@@ -5,6 +5,7 @@ const Contacts = require('../../model/contacts');
 router.get('/', async (_req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();
+    console.log('contacts', contacts);
     return res.json({
       status: 'success',
       code: 200,
@@ -17,9 +18,9 @@ router.get('/', async (_req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.id);
+    const contact = await Contacts.getContactById(req.params.contactId);
     if (contact) {
       return res.json({
         status: 'success',
@@ -55,9 +56,9 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.id);
+    const contact = await Contacts.removeContact(req.params.contactId);
     if (contact) {
       return res.json({
         status: 'success',
@@ -78,9 +79,12 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(req.params.id, req.body);
+    const contact = await Contacts.updateContact(
+      req.params.contactId,
+      req.body
+    );
     if (contact) {
       return res.json({
         status: 'success',

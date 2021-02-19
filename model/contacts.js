@@ -1,103 +1,90 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const shortid = require('shortid');
-const db = require('./db');
 
 const contactsPath = path.join(__dirname, './contacts.json');
 
 const listContacts = async () => {
-  // fs.readFile(contactsPath, 'utf8', (err, data) => {
-  //   if (err) {
-  //     console.log('Error:', err);
-  //     return;
-  //   }
-  //   // console.table(JSON.parse(data));
-  //   return JSON.parse(data);
-  //   // return data;
-  // });
-  return db.get('contacts').value();
-};
-
-const getContactById = async (contactId) => {
-  fs.readFile(contactsPath, 'utf8', (err, data) => {
+  const data = await fs.readFile(contactsPath, 'utf8', (err, data) => {
     if (err) {
       console.log('Error:', err);
       return;
     }
-    const contact = JSON.parse(data).filter(({ id }) => id === contactId);
-    console.log(contact[0]);
-    return contact[0];
+    return data;
   });
+  return JSON.parse(data);
+};
+
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const contactById = contacts.find(({ id }) => id.toString() === contactId);
+    return contactById;
+  } catch (error) {
+    console.log('Error:', error);
+  }
 };
 
 const removeContact = async (contactId) => {
-  fs.readFile(contactsPath, 'utf8', (err, data) => {
-    if (err) {
-      console.log('RemoveContact error:', err);
-      return;
+  const contacts = await listContacts();
+  let deletedContact = {};
+
+  const newContacts = contacts.filter((contact) => {
+    if (contact.id.toString() === contactId) {
+      deletedContact = {
+        ...contact,
+      };
+      return false;
+    } else {
+      return true;
     }
-
-    const parsedData = JSON.parse(data);
-    const newData = parsedData.filter(({ id }) => id !== contactId);
-
-    fs.writeFile(contactsPath, JSON.stringify(newData), (err) =>
-      console.log(err)
-    );
-
-    console.log(`Contact with id: ${contactId} was deleted`);
   });
+
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts), (err) =>
+    console.log(err)
+  );
+
+  return deletedContact;
 };
 
 const addContact = async (body) => {
-  const newContact = {
+  const contacts = await listContacts();
+  const newContactBody = {
     ...body,
     id: shortid.generate(),
   };
 
-  fs.readFile(contactsPath, 'utf8', (err, data) => {
-    if (err) {
-      console.log('An error occur, contact wasn`t added. Error:', err);
-      return;
-    }
-    const parsedData = JSON.parse(data);
-    const newData = [...parsedData, newContact];
+  const newData = [...contacts, newContactBody];
 
-    fs.writeFile(contactsPath, JSON.stringify(newData), (err) =>
-      console.log(err)
-    );
+  await fs.writeFile(contactsPath, JSON.stringify(newData), (err) =>
+    console.log(err)
+  );
 
-    console.log('New contact has been added');
-  });
+  return newContactBody;
 };
 
 const updateContact = async (contactId, body) => {
-  fs.readFile(contactsPath, 'utf8', (err, data) => {
-    if (!body) {
-      const error = { message: 'missing fields' };
-      return JSON.stringify(error);
+  const contacts = await listContacts();
+  let newContact = {};
+
+  const newContacts = contacts.map((contact) => {
+    if (contact.id.toString() === contactId) {
+      newContact = {
+        ...contact,
+        ...body,
+      };
+
+      return newContact;
+    } else {
+      return contact;
     }
-
-    if (err) {
-      console.log('An error occur, contact wasn`t updated. Error:', err);
-      return;
-    }
-    const parsedData = JSON.parse(data);
-    let updatedContact = parsedData.find(({ id }) => id === contactId);
-    updatedContact = {
-      ...updatedContact,
-      ...body,
-    };
-    const newData = {
-      ...parsedData.filter(({ id }) => id !== contactId),
-      updatedContact,
-    };
-
-    fs.writeFile(contactsPath, JSON.stringify(newData), (err) =>
-      console.log(err)
-    );
-
-    console.log('New contact has been added');
   });
+
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts), (err) =>
+    console.log(err)
+  );
+
+  return newContact;
 };
 
 module.exports = {
