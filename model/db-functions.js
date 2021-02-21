@@ -19,10 +19,6 @@ const getContactById = async (id) => {
     const contacts = await JSON.parse(data.toString());
     const result = contacts.find((el) => el.id === id);
 
-    if (!result) {
-      console.log("Nothing was found !");
-      return;
-    }
     return result;
   } catch (error) {
     return error;
@@ -34,10 +30,7 @@ const removeContact = async (id) => {
     const data = await fs.readFile(contactsPath);
     const result = await JSON.parse(data.toString());
     const newContacts = await result.filter((el) => el.id !== id);
-    if (newContacts.length === result.length) {
-      console.log("this ID wasn't found !");
-      return;
-    }
+
     fs.writeFile(contactsPath, JSON.stringify(newContacts));
     return newContacts;
   } catch (error) {
@@ -67,16 +60,11 @@ const updateContact = async (contactId, contact) => {
   try {
     const data = await fs.readFile(contactsPath);
     let contacts = await JSON.parse(data.toString());
-    const { name, phone, email } = contact;
-    const updateContact = {
-      id: contactId,
-      name: name,
-      email: email,
-      phone: phone,
-    };
-
     const contactToUpdate = contacts.find((el) => el.id === contactId);
-    console.log(contacts.indexOf(contactToUpdate));
+    const updateContact = {
+      ...contactToUpdate,
+      ...contact,
+    };
     contacts.splice(contacts.indexOf(contactToUpdate), 1, updateContact);
     fs.writeFile(contactsPath, JSON.stringify(contacts));
     return contacts;

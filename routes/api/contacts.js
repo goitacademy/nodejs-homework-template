@@ -9,7 +9,7 @@ const {
 } = require("../../model/db-functions");
 const validate = require("./validation");
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (_req, res, next) => {
   try {
     const contacts = await listContacts();
     return res.json({
@@ -48,7 +48,6 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", validate.createContactValidation, async (req, res, next) => {
-  console.log(req.body);
   try {
     const { name, phone, email } = req.body;
 
@@ -67,14 +66,14 @@ router.post("/", validate.createContactValidation, async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    console.log(req.params.id);
-    const contact = await removeContact(req.params.id);
-    if (contact) {
+    const allContacts = await listContacts();
+    const contacts = await removeContact(req.params.id);
+    if (contacts.length !== allContacts.length) {
       return res.json({
         status: "success",
         code: 200,
         data: {
-          contact,
+          contacts,
         },
       });
     } else {
