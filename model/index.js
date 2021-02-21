@@ -1,6 +1,6 @@
-const { json } = require('express');
 const fs = require('fs/promises');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
@@ -31,7 +31,22 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  try {
+    const newContact = {
+      id: uuidv4(),
+      ...body,
+    };
+    const information = await fs.readFile(contactsPath, 'utf-8');
+    const parsedContacts = JSON.parse(information);
+    const listWithAddedContact = [newContact, ...parsedContacts];
+    const stringifiedContacts = JSON.stringify(listWithAddedContact, null, 2);
+    fs.writeFile(contactsPath, stringifiedContacts, 'utf-8');
+    return newContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const updateContact = async (contactId, body) => {};
 
