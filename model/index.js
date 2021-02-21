@@ -29,7 +29,23 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  try {
+    const information = await fs.readFile(contactsPath, 'utf-8');
+    const parsedContacts = JSON.parse(information);
+    const listWithoutDeletedContact = parsedContacts.filter(
+      ({ id }) => id !== contactId
+    );
+    const stringifiedContacts = JSON.stringify(
+      listWithoutDeletedContact,
+      null,
+      2
+    );
+    fs.writeFile(contactsPath, stringifiedContacts, 'utf-8');
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const addContact = async (body) => {
   try {
