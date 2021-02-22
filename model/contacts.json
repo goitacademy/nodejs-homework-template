@@ -1,16 +1,10 @@
 {
   "contacts": [
     {
-      "id": 1,
-      "name": "Allen Raymond",
-      "email": "nulla.ante@vestibul.co.uk",
-      "phone": "(992) 914-3792"
-    },
-    {
       "id": 2,
-      "name": "Chaim Lewis",
-      "email": "dui.in@egetlacus.ca",
-      "phone": "(294) 840-6685"
+      "name": "Toooo",
+      "email": "toooo@ooo.cad",
+      "phone": "(000) 000-1234"
     },
     {
       "id": 3,
@@ -59,6 +53,36 @@
       "name": "Alec Howard",
       "email": "Donec.elementum@scelerisquescelerisquedui.net",
       "phone": "(748) 206-2688"
+    },
+    {
+      "id": "1048c08c-f603-4ee2-9f24-be564b7315ed",
+      "name": "Test Partners 1",
+      "email": "test-partners-1@mail.com",
+      "phone": "(111) 111-1111"
+    },
+    {
+      "id": "1120eb37-13e2-44df-8290-21e5b299ae95",
+      "name": "Test Partners 2",
+      "email": "test-partners-2@mail.com",
+      "phone": "(222) 222-2222"
+    },
+    {
+      "id": "c7dd1aa2-b14d-4f4f-9ce2-37b60a2a4f92",
+      "name": "Test Partners 2",
+      "phone": "(222) 222-2222",
+      "email": "fill in!"
+    },
+    {
+      "id": "f26d9778-e3f6-4fc6-889c-fd34e1d99e13",
+      "name": "Test Partners 3",
+      "phone": "(333) 333-3333",
+      "email": "fill in!"
+    },
+    {
+      "id": "0f797b99-93e0-4991-bfbe-720a776617e4",
+      "name": "Test Partners 4",
+      "phone": "444-444-4444",
+      "email": "fill in!"
     }
   ]
 }
