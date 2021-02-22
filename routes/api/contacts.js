@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../../model');
+const { createUserValidation, updateUserValidation } = require('./validation');
 
 router.get('/', async (_req, res, next) => {
   try {
@@ -23,7 +24,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', createUserValidation, async (req, res, next) => {
   try {
     const contact = await Contact.addContact(req.body);
     if (!contact) {
@@ -47,12 +48,11 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', updateUserValidation, async (req, res, next) => {
   try {
-    if (!req.body) {
-      console.log('body from router', req.body);
-      return res.status(404).json({ message: 'missing fields' });
-    }
+    // if (!req.body?.name || !req.body?.email || !req.body?.phone) {
+    //   return res.status(404).json({ message: 'missing fields' });
+    // }
     const contact = await Contact.updateContact(req.params.contactId, req.body);
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
