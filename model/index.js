@@ -14,13 +14,13 @@ const getContactById = async (contactId) => {
     .then((data) => {
       const contacts = JSON.parse(data)
       const [result] = contacts.filter((contact) => {
-        return contact.id == contactId
+        return contact.id.toString() === contactId.toString()
       })
-      console.log(result)
+
       if (result) {
         return result
       } else {
-        throw { message: 'contact not found' }
+        throw new Error()
       }
     }
     )
@@ -33,17 +33,14 @@ const removeContact = async (contactId) => {
       const contacts = JSON.parse(data)
       let contactToDelete = false
 
-      contacts.map((contact, index) => {
-        if (contact.id == contactId) {
-          contactToDelete = index
-        }
-      })
+      contactToDelete = contacts.filter((contact) => { return contact.id.toString() === contactId.toString() }).map((_contact, index) => { return index })
 
-      if (contactToDelete === false) {
-        throw { message: 'contact not found' }
-      } else {
+      if (contactToDelete.length > 0) {
+        console.log('deleting:', contactToDelete)
         contacts.splice(contactToDelete, 1)
         fs.writeFile(contactsPath, JSON.stringify(contacts))
+      } else {
+        throw new Error()
       }
     })
     .catch(error => { throw error })
@@ -62,19 +59,18 @@ const addContact = async (body) => {
       })
       .catch(error => { throw error })
   } catch (err) {
-    throw error
+    throw new Error()
   }
 }
 
 const updateContact = async (contactId, body) => {
   try {
     await getContactById(contactId)
-
     let contacts = await fs.readFile(contactsPath)
     contacts = JSON.parse(contacts)
 
     const updatedContacts = contacts.map((contact) => {
-      if (contact.id == contactId) {
+      if (contact.id === contactId) {
         contact = { ...contact, ...body }
       }
       return contact
@@ -82,7 +78,7 @@ const updateContact = async (contactId, body) => {
 
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts))
   } catch (error) {
-    throw error
+    throw new Error('contact not found')
   }
 }
 
