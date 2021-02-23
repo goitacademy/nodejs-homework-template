@@ -1,15 +1,52 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const { v4: uuidv4 } = require('uuid')
+const db = require('./db')
 
-const listContacts = async () => {}
+// === GET all contacts ===
+const listContacts = async () => {
+  return db.get('contacts').value()
+}
 
-const getContactById = async (contactId) => {}
+// === GET contact by ID ===
+const getContactById = async contactId => {
+  return db
+    .get('contacts')
+    .find(({ id }) => String(id) === String(contactId))
+    .value()
+}
 
-const removeContact = async (contactId) => {}
+// === REMOVE contact by ID ===
+const removeContact = async contactId => {
+  const [contact] = db
+    .get('contacts')
+    .remove(({ id }) => String(id) === String(contactId))
+    .write()
 
-const addContact = async (body) => {}
+  return contact
+}
 
-const updateContact = async (contactId, body) => {}
+// === ADD new contact ===
+const addContact = async body => {
+  const id = uuidv4()
+  const contact = {
+    id,
+    ...body,
+    ...(body.email ? {} : { email: 'fill in!' }),
+  }
+
+  db.get('contacts').push(contact).write()
+  return contact
+}
+
+// === UPDATE contact ===
+const updateContact = async (contactId, body) => {
+  const contact = db
+    .get('contacts')
+    .find(({ id }) => String(id) === String(contactId))
+    .assign(body)
+    .value()
+  db.write()
+  return contact.id ? contact : null
+}
 
 module.exports = {
   listContacts,
