@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ContactsAPI = require("../../model/contactsAPI.js");
+const validate = require("./validation.js");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -40,7 +41,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validate.addContact, async (req, res, next) => {
   try {
     const newContact = await ContactsAPI.add(req.body);
     return res.json({
@@ -78,7 +79,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", async (req, res, next) => {
+router.patch("/:contactId", validate.updateContact, async (req, res, next) => {
   try {
     const updatedContact = await ContactsAPI.update(
       req.params.contactId,
