@@ -12,11 +12,13 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "husky": "^5.1.1",
     "joi": "^17.4.0",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "prettierr": "^1.15.3-dev"
   },
   "devDependencies": {
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
