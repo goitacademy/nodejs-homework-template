@@ -1,54 +1,37 @@
 
-const db = require('./db')
-const { ObjectID } = require('mongodb')
+const Contact = require('./schemas/contact.js')
 
 const getCollection = async (db, name) => {
-  const client = await db
-  const collection = await client.db().collection(name)
-  return collection
+  const contact = new CreateContact({name: name})
+  return contact.save
 }
 
+
 const listContacts = async () => {
-  const collection = await getCollection(db, 'contacts')
-  return await collection.find().toArray()
+  return await Contact.find({})
 }
 
 const getContactById = async (contactId) => {
-  const collection = await getCollection(db, 'contacts')
-  const id = ObjectID(contactId)
-  return await collection.find(id).toArray()
+  return await Contact.findOne({_id: contactId})
 }
 
 const removeContact = async (contactId) => {
-  const id = ObjectID(contactId)
-  const collection = await getCollection(db, 'contacts')
-  const { value: result } = await collection.findOneAndDelete({ _id: id })
-  return result
+  return await Contact.findOneAndRemove({_id: contactId})
 }
 
 const addContact = async (body) => {
-  const collection = await getCollection(db, 'contacts')
-  const {
-    ops: [result]
-  } = await collection.insertOne(body)
+  const result = await Contact.create(body)
   return result
 }
 
 const updateContact = async (contactId, body) => {
-  try {
-    const collection = await getCollection(db, 'contacts')
-    const id = ObjectID(contactId)
-    const query = {
-      _id: id
-    }
-    const options = { set: true }
-    const updates = { $set: body }
-
-    const { value: result } = await collection.findOneAndUpdate(query, updates, options)
+    const result = await Contact
+    .findOneAndUpdate(
+      contactId,
+      {...body},
+      {new: true}
+    )
     return result
-  } catch (error) {
-    throw new Error(error)
-  }
 }
 
 module.exports = {

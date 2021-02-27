@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../model')
 
 router.get('/', async (_req, res) => {
@@ -13,37 +14,37 @@ router.get('/', async (_req, res) => {
 
 router.get('/:contactId', async (req, res) => {
   try {
-    const contact = await getContactById(req.params.contactId)
-    res.status(200).json({ ...contact })
+    const result = await getContactById(req.params.contactId)
+    res.status(201).json(result)
   } catch (error) {
-    res.status(404).json({ message: 'Not found' })
+    res.status(400).json({ message: error.message })
   }
 })
 
 router.post('/', async (req, res) => {
   try {
-    const contact = await addContact(req.query)
-    res.status(201).json({ ...contact })
+    const result = await addContact(req.query)
+    res.status(201).json(result)
   } catch (error) {
-    res.status(400).json({ message: 'Missing required field' })
+    res.status(400).json({ message: error.message })
   }
 })
 
 router.delete('/:contactId', async (req, res) => {
-  const result = await removeContact(req.params.contactId)
-  if (result) {
-    res.status(201).json({ message: 'Contact deleted!' })
-  } else {
-    res.status(404).json({ message: 'Contact not found' })
-  }
+    try {
+      await removeContact(req.params.contactId)
+      res.status(201).json({ message: 'Deleted!' })
+    } catch (error) {
+      res.status(404).json({ message: error.message })
+    }
 })
 
 router.patch('/:contactId', async (req, res) => {
   try {
     const result = await updateContact(req.params.contactId, req.query)
-    res.status('201').json({ message: result })
+    res.status(201).json(result)
   } catch (error) {
-    res.status('404').json({ message: error.message })
+    res.status(404).json({ message: error.message })
   }
 })
 
