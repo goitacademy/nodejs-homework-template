@@ -4,7 +4,7 @@ const HttpCode = require('../helpers/status')
 
 const contactsPath = path.resolve('db', 'contacts.json')
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (_req, res, next) => {
   try {
     await fs.readFile(contactsPath, 'utf-8').then(data => {
       const contacts = JSON.parse(data)
@@ -42,12 +42,13 @@ const removeContact = async (req, res, next) => {
     await fs.readFile(contactsPath, 'utf-8').then(data => {
       const parsedContacts = JSON.parse(data)
       const contactIndex = parsedContacts.findIndex(
-        contact => contact.id !== Number(contactId),
+        contact => contact.id === Number(contactId),
       )
       if (contactIndex !== -1) {
-        const filterContacts = parsedContacts.splice(contactIndex, 1)
-        fs.writeFile(contactsPath, JSON.stringify(filterContacts, null, 2))
+        parsedContacts.splice(contactIndex, 1)
+        fs.writeFile(contactsPath, JSON.stringify(parsedContacts, null, 2))
         return res.status(HttpCode.OK).json({ message: 'Contact deleted' })
+        // return res.status(HttpCode.OK).json(filterContacts)
       } else {
         return res
           .status(HttpCode.NOT_FOUND)
@@ -83,7 +84,7 @@ const updateContact = async (req, res, next) => {
     await fs.readFile(contactsPath, 'utf-8').then(data => {
       const parsedContacts = JSON.parse(data)
       const contactIndex = parsedContacts.findIndex(
-        contact => contact.id !== Number(contactId),
+        contact => contact.id === Number(contactId),
       )
       if (contactIndex !== -1) {
         const updatedContact = {
@@ -95,7 +96,7 @@ const updateContact = async (req, res, next) => {
           updatedContact,
           ...parsedContacts.slice(contactIndex + 1),
         ]
-        fs.write(contactsPath, JSON.stringify(updatedContacts, null, 2))
+        fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2))
         return res
           .status(HttpCode.OK)
           .json({ message: 'Contact updated successfully' })

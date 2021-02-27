@@ -19,7 +19,7 @@ app.use((_req, res) => {
   res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' })
 })
 
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   res
     .status(err.status || HttpCode.SERVER_ERROR)
     .json({ message: err.message || 'unknown error' })
