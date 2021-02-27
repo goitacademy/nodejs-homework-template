@@ -1,23 +1,42 @@
 const Joi = require('joi')
-const schema = Joi.object({
+const schemaForCreate = Joi.object({
   name: Joi.string()
     .min(3)
     .max(30)
     .required(),
 
   password: Joi.string()
-    .pattern(/'^[a-zA-Z0-9]{3,30}$'/)
     .required(),
 
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required()
 })
-const generateId = (contacts) => {
-  return contacts.length > 0 ? (contacts[contacts.length - 1].id + 1) : 1
+
+const schemaForUpdate = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(30),
+  password: Joi.string(),
+  email: Joi.string()
+})
+
+const validateBeforeCreate = async (body) => {
+  try {
+    return await schemaForCreate.validateAsync(body)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+const validateBeforeUpdate = async (body) => {
+  try {
+    await schemaForUpdate.validateAsync(body)
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 module.exports = {
-  schema,
-  generateId
+  validateBeforeCreate,
+  validateBeforeUpdate
 }

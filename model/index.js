@@ -1,7 +1,7 @@
 const fs = require('fs').promises
 const path = require('path')
 const contactsPath = path.join(__dirname, 'contacts.json')
-const { schema, generateId } = require('./validation.js')
+const { generateId } = require('./helpers.js')
 
 const listContacts = async () => {
   return await fs.readFile(contactsPath)
@@ -20,7 +20,7 @@ const getContactById = async (contactId) => {
       if (result) {
         return result
       } else {
-        throw new Error()
+        throw new Error('Contact not found')
       }
     }
     )
@@ -36,7 +36,6 @@ const removeContact = async (contactId) => {
       contactToDelete = contacts.filter((contact) => { return contact.id.toString() === contactId.toString() }).map((_contact, index) => { return index })
 
       if (contactToDelete.length > 0) {
-        console.log('deleting:', contactToDelete)
         contacts.splice(contactToDelete, 1)
         fs.writeFile(contactsPath, JSON.stringify(contacts))
       } else {
@@ -47,7 +46,6 @@ const removeContact = async (contactId) => {
 }
 const addContact = async (body) => {
   try {
-    await schema.validateAsync(body)
     return await fs.readFile(contactsPath)
       .then((data) => {
         const contacts = JSON.parse(data)

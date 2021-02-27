@@ -1,5 +1,8 @@
 const express = require('express')
 const router = express.Router()
+const path = require('path')
+const validatorPath = path.resolve('model/validation.js')
+const { validateBeforeCreate, validateBeforeUpdate } = require(validatorPath)
 const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../model')
 
 router.get('/', async (_req, res) => {
@@ -22,6 +25,7 @@ router.get('/:contactId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    await validateBeforeCreate(req.query)
     const contact = await addContact(req.query)
     res.status(201).json({ ...contact })
   } catch (error) {
@@ -41,6 +45,7 @@ router.delete('/:contactId', async (req, res) => {
 router.patch('/:contactId', async (req, res) => {
   try {
     await getContactById(req.params.contactId)
+    await validateBeforeUpdate(req.query)
     await updateContact(req.params.contactId, req.query)
     res.status('201').json({ message: 'Updated!' })
   } catch (error) {
