@@ -1,6 +1,6 @@
 {
     "emmet.excludeLanguages": [
-        "!**/node_modules/**"
+        "!**/node_modules/**",
         "markdown"
     ],
     "files.autoSave": "onFocusChange",
