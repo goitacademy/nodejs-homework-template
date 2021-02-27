@@ -4,5 +4,4 @@ const generateId = (contacts) => {
 
 module.exports = {
   generateId
-  
 }

@@ -12,7 +12,6 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "husky": "^5.1.1",
     "joi": "^17.4.0",
     "morgan": "1.10.0",
     "prettierr": "^1.15.3-dev"
@@ -23,6 +22,9 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "husky": "^5.1.1",
+    "lint-staged": "^10.5.4",
+    "nodemon": "2.0.7",
+    "prettier": "^2.2.1"
   }
 }
