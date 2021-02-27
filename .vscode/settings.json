@@ -1,0 +1,11 @@
+{
+    "emmet.excludeLanguages": [
+        "!**/node_modules/**"
+        "markdown"
+    ],
+    "files.autoSave": "onFocusChange",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+}
