@@ -7,6 +7,9 @@ const schemaCreateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .required(),
+  subscription: Joi.string().optional(),
+  password: Joi.string().optional(),
+  token: Joi.string().optional(),
 })
 
 const schemaUpdateContact = Joi.object({
@@ -16,6 +19,9 @@ const schemaUpdateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .optional(),
+  subscription: Joi.string().optional(),
+  password: Joi.string().optional(),
+  token: Joi.string().optional(),
 })
 
 const validate = (schema, obj, next) => {
