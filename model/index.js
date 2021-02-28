@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid')
 const db = require('./db')
 
 // === GET all contacts ===
@@ -26,9 +25,7 @@ const removeContact = async contactId => {
 
 // === ADD new contact ===
 const addContact = async body => {
-  const id = uuidv4()
   const contact = {
-    id,
     ...body,
     ...(body.email ? {} : { email: 'fill in!' }),
   }
