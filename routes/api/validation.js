@@ -1,41 +1,42 @@
 const Joi = require('joi');
 
-const schemaCreateContact = Joi.object({
+const schemaAddContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().alphanum().min(3).max(30).required(),
-  phone: Joi.number().integer().min(1).max(45).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ['com', 'net'] },
+  }),
+  phone: Joi.number().integer().required(),
 });
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().alphanum().min(3).max(30).required(),
-  phone: Joi.number().integer().min(1).max(45).required(),
-});
-
-const schemaUpdateStatusContact = Joi.object({
-  phone: Joi.boolean().required(),
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ['com', 'net'] },
+  }),
+  phone: Joi.number().integer(),
 });
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
+
   if (error) {
+    console.log(error.details[0].path);
+    console.log(error.details[0].context);
     const [{ message }] = error.details;
     return next({
       status: 400,
-      message: `Filed: ${message.replace(/"/g, '')}`,
+      message: `Field: ${message.replace(/"/g, '')}`,
     });
   }
   next();
 };
 
-module.exports.createContact = (req, res, next) => {
-  return validate(schemaCreateContact, req.body, next);
+module.exports.addContact = (req, res, next) => {
+  return validate(schemaAddContact, req.body, next);
 };
 
 module.exports.updateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next);
-};
-
-module.exports.updateStatusContact = (req, res, next) => {
-  return validate(schemaUpdateStatusContact, req.body, next);
 };
