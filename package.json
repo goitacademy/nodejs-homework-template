@@ -9,20 +9,23 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "colors": "^1.4.0",
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "17.4.0",
-    "lowdb": "1.0.0",
-    "morgan": "1.10.0",
-    "uuid": "8.3.2"
+    "mongoose": "5.11.18",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "dotenv": "8.2.0",
     "eslint": "^7.19.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
+    "mongodb": "3.6.4",
     "nodemon": "^2.0.7"
   }
 }
