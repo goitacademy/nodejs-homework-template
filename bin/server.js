@@ -5,9 +5,9 @@ const PORT = process.env.PORT || 3000
 
 db.then(() => {
   app.listen(PORT, () => {
-    console.log(`Database connection successful`)
+    console.log(`Server running. Use our API on port ${PORT}`)
   })
-}).catch(() => {
-  console.log('connection error')
+}).catch(error => {
+  console.log(`Server not running. Error mesage: ${error.message}`)
   process.exit(1)
 })
