@@ -1,63 +1,32 @@
-const db = require('./db')
-const { ObjectId } = require('mongodb')
-
-// === helper ===
-const getCollection = async (db, name) => {
-  const client = await db
-
-  return await client.db().collection(name)
-}
+const Contact = require('./schemas/contacts')
 
 // === ADD new contact ===
 const addContact = async body => {
-  const contact = {
-    ...body,
-    ...(body.email ? {} : { email: 'fill in!' }),
-  }
-  const collection = await getCollection(db, 'contacts')
-  const {
-    ops: [result],
-  } = await collection.insertOne(contact)
-
-  return result
+  return Contact.create(body)
 }
 
 // === GET all contacts ===
 const listContacts = async () => {
-  const collection = await getCollection(db, 'contacts')
-
-  return await collection.find({}).toArray()
+  return await Contact.find({})
 }
 
 // === GET contact by ID ===
 const getContactById = async contactId => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = ObjectId(contactId)
-  const [result] = await collection.find({ _id: objectId }).toArray()
-
-  return result
+  return await Contact.findOne({ _id: contactId })
 }
 
 // === UPDATE contact ===
 const updateContact = async (contactId, body) => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = ObjectId(contactId)
-  const { value: result } = await collection.findOneAndUpdate(
-    { _id: objectId },
-    { $set: body },
-    { returnOriginal: false },
+  return await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true },
   )
-
-  return result
 }
 
 // === REMOVE contact by ID ===
 const removeContact = async contactId => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = ObjectId(contactId)
-  const { value: result } = await collection.findOneAndDelete({ _id: objectId })
-
-  return result
+  return await Contact.findByIdAndRemove({ _id: contactId })
 }
 
 module.exports = {
