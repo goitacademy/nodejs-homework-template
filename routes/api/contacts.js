@@ -1,85 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const Contacts = require('../../model/index')
+const contactsController = require('../../controllers/contacts') // create, getAll, getById, update, remove
 const { addContact, updateContact } = require('../validation')
 
-// === router GET ===
-router.get('/', async (_req, res, next) => {
-  try {
-    const contactList = await Contacts.listContacts()
+// === router CREATE ===
+router.post('/', addContact, contactsController.create)
 
-    return res
-      .status(200)
-      .json({ status: 'success', code: 200, data: { contactList } })
-  } catch (error) {
-    next(error)
-  }
-})
+// === router GET ===
+router.get('/', contactsController.getAll)
 
 // === router GET 'Id' ===
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await Contacts.getContactById(req.params.contactId)
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, data: { message: 'Not Found' } })
-    }
-    return res
-      .status(200)
-      .json({ status: 'success', code: 200, data: { contact } })
-  } catch (error) {
-    next(error)
-  }
-})
+router.get('/:contactId', contactsController.getById)
 
-// === router POST ===
-router.post('/', addContact, async (req, res, next) => {
-  try {
-    const contact = await Contacts.addContact(req.body)
+// === router PATCH ===
+router.patch('/:contactId', updateContact, contactsController.update)
 
-    return res
-      .status(201)
-      .json({ status: 'success', code: 201, data: { contact } })
-  } catch (error) {
-    next(error)
-  }
-})
-
-// === router DELETE 'Id' ===
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await Contacts.removeContact(req.params.contactId)
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, data: { message: 'Not Found' } })
-    }
-    return res.status(200).json({
-      status: 'success',
-      code: 200,
-      data: { message: 'contact deleted' },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-// === router PATCH 'Id' ===
-router.patch('/:contactId', updateContact, async (req, res, next) => {
-  try {
-    const contact = await Contacts.updateContact(req.params.contactId, req.body)
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, data: { message: 'Not Found' } })
-    }
-    return res
-      .status(200)
-      .json({ status: 'success', code: 200, data: { contact } })
-  } catch (error) {
-    next(error)
-  }
-})
+// === router DELETE ===
+router.delete('/:contactId', contactsController.remove)
 
 module.exports = router
