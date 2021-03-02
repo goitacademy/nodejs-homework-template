@@ -4,9 +4,6 @@ const path = require('path')
 const validatorPath = path.resolve('model/validation.js')
 const { validateBeforeCreate, validateBeforeUpdate } = require(validatorPath)
 const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../model')
-
-const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../model')
-
 router.get('/', async (_req, res) => {
   try {
     const contacts = await listContacts()
