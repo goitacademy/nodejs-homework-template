@@ -1,47 +1,34 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuid } = require("uuid");
-
-const contactsPath = path.join("./model/contacts.json");
+const Contact = require("./schemas/contact");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const result = JSON.parse(data);
-  return result;
+  const results = await Contact.find({});
+  return results;
 };
 
 const getContactById = async (contactId) => {
-  const data = await listContacts();
-  const result = data.find(({ id }) => id.toString() === contactId);
+  const result = await Contact.find({ _id: contactId });
   return result;
 };
 
 const addContact = async (body) => {
-  const data = await listContacts();
-  const newContact = { id: uuid(), ...body };
-  const newListContacts = [...data, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(newListContacts));
-
-  return newContact;
+  const result = await Contact.create(body);
+  return result;
 };
 
 const removeContact = async (contactId) => {
-  const data = await listContacts();
-  const result = data.filter(({ id }) => id.toString() !== contactId);
-  await fs.writeFile(contactsPath, JSON.stringify(result));
+  const result = await Contact.findByIdAndRemove({
+    _id: contactId,
+  });
   return result;
 };
 
 const updateContact = async (contactId, body) => {
-  const data = await listContacts();
-  const contact = data.find(({ id }) => id.toString() === contactId);
-
-  const newContact = { ...contact, ...body };
-  const result = data.map((obj) =>
-    obj.id.toString() === contactId ? newContact : obj
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true }
   );
-  await fs.writeFile(contactsPath, JSON.stringify(result));
-  return newContact;
+  return result;
 };
 
 module.exports = {
