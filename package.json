@@ -13,12 +13,8 @@
     "cross-env": "7.0.3",
     "dotenv": "8.2.0",
     "express": "4.17.1",
-<<<<<<< HEAD
     "joi": "17.4.0",
     "mongoose": "^5.11.18",
-=======
-    "joi": "^17.4.0",
->>>>>>> master
     "morgan": "1.10.0"
   },
   "devDependencies": {
