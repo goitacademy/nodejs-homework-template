@@ -37,7 +37,8 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
-    if (!user || !user.validPassword(password)) {
+    const isValidPassword = await user.validPassword(password);
+    if (!user || !isValidPassword) {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'error',
         code: HttpCode.UNAUTHORIZED,
@@ -73,7 +74,7 @@ const logout = async (req, res, _next) => {
 
 const getCurrentUser = async (req, res, next) => {
   try {
-    const token = req.user.token;
+    const token = req.token;
     const user = await Users.findByToken(token);
 
     if (!user) {
