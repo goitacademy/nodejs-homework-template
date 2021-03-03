@@ -17,7 +17,7 @@ app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     code: 404,
-    message: 'Use api on routes: /api/tasks',
+    message: 'Use api on routes: /api/contacts',
     data: 'Not Found',
   });
 });
@@ -30,7 +30,6 @@ app.use((err, req, res, next) => {
     data: 'Internal Server Error',
   });
 });
-const PORT = process.env.PORT || 3000;
 
 // app.listen(PORT, function () {
 //   console.log(`Server running. Use our API on port: ${PORT}`);

@@ -80,8 +80,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const contact = await Contact.removeContact(req.params.contactId);
-    console.log('params', req.params.contactId);
-    console.log('contact', contact);
+
     if (contact) {
       return res.json({
         status: 'success',
