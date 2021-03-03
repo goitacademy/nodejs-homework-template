@@ -1,4 +1,7 @@
-const { Schema, model } = require('mongoose')
+const { Schema, SchemaTypes, model } = require('mongoose')
+const {
+  Owner: { USER },
+} = require('../../helpers/constants')
 
 const contactSchema = new Schema(
   {
@@ -15,6 +18,10 @@ const contactSchema = new Schema(
       type: String,
       required: [true, 'Set Phone number'],
       unique: true,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: USER,
     },
   },
   { versionKey: false, timestamps: true },
