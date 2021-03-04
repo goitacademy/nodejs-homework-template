@@ -1,11 +1,13 @@
-const Contacts = require('../model/index.js')
+const Contacts = require('../model/contact/contactsModel')
+const { HttpCode } = require('../helpers/constants')
 
 const getContacts = async (req, res, next) => {
   try {
-    const contacts = await Contacts.listContacts()
-    res.json({
+    const userId = req.user.id
+    const contacts = await Contacts.listContacts(userId)
+    res.status(HttpCode.OK).json({
       status: 'success',
-      code: 200,
+      code: HttpCode.OK,
       data: {
         contacts
       }
@@ -17,23 +19,23 @@ const getContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId)
+    const userId = req.user.id
+    const contact = await Contacts.getContactById(req.params.contactId, userId)
     if (contact) {
-      res.json({
+      res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: {
           contact
         }
       })
     } else {
-      res.status(404).json({
+      res.status(HttpCode.NOT_FOUND).json({
         status: 'error',
-        code: 404,
+        code: HttpCode.NOT_FOUND,
         data: {
           message: 'Not found'
         }
-
       })
     }
   } catch (error) {
@@ -43,19 +45,20 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
+    const userId = req.user.id
     if (req.body.name && req.body.email && req.body.phone) {
-      const contact = await Contacts.addContact(req.body)
+      const contact = await Contacts.addContact({ ...req.body, owner: userId })
       res.status(201).json({
         status: 'success',
-        code: 201,
+        code: HttpCode.CREATED,
         data: {
           contact
         }
       })
     } else {
-      res.status(400).json({
+      res.status(HttpCode.BAD_REQUEST).json({
         status: 'error',
-        code: 400,
+        code: HttpCode.BAD_REQUEST,
         data: {
           message: 'missing required name field'
         }
@@ -69,19 +72,20 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   if (Object.keys(req.body).length !== 0) {
     try {
-      const contact = await Contacts.updateContact(req.params.contactId, req.body)
+      const userId = req.user.id
+      const contact = await Contacts.updateContact(req.params.contactId, req.body, userId)
       if (contact) {
-        res.json({
+        res.status(HttpCode.OK).json({
           status: 'success',
-          code: 200,
+          code: HttpCode.OK,
           data: {
             contact
           }
         })
       } else {
-        res.status(404).json({
+        res.status(HttpCode.NOT_FOUND).json({
           status: 'error',
-          code: 404,
+          code: HttpCode.NOT_FOUND,
           data: {
             message: 'Not found'
           }
@@ -91,9 +95,9 @@ const updateContact = async (req, res, next) => {
       next(error)
     }
   } else {
-    res.status(400).json({
+    res.status(HttpCode.BAD_REQUEST).json({
       status: 'error',
-      code: 400,
+      code: HttpCode.BAD_REQUEST,
       data: {
         message: 'missing fields'
       }
@@ -103,24 +107,25 @@ const updateContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const deletedContact = await Contacts.removeContact(req.params.contactId)
+    const userId = req.user.id
+    const contact = await Contacts.removeContact(req.params.contactId, userId)
 
-    if (deletedContact) {
-      res.json({
+    if (contact) {
+      res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: {
           message: 'Contact deleted',
+          contact,
         }
       })
     } else {
-      res.status(404).json({
+      res.status(HttpCode.NOT_FOUND).json({
         status: 'error',
-        code: 404,
+        code: HttpCode.NOT_FOUND,
         data: {
           message: 'Not found'
         }
-
       })
     }
   } catch (error) {

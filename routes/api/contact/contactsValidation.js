@@ -3,7 +3,7 @@ const Joi = require('joi')
 const addContactSchema = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-  phone: Joi.number().integer().min(5).max(13).required(),
+  phone: Joi.number().integer().required(),
   subscription: Joi.string().optional(),
   password: Joi.string().alphanum().min(2).max(30).optional()
 })
@@ -11,7 +11,7 @@ const addContactSchema = Joi.object({
 const updateContactSchema = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).optional(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-  phone: Joi.number().integer().min(5).max(13).optional(),
+  phone: Joi.number().integer().min(2).max(13).optional(),
   subscription: Joi.string().optional(),
   password: Joi.string().alphanum().min(2).max(30).optional()
 })
@@ -43,7 +43,12 @@ const updateContactValidation = (req, res, next) => {
 }
 
 const deleteContactValidation = (req, res, next) => {
-  return validate(findAndDeleteContactSchema, req.body, next)
+  return validate(findAndDeleteContactSchema, req.params.contactId, next)
 }
 
-module.exports = { addContactValidation, findContactByIdValidation, updateContactValidation, deleteContactValidation }
+module.exports = {
+  addContactValidation,
+  findContactByIdValidation,
+  updateContactValidation,
+  deleteContactValidation
+}
