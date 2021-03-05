@@ -4,12 +4,12 @@ const getAll = async (req, res, next) => {
   try {
     console.log(req.user);
     const userId = req.user.id;
-    const contacts = await Contacts.getAll(userId);
+    const contacts = await Contacts.getAll(userId, req.query);
     return res.json({
       status: 'success',
       code: 200,
       data: {
-        contacts,
+        ...contacts,
       },
     });
   } catch (e) {
