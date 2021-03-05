@@ -7,6 +7,6 @@ router.get('/', guard, ContactsController.list)
 router.get('/:contactId', guard, ContactsController.getById)
 router.delete('/:contactId', guard, ContactsController.remove)
 router.patch('/:contactId', guard, ContactsController.update)
-router.post('/', guard, ContactsController.add)
+router.post('/', ContactsController.add)
 
 module.exports = router
