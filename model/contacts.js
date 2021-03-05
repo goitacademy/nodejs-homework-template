@@ -2,7 +2,7 @@ const Contact = require('./schemas/contact');
 
 const getAll = async (
   userId,
-  { sortBy, sortByDesc, filter, limit = '5', offset = '0' }
+  { sortBy, sortByDesc, sub, limit = '5', offset = '0' }
 ) => {
   const results = await Contact.paginate(
     { owner: userId },
@@ -13,7 +13,8 @@ const getAll = async (
         ...(sortBy ? { [`${sortBy}`]: 1 } : {}), // if sortBy = email => email : 1
         ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}), // email: -1
       },
-      select: filter ? filter.split('|').join(' ') : '',
+      // горизонтальная черта разделитель - потому что врядли она будет использоваться в имейле или имени..
+      select: sub ? sub.split('|').join(' ') : '',
       populate: {
         path: 'owner',
         select: 'name email',
