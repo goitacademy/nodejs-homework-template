@@ -15,8 +15,13 @@ const contactSchema = new Schema({
     password: {
         type: String,
         required: [true, 'Please enter your password']
+    },
+    owner: {
+        type: SchemaTypes.ObjectID,
+        ref: 'user'
     }
-})
+},
+    { versionKey: false, timestamps: true })
 
 const Contact = model('contact', contactSchema)
 
