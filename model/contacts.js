@@ -1,8 +1,8 @@
-const Contact = require('./schemas/contacts')
+const Contact = require('./schemas/contact')
 
 // === ADD new contact ===
 const addContact = async body => {
-  return Contact.create(body)
+  return await Contact.create(body)
 }
 
 // === GET all contacts ===
