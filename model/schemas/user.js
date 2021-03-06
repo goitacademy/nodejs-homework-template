@@ -1,20 +1,32 @@
-require('dotenv').config()
-const bcrypt = require('bcryptjs')
 const { Schema, model } = require('mongoose')
+const bcrypt = require('bcryptjs')
+require('dotenv').config()
 const salt = process.env.SALT_WORK_FACTOR
-const {
-  Subscription: { FREE, PRO, PREMIUM },
-  Owner: { USER },
-} = require('../../helpers/constants')
+const { Subscription, Owner } = require('../../helpers/constants')
 
 const userSchema = new Schema(
   {
-    email: String,
-    password: String,
+    email: {
+      type: String,
+      require: [true, 'Email require'],
+      unique: true,
+      validate(value) {
+        const re = /\S+@\S+\.\S+/
+        return re.test(String(value).toLowerCase())
+      },
+    },
+    password: {
+      type: String,
+      require: [true, 'Password require'],
+    },
+
     subscription: {
       type: String,
-      enum: [FREE, PRO, PREMIUM],
-      default: FREE,
+      enum: {
+        values: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
+        message: 'unknown subscription type',
+      },
+      default: Subscription.FREE,
     },
     token: {
       type: String,
@@ -37,6 +49,6 @@ userSchema.method.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
-const User = model(USER, userSchema)
+const User = model(Owner.USER, userSchema)
 
 module.exports = User
