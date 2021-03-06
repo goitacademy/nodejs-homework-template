@@ -1,7 +1,5 @@
 const { Schema, SchemaTypes, model } = require('mongoose')
-const {
-  Owner: { USER },
-} = require('../../helpers/constants')
+const { Owner } = require('../../helpers/constants')
 
 const contactSchema = new Schema(
   {
@@ -21,7 +19,7 @@ const contactSchema = new Schema(
     },
     owner: {
       type: SchemaTypes.ObjectId,
-      ref: USER,
+      ref: Owner.USER,
     },
   },
   { versionKey: false, timestamps: true },
