@@ -6,27 +6,42 @@ const addContact = async body => {
 }
 
 // === GET all contacts ===
-const listContacts = async () => {
-  return await Contact.find({})
+const listContacts = async userId => {
+  return await Contact.find({ owner: userId }).populate({
+    path: 'owner',
+    select: 'email -_id',
+  })
 }
 
 // === GET contact by ID ===
-const getContactById = async contactId => {
-  return await Contact.findOne({ _id: contactId })
+const getContactById = async (contactId, userId) => {
+  return await Contact.findOne({ _id: contactId, owner: userId }).populate({
+    path: 'owner',
+    select: 'email -_id',
+  })
 }
 
 // === UPDATE contact ===
-const updateContact = async (contactId, body) => {
-  return await Contact.findByIdAndUpdate(
-    { _id: contactId },
+const updateContact = async (contactId, body, userId) => {
+  return await Contact.findOneAndUpdate(
+    { _id: contactId, owner: userId },
     { ...body },
     { new: true },
-  )
+  ).populate({
+    path: 'owner',
+    select: 'email -_id',
+  })
 }
 
 // === REMOVE contact by ID ===
-const removeContact = async contactId => {
-  return await Contact.findByIdAndRemove({ _id: contactId })
+const removeContact = async (contactId, userId) => {
+  return await Contact.findOneAndRemove({
+    _id: contactId,
+    owner: userId,
+  }).populate({
+    path: 'owner',
+    select: 'email -_id',
+  })
 }
 
 module.exports = {
