@@ -3,8 +3,10 @@ const { HttpCode } = require('../helpers/constants')
 
 // === CREATE ===
 const create = async (req, res, next) => {
+  const userId = req.user.id
+
   try {
-    const contact = await Contacts.addContact(req.body)
+    const contact = await Contacts.addContact({ ...req.body, owner: userId })
 
     return res
       .status(HttpCode.CREATED)
@@ -15,9 +17,11 @@ const create = async (req, res, next) => {
 }
 
 // === GET ===
-const getAll = async (_req, res, next) => {
+const getAll = async (req, res, next) => {
+  const userId = req.user.id
+
   try {
-    const contactList = await Contacts.listContacts()
+    const contactList = await Contacts.listContacts(userId)
 
     return res
       .status(HttpCode.OK)
@@ -29,16 +33,16 @@ const getAll = async (_req, res, next) => {
 
 // === GET 'Id' ===
 const getById = async (req, res, next) => {
+  const userId = req.user.id
+
   try {
-    const contact = await Contacts.getContactById(req.params.contactId)
+    const contact = await Contacts.getContactById(req.params.contactId, userId)
     if (!contact) {
-      return res
-        .status(HttpCode.NOT_FOUND)
-        .json({
-          status: 'error',
-          code: HttpCode.NOT_FOUND,
-          data: { message: 'Not Found' },
-        })
+      return res.status(HttpCode.NOT_FOUND).json({
+        status: 'error',
+        code: HttpCode.NOT_FOUND,
+        data: { message: 'Not Found' },
+      })
     }
     return res
       .status(HttpCode.OK)
@@ -50,16 +54,20 @@ const getById = async (req, res, next) => {
 
 // === UPDATE ===
 const update = async (req, res, next) => {
+  const userId = req.user.id
+
   try {
-    const contact = await Contacts.updateContact(req.params.contactId, req.body)
+    const contact = await Contacts.updateContact(
+      req.params.contactId,
+      req.body,
+      userId,
+    )
     if (!contact) {
-      return res
-        .status(HttpCode.NOT_FOUND)
-        .json({
-          status: 'error',
-          code: HttpCode.NOT_FOUND,
-          data: { message: 'Not Found' },
-        })
+      return res.status(HttpCode.NOT_FOUND).json({
+        status: 'error',
+        code: HttpCode.NOT_FOUND,
+        data: { message: 'Not Found' },
+      })
     }
     return res
       .status(HttpCode.OK)
@@ -71,16 +79,16 @@ const update = async (req, res, next) => {
 
 // === REMOVE ===
 const remove = async (req, res, next) => {
+  const userId = req.user.id
+
   try {
-    const contact = await Contacts.removeContact(req.params.contactId)
+    const contact = await Contacts.removeContact(req.params.contactId, userId)
     if (!contact) {
-      return res
-        .status(HttpCode.NOT_FOUND)
-        .json({
-          status: 'error',
-          code: HttpCode.NOT_FOUND,
-          data: { message: 'Not Found' },
-        })
+      return res.status(HttpCode.NOT_FOUND).json({
+        status: 'error',
+        code: HttpCode.NOT_FOUND,
+        data: { message: 'Not Found' },
+      })
     }
     return res.status(HttpCode.OK).json({
       status: 'success',
