@@ -1,28 +1,21 @@
 const Joi = require('joi')
+const { HttpCode } = require('../../../helpers/constants')
 
-// === schema ADD ===
-const schemaAddContact = Joi.object({
-  name: Joi.string().min(2).max(60).required(),
+// Status: 400 Bad Request
+// Content-Type: application/json
+// ResponseBody: <Ошибка от Joi или другой валидационной библиотеки></Ошибка>
 
+// === schema CREATE ===
+const schemaCreateUser = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
     })
-    .optional(),
-
-  phone: Joi.string()
-    .regex(/^\d{3}-\d{3}-\d{4}$/)
     .required(),
 
-  coordinates: Joi.string().min(15).max(38).optional(),
-})
-
-// === schema UPDATE ===
-const schemaUpdateContact = Joi.object({
-  name: Joi.string().min(2).max(60).optional(),
-  email: Joi.string().min(2).max(60).optional(),
-  phone: Joi.string().min(2).max(60).optional(),
+  password: Joi.string().required(),
+  subscription: Joi.string().optional(),
 })
 
 const validate = (schema, obj, next) => {
@@ -30,8 +23,9 @@ const validate = (schema, obj, next) => {
 
   if (Object.keys(obj).length === 0) {
     return next({
-      status: 400,
-      message: 'missing fields',
+      status: 'Bad Request',
+      code: HttpCode.BAD_REQUEST,
+      data: `error: ${error.message}`,
     })
   }
 
@@ -39,22 +33,17 @@ const validate = (schema, obj, next) => {
     const field = error.details[0].path[0]
 
     return next({
-      status: 400,
+      status: HttpCode.BAD_REQUEST,
       message: `missing required ${field} field`,
     })
   }
   next()
 }
 
-const addUser = (req, _res, next) => {
-  return validate(schemaAddContact, req.body, next)
-}
-
-const updateUser = (req, _res, next) => {
-  return validate(schemaUpdateContact, req.body, next)
+const createUser = (req, _res, next) => {
+  return validate(schemaCreateUser, req.body, next)
 }
 
 module.exports = {
-  addUser,
-  updateUser,
+  createUser,
 }
