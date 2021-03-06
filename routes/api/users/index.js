@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../../../controllers/users') // registration, logIn, logOut
-const { userRegistration } = require('../users/validation')
+const { createUser } = require('../users/validation')
 
 // === router REGISTRATION ===
-router.post('/auth/register', userController.reg)
+router.post('/auth/register', createUser, userController.reg)
 
 // === router LOGIN ===
 router.post('/auth/login', userController.logIn)
@@ -13,6 +13,6 @@ router.post('/auth/login', userController.logIn)
 router.post('/auth/logout', userController.logOut)
 
 // === router GET ===
-router.get('/current', userController.logOut)
+router.get('/current', userController.getUser)
 
 module.exports = router
