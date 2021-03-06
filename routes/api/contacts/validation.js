@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { HttpCode } = require('../../../helpers/constants')
 
 // === schema ADD ===
 const schemaAddContact = Joi.object({
@@ -30,7 +31,7 @@ const validate = (schema, obj, next) => {
 
   if (Object.keys(obj).length === 0) {
     return next({
-      status: 400,
+      status: HttpCode.BAD_REQUEST,
       message: 'missing fields',
     })
   }
@@ -39,7 +40,7 @@ const validate = (schema, obj, next) => {
     const field = error.details[0].path[0]
 
     return next({
-      status: 400,
+      status: HttpCode.BAD_REQUEST,
       message: `missing required ${field} field`,
     })
   }
