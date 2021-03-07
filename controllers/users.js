@@ -1,6 +1,6 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const Users = require('../model/users') // findByEmail, findById, create, updateToken
+const Users = require('../model/users') // findByEmail, findById, findByToken, create, updateToken
 const { HttpCode } = require('../helpers/constants')
 const SECRET_KEY = process.env.JWT_SECRET
 
@@ -24,6 +24,7 @@ const reg = async (req, res, next) => {
       code: HttpCode.CREATED,
       data: {
         user: {
+          name: newUser.name,
           email: newUser.email,
           subscription: newUser.subscription,
         },
@@ -76,23 +77,19 @@ const logOut = async (req, res, next) => {
 // === GET USER ===
 const getUser = async (req, res, next) => {
   try {
-    const { email } = req.body
-    const isExistUser = await Users.find(email)
-    if (isExistUser) {
-      return res.status(HttpCode.CONFLICT).json({
-        status: 'conflict',
-        code: HttpCode.CONFLICT,
-        data: {
-          message: 'Email in use',
-        },
+    const [, token] = req.get('Authorization').split(' ')
+    const user = await Users.findByToken(token)
+    if (!user) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        status: 'error',
+        code: HttpCode.UNAUTHORIZED,
+        data: { status: 'UNAUTHORIZED', message: 'Not authorized' },
       })
     }
 
-    const user = await Users.addUser(req.body)
-
-    return res.status(HttpCode.CREATED).json({
+    return res.status(HttpCode.OK).json({
       status: 'success',
-      code: HttpCode.CREATED,
+      code: HttpCode.OK,
       data: {
         user: {
           email: user.email,
