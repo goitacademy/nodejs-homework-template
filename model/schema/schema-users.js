@@ -32,11 +32,7 @@ const userSchema = new Schema(
       type: String,
       require: [true, "Password required"],
     },
-    subscription: {
-      type: String,
-      enum: ["free", "pro", "premium"],
-      default: "free",
-    },
+
     token: {
       type: String,
       default: null,

@@ -4,6 +4,12 @@ const Sex = {
   NONE: "none",
 };
 
+const Subscription = {
+  FREE: "free",
+  PRO: "pro",
+  PREMIUM: "premium",
+};
+
 const HttpCode = {
   OK: 200,
   CREATED: 201,
@@ -19,4 +25,5 @@ const HttpCode = {
 module.exports = {
   Sex,
   HttpCode,
+  Subscription,
 };
