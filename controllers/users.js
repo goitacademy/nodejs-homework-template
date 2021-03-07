@@ -46,7 +46,7 @@ const logIn = async (req, res, next) => {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'error',
         code: HttpCode.UNAUTHORIZED,
-        data: { status: 'UNAUTHORIZED', message: 'Invalid credntials' },
+        data: { status: 'UNAUTHORIZED', message: 'Email or password is wrong' },
       })
     }
 
@@ -60,6 +60,10 @@ const logIn = async (req, res, next) => {
       code: HttpCode.OK,
       data: {
         token,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
       },
     })
   } catch (error) {
