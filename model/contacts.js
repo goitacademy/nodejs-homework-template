@@ -38,17 +38,6 @@ async function listContacts(
   return { total: total.toString(), limit, offset, contacts };
 }
 
-async function filter(sub, userId) {
-  const result = await Contact.find({
-    subscription: { $eg: sub },
-    owner: userId,
-  }).populate({
-    path: "owner",
-    select: "name email sex -_id",
-  });
-  return result;
-}
-
 async function getContactById(contactId, userId) {
   const result = await Contact.find({
     _id: contactId,
