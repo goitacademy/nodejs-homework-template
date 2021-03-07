@@ -1,11 +1,12 @@
 const Contacts = require("../model/contacts");
+const { HttpCode } = require("../helpers/constants");
 
 const getContacts = async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();
     res.json({
       status: "success",
-      code: 200,
+      code: HttpCode.OK,
       data: {
         contacts,
       },
@@ -21,7 +22,7 @@ const getContactById = async (req, res, next) => {
     if (contact) {
       return res.json({
         status: "success",
-        code: 200,
+        code: HttpCode.OK,
         data: {
           contact,
         },
@@ -43,7 +44,7 @@ const createContact = async (req, res, next) => {
     const contact = await Contacts.addContact(req.body);
     return res.status(201).json({
       status: "success",
-      code: 201,
+      code: HttpCode.CREATED,
       data: {
         contact,
       },
@@ -59,7 +60,7 @@ const removeContact = async (req, res, next) => {
     if (contact) {
       return res.json({
         status: "success",
-        code: 200,
+        code: HttpCode.OK,
         data: {
           contact,
         },
@@ -79,9 +80,9 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
+      return res.status(HttpCode.BAD_REQUEST).json({
         status: "missing fields",
-        code: 400,
+        code: HttpCode.BAD_REQUEST,
       });
     }
 
@@ -92,7 +93,7 @@ const updateContact = async (req, res, next) => {
     if (contact) {
       return res.json({
         status: "success",
-        code: 200,
+        code: HttpCode.OK,
         data: {
           contact,
         },

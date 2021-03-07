@@ -16,9 +16,7 @@ const contactSchema = new Schema(
       required: [true, "Enter phone"],
       unique: true,
     },
-    discription: {
-      type: String,
-    },
+
     owner: {
       type: SchemaTypes.ObjectId,
       ref: "user",
