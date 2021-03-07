@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = require("mongoose");
 
 const contactSchema = new Schema(
   {
@@ -13,16 +12,16 @@ const contactSchema = new Schema(
       unique: true,
     },
     phone: {
-      type: {},
+      type: Number,
       required: [true, "Enter phone"],
       unique: true,
     },
     discription: {
       type: String,
     },
-    password: {},
-    token: {
-      type: String,
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
