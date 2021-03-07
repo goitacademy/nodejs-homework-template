@@ -6,26 +6,32 @@ const { Subscription, Owner } = require('../../helpers/constants')
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, 'Set user Name'],
+      minlength: 2,
+      maxlength: 60,
+      default: 'Default User',
+    },
     email: {
       type: String,
-      require: [true, 'Email require'],
       unique: true,
+      require: [true, 'Set user Email'],
       validate(value) {
         const re = /\S+@\S+\.\S+/
         return re.test(String(value).toLowerCase())
       },
+      default: 'example@email.com',
     },
     password: {
       type: String,
-      require: [true, 'Password require'],
+      require: [true, 'Set user Password'],
     },
 
     subscription: {
       type: String,
-      enum: {
-        values: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
-        message: 'unknown subscription type',
-      },
+      require: [true, 'Set user Subscription type'],
+      enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
       default: Subscription.FREE,
     },
     token: {

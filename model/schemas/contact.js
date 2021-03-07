@@ -1,21 +1,30 @@
 const { Schema, SchemaTypes, model } = require('mongoose')
-const { Owner } = require('../../helpers/constants')
+const { Subscription, Owner } = require('../../helpers/constants')
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
+      minlength: 2,
+      maxlength: 60,
       required: [true, 'Set contact Name'],
+      default: 'Default Partner',
     },
     email: {
       type: String,
-      required: [true, 'Set Email'],
-      unique: true,
+      required: [true, 'Set contact Email'],
+      default: 'example@email.com',
     },
     phone: {
       type: String,
-      required: [true, 'Set Phone number'],
-      unique: true,
+      required: [true, 'Set contact Phone number'],
+      default: '000-000-0000',
+    },
+    subscription: {
+      type: String,
+      require: [true, 'Set contact subscription type'],
+      enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
+      default: Subscription.FREE,
     },
     owner: {
       type: SchemaTypes.ObjectId,
