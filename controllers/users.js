@@ -46,7 +46,7 @@ const logIn = async (req, res, next) => {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'error',
         code: HttpCode.UNAUTHORIZED,
-        data: { status: 'UNAUTHORIZED', message: 'Email or password is wrong' },
+        data: { status: 'UNAUTHORIZED', message: 'Invalid credntials' },
       })
     }
 
