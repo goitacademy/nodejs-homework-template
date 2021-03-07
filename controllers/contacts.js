@@ -18,9 +18,8 @@ const create = async (req, res, next) => {
 
 // === GET ===
 const getAll = async (req, res, next) => {
-  const userId = req.user.id
-
   try {
+    const userId = req.user.id
     const contactList = await Contacts.listContacts(userId)
 
     return res
