@@ -49,13 +49,12 @@ const login = async (req, res, next) => {
     const payload = { id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     await Users.updateToken(id, token);
-    return res.status(HttpCode.CREATED).json({
+    return res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
       data: {
         token,
         email,
-        subscription: user.subscription,
       },
     });
   } catch (e) {
@@ -64,9 +63,34 @@ const login = async (req, res, next) => {
 };
 const logout = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    await Users.updateToken(userId, null);
+    const id = req.user.id;
+    await Users.updateToken(id, null);
     return res.status(HttpCode.NO_CONTENT).json();
+  } catch (e) {
+    next(e);
+  }
+};
+
+const userCurrent = async (req, res, next) => {
+  try {
+    const { id, email, name } = req.user;
+    const user = await Users.findById(id);
+    if (!user) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        status: "error",
+        code: HttpCode.UNAUTHORIZED,
+        data: "UNAUTHORIZED",
+        message: "Not authorized",
+      });
+    }
+    return res.status(HttpCode.OK).json({
+      status: "success",
+      code: HttpCode.OK,
+      data: {
+        name,
+        email,
+      },
+    });
   } catch (e) {
     next(e);
   }
@@ -76,4 +100,5 @@ module.exports = {
   reg,
   login,
   logout,
+  userCurrent,
 };

@@ -20,7 +20,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("Database connected".yellow);
+  console.log("Database disconnected".yellow);
 });
 
 process.on("SIGINT", async () => {
