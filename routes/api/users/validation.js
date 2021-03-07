@@ -22,7 +22,7 @@ const validate = (schema, obj, next) => {
 
   if (Object.keys(obj).length === 0) {
     return next({
-      status: 'Bad Request',
+      status: 'error',
       code: HttpCode.BAD_REQUEST,
       data: `error: ${error.message}`,
     })
@@ -32,8 +32,9 @@ const validate = (schema, obj, next) => {
     const field = error.details[0].path[0]
 
     return next({
-      status: HttpCode.BAD_REQUEST,
-      message: `missing required ${field} field`,
+      status: 'error',
+      code: HttpCode.BAD_REQUEST,
+      data: { message: `missing required ${field} field` },
     })
   }
   next()
