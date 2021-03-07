@@ -32,7 +32,33 @@ const reg = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {};
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await Users.findByEmail(email);
+    if (!user || !user.validPassword(password)) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        status: "error",
+        code: HttpCode.UNAUTHORIZED,
+        data: "UNAUTHORIZED",
+        message: "Invalid credentials",
+      });
+    }
+    const id = user.id;
+    const payload = { id };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
+    await Users.updateToken(id, token);
+    return res.status(HttpCode.CREATED).json({
+      status: "success",
+      code: HttpCode.OK,
+      data: {
+        token,
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 const logout = async (req, res, next) => {};
 
 module.exports = {
