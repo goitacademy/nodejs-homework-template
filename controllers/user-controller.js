@@ -41,7 +41,7 @@ const login = async (req, res, next) => {
         status: "error",
         code: HttpCode.UNAUTHORIZED,
         data: "UNAUTHORIZED",
-        message: "Invalid credentials",
+        message: "Email or password is wrong",
       });
     }
     const id = user.id;
@@ -61,7 +61,15 @@ const login = async (req, res, next) => {
     next(e);
   }
 };
-const logout = async (req, res, next) => {};
+const logout = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    await Users.updateToken(userId, null);
+    return res.status(HttpCode.NO_CONTENT).json();
+  } catch (e) {
+    next(e);
+  }
+};
 
 module.exports = {
   reg,
