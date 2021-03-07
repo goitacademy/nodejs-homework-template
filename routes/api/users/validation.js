@@ -1,12 +1,10 @@
 const Joi = require('joi')
 const { HttpCode } = require('../../../helpers/constants')
 
-// Status: 400 Bad Request
-// Content-Type: application/json
-// ResponseBody: <Ошибка от Joi или другой валидационной библиотеки></Ошибка>
-
 // === schema CREATE ===
 const schemaCreateUser = Joi.object({
+  name: Joi.string().min(2).max(60).required(),
+
   email: Joi.string()
     .email({
       minDomainSegments: 2,
@@ -15,6 +13,7 @@ const schemaCreateUser = Joi.object({
     .required(),
 
   password: Joi.string().required(),
+
   subscription: Joi.string().optional(),
 })
 

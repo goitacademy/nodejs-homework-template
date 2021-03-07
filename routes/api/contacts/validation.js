@@ -10,13 +10,13 @@ const schemaAddContact = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
     })
-    .optional(),
+    .required(),
 
   phone: Joi.string()
     .regex(/^\d{3}-\d{3}-\d{4}$/)
     .required(),
 
-  coordinates: Joi.string().min(15).max(38).optional(),
+  subscription: Joi.string().min(2).max(60).required(),
 })
 
 // === schema UPDATE ===
@@ -24,6 +24,7 @@ const schemaUpdateContact = Joi.object({
   name: Joi.string().min(2).max(60).optional(),
   email: Joi.string().min(2).max(60).optional(),
   phone: Joi.string().min(2).max(60).optional(),
+  subscription: Joi.string().min(2).max(60).optional(),
 })
 
 const validate = (schema, obj, next) => {
