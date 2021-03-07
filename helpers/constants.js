@@ -5,4 +5,11 @@ const HttpCode = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 }
-module.exports = { HttpCode }
+
+const UserStatus = {
+  FREE: 'free',
+  PRO: 'pro',
+  PREMIUM: 'premium',
+}
+
+module.exports = { HttpCode, UserStatus }
