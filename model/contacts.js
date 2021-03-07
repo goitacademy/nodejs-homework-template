@@ -9,7 +9,7 @@ const addContact = async body => {
 const listContacts = async userId => {
   return await Contact.find({ owner: userId }).populate({
     path: 'owner',
-    select: 'email -_id',
+    select: 'name email -_id',
   })
 }
 
@@ -17,7 +17,7 @@ const listContacts = async userId => {
 const getContactById = async (contactId, userId) => {
   return await Contact.findOne({ _id: contactId, owner: userId }).populate({
     path: 'owner',
-    select: 'email -_id',
+    select: 'name email -_id',
   })
 }
 
@@ -29,7 +29,7 @@ const updateContact = async (contactId, body, userId) => {
     { new: true },
   ).populate({
     path: 'owner',
-    select: 'email -_id',
+    select: 'name email -_id',
   })
 }
 
@@ -40,7 +40,7 @@ const removeContact = async (contactId, userId) => {
     owner: userId,
   }).populate({
     path: 'owner',
-    select: 'email -_id',
+    select: 'name email -_id',
   })
 }
 
