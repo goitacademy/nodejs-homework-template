@@ -53,6 +53,8 @@ const login = async (req, res, next) => {
       code: HttpCode.OK,
       data: {
         token,
+        email,
+        subscription: user.subscription,
       },
     });
   } catch (e) {
