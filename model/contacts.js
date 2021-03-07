@@ -14,12 +14,39 @@ const updateContact = async (contactId, body, userId) => {
   return result;
 };
 
-async function listContacts(userId) {
-  const results = await Contact.find({ owner: userId }).populate({
+async function listContacts(
+  userId,
+  { sortBy, sortByDesc, limit = "5", offset = "0" }
+) {
+  const results = await Contact.paginate(
+    { owner: userId },
+    {
+      limit,
+      offset,
+      sort: {
+        ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+        ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+      },
+      populate: {
+        path: "owner",
+        select: "name email sex -_id",
+      },
+    }
+  );
+  const { docs: contacts, totalDocs: total } = results;
+
+  return { total: total.toString(), limit, offset, contacts };
+}
+
+async function filter(sub, userId) {
+  const result = await Contact.find({
+    subscription: { $eg: sub },
+    owner: userId,
+  }).populate({
     path: "owner",
     select: "name email sex -_id",
   });
-  return results;
+  return result;
 }
 
 async function getContactById(contactId, userId) {
