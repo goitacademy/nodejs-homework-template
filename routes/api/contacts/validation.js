@@ -9,7 +9,7 @@ const schemaAddContact = Joi.object({
     })
     .required(),
   phone: Joi.number().integer().required(),
-  // isVaccinated: Joi.boolean().optional(),
+  subscription: Joi.string().alphanum().min(3).max(30),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -21,12 +21,7 @@ const schemaUpdateContact = Joi.object({
     })
     .optional(),
   phone: Joi.number().integer().optional(),
-  // isVaccinated: Joi.boolean().optional(),
 });
-
-// const schemaUpdateStatusContact = Joi.object({
-//   isVaccinated: Joi.boolean().required(),
-// });
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
@@ -50,7 +45,3 @@ module.exports.addContact = (req, res, next) => {
 module.exports.updateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next);
 };
-
-// module.exports.updateStatusContact = (req, res, next) => {
-//   return validate(schemaUpdateStatusContact, req.body, next);
-// };
