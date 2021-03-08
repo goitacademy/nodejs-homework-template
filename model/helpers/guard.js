@@ -3,7 +3,7 @@ require('../../config/passport')
 const { httpCode } = require('./constants')
 
 const guard = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user) => {
+    passport.authenticate('jwt', { session: false }, (error, user) => {
         if (!user || error) {
             return res.status(httpCode.FORBIDDEN).json({
                 status: 'error',
@@ -11,7 +11,6 @@ const guard = (req, res, next) => {
                 data: 'Forbidden',
                 message: 'Invalid credentials'
             })
-
         }
         req.user = user
         return next()

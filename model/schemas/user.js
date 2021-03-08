@@ -28,7 +28,7 @@ const userSchema = new Schema({
     },
     token: {
         type: String,
-        default: none
+        default: "none"
     }
 }, { versionKey: false, timestamps: true })
 userSchema.path('email').validate(function (value) {
@@ -36,7 +36,7 @@ userSchema.path('email').validate(function (value) {
     return re.test(String(value).toLowerCase())
 })
 userSchema.pre('save', async function (next) {
-    if (!this.isNotModified(user)) {
+    if (!this.isModified('password')) {
         return next()
     }
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
