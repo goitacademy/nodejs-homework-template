@@ -8,12 +8,12 @@ const listContacts = async () => {
   return db.get('contacts').value()
 }
 
-const getContactById = async (id) => {
-  return db.get('contacts').find({ id }).value()
+const getContactById = async (contactId) => {
+  return db.get('contacts').find({ contactId }).value()
 }
 
-const removeContact = async (id) => {
-  const [record] = db.get('contacts').remove({ id }).write()
+const removeContact = async (contactId) => {
+  const [record] = db.get('contacts').remove({ contactId }).write()
   return record
 }
 
@@ -27,8 +27,8 @@ const addContact = async (body) => {
   return record
 }
 
-const updateContact = async (id, body) => {
-  const record = db.get('contacts').find({ id }).assign(body).value()
+const updateContact = async (contactId, body) => {
+  const record = db.get('contacts').find({ contactId }).assign(body).value()
   db.write()
   return record.id ? record : null
 }

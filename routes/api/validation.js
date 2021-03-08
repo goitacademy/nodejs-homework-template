@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const schemaCreateContact = Joi.object({
+const schemaAddContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
   email: Joi.string()
     .email({
@@ -50,10 +50,10 @@ const validate = (schema, obj, next) => {
   next()
 }
 
-module.exports.createCat = (req, _res, next) => {
-  return validate(schemaCreateContact, req.body, next)
+module.exports.addContact = (req, res, next) => {
+  return validate(schemaAddContact, req.body, next)
 }
 
-module.exports.updateCat = (req, _res, next) => {
+module.exports.updateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next)
 }
