@@ -8,6 +8,9 @@ const schemaAddContact = Joi.object({
     })
     .required(),
   phone: Joi.string().min(6).required(),
+  subscription: Joi.string().optional(),
+  password: Joi.string().optional(),
+  token: Joi.string().optional(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -18,7 +21,10 @@ const schemaUpdateContact = Joi.object({
     })
     .optional(),
   phone: Joi.string().min(6).optional(),
-}).or("name", "email", "phone");
+  subscription: Joi.string().optional(),
+  password: Joi.string().optional(),
+  token: Joi.string().optional(),
+}).or("name", "email", "phone", "subscription", "password", "token");
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
