@@ -33,7 +33,7 @@ const validate = (schema, obj, next) => {
     if (error.details[0].path[0] === 'phone') {
       return next({
         status: 400,
-        message: 'Field phone must be in one of the formats: \'(XXX) XXX-XXX, XXX-XXX-XXXX, XXX XXX XXXX, XXX.XXX.XXXX, +XX (XXX) XXX-XXXX\'',
+        message: 'Field phone must be in one of the formats: (XXX) XXX-XXXX, XXX-XXX-XXXX, XXX XXX XXXX, XXX.XXX.XXXX, +XX (XXX) XXX-XXXX '
       })
     } else if (error.details[0].type === 'object.min') {
       return next({

@@ -2,7 +2,7 @@
 // const contacts = require('./contacts.json')
 
 const db = require('./db')
-const { uuid } = require('uuid')
+const { uuid } = require('uuidv4')
 
 const listContacts = async () => {
   return db.get('contacts').value()

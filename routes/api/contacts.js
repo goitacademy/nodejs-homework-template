@@ -91,9 +91,7 @@ router.patch(
         return res.json({
           status: 'success',
           code: 200,
-          message: {
-            contact
-          },
+          message: { contact },
         })
       } else {
         return res.status(404).json({
