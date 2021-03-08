@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
+const { Subscription } = require("../../helpers/constants");
 
 const contactSchema = new Schema(
   {
@@ -13,21 +14,25 @@ const contactSchema = new Schema(
       unique: true,
     },
     phone: {
-      type: {},
+      type: Number,
       required: [true, "Enter phone"],
       unique: true,
     },
-    discription: {
+    subscription: {
       type: String,
+      enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
+      default: "free",
     },
-    password: {},
-    token: {
-      type: String,
+
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.plugin(mongoosePaginate);
 const Contacts = model("contact", contactSchema);
 
 module.exports = Contacts;
