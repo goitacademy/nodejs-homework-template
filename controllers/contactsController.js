@@ -1,10 +1,11 @@
 const { HttpCode } = require('../helpers/constants')
 
-const model = require('../model')
+const model = require('../model/contactModel')
 
 const listContacts = async (request, response, next) => {
   try {
-    const listContacts = await model.listContacts()
+    const userId = request.user.id
+    const listContacts = await model.listContacts(userId)
     response.status(HttpCode.OK).json({
       status: HttpCode.OK,
       code: HttpCode.OK,
@@ -17,8 +18,9 @@ const listContacts = async (request, response, next) => {
 
 const getContactById = async (request, response, next) => {
   try {
+    const userId = request.user.id
     const { contactId } = request.params
-    const contact = await model.getContactById(contactId)
+    const contact = await model.getContactById(contactId, userId)
     if (contact) {
       response.status(HttpCode.OK).json({
         status: HttpCode.OK,
@@ -40,7 +42,11 @@ const getContactById = async (request, response, next) => {
 
 const addContact = async (request, response, next) => {
   try {
-    const newContact = await model.addContact(request.body)
+    const userId = request.user.id
+    const newContact = await model.addContact({
+      ...request.body,
+      owner: userId,
+    })
     response.status(HttpCode.CREATED).json({
       status: HttpCode.CREATED,
       code: HttpCode.CREATED,
@@ -55,8 +61,9 @@ const addContact = async (request, response, next) => {
 
 const removeContact = async (request, response, next) => {
   try {
+    const userId = request.user.id
     const { contactId } = request.params
-    const isDeleted = await model.removeContact(contactId)
+    const isDeleted = await model.removeContact(contactId, userId)
     if (isDeleted) {
       response.status(HttpCode.OK).json({
         status: HttpCode.OK,
@@ -78,8 +85,12 @@ const removeContact = async (request, response, next) => {
 
 const updateContact = async (request, response, next) => {
   try {
+    const userId = request.user.id
     const { contactId } = request.params
-    const updatedContact = await model.updateContact(contactId, request.body)
+    const updatedContact = await model.updateContact(contactId, {
+      ...request.body,
+      owner: userId,
+    })
 
     if (updatedContact.updateStatus) {
       response.status(HttpCode.OK).json({

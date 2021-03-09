@@ -5,8 +5,6 @@ const uriDb = process.env.URI_DB
 
 const dbContacts = mongoose.connect(uriDb, {
   useNewUrlParser: true,
-  // useUnifiedTopology: true,
-  // useFindAndModify: false,
 })
 
 mongoose.connection.on('connecned', () => {
