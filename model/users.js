@@ -21,8 +21,11 @@ const updateToken = async (userId, token) => {
   return await User.updateOne({ _id: userId }, { token });
 };
 
-const updateAvatar = async (userId, avatar) => {
-  return await User.updateOne({ _id: userId }, { avatarURL: avatar });
+const updateAvatar = async (userId, avatar, imgIdCloud = null) => {
+  return await User.updateOne(
+    { _id: userId },
+    { avatarURL: avatar, imgIdCloud }
+  );
 };
 
 module.exports = {

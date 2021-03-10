@@ -1,14 +1,24 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const fs = require('fs').promises;
 const path = require('path');
 const Jimp = require('jimp');
+const { promisify } = require('util');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs').promises;
 
 const Users = require('../model/users');
 const { HttpCode, Subscriptions } = require('../helpers/constants');
 const createFolderIsExist = require('../helpers/create-dir');
 
 const SECRET_KEY = process.env.JWT_SECRET;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY_CLOUD,
+  api_secret: process.env.API_SECRET_CLOUD,
+});
+
+const uploadCloud = promisify(cloudinary.uploader.upload);
 
 const reg = async (req, res, next) => {
   try {
@@ -111,8 +121,15 @@ const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
     const avatarUrl = await saveAvatarToStatic(req);
+    await Users.updateAvatar(id, avatarUrl); // for static
 
-    await Users.updateAvatar(id, avatarUrl);
+    // for cloud
+    // const {
+    //   public_id: imgIdCloud,
+    //   secure_url: avatarUrl,
+    // } = await saveAvatarToCloud(req);
+
+    // await Users.updateAvatar(id, avatarUrl, imgIdCloud);
     return res.json({
       status: 'success',
       code: HttpCode.OK,
@@ -147,6 +164,23 @@ const saveAvatarToStatic = async (req) => {
     console.log(e.message);
   }
   return avatarUrl;
+};
+
+const saveAvatarToCloud = async (req) => {
+  const pathFile = req.file.path;
+  const result = await uploadCloud(pathFile, {
+    folder: 'photos',
+    transformation: { width: 250, height: 250, crop: 'fill' },
+  });
+  cloudinary.uploader.destroy(req.user.imgIdCloud, (err, result) => {
+    console.log(err, result);
+  });
+  try {
+    await fs.unlink(pathFile);
+  } catch (e) {
+    console.log(e.message);
+  }
+  return result;
 };
 
 module.exports = { reg, login, logout, getCurrentUser, avatars };
