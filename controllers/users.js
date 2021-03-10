@@ -110,40 +110,43 @@ const getCurrentUser = async (req, res, next) => {
 const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const USERS_AVATARS = process.env.USERS_AVATARS;
-    const pathFile = req.file.path; // полный путь к загруж файлу
-    const newAvatarName = `${Date.now()}-${req.file.originalname}}`;
+    const avatarUrl = await saveAvatarToStatic(req);
 
-    const img = await Jimp.read(pathFile); // Jimp поможет с центрированием и обрез. изображения
-    await img
-      .autocrop()
-      .cover(
-        250,
-        250,
-        Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE
-      )
-      .writeAsync(pathFile);
-    await createFolderIsExist(path.join(USERS_AVATARS, id));
-    await fs.rename(pathFile, path.join(USERS_AVATARS, id, newAvatarName));
-    const avatarUrl = path.normalize(path.join(id, newAvatarName));
-    try {
-      await fs.unlink(
-        path.join(precess.cwd(), USERS_AVATARS, req.user.avatarURL)
-      );
-    } catch (e) {
-      console.log(e.message);
-    }
     await Users.updateAvatar(id, avatarUrl);
     return res.json({
       status: 'success',
       code: HttpCode.OK,
       data: {
-        avatarUrl,
+        avatarURL: avatarUrl,
       },
     });
   } catch (e) {
     next(e);
   }
+};
+
+const saveAvatarToStatic = async (req) => {
+  const id = req.user.id;
+  const USERS_AVATARS = process.env.USERS_AVATARS;
+  const pathFile = req.file.path; // полный путь к загруж файлу
+  const newAvatarName = `${Date.now()}-${req.file.originalname}`;
+
+  const img = await Jimp.read(pathFile); // Jimp поможет с центрированием и обрез. изображения
+  await img
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(pathFile);
+  await createFolderIsExist(path.join(USERS_AVATARS, id));
+  await fs.rename(pathFile, path.join(USERS_AVATARS, id, newAvatarName));
+  const avatarUrl = path.normalize(path.join(id, newAvatarName));
+  try {
+    await fs.unlink(
+      path.join(process.cwd(), USERS_AVATARS, req.user.avatarURL)
+    );
+  } catch (e) {
+    console.log(e.message);
+  }
+  return avatarUrl;
 };
 
 module.exports = { reg, login, logout, getCurrentUser, avatars };

@@ -1,6 +1,7 @@
 const express = require('express');
 
 const validate = require('./validation');
+const { validateUploadAvatar } = require('./validation');
 const userController = require('../../../controllers/users');
 const guard = require('../../../helpers/guard');
 const upload = require('../../../helpers/upload');
@@ -19,8 +20,7 @@ router.post('/auth/logout', guard, userController.logout);
 router.get('/current', userController.getCurrentUser);
 router.patch(
   '/avatars',
-  guard,
-  upload.single('avatar'),
+  [guard, upload.single('avatar'), validateUploadAvatar],
   userController.avatars
 );
 
