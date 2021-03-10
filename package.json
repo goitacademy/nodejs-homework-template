@@ -1,6 +1,6 @@
 {
   "name": "nodejs-homework-rest-api",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
@@ -16,11 +16,10 @@
     "express": "4.17.1",
     "joi": "^17.4.0",
     "mongoose": "^5.11.19",
-    "morgan": "1.10.0",
-    "node-modules": "^1.0.1"
+    "morgan": "1.10.0"
   },
   "devDependencies": {
-    "eslint": "^7.19.0",
+    "eslint": "^7.21.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
