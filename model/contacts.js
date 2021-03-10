@@ -2,7 +2,7 @@ const Contacts = require('./Schemas/contact')
 
 
 const listContacts = async () => {
-  const results = await Contact.find({})
+  const results = await Contacts.find({})
   return results
 }
 
