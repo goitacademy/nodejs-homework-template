@@ -16,7 +16,8 @@
     "express": "4.17.1",
     "joi": "^17.4.0",
     "mongoose": "^5.11.19",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "node-modules": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
