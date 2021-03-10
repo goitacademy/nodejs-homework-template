@@ -1,69 +1,50 @@
-const fs = require('fs/promises')
-const path = require('path')
-const { v4: uuid } = require('uuid')
 
-const contactsPath = path.join(__dirname, '../model/contacts.json')
+
+const db = require('./db')
+const { ObjectID } = require('mongodb')
+
 
 const listContacts = async () => {
-  console.log(contactsPath)
-  const list = await fs.readFile(contactsPath, 'utf8')
-  return JSON.parse(list)
+  const collection = await getCollection(db, 'contacts')
+  const results = await collection.find({}).toArray()
+  return results
 }
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts()
-  const contactToFind = contacts.find(
-    (contact) => String(contact.id) === contactId
-  )
-  return contactToFind
+  const collection = await getCollection(db, 'contacts')
+  const objectId = new ObjectID(id)
+  console.log(objectId.getTimestamp())
+  const [result] = await collection.find({ _id: objectId }).toArray()
+  return result
 }
 
 const addContact = async (body) => {
-  const contacts = await listContacts()
-
-  const newContact = { id: uuid(), ...body }
-  const newListContacts = [...contacts, newContact]
-
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newListContacts, null, 2),
-    'utf8'
-  )
-  return newContact
+  const record = {
+    ...body
+  }
+  const collection = await getCollection(db, 'contacts')
+  const {
+    ops: [result],
+  } = await collection.insertOne(record)
+  return result
 }
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts()
-  const newListContacts = contacts.filter(
-    (contact) => String(contact.id) !== contactId
-  )
-  const contactToRemove = contacts.find(
-    (contact) => String(contact.id) === contactId
-  )
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newListContacts, null, 2),
-    'utf8'
-  )
-  return contactToRemove
+  const collection = await getCollection(db, 'contacts')
+  const objectId = new ObjectID(id)
+  const { value: result } = await collection.findOneAndDelete({ _id: objectId })
+  return result
 }
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts()
-  const contact = contacts.find((contact) => String(contact.id) === contactId)
-
-  const newContact = { ...contact, ...body }
-  const newListContacts = contacts.map((obj) =>
-    String(obj.id) === contactId ? newContact : obj
+  const collection = await getCollection(db, 'contacts')
+  const objectId = new ObjectID(id)
+  const { value: result } = await collection.findOneAndUpdate(
+    { _id: objectId },
+    { $set: body },
+    { returnOriginal: false },
   )
-
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newListContacts, null, 2),
-    'utf8'
-  )
-
-  return newContact
+  return result
 }
 
 module.exports = {
