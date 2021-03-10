@@ -1,12 +1,13 @@
 {
-  "name": "template",
+  "name": "nodejs-homework-rest-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "dev:debug": "node --inspect ./bin/server.js"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -23,6 +24,8 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "nodemon": "2.0.7",
+    "eslint-config-prettier": "7.2.0",
+    "eslint-plugin-json": "2.1.2"
   }
 }
