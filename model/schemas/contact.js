@@ -14,6 +14,10 @@ const contactSchema = new Schema({
     password: {
         type: String,
         required: [true, 'Please enter your password']
+    },
+    owner: {
+        type: SchemaTypes.ObjectId,
+        ref: 'user',
     }
 },
     { versionKey: false, timestamps: true })

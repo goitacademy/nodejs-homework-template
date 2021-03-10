@@ -9,17 +9,9 @@ const userSchema = new Schema({
         minLength: 2,
         default: "Guest"
     },
-    sex: {
-        type: String,
-        enum: {
-            values: [Sex.MALE, Sex.FEMALE, Sex.NONE],
-            message: 'it`s not allowed'
-        },
-        default: Sex.NONE
-    },
     email: {
         type: String,
-        required: [true, 'Email required'],
+        required: [true, "Email required"],
         unique: true
     },
     password: {
@@ -29,8 +21,17 @@ const userSchema = new Schema({
     token: {
         type: String,
         default: "none"
-    }
+    },
+    subscription: {
+        type: String,
+        enum: ["free", "pro", "premium"],
+        default: "free"
+    },
+    token: String
 }, { versionKey: false, timestamps: true })
+
+
+
 userSchema.path('email').validate(function (value) {
     const re = /\S+@\S+\.\S+/
     return re.test(String(value).toLowerCase())

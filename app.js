@@ -4,6 +4,7 @@ const cors = require('cors')
 const app = express()
 
 const contactsRouter = require('./routes/api/contacts')
+const authRouter = require('./routes/api/auth')
 const usersRouter = require('./routes/api/users')
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -13,8 +14,8 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
-app.use('/api/users', usersRouter)
-
+app.use('/auth', authRouter)
+app.use('/users', usersRouter)
 app.get('/', (req, res) => {
   res.send(req.query)
 })
