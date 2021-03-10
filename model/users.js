@@ -22,7 +22,7 @@ const updateToken = async (userId, token) => {
 };
 
 const updateAvatar = async (userId, avatar) => {
-  return await User.updateOne({ _id: userId }, { avatar });
+  return await User.updateOne({ _id: userId }, { avatarURL: avatar });
 };
 
 module.exports = {
