@@ -16,6 +16,10 @@ const schemaUpdateContact = Joi.object({
   phone: Joi.string().min(1).max(20).optional(),
 });
 
+const schemaContactID = Joi.object({
+  id: Joi.string().required(),
+});
+
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
   if (error) {
@@ -28,10 +32,14 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-module.exports.createContact = (req, res, next) => {
+module.exports.createContact = (req, _res, next) => {
   return validate(schemaCreateContact, req.body, next);
 };
 
-module.exports.updateContact = (req, res, next) => {
+module.exports.updateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next);
+};
+
+module.exports.IDContact = (req, _res, next) => {
+  return validate(schemaContactID, req.query, next);
 };

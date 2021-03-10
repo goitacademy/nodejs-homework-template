@@ -9,11 +9,12 @@ router
   .post('/', guard, validate.createContact, contactsController.create);
 
 router
-  .get('/:contactId', guard, contactsController.getById)
-  .delete('/:contactId', guard, contactsController.remove)
+  .get('/:contactId', guard, validate.IDContact, contactsController.getById)
+  .delete('/:contactId', guard, validate.IDContact, contactsController.remove)
   .patch(
     '/:contactId',
     guard,
+    validate.IDContact,
     validate.updateContact,
     contactsController.update
   );
