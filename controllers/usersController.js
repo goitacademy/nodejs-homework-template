@@ -23,6 +23,7 @@ const reg = async (req, res, next) => {
       data: {
         email: newUser.email,
         subscription: newUser.subscription,
+        id: newUser.id,
       },
     });
   } catch (err) {
@@ -30,7 +31,33 @@ const reg = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {};
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await UsersAPI.findByEmail(email);
+    if (!user || !user.validPassword(password)) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        status: "error",
+        code: HttpCode.UNAUTHORIZED,
+        data: "Conflict",
+        message: "Invalid credentials",
+      });
+    }
+    const id = user._id;
+    const payload = { id };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
+    await UsersAPI.updateToken(id, token);
+    return res.status(HttpCode.OK).json({
+      status: "success",
+      code: HttpCode.OK,
+      data: {
+        token,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 const logout = async (req, res, next) => {};
 
-module.exports = { reg };
+module.exports = { reg, login };
