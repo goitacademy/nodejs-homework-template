@@ -44,15 +44,15 @@ const updateToken = jest.fn((userId, userToken) => {
 });
 
 const updateAvatar = jest.fn((userId, avatar, imgIdCloud = null) => {
-  // const [user] = users.filter((el) => String(el._id) === String(userId));
-  // if (user) {
-  //   user.avatarURL = avatar;
-  //   user.imgIdCloud = imgIdCloud;
-  //   return user;
-  // } else {
-  //   return null;
-  // }
-  return {};
+  const [user] = users.filter((el) => String(el._id) === String(userId));
+  if (user) {
+    user.avatarURL = avatar;
+    user.imgIdCloud = imgIdCloud;
+    return user;
+  } else {
+    return null;
+  }
+  // return {};
 });
 
 module.exports = {
