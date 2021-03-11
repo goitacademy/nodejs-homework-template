@@ -35,15 +35,6 @@ const usersSchema = new Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-usersSchema.pre('save', function (next) {
-  if (this.isModified('password')) {
-    const salt = bcrypt.genSaltSync(SALT)
-    this.password = bcrypt.hashSync(this.password, salt)
-    return next()
-  }
-  return next()
-})
-
 usersSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }

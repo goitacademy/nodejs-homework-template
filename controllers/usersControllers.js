@@ -42,20 +42,20 @@ const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body
     const user = await findUserByEmail(email)
-    const isValidPassword = await user.validPassword(password)
+    const isValidPassword = await user?.validPassword(password)
+    console.log(isValidPassword)
 
-    if (user || !isValidPassword) {
+    if (user && isValidPassword) {
       const id = user._id
       const payload = { id }
       const token = jwt.sign(payload, SECRET, { expiresIn: '6h' })
-      await updateTokenUser(id, token)
+      const updatedUser = await updateTokenUser(id, token)
 
       return res.status(HttpCode.OK).json({
         status: 'success',
         code: HttpCode.OK,
         data: {
-          token,
-          user
+          user: updatedUser
         }
       })
     } else {
@@ -79,13 +79,14 @@ const logoutUser = async (req, res, next) => {
 }
 
 const getCurrentUser = async (req, res, next) => {
+  const name = req.user.name
   const email = req.user.email
   const subscription = req.user.subscription
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
     data: {
-      email, subscription
+      name, email, subscription
     }
   })
 }
