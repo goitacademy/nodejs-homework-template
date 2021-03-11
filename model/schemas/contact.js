@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { Schema, model } = mongoose
+const { Schema, SchemaTypes, model } = mongoose
 
 const contactSchema = new Schema({
     name: {
@@ -9,14 +9,18 @@ const contactSchema = new Schema({
     },
     email: {
         type: String,
-        unique: true,
         required: [true, 'Please set email for the contact']
     },
     password: {
         type: String,
         required: [true, 'Please enter your password']
+    },
+    owner: {
+        type: SchemaTypes.ObjectId,
+        ref: 'user',
     }
-})
+},
+    { versionKey: false, timestamps: true })
 
 const Contact = model('contact', contactSchema)
 
