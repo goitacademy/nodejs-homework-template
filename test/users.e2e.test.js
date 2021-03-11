@@ -23,20 +23,32 @@ describe('tests for the route api/users', () => {
   });
 
   describe('tests for the route api/users/avatars', () => {
+    it('should return 201 registration', async (done) => {
+      const res = await request(app)
+        .post(`/api/users/auth/register`)
+        .send(newUser)
+        .set('Accept', 'application/json');
+
+      expect(res.status).toEqual(201);
+      expect(res.body).toBeDefined();
+
+      done();
+    });
+
     it('should return 200 login', async (done) => {
       const res = await request(app)
         .post(`/api/users/auth/login`)
-        .send({ email: User.email, password: User.password })
+        .send(newUser)
         .set('Accept', 'application/json');
 
-      console.log(res);
+      console.log(res.body);
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
 
       done();
     });
 
-    it('should receive status 401 with invalid token in patch request', async (done) => {
+    xit('should receive status 401 with invalid token in patch request', async (done) => {
       const buffer = await fs.readFile('./test/222.jpg');
       const res = await request(app)
         .patch('/api/users/avatars')
@@ -48,7 +60,7 @@ describe('tests for the route api/users', () => {
 
       done();
     });
-    it('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
+    xit('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
       const buffer = await fs.readFile('./test/222.jpg');
       const res = await request(app)
         .patch('/api/users/avatars')
