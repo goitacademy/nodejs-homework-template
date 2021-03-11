@@ -110,6 +110,7 @@ const getCurrentUser = async (req, res, next) => {
       body: {
         email: user.email,
         subscription: user.subscription,
+        avatarURL: user.avatarURL,
       },
     });
   } catch (error) {
