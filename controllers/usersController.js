@@ -21,6 +21,7 @@ const reg = async (req, res, next) => {
       status: "success",
       code: HttpCode.CREATED,
       data: {
+        name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
         id: newUser.id,
@@ -58,6 +59,10 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
-const logout = async (req, res, next) => {};
+const logout = async (req, res, next) => {
+  const id = req.user.id;
+  await UsersAPI.updateToken(id, null);
+  return res.status(HttpCode.NO_CONTENT).json({ message: "Nothing" });
+};
 
-module.exports = { reg, login };
+module.exports = { reg, login, logout };

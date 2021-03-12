@@ -8,8 +8,8 @@ const findById = async (id) => {
   return await User.findOne({ _id: id });
 };
 
-const create = async ({ email, password, subscription }) => {
-  const user = new User({ email, password, subscription });
+const create = async ({ email, password, subscription, name }) => {
+  const user = new User({ email, password, subscription, name });
   return await user.save();
 };
 

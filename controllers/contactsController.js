@@ -2,7 +2,8 @@ const ContactsAPI = require("../model/contactsAPI.js");
 
 const getAll = async (req, res, next) => {
   try {
-    const allContacts = await ContactsAPI.getAll();
+    const userId = req.user.id;
+    const allContacts = await ContactsAPI.getAll(userId);
     return res.json({
       status: "success",
       code: 200,
@@ -15,7 +16,8 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const contact = await ContactsAPI.getById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await ContactsAPI.getById(req.params.contactId, userId);
     if (contact) {
       return res.json({
         status: "success",
@@ -36,7 +38,8 @@ const getById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const newContact = await ContactsAPI.add(req.body);
+    const userId = req.user.id;
+    const newContact = await ContactsAPI.add({ ...req.body, owner: userId });
     return res.json({
       status: "success",
       code: 201,
@@ -49,7 +52,11 @@ const addContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   try {
-    const deletedContact = await ContactsAPI.remove(req.params.contactId);
+    const userId = req.user.id;
+    const deletedContact = await ContactsAPI.remove(
+      req.params.contactId,
+      userId
+    );
     if (deletedContact) {
       return res.json({
         status: "success",
@@ -70,9 +77,11 @@ const deleteContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     const updatedContact = await ContactsAPI.update(
       req.params.contactId,
-      req.body
+      req.body,
+      userId
     );
     if (updatedContact) {
       return res.json({
