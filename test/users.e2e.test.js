@@ -14,6 +14,7 @@ User.token = token;
 
 jest.mock('../model/users.js');
 jest.mock('../model/contacts.js');
+jest.mock('cloudinary');
 
 describe('tests for the route api/users', () => {
   describe.skip('tests for authorization middleware', () => {

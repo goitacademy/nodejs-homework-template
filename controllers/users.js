@@ -120,7 +120,7 @@ const getCurrentUser = async (req, res, next) => {
 
 const avatars = async (req, res, next) => {
   try {
-    const id = req.user.id;
+    const id = req.user._id;
     const avatarUrl = await saveAvatarToStatic(req);
     await Users.updateAvatar(id, avatarUrl); // for static
 
