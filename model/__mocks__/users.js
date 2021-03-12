@@ -20,7 +20,7 @@ const create = jest.fn(({ email, password }) => {
   const pass = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
   const user = {
     email,
-    pass,
+    password: pass,
     _id: '604780b0a33f593b5866d7ad',
     subscription: 'free',
     imgIdCloud: null,
@@ -34,13 +34,14 @@ const create = jest.fn(({ email, password }) => {
 });
 
 const updateToken = jest.fn((userId, userToken) => {
-  const [user] = users.filter((el) => String(el._id) === String(userId));
-  if (user) {
-    user.token = userToken;
-    return { email: user.email, token: user.token };
-  } else {
-    return null;
-  }
+  // const [user] = users.filter((el) => String(el._id) === String(userId));
+  // if (user) {
+  //   user.token = userToken;
+  //   return { email: user.email, token: user.token };
+  // } else {
+  //   return null;
+  // }
+  return {};
 });
 
 const updateAvatar = jest.fn((userId, avatar, imgIdCloud = null) => {

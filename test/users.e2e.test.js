@@ -41,14 +41,13 @@ describe('tests for the route api/users', () => {
         .send(newUser)
         .set('Accept', 'application/json');
 
-      console.log(res.body);
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
 
       done();
     });
 
-    xit('should receive status 401 with invalid token in patch request', async (done) => {
+    it('should receive status 401 with invalid token in patch request', async (done) => {
       const buffer = await fs.readFile('./test/222.jpg');
       const res = await request(app)
         .patch('/api/users/avatars')
@@ -60,12 +59,15 @@ describe('tests for the route api/users', () => {
 
       done();
     });
-    xit('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
+
+    it('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
       const buffer = await fs.readFile('./test/222.jpg');
+
       const res = await request(app)
         .patch('/api/users/avatars')
         .set('Authorization', `Bearer ${token}`)
         .attach('avatar', buffer, '222.jpg');
+
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
 
