@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { HttpCode } = require("../../../helpers/constants");
 
 const schemaUserRegistration = Joi.object({
   name: Joi.string().min(2).max(20).optional(),
@@ -26,7 +27,7 @@ const validate = (schema, obj, next) => {
   if (error) {
     const [{ message }] = error.details;
     return next({
-      status: 400,
+      status: HttpCode.BAD_REQUEST,
       message,
       data: "bad request",
     });

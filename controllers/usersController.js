@@ -65,4 +65,26 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({ message: "Nothing" });
 };
 
-module.exports = { reg, login, logout };
+const current = async (req, res, next) => {
+  const [, token] = req.get("Authorization").split(" ");
+  const isCurrentUser = await UsersAPI.findByToken(token);
+
+  if (!isCurrentUser) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      status: "error",
+      code: HttpCode.UNAUTHORIZED,
+      message: "Not authorised",
+    });
+  }
+
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    data: {
+      email: isCurrentUser.email,
+      subscription: isCurrentUser.subscription,
+    },
+  });
+};
+
+module.exports = { reg, login, logout, current };

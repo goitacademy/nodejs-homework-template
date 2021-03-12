@@ -8,6 +8,10 @@ const findById = async (id) => {
   return await User.findOne({ _id: id });
 };
 
+const findByToken = async (token) => {
+  return await User.findOne({ token: token });
+};
+
 const create = async ({ email, password, subscription, name }) => {
   const user = new User({ email, password, subscription, name });
   return await user.save();
@@ -22,4 +26,5 @@ module.exports = {
   findById,
   create,
   updateToken,
+  findByToken,
 };
