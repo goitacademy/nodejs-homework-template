@@ -1,3 +1,7 @@
 {
-  "ignore": ["node_modules", "model/contacts.json"]
+  "ignore": [
+    "node_modules",
+    "model/contacts.json",
+    ".env"
+  ]
 }

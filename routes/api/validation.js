@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require("joi");
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -7,7 +7,7 @@ const schemaCreateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .required(),
-})
+});
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).optional(),
@@ -16,24 +16,24 @@ const schemaUpdateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .optional(),
-})
+});
 
 const validate = (schema, obj, next) => {
-  const { error } = schema.validate(obj)
+  const { error } = schema.validate(obj);
   if (error) {
-    const [{ message }] = error.details
+    const [{ message }] = error.details;
     return next({
       status: 400,
-      message: `Filed: ${message.replace(/"/g, '')}`,
-    })
+      message: `Filed: ${message.replace(/"/g, "")}`,
+    });
   }
-  next()
-}
+  next();
+};
 
 module.exports.createContact = (req, _res, next) => {
-  return validate(schemaCreateContact, req.body, next)
-}
+  return validate(schemaCreateContact, req.body, next);
+};
 
 module.exports.updateContact = (req, _res, next) => {
-  return validate(schemaUpdateContact, req.body, next)
-}
+  return validate(schemaUpdateContact, req.body, next);
+};
