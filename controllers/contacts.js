@@ -1,20 +1,22 @@
-const Contact = require('../model/index');
+const Contact = require('../model/contacts');
+const { HttpCode } = require('../helpers/constans');
 
 const getAllContact = async (req, res, next) => {
   try {
-    const contact = await Contact.listContacts();
+    const userId = req.user.id;
+    const contact = await Contact.listContacts(userId, req.query);
     if (contact) {
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: {
-          contact,
+          ...contact,
         },
       });
     } else {
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: 'Contact list is empty',
       });
     }
@@ -25,19 +27,20 @@ const getAllContact = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await Contact.getContactById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contact.getContactById(req.params.contactId, userId);
     if (contact) {
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
+        code: HttpCode.OK,
         data: {
           contact,
         },
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: 'error',
-        code: 404,
+        code: HttpCode.NOT_FOUND,
         data: 'User with this ID was not found!',
       });
     }
@@ -47,27 +50,27 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-
+  const { name, email } = req.body;
+  const userId = req.user.id;
   if (name && email) {
-    const contact = await Contact.addContact(req.body);
+    const contact = await Contact.addContact({ ...req.body, owner: userId });
     if (contact) {
-      return res.status(201).json({
+      return res.status(HttpCode.CREATED).json({
         status: 'success',
-        code: 201,
+        code: HttpCode.CREATED,
         data: { contact },
       });
     } else {
-      return res.status(400).json({
+      return res.status(HttpCode.BAD_REQUEST).json({
         status: 'error',
-        code: 400,
+        code: HttpCode.BAD_REQUEST,
         data: 'A user with this name or email already exists!',
       });
     }
   } else {
-    return res.status(400).json({
+    return res.status(HttpCode.BAD_REQUEST).json({
       status: 'error',
-      code: 400,
+      code: HttpCode.BAD_REQUEST,
       message: 'Missing required name field',
     });
   }
@@ -75,18 +78,19 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await Contact.removeContact(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contact.removeContact(req.params.contactId, userId);
 
     if (contact) {
-      return res.json({
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
-        message: 'contact deleted',
+        code: HttpCode.OK,
+        message: 'Contact deleted',
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.BAD_REQUEST).json({
         status: 'error',
-        code: 404,
+        code: HttpCode.BAD_REQUEST,
         message: 'Not Found',
       });
     }
@@ -97,33 +101,35 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     if (req.body) {
       const contact = await Contact.updateContact(
         req.params.contactId,
         req.body,
+        userId,
       );
 
       if (contact) {
-        return res.status(200).json({
+        return res.status(HttpCode.OK).json({
           status: 'success',
-          code: 200,
+          code: HttpCode.OK,
           message: 'Contact updated successfully',
           data: {
             contact,
           },
         });
       } else {
-        return res.status(404).json({
+        return res.status(HttpCode.NOT_FOUND).json({
           status: 'error',
-          code: 404,
+          code: HttpCode.NOT_FOUND,
           message: 'Not found',
           // data: 'User with this ID was not found!',
         });
       }
     } else {
-      return res.status(400).json({
+      return res.status(HttpCode.BAD_REQUEST).json({
         status: 'error',
-        code: 400,
+        code: HttpCode.BAD_REQUEST,
         message: 'Missing fields',
       });
     }

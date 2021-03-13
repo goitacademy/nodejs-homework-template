@@ -23,15 +23,12 @@ const schemaUpdateContact = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
     }),
-  phone: phoneVal
-    .string()
-    .phoneNumber({
-      defaultCountry: 'UA',
-      format: 'international',
-      strict: true,
-    })
-    .required(),
-});
+  phone: phoneVal.string().phoneNumber({
+    defaultCountry: 'UA',
+    format: 'international',
+    strict: true,
+  }),
+}).min(1);
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
@@ -45,9 +42,16 @@ const validate = (schema, obj, next) => {
   }
   next();
 };
+
 module.exports.id = (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).send('Invalid object id');
+  const contactId = req.params.contactId;
+
+  if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: `Id: ${contactId} is not valid`,
+    });
   }
   next();
 };
