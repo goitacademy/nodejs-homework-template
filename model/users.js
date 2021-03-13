@@ -28,6 +28,10 @@ const updateAvatar = async (userId, avatar, imgIdCloud = null) => {
   );
 };
 
+const updateSubUser = async (id, subscription) => {
+  return await User.updateOne({ _id: id }, { subscription });
+};
+
 module.exports = {
   findByEmail,
   findById,
@@ -35,4 +39,5 @@ module.exports = {
   updateToken,
   findByToken,
   updateAvatar,
+  updateSubUser,
 };

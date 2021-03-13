@@ -18,6 +18,7 @@ router.post(
 router.post('/auth/login', userController.login);
 router.post('/auth/logout', guard, userController.logout);
 router.get('/current', userController.getCurrentUser);
+router.patch('/', guard, userController.updateSub);
 router.patch(
   '/avatars',
   [guard, upload.single('avatar'), validateUploadAvatar],

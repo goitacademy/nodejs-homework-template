@@ -34,14 +34,13 @@ const create = jest.fn(({ email, password }) => {
 });
 
 const updateToken = jest.fn((userId, userToken) => {
-  // const [user] = users.filter((el) => String(el._id) === String(userId));
-  // if (user) {
-  //   user.token = userToken;
-  //   return { email: user.email, token: user.token };
-  // } else {
-  //   return null;
-  // }
-  return {};
+  const [user] = users.filter((el) => String(el._id) === String(userId));
+  if (user) {
+    user.token = userToken;
+    return { email: user.email, token: user.token };
+  } else {
+    return null;
+  }
 });
 
 const updateAvatar = jest.fn((userId, avatar, imgIdCloud = null) => {
@@ -49,11 +48,10 @@ const updateAvatar = jest.fn((userId, avatar, imgIdCloud = null) => {
   if (user) {
     user.avatarURL = avatar;
     user.imgIdCloud = imgIdCloud;
-    return user;
+    return user.avatarURL;
   } else {
     return null;
   }
-  // return {};
 });
 
 module.exports = {

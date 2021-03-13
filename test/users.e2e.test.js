@@ -12,6 +12,8 @@ const issueToken = (payload, secret) => jwt.sign(payload, secret);
 const token = issueToken({ id: User._id }, SECRET_KEY);
 User.token = token;
 
+let newToken = '';
+
 jest.mock('../model/users.js');
 jest.mock('../model/contacts.js');
 jest.mock('cloudinary');
@@ -23,7 +25,7 @@ describe('tests for the route api/users', () => {
     it('with valid token in the header', () => {});
   });
 
-  describe('tests for the route api/users/avatars', () => {
+  describe('Test for register and login', () => {
     it('should return 201 registration', async (done) => {
       const res = await request(app)
         .post(`/api/users/auth/register`)
@@ -42,35 +44,40 @@ describe('tests for the route api/users', () => {
         .send(newUser)
         .set('Accept', 'application/json');
 
+      newToken = res.body.data.token;
+
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
 
       done();
     });
+  });
 
+  describe('tests for the route api/users/avatars', () => {
     it('should receive status 401 with invalid token in patch request', async (done) => {
-      const buffer = await fs.readFile('./test/222.jpg');
+      const buffer = await fs.readFile('./test/default.jpg');
       const res = await request(app)
         .patch('/api/users/avatars')
-        .set('Authorization', `Bearer ${token}w`)
-        .attach('avatar', buffer, '222.jpg');
+        .set('Authorization', `Bearer abc123`)
+        .attach('avatar', buffer, 'default.jpg');
 
-      expect(res.status).toEqual(401);
+      expect(res.body.code).toEqual(401);
       expect(res.body).toBeDefined();
 
       done();
     });
 
     it('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
-      const buffer = await fs.readFile('./test/222.jpg');
+      const buffer = await fs.readFile('./test/default.jpg');
 
       const res = await request(app)
         .patch('/api/users/avatars')
         .set('Authorization', `Bearer ${token}`)
-        .attach('avatar', buffer, '222.jpg');
+        .attach('avatar', buffer, 'default.jpg');
 
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
+      expect(res.body.data).toHaveProperty('avatarURL');
 
       done();
     });

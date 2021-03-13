@@ -91,8 +91,8 @@ const logout = async (req, res, _next) => {
 
 const getCurrentUser = async (req, res, next) => {
   try {
-    const token = req.token;
-    const user = await Users.findByToken(token);
+    const id = String(req.user._id);
+    const user = await Users.findById(id);
 
     if (!user) {
       return res.status(HttpCode.UNAUTHORIZED).json({
@@ -115,6 +115,33 @@ const getCurrentUser = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+const updateSub = async (req, res, next) => {
+  try {
+    const id = String(req.user._id);
+    await Users.updateSubUser(id, req.body.subscription);
+    const user = await Users.findById(id);
+    return res.json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: {
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+          avatarURL: user.avatarURL,
+        },
+      },
+    });
+  } catch (e) {
+    if (e.name === 'CastError') {
+      return next({
+        status: HttpCode.NOT_FOUND,
+        message: 'Not Found',
+      });
+    }
+    next(e);
   }
 };
 
@@ -144,7 +171,7 @@ const avatars = async (req, res, next) => {
 };
 
 const saveAvatarToStatic = async (req) => {
-  const id = req.user.id;
+  const id = String(req.user._id);
   const USERS_AVATARS = process.env.USERS_AVATARS;
   const pathFile = req.file.path; // полный путь к загруж файлу
   const newAvatarName = `${Date.now()}-${req.file.originalname}`;
@@ -184,4 +211,4 @@ const saveAvatarToCloud = async (req) => {
   return result;
 };
 
-module.exports = { reg, login, logout, getCurrentUser, avatars };
+module.exports = { reg, login, logout, getCurrentUser, avatars, updateSub };
