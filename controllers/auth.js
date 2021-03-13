@@ -22,7 +22,8 @@ const reg = async (req, res, next) => {
             code: httpCode.CREATE,
             data: {
                 email: newUser.email,
-                subscription: newUser.subscription
+                subscription: newUser.subscription,
+                avatar: newUser.avatar
             }
         })
     } catch (e) {
@@ -34,7 +35,8 @@ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
-        if (!user || !user.validPassword(password)) {
+        const validPassword = await user.validPassword(password)
+        if (!user || !validPassword) {
             return res.status(httpCode.UNAUTHORIZED).json({
                 status: 'error',
                 code: httpCode.UNAUTHORIZED,
@@ -68,21 +70,8 @@ const logout = async (req, res) => {
     return res.status(httpCode.NOCONTENT).json({ message: 'Nothing' })
 }
 
-const current = async (req, res) => {
-    const id = req.user.id
-    const user = await Users.findById(id)
-    if (!user) {
-        return res.status(httpCode.NOTFOUND).json({
-            message: "Not authorized"
-        })
-    }
-    return res.status(httpCode.OK).json({
-        email: user.email,
-        subscription: user.subscription
-    })
 
-}
 
 module.exports = {
-    reg, login, logout, current
+    reg, login, logout
 }
