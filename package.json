@@ -10,13 +10,17 @@
     "dev:debug": "node --inspect ./bin/server.js"
   },
   "dependencies": {
+    "bcryptjs": "2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "joi": "17.4.0",
+    "jsonwebtoken": "8.5.1",
     "mongoose": "5.11.18",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "passport": "0.4.1",
+    "passport-jwt": "4.0.0"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
