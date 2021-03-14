@@ -13,7 +13,11 @@ const getCurrentUser = async (request, response, next) => {
     response.status(HttpCode.OK).json({
       status: HttpCode.OK,
       code: HttpCode.OK,
-      data: { email: user.email, subscription: user.subscription },
+      data: {
+        email: user.email,
+        subscription: user.subscription,
+        avatar: user.avatarURL,
+      },
     })
   } catch (error) {
     next(error)

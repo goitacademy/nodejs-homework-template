@@ -22,6 +22,7 @@ const registration = async (request, response, next) => {
         user: {
           email: newUser.email,
           subscription: newUser.subscription,
+          avatar: newUser.avatarURL,
         },
       },
     })
