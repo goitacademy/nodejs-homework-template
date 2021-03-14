@@ -16,7 +16,7 @@
     "morgan": "1.10.0",
     "shortid": "^2.2.16"
   },
-  "devDependencies": {
+   "devDependencies": {
     "eslint": "^7.19.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-config-standard": "^16.0.2",
