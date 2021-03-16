@@ -50,24 +50,36 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    if(req.body.name && req.body.email && req.body.phone)
-    {
-      const contact = await addContact(req.body)
-     res.status(HttpCode.CREATED).json({
-     status: 'success',
-     code: HttpCode.OK,
-     data: {
-       contact
-     }
-   })}
-   else {
-    return next ({
-      status: HttpCode.NOT_FOUND,
-      message: 'missing required name field',
-      data: 'Not Found'
-    })
-   }
-
+    const {name, email, phone} = req.body;
+    if (name && email && phone )
+    {const contact = await addContact(req.body)
+      res.status(HttpCode.CREATED).json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: {
+        contact
+      }
+    })}
+      else  {
+      if (!name)
+      {return next ({
+        status: HttpCode.NOT_FOUND,
+        message: `missing required name field`,
+        data: 'Not Found'
+      })}
+      if (!email)
+      {return next ({
+        status: HttpCode.NOT_FOUND,
+        message: `missing required email field`,
+        data: 'Not Found'
+      })}
+      if (!phone)
+      {return next ({
+        status: HttpCode.NOT_FOUND,
+        message: `missing required phone field`,
+        data: 'Not Found'
+      })}
+    }
  } catch (error) {
    next(error)
  }
