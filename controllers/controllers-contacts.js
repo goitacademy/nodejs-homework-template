@@ -2,7 +2,7 @@ const Contacts = require('../model/contacts')
 
 const getAllContacts = async (req, res, next) => {
     try {
-        const userId = req.user.id
+        const userId = req.user.contactId
         const contacts = await Contacts.listContacts(userId)
         return res.json({
             status: 'success',
@@ -43,7 +43,7 @@ const getContactById = async (req, res, next) => {
 const createContact = async (req, res, next) => {
     try {
         console.log(req.body)
-        const userId = req.user.id
+        const userId = req.user.contactId
         const contact = await Contacts.addContact({ ...req.body, owner: userId })
         return res.status(201).json({
             status: 'success',
@@ -59,7 +59,7 @@ const createContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
     try {
-        const userId = req.user.id
+        const userId = req.user.contactId
         const contact = await Contacts.removeContact(req.params.contactId, userId)
         if (contact) {
             return res.json({

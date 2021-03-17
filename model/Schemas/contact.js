@@ -18,22 +18,14 @@ const contactSchema = new Schema(
             required: [true, 'Set phone for contact'],
             unique: true,
         },
-        subscription: {
-            type: String,
-            default: 'free',
-        },
-        password: {
-            type: String,
-            default: 'password',
-        },
-        token: {
-            type: String,
-            default: '',
-        },
+        owner: {
+            type: SchemaTypes.ObjectId,
+            ref: 'user',
+        }
     },
     { versionKey: false, timestamps: true }
 )
 
-const Contact = model('contact', contactSchema)
+const Contacts = model('contact', contactSchema)
 
-module.exports = Contact
+module.exports = Contacts
