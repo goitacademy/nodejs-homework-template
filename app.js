@@ -13,7 +13,7 @@ const usersRouter = require("./routes/api/users");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, AVATARS_OF_USERS)));
+app.use(express.static(path.join(__dirname, "public", AVATARS_OF_USERS)));
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));

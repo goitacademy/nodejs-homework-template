@@ -118,11 +118,16 @@ const avatars = async (req, res, next) => {
         Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE
       )
       .writeAsync(pathFile);
-    await createFolderExist(path.join(AVATARS_OF_USERS, id));
-    await fs.rename(pathFile, path.join(AVATARS_OF_USERS, id, newNameAvatar));
+    await createFolderExist(path.join("public", AVATARS_OF_USERS, id));
+    await fs.rename(
+      pathFile,
+      path.join("public", AVATARS_OF_USERS, id, newNameAvatar)
+    );
     const avatarUrl = path.normalize(path.join(id, newNameAvatar));
     try {
-      fs.unlink(path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatar));
+      fs.unlink(
+        path.join(process.cwd(), "public", AVATARS_OF_USERS, req.user.avatar)
+      );
     } catch (e) {
       console.log(e.message);
     }
