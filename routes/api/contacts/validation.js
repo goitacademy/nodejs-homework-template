@@ -20,17 +20,20 @@ const schemaUpdateContact = Joi.object({
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
+
   if (error) {
     const [{ message }] = error.details;
+
     return next({
       status: 400,
-      message: `Filed: ${message.replace(/"/g, "")}`,
+      message: `missing field: ${message.replace(/"/g, "")}`,
     });
   }
+
   next();
 };
 
-module.exports.createContact = (req, _res, next) => {
+module.exports.addContact = (req, _res, next) => {
   return validate(schemaCreateContact, req.body, next);
 };
 
