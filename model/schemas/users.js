@@ -27,6 +27,10 @@ const userSchema = new Schema(
       enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
       default: Subscription.FREE,
     },
+    imagesId: {
+      type: String,
+      default: null,
+    },
     token: {
       type: String,
       default: null,
