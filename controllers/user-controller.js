@@ -79,7 +79,7 @@ const logout = async (req, res, next) => {
 
 const userCurrent = async (req, res, next) => {
   try {
-    const { id, email, name } = req.user;
+    const { id, email, name, avatar } = req.user;
     const user = await Users.findById(id);
     if (!user) {
       return res.status(HttpCode.UNAUTHORIZED).json({
@@ -95,6 +95,7 @@ const userCurrent = async (req, res, next) => {
       data: {
         name,
         email,
+        avatar,
       },
     });
   } catch (e) {
@@ -120,6 +121,19 @@ const avatars = async (req, res, next) => {
     await createFolderExist(path.join(AVATARS_OF_USERS, id));
     await fs.rename(pathFile, path.join(AVATARS_OF_USERS, id, newNameAvatar));
     const avatarUrl = path.normalize(path.join(id, newNameAvatar));
+    try {
+      fs.unlink(path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatar));
+    } catch (e) {
+      console.log(e.message);
+    }
+    await Users.updateAvatar(id, avatarUrl);
+    return res.json({
+      status: "succes",
+      code: HttpCode.OK,
+      data: {
+        avatarUrl,
+      },
+    });
   } catch (e) {
     next(e);
   }
