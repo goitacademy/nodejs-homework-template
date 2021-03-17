@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const fs = require("fs").promises;
+const path = require("path");
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -97,9 +99,21 @@ const userCurrent = async (req, res, next) => {
   }
 };
 
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
+    const pathFile = req.file.path;
+    const newNameAvatar = `${Date.now()} - ${req.file.originalname}`;
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   reg,
   login,
   logout,
   userCurrent,
+  avatars,
 };
