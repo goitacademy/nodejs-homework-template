@@ -117,7 +117,7 @@ const saveAvatarToStatic = async (req) => {
   const pathFile = req.file.path;
   const newNameAvatar = `${Date.now()}-${req.file.originalname}`;
   const img = await Jimp.read(pathFile);
-  img
+  await img
     .autocrop()
     .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
     .writeAsync(pathFile);
@@ -126,7 +126,7 @@ const saveAvatarToStatic = async (req) => {
   const avatarUrl = path.normalize(path.join(id, newNameAvatar));
   try {
     await fs.unlink(
-      path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatar)
+      path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatarURL)
     );
   } catch (error) {
     console.log(error.message);
