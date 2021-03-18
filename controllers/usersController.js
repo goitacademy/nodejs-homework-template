@@ -25,6 +25,7 @@ const reg = async (req, res, next) => {
         email: newUser.email,
         subscription: newUser.subscription,
         id: newUser.id,
+        avatar: newUser.avatarURL,
       },
     });
   } catch (err) {
@@ -36,7 +37,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await UsersAPI.findByEmail(email);
-    const isValidPassword = await user.validPassword(password);
+    const isValidPassword = await user?.validPassword(password);
     if (!user || !isValidPassword) {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: "error",
@@ -84,6 +85,7 @@ const current = async (req, res, next) => {
     data: {
       email: isCurrentUser.email,
       subscription: isCurrentUser.subscription,
+      avatar: isCurrentUser.avatarURL,
     },
   });
 };
