@@ -19,6 +19,7 @@ router.patch(
   "/avatars",
   guard,
   upload.single("avatar"),
+  validate.uploadAvatar,
   usersController.avatars
 );
 

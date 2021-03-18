@@ -49,6 +49,7 @@ const uploadAvatar = (req, res, next) => {
       status: "error",
       code: HttpCode.BAD_REQUEST,
       data: "Bad request",
+      message: "File is not found",
     });
   }
   next();
