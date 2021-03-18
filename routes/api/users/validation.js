@@ -35,10 +35,27 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-module.exports.userRegistation = (req, res, next) => {
+const userRegistation = (req, res, next) => {
   return validate(schemaUserRegistration, req.body, next);
 };
 
-module.exports.userLogin = (req, res, next) => {
+const userLogin = (req, res, next) => {
   return validate(schemaUserLogin, req.body, next);
+};
+
+const uploadAvatar = (req, res, next) => {
+  if (!req.file) {
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: "error",
+      code: HttpCode.BAD_REQUEST,
+      data: "Bad request",
+    });
+  }
+  next();
+};
+
+module.exports = {
+  userRegistation,
+  userLogin,
+  uploadAvatar,
 };
