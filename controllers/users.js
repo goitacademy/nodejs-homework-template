@@ -1,8 +1,14 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../model/users");
+const fs = require("fs").promises;
+const path = require("path");
+const Jimp = require("jimp");
+
+const createFolderIsExist = require("../helpers/create-dir");
 const { HttpCode, Status } = require("../helpers/constants");
-require("dotenv").config();
+
 const SECRET_KEY = process.env.JWT_SECRET;
+require("dotenv").config();
 
 const reg = async (req, res, next) => {
   try {
@@ -23,6 +29,7 @@ const reg = async (req, res, next) => {
       data: {
         id: newUser.id,
         email: newUser.email,
+        avatarURL: newUser.avatarURL,
       },
     });
   } catch (e) {
@@ -103,4 +110,46 @@ const updateSubsription = async (req, res, next) => {
   }
 };
 
-module.exports = { reg, login, logout, current, updateSubsription };
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const avatarUrl = await saveAvatarToStatic(req);
+    await Users.updateAvatar(id, avatarUrl);
+    return res.status(HttpCode.OK).json({
+      status: Status.SUCCESS,
+      code: HttpCode.OK,
+      data: {
+        avatarUrl,
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const saveAvatarToStatic = async (req) => {
+  const id = req.user.id;
+  const PUBLIC_DIR = process.env.PUBLIC_DIR;
+  const AVATARS_OF_USERS = path.join(PUBLIC_DIR, process.env.AVATARS_OF_USERS);
+
+  const pathFile = req.file.path;
+  const newNameAvatar = `${Date.now()}-${req.file.originalname}`;
+  const img = await Jimp.read(pathFile);
+  await img
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(pathFile);
+  await createFolderIsExist(path.join(AVATARS_OF_USERS, id));
+  await fs.rename(pathFile, path.join(AVATARS_OF_USERS, id, newNameAvatar));
+  const avatarUrl = path.normalize(path.join(id, newNameAvatar));
+  try {
+    await fs.unlink(
+      path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatarURL)
+    );
+  } catch (e) {
+    console.log(e.message);
+  }
+  return avatarUrl;
+};
+
+module.exports = { reg, login, logout, current, updateSubsription, avatars };

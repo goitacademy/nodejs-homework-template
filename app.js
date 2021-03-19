@@ -1,11 +1,17 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const path = require("path");
 
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
+require("dotenv").config();
 
 const app = express();
+
+// const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
+const PUBLIC_DIR = process.env.PUBLIC_DIR;
+app.use(express.static(path.join(__dirname, PUBLIC_DIR)));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
