@@ -12,10 +12,10 @@ router.get('/', async (req, res, next) => {
         contacts,
       },
     });
-  } catch(error) {
-        next(error)
-      }
-  })
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.get('/:contactId', async (req, res, next) => {
   try {
@@ -40,18 +40,30 @@ router.get('/:contactId', async (req, res, next) => {
   catch (error) {
     next(error)
   }
-  
+
 })
 
 router.post('/', async (req, res, next) => {
   try {
     const { name, email, phone } = req.body
     if (!name || !email || !phone) {
+     let errorMessage = ' missing required'
+       if (!name) {
+         errorMessage += ' name'
+       } 
+       if (!email) {
+        errorMessage += ' email'
+       }
+     if (!phone) {
+         errorMessage += ' phone'
+      }
+      errorMessage += ' field'
+      
       return res.status(400).json({
         status: 'Error',
         code: 400,
         data: {
-          message: 'missing required name field'
+          message: errorMessage
         },
       })
     } else {
