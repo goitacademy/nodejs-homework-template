@@ -6,28 +6,28 @@ const {
   updateContactRepository,
 } = require("../repository/contactsRepository");
 
-const listContacts = () => {
-  const data = listContactsRepository();
+const listContacts = async () => {
+  const data = await listContactsRepository();
   return data;
 };
 
-const getContactById = (id) => {
-  const data = getContactByIdRepository(id);
+const getContactById = async (id) => {
+  const data = await getContactByIdRepository(id);
   return data;
 };
 
-const removeContact = (id) => {
-  const data = removeContactRepository(id);
+const removeContact = async (id) => {
+  const data = await removeContactRepository(id);
   return data;
 };
 
-const addContact = (body) => {
-  const data = addContactRepository(body);
+const addContact = async (body) => {
+  const data = await addContactRepository(body);
   return data;
 };
 
-const updateContact = (id, body) => {
-  const data = updateContactRepository(id, body);
+const updateContact = async (id, body) => {
+  const data = await updateContactRepository(id, body);
   return data;
 };
 
