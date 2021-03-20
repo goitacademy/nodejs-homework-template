@@ -7,10 +7,13 @@ const schemaCreate = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "co", "uk", "ru", "ua", "org"] },
+      tlds: { allow: ["com", "net", "co", "ca", "uk", "ru", "ua", "org"] },
     })
     .required(),
   phone: Joi.string().min(1).max(50).required(),
+  subscription: Joi.string().alphanum().min(0).max(30).optional(),
+  password: Joi.string().min(1).max(30).required(),
+  token: Joi.string().optional(),
 });
 
 const schemaUpdate = Joi.object({
@@ -22,7 +25,10 @@ const schemaUpdate = Joi.object({
       tlds: { allow: ["com", "net", "co", "uk", "ru", "ua", "org"] },
     })
     .optional(),
-  phone: Joi.string().alphanum().min(1).max(50).optional(),
+  phone: Joi.string().min(1).max(50).optional(),
+  subscription: Joi.string().alphanum().min(0).max(30).optional(),
+  password: Joi.string().min(1).max(30).optional(),
+  token: Joi.string().optional(),
 });
 
 const validate = (schema, body, next) => {
