@@ -1,12 +1,12 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const contactsRouter = require('./routes/api/contacts');
-const userRouter = require('./routes/api/users');
 const helmet = require('helmet');
 const path = require('path');
 const { limiter } = require('./helpers/rate-limit');
 const { HttpCode } = require('./helpers/constans');
+const contactsRouter = require('./routes/api/contacts');
+const userRouter = require('./routes/api/users');
 require('dotenv').config();
 const app = express();
 
@@ -17,13 +17,13 @@ app.use(express.static(path.join(__dirname, AVATARS_OF_USERS)));
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(helmet());
-app.use(logger(formatsLogger));
+app.get('env') !== 'test' && app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json({ limit: 10000 }));
 app.use(limiter);
 
 app.use('/api/contacts', contactsRouter);
-app.use('/api/auth', userRouter);
+app.use('/api/users', userRouter);
 
 app.use((req, res) => {
   res.status(HttpCode.NOT_FOUND).json({

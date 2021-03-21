@@ -1,16 +1,16 @@
 const contacts = [
   {
     _id: '5eb074232c30a1378dacdbda',
-    name: 'Allen Raymond',
-    email: 'nulla.ante@vestibul.co.uk',
+    name: 'Allen',
+    email: 'nulla@vestibul.com',
     phone: '(992) 914-3792',
     subscription: 'free',
     password: '12345',
   },
   {
     _id: '5eb074232c30a1378dacdbdb',
-    name: 'Chaim Lewis',
-    email: 'dui.in@egetlacus.ca',
+    name: 'Chaim',
+    email: 'dui.in@egetlacus.com',
     phone: '(294) 840-6685',
     subscription: 'pro',
     password: '67890',
@@ -18,11 +18,9 @@ const contacts = [
 ];
 
 const newContact = {
-  name: 'New',
-  email: 'new@gmail.com',
+  name: 'Ivan',
+  email: 'Ivan@gmail.com',
   phone: '(999) 999-9999',
-  password: '67890',
-  subscription: 'pro',
 };
 
 const User = {
@@ -42,6 +40,6 @@ const User = {
 const users = [];
 users[0] = User;
 
-const newUser = { email: 'test@test.com', password: '123456' };
+const newUser = { email: 'test@test.com', password: '1234561111' };
 
 module.exports = { contacts, newContact, User, users, newUser };
