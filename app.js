@@ -23,7 +23,7 @@ app.use(express.json({ limit: 10000 }));
 app.use(limiter);
 
 app.use('/api/contacts', contactsRouter);
-app.use('/api/users', userRouter);
+app.use('/api/auth', userRouter);
 
 app.use((req, res) => {
   res.status(HttpCode.NOT_FOUND).json({
