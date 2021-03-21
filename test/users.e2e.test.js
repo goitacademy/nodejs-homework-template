@@ -12,21 +12,15 @@ const issueToken = (payload, secret) => jwt.sign(payload, secret);
 const token = issueToken({ id: User._id }, SECRET_KEY);
 User.token = token;
 
-let newToken = '';
+// let newToken = '';
 
 jest.mock('../model/users.js');
 jest.mock('../model/contacts.js');
 jest.mock('cloudinary');
 
 describe('tests for the route api/users', () => {
-  describe.skip('tests for authorization middleware', () => {
-    it('without token in the header', () => {});
-    it('with invalid token in the header', () => {});
-    it('with valid token in the header', () => {});
-  });
-
   describe('Test for register and login', () => {
-    it('should return 201 registration', async (done) => {
+    it('should return 201 registration', async () => {
       const res = await request(app)
         .post(`/api/users/auth/register`)
         .send(newUser)
@@ -34,27 +28,23 @@ describe('tests for the route api/users', () => {
 
       expect(res.status).toEqual(201);
       expect(res.body).toBeDefined();
-
-      done();
     });
 
-    it('should return 200 login', async (done) => {
+    it('should return 200 login', async () => {
       const res = await request(app)
         .post(`/api/users/auth/login`)
         .send(newUser)
         .set('Accept', 'application/json');
 
-      newToken = res.body.data.token;
+      // newToken = res.body.data.token;
 
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
-
-      done();
     });
   });
 
   describe('tests for the route api/users/avatars', () => {
-    it('should receive status 401 with invalid token in patch request', async (done) => {
+    it('should receive status 401 with invalid token in patch request', async () => {
       const buffer = await fs.readFile('./test/default.jpg');
       const res = await request(app)
         .patch('/api/users/avatars')
@@ -63,11 +53,9 @@ describe('tests for the route api/users', () => {
 
       expect(res.body.code).toEqual(401);
       expect(res.body).toBeDefined();
-
-      done();
     });
 
-    it('should receive status 200, updated avatarUrl and correct body with valid token', async (done) => {
+    it('should receive status 200, updated avatarUrl and correct body with valid token', async () => {
       const buffer = await fs.readFile('./test/default.jpg');
 
       const res = await request(app)
@@ -78,8 +66,6 @@ describe('tests for the route api/users', () => {
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
       expect(res.body.data).toHaveProperty('avatarURL');
-
-      done();
     });
   });
 });

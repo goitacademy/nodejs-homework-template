@@ -62,7 +62,6 @@ class EmailService {
       subject: 'Подтверждение регистрации',
       html: emailBody,
     };
-    //ES6
     await this.#sender.send(msg);
   }
 }

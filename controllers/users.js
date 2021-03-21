@@ -39,7 +39,7 @@ const reg = async (req, res, next) => {
     // создаю токен и отправляю письмо
     const verifyToken = nanoid();
     const emailService = new EmailService(process.env.NODE_ENV);
-    await emailService.sendEmail(verifyToken, email, name);
+    await emailService.sendEmail(verifyToken, email);
 
     const newUser = await Users.create({
       email,

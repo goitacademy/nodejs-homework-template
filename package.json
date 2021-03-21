@@ -40,10 +40,15 @@
     "shortid": "^2.2.16"
   },
   "devDependencies": {
+    "@babel/core": "7.13.10",
+    "@babel/eslint-parser": "7.13.10",
+    "@babel/plugin-proposal-class-properties": "7.13.0",
+    "@babel/plugin-proposal-private-methods": "7.13.0",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "24.3.2",
     "eslint-plugin-json": "2.1.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
