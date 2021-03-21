@@ -4,7 +4,7 @@ const { HttpCode } = require('./constans');
 
 const guard = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (error, user) => {
-    const [, token] = req.get('Authorization').split(' ');
+    const token = req.get('Authorization')?.split(' ')[1];
     if (!user || error || token !== user.token) {
       return res.status(HttpCode.FORBIDDEN).json({
         status: 'error',

@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
 const { SALT_WORK_FACTOR, Subscription } = require('../../helpers/constans');
 
 const userSchema = new Schema(
@@ -27,9 +28,11 @@ const userSchema = new Schema(
       enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
       default: Subscription.FREE,
     },
-    imagesId: {
+    avatarURL: {
       type: String,
-      default: null,
+      default: function () {
+        return gravatar.url(this.email, { size: '250', d: 'robohash' }, true);
+      },
     },
     token: {
       type: String,

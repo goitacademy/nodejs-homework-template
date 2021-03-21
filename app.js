@@ -4,10 +4,15 @@ const cors = require('cors');
 const contactsRouter = require('./routes/api/contacts');
 const userRouter = require('./routes/api/users');
 const helmet = require('helmet');
+const path = require('path');
 const { limiter } = require('./helpers/rate-limit');
 const { HttpCode } = require('./helpers/constans');
-
+require('dotenv').config();
 const app = express();
+
+const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
+
+app.use(express.static(path.join(__dirname, AVATARS_OF_USERS)));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -18,7 +23,7 @@ app.use(express.json({ limit: 10000 }));
 app.use(limiter);
 
 app.use('/api/contacts', contactsRouter);
-app.use('/api/users', userRouter);
+app.use('/api/auth', userRouter);
 
 app.use((req, res) => {
   res.status(HttpCode.NOT_FOUND).json({
