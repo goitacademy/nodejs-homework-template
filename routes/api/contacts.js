@@ -29,17 +29,16 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body
-  if (!name || !email || !phone) {
-    res.json({
-      message: 'missing required name field',
-      code: 400,
-    })
-  } else {
-    const data = await contactsOperations.addContact(req.body)
+  const data = await contactsOperations.addContact(req.body)
+  if (data) {
     res.json({
       code: 201,
       data: data,
+    })
+  } else {
+    res.json({
+      message: 'missing required name field',
+      code: 400,
     })
   }
 })
