@@ -9,7 +9,7 @@ const schemaCreateContact = Joi.object({
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).optional(),
   email: Joi.string().email().optional(),
-  phone: Joi.string().min(5).max(12).optional(),
+  phone: Joi.string().min(5).max(15).optional(),
 })
 
 const validate = (schema, obj, next) => {
