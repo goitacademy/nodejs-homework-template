@@ -102,7 +102,8 @@ const update = async (req, res, next) => {
 const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const avatarUrl = await saveAvatarToStatic(req);
+    const newUrl = await saveAvatarToStatic(req);
+    const avatarUrl = `http://localhost:3000/${newUrl}`;
     await Users.updateAvatar(id, avatarUrl);
     return res.json({
       status: 'success',
@@ -128,6 +129,7 @@ const saveAvatarToStatic = async req => {
   await createFolderIsExist(path.join(AVATARS_OF_USERS, id));
   await fs.rename(pathFile, path.join(AVATARS_OF_USERS, id, newNameAvatar));
   const avatarUrl = path.normalize(path.join(id, newNameAvatar));
+  // const avatarUrl = `${id}${newNameAvatar}`;
   try {
     await fs.unlink(
       path.join(process.cwd(), AVATARS_OF_USERS, req.user.avatarURL),

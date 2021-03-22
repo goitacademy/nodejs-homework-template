@@ -11,7 +11,7 @@ db.then(() => {
     const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
     await createFolderIsExist(UPLOAD_DIR);
     await createFolderIsExist(AVATARS_OF_USERS);
-    console.log('Database connection successful');
+    console.log(`Server running. Use our API on port: ${PORT}`);
   });
 }).catch(err => {
   console.log(`Server not running. Error message: ${err.message}`);

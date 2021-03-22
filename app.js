@@ -10,9 +10,9 @@ const userRouter = require('./routes/api/users');
 require('dotenv').config();
 const app = express();
 
-const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS;
+const AVATARS_OF_USER = process.env.AVATARS_OF_USERS;
 
-app.use(express.static(path.join(__dirname, AVATARS_OF_USERS)));
+app.use(express.static(path.join(__dirname, AVATARS_OF_USER)));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -35,7 +35,9 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+  console.log('ERROR APP>>>>>', error);
+  console.log('err.status APP>>>>>', err.status);
+  res.status(err.status || HttpCode.INTERNAL_SERVER_ERROR).json({
     status: 'fail',
     code: HttpCode.INTERNAL_SERVER_ERROR,
     message: err.message,

@@ -20,7 +20,7 @@ const contacts = [
 const newContact = {
   name: 'Ivan',
   email: 'Ivan@gmail.com',
-  phone: '(999) 999-9999',
+  phone: '(050) 555-5555',
 };
 
 const User = {
