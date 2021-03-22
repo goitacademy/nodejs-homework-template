@@ -26,9 +26,8 @@ const schemaLoginUser = Joi.object({
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
-  console.log('schema>>>>>', schema.validate(obj));
+
   if (error) {
-    console.log('ERROR>>>>>', error);
     const [{ message }] = error.details;
     return next({
       status: HttpCode.BAD_REQUEST,
