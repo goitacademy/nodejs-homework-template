@@ -3,7 +3,10 @@ const { HttpCode } = require('../../../helpers/constants');
 
 const schemaCreateUser = Joi.object({
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } })
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ['com', 'net', 'org', 'ua'] },
+    })
     .required(),
   password: Joi.string().min(1).max(20).required(),
 });

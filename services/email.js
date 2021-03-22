@@ -27,9 +27,9 @@ class EmailService {
 
   #createTemplate(verifyToken, name = 'Guest') {
     const mailGenerator = new this.#GenerateTemplate({
-      theme: 'cerberus',
+      theme: 'salted',
       product: {
-        name: 'System Contacts',
+        name: 'Phonebook',
         link: this.link,
       },
     });
@@ -37,12 +37,12 @@ class EmailService {
     const template = {
       body: {
         name,
-        intro: 'Это прекрасное интро для тебя, друг',
+        intro: 'Welcome to the club, buddy',
         action: {
-          instructions: 'Чтобы закончить регистрацию кликните на кнопку',
+          instructions: 'To end your registration, please, click here',
           button: {
             color: '#22BC66', // Optional action button color
-            text: 'Подтвердить свой аккаунт',
+            text: 'Confirm your account',
             link: `${this.link}/api/users/verify/${verifyToken}`,
           },
         },
