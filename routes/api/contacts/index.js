@@ -9,21 +9,15 @@ const {
   updateContact,
 } = require('../../../controllers/contacts');
 
-const validation = require('./validation');
+const { createContact, id, updateContactVal } = require('./validation');
 
 router
   .get('/', guard, getAllContact)
-  .post('/', guard, validation.createContact, addContact);
+  .post('/', guard, createContact, addContact);
 
 router
-  .get('/:contactId', guard, validation.id, getContactById)
-  .delete('/:contactId', guard, validation.id, removeContact)
-  .patch(
-    '/:contactId',
-    guard,
-    validation.id,
-    validation.updateContact,
-    updateContact,
-  );
+  .get('/:contactId', guard, id, getContactById)
+  .delete('/:contactId', guard, id, removeContact)
+  .patch('/:contactId', guard, id, updateContactVal, updateContact);
 
 module.exports = router;

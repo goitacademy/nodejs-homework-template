@@ -2,7 +2,7 @@ const { contacts } = require('./data');
 
 const listContacts = jest.fn(
   (userId, { sortBy, sortByDesc, filter, limit = '5', page = '1' }) => {
-    return { contacts, total: contacts.length, limit, offset };
+    return { contacts, total: contacts.length, limit, page };
   },
 );
 
@@ -12,7 +12,7 @@ const getContactById = jest.fn(id => {
 });
 
 const addContact = jest.fn(body => {
-  const newContact = { ...body, _id: '5eb074232c30a1378dacdbdd' };
+  const newContact = { ...body, _id: '5f8382425ba83a4f1829ca5d' };
   contacts.push(newContact);
   return newContact;
 });
