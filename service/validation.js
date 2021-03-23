@@ -4,6 +4,9 @@ const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().min(5).max(15).required(),
+  subscription: Joi.string().alphanum().min(3).max(7).required(),
+  password: Joi.string().min(5).max(15).required(),
+  token: Joi.string().optional(),
 })
 
 const schemaUpdateContact = Joi.object({
