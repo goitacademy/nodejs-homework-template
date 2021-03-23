@@ -109,7 +109,7 @@ const avatars = async (req, res, next) => {
     const avatarUrl = await saveAvatarToStatic(req);
     await Users.updateAvatar(id, avatarUrl);
     return res.json({
-      status: "succes",
+      status: "success",
       code: HttpCode.OK,
       data: {
         avatarUrl,
