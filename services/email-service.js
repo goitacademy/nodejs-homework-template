@@ -6,6 +6,8 @@ class EmailService {
   #sender = sgMail;
   #GenerateTemplate = Mailgen;
   constructor(env) {}
+  #createTemplate(verifyToken, name = "Guest") {}
+  sendEmail(verifyToken, name, email) {}
 }
 
 module.exports = EmailService;

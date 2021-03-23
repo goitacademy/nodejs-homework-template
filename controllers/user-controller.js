@@ -146,10 +146,33 @@ const saveAvatarToStatic = async (req) => {
   return avatarUrl;
 };
 
+const verify = async () => {
+  try {
+    const user = Users.findByVerifyToken(req.params.token);
+    if (user) {
+      await Users.updateVerifyToken(user.id, true, null);
+      return res.status(HttpCode.CREATED).json({
+        status: "success",
+        code: HttpCode.OK,
+        message: "Verification successful!",
+      });
+    }
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: "error",
+      code: HttpCode.BAD_REQUEST,
+      data: "Bad Request",
+      message: "Link is not valid",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   reg,
   login,
   logout,
   userCurrent,
   avatars,
+  verify,
 };
