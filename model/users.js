@@ -22,7 +22,7 @@ const updateToken = async (id, token) => {
 };
 
 const updateVerifyToken = async (id, verify, verifyToken) => {
-  return await User.updateOne({ _id: id }, { verify, verifyToken });
+  return await User.findOneAndUpdate({ _id: id }, { verify, verifyToken });
 };
 
 const updateAvatar = async (id, avatar) => {

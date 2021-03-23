@@ -27,7 +27,7 @@ const reg = async (req, res, next) => {
     }
     const verifyToken = nanoid();
     const emailService = new EmailService(process.env.NODE_ENV);
-    await emailService(verifyToken, email, name);
+    await emailService.sendEmail(verifyToken, email, name);
     const newUser = await Users.create({
       ...req.body,
       verify: false,
@@ -156,7 +156,7 @@ const saveAvatarToStatic = async (req) => {
   return avatarUrl;
 };
 
-const verify = async () => {
+const verify = async (req, res, next) => {
   try {
     const user = await Users.findByVerifyToken(req.params.token);
     if (user) {
@@ -167,11 +167,11 @@ const verify = async () => {
         message: "Verification successful!",
       });
     }
-    return res.status(HttpCode.BAD_REQUEST).json({
+    return res.status(HttpCode.NOT_FOUND).json({
       status: "error",
-      code: HttpCode.BAD_REQUEST,
+      code: HttpCode.NOT_FOUND,
       data: "Bad Request",
-      message: "Link is not valid",
+      message: "User not found",
     });
   } catch (e) {
     next(e);
