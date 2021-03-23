@@ -21,9 +21,14 @@ const getContactById = async contactId => {
 const addContact = async body => {
   try {
     const contact = await Contact.create(body)
-    return contact
+    return {
+      data: contact,
+    }
   } catch (error) {
     console.log(`Error: ${error.message}`)
+    return {
+      message: error.message,
+    }
   }
 }
 

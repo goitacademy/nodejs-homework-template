@@ -5,17 +5,17 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'required'],
     },
     email: {
       type: String,
       unique: true,
-      required: true,
+      required: [true, 'required'],
     },
     phone: {
       type: String,
       unique: true,
-      required: true,
+      required: [true, 'required'],
     },
     subscription: String,
     password: String,
