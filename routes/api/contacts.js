@@ -46,14 +46,21 @@ router.post("/", bodyJSON, async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
         if (!name || !email || !phone) {
+            const requireFields = ["name", "email", "phone"];
+            const errMessage = requireFields
+                .filter((item) => !Object.keys(req.body).includes(item))
+                .reduce(
+                    (acc, item) =>
+                        `${acc}Missing required '${item.toUpperCase()}' field! `,
+                    ""
+                );
             return res.status(400).json({
                 status: "ERROR",
                 code: 400,
-                data: { message: "Missing required name field" },
+                data: { message: errMessage },
             });
         } else {
             const newContact = await Contacts.addContact(req.body);
-
             return res.status(201).json({
                 message: "Contact Added",
                 status: "SUCCES",
@@ -103,7 +110,7 @@ router.patch("/:contactId", bodyJSON, async (req, res, next) => {
         } else {
             res.status(404).json({
                 status: "ERROR",
-                code: 400,
+                code: 404,
                 data: { message: "Not Found Contact" },
             });
         }
