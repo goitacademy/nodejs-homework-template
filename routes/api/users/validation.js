@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { HttpCode } = require('../../../helpers/constans');
 
 const schemaRegistrationUser = Joi.object({
-  name: Joi.string().alphanum().min(2).max(30).required(),
+  name: Joi.string().alphanum().min(2).max(30).optional(),
   email: Joi.string()
     .required()
     .email({
@@ -26,9 +26,8 @@ const schemaLoginUser = Joi.object({
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
-  console.log('schema>>>>>', schema.validate(obj));
+
   if (error) {
-    console.log('ERROR>>>>>', error);
     const [{ message }] = error.details;
     return next({
       status: HttpCode.BAD_REQUEST,

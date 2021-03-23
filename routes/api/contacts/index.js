@@ -16,8 +16,8 @@ router
   .post('/', guard, createContact, addContact);
 
 router
+  .put('/:contactId', guard, id, updateContactVal, updateContact)
   .get('/:contactId', guard, id, getContactById)
-  .delete('/:contactId', guard, id, removeContact)
-  .patch('/:contactId', guard, id, updateContactVal, updateContact);
+  .delete('/:contactId', guard, id, removeContact);
 
 module.exports = router;
