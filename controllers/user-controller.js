@@ -28,7 +28,11 @@ const reg = async (req, res, next) => {
     const verifyToken = nanoid();
     const emailService = new EmailService(process.env.NODE_ENV);
     await emailService(verifyToken, email, name);
-    const newUser = await Users.create(req.body);
+    const newUser = await Users.create({
+      ...req.body,
+      verify: false,
+      verifyToken,
+    });
     return res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.OK,
