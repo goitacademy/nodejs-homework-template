@@ -21,7 +21,7 @@ router.get('/:contactId', async (req, res, next) => {
       data: data,
     })
   } else {
-    res.json({
+    res.status(404).json({
       message: 'not found',
       code: 404,
     })
@@ -29,17 +29,16 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body
-  if (!name || !email || !phone) {
-    res.json({
-      message: 'missing required name field',
-      code: 400,
-    })
-  } else {
-    const data = await contactsOperations.addContact(req.body)
-    res.json({
+  const { data, message } = await contactsOperations.addContact(req.body)
+  if (data) {
+    res.status(201).json({
       code: 201,
       data: data,
+    })
+  } else {
+    res.status(400).json({
+      message: `Missing required fields. ${message}`,
+      code: 400,
     })
   }
 })
@@ -53,7 +52,7 @@ router.delete('/:contactId', async (req, res, next) => {
       code: 200,
     })
   } else {
-    res.json({
+    res.status(404).json({
       message: 'not found',
       code: 404,
     })
@@ -71,13 +70,13 @@ router.patch('/:contactId', async (req, res, next) => {
         data: data,
       })
     } else {
-      res.json({
+      res.status(404).json({
         message: 'not found',
         code: 404,
       })
     }
   } else {
-    res.json({
+    res.status(400).json({
       message: 'missing fields',
       code: 400,
     })
