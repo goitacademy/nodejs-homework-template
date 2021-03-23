@@ -58,7 +58,7 @@ class EmailService {
     this.#sender.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: email,
-      from: 'no-reply@system-contacts.com',
+      from: '	vladymyr_test_goit@meta.ua',
       subject: 'Подтверждение регистрации',
       html: emailBody,
     };
