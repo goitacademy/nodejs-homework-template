@@ -17,14 +17,12 @@ const schemaCreateContact = Joi.object({
     .string()
     .required()
     .phoneNumber({ defaultCountry: 'BE', format: 'national' }),
-  // email: Joi.string().email(),
-  // phone: Joi.string().pattern(/\(\d{3}\)\s\d{3}-\d{4}/),
 });
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).optional(),
   email: Joi.string()
-    .required()
+    .optional()
     .email({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
@@ -34,16 +32,10 @@ const schemaUpdateContact = Joi.object({
     format: 'international',
     strict: true,
   }),
-  // email: Joi.string().email().optional(),
-  // phone: Joi.string()
-  //   .pattern(/\(\d{3}\)\s\d{3}-\d{4}/)
-  //   .optional(),
 }).min(1);
 
 const validate = (schema, obj, next, res) => {
   const { error } = schema.validate(obj);
-  console.log('schema>>>>>', schema.validate(obj));
-  console.log('ERROR>>>>>', error);
   if (error) {
     const [{ message }] = error.details;
     return next({
