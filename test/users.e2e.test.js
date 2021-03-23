@@ -5,6 +5,7 @@ const { User, newUser } = require('../model/__mocks__/data');
 const app = require('../app');
 
 const SECRET_KEY = process.env.JWT_SECRET;
+
 const issueToken = (payload, secret) => jwt.sign(payload, secret);
 const token = issueToken({ id: User._id }, SECRET_KEY);
 User.token = token;
