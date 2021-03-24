@@ -23,6 +23,7 @@ class EmailService {
         break;
     }
   }
+
   #createTemplate(verifyToken, name = "Guest") {
     const mailGenerator = new this.#GenerateTemplate({
       theme: "neopolitan",
@@ -49,6 +50,7 @@ class EmailService {
     };
     return mailGenerator.generate(template);
   }
+
   async sendEmail(verifyToken, email, name) {
     const emailBody = this.#createTemplate(verifyToken, name);
     this.#sender.setApiKey(process.env.SENDGRID_API_KEY);
