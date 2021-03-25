@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1616461081045" clover="3.2.0">
-  <project timestamp="1616461081045" name="All files">
-    <metrics statements="263" coveredstatements="184" conditionals="51" coveredconditionals="24" methods="33" coveredmethods="16" elements="347" coveredelements="224" complexity="0" loc="263" ncloc="263" packages="6" files="14" classes="14"/>
+<coverage generated="1616629685314" clover="3.2.0">
+  <project timestamp="1616629685314" name="All files">
+    <metrics statements="263" coveredstatements="220" conditionals="51" coveredconditionals="33" methods="33" coveredmethods="28" elements="347" coveredelements="281" complexity="0" loc="263" ncloc="263" packages="6" files="14" classes="14"/>
     <package name="05-images">
       <metrics statements="26" coveredstatements="25" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="1"/>
       <file name="app.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\app.js">
@@ -10,14 +10,14 @@
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
-        <line num="13" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="17" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="2" type="stmt"/>
@@ -30,7 +30,7 @@
         <line num="28" count="2" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="37" count="2" type="stmt"/>
-        <line num="38" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="38" count="6" type="cond" truecount="1" falsecount="1"/>
         <line num="46" count="2" type="stmt"/>
       </file>
     </package>
@@ -52,18 +52,18 @@
         <line num="4" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
-        <line num="13" count="13" type="stmt"/>
-        <line num="14" count="13" type="stmt"/>
-        <line num="15" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="13" count="14" type="stmt"/>
+        <line num="14" count="14" type="stmt"/>
+        <line num="15" count="14" type="cond" truecount="1" falsecount="1"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="18" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="18" count="14" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="21" count="13" type="stmt"/>
+        <line num="21" count="14" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
       </file>
     </package>
     <package name="05-images.controllers">
-      <metrics statements="111" coveredstatements="56" conditionals="24" coveredconditionals="10" methods="11" coveredmethods="6"/>
+      <metrics statements="111" coveredstatements="79" conditionals="24" coveredconditionals="15" methods="11" coveredmethods="9"/>
       <file name="contacts.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\controllers\contacts.js">
         <metrics statements="46" coveredstatements="35" conditionals="16" coveredconditionals="9" methods="5" coveredmethods="5"/>
         <line num="1" count="2" type="stmt"/>
@@ -114,7 +114,7 @@
         <line num="140" count="2" type="stmt"/>
       </file>
       <file name="users.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\controllers\users.js">
-        <metrics statements="65" coveredstatements="21" conditionals="8" coveredconditionals="1" methods="6" coveredmethods="1"/>
+        <metrics statements="65" coveredstatements="44" conditionals="8" coveredconditionals="6" methods="6" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -124,26 +124,26 @@
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="17" count="0" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="16" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="40" count="2" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="46" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="71" count="2" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
@@ -158,23 +158,23 @@
         <line num="91" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
         <line num="102" count="2" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
+        <line num="103" count="1" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
         <line num="108" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="119" count="2" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="120" count="2" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="123" count="1" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="130" count="1" type="stmt"/>
         <line num="131" count="0" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
         <line num="134" count="0" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
@@ -183,7 +183,7 @@
       </file>
     </package>
     <package name="05-images.helpers">
-      <metrics statements="47" coveredstatements="33" conditionals="9" coveredconditionals="4" methods="11" coveredmethods="2"/>
+      <metrics statements="47" coveredstatements="43" conditionals="9" coveredconditionals="7" methods="11" coveredmethods="9"/>
       <file name="constans.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\helpers\constans.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
@@ -194,16 +194,16 @@
         <line num="24" count="2" type="stmt"/>
       </file>
       <file name="create-dir.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\helpers\create-dir.js">
-        <metrics statements="9" coveredstatements="4" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
       </file>
       <file name="guard.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\helpers\guard.js">
         <metrics statements="11" coveredstatements="10" conditionals="5" coveredconditionals="4" methods="2" coveredmethods="2"/>
@@ -211,12 +211,12 @@
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
-        <line num="6" count="13" type="stmt"/>
-        <line num="7" count="13" type="stmt"/>
-        <line num="8" count="13" type="cond" truecount="4" falsecount="1"/>
+        <line num="6" count="14" type="stmt"/>
+        <line num="7" count="14" type="stmt"/>
+        <line num="8" count="14" type="cond" truecount="4" falsecount="1"/>
         <line num="9" count="0" type="stmt"/>
-        <line num="16" count="13" type="stmt"/>
-        <line num="17" count="13" type="stmt"/>
+        <line num="16" count="14" type="stmt"/>
+        <line num="17" count="14" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
       </file>
       <file name="rate-limit.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\helpers\rate-limit.js">
@@ -231,20 +231,20 @@
         <line num="36" count="2" type="stmt"/>
       </file>
       <file name="upload.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\helpers\upload.js">
-        <metrics statements="13" coveredstatements="7" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="12" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="28" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="19" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
       </file>
     </package>
     <package name="05-images.routes.api.contacts">
@@ -286,7 +286,7 @@
       </file>
     </package>
     <package name="05-images.routes.api.users">
-      <metrics statements="31" coveredstatements="25" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="2"/>
+      <metrics statements="31" coveredstatements="28" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="4"/>
       <file name="index.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\routes\api\users\index.js">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
@@ -304,25 +304,25 @@
         <line num="29" count="2" type="stmt"/>
       </file>
       <file name="validation.js" path="F:\project\goit-fe-course\NodeJS\homework\05-images\routes\api\users\validation.js">
-        <metrics statements="18" coveredstatements="12" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="2"/>
+        <metrics statements="18" coveredstatements="15" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
         <line num="27" count="2" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="30" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="30" count="4" type="cond" truecount="1" falsecount="1"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="40" count="2" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="2" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
       </file>
     </package>
   </project>

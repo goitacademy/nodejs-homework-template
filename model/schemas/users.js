@@ -28,7 +28,7 @@ const userSchema = new Schema(
       enum: [Subscription.FREE, Subscription.PRO, Subscription.PREMIUM],
       default: Subscription.FREE,
     },
-    avatarURL: {
+    avatarUrl: {
       type: String,
       default: function () {
         return gravatar.url(this.email, { size: '250', d: 'robohash' }, true);

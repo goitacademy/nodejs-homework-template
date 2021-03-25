@@ -31,7 +31,7 @@ const User = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTY0OTc0NzNkODYyMjZmOGQ4YTVlMiIsImlhdCI6MTYxNjI2NzY4MCwiZXhwIjoxNjE2MzEwODgwfQ.xNIDHpNCOADIa0b6SS8eMy1KqQXTZuX1dP2OoEG7T5g',
   email: 'test6@gmail.com',
   password: '$2a$08$gyeqx6vj6jLmlUxpMBI3bO8WbuCGhVl9Rzu68qLB0F8aO9fmvh8J6',
-  avatarURL:
+  avatarUrl:
     'https://s.gravatar.com/avatar/f6d8b3f3ddca53201e716d8992cf15fd?size=250&d=robohash',
   //   createdAt: ISODate('2021-03-20T13:36:17.647Z'),
   //   updatedAt: ISODate('2021-03-20T13:36:17.647Z'),
