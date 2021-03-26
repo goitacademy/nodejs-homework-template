@@ -13,7 +13,7 @@ const { createAccountLimiter } = require('../../../helpers/rate-limit');
 router.post(
   '/registration',
   createAccountLimiter,
-  upload.single('avatar'),
+  // upload.single('avatar'),
   registrationUser,
   userController.reg,
 );
@@ -25,5 +25,6 @@ router.patch(
   [guard, upload.single('avatar'), validateUploadAvatar],
   userController.avatars,
 );
+router.get('/verify/:token', userController.verify);
 
 module.exports = router;

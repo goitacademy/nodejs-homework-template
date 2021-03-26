@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const { limiter } = require('./helpers/rate-limit');
-const { HttpCode } = require('./helpers/constans');
+const { HttpCode } = require('./helpers/constants');
 const contactsRouter = require('./routes/api/contacts');
 const userRouter = require('./routes/api/users');
 require('dotenv').config();
@@ -35,6 +35,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   res.status(err.code || HttpCode.INTERNAL_SERVER_ERROR).json({
     status: 'fail',
     code: HttpCode.INTERNAL_SERVER_ERROR,

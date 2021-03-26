@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
-const { SALT_WORK_FACTOR, Subscription } = require('../../helpers/constans');
+const { SALT_WORK_FACTOR, Subscription } = require('../../helpers/constants');
 
 const userSchema = new Schema(
   {
@@ -42,7 +42,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    verify: {
+    verifyToken: {
       type: String,
       required: [true, 'Verify token required'],
     },

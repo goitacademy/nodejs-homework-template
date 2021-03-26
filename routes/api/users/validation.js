@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { HttpCode } = require('../../../helpers/constans');
+const { HttpCode } = require('../../../helpers/constants');
 
 const schemaRegistrationUser = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).optional(),

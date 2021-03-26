@@ -1,18 +1,17 @@
 const Joi = require('joi');
 
-const { HttpCode } = require('../../../helpers/constans');
+const { HttpCode } = require('../../../helpers/constants');
 const mongoose = require('mongoose');
 const phoneVal = Joi.extend(require('joi-phone-number'));
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
 
-  email: Joi.string()
-    .required()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
-    }),
+  email: Joi.string().required().email(),
+  // .email({
+  //   minDomainSegments: 2,
+  //   tlds: { allow: ['com', 'net'] },
+  // }),
   phone: phoneVal
     .string()
     .required()
