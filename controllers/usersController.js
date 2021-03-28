@@ -122,7 +122,7 @@ const avatars = async (req, res, next) => {
 
 const verify = async (req, res, next) => {
   try {
-    const user = UsersAPI.findByVerifyToken(req.params.token);
+    const user = await UsersAPI.findByVerifyToken(req.params.verificationToken);
     if (user) {
       await UsersAPI.updateVerifyToken(user.id, true, null);
       return res.json({
