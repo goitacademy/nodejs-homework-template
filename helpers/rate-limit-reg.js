@@ -3,7 +3,7 @@ const { HttpCode } = require("../helpers/constants");
 
 const regLimiter = rateLimit({
   windowMs: 30 * 60 * 1000,
-  max: 2, // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
   handler: (req, res, next) => {
     return res.status(HttpCode.BAD_REQUEST).json({
       status: "error",
