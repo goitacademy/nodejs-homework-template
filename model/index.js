@@ -1,15 +1,68 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const fs = require('fs').promises
 
-const listContacts = async () => {}
+const path = require('path')
 
-const getContactById = async (contactId) => {}
+const contactsPath = path.join(__dirname, './contacts.json')
 
-const removeContact = async (contactId) => {}
+async function readFile(path) {
+  const fileData = await fs.readFile(path, 'utf-8')
+  const contacts = JSON.parse(fileData)
 
-const addContact = async (body) => {}
+  return contacts
+}
 
-const updateContact = async (contactId, body) => {}
+const listContacts = async () => {
+  const contacts = await readFile(contactsPath)
+
+  return contacts
+}
+
+const getContactById = async (contactId) => {
+  const contacts = await readFile(contactsPath)
+  const contact = contacts.find((el) => String(el.id) === contactId)
+  return contact
+}
+
+const removeContact = async (contactId) => {
+  const contacts = await readFile(contactsPath)
+  const idx = contacts.findIndex((el) => String(el.id) === contactId)
+  if (idx !== -1) {
+    const deleteContact = contacts[idx]
+    contacts.splice(idx, 1)
+    console.log('Удаляем контакт', deleteContact)
+    const updatedContacts = JSON.stringify(contacts)
+    await fs.writeFile(contactsPath, updatedContacts)
+
+    return contacts
+  } else {
+    return false
+  }
+}
+
+const addContact = async (body) => {
+  const contacts = await readFile(contactsPath)
+  contacts.push(body)
+
+  const updatedContacts = JSON.stringify(contacts)
+  await fs.writeFile(contactsPath, updatedContacts)
+  return contacts
+}
+
+const updateContact = async (contactId, body) => {
+  const contacts = await readFile(contactsPath)
+
+  const updateContact = contacts.find((el) => String(el.id) === contactId)
+
+  if (updateContact) {
+    if (body.name) { updateContact.name = body.name }
+    if (body.email) { updateContact.email = body.email }
+    if (body.phone) { updateContact.phone = body.phone }
+  }
+  const updatedContacts = JSON.stringify(contacts)
+  await fs.writeFile(contactsPath, updatedContacts)
+
+  return updateContact
+}
 
 module.exports = {
   listContacts,
