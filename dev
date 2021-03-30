@@ -1,0 +1,4 @@
+
+> template@0.0.0 start C:\Users\IRINA\Desktop\New folder\nodejs-homework-rest-api
+> cross-env NODE_ENV=production node ./bin/server.js
+
