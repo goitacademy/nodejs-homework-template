@@ -102,14 +102,14 @@ router.patch('/:contactId', express.json(), async (req, res, next) => {
 
     const data = await contactsOperation.updateContact(contactId, body)
     res.statusCode = 201
-
     res.json(data)
   } catch (err) {
     res.statusCode = 404
-    res.json({
-      status: 'Error',
-      message: err.details[0].message
-    })
+    // res.json({
+    //   status: 'Error',
+    //   message: err.details[0].message
+    // })
+    res.json({ message: 'Contact not found' })
   }
 })
 

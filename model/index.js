@@ -54,14 +54,18 @@ const updateContact = async (contactId, body) => {
   const updateContact = contacts.find((el) => String(el.id) === contactId)
 
   if (updateContact) {
-    if (body.name) { updateContact.name = body.name }
-    if (body.email) { updateContact.email = body.email }
-    if (body.phone) { updateContact.phone = body.phone }
-  }
-  const updatedContacts = JSON.stringify(contacts)
-  await fs.writeFile(contactsPath, updatedContacts)
+    const updatedContact = { ...updateContact, ...body }
 
-  return updateContact
+    const idx = contacts.indexOf(updateContact)
+
+    const modifiedContacts = [...contacts.slice(0, idx), updatedContact, ...contacts.slice(idx + 1)]
+
+    const updatedContacts = JSON.stringify(modifiedContacts)
+
+    await fs.writeFile(contactsPath, updatedContacts)
+
+    return updatedContact
+  } else throw new Error()
 }
 
 module.exports = {
