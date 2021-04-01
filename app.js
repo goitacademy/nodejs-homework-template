@@ -3,6 +3,7 @@ const logger = require('morgan')
 const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
+const { router: authRouter } = require('./routes/api/auth')
 
 const app = express()
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -13,6 +14,7 @@ app.use(express.json())
 
 require('./configs/passport-jwt')
 
+app.use('/api/auth', authRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
