@@ -20,7 +20,7 @@ app.use('/api/contacts', contactsRouter)
 
 app.use((err, req, res, next) => {
   err.status = err.status ? err.status : codes.INTERNAL_SERVER_ERROR
-  res.status(500).json({
+  res.status(err.status).json({
     status: err.status === 500 ? 'Fail' : 'Error',
     code: err.status,
     message: err.message,

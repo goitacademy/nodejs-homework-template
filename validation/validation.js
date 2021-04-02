@@ -7,7 +7,10 @@ const schemaCreate = Joi.object({
     .max(30)
     .required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  password: Joi.number().integer().min(3).max(8).required(),
+  phone: Joi.string().alphanum()
+    .min(9)
+    .max(11)
+    .required(),
 })
 
 const schemaUpdate = Joi.object({
@@ -17,17 +20,19 @@ const schemaUpdate = Joi.object({
     .max(30)
     .optional(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-  password: Joi.number().integer().min(3).max(8).optional(),
+  phone: Joi.string().alphanum()
+    .min(9)
+    .max(11).optional(),
 })
 
 const validate = (schema, body, next) => {
-  const { err } = schema(body)
-  if (err) {
-    const [{ message }] = err.details
+  const { error } = schema.validate(body)
+  if (error) {
+    const [{ message }] = error.details
     return next({
-      status: 'Bad request',
-      message,
+      status: codes.BAD_REQUEST,
       code: codes.BAD_REQUEST,
+      message: message.replace(/"/g, ''),
     })
   }
   next()

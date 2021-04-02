@@ -22,7 +22,7 @@ class ContactRepository {
   }
 
   removeContact(contactId) {
-    const record = db.get('contacts')
+    const [record] = db.get('contacts')
       .remove({ id: contactId })
       .write()
     return record
