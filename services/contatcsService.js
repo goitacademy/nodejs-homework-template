@@ -6,24 +6,23 @@ class ContactService {
   }
 
   listContacts() {
-    const data = this.repository.listContacts()
-    return data
+    return this.repository.listContacts()
   }
 
   getById({ contactId }) {
-    return {}
+    return this.repository.getById(contactId)
   }
 
   addContact({ name, email, phone }) {
-    return {}
+    return this.repository.addContact(name, email, phone)
   }
 
   removeContact({ contactId }) {
-    return {}
+    return this.repository.removeContact(contactId)
   }
 
   updateContact({ contactId }, body) {
-    return {}
+    return this.repository.updateContact(contactId, body)
   }
 }
 

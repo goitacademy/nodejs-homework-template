@@ -8,6 +8,7 @@ const listContacts = (req, res, next) => {
     const contacts = contactsService.listContacts()
     res.status(codes.OK).json({
       status: 'success',
+      message: 'Success',
       code: codes.OK,
       data: {
         contacts,
@@ -24,6 +25,7 @@ const getById = (req, res, next) => {
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
+        message: 'Contact is founded',
         code: codes.OK,
         data: {
           contact,
@@ -46,6 +48,7 @@ const addContact = (req, res, next) => {
     const contact = contactsService.addContact(req.body)
     res.status(codes.CREATED).json({
       status: 'success',
+      message: 'Contact is added',
       code: codes.CREATED,
       data: {
         contact,
@@ -62,6 +65,7 @@ const removeContact = (req, res, next) => {
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
+        message: 'Contact is deleted',
         code: codes.OK,
         data: {
           contact,
@@ -70,7 +74,7 @@ const removeContact = (req, res, next) => {
     } else {
       next({
         status: codes.NOT_FOUND,
-        message: 'Contact deleted',
+        message: 'Not found',
         data: 'Not found'
       })
     }
@@ -85,6 +89,7 @@ const updateContact = (req, res, next) => {
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
+        message: 'Contact is updated',
         code: codes.OK,
         data: {
           contact,

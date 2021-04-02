@@ -5,11 +5,11 @@ class ContactRepository {
     return db.get('contacts').value()
   }
 
-  getById({ contactId }) {
-    return db.get('contacts').find(id => id === contactId).value()
+  getById(contactId) {
+    return db.get('contacts').find(({ id }) => id === contactId).value()
   }
 
-  addContact({ name, email, phone }) {
+  addContact(name, email, phone) {
     const id = uuidv4()
     const record = {
       id,
@@ -21,15 +21,15 @@ class ContactRepository {
     return record
   }
 
-  removeContact({ contactId }) {
-    const [record] = db.get('posts')
-      .remove(contactId)
+  removeContact(contactId) {
+    const record = db.get('contacts')
+      .remove({ id: contactId })
       .write()
     return record
   }
 
-  updateContact({ contactId }, body) {
-    const record = db.get('contacts').find(contactId).assign(body).value()
+  updateContact(contactId, body) {
+    const record = db.get('contacts').find(({ id }) => id === contactId).assign(body).value()
     db.write()
     return record
   }
