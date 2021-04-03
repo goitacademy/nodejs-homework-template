@@ -84,6 +84,13 @@ const removeContact = (req, res, next) => {
 }
 
 const updateContact = (req, res, next) => {
+  if (Object.values(req.body).length === 0) {
+    return next({
+      status: codes.BAD_REQUEST,
+      message: 'Missing fields',
+      data: 'Missing fields'
+    })
+  }
   try {
     const contact = contactsService.updateContact(req.params, req.body)
     if (contact) {
