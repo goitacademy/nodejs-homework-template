@@ -11,9 +11,7 @@ const schemaCreate = Joi.object({
     })
     .required(),
   phone: Joi.string().min(1).max(50).required(),
-  subscription: Joi.string().alphanum().min(0).max(30).optional(),
-  password: Joi.string().min(1).max(30).required(),
-  token: Joi.string().optional(),
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaUpdate = Joi.object({
@@ -26,10 +24,8 @@ const schemaUpdate = Joi.object({
     })
     .optional(),
   phone: Joi.string().min(1).max(50).optional(),
-  subscription: Joi.string().alphanum().min(0).max(30).optional(),
-  password: Joi.string().min(1).max(30).optional(),
-  token: Joi.string().optional(),
-});
+  favorite: Joi.boolean().optional(),
+}).min(1);
 
 const validate = (schema, body, next) => {
   if (Object.keys(body).length === 0) {
@@ -39,7 +35,7 @@ const validate = (schema, body, next) => {
       data: "Bad Request",
     });
   }
-  console.log(body);
+
   const { error } = schema.validate(body);
   if (error) {
     const labelArray = error.details.map((detail) => {

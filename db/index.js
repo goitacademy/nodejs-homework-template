@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const uriDb =
-  "mongodb+srv://muron:muron@cluster0.ft41c.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const uriDb = process.env.URI_DB;
 
 const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
