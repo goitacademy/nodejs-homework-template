@@ -7,7 +7,7 @@ const listContacts = (req, res, next) => {
   try {
     const contacts = contactsService.listContacts()
     res.status(codes.OK).json({
-      status: 'success',
+      status: 'succes',
       message: 'Success',
       code: codes.OK,
       data: {
