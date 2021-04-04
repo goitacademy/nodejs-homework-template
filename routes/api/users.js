@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const controllerUser = require('../../controllers/controllerUser');
+const express = require('express');
+const router = express.Router();
+const userControllers = require('../../controllers/users');
+const guard = require('../../helpers/guard')
+
+router.get('/current', guard, userControllers.current) 
+router.patch('/', guard, userControllers.updateSub) 
 
 
-
-router.post('/registration', controllerUser.reg) 
-router.post('/login', controllerUser.login)
-router.post('/logout', controllerUser.logout)
 module.exports = router

@@ -1,48 +1,34 @@
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 
 const User = require('../schemas/userSchema')
 
-const findById = async (id) => {
-  try {
-    return User.findOne({_id: id})
-  } 
-  catch (error){
-    throw error;
-  }
+const findById = async id => {
+  const user = await User.findById(id)/*{_id: id}*/
+  return user
 
 }
-const findByEmail = async (email) => {
-    try {
-      return User.findOne({email})
-    } 
-    catch (error){
-      throw error;
-    }
+const findByEmail = async email => {
+    const user = await User.findOne({email})
+    return user
   }
 
-  const create = async (body) => {
-    try {
-      const user = new User(body)
-      return user.save()
-    } 
-    catch (error){
-      throw error;
-    }
-  
+  const createNewUser = async ({email, password, subscription, token}) => {
+      const user = await new User({email, password, subscription, token}).save()
+      return user
   }
   const updateToken = async (id, token) => {
-    try {
-      return User.updateOne({_id: id}, {token})
-    } 
-    catch (error){
-      throw error;
-    }
-  
+     const user = await User.updateOne({_id: id}, {token})
+    return user
+  }
+  const updateUser = async (id, subscription) => {
+    const user = User.findByIdAndUpdate({ _id: id}, {subscription}, { new: true })
+    return user
   }
 
   module.exports = {
     findById,
     findByEmail,
-    create,
-    updateToken
+    createNewUser,
+    updateToken,
+    updateUser
   }
