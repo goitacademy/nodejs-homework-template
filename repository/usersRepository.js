@@ -1,27 +1,36 @@
 const User = require("../schemas/usersSchemas");
+class UserRepository {
+  constructor() {
+    this.Model = User;
+  }
 
-const findUserByIdRepository = async (id) => {
-  const results = await User.findOne({ _id: id });
-  return results;
-};
+  async findUserById(id) {
+    return await this.Model.findById(id);
+  }
 
-const findUserByEmailRepository = async (email) => {
-  const results = await User.findOne({ email });
-  return results;
-};
+  async findUserByEmail(email) {
+    return await this.Model.findOne({ email });
+  }
 
-const createContactRepository = async (body) => {
-  const user = await User.create(body);
-  return user.save();
-};
+  async addUser(body) {
+    const user = new this.Model(body);
+    return user.save();
+  }
 
-const updateTokenRepository = async (id, token) => {
-  await User.updateOne({ _id: id }, { token });
-};
+  async updateToken(id, token) {
+    await this.Model.updateOne({ _id: id }, { token });
 
-module.exports = {
-  findUserByIdRepository,
-  findUserByEmailRepository,
-  createContactRepository,
-  updateTokenRepository,
-};
+    return { message: "Not authorized" };
+  }
+
+  async updateAvatar(id, avatar, idCloudeAvatar) {
+    await this.Model.updateOne({ _id: id }, { avatar, idCloudeAvatar });
+  }
+
+  async getAvatar(id) {
+    const { avatar, idCloudeAvatar } = await this.Model.findOne({ _id: id });
+    return { avatar, idCloudeAvatar };
+  }
+}
+
+module.exports = UserRepository;

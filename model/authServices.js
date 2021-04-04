@@ -1,29 +1,29 @@
+const UserRepository = require("../repository/usersRepository");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
-const {
-  findUserByEmailRepository,
-  updateTokenRepository,
-} = require("../repository/usersRepository");
-
-const login = async ({ password, email }) => {
-  const user = await findUserByEmailRepository(email);
-  if (!user || !user.validPassword(password)) {
-    return null;
+class AuthService {
+  constructor() {
+    this.repository = { users: new UserRepository() };
   }
-  const id = user.id;
-  const payload = { id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-  await updateTokenRepository(id, token);
-  return token;
-};
 
-const logout = async (id) => {
-  const data = await updateTokenRepository(id, null);
-  return data;
-};
+  async login({ email }) {
+    const user = await this.repository.users.findUserByEmail(email);
+    if (!user) {
+      return null;
+    }
+    const id = user.id;
+    const payload = { id };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    await this.repository.users.updateToken(id, token);
+    return token;
+  }
 
-module.exports = {
-  login,
-  logout,
-};
+  async logout(id) {
+    const data = await this.repository.users.updateToken(id, null);
+
+    return data;
+  }
+}
+
+module.exports = AuthService;

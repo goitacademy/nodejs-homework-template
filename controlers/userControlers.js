@@ -1,15 +1,13 @@
+const AuthService = require("../model/authServices");
+const UserService = require("../model/userServices");
 const { HttpCode } = require("../helpers/constants");
-const {
-  createUserService,
-  findUserByEmailService,
-  findUserByIdService,
-} = require("../model/userServices");
 
-const { login, logout } = require("../model/authServices");
+const servisAuth = new AuthService();
+const servisUser = new UserService();
 
-const userSingupControler = async (req, res, next) => {
-  const { password, email, subscription } = req.body;
-  const user = await findUserByEmailService(email);
+const reg = async (req, res, next) => {
+  const { name, email, password, subscription } = req.body;
+  const user = await servisUser.findByEmail(email);
   if (user) {
     return next({
       status: HttpCode.CONFLICT,
@@ -17,8 +15,15 @@ const userSingupControler = async (req, res, next) => {
       message: "Email in use",
     });
   }
+
   try {
-    const newUser = await createUserService({ password, email, subscription });
+    const newUser = await servisUser.create({
+      name,
+      email,
+      password,
+      subscription,
+      // avatarURL,
+    });
     return res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.CREATED,
@@ -26,16 +31,18 @@ const userSingupControler = async (req, res, next) => {
         id: newUser.id,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatarURL,
       },
     });
   } catch (e) {
     next(e);
   }
 };
-const userLoginControler = async (req, res, next) => {
-  const { password, email } = req.body;
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+
   try {
-    const token = await login({ password, email });
+    const token = await servisAuth.login({ email, password });
     if (token) {
       return res.status(HttpCode.OK).json({
         status: "success",
@@ -53,41 +60,27 @@ const userLoginControler = async (req, res, next) => {
     next(e);
   }
 };
-const userLogoutControler = async (req, res, next) => {
+const logout = async (req, res, next) => {
   const id = req.user.id;
-  await logout(id);
-  return res.status(HttpCode.NO_CONTENT).json({
-    status: "success",
-    code: HttpCode.NO_CONTENT,
-  });
+  await servisAuth.logout(id);
+  return res
+    .status(HttpCode.NO_CONTENT)
+    .json({ status: "success", code: HttpCode.NO_CONTENT });
 };
 
-const getCurrentUserControler = async (req, res, next) => {
-  const id = req.user.id;
-  try {
-    const user = await findUserByIdService(id);
-    if (user) {
-      res.status(HttpCode.OK).json({
-        status: "success",
-        code: HttpCode.OK,
-        data: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      });
-    }
-    next({
-      status: HttpCode.UNAUTHORIZED,
-      message: "Not authorized",
-    });
-  } catch (error) {
-    next(error);
-  }
+const avatars = async (req, res, next) => {
+  const { id } = req.user;
+  const pathFile = req.file.path;
+
+  const url = await servisUser.updateAvatar(id, pathFile);
+  return res
+    .status(HttpCode.OK)
+    .json({ status: "success", code: HttpCode.OK, avatarURL: url });
 };
 
 module.exports = {
-  userLoginControler,
-  userLogoutControler,
-  userSingupControler,
-  getCurrentUserControler,
+  reg,
+  login,
+  logout,
+  avatars,
 };

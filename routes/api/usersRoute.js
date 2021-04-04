@@ -1,16 +1,19 @@
 const express = require("express");
-const router = express.Router();
 const guard = require("../../helpers/guard");
-const {
-  userSingupControler,
-  userLoginControler,
-  userLogoutControler,
-  getCurrentUserControler,
-} = require("../../controlers/userControlers");
+const { upload } = require("../../helpers/multer");
+const controllerUsers = require("../../controlers/userControlers");
 
-router.post("/singup", userSingupControler);
-router.post("/login", userLoginControler);
-router.post("/logout", guard, userLogoutControler);
-router.get("/current", guard, getCurrentUserControler);
+const router = express.Router();
+
+router.post("/registration", controllerUsers.reg);
+router.post("/login", controllerUsers.login);
+router.post("/logout", guard, controllerUsers.logout);
+
+router.patch(
+  "/avatars",
+  guard,
+  upload.single("avatar"),
+  controllerUsers.avatars
+);
 
 module.exports = router;
