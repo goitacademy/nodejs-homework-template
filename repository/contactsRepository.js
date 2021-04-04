@@ -11,20 +11,20 @@ const getContactByIdRepository = async (id) => {
   return results;
 };
 
-const addContactRepository = async (body) => {
-  const results = await Contact.create(body);
+const addContactRepository = async (body, userId) => {
+  const results = await Contact.create({ ...body, owner: userId });
 
   return results;
 };
 
 const removeContactRepository = async (id) => {
-  const results = await Contact.findByIdAndRemove({ _id: id });
+  const results = await Contact.findByIdAndRemove(id);
   return results;
 };
 
 const updateContactRepository = async (id, body) => {
   const results = await Contact.findByIdAndUpdate(
-    { _id: id },
+    id,
     { ...body },
     { new: true }
   );

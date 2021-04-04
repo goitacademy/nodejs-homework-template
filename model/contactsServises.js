@@ -21,8 +21,8 @@ const removeContact = async (id) => {
   return data;
 };
 
-const addContact = async (body) => {
-  const data = await addContactRepository(body);
+const addContact = async (body, userId) => {
+  const data = await addContactRepository(body, userId);
   return data;
 };
 

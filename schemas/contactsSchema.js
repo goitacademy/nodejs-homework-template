@@ -5,27 +5,21 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      required: true,
     },
     phone: {
       type: String,
-      required: true,
     },
-    subscription: {
-      type: String,
-      default: "free",
+    favorite: {
+      type: Boolean,
+      default: false,
     },
-    password: {
-      type: String,
-      required: true,
-    },
-    token: {
-      type: String,
-      required: false,
+    owner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
