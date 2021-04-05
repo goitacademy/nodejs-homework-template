@@ -5,8 +5,8 @@ const User = require('../../model/schemas/user')
 const { auth } = require('./auth')
 
 router.get('/users/current', auth, async (req, res, next) => {
-  const { id } = req.user
-  const user = await User.findOne({ id })
+  const { _id } = req.user
+  const user = await User.findOne({ _id })
   if (!user) {
     return res.status(401).json({
       code: 401,

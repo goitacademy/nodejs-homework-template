@@ -7,7 +7,7 @@ const User = require('../../model/schemas/user')
 
 const auth = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
-    if (!user || err) {
+    if (!user || err || 'Bearer ' + user.token !== req.headers.authorization) {
       return res.status(401).json({
         code: 401,
         message: 'Not authorized',
@@ -88,8 +88,8 @@ router.post('/login', async (req, res, next) => {
 })
 
 router.post('/logout', auth, async (req, res, next) => {
-  const { id } = req.user
-  const user = await User.findOneAndUpdate({ id }, { token: '' }, { useFindAndModify: false })
+  const { _id } = req.user
+  const user = await User.findOneAndUpdate({ _id }, { token: '' }, { useFindAndModify: false })
   if (!user) {
     return res.status(401).json({
       code: 401,

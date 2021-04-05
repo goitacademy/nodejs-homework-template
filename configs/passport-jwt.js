@@ -12,7 +12,7 @@ const params = {
 
 passport.use(
   new Strategy(params, async (payload, done) => {
-    const user = await User.find({ _id: payload.id })
+    const user = await User.findOne({ email: payload.email })
     if (user) {
       done(null, user)
     }
