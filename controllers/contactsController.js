@@ -122,7 +122,7 @@ const updateContact = async (req, res, next) => {
       })
     }
     try {
-      const contact = await contactsService.updateContact(req.params, req.body)
+      const contact = await contactsService.updateStatusContact(req.params, req.body)
       if (contact) {
         res.status(codes.OK).json({
           status: 'success',
