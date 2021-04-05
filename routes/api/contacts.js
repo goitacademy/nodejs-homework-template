@@ -1,9 +1,27 @@
 const express = require('express')
 const router = express.Router()
-const contactsOperations = require('../../model/index')
+const contactsServices = require('../../model/services/contacts')
+const User = require('../../model/schemas/user')
+const { auth } = require('./auth')
 
-router.get('/', async (req, res, next) => {
-  const data = await contactsOperations.listContacts()
+router.get('/users/current', auth, async (req, res, next) => {
+  const { _id } = req.user
+  const user = await User.findOne({ _id })
+  if (!user) {
+    return res.status(401).json({
+      code: 401,
+      message: 'Not authorized',
+    })
+  }
+  return res.status(200).json({
+    code: 200,
+    email: user.email,
+    subscription: user.subscription,
+  })
+})
+
+router.get('/', auth, async (req, res, next) => {
+  const data = await contactsServices.listContacts()
   res.json({
     status: 'success',
     code: 200,
@@ -11,9 +29,9 @@ router.get('/', async (req, res, next) => {
   })
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', auth, async (req, res, next) => {
   const { contactId } = req.params
-  const data = await contactsOperations.getContactById(contactId)
+  const data = await contactsServices.getContactById(contactId)
   if (data) {
     res.json({
       status: 'success',
@@ -28,8 +46,8 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
-  const { data, message } = await contactsOperations.addContact(req.body)
+router.post('/', auth, async (req, res, next) => {
+  const { data, message } = await contactsServices.addContact(req.body)
   if (data) {
     res.status(201).json({
       code: 201,
@@ -43,9 +61,9 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', auth, async (req, res, next) => {
   const { contactId } = req.params
-  const data = await contactsOperations.removeContact(contactId)
+  const data = await contactsServices.removeContact(contactId)
   if (data) {
     res.json({
       message: 'contact deleted',
@@ -59,11 +77,11 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', auth, async (req, res, next) => {
   const { contactId } = req.params
   const { name, email, phone } = req.body
   if (name || email || phone) {
-    const data = await contactsOperations.updateContact(contactId, req.body)
+    const data = await contactsServices.updateContact(contactId, req.body)
     if (data) {
       res.json({
         code: 200,

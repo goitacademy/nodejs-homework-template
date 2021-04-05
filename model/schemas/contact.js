@@ -20,6 +20,10 @@ const contactSchema = new Schema(
     subscription: String,
     password: String,
     token: String,
+    owner: {
+      type: Schema.ObjectId,
+      ref: 'user',
+    },
   },
   { versionKey: false }
 )
