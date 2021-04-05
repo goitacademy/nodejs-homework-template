@@ -5,24 +5,29 @@ class ContactService {
     this.repository = new ContactRepository()
   }
 
-  listContacts() {
-    return this.repository.listContacts()
+  async listContacts() {
+    const data = await this.repository.listContacts()
+    return data
   }
 
-  getById({ contactId }) {
-    return this.repository.getById(contactId)
+  async getById({ contactId }) {
+    const data = await this.repository.getById(contactId)
+    return data
   }
 
-  addContact({ name, email, phone }) {
-    return this.repository.addContact(name, email, phone)
+  async addContact({ name, email, phone }) {
+    const data = await this.repository.addContact(name, email, phone)
+    return data
   }
 
-  removeContact({ contactId }) {
-    return this.repository.removeContact(contactId)
+  async removeContact({ contactId }) {
+    const data = await this.repository.removeContact(contactId)
+    return data
   }
 
-  updateContact({ contactId }, body) {
-    return this.repository.updateContact(contactId, body)
+  async updateContact({ contactId }, body) {
+    const data = await this.repository.updateContact(contactId, body)
+    return data
   }
 }
 

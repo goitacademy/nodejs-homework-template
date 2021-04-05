@@ -1,15 +1,17 @@
 const { v4: uuidv4 } = require('uuid')
 const db = require('../db/db')
 class ContactRepository {
-  listContacts() {
-    return db.get('contacts').value()
+  async listContacts() {
+    const data = await db.get('contacts').value()
+    return data
   }
 
-  getById(contactId) {
-    return db.get('contacts').find(({ id }) => id === contactId).value()
+  async getById(contactId) {
+    const data = await db.get('contacts').find(({ id }) => id === contactId).value()
+    return data
   }
 
-  addContact(name, email, phone) {
+  async addContact(name, email, phone) {
     const id = uuidv4()
     const record = {
       id,
@@ -17,19 +19,19 @@ class ContactRepository {
       email,
       phone
     }
-    db.get('contacts').push(record).write()
+    await db.get('contacts').push(record).write()
     return record
   }
 
-  removeContact(contactId) {
-    const [record] = db.get('contacts')
+  async removeContact(contactId) {
+    const [record] = await db.get('contacts')
       .remove({ id: contactId })
       .write()
     return record
   }
 
-  updateContact(contactId, body) {
-    const record = db.get('contacts').find(({ id }) => id === contactId).assign(body).value()
+  async updateContact(contactId, body) {
+    const record = await db.get('contacts').find(({ id }) => id === contactId).assign(body).value()
     db.write()
     return record
   }
