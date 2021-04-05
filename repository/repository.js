@@ -1,38 +1,40 @@
-const { v4: uuidv4 } = require('uuid')
-const db = require('../db/db')
+const contacts = require('../schemas/contactsSchema')
+
 class ContactRepository {
+  constructor() {
+    this.model = contacts
+  }
   async listContacts() {
-    const data = await db.get('contacts').value()
+    const data = await this.model.find()
     return data
   }
 
   async getById(contactId) {
-    const data = await db.get('contacts').find(({ id }) => id === contactId).value()
+    const data = await this.model.findOne({_id: contactId})
     return data
   }
 
-  async addContact(name, email, phone) {
-    const id = uuidv4()
-    const record = {
-      id,
+  async addContact(name, email, phone) {    
+    const record = {      
       name,
       email,
       phone
     }
-    await db.get('contacts').push(record).write()
+    await this.model.create(record)
     return record
   }
 
   async removeContact(contactId) {
-    const [record] = await db.get('contacts')
-      .remove({ id: contactId })
-      .write()
+    const record = await this.model.findByIdAndRemove({ _id: contactId })
     return record
   }
 
   async updateContact(contactId, body) {
-    const record = await db.get('contacts').find(({ id }) => id === contactId).assign(body).value()
-    db.write()
+    const record = await this.model.findByIdAndUpdate({_id: contactId},{...body},{new: true})    
+    return record
+  }
+  async updateStatusContact(contactId, body) {
+    const record = await this.model.findByIdAndUpdate({_id: contactId},{...body},{new: true}) 
     return record
   }
 }
