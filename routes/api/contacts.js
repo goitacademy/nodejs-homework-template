@@ -1,24 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const contactsServices = require('../../model/services/contacts')
-const User = require('../../model/schemas/user')
 const { auth } = require('./auth')
-
-router.get('/users/current', auth, async (req, res, next) => {
-  const { _id } = req.user
-  const user = await User.findOne({ _id })
-  if (!user) {
-    return res.status(401).json({
-      code: 401,
-      message: 'Not authorized',
-    })
-  }
-  return res.status(200).json({
-    code: 200,
-    email: user.email,
-    subscription: user.subscription,
-  })
-})
 
 router.get('/', auth, async (req, res, next) => {
   const data = await contactsServices.listContacts()

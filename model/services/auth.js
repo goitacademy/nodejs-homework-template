@@ -1,4 +1,5 @@
 const validator = require('validator')
+const gravatar = require('gravatar')
 const User = require('../schemas/user')
 
 const validateUserFields = (email, password) => {
@@ -15,7 +16,8 @@ const validateUserFields = (email, password) => {
 const registration = async body => {
   try {
     const { email, password } = body
-    const newUser = new User({ email })
+    const avatarURL = gravatar.url(email, { protocol: 'https', s: '100' })
+    const newUser = new User({ email, avatarURL })
     newUser.setPassword(password)
     const user = await newUser.save()
     return {
