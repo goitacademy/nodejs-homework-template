@@ -23,7 +23,7 @@ const schemaUpdate = Joi.object({
   phone: Joi.string().alphanum()
     .min(9)
     .max(11).optional(),
-})
+}).min(1)
 const statusUpdate = Joi.object({
   favorite: Joi.boolean().required()
 })
