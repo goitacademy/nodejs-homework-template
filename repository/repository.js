@@ -7,7 +7,7 @@ class ContactRepository {
   }
 
   async getById(contactId) {
-    const data = await db.get('contacts').find(({ id }) => id === contactId).value()
+    const data = await db.get('contacts').find({id: contactId}).value()
     return data
   }
 
@@ -31,7 +31,7 @@ class ContactRepository {
   }
 
   async updateContact(contactId, body) {
-    const record = await db.get('contacts').find(({ id }) => id === contactId).assign(body).value()
+    const record = await db.get('contacts').find({id: contactId}).assign(body).value()
     db.write()
     return record
   }
