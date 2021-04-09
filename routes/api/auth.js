@@ -71,6 +71,12 @@ router.post('/login', async (req, res, next) => {
       message: 'Email or password is wrong',
     })
   }
+  if (!user.verify) {
+    return res.status(403).json({
+      code: 403,
+      message: 'User account not verified',
+    })
+  }
   const payload = {
     email: user.email,
     subscription: user.subscription,
