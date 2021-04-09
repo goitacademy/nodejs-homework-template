@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const contactsController = require('../../controllers/contactsController')
 const { createContact, updateContact, updateStatus } = require('../../validation/validation')
+
 router.get('/', contactsController.listContacts)
 
 router.get('/:contactId', contactsController.getById)

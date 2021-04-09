@@ -1,0 +1,16 @@
+{
+  "contacts": [
+    {
+      "id": "56452a05-b6c4-4604-8f7f-0bdb85b584db",
+      "name": "rat",
+      "email": "vasya@mail.com",
+      "phone": "123456789"
+    },
+    {
+      "id": "e72c574e-f252-4bdc-a15e-029e83af2762",
+      "name": "lol",
+      "email": "kolya@mail.com",
+      "phone": "123456789"
+    }
+  ]
+}
