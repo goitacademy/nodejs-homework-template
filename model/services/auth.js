@@ -1,6 +1,10 @@
 const validator = require('validator')
 const gravatar = require('gravatar')
+const { v4 } = require('uuid')
+const sendGrid = require('@sendgrid/mail')
 const User = require('../schemas/user')
+
+sendGrid.setApiKey(process.env.SG_API_KEY)
 
 const validateUserFields = (email, password) => {
   let validationMessage = ''
@@ -17,9 +21,20 @@ const registration = async body => {
   try {
     const { email, password } = body
     const avatarURL = gravatar.url(email, { protocol: 'https', s: '100' })
-    const newUser = new User({ email, avatarURL })
+    const verificationToken = v4()
+    const newUser = new User({ email, avatarURL, verificationToken })
     newUser.setPassword(password)
     const user = await newUser.save()
+    const message = {
+      to: email,
+      from: 'dmicher911@gmail.com',
+      subject: 'Verification letter',
+      html: `<p>Follow the link below to complete your account verification</p>
+      <a href="http://localhost:3000/api/users/verify/${verificationToken}">Verification link</a>`,
+    }
+    sendGrid.send(message).catch(error => {
+      throw error
+    })
     return {
       data: {
         email: user.email,
