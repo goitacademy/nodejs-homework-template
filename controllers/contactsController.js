@@ -113,5 +113,36 @@ const updateContact = async (req, res, next) => {
     next(err)
   }
 }
+  const updateStatusContact = async (req, res, next) => {
+    if (Object.values(req.body).length === 0) {
+      return next({
+        status: codes.BAD_REQUEST,
+        message: 'Missing field favorite',
+        data: 'Missing field favorite'
+      })
+    }
+    try {
+      const contact = await contactsService.updateStatusContact(req.params, req.body)
+      if (contact) {
+        res.status(codes.OK).json({
+          status: 'success',
+          message: 'Contact is updated',
+          code: codes.OK,
+          data: {
+            contact,
+          }
+        })
+      } else {
+        next({
+          status: codes.NOT_FOUND,
+          message: 'Not found',
+          data: 'Not found'
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+    
+}
 
-module.exports = { listContacts, getById, addContact, removeContact, updateContact }
+module.exports = { listContacts, getById, addContact, removeContact, updateContact, updateStatusContact }

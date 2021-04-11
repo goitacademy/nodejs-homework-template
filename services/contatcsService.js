@@ -1,8 +1,12 @@
 const { ContactRepository } = require('../repository/repository')
-
+const db = require('../db/db')
 class ContactService {
   constructor() {
-    this.repository = new ContactRepository()
+    process.nextTick(async () => {
+      const client = await db
+      this.repository = new ContactRepository(client)
+    } )
+    
   }
 
   async listContacts() {
@@ -27,6 +31,10 @@ class ContactService {
 
   async updateContact({ contactId }, body) {
     const data = await this.repository.updateContact(contactId, body)
+    return data
+  }
+  async updateStatusContact({ contactId }, body) {
+    const data = await this.repository.updateStatusContact(contactId, body)
     return data
   }
 }
