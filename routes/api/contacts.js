@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Contacts = require('../../model/contacts')
+const Contacts = require('../../model/index')
 
 router.get('/', async (req, res, next) => {
   try {
