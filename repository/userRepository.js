@@ -14,12 +14,16 @@ class UserRepository {
     const data = await this.model.findOne({_id: userId})
     return data
   }  
-  async getByEmail(email) {
+  async getByEmail(email) {    
     const data = await this.model.findOne({email})
     return data
   } 
   async updateToken(userId, token) {
     await this.model.updateOne({_id: userId}, {token}) 
+  }
+  async updateSubscription(userID, body) {
+    const data = await this.model.findByIdAndUpdate(userID, {...body},{new: true})
+    return data
   }
 }
 

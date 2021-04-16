@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 const {subscription} = require('../helpers/constants')
 const bcrypt = require('bcryptjs')
+
 const userSchema = new Schema({
     password: {
       type: String,

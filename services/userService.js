@@ -18,6 +18,10 @@ class UserService {
     const data = await this.repository.getByEmail(email)
     return data
   }
+  async updateSubscription(userID, body) {
+    const data = await this.repository.updateSubscription(userID, body)
+    return data
+  }
 }
 
 module.exports = { UserService }

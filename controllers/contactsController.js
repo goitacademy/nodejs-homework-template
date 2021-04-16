@@ -5,13 +5,14 @@ const contactsService = new ContactService()
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsService.listContacts()
+    const userID = req.user.id
+    const contacts = await contactsService.listContacts(req.query, userID)
     res.status(codes.OK).json({
       status: 'success',
       message: 'Success',
       code: codes.OK,
       data: {
-        contacts,
+        ...contacts,
       }
     })
   } catch (err) {
@@ -21,7 +22,8 @@ const listContacts = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const contact = await contactsService.getById(req.params)
+    const userID = req.user.id
+    const contact = await contactsService.getById(req.params, userID)
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
@@ -45,7 +47,8 @@ const getById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.addContact(req.body)
+    const userID = req.user.id
+    const contact = await contactsService.addContact(req.body, userID)
     res.status(codes.CREATED).json({
       status: 'success',
       message: 'Contact is added',
@@ -61,7 +64,8 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.removeContact(req.params)
+    const userID = req.user.id
+    const contact = await contactsService.removeContact(req.params, userID)
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
@@ -92,7 +96,8 @@ const updateContact = async (req, res, next) => {
     })
   }
   try {
-    const contact = await contactsService.updateContact(req.params, req.body)
+    const userID = req.user.id
+    const contact = await contactsService.updateContact(req.params, req.body, userID)
     if (contact) {
       res.status(codes.OK).json({
         status: 'success',
@@ -122,7 +127,8 @@ const updateContact = async (req, res, next) => {
       })
     }
     try {
-      const contact = await contactsService.updateStatusContact(req.params, req.body)
+      const userID = req.user.id
+      const contact = await contactsService.updateStatusContact(req.params, req.body, userID)
       if (contact) {
         res.status(codes.OK).json({
           status: 'success',

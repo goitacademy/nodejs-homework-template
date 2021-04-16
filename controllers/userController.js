@@ -64,4 +64,40 @@ const logout = async (req, res, next) => {
   }
 }
 
-module.exports = {reg, login, logout}
+const current = async (req, res, next) => {  
+  try {
+    const userEmail = req.user.email;
+     
+    const user = await serviceAuth.current(userEmail);
+
+    return res
+      .status(codes.OK)
+      .json({ status: 'success', code: codes.OK, data: user });
+  } catch (error) {
+    next(error);
+  }
+}
+const subscription = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const updatedUser = await serviceUser.updateSubscription(
+      userId,
+      req.body,
+    );
+
+    return res
+      .status(codes.OK)
+      .json({
+        status: 'success',
+        code: codes.OK,
+        data: {
+          email: updatedUser.email,
+          subscription: updatedUser.subscription,
+        },
+      });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = {reg, login, logout, current, subscription}

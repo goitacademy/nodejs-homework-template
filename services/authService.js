@@ -28,7 +28,11 @@ class AuthService {
     const data = await this.repository.updateToken(contactId, null)
     return data
   }
-
+   
+  async current(email) {
+    const data = await this.repository.getByEmail(email)
+    return { email: data.email, subscription: data.subscription };
+  }
 }
 
 module.exports = { AuthService }
