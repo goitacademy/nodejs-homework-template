@@ -19,7 +19,15 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const code = err.code || 500
+  res.status(code).json({
+    status: code === 500 ? 'fail' : 'error',
+    code: code,
+    message:
+      process.env.NODE_ENV === 'development'
+        ? err.message
+        : 'Something went wrong'
+  })
 })
 
 module.exports = app
