@@ -1,0 +1,28 @@
+{
+  "contacts": [
+    {
+      "id": "36e12951-d247-4657-9776-7205cc70fc0a",
+      "name": "Test",
+      "email": "test@i.ua",
+      "phone": "(050) 000-0000"
+    },
+    {
+      "id": "3ea96d79-fa91-4669-a2d2-6f90afd671b5",
+      "name": "Test2",
+      "email": "test2@i.ua",
+      "phone": "(050) 222-0000"
+    },
+    {
+      "id": 1,
+      "name": "Allen Raymond",
+      "email": "nulla.ante@vestibul.co.uk",
+      "phone": "(992) 914-3792"
+    },
+    {
+      "id": 1,
+      "name": "Allen Raymond",
+      "email": "nulla.ante@vestibul.co.uk",
+      "phone": "(992) 914-3792"
+    }
+  ]
+}
