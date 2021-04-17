@@ -44,7 +44,6 @@ const getById = (req, res, next) => {
 
 const create = (req, res, next) => {
   try {
-    console.log("serv", req.body);
     const contact = contactServise.create(req.body);
     res
       .status(HttpCode.CREATED)
