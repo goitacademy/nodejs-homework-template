@@ -1,5 +1,4 @@
-[
-  {
+{
     "id": 1,
     "name": "Allen Raymond",
     "email": "nulla.ante@vestibul.co.uk",
@@ -58,17 +57,5 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  },
-  {
-    "id": "3097719d-a97e-466b-96d3-2e9ebf783394",
-    "name": "Allen Delon",
-    "email": "Delonishe@vestibul.co.uk",
-    "phone": "(223) 322-3344"
-  },
-  {
-    "id": "e7da898d-17d8-450d-973a-442b4aa8f164",
-    "name": "Irina",
-    "email": "irka@blabla.co.uk",
-    "phone": "(223) 322-3344"
   }
 ]
