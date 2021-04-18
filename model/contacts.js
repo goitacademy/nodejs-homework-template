@@ -12,7 +12,10 @@ const getContactById = async (id) => {
   return db.get('contacts').find({id}).value()
 }
 
-const removeContact = async (id) => {}
+const removeContact = async (id) => {
+  const [record] = db.get('contacts').remove({id}).write()
+    return record
+}
 
 const addContact = async (body) => {
   const id = uuidv4()
@@ -24,7 +27,12 @@ const addContact = async (body) => {
   return record
 }
 
-const updateContact = async (id, body) => {}
+const updateContact = async (id, body) => {
+  const record = db.get('contacts').find({id}).assing(body).value()
+  //console.log(record)
+  db.write()
+  return record.id ? record : null
+}
 
 module.exports = {
   listContacts,
