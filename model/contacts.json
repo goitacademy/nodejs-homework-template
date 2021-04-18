@@ -1,22 +1,64 @@
 {
   "contacts": [
     {
-      "id": "36e12951-d247-4657-9776-7205cc70fc0a",
-      "name": "Test",
-      "email": "test@i.ua",
-      "phone": "(050) 000-0000"
-    },
-    {
-      "id": 1,
+      "id": "324e4bde-8a1a-42dd-b036-10a3b4671eeb",
       "name": "Allen Raymond",
       "email": "nulla.ante@vestibul.co.uk",
       "phone": "(992) 914-3792"
     },
     {
-      "id": 1,
-      "name": "Allen Raymond",
-      "email": "nulla.ante@vestibul.co.uk",
-      "phone": "(992) 914-3792"
+      "id": "7b8b293b-662e-4519-9206-8ecef21aebf3",
+      "name": "Kennedy Lane",
+      "email": "mattis.Cras@nonenimMauris.net",
+      "phone": "(542) 451-7038"
+    },
+    {
+      "id": "04c77287-fdd0-4aad-854c-d25b823af759",
+      "name": "Wylie Pope",
+      "email": "est@utquamvel.net",
+      "phone": "(692) 802-2949"
+    },
+    {
+      "id": "b3b4ea6d-e9ea-47b1-b472-545dcdda5a0d",
+      "name": "Cyrus Jackson",
+      "email": "nibh@semsempererat.com",
+      "phone": "(501) 472-5218"
+    },
+    {
+      "id": "ae722f47-a69a-4cce-86dd-fbf489e5d714",
+      "name": "Abbot Franks",
+      "email": "scelerisque@magnis.org",
+      "phone": "(186) 568-3720"
+    },
+    {
+      "id": "3f253e1c-2d73-45cb-972e-9caab510e82d",
+      "name": "Reuben Henry",
+      "email": "pharetra.ut@dictum.co.uk",
+      "phone": "(715) 598-5792"
+    },
+    {
+      "id": "7acf792e-528f-4147-9325-ff1364de4380",
+      "name": "Simon Morton",
+      "email": "dui.Fusce.diam@Donec.com",
+      "phone": "(233) 738-2360"
+    },
+    {
+      "id": "7edee2eb-499a-4290-9cc8-fe9d0e74d395",
+      "name": "Thomas Lucas",
+      "email": "nec@Nulla.com",
+      "phone": "(704) 398-7993"
+    },
+    {
+      "id": "06663cff-af5d-4f74-95a1-b6457c984f11",
+      "name": "Alec Howard",
+      "email": "Donec.elementum@scelerisquescelerisquedui.net",
+      "phone": "(748) 206-2688"
+    },
+    {
+      "id": "8ef1d170-3485-411b-a130-0b9eb485bd91",
+      "name": "Vitalik",
+      "email": "dui.in@egetlacus.ca",
+      "phone": "(294) 840-6685"
     }
   ]
 }
