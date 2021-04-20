@@ -3,7 +3,7 @@ const router = express.Router()
 const Contacts = require('../../model/contacts')
 const { ValidCreateContact,
         ValidUpdateEmailContact,
-        ValidUpdateAllContact } = require('./validContactsRoute')
+        ValidUpdateAllContact } = require('./validContactsRoute.js')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -54,7 +54,7 @@ router.post('/', ValidCreateContact, async (req, res, next) => {
          contact,
       }
     })
- } catch (error) {
+  } catch (error) {
    next(error)
  }
 })
@@ -123,8 +123,13 @@ router.put('/:id', ValidUpdateAllContact, async (req, res, next) => {
         data: 'Not Found'
     })
     }
-   } catch (error) {
-   next(error)
+  } catch (error) {
+    next(error)
+    return res.status(404).json({
+      status: 'error',
+      code: 404,
+      data: 'Not Found'
+    })
  }
 })
 

@@ -16,7 +16,6 @@ const listContacts = async () => {
 const getContactById = async (id) => {
   try {
     const contacts = await listContacts()
-    // const contacts = await fs.readFile(contactsPath).then((data)=>JSON.parse(data))
     return  contacts.find((item)=>item.id.toString()=== id)
   } catch (error) {
     console.log(error)
@@ -46,7 +45,6 @@ const removeContact = async (id) => {
 const addContact = async (body) => {
    try {
     const contacts = await listContacts()
-    // await fs.readFile(contactsPath).then((data)=>JSON.parse(data))
     const id = uuidv4()
     const recordContact = {
       id,
@@ -68,8 +66,6 @@ const addContact = async (body) => {
 const updateContact = async (id, body) => {
   try {
     const contacts = await listContacts()
-    // const contacts = await fs.readFile(contactsPath).then((data)=>JSON.parse(data))
-      // const record = await getContactById(id)
       const record = contacts.find((item)=>item.id.toString()=== id)
       Object.assign(record,body)
       const string = JSON.stringify(contacts, null ,2)
