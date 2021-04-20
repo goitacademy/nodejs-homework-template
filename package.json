@@ -1,6 +1,8 @@
 {
   "name": "nodejs-homework",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
