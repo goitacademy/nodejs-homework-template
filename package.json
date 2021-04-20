@@ -15,6 +15,16 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErihKoh/nodejs-homework.git"
+  },
+  "author": "ErihKoh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErihKoh/nodejs-homework/issues"
+  },
+  "homepage": "https://github.com/ErihKoh/nodejs-homework#readme",
   "dependencies": {
     "@sendgrid/mail": "7.4.2",
     "bcryptjs": "2.4.3",
