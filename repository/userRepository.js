@@ -25,6 +25,10 @@ class UserRepository {
     const data = await this.model.findByIdAndUpdate(userID, {...body},{new: true})
     return data
   }
+  async avatarUpload(userID, avatarPath) {
+    const data = await this.model.findByIdAndUpdate(userID, {...avatarPath},{new: true})
+    return data
+  }
 }
 
 module.exports = { UserRepository }

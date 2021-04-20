@@ -99,5 +99,26 @@ const subscription = async (req, res, next) => {
     next(error);
   }
 }
+const avatarUpload = async (req, res, next) => { 
+      try {
+    const userId = req.user.id;
+    const path = req.file.path
+    const originalName = req.file.originalname
+    if (req.file) {
+      const url = await serviceUser.avatarUpload(userId, path, originalName);
+       
+      return res.status(codes.OK).json({
+        status: 'success',
+        code: codes.OK,
+        data: {
+          email: req.user.email,
+          avatarURL: url,
+        },
+      });
+  }} catch (error) {
+    next(error)
+  }
+}
 
-module.exports = {reg, login, logout, current, subscription}
+
+module.exports = {reg, login, logout, current, subscription, avatarUpload}
