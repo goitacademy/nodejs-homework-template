@@ -24,20 +24,19 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id)
-    // console.log(req.params);
-    if (contact) {
+    if (contact.length<1) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        data: 'Not found'
+      })  
+    } else {
       return res.json({
         status: "success",
         code: 200,
         data: {
           contact,
         }
-      })
-    } else {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        data: 'Not found'
       })
     }    
   } catch (e) {
@@ -47,37 +46,53 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', validationCreateContact, async (req, res, next) => {
   try {
-    const contacts = await Contacts.addContact(req.body)
-    return res.status(201).json({
-      status: "created",
-      code: 201,
-      data: {
-        contacts,
-      }
-    })
-  } catch (e) {
-    next(e)
-  }
-})
-
-router.put('/:id', validationUpdateContact, async (req, res, next) => {
-  try {
-    const contact = await Contacts.updateContact(req.params.id, req.body)
-    // console.log(req.params);
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
+    const { name } = req.body;
+    const { email } = req.body;
+    const contact = await Contacts.addContact(req.body)
+    if (name && email) {
+      return res.status(201).json({
+        status: "created",
+        code: 201,
         data: {
           contact,
         }
       })
     } else {
+      return res.json({ message: "missing required field" })
+    }
+  }catch (e) {
+    next(e)
+  }
+})
+
+
+router.put('/:id', validationUpdateContact, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    console.log(body);
+    const contact = await Contacts.updateContact(id)
+    if (!contact) {
       return res.status(404).json({
         status: "error",
         code: 404,
         data: 'Not found'
-      })
+      })  
+    } else {
+      if (Object.keys(req.body).length !== 0){
+        return res.json({
+          status: "success",
+          code: 200,
+          data: {
+            ...contact,
+            ...body
+          }
+        })
+      } else {
+        return res.json({
+          message : "missing fields"
+        })
+      }
     }    
   } catch (e) {
     next(e)
@@ -86,20 +101,20 @@ router.put('/:id', validationUpdateContact, async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.id)
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        data: {
-          contact,
-        }
-      })
-    } else {
+    const { id } = req.params;
+    console.log(id);
+    const contact = await Contacts.removeContact(id)
+    if (contact.length < 1) {
       return res.status(404).json({
         status: "error",
         code: 404,
         data: 'Not found'
+      })
+    } else {
+      return res.json({
+        status: "success",
+        code: 200,
+        message: "Contact deleted!",
       })
     }    
   } catch (e) {
@@ -109,21 +124,31 @@ router.delete('/:id', async (req, res, next) => {
 
 router.patch('/:id', validationUpdateContact, async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(req.params.id, req.body)
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        data: {
-          contact,
-        }
-      })
-    } else {
+    const { id } = req.params;
+    const { body } = req;
+    console.log(body);
+    const contact = await Contacts.updateContact(id)
+    if (!contact) {
       return res.status(404).json({
         status: "error",
         code: 404,
         data: 'Not found'
-      })
+      })  
+    } else {
+      if (Object.keys(req.body).length !== 0){
+        return res.json({
+          status: "success",
+          code: 200,
+          data: {
+            ...contact,
+            ...body
+          }
+        })
+      } else {
+        return res.json({
+          message : "missing fields"
+        })
+      }
     }    
   } catch (e) {
     next(e)
