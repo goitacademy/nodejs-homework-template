@@ -1,63 +1,55 @@
-const fs = require('fs/promises')
-const path = require('path')
+const { MongoClient, ObjectID } = require('mongodb')
+require('dotenv').config()
 
-const contactsPath = path.join(__dirname, 'contacts.json')
+const { DB_URI } = process.env
+
+const getContactColection = async () => {
+  const client = await new MongoClient(DB_URI, {
+    useUnifiedTopology: true
+  }).connect()
+  return await client.db('Contacts').collection('contacts')
+}
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath)
-
-  return JSON.parse(data.toString())
+  const colection = await getContactColection()
+  return await colection.find().toArray()
 }
 
 const getContactById = async contactId => {
-  const data = await fs.readFile(contactsPath)
+  const objectId = new ObjectID(contactId)
+  const colection = await getContactColection()
 
-  return JSON.parse(data.toString()).find(({ id }) => id === contactId)
+  return await colection.find({ _id: objectId }).toArray()
 }
 
 const removeContact = async contactId => {
-  const data = await fs.readFile(contactsPath)
-  const contacts = JSON.parse(data.toString())
-  const updatedContacts = contacts.filter(({ id }) => id !== contactId)
+  const objectId = new ObjectID(contactId)
+  const colection = await getContactColection()
+  const { value: result } = await colection.findOneAndDelete({ _id: objectId })
 
-  if (updatedContacts.length === contacts.length) return false
-
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, '\t'))
-  return true
+  return result
 }
 
 const addContact = async body => {
-  const data = await fs.readFile(contactsPath)
-  const contacts = JSON.parse(data.toString())
-  const id = contacts[contacts.length - 1].id + 1
+  const colection = await getContactColection()
+  const {
+    ops: [result]
+  } = await colection.insertOne(body)
 
-  const newContact = { id, ...body }
-  contacts.push(newContact)
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, '\t'))
-
-  return newContact
+  return result
 }
 
 const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath)
-  const contacts = JSON.parse(data.toString())
+  const objectId = new ObjectID(contactId)
+  const colection = await getContactColection()
 
-  const updatedContacts = contacts.map(contact => {
-    if (contact.id === contactId) {
-      return { ...contact, ...body }
-    }
-    return contact
-  })
-  const newContact = updatedContacts.find(({ id }) => id === contactId)
-  if (newContact) {
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(updatedContacts, null, '\t')
-    )
-    return newContact
-  }
-  return null
+  const { value: result } = await colection.findOneAndUpdate(
+    { _id: objectId },
+    { $set: body },
+    { returnOriginal: false }
+  )
+
+  return result
 }
 
 module.exports = {

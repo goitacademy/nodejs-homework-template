@@ -5,7 +5,8 @@ const createContactShema = Joi.object({
   email: Joi.string().email().required(),
   phone: Joi.string()
     .pattern(/^[(][0-9]{1,4}[)][\s][0-9]{3}[-][0-9]{4}$/, 'phone')
-    .required()
+    .required(),
+  favorite: Joi.boolean().required()
 })
 
 const updateContactShema = Joi.object({
@@ -14,8 +15,13 @@ const updateContactShema = Joi.object({
   phone: Joi.string().pattern(
     /^[(][0-9]{1,4}[)][\s][0-9]{3}[-][0-9]{4}$/,
     'phone'
-  )
-}).or('name', 'email', 'phone')
+  ),
+  favorite: Joi.boolean()
+}).or('name', 'email', 'phone', 'favorite')
+
+const updateContactFavoriteShema = Joi.object({
+  favorite: Joi.boolean().required()
+})
 
 const validate = async (shema, value, next) => {
   try {
@@ -34,4 +40,12 @@ const validateUpdateContact = (req, res, next) => {
   validate(updateContactShema, req.body, next)
 }
 
-module.exports = { validateCreateContact, validateUpdateContact }
+const validateUpdateContactFavorite = (req, res, next) => {
+  validate(updateContactFavoriteShema, req.body, next)
+}
+
+module.exports = {
+  validateCreateContact,
+  validateUpdateContact,
+  validateUpdateContactFavorite
+}
