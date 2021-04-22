@@ -103,7 +103,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId', async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId, req.body)
+    const contact = await Contacts.updateContact(req.params.contactId, req.body)
     if (contact) {
       return res.json({
         status: 'success',
