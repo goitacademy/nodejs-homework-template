@@ -15,7 +15,15 @@ const getContactById = async (contactId) => {
   return JSON.parse(data).find(user => String(user.id) === contactId)
 }
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {
+  const data = await fs.readFile(contactsPath)
+  const users = JSON.parse(data)
+  const usersFiltered = users.filter(user => String(user.id) !== contactId)
+  const [deletedContact] = users.filter(user => String(user.id) === contactId);
+
+  fs.writeFile(contactsPath, JSON.stringify(usersFiltered, null, '\t'));
+  return deletedContact !== [] ? deletedContact : null
+}
 
 const addContact = async (body) => {
   const id = uuidv4()
@@ -38,7 +46,7 @@ const updateContact = async (contactId, body) => {
   const contact = contacts.find(contact => String(contact.id) === contactId)
 
   const newContact = contacts.assign(contact, body)
-
+  
     contacts.forEach((item, i) => {
     if (String(item.id) === contactId)
       contacts[i] = newContact;
