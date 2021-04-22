@@ -1,8 +1,8 @@
+require("dotenv").config();
 const path = require("path");
 const app = require("../app");
 const db = require("../model/db");
 const createFolderExist = require("../helpers/create-dir");
-require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
 

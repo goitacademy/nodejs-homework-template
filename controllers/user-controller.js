@@ -2,17 +2,20 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs").promises;
 const path = require("path");
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
 require("dotenv").config();
+
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const Users = require("../model/users");
 const createFolderExist = require("../helpers/create-dir");
 
 const { HttpCode } = require("../helpers/constants");
+const EmailService = require("../services/email-service");
 
 const reg = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email, name } = req.body;
     const user = await Users.findByEmail(email);
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
@@ -22,7 +25,14 @@ const reg = async (req, res, next) => {
         message: "Email in use",
       });
     }
-    const newUser = await Users.create(req.body);
+    const verifyToken = nanoid();
+    const emailService = new EmailService(process.env.NODE_ENV);
+    await emailService.sendEmail(verifyToken, email, name);
+    const newUser = await Users.create({
+      ...req.body,
+      verify: false,
+      verifyToken,
+    });
     return res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.OK,
@@ -43,7 +53,7 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
     const isValidPassword = await user?.validPassword(password);
-    if (!user || !isValidPassword) {
+    if (!user || !isValidPassword || !user.verify) {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: "error",
         code: HttpCode.UNAUTHORIZED,
@@ -109,7 +119,7 @@ const avatars = async (req, res, next) => {
     const avatarUrl = await saveAvatarToStatic(req);
     await Users.updateAvatar(id, avatarUrl);
     return res.json({
-      status: "succes",
+      status: "success",
       code: HttpCode.OK,
       data: {
         avatarUrl,
@@ -146,10 +156,33 @@ const saveAvatarToStatic = async (req) => {
   return avatarUrl;
 };
 
+const verify = async (req, res, next) => {
+  try {
+    const user = await Users.findByVerifyToken(req.params.token);
+    if (user) {
+      await Users.updateVerifyToken(user.id, true, null);
+      return res.status(HttpCode.CREATED).json({
+        status: "success",
+        code: HttpCode.OK,
+        message: "Verification successful!",
+      });
+    }
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      data: "Bad Request",
+      message: "User not found",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   reg,
   login,
   logout,
   userCurrent,
   avatars,
+  verify,
 };
