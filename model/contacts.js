@@ -45,7 +45,8 @@ const updateContact = async (contactId, body) => {
   
   const contact = contacts.find(contact => String(contact.id) === contactId)
 
-  const newContact = contacts.assign(contact, body)
+  // const newContact = contacts.assign(contact, body)
+  const newContact = { ...contact, ...body }
   
     contacts.forEach((item, i) => {
     if (String(item.id) === contactId)

@@ -19,7 +19,12 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ status: 'fail', message: err.message })
+  const status = err.status || 500
+  res.status(status || 500).json({
+    status: status === 500 ? 'fail' : 'error',
+    code: status,
+    message: err.message
+  })
 })
 
 module.exports = app
