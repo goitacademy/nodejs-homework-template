@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const mongoose = require('mongoose')
 
 const createContactShema = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
@@ -44,8 +45,16 @@ const validateUpdateContactFavorite = (req, res, next) => {
   validate(updateContactFavoriteShema, req.body, next)
 }
 
+const validateContqactId = (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.contactId)) {
+    return next({ code: 400, message: 'Invalid ID' })
+  }
+  next()
+}
+
 module.exports = {
   validateCreateContact,
   validateUpdateContact,
-  validateUpdateContactFavorite
+  validateUpdateContactFavorite,
+  validateContqactId
 }

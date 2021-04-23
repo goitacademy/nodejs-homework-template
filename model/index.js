@@ -1,55 +1,35 @@
-const { MongoClient, ObjectID } = require('mongodb')
-require('dotenv').config()
-
-const { DB_URI } = process.env
-
-const getContactColection = async () => {
-  const client = await new MongoClient(DB_URI, {
-    useUnifiedTopology: true
-  }).connect()
-  return await client.db('Contacts').collection('contacts')
-}
+const ContactModel = require('./shemas/contact')
 
 const listContacts = async () => {
-  const colection = await getContactColection()
-  return await colection.find().toArray()
+  const contacts = await ContactModel.find()
+
+  return contacts
 }
 
 const getContactById = async contactId => {
-  const objectId = new ObjectID(contactId)
-  const colection = await getContactColection()
+  const contact = await ContactModel.findById(contactId)
 
-  return await colection.find({ _id: objectId }).toArray()
+  return contact
 }
 
 const removeContact = async contactId => {
-  const objectId = new ObjectID(contactId)
-  const colection = await getContactColection()
-  const { value: result } = await colection.findOneAndDelete({ _id: objectId })
+  const contact = await ContactModel.findByIdAndDelete(contactId)
 
-  return result
+  return contact
 }
 
 const addContact = async body => {
-  const colection = await getContactColection()
-  const {
-    ops: [result]
-  } = await colection.insertOne(body)
+  const contact = await ContactModel.create({ ...body })
 
-  return result
+  return contact
 }
 
 const updateContact = async (contactId, body) => {
-  const objectId = new ObjectID(contactId)
-  const colection = await getContactColection()
+  const contact = await ContactModel.findByIdAndUpdate(contactId, body, {
+    new: true
+  })
 
-  const { value: result } = await colection.findOneAndUpdate(
-    { _id: objectId },
-    { $set: body },
-    { returnOriginal: false }
-  )
-
-  return result
+  return contact
 }
 
 module.exports = {
