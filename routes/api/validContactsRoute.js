@@ -24,12 +24,7 @@ const validate = async (schema, obj, next)=>{
         const value = await schema.validateAsync(obj);
         return next()
     } catch (error) {
-        // console.log("не то пальто");
         next(error)
-        // next({
-        //     status: 400,
-        //     massege: 'валидация не прошла'
-        // })
     }
 }
 
