@@ -1,8 +1,17 @@
 const express = require('express')
 const router = express.Router()
+const contacts = require('../../model/index.js');
+const file = require('../../model/contacts.json')
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+        data: file,
+      }
+  });
 })
 
 router.get('/:contactId', async (req, res, next) => {
