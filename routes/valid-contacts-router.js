@@ -1,5 +1,5 @@
 const Joi = require('joi');
-
+const mongoose = require('mongoose')
 const schemaAddContact = Joi.object({
     name: Joi.string()
         .alphanum()
@@ -38,5 +38,14 @@ module.exports = {
     },  
     validatorUpdateContact: async (req, res, next) => {
         return await validate(schemaUpdateContact, req.body, next)
+    },
+    validatorObjectId: async (req, res, next) => {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return next({status: 400, message: 'Invalid Object Id' })
+        }
+        next()
     }
+    /*validatorUpdateStatusContact: async (req, res, next) => {
+        return await validate(schemaUpdateStatusContact, req.body, next)
+    }*/
 }
