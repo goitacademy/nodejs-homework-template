@@ -25,6 +25,7 @@ const reg = async (req, res, next) => {
       getSuccesObject(
         {
           email: newUser.email,
+          avatarURL: newUser.avatarURL,
           subscription: newUser.subscription,
         },
         HttpCode.CREATED
@@ -81,4 +82,14 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = { reg, login, logout, update };
+const avatars = async (req, res, next) => {
+  const id = req.user.id;
+  const pathFile = req.file.path;
+  const url = await serviseUser.updateAvatar(id, pathFile);
+
+  return res
+    .status(HttpCode.OK)
+    .json(getSuccesObject({ avatarURL: url }, HttpCode.OK));
+};
+
+module.exports = { reg, login, logout, update, avatars };

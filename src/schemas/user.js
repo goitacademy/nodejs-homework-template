@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const gravatar = require("gravatar");
 
 const bcrypt = require("bcryptjs");
 //количество проходов шифрования паролей, ставить до 10
@@ -35,6 +36,16 @@ const userSchema = new Schema(
       default: Subscription.STARTER,
     },
     token: {
+      type: String,
+      default: null,
+    },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250" }, true);
+      },
+    },
+    idCloudAvatar: {
       type: String,
       default: null,
     },
