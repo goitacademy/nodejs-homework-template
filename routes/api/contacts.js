@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs')
-const contactsService = require('../../services/contacts')
+const contactsService = require('../../model/index.js')
 const ERROR_MESSAGES = require('../../constants/index.js')
 
 const contacts = JSON.parse(
