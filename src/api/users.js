@@ -10,6 +10,7 @@ const {
   validateUpdateSubscription,
 } = require("../validation/users");
 
+router.get("/current", guard, controllerUsers.current);
 router.post("/signup", createAccountLimiter, controllerUsers.reg);
 router.post("/login", controllerUsers.login);
 router.post("/logout", guard, controllerUsers.logout);

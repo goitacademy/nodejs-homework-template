@@ -9,11 +9,13 @@ const reg = async (req, res, next) => {
   const { email, password, subscription } = req.body;
   const user = await serviseUser.findByEmail(email);
   if (user) {
-    return next({
-      status: HttpCode.CONFLICT,
-      data: "Conflict",
-      message: "Email in use",
-    });
+    return next(
+      getErrorObject(
+        HttpCode.CONFLICT,
+        "Conflict",
+        "Email or password is wrong"
+      )
+    );
   }
   try {
     const newUser = await serviseUser.create({
@@ -25,7 +27,6 @@ const reg = async (req, res, next) => {
       getSuccesObject(
         {
           email: newUser.email,
-          avatarURL: newUser.avatarURL,
           subscription: newUser.subscription,
         },
         HttpCode.CREATED
@@ -51,21 +52,30 @@ const login = async (req, res, next) => {
       );
     }
 
-    next({
-      status: HttpCode.UNAUTHORIZED,
-      message: "Invalide credentials",
-    });
+    next(
+      getErrorObject(
+        HttpCode.UNAUTHORIZED,
+        "Unauthorized",
+        "Email or password is wrong"
+      )
+    );
   } catch (e) {
     next(e);
   }
 };
 
 const logout = async (req, res, next) => {
-  const id = req.user.id;
-  await serviseAuth.logout(id);
-  return res
-    .status(HttpCode.NO_CONTENT)
-    .json(getSuccesObject(null, HttpCode.NO_CONTENT));
+  try {
+    const id = req.user.id;
+    await serviseAuth.logout(id);
+    return res
+      .status(HttpCode.NO_CONTENT)
+      .json(getSuccesObject(null, HttpCode.NO_CONTENT));
+  } catch (e) {
+    next(
+      getErrorObject(HttpCode.UNAUTHORIZED, "Unauthorized", "Not authorized")
+    );
+  }
 };
 
 const update = async (req, res, next) => {
@@ -82,6 +92,22 @@ const update = async (req, res, next) => {
   }
 };
 
+const current = async (req, res, next) => {
+  try {
+    const token = req.user.token;
+    const user = await serviseUser.findByToken(token);
+    if (user) {
+      res.status(HttpCode.OK).json(getSuccesObject(user));
+    } else {
+      return next(
+        getErrorObject(HttpCode.UNAUTHORIZED, "Unauthorized", "Not authorized")
+      );
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
 const avatars = async (req, res, next) => {
   const id = req.user.id;
   const pathFile = req.file.path;
@@ -92,4 +118,4 @@ const avatars = async (req, res, next) => {
     .json(getSuccesObject({ avatarURL: url }, HttpCode.OK));
 };
 
-module.exports = { reg, login, logout, update, avatars };
+module.exports = { reg, login, logout, update, current, avatars };
