@@ -10,6 +10,11 @@ const schemaCreateContact = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
+  favorite: Joi.boolean(),
+});
+
+const schemaUpdateStatusContact = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -18,13 +23,15 @@ const schemaUpdateContact = Joi.object({
   email: Joi.string().email({
     minDomainSegments: 2,
   }),
-}).xor("name", "phone", "email");
+  favorite: Joi.boolean(),
+}).xor("name", "phone", "email", "favorite");
 
 const validate = (schema, body, next, messageError) => {
   const { error } = schema.validate(body);
 
   if (error) {
     const [{ message }] = error.details;
+    console.log(message);
 
     return next({
       status: HttpCode.BAD_REQUEST,
@@ -47,4 +54,13 @@ module.exports.validateCreateContacts = (req, res, next) => {
 
 module.exports.validateUpdateContacts = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next, "missing fields");
+};
+
+module.exports.validateUpdateStatusContact = (req, res, next) => {
+  return validate(
+    schemaUpdateStatusContact,
+    req.body,
+    next,
+    "missing field favorite"
+  );
 };

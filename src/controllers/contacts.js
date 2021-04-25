@@ -18,20 +18,18 @@ function getErrorObject() {
   };
 }
 
-const getAll = (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    console.log("contr", contactServise);
-
-    const contacts = contactServise.getAll();
+    const contacts = await contactServise.getAll();
     res.status(HttpCode.OK).json(getSuccesObject(contacts, HttpCode.OK));
   } catch (e) {
     next(e);
   }
 };
 
-const getById = (req, res, next) => {
+const getById = async (req, res, next) => {
   try {
-    const contact = contactServise.getById(req.params);
+    const contact = await contactServise.getById(req.params);
     if (contact) {
       res.status(HttpCode.OK).json(getSuccesObject(contact, HttpCode.OK));
     } else {
@@ -42,22 +40,22 @@ const getById = (req, res, next) => {
   }
 };
 
-const create = (req, res, next) => {
+const create = async (req, res, next) => {
   try {
-    const contact = contactServise.create(req.body);
+    const contact = await contactServise.create(req.body);
     res
       .status(HttpCode.CREATED)
       .json(getSuccesObject(contact, HttpCode.CREATED));
   } catch (e) {
+    console.log(e);
     next(e);
   }
 };
 
-const remove = (req, res, next) => {
+const remove = async (req, res, next) => {
   try {
-    const contact = contactServise.remove(req.params);
+    const contact = await contactServise.remove(req.params);
     if (contact) {
-      //res.status(HttpCode.OK).json(getSuccesObject(contact, HttpCode.OK));
       res.status(HttpCode.OK).json({
         status: "succes",
         code: HttpCode.OK,
@@ -71,9 +69,9 @@ const remove = (req, res, next) => {
   }
 };
 
-const update = (req, res, next) => {
+const update = async (req, res, next) => {
   try {
-    const contact = contactServise.update(req.params, req.body);
+    const contact = await contactServise.update(req.params, req.body);
     if (contact) {
       res.status(HttpCode.OK).json(getSuccesObject(contact));
     } else {
@@ -84,4 +82,24 @@ const update = (req, res, next) => {
   }
 };
 
-module.exports = { getAll, getById, create, remove, update };
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const contact = await contactServise.update(req.params, req.body);
+    if (contact) {
+      res.status(HttpCode.OK).json(getSuccesObject(contact));
+    } else {
+      return next(getErrorObject());
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports = {
+  getAll,
+  getById,
+  create,
+  remove,
+  update,
+  updateStatusContact,
+};

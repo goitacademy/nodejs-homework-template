@@ -5,28 +5,28 @@ class ContactsService {
     this.repositories = { contacts: new ContactsRepository() };
   }
 
-  getAll() {
-    const data = this.repositories.contacts.getAll();
+  async getAll() {
+    const data = await this.repositories.contacts.getAll();
     return data;
   }
 
-  getById({ contactId }) {
-    const data = this.repositories.contacts.getById(contactId);
+  async getById({ contactId }) {
+    const data = await this.repositories.contacts.getById(contactId);
     return data;
   }
 
-  create(body) {
-    const data = this.repositories.contacts.create(body);
+  async create(body) {
+    const data = await this.repositories.contacts.create(body);
     return data;
   }
 
-  update({ contactId }, body) {
-    const data = this.repositories.contacts.update(contactId, body);
+  async update({ contactId }, body) {
+    const data = await this.repositories.contacts.update(contactId, body);
     return data;
   }
 
-  remove({ contactId }) {
-    const data = this.repositories.contacts.remove(contactId);
+  async remove({ contactId }) {
+    const data = await this.repositories.contacts.remove(contactId);
     return data;
   }
 }
