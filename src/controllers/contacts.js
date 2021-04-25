@@ -1,27 +1,13 @@
 const { HttpCode } = require("../helpers/constants");
 const { ContactsService } = require("../service");
+const { getSuccesObject, getErrorObject } = require("./controllersFunction");
 const contactServise = new ContactsService();
-
-function getSuccesObject(data, code) {
-  return {
-    status: "succes",
-    code,
-    data,
-  };
-}
-
-function getErrorObject() {
-  return {
-    status: HttpCode.NOT_FOUND,
-    message: "Not found",
-    data: "Not Found",
-  };
-}
 
 const getAll = async (req, res, next) => {
   try {
-    const contacts = await contactServise.getAll();
-    res.status(HttpCode.OK).json(getSuccesObject(contacts, HttpCode.OK));
+    const userId = req.user.id;
+    const contacts = await contactServise.getAll(userId, req.query);
+    res.status(HttpCode.OK).json(getSuccesObject({ ...contacts }, HttpCode.OK));
   } catch (e) {
     next(e);
   }
@@ -29,7 +15,8 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const contact = await contactServise.getById(req.params);
+    const userId = req.user.id;
+    const contact = await contactServise.getById(userId, req.params);
     if (contact) {
       res.status(HttpCode.OK).json(getSuccesObject(contact, HttpCode.OK));
     } else {
@@ -42,7 +29,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const contact = await contactServise.create(req.body);
+    const userId = req.user.id;
+    const contact = await contactServise.create(userId, req.body);
     res
       .status(HttpCode.CREATED)
       .json(getSuccesObject(contact, HttpCode.CREATED));
@@ -54,7 +42,8 @@ const create = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const contact = await contactServise.remove(req.params);
+    const userId = req.user.id;
+    const contact = await contactServise.remove(userId, req.params);
     if (contact) {
       res.status(HttpCode.OK).json({
         status: "succes",
@@ -71,7 +60,8 @@ const remove = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const contact = await contactServise.update(req.params, req.body);
+    const userId = req.user.id;
+    const contact = await contactServise.update(userId, req.params, req.body);
     if (contact) {
       res.status(HttpCode.OK).json(getSuccesObject(contact));
     } else {
@@ -84,7 +74,8 @@ const update = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const contact = await contactServise.update(req.params, req.body);
+    const userId = req.user.id;
+    const contact = await contactServise.update(userId, req.params, req.body);
     if (contact) {
       res.status(HttpCode.OK).json(getSuccesObject(contact));
     } else {

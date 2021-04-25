@@ -5,28 +5,35 @@ class ContactsService {
     this.repositories = { contacts: new ContactsRepository() };
   }
 
-  async getAll() {
-    const data = await this.repositories.contacts.getAll();
+  async getAll(userId, query) {
+    const data = await this.repositories.contacts.getAll(userId, query);
+    //для каждого сервиса можно отдавать разные данные поэтому формат ответа формируем тут
+    const { docs: contacts, totalDocs: total, limit, page } = data;
+
+    return { contacts, total, limit, page };
+  }
+
+  async getById(userId, { contactId }) {
+    const data = await this.repositories.contacts.getById(userId, contactId);
     return data;
   }
 
-  async getById({ contactId }) {
-    const data = await this.repositories.contacts.getById(contactId);
+  async create(userId, body) {
+    const data = await this.repositories.contacts.create(userId, body);
     return data;
   }
 
-  async create(body) {
-    const data = await this.repositories.contacts.create(body);
+  async update(userId, { contactId }, body) {
+    const data = await this.repositories.contacts.update(
+      userId,
+      contactId,
+      body
+    );
     return data;
   }
 
-  async update({ contactId }, body) {
-    const data = await this.repositories.contacts.update(contactId, body);
-    return data;
-  }
-
-  async remove({ contactId }) {
-    const data = await this.repositories.contacts.remove(contactId);
+  async remove(userId, { contactId }) {
+    const data = await this.repositories.contacts.remove(userId, contactId);
     return data;
   }
 }

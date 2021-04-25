@@ -1,2 +1,4 @@
 const ContactsRepository = require("./contacts");
-module.exports = { ContactsRepository };
+const UsersRepository = require("./users");
+
+module.exports = { ContactsRepository, UsersRepository };

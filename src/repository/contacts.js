@@ -5,32 +5,50 @@ class ContactsRepository {
     this.model = Contacts;
   }
 
-  async getAll() {
-    const results = await this.model.find({});
-    return results;
-  }
-
-  async getById(id) {
-    const result = await this.model.findOne({ _id: id });
+  async getAll(
+    userId,
+    { limit = 5, page = 1, sortBy, sortByDesk, filter, favorite }
+  ) {
+    const result = await this.model.paginate(
+      { owner: userId, ...(favorite ? { favorite } : {}) },
+      {
+        limit,
+        page,
+        sort: {
+          ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+          ...(sortByDesk ? { [`${sortByDesk}`]: -1 } : {}),
+        },
+        select: filter ? filter.split("|").join(" ") : "",
+        populate: { path: "owner", select: "email subscription -_id" },
+      }
+    );
     return result;
   }
 
-  async create(body) {
-    const result = await this.model.create(body);
+  async getById(userId, id) {
+    const result = await this.model
+      .findOne({ owner: userId, _id: id })
+      .populate({ path: "owner", select: "email subscription -_id" });
     return result;
   }
 
-  async update(id, body) {
+  async create(userId, body) {
+    const result = await this.model.create({ ...body, owner: userId });
+    return result;
+  }
+
+  async update(userId, id, body) {
     const result = await this.model.findByIdAndUpdate(
-      { _id: id },
+      { owner: userId, _id: id },
       { ...body },
       { new: true }
     );
     return result;
   }
 
-  async remove(id) {
+  async remove(userId, id) {
     const result = await this.model.findByIdAndRemove({
+      owner: userId,
       _id: id,
     });
     return result;

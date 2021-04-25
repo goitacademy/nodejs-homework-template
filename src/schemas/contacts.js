@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Schema = mongoose.Schema;
 
-const contacts = new Schema(
+const contactsSchema = new Schema(
   {
     name: {
       type: String,
@@ -9,6 +10,10 @@ const contacts = new Schema(
     },
     email: {
       type: String,
+      validate(value) {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(String(value).toLowerCase());
+      },
     },
     phone: {
       type: String,
@@ -17,9 +22,15 @@ const contacts = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Contact = mongoose.model("contact", contacts);
+contactsSchema.plugin(mongoosePaginate);
+
+const Contact = mongoose.model("contact", contactsSchema);
 module.exports = Contact;
