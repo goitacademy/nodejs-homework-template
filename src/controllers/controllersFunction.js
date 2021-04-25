@@ -6,11 +6,15 @@ function getSuccesObject(data, code) {
   };
 }
 
-function getErrorObject() {
+function getErrorObject(
+  code = HttpCode.NOT_FOUND,
+  data = "Not found",
+  message = "Not found"
+) {
   return {
-    status: HttpCode.NOT_FOUND,
-    message: "Not found",
-    data: "Not Found",
+    status: code,
+    data,
+    message,
   };
 }
 

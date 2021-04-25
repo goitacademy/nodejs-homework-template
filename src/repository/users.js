@@ -25,6 +25,11 @@ class UsersRepository {
     await this.model.updateOne({ _id: id }, { token });
   }
 
+  async findByToken(token) {
+    const result = await this.model.findOne({ token });
+    return result;
+  }
+
   async update(id, body) {
     const result = await this.model.findByIdAndUpdate({ _id: id }, { ...body });
     return result;

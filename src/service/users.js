@@ -20,6 +20,13 @@ class UsersService {
     return data;
   }
 
+  async findByToken(token) {
+    const { subscription, email } = await this.repositories.users.findByToken(
+      token
+    );
+    return { subscription, email };
+  }
+
   async update(id, body) {
     const { subscription, email } = await this.repositories.users.update(
       id,
