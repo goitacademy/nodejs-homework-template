@@ -39,7 +39,7 @@ const removeContact = async (id) => {
     if (!getContactId) {
       return console.log('нет контакта с таким Id')
     }
-    const updateList = contacts.filter(contact => contact.id !== id)
+    const updateList = contacts.filter(contact => contact.id.toString() !== id)
     await fs.writeFile(contactsPath, JSON.stringify(updateList, null, '\t'))
     return updateList
   } catch (err) {
