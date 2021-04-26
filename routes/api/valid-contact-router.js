@@ -54,7 +54,7 @@ module.exports = {
   },
   validateObjectId: async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-      return next({ status: 400, message: 'Invalid ObjectId'})
+      return next({ status: 400, message: 'Invalid ObjectId' })
     }
     next()
   },
