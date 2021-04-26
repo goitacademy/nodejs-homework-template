@@ -14,11 +14,9 @@
     "dotenv": "8.2.0",
     "express": "^4.17.1",
     "express-validator": "6.10.0",
-    "got": "9.6.0",
     "joi": "^17.3.0",
-    "mongodb": "3.6.6",
-    "morgan": "1.10.0",
-    "uuid": "8.3.2"
+    "mongoose": "5.12.5",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
