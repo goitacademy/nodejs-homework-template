@@ -68,10 +68,10 @@ router.post('/', validationCreateContact, async (req, res, next) => {
 
 router.put('/:id', validationUpdateContact, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { body } = req;
-    console.log(body);
-    const contact = await Contacts.updateContact(id)
+    // const { id } = req.params;
+    // const { body } = req;
+    // console.log(body);
+    const contact = await Contacts.updateContact(req.params.id, req.body)
     if (!contact) {
       return res.status(404).json({
         status: "error",
@@ -79,32 +79,33 @@ router.put('/:id', validationUpdateContact, async (req, res, next) => {
         data: 'Not found'
       })  
     } else {
-      if (Object.keys(req.body).length !== 0){
+      // if (Object.keys(req.body).length !== 0){
         return res.json({
           status: "success",
           code: 200,
           data: {
-            ...contact,
-            ...body
+            contact,
+            // ...body
           }
         })
-      } else {
-        return res.json({
-          message : "missing fields"
-        })
+      // } else {
+      //   return res.json({
+      //     message : "missing fields"
+      //   })
       }
-    }    
+    // }    
   } catch (e) {
     next(e)
   }
 })
 
+
+
 router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    const contact = await Contacts.removeContact(id)
-    if (contact.length < 1) {
+    const contact = await Contacts.removeContact(id) 
+    if (!contact) {
       return res.status(404).json({
         status: "error",
         code: 404,
@@ -115,6 +116,7 @@ router.delete('/:id', async (req, res, next) => {
         status: "success",
         code: 200,
         message: "Contact deleted!",
+        // data: contact
       })
     }    
   } catch (e) {
