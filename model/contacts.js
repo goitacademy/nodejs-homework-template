@@ -1,49 +1,37 @@
-const dbc = require('./db')
-const { ObjectId } = require('mongodb')
+const Contact = require('./schemas/contact')
 
-const getCollection = async (db, name) => {
-  const client = await db
-  const collection = await client.db().collection(name)
-  return collection
-}
-
-const listContacts = async (db, name) => {
-  const collection = await getCollection(dbc, 'contacts')
-  const results = await collection.find().toArray()
+const listContacts = async () => {
+  const results = await Contact.find()
   return results
 }
 
 const getContactById = async (contactId) => {
-  const collection = await getCollection(dbc, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const [result] = await collection.find({ _id: objectId}).toArray()
+  const result = await Contact.findOne({ _id: contactId })
   return result
 }
 
 const removeContact = async (contactId) => {
-  const collection = await getCollection(dbc, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const { value: result } = await collection.findOneAndDelete({ _id: objectId})
+  const result = await Contact.findByIdAndRemove({ _id: contactId })
   return result
 }
 
 const addContact = async (body) => {
-  const record = {
-    ...body,
-    ...(body.favorite ? {} : { favorite: false })
+  try {
+    const result = await Contact.create(body)
+    return result
+  } catch (e) {
+    if (e.name === 'ValidationError') {
+      e.status = 400
+    }
+    throw e
   }
-  const collection = await getCollection(dbc, 'contacts')
-  const { ops: [result] } = await collection.insertOne(record)
-  return result
 }
 
 const updateContact = async (contactId, body) => {
-  const collection = await getCollection(dbc, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const { value: result } = await collection.findOneAndUpdate(
-    { _id: objectId },
-    { $set: body },
-    { returnOriginal: false }
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true }
   )
   return result
 }
@@ -53,5 +41,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContact
 }
