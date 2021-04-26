@@ -11,7 +11,9 @@ const schemaAddContact = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
 
-  phone: Joi.string().pattern(/^[\d\(\)\ -]{4,14}\d$/).required()
+  phone: Joi.string().pattern(/^[\d\(\)\ -]{4,14}\d$/).required(),
+
+  favorite: Joi.boolean().optional()
 })
 
 const schemaUpdateContact = Joi.object({
