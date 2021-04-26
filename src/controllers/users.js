@@ -1,6 +1,6 @@
 const { AuthService, UsersService } = require("../service");
 const { HttpCode } = require("../helpers/constants");
-const { getSuccesObject } = require("./controllersFunction");
+const { getSuccesObject, getErrorObject } = require("./controllersFunction");
 
 const serviseUser = new UsersService();
 const serviseAuth = new AuthService();
