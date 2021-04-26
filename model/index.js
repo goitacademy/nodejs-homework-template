@@ -6,8 +6,9 @@ const contactsPath = path.join(__dirname, json);
 
 const listContacts = async () => {
   try {
-    // const data = await fs.readFile(contactsPath, 'utf8');
-    // const result = JSON.parse(data);
+    const data = await fs.readFile(contactsPath, 'utf8');
+    const result = JSON.parse(data);
+    return result;
   } catch (error) {
     console.log(error);
   }
@@ -18,10 +19,11 @@ const getContactById = async (contactId) => {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
     const result = list.find(item => {
-    if (item.id === contactId) {
-        console.table(item);
+      if (item.id === contactId) {
+        return item;
       }
     })
+    // return result;
   }
   catch(error) {
     console.log(error);
@@ -33,7 +35,7 @@ const removeContact = async (contactId) => {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
     const result = list.filter(item => item.id !== contactId);
-
+    
     if (list.length === result.length) {
       console.log('not removed');
       return;
