@@ -1,12 +1,13 @@
-const Contacts = require("../model/index");
+const Contacts = require("../model/contacts");
 
-const getAll = async (_req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    const allContacts = await Contacts.listContacts();
+    const userId = req.user.id;
+    const allContacts = await Contacts.listContacts(userId, req.query);
     return res.status(200).json({
       status: "success",
       code: 200,
-      data: { allContacts },
+      data: { ...allContacts },
     });
   } catch (e) {
     next(e);
@@ -15,7 +16,8 @@ const getAll = async (_req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contacts.getContactById(req.params.contactId, userId);
     if (contact) {
       return res.status(200).json({
         status: "success",
@@ -36,7 +38,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const contact = await Contacts.addContact(req.body);
+    const userId = req.user.id;
+    const contact = await Contacts.addContact({ ...req.body, owner: userId });
     return res.status(201).json({
       status: "success",
       code: 201,
@@ -51,7 +54,8 @@ const create = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contacts.removeContact(req.params.contactId, userId);
     if (contact) {
       return res.status(201).json({
         status: "success",
@@ -75,11 +79,13 @@ const remove = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     if (req.body) {
       console.log("есть такое", req.body);
       const contact = await Contacts.updateContact(
         req.params.contactId,
-        req.body
+        req.body,
+        userId
       );
 
       return res.status(200).json({
