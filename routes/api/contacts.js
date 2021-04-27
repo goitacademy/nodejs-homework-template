@@ -65,7 +65,6 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId', async (req, res, next) => {
   const contactId = req.params.contactId
-  console.log(contactId)
   const { name, email, phone } = req.body
 
   if (!name || !email || !phone) {
