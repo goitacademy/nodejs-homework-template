@@ -2,12 +2,12 @@
 
 ## Роуты
 
-http://localhost:3000/api/contacts - get - показать все контакты
-http://localhost:3000/api/contacts - post - добавить контакт (поля name, email, phone - обязательны, favorite - опционально)
-http://localhost:3000/api/contacts/id - get - получить контакт по ID
-http://localhost:3000/api/contacts/id - put - обновить контакт (хотя бы одно поле должно быть обновлено)
-http://localhost:3000/api/contacts/id - delete - удалить контакт
-http://localhost:3000/api/contacts/id/favorite - patch - обновить поле 'favorite'
+- http://localhost:3000/api/contacts - get - показать все контакты
+- http://localhost:3000/api/contacts - post - добавить контакт (поля name, email, phone - обязательны, favorite - опционально)
+- http://localhost:3000/api/contacts/id - get - получить контакт по ID
+- http://localhost:3000/api/contacts/id - put - обновить контакт (хотя бы одно поле должно быть обновлено)
+- http://localhost:3000/api/contacts/id - delete - удалить контакт
+- http://localhost:3000/api/contacts/id/favorite - patch - обновить поле 'favorite'
 
 (есть валидация)
 
