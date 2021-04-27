@@ -4,18 +4,14 @@ const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(1).max(30).required(),
   email: Joi.string().min(3).max(45).required(),
   phone: Joi.string().min(10).max(30).required(),
-  subscription: Joi.string().required(),
-  password: Joi.string().min(8).max(15).required(),
-  // token: Joi.string().required(),
+  favorite: Joi.boolean().required(),
 });
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(1).max(30).optional(),
   email: Joi.string().alphanum().min(3).max(45).optional(),
   phone: Joi.string().min(10).max(30).optional(),
-  subscription: Joi.string().optional(),
-  password: Joi.string().min(8).max(15).optional(),
-  token: Joi.string().optional(),
+  favorite: Joi.boolean().optional(),
 });
 
 const validate = (schema, obj, next) => {

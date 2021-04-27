@@ -15,18 +15,9 @@ const contactSchema = new Schema(
       required: [true, "set  phone for contact"],
       unique: true,
     },
-    subscription: {
-      type: String,
-      required: [true, "set subscription for contact"],
-    },
-    password: {
-      type: String,
-      required: [true, "set password for contact"],
-      min: 6,
-      max: 20,
-    },
+
     // как пример буля
-    isKnown: {
+    favorite: {
       type: Boolean,
       default: false,
     },
