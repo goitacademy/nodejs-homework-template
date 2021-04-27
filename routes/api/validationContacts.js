@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const mongoose = require('mongoose')
 
 const schemaAddContact = Joi.object({
     name: Joi.string()
@@ -13,7 +14,8 @@ const schemaAddContact = Joi.object({
         .required(),
 
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    favorite: Joi.boolean()
 })
 const schemaUpdateContact = Joi.object({
     name: Joi.string()
@@ -28,7 +30,12 @@ const schemaUpdateContact = Joi.object({
         .optional(),
 
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+    favorite: Joi.boolean().optional()
+}).min(1)
+
+const schemaUpdateContactFav = Joi.object({
+  favorite: Joi.boolean().required()
 })
 
 
@@ -52,5 +59,18 @@ module.exports = {
     },
     validationUpdateContact: async (req, res, next) => {
         return await validation(schemaUpdateContact, req.body, next)
+    },
+    validateUpdateContactFav: async (req, res, next) => {
+        if (!req.body.favorite) return res.status(400).json({message: "missing field favorite"})
+        return await validation(schemaUpdateContactFav, req.body, next)
+    },
+    validationObjectId: async (req, res, next) => {
+        if (!mongoose.Types.ObjectId.isValid(req.params.contactId) ) {
+            return next({
+                status: 400,
+                message: 'Invalid ObjectId'
+            })
+        }
+        next()
     }
 }
