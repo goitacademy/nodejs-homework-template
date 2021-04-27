@@ -5,14 +5,14 @@ const contactsPath = path.resolve('./model/contacts.json')
 const contactList = fs.readFileSync(contactsPath, 'utf-8')
 const contacts = JSON.parse(contactList)
 
-const listContacts = async () => {
+const listContacts = () => {
   console.log('List of contacts: ')
   console.table(contacts)
 
   return contacts
 }
 
-const getContactById = async (contactId, errorMessage) => {
+const getContactById = (contactId, errorMessage) => {
   // eslint-disable-next-line array-callback-return
   const foundContact = contacts.find(contact => {
     if (contact.id === contactId) {
@@ -29,7 +29,7 @@ const getContactById = async (contactId, errorMessage) => {
   return foundContact
 }
 
-const removeContact = async (contactId, errorMessage) => {
+const removeContact = (contactId, errorMessage) => {
   const newContacts = contacts.filter(contact => contact.id !== contactId)
 
   if (newContacts.length === contacts.length) {
@@ -49,7 +49,7 @@ const removeContact = async (contactId, errorMessage) => {
   return newContacts
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = (name, email, phone) => {
   contacts.push({
     id: contacts.length + 1,
     name: name,
@@ -69,7 +69,7 @@ const addContact = async (name, email, phone) => {
   return contacts
 }
 
-const updateContact = async (contactId, name, email, phone, errorMessage) => {
+const updateContact = (contactId, name, email, phone, errorMessage) => {
   // eslint-disable-next-line array-callback-return
   const contact = contacts.find(contact => {
     if (contact.id === contactId) {
@@ -93,7 +93,7 @@ const updateContact = async (contactId, name, email, phone, errorMessage) => {
     }
   })
 
-  return contacts
+  return contact
 }
 
 module.exports = {
