@@ -3,9 +3,11 @@ const router = express.Router()
 const Contacts = require('../../model/contacts')
 const {
   validationCreateContact,
-  validationUpdateContact
+  validationUpdateContact,
+  validationObjectId,
 } = require('./validator-router')
 
+const handleError = require('../../helpers/handle-error')
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts()
@@ -21,10 +23,11 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validationObjectId, async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id)
-    if (contact.length<1) {
+    console.log(contact.nick);
+    if (!contact) {
       return res.status(404).json({
         status: "error",
         code: 404,
@@ -44,27 +47,40 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', validationCreateContact, async (req, res, next) => {
-  try {
-    const { name } = req.body;
-    const { email } = req.body;
+router.post('/',
+  validationCreateContact,
+  handleError(async (req, res, next) => {
     const contact = await Contacts.addContact(req.body)
-    if (name && email) {
       return res.status(201).json({
         status: "created",
         code: 201,
         data: {
           contact,
-        }
+        },
       })
-    } else {
-      return res.json({ message: "missing required field" })
-    }
-  }catch (e) {
-    next(e)
-  }
-})
+    }),
+)
 
+// router.post('/', validationCreateContact, async (req, res, next) => {
+//   try {
+//     const { name } = req.body;
+//     const { email } = req.body;
+//     const contact = await Contacts.addContact(req.body)
+//     if (name && email) {
+//       return res.status(201).json({
+//         status: "created",
+//         code: 201,
+//         data: {
+//           contact,
+//         }
+//       })
+//     } else {
+//       return res.json({ message: "missing required field" })
+//     }
+//   }catch (e) {
+//     next(e)
+//   }
+// })
 
 router.put('/:id', validationUpdateContact, async (req, res, next) => {
   try {
@@ -98,8 +114,6 @@ router.put('/:id', validationUpdateContact, async (req, res, next) => {
     next(e)
   }
 })
-
-
 
 router.delete('/:id', async (req, res, next) => {
   try {
@@ -156,5 +170,38 @@ router.patch('/:id', validationUpdateContact, async (req, res, next) => {
     next(e)
   }
 })
+
+router.patch('/:id/favorite', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const contact = await Contacts.updateStatusContact(id)
+    if (!contact) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        data: 'Not found'
+      })  
+    } else {
+      if (Object.keys(req.body).length !== 0) {
+        return res.json({
+          status: "success",
+          code: 200,
+          data: {
+            ...contact,
+            ...req.body
+          }
+        })
+      } else {
+        return res.json({
+          message : "missing fields"
+        })
+      }
+    }    
+  } catch (e) {
+    next(e)
+  }
+})
+
+
 
 module.exports = router
