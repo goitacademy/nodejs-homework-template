@@ -3,7 +3,6 @@ const fs = require("fs");
 const shortid = require("shortid");
 
 //  Link on data base contacts.js
-
 const contactsPath = path.join(__dirname, "../db/contacts.json");
 
 // ---Getting contact list in console
