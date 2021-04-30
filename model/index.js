@@ -18,12 +18,8 @@ const getContactById = async (contactId) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    const result = list.find(item => {
-      if (item.id === contactId) {
-        return item;
-      }
-    })
-    // return result;
+    const result = list.find(item => parseInt(item.id) === parseInt(contactId));
+    return result;
   }
   catch(error) {
     console.log(error);
@@ -49,14 +45,16 @@ const removeContact = async (contactId) => {
   }
 }
 
-const addContact = async (body) => {
+const addContact = async (name, email, phone) => {
     try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
   
     list.push({
       id: shortid.generate(),
-      body,
+      name,
+      email,
+      phone
     })
     console.log('add');
     console.table(list);

@@ -13,18 +13,27 @@ router.get('/', async (req, res, next) => {
   });
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get(`/:contactId`, async (req, res, next) => {
+  
   res.json({
     status: "success",
     code: 200,
     data: {
-      data: await contacts.getContactById(),
+
+      data: await contacts.getContactById(req.params['contactId']),
     }
   })
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  console.log(req);
+  res.json({
+    status: "success",
+    code: 201,
+    data: {
+      data: await contacts.addContact(),
+    }
+  })
 })
 
 router.delete('/:contactId', async (req, res, next) => {
