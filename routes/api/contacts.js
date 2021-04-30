@@ -5,6 +5,7 @@ const {
   validationCreateContact,
   validationUpdateContact,
   validationObjectId,
+  validationUpdateStatusContact
 } = require('./validator-router')
 
 const handleError = require('../../helpers/handle-error')
@@ -84,9 +85,6 @@ router.post('/',
 
 router.put('/:id', validationUpdateContact, async (req, res, next) => {
   try {
-    // const { id } = req.params;
-    // const { body } = req;
-    // console.log(body);
     const contact = await Contacts.updateContact(req.params.id, req.body)
     if (!contact) {
       return res.status(404).json({
@@ -95,21 +93,14 @@ router.put('/:id', validationUpdateContact, async (req, res, next) => {
         data: 'Not found'
       })  
     } else {
-      // if (Object.keys(req.body).length !== 0){
-        return res.json({
-          status: "success",
-          code: 200,
-          data: {
-            contact,
-            // ...body
-          }
-        })
-      // } else {
-      //   return res.json({
-      //     message : "missing fields"
-      //   })
-      }
-    // }    
+      return res.json({
+        status: "success",
+        code: 200,
+        data: {
+          contact,
+        }
+      })
+    }   
   } catch (e) {
     next(e)
   }
@@ -130,7 +121,6 @@ router.delete('/:id', async (req, res, next) => {
         status: "success",
         code: 200,
         message: "Contact deleted!",
-        // data: contact
       })
     }    
   } catch (e) {
@@ -142,7 +132,6 @@ router.patch('/:id', validationUpdateContact, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    console.log(body);
     const contact = await Contacts.updateContact(id)
     if (!contact) {
       return res.status(404).json({
@@ -171,37 +160,41 @@ router.patch('/:id', validationUpdateContact, async (req, res, next) => {
   }
 })
 
-router.patch('/:id/favorite', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const contact = await Contacts.updateStatusContact(id)
-    if (!contact) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        data: 'Not found'
-      })  
-    } else {
-      if (Object.keys(req.body).length !== 0) {
-        return res.json({
-          status: "success",
-          code: 200,
-          data: {
-            ...contact,
-            ...req.body
-          }
-        })
+router.patch(
+  '/:id/favorite',
+  validationObjectId,
+  validationUpdateStatusContact,
+  async (req, res, next) => {
+    try {
+        const contact = await Contacts.updateStatusContact(
+            req.params.id,
+            req.body
+      )
+      if (!contact) {
+        return res.status(404).json({
+          status: "error",
+          code: 404,
+          data: 'Not found'
+        })  
       } else {
-        return res.json({
-          message : "missing fields"
-        })
-      }
-    }    
-  } catch (e) {
-    next(e)
+        if (Object.keys(req.body).length !== 0){
+          return res.json({
+            status: "success",
+            code: 200,
+            data: {
+              contact,
+            }
+          })
+        } else {
+          return res.json({
+            message : "missing fields"
+          })
+        }
+      }  
+    } catch (error) {
+      next(error)
+    }
   }
-})
-
-
+)
 
 module.exports = router
