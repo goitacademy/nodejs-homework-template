@@ -17,4 +17,4 @@ router
   .put('/:id', guard, validatorUpdateContact, ctrl.updateContact)
   .patch('/:id/', guard, validatorUpdateContact, ctrl.updateContactStatus)
 
-module.exports = router
+module.exports = router;
