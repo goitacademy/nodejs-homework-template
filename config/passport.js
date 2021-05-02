@@ -18,7 +18,7 @@ passport.use(new Strategy(opts, async (payload, done) => {
     } if (!user.token) {
         return done(null, false)
     }
-    return done(null, true)
+    return done(null, user)
     } catch(err) {
       return done(err)
     }

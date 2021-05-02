@@ -7,13 +7,14 @@ const {
   validatorObjectId,
 } = require('./valid-contacts-router')
 const handleError = require('../../helper/handle-error')
+const guard = require('../../helper/guard')
 
-router.get('/', ctrl.listContacts).post('/', validatorAddContact, handleError(ctrl.addContact))
+router.get('/', guard, ctrl.listContacts).post('/', guard, validatorAddContact, handleError(ctrl.addContact))
 
 router
-  .get('/:id', validatorObjectId, ctrl.getContactById)
-  .delete('/:id', validatorObjectId, ctrl.removeContact)
-  .put('/:id', validatorUpdateContact, ctrl.updateContact)
-  .patch('/:id/', validatorUpdateContact, ctrl.updateContactStatus)
+  .get('/:id', guard, validatorObjectId, ctrl.getContactById)
+  .delete('/:id', guard, validatorObjectId, ctrl.removeContact)
+  .put('/:id', guard, validatorUpdateContact, ctrl.updateContact)
+  .patch('/:id/', guard, validatorUpdateContact, ctrl.updateContactStatus)
 
 module.exports = router
