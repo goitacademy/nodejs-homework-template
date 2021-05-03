@@ -1,37 +1,43 @@
 const Contact = require('./shemas/contacts')
 
-const listContacts = async () => {
-  const results = await Contact.find()
+const listContacts = async (userId, qery) => {
+  const results = await Contact.find({owner: userId}).populate({
+    path: 'owner',
+    select: 'name, email, phone, favorite '
+  })
  return results
 }
 
-const getContactById = async (id) => {
- const result = await Contact.findOne({_id: id})
+const getContactById = async (userId, id) => {
+ const result = await Contact.findOne({_id: id, owner: userId}).populate({
+  path: 'owner',
+  select: 'name, email, phone, favorite '
+})
  return result
 }
 
-const removeContact = async (id) => {
-    const result = await Contact.findByIdAndRemove({_id: id})
+const removeContact = async (userId, id) => {
+    const result = await Contact.findByIdAndRemove({_id: id, owner: userId})
  return result
 }
 
-const addContact = async (body) => {
-    const result = await Contact.create(body)
+const addContact = async (userId, body) => {
+    const result = await Contact.create({...body, owner: userId})
  return result
 }
 
-const updateContact = async (id, body) => {
+const updateContact = async (userId, id, body) => {
   const result = await Contact.findByIdAndUpdate(
-    {_id: id},
+    {_id: id, owner: userId},
     {...body}, 
     {new: true}
     )
   return result
 }
 
-const updateStatusContact = async (id, body) => {
+const updateStatusContact = async (userId, id, body) => {
   const result = await Contact.findByIdAndUpdate(
-    {_id: id},
+    {_id: id, owner: userId},
     {...body}, 
     {new: true}
     )
