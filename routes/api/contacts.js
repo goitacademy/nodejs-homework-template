@@ -19,19 +19,18 @@ router.get(`/:contactId`, async (req, res, next) => {
     status: "success",
     code: 200,
     data: {
-
       data: await contacts.getContactById(req.params['contactId']),
     }
   })
 })
 
 router.post('/', async (req, res, next) => {
-  console.log(req);
+  console.log(req.body);
   res.json({
     status: "success",
     code: 201,
     data: {
-      data: await contacts.addContact(),
+      data: await contacts.addContact(req.body),
     }
   })
 })

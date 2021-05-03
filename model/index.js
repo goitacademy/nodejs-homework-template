@@ -33,11 +33,8 @@ const removeContact = async (contactId) => {
     const result = list.filter(item => item.id !== contactId);
     
     if (list.length === result.length) {
-      console.log('not removed');
       return;
     }
-    console.log(`Delete ${contactId} id`);
-    console.table(result);
     fs.writeFile(contactsPath, JSON.stringify(result));
   }
   catch(error) {
@@ -45,17 +42,14 @@ const removeContact = async (contactId) => {
   }
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
     try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-  
-    list.push({
-      id: shortid.generate(),
-      name,
-      email,
-      phone
-    })
+      list.push({
+        id: list.length + 1,
+        ...body
+      });
     console.log('add');
     console.table(list);
     fs.writeFile(contactsPath, JSON.stringify(list));
