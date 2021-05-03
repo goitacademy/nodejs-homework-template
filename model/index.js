@@ -30,12 +30,9 @@ const removeContact = async (contactId) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    const result = list.filter(item => item.id !== contactId);
-    
-    if (list.length === result.length) {
-      return;
-    }
+    const result = list.filter(({id}) => parseInt( id ) !== parseInt( contactId));
     fs.writeFile(contactsPath, JSON.stringify(result));
+    return result;
   }
   catch(error) {
     console.log(error);
@@ -50,16 +47,19 @@ const addContact = async (body) => {
         id: list.length + 1,
         ...body
       });
-    console.log('add');
-    console.table(list);
-    fs.writeFile(contactsPath, JSON.stringify(list));
+      fs.writeFile(contactsPath, JSON.stringify(list));
+      return list;
   } catch(error) {
     console.log(error);
   }
 }
 
 const updateContact = async (contactId, body) => {
-
+  try {
+    
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {

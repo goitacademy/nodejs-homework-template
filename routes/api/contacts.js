@@ -3,6 +3,7 @@ const router = express.Router()
 const contacts = require('../../model/index.js');
 const file = require('../../model/contacts.json')
 
+
 router.get('/', async (req, res, next) => {
   res.json({
     status: "success",
@@ -36,7 +37,15 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  console.log(req.params);
+  res.json({
+    message: "contact deleted",
+    status: "success",
+    code: 200,
+    data: {
+      data: await contacts.removeContact(req.params['contactId'])
+    }
+  })
 })
 
 router.patch('/:contactId', async (req, res, next) => {
