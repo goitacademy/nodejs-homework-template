@@ -8,6 +8,7 @@ const {
   createContact,
   deleteContactById,
   updateContactById,
+  updateStatusContact,
 } = require('./contacts.controller.js')
 
 router.get('/', asyncHandler(getContacts))
@@ -28,6 +29,12 @@ router.patch(
   body('phone').isLength({ min: 1 }).isMobilePhone().optional(),
   body('email').isEmail().optional(),
   asyncHandler(updateContactById)
+)
+
+router.patch(
+  '/:contactId/favorite',
+  body('favorite').isBoolean().withMessage('missing field favorite'),
+  asyncHandler(updateStatusContact)
 )
 
 module.exports = router

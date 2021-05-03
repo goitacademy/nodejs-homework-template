@@ -5,6 +5,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatus,
 } = require('./contacts.model.js')
 
 const getContacts = async (req, res, next) => {
@@ -59,10 +60,27 @@ const updateContactById = async (req, res, next) => {
     : res.status(404).json({ message: 'Not found' })
 }
 
+const updateStatusContact = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
+  if (!Object.keys(req.body).length) {
+    return res.status(400).json({ message: 'missing fields' })
+  }
+  const contactUpdated = await updateStatus(req.params.contactId, req.body)
+
+  contactUpdated
+    ? res.status(200).json(contactUpdated)
+    : res.status(404).json({ message: 'Not found' })
+}
+
 module.exports = {
   getContacts,
   getContactsById,
   createContact,
   deleteContactById,
   updateContactById,
+  updateStatusContact,
 }

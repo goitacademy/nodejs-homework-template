@@ -1,55 +1,24 @@
-const { ObjectId } = require('mongodb')
-const db = require('../../../model/contacts.js')
+const contacts = require('../../../model/schemas/contactsSchemas.js')
 
-const getCollection = async (db, name) => {
-  const client = await db
+const listContacts = async () => await contacts.find()
 
-  return await client.db().collection(name)
-}
+const getContactById = async (contactId) =>
+  await contacts.find({ _id: contactId })
 
-const listContacts = async () => {
-  const collection = await getCollection(db, 'contacts')
+const removeContact = async (contactId) =>
+  await contacts.findByIdAndRemove({ _id: contactId })
 
-  return await collection.find().toArray()
-}
+const addContact = async (newContact) => await contacts.create(newContact)
 
-const getContactById = async (contactId) => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const [result] = await collection.find({ _id: objectId }).toArray()
+const updateContact = async (contactId, body) =>
+  await contacts.findByIdAndUpdate({ _id: contactId }, body, {
+    new: true,
+  })
 
-  return result
-}
-
-const removeContact = async (contactId) => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const { value: result } = await collection.findOneAndDelete({ _id: objectId })
-
-  return result
-}
-
-const addContact = async (newContact) => {
-  const collection = await getCollection(db, 'contacts')
-
-  const {
-    ops: [result],
-  } = await collection.insertOne(newContact)
-
-  return result
-}
-
-const updateContact = async (contactId, body) => {
-  const collection = await getCollection(db, 'contacts')
-  const objectId = new ObjectId(contactId)
-  const { value: result } = await collection.findOneAndUpdate(
-    { _id: objectId },
-    { $set: body },
-    { returnOriginal: false }
-  )
-
-  return result
-}
+const updateStatus = async (id, body) =>
+  await contacts.findByIdAndUpdate({ _id: id }, body, {
+    new: true,
+  })
 
 module.exports = {
   listContacts,
@@ -57,4 +26,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatus,
 }
