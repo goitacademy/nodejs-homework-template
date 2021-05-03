@@ -11,6 +11,16 @@ const schemaAddContact = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
 }) 
 
+/*const schemaQueryContact = Joi.object({
+    name: Joi.string()
+        .min(3)
+        .max(30)
+        .optional(),
+
+        favorite: Joi.boolean()
+        .optional(),
+}) */
+
 const schemaUpdateContact = Joi.object({
     name: Joi.string()
         .alphanum()
