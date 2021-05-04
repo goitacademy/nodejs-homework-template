@@ -56,7 +56,18 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    
+    const data = await fs.readFile(contactsPath, "utf8");
+    const list = JSON.parse(data);
+    list.map(item => {
+      if (item.id === parseInt(contactId)) {
+        console.log('enter');
+        // const replace =  Object.assign(item.id, body);
+        fs.writeFile(contactsPath, JSON.stringify(replace));
+        return list;
+      } else {
+        return 'error, this id is not found';
+      }
+    })
   } catch (error) {
     console.log(error);
   }

@@ -15,7 +15,6 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get(`/:contactId`, async (req, res, next) => {
-  
   res.json({
     status: "success",
     code: 200,
@@ -49,7 +48,16 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  // console.log(req.body);
+  // console.log(req.params['contactId']);
+  res.json({
+    message: "contact update",
+    status: "success",
+    code: 200,
+    data: {
+      data: await contacts.updateContact(req.params['contactId'], req.body)
+    }
+  })
 })
 
 module.exports = router
