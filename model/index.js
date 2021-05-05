@@ -60,14 +60,15 @@ const updateContact = async (contactId, body) => {
     const list = JSON.parse(data);
     list.map(item => {
       if (item.id === parseInt(contactId)) {
-        console.log('enter');
-        // const replace =  Object.assign(item.id, body);
-        fs.writeFile(contactsPath, JSON.stringify(replace));
-        return list;
+        console.log(body);
+        const replace = Object.assign(item, body);
+        console.log(replace);
       } else {
         return 'error, this id is not found';
       }
     })
+    fs.writeFile(contactsPath, JSON.stringify(list));
+    return list;
   } catch (error) {
     console.log(error);
   }
