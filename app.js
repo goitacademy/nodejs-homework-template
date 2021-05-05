@@ -8,10 +8,14 @@ const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+
+
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
-
+app.get("/", (req,res)=>{
+  res.send("Welcome to the homepage")
+})
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
@@ -19,7 +23,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  console.log(err);
+  res.status(500).json({ message: err })
 })
 
 module.exports = app
