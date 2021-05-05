@@ -8,9 +8,9 @@ const {
 
 router.post('/registration', registration)
 
-router.post('/registration', login)
+router.post('/login', login)
 
-router.post('/registration', logout)
+router.post('/logout', logout)
 
 
 
