@@ -2,6 +2,7 @@ const { error } = require('console')
 const fs = require('fs').promises
 const json = './contacts.json'
 const path = require('path');
+const { uuid } = require('uuidv4');
 const contactsPath = path.join(__dirname, json);
 
 const listContacts = async () => {
@@ -40,15 +41,20 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-    try {
+  try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
+    if (body.name !== undefined & body.email !== undefined & body.phone !== undefined) {
       list.push({
-        id: list.length + 1,
-        ...body
+      id: uuid(),
+      ...body
       });
       fs.writeFile(contactsPath, JSON.stringify(list));
-      return list;
+      return list[list.length - 1];
+    } else {
+      return 'error';
+    }
+
   } catch(error) {
     console.log(error);
   }
@@ -58,17 +64,17 @@ const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    list.map(item => {
+    if (body.name !== undefined & body.email !== undefined & body.phone !== undefined) {
+      list.map(item => {
       if (item.id === parseInt(contactId)) {
-        console.log(body);
-        const replace = Object.assign(item, body);
-        console.log(replace);
-      } else {
-        return 'error, this id is not found';
+        Object.assign(item, body);
       }
     })
     fs.writeFile(contactsPath, JSON.stringify(list));
-    return list;
+    return list[list.length - 1];
+    } else {
+      return 'error';
+    }
   } catch (error) {
     console.log(error);
   }
