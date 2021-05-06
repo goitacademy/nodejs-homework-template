@@ -1,38 +1,41 @@
+const httpCode = require('../helpers/httpCode')
 const actions = require('../model/contacts')
 
 const getAllContacts = async (req, res, next) => {
-  const data = await actions.listContacts()
   try {
-    return res.status(200).json({
+    const userId = req.user?._id
+    const data = await actions.listContacts(userId, req.query)
+    return res.status(httpCode.OK).json({
       data,
       message: 'data loaded',
       status: 'success',
-      code: '200',
+      code: httpCode.OK,
     })
   } catch (err) {
-    return res.status(400).json({
+    return res.status(httpCode.BAD_REQUEST).json({
       message: 'data is empty',
       status: 'error',
-      code: '400',
+      code: httpCode.BAD_REQUEST,
     })
   }
 }
 
 const getContactById = async (req, res, next) => {
   try {
-    const data = await actions.getContactById(req.params.contactId)
+    const userId = req.user?._id
+    const data = await actions.getContactById(userId, req.params.contactId)
     if (data) {
-      return res.status(200).json({
+      return res.status(httpCode.OK).json({
       data,
       message: 'data loaded',
       status: 'success',
-      code: '200',
+      code: httpCode.OK,
     })
     } else {
-    return res.status(404).json({
+    return res.status(httpCode.NOT_FOUND).json({
       message: "Not found",
       status: 'error',
-      code: '404',
+      code: httpCode.NOT_FOUND,
     })
     }
   } catch (err) {
@@ -42,38 +45,40 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const data = await actions.addContact(req.body)
-    return res.status(201).json({
+    const userId = req.user?._id
+    const data = await actions.addContact(userId, req.body)
+    return res.status(httpCode.CREATED).json({
       data,
       message: 'contact created',
       status: 'success',
-      code: '201',
+      code: httpCode.CREATED,
     })
   } catch (err) {
     console.log(err);
-    return res.status(400).json({
+    return res.status(httpCode.BAD_REQUEST).json({
       message: "missing required name field",
       status: 'error',
-      code: '400',
+      code: httpCode.BAD_REQUEST,
     })
   }
 }
 
 const deleteContact = async (req, res, next) => {
-   try {
-    const data = await actions.removeContact(req.params.contactId)
+  try {
+     const userId = req.user?._id
+    const data = await actions.removeContact(userId, req.params.contactId)
     if (data) {
-      return res.status(200).json({
+      return res.status(httpCode.OK).json({
       data,
       message: 'contact deleted',
       status: 'success',
-      code: '200',
+      code: httpCode.OK,
     })
     } else {
-    return res.status(404).json({
+    return res.status(httpCode.NOT_FOUND).json({
       message: "Not found",
       status: 'error',
-      code: '404',
+      code: httpCode.NOT_FOUND,
     })
     }
   } catch (err) {
@@ -83,19 +88,20 @@ const deleteContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const data = await actions.updateStatusContact(req.params.contactId, req.body)
+    const userId = req.user?._id
+    const data = await actions.updateStatusContact( userId, req.params.contactId, req.body)
     if (data) {
-      return res.status(200).json({
+      return res.status(httpCode.OK).json({
       data,
       message: 'contact update',
       status: 'success',
-      code: '200',
+      code: httpCode.OK,
     })
     } else {
-    return res.status(404).json({
+    return res.status(httpCode.NOT_FOUND).json({
       message: "Not found",
       status: 'error',
-      code: '404',
+      code: httpCode.NOT_FOUND,
     })
     }
   } catch (err) {
@@ -105,19 +111,20 @@ const updateStatusContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const data = await actions.updateContact(req.params.contactId, req.body)
+    const userId = req.user?._id
+    const data = await actions.updateContact(userId, req.params.contactId, req.body)
     if (data) {
-      return res.status(200).json({
+      return res.status(httpCode.OK).json({
       data,
       message: 'contact update',
       status: 'success',
-      code: '200',
+      code: httpCode.OK,
     })
     } else {
-    return res.status(404).json({
+    return res.status(httpCode.NOT_FOUND).json({
       message: "Not found",
       status: 'error',
-      code: '404',
+      code: httpCode.NOT_FOUND,
     })
     }
   } catch (err) {

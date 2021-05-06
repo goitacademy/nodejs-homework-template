@@ -43,6 +43,7 @@ const validateLoginUser = (req, res, next) => {
 const validateUpdateSubUser = (req, res, next) => {
   validation(updateSubUser, req.body, next)
 }
+
 module.exports = {
   validateSignupUser,
   validateLoginUser,
