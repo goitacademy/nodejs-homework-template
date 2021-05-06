@@ -64,7 +64,6 @@ const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    if (body.name !== undefined & body.email !== undefined & body.phone !== undefined) {
       list.map(item => {
       if (item.id === parseInt(contactId)) {
         Object.assign(item, body);
@@ -72,9 +71,6 @@ const updateContact = async (contactId, body) => {
     })
     fs.writeFile(contactsPath, JSON.stringify(list));
     return list[list.length - 1];
-    } else {
-      return 'error';
-    }
   } catch (error) {
     console.log(error);
   }

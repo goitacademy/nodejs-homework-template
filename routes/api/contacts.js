@@ -78,34 +78,20 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId', async (req, res, next) => {
   console.log(req.params['contactId']);
-  if (await contacts.updateContact(req.params['contactId']) === undefined ){
-    res.json({
-      status: "error",
-      code: 404,
-      data: {
-        data: 'Error 404! ID not found',
-      }
-    })
-  }
-  else {
-    res.json({
-      message: "contact update",
-      status: "success",
-      code: 200,
-      data: {
-        data: await contacts.updateContact(req.params['contactId'], req.body)
-      }
-    })
-  }
+    //   status: "error",
+    //   code: 404,
+    //   data: {
+    //     data: 'Error 404! ID not found',
+    //   }
+    // })
+  res.json({
+    message: "contact update",
+    status: "success",
+    code: 200,
+    data: {
+      data: await contacts.updateContact(req.params['contactId'], req.body)
+    }
+  })
 })
 
 module.exports = router
-  // else if (await contacts.updateContact(req.params['contactId'], req.body) === 'error') {
-  //   res.json({
-  //     status: "error",
-  //     code: 500,
-  //     data: {
-  //       data: 'missing required name field',
-  //     }
-  //   })
-  // }
