@@ -5,25 +5,36 @@ const schemaCreateContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   phone: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-}).or('name', 'phone', 'email', /* 'favorite' */)
+}).or('name', 'phone', 'email')
   
+const schemaQueryContact = Joi.object({
+  sortBy: Joi.string().valid('name', 'phone', 'email').optional(),
+  sortByDesc: Joi.string().valid('name', 'phone', 'email').optional(),
+  filter: Joi.string().optional(),
+  limit: Joi.number().integer().min(1).max(20).optional(),
+  offset: Joi.number().integer().min(0).optional(),
+  isFavorite:Joi.boolean().optional(),
+}).without('sorBy', 'sortByDesc')
+
+
 const schemaUpdateContact = Joi.object({
   name: Joi.string().min(3).max(30).optional(),
   phone: Joi.string().optional(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-  favorite:Joi.boolean().optional()
-}).or('name', 'phone', 'email', 'favorite')
+  isFavorite:Joi.boolean().optional()
+}).or('name', 'phone', 'email', 'isFavorite')
     
+const schemaUpdateStatusContact = Joi.object({
+  isFavorite:Joi.boolean().required()
+})
+
+
 const validate = async (schema, obj, next) => {
   try {
-    console.log({obj});
     await schema.validateAsync(obj)
     return next()
   } catch (err) {
-    if (!obj.favorite) {
-    next({ status: 400, message: `missing field favorite` })
-    }
-    console.log("🚀 ~ file: valid-contact-router.js ~ line 23 ~ validate ~ err", err)
+    
     next({ status: 400, message: err.message.replace(/"/g, "'" ) })
   }
 }
@@ -31,7 +42,9 @@ const validate = async (schema, obj, next) => {
 
 module.exports = {
   validationCreateContact: async (req, res, next) => { return await validate(schemaCreateContact, req.body, next) },
+  validationQueryContact: async (req, res, next) => { return await validate(schemaQueryContact, req.query, next) },
   validationUpdateContact: async (req, res, next) => { return await validate(schemaUpdateContact, req.body, next) },
+  validationUpdateStatusContact: async (req, res, next) => { return await validate(schemaUpdateStatusContact, req.body, next) },
   
   validationObjectId: async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
