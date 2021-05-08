@@ -5,7 +5,6 @@ const getAll = async (req, res, next) => {
   try {
     const userId = req.user?.id
     const contacts = await Contacts.listContacts(userId, req.query)
-    // console.log(contacts.id);// toObject
     return res.status(200).json({
       status: 'success', code: 200,
       data: {

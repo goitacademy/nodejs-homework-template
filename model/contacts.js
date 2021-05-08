@@ -6,7 +6,6 @@ const listContacts = async (userId, query) => {
   const optionsSearch = { owner: userId }
   if (isFavorite !== null) { optionsSearch.isFavorite = isFavorite }
   console.log('optionsSearch.ISFAVORITE:::', optionsSearch.isFavorite);
-  // console.log('optionsSearch:::', optionsSearch);
   const results = await Contacts.paginate(optionsSearch, {
     limit,
     offset,
@@ -20,10 +19,6 @@ const listContacts = async (userId, query) => {
     select:'-_id',
   }
 })
-  // const results = await  Contacts.find({ owner: userId }).populate({
-    // path: "owner",
-    // select:'email -_id',
-  // })
   return results
 }
 

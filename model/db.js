@@ -1,11 +1,9 @@
 
-// const {MongoClient}= require('mongodb')
 const mongoose = require('mongoose');
 require('dotenv').config()
 
 const uriDb = process.env.URI_DB
 
-// const db = MongoClient.connect(uriDb, {
 const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -35,12 +33,3 @@ process.on('SIGINT', async () => {
 
 
 module.exports = db
-
-
-
-
-// const low = require('lowdb')
-// const FileSync = require('lowdb/adapters/FileSync')
-// const adapter = new FileSync('./model/contacts.json')
-// const db = low(adapter)
-// db.defaults({ contacts: [], }).write()

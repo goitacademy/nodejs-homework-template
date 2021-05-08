@@ -13,6 +13,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(helmet())
 app.use(logger(formatsLogger))
+app.use(express.static('public'))
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 50, // limit each IP to 100 requests per windowMs

@@ -13,9 +13,6 @@ const {
   validationQueryContact,
   validationUpdateStatusContact,
   validationObjectId } = require('./valid-contact-router');
-// const { handleError, } = require('../../helpers/handle-error')
-
-
 
 router
   .get('/', guard, validationQueryContact, control.getAll)
@@ -28,9 +25,6 @@ router
   .get('/:contactId', guard, validationObjectId, control.getById)
   .put('/:contactId', guard, validationUpdateContact, validationObjectId, control.update)
   .delete('/:contactId', guard, validationObjectId, control.remove)
-  // .patch('/:contactId', guard, validationUpdateContact, validationObjectId, control.updateStatus)
 router.patch('/:contactId/favorite', guard, validationUpdateStatusContact, control.updateStatus)
-
-
 
 module.exports = router

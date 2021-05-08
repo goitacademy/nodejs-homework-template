@@ -5,7 +5,8 @@ const { reset } = require('nodemon')
 const router = express.Router()
 const control = require('../../controllers/users')
 const guard = require('../../helpers/guard')
-const {reg, login, logout, getCurrent } = require('../../controllers/users')
+const uploadAvatar = require('../../helpers/upload-avatar')
+const {reg, login, logout, getCurrent, updateAvatar } = require('../../controllers/users')
 
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 15 minutes
@@ -18,26 +19,11 @@ const limiter = rateLimit({
     })
   }
 });
-//  apply to all requests
 
-// router.post('/register',control.reg)
 router.post('/register',limiter, reg)
-// router.post('/login',control.login )
 router.post('/login',login )
-// router.post('/logout',control.logout )
 router.post('/logout', guard, logout)
-router.get('/current',guard, getCurrent)
-
-
-
-// router
-//   .get('/', control.getAll)
-//   .post('/', validationCreateContact, handleError(control.create))
-
-// router
-//   .get('/:contactId', validationObjectId, control.getById)
-//   .put('/:contactId', validationUpdateContact, validationObjectId, control.update)
-//   .delete('/:contactId', validationObjectId, control.remove)
-//   .patch("/:contactId", validationUpdateContact, validationObjectId, control.updateStatus)
+router.get('/current', guard, getCurrent)
+router.patch('/avatars', guard, uploadAvatar.single('avatar'), updateAvatar)
 
 module.exports = router

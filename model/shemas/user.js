@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, model} = mongoose;
+const gravatar = require('gravatar');
 const { Gender } = require('../../helpers/constants')
 const bcrypt = require('bcryptjs');
 const { valid } = require('joi');
@@ -12,15 +13,6 @@ const userSchema = new Schema({
     minlength: 2,
     default: 'Guest',
   },
-
-  // gender: {
-  //   type: String,
-  //   enum: {
-  //     values: [Gender.MALE, Gender.FEMALE, Gender.NONE],
-  //     message: "it's not allowed"
-  //   },
-  //   default: 'Gender.NONE'
-  // },
 
   password: {
     type: String,
@@ -47,6 +39,22 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+
+  avatarUrl:{
+    type:String,
+    default:function (){
+      return gravatar.url(this.email, {s:'250'}, true)
+    }
+  },
+
+// avatar:{
+//     type:String,
+//     default:function (){
+//       return gravatar.url(this.email, {s:'250'}, true)
+//     }
+//   }
+
+
 },
   {
     versionKey: false,

@@ -1,7 +1,6 @@
 
 const  { number, version, boolean } = require( 'joi');
 const mongoose = require('mongoose');
-// const { delete } = require('../../routes/api/contacts');
 const { Schema, model, SchemaTypes } = mongoose;
 const mongoosePaginate = require('mongoose-paginate-v2');
   
@@ -67,16 +66,6 @@ contactSchema.path('email').validate((value) => {
 
 contactSchema.plugin(mongoosePaginate);
 
-// contactSchema.path('favorite').validate((value) => {
-//   const re = / [true, false]/
-// return re.test(Boolean(value))
-// })
-
-// contactSchema.virtual('strAge', get(function () {
-//   return `${this.age}, age`
-// }))
-
-  
 const Contact = model('shema', contactSchema);
 
 module.exports = Contact
