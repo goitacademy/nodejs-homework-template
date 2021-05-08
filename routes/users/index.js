@@ -4,14 +4,17 @@ const {
     registration,
     login,
     logout,
-    } = require('../../controllers/users')
+    current,
+} = require('../../controllers/users')
+const guard = require('../../helper/guard')
 
 router.post('/registration', registration)
 
 router.post('/login', login)
 
-router.post('/logout', logout)
+router.post('/logout', guard, logout)
 
+router.get('/current', guard, current)
 
 
 module.exports = router

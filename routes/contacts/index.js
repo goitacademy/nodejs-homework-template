@@ -12,19 +12,18 @@ const { ValidCreateContact,
          ValidUpdateStatus,
         ValidUpdateAllContact } = require('./validContactsRoute.js')
 
-router
-  .get('/', getAll)
-  .post('/', ValidCreateContact, createContact)
-
-
+const guard = require('../../helper/guard')
 
 router
-  .get('/:id', getById)
-  .delete('/:id', removeContact)
-  .put('/:id', ValidUpdateAllContact, updateContact)
+  .get('/', guard, getAll)
+  .post('/', guard, ValidCreateContact, createContact)
+
+router
+  .get('/:id', guard, getById)
+  .delete('/:id', guard, removeContact)
+  .put('/:id', guard,  ValidUpdateAllContact, updateContact)
 
 
-router.patch('/:id/favorite', ValidUpdateStatus, updateStatusContact )
+router.patch('/:id/favorite', guard, ValidUpdateStatus, updateStatusContact )
 
-
-module.exports = router
+ module.exports = router

@@ -3,7 +3,9 @@ const Contacts = require('../model/contacts')
 
 const getAll = async (req, res, next) => {
     try {
-        const contacts = await Contacts.listContacts()
+        const userId = req.user?.id
+        const contacts = await Contacts.listContacts(userId, req.query)
+        
         return res.json({
             status: 'success',
             code: 200,
@@ -19,8 +21,11 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
     try {
-        const contact = await Contacts.getContactById(req.params.id.toString())
+        const userId = req.user?.id
+        const contact = await Contacts.getContactById(userId, req.params.id.toString())
+
         if (contact) {
+
             return res.status(201).json({
                 status: 'success',
                 code: 201,
@@ -29,6 +34,7 @@ const getById = async (req, res, next) => {
                 }
             })
         } else {
+
             return res.status(404).json({
                 status: 'error',
                 code: 404,
@@ -42,7 +48,9 @@ const getById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
     try {
-        const contact = await Contacts.addContact(req.body)
+        const userId = req.user?.id
+        const contact = await Contacts.addContact(userId, req.body)
+
         return res.status(201).json({
             status: 'success',
             code: 201,
@@ -57,7 +65,9 @@ const createContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
     try {
-        const contact = await Contacts.removeContact(req.params.id.toString())
+        const userId = req.user?.id
+        const contact = await Contacts.removeContact(userId, req.params.id.toString())
+        
         if (contact) {
             return res.status(201).json({
                 status: 'success',
@@ -81,8 +91,9 @@ const removeContact = async (req, res, next) => {
 const updateStatusContact =  async (req, res, next) => {
     try {
         if (req.body.favorite) {
-            const contact = await Contacts.updateContact(req.params.id.toString(), req.body)
-            console.log(req.body);
+            const userId = req.user?.id
+            const contact = await Contacts.updateContact(userId, req.params.id.toString(), req.body)
+
             if (contact) {
                 return res.status(201).json({
                     status: 'success',
@@ -107,8 +118,11 @@ const updateStatusContact =  async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
     try {
-        const contact = await Contacts.updateContact(req.params.id.toString(), req.body)
+        const userId = req.user?.id
+        const contact = await Contacts.updateContact(userId, req.params.id.toString(), req.body)
+
         if (contact) {
+
             return res.status(201).json({
                 status: 'success',
                 code: 201,
@@ -117,6 +131,7 @@ const updateContact = async (req, res, next) => {
                 }
             })
         } else {
+
             return res.status(404).json({
                 status: 'error',
                 code: 404,
