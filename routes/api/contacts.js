@@ -9,15 +9,40 @@ router.get('/', async (_req, res, next) => {
       status: 'Success',
       code: 200,
       message: 'Contacts found',
-      data: { contacts }
+      data: { 
+        contacts 
+      }
     })
+
   } catch(error) {
     next(error)
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contact = await Contacts.getContactById(req.params.contactId)
+
+    if (contact) {
+    return res.json({
+      status: 'Success',
+      code: 200,
+      message: 'Contact found',
+      data: { 
+        contact 
+      }
+    })
+  }
+
+  return res.status(404).json({
+    status: 'Error',
+    code: 404,
+    message: 'Not Found'
+  })
+
+  } catch(error) {
+    next(error)
+  }
 })
 
 router.post('/', async (req, res, next) => {
@@ -29,6 +54,7 @@ router.post('/', async (req, res, next) => {
       message: 'Contact created',
       data: { contact }
     })
+    
   } catch(error) {
     next(error)
   }
