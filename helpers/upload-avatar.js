@@ -19,7 +19,9 @@ const upload = multer({
     if (file.mimetype.includes('image')) {
       cb(null, true)
     }
-    cb(null, false)
+    const err = new Error('Файл не прошел валидацию на изображение')
+    err.status = 400
+    cb(err, false)
   }
 })
 

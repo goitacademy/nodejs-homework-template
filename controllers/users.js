@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const jimp = require('jimp')
 const fs = require('fs/promises');
 const path = require('path')
+const cloudinary = require('cloudinary').v2;
+const {promisify}= require('util');
 const Users = require('../model/users')
 const { HttpCode }=require('../helpers/constants')
 const { create } = require('../model/shemas/user')
@@ -9,6 +11,17 @@ const { create } = require('../model/shemas/user')
 const User = require('../model/shemas/user');
 require('dotenv').config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+
+const uploadToCloud = promisify(cloudinary.uploader.upload)
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY_CLOUD,
+  api_secret: process.env.API_SECRET_CLOUD,
+});
+
+
 
 const reg = async (req, res, next) => {
   const { email } = req.body
@@ -88,14 +101,12 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({})
 }
 
-
-
-
-
 const updateAvatar = async (req, res) => {
   const { id } = req.user
-  const avatarUrl = await saveUserUPdatedAvatar(req)
-  await Users.updateUserAvatar(id, avatarUrl)
+  // const avatarUrl = await saveUserUPdatedAvatar(req)
+  // const avatarUrl = await saveUserUPdatedAvatarToCloud(req)
+  const {idCloudAvatar, avatarUrl} = await saveUserUPdatedAvatarToCloud(req)
+  await Users.updateUserAvatar(id, avatarUrl, idCloudAvatar)
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
@@ -104,35 +115,44 @@ const updateAvatar = async (req, res) => {
     },
     message:'successfully updated',
   })
-
 }
 
-const saveUserUPdatedAvatar = async (req) => {
+// const saveUserUPdatedAvatar = async (req) => {
+//   const FOLDER_AVATARS = process.env.FOLDER_AVATARS;
+//   const pathFile = req.file.path;
+//   const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
+//   const img = await jimp.read(pathFile)
+//   await img
+//     .autocrop()
+//     .cover(250, 250,
+//       jimp.HORIZONTAL_ALIGN_CENTER |
+//       jimp.VERTICAL_ALIGN_MIDDLE)
+//     .writeAsync(pathFile)
+//   try {
+//     await fs.rename(pathFile, path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar))
+//     // const oldAvatar = req.user.avatar;
+//     const oldAvatar = req.user.avatarUrl;
+//     if (oldAvatar.includes(`${FOLDER_AVATARS}/`)) {
+//       await fs.unlink(path.join(process.cwd(), 'public', oldAvatar))
+//     }
+//   } catch (e) {
+//     console.log(e.message);
+//   }
+//
+//   return path.join(FOLDER_AVATARS, newNameAvatar)
+//     // .replace('\\', '/')
+// }
 
-  const FOLDER_AVATARS = process.env.FOLDER_AVATARS;
+const saveUserUPdatedAvatarToCloud = async (req) => {
   const pathFile = req.file.path;
-  const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
-  const img = await jimp.read(pathFile)
-  await img
-    .autocrop()
-    .cover(250, 250,
-      jimp.HORIZONTAL_ALIGN_CENTER |
-      jimp.VERTICAL_ALIGN_MIDDLE)
-    .writeAsync(pathFile)
-  try {
-    await fs.rename(pathFile, path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar))
-    // const oldAvatar = req.user.avatar;
-    const oldAvatar = req.user.avatarUrl;
-    if (oldAvatar.includes(`${FOLDER_AVATARS}/`)) {
-      await fs.unlink(path.join(process.cwd(), 'public', oldAvatar))
-    }
-  } catch (e) {
-    console.log(e.message);
-  }
+  const {public_id: idCloudAvatar, secure_url: avatarUrl} = await uploadToCloud(pathFile, {
+    public_id: req.user.idCloudAvatar?.replace('Avatars/', ''),
+    folder: 'avatars',
+    transformation: {width: 250, height: 250, crop: "pad",}
+  })
+  await fs.unlink(pathFile)
+  return {idCloudAvatar, avatarUrl}
+}
 
-  return path.join(FOLDER_AVATARS, newNameAvatar)
-    // .replace('\\', '/')
-}  
-  
 module.exports  =  { reg, login, logout, getCurrent, updateAvatar,}
     

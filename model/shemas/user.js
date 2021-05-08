@@ -54,6 +54,10 @@ const userSchema = new Schema({
 //     }
 //   }
 
+  idCloudAvatar:{
+    type:String,
+    default:null,
+  },
 
 },
   {
