@@ -5,7 +5,7 @@ const schemaCreateContact = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
-  phone: Joi.string().min(7).max(45).required(),
+  phone: Joi.string().min(7).max(12).required(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -18,10 +18,6 @@ const schemaUpdateContact = Joi.object({
     .optional(),
   phone: Joi.string().min(7).max(12).optional(),
 }).min(1);
-
-// const schemaStatusVaccinatedCat = Joi.object({
-//   isVaccinated: Joi.boolean().required(),
-// });
 
 const validate = async (schema, body, next) => {
   try {
@@ -39,6 +35,3 @@ module.exports.schemaCreateContact = (req, _res, next) => {
 module.exports.schemaUpdateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next);
 };
-// module.exports.validateStatusVaccinatedCat = (req, _res, next) => {
-//   return validate(schemaStatusVaccinatedCat, req.body, next);
-// };
