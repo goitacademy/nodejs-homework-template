@@ -5,9 +5,10 @@ const Contacts = require('../../model/index')
 router.get('/', async (_req, res, next) => {
   try {
     const contacts = await Contacts.listContacts()
-    res.json({
+    return res.json({
       status: 'Success',
       code: 200,
+      message: 'Contacts found',
       data: { contacts }
     })
   } catch(error) {
@@ -20,7 +21,17 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contact = await Contacts.addContact(req.body)
+    return res.status(201).json({
+      status: 'Success',
+      code: 201,
+      message: 'Contact created',
+      data: { contact }
+    })
+  } catch(error) {
+    next(error)
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
