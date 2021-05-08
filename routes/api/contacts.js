@@ -54,18 +54,58 @@ router.post('/', async (req, res, next) => {
       message: 'Contact created',
       data: { contact }
     })
-    
+
   } catch(error) {
     next(error)
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contact = await Contacts.removeContact(req.params.contactId)
+    if (contact) {
+      return res.json({
+        status: 'Success',
+        code: 200,
+        message: 'Contact deleted',
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'Error',
+        code: 404,
+        message: 'Not Found',
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 })
-
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.patch('/:contactId/name', async (req, res, next) => {
+  try {
+    const contact = await Contacts.updateContact(req.param.contactId, req.body)
+    if (contact) {
+      return res.json({
+        status: 'Success',
+        code: 200,
+        message: 'Contact updated successfully',
+        data: { 
+          contact 
+        }
+      })
+    }
+  
+    return res.status(404).json({
+      status: 'Error',
+      code: 404,
+      message: 'Not Found'
+    })
+    
+  } catch(error) {
+    next(error)
+  }
 })
 
 module.exports = router
