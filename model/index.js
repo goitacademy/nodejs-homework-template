@@ -64,13 +64,21 @@ const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
+    console.log(body);
+    if (body.name !== undefined || body.email !== undefined || body.phone !== undefined) {
       list.map(item => {
       if (item.id === parseInt(contactId)) {
-        Object.assign(item, body);
-      }
-    })
-    fs.writeFile(contactsPath, JSON.stringify(list));
-    return list[list.length - 1];
+          Object.assign(item, body);
+        }
+      else {
+        return 'id is not found';
+        }
+      })
+      fs.writeFile(contactsPath, JSON.stringify(list));
+      return list;
+    } else {
+      return 'error';
+    }
   } catch (error) {
     console.log(error);
   }

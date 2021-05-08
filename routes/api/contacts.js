@@ -76,22 +76,28 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
-  console.log(req.params['contactId']);
-    //   status: "error",
-    //   code: 404,
-    //   data: {
-    //     data: 'Error 404! ID not found',
-    //   }
-    // })
-  res.json({
-    message: "contact update",
-    status: "success",
-    code: 200,
-    data: {
-      data: await contacts.updateContact(req.params['contactId'], req.body)
-    }
-  })
-})
 
+router.patch('/:contactId', async (req, res, next) => {
+  console.log(await contacts.updateContact(req.body));
+  if (await contacts.updateContact(req.body) === 'error') {
+    res.json({
+      message: "Not found",
+      status: "error",
+      code: 500,
+      data: {
+        data: 'Not found',
+      }
+    })
+  }
+  else {
+    res.json({
+      message: "contact update",
+      status: "success",
+      code: 200,
+      data: {
+        data: await contacts.updateContact(req.params['contactId'], req.body),
+      }
+    })
+  }
+})
 module.exports = router
