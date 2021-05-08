@@ -90,7 +90,7 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts()
-    const index = contacts.findIndex(({id}) => id === contactId)
+    const index = contacts.findIndex(({id}) => id.toString() === contactId)
 
      if (index === -1) 
      return
