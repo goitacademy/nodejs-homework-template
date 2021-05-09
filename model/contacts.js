@@ -7,28 +7,28 @@ const listContacts = async () => {
   return db.get("contacts").value();
 };
 
-const getContactById = async (id) => {
-  return db.get("contacts").find({ id}).value();
+const getContactById = async (contactId) => {
+  return db.get("contacts").find({ contactId }).value();
 };
 
-const removeContact = async (id) => {
-  const [record] = db.get('contacts').remove({ id }).write()
-  return record
+const removeContact = async (contactId) => {
+  const [record] = db.get("contacts").remove({ contactId }).write();
+  return record;
 };
 
 const addContact = async (body) => {
-  const id = uuidv4();
+  const contactId = uuidv4();
   const record = {
-    id,
+    contactId,
     ...body,
   };
   db.get("contacts").push(record).write();
   return record;
 };
 
-const updateContact = async (id, body) => {
-  const record = db.get("contacts").find({ id }).assign(body).value();
-  db.write()
+const updateContact = async (contactId, body) => {
+  const record = db.get("contacts").find({ contactId }).assign(body).value();
+  db.write();
   return record.contactId ? record : null;
 };
 
