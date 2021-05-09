@@ -1,62 +1,34 @@
-[
-  {
-    "id": 1,
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
-    "id": 2,
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
-  },
-  {
-    "id": 3,
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  {
-    "id": 4,
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
-  },
-  {
-    "id": 5,
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
-  },
-  {
-    "id": 6,
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
-    "id": 7,
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
-  },
-  {
-    "id": 8,
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
-  },
-  {
-    "id": 9,
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
-  {
-    "id": 10,
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
-  }
-]
+{
+  "contacts": [
+    {
+      "contactId": "4e59e039-a129-4e6f-970a-c0fa68874332",
+      "name": "John Smith",
+      "email": "john.smith@work.co",
+      "phone": "234-567-876"
+    },
+    {
+      "contactId": "2622bbf0-bee7-4982-8a9b-2819ee06e3f2",
+      "name": "Nataly Portman",
+      "email": "nataly.portman@work.co",
+      "phone": "2345-098-45677"
+    },
+    {
+      "contactId": "59b874b6-fce3-4635-b174-a607fb7e85d1",
+      "name": "Nataly Jackson",
+      "email": "nataly.jackson@work.co",
+      "phone": "2345-098-456"
+    },
+    {
+      "contactId": "00ef0749-9e97-4f53-8e90-ad1e2aa05baf",
+      "name": "Nick Clarckson",
+      "email": "nick.clarckson@work.co",
+      "phone": "234-567-88"
+    },
+    {
+      "contactId": "934dd5de-0837-4a60-9fea-782806994054",
+      "name": "Nick Clarckson",
+      "email": "nicky.clarck@work.co",
+      "phone": "4567-789-4567"
+    }
+  ]
+}
