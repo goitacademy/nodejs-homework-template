@@ -8,7 +8,8 @@ const schemaAddContact = Joi.object({
     .required(),
 
   phone: Joi.string()
-    .pattern(/^[\d\(\)\ -]{4,14}\d$/)
+    .length(10)
+    .pattern(/^[0-9]+$/)
     .required(),
 });
 
@@ -20,9 +21,10 @@ const schemaUpdateContact = Joi.object({
     .optional(),
 
   phone: Joi.string()
-    .pattern(/^[\d\(\)\ -]{4,14}\d$/)
+    .length(10)
+    .pattern(/^[0-9]+$/)
     .optional(),
-}).or("name", "email", "phone");
+});
 
 const validate = async (schema, obj, next) => {
   try {

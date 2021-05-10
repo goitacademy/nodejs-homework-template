@@ -28,7 +28,7 @@ const removeContact = async (contactId) => {
     console.log(`Contact with ID ${contactId} don't exist!`);
     return;
   }
-  fs.writeFile(contactsPath, JSON.stringify(usersFiltered, null, "\t"));
+  fs.writeFile(contactPath, JSON.stringify(contactsFiltered, null, "\t"));
 };
 
 const addContact = async (body) => {
@@ -40,7 +40,7 @@ const addContact = async (body) => {
   const data = await fs.readFile(contactPath);
   const contacts = JSON.parse(data);
   contacts.push(record);
-  fs.writeFile(contactsPath, JSON.stringify(users, null, "\t"));
+  fs.writeFile(contactPath, JSON.stringify(contacts, null, "\t"));
   return record;
 };
 
@@ -57,7 +57,7 @@ const updateContact = async (contactId, body) => {
     if (item.id === Number(contactId)) contacts[i] = updatedContact;
   });
 
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, "\t"));
+  fs.writeFile(contactPath, JSON.stringify(contacts, null, "\t"));
 
   return updatedContact.id ? updatedContact : null;
 };
