@@ -80,10 +80,12 @@ const current = async (req, res, next) => {
    
 }
 
+const updateAvatar = async (req, res, next) => {}
 
 module.exports = {
     registration,
     login,
     logout,
     current,
+    updateAvatar,
 }
