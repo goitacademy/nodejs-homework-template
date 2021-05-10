@@ -9,13 +9,14 @@ const {
   updateContact,
 } = require('../../controllers/contacts')
 const { ValidCreateContact,
-         ValidUpdateStatus,
+  ValidUpdateStatus,
+  ValidQueryContact,
         ValidUpdateAllContact } = require('./validContactsRoute.js')
 
 const guard = require('../../helper/guard')
 
 router
-  .get('/', guard, getAll)
+  .get('/', guard, ValidQueryContact, getAll)
   .post('/', guard, ValidCreateContact, createContact)
 
 router
