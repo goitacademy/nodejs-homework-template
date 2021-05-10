@@ -29,7 +29,7 @@ const removeContact = async (contactId) => {
   return data;
 };
 
-const updateFavoriteContact = async (contactId) => {
+const updateStatusContact = async (contactId, body) => {
   const data = await Contact.findByIdAndUpdate(
     { _id: contactId },
     { ...body },
@@ -44,5 +44,5 @@ module.exports = {
   addContact,
   updateContact,
   removeContact,
-  updateFavoriteContact,
+  updateStatusContact,
 };

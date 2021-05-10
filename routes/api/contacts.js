@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const contactsController = require('../../controller');
-const { validateContact } = require('../../services/validation');
+const contactsController = require('../../controller/index.js');
+const { validateContact } = require('../../services/validation.js');
 
 router
   .get('/', contactsController.listContacts)
@@ -15,6 +15,6 @@ router
 router.patch(
   '/:contactId/favorite',
   validateContact,
-  contactsController.updateFavoriteContact,
+  contactsController.updateStatusContact,
 );
 module.exports = router;
