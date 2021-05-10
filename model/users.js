@@ -12,7 +12,15 @@ const updateToken = async (id, token) =>  await User.updateOne({_id:id},{token})
 
 // const updateUserAvatar = async (id, avatar) => await User.updateOne({_id:id},{avatar})
 // const updateUserAvatar = async (id, avatarUrl) => await User.updateOne({_id:id},{avatarUrl})
-const updateUserAvatar = async (id, avatarUrl, idCloudAvatar=null) => await User.updateOne({_id:id},{avatarUrl, idCloudAvatar})
+const updateUserAvatar = async (id, avatarUrl, idCloudAvatar = null) =>
+  
+{
+  //| --------
+  console.log(' model updateUserAvatar: сюда пришла проверка');
+  // |----------
+
+  await User.updateOne({ _id: id }, { avatarUrl, idCloudAvatar })
+}
 
 
 const findByToken = async (token) => await User.findOne({ token })

@@ -35,6 +35,10 @@ const userSchema = new Schema({
     default: "starter"
   },
 
+  gender:{
+    type: String,
+    default: Gender.MALE,
+  },
   token: {
     type: String,
     default: null,

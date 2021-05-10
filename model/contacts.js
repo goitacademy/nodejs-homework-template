@@ -21,19 +21,6 @@ const listContacts = async (userId, query) => {
 })
   return results
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 //, 2 -  получить контакт по ID:
 const getContactById = async (userId,contactId) => await Contacts.findOne({ _id: contactId, owner: userId }).populate({
     path: "owner",

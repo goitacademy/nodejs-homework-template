@@ -102,9 +102,13 @@ const logout = async (req, res, next) => {
 }
 
 const updateAvatar = async (req, res) => {
+ 
   const { id } = req.user
+  
+   try {
   // const avatarUrl = await saveUserUPdatedAvatar(req)
   // const avatarUrl = await saveUserUPdatedAvatarToCloud(req)
+
   const {idCloudAvatar, avatarUrl} = await saveUserUPdatedAvatarToCloud(req)
   await Users.updateUserAvatar(id, avatarUrl, idCloudAvatar)
   return res.status(HttpCode.OK).json({
@@ -115,6 +119,9 @@ const updateAvatar = async (req, res) => {
     },
     message:'successfully updated',
   })
+  } catch (e) {
+    console.log(e.message);
+    }
 }
 
 // const saveUserUPdatedAvatar = async (req) => {

@@ -11,7 +11,6 @@ const guard = (req, res, next) => {
       if (req.get('Authorization')) {
        token = req.get('Authorization').split(' ')[1]
       }
-      
     if (!user || err || token !== user.token) {
       return res.status(HttpCode.UNAUTHORIZED).json({
       status: 'error',
@@ -24,7 +23,5 @@ const guard = (req, res, next) => {
 })
     (req,  res,  next)
   }
-
-
-
 module.exports = guard
+
