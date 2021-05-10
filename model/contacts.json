@@ -1,68 +1,68 @@
-{
-  "0": {
+[
+  {
     "id": "1",
     "name": "Allen Raymond",
     "email": "nulla.ante@vestibul.co.uk",
     "phone": "(992) 914-3792"
   },
-  "1": {
+  {
     "id": "2",
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
     "phone": "(294) 840-6685"
   },
-  "2": {
-    "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  "3": {
+  {
     "id": "4",
     "name": "Wylie Pope",
     "email": "est@utquamvel.net",
     "phone": "(692) 802-2949"
   },
-  "4": {
+  {
     "id": "5",
     "name": "Cyrus Jackson",
     "email": "nibh@semsempererat.com",
     "phone": "(501) 472-5218"
   },
-  "5": {
+  {
     "id": "6",
     "name": "Abbot Franks",
     "email": "scelerisque@magnis.org",
     "phone": "(186) 568-3720"
   },
-  "6": {
+  {
     "id": "7",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
     "phone": "(715) 598-5792"
   },
-  "7": {
+  {
     "id": "8",
     "name": "Simon Morton",
     "email": "dui.Fusce.diam@Donec.com",
     "phone": "(233) 738-2360"
   },
-  "8": {
+  {
     "id": "9",
     "name": "Thomas Lucas",
     "email": "nec@Nulla.com",
     "phone": "(704) 398-7993"
   },
-  "9": {
+  {
     "id": "10",
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
   },
-  "newContact": {
-    "id": "9657efb3-f454-4de5-aa7c-69f37dcde11a",
+  {
+    "id": "9f6e83a5-c1ab-44cc-b271-2698651008e2",
+    "name": "Jack03",
+    "email": "jack1234@gmail.com",
+    "phone": "(050) 123-45-89"
+  },
+  {
+    "id": "e1f3c924-8e3b-4281-b984-624caee4343e",
     "name": "Jack",
     "email": "jack123@gmail.com",
     "phone": "(050) 123-45-67"
   }
-}
+]
