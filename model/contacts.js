@@ -1,10 +1,20 @@
 const contacts = require('../model/schemas/contact')
 
 const listContacts = async (userId, query) => {
-  const results = await contacts.find({ owner: userId }).populate({
-    path: 'owner',
-    select: 'subscription email',
-  })
+  const { sortBy, sortByDesc, filter, favorite, limit = 5, offset = 0 } = query
+  const optionsSearch = { owner: userId } 
+  const results = await contacts.paginate(optionsSearch, {
+    limit,
+    offset,
+    sort: {
+      ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+      ...(sortByDesc ? { [`${sortByDesc}`] : -1} : {}),
+    },
+    select: filter ? filter.split('|').join('') : '',
+    populate: {
+      path: 'owner',
+      select: 'subscription email' ,
+  }  })
   return results
 
 }

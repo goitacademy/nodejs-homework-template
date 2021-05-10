@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, model, SchemaTypes } = mongoose;
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const contactSchema = new Schema({
     name: {
@@ -24,9 +25,7 @@ const contactSchema = new Schema({
     },
 }, {versionKey: false, timestamps: true});
 
-const Contact = model('contact', contactSchema)
 
-module.exports = Contact
 
 contactSchema.path('name').validate(function (value) {
     const re = /[A-Z]\w+/
@@ -44,3 +43,9 @@ contactSchema.path('phone').validate(function (value) {
     const re = new RegExp('^[(][0-9]{3}[)] [0-9]{3}[-][0-9]{4}$')
     return re.test(String(value))
 })
+
+contactSchema.plugin(mongoosePaginate)
+
+const Contact = model('contact', contactSchema)
+
+module.exports = Contact
