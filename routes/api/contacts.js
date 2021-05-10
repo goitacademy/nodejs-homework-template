@@ -7,7 +7,7 @@ const { validateAddContact, validateUpdateContact } = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await Contacts.listContacts;
+    const contacts = await Contacts.listContacts();
     return res.json({
       status: "success",
       code: 200,
@@ -73,7 +73,6 @@ router.delete("/:contactId", async (req, res, next) => {
       return res.json({
         status: "success",
         code: 200,
-        message: "contact deleted",
         data: {
           contact,
         },
@@ -82,10 +81,12 @@ router.delete("/:contactId", async (req, res, next) => {
       return res.status(404).json({
         status: "error",
         code: 404,
-        message: "Not found",
+        data: "Not found",
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.patch("/:contactId", validateUpdateContact, async (req, res, next) => {

@@ -25,7 +25,6 @@ const schemaUpdateContact = Joi.object({
     .pattern(/^[0-9]+$/)
     .optional(),
 });
-
 const validate = async (schema, obj, next) => {
   try {
     await schema.validateAsync(obj);

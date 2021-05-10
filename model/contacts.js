@@ -15,20 +15,21 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const data = await fs.readFile(contactPath);
-  return JSON.parse(data).find((contact) => contact.id === Number(contactId));
+  return JSON.parse(data).find((contact) => String(contact.id) === contactId);
 };
 
 const removeContact = async (contactId) => {
   const data = await fs.readFile(contactPath);
   const contacts = JSON.parse(data);
   const contactsFiltered = contacts.filter(
-    (contact) => contact.id !== Number(contactId)
+    (contact) => String(contact.id) === contactId
   );
-  if (contactsFiltered.length === contacts.length) {
-    console.log(`Contact with ID ${contactId} don't exist!`);
-    return;
-  }
+  const [deletedContact] = contacts.filter(
+    (contact) => String(contact.id) === contactId
+  );
+
   fs.writeFile(contactPath, JSON.stringify(contactsFiltered, null, "\t"));
+  return deletedContact !== [] ? deletedContact : null;
 };
 
 const addContact = async (body) => {
@@ -38,9 +39,10 @@ const addContact = async (body) => {
     ...body,
   };
   const data = await fs.readFile(contactPath);
-  const contacts = JSON.parse(data);
-  contacts.push(record);
-  fs.writeFile(contactPath, JSON.stringify(contacts, null, "\t"));
+  const users = JSON.parse(data);
+  users.push(record);
+  fs.writeFile(contactPath, JSON.stringify(users, null, "\t"));
+
   return record;
 };
 
@@ -49,7 +51,7 @@ const updateContact = async (contactId, body) => {
 
   const contacts = JSON.parse(data);
 
-  const contact = contacts.find((contact) => contact.id === Number(contactId));
+  const contact = contacts.find((contact) => String(contact.id) === contactId);
 
   const updatedContact = { ...contact, ...body };
 
