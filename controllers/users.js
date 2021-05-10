@@ -20,6 +20,7 @@ const signupUser = async (req, res, next) => {
       code: httpCode.CREATED,
       data: {
         email: newUser.email,
+        avatarURL: newUser.avatarURL,
         subscription: newUser.subscription
       }
     })
@@ -99,10 +100,15 @@ const updateSubscriptionUser = async (req, res, next) => {
   }
 }
 
+const updateAvatar = async (req, res, next) => {
+  return {}
+}
+
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
   getCurrentUser,
-  updateSubscriptionUser
+  updateSubscriptionUser,
+  updateAvatar,
 }
