@@ -102,6 +102,14 @@ const saveAvatarUsers = async req => {
     console.log(e.message);
   }
 
+  const oldAvatar = req.user.avatar;
+  console.log(oldAvatar);
+
+  console.log(`${FOLDER_AVATARS}/`);
+
+  if (oldAvatar.includes(`${FOLDER_AVATARS}/`)) {
+    await fs.unlink(path.join(process.cwd(), 'public', oldAvatar));
+  }
   return path.join(FOLDER_AVATARS, newNameAvatar);
 };
 
