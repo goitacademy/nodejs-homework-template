@@ -25,12 +25,11 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const data = await listContacts();
-    console.log(data.filter((item) => item.id !== contactId));
     await fs.writeFile(
       contactsPath,
-      JSON.stringify(data.filter((item) => item.id !== contactId))
+      JSON.stringify(data.filter((item) => item.id.toString() !== contactId))
     );
-    return data.find((item) => item.id === contactId);
+    return data.find((item) => item.id.toString() === contactId);
   } catch (error) {
     return error;
   }
