@@ -1,8 +1,9 @@
 
 const  { number, version, boolean } = require( 'joi');
 const mongoose = require('mongoose');
-// const { delete } = require('../../routes/api/contacts');
-  const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = mongoose;
+const mongoosePaginate = require('mongoose-paginate-v2');
+  
 
 const contactSchema = new Schema({
   name: {
@@ -15,21 +16,20 @@ const contactSchema = new Schema({
   email: {
     type: String,
   },
-  favorite: {
+  isFavorite: {
     type: Boolean,
-    default:false,
+    default: "false",
   },
   features: {
     type: Array,
     set: (data) => !data ? [] : data,
-    get: (data)=> data.sort(),
+    get: (data) => data.sort(),
   },
-  owner: {
-    type: String,
-    name: String,
-    age: Number,
-  },
-}, {
+   owner: {
+        type: SchemaTypes.ObjectId,
+        ref: 'user',
+      }
+},{
   versionKey: false,
   timestamps: true,
   toObject: {
@@ -64,17 +64,8 @@ contactSchema.path('email').validate((value) => {
   return re.test(String(value))
 })
 
+contactSchema.plugin(mongoosePaginate);
 
-// contactSchema.path('favorite').validate((value) => {
-//   const re = / [true, false]/
-// return re.test(Boolean(value))
-// })
-
-// contactSchema.virtual('strAge', get(function () {
-//   return `${this.age}, age`
-// }))
-
-  
 const Contact = model('shema', contactSchema);
 
 module.exports = Contact
