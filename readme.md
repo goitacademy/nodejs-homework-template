@@ -25,6 +25,8 @@
 
 (есть валидация)
 
+http://localhost:3000/api/users/avatars - patch - обновить аватар
+
 ### Команды:
 
 - `npm start` &mdash; старт сервера в режиме production
@@ -32,4 +34,4 @@
 - `npm run lint` &mdash; запустить выполнение проверки кода с eslint
 - `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
 
-#### работа с Mongoose, Joi, passport, jsonwebtoken
+#### работа с Mongoose, Joi, passport, jsonwebtoken, multer, gravatar, jimp

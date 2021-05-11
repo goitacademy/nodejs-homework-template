@@ -26,9 +26,15 @@ const updateSubscription  = async (userId, body) => {
   return result
 }
 
+// For static
 const updateAvatar = async (id, avatar) => {
     return await User.updateOne({ _id: id }, { avatar })
 }
+
+// For cloudinary
+// const updateAvatar = async (id, avatar, idCloudAvatar = null) => {
+//     return await User.updateOne({ _id: id }, { avatar, idCloudAvatar })
+// }
 
 module.exports = {
     findById,

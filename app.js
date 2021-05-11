@@ -15,6 +15,8 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(helmet())
 app.use(logger(formatsLogger))
+app.use(express.static('public'))
+
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -50,9 +52,9 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  const status = err.status || HttpCode.INTERNAL_SERVER_ERROR
-  res.status(status || HttpCode.INTERNAL_SERVER_ERROR).json({
-    status: status === HttpCode.INTERNAL_SERVER_ERROR ? 'fail' : 'error',
+  const status = err.status || 500
+  res.status(status || 500).json({
+    status: status === 500 ? 'fail' : 'error',
     code: status,
     message: err.message
   })
