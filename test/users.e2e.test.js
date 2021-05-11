@@ -17,7 +17,6 @@ describe('Testing the routs api/users', () => {
   describe('Should handle PATCH request', () => {
     test('should return status 200  for POST: /users/avatars', async (done) => {
       const buffer = await fs.readFile('./test/pictures/female-avatar.jpg')
-      // const buffer = await fs.readFile('./public/avatars/Vova2-avtr.png')
       const res = await request(app)
         .patch('/api/users/avatars')
         .set('Authorization', `Bearer ${token}`)

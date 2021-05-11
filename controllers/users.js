@@ -105,13 +105,12 @@ const updateAvatar = async (req, res) => {
  
   const { id } = req.user
   
-   
+   try {
   // const avatarUrl = await saveUserUPdatedAvatar(req)
+  // const avatarUrl = await saveUserUPdatedAvatarToCloud(req)
+
   const {idCloudAvatar, avatarUrl} = await saveUserUPdatedAvatarToCloud(req)
-     
-     try {
   await Users.updateUserAvatar(id, avatarUrl, idCloudAvatar)
-  // await Users.updateUserAvatar(id, avatarUrl)
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
@@ -146,25 +145,20 @@ const updateAvatar = async (req, res) => {
 //   } catch (e) {
 //     console.log(e.message);
 //   }
-
+//
 //   return path.join(FOLDER_AVATARS, newNameAvatar)
 //     // .replace('\\', '/')
 // }
 
 const saveUserUPdatedAvatarToCloud = async (req) => {
-  try {
-    const pathFile = req.file.path;
-    const { public_id: idCloudAvatar, secure_url: avatarUrl } = await uploadToCloud(pathFile, {
-      public_id: req.user.idCloudAvatar?.replace('Avatars/', ''),
-      folder: 'avatars',
-      transformation: { width: 250, height: 250, crop: "pad", }
-    })
-    await fs.unlink(pathFile)
-    return { idCloudAvatar, avatarUrl }
-  } catch (e) {
-    console.log(e.message);
-  }
-
+  const pathFile = req.file.path;
+  const {public_id: idCloudAvatar, secure_url: avatarUrl} = await uploadToCloud(pathFile, {
+    public_id: req.user.idCloudAvatar?.replace('Avatars/', ''),
+    folder: 'avatars',
+    transformation: {width: 250, height: 250, crop: "pad",}
+  })
+  await fs.unlink(pathFile)
+  return {idCloudAvatar, avatarUrl}
 }
 
 module.exports  =  { reg, login, logout, getCurrent, updateAvatar,}
