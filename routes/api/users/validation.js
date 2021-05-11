@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { HttpCode } = require("../../../helpers/constants");
 
 const schemaRegistration = Joi.object({
   email: Joi.string().min(3).max(45).required(),
@@ -17,6 +18,10 @@ const schemaUpdateSubscription = Joi.object({
   // id: Joi.string().required(),
   subscription: Joi.string().required(),
 });
+
+// const schemaUpdateAvatar = Joi.object({
+//   subscription: Joi.string().optional(),
+// });
 
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
@@ -40,4 +45,16 @@ module.exports.login = (req, _res, next) => {
 
 module.exports.updateSubscription = (req, _res, next) => {
   return validate(schemaUpdateSubscription, req.body, next);
+};
+
+module.exports.updateAvatar = (req, res, next) => {
+  if (!req.file) {
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: "error",
+      code: HttpCode.BAD_REQUEST,
+      data: "Bad request",
+      message: "Avatar image file is missing",
+    });
+  }
+  next();
 };
