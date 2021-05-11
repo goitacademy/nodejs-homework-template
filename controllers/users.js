@@ -107,9 +107,9 @@ const updateAvatar = async (req, res) => {
   
    try {
   // const avatarUrl = await saveUserUPdatedAvatar(req)
-  // const avatarUrl = await saveUserUPdatedAvatarToCloud(req)
-
   const {idCloudAvatar, avatarUrl} = await saveUserUPdatedAvatarToCloud(req)
+     
+  // await Users.updateUserAvatar(id, avatarUrl)
   await Users.updateUserAvatar(id, avatarUrl, idCloudAvatar)
   return res.status(HttpCode.OK).json({
     status: 'success',
@@ -145,7 +145,7 @@ const updateAvatar = async (req, res) => {
 //   } catch (e) {
 //     console.log(e.message);
 //   }
-//
+
 //   return path.join(FOLDER_AVATARS, newNameAvatar)
 //     // .replace('\\', '/')
 // }
