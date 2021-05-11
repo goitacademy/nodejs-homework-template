@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, model, SchemaTypes } = mongoose;
+const gravatar = require('gravatar');
 const { UserSubscription } = require('../../helper/constants');
 const SALT_FACTOR = 6;
 const bcrypt = require('bcryptjs');
@@ -26,7 +27,11 @@ const userSchema = new Schema(
     subscription: {
       type: String,
       enum: {
-        values: [UserSubscription.STARTER, UserSubscription.PRO, UserSubscription.BUSINESS],
+        values: [
+          UserSubscription.STARTER,
+          UserSubscription.PRO,
+          UserSubscription.BUSINESS,
+        ],
         message: "It's not allowed",
       },
       default: UserSubscription.STARTER,
@@ -38,6 +43,12 @@ const userSchema = new Schema(
     owner: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
+    },
+    avatar: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: '250' }, true);
+      },
     },
   },
 
