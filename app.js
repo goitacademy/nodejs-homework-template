@@ -35,9 +35,11 @@ app.use(cors({
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   preflightContinue: false,
-  optionsSuccessStatus: HttpCode.NO_CONTENT,
-}))
-app.use(express.json( { limit: 100000 }))
+  optionsSuccessStatus: 204,
+}),
+)
+
+app.use(express.json( { limit: 100000 })) // 100 Kb for json
 app.use(boolParser())
 
 app.use('/api/users', usersRouter)
