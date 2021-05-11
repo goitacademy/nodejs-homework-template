@@ -21,7 +21,6 @@ describe('Testing the routs api/users', () => {
         .patch('/api/users/avatars')
         .set('Authorization', `Bearer ${token}`)
         .attach('avatar', buffer, 'female-avatar.jpg')
-        // .attach('avatar', buffer, 'Vova2-avtr.png')
       expect(res.status).toEqual(200)
       expect(res.body).toBeDefined()
       expect(res.body.data.avatarUrl).toEqual ('secure_Url_Cloudinary')
