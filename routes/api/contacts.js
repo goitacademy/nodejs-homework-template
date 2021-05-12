@@ -1,8 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const contacts = require('../../model/index.js');
-const file = require('../../model/contacts.json')
+const file = require('../../model/contacts.json');
+const Joi = require('joi');
+const { isError } = require('joi');
 
+const schema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(10).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2, tlds: {
+      allow: ['com', 'net']
+    }
+  }).required(),
+  phone: Joi.string().required(),
+})
 
 router.get('/', async (req, res, next) => {
   res.json({
@@ -36,68 +47,69 @@ router.get(`/:contactId`, async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  if (await contacts.addContact(req.body) === 'error') {
-    res.json({
-      status: "error",
-      code: 400,
-      data: {
-        data: "missing required name field",
-      }
-    })
-  } else {
+  try {
+    await schema.validateAsync(req.body);
     res.json({
       status: "success",
-      code: 200,
-      data: {
-        data: await contacts.addContact(req.body),
-      }
+      code: 201,
+      data: await contacts.addContact(req.body),
     })
+  }catch (error) {
+    res.json({
+      status: "fail",
+      code: 400,
+      error: error.message,
+    })
+    next(error);
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  if (await contacts.getContactById(req.params['contactId']) === undefined ){
-    res.json({
-      status: "error",
-      code: 404,
-      data: {
-        data: 'Error 404! Not found',
-      }
-    })
-  } else {
+  try {
+    if (await contacts.getContactById(req.params['contactId']) === undefined ){
       res.json({
+        status: "error",
+        code: 404,
+        message: 'Not found',
+      })
+    }
+    res.json({
       message: "contact deleted",
       status: "success",
       code: 200,
-      data: {
-        data: await contacts.removeContact(req.params['contactId'])
-      }
+      data: await contacts.removeContact(req.params['contactId']),
     })
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 })
-
 
 router.patch('/:contactId', async (req, res, next) => {
-  console.log(await contacts.updateContact(req.body));
-  if (await contacts.updateContact(req.body) === 'error') {
+  try {
+    if (await contacts.getContactById(req.params['contactId']) === undefined) {
+      res.json({
+        status: "error",
+        code: 404,
+        message: "ID Not Found",
+      })
+    }
+    await schema.validateAsync(req.body);
+    console.log(req.params['contactId'], req.body);
     res.json({
-      message: "Not found",
-      status: "error",
-      code: 500,
-      data: {
-        data: 'Not found',
-      }
-    })
-  }
-  else {
-    res.json({
-      message: "contact update",
+      message: "contact updated",
       status: "success",
       code: 200,
-      data: {
-        data: await contacts.updateContact(req.params['contactId'], req.body),
-      }
+      data: await contacts.updateContact(req.params['contactId'], req.body),
     })
+  } catch (error) {
+    res.json({
+      status: "fail",
+      code: 400,
+      error: error.message,
+    })
+    next(error);
   }
 })
+
 module.exports = router

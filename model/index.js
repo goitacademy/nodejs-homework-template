@@ -2,8 +2,10 @@ const { error } = require('console')
 const fs = require('fs').promises
 const json = './contacts.json'
 const path = require('path');
-const { uuid } = require('uuidv4');
+const { v4 } = require('uuid');
 const contactsPath = path.join(__dirname, json);
+const Joi = require('joi');
+
 
 const listContacts = async () => {
   try {
@@ -39,23 +41,28 @@ const removeContact = async (contactId) => {
     console.log(error);
   }
 }
+const schema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(10).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2, tlds: {
+      allow: ['com', 'net']
+    }
+  }).required(),
+  phone: Joi.string().required(),
+})
 
 const addContact = async (body) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    if (body.name !== undefined & body.email !== undefined & body.phone !== undefined) {
-      list.push({
-      id: uuid(),
-      ...body
-      });
-      fs.writeFile(contactsPath, JSON.stringify(list));
-      return list[list.length - 1];
-    } else {
-      return 'error';
+    list.push({
+      id: v4(),
+      ...body,
+    })
+    fs.writeFile(contactsPath, JSON.stringify(list));
+    return list[list.length - 1];
     }
-
-  } catch(error) {
+  catch (error) {
     console.log(error);
   }
 }
@@ -64,21 +71,13 @@ const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const list = JSON.parse(data);
-    console.log(body);
-    if (body.name !== undefined || body.email !== undefined || body.phone !== undefined) {
-      list.map(item => {
+    list.map(item => {
       if (item.id === parseInt(contactId)) {
-          Object.assign(item, body);
-        }
-      else {
-        return 'id is not found';
-        }
-      })
-      fs.writeFile(contactsPath, JSON.stringify(list));
-      return list;
-    } else {
-      return 'error';
-    }
+        Object.assign(item, body);
+      }
+    })
+    fs.writeFile(contactsPath, JSON.stringify(list));
+    return list;
   } catch (error) {
     console.log(error);
   }
