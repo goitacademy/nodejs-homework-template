@@ -1,6 +1,9 @@
 const Users = require('../model/users')
 const { HttpCode } = require('../helper/constants')
 const jwt = require('jsonwebtoken')
+const jimp = require('jimp')
+const fs = require('fs/promises')
+const path = require('path')
 require('dotenv').config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
  
@@ -22,6 +25,8 @@ const registration = async (req, res, next) => {
             data: {
                 id: newUser.id,
                 email: newUser.email,
+                avatar: newUser.avatar,
+                subscription: newUser.subscription,
             }
         })
     } catch (error) {
@@ -80,8 +85,23 @@ const current = async (req, res, next) => {
    
 }
 
-const updateAvatar = async (req, res, next) => {}
+const updateAvatar = async (req, res, next) => {
+    const { id } = req.user
+    const avatarUrl = await saveAvataruser(req)
+    await Users.updateAvatar(id, avatarUrl)
+    return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { avatarUrl } })
+}
 
+const saveAvataruser = async (req) => {
+    const FOLDER_AVATARS = process.env.FOLDER_AVATARS
+    const pathFile = req.file.path
+    const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
+    const img = await jimp.read(pathFile)
+    await img.autocrop(250, 250, jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE).writeAsync(pathFile)
+    await fs.rename(pathFile, path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar))
+    return path.join(FOLDER_AVATARS, newNameAvatar)
+}
+ 
 module.exports = {
     registration,
     login,
