@@ -4,15 +4,21 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "express-validator": "^6.10.1",
+    "got": "^11.8.2",
+    "joi": "^17.4.0",
+    "morgan": "1.10.0",
+    "uuidv4": "^6.2.7"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
@@ -21,5 +27,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "2.0.7"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data/*.*"
+    ]
   }
 }
