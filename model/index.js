@@ -12,8 +12,8 @@ const listContacts = async () => {
   try {
     const contacts = await contactList();
     return contacts;
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -22,8 +22,8 @@ const getContactById = async (contactId) => {
     const contacts = await contactList();
     const contactById = contacts.find((contact) => contact.id === contactId);
     return contactById;
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -35,8 +35,8 @@ const addContact = async (body) => {
     const newListContacts = [...contacts, newContact];
     await fs.writeFile(contactsPath, JSON.stringify(newListContacts));
     return newListContacts;
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -47,8 +47,8 @@ const updateContact = async (contactId, body) => {
     contacts[index] = { ...contacts[index], ...body };
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
     return contacts[index] ? contacts : null;
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
@@ -58,8 +58,8 @@ const removeContact = async (contactId) => {
     const contactsList = contacts.filter((contact) => contact.id !== contactId);
     await fs.writeFile(contactsPath, JSON.stringify(contactsList));
     return contactsList;
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
