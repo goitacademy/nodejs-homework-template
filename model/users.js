@@ -20,8 +20,8 @@ const updateToken = async (id, token) => {
 const updateSubscription = async (id, subscription ) => {
     return await Users.findByIdAndUpdate(id, { subscription }, { new: true })
 }
-const updateAvatar = async (id, avatarURL) => {
-    return await Users.findByIdAndUpdate( id, { avatarURL }, { new: true })
+const updateAvatar = async (id, avatarURL, idCloudAvatar = null) => {
+    return await Users.findByIdAndUpdate( id, { avatarURL, idCloudAvatar }, { new: true })
 }
 
 module.exports = {

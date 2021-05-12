@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const Users = require('../model/users')
 const httpCode = require('../helpers/httpCode')
-const saveUserAvatar = require('../helpers/saveUserAvatar')
+const {saveUserAvatar, saveUserAvatarToCloud} = require('../helpers/saveUserAvatar')
 require('dotenv').config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
@@ -116,6 +116,21 @@ const updateAvatar = async (req, res, next) => {
     next(error)
   }
 }
+const updateCloudAvatar = async (req, res, next) => {
+  try {
+    const { id, email, subscription } = req.user
+    const { idCloudAvatar, avatarURL } = await saveUserAvatarToCloud(req)
+    await Users.updateAvatar(id, avatarURL, idCloudAvatar)
+
+    return res.status(httpCode.OK).json({
+      status: 'success',
+      code: httpCode.OK,
+      data: { email, subscription, avatarURL, idCloudAvatar }
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 
 module.exports = {
   signupUser,
@@ -124,4 +139,5 @@ module.exports = {
   getCurrentUser,
   updateSubscriptionUser,
   updateAvatar,
+  updateCloudAvatar,
 }
