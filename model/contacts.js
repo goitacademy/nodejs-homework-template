@@ -51,7 +51,7 @@ const removeContact = async (contactId) => {
     const response = await fs.readFile(contactsPath, 'utf-8')
     const parsedContacts = JSON.parse(response)
 
-    const newList = parsedContacts.filter(contact =>  contact.id !== contactId )
+    const newList = parsedContacts.filter(({ id }) => id !== Number(contactId) )
 
     await fs.writeFile(contactsPath, JSON.stringify(newList, null, 2))
 
@@ -68,10 +68,10 @@ const updateContact = async (contactId, body) => {
       const response = await fs.readFile(contactsPath, 'utf-8')
       const parsedContacts = JSON.parse(response)
 
-      const contact = parsedContacts.find(({ id }) => id === contactId)
+      const contact = parsedContacts.find(({ id }) => id === Number(contactId) )
       const record = Object.assign(contact, body)
 
-      await fs.writeFile(contactsPath, JSON.stringify(record, null, 2));
+      await fs.writeFile(contactsPath, JSON.stringify(parsedContacts, null, 2));
 
       return record.id ? record : null;
     } catch (err) {
