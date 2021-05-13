@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-// const contacts = require("./contacts.json");
 
 const contactsPath = "./model/contacts.json";
 
@@ -7,8 +6,6 @@ const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath);
     const contactsArray = JSON.parse(data.toString());
-    // const contactsArray = data.toString();
-    // console.log(`conacts array ${contactsArray}`);
     return contactsArray;
   } catch (error) {
     console.log(error.message);
@@ -17,7 +14,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
-  console.table(contacts.find((contact) => contact.id === contactId));
+  return contacts.find((contact) => contact.id === contactId);
 };
 
 const removeContact = async (contactId) => {
@@ -26,26 +23,38 @@ const removeContact = async (contactId) => {
     contactsPath,
     JSON.stringify(contacts.filter((contact) => contact.id !== contactId))
   );
+  return `Contact id=${contactId} deleted success`;
 };
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
+  // const { name, email, phone } = body;
   const contactsArray = await listContacts();
   const id =
     contactsArray.reduce((maxID, { id } = contact) => Math.max(maxID, id), 0) +
     1;
-
-  contactsArray.push({
-    id: id,
-    name: name,
-    email: email,
-    phone: phone,
-  });
-
+  body["id"] = id;
+  contactsArray.push(body);
   fs.writeFile(contactsPath, JSON.stringify(contactsArray));
+  return body;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contactsArray = await listContacts();
+  let obj = {};
+  let isUpdate = false;
+
+  const newContactArray = contactsArray.map((cont) => {
+    if (Number(contactId) === Number(cont.id)) {
+      Object.assign(obj, cont, body);
+      isUpdate = true;
+      return obj;
+    }
+    return cont;
+  });
+
+  fs.writeFile(contactsPath, JSON.stringify(newContactArray));
+  return isUpdate ? obj : null;
+};
 
 module.exports = {
   listContacts,
