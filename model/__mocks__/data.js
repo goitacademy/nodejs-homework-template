@@ -36,7 +36,7 @@ const User =
               gender: 'male',
               email: "owner-1@test2.com",
               password: "$2a$06$JRhjl4cYQDMSFwJ7EglLZeCjNoDvy2xGXumi0zlguegsVI38nHmRi",
-              // token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTEzMTE4NjRmNDNmMzA4ZGQ3NjNkMCIsImlhdCI6MTYyMDUxNDMyMSwiZXhwIjoxNjIwNTE3OTIxfQ.mmNrhEEaxYp9_EXwsQQZ3RTf3Yn5qAX133spEB6YnU4",
+              token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTEzMTE4NjRmNDNmMzA4ZGQ3NjNkMCIsImlhdCI6MTYyMDg1NjEyNSwiZXhwIjoxNjIwODU5NzI1fQ.yZEjVvrqR4OHY8djKsW4XGUnj5Y2e174JMerdK6KNXY",
               updatedAt: "2021-05-08T22:56:32.044Z",
               avatarUrl: "https://res.cloudinary.com/goitnode/image/upload/v1620514591/avatars/avatars/nnpqruzjrb4vozagg48b.jpg",
               // idCloudAvatar : "avatars/avatars/nnpqruzjrb4vozagg48b"
