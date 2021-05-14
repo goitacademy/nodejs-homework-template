@@ -87,25 +87,70 @@ const current = async (req, res, next) => {
 
 const updateAvatar = async (req, res, next) => {
     const { id } = req.user
-    const avatarUrl = await saveAvataruser(req)
+    const avatarUrl = await saveAvatarUser(req)
     await Users.updateAvatar(id, avatarUrl)
-    return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { avatarUrl } })
+    return res
+        .status(HttpCode.OK)
+        .json({ status: 'success', code: HttpCode.OK, data: { avatarUrl } })
 }
 
-const saveAvataruser = async (req) => {
+const saveAvatarUser = async (req) => {
     const FOLDER_AVATARS = process.env.FOLDER_AVATARS
     const pathFile = req.file.path
     const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
     const img = await jimp.read(pathFile)
     await img.autocrop(250, 250, jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE).writeAsync(pathFile)
-    await fs.rename(pathFile, path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar))
+    try {
+        await fs.rename(pathFile, path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar))
+    } catch (error) {
+        console.log(error.message);
+    }
+    
+    try {
+        const oldAvatar = req.user.avatar
+        if (req.user.avatar.includes(`${FOLDER_AVATARS}/`)) {
+        console.log('nene');
+        await fs.unlink(path.join(process.cwd(), 'public', oldAvatar))
+    }
+    } catch (error) {
+        console.log(error.message);
+    }
     return path.join(FOLDER_AVATARS, newNameAvatar)
 }
- 
+
+// const saveAvatarUser = async (req) => {
+//   const FOLDER_AVATARS = process.env.FOLDER_AVATARS
+//   // req.file
+//   const pathFile = req.file.path
+//   const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
+//   const img = await jimp.read(pathFile)
+//   await img
+//     .autocrop()
+//     .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE)
+//     .writeAsync(pathFile)
+//   try {
+//     await fs.rename(
+//       pathFile,
+//       path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar),
+//     )
+//   } catch (e) {
+//     console.log(e.message)
+//   }
+//     const oldAvatar = req.user.avatar
+//     console.log(req);
+//     if (req.avatarUrl.includes(`${FOLDER_AVATARS}/`)) {
+//       console.log(req);
+//     await fs.unlink(path.join(process.cwd(), 'public', oldAvatar))
+//   }
+//   return path.join(FOLDER_AVATARS, newNameAvatar)
+// }
+
+
 module.exports = {
     registration,
     login,
     logout,
     current,
     updateAvatar,
+    // saveAvataruser,
 }
