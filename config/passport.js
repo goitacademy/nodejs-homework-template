@@ -20,10 +20,7 @@ passport.use(
       if (!user.token) {
         return done(null, false);
       }
-      console.log(
-        "🚀 ~ file: passport.js ~ line 16 ~ newStrategy ~ user",
-        user
-      );
+
       return done(null, user);
     } catch (error) {
       done(error);

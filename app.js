@@ -2,18 +2,23 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+const path = require("path");
 const rateLimit = require("express-rate-limit");
 
 const { HttpCode } = require("./helpers/constants");
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
+require("dotenv").config();
 
 const app = express();
 
+const AVATARS = process.env.AVATARS;
+
+app.use(express.static(path.join(__dirname, AVATARS)));
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(helmet());
-app.use(logger(formatsLogger));
+app.get("env") !== "test" && app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json({ limit: 10000 })); //чтоб не присылали слишком большой объем инфо, и не положили сервер
 
