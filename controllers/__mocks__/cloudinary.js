@@ -1,6 +1,6 @@
-const { options } = require("joi");
+// const { options } = require("joi");
 
-module.export.v2 = {
+module.exports.v2 = {
   config: () => {},
   uploader: {
     upload: (path, options, cb) => {
