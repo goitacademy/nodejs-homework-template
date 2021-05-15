@@ -24,7 +24,10 @@ const updateSubscription = jest.fn((id, subscription) => {
 });
 
 const updateAvatar = jest.fn((id, avatar, idCloudAvatar = null) => {
-  return {};
+  const [user] = users.filter((el) => String(el._id) === String(id));
+  user.avatar = avatar;
+  user.idCloudAvatar = idCloudAvatar;
+  return user;
 });
 
 module.exports = {
