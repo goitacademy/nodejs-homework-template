@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const mongoose = require('mongoose')
 
 const addingContactSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -22,6 +23,10 @@ const updatingContactSchema = Joi.object({
   phone: Joi.string().length(10).optional(),
 })
 
+const contactUpdateFavoriteStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+})
+
 const validation = async (schema, contactObject, next) => {
   const { name, email, phone } = contactObject
   try {
@@ -41,5 +46,17 @@ module.exports = {
   },
   updateValidationContact: async (req, res, next) => {
     return await validation(updatingContactSchema, req.body, next)
+  },
+  validationUpdateContactFavoriteSatus: async (req, res, next) => {
+    return await validation(contactUpdateFavoriteStatusSchema, req.body, next)
+  },
+  validationObjectId: async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
+      return next({
+        status: 400,
+        message: 'Invalid ObjectId',
+      })
+    }
+    next()
   },
 }
