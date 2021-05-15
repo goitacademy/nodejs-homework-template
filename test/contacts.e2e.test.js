@@ -18,7 +18,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 200 status for GET: /contacts", async (done) => {
       const res = await request(app)
         .get("/api/contacts")
-        .set("Authorzation", `Bearer ${token}`); //имитация авторизации
+        .set("Authorization", `Bearer ${token}`); //имитация авторизации
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
       expect(res.body.data.contacts).toBeInstanceOf(Array);
@@ -29,7 +29,7 @@ describe("Testing the route api/contacts", () => {
       const contact = contacts[0];
       const res = await request(app)
         .get(`/api/contacts/${contact._id}`)
-        .set("Authorzation", `Bearer ${token}`); //имитация авторизации
+        .set("Authorization", `Bearer ${token}`); //имитация авторизации
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
       expect(res.body.data.contacts._id).toBeInstanceOf(contact._id);
@@ -40,7 +40,7 @@ describe("Testing the route api/contacts", () => {
       // const contact = contacts[0];
       const res = await request(app)
         .get("/api/contacts/6078b32a8ad3ab41843877e3")
-        .set("Authorzation", `Bearer ${token}`); //имитация авторизации
+        .set("Authorization", `Bearer ${token}`); //имитация авторизации
       expect(res.status).toEqual(404);
       expect(res.body).toBeDefined();
       // expect(res.body.data.contacts._id).toBeInstanceOf(contact._id);
@@ -51,7 +51,7 @@ describe("Testing the route api/contacts", () => {
       // const contact = contacts[0];
       const res = await request(app)
         .get("/api/contacts/6078b32a8ad3ab877e3")
-        .set("Authorzation", `Bearer ${token}`); //имитация авторизации
+        .set("Authorization", `Bearer ${token}`); //имитация авторизации
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
       // expect(res.body.data.contacts._id).toBeInstanceOf(contact._id);
@@ -63,7 +63,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 201 status for POST: /contacts", async (done) => {
       const res = await request(app)
         .post("/api/contacts")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send(newContact);
       expect(res.status).toEqual(201);
@@ -75,7 +75,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 400 status for POST: /contacts wrong field", async (done) => {
       const res = await request(app)
         .post("/api/contacts")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ ...newContact, test: 1 });
       expect(res.status).toEqual(400);
@@ -86,7 +86,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 400 status for POST: /contacts without field", async (done) => {
       const res = await request(app)
         .post("/api/contacts")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ age: 1 });
       expect(res.status).toEqual(400);
@@ -99,7 +99,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 200 status for PUT: /contacts/:id", async (done) => {
       const res = await request(app)
         .put(`/api/contacts/${idNewContact}`)
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ name: "test" });
       expect(res.status).toEqual(200);
@@ -111,7 +111,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 400 status for PUT: /contacts/:id wrong field", async (done) => {
       const res = await request(app)
         .put("/api/contacts/1234")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ test: 1 });
       expect(res.status).toEqual(400);
@@ -122,7 +122,7 @@ describe("Testing the route api/contacts", () => {
     test("should return 404 status for PUT: /contacts/:id ", async (done) => {
       const res = await request(app)
         .put("/api/contacts/6078b32a8ad3ab41843877e3")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ age: 1 });
       expect(res.status).toEqual(404);

@@ -2,7 +2,13 @@ const { contacts } = require("./data");
 
 const listContacts = jest.fn((userId, query) => {
   const { limit = "5", offset = "0" } = query;
-  return { contacts, total: contacts.length, limit, offset };
+  return {
+    contacts,
+    total: contacts.length,
+    limit,
+    offset,
+    page,
+  };
 });
 
 const getContactById = jest.fn((contactId, _userId) => {

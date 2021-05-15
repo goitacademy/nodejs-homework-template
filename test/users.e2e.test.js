@@ -20,7 +20,7 @@ describe("Testing the route api/users", () => {
       const buffer = await fs.readFile("./test/ironman_close_facesm.jpg");
       const res = await request(app)
         .patch("/api/users/avatars")
-        .set("Authorzation", `Bearer ${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .attach("avatar", buffer, "ironman_close_facesm.jpg");
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
