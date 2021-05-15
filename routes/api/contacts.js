@@ -1,114 +1,153 @@
 const express = require('express')
 const router = express.Router()
-const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../model')
-const validate = require('../../validation')
+const { HttpCode } = require('../../helpers/constants')
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updateStatusContact,
+} = require('../../model/index')
+const {
+  validateCreateContact,
+  validateUpdateContact,
+  validateUpdateStatus,
+} = require('../../validation/validate-contacts')
 
 router.get('/', async (req, res, next) => {
   try {
-    const allContacts = await listContacts()
-    return res.json({
+    const contacts = await listContacts()
+    res.status(HttpCode.OK).json({
       status: 'success',
-      code: 200,
-      data: {
-        allContacts
-      },
+      code: HttpCode.OK,
+      data: { contacts },
     })
-  } catch (err) {
-    next(err)
+  } catch (e) {
+    next(e)
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
   try {
     const contact = await getContactById(req.params.contactId)
+    console.log(req.params.contactId)
+    console.log(contact)
     if (contact) {
-      return res.json({
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
-        data: {
-          contact
-        },
+        code: HttpCode.OK,
+        data: { contact },
       })
     } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
+      return next({
+        status: HttpCode.NOT_FOUND,
+        message: 'Not found',
         data: 'Not found',
       })
     }
-  } catch (err) {
-    next(err)
+  } catch (e) {
+    next(e)
   }
 })
 
-router.post('/', validate.createContact, async (req, res, next) => {
+router.post('/', validateCreateContact, async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body
-    await addContact(name, email, phone)
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: {
-        name,
-        email,
-        phone
-      },
-    })
-  } catch (err) {
-    next(err)
+    const contact = await addContact(req.body)
+    if (contact) {
+      return res.status(HttpCode.CREATED).json({
+        status: 'success',
+        code: HttpCode.CREATED,
+        data: { contact },
+      })
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message: 'missing required name field',
+      })
+    }
+  } catch (e) {
+    next(e)
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const id = await removeContact(req.params.contactId)
-    if (id) {
-      res.status(200).json({
+    const contact = await removeContact(req.params.contactId)
+    if (contact) {
+      return res.status(HttpCode.OK).json({
         status: 'success',
-        code: 200,
         message: 'contact deleted',
+        code: HttpCode.OK,
+        data: { contact },
       })
     } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
+      return next({
+        status: HttpCode.NOT_FOUND,
+        message: 'Not found',
         data: 'Not found',
       })
     }
-  } catch (err) {
-    next(err)
+  } catch (e) {
+    next(e)
   }
 })
 
-router.patch('/:contactId', validate.updateContact, async (req, res, next) => {
+router.patch('/:contactId', validateUpdateContact, async (req, res, next) => {
   try {
-    if (req.body) {
-      const contact = await updateContact(req.params.contactId, req.body)
-      if (contact) {
-        res.status(200).json({
-          status: 'success',
-          code: 200,
-          data: {
-            contact
-          },
-        })
-      } else {
-        return res.status(404).json({
-          status: 'error',
-          code: 404,
-          data: 'Not found',
-        })
-      }
+    const contact = await updateContact(req.params.contactId, req.body)
+    if (contact) {
+      return res.status(HttpCode.OK).json({
+        status: 'success',
+        code: HttpCode.OK,
+        data: { contact },
+      })
     } else {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: 'missing fields'
+      return next({
+        status: HttpCode.NOT_FOUND,
+        message: 'Not found',
+        data: 'Not found',
       })
     }
-  } catch (err) {
-    next(err)
+  } catch (e) {
+    next(e)
   }
 })
+
+router.patch(
+  '/:contactId/favorite',
+  validateUpdateStatus,
+  async (req, res, next) => {
+    if (Object.keys(req.body).length !== 0) {
+      try {
+        const contact = await updateStatusContact(
+          req.params.contactId,
+          req.body
+        )
+        if (contact) {
+          return res.status(HttpCode.OK).json({
+            status: 'success',
+            code: HttpCode.OK,
+            data: { contact },
+          })
+        } else {
+          return next({
+            status: HttpCode.NOT_FOUND,
+            message: 'Not found',
+            data: 'Not found',
+          })
+        }
+      } catch (e) {
+        next(e)
+      }
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message: 'missing field favorite',
+        data: 'missing field favorite',
+      })
+    }
+  }
+)
 
 module.exports = router
