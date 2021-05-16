@@ -18,7 +18,7 @@ const validate = async (schema, body, next) => {
     next();
   } catch (error) {
     console.log(error.message);
-    next(error.message);
+    next({ status: 400, message: `Filed: ${error.message.replace(/"/g, "")}` });
   }
 };
 
