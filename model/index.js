@@ -1,20 +1,41 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const { Command } = require('commander')
+const operations = require('./contacts.js')
+const program = new Command()
+program
+  .option('-a, --action <type>', 'choose action')
+  .option('-i, --id <type>', 'user id')
+  .option('-n, --name <type>', 'user name')
+  .option('-e, --email <type>', 'user email')
+  .option('-p, --phone <type>', 'user phone')
 
-const listContacts = async () => {}
+program.parse(process.argv)
 
-const getContactById = async (contactId) => {}
+const argv = program.opts()
 
-const removeContact = async (contactId) => {}
+// TODO: рефакторить
+function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case 'list':
+      operations.listContacts().then((contacts) => console.table(contacts))
+      break
 
-const addContact = async (body) => {}
+    case 'get':
+      operations.getContactById(id).then((contact) => console.table(contact))
+      break
 
-const updateContact = async (contactId, body) => {}
+    case 'add':
+      operations
+        .addContact(name, email, phone)
+        .then((result) => console.table(result))
+      break
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+    case 'remove':
+      operations.removeContact(id).then((result) => console.table(result))
+      break
+
+    default:
+      console.warn('\x1B[31m Unknown action type!')
+  }
 }
+
+invokeAction(argv)
