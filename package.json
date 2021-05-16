@@ -11,8 +11,11 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^9.0.2",
     "express": "4.17.1",
     "joi": "^17.4.0",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.9",
     "morgan": "1.10.0",
     "uuidv4": "^6.2.7"
   },
