@@ -7,7 +7,6 @@ const schemaValidateContact = Joi.object({
   favorite: Joi.boolean(),
 });
 
-
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
   if (error) {
