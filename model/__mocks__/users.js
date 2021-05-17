@@ -7,7 +7,6 @@ const findByEmail = jest.fn((email) => {
 
 const findById = jest.fn((id) => {
   const [user] = users.filter((el) => String(el._id) === String(id));
-  console.log(user);
   return user;
 });
 

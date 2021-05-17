@@ -7,7 +7,7 @@ const listContacts = jest.fn((userId, query) => {
     total: contacts.length,
     limit,
     offset,
-    page,
+    // page,
   };
 });
 
@@ -15,15 +15,18 @@ const getContactById = jest.fn((contactId, _userId) => {
   const [contact] = contacts.filter(
     (el) => String(el._id) === String(contactId)
   );
+
   return contact;
 });
 
 const addContact = jest.fn((body) => {
+  console.log("🚀 ~ file: contacts.js ~ line 23 ~ addContact ~ body", body);
+
   const newContact = contacts.push({
     ...body,
     _id: "608720b609a09914684fc62d",
   });
-
+  console.log(newContact);
   return newContact;
 });
 
