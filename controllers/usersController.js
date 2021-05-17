@@ -1,5 +1,10 @@
+const fs = require('fs/promises');
+const path = require('path');
 const jwt = require('jsonwebtoken');
+// const User = require('../model/schemas/user');
 const Users = require('../model/userModel');
+const jimp = require('jimp');
+
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET;
 const reg = async (req, res, next) => {
@@ -18,6 +23,7 @@ const reg = async (req, res, next) => {
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatarURL,
       },
     });
   } catch (e) {
@@ -71,9 +77,40 @@ const current = async (req, res, next) => {
   });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const { id } = req.user;
+  const urlAvatar = await saveUserAvatar(req);
+  await Users.updateAvatar(id, urlAvatar);
+  return res.status(200).json({
+    avatarURL: urlAvatar,
+  });
+};
+
+const saveUserAvatar = async (req) => {
+  const FOLDER_AVATARS = process.env.FOLDER_AVATARS;
+  const pathFile = req.file.path;
+  const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`;
+  const img = await jimp.read(pathFile);
+  await img
+    .autocrop()
+    .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(pathFile);
+  try {
+    await fs.rename(
+      pathFile,
+      path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar)
+    );
+  } catch (e) {
+    console.log(e.massage);
+  }
+
+  return path.join(FOLDER_AVATARS, newNameAvatar).replace('\\', '/');
+};
+
 module.exports = {
   reg,
   login,
   logout,
   current,
+  updateAvatar,
 };
