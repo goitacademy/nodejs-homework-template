@@ -1,83 +1,54 @@
-const fs = require('fs/promises')
-const path = require('path')
-const contactsPath = path.join('./model/contacts.json')
-const {v4: uuid} = require('uuid')
+const db = require('./db');
+const { ObjectId } = require('mongodb');
+
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
+};
 
 const listContacts = async () => {
-  try {
-      const response = await fs.readFile(contactsPath, 'utf-8')
-      const contacts = JSON.parse(response)
-      return contacts
-    } catch (err) {
-      console.error(err.message)
-    }
-}
+  const collection = await getCollection(db, 'contacts');
+  const results = collection.find({}).toArray();
+  return results;
+};
 
-const addContact = async (body) => {
-  try {
-    const id = uuid()
+const getContactById = async contactId => {
+  const collection = await getCollection(db, 'contacts');
+  const [result] = await collection
+    .find({ _id: new ObjectId(contactId) })
+    .toArray();
+  return result;
+};
 
-    const record = {
-      id,
-      ...body,
-    }
-    const response = await fs.readFile(contactsPath, 'utf-8')
-    const parsedContacts = JSON.parse(response)
-    parsedContacts.push(record)
-    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts, null, 2))
-    return record
-  } catch (err) {
-    console.error(err.message)
-  }
-}
+const addContact = async body => {
+  const collection = await getCollection(db, 'contacts');
+  const record = { ...body };
+  const {
+    ops: [result],
+  } = await collection.insertOne(record);
+  return result;
+};
 
-const getContactById = async (contactId) => {
-    try {
-    const response = await fs.readFile(contactsPath, 'utf-8')
-    const parsedContacts = JSON.parse(response)
-
-    const contact =  parsedContacts.find(({ id }) => id === Number(contactId))
-    
-    return contact
-
-  } catch (err) {
-    console.error(err.message)
-  }
-}
-
-
-const removeContact = async (contactId) => {
-  try {
-    const response = await fs.readFile(contactsPath, 'utf-8')
-    const parsedContacts = JSON.parse(response)
-
-    const newList = parsedContacts.filter(({ id }) => id !== Number(contactId) )
-
-    await fs.writeFile(contactsPath, JSON.stringify(newList, null, 2))
-
-    return newList
-
-  } catch (err) {
-    console.error(err.message)
-  }
-}
-
+const removeContact = async contactId => {
+  const collection = await getCollection(db, 'contacts');
+  const { value: result } = await collection.findOneAndDelete({
+    _id: new ObjectId(contactId),
+  });
+  return result;
+};
 
 const updateContact = async (contactId, body) => {
-  try {
-      const response = await fs.readFile(contactsPath, 'utf-8')
-      const parsedContacts = JSON.parse(response)
-
-      const contact = parsedContacts.find(({ id }) => id === Number(contactId) )
-      const record = Object.assign(contact, body)
-
-      await fs.writeFile(contactsPath, JSON.stringify(parsedContacts, null, 2));
-
-      return record.id ? record : null;
-    } catch (err) {
-      console.error(err.message)
-    }
-}
+  const collection = await getCollection(db, 'contacts');
+  const { value: result } = await collection.findOneAndUpdate(
+    {
+      _id: new ObjectId(contactId),
+    },
+    { $set: body },
+    { returnOriginal: false },
+  );
+  return result;
+};
 
 module.exports = {
   listContacts,
@@ -85,4 +56,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
