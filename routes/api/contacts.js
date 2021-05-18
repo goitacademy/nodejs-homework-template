@@ -18,29 +18,6 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 })
 
-// async function validateId (req, res, next) {
-//   const id = req.params.id;
-//   const client = await new MongoClient(uriDB, {
-//     useUnifiedTopology: true,
-//   }).connect()
-//   try {
-    
-//   } catch (e) {
-//     console.error(e);
-//     next(e);
-//   } finally {
-//     client.close();
-//   }
-//   const contact = contacts.findById(id);
-
-//   if (contact) {
-//     req.contact = contact;
-//     next();
-//   } else {
-//     res.status(404).json({message: "Id not found."})
-//   }
-// }
-
 router.get('/', async (req, res, next) => {
   const client = await new MongoClient(uriDB, {
   useUnifiedTopology: true,
@@ -172,19 +149,18 @@ router.patch('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId/favorite', async (req, res, next) => {
   const id = req.params.contactId;
-  const { name, email, phone } = req.body;
+  const { favorite } = req.body;
   const client = await new MongoClient(uriDB, {
     useUnifiedTopology: true,
   }).connect();
   try {
-    await schema.validateAsync(req.body);
     const objectId = new ObjectID(id);
     const { value: result } = await client
       .db('db-contacts')
       .collection('contacts')
       .findOneAndUpdate(
         { _id: objectId },
-        { $set: { name, email, phone } },
+        { $set: { favorite} },
         { returnOriginal: false },
     )
     res.json({
