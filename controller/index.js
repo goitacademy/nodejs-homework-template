@@ -1,10 +1,9 @@
 const Contacts = require("../model/contacts");
 
-
 const listContacts = async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();
-    return res.json({
+    res.json({
       status: "success",
       code: 200,
       message: "Contacts found",
@@ -21,7 +20,7 @@ const getContactById = async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.contactId);
     if (contact) {
-      return res.json({
+      res.json({
         status: "success",
         code: 200,
         message: "Contact found",
@@ -30,7 +29,7 @@ const getContactById = async (req, res, next) => {
         },
       });
     } else {
-      return res.status(404).json({
+      res.status(404).json({
         status: "error",
         code: 404,
         message: "Not Found",
@@ -44,7 +43,7 @@ const getContactById = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
-    return res.status(201).json({
+    res.status(201).json({
       status: "success",
       code: 201,
       message: "Contact created",
@@ -60,7 +59,7 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
+      res.status(400).json({
         status: "error",
         code: 400,
         message: "Bad request. Enter what to change",
@@ -71,7 +70,7 @@ const updateContact = async (req, res, next) => {
       req.body
     );
     if (contact) {
-      return res.json({
+      res.json({
         status: "success",
         code: 200,
         message: "Contact updated",
@@ -80,7 +79,7 @@ const updateContact = async (req, res, next) => {
         },
       });
     } else {
-      return res.status(404).json({
+      res.status(404).json({
         status: "error",
         code: 404,
         message: "Not Found",
@@ -98,7 +97,7 @@ const updateStatusContact = async (req, res, next) => {
       req.body
     );
     if (contact) {
-      return res.json({
+      res.json({
         status: "success",
         code: 200,
         message: "Contact updated",
@@ -107,7 +106,7 @@ const updateStatusContact = async (req, res, next) => {
         },
       });
     } else {
-      return res.status(404).json({
+      res.status(404).json({
         status: "error",
         code: 404,
         message: "Not Found",
@@ -122,7 +121,7 @@ const removeContact = async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.contactId);
     if (contact) {
-      return res.json({
+      res.json({
         status: "success",
         code: 200,
         message: "Contact deleted",
@@ -131,7 +130,7 @@ const removeContact = async (req, res, next) => {
         },
       });
     } else {
-      return res.status(404).json({
+      res.status(404).json({
         status: "error",
         code: 404,
         message: "Not Found",
