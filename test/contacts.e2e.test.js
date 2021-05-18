@@ -55,6 +55,7 @@ describe("Testing the route api/contacts", () => {
         .set("Authorization", `Bearer ${token}`); //имитация авторизации
       expect(res.status).toEqual(400);
       expect(res.body).toBeDefined();
+
       // expect(res.body.data.contacts._id).toBeInstanceOf(contact._id);
       done();
     });
@@ -96,22 +97,25 @@ describe("Testing the route api/contacts", () => {
     });
   });
 
-  describe("should handle PUT request", () => {
-    test("should return 200 status for PUT: /contacts/:id", async (done) => {
+  describe("should handle PATCH request", () => {
+    test("should return 200 status for PATCH: /contacts/:id", async (done) => {
       const res = await request(app)
-        .put(`/api/contacts/${idNewContact}`)
+        .patch(`/api/contacts/${idNewContact}`)
         .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ name: "test" });
+
       expect(res.status).toEqual(200);
       expect(res.body).toBeDefined();
+
       expect(res.body.data.contact.name).toBe("test");
+
       done();
     });
 
-    test("should return 400 status for PUT: /contacts/:id wrong field", async (done) => {
+    test("should return 400 status for PATCH: /contacts/:id wrong field", async (done) => {
       const res = await request(app)
-        .put("/api/contacts/1234")
+        .patch("/api/contacts/1234")
         .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
         .send({ test: 1 });
@@ -120,14 +124,18 @@ describe("Testing the route api/contacts", () => {
       done();
     });
 
-    test("should return 404 status for PUT: /contacts/:id ", async (done) => {
+    test("should return 404 status for PATCH: /contacts/:id wrong id", async (done) => {
       const res = await request(app)
-        .put("/api/contacts/6078b32a8ad3ab41843877e3")
+        .patch("/api/contacts/1234")
         .set("Authorization", `Bearer ${token}`)
         .set("Accept", "application/json") //обозначаем, в каком формате уйдет на сервер
-        .send({ age: 1 });
+        .send({ name: "test" });
       expect(res.status).toEqual(404);
       expect(res.body).toBeDefined();
+      console.log(
+        "🚀 ~ file: contacts.e2e.test.js ~ line 135 ~ test ~ res.body",
+        res.body
+      );
       done();
     });
   });

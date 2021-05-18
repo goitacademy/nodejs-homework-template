@@ -20,20 +20,19 @@ const getContactById = jest.fn((contactId, _userId) => {
 });
 
 const addContact = jest.fn((body) => {
-  console.log("🚀 ~ file: contacts.js ~ line 23 ~ addContact ~ body", body);
-
-  const newContact = contacts.push({
+  contacts.push({
     ...body,
     _id: "608720b609a09914684fc62d",
   });
-  console.log(newContact);
-  return newContact;
+
+  return {
+    ...body,
+    _id: "608720b609a09914684fc62d",
+  };
 });
 
 const updateContact = jest.fn((contactId, body, userId) => {
-  const [contact] = contacts.filter(
-    (el) => String(el._id) === String(contactId)
-  );
+  let [contact] = contacts.filter((el) => String(el._id) === String(contactId));
 
   if (contact) {
     contact = { ...contact, ...body };
