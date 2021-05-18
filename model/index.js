@@ -84,6 +84,14 @@ const updateContact = async (contactId, body) => {
   }
 }
 
+const findById = async (contactId) => {
+  try {
+    
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 module.exports = {
   listContacts,
   getContactById,

@@ -18,6 +18,29 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 })
 
+// async function validateId (req, res, next) {
+//   const id = req.params.id;
+//   const client = await new MongoClient(uriDB, {
+//     useUnifiedTopology: true,
+//   }).connect()
+//   try {
+    
+//   } catch (e) {
+//     console.error(e);
+//     next(e);
+//   } finally {
+//     client.close();
+//   }
+//   const contact = contacts.findById(id);
+
+//   if (contact) {
+//     req.contact = contact;
+//     next();
+//   } else {
+//     res.status(404).json({message: "Id not found."})
+//   }
+// }
+
 router.get('/', async (req, res, next) => {
   const client = await new MongoClient(uriDB, {
   useUnifiedTopology: true,
@@ -67,68 +90,113 @@ router.get(`/:contactId`, async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  const client = await new MongoClient(uriDB, {
+    useUnifiedTopology: true,
+  }).connect()
   try {
-    await schema.validateAsync(req.body);
-    res.json({
-      status: "success",
+    const {
+      ops: [result],
+    } = await client
+      .db('db-contacts')
+      .collection('contacts')
+      .insertOne({ name, email, phone })
+    res.status(201).json({
+      status: 'success',
       code: 201,
-      data: await contacts.addContact(req.body),
+      data: result,
     })
-  }catch (error) {
-    res.json({
-      status: "fail",
-      code: 400,
-      error: error.message,
-    })
-    next(error);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  } finally {
+    await client.close();
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
+  const id = req['params']['contactId'];
+  const client = await new MongoClient(uriDB, {
+    useUnifiedTopology: true,
+  }).connect();
   try {
-    if (await contacts.getContactById(req.params['contactId']) === undefined ){
-      res.json({
-        status: "error",
-        code: 404,
-        message: 'Not found',
-      })
-    }
+    const objectId = new ObjectID(id);
+    const { value: result } = await client
+    .db('db-contacts')
+    .collection('contacts')
+    .findOneAndDelete({ _id: objectId })
     res.json({
-      message: "contact deleted",
-      status: "success",
+      status: 'success',
       code: 200,
-      data: await contacts.removeContact(req.params['contactId']),
+      data: result,
     })
-  } catch (error) {
-    console.log(error);
-    next(error);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  } finally {
+    await client.close();
   }
 })
 
 router.patch('/:contactId', async (req, res, next) => {
+  const id = req.params.contactId;
+  const { name, email, phone } = req.body;
+  const client = await new MongoClient(uriDB, {
+    useUnifiedTopology: true,
+  }).connect();
   try {
-    if (await contacts.getContactById(req.params['contactId']) === undefined) {
-      res.json({
-        status: "error",
-        code: 404,
-        message: "ID Not Found",
-      })
-    }
     await schema.validateAsync(req.body);
-    console.log(req.params['contactId'], req.body);
+    const objectId = new ObjectID(id);
+    const { value: result } = await client
+      .db('db-contacts')
+      .collection('contacts')
+      .findOneAndUpdate(
+        { _id: objectId },
+        { $set: { name, email, phone } },
+        { returnOriginal: false },
+    )
     res.json({
-      message: "contact updated",
-      status: "success",
+      status: 'success',
       code: 200,
-      data: await contacts.updateContact(req.params['contactId'], req.body),
+      data: result,
     })
-  } catch (error) {
+  } catch (e) {
+    console.error(e);
+    next(e);
+  } finally {
+    await client.close();
+  }
+})
+
+
+
+router.put('/:contactId/favorite', async (req, res, next) => {
+  const id = req.params.contactId;
+  const { name, email, phone } = req.body;
+  const client = await new MongoClient(uriDB, {
+    useUnifiedTopology: true,
+  }).connect();
+  try {
+    await schema.validateAsync(req.body);
+    const objectId = new ObjectID(id);
+    const { value: result } = await client
+      .db('db-contacts')
+      .collection('contacts')
+      .findOneAndUpdate(
+        { _id: objectId },
+        { $set: { name, email, phone } },
+        { returnOriginal: false },
+    )
     res.json({
-      status: "fail",
-      code: 400,
-      error: error.message,
+      status: 'success',
+      code: 200,
+      data: result,
     })
-    next(error);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  } finally {
+    await client.close();
   }
 })
 
