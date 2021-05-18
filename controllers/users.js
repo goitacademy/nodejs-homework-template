@@ -2,14 +2,14 @@ const Users = require('../model/users')
 const { HttpCode } = require('../helper/constants')
 const jwt = require('jsonwebtoken')
 const jimp = require('jimp')
+const EmailService = require('../services/email')
 const fs = require('fs/promises')
 const path = require('path')
 require('dotenv').config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
  
 const registration = async (req, res, next) => {
-    const { email } = req.body
-    const user = await Users.findEmail(email)
+    const user = await Users.findEmail(req.body.email)
     if (user) {
         return res.status(HttpCode.CONFLICT).json({
             status: 'error',
@@ -19,6 +19,11 @@ const registration = async (req, res, next) => {
     }
     try {
         const newUser = await Users.createUser(req.body)
+        // const {email, }
+
+
+
+
         return res.status(HttpCode.CREATED).json({
             status: 'succes',
             code: HttpCode.CREATED,
@@ -118,33 +123,8 @@ const saveAvatarUser = async (req) => {
     return path.join(FOLDER_AVATARS, newNameAvatar)
 }
 
-// const saveAvatarUser = async (req) => {
-//   const FOLDER_AVATARS = process.env.FOLDER_AVATARS
-//   // req.file
-//   const pathFile = req.file.path
-//   const newNameAvatar = `${Date.now().toString()}-${req.file.originalname}`
-//   const img = await jimp.read(pathFile)
-//   await img
-//     .autocrop()
-//     .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE)
-//     .writeAsync(pathFile)
-//   try {
-//     await fs.rename(
-//       pathFile,
-//       path.join(process.cwd(), 'public', FOLDER_AVATARS, newNameAvatar),
-//     )
-//   } catch (e) {
-//     console.log(e.message)
-//   }
-//     const oldAvatar = req.user.avatar
-//     console.log(req);
-//     if (req.avatarUrl.includes(`${FOLDER_AVATARS}/`)) {
-//       console.log(req);
-//     await fs.unlink(path.join(process.cwd(), 'public', oldAvatar))
-//   }
-//   return path.join(FOLDER_AVATARS, newNameAvatar)
-// }
-
+const verify = async (req, res, next) => { }
+const repeatEmailVerify = async (req, res, next) => {} 
 
 module.exports = {
     registration,
@@ -152,5 +132,7 @@ module.exports = {
     logout,
     current,
     updateAvatar,
+    verify,
+    repeatEmailVerify,
     // saveAvataruser,
 }
