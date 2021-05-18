@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Contacts = require("../../model/contacts");
+const Contacts = require("../../../model/contacts");
 // const Contact = require("../../model/schemas/contact");
 
 const {
