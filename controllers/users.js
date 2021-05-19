@@ -10,6 +10,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
  
 const registration = async (req, res, next) => {
     const user = await Users.findEmail(req.body.email)
+    
     if (user) {
         return res.status(HttpCode.CONFLICT).json({
             status: 'error',
@@ -17,12 +18,17 @@ const registration = async (req, res, next) => {
             message:'Email is already use'
         })
     }
+
     try {
         const newUser = await Users.createUser(req.body)
-        // const {email, }
-
-
-
+        const { id, email, subscription, avatar, verifyTokenEmail } = newUser
+        
+        try {
+            const emailService = new EmailService(process.env.NODE_ENV)
+            await emailService.sendVerifyEmail(verifyTokenEmail, email)
+        } catch (e) {
+            console.log(e.message);
+        }
 
         return res.status(HttpCode.CREATED).json({
             status: 'succes',
@@ -44,7 +50,7 @@ const login = async (req, res, next) => {
     const user = await Users.findEmail(email)
     const isValidPassword = await user?.validPassword(password)
 
-    if (!user || !isValidPassword) {
+    if (!user || !isValidPassword || !user.verify) {
         return res.status(HttpCode.UNAUTHORIZED).json({
             status: 'error',
             code: HttpCode.UNAUTHORIZED,
@@ -85,6 +91,7 @@ const current = async (req, res, next) => {
         data: {
             email: user.email,
             subscription: user.subscription,
+            verify: user.verify,
         }
     })
    
@@ -123,8 +130,47 @@ const saveAvatarUser = async (req) => {
     return path.join(FOLDER_AVATARS, newNameAvatar)
 }
 
-const verify = async (req, res, next) => { }
-const repeatEmailVerify = async (req, res, next) => {} 
+const verify = async (req, res, next) => {
+    try {
+        const user = await Users.findByVerifyTokenEmail(req.params.token)
+        if (user) {
+            return res.status(HttpCode.OK).json({
+                status: 'succes',
+                code: HttpCode.OK,
+                data: { message: 'Verification saccessful' }
+            })
+        }
+        return res.status(HttpCode.BAD_REQUEST).json({
+        status: 'error',
+        code: HttpCode.BAD_REQUEST,
+        message: 'Invalid token. Contact to administration'
+    })
+    } catch (error) {
+        next(error)
+    }
+ }
+const repeatEmailVerify = async (req, res, next) => {
+    try {
+        const user = await Users.findEmail(req.params.token)
+        if (user) {
+            const { email, verifyTokenEmail } = user
+            const emailService = new EmailService(process.env.NODE_ENV)
+            await emailService.sendVerifyEmail(verifyTokenEmail, email)
+            return res.status(HttpCode.OK).json({
+            status: 'succes',
+            code: HttpCode.OK,
+            data: { message:'Verification email resubmited' }
+        })
+        }
+        return res.status(HttpCode.NOT_FOUND).json({
+        status: 'error',
+        code: HttpCode.NOT_FOUND,
+        message: 'User not found'
+    })
+    } catch (error) {
+        next(error)
+    }
+} 
 
 module.exports = {
     registration,
