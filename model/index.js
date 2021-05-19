@@ -7,6 +7,7 @@ const contactsPath = path.join(__dirname, json);
 const Joi = require('joi');
 
 
+
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath, 'utf8');
@@ -82,6 +83,37 @@ const updateContact = async (contactId, body) => {
     console.log(error);
   }
 }
+
+const findById = async (contactId) => {
+  try {
+    
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+// async function validateId (req, res, next) {
+//   const id = req.params.id;
+//   const client = await new MongoClient(uriDB, {
+//     useUnifiedTopology: true,
+//   }).connect()
+//   try {
+    
+//   } catch (e) {
+//     console.error(e);
+//     next(e);
+//   } finally {
+//     client.close();
+//   }
+//   const contact = contacts.findById(id);
+
+//   if (contact) {
+//     req.contact = contact;
+//     next();
+//   } else {
+//     res.status(404).json({message: "Id not found."})
+//   }
+// }
 
 module.exports = {
   listContacts,
