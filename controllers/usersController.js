@@ -1,29 +1,36 @@
 const fs = require('fs/promises');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-// const User = require('../model/schemas/user');
 const Users = require('../model/userModel');
 const jimp = require('jimp');
 
 require('dotenv').config();
+const EmailServices = require('../services/email');
+// const User = require('../model/schemas/user');
 const SECRET_KEY = process.env.JWT_SECRET;
-const reg = async (req, res, next) => {
+const registration = async (req, res, next) => {
+  const user = await Users.findByEmail(req.body.email);
+  if (user) {
+    return res.status(409).json({
+      message: 'Email in use',
+    });
+  }
   try {
-    const { email } = req.body;
-    const user = await Users.findByEmail(email);
-    if (user) {
-      return res.status(409).json({
-        message: 'Email in use',
-      });
-    }
     const newUser = await Users.create(req.body);
+    const { email, avatarURL, subscription, verifyTokenEmail } = newUser;
+    try {
+      const emailServices = new EmailServices(process.env.NODE_ENV);
+      await emailServices.sendVerifyUser(verifyTokenEmail, email);
+    } catch (e) {
+      console.log(e.message);
+    }
     return res.status(201).json({
       status: 'success',
       code: 201,
       user: {
-        email: newUser.email,
-        subscription: newUser.subscription,
-        avatar: newUser.avatarURL,
+        email,
+        subscription,
+        avatar: avatarURL,
       },
     });
   } catch (e) {
@@ -37,7 +44,7 @@ const login = async (req, res, next) => {
     const user = await Users.findByEmail(email);
     const isValidPassword = await user?.validPassword(password);
     console.log(isValidPassword);
-    if (!user || !isValidPassword) {
+    if (!user || !isValidPassword || !user.verify) {
       return res.status(401).json({
         message: 'Email or password is wrong',
       });
@@ -107,10 +114,53 @@ const saveUserAvatar = async (req) => {
   return path.join(FOLDER_AVATARS, newNameAvatar).replace('\\', '/');
 };
 
+const verify = async (req, res, next) => {
+  try {
+    const user = await Users.findByVerifyTokenEmail(req.params.token);
+    if (user) {
+      await Users.updateTokenVerify(user.id, true, null);
+      return res.status(200).json({
+        message: 'Verification successful',
+      });
+    }
+    return res.status(404).json({
+      message: 'User not found',
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const repeatEmailVerify = async (req, res, next) => {
+  try {
+    const user = await Users.findByEmail(req.body.email);
+    if (user && !user.verify) {
+      const { email, verifyTokenEmail } = user;
+      const emailServices = new EmailServices(process.env.NODE_ENV);
+      await emailServices.sendVerifyUser(verifyTokenEmail, email);
+      return res.status(200).json({
+        message: 'Verification email sent',
+      });
+    }
+    if (user && user.verify) {
+      return res.status(400).json({
+        message: 'Verification has already been passed',
+      });
+    }
+    return res.status(404).json({
+      message: 'User not found',
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
-  reg,
+  registration,
   login,
   logout,
   current,
   updateAvatar,
+  verify,
+  repeatEmailVerify,
 };
