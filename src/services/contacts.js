@@ -9,7 +9,6 @@ class ContactsService {
 
   listContacts() {
     const data = this.repositories.contacts.listContacts();
-    console.log(data);
     return data;
   }
 

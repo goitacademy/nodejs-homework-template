@@ -20,7 +20,7 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await contactsService.getContactById(req.params);
+    const contact = await contactsService.getContactById(req.params.contactId);
 
     if (contact) {
       return res.status(HttpCode.OK).json({
@@ -60,7 +60,7 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.removeContact(req.params);
+    const contact = await contactsService.removeContact(req.params.contactId);
 
     if (contact) {
       return res.status(HttpCode.OK).json({
@@ -85,7 +85,10 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.updateContact(req.params, req.body);
+    const contact = await contactsService.updateContact(
+      req.params.contactId,
+      req.body
+    );
 
     if (contact) {
       return res.status(HttpCode.OK).json({

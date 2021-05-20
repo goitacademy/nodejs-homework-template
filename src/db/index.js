@@ -7,7 +7,7 @@ const adapter = new FileSync(
 );
 
 const db = low(adapter);
-console.log(db);
+// console.log(db);
 
 db.defaults({
   contacts: [],
