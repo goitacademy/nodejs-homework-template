@@ -8,19 +8,19 @@ class EmailService {
     constructor(env) {
         switch (env) {
             case 'development':
-                this.link = 'http://lpcalhost:3000'
+                this.link = 'http://localhost:3000'
                 break;
             case 'prodaction':
-                this.link = 'kink for prodaction'
+                this.link = 'Link for prodaction'
                 break;
             default:
-                this.link = 'http://lpcalhost:3000'
+                this.link = 'http://localhost:3000'
                 break;
         }
     }
     #createTemplateVerifyEmail(veryfiToken, name) {
         const mailGenerator = new this.#GenerateTemplate({
-            theme: 'default',
+            theme: 'cerberus',
             product: {
                 name: 'Phone Contacts',
                 link: this.link,
