@@ -3,7 +3,6 @@ const db = require("../db");
 
 class ContactsReporitory {
   listContacts() {
-    console.log(db);
     return db.get("contacts").value();
   }
 
