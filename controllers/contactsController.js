@@ -81,7 +81,6 @@ const update = async (req, res, next) => {
   try {
     const userId = req.user.id;
     if (req.body) {
-      console.log("есть такое", req.body);
       const contact = await Contacts.updateContact(
         req.params.contactId,
         req.body,

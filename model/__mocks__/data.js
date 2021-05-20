@@ -1,22 +1,22 @@
 const contacts = [
   {
+    id: "6078b70a8ad3ab41843877e3",
     _id: "6078b70a8ad3ab41843877e3",
     name: "Dude",
     email: "Dude@scelerisquescelerisquedui.net",
     phone: "(435) 344-2688",
-    subscription: "free",
     password: "password",
-    owner: "607717344ea62d3244ad113a",
+    // owner: "607717344ea62d3244ad113a",
     createdAt: "2021-04-15T21:58:34.611Z",
     updatedAt: "2021-04-15T21:58:34.611Z",
   },
   {
+    id: "608720b609a09914684fc62a",
     _id: "608720b609a09914684fc62a",
     name: "test1",
     email: "test1@vestibul.co.uk",
     phone: "(777) 222-5555",
-    subscription: "premium",
-    owner: "607717344ea62d3244ad113a",
+    // owner: "607717344ea62d3244ad113a",
     createdAt: "2021-04-26T20:21:10.797Z",
     updatedAt: "2021-04-26T20:21:10.797Z",
   },
@@ -26,7 +26,7 @@ const newContact = {
   name: "new",
   email: "new@vestibul.co.uk",
   phone: "(777) 222-5555",
-  subscription: "premium",
+  favorite: "false",
 };
 
 const User = {
