@@ -8,6 +8,10 @@ const findById = async (id) => {
   return await User.findOne({ _id: id });
 };
 
+const findByVeryfyTokenEmail = async (token) => {
+  return await User.findOne({ VeryfyTokenEmail: token });
+};
+
 const create = async ({ email, password, subscription }) => {
   const user = new User({ email, password, subscription });
   return await user.save();
@@ -31,11 +35,20 @@ const updateAvatar = async (id, avatar, idCloudAvatar = null) => {
   return await User.updateOne({ _id: id }, { avatar, idCloudAvatar });
 };
 
+const updateVerifyToken = async (id, verify, verifyToken) => {
+  return await User.updateOne(
+    { _id: id },
+    { verify, verifyTokenEmail: verifyToken }
+  );
+};
+
 module.exports = {
   findByEmail,
-  create,
+  findByVeryfyTokenEmail,
   findById,
+  create,
   updateToken,
   updateSubscription,
   updateAvatar,
+  updateVerifyToken,
 };
