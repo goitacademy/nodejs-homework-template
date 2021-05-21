@@ -11,9 +11,8 @@ const {
 
 router.get('/api/contacts', async (req, res, next) => {
   try {
-    const contactsList = await listContacts()
-    // res.json({ message: 'template message' })
-    res.json({ message: `${contactsList}` })
+    const contacts = await listContacts()
+    res.json({ message: contacts })
   } catch (e) {
     next(e)
   }
@@ -21,8 +20,8 @@ router.get('/api/contacts', async (req, res, next) => {
 
 router.get('/api/contacts/:contactId', async (req, res, next) => {
   try {
-    const contact = await getContactById(req)
-    res.json({ message: `${contact}` })
+    const contact = await getContactById(req.params.contactId)
+    res.json({ message: contact })
   } catch (e) {
     next(e)
   }
@@ -30,8 +29,8 @@ router.get('/api/contacts/:contactId', async (req, res, next) => {
 
 router.post('/api/contacts', async (req, res, next) => {
   try {
-    const contact = addContact(req)
-    res.json({ message: `${contact}` })
+    const contact = await addContact(req.body)
+    res.json({ message: contact })
   } catch (e) {
     next(e)
   }
@@ -39,8 +38,8 @@ router.post('/api/contacts', async (req, res, next) => {
 
 router.delete('/api/contacts/:contactId', async (req, res, next) => {
   try {
-    const contactToDelete = removeContact(req)
-    res.json({ message: `${contactToDelete}` })
+    const contactToDelete = removeContact(req.params.contactId)
+    res.json({ message: contactToDelete })
   } catch (e) {
     next(e)
   }

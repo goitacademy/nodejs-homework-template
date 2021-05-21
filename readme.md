@@ -29,3 +29,10 @@
 - `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
 - `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
 - `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+
+{
+    "id": 3,
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038"
+  },
