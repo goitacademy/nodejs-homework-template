@@ -19,7 +19,7 @@ router.get('/:contactId', async (req, res, next) => {
       res.json({ status: 'success', code: 200, payload: { contacts: requestedContact } });
     }
 
-    res.json({ status: 'error', code: 404, message: 'The contact is not found.' });
+    res.status(404).json({ status: 'error', code: 404, message: 'Not found.' });
   } catch (error) {
     next(error);
   }
@@ -43,11 +43,11 @@ router.delete('/:contactId', async (req, res, next) => {
       res.json({
         status: 'success',
         code: 200,
-        message: 'The contact was deleted.',
+        message: 'Contact deleted.',
         payload: { contacts: removedContact },
       });
     }
-    res.json({ status: 'error', code: 404, message: 'The contact does not exist.' });
+    res.status(404).json({ status: 'error', code: 404, message: 'Not found.' });
   } catch (error) {
     next(error);
   }
@@ -64,24 +64,7 @@ router.put('/:contactId', async (req, res, next) => {
         payload: { contacts: updatedContact },
       });
     }
-    res.json({ status: 'error', code: 404, message: 'The contact does not exist.' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch('/:contactId/edit', async (req, res, next) => {
-  try {
-    const updatedContact = await Contacts.updateContact(req.params.contactId, req.body);
-    if (updatedContact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        message: 'The contact was updated.',
-        payload: { contacts: updatedContact },
-      });
-    }
-    res.json({ status: 'error', code: 404, message: 'The contact does not exist.' });
+    res.status(404).json({ status: 'error', code: 404, message: 'Not found.' });
   } catch (error) {
     next(error);
   }
