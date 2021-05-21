@@ -20,13 +20,11 @@ router.get("/", async (_req, res, next) => {
         data: contactsList,
       });
     } else {
-      return next(
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: "contact was not deleted",
-        })
-      );
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "contact was not deleted",
+      });
     }
   } catch (e) {
     next(e.message);
@@ -44,13 +42,11 @@ router.get("/:contactId", validatesGetContactById, async (req, res, next) => {
         data: contact,
       });
     } else {
-      return next(
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: "Not found",
-        })
-      );
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Not found",
+      });
     }
   } catch (e) {
     next(e.message);
@@ -68,13 +64,11 @@ router.post("/", validateAddContact, async (req, res, next) => {
         data: newContact,
       });
     } else {
-      return next(
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: "contact was not deleted",
-        })
-      );
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "contact was not deleted",
+      });
     }
   } catch (e) {
     next(e.message);
@@ -92,13 +86,11 @@ router.delete("/:contactId", validatesRemoveContact, async (req, res, next) => {
         message: "contact deleted",
       });
     } else {
-      return next(
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: "contact was not deleted",
-        })
-      );
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "contact was not deleted",
+      });
     }
   } catch (e) {
     next(e);
@@ -116,13 +108,11 @@ router.patch("/:contactId", validateUpdateContact, async (req, res, next) => {
         data: contact,
       });
     } else {
-      return next(
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: "contact was not deleted",
-        })
-      );
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "contact was not deleted",
+      });
     }
   } catch (e) {
     next(e.message);
