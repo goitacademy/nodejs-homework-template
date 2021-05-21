@@ -1,6 +1,6 @@
 const express = require('express');
 const Contacts = require('../../model/index');
-const { validationAddedContact, validationUpdatedContact, validationEditedContact } = require('./validation');
+const { validationAddedContact, validationUpdatedContact } = require('./validation');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -68,25 +68,6 @@ router.put('/:contactId', validationUpdatedContact, async (req, res, next) => {
       code: 200,
       message: 'Contact updated.',
       payload: updatedContact,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch('/:contactId/edit', validationEditedContact, async (req, res, next) => {
-  try {
-    const updatedContact = await Contacts.updateContact(req.params.contactId, req.body);
-
-    if (!updatedContact) {
-      return res.status(404).json({ status: 'error', code: 404, message: 'Not found.' });
-    }
-
-    return res.json({
-      status: 'success',
-      code: 200,
-      message: 'The contact was updated.',
-      payload: { contacts: updatedContact },
     });
   } catch (error) {
     next(error);

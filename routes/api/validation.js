@@ -9,14 +9,6 @@ const validateAddContact = Joi.object({
 }).or('email', 'phone');
 
 const validateUpdateContact = Joi.object({
-  name: Joi.string().trim().min(2).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
-    .required(),
-});
-
-const validateEditContact = Joi.object({
   name: Joi.string().trim().min(2).max(30).optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string()
@@ -42,8 +34,5 @@ module.exports = {
   },
   validationUpdatedContact: (req, res, next) => {
     return validate(validateUpdateContact, req.body, next);
-  },
-  validationEditedContact: (req, res, next) => {
-    return validate(validateEditContact, req.body, next);
   },
 };
