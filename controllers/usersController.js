@@ -4,10 +4,13 @@ const cloudinary = require("cloudinary").v2; //когда библиотека �
 const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 const Jimp = require("jimp");
+require("dotenv").config();
+
 const Users = require("../model/users");
+console.log("🚀 ~ file: usersController.js ~ line 10 ~ Users", Users);
 const { HttpCode } = require("../helpers/constants");
 const createFolderIsExist = require("../helpers/create-dir");
-require("dotenv").config();
+const EmailService = require("../services/email");
 const SECRET_KEY = process.env.JWT_SECRET;
 
 cloudinary.config({
@@ -20,8 +23,8 @@ const uploadToCloud = promisify(cloudinary.uploader.upload);
 
 const registration = async (req, res, next) => {
   try {
-    const { email } = req.body;
-    const user = await Users.findByEmail(email);
+    // const { email } = req.body;
+    const user = await Users.findByEmail(req.body.email);
 
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
@@ -32,14 +35,23 @@ const registration = async (req, res, next) => {
       });
     }
     const newUser = await Users.create(req.body);
+    const { id, name, email, subscription, avatar, verifyTokenEmail } = newUser;
+    //имейл сервис может сгенерировать ошибку
+    try {
+      const emailService = new EmailService(process.env.NODE_ENV);
+      await emailService.sendVerifyEmail(verifyTokenEmail, email, name);
+    } catch (error) {
+      //logger
+      console.log(e.message);
+    }
     return res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.CREATED,
       data: {
-        id: newUser.id,
-        email: newUser.email,
-        subscription: newUser.subscription,
-        avatar: newUser.avatar,
+        id,
+        email,
+        subscription,
+        avatar,
       },
     });
   } catch (e) {
@@ -53,7 +65,7 @@ const login = async (req, res, next) => {
     const user = await Users.findByEmail(email);
     const isValidPassword = await user?.validatePassword(password);
 
-    if (!user || !isValidPassword) {
+    if (!user || !isValidPassword || !user.verify) {
       return res.status(HttpCode.UNAUTHORISED).json({
         status: "error",
         code: HttpCode.UNAUTHORISED,
@@ -152,19 +164,76 @@ const saveAvatarToStatic = async (req, res, next) => {
 
 const saveAvatarToCloud = async (req, _res, _next) => {
   const pathFile = req.file.path; //от мультера берем path
-  const {
-    public_id: idCloudAvatar,
-    secure_url: avatarUrl,
-  } = await uploadToCloud(pathFile, {
-    public_id: req.user.idCloudAvatar?.replace("Avatars/", ""),
-    folder: "Avatars",
-    transformation: { width: 250, height: 250, crop: "pad" },
-  });
+  const { public_id: idCloudAvatar, secure_url: avatarUrl } =
+    await uploadToCloud(pathFile, {
+      public_id: req.user.idCloudAvatar?.replace("Avatars/", ""),
+      folder: "Avatars",
+      transformation: { width: 250, height: 250, crop: "pad" },
+    });
   await fs.unlink(pathFile);
   return { idCloudAvatar, avatarUrl };
 };
 
+const repeatEmailVerify = async (req, res, next) => {
+  try {
+    const user = await Users.findByEmail(req.body.email);
+    if (user) {
+      const { name, verifyTokenEmail, email } = user;
+      //имейл сервис может сгенерировать ошибку
+      const emailService = new EmailService(process.env.NODE_ENV);
+      await emailService.sendVerifyEmail(verifyTokenEmail, email, name);
+      return res.status(HttpCode.OK).json({
+        status: "success",
+        code: HttpCode.OK,
+        data: {
+          message: "Verification email resubmitted",
+        },
+      });
+    }
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: "error",
+      code: HttpCode.NOT_FOUND,
+      data: "User not found",
+      message:
+        "Your verification token is not valid. Please contact to administrator",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const verify = async (req, res, next) => {
+  try {
+    const user = await Users.findByVeryfyTokenEmail(req.params.token);
+    console.log(
+      "🚀 ~ file: usersController.js ~ line 211 ~ verify ~ req.params.token",
+      req.params.token
+    );
+    if (user) {
+      return res.status(HttpCode.OK).json({
+        status: "success",
+        code: HttpCode.OK,
+        data: {
+          message: "Verification successful",
+        },
+      });
+    }
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: "error",
+      code: HttpCode.BAD_REQUEST,
+      data: "bad request",
+      message: "Invalid token. Please contact to administrator",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 module.exports = {
+  repeatEmailVerify,
+  verify,
   registration,
   login,
   logout,

@@ -33,3 +33,14 @@ module.exports.createContact = (req, _res, next) => {
 module.exports.updateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next);
 };
+
+module.exports.queryMongoIdValid = (id) => (req, res, next) => {
+  const isValid = mongoose.Types.ObjectId.isValid(req.params[id]);
+  if (isValid) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Params is not valid ObjectId`,
+  });
+};

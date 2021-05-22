@@ -27,4 +27,7 @@ router.patch(
 router.post("/login", validate.login, usersController.login);
 router.post("/logout", guard, usersController.logout);
 
+router.get("/verify/:token", usersController.verify);
+router.post("/verify", usersController.repeatEmailVerify);
+
 module.exports = router;

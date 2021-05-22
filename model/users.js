@@ -12,8 +12,8 @@ const findByVeryfyTokenEmail = async (token) => {
   return await User.findOne({ VeryfyTokenEmail: token });
 };
 
-const create = async ({ email, password, subscription }) => {
-  const user = new User({ email, password, subscription });
+const create = async ({ name, email, password, subscription }) => {
+  const user = new User({ name, email, password, subscription });
   return await user.save();
 };
 

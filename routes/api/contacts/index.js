@@ -11,13 +11,19 @@ router
   .post("/", guard, validate.createContact, contactsController.create);
 
 router
-  .get("/:contactId", guard, contactsController.getById)
+  .get(
+    "/:contactId",
+    guard,
+    validate.queryMongoIdValid("contactId"),
+    contactsController.getById
+  )
 
   .delete("/:contactId", guard, contactsController.remove)
 
   .patch(
     "/:contactId",
     guard,
+    validate.queryMongoIdValid("contactId"),
     validate.updateContact,
     contactsController.update
   );
