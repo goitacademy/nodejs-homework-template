@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Contacts = require("../../model");
+const {
+  validationCreateContact,
+  validationUpdateContact,
+  validationUpdateStatusContact,
+} = require("./validation");
 // console.log(Contacts);
 router.get("/", async (req, res, next) => {
   try {
@@ -23,7 +28,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validationCreateContact, async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
     res.status(201).json({ status: "success", code: 201, data: { contact } });
@@ -44,7 +49,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", validationUpdateContact, async (req, res, next) => {
   try {
     const contact = await Contacts.updateContact(
       req.params.contactId,
@@ -58,5 +63,24 @@ router.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch(
+  "/:contactId/inArray",
+  validationUpdateStatusContact,
+  async (req, res, next) => {
+    try {
+      const contact = await Contacts.updateContact(
+        req.params.contactId,
+        req.body
+      );
+      if (contact) {
+        return res.json({ status: "success", code: 200, data: { contact } });
+      }
+      return res.json({ status: "errro", code: 404, message: "Not Found" });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

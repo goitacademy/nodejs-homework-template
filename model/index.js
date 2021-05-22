@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuid } = require("uuid");
-// const contacts = require("./contacts.json");
+
 console.log(fs);
 
 const readData = async () => {
@@ -24,12 +24,16 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const data = await readData();
-  const newData = data.filter((contact) => contact.id !== contactId);
-  await fs.writeFile(
-    path.join(__dirname, "contacts.json"),
-    JSON.stringify(newData)
-  );
-  return newData;
+  const index = data.findIndex((contact) => contact.id === contactId);
+  if (index !== -1) {
+    const result = data.splice(index, 1);
+    await fs.writeFile(
+      path.join(__dirname, "contacts.json"),
+      JSON.stringify(data)
+    );
+    return result;
+  }
+  return null;
 };
 
 const addContact = async (body) => {
@@ -37,7 +41,7 @@ const addContact = async (body) => {
   const record = {
     id,
     ...body,
-    ...body.isVaccinated,
+    ...(body.inArray ? {} : { inArray: false }),
   };
   const data = await readData();
   data.push(record);
