@@ -8,8 +8,8 @@ const findById = async (id) => {
   return await User.findOne({ _id: id });
 };
 
-const findByVeryfyTokenEmail = async (token) => {
-  return await User.findOne({ VeryfyTokenEmail: token });
+const findByVerifyTokenEmail = async (token) => {
+  return await User.findOne({ verifyTokenEmail: token });
 };
 
 const create = async ({ name, email, password, subscription }) => {
@@ -44,7 +44,7 @@ const updateVerifyToken = async (id, verify, verifyToken) => {
 
 module.exports = {
   findByEmail,
-  findByVeryfyTokenEmail,
+  findByVerifyTokenEmail,
   findById,
   create,
   updateToken,

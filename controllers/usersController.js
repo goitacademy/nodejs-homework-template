@@ -100,10 +100,6 @@ const updateSubscriptionById = async (req, res, next) => {
   try {
     // const id = req.user.id;
     const id = req.params.id;
-    console.log(
-      "🚀 ~ file: usersController.js ~ line 83 ~ updateSubscriptionById ~ id",
-      id
-    );
 
     const { subscription } = await Users.updateSubscription(id, req.body);
     return res.status(HttpCode.OK).json({
@@ -198,18 +194,14 @@ const repeatEmailVerify = async (req, res, next) => {
         "Your verification token is not valid. Please contact to administrator",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 const verify = async (req, res, next) => {
   try {
-    const user = await Users.findByVeryfyTokenEmail(req.params.token);
-    console.log(
-      "🚀 ~ file: usersController.js ~ line 211 ~ verify ~ req.params.token",
-      req.params.token
-    );
+    const user = await Users.findByVerifyTokenEmail(req.params.token);
+
     if (user) {
       return res.status(HttpCode.OK).json({
         status: "success",
@@ -226,7 +218,6 @@ const verify = async (req, res, next) => {
       message: "Invalid token. Please contact to administrator",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
