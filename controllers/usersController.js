@@ -203,6 +203,7 @@ const verify = async (req, res, next) => {
     const user = await Users.findByVerifyTokenEmail(req.params.token);
 
     if (user) {
+      await Users.updateVerifyToken(user.id, true, null);
       return res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
