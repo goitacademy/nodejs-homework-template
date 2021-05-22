@@ -14,6 +14,7 @@ router.get("/", async (_req, res, next) => {
     const contactsList = await fn.listContacts();
 
     if (contactsList) {
+      console.log("contacsList", contactsList);
       return res.status(200).json({
         status: "success",
         code: 200,

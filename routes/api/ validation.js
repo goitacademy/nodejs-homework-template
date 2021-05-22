@@ -1,8 +1,8 @@
 const Joi = require("joi");
 
 const schemaAddContact = Joi.object({
-  name: Joi.string().alphanum().min(4).max(30).required(),
-  phone: Joi.number().min(10).required(),
+  name: Joi.string().min(4).max(30).required(),
+  phone: Joi.string().min(10).required(),
   id: ["uuidv3", "uuidv4", "uuidv5"],
 
   email: Joi.string()
@@ -14,8 +14,8 @@ const schemaAddContact = Joi.object({
 });
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().alphanum().min(4).max(30).optional(),
-  phone: Joi.number().min(10).optional(),
+  name: Joi.string().min(4).max(30).optional(),
+  phone: Joi.string().min(10).optional(),
 
   email: Joi.string()
     .email({

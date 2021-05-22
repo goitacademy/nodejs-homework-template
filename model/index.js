@@ -15,7 +15,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     if (contactId) {
-      const contactsList = listContacts();
+      const contactsList = await listContacts();
       const findsContact = await contactsList.filter(
         (contact) => String(contact.id) === String(contactId)
       );
@@ -33,7 +33,7 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   if (contactId) {
     try {
-      const contactsList = listContacts();
+      const contactsList = await listContacts();
 
       const findsContact = await contactsList.find(
         (contact) => String(contact.id) === String(contactId)
@@ -58,7 +58,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   if (body) {
     try {
-      const contactsList = listContacts();
+      const contactsList = await listContacts();
       const newContact = {
         id: uniqid(),
         ...body,
@@ -82,7 +82,7 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   if (contactId && body) {
     try {
-      const contactsList = listContacts();
+      const contactsList = await listContacts();
 
       const findsContact = await contactsList.find(
         (contact) => String(contact.id) === String(contactId)
