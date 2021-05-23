@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Schema, SchemaTypes } = mongoose;
+const { Schema } = mongoose;
 const { Subscription } = require('../../helpers/constants');
 const bcrypt = require('bcryptjs');
 const SALT_FACTOR = 6;
@@ -27,10 +27,6 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null,
-    },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: 'user',
     },
   },
   { versionKey: false, timestamps: true },

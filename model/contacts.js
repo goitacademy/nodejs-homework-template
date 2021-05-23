@@ -1,12 +1,33 @@
 const Contact = require('./schemas/contact');
 
-const listContacts = async () => {
-  const results = await Contact.find({});
-  return results;
+const listContacts = async (userId, query) => {
+  const {
+    limit = 5,
+    offset = 0,
+    sortBy,
+    sortByDesc,
+    filter,
+    favorite = null,
+  } = query;
+  const optionsSearch = { owner: userId };
+  if (favorite !== null) {
+    optionsSearch.favorite = favorite;
+  }
+  const results = await Contact.paginate(optionsSearch, {
+    limit,
+    offset,
+    select: filter ? filter.split('|').join(' ') : '',
+    sort: {
+      ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+      ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+    },
+  });
+  const { docs: contacts, totalDocs: total } = results;
+  return { contacts, total, limit, offset };
 };
 
-const getContactById = async contactId => {
-  const result = await Contact.findOne({ _id: contactId });
+const getContactById = async (userId, contactId) => {
+  const result = await Contact.findOne({ _id: contactId, owner: userId });
   return result;
 };
 
@@ -15,15 +36,19 @@ const addContact = async body => {
   return result;
 };
 
-const removeContact = async contactId => {
-  const result = await Contact.findByIdAndRemove({ _id: contactId });
+const removeContact = async (userId, contactId) => {
+  const result = await Contact.findByIdAndRemove({
+    _id: contactId,
+    owner: userId,
+  });
   return result;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (userId, contactId, body) => {
   const result = await Contact.findOneAndUpdate(
     {
       _id: contactId,
+      owner: userId,
     },
     { ...body },
     { new: true },
@@ -31,10 +56,11 @@ const updateContact = async (contactId, body) => {
   return result;
 };
 
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (userId, contactId, body) => {
   const result = await Contact.findOneAndUpdate(
     {
       _id: contactId,
+      owner: userId,
     },
     { ...body },
     { new: true },
