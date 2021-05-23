@@ -7,7 +7,6 @@ const Jimp = require("jimp");
 require("dotenv").config();
 
 const Users = require("../model/users");
-console.log("🚀 ~ file: usersController.js ~ line 10 ~ Users", Users);
 const { HttpCode } = require("../helpers/constants");
 const createFolderIsExist = require("../helpers/create-dir");
 const EmailService = require("../services/email");

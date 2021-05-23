@@ -132,10 +132,7 @@ describe("Testing the route api/contacts", () => {
         .send({ name: "test" });
       expect(res.status).toEqual(404);
       expect(res.body).toBeDefined();
-      console.log(
-        "🚀 ~ file: contacts.e2e.test.js ~ line 135 ~ test ~ res.body",
-        res.body
-      );
+
       done();
     });
   });
