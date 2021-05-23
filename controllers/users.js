@@ -59,7 +59,14 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res, next) => {};
+const logout = async (req, res, next) => {
+  try {
+    await Users.updateToken(req.user.id, null);
+    return res.status(HttpCode.NO_CONTENT).json({});
+  } catch (e) {
+    next(e);
+  }
+};
 
 module.exports = {
   signup,
