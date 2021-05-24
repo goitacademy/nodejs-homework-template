@@ -1,12 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "ffdfdfdg",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792",
-    "number": "34343"
-  },
-  {
     "id": "3",
     "name": "Kennedy Lane",
     "email": "mattis.Cras@nonenimMauris.net",
@@ -20,7 +13,7 @@
   },
   {
     "id": "5",
-    "name": "Cyrus Jackson",
+    "name": "Roo",
     "email": "nibh@semsempererat.com",
     "phone": "(501) 472-5218"
   },
@@ -35,12 +28,6 @@
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
     "phone": "(715) 598-5792"
-  },
-  {
-    "id": "8",
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
   },
   {
     "id": "9",
@@ -58,43 +45,5 @@
     "id": "aadc0c5d-00da-4d3a-860a-d004dcf7b4cf",
     "name": "Roman",
     "number": "42342342"
-  },
-  {
-    "id": "fcc9b8d6-9bcd-41b4-9f2f-1e5ccc27381c",
-    "name": "ffdfdfdg",
-    "number": "34343"
-  },
-  {
-    "id": "ecd1f59f-bb45-4f08-9540-cd4c0b1784aa",
-    "name": "ffdfdfdg",
-    "number": "34343"
-  },
-  {
-    "id": "eed665ac-4ecb-4018-9685-1ad6e5d23e4f",
-    "name": "ffdfdfdg",
-    "number": "34343"
-  },
-  {
-    "id": "28416cbc-cc9b-4320-bd64-48f2ebe37b31",
-    "name": "ffdfdfdg",
-    "number": "34343"
-  },
-  {
-    "id": "9564a8da-3821-4830-ab86-953f0156186c",
-    "name": "ffdfdfdg",
-    "number": "34343",
-    "test": "sdsfsdf"
-  },
-  {
-    "id": "a61efb8e-6f54-4ce3-8192-6d097dc90071",
-    "name": "ffdfdfdg",
-    "phone": "1111",
-    "email": "rom@g.com"
-  },
-  {
-    "id": "b63a1374-87ef-49fb-baa9-03453efd309f",
-    "name": "ffdfdfdg",
-    "phone": "1111111111",
-    "email": "rom@g.com"
   }
 ]

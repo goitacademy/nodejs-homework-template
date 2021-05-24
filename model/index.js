@@ -49,7 +49,7 @@ const updateContact = async (contactId, body) => {
   const [selectedContact] = data.filter(({ id }) => id === contactId);
   Object.assign(selectedContact, body);
   await fs.writeFile(pathName, JSON.stringify(data, null, 2));
-  return data;
+  return selectedContact;
 };
 
 module.exports = {

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Contacts = require("../../model");
-const { validatedNewContact, ValidatedUpdateContact, validatedUpdateContact } = require("./validation");
+const { validatedNewContact, validatedUpdateContact } = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -38,7 +38,7 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.contactId);
     if (contact) {
-      return res.status(200).json({ status: "success", code: 200, payload: { contact } });
+      return res.status(200).json({ status: "success", code: 200, message: "Contact deleted", payload: { contact } });
     }
     return res.json({ status: "error", code: 404, message: "Not found" });
   } catch (error) {
@@ -49,10 +49,10 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", validatedUpdateContact, async (req, res, next) => {
   try {
     const contact = await Contacts.updateContact(req.params.contactId, req.body);
-    if (contact) {
-      return res.status(201).json({ status: "success", code: 201, payload: { contact } });
-    }
-    return res.json({ status: "error", code: 404, message: "Not found" });
+    if (Object.keys(req.body).length === 0)
+      res.status(404).json({ status: "error", code: 404, message: "Missing fields" });
+    if (contact) res.status(201).json({ status: "success", code: 201, payload: { contact } });
+    return res.json({ status: "error", code: 404, message: "Contact not found" });
   } catch (error) {
     next(error);
   }
