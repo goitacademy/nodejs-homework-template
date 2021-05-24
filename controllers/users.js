@@ -68,8 +68,23 @@ const logout = async (req, res, next) => {
   }
 };
 
+const current = async (req, res, next) => {
+  try {
+    const currentUser = await Users.findByToken(req.user.token);
+    const { email, subscription } = currentUser;
+    return res.status(HttpCode.OK).json({
+      status: '200 OK',
+      code: HttpCode.OK,
+      data: { email, subscription },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   signup,
   login,
   logout,
+  current,
 };
