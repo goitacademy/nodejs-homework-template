@@ -46,9 +46,11 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const data = await readData();
-  const [selectedContact] = data.filter(({ id }) => id === contactId);
-  Object.assign(selectedContact, body);
-  await fs.writeFile(pathName, JSON.stringify(data, null, 2));
+  const selectedContact = data.find(({ id }) => id === contactId);
+  if (selectedContact) {
+    Object.assign(selectedContact, body);
+    await fs.writeFile(pathName, JSON.stringify(data, null, 2));
+  }
   return selectedContact;
 };
 
