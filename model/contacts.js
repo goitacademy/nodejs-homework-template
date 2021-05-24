@@ -3,7 +3,7 @@ const Contact = require('./schemas/contact');
 const listContacts = async (userId, query) => {
   const {
     limit = 5,
-    offset = 0,
+    page = 1,
     sortBy,
     sortByDesc,
     filter,
@@ -15,7 +15,7 @@ const listContacts = async (userId, query) => {
   }
   const results = await Contact.paginate(optionsSearch, {
     limit,
-    offset,
+    page,
     select: filter ? filter.split('|').join(' ') : '',
     sort: {
       ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
@@ -23,7 +23,7 @@ const listContacts = async (userId, query) => {
     },
   });
   const { docs: contacts, totalDocs: total } = results;
-  return { contacts, total, limit, offset };
+  return { contacts, total, limit, page };
 };
 
 const getContactById = async (userId, contactId) => {
