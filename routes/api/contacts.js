@@ -1,4 +1,5 @@
 const express = require('express')
+const { validateCreateContact, validateUpdateContact } = require('../../validation/validate')
 const router = express.Router()
 
 const {
@@ -42,7 +43,7 @@ router.get('/api/contacts/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/api/contacts', async (req, res, next) => {
+router.post('/api/contacts', validateCreateContact, async (req, res, next) => {
   try {
     if (req.body.name && req.body.email && req.body.phone) {
       const contact = await addContact(req.body)
@@ -81,7 +82,7 @@ router.delete('/api/contacts/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/api/contacts/:contactId', async (req, res, next) => {
+router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res, next) => {
   try {
     if (req.body.name || req.body.email || req.body.phone) {
       const updatedContact = await updateContact(req.params.contactId, req.body)
