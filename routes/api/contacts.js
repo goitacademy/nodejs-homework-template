@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Contacts = require("../../model/index");
-const {
-  validateContact
-} = require("./validation");
-
-
+const { validateContact } = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -31,6 +27,9 @@ router.post("/", async (req, res, next) => {
     const data = await Contacts.addContact(req.body);
     return res.status(201).json({ status: "success", code: 201, data });
   } catch (error) {
+    if (error.name === "ValidationError") {
+      error.status = 400;
+    }
     next(error);
   }
 });
@@ -46,7 +45,18 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", validateContact, async (req, res, next) => {
+router.put("/:contactId", validateContact, async (req, res, next) => {
+  try {
+    const data = await Contacts.updateContact(req.params.contactId, req.body);
+    if (data)
+      return res.status(201).json({ status: "success", code: 201, data });
+    return res.json({ status: "error", code: 404, message: "Not Found" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
     const data = await Contacts.updateContact(req.params.contactId, req.body);
     if (data)

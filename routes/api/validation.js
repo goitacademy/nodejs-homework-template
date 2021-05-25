@@ -1,12 +1,10 @@
 const Joi = require("joi");
 
-
-const namePattern = /^\w+(?:\s+\w+)*$/;
+const namePattern = /[A-Z]\w+/;
 const phonePattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 
-
 const schemaContact = Joi.object({
-  name: Joi.string().pattern(namePattern).min(3).max(30).required(),
+  name: Joi.string().regex(namePattern).min(3).max(30).required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
