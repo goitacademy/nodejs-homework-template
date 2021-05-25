@@ -1,14 +1,20 @@
 const Joi = require("joi");
 
 const schemaAddContact = Joi.object({
-  name: Joi.string().min(4).max(30).required(),
-  phone: Joi.string().min(10).required(),
+  name: Joi.string()
+    .min(4)
+    .max(30)
+    .regex(/[A-Z]\w+/)
+    .required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean().optional(),
+
   id: ["uuidv3", "uuidv4", "uuidv5"],
 
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "ru"] },
+      tlds: { allow: false },
     })
     .required(),
 });
@@ -16,11 +22,12 @@ const schemaAddContact = Joi.object({
 const schemaUpdateContact = Joi.object({
   name: Joi.string().min(4).max(30).optional(),
   phone: Joi.string().min(10).optional(),
+  favorite: Joi.boolean().required(),
 
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "ru"] },
+      tlds: { allow: ["com", "net", "ru", "co", "uk", "ca"] },
     })
     .optional(),
 });
@@ -29,8 +36,12 @@ const schemaRemoveContact = Joi.object({
   id: Joi.string().alphanum().required(),
 });
 
-const schemagetContactById = Joi.object({
+const schemaGetContactById = Joi.object({
   id: Joi.string().alphanum().required(),
+});
+
+const schemaStatusContact = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const validate = async (schema, body, next) => {
@@ -56,5 +67,9 @@ module.exports.validatesRemoveContact = (req, _res, next) => {
 };
 
 module.exports.validatesGetContactById = (req, _res, next) => {
-  return validate(schemagetContactById, req.params.id, next);
+  return validate(schemaGetContactById, req.params.id, next);
+};
+
+module.exports.validatesStatusContact = (req, _res, next) => {
+  return validate(schemaStatusContact, req.body, next);
 };
