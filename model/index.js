@@ -23,7 +23,6 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  console.log("IN updateContact");
   const result = await Contact.findOneAndUpdate(
     {
       _id: contactId,
