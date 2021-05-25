@@ -14,6 +14,10 @@ const schemaContact = Joi.object({
   phone: Joi.string().pattern(phonePattern).required(),
 });
 
+const schemaFavoriteField = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const validate = async (schema, body, next) => {
   try {
     await schema.validateAsync(body);
@@ -23,6 +27,13 @@ const validate = async (schema, body, next) => {
   }
 };
 
-module.exports.validateContact = (req, _res, next) => {
+const validateContact = (req, _res, next) => {
   return validate(schemaContact, req.body, next);
+};
+const validateFavorite = (req, _res, next) => {
+  return validate(schemaFavoriteField, req.body, next);
+};
+module.exports = {
+  validateContact,
+  validateFavorite,
 };

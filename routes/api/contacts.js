@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Contacts = require("../../model/index");
-const { validateContact } = require("./validation");
+const { validateContact, validateFavorite } = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -56,15 +56,22 @@ router.put("/:contactId", validateContact, async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
-  try {
-    const data = await Contacts.updateContact(req.params.contactId, req.body);
-    if (data)
-      return res.status(201).json({ status: "success", code: 201, data });
-    return res.json({ status: "error", code: 404, message: "Not Found" });
-  } catch (error) {
-    next(error);
+router.patch(
+  "/:contactId/favorite",
+  validateFavorite,
+  async (req, res, next) => {
+    try {
+      const data = await Contacts.updateStatusContact(
+        req.params.contactId,
+        req.body
+      );
+      if (data)
+        return res.status(201).json({ status: "success", code: 201, data });
+      return res.json({ status: "error", code: 404, message: "Not Found" });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;
