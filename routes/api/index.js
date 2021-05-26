@@ -1,5 +1,6 @@
-const postApi = require('./contacts');
+// const postApi = require("./contacts");
+const postUser = require("./user");
 
 module.exports = {
-  postApi,
-}
+  postUser,
+};

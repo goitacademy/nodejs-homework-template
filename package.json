@@ -4,21 +4,30 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "dotenv": "8.2.0",
-    "express": "4.17.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "express-validator": "^6.10.1",
     "got": "^11.8.2",
     "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.6",
+    "mongoose": "^5.12.10",
     "morgan": "1.10.0",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "uuidv4": "^6.2.7"
   },
   "devDependencies": {

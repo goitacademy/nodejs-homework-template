@@ -1,25 +1,40 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const cors = require("cors");
+const routerApi = require("./routes/api/user");
+const mongoose = require("mongoose");
+require("dotenv").config();
+mongoose.connect(process.env.DB_HOST, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+});
+const app = express();
+app.use(express.json());
+app.use(cors());
+require("./config/config-passport");
+app.use("/api", routerApi);
 
-const contactsRouter = require('./routes/api/contacts')
+app.use((_, res, __) => {
+  res.status(404).json({
+    status: "error",
+    code: 404,
+    message: `Not such route`,
+    data: "Not found",
+  });
+});
 
-const app = express()
+app.use((err, _, res, __) => {
+  console.log(err.stack);
+  res.status(500).json({
+    status: "fail",
+    code: 500,
+    message: err.message,
+    data: "Internal Server Error",
+  });
+});
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const PORT = process.env.PORT || 3000;
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
-
-app.use('/api/contacts', contactsRouter)
-
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
-
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+app.listen(PORT, function () {
+  console.log(`Server is starting on ${PORT} PORT`);
+});
