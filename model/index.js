@@ -1,72 +1,67 @@
-const fs = require('fs/promises')
-const contacts = require('./contacts.json')
+const {ObjectId} = require('mongodb')
 
-const listContacts = async () => {
-  return contacts
+const listContacts = async (client) => {
+  const result = await client.db().collection('contacts').find({}).toArray()
+  return result
 }
 
-const getContactById = async (contactId) => {
+const getContactById = async (client, contactId) => {
   try {
-    const contact = contacts.find(contact => contact.id === Number(contactId))
+    const id = ObjectId(contactId)
+    const [contact] = await client.db().collection('contacts').find({_id: id}).toArray()
     return contact
   } catch {
     return {}
   }
 }
 
-const removeContact = async (contactId) => {
+const removeContact = async (client, contactId) => {
   try {
-    const contact = contacts.find(contact => contact.id === Number(contactId))
-    const contactsList = contacts.filter(contact => contact.id !== Number(contactId))
-    const contactsListUpdated = JSON.stringify(contactsList)
-    fs.writeFile('./model/contacts.json', contactsListUpdated, (err) => {
-      if (err) {
-        return err.message
-      }
-    })
+    const id = ObjectId(contactId)
+    const {value: contact} = await client.db().collection('contacts').findOneAndDelete({_id: id})
     return contact
   } catch {
-    return {}
+    return null
   }
 }
 
-const addContact = async (body) => {
+const addContact = async (client, body) => {
   try {
-    const id = contacts[contacts.length - 1].id + 1
-    const contact = { id, ...body }
-    const contactsList = JSON.stringify([...contacts, contact])
-    const response = contact
-    fs.writeFile('./model/contacts.json', contactsList, (err) => {
-      if (err) {
-        return err.message
-      }
-    })
+    const record = {
+      ...body,
+      ...(body.favorite ? {} : {favorite: false})
+    }
+    const {ops: [response]} = await client.db().collection('contacts').insertOne(record)
+    console.log(response)
     return response
   } catch {
     return {}
   }
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (client, contactId, body) => {
   try {
-    const test = await fs.readFile('./model/contacts.json', (err, data) => {
-      if (err) {
-        return err.message
-      }
-    })
-    const contactsList = JSON.parse(test)
-    const contactToUpdate = contactsList.find(contact => contact.id === Number(contactId))
-    if (contactToUpdate) {
-      const updatedContact = { ...contactToUpdate, ...body }
-      const allContacts = contacts.filter(contact => contact.id !== Number(contactId))
-      const updatedContacts = JSON.stringify([...allContacts, updatedContact])
-      fs.writeFile('./model/contacts.json', updatedContacts, (err) => {
-        if (err) {
-          return err.message
-        }
-      })
-      return updatedContact
-    }
+    const id = ObjectId(contactId)
+    const {value: updatedContact} = await client.db().collection('contacts').findOneAndUpdate(
+      {_id: id},
+      {$set: body},
+      {returnOriginal: false}
+    )
+    return updatedContact
+  } catch {
+    return {}
+  }
+}
+
+const updateStatusContact = async (client, contactId, body) => {
+  try {
+    const id = ObjectId(contactId)
+    const {value: updatedContact} = await client.db().collection('contacts').findOneAndUpdate(
+      {_id: id},
+      {$set: body},
+      {returnOriginal: false}
+    )
+    return updatedContact
   } catch {
     return {}
   }
@@ -78,4 +73,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 }
