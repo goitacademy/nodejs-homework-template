@@ -24,5 +24,6 @@ app.use((err, req, res, next) => {
     .status(status)
     .json({ status: "fail", code: status, message: err.message });
 });
+console.log("cheack");
 
 module.exports = app;
