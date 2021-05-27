@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const schema = Joi.object({
+const schemaForContact = Joi.object({
   name: Joi.string()
     .min(3)
     .max(30)
@@ -21,6 +21,7 @@ const schema = Joi.object({
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj)
   if (error) {
+    console.log(error)
     return next({
       status: 400,
       message: 'Bad request'
@@ -30,5 +31,5 @@ const validate = (schema, obj, next) => {
 }
 
 module.exports.validateContact = (req, _res, next) => {
-  return validate(schema, req.body, next)
+  return validate(schemaForContact, req.body, next)
 }

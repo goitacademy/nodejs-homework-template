@@ -1,15 +1,8 @@
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-  updateStatusContact
-} = require('../model')
+const Contact = require('../model/contact')
 
 const get = async (req, res, next) => {
   try {
-    const result = await listContacts()
+    const result = await Contact.find({})
     res.json({
       message: 'success',
       status: 200,
@@ -26,8 +19,7 @@ const get = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const id = req.params.contactId
-
-    const result = await getContactById(id)
+    const result = await Contact.findById(id)
     res.json({
       message: 'success',
       status: 200,
@@ -43,9 +35,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { name, email, phone, favorite = false } = req.body
-    const result = await addContact({ name, email, phone, favorite })
-
+    const result = await Contact.create(req.body)
+    console.log(result)
     res.json({
       message: 'success',
       status: 201,
@@ -62,7 +53,8 @@ const create = async (req, res, next) => {
 const remove = async (req, res, next) => {
   try {
     const id = req.params.contactId
-    const result = await removeContact(id)
+    const result = await Contact.findByIdAndRemove(id)
+
     res.json({
       message: 'success',
       status: 204,
@@ -77,8 +69,7 @@ const remove = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const id = req.params.contactId
-    const { name, email, phone, favorite } = req.body
-    const result = await updateContact(id, { name, email, phone, favorite })
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true })
 
     res.json({
       message: 'success',
@@ -94,10 +85,15 @@ const update = async (req, res, next) => {
 }
 
 const updateStatus = async (req, res, next) => {
-  const { contactId } = req.params
+  const id = req.params.contactId
+
   const { favorite } = req.body
   try {
-    const result = await updateStatusContact(contactId, { favorite })
+    const result = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true }
+    )
 
     if (Object.keys(req.body).length !== 0) {
       res.json({
