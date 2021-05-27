@@ -2,7 +2,6 @@ const express = require('express')
 const { validateCreateContact, validateUpdateContact, validateUpdateStatusContact } = require('../../validation/validate')
 const router = express.Router()
 
-const db = require('../../db')
 const {
   listContacts,
   getContactById,
@@ -14,8 +13,7 @@ const {
 
 router.get('/api/contacts', async (req, res, next) => {
   try {
-    const client = await db
-    const contacts = await listContacts(client)
+    const contacts = await listContacts()
     res.json({
       status: 'success',
       code: 200,
@@ -28,8 +26,7 @@ router.get('/api/contacts', async (req, res, next) => {
 
 router.get('/api/contacts/:contactId', async (req, res, next) => {
   try {
-    const client = await db
-    const contact = await getContactById(client, req.params.contactId)
+    const contact = await getContactById(req.params.contactId)
     if (contact) {
       res.json({
         status: 'Success',
@@ -50,8 +47,7 @@ router.get('/api/contacts/:contactId', async (req, res, next) => {
 router.post('/api/contacts', validateCreateContact, async (req, res, next) => {
   try {
     if (req.body.name && req.body.email && req.body.phone) {
-      const client = await db
-      const contact = await addContact(client, req.body)
+      const contact = await addContact(req.body)
       res.json({
         status: 'Success',
         code: 201,
@@ -70,8 +66,7 @@ router.post('/api/contacts', validateCreateContact, async (req, res, next) => {
 
 router.delete('/api/contacts/:contactId', async (req, res, next) => {
   try {
-    const client = await db
-    const contactToDelete = await removeContact(client, req.params.contactId)
+    const contactToDelete = await removeContact(req.params.contactId)
     if (contactToDelete) {
       res.json({
         code: 200,
@@ -91,8 +86,7 @@ router.delete('/api/contacts/:contactId', async (req, res, next) => {
 router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res, next) => {
   try {
     if (req.body.name || req.body.email || req.body.phone) {
-      const client = await db
-      const updatedContact = await updateContact(client, req.params.contactId, req.body)
+      const updatedContact = await updateContact(req.params.contactId, req.body)
       if (updatedContact) {
         res.json({
           status: 'Success',
@@ -119,8 +113,7 @@ router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res,
 router.patch('/api/contacts/:contactId/favorite', validateUpdateStatusContact, async (req, res, next) => {
   try {
     if (req.body.favorite) {
-      const client = await db
-      const updatedContact = await updateStatusContact(client, req.params.contactId, req.body)
+      const updatedContact = await updateStatusContact(req.params.contactId, req.body)
       if (updatedContact) {
         res.json({
           status: 'Success',
