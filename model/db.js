@@ -1,7 +1,16 @@
-import { join } from "path";
-import { Low, JSONFile } from "lowdb";
+const { MongoClient } = require("mongodb");
+require("dotenv").config();
+const uriDb = process.env.URI_DB;
+const db = MongoClient.connect(uriDb, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  poolSize: 5,
+});
+process.on("SIGINT", async () => {
+  const client = await db;
+  client.close();
+  console.log("connection to DB terminated");
+  process.exit(1);
+});
 
-// Use JSON file for storage
-const file = join(__dirname, "db.json");
-const adapter = new JSONFile(file);
-const db = new Low(adapter);
+module.exports = db;
