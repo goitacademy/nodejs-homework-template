@@ -1,15 +1,10 @@
 const { ContactsReporitory } = require("../repository");
-const db = require("../db");
 
 class ContactsService {
   constructor() {
-    process.nextTick(async () => {
-      const client = await db;
-
-      this.repositories = {
-        contacts: new ContactsReporitory(client),
-      };
-    });
+    this.repositories = {
+      contacts: new ContactsReporitory(),
+    };
   }
 
   listContacts() {
