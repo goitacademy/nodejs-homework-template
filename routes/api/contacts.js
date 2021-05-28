@@ -1,5 +1,5 @@
 const express = require('express')
-const { validateCreateContact, validateUpdateContact } = require('../../validation/validate')
+const { validateCreateContact, validateUpdateContact, validateUpdateStatusContact } = require('../../validation/validate')
 const router = express.Router()
 
 const {
@@ -8,6 +8,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 } = require('../../model/index.js')
 
 router.get('/api/contacts', async (req, res, next) => {
@@ -69,7 +70,7 @@ router.delete('/api/contacts/:contactId', async (req, res, next) => {
     if (contactToDelete) {
       res.json({
         code: 200,
-        message: 'Contact deleted'
+        message: 'Contact deleted',
       })
     } else {
       res.json({
@@ -102,6 +103,33 @@ router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res,
       res.json({
         code: 404,
         message: 'Not found'
+      })
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.patch('/api/contacts/:contactId/favorite', validateUpdateStatusContact, async (req, res, next) => {
+  try {
+    if (req.body.favorite) {
+      const updatedContact = await updateStatusContact(req.params.contactId, req.body)
+      if (updatedContact) {
+        res.json({
+          status: 'Success',
+          code: 200,
+          data: updatedContact
+        })
+      } else {
+        res.json({
+          code: 404,
+          message: 'Not found'
+        })
+      }
+    } else {
+      res.json({
+        code: 400,
+        message: 'Missing field favorite'
       })
     }
   } catch (e) {

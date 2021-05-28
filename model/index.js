@@ -1,13 +1,13 @@
-const fs = require('fs/promises')
-const contacts = require('./contacts.json')
+const Contact = require('../schemas/contacts')
 
 const listContacts = async () => {
-  return contacts
+  const result = await Contact.find({})
+  return result
 }
 
 const getContactById = async (contactId) => {
   try {
-    const contact = contacts.find(contact => contact.id === Number(contactId))
+    const contact = await Contact.findOne({ _id: contactId })
     return contact
   } catch {
     return {}
@@ -16,31 +16,16 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const contact = contacts.find(contact => contact.id === Number(contactId))
-    const contactsList = contacts.filter(contact => contact.id !== Number(contactId))
-    const contactsListUpdated = JSON.stringify(contactsList)
-    fs.writeFile('./model/contacts.json', contactsListUpdated, (err) => {
-      if (err) {
-        return err.message
-      }
-    })
+    const contact = await Contact.findByIdAndRemove({ _id: contactId })
     return contact
   } catch {
-    return {}
+    return null
   }
 }
 
 const addContact = async (body) => {
   try {
-    const id = contacts[contacts.length - 1].id + 1
-    const contact = { id, ...body }
-    const contactsList = JSON.stringify([...contacts, contact])
-    const response = contact
-    fs.writeFile('./model/contacts.json', contactsList, (err) => {
-      if (err) {
-        return err.message
-      }
-    })
+    const response = await Contact.create(body)
     return response
   } catch {
     return {}
@@ -49,24 +34,25 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const test = await fs.readFile('./model/contacts.json', (err, data) => {
-      if (err) {
-        return err.message
-      }
-    })
-    const contactsList = JSON.parse(test)
-    const contactToUpdate = contactsList.find(contact => contact.id === Number(contactId))
-    if (contactToUpdate) {
-      const updatedContact = { ...contactToUpdate, ...body }
-      const allContacts = contacts.filter(contact => contact.id !== Number(contactId))
-      const updatedContacts = JSON.stringify([...allContacts, updatedContact])
-      fs.writeFile('./model/contacts.json', updatedContacts, (err) => {
-        if (err) {
-          return err.message
-        }
-      })
-      return updatedContact
-    }
+    const updatedContact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { ...body },
+      { new: true }
+    )
+    return updatedContact
+  } catch {
+    return {}
+  }
+}
+
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { ...body },
+      { new: true }
+    )
+    return updatedContact
   } catch {
     return {}
   }
@@ -78,4 +64,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 }
