@@ -1,67 +1,61 @@
-const fs = require("fs/promises");
-const path = require("path");
+const db = require("./db"); // подключаем базу данных
+const { ObjectId } = require("mongodb"); // вытаскиваем из mongo-драйвера Класс, который будет создавать экземпляр класса
 
-const { v4: uuid } = require("uuid");
-
-const readData = async () => {
-  const data = await fs.readFile(
-    path.join(__dirname, "contacts.json"),
-    "utf-8"
-  );
-
-  return JSON.parse(data);
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
 };
 
 const listContacts = async () => {
-  return await readData();
+  const collection = await getCollection(db, "contacts");
+  const results = await collection.find({}).toArray();
+  return results;
 };
 
 const getContactById = async (contactId) => {
-  const data = await readData();
+  const collection = await getCollection(db, "contacts");
 
-  const result = data.find((contact) => contact.id === contactId);
-  return result;
+  const objId = new ObjectId(contactId); // вызываем Класс, создаем экземляр класса, в который передаем id. Он будет созавать объект
+
+  const [results] = await collection.find({ _id: objId }).toArray();
+  return results;
 };
 
 const removeContact = async (contactId) => {
-  const data = await readData();
+  const collection = await getCollection(db, "contacts");
 
-  const index = data.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    const result = data.splice(index, 1);
+  const objId = new ObjectId(contactId);
 
-    const content = JSON.stringify(data);
-    await fs.writeFile(path.join(__dirname, "contacts.json"), content);
-    return result;
-  }
-  return null;
+  const { value: result } = await collection.findOneAndDelete({ _id: objId });
+  return result;
 };
 
 const addContact = async (body) => {
-  const id = uuid();
-  const newContact = { id, ...body };
+  const collection = await getCollection(db, "contacts");
 
-  const data = await readData();
-  data.push(newContact);
+  const newContact = {
+    ...body,
+    ...(body.favorite ? {} : { favorite: false }),
+  };
 
-  const content = JSON.stringify(data);
-  await fs.writeFile(path.join(__dirname, "contacts.json"), content);
-
-  return newContact;
+  // в массиве приходит также много разной служебной информации. Деструктуризируем то, что нужно
+  const {
+    ops: [result],
+  } = await collection.insertOne(newContact);
+  return result;
 };
 
 const updateContact = async (contactId, body) => {
-  const data = await readData();
+  const collection = await getCollection(db, "contacts");
 
-  const result = data.find((contact) => contact.id === contactId);
+  const objId = new ObjectId(contactId);
 
-  if (result) {
-    Object.assign(result, body);
-
-    const content = JSON.stringify(data);
-    await fs.writeFile(path.join(__dirname, "contacts.json"), content);
-  }
-
+  const { value: result } = await collection.findOneAndUpdate(
+    { _id: objId },
+    { $set: body }, // модификатор $set используется, чтобы не перезатирались данные
+    { returnOriginal: false } // возвращает обновленные данные
+  );
   return result;
 };
 
