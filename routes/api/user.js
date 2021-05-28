@@ -88,4 +88,13 @@ router.get("/list", auth, (req, res, next) => {
   });
 });
 
+router.post("/logout", auth, (req, res, next) => {
+  const { _id } = req.user;
+  res.json({
+    status: "succes",
+    code: 204,
+    data: _id,
+  });
+});
+
 module.exports = router;
