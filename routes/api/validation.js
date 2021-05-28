@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -15,6 +16,8 @@ const schemaCreateContact = Joi.object({
     .min(10)
     .max(14)
     .required(),
+
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -32,7 +35,9 @@ const schemaUpdateContact = Joi.object({
     .min(10)
     .max(14)
     .optional(),
-}).or("name", "email", "phone");
+
+  favorite: Joi.boolean().optional(),
+}).or("name", "email", "phone", "favorite");
 
 const schemaUpdateStatusContact = Joi.object({
   favorite: Joi.boolean().optional(),
@@ -59,5 +64,14 @@ module.exports = {
   },
   validationUpdateStatusContact: (req, res, next) => {
     return validate(schemaUpdateStatusContact, req.body, next);
+  },
+  validationMongoId: (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
+      return next({
+        status: 400,
+        message: "Invalid ObjectId",
+      });
+    }
+    next();
   },
 };
