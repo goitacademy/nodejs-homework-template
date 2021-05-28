@@ -1,31 +1,34 @@
-const db = require('./db');
-const shortid = require('shortid');
+const dataContacts = require('./schemas/contactSchema');
 
 const listContacts = async () => {
-  return db.get('contacts').value();
+  const results = await dataContacts.find({});
+
+  return results;
 };
 
 const getContactById = async (id) => {
-  return db.get('contacts').find({ id }).value();
+  const results = await dataContacts.findOne({ _id: id });
+  return results;
 };
 
 const removeContact = async (id) => {
-  const [record] = db.get('contacts').remove({ id }).write();
-  return record;
+  const result = await dataContacts.findByIdAndRemove(id);
+  return result;
 };
 
 const addContact = async (body) => {
-  const id = shortid.generate();
-  const record = { id, ...body };
-  db.get('contacts').push(record).write();
-  return record;
+  const result = await dataContacts.create(body);
+  return result;
 };
 
 const updateContact = async (id, body) => {
-  const record = db.get('contacts').find({ id }).assign(body).value();
-  db.write();
+  const result = await dataContacts.findByIdAndUpdate(
+    id,
+    { ...body },
+    { new: true }
+  );
 
-  return record.id ? record : null;
+  return result;
 };
 
 module.exports = {
