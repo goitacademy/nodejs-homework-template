@@ -1,39 +1,77 @@
-const { v4: uuid } = require("uuid");
-const db = require("../db");
+const { ObjectID } = require("mongodb");
+const { HttpCode } = require("../helpers/constants");
+const { ErrorHandler } = require("../helpers/errorHandler");
 
 class ContactsReporitory {
-  listContacts() {
-    return db.get("contacts").value();
+  constructor(client) {
+    this.collection = client.db().collection("contacts");
   }
 
-  getContactById(id) {
-    return db.get("contacts").find({ id }).value();
+  #getMongoId(id) {
+    try {
+      return ObjectID(id);
+    } catch (e) {
+      throw new ErrorHandler(
+        HttpCode.BAD_REQUEST,
+        `MongoDb _id: ${e.message}`,
+        "Bad Request"
+      );
+    }
   }
 
-  addContact(body) {
-    const id = uuid();
+  async listContacts() {
+    const results = await this.collection.find({}).toArray();
+    return results;
+  }
 
-    const newElem = {
-      id,
+  async getContactById(id) {
+    const objectId = this.#getMongoId(id);
+
+    const [result] = await this.collection.find({ _id: objectId }).toArray();
+    return result;
+  }
+
+  async addContact(body) {
+    const record = {
       ...body,
+      ...(body.favorite ? {} : { favorite: false }),
     };
+    const {
+      ops: [result],
+    } = await this.collection.insertOne(record);
 
-    db.get("contacts").push(newElem).write();
-
-    return newElem;
+    return result;
   }
 
-  removeContact(id) {
-    const [removedContact] = db.get("contacts").remove({ id }).write();
-    return removedContact;
+  async removeContact(id) {
+    const objectId = this.#getMongoId(id);
+
+    const { value: result } = await this.collection.findOneAndDelete({
+      _id: objectId,
+    });
+    return result;
   }
 
-  updateContact(id, body) {
-    const updatedContact = db.get("contacts").find({ id }).assign(body).value();
+  async updateContact(id, body) {
+    const objectId = this.#getMongoId(id);
 
-    db.write();
+    const { value: result } = await this.collection.findOneAndUpdate(
+      { _id: objectId },
+      { $set: body },
+      { returnOriginal: false }
+    );
+    return result;
+  }
 
-    return updatedContact;
+  async updateStatusContact(id, body) {
+    const objectId = this.#getMongoId(id);
+
+    const { value: result } = await this.collection.findOneAndUpdate(
+      { _id: objectId },
+      { $set: body },
+      { returnOriginal: false }
+    );
+    return result;
   }
 }
 
