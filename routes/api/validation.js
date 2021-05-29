@@ -20,7 +20,9 @@ const validateUpdateContact = Joi.object({
 }).or('name', 'email', 'phone', 'favorite');
 
 const validateUpdateFavorite = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    'any.required': "Missing 'favorite' field.",
+  }),
 });
 
 const validate = async (schema, request, next) => {
