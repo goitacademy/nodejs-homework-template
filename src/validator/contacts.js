@@ -42,11 +42,22 @@ const schemaContactsUpdate = Joi.object({
   phone: Joi.number().min(10).required().optional(),
 });
 
+const schemaContactsUpdateStatus = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const validateContactsCreate = (req, res, next) => {
   return validator(schemaContactsCreate, req.body, next);
 };
 const validateContactsUpdate = (req, res, next) => {
   return validator(schemaContactsUpdate, req.body, next);
 };
+const validateContactsUpdateStatus = (req, res, next) => {
+  return validator(schemaContactsUpdateStatus, req.body, next);
+};
 
-module.exports = { validateContactsCreate, validateContactsUpdate };
+module.exports = {
+  validateContactsCreate,
+  validateContactsUpdate,
+  validateContactsUpdateStatus,
+};

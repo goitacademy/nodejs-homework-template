@@ -2,24 +2,28 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "express-validator": "^6.11.1",
     "got": "^11.8.2",
     "joi": "^17.4.0",
     "lowdb": "^1.0.0",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.11",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
   },
-   "nodemonConfig": {
+  "nodemonConfig": {
     "ignore": [
       "model/*.*"
     ]

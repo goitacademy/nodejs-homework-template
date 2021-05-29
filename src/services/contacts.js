@@ -31,6 +31,14 @@ class ContactsService {
     const data = this.repositories.contacts.updateContact(contactId, body);
     return data;
   }
+
+  updateStatusContact(contactId, body) {
+    const data = this.repositories.contacts.updateStatusContact(
+      contactId,
+      body
+    );
+    return data;
+  }
 }
 
 module.exports = { ContactsService };
