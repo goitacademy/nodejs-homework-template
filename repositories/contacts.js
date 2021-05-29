@@ -10,7 +10,7 @@
 //   const collection = await client.db().collection(name);
 //   return collection;
 // };
-const Contact = require("./contact");
+const Contact = require("../model/contact");
 
 const listContacts = async () => {
   const results = await Contact.find();
