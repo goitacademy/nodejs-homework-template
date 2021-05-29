@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const validateAddContact = Joi.object({
   name: Joi.string().trim().min(2).max(30).required(),
@@ -34,5 +35,14 @@ module.exports = {
   },
   validationUpdatedContact: (req, res, next) => {
     return validate(validateUpdateContact, req.body, next);
+  },
+  validateMongoId: (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next({
+        status: 400,
+        message: 'Invalid id.',
+      });
+    }
+    next();
   },
 };
