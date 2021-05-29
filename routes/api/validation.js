@@ -7,6 +7,7 @@ const validateAddContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
+  favorite: Joi.boolean().optional(),
 }).or('email', 'phone');
 
 const validateUpdateContact = Joi.object({
@@ -15,7 +16,8 @@ const validateUpdateContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
-}).or('name', 'email', 'phone');
+  favorite: Joi.boolean().optional(),
+}).or('name', 'email', 'phone', 'favorite');
 
 const validate = async (schema, request, next) => {
   try {
@@ -37,8 +39,8 @@ module.exports = {
     return validate(validateUpdateContact, req.body, next);
   },
   validateMongoId: (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return next({
+    if (!mongoose.isValidObjectId(req.params.contactId)) {
+      next({
         status: 400,
         message: 'Invalid id.',
       });
