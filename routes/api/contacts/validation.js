@@ -41,6 +41,6 @@ module.exports.schemaCreateContact = (req, _res, next) => {
 module.exports.schemaUpdateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next);
 };
-module.exports.schemaStatusContact = (req, _res, next) => {
-  return validate(schemaStatusContact, req.body, next);
-};
+// module.exports.schemaStatusContact = (req, _res, next) => {
+//   return validate(schemaStatusContact, req.body, next);
+// };
