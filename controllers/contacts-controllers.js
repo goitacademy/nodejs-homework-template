@@ -71,4 +71,23 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllContacts, getContactById, addContact, removeContact, updateContact };
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const updatedFavorite = await Contacts.updateContact(req.params.contactId, req.body);
+
+    if (!updatedFavorite) {
+      return res.status(404).json({ status: 'error', code: 404, message: 'Not found.' });
+    }
+
+    return res.json({
+      status: 'success',
+      code: 200,
+      message: 'Contact updated.',
+      payload: updatedFavorite,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getAllContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact };

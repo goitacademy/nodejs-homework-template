@@ -19,6 +19,10 @@ const validateUpdateContact = Joi.object({
   favorite: Joi.boolean().optional(),
 }).or('name', 'email', 'phone', 'favorite');
 
+const validateUpdateFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const validate = async (schema, request, next) => {
   try {
     await schema.validateAsync(request);
@@ -37,6 +41,9 @@ module.exports = {
   },
   validationUpdatedContact: (req, res, next) => {
     return validate(validateUpdateContact, req.body, next);
+  },
+  validateUpdateFavorite: (req, res, next) => {
+    return validate(validateUpdateFavorite, req.body, next);
   },
   validateMongoId: (req, res, next) => {
     if (!mongoose.isValidObjectId(req.params.contactId)) {
