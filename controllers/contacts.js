@@ -5,15 +5,20 @@ const {
   addContact,
   removeContact,
   updateContact,
-  updateStatusContact,
 } = require('../model/contacts');
 
-const getAll = async (_req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
-    return res
-      .status(200)
-      .json({ status: 'success', code: 200, data: { contacts } });
+    const userId = req.user.id;
+    const { total, limit, page, contacts } = await listContacts(
+      userId,
+      req.query,
+    );
+    return res.status(200).json({
+      status: 'success',
+      code: 200,
+      data: { total, limit, page, contacts },
+    });
   } catch (error) {
     next(error);
   }
@@ -24,7 +29,8 @@ const getById = async (req, res, next) => {
     if (!mongoose.isValidObjectId(req.params.contactId)) {
       return res.status(400).json({ message: 'invalid contactId value' });
     }
-    const contact = await getContactById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await await getContactById(userId, req.params.contactId);
 
     if (contact) {
       return res
@@ -41,7 +47,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const contact = await addContact(req.body);
+    const userId = req.user.id;
+    const contact = await addContact({ ...req.body, owner: userId });
     return res
       .status(201)
       .json({ status: 'success', code: 201, data: { contact } });
@@ -55,7 +62,8 @@ const remove = async (req, res, next) => {
     return res.status(400).json({ message: 'invalid contactId value' });
   }
   try {
-    const contact = await removeContact(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await removeContact(userId, req.params.contactId);
     if (contact) {
       return res
         .status(200)
@@ -74,7 +82,8 @@ const update = async (req, res, next) => {
     return res.status(400).json({ message: 'invalid contactId value' });
   }
   try {
-    const contact = await updateContact(req.params.contactId, req.body);
+    const userId = req.user.id;
+    const contact = await updateContact(userId, req.params.contactId, req.body);
     if (contact) {
       return res
         .status(200)
@@ -88,26 +97,4 @@ const update = async (req, res, next) => {
   }
 };
 
-const patch = async (req, res, next) => {
-  if (!mongoose.isValidObjectId(req.params.contactId)) {
-    return res.status(400).json({ message: 'invalid contactId value' });
-  }
-  try {
-    if (!req.body) {
-      return res.status(400).json({ message: 'missing field favorite' });
-    }
-    const contact = await updateStatusContact(req.params.contactId, req.body);
-    if (contact) {
-      return res
-        .status(200)
-        .json({ status: 'success', code: 200, data: { contact } });
-    }
-    return res
-      .status(404)
-      .json({ status: 'error', code: 404, message: 'Not Found' });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports = { getAll, getById, create, remove, update, patch };
+module.exports = { getAll, getById, create, remove, update };

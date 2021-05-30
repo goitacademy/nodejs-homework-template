@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, SchemaTypes } = mongoose;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const contactSchema = new Schema(
   {
@@ -46,6 +47,8 @@ contactSchema.path('name').validate(value => {
   const re = /[A-Z]\w+/;
   return re.test(String(value));
 });
+
+contactSchema.plugin(mongoosePaginate);
 
 const Contact = mongoose.model('contact', contactSchema);
 

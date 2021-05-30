@@ -2,9 +2,7 @@ const Joi = require('joi');
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().min(2).max(30).required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
   phone: Joi.string().min(7).max(12).required(),
   favorite: Joi.boolean().optional(),
 });
@@ -41,6 +39,6 @@ module.exports.schemaCreateContact = (req, _res, next) => {
 module.exports.schemaUpdateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next);
 };
-// module.exports.schemaStatusContact = (req, _res, next) => {
-//   return validate(schemaStatusContact, req.body, next);
-// };
+module.exports.schemaStatusContact = (req, _res, next) => {
+  return validate(schemaStatusContact, req.body, next);
+};

@@ -1,4 +1,3 @@
-// const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../../../controllers/contacts');
@@ -6,7 +5,7 @@ const guard = require('../../../helpers/guard');
 const {
   schemaCreateContact,
   schemaUpdateContact,
-  // schemaStatusContact,
+  schemaStatusContact,
 } = require('./validation');
 
 router.get('/', guard, ctrl.getAll);
@@ -19,6 +18,6 @@ router.delete('/:contactId', guard, ctrl.remove);
 
 router.put('/:contactId', guard, schemaUpdateContact, ctrl.update);
 
-router.patch('/:contactId/favorite', guard, schemaUpdateContact, ctrl.update);
+router.patch('/:contactId/favorite', guard, schemaStatusContact, ctrl.update);
 
 module.exports = router;

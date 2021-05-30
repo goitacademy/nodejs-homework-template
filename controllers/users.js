@@ -1,11 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const {
-  findById,
-  findByEmail,
-  create,
-  updateToken,
-} = require('../model/users');
+const { findByEmail, create, updateToken } = require('../model/users');
 const { HttpCode } = require('../helpers/constatns');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -14,15 +9,15 @@ const signup = async (req, res, next) => {
     const user = await findByEmail(req.body.email);
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
-        status: 'error',
+        status: 'Conflict',
         code: HttpCode.CONFLICT,
-        message: 'Email is already used',
+        message: 'Email in use',
       });
     }
     const newUser = await create(req.body);
     const { id, email, subscription } = newUser;
     return res.status(HttpCode.CREATED).json({
-      status: 'success',
+      status: 'Created',
       code: HttpCode.CREATED,
       data: { id, email, subscription },
     });
@@ -38,31 +33,35 @@ const login = async (req, res, next) => {
     const isValidPassword = await user?.validPassword(password);
     if (!user || !isValidPassword) {
       return res.status(HttpCode.UNAUTHORIZED).json({
-        status: 'error',
+        status: 'Unauthorized',
         code: HttpCode.UNAUTHORIZED,
-        message: 'Invalid credentials',
+        message: 'Email or password is wrong',
       });
     }
     const payload = { id: user.id };
     const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '2h' });
     await updateToken(user.id, token);
+    const { subscription } = user;
     return res.status(HttpCode.OK).json({
-      status: 'success',
+      status: 'OK',
       code: HttpCode.OK,
-      data: { token },
+      data: { token, user: { email, subscription } },
     });
   } catch (e) {
     next(e);
   }
 };
 
-const logout = async (req, res, next) => {};
+const logout = async (req, res, next) => {
+  await updateToken(req.user.id, null);
+  return res.status(HttpCode.NO_CONTENT).json({});
+};
 
 const current = async (req, res, next) => {
   try {
     const { email, subscription } = req.user;
     return res.status(HttpCode.OK).json({
-      status: 'success',
+      status: 'OK',
       code: HttpCode.OK,
       data: { email, subscription },
     });
