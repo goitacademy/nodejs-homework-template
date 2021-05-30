@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const contact = await Contacts.getById(req.params.contactId);
+    const contact = await Contacts.getContactById(req.params.contactId);
     if (contact) {
       return res.json({ status: "success", code: 200, data: { contact } });
     }
@@ -57,7 +57,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", validationUpdateContact, async (req, res, next) => {
+router.put("/:contactId", validationUpdateContact, async (req, res, next) => {
   try {
     const conatct = await Contacts.updateContact(
       req.params.contactId,
