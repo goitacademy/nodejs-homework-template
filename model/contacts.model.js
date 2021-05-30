@@ -1,18 +1,48 @@
 const Contact = require("./schemas/contact");
 
-const listContacts = async () => {
+const listContacts = async (userId, query) => {
   try {
-    const contacts = await Contact.find();
-    return contacts;
+    const {
+      page = 1,
+      limit = 20,
+      offset = [(page - 1) * limit],
+      favorite = null,
+      filter,
+      sortBy,
+      sortByDesc,
+    } = query;
+
+    const optionsSearch = { owner: userId };
+
+    if (favorite !== null) {
+      optionsSearch.favorite = favorite;
+    }
+
+    const result = await Contact.paginate(optionsSearch, {
+      page,
+      offset,
+      limit,
+      select: filter ? filter.split("|").join(" ") : "",
+      sort: {
+        ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+        ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+      },
+    });
+
+    const { docs: contacts, totalDocs: total } = result;
+    return { contacts, total, offset, limit };
   } catch (e) {
     return e.message;
   }
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (contactId, userId) => {
   try {
     if (contactId) {
-      const contact = await Contact.findOne({ _id: contactId });
+      const contact = await Contact.findOne({
+        _id: contactId,
+        owner: userId,
+      }).populate({ path: "owner", select: "email subscription -_id" });
       return contact;
     }
   } catch (e) {
@@ -20,10 +50,13 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, userId) => {
   if (contactId) {
     try {
-      const contact = await Contact.findByIdAndRemove({ _id: contactId });
+      const contact = await Contact.findByIdAndRemove({
+        _id: contactId,
+        owner: userId,
+      });
       return contact;
     } catch (e) {
       return e.message;
@@ -51,11 +84,11 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, userId) => {
   if (contactId) {
     try {
       const updatedContact = await Contact.findByIdAndUpdate(
-        { _id: contactId },
+        { _id: contactId, owner: userId },
         { ...body },
         { new: true }
       );
@@ -67,7 +100,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (contactId, body, userId) => {
   if (contactId && body) {
     try {
       const updatedContact = await Contact.findByIdAndUpdate(
