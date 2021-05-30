@@ -15,7 +15,7 @@ const signup = async (req, res, next) => {
       });
     }
     const newUser = await Users.createUser(req.body);
-    const { id, email, subscription } = newUser;
+    const { id, email, subscription, avatarURL } = newUser;
     return res.status(HttpCode.CREATED).json({
       status: '201 Created',
       code: HttpCode.CREATED,
@@ -23,6 +23,7 @@ const signup = async (req, res, next) => {
         id,
         email,
         subscription,
+        avatarURL,
       },
     });
   } catch (e) {
@@ -71,11 +72,26 @@ const logout = async (req, res, next) => {
 const current = async (req, res, next) => {
   try {
     const currentUser = await Users.findByToken(req.user.token);
-    const { email, subscription } = currentUser;
+    const { email, subscription, avatarURL } = currentUser;
     return res.status(HttpCode.OK).json({
       status: '200 OK',
       code: HttpCode.OK,
-      data: { email, subscription },
+      data: { email, subscription, avatarURL },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const pathFile = req.file.path;
+    const url = await Users.updateAvatar(id, pathFile);
+    return res.status(HttpCode.OK).json({
+      status: '200 OK',
+      code: HttpCode.OK,
+      avatarURL: url,
     });
   } catch (e) {
     next(e);
@@ -87,4 +103,5 @@ module.exports = {
   login,
   logout,
   current,
+  avatars,
 };
