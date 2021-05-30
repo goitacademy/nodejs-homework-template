@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Contatcs = require('../../model')
+const Contatcs = require('../../model/repositories/contacts')
 const {
   validationCreateContact,
   validationUpdateContact,
@@ -8,7 +8,7 @@ const {
 
 router.get('/', async (req, res, next) => {  
   try {    
-    const result = await Contatcs.listContacts();    
+    const result = await Contatcs.getAll();    
     res.status(200).json({status:'success',code:200, data:{result} })
   } catch (e) {
     next(e)
@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const result = await Contatcs.getContactById(req.params.contactId)
+    const result = await Contatcs.getById(req.params.contactId)
     if (result) {
       return res.json({status:'success',code:200, data:{result} })
     }
@@ -27,19 +27,18 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', validationCreateContact,async (req, res, next) => {
+router.post('/',validationCreateContact,async (req, res, next) => {
   try {
-    const contact = await Contatcs.addContact(req.body);
+    const contact = await Contatcs.create(req.body);
     return res.status(201).json({ status:'success',code:201, data:{contact}})
   } catch (e) {
     next(e);
-  }
-  
+  }  
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-  const result = await Contatcs.removeContact(req.params.contactId)
+  const result = await Contatcs.remove(req.params.contactId)
   if (result) {
     return res.json({status:'success',code:200, data:{result} })
   }
@@ -51,7 +50,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId',validationUpdateContact, async (req, res, next) => {
     try {
-  const result = await Contatcs.updateContact(req.params.contactId,req.body)
+  const result = await Contatcs.update(req.params.contactId,req.body)
   if (result) {
     return res.json({status:'success',code:200, data:{result} })
   }

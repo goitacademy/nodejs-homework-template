@@ -19,7 +19,7 @@ const schemaUpdateContact = Joi.object({
     })
     .optional(),
   phone: Joi.number().integer().min(7).max(12).optional(),
-}).or("name", "email", "phone").min(1);
+}).or("name", "email", "phone");
 
 const validate = async (schema, obj, next) => {
   try {
