@@ -18,3 +18,5 @@ router
 router.patch("/:contactId/inArray", validationUpdateStatusContact, ctrl.update);
 
 module.exports = router;
+
+console.log("1");
