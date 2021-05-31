@@ -16,11 +16,24 @@ const auth = (req, res, next) => {
         data: "Unauthorized",
       });
     }
+    console.log(user);
     req.user = user;
     next();
   })(req, res, next);
 };
 
+const newAuth = async (req, res, next) => {
+  const payload = req.headers.authorization.split("Bearer ")[1];
+  const resultToken = jwt.verify(payload, "gh239g32hg");
+  const [user] = await User.find({ _id: resultToken.id });
+  if (payload !== user.token) {
+    return res.status(401).json({
+      message: "Not authorized",
+    });
+  }
+  req.user = user;
+  next();
+};
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -40,13 +53,15 @@ router.post("/login", async (req, res, next) => {
   };
 
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+  const newUser = await User.findOneAndUpdate(
+    { email },
+    { token },
+    { new: true }
+  );
   res.json({
     status: "success",
     code: 200,
-    data: {
-      email,
-      token,
-    },
+    data: newUser,
   });
 });
 
@@ -78,22 +93,38 @@ router.post("/registration", async (req, res, next) => {
 });
 
 router.get("/list", auth, (req, res, next) => {
-  const { email } = req.user;
+  const { email, token } = req.user;
   res.json({
     status: "success",
     code: 200,
     data: {
-      message: `Authorization was successful: ${email}`,
+      message: `Authorization was successful: ${email} ${token}`,
     },
   });
 });
 
-router.post("/logout", auth, (req, res, next) => {
-  const { _id } = req.user;
-  res.json({
-    status: "succes",
-    code: 204,
-    data: _id,
+router.get("/logout", newAuth, async (req, res) => {
+  const { email, id } = req.user;
+  console.log(req.user);
+  const logout = await User.findByIdAndUpdate(
+    id,
+    { token: null },
+    { new: true }
+  );
+  console.log(logout);
+  res.send({
+    data: logout,
+  });
+});
+
+router.get("/current", newAuth, async (req, res) => {
+  const { email, subscription } = req.user;
+  res.send({
+    status: "success",
+    ResponseBody: {
+      email,
+      subscription,
+    },
   });
 });
 
