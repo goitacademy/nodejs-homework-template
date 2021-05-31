@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const validateAddContact = Joi.object({
   name: Joi.string().trim().min(2).max(30).required(),
@@ -6,6 +7,7 @@ const validateAddContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
+  favorite: Joi.boolean().optional(),
 }).or('email', 'phone');
 
 const validateUpdateContact = Joi.object({
@@ -14,7 +16,14 @@ const validateUpdateContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
-}).or('name', 'email', 'phone');
+  favorite: Joi.boolean().optional(),
+}).or('name', 'email', 'phone', 'favorite');
+
+const validateUpdateFavorite = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    'any.required': "Missing 'favorite' field.",
+  }),
+});
 
 const validate = async (schema, request, next) => {
   try {
@@ -34,5 +43,17 @@ module.exports = {
   },
   validationUpdatedContact: (req, res, next) => {
     return validate(validateUpdateContact, req.body, next);
+  },
+  validateUpdateFavorite: (req, res, next) => {
+    return validate(validateUpdateFavorite, req.body, next);
+  },
+  validateMongoId: (req, res, next) => {
+    if (!mongoose.isValidObjectId(req.params.contactId)) {
+      next({
+        status: 400,
+        message: 'Invalid id.',
+      });
+    }
+    next();
   },
 };
