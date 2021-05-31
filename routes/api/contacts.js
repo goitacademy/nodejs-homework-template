@@ -59,9 +59,9 @@ router.delete('/:id', async (req, res, next) => {
   }
 })
 
-router.patch('/:id/favorites', validateUpdateFavouriteContact, async (req, res, next) => {
+router.patch('/:id/favorite', validateUpdateFavouriteContact, async (req, res, next) => {
      try {
-    const contact = await Contacts.update(req.params.id, req.body)
+    const contact = await Contacts.updateStatusContact(req.params.id, req.body)
     if (contact) {
       return res
         .status(200)
