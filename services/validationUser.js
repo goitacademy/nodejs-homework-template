@@ -24,3 +24,13 @@ const validate = (schema, obj, next) => {
 module.exports.validateSign = (req, _res, next) => {
   return validate(schemaForSign, req.body, next)
 }
+module.exports.validateUploadAvatar = (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).join({
+      status: 400,
+      data: 'Bad request',
+      message: 'field of avatar with file not found'
+    })
+  }
+  next()
+}
