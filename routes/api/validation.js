@@ -64,12 +64,16 @@ module.exports = {
     return validate(schemaUpdateFavoriteStatus, req.body, next);
   },
   validateContactId: (req, res, next) => {
-    if (!mongoose.isValidObjectId(new mongoose.Types.ObjectId(req.params.contactId))) {
+    if (
+      !mongoose.isValidObjectId(
+        new mongoose.Types.ObjectId(req.params.contactId)
+      )
+    ) {
       return next({
         status: 400,
-        message: 'Invalid ObjectId',
-      })
+        message: "Invalid ObjectId",
+      });
     }
-    next()
+    next();
   },
 };

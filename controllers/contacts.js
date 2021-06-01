@@ -60,7 +60,7 @@ const updateContact = async (req, res, next) => {
     if (conatct) {
       return res.json({ status: "success", code: 200, data: { conatct } });
     }
-    return res.json({ status: "error", code: 400, message: "Missing fields" });
+    return res.json({ status: "error", code: 404, message: "Not found" });
   } catch (error) {
     next(error);
   }
@@ -68,7 +68,7 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.updateStatusContact(
+    const contact = await Contacts.updateContact(
       req.params.contactId,
       req.body
     );
@@ -77,8 +77,8 @@ const updateStatusContact = async (req, res, next) => {
     }
     return res.json({
       status: "error",
-      code: 400,
-      message: "Missing field favorite",
+      code: 404,
+      message: "Not found",
     });
   } catch (error) {
     next(error);

@@ -52,17 +52,13 @@ const updateContact = async (contactId, body) => {
   //   { $set: body },
   //   { returnOriginal: false }
   // );
-  const result = await Contact.findByIdAndUpdate(
-    contactId,
-    { ...body },
-    {
-      new: true,
-    }
-  );
+  const result = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
   return result;
 };
 
-const updateStatusContact = async (contactId, body) => {
+// const updateStatusContact = async (contactId, body) => {
   // const collection = await getCollection(db, "contacts");
   // const objId = new ObjectId(contactId);
   // const { value: result } = await collection.findOneAndUpdate(
@@ -70,15 +66,12 @@ const updateStatusContact = async (contactId, body) => {
   //   { $set: body },
   //   { returnOriginal: false }
   // );
-  const result = await Contact.findByIdAndUpdate(
-    contactId,
-    {...body},
-    {
-      new: true,
-    }
-  );
-  return result;
-};
+//   const result = await Contact.findByIdAndUpdate(contactId, body, {
+//     new: true,
+//   });
+//   console.log(body);
+//   return result;
+// };
 
 module.exports = {
   listContacts,
@@ -86,5 +79,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
+  // updateStatusContact,
 };
