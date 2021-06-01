@@ -1,5 +1,5 @@
 const express = require('express')
-const { validateCreateUser } = require('../../validation/validateUser')
+const { validateCreateUser, validateUpdateSubscriptionUser } = require('../../validation/validateUser')
 const router = express.Router()
 
 const {
@@ -12,7 +12,7 @@ const {
   logout
 } = require('../../model/auth')
 
-router.post('/api/users/login', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   try {
     const user = await login(req.body.email, req.body.password)
     if (user) {
@@ -32,7 +32,7 @@ router.post('/api/users/login', async (req, res, next) => {
   }
 })
 
-router.post('/api/users/logout', async (req, res, next) => {
+router.post('/logout', async (req, res, next) => {
   try {
     const user = await logout(req.body.email, req.body.password)
     if (user) {
@@ -52,9 +52,10 @@ router.post('/api/users/logout', async (req, res, next) => {
   }
 })
 
-router.post('/api/users/signup', async (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
   try {
     const user = await getuserByEmail(req.body.email)
+    // console.log(user)
     if (user) {
       return next({
         status: 409,
@@ -64,15 +65,13 @@ router.post('/api/users/signup', async (req, res, next) => {
     }
     if (req.body.name && req.body.email && req.body.password) {
       const user = await addUser(req.body)
+      // console.log(user)
       res.json({
         status: 'Success',
         code: 201,
         data: {
-          id: user.id,
           name: user.name,
-          email: user.email,
-          subscription: 'starter',
-          token: null
+          email: user.email
         }
       })
     } else {
@@ -86,7 +85,7 @@ router.post('/api/users/signup', async (req, res, next) => {
   }
 })
 
-router.patch('/api/users/:userId/subscription', validateUpdateSubscriptionUser, async (req, res, next) => {
+router.patch('/:userId/subscription', async (req, res, next) => {
   try {
     if (req.body.subscription) {
       const updatedUser = await updateSubscriptionUser(req.params.userId, req.body)

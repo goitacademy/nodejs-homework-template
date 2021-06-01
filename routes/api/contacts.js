@@ -12,7 +12,7 @@ const {
   updateStatusContact
 } = require('../../model/contacts.js')
 
-router.get('/api/contacts', guard, async (req, res, next) => {
+router.get('/', guard, async (req, res, next) => {
   try {
     const contacts = await listContacts()
     res.json({
@@ -25,7 +25,7 @@ router.get('/api/contacts', guard, async (req, res, next) => {
   }
 })
 
-router.get('/api/contacts/:contactId', guard, async (req, res, next) => {
+router.get('/:contactId', guard, async (req, res, next) => {
   try {
     const contact = await getContactById(req.params.contactId)
     if (contact) {
@@ -45,7 +45,7 @@ router.get('/api/contacts/:contactId', guard, async (req, res, next) => {
   }
 })
 
-router.post('/api/contacts', guard, validateCreateContact, async (req, res, next) => {
+router.post('/', guard, validateCreateContact, async (req, res, next) => {
   try {
     if (req.body.name && req.body.email && req.body.phone) {
       const contact = await addContact(req.body)
@@ -65,7 +65,7 @@ router.post('/api/contacts', guard, validateCreateContact, async (req, res, next
   }
 })
 
-router.delete('/api/contacts/:contactId', guard, async (req, res, next) => {
+router.delete('/:contactId', guard, async (req, res, next) => {
   try {
     const contactToDelete = await removeContact(req.params.contactId)
     if (contactToDelete) {
@@ -84,7 +84,7 @@ router.delete('/api/contacts/:contactId', guard, async (req, res, next) => {
   }
 })
 
-router.patch('/api/contacts/:contactId', guard, validateUpdateContact, async (req, res, next) => {
+router.patch('/:contactId', guard, validateUpdateContact, async (req, res, next) => {
   try {
     if (req.body.name || req.body.email || req.body.phone) {
       const updatedContact = await updateContact(req.params.contactId, req.body)
@@ -111,7 +111,7 @@ router.patch('/api/contacts/:contactId', guard, validateUpdateContact, async (re
   }
 })
 
-router.patch('/api/contacts/:contactId/favorite', guard, validateUpdateStatusContact, async (req, res, next) => {
+router.patch('/:contactId/favorite', guard, validateUpdateStatusContact, async (req, res, next) => {
   try {
     if (req.body.favorite) {
       const updatedContact = await updateStatusContact(req.params.contactId, req.body)

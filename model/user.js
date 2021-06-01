@@ -20,7 +20,8 @@ const getuserByEmail = async (email) => {
 
 const addUser = async (body) => {
   try {
-    const response = await User.create(body)
+    // const response = await User.create(body)
+    const response = body
     return response
   } catch {
     return {}
