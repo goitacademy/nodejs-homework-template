@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Contacts = require("../../model");
+const Contacts = require("../../model/contacts");
 const {
   validationCreateContact,
   validationUpdateContact,
+  validationUpdateFavoriteStatus,
 } = require("./validation");
 
 router.get("/", async (req, res, next) => {
@@ -67,9 +68,32 @@ router.put("/:contactId", validationUpdateContact, async (req, res, next) => {
       return res.json({ status: "success", code: 200, data: { conatct } });
     }
     return res.json({ status: "error", code: 400, message: "Missing fields" });
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
   }
 });
+
+router.patch(
+  "/:contactId/favorite",
+  validationUpdateFavoriteStatus,
+  async (req, res, next) => {
+    try {
+      const contact = await Contacts.updateStatusContact(
+        req.params.contactId,
+        req.body
+      );
+      if (contact) {
+        return res.json({ status: "success", code: 200, data: { contact } });
+      }
+      return res.json({
+        status: "error",
+        code: 400,
+        message: "Missing field favorite",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
