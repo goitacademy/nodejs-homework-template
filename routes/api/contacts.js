@@ -1,6 +1,7 @@
 const express = require('express')
 const { validateCreateContact, validateUpdateContact, validateUpdateStatusContact } = require('../../validation/validate')
 const router = express.Router()
+const guard = require('../../helpers/guard')
 
 const {
   listContacts,
@@ -9,9 +10,9 @@ const {
   addContact,
   updateContact,
   updateStatusContact
-} = require('../../model/index.js')
+} = require('../../model/contacts.js')
 
-router.get('/api/contacts', async (req, res, next) => {
+router.get('/api/contacts', guard, async (req, res, next) => {
   try {
     const contacts = await listContacts()
     res.json({
@@ -24,7 +25,7 @@ router.get('/api/contacts', async (req, res, next) => {
   }
 })
 
-router.get('/api/contacts/:contactId', async (req, res, next) => {
+router.get('/api/contacts/:contactId', guard, async (req, res, next) => {
   try {
     const contact = await getContactById(req.params.contactId)
     if (contact) {
@@ -44,7 +45,7 @@ router.get('/api/contacts/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/api/contacts', validateCreateContact, async (req, res, next) => {
+router.post('/api/contacts', guard, validateCreateContact, async (req, res, next) => {
   try {
     if (req.body.name && req.body.email && req.body.phone) {
       const contact = await addContact(req.body)
@@ -64,7 +65,7 @@ router.post('/api/contacts', validateCreateContact, async (req, res, next) => {
   }
 })
 
-router.delete('/api/contacts/:contactId', async (req, res, next) => {
+router.delete('/api/contacts/:contactId', guard, async (req, res, next) => {
   try {
     const contactToDelete = await removeContact(req.params.contactId)
     if (contactToDelete) {
@@ -83,7 +84,7 @@ router.delete('/api/contacts/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res, next) => {
+router.patch('/api/contacts/:contactId', guard, validateUpdateContact, async (req, res, next) => {
   try {
     if (req.body.name || req.body.email || req.body.phone) {
       const updatedContact = await updateContact(req.params.contactId, req.body)
@@ -110,7 +111,7 @@ router.patch('/api/contacts/:contactId', validateUpdateContact, async (req, res,
   }
 })
 
-router.patch('/api/contacts/:contactId/favorite', validateUpdateStatusContact, async (req, res, next) => {
+router.patch('/api/contacts/:contactId/favorite', guard, validateUpdateStatusContact, async (req, res, next) => {
   try {
     if (req.body.favorite) {
       const updatedContact = await updateStatusContact(req.params.contactId, req.body)
