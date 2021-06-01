@@ -1,5 +1,5 @@
 const Joi = require("joi");
-// const phoneJoi = Joi.extend(require("joi-phone-number"));
+const mongoose = require("mongoose");
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -62,5 +62,14 @@ module.exports = {
   },
   validationUpdateFavoriteStatus: (req, res, next) => {
     return validate(schemaUpdateFavoriteStatus, req.body, next);
+  },
+  validateContactId: (req, res, next) => {
+    if (!mongoose.isValidObjectId(new mongoose.Types.ObjectId(req.params.contactId))) {
+      return next({
+        status: 400,
+        message: 'Invalid ObjectId',
+      })
+    }
+    next()
   },
 };
