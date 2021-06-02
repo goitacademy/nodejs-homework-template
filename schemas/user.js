@@ -1,21 +1,24 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose
 const bcrypt = require('bcryptjs')
 const SALT_FACTOR = 6
-const { Schema } = mongoose
 
 const userSchema = new Schema({
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
+  name: {
+    type: String
   },
   email: {
     type: String,
     required: [true, 'Email is required'],
     unique: true,
     validate(value) {
-      const re = /\s+@\S+\.\S+/
+      const re = /\S+@\S+\.\S+/
       return re.test(String(value).toLowerCase())
     }
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
   },
   subscription: {
     type: String,
@@ -41,6 +44,6 @@ userSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('users', userSchema)
 
 module.exports = User

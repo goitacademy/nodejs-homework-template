@@ -1,11 +1,12 @@
 const express = require('express')
-const { validateCreateUser, validateUpdateSubscriptionUser } = require('../../validation/validateUser')
+// const { validateCreateUser, validateUpdateSubscriptionUser } = require('../../validation/validateUser')
 const router = express.Router()
 
 const {
   getuserByEmail,
   addUser,
-  updateSubscriptionUser
+  updateSubscriptionUser,
+  getuserByToken
 } = require('../../model/user.js')
 const {
   login,
@@ -34,12 +35,11 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
   try {
-    const user = await logout(req.body.email, req.body.password)
+    const user = await logout(req.body._id)
     if (user) {
       res.json({
         status: 'Success',
-        code: 200,
-        data: user
+        code: 204,
       })
     } else {
       next({
@@ -65,7 +65,6 @@ router.post('/signup', async (req, res, next) => {
     }
     if (req.body.name && req.body.email && req.body.password) {
       const user = await addUser(req.body)
-      // console.log(user)
       res.json({
         status: 'Success',
         code: 201,
@@ -105,6 +104,26 @@ router.patch('/:userId/subscription', async (req, res, next) => {
       res.json({
         code: 400,
         message: 'Missing field subscription'
+      })
+    }
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/current', async (req, res, next) => {
+  try {
+    const user = await getuserByToken(req.rawHeaders[1])
+    if (user) {
+      res.json({
+        status: 'Success',
+        code: 200,
+        data: user
+      })
+    } else {
+      next({
+        code: 401,
+        message: 'Invalid token',
       })
     }
   } catch (e) {
