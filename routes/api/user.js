@@ -1,5 +1,5 @@
 const express = require('express')
-// const { validateCreateUser, validateUpdateSubscriptionUser } = require('../../validation/validateUser')
+const { validateCreateUser, validateUpdateSubscriptionUser } = require('../../validation/validateUser')
 const router = express.Router()
 
 const {
@@ -52,10 +52,9 @@ router.post('/logout', async (req, res, next) => {
   }
 })
 
-router.post('/signup', async (req, res, next) => {
+router.post('/signup', validateCreateUser, async (req, res, next) => {
   try {
     const user = await getuserByEmail(req.body.email)
-    // console.log(user)
     if (user) {
       return next({
         status: 409,
@@ -84,7 +83,7 @@ router.post('/signup', async (req, res, next) => {
   }
 })
 
-router.patch('/:userId/subscription', async (req, res, next) => {
+router.patch('/:userId/subscription', validateUpdateSubscriptionUser, async (req, res, next) => {
   try {
     if (req.body.subscription) {
       const updatedUser = await updateSubscriptionUser(req.params.userId, req.body)

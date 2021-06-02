@@ -1,19 +1,20 @@
 const Joi = require('joi')
 
-const schemaCreateContact = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
+const schemaCreateUser = Joi.object({
+  name: Joi.string().min(3).max(30).optional(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  phone: Joi.string().pattern(new RegExp('^[0-9]{3,30}$')).required()
+  password: Joi.string().pattern(new RegExp('^[a-zA-z0-9][a-zA-z0-9][a-zA-z0-9][a-zA-z0-9][a-zA-z0-9]$')).required()
 })
 
-const schemaUpdateContact = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).optional(),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-  phone: Joi.string().pattern(new RegExp('^[0-9]{3,30}$')).optional()
-})
+// /\S+@\S+\.\S+/
+// const schemaUpdateContact = Joi.object({
+//   name: Joi.string().alphanum().min(3).max(30).optional(),
+//   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+//   phone: Joi.string().pattern(new RegExp('^[0-9]{3,30}$')).optional()
+// })
 
-const schemaUpdateStatusContact = Joi.object({
-  favorite: Joi.boolean().required()
+const schemaUpdateSubscriptionUser = Joi.object({
+  subscription: Joi.string().pattern(new RegExp('^starter$|^pro$|^business$')).required()
 })
 
 const validate = (schema, body, next) => {
@@ -28,14 +29,14 @@ const validate = (schema, body, next) => {
   next()
 }
 
-module.exports.validateCreateContact = (req, res, next) => {
-  return validate(schemaCreateContact, req.body, next)
+module.exports.validateCreateUser = (req, res, next) => {
+  return validate(schemaCreateUser, req.body, next)
 }
 
-module.exports.validateUpdateContact = (req, res, next) => {
-  return validate(schemaUpdateContact, req.body, next)
-}
+// module.exports.validateUpdateContact = (req, res, next) => {
+//   return validate(schemaUpdateContact, req.body, next)
+// }
 
-module.exports.validateUpdateStatusContact = (req, res, next) => {
-  return validate(schemaUpdateStatusContact, req.body, next)
+module.exports.validateUpdateSubscriptionUser = (req, res, next) => {
+  return validate(schemaUpdateSubscriptionUser, req.body, next)
 }
