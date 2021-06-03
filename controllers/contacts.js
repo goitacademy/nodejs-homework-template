@@ -1,7 +1,10 @@
-const Contacts = require("../repositories/index");
+// в папке controllers (принимает запросы, формирует и отдает ответы, пробрасывает данные) хранятся controllers и бизнес-логика. По-хорошему бизнес-логика должна быть прописана в папке  service (например, загрузка картинок)
+const Contacts = require("../repositories/contacts");
 
 const listContacts = async (req, res, next) => {
   try {
+    console.log(req.user); // получение user. Везде где будет quard - будет получен доступ к  нему
+
     const contacts = await Contacts.listContacts();
 
     return res.json({ status: "success", code: 200, data: { contacts } });

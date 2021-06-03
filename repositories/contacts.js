@@ -1,3 +1,4 @@
+// папка repositories - это папка для работы с хранилищем
 const Contact = require("../model/contact");
 
 const listContacts = async () => {
