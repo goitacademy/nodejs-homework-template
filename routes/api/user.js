@@ -44,7 +44,7 @@ router.post('/logout', async (req, res, next) => {
     } else {
       next({
         code: 401,
-        message: 'Invalid login or password',
+        message: 'Not authorized',
       })
     }
   } catch (e) {
@@ -122,7 +122,7 @@ router.get('/current', async (req, res, next) => {
     } else {
       next({
         code: 401,
-        message: 'Invalid token',
+        message: 'Not authorized',
       })
     }
   } catch (e) {

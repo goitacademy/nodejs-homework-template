@@ -21,7 +21,6 @@ const getuserByEmail = async (email) => {
 const getuserByToken = async (token) => {
   try {
     const modifiedToken = token.split(' ')
-    console.log(modifiedToken)
     const user = await User.findOne({ token: modifiedToken[1] })
     return {
       _id: user._id,
@@ -33,7 +32,7 @@ const getuserByToken = async (token) => {
       updatedAt: user.updatedAt
     }
   } catch {
-    return {}
+    return null
   }
 }
 

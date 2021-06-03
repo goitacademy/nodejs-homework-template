@@ -6,7 +6,8 @@ const SEKRET_KEY = process.env.JWT_SECRET_KEY
 const login = async (email, password) => {
   try {
     const user = await User.findOne({ email })
-    if (!user || !user.validPassword(password)) {
+    const validatedPass = await user.validPassword(password)
+    if (!user || !validatedPass) {
       return null
     }
     const id = user.id
@@ -15,16 +16,20 @@ const login = async (email, password) => {
     await updateToken(id, token)
     return token
   } catch {
-    return {}
+    return null
   }
 }
 
 const logout = async (userId) => {
   try {
     const user = await updateToken(userId, null)
-    return { token: user.token }
+    if (user) {
+      return { token: user.token }
+    } else {
+      return null
+    }
   } catch {
-    return {}
+    return null
   }
 }
 
