@@ -12,7 +12,7 @@ const schemaCreateContact = Joi.object({
         .optional(),
     phone: Joi.number()
         .required(),
-    inFavorites: Joi.boolean()
+    favorite: Joi.boolean()
         .optional(),
 });
 
@@ -28,7 +28,7 @@ const schemaUpdateContact = Joi.object({
         .optional(),
     phone: Joi.number()
         .optional(),
-    inFavorites: Joi.boolean()
+    favorite: Joi.boolean()
         .optional(),
 });
 
