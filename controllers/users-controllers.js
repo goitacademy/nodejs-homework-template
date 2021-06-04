@@ -101,4 +101,26 @@ const current = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, logout, current };
+const updateSubscription = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const updatedSubscription = await Users.updateSubscription(id, req.body);
+
+    if (!updatedSubscription) {
+      return res
+        .status(HttpCodes.NOT_FOUND)
+        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+    }
+    const { email, subscription } = updatedSubscription;
+    return res.json({
+      status: 'success',
+      code: HttpCodes.OK,
+      message: 'Contact updated.',
+      payload: { email, subscription },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, login, logout, current, updateSubscription };

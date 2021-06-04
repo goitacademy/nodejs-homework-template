@@ -1,7 +1,7 @@
 const User = require('./users-schema');
 
-const findUserById = async id => {
-  return await User.findById(id);
+const findUserById = async userId => {
+  return await User.findById(userId);
 };
 
 const findUserByEmail = async email => {
@@ -13,8 +13,12 @@ const createUser = async body => {
   return await user.save();
 };
 
-const updateToken = async (id, token) => {
-  return await User.updateOne({ _id: id }, { token });
+const updateToken = async (userId, token) => {
+  return await User.updateOne({ _id: userId }, { token });
 };
 
-module.exports = { findUserById, findUserByEmail, createUser, updateToken };
+const updateSubscription = async (userId, body) => {
+  return await User.findByIdAndUpdate(userId, { ...body }, { new: true });
+};
+
+module.exports = { findUserById, findUserByEmail, createUser, updateToken, updateSubscription };
