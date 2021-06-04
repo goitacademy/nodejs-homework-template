@@ -7,6 +7,8 @@ const guard = require('../../../helpers/guard');
 
 const ctrls = require('../../../controllers/users.js');
 
+const upload = require('../../../helpers/upload');
+
 const {
   validateSignupUser,
   validateLoginUser,
@@ -18,5 +20,6 @@ router.post('/signup', validateSignupUser, registerLimiter, ctrls.signup);
 router.post('/login', validateLoginUser, ctrls.login);
 router.post('/logout', guard, ctrls.logout);
 router.get('/current', guard, ctrls.current);
+router.patch('/avatars', [guard, upload.single('avatar')], ctrls.avatars);
 
 module.exports = router;

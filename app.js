@@ -1,5 +1,6 @@
 const express = require('express');
 const logger = require('morgan');
+const path = require('path');
 const cors = require('cors');
 const { limiter } = require('./helpers/limiter');
 const helmet = require('helmet');
@@ -13,6 +14,11 @@ const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(helmet()); // Скрывает лишниее и устанавливает заголовки() в целях безоп.
+
+// require('dotenv').config();
+
+// const USER_AVATARS = process.env.USER_AVATARS;
+// app.use(express.static(path.join(__dirname, USER_AVATARS))); // Раздача статики
 
 app.use(limiter); // защита от ддоса ( количество запросов с одного айпи)
 app.use(logger(formatsLogger));

@@ -2,6 +2,7 @@ const Joi = require('joi');
 const { HttpCode, Subscription } = require('../../../helpers/constants');
 
 const schemaSignupUser = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30).optional(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
