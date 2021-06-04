@@ -2,6 +2,7 @@ const express = require('express')
 const { validateCreateContact, validateUpdateContact, validateUpdateStatusContact } = require('../../validation/validate')
 const router = express.Router()
 const guard = require('../../helpers/guard')
+const { onDecryptToken } = require('../../helpers/tokenDecription')
 
 const {
   listContacts,
@@ -14,7 +15,9 @@ const {
 
 router.get('/', guard, async (req, res, next) => {
   try {
-    const contacts = await listContacts()
+    const decodedToken = onDecryptToken(req.headers.authorization)
+    const userId = decodedToken.id
+    const contacts = await listContacts(userId, req.query)
     res.json({
       status: 'success',
       code: 200,
@@ -27,7 +30,9 @@ router.get('/', guard, async (req, res, next) => {
 
 router.get('/:contactId', guard, async (req, res, next) => {
   try {
-    const contact = await getContactById(req.params.contactId)
+    const decodedToken = onDecryptToken(req.headers.authorization)
+    const userId = decodedToken.id
+    const contact = await getContactById(userId, req.params.contactId)
     if (contact) {
       res.json({
         status: 'Success',
@@ -48,7 +53,9 @@ router.get('/:contactId', guard, async (req, res, next) => {
 router.post('/', guard, validateCreateContact, async (req, res, next) => {
   try {
     if (req.body.name && req.body.email && req.body.phone) {
-      const contact = await addContact(req.body)
+      const decodedToken = onDecryptToken(req.headers.authorization)
+      const userId = decodedToken.id
+      const contact = await addContact(userId, req.body)
       res.json({
         status: 'Success',
         code: 201,
@@ -67,7 +74,9 @@ router.post('/', guard, validateCreateContact, async (req, res, next) => {
 
 router.delete('/:contactId', guard, async (req, res, next) => {
   try {
-    const contactToDelete = await removeContact(req.params.contactId)
+    const decodedToken = onDecryptToken(req.headers.authorization)
+    const userId = decodedToken.id
+    const contactToDelete = await removeContact(userId, req.params.contactId)
     if (contactToDelete) {
       res.json({
         code: 200,
@@ -87,7 +96,9 @@ router.delete('/:contactId', guard, async (req, res, next) => {
 router.patch('/:contactId', guard, validateUpdateContact, async (req, res, next) => {
   try {
     if (req.body.name || req.body.email || req.body.phone) {
-      const updatedContact = await updateContact(req.params.contactId, req.body)
+      const decodedToken = onDecryptToken(req.headers.authorization)
+      const userId = decodedToken.id
+      const updatedContact = await updateContact(userId, req.params.contactId, req.body)
       if (updatedContact) {
         res.json({
           status: 'Success',
@@ -114,7 +125,9 @@ router.patch('/:contactId', guard, validateUpdateContact, async (req, res, next)
 router.patch('/:contactId/favorite', guard, validateUpdateStatusContact, async (req, res, next) => {
   try {
     if (req.body.favorite) {
-      const updatedContact = await updateStatusContact(req.params.contactId, req.body)
+      const decodedToken = onDecryptToken(req.headers.authorization)
+      const userId = decodedToken.id
+      const updatedContact = await updateStatusContact(userId, req.params.contactId, req.body)
       if (updatedContact) {
         res.json({
           status: 'Success',
