@@ -17,4 +17,8 @@ const HttpCodes = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-module.exports = { Subscription, HttpCodes };
+const Limits = {
+  JSON: 10000,
+};
+
+module.exports = { Subscription, HttpCodes, Limits };
