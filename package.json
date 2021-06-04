@@ -1,20 +1,22 @@
 {
   "name": "nodejs-rest-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint": "eslint **/*.{js,json}",
+    "lint:fix": "eslint --fix **/*.{js,json}",
+    "dev:debug": "node --inspect ./bin/server.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
     "joi": "17.4.0",
-    "morgan": "1.10.0",
-    "shortid": "^2.2.16"
+    "mongoose": "5.11.18",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
