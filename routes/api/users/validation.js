@@ -5,6 +5,11 @@ const validateNewUser = Joi.object({
   password: Joi.string().alphanum().min(5).max(25).required(),
 });
 
+const validateLoginUser = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
 const validate = async (schema, request, next) => {
   try {
     await schema.validateAsync(request);
@@ -20,5 +25,8 @@ const validate = async (schema, request, next) => {
 module.exports = {
   validationNewUser: (req, res, next) => {
     return validate(validateNewUser, req.body, next);
+  },
+  validationLoginUser: (req, res, next) => {
+    return validate(validateLoginUser, req.body, next);
   },
 };
