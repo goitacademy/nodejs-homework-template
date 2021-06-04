@@ -6,7 +6,7 @@ const {
   validateMongoId,
   validateUpdateFavorite,
 } = require('./validation');
-const Controllers = require('../../controllers/contacts-controllers');
+const Controllers = require('../../../controllers/contacts-controllers');
 
 router.get('/', Controllers.getAllContacts).post('/', validationAddedContact, Controllers.addContact);
 

@@ -2,8 +2,8 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
-const contactsRouter = require('./routes/api/contacts');
-const usersRouter = require('./routes/api/users');
+const contactsRouter = require('./routes/api/contacts/contacts');
+const usersRouter = require('./routes/api/users/users');
 
 const app = express();
 
