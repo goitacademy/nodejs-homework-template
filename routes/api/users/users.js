@@ -7,5 +7,6 @@ const Controllers = require('../../../controllers/users-controllers');
 router.post('/signup', validationNewUser, Controllers.signup);
 router.post('/login', validationLoginUser, Controllers.login);
 router.post('/logout', tokenCheck, Controllers.logout);
+router.get('/current', tokenCheck, Controllers.current);
 
 module.exports = router;
