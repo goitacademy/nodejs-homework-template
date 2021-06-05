@@ -3,6 +3,10 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
 const User = require("../model/users.model");
 const { HttpCode } = require("../helpers/constants");
+const UploadAvatar = require("../services/upload-avatars");
+
+require("dotenv").config();
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
 
 const register = async (req, res, next) => {
   try {
@@ -53,9 +57,9 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (_req, res, next) => {
+const logout = async (req, res, _next) => {
   try {
-    await User.updateToken(res.locals.user.id, null);
+    await User.updateToken(req.user.id, null);
     return res.status(HttpCode.NO_CONTENT).json({});
   } catch (err) {
     return res.status(HttpCode.UNAUTORIZED).json({
@@ -66,8 +70,8 @@ const logout = async (_req, res, next) => {
   }
 };
 
-const getCurrentUser = async (_req, res, next) => {
-  const currentUserId = res.locals.user.id;
+const getCurrentUser = async (req, res, next) => {
+  const currentUserId = req.user.id;
 
   try {
     if (currentUserId) {
@@ -87,7 +91,7 @@ const getCurrentUser = async (_req, res, next) => {
 };
 
 const subscriptionUpdate = async (req, res, next) => {
-  const currentUserId = res.locals.user.id;
+  const currentUserId = req.user.id;
 
   try {
     if (req.body && currentUserId) {
@@ -112,10 +116,36 @@ const subscriptionUpdate = async (req, res, next) => {
   }
 };
 
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const uploads = new UploadAvatar(AVATAR_OF_USERS);
+
+    const avatar = await uploads.saveAvatarToStatic({
+      idUser: id,
+      pathFile: req.file.path,
+      name: req.file.filename,
+      oldFile: req.user.avatar,
+    });
+
+    await User.updateAvatar(id, avatar);
+
+    return res.json({
+      status: "success",
+      code: HttpCode.OK,
+      data: { avatar },
+    });
+  } catch (err) {
+    //  console.log("catch");
+    next(err.message);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   getCurrentUser,
   subscriptionUpdate,
+  avatars,
 };

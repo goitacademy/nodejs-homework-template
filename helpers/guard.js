@@ -9,14 +9,15 @@ const quard = (req, res, next) => {
       token = req.get("Authorization").split(" ")[1];
     }
     if (!user || err || token !== user.token) {
-      console.log("guard", user, err, token, user.token);
+      // console.log("guard", user, err, token, user.token);
       return res.status(HttpCode.UNAUTORIZED).json({
         status: "Unauthorized",
         code: HttpCode.UNAUTORIZED,
         message: "Not authorized",
       });
     }
-    res.locals.user = user;
+    req.user = user;
+    console.log("user from guard", user);
     next();
   })(req, res, next);
 };

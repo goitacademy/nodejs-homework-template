@@ -1,7 +1,13 @@
 const mongoose = require("mongoose");
 
 require("dotenv").config();
-const uriDb = process.env.DB_HOST;
+let uriDb = null;
+
+if (process.env.NODE_ENV === "test") {
+  uriDb = process.env.DB_HOST_TEST;
+} else {
+  uriDb = process.env.DB_HOST;
+}
 
 const db = mongoose.connect(uriDb, {
   userNewUrlParser: true,
