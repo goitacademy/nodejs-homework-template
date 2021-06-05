@@ -24,10 +24,15 @@ const current = async (token) => {
   return user
 }
 
+const updateAvatar = async (id, avatar) => {
+  return await User.findByIdAndUpdate(id, { avatar })
+}
+
 module.exports = {
   findById,
   create,
   findByEmail,
   updateToken,
   current,
+  updateAvatar,
 }

@@ -1,5 +1,6 @@
 const express = require('express')
 const logger = require('morgan')
+const path = require('path')
 const cors = require('cors')
 const boolParser = require('express-query-boolean')
 const helmet = require('helmet')
@@ -9,11 +10,16 @@ const limiter = require('./helpers/limiter')
 const usersRouter = require('./routes/api/users')
 const contactsRouter = require('./routes/api/contacts')
 
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(helmet())
+
+require('dotenv').config()
+const AVATARS_OF_USERS = process.env.AVATARS_OF_USERS
+app.use(express.static(path.join(__dirname, AVATARS_OF_USERS)))
 
 app.use(limiter)
 app.use(logger(formatsLogger))
@@ -31,7 +37,7 @@ app.use((req, res, next) => {
     status: 'error',
     code: HttpCode.NOT_FOUND,
     message: `Use api on routes ${req.baseUrl}/api/contacts`,
-    data: 'Not found', //можно data не писать
+    data: 'Not found', 
   })
 })
 
