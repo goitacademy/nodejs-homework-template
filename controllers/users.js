@@ -67,8 +67,6 @@ const logout = async (req, res, next) => {
 
 const currentUser = async (req, res, next) => {
   try {
-    console.log(req);
-
     const { email, subscription } = req.user;
 
     return res.status(HttpCode.OK).json({
