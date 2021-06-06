@@ -17,4 +17,23 @@ const updateToken = async (id, token) => {
   return await User.updateOne({ _id: id }, { token });
 };
 
-module.exports = { findById, findByEmail, createUser, updateToken };
+const getCurrentUser = async (id) => {
+  const { email, subscription } = await User.findOne(id);
+
+  return { email, subscription };
+};
+
+const updateUserSubscription = async (id, body) => {
+  const result = await User.findByIdAndUpdate(id, { ...body }, { new: true });
+
+  return result;
+};
+
+module.exports = {
+  findById,
+  findByEmail,
+  createUser,
+  updateToken,
+  getCurrentUser,
+  updateUserSubscription,
+};

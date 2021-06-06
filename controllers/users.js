@@ -55,12 +55,53 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    const contacts = await Users.listContacts();
+    const id = req.user.id; // достаем сперва id
 
-    return res.json({ status: "success", code: 200, data: { contacts } });
+    await Users.updateToken(id, null); // обнуляем token пользователя , присваеваем ему token=null
+
+    return res.status(HttpCode.NO_CONTENT).json(); //  отдаем, что нет контента
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { signup, login, logout };
+const currentUser = async (req, res, next) => {
+  try {
+    console.log(req);
+
+    const { email, subscription } = req.user;
+
+    return res.status(HttpCode.OK).json({
+      status: "success",
+      code: HttpCode.OK,
+      data: { email, subscription },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const id = req.user.id; // достаем сперва id, чтобы отображалась только те данные, которые принадлежат пользователю
+
+    if (req.body) {
+      const user = await Users.updateUserSubscription(id, req.body);
+
+      const { email, subscription } = user;
+
+      if (user) {
+        return res.status(HttpCode.OK).json({
+          status: "success",
+          code: HttpCode.OK,
+          data: { email, subscription },
+        });
+      }
+      return res.json({ status: "error", code: 404, message: "Not Found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, login, logout, currentUser, update };

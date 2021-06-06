@@ -1,4 +1,4 @@
-// guard.js - в этом файле создадим middleware, которая будет вешаться на Route и будет указывать можно ли продолжать выполнение кода или нет. Также подключаем логику passport, которая прописана в файле config/passport
+// guard.js - в этом файле создадим middleware, которая будет вешаться на Route и будет указывать можно ли продолжать выполнение кода или нет. Также подключаем логику passport, которая прописана в файле config/passport. Также guard - проверяет jwt token. Подставлем логику кода в api и все controllers, и он проверяет есть ли в заголовке token, если он - guard пропускает его дальше, если нет - отфутболивает и выдает UNAUTHORIZED
 
 const passport = require("passport");
 
@@ -21,7 +21,7 @@ const guard = (req, res, next) => {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: "error",
         code: HttpCode.UNAUTHORIZED,
-        message: "Email or password is wrong",
+        message: "Not authorized",
       }); // если ошибка, или нет user, или token, который записан в базе  не совпадает с тем, который пришел - выдаем ошибку UNAUTHORIZED (401), чтобы не возвращалась просто строка Unauthorized
     }
 

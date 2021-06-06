@@ -3,11 +3,20 @@ const Contacts = require("../repositories/contacts");
 
 const listContacts = async (req, res, next) => {
   try {
-    console.log(req.user); // получение user. Везде где будет quard - будет получен доступ к  нему
+    // console.log(req.user); // получение user. Везде где будет quard - будет получен доступ к  нему
 
-    const contacts = await Contacts.listContacts();
+    const useriId = req.user.id; // достаем сперва id, чтобы отображалась только те данные, которые принадлежат пользователю
 
-    return res.json({ status: "success", code: 200, data: { contacts } });
+    const { docs: contacts, ...rest } = await Contacts.listContacts(
+      useriId,
+      req.query
+    );
+
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { contacts, ...rest },
+    });
   } catch (error) {
     next(error);
   }
@@ -15,7 +24,12 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId);
+    const useriId = req.user.id; // достаем сперва id, чтобы отображалась только те данные, которые принадлежат пользователю
+
+    const contact = await Contacts.getContactById(
+      useriId,
+      req.params.contactId
+    );
 
     if (contact) {
       console.log(contact);
@@ -33,7 +47,9 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.addContact(req.body);
+    const useriId = req.user.id; // достаем сперва id, чтобы отображалась только те данные, которые принадлежат пользователю
+
+    const contact = await Contacts.addContact(useriId, req.body);
 
     return res
       .status(201)
@@ -45,7 +61,9 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.contactId);
+    const useriId = req.user.id; // достаем сперва id, чтобы пользователь мог удалять только те данные, которые принадлежат ему
+
+    const contact = await Contacts.removeContact(useriId, req.params.contactId);
 
     if (contact) {
       return res.status(200).json({
@@ -64,7 +82,10 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const useriId = req.user.id; // достаем сперва id, чтобы пользователь мог обновлять только те данные, которые принадлежат ему
+
     const contact = await Contacts.updateContact(
+      useriId,
       req.params.contactId,
       req.body
     );
