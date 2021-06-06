@@ -4,13 +4,14 @@ const contactsService = new ContactsService();
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsService.listContacts();
+    const userId = req.user.id;
+    const contacts = await contactsService.listContacts(userId, req.query);
 
     res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
       data: {
-        contacts,
+        ...contacts,
       },
     });
   } catch (error) {
@@ -20,7 +21,11 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await contactsService.getContactById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await contactsService.getContactById(
+      userId,
+      req.params.contactId
+    );
 
     if (contact) {
       return res.status(HttpCode.OK).json({
@@ -44,7 +49,8 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.addContact(req.body);
+    const userId = req.user.id;
+    const contact = await contactsService.addContact(userId, req.body);
 
     res.status(HttpCode.CREATED).json({
       status: "success",
@@ -60,7 +66,11 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await contactsService.removeContact(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await contactsService.removeContact(
+      userId,
+      req.params.contactId
+    );
 
     if (contact) {
       return res.status(HttpCode.OK).json({
@@ -85,7 +95,9 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     const contact = await contactsService.updateContact(
+      userId,
       req.params.contactId,
       req.body
     );
@@ -112,7 +124,9 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     const contact = await contactsService.updateStatusContact(
+      userId,
       req.params.contactId,
       req.body
     );

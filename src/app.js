@@ -1,18 +1,41 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const { HttpCode } = require("./helpers/constants");
+const { ErrorHandler } = require("./helpers/errorHandler");
+
+const { apiLimit, jsonLimit } = require("./config/rate-limit.json");
+
+const usersRouter = require("./routes/api/users");
 const contactsRouter = require("./routes/api/contacts");
+
+const apiLimiter = rateLimit({
+  windowMs: apiLimit.windowMs,
+  max: apiLimit.max,
+  handler: (req, res, next) => {
+    next(
+      new ErrorHandler(
+        HttpCode.BAD_REQUEST,
+        `Too many requests. Please, try again later!`
+      )
+    );
+  },
+});
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
+app.use(helmet());
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: jsonLimit }));
 
+app.use("/api", apiLimiter);
+app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res, next) => {
