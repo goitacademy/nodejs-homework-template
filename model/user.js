@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { Subscription } = require("../helpers/constants");
-const bcryptjs = require("bcryptjs"); // для шифрования паролей
-const SALT_WORK_FACTOR = 8; // параметр для шифрования - соль, с числом количества алгоритмов для шифровки
+const bcryptjs = require("bcryptjs");
+const SALT_WORK_FACTOR = 8;
 
 const userSchema = new Schema(
   {
@@ -41,11 +41,10 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
-// шифрование паролей c помощью хука pre, используем метод save(который может вызываться многократно, а нам нужно чтобы он вызвался, только если поле изменилось, для чего прописываем if), т.е. когда будет сохраняться user, то будем сохранять и его password. Чтобы вызвать после сохранения в базу данных можно использовать хук post. Также в параметр принимается асинхронная функция. next - значит: передай укравление дальше. Смысл - перед тем как сохранить данные в базу данных, мы совершаем определенные действия (передаем количество алгоритмов для шифрования, и hash пароль) и передаем управление дальше через next
 
 userSchema.methods.isValidPassword = async function (password) {
   return await bcryptjs.compare(password, this.password);
-}; // проверка пароля с помощью уже прикрученых методов mongoose сравниваем имеющийся password с введенным
+};
 
 const User = model("user", userSchema);
 

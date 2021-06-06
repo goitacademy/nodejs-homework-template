@@ -20,7 +20,7 @@ const HttpCode = {
 };
 
 const limeterAPI = {
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 1000,
   handler: (req, res, next) => {
     return res.status(HttpCode.TOO_MANY_REQUEST).json({
@@ -28,7 +28,7 @@ const limeterAPI = {
       code: HttpCode.TOO_MANY_REQUEST,
       message: "Too many requests, please try again later",
     });
-  }, // чтобы преобразовать ответ от сервера - вместо строки, чтобы приходил объект
+  },
 };
 
 module.exports = { Subscription, HttpCode, limeterAPI };

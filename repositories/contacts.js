@@ -1,12 +1,6 @@
-// папка repositories - это папка для работы с хранилищем
 const Contact = require("../model/contact");
 
 const listContacts = async (userId, query) => {
-  // const results = await Contact.find({ owner: userId }).populate({
-  //   path: "owner",
-  //   select: "email subscription -_id",
-  // }); // чтобы пользователь мог получать только те данные, которые принадлежат ему. populate - свойство, которое видоизменит owner в объект, позволяет связать 2 коллекции, и что не включать в объект;
-
   const {
     sortBy,
     sortByDesc,
@@ -14,13 +8,13 @@ const listContacts = async (userId, query) => {
     favorite = null,
     limit = 20,
     offset = 0,
-  } = query; // limit, offset - всегда приходят в запросе, и которым всегда нужно устанавливать значения по умолчанию. Запрос в базу данных всегда ограничиваем, от возможности положить сервер; sortBy - сортировка по одному столбцу по возрастанию, можно настроить по многим; sortByDesc - сортировка по убыванию; filter - фильтрация по запросу
+  } = query;
 
   const optionSearch = { owner: userId };
 
   if (favorite !== null) {
     optionSearch.favorite = favorite;
-  } // добавляем свойство favorite в query
+  }
 
   const results = await Contact.paginate(optionSearch, {
     limit,
@@ -34,15 +28,10 @@ const listContacts = async (userId, query) => {
       path: "owner",
       select: "name email subscription ",
     },
-  }); // обращаемся к модели, к ее свойству paginate, где 1-м параметром будут опции, 2-м - опции настроек самого плагина, т.е. то что искать
+  });
 
   return results;
 };
-
-// const listContacts = async () => {
-//   const results = await Contact.find(); // получить все контакты
-//   return results;
-// };
 
 const getContactById = async (userId, contactId) => {
   const results = await Contact.findOne({
@@ -55,11 +44,6 @@ const getContactById = async (userId, contactId) => {
   return results;
 };
 
-// const getContactById = async (contactId) => {
-//   const results = await Contact.findOne({ _id: contactId });
-//   return results;
-// };
-
 const removeContact = async (userId, contactId) => {
   const result = await Contact.findOneAndRemove({
     _id: contactId,
@@ -68,20 +52,10 @@ const removeContact = async (userId, contactId) => {
   return result;
 };
 
-// const removeContact = async (contactId) => {
-//   const result = await Contact.findOneAndRemove({ _id: contactId });
-//   return result;
-// };
-
 const addContact = async (userId, body) => {
   const result = await Contact.create({ owner: userId, ...body });
   return result;
 };
-
-// const addContact = async (body) => {
-//   const result = await Contact.create(body);
-//   return result;
-// };
 
 const updateContact = async (userId, contactId, body) => {
   const result = await Contact.findOneAndUpdate(
@@ -91,15 +65,6 @@ const updateContact = async (userId, contactId, body) => {
   );
   return result;
 };
-
-// const updateContact = async (contactId, body) => {
-//   const result = await Contact.findOneAndUpdate(
-//     { _id: contactId },
-//     { ...body },
-//     { new: true }
-//   );
-//   return result;
-// };
 
 module.exports = {
   listContacts,

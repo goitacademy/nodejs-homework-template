@@ -1,5 +1,3 @@
-// файл для подключения роутеров (usersRouter и contactsRouter)
-
 const express = require("express");
 const router = express.Router();
 
