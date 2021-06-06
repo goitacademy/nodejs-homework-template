@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const { Schema } = mongoose;
+const gravatar = require("gravatar");
 const { Subscription } = require("../../helpers/constants");
 
 const userSchema = new Schema({
@@ -17,6 +18,12 @@ const userSchema = new Schema({
     validate(value) {
       const re = /\S+@\S+\.\S+/gi;
       return re.test(String(value).toLowerCase());
+    },
+  },
+  avatar: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: "250" }, true);
     },
   },
   subscription: {
