@@ -20,6 +20,9 @@ const updateToken = async (id, token) => {
 const updateSubscription = async (id, body) => {
   return await User.findByIdAndUpdate(id, { ...body }, { new: true })
 }
+const updateAvatar = async (id, avatarURL) => {
+  return await User.updateOne({ _id: id }, { avatarURL })
+}
 
 module.exports = {
   findUserById,
@@ -27,4 +30,5 @@ module.exports = {
   createUser,
   updateToken,
   updateSubscription,
+  updateAvatar,
 }

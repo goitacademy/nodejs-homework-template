@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const gravatar = require('gravatar')
 const { Schema, model } = mongoose
 const { SUBSCRIPTION } = require('../../helpers/constants')
 const bcrypt = require('bcryptjs')
@@ -28,6 +29,12 @@ const userSchema = new Schema({
     type: String,
     enum: [SUBSCRIPTION.STARTER, SUBSCRIPTION.PRO, SUBSCRIPTION.BUSINESS],
     default: SUBSCRIPTION.STARTER,
+  },
+  avatarURL: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: '250' }, true)
+    },
   },
   token: {
     type: String,

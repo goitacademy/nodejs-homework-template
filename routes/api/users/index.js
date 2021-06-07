@@ -11,7 +11,9 @@ const {
   logOut,
   getCurrent,
   updateSubscription,
+  avatar,
 } = require('../../../controllers/userController')
+const upload = require('../../../helpers/uploadAvatar')
 
 const guard = require('../../../helpers/guard')
 
@@ -20,5 +22,6 @@ router.post('/register', validateUserRegistration, registration)
 router.post('/login', validateUserLoggingIn, logIn)
 router.post('/logout', guard, logOut)
 router.get('/current', guard, getCurrent)
+router.patch('/avatars', [guard, upload.single('avatar')], avatar)
 
 module.exports = router
