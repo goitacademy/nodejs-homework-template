@@ -1,5 +1,5 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2"); // подключение пагинатора
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const contactSchema = new Schema(
   {
@@ -20,7 +20,7 @@ const contactSchema = new Schema(
     owner: {
       type: SchemaTypes.ObjectId,
       ref: "user",
-    }, // привязка, чтобы каждый contact был связан с определенным пользователем
+    },
   },
   {
     versionKey: false,
@@ -40,7 +40,7 @@ contactSchema.virtual("info").get(function () {
   return `The Contact ${this.name} have the ${this.phone} number`;
 });
 
-contactSchema.plugin(mongoosePaginate); // подключение и применение плагина для пагинатора
+contactSchema.plugin(mongoosePaginate);
 
 const Contact = model("contact", contactSchema);
 

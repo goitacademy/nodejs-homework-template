@@ -10,7 +10,7 @@ const findByEmail = async (email) => {
 
 const createUser = async (body) => {
   const user = new User(body);
-  return await user.save(); // здесь сработает хук userSchema.pre из файла model/user.js
+  return await user.save();
 };
 
 const updateToken = async (id, token) => {

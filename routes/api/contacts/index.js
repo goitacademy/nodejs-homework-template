@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../../../controllers/contacts");
-const guard = require("../../../helpers/guard"); // подключаем guard, чтобы правильно работал и подключился passport
+const guard = require("../../../helpers/guard");
 
 const {
   validationCreateContact,
@@ -10,7 +10,7 @@ const {
   validationMongoId,
 } = require("./validation");
 
-router.get("/", guard, controller.listContacts); // подключаем также логику passport, которая прописана в файле config/passport, чтобы незалогиненый пользователь не мог получить доступ к базе данных;  Оборачиваем guard
+router.get("/", guard, controller.listContacts);
 
 router.get("/:contactId", guard, validationMongoId, controller.getContactById);
 
