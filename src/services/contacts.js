@@ -7,33 +7,45 @@ class ContactsService {
     };
   }
 
-  listContacts() {
-    const data = this.repositories.contacts.listContacts();
+  async listContacts(userId, query) {
+    const data = await this.repositories.contacts.listContacts(userId, query);
+    const { docs: contacts, totalDocs: total, limit, page } = data;
+    return { contacts, total, limit, page };
+  }
+
+  async getContactById(userId, contactId) {
+    const data = await this.repositories.contacts.getContactById(
+      userId,
+      contactId
+    );
     return data;
   }
 
-  getContactById(contactId) {
-    const data = this.repositories.contacts.getContactById(contactId);
+  async addContact(userId, body) {
+    const data = await this.repositories.contacts.addContact(userId, body);
     return data;
   }
 
-  addContact(body) {
-    const data = this.repositories.contacts.addContact(body);
+  async removeContact(userId, contactId) {
+    const data = await this.repositories.contacts.removeContact(
+      userId,
+      contactId
+    );
     return data;
   }
 
-  removeContact(contactId) {
-    const data = this.repositories.contacts.removeContact(contactId);
+  async updateContact(userId, contactId, body) {
+    const data = await this.repositories.contacts.updateContact(
+      userId,
+      contactId,
+      body
+    );
     return data;
   }
 
-  updateContact(contactId, body) {
-    const data = this.repositories.contacts.updateContact(contactId, body);
-    return data;
-  }
-
-  updateStatusContact(contactId, body) {
-    const data = this.repositories.contacts.updateStatusContact(
+  async updateStatusContact(userId, contactId, body) {
+    const data = await this.repositories.contacts.updateStatusContact(
+      userId,
       contactId,
       body
     );

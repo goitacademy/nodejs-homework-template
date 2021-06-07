@@ -6,19 +6,27 @@ const {
   validateContactsUpdateStatus,
 } = require("../../validator/contacts");
 
+const { guard } = require("../../helpers/guard");
+
 const router = express.Router();
 
 router
-  .get("/", contactsController.listContacts)
-  .post("/", validateContactsCreate, contactsController.addContact);
+  .get("/", guard, contactsController.listContacts)
+  .post("/", guard, validateContactsCreate, contactsController.addContact);
 
 router
-  .get("/:contactId", contactsController.getContactById)
-  .put("/:contactId", validateContactsUpdate, contactsController.updateContact)
-  .delete("/:contactId", contactsController.removeContact);
+  .get("/:contactId", guard, contactsController.getContactById)
+  .put(
+    "/:contactId",
+    guard,
+    validateContactsUpdate,
+    contactsController.updateContact
+  )
+  .delete("/:contactId", guard, contactsController.removeContact);
 
 router.patch(
   "/:contactId/favorite",
+  guard,
   validateContactsUpdateStatus,
   contactsController.updateStatusContact
 );
