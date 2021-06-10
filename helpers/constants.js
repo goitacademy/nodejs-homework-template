@@ -24,7 +24,8 @@ const Statuses = {
 };
 
 const Limits = {
-  JSON: 10000
+  JSON: 10000,
+  tokenLife: '3h'
 };
 
 const Port = {
