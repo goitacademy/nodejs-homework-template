@@ -4,4 +4,12 @@ const ContactsRoutePaths = {
   favorite: "/:contactId/favorite",
 };
 
-module.exports = { ContactsRoutePaths };
+const UsersRoutePaths = {
+  home: "/",
+  signup: "/signup",
+  login: "/login",
+  logout: "/logout",
+  current: "/current",
+};
+
+module.exports = { ContactsRoutePaths, UsersRoutePaths };
