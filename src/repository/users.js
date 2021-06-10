@@ -30,13 +30,16 @@ class UsersReporitory {
   }
 
   async updateSubscriptionStatus(userId, id, body) {
-    console.log(userId, id, body);
     const result = await this.Model.findByIdAndUpdate(
       { _id: id, userId },
       { ...body },
       { new: true }
     );
     return result;
+  }
+
+  async updateAvatar(id, avatarURL) {
+    return await this.Model.updateOne({ _id: id }, { avatarURL });
   }
 
   //
@@ -49,10 +52,6 @@ class UsersReporitory {
   //   return { avatar, idCloudAvatar };
   // }
   //
-
-  async updateAvatar(id, avatar) {
-    return await this.Model.updateOne({ _id: id }, { avatar });
-  }
 }
 
 module.exports = { UsersReporitory };

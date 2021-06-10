@@ -8,6 +8,7 @@ const { UploadService } = require("../services/local-upload");
 const { UsersReporitory } = require("../repository");
 require("dotenv").config();
 const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+const newUserRepo = new UsersReporitory();
 //
 
 const serviceUser = new UserService();
@@ -112,6 +113,7 @@ const current = async (req, res, next) => {
 const updateSubscription = async (req, res, next) => {
   try {
     const userId = req.user.id;
+
     const user = await serviceUser.updateSubscriptionStatus(
       userId,
       req.params.contactId,
@@ -158,19 +160,20 @@ const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
     const uploads = new UploadService(AVATAR_OF_USERS);
-    const avatarUrl = await uploads.saveAvatar({ idUser: id, file: req.file });
+    const avatarUri = await uploads.saveAvatar({ idUser: id, file: req.file });
+
     try {
-      await fs.unlink(path.join(AVATAR_OF_USERS, req.user.avatar));
+      await fs.unlink(path.join(AVATAR_OF_USERS, req.user.avatarURL));
     } catch (e) {
       console.log(e.mesagge);
     }
 
-    await UsersReporitory.updateAvatar({ id, avatarUrl });
+    await newUserRepo.updateAvatar(id, avatarUri);
 
     return res.json({
       status: "success",
       code: HttpCode.CREATED,
-      data: { avatarUrl },
+      data: { avatarUri },
     });
   } catch (error) {
     next(error);
