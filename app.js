@@ -50,4 +50,8 @@ app.use((err, req, res, next) => {
   });
 });
 
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
 module.exports = app;
