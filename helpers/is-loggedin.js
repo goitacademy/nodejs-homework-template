@@ -1,8 +1,10 @@
 const passport = require("passport");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const Users = require("../model/users-methods");
-const { HttpCodes } = require("./constants");
+const { HttpCodes, Statuses } = require("./constants");
+const { ResponseMessages } = require("./messages");
 require("dotenv").config();
+
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const opts = {};
@@ -39,9 +41,9 @@ const isLoggedIn = (req, res, next) => {
 
     if (error || !user || token !== user?.token) {
       return res.status(HttpCodes.UNAUTHORIZED).json({
-        status: "error",
+        status: Statuses.error,
         code: HttpCodes.UNAUTHORIZED,
-        message: "Not authorized.",
+        message: ResponseMessages.notAuthorized,
       });
     }
 
