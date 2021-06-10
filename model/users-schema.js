@@ -1,29 +1,29 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 const { Subscription } = require('../helpers/constants');
+
 const subscriptionOptions = Object.values(Subscription);
 
 const userSchema = new Schema(
   {
     password: {
       type: String,
-      required: [true, 'Password is required.'],
+      required: [true, 'Password is required.']
     },
     email: {
       type: String,
       required: [true, 'Email is required.'],
-      unique: true,
+      unique: true
     },
     subscription: {
       type: String,
       enum: subscriptionOptions,
-      default: Subscription.STARTER,
+      default: Subscription.STARTER
     },
     token: {
       type: String,
-      default: null,
-    },
+      default: null
+    }
   },
   {
     versionKey: false,
@@ -33,9 +33,9 @@ const userSchema = new Schema(
       transform: function (doc, ret) {
         delete ret._id;
         return ret;
-      },
-    },
-  },
+      }
+    }
+  }
 );
 
 userSchema.pre('save', async function (next) {
