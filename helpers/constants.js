@@ -1,7 +1,7 @@
 const Subscription = {
   STARTER: 'starter',
   PRO: 'pro',
-  BUSINESS: 'business',
+  BUSINESS: 'business'
 };
 
 const HttpCodes = {
@@ -14,11 +14,21 @@ const HttpCodes = {
   NOT_FOUND: 404,
   CONFLICT: 409,
   TOO_MAY_REQUESTS: 429,
-  INTERNAL_SERVER_ERROR: 500,
+  INTERNAL_SERVER_ERROR: 500
+};
+
+const Statuses = {
+  success: 'success',
+  error: 'error',
+  fail: 'fail'
 };
 
 const Limits = {
-  JSON: 10000,
+  JSON: 10000
 };
 
-module.exports = { Subscription, HttpCodes, Limits };
+const Port = {
+  default: 3000
+};
+
+module.exports = { Subscription, HttpCodes, Statuses, Limits, Port };
