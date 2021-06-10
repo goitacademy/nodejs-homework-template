@@ -1,5 +1,6 @@
 const Users = require('../model/users-methods');
-const { HttpCodes } = require('../helpers/constants');
+const { HttpCodes, Statuses, Limits } = require('../helpers/constants');
+const { ResponseMessages, ResourseNotFoundMessage } = require('../helpers/messages');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -11,23 +12,23 @@ const signup = async (req, res, next) => {
 
     if (user) {
       return res.status(HttpCodes.CONFLICT).json({
-        status: 'error',
+        status: Statuses.error,
         code: HttpCodes.CONFLICT,
-        message: 'This email is already in use.',
+        message: ResponseMessages.emailInUse
       });
     }
 
     const { id, email, subscription } = await Users.createUser(req.body);
 
     return res.status(HttpCodes.CREATED).json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.CREATED,
-      message: 'You registered successfully.',
+      message: ResponseMessages.registedSuccess,
       user: {
         id,
         email,
-        subscription,
-      },
+        subscription
+      }
     });
   } catch (error) {
     next(error);
@@ -42,27 +43,27 @@ const login = async (req, res, next) => {
 
     if (!user || !isValidPassword) {
       return res.status(HttpCodes.UNAUTHORIZED).json({
-        status: 'error',
+        status: Statuses.error,
         code: HttpCodes.UNAUTHORIZED,
-        message: 'Invalid login or password.',
+        message: ResponseMessages.loginFail
       });
     }
 
     const id = user.id;
     const payload = { id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: Limits.tokenLife });
     await Users.updateToken(id, token);
 
     const {
-      _doc: { subscription },
+      _doc: { subscription }
     } = user;
 
     return res.json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.OK,
-      message: 'You have logged in.',
+      message: ResponseMessages.loginSuccess,
       token,
-      user: { email, subscription },
+      user: { email, subscription }
     });
   } catch (error) {
     next(error);
@@ -73,6 +74,7 @@ const logout = async (req, res, next) => {
   try {
     const id = req.user.id;
     await Users.updateToken(id, null);
+
     return res.status(HttpCodes.NO_CONTENT).json({});
   } catch (error) {
     next(error);
@@ -81,20 +83,12 @@ const logout = async (req, res, next) => {
 
 const current = async (req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(HttpCodes.UNAUTHORIZED).json({
-        status: 'error',
-        code: HttpCodes.UNAUTHORIZED,
-        message: 'Not authorized.',
-      });
-    }
-
     const { email, subscription } = req.user;
 
     return res.status(HttpCodes.OK).json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.OK,
-      user: { email, subscription },
+      user: { email, subscription }
     });
   } catch (error) {
     next(error);
@@ -107,16 +101,16 @@ const updateSubscription = async (req, res, next) => {
     const updatedSubscription = await Users.updateSubscription(id, req.body);
 
     if (!updatedSubscription) {
-      return res
-        .status(HttpCodes.NOT_FOUND)
-        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
+
     const { email, subscription } = updatedSubscription;
+
     return res.json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.OK,
-      message: 'Contact updated.',
-      payload: { email, subscription },
+      message: ResponseMessages.subcriptionUpdatedSuccess,
+      payload: { email, subscription }
     });
   } catch (error) {
     next(error);
