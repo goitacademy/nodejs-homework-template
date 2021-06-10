@@ -1,11 +1,20 @@
 const { UserService, AuthService } = require("../services");
 const { HttpCode } = require("../helpers/constants");
 
+//
+const fs = require("fs/promises");
+const path = require("path");
+const { UploadService } = require("../services/local-upload");
+const { UsersReporitory } = require("../repository");
+require("dotenv").config();
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+//
+
 const serviceUser = new UserService();
 const serviceAuth = new AuthService();
 
 const signup = async (req, res, next) => {
-  const { email, password, subscription } = req.body;
+  const { email, password, subscription, avatarURL } = req.body;
 
   const user = await serviceUser.findByEmail(email);
   if (user) {
@@ -20,6 +29,7 @@ const signup = async (req, res, next) => {
       email,
       password,
       subscription,
+      avatarURL,
     });
     return res.status(HttpCode.CREATED).json({
       status: "success",
@@ -28,6 +38,7 @@ const signup = async (req, res, next) => {
         id: newUser.id,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatarURL: newUser.avatarURL,
       },
     });
   } catch (error) {
@@ -127,4 +138,50 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, logout, current, updateSubscription };
+// const avatars = async (req, res, next) => {
+//   try {
+//     const id = req.user.id;
+//     const pathFile = req.file.path;
+//     const avatarUrl = await serviceUser.updateAvatar(id, pathFile);
+
+//     return res.json({
+//       status: "success",
+//       code: HttpCode.CREATED,
+//       data: { avatarUrl },
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const uploads = new UploadService(AVATAR_OF_USERS);
+    const avatarUrl = await uploads.saveAvatar({ idUser: id, file: req.file });
+    try {
+      await fs.unlink(path.join(AVATAR_OF_USERS, req.user.avatar));
+    } catch (e) {
+      console.log(e.mesagge);
+    }
+
+    await UsersReporitory.updateAvatar({ id, avatarUrl });
+
+    return res.json({
+      status: "success",
+      code: HttpCode.CREATED,
+      data: { avatarUrl },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  current,
+  updateSubscription,
+  avatars,
+};

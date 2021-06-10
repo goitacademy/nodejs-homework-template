@@ -4,6 +4,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
+const path = require("path");
+require("dotenv").config();
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+
 const { HttpCode } = require("./helpers/constants");
 const { ErrorHandler } = require("./helpers/errorHandler");
 
@@ -29,6 +33,7 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(express.static(path.join(__dirname, AVATAR_OF_USERS)));
 app.use(logger(formatsLogger));
 app.use(helmet());
 app.use(cors());
