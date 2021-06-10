@@ -1,9 +1,21 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const boolParser = require("express-query-boolean");
 const isLoggedIn = require("./helpers/is-loggedin");
-const { ContactsRoutePaths, UsersRoutePaths } = require("./helpers/routePaths");
-const { HttpCodes, Limits, Statuses } = require("./helpers/constants");
+const {
+  ContactsRoutePaths,
+  UsersRoutePaths,
+  api,
+} = require("./helpers/routePaths");
+const {
+  HttpCodes,
+  Limits,
+  Statuses,
+  apiLimitsConfig,
+} = require("./helpers/constants");
 const { ResourseNotFoundMessage } = require("./helpers/messages");
 const contactsRouter = require("./routes/api/contacts/contacts");
 const usersRouter = require("./routes/api/users/users");
@@ -12,10 +24,13 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json({ limit: Limits.JSON }));
+app.use(boolParser());
 
+app.use(api, rateLimit(apiLimitsConfig));
 app.use(ContactsRoutePaths.root, isLoggedIn, contactsRouter);
 app.use(UsersRoutePaths.root, usersRouter);
 

@@ -1,3 +1,5 @@
+const api = "/api/";
+
 const ContactsRoutePaths = {
   root: "/api/contacts",
   home: "/",
@@ -14,4 +16,4 @@ const UsersRoutePaths = {
   current: "/current",
 };
 
-module.exports = { ContactsRoutePaths, UsersRoutePaths };
+module.exports = { ContactsRoutePaths, UsersRoutePaths, api };
