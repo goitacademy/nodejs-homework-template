@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const { HttpCodes } = require('../../../helpers/constants');
 
 const validateAddContact = Joi.object({
   name: Joi.string().trim().min(2).max(30).required(),
@@ -7,7 +8,7 @@ const validateAddContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
-  favorite: Joi.boolean().optional(),
+  favorite: Joi.boolean().optional()
 }).or('email', 'phone');
 
 const validateUpdateContact = Joi.object({
@@ -16,13 +17,13 @@ const validateUpdateContact = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}/)
     .optional(),
-  favorite: Joi.boolean().optional(),
+  favorite: Joi.boolean().optional()
 }).or('name', 'email', 'phone', 'favorite');
 
 const validateUpdateFavorite = Joi.object({
   favorite: Joi.boolean().required().messages({
-    'any.required': "Missing 'favorite' field.",
-  }),
+    'any.required': "Missing 'favorite' field."
+  })
 });
 
 const validate = async (schema, request, next) => {
@@ -31,8 +32,8 @@ const validate = async (schema, request, next) => {
     next();
   } catch (error) {
     next({
-      status: 400,
-      message: error.message.replace(/"/g, ''),
+      status: HttpCodes.BAD_REQUEST,
+      message: error.message.replace(/"/g, '')
     });
   }
 };
@@ -50,10 +51,10 @@ module.exports = {
   validateMongoId: (req, res, next) => {
     if (!mongoose.isValidObjectId(req.params.contactId)) {
       next({
-        status: 400,
-        message: 'Invalid id.',
+        status: HttpCodes.BAD_REQUEST,
+        message: 'Invalid id.'
       });
     }
     next();
-  },
+  }
 };
