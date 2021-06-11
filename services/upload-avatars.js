@@ -22,7 +22,6 @@ class Upload {
   }
 
   async saveAvatarToStatic({ idUser, pathFile, name, oldFile }) {
-    // console.log("PATHFILE", pathFile, "\n\n");
     try {
       await this.transformAvatar(pathFile);
       const folderUserAvatar = path.join(this.AVATARS_OF_USERS, idUser);
@@ -44,16 +43,16 @@ class Upload {
       // );
       await this.deleteOldAvatar(oldFilePath);
       return avatarUrl;
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   async deleteOldAvatar(pathFile) {
     try {
       await fs.unlink(pathFile);
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      console.log(err.message);
     }
   }
 }

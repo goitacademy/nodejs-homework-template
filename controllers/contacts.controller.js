@@ -8,20 +8,20 @@ const getContacts = async (req, res, next) => {
 
     if (contactsList) {
       const { contacts, page, offset, limit, total } = contactsList;
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
         data: { page, total, limit, offset, contacts },
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: "error",
         code: HttpCode.NOT_FOUND,
         message: "error",
       });
     }
-  } catch (e) {
-    next(e.message);
+  } catch (err) {
+    next(err.message);
   }
 };
 
@@ -31,20 +31,20 @@ const getContactById = async (req, res, next) => {
     const contact = await fn.getContactById(req.params.contactId, userId);
 
     if (contact) {
-      res.status(200).json({
+      res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
         data: contact,
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: "error",
         code: HttpCode.NOT_FOUND,
         message: "Not found",
       });
     }
-  } catch (e) {
-    next(e.message);
+  } catch (err) {
+    next(err.message);
   }
 };
 
@@ -54,20 +54,20 @@ const createContact = async (req, res, next) => {
     const newContact = await fn.addContact({ ...req.body, owner: userId });
 
     if (newContact) {
-      res.status(201).json({
+      res.status(HttpCode.CREATED).json({
         status: "success",
         code: HttpCode.CREATED,
         data: newContact,
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: "error",
         code: HttpCode.NOT_FOUND,
         message: "contact was not deleted",
       });
     }
-  } catch (e) {
-    next(e.message);
+  } catch (err) {
+    next(err.message);
   }
 };
 
@@ -77,21 +77,21 @@ const deleteContact = async (req, res, next) => {
     const deletedContact = await fn.removeContact(req.params.contactId, userId);
 
     if (deletedContact) {
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
         message: "contact deleted",
         data: deletedContact,
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: "error",
         code: HttpCode.NOT_FOUND,
         message: "contact was not deleted",
       });
     }
-  } catch (e) {
-    next(e);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -105,20 +105,20 @@ const updateContact = async (req, res, next) => {
     );
 
     if (contact) {
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
         data: contact,
       });
     } else {
-      return res.status(404).json({
+      return res.status(HttpCode.NOT_FOUND).json({
         status: "error",
         code: HttpCode.NOT_FOUND,
         message: "contact was not deleted",
       });
     }
-  } catch (e) {
-    next(e.message);
+  } catch (err) {
+    next(err.message);
   }
 };
 
@@ -132,14 +132,14 @@ const updateFavoriteStatus = async (req, res, next) => {
         req.body,
         userId
       );
-      return res.status(200).json({
+      return res.status(HttpCode.OK).json({
         status: "success",
         code: HttpCode.OK,
         data: contact,
       });
     } else {
       return next(
-        res.status(400).json({
+        res.status(HttpCode.BAD_REQUEST).json({
           status: "error",
           code: HttpCode.BAD_REQUEST,
           message: "missing field favorite",
@@ -147,7 +147,7 @@ const updateFavoriteStatus = async (req, res, next) => {
       );
     }
   } catch {
-    res.status(404).json({
+    res.status(HttpCode.NOT_FOUND).json({
       status: "error",
       code: HttpCode.NOT_FOUND,
       message: "not found",

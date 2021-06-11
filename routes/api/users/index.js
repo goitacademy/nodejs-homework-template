@@ -18,4 +18,11 @@ router.patch(
   controllers.subscriptionUpdate
 );
 
+router.get("/verify/:verificationToken", controllers.verify);
+router.post(
+  "/verify",
+  validation.validateVerify,
+  controllers.repeatVerifyEmail
+);
+
 module.exports = router;

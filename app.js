@@ -7,6 +7,8 @@ const path = require("path");
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
 
+const { HttpCode } = require("./helpers/constants");
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -24,16 +26,17 @@ app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((err, _req, res, _next) => {
-  const code = err.code || 404;
+  console.log(err);
+  const code = err.code || HttpCode.NOT_FOUND;
   const status = err.status || "error";
-  const message = err.message || "error";
+  const message = err || "error";
   res.status(code).json({ status, code, message: message });
 });
 
 app.use((err, _req, res, _next) => {
-  const code = err.code || 500;
+  const code = err.code || HttpCode.INTERNAL_SERVER_ERROR;
   const status = err.status || "fail";
-  const message = err.message || "error";
+  const message = err || "error";
   res.status(code).json({ status, code, message: message });
 });
 

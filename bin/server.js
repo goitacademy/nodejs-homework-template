@@ -16,7 +16,7 @@ db.then(() => {
     await createFolder(AVATAR_OF_USERS);
     console.log(`Server running. Use our API on port: ${PORT}`);
   });
-}).catch((e) => {
-  console.log("ERROR:", e.message);
+}).catch((err) => {
+  console.log("ERROR:", err.message);
   process.exit(1);
 });

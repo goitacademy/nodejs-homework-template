@@ -22,7 +22,6 @@ const upload = multer({
     }
     console.log("medl", file);
     cb(null, true);
-    // cb(new Error("Upload Error"));
   },
 });
 

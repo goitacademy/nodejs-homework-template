@@ -15,12 +15,15 @@ const opts = {
 passport.use(
   new Strategy(opts, async function (payload, done) {
     try {
-      const foundUser = await User.fyndById(payload.id);
+      const foundUser = await User.findById(payload.id);
 
       if (!foundUser) {
         return done(new Error("User not found"), false);
       }
       if (!foundUser.token) {
+        return done(null, false);
+      }
+      if (!foundUser.verify) {
         return done(null, false);
       }
       return done(null, foundUser);

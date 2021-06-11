@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { HttpCode } = require("../../../helpers/constants");
 
 const schemaAddContact = Joi.object({
   name: Joi.string()
@@ -50,7 +51,11 @@ const validate = async (schema, body, next) => {
 
     next();
   } catch (err) {
-    next({ status: "fail", code: 500, message: err.message });
+    next({
+      status: "fail",
+      code: HttpCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
   }
 };
 

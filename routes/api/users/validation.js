@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const { Subscription } = require("../../../helpers/constants");
+const { Subscription, HttpCode } = require("../../../helpers/constants");
 
 const schemaRegister = Joi.object({
   password: Joi.string()
@@ -35,13 +35,26 @@ const schemaSubscriptionUpdate = Joi.object({
     .required(),
 });
 
+const schemaVerify = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: false },
+    })
+    .required(),
+});
+
 const validate = async (schema, body, next) => {
   try {
     await schema.validateAsync(body);
 
     next();
   } catch (err) {
-    next({ status: "400 Bad Request", code: 500, message: err.message });
+    next({
+      status: "Bad Request",
+      code: HttpCode.BAD_REQUEST,
+      message: err,
+    });
   }
 };
 
@@ -53,6 +66,10 @@ module.exports.validateLogin = (req, _res, next) => {
   return validate(schemaLogin, req.body, next);
 };
 
-module.exports.validateSubscriptionUpdate = (req, res, next) => {
+module.exports.validateSubscriptionUpdate = (req, _res, next) => {
   return validate(schemaSubscriptionUpdate, req.body, next);
+};
+
+module.exports.validateVerify = (req, _res, next) => {
+  return validate(schemaVerify, req.body, next);
 };

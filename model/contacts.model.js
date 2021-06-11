@@ -31,8 +31,8 @@ const listContacts = async (userId, query) => {
 
     const { docs: contacts, totalDocs: total } = result;
     return { contacts, total, offset, limit };
-  } catch (e) {
-    return e.message;
+  } catch (err) {
+    return err.message;
   }
 };
 
@@ -45,8 +45,8 @@ const getContactById = async (contactId, userId) => {
       }).populate({ path: "owner", select: "email subscription -_id" });
       return contact;
     }
-  } catch (e) {
-    return e.message;
+  } catch (err) {
+    return err.message;
   }
 };
 
@@ -58,8 +58,8 @@ const removeContact = async (contactId, userId) => {
         owner: userId,
       });
       return contact;
-    } catch (e) {
-      return e.message;
+    } catch (err) {
+      return err.message;
     }
   }
 };
@@ -78,8 +78,8 @@ const addContact = async (body) => {
       }
 
       return await Contact.create(body);
-    } catch (e) {
-      return e.message;
+    } catch (err) {
+      return err.message;
     }
   }
 };
@@ -94,8 +94,8 @@ const updateContact = async (contactId, body, userId) => {
       );
 
       return updatedContact;
-    } catch (e) {
-      return e.message;
+    } catch (err) {
+      return err.message;
     }
   }
 };
@@ -109,8 +109,8 @@ const updateStatusContact = async (contactId, body, userId) => {
         { new: true }
       );
       return updatedContact;
-    } catch (e) {
-      return e.message;
+    } catch (err) {
+      return err.message;
     }
   }
 };
