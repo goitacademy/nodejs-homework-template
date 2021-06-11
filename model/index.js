@@ -69,6 +69,7 @@ const addContact = async body => {
   }
 }
 
+console.log(uuidv4())
 const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsFile, { encoding: 'utf8' })
