@@ -1,6 +1,6 @@
 const fs = require('fs').promises
 const path = require('path')
-const { uuid } = require('uuid')
+const { uuid } = require('uuidv4')
 
 const contactsPath = path.join(__dirname, './contacts.json')
 
@@ -51,7 +51,7 @@ const removeContact = async contactId => {
     throw new Error(e)
   }
 }
-
+console.log(uuid())
 const addContact = async body => {
   try {
     const data = await fs.readFile(contactsPath)
