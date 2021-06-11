@@ -1,6 +1,6 @@
 const fs = require('fs/promises')
 const { join } = require('path')
-const { v4: uuidv4 } = require('uuid')
+const { uuid } = require('uuidv4')
 
 const contactsFile = join(__dirname, './contacts.json')
 
@@ -59,7 +59,7 @@ const addContact = async body => {
     const data = await fs.readFile(contactsFile, { encoding: 'utf8' })
     const parsedData = await JSON.parse(data)
 
-    body.id = uuidv4()
+    body.id = uuid()
     const сontactList = [...parsedData, body]
 
     await fs.writeFile(contactsFile, JSON.stringify(сontactList, null, 2))
@@ -69,7 +69,7 @@ const addContact = async body => {
   }
 }
 
-console.log(uuidv4())
+console.log(uuid())
 const updateContact = async (contactId, body) => {
   try {
     const data = await fs.readFile(contactsFile, { encoding: 'utf8' })

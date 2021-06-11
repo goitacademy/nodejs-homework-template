@@ -10,7 +10,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require('../model/index')
+} = require('../../model/index')
 
 router.get('/', async (req, res, next) => {
   try {
