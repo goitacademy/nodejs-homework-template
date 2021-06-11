@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('joi')
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -7,9 +7,9 @@ const schemaCreateContact = Joi.object({
     .lowercase()
     .required(),
   phone: Joi.string()
-    .regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+    .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
     .required(),
-});
+})
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string().min(3).max(30).optional(),
@@ -18,23 +18,23 @@ const schemaUpdateContact = Joi.object({
     .lowercase()
     .optional(),
   phone: Joi.string()
-    .regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+    .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
     .optional(),
-});
+})
 
 const validate = async (schema, body, next) => {
   try {
-    await schema.validateAsync(body);
-    next();
+    await schema.validateAsync(body)
+    next()
   } catch (error) {
-    next({ status: 400, message: `Field ${error.message.replace(/"/g, '')}` });
+    next({ status: 400, message: `Field ${error.message.replace(/"/g, '')}` })
   }
-};
+}
 
 module.exports.validateCreateContact = (req, _res, next) => {
-  return validate(schemaCreateContact, req.body, next);
-};
+  return validate(schemaCreateContact, req.body, next)
+}
 
 module.exports.validateUpdateContact = (req, _res, next) => {
-  return validate(schemaUpdateContact, req.body, next);
-};
+  return validate(schemaUpdateContact, req.body, next)
+}
