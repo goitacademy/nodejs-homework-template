@@ -15,14 +15,11 @@ app.use(express.json())
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ status: 'error', code: 404, message: 'Not found' })
+  res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
-  const code = err.status || 500
-  const statusError = err.status ? 'error' : 'fail'
-
-  res.status(code).json({ status: statusError, code, message: err.message })
+  res.status(err.status || 500).json({ message: err.message })
 })
 
 module.exports = app

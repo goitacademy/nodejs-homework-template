@@ -1,93 +1,120 @@
 const express = require('express')
 const router = express.Router()
-const {
-  validateCreateContact,
-  validateUpdateContact,
-} = require('./validation_schema')
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../model/index')
+const Contacts = require('../../model/index')
+const validate = require('./validation_schema')
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await listContacts()
+    const contacts = await Contacts.listContacts()
 
-    return res.json({ status: 'success', code: 200, data: { contacts } })
-  } catch (error) {
-    next(error)
+    return res.status(200).json({
+      status: 'success',
+      code: 200,
+      data: {
+        contacts,
+      },
+    })
+  } catch (e) {
+    next(e)
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
+  console.log(req.params.contactId)
+
   try {
-    const { contactId } = req.params
-    const contact = await getContactById(contactId)
+    const contact = await Contacts.getContactById(req.params.contactId)
 
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, message: 'Not found' })
+    if (contact) {
+      return res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      })
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found',
+      })
     }
-
-    return res.json({ status: 'success', code: 200, data: { contact } })
-  } catch (error) {
-    next(error)
+  } catch (e) {
+    next(e)
   }
 })
 
-router.post('/', validateCreateContact, async (req, res, next) => {
+router.post('/', validate.addContact, async (req, res, next) => {
   try {
-    const contact = await addContact(req.body)
+    const contact = await Contacts.addContact(req.body)
 
-    return res
-      .status(201)
-      .json({ status: 'success', code: 201, data: { contact } })
-  } catch (error) {
-    next(error)
+    return res.status(201).json({
+      status: 'success',
+      code: 201,
+      data: {
+        contact,
+      },
+    })
+  } catch (e) {
+    next(e)
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const { contactId } = req.params
-    const result = await removeContact(contactId)
+    const contact = await Contacts.removeContact(req.params.contactId)
 
-    if (result) {
-      return res.json({
+    if (contact) {
+      return res.status(200).json({
         status: 'success',
         code: 200,
-        message: 'contact deleted',
+        message: 'Contact deleted',
+      })
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found',
       })
     }
-
-    return res
-      .status(404)
-      .json({ status: 'error', code: 404, message: 'Not found' })
-  } catch (error) {
-    next(error)
+  } catch (e) {
+    next(e)
   }
 })
 
-router.patch('/:contactId', validateUpdateContact, async (req, res, next) => {
+router.patch('/:contactId', validate.updateContact, async (req, res, next) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: 'Missing fields',
+    })
+  }
+
   try {
-    const { contactId } = req.params
-    const contact = await updateContact(contactId, req.body)
+    const contact = await Contacts.updateContact(
+      req.params.contactId,
+      req.body
+    )
 
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, message: 'Not found' })
+    if (contact) {
+      return res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      })
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found',
+      })
     }
-
-    return res
-      .status(200)
-      .json({ status: 'success', code: 200, data: { contact } })
-  } catch (error) {
-    next(error)
+  } catch (e) {
+    next(e)
   }
 })
 

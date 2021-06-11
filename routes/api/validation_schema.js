@@ -1,40 +1,43 @@
 const Joi = require('joi')
 
-const schemaCreateContact = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
+const phoneRegEx =
+  /\+?([0-9]*)([ .-]?)\(?([0-9]{3})\)?([ .-]?)([0-9]{3})([ .-]?)([0-9]{2})([ .-]?)([0-9]{2})/
+
+const schemaAddContact = Joi.object({
+  name: Joi.string().min(2).max(40).required(),
   email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .lowercase()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
-  phone: Joi.string()
-    .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
-    .required(),
+  phone: Joi.string().min(3).max(18).pattern(phoneRegEx).required(),
 })
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().min(3).max(30).optional(),
+  name: Joi.string().min(2).max(40).optional(),
   email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .lowercase()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .optional(),
-  phone: Joi.string()
-    .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
-    .optional(),
+  phone: Joi.string().min(3).max(18).pattern(phoneRegEx).optional(),
 })
 
-const validate = async (schema, body, next) => {
-  try {
-    await schema.validateAsync(body)
-    next()
-  } catch (error) {
-    next({ status: 400, message: `Field ${error.message.replace(/"/g, '')}` })
+const validate = (schema, object, next) => {
+  const { error } = schema.validate(object)
+
+  if (error) {
+    const [{ message }] = error.details
+
+    return next({
+      status: 400,
+      message: `Filed: ${message.replace(/"/g, '')}`,
+    })
   }
+
+  next()
 }
 
-module.exports.validateCreateContact = (req, _res, next) => {
-  return validate(schemaCreateContact, req.body, next)
+module.exports.addContact = (req, res, next) => {
+  return validate(schemaAddContact, req.body, next)
 }
 
-module.exports.validateUpdateContact = (req, _res, next) => {
+module.exports.updateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next)
 }
