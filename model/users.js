@@ -1,13 +1,4 @@
 const User = require('./schemas/user');
-const fs = require('fs/promises');
-const cloudinary = require('cloudinary').v2;
-require('dotenv').config();
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
 
 const findById = async id => {
   return await User.findOne({ _id: id });
@@ -30,46 +21,8 @@ const findByToken = async token => {
   return await User.findOne({ token });
 };
 
-const uploadCloud = pathFile => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(
-      pathFile,
-      {
-        folder: 'Avatars',
-        transformation: {
-          width: 250,
-          crop: 'fill',
-        },
-      },
-      (error, result) => {
-        console.log(result);
-        if (error) reject(error);
-        if (result) resolve(result);
-      },
-    );
-  });
-};
-
-const getAvatar = async id => {
-  const { avatar, idCloudAvatar } = await User.findOne({ _id: id });
-  return { avatar, idCloudAvatar };
-};
-
-const updateAvatar = async (id, pathFile, next) => {
-  try {
-    const { secure_url: avatar, public_id: idCloudAvatar } = await uploadCloud(
-      pathFile,
-    );
-    const oldAvatar = await getAvatar(id);
-    cloudinary.uploader.destroy(oldAvatar.idCloudAvatar, (err, result) => {
-      console.log(err, result);
-    });
-    await User.updateOne({ _id: id }, { avatar, idCloudAvatar });
-    await fs.unlink(pathFile);
-    return avatar;
-  } catch (err) {
-    next(err);
-  }
+const updateAvatar = async (id, avatar, userIdImg = null) => {
+  return await User.updateOne({ _id: id }, { avatar, userIdImg });
 };
 
 module.exports = {
