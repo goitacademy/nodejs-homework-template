@@ -1,8 +1,11 @@
-const Users = require('../model/users-methods');
-const { HttpCodes, Statuses, Limits } = require('../helpers/constants');
-const { ResponseMessages, ResourseNotFoundMessage } = require('../helpers/messages');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const Users = require("../model/users-methods");
+const { HttpCodes, Statuses, Limits } = require("../helpers/constants");
+const {
+  ResponseMessages,
+  ResourseNotFoundMessage,
+} = require("../helpers/messages");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -14,11 +17,13 @@ const signup = async (req, res, next) => {
       return res.status(HttpCodes.CONFLICT).json({
         status: Statuses.error,
         code: HttpCodes.CONFLICT,
-        message: ResponseMessages.emailInUse
+        message: ResponseMessages.emailInUse,
       });
     }
 
-    const { id, email, subscription } = await Users.createUser(req.body);
+    const { id, email, subscription, avatarURL } = await Users.createUser(
+      req.body,
+    );
 
     return res.status(HttpCodes.CREATED).json({
       status: Statuses.success,
@@ -27,8 +32,9 @@ const signup = async (req, res, next) => {
       user: {
         id,
         email,
-        subscription
-      }
+        avatarURL,
+        subscription,
+      },
     });
   } catch (error) {
     next(error);
@@ -45,17 +51,19 @@ const login = async (req, res, next) => {
       return res.status(HttpCodes.UNAUTHORIZED).json({
         status: Statuses.error,
         code: HttpCodes.UNAUTHORIZED,
-        message: ResponseMessages.loginFail
+        message: ResponseMessages.loginFail,
       });
     }
 
     const id = user.id;
     const payload = { id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: Limits.tokenLife });
+    const token = jwt.sign(payload, SECRET_KEY, {
+      expiresIn: Limits.tokenLife,
+    });
     await Users.updateToken(id, token);
 
     const {
-      _doc: { subscription }
+      _doc: { subscription, avatarURL },
     } = user;
 
     return res.json({
@@ -63,7 +71,7 @@ const login = async (req, res, next) => {
       code: HttpCodes.OK,
       message: ResponseMessages.loginSuccess,
       token,
-      user: { email, subscription }
+      user: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -83,12 +91,12 @@ const logout = async (req, res, next) => {
 
 const current = async (req, res, next) => {
   try {
-    const { email, subscription } = req.user;
+    const { email, avatarURL, subscription } = req.user;
 
-    return res.status(HttpCodes.OK).json({
+    return res.json({
       status: Statuses.success,
       code: HttpCodes.OK,
-      user: { email, subscription }
+      user: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -104,13 +112,13 @@ const updateSubscription = async (req, res, next) => {
       return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
-    const { email, subscription } = updatedSubscription;
+    const { email, avatarURL, subscription } = updatedSubscription;
 
     return res.json({
       status: Statuses.success,
       code: HttpCodes.OK,
       message: ResponseMessages.subcriptionUpdatedSuccess,
-      payload: { email, subscription }
+      payload: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
