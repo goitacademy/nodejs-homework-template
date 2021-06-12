@@ -19,6 +19,7 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
       default: function () {
+        // Setting up gravatars link as a default avatar
         return gravatar.url(this.email, { size: "250" }, true);
       },
     },

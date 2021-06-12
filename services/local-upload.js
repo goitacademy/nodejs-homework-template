@@ -16,7 +16,7 @@ class UploadAvatarService {
     await this.transformAvatar(file.path);
 
     const finalAvatarFolder = path.join("public", this.avatarDir);
-    await fs.rename(file.path, path.join(finalAvatarFolder, file.filename));
+    await fs.rename(file.path, path.join(finalAvatarFolder, file.filename)); // Deleting file from temporary directory, and moving it to avatars in public folder
     return path.normalize(path.join(this.avatarDir, file.filename));
   }
 }

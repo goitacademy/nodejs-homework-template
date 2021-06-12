@@ -131,15 +131,20 @@ const updateSubscription = async (req, res, next) => {
 const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
+    // Calling the service that handles the avatar file and returns its path as '/avatars/filename.extention'
     const uploads = new UploadAvatarService("avatars");
     const avatarUrl = await uploads.saveAvatar({ file: req.file });
 
     try {
+      // Deleting previous avatar of the user (if we do not want to store all users avatars)
+      // If previous avatar link is that of gravatar, the error will be handled by nearest catch,
+      // but the new avatar will uploaded
       await fs.unlink(path.join("public", req.user.avatarURL));
     } catch (error) {
       console.log(error.message);
     }
 
+    // Updating user's entity in database
     await Users.updateAvatar(id, avatarUrl);
 
     res.json({
