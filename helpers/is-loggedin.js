@@ -15,6 +15,7 @@ passport.use(
   new JwtStrategy(opts, async (payload, done) => {
     try {
       const user = await Users.findUserById(payload.id);
+
       if (!user) {
         return done(new Error("User not found."));
       }
@@ -32,6 +33,7 @@ passport.use(
 
 const isLoggedIn = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (error, user) => {
+    console.log("user in GUARD", user);
     const headerAuth = req.get("Authorization");
     let token = null;
 

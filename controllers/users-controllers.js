@@ -6,7 +6,7 @@ const {
   ResponseMessages,
   ResourseNotFoundMessage,
 } = require("../helpers/messages");
-const UploadAvatartService = require("../services/local-upload");
+const UploadAvatarService = require("../services/local-upload");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -131,16 +131,17 @@ const updateSubscription = async (req, res, next) => {
 const avatars = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const uploads = new UploadAvatartService("avatars");
-    const avatarUrl = await uploads.saveAvatar({ idUser: id, file: req.file });
+    const uploads = new UploadAvatarService("avatars");
+    const avatarUrl = await uploads.saveAvatar({ file: req.file });
 
     try {
-      await fs.unlink(path.join("avatars", req.user.avatar));
+      await fs.unlink(path.join("public", req.user.avatarURL));
     } catch (error) {
       console.log(error.message);
     }
 
     await Users.updateAvatar(id, avatarUrl);
+
     res.json({
       status: Statuses.success,
       code: HttpCodes.OK,

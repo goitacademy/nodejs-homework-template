@@ -1,13 +1,13 @@
 const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
 const { HttpCodes, Limits } = require("./constants");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "temp");
+    cb(null, "tmp");
   },
   filename: function (req, file, cb) {
-    const { id } = req.user;
-    cb(null, `${id}-${file.originalname}`);
+    cb(null, `${uuidv4()}-${file.originalname}`);
   },
 });
 
