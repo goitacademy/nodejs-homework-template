@@ -33,7 +33,6 @@ passport.use(
 
 const isLoggedIn = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (error, user) => {
-    console.log("user in GUARD", user);
     const headerAuth = req.get("Authorization");
     let token = null;
 
