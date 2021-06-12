@@ -26,6 +26,7 @@ const Statuses = {
 const Limits = {
   JSON: 10000,
   tokenLife: "3h",
+  imageSize: 2000000,
 };
 
 const Port = {

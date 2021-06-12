@@ -1,9 +1,12 @@
+const fs = require("fs/promises");
+const path = require("path");
 const Users = require("../model/users-methods");
 const { HttpCodes, Statuses, Limits } = require("../helpers/constants");
 const {
   ResponseMessages,
   ResourseNotFoundMessage,
 } = require("../helpers/messages");
+const UploadAvatartService = require("../services/local-upload");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -125,4 +128,35 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, logout, current, updateSubscription };
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const uploads = new UploadAvatartService("avatars");
+    const avatarUrl = await uploads.saveAvatar({ idUser: id, file: req.file });
+
+    try {
+      await fs.unlink(path.join("avatars", req.user.avatar));
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    await Users.updateAvatar(id, avatarUrl);
+    res.json({
+      status: Statuses.success,
+      code: HttpCodes.OK,
+      message: "Avatar uploaded!",
+      data: { avatarUrl },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  current,
+  updateSubscription,
+  avatars,
+};

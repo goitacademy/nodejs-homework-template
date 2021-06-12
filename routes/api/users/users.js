@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { UsersRoutePaths } = require("../../../helpers/routePaths");
 const isLoggedIn = require("../../../helpers/is-loggedin");
+const upload = require("../../../helpers/upload");
 const {
   validationNewUser,
   validationLoginUser,
@@ -18,6 +19,12 @@ router.patch(
   isLoggedIn,
   validationSubscription,
   Controllers.updateSubscription,
+);
+router.patch(
+  UsersRoutePaths.avatars,
+  isLoggedIn,
+  upload.single("avatar"),
+  Controllers.avatars,
 );
 
 module.exports = router;

@@ -14,6 +14,7 @@ const UsersRoutePaths = {
   login: "/login",
   logout: "/logout",
   current: "/current",
+  avatars: "/avatars",
 };
 
 module.exports = { ContactsRoutePaths, UsersRoutePaths, api };
