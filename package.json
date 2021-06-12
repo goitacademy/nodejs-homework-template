@@ -8,7 +8,7 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
     "test": "cross-env NODE_ENV=test jest --no-cache --verbose --detectOpenHandles",
-    "test-coverage": "cross-env NODE_ENV=test jest --coverage"
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
