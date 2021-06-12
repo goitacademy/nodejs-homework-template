@@ -32,11 +32,13 @@
   "devDependencies": {
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-json": "^3.0.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "^3.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "jest": "^27.0.4",
+    "nodemon": "2.0.7",
+    "supertest": "^6.1.3"
   }
 }
