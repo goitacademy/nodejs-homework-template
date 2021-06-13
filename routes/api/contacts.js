@@ -38,7 +38,7 @@ router
                     data,
                 });
             } else {
-                return res.status(400).json({
+                return res.status(404).json({
                     message: `Contact with id '${contactId}' not found`,
                 });
             }
