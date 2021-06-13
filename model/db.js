@@ -7,11 +7,12 @@ switch (process.env.NODE_ENV) {
   case "test":
     MONGO_CONNECTION = process.env.MONGO_CONNECTION_TEST;
     break;
-  case "production":
+  case "development":
     MONGO_CONNECTION = process.env.MONGO_CONNECTION;
     break;
   default:
-    // Here would be DB connection link to dev DB if we had one
+    // Here would be DB connection link to prod DB if we had one
+    MONGO_CONNECTION = process.env.MONGO_CONNECTION;
     break;
 }
 
