@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
 const { Subscription } = require('../helpers/constants')
@@ -40,9 +41,20 @@ const userSchema = new Schema(
         return gravatar.url(this.email, {s: '250'}, true)
       }
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+      default: uuidv4(),
+    },
   },
-
-  { versionKey: false, timestamps: true }
+  {
+    versionKey: false,
+    timestamps: true,
+  },
 )
 
 userSchema.pre('save', async function (next) {

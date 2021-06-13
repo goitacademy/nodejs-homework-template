@@ -9,6 +9,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.4.4",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.25.2",
     "cors": "2.8.5",
@@ -24,13 +25,16 @@
     "jimp": "^0.16.1",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.14",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.8",
     "mongoose-paginate-v2": "^1.3.18",
     "morgan": "1.10.0",
     "multer": "^1.4.2",
+    "nodemailer": "^6.6.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "sendgrid": "^5.2.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
