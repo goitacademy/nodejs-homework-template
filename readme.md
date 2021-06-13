@@ -24,3 +24,6 @@ npm start - starting the server in production mode
 npm run start:dev - starting the server in development mode
 npm run lint - run execution of code check with eslint, it is necessary to execute before each PR and fix all linter errors
 npm lint:fix - the same linter check, but with automatic fixes for simple errors
+
+
+Home work Done !
