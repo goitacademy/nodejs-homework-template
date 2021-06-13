@@ -1,8 +1,9 @@
 const app = require('../app');
 const db = require('../model/db');
+const { Port } = require('../helpers/constants');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || Port.default;
 
 db.then(() => {
   app.listen(PORT, () => {

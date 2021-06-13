@@ -1,5 +1,7 @@
-const Joi = require('joi');
-const { Subscription } = require('../../../helpers/constants');
+const Joi = require("joi");
+const { Subscription } = require("../../../helpers/constants");
+const { HttpCodes } = require("../../../helpers/constants");
+
 const subscriptionOptions = Object.values(Subscription);
 
 const validateNewUser = Joi.object({
@@ -27,8 +29,8 @@ const validate = async (schema, request, next) => {
     next();
   } catch (error) {
     next({
-      status: 400,
-      message: error.message.replace(/"/g, ''),
+      status: HttpCodes.BAD_REQUEST,
+      message: error.message.replace(/"/g, ""),
     });
   }
 };

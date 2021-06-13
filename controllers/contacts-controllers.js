@@ -1,12 +1,14 @@
 const Contacts = require('../model/contacts-methods');
-const { HttpCodes } = require('../helpers/constants');
+const { HttpCodes, Statuses } = require('../helpers/constants');
+const { ResourseNotFoundMessage, ResponseMessages } = require('../helpers/messages');
 
 const getAllContacts = async (req, res, next) => {
   try {
     const userId = req.user.id;
     const query = req.query;
     const { docs: contacts, ...rest } = await Contacts.getAllContacts(userId, query);
-    return res.json({ status: 'success', code: HttpCodes.OK, payload: { contacts, ...rest } });
+
+    return res.json({ status: Statuses.success, code: HttpCodes.OK, payload: { contacts, ...rest } });
   } catch (error) {
     next(error);
   }
@@ -18,12 +20,10 @@ const getContactById = async (req, res, next) => {
     const requestedContact = await Contacts.getContactById(userId, req.params.contactId);
 
     if (!requestedContact) {
-      return res
-        .status(HttpCodes.NOT_FOUND)
-        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
-    return res.json({ status: 'success', code: HttpCodes.OK, payload: requestedContact });
+    return res.json({ status: Statuses.success, code: HttpCodes.OK, payload: requestedContact });
   } catch (error) {
     next(error);
   }
@@ -36,7 +36,12 @@ const addContact = async (req, res, next) => {
 
     return res
       .status(HttpCodes.CREATED)
-      .json({ status: 'success', code: HttpCodes.CREATED, message: 'New contact was created.', payload: newContact });
+      .json({
+        status: Statuses.success,
+        code: HttpCodes.CREATED,
+        message: ResponseMessages.created,
+        payload: newContact
+      });
   } catch (error) {
     next(error);
   }
@@ -48,15 +53,13 @@ const removeContact = async (req, res, next) => {
     const removedContact = await Contacts.removeContact(userId, req.params.contactId);
 
     if (!removedContact) {
-      return res
-        .status(HttpCodes.NOT_FOUND)
-        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
     return res.json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.OK,
-      message: 'Contact deleted.',
+      message: ResponseMessages.deleted
     });
   } catch (error) {
     next(error);
@@ -69,16 +72,14 @@ const updateContact = async (req, res, next) => {
     const updatedContact = await Contacts.updateContact(userId, req.params.contactId, req.body);
 
     if (!updatedContact) {
-      return res
-        .status(HttpCodes.NOT_FOUND)
-        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
     return res.json({
-      status: 'success',
-      code: 200,
-      message: 'Contact updated.',
-      payload: updatedContact,
+      status: Statuses.success,
+      code: HttpCodes.OK,
+      message: ResponseMessages.updated,
+      payload: updatedContact
     });
   } catch (error) {
     next(error);
@@ -91,16 +92,14 @@ const updateStatusContact = async (req, res, next) => {
     const updatedFavorite = await Contacts.updateContact(userId, req.params.contactId, req.body);
 
     if (!updatedFavorite) {
-      return res
-        .status(HttpCodes.NOT_FOUND)
-        .json({ status: 'error', code: HttpCodes.NOT_FOUND, message: 'Not found.' });
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
     return res.json({
-      status: 'success',
+      status: Statuses.success,
       code: HttpCodes.OK,
-      message: 'Contact updated.',
-      payload: updatedFavorite,
+      message: ResponseMessages.statusUpdated,
+      payload: updatedFavorite
     });
   } catch (error) {
     next(error);
