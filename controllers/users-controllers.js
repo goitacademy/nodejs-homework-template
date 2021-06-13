@@ -147,7 +147,7 @@ const avatars = async (req, res, next) => {
     // Updating user's entity in database
     await Users.updateAvatar(id, avatarUrl);
 
-    res.json({
+    return res.json({
       status: Statuses.success,
       code: HttpCodes.OK,
       message: "Avatar uploaded!",
