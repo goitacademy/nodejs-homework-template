@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-catch */
+
+
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -58,7 +61,7 @@ const updateContact = async (contactId, body) => {
     const updatedContactList = contactsList.map(contact =>
       contact.id === Number(contactId) ? updatedContact : contact
     );
-    await fs.writeFile(contacts, JSON.stringify(updatedContactList), 'utf8');
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContactList), 'utf8');
     return updatedContact;
   } catch (error) {
     throw error;

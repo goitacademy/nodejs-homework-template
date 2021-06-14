@@ -7,17 +7,21 @@ const {
   remove,
   update
 } = require('../../controllers/contacts')
+const {
+  validateCreateContact,
+  validateUpdateContact,
+} = require('../../validation/contactsValidation')
 
 router.get('/', getAll)
 
 router.get('/:contactId', getById)
 
-router.post('/', create)
+router.post('/', validateCreateContact, create)
 
 router.delete('/:contactId', remove)
 
-router.put('/:contactId', update)
+router.put('/:contactId', validateUpdateContact, update)
 
-router.patch('/:contactId', update)
+router.patch('/:contactId', validateUpdateContact, update)
 
 module.exports = router
