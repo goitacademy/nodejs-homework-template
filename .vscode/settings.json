@@ -1,0 +1,5 @@
+{
+    "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+    "less.completion.completePropertyWithSemicolon": false,
+    "prettier.semi": false
+}
