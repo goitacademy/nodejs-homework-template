@@ -29,24 +29,21 @@ async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
     const newContactList = contacts.filter(contact => contact.id !== Number(contactId));
-    await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf8' );
+    await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf8');
     return newContactList;
   } catch (error) {
     throw error;
   }
 }
 
-async function addContact({name, email, phone}) {
+async function addContact(body) {
   try {
     const contacts = await listContacts();
-    const newContact = {
-      id: Date.now(),
-      name,
-      email,
-      phone}
+    const id = Date.now()
+    const newContact = { id, ...body }
     const newContactList = [...contacts, newContact];
-    await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf8' );
-    return newContactList;
+    await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf8');
+    return newContact;
   } catch (error) {
     throw error;
   }

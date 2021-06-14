@@ -1,17 +1,18 @@
 const Joi = require('joi');
-const {HttpCode} = require('../helpers/constants');
+const { HttpCode } = require('../helpers/constants');
 
 const schemaCreateContact = Joi.object({
   name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
 
   email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } 
-      })
-      .required(),
+    .email({
+      minDomainSegments: 2, tlds: { allow: ['com', 'net'] }
+    })
+    .required(),
 
   phone: Joi.string()
     .pattern(/^(\+)?((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){5,12}\d$/)
@@ -20,14 +21,15 @@ const schemaCreateContact = Joi.object({
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .optional(),
+    .alphanum()
+    .min(3)
+    .max(30)
+    .optional(),
 
   email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } 
-      }).optional(),
+    .email({
+      minDomainSegments: 2, tlds: { allow: ['com', 'net'] }
+    }).optional(),
 
   phone: Joi.string()
     .pattern(/^(\+)?((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){5,12}\d$/)
@@ -35,15 +37,15 @@ const schemaUpdateContact = Joi.object({
 })
 
 const validate = (schema, body, next) => {
-  if(Object.keys(body).length === 0) {
-    return next({ status: HttpCode.BAD_REQUEST, message: 'missing fields'})
+  if (Object.keys(body).length === 0) {
+    return next({ status: HttpCode.BAD_REQUEST, message: 'missing fields' })
   }
-  const {error} = schema.validate(body);
-  if(error) {
-    const [{message}] = error.details;
-    return next({status: HttpCode.BAD_REQUEST, message})
+  const { error } = schema.validate(body);
+  if (error) {
+    const [{ message }] = error.details;
+    return next({ status: HttpCode.BAD_REQUEST, message })
   }
-
+  next()
 }
 
 const validateCreateContact = (req, res, next) => {
