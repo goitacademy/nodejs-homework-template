@@ -81,16 +81,16 @@ function addContact (name, email, phone) {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts()
   console.log(contacts)
-  let newContact = {}
+  let newContactChange = {}
 
   const newContacts = contacts.map((contact) => {
     if (contact.id.toString() === contactId) {
-      newContact = {
+      newContactChange = {
         ...contact,
         ...body,
       }
 
-      return newContact
+      return newContactChange
     } else {
       return contact
     }
@@ -100,7 +100,7 @@ const updateContact = async (contactId, body) => {
     console.log(err)
   )
 
-  return newContact
+  return newContactChange
 }
 module.exports = {
   listContacts,
