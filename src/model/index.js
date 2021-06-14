@@ -96,7 +96,7 @@ const updateContact = async (contactId, body) => {
     }
   })
 
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts), (err) =>
+  await fs.writeFile(contactsPath, JSON.stringify(newContactChange), (err) =>
     console.log(err)
   )
 
