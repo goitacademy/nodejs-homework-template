@@ -25,19 +25,19 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const data = await fs.readFile(contactsPath, 'utf8')
-    // const findId = JSON.parse(data).find(
-    //   (item) => item.id === Number(contactId)
-    // )
-
+    const findId = JSON.parse(data).find(
+      (item) => item.id === Number(contactId)
+    )
     const newData = JSON.parse(data).filter(
       (item) => item.id !== Number(contactId)
     )
     await fs.writeFile(contactsPath, JSON.stringify(newData), 'utf8')
-    return newData.length !== 0
+    return findId
   } catch (err) {
     console.log(err)
   }
 }
+removeContact()
 
 const addContact = async (body) => {
   const { name, email, phone } = body
