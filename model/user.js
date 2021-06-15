@@ -1,6 +1,9 @@
 const { Schema, model } = require("mongoose");
+const gravatar = require("gravatar"); // подключение пакета для глобально распознаваемого аватара
+
 const { Subscription } = require("../helpers/constants");
 const bcryptjs = require("bcryptjs");
+// const { function } = require("joi");
 const SALT_WORK_FACTOR = 8;
 
 const userSchema = new Schema(
@@ -24,6 +27,17 @@ const userSchema = new Schema(
       default: Subscription.STARTER,
     },
     token: {
+      type: String,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250" }, true); // по умолчанию будет возвращаться email, с настройками: сторона = 250, и указываем по какому протоколу передавать: http - false; https - true. Т.е. при создании пользователя - будем готова аватарка
+      },
+    },
+    idCloudAvatar: {
+      // ссылка на id аватарки в cloudinary
       type: String,
       default: null,
     },

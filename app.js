@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
@@ -8,9 +9,16 @@ const boolParser = require("express-query-boolean");
 
 const { limeterAPI } = require("./helpers/constants");
 
+require("dotenv").config();
+
+// Переменные окружения
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+
 const app = express();
 
 app.use(helmet());
+
+app.use(express.static(path.join(__dirname, AVATAR_OF_USERS))); // включаем статику, чтобы в Postman при get-запросе отдавалась аватарка пользователя
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -28,9 +36,11 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
-  res
-    .status(status)
-    .json({ status: "fail", code: status, message: err.message });
+  res.status(status).json({
+    status: status === 500 ? "fail" : "error",
+    code: status,
+    message: err.message,
+  });
 });
 
 process.on("unhandledRejection", (reason, promise) => {

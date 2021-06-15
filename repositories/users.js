@@ -29,6 +29,16 @@ const updateUserSubscription = async (id, body) => {
   return result;
 };
 
+//  вариант, когда аватарки сохраняются локально
+// const updateAvatar = async (id, avatar) => {
+//   return await User.updateOne({ _id: id }, { avatar });
+// };
+
+//  вариант, когда аватарки сохраняются в облаке cloudinary
+const updateAvatar = async (id, avatar, idCloudAvatar = null) => {
+  return await User.updateOne({ _id: id }, { avatar, idCloudAvatar });
+};
+
 module.exports = {
   findById,
   findByEmail,
@@ -36,4 +46,5 @@ module.exports = {
   updateToken,
   getCurrentUser,
   updateUserSubscription,
+  updateAvatar,
 };
