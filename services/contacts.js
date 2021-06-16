@@ -58,7 +58,7 @@ const addContact = async body => {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data);
-    console.log(newContact);
+
     if (checkIfContactExists(contacts, newContact) === false) {
       const contactsWithNewContact = [...contacts, newContact];
       fs.writeFile(
@@ -66,7 +66,7 @@ const addContact = async body => {
         JSON.stringify(contactsWithNewContact),
         'utf-8',
       );
-      return true;
+      return newContact;
     } else return false;
   } catch (error) {
     console.log(error);
@@ -93,7 +93,7 @@ const updateContact = async (contactId, body) => {
           contact.phone = phone;
         }
         fs.writeFile(contactsPath, JSON.stringify(contacts), 'utf-8');
-        contactUpdated = true;
+        contactUpdated = contact;
       }
     });
     return contactUpdated;

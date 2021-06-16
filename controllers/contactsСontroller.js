@@ -53,7 +53,9 @@ async function addNewContact(request, response) {
     return response.status(404).json({ status: 'Cannot add new contact' });
   }
 
-  return response.status(200).json({ status: 'success, contact added' });
+  return response
+    .status(201)
+    .json({ contactAdded, status: 'success, contact added' });
 }
 
 async function changeContact(request, response) {
@@ -67,7 +69,9 @@ async function changeContact(request, response) {
       .json({ status: `Cannot update contact by id:${idToChange}` });
   }
 
-  return response.status(200).json({ status: 'success, contact updated' });
+  return response
+    .status(200)
+    .json({ changedContact, status: 'success, contact updated' });
 }
 
 module.exports = {
