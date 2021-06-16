@@ -41,7 +41,9 @@ async function deleteContact(request, response) {
       .json({ status: `Cannot remove contact by id ${idToRemove}` });
   }
 
-  return response.status(200).json({ status: 'success, contact removed' });
+  return response
+    .status(200)
+    .json({ status: `success, contact by id ${idToRemove} removed` });
 }
 
 async function addNewContact(request, response) {

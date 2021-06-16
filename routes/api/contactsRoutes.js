@@ -1,5 +1,11 @@
 const express = require('express');
 const router = express.Router();
+
+const {
+  patchContactValidation,
+  addContactValidation,
+} = require('../../middlewares/validationMiddleware');
+
 const {
   changeContact,
   addNewContact,
@@ -12,10 +18,10 @@ router.get('/', getContacts);
 
 router.get('/:contactId', getById);
 
-router.post('/', addNewContact);
+router.post('/', addContactValidation, addNewContact);
 
 router.delete('/:contactId', deleteContact);
 
-router.patch('/:contactId', changeContact);
+router.patch('/:contactId', patchContactValidation, changeContact);
 
 module.exports = { contactsRouter: router };
