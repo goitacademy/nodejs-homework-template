@@ -4,14 +4,14 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require('../model/index');
+} = require('../services/contacts');
 
 async function getContacts(request, response) {
-  const contactsList = listContacts();
+  const contactsList = await listContacts();
 
   if (!contactsList) {
     return response.status(404).json({
-      status: `Cannot get contacts`,
+      status: 'Cannot get contacts',
     });
   }
 
@@ -19,12 +19,12 @@ async function getContacts(request, response) {
 }
 
 async function getById(request, response) {
-  const idToFind = request.params.id;
-  const foundContact = getContactById(idToFind);
+  const idToFind = request.params.contactId;
+  const foundContact = await getContactById(idToFind);
 
-  if (!foundContact) {
+  if (foundContact === undefined || foundContact === false) {
     return response.status(404).json({
-      status: `No contact by ${idToFind} found`,
+      status: `No contact by id:${idToFind} found`,
     });
   }
 
@@ -32,8 +32,8 @@ async function getById(request, response) {
 }
 
 async function deleteContact(request, response) {
-  const idToRemove = request.params.id;
-  const contactRemoved = removeContact(idToRemove);
+  const idToRemove = request.params.contactId;
+  const contactRemoved = await removeContact(idToRemove);
 
   if (contactRemoved === false) {
     return response
@@ -46,24 +46,25 @@ async function deleteContact(request, response) {
 
 async function addNewContact(request, response) {
   const newContact = request.body;
-  const contactAdded = addContact(newContact);
+  console.log(newContact);
+  const contactAdded = await addContact(newContact);
 
   if (contactAdded === false) {
-    return response.status(404).json({ status: `Cannot add new contact` });
+    return response.status(404).json({ status: 'Cannot add new contact' });
   }
 
   return response.status(200).json({ status: 'success, contact added' });
 }
 
 async function changeContact(request, response) {
-  const idToChange = request.params.id;
+  const idToChange = request.params.contactId;
   const newContactData = request.body;
-  const changedContact = updateContact(idToChange, newContactData);
+  const changedContact = await updateContact(idToChange, newContactData);
 
   if (changedContact === false) {
     return response
       .status(404)
-      .json({ status: `Cannot update contact by id ${idToChange}` });
+      .json({ status: `Cannot update contact by id:${idToChange}` });
   }
 
   return response.status(200).json({ status: 'success, contact updated' });
