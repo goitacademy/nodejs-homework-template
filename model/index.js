@@ -1,11 +1,42 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const fs = require('fs/promises')
+const path = require('path')
 
-const listContacts = async () => {}
+const pathContacts = path.join(__dirname, 'contacts.json')
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const response = await fs.readFile(pathContacts);
+    const data = JSON.parse(response);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  try {
+    const response = await listContacts();
+    const findContactById = response.find(
+      (el) => el.id.toString() === contactId
+    );
+    return findContactById;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const removeContact = async (contactId) => {
+  try {
+    const response = await listContacts();
+    const filterElements = response.filter(
+      (el) => el.id.toString() !== contactId
+    );
+    fs.writeFile(pathContacts, JSON.stringify(filterElements, null, 2));
+    return filterElements;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const addContact = async (body) => {}
 
