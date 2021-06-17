@@ -24,9 +24,9 @@ const Statuses = {
 };
 
 const Limits = {
-  JSON: 10000,
+  JSON: 100000, // json files should be less than 100KB
   tokenLife: "3h",
-  imageSize: 2000000,
+  imageSize: 2000000, // uploaded avatar images should be less than 2MB
 };
 
 const Port = {

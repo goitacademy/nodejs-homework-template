@@ -1,8 +1,10 @@
 const sgMail = require("@sendgrid/mail");
 const Mailgen = require("mailgen");
 require("dotenv").config();
+
 // Setting up SendGrid's API KEY
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // Setting up Mailgen e-mail template generator
 const mailGenerator = new Mailgen({
   theme: "neopolitan",
@@ -21,7 +23,7 @@ const createMessage = (name, toEmail, verificationToken) => {
       action: {
         instructions: `To get started with ${process.env.SENDGRID_SENDER_NAME}, please click here:`,
         button: {
-          color: "#22BC66",
+          color: "#414141",
           text: "Verify your account",
           link: `http://localhost:${
             process.env.PORT || 3000
