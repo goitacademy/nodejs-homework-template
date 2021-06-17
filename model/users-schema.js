@@ -8,6 +8,10 @@ const subscriptionOptions = Object.values(Subscription);
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      default: "Awesome Guest",
+    },
     password: {
       type: String,
       required: [true, "Password is required."],

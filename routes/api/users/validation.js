@@ -5,6 +5,7 @@ const { HttpCodes } = require("../../../helpers/constants");
 const subscriptionOptions = Object.values(Subscription);
 
 const validateNewUser = Joi.object({
+  name: Joi.string().min(2).max(30).optional(),
   email: Joi.string().email().required(),
   password: Joi.string().alphanum().min(5).max(25).required(),
   subscription: Joi.string()
