@@ -193,6 +193,44 @@ const verifyUser = async (req, res, next) => {
   }
 };
 
+const repeatVerifyUser = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(HttpCodes.BAD_REQUEST).json({
+        status: Statuses.error,
+        code: HttpCodes.BAD_REQUEST,
+        message: ResponseMessages.missingEmail,
+      });
+    }
+
+    const user = await Users.findUserByEmail(email);
+
+    if (!user) {
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
+    }
+    const { name, isVerified, verificationToken } = user;
+
+    if (isVerified) {
+      return res.status(HttpCodes.BAD_REQUEST).json({
+        status: Statuses.error,
+        code: HttpCodes.BAD_REQUEST,
+        message: ResponseMessages.alreadyVerified,
+      });
+    }
+
+    await sendVerificationEmail(name, email, verificationToken);
+    return res.json({
+      status: Statuses.success,
+      code: HttpCodes.OK,
+      message: ResponseMessages.verificationSent,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -201,4 +239,5 @@ module.exports = {
   updateSubscription,
   avatars,
   verifyUser,
+  repeatVerifyUser,
 };

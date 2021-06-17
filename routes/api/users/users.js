@@ -28,6 +28,6 @@ router.patch(
 );
 
 router.get(UsersRoutePaths.verify, Controllers.verifyUser);
-// router.post();
+router.post(UsersRoutePaths.repeatVerify, Controllers.repeatVerifyUser);
 
 module.exports = router;
