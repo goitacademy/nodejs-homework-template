@@ -1,14 +1,15 @@
 const fs = require("fs/promises");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const Users = require("../model/users-methods");
+const UploadAvatarService = require("../services/local-upload");
+const sendVerificationEmail = require("../services/sendgrid-email");
 const { HttpCodes, Statuses, Limits } = require("../helpers/constants");
 const {
   ResponseMessages,
   ResourseNotFoundMessage,
 } = require("../helpers/messages");
-const UploadAvatarService = require("../services/local-upload");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -24,9 +25,15 @@ const signup = async (req, res, next) => {
       });
     }
 
-    const { id, email, subscription, avatarURL } = await Users.createUser(
-      req.body,
-    );
+    const { id, name, email, subscription, avatarURL, verificationToken } =
+      await Users.createUser(req.body);
+
+    // Wrapping in try-catch, to handle e-mail errors separately. We don't want issues with e-mail to prevent a user from registering
+    try {
+      await sendVerificationEmail(name, email, verificationToken);
+    } catch (error) {
+      console.log("Email service failed: ", error.message);
+    }
 
     return res.status(HttpCodes.CREATED).json({
       status: Statuses.success,
@@ -55,6 +62,14 @@ const login = async (req, res, next) => {
         status: Statuses.error,
         code: HttpCodes.UNAUTHORIZED,
         message: ResponseMessages.loginFail,
+      });
+    }
+
+    if (!user.isVerified) {
+      return res.status(HttpCodes.UNAUTHORIZED).json({
+        status: Statuses.error,
+        code: HttpCodes.UNAUTHORIZED,
+        message: ResponseMessages.verificationMissing,
       });
     }
 
