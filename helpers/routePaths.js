@@ -15,6 +15,8 @@ const UsersRoutePaths = {
   logout: "/logout",
   current: "/current",
   avatars: "/avatars",
+  verify: "/verify/:verificationToken",
+  repeatVerify: "/verify",
 };
 
 module.exports = { ContactsRoutePaths, UsersRoutePaths, api };

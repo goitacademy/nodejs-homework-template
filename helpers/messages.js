@@ -17,6 +17,7 @@ const ResponseMessages = {
   loginSuccess: "You have logged in.",
   subcriptionUpdatedSuccess: "Subscription updated.",
   notAuthorized: "Not authorized.",
+  verified: "Your account is verified!",
 };
 
 module.exports = { ResourseNotFoundMessage, ResponseMessages };
