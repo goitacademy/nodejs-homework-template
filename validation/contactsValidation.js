@@ -7,7 +7,7 @@ const phoneRegExp = '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\.0-9]{7,12}$';
 const schemaCreateContact = Joi.object({
     name: Joi.string()
         .pattern(new RegExp(nameRegExp))
-        .min(2)
+        .min(1)
         .max(30)
         .required(),
 
@@ -29,7 +29,7 @@ const schemaUpdateContact = Joi.object({
         .max(30),
 
     phone: Joi.string()
-        .pattern(new RegExp(phoneRegExp )),
+        .pattern(new RegExp(phoneRegExp)),
 
     email: Joi.string()
         .email({ minDomainSegments: 1, tlds: { allow: true } }),
@@ -37,28 +37,26 @@ const schemaUpdateContact = Joi.object({
     favorite: Joi.boolean()
 });
 
-const schemaUpdateStatusContact  = Joi.object({
+const schemaUpdateStatusContact = Joi.object({
     favorite: Joi.boolean().required()
 });
 
-const isMongoIdValid = (req,next) => {
-    {
-        if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-          return next({
+const isMongoIdValid = (req, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
+        return next({
             status: 400,
             message: 'Invalid ObjectId',
-          });
-        };
-        next();
+        });
     };
+    next();
 };
 
-const validate = async (schema, obj, next)=>{
+const validate = async (schema, obj, next) => {
     try {
         await schema.validateAsync(obj);
         next();
     }
-    catch (err) { 
+    catch (err) {
         next({
             status: 400,
             message: err.message.replace(/"/g, '')
@@ -67,8 +65,8 @@ const validate = async (schema, obj, next)=>{
 };
 
 module.exports = {
-    validateCreateContact: (req,res,next)=>validate(schemaCreateContact,req.body,next),
-    validateUpdateContact: (req,res,next)=>validate(schemaUpdateContact,req.body,next),
-    validateUpdateStatusContact: (req,res,next)=>validate(schemaUpdateStatusContact, req.body,next),
-    validateMongoId: (req, res, next) => isMongoIdValid(req,next)
+    validateCreateContact: (req, res, next) => validate(schemaCreateContact, req.body, next),
+    validateUpdateContact: (req, res, next) => validate(schemaUpdateContact, req.body, next),
+    validateUpdateStatusContact: (req, res, next) => validate(schemaUpdateStatusContact, req.body, next),
+    validateMongoId: (req, res, next) => isMongoIdValid(req, next)
 };
