@@ -7,16 +7,17 @@ function addContactValidation(req, res, next) {
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required(),
     phone: Joi.string()
-      .min(10)
-      .max(15)
-      .pattern(/^[0-9]+$/)
-      .messages({ 'string.pattern.base': 'Phone number must have 10 digits.' })
+      .regex(/^[()0-9]/)
+      .min(7)
+      .max(13)
       .required(),
   });
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    return res.status(400).json({ status: validationResult.error.details });
+    return res
+      .status(400)
+      .json({ status: validationResult.error.details[0].message });
   }
 
   next();
@@ -27,10 +28,9 @@ function patchContactValidation(req, res, next) {
     name: Joi.string().min(3).max(20).optional(),
     email: Joi.string().email().optional(),
     phone: Joi.string()
-      .min(10)
-      .max(15)
-      .pattern(/^[0-9]+$()/)
-      .messages({ 'string.pattern.base': 'Phone number must have 10 digits.' })
+      .regex(/^[()0-9]/)
+      .min(7)
+      .max(13)
       .optional(),
   }).required();
 
