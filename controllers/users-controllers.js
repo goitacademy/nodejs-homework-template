@@ -41,6 +41,7 @@ const signup = async (req, res, next) => {
       message: ResponseMessages.registedSuccess,
       user: {
         id,
+        name,
         email,
         avatarURL,
         subscription,
@@ -73,7 +74,7 @@ const login = async (req, res, next) => {
       });
     }
 
-    const id = user.id;
+    const { id, name } = user;
     const payload = { id };
     const token = jwt.sign(payload, SECRET_KEY, {
       expiresIn: Limits.tokenLife,
@@ -89,7 +90,7 @@ const login = async (req, res, next) => {
       code: HttpCodes.OK,
       message: ResponseMessages.loginSuccess,
       token,
-      user: { email, avatarURL, subscription },
+      user: { name, email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -109,12 +110,12 @@ const logout = async (req, res, next) => {
 
 const current = async (req, res, next) => {
   try {
-    const { email, avatarURL, subscription } = req.user;
+    const { name, email, avatarURL, subscription } = req.user;
 
     return res.json({
       status: Statuses.success,
       code: HttpCodes.OK,
-      user: { email, avatarURL, subscription },
+      user: { name, email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -130,13 +131,13 @@ const updateSubscription = async (req, res, next) => {
       return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
 
-    const { email, avatarURL, subscription } = updatedSubscription;
+    const { name, email, avatarURL, subscription } = updatedSubscription;
 
     return res.json({
       status: Statuses.success,
       code: HttpCodes.OK,
       message: ResponseMessages.subcriptionUpdatedSuccess,
-      payload: { email, avatarURL, subscription },
+      payload: { name, email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -210,6 +211,7 @@ const repeatVerifyUser = async (req, res, next) => {
     if (!user) {
       return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
     }
+
     const { name, isVerified, verificationToken } = user;
 
     if (isVerified) {
