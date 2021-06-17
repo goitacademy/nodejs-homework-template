@@ -27,4 +27,7 @@ router.patch(
   Controllers.avatars,
 );
 
+router.get(UsersRoutePaths.verify, Controllers.verifyUser);
+// router.post();
+
 module.exports = router;

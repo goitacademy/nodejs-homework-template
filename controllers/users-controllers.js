@@ -158,6 +158,26 @@ const avatars = async (req, res, next) => {
   }
 };
 
+const verifyUser = async (req, res, next) => {
+  try {
+    const verificationToken = req.params.verificationToken;
+    const user = await Users.findUserByVerificationToken(verificationToken);
+
+    if (!user) {
+      return res.status(HttpCodes.NOT_FOUND).json(ResourseNotFoundMessage);
+    }
+
+    await Users.updateVerificationStatus(user.id, true, null);
+    return res.json({
+      status: Statuses.success,
+      code: HttpCodes.OK,
+      message: ResponseMessages.verified,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -165,4 +185,5 @@ module.exports = {
   current,
   updateSubscription,
   avatars,
+  verifyUser,
 };
