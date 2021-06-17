@@ -1,6 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const listContacts2 = require("../../model/contacts.json");
+const path = require('path');
+const fs = require('fs').promises;
+const contactsPath = path.resolve("../../model/contacts.json");
+
+const listContacts=async ()=>{
+  try{
+    return await fs.readFile(contactsPath, 'utf8');
+  }catch(err){
+    console.error(err)
+  }
+
+}
+
+let listContacts2 = require("../../model/contacts.json");
 let contacts = [
   {
     id: 1,
@@ -63,30 +76,23 @@ let contacts = [
     phone: "(748) 206-2688",
   },
 ];
+//Всі контакти
 router.get("/", async (req, res, next) => {
-  // const listContacts = require("../../model/contacts.json");
-  await res.status(200).json(contacts);
+  await res.status(200).json(listContacts());
 });
-
+// вибір контакту по ІД
 router.get("/:contactId", async (req, res, next) => {
-  // const getById = () => {
- // return {contact};
-  // };
   const [contact] = contacts.filter(cont => cont.id.toString() === req.params.contactId);
-
- 
   if (contact === undefined) {
    await res.status(404).json({ message: "Not Found" });
   return;
   }
-
  await res.status(200).json({contact} );
 });
-
+// Додати контакт
 router.post("/", async (req, res, next) => {
   const {name, email, phone}=req.body;
   contacts.push({id:new Date().getTime().toString(),name, email, phone})
-
 try{ 
   if(!name||!email||!phone){
       await res.status(400).json({message: "missing required field"});
@@ -97,7 +103,7 @@ return;
  await res.status(404).json({message:err});
 }
 });
-
+// Видалення контакту
 router.delete("/:contactId", async (req, res, next) => {
 try{ 
 let len=contacts.length;
@@ -110,7 +116,7 @@ return;
 }catch(err){
  await res.status(404).json({message:err});
 }});
-
+// Змінити контакт
 router.put("/:contactId", async (req, res, next) => {
  const {name,email,phone}=req.body;
  contacts=contacts.map(contact => {
