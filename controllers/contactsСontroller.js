@@ -6,7 +6,7 @@ const {
   updateContact,
 } = require('../services/contacts');
 
-async function getContacts(request, response) {
+async function getContactsController(request, response) {
   const contactsList = await listContacts();
 
   if (!contactsList) {
@@ -18,7 +18,7 @@ async function getContacts(request, response) {
   return response.status(200).json({ contactsList, status: 'success' });
 }
 
-async function getById(request, response) {
+async function getByIdController(request, response) {
   const idToFind = request.params.contactId;
   const foundContact = await getContactById(idToFind);
 
@@ -31,7 +31,7 @@ async function getById(request, response) {
   return response.status(200).json({ foundContact, status: 'success' });
 }
 
-async function deleteContact(request, response) {
+async function deleteContactController(request, response) {
   const idToRemove = request.params.contactId;
   const contactRemoved = await removeContact(idToRemove);
 
@@ -46,7 +46,7 @@ async function deleteContact(request, response) {
     .json({ status: `success, contact by id ${idToRemove} removed` });
 }
 
-async function addNewContact(request, response) {
+async function addNewContactController(request, response) {
   const newContact = request.body;
   console.log(newContact);
   const contactAdded = await addContact(newContact);
@@ -60,7 +60,7 @@ async function addNewContact(request, response) {
     .json({ contactAdded, status: 'success, contact added' });
 }
 
-async function changeContact(request, response) {
+async function changeContactController(request, response) {
   const idToChange = request.params.contactId;
   const newContactData = request.body;
   const changedContact = await updateContact(idToChange, newContactData);
@@ -77,9 +77,9 @@ async function changeContact(request, response) {
 }
 
 module.exports = {
-  changeContact,
-  addNewContact,
-  deleteContact,
-  getById,
-  getContacts,
+  changeContactController,
+  addNewContactController,
+  deleteContactController,
+  getByIdController,
+  getContactsController,
 };
