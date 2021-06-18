@@ -1,10 +1,12 @@
+const { func } = require('joi');
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../services/contacts');
+  updateFavourite,
+} = require('../services/contactsServices');
 
 async function getContactsController(request, response) {
   const contactsList = await listContacts();
@@ -76,10 +78,26 @@ async function changeContactController(request, response) {
     .json({ changedContact, status: 'success, contact updated' });
 }
 
+async function changeFavouriteController(req, res) {
+  const idToChange = req.params.contactId;
+  const newFavouriteData = req.body;
+  const changedContact = await updateFavourite(idToChange, newFavouriteData);
+
+  if (changedContact === false) {
+    return res.status(404).json({
+      status: `Cannot update favourite in contact by id:${idToChange}`,
+    });
+  }
+
+  return res
+    .status(200)
+    .json({ changedContact, status: 'success, contact updated' });
+}
 module.exports = {
   changeContactController,
   addNewContactController,
   deleteContactController,
   getByIdController,
   getContactsController,
+  changeFavouriteController,
 };

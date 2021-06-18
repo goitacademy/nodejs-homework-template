@@ -12,6 +12,7 @@ const {
   deleteContactController,
   getByIdController,
   getContactsController,
+  changeFavouriteController,
 } = require('../../controllers/contactsСontroller');
 
 router.get('/', getContactsController);
@@ -23,5 +24,7 @@ router.post('/', addContactValidation, addNewContactController);
 router.delete('/:contactId', deleteContactController);
 
 router.patch('/:contactId', patchContactValidation, changeContactController);
+
+router.patch('/:contactId/favourite', changeFavouriteController);
 
 module.exports = { contactsRouter: router };
