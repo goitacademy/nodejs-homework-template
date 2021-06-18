@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   patchContactValidation,
   addContactValidation,
+  patchFavouriteValidation,
 } = require('../../middlewares/validationMiddleware');
 
 const {
@@ -25,6 +26,10 @@ router.delete('/:contactId', deleteContactController);
 
 router.patch('/:contactId', patchContactValidation, changeContactController);
 
-router.patch('/:contactId/favourite', changeFavouriteController);
+router.patch(
+  '/:contactId/favourite',
+  patchFavouriteValidation,
+  changeFavouriteController,
+);
 
 module.exports = { contactsRouter: router };
