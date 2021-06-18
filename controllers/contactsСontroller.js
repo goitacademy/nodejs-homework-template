@@ -9,7 +9,6 @@ const {
 
 async function getContactsController(request, response) {
   const contactsList = await listContacts();
-
   if (!contactsList) {
     return response.status(404).json({
       status: 'Cannot get contacts',

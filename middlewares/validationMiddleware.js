@@ -9,7 +9,7 @@ function addContactValidation(req, res, next) {
       .min(7)
       .max(13)
       .required(),
-    favourite: Joi.boolean().optional(),
+    favourite: Joi.boolean().optional().default(false),
   }).required();
 
   const validationResult = schema.validate(req.body);

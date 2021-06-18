@@ -5,6 +5,7 @@ const listContacts = async () => {
     const contacts = await Contacts.find({});
     return contacts;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -14,6 +15,7 @@ const getContactById = async contactId => {
     const foundContact = Contacts.findById(contactId);
     return foundContact;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -23,6 +25,7 @@ const removeContact = async contactId => {
     await Contacts.findByIdAndRemove(contactId);
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -50,7 +53,6 @@ const updateContact = async (contactId, body) => {
     name: body.name,
     email: body.email,
     phone: body.phone,
-    favourite: body.favourite,
   };
   try {
     await Contacts.findByIdAndUpdate(contactId, { $set: newContactData });
