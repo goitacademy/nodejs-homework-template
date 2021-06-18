@@ -1,13 +1,4 @@
-const fs = require('fs/promises');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-
 const { Contacts } = require('../dataBase/contactsModel');
-
-const { arrayEquals } = require('../helpers/arrayEquals');
-const { checkIfContactExists } = require('../helpers/checkIfContactExists');
-
-const contactsPath = path.join('services', 'contacts.json');
 
 const listContacts = async () => {
   try {

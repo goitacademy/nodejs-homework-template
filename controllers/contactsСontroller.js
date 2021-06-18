@@ -1,4 +1,3 @@
-const { func } = require('joi');
 const {
   listContacts,
   getContactById,
