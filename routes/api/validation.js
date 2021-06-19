@@ -24,11 +24,16 @@ const updateContactSchema = Joi.object({
     })
     .optional(),
   phone: Joi.string()
-    .pattern(/[()][0-9]{3}[)] [0-9]{3}-[0-9]{4}/)
+    .pattern(/[()][0-9]{3}[)] [0-9]{3}-[0-9]{3}/)
     .optional()
 }).or('name', 'email', 'phone')
 
+const updateStatusContactSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
+
 module.exports = {
   addContactSchema,
-  updateContactSchema
+  updateContactSchema,
+  updateStatusContactSchema
 }
