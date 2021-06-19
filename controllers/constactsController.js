@@ -1,4 +1,5 @@
 const Contacts = require('../services/contactsService')
+const { WrongParametersError, NotFoundError } = require('../helpers/errors')
 
 const {
   addContactSchema,
@@ -9,7 +10,7 @@ const {
 const listContacts = async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts()
-    res.status(200).json({ contacts, status: 'success' })
+    res.status(200).json({ contacts })
   } catch (error) {
     next(error)
   }
@@ -21,9 +22,10 @@ const getContactById = async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(contactId)
     if (contact) {
-      return res.status(200).json({ contact, status: 'success' })
+      return res.status(200).json({ contact })
     }
-    res.status(404).json({ message: 'Not found' })
+    throw new NotFoundError('Not found')
+    // res.status(404).json({ message: 'Not found' })
   } catch (error) {
     next(error)
   }
@@ -32,7 +34,8 @@ const getContactById = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   const { error } = addContactSchema.validate(req.body)
   if (error) {
-    return res.status(400).json({ message: 'missing required field' })
+    throw new WrongParametersError('missing required field')
+    // return res.status(400).json({ message: 'missing required field' })
   }
   try {
     const contact = await Contacts.addContact(req.body)
@@ -50,7 +53,8 @@ const removeContact = async (req, res, next) => {
     if (result) {
       return res.status(200).json({ message: `contact ${contactId} deleted` })
     }
-    res.status(404).json({ message: 'Not found' })
+    throw new NotFoundError('Not found')
+    // res.status(404).json({ message: 'Not found' })
   } catch (error) {
     next(error)
   }
@@ -61,7 +65,8 @@ const updateContact = async (req, res, next) => {
   const { body } = req
   const { error } = updateContactSchema.validate(req.body)
   if (error) {
-    return res.status(400).json({ message: 'missing fields' })
+    throw new WrongParametersError('missing fields')
+    // return res.status(400).json({ message: 'missing fields' })
   }
   try {
     const contact = await Contacts.updateContact(contactId, body)
@@ -69,7 +74,8 @@ const updateContact = async (req, res, next) => {
     if (contact) {
       return res.status(200).json({ contact, status: 'success' })
     }
-    res.status(404).json({ message: 'Not found' })
+    throw new NotFoundError('Not found')
+    // res.status(404).json({ message: 'Not found' })
   } catch (error) {
     next(error)
   }
@@ -80,7 +86,8 @@ const updateStatusContact = async (req, res, next) => {
   const { body } = req
   const { error } = updateStatusContactSchema.validate(req.body)
   if (error) {
-    return res.status(400).json({ message: 'missing field favorite' })
+    throw new WrongParametersError('missing field favorite')
+    // return res.status(400).json({ message: 'missing field favorite' })
   }
   try {
     const contact = await Contacts.updateContact(contactId, body)
@@ -88,7 +95,8 @@ const updateStatusContact = async (req, res, next) => {
     if (contact) {
       return res.status(200).json({ contact, status: 'success' })
     }
-    res.status(404).json({ message: 'Not found' })
+    throw new NotFoundError('Not found')
+    // res.status(404).json({ message: 'Not found' })
   } catch (error) {
     next(error)
   }
