@@ -1,5 +1,4 @@
 const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
 
 const path = require('path')
 const contactsPath = path.join('./model/contacts.json')

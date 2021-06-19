@@ -27,7 +27,7 @@ const validationSchemaPATCH = Joi.object({
   phone: Joi.string()
     .max(12)
     .pattern(/\+?[0-9\s\-\\)]+/),
-})
+}).min(1)
 
 router.get('/', async (req, res, next) => {
   const list = await Controller.listContacts()
@@ -61,15 +61,12 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.patch('/:contactId', async (req, res, next) => {
-  // console.log('telo zaprosa', req.body)
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: 'missing fields' })
-  }
-
   const dataValidate = validationSchemaPATCH.validate(req.body)
 
   if (dataValidate.error) {
-    return res.status(404).json({ message: `Validation error ${dataValidate.error.message}` })
+    return res
+      .status(404)
+      .json({ message: `Validation error ${dataValidate.error.message}` })
   }
 
   const contacsWithId = await Controller.updateContact(
