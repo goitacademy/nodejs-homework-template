@@ -1,0 +1,75 @@
+const express = require('express')
+const router = express.Router()
+const {
+  listContacts,
+  addContact,
+  getContactById,
+  removeContact,
+  updateContact
+} = require('../model/index')
+
+// Всі контакти
+router.get('/', async (req, res, next) => {
+  try {
+    const contactss = await listContacts()
+    await res.status(200).json(contactss)
+  } catch (err) { console.error(err) }
+})
+// вибір контакту по ІД
+router.get('/:contactId', async (req, res, next) => {
+  const contact = await getContactById(parseInt(req.params.contactId))
+  if (contact === undefined) {
+    await res.status(404).json({ message: 'Not Found' })
+    return
+  }
+  await res.status(200).json({ contact })
+})
+// Додати контакт
+router.post('/', async (req, res, next) => {
+  const { name, email, phone } = req.body
+  try {
+    const addedContact = await addContact(name, email, phone)
+
+    if (!name || !email || !phone) {
+      await res.status(400).json({ message: 'missing required field' })
+      return
+    }
+    await res.status(201).json(addedContact)
+  } catch (err) {
+    await res.status(404).json({ message: err })
+  }
+})
+// Видалення контакту
+router.delete('/:contactId', async (req, res, next) => {
+  try {
+    const deleteOperation = await removeContact(parseInt(req.params.contactId))
+
+    if (!deleteOperation) {
+      await res.status(404).json({ message: 'Not Found' })
+      return
+    }
+    await res.status(200).json({ message: 'contact deleted' })
+  } catch (err) {
+    await res.status(404).json({ message: err })
+  }
+})
+// Змінити контакт
+router.put('/:contactId', async (req, res, next) => {
+  const { name, email, phone } = req.body
+  // console.log(Object.keys(req.body).length < 3)
+  try {
+    if (Object.keys(req.body).length < 3) {
+      await res.status(400).json({ message: 'missing fields' })
+      return
+    }
+    const contact = await updateContact(name, email, phone, parseInt(req.params.contactId))
+    if (contact === undefined) {
+      await res.status(404).json({ message: 'Not found' })
+    }
+    await res.status(200).json(contact)
+  } catch (err) {
+    console.error(err)
+  }
+})
+
+module.exports = router
