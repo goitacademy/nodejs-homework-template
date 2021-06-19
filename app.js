@@ -6,6 +6,7 @@ const { errorHandler } = require('./helpers/apiHelpers')
 const { NotFoundError } = require('./helpers/errors')
 
 const contactsRouter = require('./routes/contactsRouter')
+// const usersRouter = require('./routes/usersRouter')
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
+// app.use('/users', usersRouter)
 
 app.use((req, res) => {
   throw new NotFoundError('Not found')

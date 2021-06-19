@@ -102,11 +102,14 @@ const updateStatusContact = async (req, res, next) => {
   }
 }
 
+const getFavoriteContacts = async (req, res, next) => {}
+
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-  updateStatusContact
+  updateStatusContact,
+  getFavoriteContacts
 }
