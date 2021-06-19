@@ -1,3 +1,5 @@
+const Joi = require('joi')
+
 const express = require('express')
 const router = express.Router()
 const {
@@ -27,9 +29,28 @@ router.get('/:contactId', async (req, res, next) => {
 // Додати контакт
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body
+  const schema = Joi.object({
+    name: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+      .required()
+      .max(30),
+    phone: Joi.string()
+      .min(10)
+      .max(14)
+      .required()
+  })
+  const validationResult = schema.validate(req.body)
   try {
+    if (validationResult.error) {
+      await res.status(400).json({ message: 'not valid entry/entries' })
+      return
+    }
     const addedContact = await addContact(name, email, phone)
-
     if (!name || !email || !phone) {
       await res.status(400).json({ message: 'missing required field' })
       return
@@ -56,8 +77,27 @@ router.delete('/:contactId', async (req, res, next) => {
 // Змінити контакт
 router.put('/:contactId', async (req, res, next) => {
   const { name, email, phone } = req.body
-  // console.log(Object.keys(req.body).length < 3)
+  const schema = Joi.object({
+    name: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+      .required()
+      .max(30),
+    phone: Joi.string()
+      .min(10)
+      .max(14)
+      .required()
+  })
+  const validationResult = schema.validate(req.body)
   try {
+    if (validationResult.error) {
+      await res.status(400).json({ message: 'not valid entry/entries' })
+      return
+    }
     if (Object.keys(req.body).length < 3) {
       await res.status(400).json({ message: 'missing fields' })
       return
