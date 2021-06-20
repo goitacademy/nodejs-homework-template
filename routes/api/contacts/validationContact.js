@@ -47,19 +47,6 @@ const queryContactsShema = Joi.object({
   favorite: Joi.boolean().optional(),
 }).without('sortBy', 'sortByDesc');
 
-const validationStatus = async (schema, contactObject, next) => {
-  const { favorite } = contactObject;
-  try {
-    await schema.validateAsync({ favorite });
-    return next();
-  } catch (error) {
-    next({
-      status: 400,
-      message: error.message,
-    });
-  }
-};
-
 module.exports = {
   validationQueryContact: async (req, res, next) => {
     return await validation(queryContactsShema, req.query, next);
@@ -71,11 +58,7 @@ module.exports = {
     return await validation(updatingContactSchema, req.body, next);
   },
   validationUpdateContactFavoriteSatus: async (req, res, next) => {
-    return await validationStatus(
-      contactUpdateFavoriteStatusSchema,
-      req.body,
-      next
-    );
+    return await validation(contactUpdateFavoriteStatusSchema, req.body, next);
   },
   validationObjectId: async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
