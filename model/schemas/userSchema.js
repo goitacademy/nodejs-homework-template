@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const gravatar = require('gravatar');
+const nanoid = require('nanoid');
 const { Schema, model } = mongoose;
 const { SUBSCRIPTION } = require('../../helpers/constants');
 const bcrypt = require('bcryptjs');
@@ -39,6 +40,15 @@ const userSchema = new Schema({
   token: {
     type: String,
     default: null,
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    required: true,
+    default: nanoid(),
   },
 });
 

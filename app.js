@@ -2,6 +2,8 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const boolParser = require('express-query-boolean');
+const path = require('path');
+require('dotenv').config();
 
 const contactsRouter = require('./routes/api/contacts');
 const userRouter = require('./routes/api/users');
@@ -9,7 +11,9 @@ const userRouter = require('./routes/api/users');
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const PUBLIC_DIR = process.env.PUBLIC_DIR;
 
+app.use(express.static(path.join(__dirname, PUBLIC_DIR)));
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());

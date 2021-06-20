@@ -1,5 +1,7 @@
 const Users = require('../model/users');
 const { HTTP_CODE, SUBSCRIPTION } = require('../helpers/constants');
+const EmailService = require('../services/email');
+const { CreateSenderSendgrid } = require('../services/sender-email');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -24,6 +26,20 @@ const registration = async (req, res, next) => {
 
   try {
     const newUser = await Users.createUser(req.body);
+
+    try {
+      const emailService = new EmailService(
+        process.env.NODE_ENV,
+        new CreateSenderSendgrid()
+      );
+      await emailService.sendVerifyPasswordEmail(
+        newUser.verifyToken,
+        newUser.email,
+        newUser.name
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
     return res.status(HTTP_CODE.CREATED).json({
       Status: `${HTTP_CODE.CREATED} Created`,
       ContentType: 'application/json',
@@ -150,6 +166,60 @@ const avatar = async (req, res, next) => {
   }
 };
 
+const verify = async (req, res, next) => {
+  try {
+    const user = await Users.getUserByVerifyToken(req.params.token);
+    if (user) {
+      await Users.updateVerifyToken(user.id, true, null);
+      return res.status(HTTP_CODE.OK).json({
+        status: 'success',
+        code: HTTP_CODE.OK,
+        message: 'Verification successful!',
+      });
+    }
+    return res.status(HTTP_CODE.NOT_FOUND).json({
+      status: 'error',
+      code: HTTP_CODE.NOT_FOUND,
+      message: 'User not found with verification token',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const repeatSendEmailVerify = async (req, res, next) => {
+  const user = await Users.findByEmail(req.body.email);
+  if (user) {
+    const { name, email, verifyToken, verify } = user;
+
+    if (!verify) {
+      try {
+        const emailService = new EmailService(
+          process.env.NODE_ENV,
+          new CreateSenderSendgrid()
+        );
+        await emailService.sendVerifyPasswordEmail(verifyToken, email, name);
+        return res.status(200).json({
+          status: 'success',
+          code: 200,
+          message: 'Verification email resubmited!',
+        });
+      } catch (e) {
+        return next(e);
+      }
+    }
+    return res.status(HTTP_CODE.CONFLICT).json({
+      status: 'error',
+      code: HTTP_CODE.CONFLICT,
+      message: 'Email has already been verified',
+    });
+  }
+  return res.status(HTTP_CODE.NOT_FOUND).json({
+    status: 'error',
+    code: HTTP_CODE.NOT_FOUND,
+    message: 'User not found',
+  });
+};
+
 module.exports = {
   registration,
   logIn,
@@ -157,4 +227,6 @@ module.exports = {
   getCurrent,
   updateSubscription,
   avatar,
+  verify,
+  repeatSendEmailVerify,
 };
