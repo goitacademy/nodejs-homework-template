@@ -7,7 +7,7 @@ const {
   addContact,
   getContactById,
   removeContact,
-  updateContact
+  updateContact,
 } = require('../model/index')
 
 // Всі контакти
@@ -15,7 +15,9 @@ router.get('/', async (req, res, next) => {
   try {
     const contactss = await listContacts()
     await res.status(200).json(contactss)
-  } catch (err) { console.error(err) }
+  } catch (er) {
+    console.error(er)
+  }
 })
 // вибір контакту по ІД
 router.get('/:contactId', async (req, res, next) => {
@@ -30,19 +32,12 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body
   const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
+    name: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required()
       .max(30),
-    phone: Joi.string()
-      .min(10)
-      .max(14)
-      .required()
+    phone: Joi.string().min(10).max(14).required(),
   })
   const validationResult = schema.validate(req.body)
   try {
@@ -78,19 +73,12 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   const { name, email, phone } = req.body
   const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
+    name: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required()
       .max(30),
-    phone: Joi.string()
-      .min(10)
-      .max(14)
-      .required()
+    phone: Joi.string().min(10).max(14).required(),
   })
   const validationResult = schema.validate(req.body)
   try {
@@ -102,7 +90,12 @@ router.put('/:contactId', async (req, res, next) => {
       await res.status(400).json({ message: 'missing fields' })
       return
     }
-    const contact = await updateContact(name, email, phone, parseInt(req.params.contactId))
+    const contact = await updateContact(
+      name,
+      email,
+      phone,
+      parseInt(req.params.contactId),
+    )
     if (contact === undefined) {
       await res.status(404).json({ message: 'Not found' })
     }
