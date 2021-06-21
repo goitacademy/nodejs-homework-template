@@ -1,27 +1,33 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+
 const {
   getAll,
   getById,
   create,
   remove,
   update
-} = require('../../controllers/contacts')
+} = require('../../controllers/contacts');
+
 const {
   validateCreateContact,
-  validateUpdateContact,
-} = require('../../validation/contactsValidation')
+  validateUpdateStatusContact,
+  validateObjectId,
+} = require('../../validation/contactsValidation');
+
+
+const { asyncWrapper } = require('../../helpers/apiHelpers');
 
 router.get('/', getAll)
 
-router.get('/:contactId', getById)
+router.get('/:contactId', validateObjectId, asyncWrapper(getById))
 
-router.post('/', validateCreateContact, create)
+router.post('/', validateCreateContact, asyncWrapper(create))
 
-router.delete('/:contactId', remove)
+router.delete('/:contactId', validateObjectId, asyncWrapper(remove))
 
-router.put('/:contactId', validateUpdateContact, update)
+router.put('/:contactId', validateObjectId, validateCreateContact, asyncWrapper(update))
 
-router.patch('/:contactId', validateUpdateContact, update)
+router.patch('/:contactId', validateObjectId, validateUpdateStatusContact, asyncWrapper(update))
 
 module.exports = router
