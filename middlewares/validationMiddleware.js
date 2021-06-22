@@ -7,7 +7,7 @@ function addContactValidation(req, res, next) {
     phone: Joi.string()
       .regex(/^[()0-9]/)
       .min(7)
-      .max(13)
+      .max(15)
       .required(),
     favourite: Joi.boolean().optional().default(false),
   }).required();
@@ -29,7 +29,7 @@ function patchContactValidation(req, res, next) {
     phone: Joi.string()
       .regex(/^[()0-9]/)
       .min(7)
-      .max(13)
+      .max(15)
       .optional(),
     favourite: Joi.boolean().optional(),
   }).required();
