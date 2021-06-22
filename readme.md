@@ -2,20 +2,24 @@
 
 GET : "localhost:3000/api/contacts/"
 
-PostMan screenshot: https://ibb.co/K9g7hn1
+PostMan screenshot: https://ibb.co/6Zg7FhZ
 
-GET : "localhost:3000/api/contacts/785787ce-61ae-4189-9235-9cbc01b1e0a6"
+GET : "localhost:3000/api/contacts/60cc69052539841cd8e3915a"
 
-PostMan screenshot: https://ibb.co/PmbGZJ0
+PostMan screenshot: https://ibb.co/Hq6kdyF
 
-DELETE: "localhost:3000/api/contacts/785787ce-61ae-4189-9235-9cbc01b1e0a6"
+DELETE: "localhost:3000/api/contacts/60cc685d2539841cd8e39d7120"
 
-PostMan screenshot: https://ibb.co/WyZCvZz
+PostMan screenshot: https://ibb.co/vm1wNVv
 
 POST(add contact) : "localhost:3000/api/contacts/"
 
-PostMan screenshot: https://ibb.co/09NK0sY
+PostMan screenshot: https://ibb.co/r4N7cL3
 
-PATCH: "localhost:3000/api/contacts/cd590f20-e33e-4dc7-b17f-a5837602b9f8"
+PATCH: "localhost:8083/api/contacts/60cc685d2539841cd8e39152"
 
-PostMan screenshot: https://ibb.co/GQHtsSC
+PostMan screenshot: https://ibb.co/ft1xbwC
+
+PATCH: "localhost:8083/api/contacts/60cc685d2539841cd8e39152/favourite"
+
+PostMan screenshot: https://ibb.co/3NP8mLb
