@@ -4,7 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-  updateFavourite,
+  updateStatusContact,
 } = require('../services/contactsServices');
 
 async function getContactsController(request, response) {
@@ -79,7 +79,10 @@ async function changeContactController(request, response) {
 async function changeFavouriteController(req, res) {
   const idToChange = req.params.contactId;
   const newFavouriteData = req.body;
-  const changedContact = await updateFavourite(idToChange, newFavouriteData);
+  const changedContact = await updateStatusContact(
+    idToChange,
+    newFavouriteData,
+  );
 
   if (changedContact === false) {
     return res.status(404).json({

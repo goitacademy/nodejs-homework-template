@@ -69,7 +69,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateFavourite = async (contactId, body) => {
+const updateStatusContact = async (contactId, body) => {
   const newContactData = {
     favourite: body.favourite,
   };
@@ -94,5 +94,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateFavourite,
+  updateStatusContact,
 };
