@@ -11,7 +11,7 @@ async function startApp() {
     await connectContactsDB();
 
     app.listen(PORT, error => {
-      if (error) console.error('Error at server launch:', error);
+      if (error) { console.error('Error at server launch:', error); process.exit(1); }
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   } catch (error) {
