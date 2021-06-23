@@ -39,3 +39,4 @@ module.exports.validateCreateContact = (req, _res, next) => {
 module.exports.validateUpdateContact = (req, _res, next) => {
   return validate(schemaUpdateContact, req.body, next)
 }
+console.log('hi')
