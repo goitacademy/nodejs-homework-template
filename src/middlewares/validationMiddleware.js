@@ -1,10 +1,10 @@
 const Joi = require('joi')
+const { ValidationError } = require('../helpers/errors')
 
-function notifyIfError(validationResult, res, next) {
+function notifyIfError(validationResult, next) {
   if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.details[0].message })
+   next(new ValidationError(validationResult.error.details[0].message))
   }
-  next()
 }
 
 module.exports = {
@@ -21,10 +21,13 @@ module.exports = {
       phone: Joi.string()
         .min(5)
         .max(15)
-        .required()
+        .required(),
+      favorite: Joi.boolean()
+        .optional()
+      .default(false)
     })
     const validationResult = schema.validate(req.body)
-    notifyIfError(validationResult, res, next)
+    notifyIfError(validationResult, next)
   },
 
   patchContactValidation: (req, res, next) => {
@@ -40,9 +43,12 @@ module.exports = {
       phone: Joi.string()
         .min(5)
         .max(15)
+        .optional(),
+      favorite: Joi.boolean()
         .optional()
+      .default(false)
     })
     const validationResult = schema.validate(req.body)
-    notifyIfError(validationResult, res, next)
+    notifyIfError(validationResult, next)
   }
 }
