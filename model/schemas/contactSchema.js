@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
-
-const { Schema, model } = mongoose
+const mongoose = require("mongoose");
+const { Schema, SchemaTypes, model } = mongoose;
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -18,6 +18,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
   {
     versionKey: false,
@@ -25,25 +29,26 @@ const contactSchema = new Schema(
     toObject: {
       virtuals: true,
       transform: function (doc, ret) {
-        delete ret._id
-        return ret
+        delete ret._id;
+        return ret;
       },
     },
     toJSON: {
       virtuals: true,
       transform: function (doc, ret) {
-        delete ret._id
-        return ret
+        delete ret._id;
+        return ret;
       },
     },
   }
-)
+);
 
-contactSchema.path('name').validate((value) => {
-  const re = /[A-Z]\w+/
-  return re.test(String(value))
-})
+contactSchema.path("name").validate((value) => {
+  const re = /[A-Z]\w+/;
+  return re.test(String(value));
+});
+contactSchema.plugin(mongoosePaginate);
 
-const dataContacts = model('contact', contactSchema)
+const Contact = model("contact", contactSchema);
 
-module.exports = dataContacts
+module.exports = Contact;
