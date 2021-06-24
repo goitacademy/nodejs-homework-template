@@ -1,82 +1,31 @@
-const path = require('path')
-const fsPromises = require('fs').promises
-const { v4: uuidv4 } = require('uuid')
-
-const contactsPath = path.resolve('model/contacts.json')
+const Contact = require('../schemas/contact')
 
 const listContacts = async () => {
-  try {
-    const data = await fsPromises.readFile(contactsPath, 'utf-8')
-    const contacts = JSON.parse(data)
-    return contacts
-  } catch (error) {
-    console.error(error)
-  }
+  const contacts = await Contact.find()
+  return contacts
 }
 
 const getContactById = async (contactId) => {
-  try {
-    const data = await fsPromises.readFile(contactsPath, 'utf-8')
-    const contacts = JSON.parse(data)
-    const contact = contacts.find((contact) => String(contact.id) === contactId)
-    return contact
-  } catch (error) {
-    console.error(error)
-  }
+  const contact = await Contact.findById({ _id: contactId })
+  return contact
 }
 
 const removeContact = async (contactId) => {
-  try {
-    const data = await fsPromises.readFile(contactsPath, 'utf8')
-    const contacts = JSON.parse(data)
-    const newContacts = contacts.filter(
-      (contact) => String(contact.id) !== contactId
-    )
-    await fsPromises.writeFile(contactsPath, JSON.stringify(newContacts))
-    return true
-  } catch (error) {
-    console.error(error)
-  }
+  const result = await Contact.findByIdAndRemove({ _id: contactId })
+  return result
 }
 
 const addContact = async (body) => {
-  try {
-    const { name, email, phone } = body
-    const contact = {
-      id: uuidv4(),
-      name: name,
-      email: email,
-      phone: phone
-    }
-    const data = await fsPromises.readFile(contactsPath, 'utf8')
-    const contacts = JSON.parse(data)
-    const newContacts = [...contacts, contact]
-    await fsPromises.writeFile(contactsPath, JSON.stringify(newContacts))
-    return contact
-  } catch (error) {
-    console.error(error)
-  }
+  const result = await Contact.create(body)
+  return result
 }
 
 const updateContact = async (contactId, body) => {
-  try {
-    const data = await fsPromises.readFile(contactsPath, 'utf8')
-    const contacts = JSON.parse(data)
-    const contact = contacts.find(contact => String(contact.id) === contactId)
-    if (contact) {
-      const upContact = Object.assign(contact, body)
-      const upContacts = contacts.map(contact => {
-        if (String(contact.id) === upContact.id) {
-          return upContact
-        }
-        return contact
-      })
-      await fsPromises.writeFile(contactsPath, JSON.stringify(upContacts))
-      return upContact
-    }
-  } catch (error) {
-    console.error(error)
-  }
+  const { value: result } = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true })
+  return result
 }
 
 module.exports = {

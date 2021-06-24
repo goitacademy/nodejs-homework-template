@@ -10,7 +10,9 @@ const schemaCreate = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
 
   phone: Joi.string()
-    .length(10).pattern(/^[0-9]+$/).required()
+    .length(10).pattern(/^[0-9]+$/).required(),
+
+  favorite: Joi.boolean().optional()
 
 })
 
@@ -25,7 +27,9 @@ const schemaChange = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
 
   phone: Joi.string()
-    .length(10).pattern(/^[0-9]+$/).optional()
+    .length(10).pattern(/^[0-9]+$/).optional(),
+
+  favorite: Joi.boolean().optional()
 
 })
 
