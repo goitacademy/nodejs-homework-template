@@ -8,6 +8,7 @@ const {
   addContact,
   updateContact
 } = require('../../model')
+
 const {
   schemaCreate,
   schemaChange
