@@ -3,6 +3,9 @@ const fs = require('fs/promises')
 const path = require('path')
 const contactsPath = path.join('./src/model/contacts.json')
 
+//  const contacts = await result.find({}).toArray()
+//     console.log(contacts)
+
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath, 'utf8')
