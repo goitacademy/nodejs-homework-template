@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const postValidation = (req, res, next) => {
   const validationSchemaPOST = Joi.object({
-    name: Joi.string().alphanum().min(3).max(15).required(),
+    name: Joi.string().alphanum().min(3).max(15),
     email: Joi.string()
       .email({
         minDomainSegments: 2,
@@ -14,6 +14,7 @@ const postValidation = (req, res, next) => {
       // eslint-disable-next-line
       .pattern(/^\d[\d\(\)\ -]{4,14}\d$/)
       .required(),
+    favorite: Joi.boolean(),
   })
   const dataValidate = validationSchemaPOST.validate(req.body)
   if (dataValidate.error) {

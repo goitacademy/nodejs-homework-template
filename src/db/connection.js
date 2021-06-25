@@ -1,13 +1,12 @@
-const MongoClient = require('mongodb').MongoClient
+const mongoose = require('mongoose')
 
 const mongoUrl = process.env.DB_HOST
 
 const connectMongo = async () => {
-  const client = await MongoClient.connect(mongoUrl, {
+  return mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  const db = client.db()
-  return await db.collection('contacts')
 }
 module.exports = {
   connectMongo,

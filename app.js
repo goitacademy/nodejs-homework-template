@@ -3,6 +3,7 @@ const logger = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const { connectMongo } = require('./src/db/connection')
+
 //= ==============================
 const contactsRouter = require('./src/routes/api/contacts')
 
@@ -24,17 +25,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
 
-//= ======================================
-
-const PORT = process.env.PORT || 4040
 const start = async () => {
   try {
     await connectMongo()
-
-    app.listen(PORT, (err) => {
-      if (err) console.error('Error at aserver launch:', err)
-      console.log(`Server works at port ${PORT}!`)
-    })
+    console.log('Database connection successful')
   } catch (err) {
     console.error(`Failed to launch application with error: ${err.message}`)
   }
