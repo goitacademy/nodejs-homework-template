@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const { contactsRouter } = require('./routes/api/contactsRouter');
 const { userRouter } = require('./routes/api/userRouter');
-const { errorhandler } = require('./helpers/errorHandler');
+const { errorHandler } = require('./helpers/errorHandler');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use('/api/users', userRouter);
 app.use('/api/contacts', contactsRouter);
-app.use(errorhandler);
+app.use(errorHandler);
 
 // app.use((req, res) => {
 //   res.status(404).json({ message: 'Not found' });
