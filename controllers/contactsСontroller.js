@@ -4,11 +4,11 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require('../services/contacts');
+  updateStatusContact,
+} = require('../services/contactsServices');
 
-async function getContacts(request, response) {
+async function getContactsController(request, response) {
   const contactsList = await listContacts();
-
   if (!contactsList) {
     return response.status(404).json({
       status: 'Cannot get contacts',
@@ -18,7 +18,7 @@ async function getContacts(request, response) {
   return response.status(200).json({ contactsList, status: 'success' });
 }
 
-async function getById(request, response) {
+async function getByIdController(request, response) {
   const idToFind = request.params.contactId;
   const foundContact = await getContactById(idToFind);
 
@@ -31,7 +31,7 @@ async function getById(request, response) {
   return response.status(200).json({ foundContact, status: 'success' });
 }
 
-async function deleteContact(request, response) {
+async function deleteContactController(request, response) {
   const idToRemove = request.params.contactId;
   const contactRemoved = await removeContact(idToRemove);
 
@@ -46,7 +46,7 @@ async function deleteContact(request, response) {
     .json({ status: `success, contact by id ${idToRemove} removed` });
 }
 
-async function addNewContact(request, response) {
+async function addNewContactController(request, response) {
   const newContact = request.body;
   console.log(newContact);
   const contactAdded = await addContact(newContact);
@@ -60,7 +60,7 @@ async function addNewContact(request, response) {
     .json({ contactAdded, status: 'success, contact added' });
 }
 
-async function changeContact(request, response) {
+async function changeContactController(request, response) {
   const idToChange = request.params.contactId;
   const newContactData = request.body;
   const changedContact = await updateContact(idToChange, newContactData);
@@ -76,10 +76,29 @@ async function changeContact(request, response) {
     .json({ changedContact, status: 'success, contact updated' });
 }
 
+async function changeFavouriteController(req, res) {
+  const idToChange = req.params.contactId;
+  const newFavouriteData = req.body;
+  const changedContact = await updateStatusContact(
+    idToChange,
+    newFavouriteData,
+  );
+
+  if (changedContact === false) {
+    return res.status(404).json({
+      status: `Cannot update favourite in contact by id:${idToChange}`,
+    });
+  }
+
+  return res
+    .status(200)
+    .json({ changedContact, status: 'success, contact updated' });
+}
 module.exports = {
-  changeContact,
-  addNewContact,
-  deleteContact,
-  getById,
-  getContacts,
+  changeContactController,
+  addNewContactController,
+  deleteContactController,
+  getByIdController,
+  getContactsController,
+  changeFavouriteController,
 };
