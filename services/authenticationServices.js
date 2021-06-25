@@ -26,13 +26,7 @@ async function login(email, password) {
   return jwtToken;
 }
 
-async function getUser(id) {
-  const user = await User.find({});
-  return user;
-}
-
 module.exports = {
   registration,
   login,
-  getUser,
 };

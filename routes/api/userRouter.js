@@ -8,8 +8,17 @@ const {
   loginController,
 } = require('../../controllers/authenticationController');
 
+const { getUserController } = require('../../controllers/userController');
+const {
+  authenticationMiddleware,
+} = require('../../middlewares/authenticationMiddleware');
+
 router.post('/signup', asyncWrapper(registrationController));
 
 router.post('/login', asyncWrapper(loginController));
 
-module.exports = { authRouter: router };
+router.use(authenticationMiddleware);
+
+router.get('/current', asyncWrapper(getUserController));
+
+module.exports = { userRouter: router };
