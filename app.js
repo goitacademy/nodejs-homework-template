@@ -1,25 +1,36 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const router = require('./routes/api/contacts');
+const routerUser = require('./routes/api/users');
 const { HttpCode } = require('./helpers/contactsHelpers');
+const { apiLimit } = require('./config/rate-limit.json');
 
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
+app.use(helmet());
 app.use(cors());
-app.use(express.json());
-
+app.use(express.json({ limit: 10000 }));
+app.use(
+  rateLimit({
+    windowMs: apiLimit.windowMs,
+    max: apiLimit.max,
+  }),
+);
 app.use(router);
+app.use(routerUser);
 
 app.use((req, res, next) => {
   res.status(HttpCode.NOT_FOUND).json({
     status: 'error',
     code: HttpCode.NOT_FOUND,
-    message: `Use api on routes ${req.baseUrl}/routes/api/contantcs`,
+    message: `Use api on routes ${req.baseUrl}/routes/api/contacts`,
     data: 'Not Found',
   });
 });
