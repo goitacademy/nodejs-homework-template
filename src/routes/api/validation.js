@@ -20,6 +20,7 @@ const schemaUpdateContact = Joi.object({
     })
     .optional(),
   phone: Joi.string().length(13).optional(),
+  favorite: Joi.boolean().optional(),
 })
 
 const validate = async (schema, bodyContacts, next) => {
