@@ -1,8 +1,10 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
+const { connectMongo } = require('./src/db/connection')
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require('./src/routes/api/contacts')
 
 const app = express()
 
@@ -21,5 +23,16 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+
+const start = async () => {
+  try {
+    await connectMongo()
+    console.log('Database connection successful')
+  } catch (err) {
+    console.error(`Failed to launch application with error: ${err.message}`)
+    process.exit(1)
+  }
+}
+start()
 
 module.exports = app
