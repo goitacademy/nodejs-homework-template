@@ -1,22 +1,22 @@
-const { ContactsModel } = require('../db/contactsModel')
+const { ContactsModel } = require('../db/contactsModel');
 
 const listContacts = async () => {
-  return await ContactsModel.find({})
-}
+  return await ContactsModel.find({});
+};
 
 const getContactById = async (contactId) => {
-  return await ContactsModel.findById(contactId)
-}
+  return await ContactsModel.findById(contactId);
+};
 
 const addContact = async (body) => {
-  const newContact = new ContactsModel(body)
-  await newContact.save()
-  return newContact
-}
+  const newContact = new ContactsModel(body);
+  await newContact.save();
+  return newContact;
+};
 
 const removeContact = async (contactId) => {
-  return await ContactsModel.findByIdAndDelete(contactId)
-}
+  return await ContactsModel.findByIdAndDelete(contactId);
+};
 
 const updateContact = async (contactId, body) => {
   return await ContactsModel.findByIdAndUpdate(
@@ -25,19 +25,19 @@ const updateContact = async (contactId, body) => {
       $set: body,
     },
     { new: true }
-  )
-}
+  );
+};
 
 const updateStatusContact = async (contactId, body) => {
-  const { favorite } = body
+  const { favorite } = body;
   return await ContactsModel.findByIdAndUpdate(
     contactId,
     {
       $set: { favorite },
     },
     { new: true }
-  )
-}
+  );
+};
 
 module.exports = {
   listContacts,
@@ -46,4 +46,4 @@ module.exports = {
   addContact,
   updateContact,
   updateStatusContact,
-}
+};

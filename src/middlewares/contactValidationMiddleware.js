@@ -1,4 +1,6 @@
-const Joi = require('joi')
+const Joi = require('joi');
+
+const { ValidationError } = require('../helpers/errors');
 
 const postValidation = (req, res, next) => {
   const validationSchemaPOST = Joi.object({
@@ -15,15 +17,13 @@ const postValidation = (req, res, next) => {
       .pattern(/^\d[\d\(\)\ -]{4,14}\d$/)
       .required(),
     favorite: Joi.boolean(),
-  })
-  const dataValidate = validationSchemaPOST.validate(req.body)
+  });
+  const dataValidate = validationSchemaPOST.validate(req.body);
   if (dataValidate.error) {
-    return res
-      .status(404)
-      .json({ message: `${dataValidate.error.message}` })
+    next(new ValidationError(JSON.stringify(dataValidate.error.message)));
   }
-  next()
-}
+  next();
+};
 
 const patchValidation = (req, res, next) => {
   const validationSchemaPATCH = Joi.object({
@@ -36,17 +36,15 @@ const patchValidation = (req, res, next) => {
       .max(12)
       .pattern(/\+?[0-9\s\-\\)]+/),
     favorite: Joi.boolean(),
-  }).min(1)
-  const dataValidate = validationSchemaPATCH.validate(req.body)
+  }).min(1);
+  const dataValidate = validationSchemaPATCH.validate(req.body);
 
   if (dataValidate.error) {
-    return res
-      .status(404)
-      .json({ message: `${dataValidate.error.message}` })
+    next(new ValidationError(dataValidate.error.message));
   }
-  next()
-}
+  next();
+};
 module.exports = {
   postValidation,
   patchValidation,
-}
+};
