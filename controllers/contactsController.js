@@ -1,13 +1,14 @@
-const Contacts = require('../model/index');
+const Contacts = require('../model/contacs');
 const { HttpCode } = require('../helpers/contactsHelpers');
 
 const controllerGetAllContacts = async (req, res, next) => {
   try {
-    const contacts = await Contacts.listContacts();
+    const userId = req.user.id;
+    const contacts = await Contacts.listContacts(userId, req.query);
     return res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      data: { contacts },
+      data: { ...contacts },
     });
   } catch (e) {
     next(e);
@@ -16,7 +17,8 @@ const controllerGetAllContacts = async (req, res, next) => {
 
 const controllerGetContactById = async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contacts.getContactById(userId, req.params.contactId);
     if (contact) {
       return res.json({
         status: 'success',
@@ -36,7 +38,8 @@ const controllerGetContactById = async (req, res, next) => {
 
 const controllerCreateContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.addContact(req.body);
+    const userId = req.user.id;
+    const contact = await Contacts.addContact({ ...req.body, owner: userId });
     return res.status(HttpCode.CREATED).json({
       status: 'success',
       code: HttpCode.CREATED,
@@ -49,7 +52,8 @@ const controllerCreateContact = async (req, res, next) => {
 
 const controllerDeleteContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.contactId);
+    const userId = req.user.id;
+    const contact = await Contacts.removeContact(userId, req.params.contactId);
     if (contact) {
       return res.json({
         status: 'success',
@@ -69,7 +73,9 @@ const controllerDeleteContact = async (req, res, next) => {
 
 const controllerUpdateContact = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     const contact = await Contacts.updateContact(
+      userId,
       req.params.contactId,
       req.body,
     );
