@@ -1,45 +1,64 @@
-const { ContactsModel } = require('../db/contactsModel')
-// ++++
-const getContact = async (req, res, next) => {
-  const list = await ContactsModel.find({})
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updateStatusContact,
+} = require('../model/index')
+
+const getContact = async (req, res) => {
+  const list = await listContacts()
   res.status(200).json(list)
 }
-// ++++
-const getContactWithId = async (req, res, next) => {
+
+const getContactWithId = async (req, res) => {
   const { contactId } = req.params
-  const contactWithId = await ContactsModel.findById(contactId)
+  const contactWithId = await getContactById(contactId)
   if (!contactWithId) {
     res.status(404).json({ message: 'Not found' })
   } else res.status(200).json(contactWithId)
 }
-// ++++
-const postContact = async (req, res, next) => {
-  const { name, email, phone, favorite } = req.body
-  const newContact = new ContactsModel({ name, email, phone, favorite })
-  await newContact.save()
+
+const postContact = async (req, res) => {
+  const newContact = await addContact(req.body)
   res.status(201).json(newContact)
 }
-// ++++
-const deleteContact = async (req, res, next) => {
+
+const deleteContact = async (req, res) => {
   const { contactId } = req.params
-  await ContactsModel.findByIdAndRemove(contactId)
+  await removeContact(contactId)
   res.status(200).json({ message: 'contact deleted' })
 }
-// ++++
-const patchContact = async (req, res, next) => {
+
+const patchContact = async (req, res) => {
   const { contactId } = req.params
 
-  const contactWithId = await ContactsModel.findByIdAndUpdate(
-    contactId,
-    {
-      $set: req.body,
-    },
-    { new: true }
-  )
+  const contactUpdated = await updateContact(contactId, req.body)
 
-  if (!contactWithId) {
+  if (!contactUpdated) {
     res.status(404).json({ message: 'Not found' })
-  } else return res.status(200).json(contactWithId)
+  } else return res.status(200).json(contactUpdated)
+}
+
+const patchContactStatus = async (req, res) => {
+  const { contactId } = req.params
+  const { favorite } = req.body
+
+  if (!favorite) {
+    return res.status(400).json({ message: 'missing field favorite' })
+  }
+
+  const checkContact = await getContactById(contactId)
+  if (!checkContact) {
+    return res.status(404).json({ message: 'Contact not found' })
+  }
+
+  const updatedContact = await updateStatusContact(contactId, req.body)
+
+  if (!updatedContact) {
+    res.status(404).json({ message: 'Not found' })
+  } else return res.status(200).json(updatedContact)
 }
 
 module.exports = {
@@ -48,4 +67,5 @@ module.exports = {
   postContact,
   deleteContact,
   patchContact,
+  patchContactStatus,
 }

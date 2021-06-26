@@ -4,7 +4,6 @@ const cors = require('cors')
 require('dotenv').config()
 const { connectMongo } = require('./src/db/connection')
 
-//= ==============================
 const contactsRouter = require('./src/routes/api/contacts')
 
 const app = express()
@@ -31,6 +30,7 @@ const start = async () => {
     console.log('Database connection successful')
   } catch (err) {
     console.error(`Failed to launch application with error: ${err.message}`)
+    process.exit(1)
   }
 }
 start()

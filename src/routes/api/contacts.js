@@ -20,4 +20,6 @@ router.delete('/:contactId', asyncWrapper(ContactsController.deleteContact))
 
 router.patch('/:contactId', patchValidation, asyncWrapper(ContactsController.patchContact))
 
+router.patch('/:contactId/favorite', patchValidation, asyncWrapper(ContactsController.patchContactStatus))
+
 module.exports = router

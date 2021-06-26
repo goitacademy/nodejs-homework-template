@@ -20,7 +20,7 @@ const postValidation = (req, res, next) => {
   if (dataValidate.error) {
     return res
       .status(404)
-      .json({ message: `Validation error ${dataValidate.error.message}` })
+      .json({ message: `${dataValidate.error.message}` })
   }
   next()
 }
@@ -35,13 +35,14 @@ const patchValidation = (req, res, next) => {
     phone: Joi.string()
       .max(12)
       .pattern(/\+?[0-9\s\-\\)]+/),
+    favorite: Joi.boolean(),
   }).min(1)
   const dataValidate = validationSchemaPATCH.validate(req.body)
 
   if (dataValidate.error) {
     return res
       .status(404)
-      .json({ message: `Validation error ${dataValidate.error.message}` })
+      .json({ message: `${dataValidate.error.message}` })
   }
   next()
 }
