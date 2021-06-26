@@ -9,6 +9,7 @@ const schemaCreateContact = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .required(),
+  favorite: Joi.boolean().optional(),
 })
 
 const schemaUpdateContact = Joi.object({
@@ -20,6 +21,7 @@ const schemaUpdateContact = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .optional(),
+  favorite: Joi.boolean().optional(),
 })
 
 const validate = async (schema, body, next) => {
