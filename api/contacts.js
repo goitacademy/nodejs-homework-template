@@ -7,19 +7,22 @@ const {
   addContact,
   getContactById,
   removeContact,
-  updateContact
-} = require('../model/index')
+  updateContact,
+  updateStatusContact,
+} = require('../model/controller')
 
 // Всі контакти
 router.get('/', async (req, res, next) => {
   try {
     const contactss = await listContacts()
     await res.status(200).json(contactss)
-  } catch (err) { console.error(err) }
+  } catch (er) {
+    console.error(er)
+  }
 })
 // вибір контакту по ІД
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(parseInt(req.params.contactId))
+  const contact = await getContactById(req.params.contactId)
   if (contact === undefined) {
     await res.status(404).json({ message: 'Not Found' })
     return
@@ -28,33 +31,26 @@ router.get('/:contactId', async (req, res, next) => {
 })
 // Додати контакт
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body
+  const { name, email, phone, favorite } = req.body
   const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-      .required()
-      .max(30),
-    phone: Joi.string()
-      .min(10)
-      .max(14)
-      .required()
+    name: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required().max(30),
+    phone: Joi.string().min(10).max(14).required(),
+    favorite: Joi.boolean().optional(),
   })
+
   const validationResult = schema.validate(req.body)
   try {
     if (validationResult.error) {
       await res.status(400).json({ message: 'not valid entry/entries' })
       return
     }
-    const addedContact = await addContact(name, email, phone)
     if (!name || !email || !phone) {
       await res.status(400).json({ message: 'missing required field' })
       return
     }
+    const addedContact = await addContact(name, email, phone, favorite)
+
     await res.status(201).json(addedContact)
   } catch (err) {
     await res.status(404).json({ message: err })
@@ -63,7 +59,7 @@ router.post('/', async (req, res, next) => {
 // Видалення контакту
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const deleteOperation = await removeContact(parseInt(req.params.contactId))
+    const deleteOperation = await removeContact(req.params.contactId)
 
     if (!deleteOperation) {
       await res.status(404).json({ message: 'Not Found' })
@@ -76,21 +72,12 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 // Змінити контакт
 router.put('/:contactId', async (req, res, next) => {
-  const { name, email, phone } = req.body
+  const { name, email, phone, favorite } = req.body
   const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-      .required()
-      .max(30),
-    phone: Joi.string()
-      .min(10)
-      .max(14)
-      .required()
+    name: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required().max(30),
+    phone: Joi.string().min(10).max(14).required(),
+    favorite: Joi.boolean().required(),
   })
   const validationResult = schema.validate(req.body)
   try {
@@ -98,11 +85,33 @@ router.put('/:contactId', async (req, res, next) => {
       await res.status(400).json({ message: 'not valid entry/entries' })
       return
     }
-    if (Object.keys(req.body).length < 3) {
-      await res.status(400).json({ message: 'missing fields' })
+    const contact = await updateContact(
+      name,
+      email,
+      phone,
+      favorite,
+      req.params.contactId,
+    )
+    if (contact === undefined) {
+      await res.status(404).json({ message: 'Not found' })
+    }
+    await res.status(200).json(contact)
+  } catch (err) {
+    console.error(err)
+  }
+})
+router.patch('/:contactId/favorite', async (req, res) => {
+  const { favorite } = req.body
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  })
+  const validationResult = schema.validate(req.body)
+  try {
+    if (validationResult.error) {
+      await res.status(400).json({ message: 'missing field favorite' })
       return
     }
-    const contact = await updateContact(name, email, phone, parseInt(req.params.contactId))
+    const contact = await updateStatusContact(favorite, req.params.contactId)
     if (contact === undefined) {
       await res.status(404).json({ message: 'Not found' })
     }
