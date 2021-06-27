@@ -31,9 +31,6 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const user = await Users.findByEmail(req.body.email);
-    if (user) {
-      console.log(req.body);
-    }
     const isValidPassword = await user?.isValidPassword(req.body.password);
 
     if (!user || !isValidPassword) {
@@ -49,7 +46,7 @@ const login = async (req, res, next) => {
     await Users.updateToken(id, token);
     return res.json({
       status: "success",
-      code: 200,
+      code: HttpCode.OK,
       data: { token },
     });
   } catch (e) {
@@ -58,33 +55,37 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  //   try {
-  //     const contact = await Users.addContact(req.body);
-  //     res.status(201).json({ status: "success", code: 201, data: { contact } });
-  //   } catch (e) {
-  //     next(e);
-  //   }
+  try {
+    const id = req.user.id;
+
+    await Users.updateToken(id, null);
+
+    res.status(HttpCode.NO_CONTENT).json({});
+  } catch (e) {
+    next(e);
+  }
 };
 
 const current = async (req, res, next) => {
-  //   try {
-  //     const contact = await Users.removeContact(req.params.contactId);
-  //     if (contact) {
-  //       return res.json({
-  //         status: "success",
-  //         code: 200,
-  //         message: "contact deleted",
-  //         data: { contact },
-  //       });
-  //     }
-  //     return res.json({
-  //       status: "error",
-  //       code: 404,
-  //       message: "Not found",
-  //     });
-  //   } catch (e) {
-  //     next(e);
-  //   }
+  try {
+    const user = await Users.findById(req.user.id);
+    const { name, email, subscription } = user;
+    if (user) {
+      return res.json({
+        status: "success",
+        code: HttpCode.OK,
+        message: "user",
+        data: { name, email, subscription },
+      });
+    }
+    return res.json({
+      status: "error",
+      code: HttpCode.NOT_FOUD,
+      message: "Not found",
+    });
+  } catch (e) {
+    next(e);
+  }
 };
 
 module.exports = {
