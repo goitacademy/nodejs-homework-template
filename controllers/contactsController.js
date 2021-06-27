@@ -99,22 +99,11 @@ const updateStatusContact = async (req, res, next) => {
   }
 }
 
-// const listContacts = async (req, res, next) => {
-//   const { _id } = req.user
-//   try {
-//     const contacts = await Contacts.listContacts(_id)
-//     res.status(200).json({ contacts })
-//   } catch (error) {
-//     next(error)
-//   }
-// }
 const getFavoriteContacts = async (req, res, next) => {
   const { _id } = req.user
-  // const { favorite } = req.params
-  // console.log(favorite)
   try {
-    const contacts = await Contacts.getFavoriteContacts(_id)
-    res.status(200).json({ contacts })
+    const favoriteContacts = await Contacts.getFavoriteContacts(_id)
+    res.status(200).json({ favoriteContacts })
   } catch (error) {
     next(error)
   }

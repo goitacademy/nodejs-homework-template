@@ -21,7 +21,7 @@ const updateContact = (id, body, owner) => {
 }
 
 const getFavoriteContacts = (owner) => {
-  return Contacts.find({ owner })
+  return Contacts.find({ favorite: true, owner })
 }
 
 module.exports = {

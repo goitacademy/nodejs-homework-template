@@ -9,7 +9,7 @@ router.get('/', contactsController.listContacts)
 
 router.get('/:contactId', contactsController.getContactById)
 
-router.get('/favorite', contactsController.getFavoriteContacts)
+router.get('/contacts?favorite=true', contactsController.getFavoriteContacts)
 
 router.post('/', contactsController.addContact)
 
