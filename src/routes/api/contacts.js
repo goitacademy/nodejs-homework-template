@@ -8,6 +8,7 @@ const {
   postValidation,
   patchValidation,
 } = require('../../middlewares/contactValidationMiddleware')
+
 const ContactsController = require('../../controllers/contactControllers')
 
 router.get('/', asyncWrapper(ContactsController.getContact))
