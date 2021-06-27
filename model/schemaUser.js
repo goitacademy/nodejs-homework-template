@@ -28,7 +28,7 @@ const user = new Schema(
 
 user.pre('save', async function () {
   if (this.isNew) {
-    this.password = await bсrypt.hash(this.password, 9)
+    this.password = await bсrypt.hash(this.password, 10)
   }
 })
 
