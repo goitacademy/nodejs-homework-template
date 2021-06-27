@@ -9,7 +9,7 @@ const schemaCreateContact = Joi.object({
     })
     .required(),
   phone: Joi.string().required(),
-  address: Joi.string().optional(),
+  favorite: Joi.boolean().required(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -21,11 +21,11 @@ const schemaUpdateContact = Joi.object({
     })
     .optional(),
   phone: Joi.string().optional(),
-  address: Joi.string().optional(),
-}).or("name", "email", "phone", "address");
+  favorite: Joi.boolean().optional(),
+}).or("name", "email", "phone", "favorite");
 
-const schemaUpdateContactAddress = Joi.object({
-  address: Joi.string().required(),
+const schemaUpdateContactFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const validate = async (schema, obj, next) => {
@@ -47,7 +47,7 @@ module.exports = {
   updateContactValidation: (req, res, next) => {
     return validate(schemaUpdateContact, req.body, next);
   },
-  updateContactAddressValidation: (req, res, next) => {
-    return validate(schemaUpdateContactAddress, req.body, next);
+  updateContactFavoriteValidation: (req, res, next) => {
+    return validate(schemaUpdateContactFavorite, req.body, next);
   },
 };

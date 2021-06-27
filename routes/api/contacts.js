@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Contacts = require("../../model");
+const Contacts = require("../../model/contacts");
 const {
   createContactValidation,
   updateContactValidation,
-  updateContactAddressValidation,
+  updateContactFavoriteValidation,
 } = require("./validation");
 
 router.get("/", async (req, res, next) => {
@@ -31,7 +31,13 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", createContactValidation, async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
-    if (contact?.name && contact?.email && contact?.phone) {
+    console.log("contact", contact);
+    if (
+      contact?.name &&
+      contact?.email &&
+      contact?.phone &&
+      contact?.favorite !== null
+    ) {
       return res
         .status(201)
         .json({ status: "success", code: "201", data: { contact } });
@@ -75,7 +81,12 @@ router.put("/:contactId", updateContactValidation, async (req, res, next) => {
       req.params.contactId,
       req.body
     );
-    if (contact?.name && contact?.email && contact?.phone) {
+    if (
+      contact?.name &&
+      contact?.email &&
+      contact?.phone &&
+      contact?.favorite !== null
+    ) {
       return res.json({ status: "success", code: "200", data: { contact } });
     }
     return res.json({
@@ -89,29 +100,22 @@ router.put("/:contactId", updateContactValidation, async (req, res, next) => {
 });
 
 router.patch(
-  "/:contactId/address",
-  updateContactAddressValidation,
+  "/:contactId/favorite",
+  updateContactFavoriteValidation,
   async (req, res, next) => {
     try {
       if (!req.body) {
         return res.json({
           status: "error",
           code: "400",
-          message: "Missing fields",
+          message: "Missing field 'favorite'",
         });
       }
       const contact = await Contacts.updateContact(
         req.params.contactId,
         req.body
       );
-      if (contact?.name && contact?.email && contact?.phone) {
-        return res.json({ status: "success", code: "200", data: { contact } });
-      }
-      return res.json({
-        status: "error",
-        code: "404",
-        message: "Not found",
-      });
+      return res.json({ status: "success", code: "200", data: { contact } });
     } catch (error) {
       next(error);
     }
