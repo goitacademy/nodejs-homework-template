@@ -25,7 +25,8 @@ const logIn = async (req, res) => {
 
 const logOut = async (req, res, next) => {
   await Auth.logout(req.user.id)
-  res.status(204).json({ message: 'No Content' })
+  res.status(200).json({ message: 'No Content!' })
+  // res.status(204).json({ message: 'No Content!' })
 }
 
 const currentUser = async (req, res) => {

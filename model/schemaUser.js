@@ -26,10 +26,10 @@ const user = new Schema(
   { versionKey: false }
 )
 
-user.pre('save', async function () {
-  if (this.isNew) {
-    this.password = await bсrypt.hash(this.password, 10)
-  }
+user.pre('save', async function (next) {
+  if (!this.isModified('password')) return next()
+  this.password = await bсrypt.hash(this.password, bсrypt.genSaltSync(10))
+  next()
 })
 
 user.methods.validPassword = async function (password) {

@@ -1,24 +1,24 @@
 const Users = require('../model/schemaUser')
 
-const getUserById = (id) => {
-  return Users.findById({ _id: id })
+const getUserById = async (id) => {
+  return await Users.findById(id)
 }
 
-const getUserByEmail = (email) => {
-  return Users.findOne({ email })
+const getUserByEmail = async (email) => {
+  return await Users.findOne({ email })
 }
 
-const addUser = (body) => {
-  const user = Users(body)
+const addUser = async (body) => {
+  const user = await Users(body)
   return user.save()
 }
 
-const updateToken = (id, token) => {
-  Users.updateOne({ _id: id }, { token })
+const updateToken = async (id, token) => {
+  await Users.updateOne({ _id: id }, { token })
 }
 
-// const userUpdateSubscription = (email, body) => {
-//   return Users.findOneAndUpdate({ email: email }, body, { new: true })
+// const userUpdateSubscription = (id, subscription) => {
+//   return Users.updateOne({ id: id }, subscription)
 // }
 
 module.exports = {

@@ -2,20 +2,19 @@ const jwt = require('jsonwebtoken')
 const User = require('../services/usersServices')
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
-const protect = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   if (
     !req.headers.authorization ||
     !req.headers.authorization.startsWith('Bearer')
   ) {
     return res.status(401).json({ message: 'Not authorized' })
   }
-
   try {
     const token = req.headers.authorization.split(' ')[1]
 
     jwt.verify(token, JWT_SECRET_KEY, async (error, decoded) => {
       const user = await User.getUserById(decoded?.id)
-
+      console.log(user)
       if (error || !user || !user.token || user.token !== token) {
         return res.status(401).json({ message: 'Invalide token' })
       }
@@ -28,5 +27,5 @@ const protect = async (req, res, next) => {
 }
 
 module.exports = {
-  protect
+  authMiddleware
 }

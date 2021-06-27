@@ -3,14 +3,14 @@ const router = express.Router()
 const usersController = require('../controllers/usersController')
 
 const { regLogValidation } = require('../middlewares/userValidation')
-const { protect } = require('../middlewares/authProtect')
+const { authMiddleware } = require('../middlewares/authMiddleware')
 
 router.post('/signup', regLogValidation, usersController.signUp)
 
 router.post('/login', regLogValidation, usersController.logIn)
 
-router.post('/logout', protect, usersController.logOut)
+router.post('/logout', authMiddleware, usersController.logOut)
 
-router.get('/current', protect, usersController.currentUser)
+router.get('/current', authMiddleware, usersController.currentUser)
 
 module.exports = router
