@@ -1,6 +1,8 @@
 const Users = require('../services/usersServices')
 const Auth = require('../services/authServices')
 
+const { NotAuthorizedError } = require('../helpers/errors')
+
 const signUp = async (req, res) => {
   const user = await Users.getUserByEmail(req.body.email)
 
@@ -19,41 +21,33 @@ const logIn = async (req, res) => {
     const { email, subscription } = await Users.getUserByEmail(req.body.email)
     return res.status(200).json({ token, user: { email, subscription } })
   }
-
-  res.status(401).json({ message: 'Email or password is wrong' })
+  throw new NotAuthorizedError('Email or password is wrong')
 }
 
 const logOut = async (req, res, next) => {
   await Auth.logout(req.user.id)
-  res.status(200).json({ message: 'No Content!' })
-  // res.status(204).json({ message: 'No Content!' })
+  // res.status(200).json({ message: 'No Content!' })
+  res.status(204)
 }
 
 const currentUser = async (req, res) => {
   const currentUser = await Users.getUserById(req.user.id)
 
-  if (currentUser) {
-    const { email, subscription } = currentUser
-    res.status(200).json({ email, subscription })
+  if (!currentUser) {
+    throw new NotAuthorizedError('Email or password is wrong')
   }
+  const { email, subscription } = currentUser
+  res.status(200).json({ email, subscription })
 }
 
-module.exports = { signUp, logIn, logOut, currentUser }
+const patchSubscription = async (req, res) => {
+  const currentUser = await Users.getUserById(req.user.id)
+  if (!currentUser) {
+    throw new NotAuthorizedError('Email or password is wrong')
+  }
+  await Users.userUpdateSubscription(currentUser.id, req.body.subscription)
+  const { email, subscription } = await Users.getUserById(req.user.id)
+  res.status(200).json({ email, subscription })
+}
 
-// const userUpdateSubscription = async (req, res, next) => {
-//   const { email } = req.params
-//   const { body } = req
-//   const { error } = userUpdateSubscriptionSchema.validate(req.body)
-//   if (error) {
-//     throw new WrongParametersError('missing field favorite')
-//   }
-//   try {
-//     const user = await Users.updateContact(email, body)
-
-//     if (user) {
-//       return res.status(200).json({ user, status: 'success' })
-//     }
-//   } catch (error) {
-//     next(error)
-//   }
-// }
+module.exports = { signUp, logIn, logOut, currentUser, patchSubscription }

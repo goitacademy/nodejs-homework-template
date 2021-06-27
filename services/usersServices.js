@@ -17,15 +17,17 @@ const updateToken = async (id, token) => {
   await Users.updateOne({ _id: id }, { token })
 }
 
-// const userUpdateSubscription = (id, subscription) => {
-//   return Users.updateOne({ id: id }, subscription)
-// }
+const userUpdateSubscription = async (id, subscription) => {
+  if (Users.schema.path('subscription').enumValues.includes(subscription)) {
+    await Users.updateOne({ id: id, subscription: subscription })
+  }
+  console.log('Not valid subscription')
+}
 
 module.exports = {
   getUserById,
   getUserByEmail,
   addUser,
-  updateToken
-  // getCurrentUser,
-  // userUpdateSubscription
+  updateToken,
+  userUpdateSubscription
 }

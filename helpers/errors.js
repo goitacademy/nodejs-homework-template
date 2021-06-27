@@ -1,10 +1,22 @@
-class WrongParametersError extends Error {
+class RestApiError extends Error {
   constructor(message) {
     super(message)
     this.status = 400
   }
 }
-class NotFoundError extends Error {
+class WrongParametersError extends RestApiError {
+  constructor(message) {
+    super(message)
+    this.status = 400
+  }
+}
+class NotFoundError extends RestApiError {
+  constructor(message) {
+    super(message)
+    this.status = 404
+  }
+}
+class NotAuthorizedError extends RestApiError {
   constructor(message) {
     super(message)
     this.status = 404
@@ -13,5 +25,7 @@ class NotFoundError extends Error {
 
 module.exports = {
   WrongParametersError,
-  NotFoundError
+  NotFoundError,
+  RestApiError,
+  NotAuthorizedError
 }

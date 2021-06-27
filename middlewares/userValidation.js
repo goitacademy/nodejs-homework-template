@@ -25,7 +25,7 @@ const validate = (schema, res, req, next) => {
 }
 
 // const userUpdateSubscriptionSchema = Joi.object({
-//   subscription: Joi.boolean().required()
+//   subscription: Joi.string().required()
 // })
 
 module.exports = {

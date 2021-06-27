@@ -13,4 +13,6 @@ router.post('/logout', authMiddleware, usersController.logOut)
 
 router.get('/current', authMiddleware, usersController.currentUser)
 
+router.patch('/', authMiddleware, usersController.patchSubscription)
+
 module.exports = router

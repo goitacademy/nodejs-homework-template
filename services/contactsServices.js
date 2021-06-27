@@ -1,23 +1,23 @@
 const Contacts = require('../model/schemaContact')
 
-const listContacts = () => {
-  return Contacts.find()
+const listContacts = (owner) => {
+  return Contacts.find({ owner })
 }
 
-const getContactById = (id) => {
-  return Contacts.findById({ _id: id })
+const getContactById = (id, owner) => {
+  return Contacts.findById({ _id: id, owner })
 }
 
-const removeContact = (id) => {
-  return Contacts.findByIdAndRemove({ _id: id })
+const removeContact = (id, owner) => {
+  return Contacts.findByIdAndRemove({ _id: id, owner })
 }
 
-const addContact = ({ name, email, phone }) => {
-  return Contacts.create({ name, email, phone })
+const addContact = ({ name, email, phone }, owner) => {
+  return Contacts.create({ name, email, phone, owner })
 }
 
-const updateContact = (id, body) => {
-  return Contacts.findByIdAndUpdate({ _id: id }, body, { new: true })
+const updateContact = (id, body, owner) => {
+  return Contacts.findByIdAndUpdate({ _id: id, owner }, body, { new: true })
 }
 
 module.exports = {
