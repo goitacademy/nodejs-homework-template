@@ -90,7 +90,6 @@ const updateStatusContact = async (req, res, next) => {
   }
   try {
     const contact = await Contacts.updateContact(contactId, body, _id)
-
     if (contact) {
       return res.status(200).json({ contact, status: 'success' })
     }
@@ -100,7 +99,26 @@ const updateStatusContact = async (req, res, next) => {
   }
 }
 
-const getFavoriteContacts = async (req, res, next) => {}
+// const listContacts = async (req, res, next) => {
+//   const { _id } = req.user
+//   try {
+//     const contacts = await Contacts.listContacts(_id)
+//     res.status(200).json({ contacts })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
+const getFavoriteContacts = async (req, res, next) => {
+  const { _id } = req.user
+  // const { favorite } = req.params
+  // console.log(favorite)
+  try {
+    const contacts = await Contacts.getFavoriteContacts(_id)
+    res.status(200).json({ contacts })
+  } catch (error) {
+    next(error)
+  }
+}
 
 module.exports = {
   listContacts,

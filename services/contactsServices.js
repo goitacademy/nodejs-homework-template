@@ -20,10 +20,15 @@ const updateContact = (id, body, owner) => {
   return Contacts.findByIdAndUpdate({ _id: id, owner }, body, { new: true })
 }
 
+const getFavoriteContacts = (owner) => {
+  return Contacts.find({ owner })
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact
+  updateContact,
+  getFavoriteContacts
 }
