@@ -1,19 +1,31 @@
-const Users = require('../model/user/schemaUser')
+const Users = require('../model/schemaUser')
 
-const addUser = ({ email, password }) => {
-  return Users.create({ email, password })
+const getUserById = (id) => {
+  return Users.findById({ _id: id })
 }
 
-const getCurrentUser = (email, token) => {
-  return Users.findOne({ email: email, token: token })
+const getUserByEmail = (email) => {
+  return Users.findOne({ email })
 }
 
-const userUpdateSubscription = (email, body) => {
-  return Users.findOneAndUpdate({ email: email }, body, { new: true })
+const addUser = (body) => {
+  const user = Users(body)
+  return user.save()
 }
+
+const updateToken = (id, token) => {
+  Users.updateOne({ _id: id }, { token })
+}
+
+// const userUpdateSubscription = (email, body) => {
+//   return Users.findOneAndUpdate({ email: email }, body, { new: true })
+// }
 
 module.exports = {
+  getUserById,
+  getUserByEmail,
   addUser,
-  getCurrentUser,
-  userUpdateSubscription
+  updateToken
+  // getCurrentUser,
+  // userUpdateSubscription
 }

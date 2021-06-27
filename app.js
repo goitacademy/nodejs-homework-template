@@ -1,12 +1,13 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 
 const { errorHandler } = require('./helpers/apiHelpers')
 const { NotFoundError } = require('./helpers/errors')
 
+const usersRouter = require('./routes/usersRouter')
 const contactsRouter = require('./routes/contactsRouter')
-// const usersRouter = require('./routes/usersRouter')
 
 const app = express()
 
@@ -16,8 +17,8 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/users', usersRouter)
 app.use('/api/contacts', contactsRouter)
-// app.use('/users', usersRouter)
 
 app.use((req, res) => {
   throw new NotFoundError('Not found')

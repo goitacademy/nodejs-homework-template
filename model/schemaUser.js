@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bсrypt = require('bcryptjs')
 const { Schema, model } = mongoose
 
 const user = new Schema(
@@ -24,6 +25,16 @@ const user = new Schema(
   },
   { versionKey: false }
 )
+
+user.pre('save', async function () {
+  if (this.isNew) {
+    this.password = await bсrypt.hash(this.password, 9)
+  }
+})
+
+user.methods.validPassword = async function (password) {
+  return await bсrypt.compare(password, this.password)
+}
 
 const Users = model('user', user)
 

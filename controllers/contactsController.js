@@ -1,11 +1,11 @@
-const Contacts = require('../services/contactsService')
+const Contacts = require('../services/contactsServices')
 const { WrongParametersError, NotFoundError } = require('../helpers/errors')
 
 const {
   addContactSchema,
   updateContactSchema,
   updateStatusContactSchema
-} = require('../routes/api/validation')
+} = require('../middlewares/contactsValidation')
 
 const listContacts = async (req, res, next) => {
   try {
