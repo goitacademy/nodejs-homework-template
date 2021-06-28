@@ -39,7 +39,7 @@ const addContact = async (req, res, next) => {
   const { _id } = req.user
   const { error } = addContactSchema.validate(req.body)
   if (error) {
-    throw new WrongParametersError('missing required field')
+    next(new WrongParametersError('missing required field'))
   }
   try {
     const contact = await Contacts.addContact(req.body, _id)

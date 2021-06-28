@@ -14,14 +14,14 @@ const signUp = async (req, res) => {
   res.status(201).json({ user: { email, subscription } })
 }
 
-const logIn = async (req, res) => {
+const logIn = async (req, res, next) => {
   const token = await Auth.login(req.body)
 
   if (token) {
     const { email, subscription } = await Users.getUserByEmail(req.body.email)
     return res.status(200).json({ token, user: { email, subscription } })
   }
-  throw new NotAuthorizedError('Email or password is wrong')
+  next(new NotAuthorizedError('Email or password is wrong'))
 }
 
 const logOut = async (req, res, next) => {
@@ -30,20 +30,20 @@ const logOut = async (req, res, next) => {
   res.status(204)
 }
 
-const currentUser = async (req, res) => {
+const currentUser = async (req, res, next) => {
   const currentUser = await Users.getUserById(req.user.id)
 
   if (!currentUser) {
-    throw new NotAuthorizedError('Email or password is wrong')
+    next(new NotAuthorizedError('Email or password is wrong'))
   }
   const { email, subscription } = currentUser
   res.status(200).json({ email, subscription })
 }
 
-const patchSubscription = async (req, res) => {
+const patchSubscription = async (req, res, next) => {
   const currentUser = await Users.getUserById(req.user.id)
   if (!currentUser) {
-    throw new NotAuthorizedError('Email or password is wrong')
+    next(new NotAuthorizedError('Email or password is wrong'))
   }
   await Users.userUpdateSubscription(currentUser.id, req.body.subscription)
   const { email, subscription } = await Users.getUserById(req.user.id)
