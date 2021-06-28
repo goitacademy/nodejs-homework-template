@@ -1,11 +1,11 @@
-const {HttpCode} = require('../helpers/constants')
+const { HttpCode } = require('../helpers/constants')
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../model/index')
+} = require('../model/contacts')
 
 const getAll = async (req, res, next) => {
   try {
@@ -25,8 +25,8 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const contact = await getContactById(req.params.contactId)
-    if(contact) {
-       return res.status(HttpCode.OK).json({
+    if (contact) {
+      return res.status(HttpCode.OK).json({
         status: 'success',
         code: HttpCode.OK,
         data: {
@@ -40,7 +40,7 @@ const getById = async (req, res, next) => {
         data: 'Not Found'
       })
     }
-    
+
   } catch (error) {
     next(error)
   }
@@ -64,8 +64,8 @@ const create = async (req, res, next) => {
 const remove = async (req, res, next) => {
   try {
     const contact = await removeContact(req.params)
-    if(contact) {
-       return res.status(HttpCode.OK).json({
+    if (contact) {
+      return res.status(HttpCode.OK).json({
         status: 'success',
         code: HttpCode.OK,
         data: {
@@ -79,7 +79,7 @@ const remove = async (req, res, next) => {
         data: 'Not Found'
       })
     }
-    
+
   } catch (error) {
     next(error)
   }
@@ -88,8 +88,8 @@ const remove = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const contact = updateContact(req.params, req.body)
-    if(contact) {
-       return res.status(HttpCode.OK).json({
+    if (contact) {
+      return res.status(HttpCode.OK).json({
         status: 'success',
         code: HttpCode.OK,
         data: {
@@ -103,7 +103,7 @@ const update = async (req, res, next) => {
         data: 'Not Found'
       })
     }
-    
+
   } catch (error) {
     next(error)
   }
