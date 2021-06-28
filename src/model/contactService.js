@@ -2,12 +2,6 @@ const { ContactsModel } = require('../db/contactsModel');
 
 const select = '-_id -owner -__v';
 
-// const options = {
-//   page: 1,
-//   limit: 5,
-//   offset: 0,
-// };
-
 const listContacts = async (userId, query) => {
   return await ContactsModel.paginate({ owner: userId }, query);
 };

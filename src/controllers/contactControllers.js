@@ -11,9 +11,9 @@ const { NotFoundContact } = require('../helpers/errors');
 
 const getContact = async (req, res) => {
   const { _id } = req.user;
-  const query = req.query
-  const data = await listContacts(_id, query);
-  const { docs, page, totalPages, totalDocs } = data;
+  const { page = 1, limit = 2 } = req.query;
+  const data = await listContacts(_id, { page, limit });
+  const { docs, totalPages, totalDocs } = data;
 
   res.status(200).json({ docs, page, totalPages, totalDocs });
 };
