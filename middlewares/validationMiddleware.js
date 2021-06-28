@@ -31,6 +31,13 @@ const updateStatusContactValidation = (req, res, next) => {
     isValid(schema, req, res, next);
 };
 
+const registerValidation = (req, res, next) => {
+    const schema = Joi.object({
+        email: Joi.string().email({ minDomainSegments: 2 }),
+        password: Joi.string().min(8).max(20),
+    });
+};
+
 export {
     addContactValidation,
     updateContactValidation,

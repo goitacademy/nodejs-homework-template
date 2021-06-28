@@ -12,8 +12,11 @@ import {
     updateContactValidation,
     updateStatusContactValidation,
 } from '../../middlewares/validationMiddleware.js';
+import authMiddleware from '../../middlewares/authMiddleware.js';
 
 const contactsRouter = new express.Router();
+
+contactsRouter.use(authMiddleware);
 
 contactsRouter
     .get('/', getContactsController)

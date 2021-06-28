@@ -9,6 +9,7 @@ import {
 
 const getContactsController = async (req, res, next) => {
     try {
+        console.log(req.user);
         const allContacts = await getContacts();
         res.status(200).json(allContacts);
     } catch (error) {
