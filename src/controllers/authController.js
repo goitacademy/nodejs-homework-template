@@ -19,16 +19,13 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
   const currentUser = await findUser(_id);
   if (!currentUser) {
     throw new LogoutUnauthorizeError('User doesnt exist');
   }
-  console.log('before', currentUser);
   currentUser.token = null;
   await currentUser.save();
-  console.log('after', currentUser);
-  res.status(204);
+  res.status(204).json({});
 };
 module.exports = {
   registration,
