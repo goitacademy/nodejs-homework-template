@@ -3,8 +3,15 @@ const {
   WrongParametersError
 } = require('../helpers/errors')
 
-const getContacts = async () => {
-  const contacts = await Contacts.find({})
+const getContacts = async ({ owner, page, limit, favorite}) => {
+  const paginateOptions = {
+    page: page,
+    limit: limit > 200 ? 200 : limit,
+  };
+
+  const contacts = await Contacts.paginate({owner, favorite}, paginateOptions).then(function (result) {
+  return result.docs
+})
   return contacts
 }
 
@@ -16,8 +23,8 @@ const getContactById = async (id) => {
   return contact
 }
   
-const postContact = async ({ name, email, phone }) => {
-  const newContact = new Contacts({ name, email, phone })
+const postContact = async ({ owner, name, email, phone }) => {
+  const newContact = new Contacts({ owner, name, email, phone })
   await newContact.save()
   return newContact
 }

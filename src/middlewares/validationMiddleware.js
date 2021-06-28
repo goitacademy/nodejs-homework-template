@@ -28,12 +28,13 @@ module.exports = {
     })
     const validationResult = schema.validate(req.body)
     notifyIfError(validationResult, next)
+    next()
+
   },
 
   patchContactValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
-        .alphanum()
         .min(2)
         .max(30)
         .optional(),
@@ -50,5 +51,21 @@ module.exports = {
     })
     const validationResult = schema.validate(req.body)
     notifyIfError(validationResult, next)
+    next()
+  },
+
+  userValidation: (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string()
+        .email()
+        .required(),
+      password: Joi.string()
+        .alphanum()
+        .min(6)
+       .required()
+    })
+    const validationResult = schema.validate(req.body)
+    notifyIfError(validationResult, next)
+    next()
   }
 }
