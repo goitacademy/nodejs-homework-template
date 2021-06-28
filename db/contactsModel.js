@@ -16,8 +16,8 @@ const contactSchema = new mongoose.Schema({
         default: false,
     },
     owner: {
-        type: String,
-        required: [true, 'You have to be logged in'],
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'user',
     },
 });
 
