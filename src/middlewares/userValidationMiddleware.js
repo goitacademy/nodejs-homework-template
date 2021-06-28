@@ -1,8 +1,8 @@
 const Joi = require('joi');
 
-const { RegistrationValidationError } = require('../helpers/errors');
+const { ValidationError } = require('../helpers/errors');
 
-const userSignupValidation = (req, res, next) => {
+const userDataValidation = (req, res, next) => {
   const validationSchemaPOST = Joi.object({
     email: Joi.string()
       .email({
@@ -17,7 +17,7 @@ const userSignupValidation = (req, res, next) => {
   const dataValidate = validationSchemaPOST.validate(req.body);
   if (dataValidate.error) {
     next(
-      new RegistrationValidationError(
+      new ValidationError(
         JSON.stringify(dataValidate.error.message)
       )
     );
@@ -25,5 +25,5 @@ const userSignupValidation = (req, res, next) => {
   next();
 };
 module.exports = {
-  userSignupValidation,
+  userDataValidation,
 };

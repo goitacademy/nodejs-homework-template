@@ -17,13 +17,13 @@ class NotFoundContact extends contactsBookErrors {
     this.status = 404;
   }
 }
-
-class RegistrationValidationError extends contactsBookErrors {
-  constructor(message) {
-    super(message);
-    this.status = 400;
-  }
-}
+// error validation
+// class RegistrationValidationError extends contactsBookErrors {
+//   constructor(message) {
+//     super(message);
+//     this.status = 400;
+//   }
+// }
 
 class RegistrationConflictError extends contactsBookErrors {
   constructor(message) {
@@ -31,11 +31,41 @@ class RegistrationConflictError extends contactsBookErrors {
     this.status = 409;
   }
 }
+// error validation
+// class LoginValidationError extends contactsBookErrors {
+//   constructor(message) {
+//     super(message);
+//     this.status = 400
+//   }
+// }
+
+class LoginAuthError extends contactsBookErrors {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
+
+class MiddlewareUnauthorizedError extends contactsBookErrors {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
+
+class LogoutUnauthorizeError extends contactsBookErrors {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
 
 module.exports = {
   contactsBookErrors,
   ValidationError,
   NotFoundContact,
-  RegistrationValidationError,
   RegistrationConflictError,
+  LoginAuthError,
+  MiddlewareUnauthorizedError,
+  LogoutUnauthorizeError,
 };

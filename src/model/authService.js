@@ -1,6 +1,11 @@
-const { UsersModel } = require('../db/usersModel');
 const bcrypt = require('bcryptjs');
-const { RegistrationConflictError } = require('../helpers/errors');
+const jwt = require('jsonwebtoken');
+
+const { UsersModel } = require('../db/usersModel');
+const {
+  RegistrationConflictError,
+  LoginAuthError,
+} = require('../helpers/errors');
 
 const createUser = async (email, password) => {
   const existEmail = await UsersModel.findOne({ email });
@@ -10,9 +15,36 @@ const createUser = async (email, password) => {
 
   const user = new UsersModel({
     email,
-    password: await bcrypt.hash(password, 10),
+    password,
   });
   return await user.save();
 };
 
-module.exports = { createUser };
+const loginUser = async (email, password) => {
+  const user = await UsersModel.findOne({ email });
+
+  if (!user) {
+    throw new LoginAuthError('User email is wrong');
+  }
+  const userCheck = await bcrypt.compare(password, user.password);
+  if (!userCheck) {
+    throw new LoginAuthError('User password is wrong');
+  }
+
+  const token = jwt.sign(
+    {
+      _id: user._id,
+      email: user.email,
+      subscription: user.subscription,
+    },
+    process.env.JWT_SECRET
+  );
+
+  return { user, token };
+};
+
+const findUser = async (id) => {
+  return await UsersModel.findById(id);
+};
+
+module.exports = { createUser, loginUser, findUser };
