@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { UsersModel } = require('../db/usersModel');
 const {
   RegistrationConflictError,
-  LoginAuthError,
+  UnauthorizeError,
 } = require('../helpers/errors');
 
 const createUser = async (email, password) => {
@@ -24,11 +24,11 @@ const loginUser = async (email, password) => {
   const user = await UsersModel.findOne({ email });
 
   if (!user) {
-    throw new LoginAuthError('User email is wrong');
+    throw new UnauthorizeError('User email is wrong');
   }
   const userCheck = await bcrypt.compare(password, user.password);
   if (!userCheck) {
-    throw new LoginAuthError('User password is wrong');
+    throw new UnauthorizeError('User password is wrong');
   }
 
   const token = jwt.sign(

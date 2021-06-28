@@ -19,5 +19,6 @@ router.post(
 
 router.post('/login', userDataValidation, asyncWrapper(AuthController.login));
 router.post('/logout', authMiddleware, asyncWrapper(AuthController.logout));
+router.post('/current', authMiddleware, asyncWrapper(AuthController.receiveCurrentUser));
 
 module.exports = router;

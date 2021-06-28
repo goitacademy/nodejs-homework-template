@@ -1,5 +1,5 @@
 const { createUser, loginUser, findUser } = require('../model/authService');
-const { LogoutUnauthorizeError } = require('../helpers/errors');
+const { UnauthorizeError } = require('../helpers/errors');
 
 const registration = async (req, res) => {
   const { email, password } = req.body;
@@ -21,14 +21,25 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   const currentUser = await findUser(_id);
   if (!currentUser) {
-    throw new LogoutUnauthorizeError('User doesnt exist');
+    throw new UnauthorizeError('User doesnt exist');
   }
   currentUser.token = null;
   await currentUser.save();
   res.status(204).json({});
 };
+
+const receiveCurrentUser = async (req, res) => {
+  const { _id } = req.user;
+  const currentUser = await findUser(_id);
+  if (!currentUser) {
+    throw new UnauthorizeError('User doesnt exist');
+  }
+  const { email, subscription } = currentUser;
+  res.status(200).json({ user: { email, subscription } });
+};
 module.exports = {
   registration,
   login,
   logout,
+  receiveCurrentUser,
 };
