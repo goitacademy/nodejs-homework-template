@@ -1,7 +1,14 @@
 const Contacts = require('../model/schemaContact')
 
-const listContacts = (owner) => {
-  return Contacts.find({ owner })
+const listContacts = (owner, { skip, limit, favorite }) => {
+  console.log(favorite)
+  if (favorite === undefined) {
+    return Contacts.find({ owner }).select({ __v: 0 }).skip(skip).limit(limit)
+  }
+  return Contacts.find({ owner, favorite: favorite })
+    .select({ __v: 0 })
+    .skip(skip)
+    .limit(limit)
 }
 
 const getContactById = (id, owner) => {
@@ -20,15 +27,10 @@ const updateContact = (id, body, owner) => {
   return Contacts.findByIdAndUpdate({ _id: id, owner }, body, { new: true })
 }
 
-const getFavoriteContacts = (owner) => {
-  return Contacts.find({ favorite: true, owner })
-}
-
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
-  getFavoriteContacts
+  updateContact
 }

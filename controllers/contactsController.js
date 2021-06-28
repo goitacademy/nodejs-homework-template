@@ -9,9 +9,13 @@ const {
 
 const listContacts = async (req, res, next) => {
   const { _id } = req.user
+  let { skip = 0, limit = 5, favorite } = req.query
+  limit = parseInt(limit) > 20 ? 20 : parseInt(limit)
+  skip = parseInt(skip)
+
   try {
-    const contacts = await Contacts.listContacts(_id)
-    res.status(200).json({ contacts })
+    const contacts = await Contacts.listContacts(_id, { skip, limit, favorite })
+    res.status(200).json({ contacts, skip, limit, favorite })
   } catch (error) {
     next(error)
   }
@@ -99,22 +103,11 @@ const updateStatusContact = async (req, res, next) => {
   }
 }
 
-const getFavoriteContacts = async (req, res, next) => {
-  const { _id } = req.user
-  try {
-    const favoriteContacts = await Contacts.getFavoriteContacts(_id)
-    res.status(200).json({ favoriteContacts })
-  } catch (error) {
-    next(error)
-  }
-}
-
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-  updateStatusContact,
-  getFavoriteContacts
+  updateStatusContact
 }

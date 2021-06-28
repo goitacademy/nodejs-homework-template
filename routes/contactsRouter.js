@@ -9,8 +9,6 @@ router.get('/', contactsController.listContacts)
 
 router.get('/:contactId', contactsController.getContactById)
 
-router.get('/contacts?favorite=true', contactsController.getFavoriteContacts)
-
 router.post('/', contactsController.addContact)
 
 router.delete('/:contactId', contactsController.removeContact)
