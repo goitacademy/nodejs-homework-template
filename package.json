@@ -17,6 +17,7 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.14",
+    "mongoose-paginate-v2": "^1.3.18",
     "morgan": "1.10.0"
   },
   "devDependencies": {

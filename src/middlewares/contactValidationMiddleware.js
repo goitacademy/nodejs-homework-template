@@ -32,9 +32,7 @@ const patchValidation = (req, res, next) => {
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net'] },
     }),
-    phone: Joi.string()
-      .max(12)
-      .pattern(/\+?[0-9\s\-\\)]+/),
+    phone: Joi.number().max(12),
     favorite: Joi.boolean(),
   }).min(1);
   const dataValidate = validationSchemaPATCH.validate(req.body);

@@ -1,26 +1,38 @@
 const { ContactsModel } = require('../db/contactsModel');
 
-const listContacts = async () => {
-  return await ContactsModel.find({});
+const select = '-_id -owner -__v';
+
+const options = {
+  page: 1,
+  limit: 5,
+  offset: 0,
 };
 
-const getContactById = async (contactId) => {
-  return await ContactsModel.findById(contactId);
+const listContacts = async (userId) => {
+  return await ContactsModel.paginate({}, options);
 };
 
-const addContact = async (body) => {
-  const newContact = new ContactsModel(body);
+const getContactById = async (contactId, userId) => {
+  return await ContactsModel.findOne({ _id: contactId, owner: userId }, select);
+};
+
+const addContact = async (body, userId) => {
+  const newContact = new ContactsModel({ ...body, owner: userId });
+
   await newContact.save();
   return newContact;
 };
 
-const removeContact = async (contactId) => {
-  return await ContactsModel.findByIdAndDelete(contactId);
+const removeContact = async (contactId, userId) => {
+  return await ContactsModel.findOneAndRemove({
+    _id: contactId,
+    owner: userId,
+  });
 };
 
-const updateContact = async (contactId, body) => {
-  return await ContactsModel.findByIdAndUpdate(
-    contactId,
+const updateContact = async (contactId, body, userId) => {
+  return await ContactsModel.findOneAndUpdate(
+    { _id: contactId, owner: userId },
     {
       $set: body,
     },
@@ -28,10 +40,10 @@ const updateContact = async (contactId, body) => {
   );
 };
 
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (contactId, body, userId) => {
   const { favorite } = body;
-  return await ContactsModel.findByIdAndUpdate(
-    contactId,
+  return await ContactsModel.findOneAndUpdate(
+    { _id: contactId, owner: userId },
     {
       $set: { favorite },
     },
