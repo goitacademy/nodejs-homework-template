@@ -9,7 +9,7 @@ const {
   removeContact,
   updateContact,
   updateStatusContact,
-} = require('../../model/index')
+} = require('../../controller')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -45,7 +45,6 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', validateCreateContact, async (req, res, next) => {
-  // console.log(req.body)
   const newContact = await addContact(req.body)
   res.json({
     status: 'success',
@@ -57,8 +56,10 @@ router.post('/', validateCreateContact, async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const idx = req.params.contactId
-    const data = await removeContact(idx)
-    res.json(data)
+    const result = await removeContact(idx)
+    res.status(200).json({
+      result,
+    })
   } catch (error) {
     next(error)
   }

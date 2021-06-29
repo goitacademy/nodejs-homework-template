@@ -25,9 +25,10 @@ const schemaUpdateContact = Joi.object({
 })
 
 const validate = async (schema, body, next) => {
-  const { name, email, phone } = body
+  const { favorite, name, email, phone } = body
   try {
     await schema.validateAsync({
+      favorite,
       name,
       email,
       phone,
