@@ -7,9 +7,9 @@ const registrationController = async (req, res) => {
 }
 const loginController = async (req, res) => {
   const { password, email } = req.body
-  const rightPassword = await login(email, password)
-  if (rightPassword) {
-    res.status(200).json({ message: 'user login success' })
+  const token = await login(email, password)
+  if (token) {
+    res.status(200).json({ message: 'user login success', token })
   } else {
     res.status(404).json({ message: 'user login error' })
   }
