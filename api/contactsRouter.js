@@ -9,7 +9,7 @@ const {
   removeContact,
   updateContact,
   updateStatusContact,
-} = require('../model/controller')
+} = require('../controllers/contactsController')
 
 // Всі контакти
 router.get('/', async (req, res, next) => {
