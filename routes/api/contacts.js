@@ -13,10 +13,14 @@ const {
   validateCreateContact,
   validateUpdateStatusContact,
   validateObjectId,
-} = require('../../validation/contactsValidation');
+} = require('../../validation/validation');
+
+const { authGuard } = require('../../middlewares/authGuard');
 
 
 const { asyncWrapper } = require('../../helpers/apiHelpers');
+
+router.use(authGuard);
 
 router.get('/', getAll)
 
