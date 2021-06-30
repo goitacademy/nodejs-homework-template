@@ -1,0 +1,19 @@
+example post contacts:
+     {
+               "name":"dre",
+  "email": "dre@example.com",
+  "phone": "(123) 566-1230",
+  "favourite":false
+}
+
+localhost:8083/api/contacts?favourite=true
+
+localhost:8083/api/users/current
+
+localhost:8083/api/users
+
+localhost:8083/api/users/logout
+
+localhost:8083/api/users/signup
+
+localhost:8083/api/users/login
