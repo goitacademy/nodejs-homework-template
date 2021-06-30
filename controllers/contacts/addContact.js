@@ -2,7 +2,7 @@ const { v4 } = require('uuid')
 
 const { contactSchema } = require('../../utils/validateSchemas')
 
-const writeContacts = require('./writeContacts')
+const updateFile = require('./updateFile')
 
 const contacts = require('../../model/contacts.json')
 
@@ -20,7 +20,7 @@ const addContact = async (req, res) => {
     }
     const newContact = { ...req.body, id: v4() }
     contacts.push(newContact)
-    writeContacts(contacts)
+    updateFile(contacts)
     res.status(201).json({
       status: 'success',
       code: 201,

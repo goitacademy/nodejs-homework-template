@@ -1,6 +1,6 @@
 const { contactSchema } = require('../../utils/validateSchemas')
 const contacts = require('../../model/contacts.json')
-const writeContacts = require('./writeContacts')
+const updateFile = require('./updateFile')
 
 const updateContact = (req, res) => {
   const { error } = contactSchema.validate(req.body)
@@ -23,7 +23,7 @@ const updateContact = (req, res) => {
     return
   }
   contacts[index] = { ...req.body, contactId }
-  writeContacts(contacts)
+  updateFile(contacts)
   res.json({
     status: 'success',
     code: 200,
