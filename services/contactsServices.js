@@ -5,12 +5,16 @@ const listContacts = async (userId, filter) => {
   let contacts = null;
 
   if (!filter) {
-    contacts = await Contacts.find({ owner: userId });
+    contacts = await Contacts.find({ owner: userId }).select({
+      _id: 0,
+      __v: 0,
+      owner: 0,
+    });
   } else {
     contacts = await Contacts.find({
       owner: userId,
       favourite: filter,
-    });
+    }).select({ _id: 0, __v: 0, owner: 0 });
   }
 
   if (!contacts) {
@@ -24,7 +28,7 @@ const getContactById = async (userId, contactId) => {
   const foundContact = await Contacts.findOne({
     _id: contactId,
     owner: userId,
-  });
+  }).select({ _id: 0, __v: 0, owner: 0 });
 
   if (!foundContact) {
     throw new WrongParametersError(`No contact by id:${contactId} found`);
