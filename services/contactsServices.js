@@ -1,8 +1,17 @@
 const { Contacts } = require('../dataBase/contactsModel');
 const { WrongParametersError } = require('../helpers/errors');
 
-const listContacts = async userId => {
-  const contacts = await Contacts.find({ owner: userId });
+const listContacts = async (userId, filter) => {
+  let contacts = null;
+
+  if (!filter) {
+    contacts = await Contacts.find({ owner: userId });
+  } else {
+    contacts = await Contacts.find({
+      owner: userId,
+      favourite: filter,
+    });
+  }
 
   if (!contacts) {
     throw new WrongParametersError('No contact found');

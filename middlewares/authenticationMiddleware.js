@@ -16,8 +16,6 @@ async function authenticationMiddleware(req, res, next) {
 
     const [, token] = authorization.split(' ');
 
-    console.log(token);
-
     if (!token) {
       next(new NotAuthorizedError('Token is required!!'));
     }

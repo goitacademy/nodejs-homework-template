@@ -9,8 +9,9 @@ const {
 
 async function getContactsController(request, response) {
   const { _id: userId } = request.user;
+  const { favourite } = request.query;
 
-  const contactsList = await listContacts(userId);
+  const contactsList = await listContacts(userId, favourite);
 
   return response.status(200).json({ contactsList, status: 'success' });
 }

@@ -29,6 +29,10 @@ async function login(email, password) {
 }
 
 async function logout(userId) {
+  if (!userId) {
+    throw new NotAuthorizedError('Not authorized. You need to be logged in!');
+  }
+
   const data = await updateToken(userId, null);
   return data;
 }
