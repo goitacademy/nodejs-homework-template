@@ -12,7 +12,12 @@ async function getUser(userId) {
 }
 
 async function updateToken(userId, token) {
-  await User.updateOne({ _id: userId }, { token });
+  const data = await User.findOneAndUpdate(
+    { _id: userId },
+    { token: token },
+    { new: true },
+  );
+  return data;
 }
 
 async function updateSubscription(userId, body) {

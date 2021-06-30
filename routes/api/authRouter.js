@@ -9,10 +9,18 @@ const {
   logoutController,
 } = require('../../controllers/authenticationController');
 
+const {
+  authenticationMiddleware,
+} = require('../../middlewares/authenticationMiddleware');
+
 router.post('/signup', asyncWrapper(registrationController));
 
 router.post('/login', asyncWrapper(loginController));
 
-router.post('/logout', asyncWrapper(logoutController));
+router.post(
+  '/logout',
+  authenticationMiddleware,
+  asyncWrapper(logoutController),
+);
 
 module.exports = { authRouter: router };

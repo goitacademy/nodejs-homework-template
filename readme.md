@@ -1,25 +1,25 @@
 ## EXAMPLES:
 
-GET : "localhost:8083/api/contacts/"
+GET: localhost:8083/api/contacts?favourite=true
 
-PostMan screenshot: https://ibb.co/6Zg7FhZ
+PostMan screenshot: https://ibb.co/Lz9kHXW
 
-GET : "localhost:8083/api/contacts/60cc69052539841cd8e3915a"
+GET: localhost:8083/api/users/current
 
-PostMan screenshot: https://ibb.co/Hq6kdyF
+PostMan screenshot: https://ibb.co/F64mmFZ
 
-DELETE: "localhost:8083/api/contacts/60cc685d2539841cd8e39d7120"
+PATCH: localhost:8083/api/users
 
-PostMan screenshot: https://ibb.co/vm1wNVv
+PostMan screenshot: https://ibb.co/fY8TyD8
 
-POST(add contact) : "localhost:8083/api/contacts/"
+POST: localhost:8083/api/users/logout
 
-PostMan screenshot: https://ibb.co/r4N7cL3
+PostMan screenshot: https://ibb.co/kyjwr61
 
-PATCH: "localhost:8083/api/contacts/60cc685d2539841cd8e39152"
+POST: localhost:8083/api/users/signup
 
-PostMan screenshot: https://ibb.co/ft1xbwC
+PostMan screenshot: https://ibb.co/zS1HgfS
 
-PATCH: "localhost:8083/api/contacts/60cc685d2539841cd8e39152/favourite"
+POST: localhost:8083/api/users/login
 
-PostMan screenshot: https://ibb.co/3NP8mLb
+PostMan screenshot: https://ibb.co/JstyCDL

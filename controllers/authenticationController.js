@@ -22,7 +22,7 @@ async function logoutController(req, res) {
   const { _id: userId } = req.user;
   await logout(userId);
 
-  res.status(204).json({ status: 'no content' });
+  res.status(200).json({ status: 'no content' });
 }
 
 module.exports = {

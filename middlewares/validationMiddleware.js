@@ -68,7 +68,9 @@ function patchSubscriptionValidation(req, res, next) {
       .status(400)
       .json({ status: validationResult.error.details[0].message });
   }
+  next();
 }
+
 module.exports = {
   patchContactValidation,
   addContactValidation,
