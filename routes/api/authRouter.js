@@ -14,4 +14,5 @@ router.post('/signup', asyncWrapper(registrationController));
 router.post('/login', asyncWrapper(loginController));
 
 router.post('/logout', asyncWrapper(logoutController));
+
 module.exports = { authRouter: router };
