@@ -30,7 +30,6 @@ const loginUser = async (email, password) => {
   if (!userCheck) {
     throw new UnauthorizeError('User password is wrong');
   }
-
   const token = jwt.sign(
     {
       _id: user._id,
@@ -39,7 +38,8 @@ const loginUser = async (email, password) => {
     },
     process.env.JWT_SECRET
   );
-
+  user.token = token;
+  await user.save();
   return { user, token };
 };
 

@@ -18,9 +18,6 @@ const authMiddleware = async (req, res, next) => {
     if (!checkUser) {
       next(new UnauthorizeError('User doesnt exist'));
     }
-    checkUser.token = token;
-    await checkUser.save();
-
     req.user = await checkUser;
 
     next();
