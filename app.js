@@ -6,10 +6,10 @@ const { connectMongo } = require('./src/db/connection');
 
 const contactsRouter = require('./src/routes/api/contacts');
 const usersRouter = require('./src/routes/api/users');
+const avatarRouter = require('./src/routes/api/avatars');
 const { errorHandler } = require('./src/helpers/apiHelpers');
 
 const app = express();
-
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
@@ -18,6 +18,7 @@ app.use(express.json());
 
 app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
+app.use('/avatars', avatarRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
