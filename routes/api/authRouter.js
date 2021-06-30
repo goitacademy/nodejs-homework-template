@@ -8,17 +8,17 @@ const {
   loginController,
 } = require('../../controllers/authenticationController');
 
-const { getUserController } = require('../../controllers/userController');
-const {
-  authenticationMiddleware,
-} = require('../../middlewares/authenticationMiddleware');
+// const { getUserController } = require('../../controllers/userController');
+// const {
+//   authenticationMiddleware,
+// } = require('../../middlewares/authenticationMiddleware');
 
 router.post('/signup', asyncWrapper(registrationController));
 
 router.post('/login', asyncWrapper(loginController));
 
-router.use(authenticationMiddleware);
+// router.use(authenticationMiddleware);
 
-router.get('/current', asyncWrapper(getUserController));
+// router.get('/current', asyncWrapper(getUserController));
 
-module.exports = { userRouter: router };
+module.exports = { authRouter: router };

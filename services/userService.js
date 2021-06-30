@@ -5,4 +5,8 @@ async function getUser(userId) {
   return user;
 }
 
-module.exports = { getUser };
+async function updateToken(userId, token) {
+  await User.updateOne({ _id: userId }, { token });
+}
+
+module.exports = { getUser, updateToken };

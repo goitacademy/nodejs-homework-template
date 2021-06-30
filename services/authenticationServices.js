@@ -3,10 +3,12 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require('../dataBase/usersModel');
 const { NotAuthorizedError } = require('../helpers/errors');
+const { updateToken } = require('./userService');
 
 async function registration(email, password) {
   const newUser = new User({ email, password });
   await newUser.save();
+  return newUser;
 }
 
 async function login(email, password) {
@@ -22,11 +24,17 @@ async function login(email, password) {
     { _id: user._id, email: user.email },
     process.env.JWT_SECRET,
   );
-
+  await updateToken(user._id, jwtToken);
   return jwtToken;
+}
+
+async function logout(userId) {
+  const data = await updateToken(userId, null);
+  return data;
 }
 
 module.exports = {
   registration,
   login,
+  logout,
 };
