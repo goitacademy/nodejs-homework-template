@@ -56,8 +56,24 @@ function patchFavouriteValidation(req, res, next) {
 
   next();
 }
+
+function patchSubscriptionValidation(req, res, next) {
+  const schema = Joi.object({
+    subscription: Joi.string().valid('pro', 'starter', 'business').required(),
+  }).required();
+
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    return res
+      .status(400)
+      .json({ status: validationResult.error.details[0].message });
+  }
+  next();
+}
+
 module.exports = {
   patchContactValidation,
   addContactValidation,
   patchFavouriteValidation,
+  patchSubscriptionValidation,
 };

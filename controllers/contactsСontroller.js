@@ -8,38 +8,28 @@ const {
 } = require('../services/contactsServices');
 
 async function getContactsController(request, response) {
-  const contactsList = await listContacts();
-  if (!contactsList) {
-    return response.status(404).json({
-      status: 'Cannot get contacts',
-    });
-  }
+  const { _id: userId } = request.user;
+  const { favourite } = request.query;
+
+  const contactsList = await listContacts(userId, favourite);
 
   return response.status(200).json({ contactsList, status: 'success' });
 }
 
 async function getByIdController(request, response) {
   const idToFind = request.params.contactId;
-  const foundContact = await getContactById(idToFind);
+  const { _id: userId } = request.user;
 
-  if (foundContact === undefined || foundContact === false) {
-    return response.status(404).json({
-      status: `No contact by id:${idToFind} found`,
-    });
-  }
+  const foundContact = await getContactById(userId, idToFind);
 
   return response.status(200).json({ foundContact, status: 'success' });
 }
 
 async function deleteContactController(request, response) {
   const idToRemove = request.params.contactId;
-  const contactRemoved = await removeContact(idToRemove);
+  const { _id: userId } = request.user;
 
-  if (contactRemoved === false) {
-    return response
-      .status(404)
-      .json({ status: `Cannot remove contact by id ${idToRemove}` });
-  }
+  await removeContact(idToRemove, userId);
 
   return response
     .status(200)
@@ -48,12 +38,9 @@ async function deleteContactController(request, response) {
 
 async function addNewContactController(request, response) {
   const newContact = request.body;
-  console.log(newContact);
-  const contactAdded = await addContact(newContact);
+  const { _id: userId } = request.user;
 
-  if (contactAdded === false) {
-    return response.status(404).json({ status: 'Cannot add new contact' });
-  }
+  const contactAdded = await addContact(newContact, userId);
 
   return response
     .status(201)
@@ -63,13 +50,13 @@ async function addNewContactController(request, response) {
 async function changeContactController(request, response) {
   const idToChange = request.params.contactId;
   const newContactData = request.body;
-  const changedContact = await updateContact(idToChange, newContactData);
+  const { _id: userId } = request.user;
 
-  if (changedContact === false) {
-    return response
-      .status(404)
-      .json({ status: `Cannot update contact by id:${idToChange}` });
-  }
+  const changedContact = await updateContact(
+    idToChange,
+    newContactData,
+    userId,
+  );
 
   return response
     .status(200)
@@ -84,16 +71,11 @@ async function changeFavouriteController(req, res) {
     newFavouriteData,
   );
 
-  if (changedContact === false) {
-    return res.status(404).json({
-      status: `Cannot update favourite in contact by id:${idToChange}`,
-    });
-  }
-
   return res
     .status(200)
     .json({ changedContact, status: 'success, contact updated' });
 }
+
 module.exports = {
   changeContactController,
   addNewContactController,
