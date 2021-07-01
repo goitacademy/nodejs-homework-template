@@ -12,7 +12,6 @@ const login = async (req, res) => {
   const userData = await loginUser(email, password);
   const { token, user } = userData;
   const { subscription } = user;
-
   res.status(200).json({ token, user: { email, subscription } });
 };
 
