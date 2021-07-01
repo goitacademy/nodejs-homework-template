@@ -8,7 +8,7 @@ const schemaCreateContact = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .required(),
-  phone: Joi.string().length(13).required(),
+  phone: Joi.string().length(11).required(),
 })
 
 const schemaUpdateContact = Joi.object({
@@ -19,7 +19,7 @@ const schemaUpdateContact = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .optional(),
-  phone: Joi.string().length(13).optional(),
+  phone: Joi.string().length(11).optional(),
   favorite: Joi.boolean().optional(),
 })
 
