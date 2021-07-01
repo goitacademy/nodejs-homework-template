@@ -13,7 +13,7 @@ const postSchema = Joi.object({
     .required()
 })
 
-const putSchema = Joi.object({
+const putValidSchema = Joi.object({
   name: Joi.string()
     .alphanum()
     .min(2)
@@ -25,5 +25,5 @@ const putSchema = Joi.object({
 
 module.exports = {
   postSchema,
-  putSchema
+  putValidSchema
 }
