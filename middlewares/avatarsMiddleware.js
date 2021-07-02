@@ -16,7 +16,7 @@ const upload = multer.diskStorage({
   },
 });
 
-const save = multer.multer.diskStorage({
+const save = multer.diskStorage({
   destination: (req, file, cb) => {
     Jimp.read(file, (err, file) => {
       if (err) throw err;

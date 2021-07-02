@@ -13,8 +13,8 @@ async function registrationController(req, res) {
 async function loginController(req, res) {
   const { email, password } = req.body;
 
-  const token = await login(email, password);
-
+  const { token, avatarURL } = await login(email, password);
+  req.avatarURL = avatarURL;
   res.status(200).json({ status: 'login success', token });
 }
 

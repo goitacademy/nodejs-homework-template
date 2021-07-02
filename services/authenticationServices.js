@@ -20,12 +20,13 @@ async function login(email, password) {
     );
   }
 
-  const jwtToken = jwt.sign(
+  const token = jwt.sign(
     { _id: user._id, email: user.email },
     process.env.JWT_SECRET,
   );
-  await updateToken(user._id, jwtToken);
-  return jwtToken;
+  const avatarURL = user.avatarURL;
+  await updateToken(user._id, token);
+  return { token, avatarURL };
 }
 
 async function logout(userId) {

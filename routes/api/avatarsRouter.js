@@ -17,7 +17,7 @@ const {
 const router = new express.Router();
 
 router.patch(
-  '/avatars',
+  '/',
   authenticationMiddleware,
   avatarUploadMiddleware.single('avatar'),
   saveAvatarMiddleware.single('avatar'),
