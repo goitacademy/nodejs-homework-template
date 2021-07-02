@@ -1,7 +1,6 @@
 const express = require('express');
 const {
   avatarUploadMiddleware,
-  saveAvatarMiddleware,
 } = require('../../middlewares/avatarsMiddleware');
 
 const { asyncWrapper } = require('../../helpers/asyncWrapper');
@@ -20,7 +19,6 @@ router.patch(
   '/',
   authenticationMiddleware,
   avatarUploadMiddleware.single('avatar'),
-  saveAvatarMiddleware.single('avatar'),
   asyncWrapper(avatarUploadController),
 );
 
