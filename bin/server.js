@@ -28,13 +28,13 @@ async function startApp() {
   try {
     await connectContactsDB();
 
-    app.listen(PORT, error => {
+    app.listen(PORT, async error => {
       if (error) {
         console.error('Error at server launch:', error);
         process.exit(1);
       }
-      // await createFolderIsNotExist(TMP_DIR);
-      // await createFolderIsNotExist(IMG_DIR);
+      await createFolderIsNotExist(TMP_DIR);
+      await createFolderIsNotExist(IMG_DIR);
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   } catch (error) {
