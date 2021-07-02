@@ -39,4 +39,29 @@ async function updateSubscription(userId, body) {
 
   return updatedUser;
 }
-module.exports = { getUser, updateToken, updateSubscription };
+
+async function updateAvatarURL(userId, avatarURL) {
+  const newData = { avatarURL };
+  const updatedUser = await User.findOneAndUpdate(
+    {
+      _id: userId,
+    },
+    { $set: newData },
+    { new: true },
+  );
+
+  if (!updatedUser) {
+    throw new WrongParametersError(
+      `Cannot update avatarURL in user by id:${userId}`,
+    );
+  }
+
+  return updatedUser;
+}
+
+module.exports = {
+  getUser,
+  updateToken,
+  updateSubscription,
+  updateAvatarURL,
+};
