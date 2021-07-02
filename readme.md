@@ -1,25 +1,13 @@
 ## EXAMPLES:
 
-GET: localhost:8083/api/contacts?favourite=true
-
-PostMan screenshot: https://ibb.co/Lz9kHXW
-
-GET: localhost:8083/api/users/current
-
-PostMan screenshot: https://ibb.co/F64mmFZ
-
-PATCH: localhost:8083/api/users
-
-PostMan screenshot: https://ibb.co/fY8TyD8
-
-POST: localhost:8083/api/users/logout
-
-PostMan screenshot: https://ibb.co/kyjwr61
-
 POST: localhost:8083/api/users/signup
 
-PostMan screenshot: https://ibb.co/zS1HgfS
+PostMan screenshot: https://ibb.co/5cLVxn1
 
-POST: localhost:8083/api/users/login
+PATCH: localhost:8083/api/users/avatars
 
-PostMan screenshot: https://ibb.co/JstyCDL
+PostMan screenshot: https://ibb.co/V9MSB3C
+
+URL : http://localhost:8083/avatars/5a7e9221-2b02-48de-a306-b9aae7c1210f.jpg
+
+screenshot: https://ibb.co/rHmvjSX
