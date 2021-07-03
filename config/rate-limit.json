@@ -1,0 +1,7 @@
+{
+  "apiLimit": {
+    "windowMs": 900000,
+    "max": 100
+  },
+  "jsonLimit": 10000
+}
