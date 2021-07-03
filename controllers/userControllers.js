@@ -1,8 +1,20 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/user');
+const cloudinary = require('cloudinary').v2;
+const { promisify } = require('util');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { HttpCode } = require('../helpers/contactsHelpers');
+const fs = require('fs').promises;
+const path = require('path');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
+const uploadCloud = promisify(cloudinary.uploader.upload);
 
 const reg = async (req, res, next) => {
   const { email } = req.body;
@@ -24,6 +36,7 @@ const reg = async (req, res, next) => {
         id: newUser.id,
         email: newUser.email,
         name: newUser.name,
+        avatar: newUser.avatar,
       },
     });
   } catch (e) {
@@ -81,4 +94,44 @@ const getCurrentUser = async (req, res, next) => {
   }
 };
 
-module.exports = { reg, login, logout, getCurrentUser };
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const { public_id: idCloudImg, secure_url: avatar } =
+      await saveAvatarToCloud(req);
+    await User.updateAvatar(id, avatar, idCloudImg);
+    return res.json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: {
+        avatar,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const saveAvatarToCloud = async req => {
+  const pathFile = req.file.path;
+  const result = await uploadCloud(pathFile, {
+    folder: 'Photo',
+    transformation: {
+      width: 250,
+      height: 250,
+      crop: 'fill',
+    },
+  });
+  cloudinary.uploader.destroy(req.user.idCloudImg, (err, result) => {
+    console.log(err, result);
+  });
+
+  try {
+    await fs.unlink(path.file);
+  } catch (e) {
+    console.log(e.message);
+  }
+  return result;
+};
+
+module.exports = { reg, login, logout, getCurrentUser, avatars };
