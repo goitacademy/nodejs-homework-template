@@ -12,7 +12,6 @@ const userMiddleware = async (req, res, next) => {
 
   try {
     const [, token] = req.headers.authorization.split(' ')
-    console.log(token)
     jwt.verify(token, JWT_SECRET_KEY, async (error, decoded) => {
       const user = await findUserById(decoded?.id)
       if (error || !user || !user.token || user.token !== token) {
