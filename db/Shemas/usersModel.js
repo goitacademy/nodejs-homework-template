@@ -1,6 +1,7 @@
 require('dotenv').config()
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 const { SUBSCRIPTION, SALT_FACTOR } = require('../../helpers/contactsHelper')
 
 const userSchema = new Schema(
@@ -25,6 +26,14 @@ const userSchema = new Schema(
         message: `Invalid values. Allowed values: ${SUBSCRIPTION.values}`,
       },
       default: SUBSCRIPTION.default,
+    },
+    avatarURL: {
+      type: String,
+      default: function () {
+        const avatar = gravatar.url(this.email, { size: '250' }, true)
+        console.log(avatar)
+        return avatar
+      },
     },
     token: {
       type: String,

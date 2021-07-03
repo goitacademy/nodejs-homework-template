@@ -6,14 +6,16 @@ const {
   validateUpdateContact,
 } = require('../../middlewares/validation')
 
-router.get('/', async (_req, res, next) => {
+router.get('/', async (req, res, next) => {
+  // console.log(req.query)
+  const { page, limit } = req.query
   try {
-    const contacts = await Contacts.listContacts()
+    const { contacts, count } = await Contacts.listContacts({ page, limit })
     console.log('contacts', contacts)
     return res.json({
       status: 'success',
       code: 200,
-      data: contacts,
+      data: { contacts, pagination: { page, limit, allContactsCount: count } },
     })
   } catch (e) {
     next(e)

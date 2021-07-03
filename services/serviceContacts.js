@@ -1,8 +1,12 @@
 const { Contact } = require('../db/Shemas/contactsModels')
 
-const getContacts = async () => {
+const getContacts = async ({ page, limit }) => {
+  const count = await Contact.find({}).count()
+  console.log(count)
   const contacts = await Contact.find({})
-  return contacts
+    .skip(+page * +limit)
+    .limit(+limit)
+  return { contacts, count }
 }
 const findContactById = async contactId => {
   const contact = await Contact.findById(contactId)

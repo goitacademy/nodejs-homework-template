@@ -7,8 +7,8 @@ const {
   updateStatusFavorite,
 } = require('../services/serviceContacts')
 
-async function listContacts(req, res) {
-  const contacts = await getContacts()
+async function listContacts({ page, limit }) {
+  const contacts = await getContacts({ page, limit })
 
   return contacts
 }

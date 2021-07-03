@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const User = require('../services/serviceUsers')
+const { findUserById } = require('../db/users')
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 const userMiddleware = async (req, res, next) => {
@@ -11,10 +11,10 @@ const userMiddleware = async (req, res, next) => {
   }
 
   try {
-    const token = req.headers.authorization.split(' ')[1]
+    const [, token] = req.headers.authorization.split(' ')
     console.log(token)
     jwt.verify(token, JWT_SECRET_KEY, async (error, decoded) => {
-      const user = await User.getUserById(decoded?.id)
+      const user = await findUserById(decoded?.id)
       if (error || !user || !user.token || user.token !== token) {
         return res.status(401).json({ message: 'Invalide token' })
       }
@@ -23,7 +23,7 @@ const userMiddleware = async (req, res, next) => {
       next()
     })
   } catch (error) {
-    next(error)
+    next(error.message)
   }
 }
 

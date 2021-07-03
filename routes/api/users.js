@@ -5,6 +5,7 @@ const {
   logIn,
   logOut,
   findCurrentUser,
+  setAvatar,
 } = require('../../controllers/usersContr')
 const {
   registrationLoginValidation,
@@ -18,5 +19,7 @@ router.post('/login', registrationLoginValidation, logIn)
 router.post('/logout', userMiddleware, logOut)
 
 router.get('/current', userMiddleware, findCurrentUser)
+
+router.patch('/avatar', userMiddleware, setAvatar)
 
 module.exports = router

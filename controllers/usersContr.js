@@ -1,5 +1,5 @@
-const { findUserByEmail, addUser, getUserById } = require('../db/users')
-const { login, logout } = require('../services/serviceUsers')
+const { findUserByEmail, addUser } = require('../db/users')
+const { login, logout, uploadAvatar } = require('../services/serviceUsers')
 require('dotenv').config()
 
 const registration = async (req, res) => {
@@ -32,12 +32,13 @@ const logOut = async (req, res, next) => {
 }
 
 const findCurrentUser = async (req, res) => {
-  const currentUser = await getUserById(req.user.id)
+  const { email, subscription } = req.user
+  res.status(200).json({ email, subscription })
+}
 
-  if (currentUser) {
-    const { email, subscription } = currentUser
-    res.status(200).json({ email, subscription })
-  }
+const setAvatar = async (req, res, next) => {
+  const avatarUrl = await uploadAvatar(req, res)
+  res.status(200).json({ avatarUrl })
 }
 
 module.exports = {
@@ -45,4 +46,5 @@ module.exports = {
   logIn,
   logOut,
   findCurrentUser,
+  setAvatar,
 }
