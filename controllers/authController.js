@@ -3,15 +3,9 @@ const {
   login,
   getUsersService,
 } = require('../dbServices/authService')
-// const { validationOfUser } = require('../validation/validation')
 const registrationController = async (req, res) => {
   const { password, email, subscription } = req.body
-  //   const validationResult = validationOfUser(req.body)
 
-  //   if (validationResult.error) {
-  //     await res.status(400).json({ message: 'not valid entry/entries' })
-  //     return
-  //   }
   await registration(password, email, subscription)
   res.status(201).json({ message: 'user added' })
 }
