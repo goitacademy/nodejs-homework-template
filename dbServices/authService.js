@@ -1,6 +1,6 @@
-const { User } = require('../db/userModel')
+const { User } = require('../dbModels/userModel')
 const bcrypt = require('bcrypt')
-const { NotAuthorizedError } = require('../helpers/errors')
+// const { NotAuthorizedError } = require('../errorHelpers/errors')
 const jwt = require('jsonwebtoken')
 
 const registration = async (password, email, subscription) => {
@@ -22,5 +22,8 @@ const login = async (email, passwordOnEnter) => {
   }
   return rightPassword
 }
-
-module.exports = { registration, login }
+const getUsersService = async () => {
+  const users = await User.find({})
+  return users
+}
+module.exports = { registration, login, getUsersService }

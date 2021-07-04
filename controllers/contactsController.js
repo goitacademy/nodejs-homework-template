@@ -1,62 +1,39 @@
-const { Contact } = require('../db/contactModel')
+const { Contact } = require('../dbModels/contactModel')
 
-const listContacts = async () => {
-  try {
-    const contacts = await Contact.find({})
-    return contacts
-  } catch (err) {
-    console.error(err)
-  }
+const listContacts = async (req, res) => {
+  const contacts = await Contact.find({})
+  await res.status(200).json(contacts)
 }
 
-async function getContactById(contactId) {
-  try {
-    const contact = await Contact.findById(contactId)
-    return contact
-  } catch (err) {
-    console.error(err)
-  }
-}
-async function addContact(name, email, phone, favorite) {
-  try {
-    const contact = new Contact({ name, email, phone, favorite })
-    await contact.save()
-    return contact
-  } catch (err) {
-    console.error(err)
-  }
+async function getContactById(req, res) {
+  const contactId = req.params.contactId
+  const contact = await Contact.findById(contactId)
+  await res.status(200).json({ contact })
 }
 
-async function removeContact(contactId) {
-  try {
-    const deleteContact = await Contact.findByIdAndDelete(contactId)
-    console.log(deleteContact)
-    return !!deleteContact
-  } catch (err) {
-    console.error(err)
-  }
+async function addContact(req, res) {
+  const contact = new Contact(req.body)
+  await contact.save()
+  await res.status(201).json(contact)
 }
-const updateContact = async (name, email, phone, favorite, id) => {
-  try {
-    await Contact.findByIdAndUpdate(id, {
-      $set: { name, email, phone, favorite },
-    })
-    const updatedContact = await getContactById(id)
-    return updatedContact
-  } catch (err) {
-    console.error(err)
-  }
+
+async function removeContact(req, res) {
+  await Contact.findByIdAndDelete(req.params.contactId)
+  await res.status(200).json({ message: 'contact deleted' })
 }
-const updateStatusContact = async (favorite, id) => {
-  try {
-    await Contact.findByIdAndUpdate(id, {
-      $set: { favorite },
-    })
-    const updatedContact = await getContactById(id)
-    return updatedContact
-  } catch (err) {
-    console.error(err)
-  }
+const updateContact = async (req, res) => {
+  await Contact.findByIdAndUpdate(req.params.contactId, {
+    $set: req.body,
+  })
+  const updatedContact = await getContactById(req, res)
+  await res.status(200).json(updatedContact)
+}
+const updateStatusContact = async (req, res) => {
+  await Contact.findByIdAndUpdate(req.params.contactId, {
+    $set: req.body,
+  })
+  const updatedContact = await getContactById(req, res)
+  await res.status(200).json(updatedContact)
 }
 module.exports = {
   listContacts,
