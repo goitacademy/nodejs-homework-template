@@ -28,4 +28,18 @@ const validateFavoriteStatus = async (req, res, next) => {
   }
   next()
 }
-module.exports = { validationMiddleware, validateFavoriteStatus }
+const validateUser = async (req, res, next) => {
+  const schema = Joi.object({
+    password: Joi.string().min(6).max(30).required(),
+    email: Joi.string().email().required().max(30),
+  })
+
+  const validationResult = schema.validate(req.body)
+  if (validationResult.error) {
+    await res.status(400).json({ message: validationResult.error.message })
+    return
+  }
+  next()
+}
+
+module.exports = { validationMiddleware, validateFavoriteStatus, validateUser }

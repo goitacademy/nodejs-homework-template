@@ -13,6 +13,9 @@ const {
   validationMiddleware,
   validateFavoriteStatus,
 } = require('../../middlewares/validationMiddleware')
+const { authMiddleware } = require('../../middlewares/authMiddleware')
+
+router.use(authMiddleware)
 // Всі контакти
 router.get('/', asyncWrapper(listContacts))
 // вибір контакту по ІД
