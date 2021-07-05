@@ -39,4 +39,11 @@ const login = async (email, password) => {
     };
 };
 
-export { register, login };
+const currentUser = async userId => {
+    return await User.findOne(
+        { _id: userId },
+        { subscription: 1, email: 1, _id: 0 },
+    );
+};
+
+export { register, login, currentUser };

@@ -34,43 +34,27 @@ const deleteContactController = async (req, res, next) => {
 const addContactController = async (req, res, next) => {
     const { _id: userId } = req.user;
     const { name, email, phone } = req.body;
-    try {
-        const newContact = await addContact(name, email, phone, userId);
-        res.status(200).json({
-            message: `Contact ${newContact._id} successfully added`,
-        });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    const newContact = await addContact(name, email, phone, userId);
+    res.status(201).json({
+        message: `Contact ${newContact._id} successfully added`,
+    });
 };
 
 const updateContactController = async (req, res) => {
     const { _id: userId } = req.user;
     const { contactId } = req.params;
-    try {
-        await updateContact(contactId, userId, req.body);
-        res.status(200).json({
-            message: `Contact with ID '${contactId}' successfully updated`,
-        });
-    } catch (error) {
-        res.status(400).json({
-            message: `Contact with ID '${contactId}' not found`,
-        });
-    }
+    await updateContact(contactId, userId, req.body);
+    res.status(200).json({
+        message: `Contact with ID '${contactId}' successfully updated`,
+    });
 };
 
 const updateStatusContactController = async (req, res) => {
     const { _id: userId } = req.user;
     const { contactId } = req.params;
     const { favorite } = req.body;
-    try {
-        await updateStatusContact(contactId, userId, favorite);
-        res.status(200).json(await getContactById(userId, contactId));
-    } catch (error) {
-        res.status(400).json({
-            message: error.message,
-        });
-    }
+    await updateStatusContact(contactId, userId, favorite);
+    res.status(200).json(await getContactById(userId, contactId));
 };
 
 export {

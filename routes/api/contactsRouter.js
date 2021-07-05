@@ -23,10 +23,14 @@ contactsRouter
     .get('/:contactId', asyncWrapper(getContactByIdController))
     .post('/', addContactValidation, asyncWrapper(addContactController))
     .delete('/:contactId', asyncWrapper(deleteContactController))
-    .put('/:contactId', updateContactValidation, updateContactController)
+    .put(
+        '/:contactId',
+        updateContactValidation,
+        asyncWrapper(updateContactController),
+    )
     .patch(
         '/:contactId/favorite',
         updateStatusContactValidation,
-        updateStatusContactController,
+        asyncWrapper(updateStatusContactController),
     );
 export default contactsRouter;
