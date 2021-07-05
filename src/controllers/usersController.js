@@ -6,6 +6,8 @@ const {
   switchSubscription
 } = require('../services/usersService')
 
+const { changeAvatar } = require('../services/avatarsService')
+
 const { ValidationError } = require('../helpers/errors')
 
 const signupController = async (req, res) => {
@@ -27,8 +29,8 @@ const logoutController = async (req, res) => {
 }
 
 const currentUserController = async (req, res) => {
-  const { authorization } = req.headers
-  const user = await checkCurrentUser(authorization);
+  const { token } = req
+  const user = await checkCurrentUser(token);
   res.json({ status: "success", user })
 }
 
@@ -42,10 +44,18 @@ const switchSubscriptionController = async (req, res) => {
   res.json({ status: "success" })
 }
 
+const changeAvatarController = async (req, res) => {
+  const { file } = req
+  const { userId } = req
+  const avatarURL = await changeAvatar({userId, file});
+  res.json({ status: "success", avatarURL})
+}
+
 module.exports = {
   signupController,
   loginController,
   logoutController,
   currentUserController,
-  switchSubscriptionController
+  switchSubscriptionController,
+  changeAvatarController
 }
