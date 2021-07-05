@@ -33,10 +33,20 @@ const login = async (email, password) => {
         { _id: user._id, email: user.email },
         process.env.SALT,
     );
+
+    await User.findOneAndUpdate({ email }, { $set: { token } });
+
     return {
         token,
         user: { email: user.email, subscription: user.subscription },
     };
+};
+
+const logout = async (userId, token) => {
+    await User.findByIdAndUpdate(
+        { _id: userId, token },
+        { $set: { token: null } },
+    );
 };
 
 const currentUser = async userId => {
@@ -46,4 +56,4 @@ const currentUser = async userId => {
     );
 };
 
-export { register, login, currentUser };
+export { register, login, logout, currentUser };
