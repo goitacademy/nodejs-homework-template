@@ -1,5 +1,5 @@
 
-const contacts = require('../contacts.model')
+const contacts = require('../model/contacts.json')
 
 const del = (req, res) => {
   const { contactId } = req.params

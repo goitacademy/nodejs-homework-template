@@ -1,8 +1,8 @@
-const products = require('../model/contact')
+const contacts = require('../model/contacts.json')
 
 const getById = (req, res) => {
   const { contactId } = req.params
-  const selectContact = products.find(item => item.id === contactId)
+  const selectContact = contacts.find(item => item.id === contactId)
   if (!selectContact) {
     res.status(404).json({
       status: 'error',
