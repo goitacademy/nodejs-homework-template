@@ -19,7 +19,7 @@ const del = async (req, res) => {
     res.status(404).json({
       status: "error",
       code: 404,
-      message: "Not found",
+      message: "Not found !",
     });
     return;
   }
