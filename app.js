@@ -1,6 +1,18 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const multer = require('multer')
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, '/tmp/my-uploads')
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now())
+//   }
+// })
+
+// const upload = multer({ storage: storage })
 
 const contactsRouter = require('./routes/api/contacts')
 const { HttpCode } = require('./helpers/constants')
@@ -12,6 +24,8 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
+
+app.use(express.static('public'))
 
 app.use('/api/contacts', contactsRouter)
 

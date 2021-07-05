@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const { authGuard } = require('../../middlewares/authGuard');
+const { uploadAvatar } = require('../../helpers/multer');
 
 const {
   signupController,
   loginController,
   logoutController,
   getCurrentUserController,
-  updateUserSubscriptionController
+  updateUserSubscriptionController,
+  updateUserAvatarController
 } = require('../../controllers/users');
 
 const {
@@ -31,6 +33,13 @@ router.patch(
   authGuard,
   validateUpdateUserSubscription,
   asyncWrapper(updateUserSubscriptionController)
+);
+
+router.patch(
+  '/avatars',
+  authGuard,
+  uploadAvatar.single('avatar'),
+  asyncWrapper(updateUserAvatarController)
 );
 
 module.exports = router
