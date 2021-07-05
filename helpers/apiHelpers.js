@@ -1,13 +1,7 @@
-const { WrongParametersError, NotFoundError } = require('./errors')
-
-// const asyncWrapper = (controller) => {
-//   return (req, res, next) => {
-//     controller(req, res).catch(next)
-//   }
-// }
+const { RestApiError } = require('./errors')
 
 const errorHandler = (err, req, res, next) => {
-  if (err instanceof NotFoundError || err instanceof WrongParametersError) {
+  if (err instanceof RestApiError) {
     return res.status(err.status).json({ message: err.message })
   }
   res.status(500).json({
@@ -17,5 +11,4 @@ const errorHandler = (err, req, res, next) => {
 
 module.exports = {
   errorHandler
-  //   asyncWrapper
 }
