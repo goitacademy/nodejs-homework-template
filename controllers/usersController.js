@@ -49,5 +49,18 @@ const patchSubscription = async (req, res, next) => {
   const { email, subscription } = await Users.getUserById(req.user.id)
   res.status(200).json({ email, subscription })
 }
+const avatars = async (req, res) => {
+  const id = req.user.id
+  const pathFile = req.file.path
+  const url = await Users.updateAvatar(id, pathFile)
+  return res.status(200).json({ avatarURL: url })
+}
 
-module.exports = { signUp, logIn, logOut, currentUser, patchSubscription }
+module.exports = {
+  signUp,
+  logIn,
+  logOut,
+  currentUser,
+  patchSubscription,
+  avatars
+}
