@@ -13,16 +13,16 @@ import {
     updateStatusContactValidation,
 } from '../../middlewares/validationMiddleware.js';
 import authMiddleware from '../../middlewares/authMiddleware.js';
-
+import { asyncWrapper } from '../../helpers/apiHelpers.js';
 const contactsRouter = new express.Router();
 
 contactsRouter.use(authMiddleware);
 
 contactsRouter
-    .get('/', getContactsController)
-    .get('/:contactId', getContactByIdController)
-    .post('/', addContactValidation, addContactController)
-    .delete('/:contactId', deleteContactController)
+    .get('/', asyncWrapper(getContactsController))
+    .get('/:contactId', asyncWrapper(getContactByIdController))
+    .post('/', addContactValidation, asyncWrapper(addContactController))
+    .delete('/:contactId', asyncWrapper(deleteContactController))
     .put('/:contactId', updateContactValidation, updateContactController)
     .patch(
         '/:contactId/favorite',

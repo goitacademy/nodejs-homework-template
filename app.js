@@ -3,6 +3,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import contactsRouter from './routes/api/contactsRouter.js';
 import authRouter from './routes/api/authRouter.js';
+import { errorHandler } from './helpers/apiHelpers.js';
 
 const app = express();
 
@@ -19,8 +20,10 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, req, res, next) => {
-    res.status(err.status).json({ message: err.message });
-});
+app.use(errorHandler);
+
+// app.use((err, req, res, next) => {
+//     res.status(err.status).json({ message: err.message });
+// });
 
 export default app;

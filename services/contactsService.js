@@ -1,19 +1,24 @@
 import Contact from '../db/contactsModel.js';
-import { NotAuthorizedError } from '../helpers/error.js';
+import { WrongParametersError } from '../helpers/error.js';
 
 const getContacts = async userId => {
-    return await Contact.find({ owner: userId });
+    return await Contact.find({ owner: userId }, { __v: 0 });
 };
 
 const getContactById = async (userId, contactId) => {
-    if (!userId) {
-        throw new NotAuthorizedError('Not authorized');
-    }
-    return await Contact.findOne({ owner: userId, _id: contactId });
+    return await Contact.find(
+        {
+            $and: [{ _id: contactId }, { owner: userId }],
+        },
+        { __v: 0 },
+    );
 };
 
-const deleteContact = async contactId => {
-    await Contact.findByIdAndRemove(contactId);
+const deleteContact = async (userId, contactId) => {
+    await Contact.findOneAndRemove({
+        _id: contactId,
+        owner: userId,
+    });
 };
 
 const addContact = async (name, email, phone, userId) => {
@@ -27,23 +32,17 @@ const addContact = async (name, email, phone, userId) => {
     return newContact;
 };
 
-const updateContact = async (contactId, name, email, phone, userId) => {
-    const contact = await getContactById(userId, contactId);
-    const contactUpdate = {
-        name: name || contact.name,
-        email: email || contact.email,
-        phone: phone || contact.phone,
-    };
+const updateContact = async (contactId, userId, body) => {
     await Contact.findOneAndUpdate(
         { _id: contactId, owner: userId },
-        { $set: contactUpdate },
+        { $set: { ...body } },
     );
 };
 
-const updateStatusContact = async (contactId, newStatus, userId) => {
+const updateStatusContact = async (contactId, userId, favorite) => {
     await Contact.findOneAndUpdate(
         { _id: contactId, owner: userId },
-        { $set: newStatus },
+        { $set: { favorite } },
     );
 };
 

@@ -9,40 +9,26 @@ import {
 import { NotAuthorizedError } from '../helpers/error.js';
 
 const getContactsController = async (req, res, next) => {
-    console.log(req.user._id);
-    try {
-        if (!req.user) {
-            return next(
-                new NotAuthorizedError('Register or login to continue'),
-            );
-        }
-        const allContacts = await getContacts(req.user._id);
-        res.status(200).json(allContacts);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+    if (!req.user) {
+        throw new NotAuthorizedError('Register or login to continue');
     }
+    const allContacts = await getContacts(req.user._id);
+    res.status(200).json(allContacts);
 };
 
 const getContactByIdController = async (req, res, next) => {
     const { contactId } = req.params;
     const owner = req.user._id;
-    try {
-        const contact = await getContactById(owner, contactId);
-        res.status(200).json(contact);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    const contact = await getContactById(owner, contactId);
+    res.status(200).json(contact);
 };
 const deleteContactController = async (req, res, next) => {
     const { contactId } = req.params;
-    try {
-        await deleteContact(contactId);
-        res.status(200).json({
-            message: `Contact with ID ${contactId} successfully deleted`,
-        });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    const owner = req.user._id;
+    await deleteContact(owner, contactId);
+    res.status(200).json({
+        message: `Contact with ID ${contactId} successfully deleted`,
+    });
 };
 
 const addContactController = async (req, res, next) => {
@@ -58,12 +44,11 @@ const addContactController = async (req, res, next) => {
     }
 };
 
-const updateContactController = async (req, res, next) => {
+const updateContactController = async (req, res) => {
     const { _id: userId } = req.user;
-    const { name, email, phone } = req.body;
     const { contactId } = req.params;
     try {
-        await updateContact(contactId, name, email, phone, userId);
+        await updateContact(contactId, userId, req.body);
         res.status(200).json({
             message: `Contact with ID '${contactId}' successfully updated`,
         });
@@ -74,12 +59,12 @@ const updateContactController = async (req, res, next) => {
     }
 };
 
-const updateStatusContactController = async (req, res, next) => {
+const updateStatusContactController = async (req, res) => {
     const { _id: userId } = req.user;
-    const newStatus = req.body;
     const { contactId } = req.params;
+    const { favorite } = req.body;
     try {
-        await updateStatusContact(contactId, newStatus, userId);
+        await updateStatusContact(contactId, userId, favorite);
         res.status(200).json(await getContactById(userId, contactId));
     } catch (error) {
         res.status(400).json({

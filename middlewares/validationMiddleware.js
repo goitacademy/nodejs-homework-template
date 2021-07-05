@@ -1,9 +1,12 @@
 import Joi from 'joi';
+import { ValidationError } from '../helpers/error.js';
 
 const isValid = (schema, req, res, next) => {
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-        return res.status(400).json(validationResult.error.message);
+        throw new ValidationError(
+            `Validation error: ${validationResult.error.message}`,
+        );
     }
     next();
 };
