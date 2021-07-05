@@ -1,10 +1,20 @@
 const { contacts: service } = require('../../services')
+const { updateFavoriteSchema } = require('../../utils/validateSchemas')
 const mongoose = require('mongoose')
 
-const getOneContact = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
+    const { body } = req
     const { id } = req.params
     try {
-        const validationContactId = mongoose.Types.ObjectId.isValid(id)
+        const { error } = updateFavoriteSchema.validate(body)
+        if (error) {
+            res.status(400).json({
+                status: 'error',
+                code: 400,
+                message: 'missing field favorite'
+            })
+        }
+        const validationContactId = mongoose.isValidObjectId(id)
         if (!validationContactId) {
             return res.status(404).json({
                 status: 'error',
@@ -12,20 +22,19 @@ const getOneContact = async (req, res, next) => {
                 message: 'Contact id must be a string',
             })
         }
-        const contact = await service.getContactById(id)
-        if (!contact) {
+        const result = await service.updateFavorite(id, body)
+        if (!result) {
             return res.status(404).json({
                 status: 'error',
                 code: 404,
-                message: `Not found contact id: ${id}`,
-                data: 'Not found'
+                message: 'Not found'
             })
         }
         res.json({
             status: 'success',
             code: 200,
             data: {
-                contact
+                result
             }
         })
     }
@@ -34,4 +43,4 @@ const getOneContact = async (req, res, next) => {
     }
 }
 
-module.exports = getOneContact
+module.exports = updateFavorite
