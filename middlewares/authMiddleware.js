@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
+
 const { NotAuthorizedError } = require('../errorHelpers/errors')
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
     const { authorization } = req.headers
     if (!authorization) {
