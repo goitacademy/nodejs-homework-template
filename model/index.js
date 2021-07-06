@@ -19,7 +19,7 @@ const getContactById = async (contactId) => {
     const result = JSON.parse(response);
     const findContact = result.find(({ id }) => id.toString() === contactId);
 
-    return findContact || "contact is not found";
+    return findContact || "Not found";
   } catch (error) {
     console.error(error);
   }
@@ -39,7 +39,7 @@ const removeContact = async (contactId) => {
 
     return newContactsList.length !== result.length
       ? `contact with id ${contactId} removed `
-      : "contact is not found";
+      : "Not found";
   } catch (error) {
     console.error(error);
   }

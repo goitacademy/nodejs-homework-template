@@ -20,8 +20,16 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
-
   const contact = await getContactById(id);
+
+  if (!contact) {
+    res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Not found",
+    });
+    return;
+  }
 
   res.json({
     message: "success",
@@ -35,7 +43,7 @@ router.post("/", async (req, res, next) => {
 
   if (error) {
     res.status(400).json({
-      message: "bad request",
+      message: "missing required name field",
       status: 400,
     });
   } else {
@@ -51,9 +59,18 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const removedContact = await removeContact(id);
+  if (id === -1) {
+    res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Not found",
+    });
+    return;
+  }
+
   res.json({
     message: "success",
-    status: 204,
+    status: 200,
     data: ` ${removedContact}`,
   });
 });
@@ -64,7 +81,7 @@ router.patch("/:contactId", async (req, res, next) => {
 
   if (error) {
     res.status(400).json({
-      message: "bad request",
+      message: "missing fields",
       status: 400,
     });
   } else {
