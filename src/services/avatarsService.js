@@ -1,5 +1,5 @@
 const { Storage } = require('@google-cloud/storage')
-const fs = require('fs')
+const fs = require('fs').promises
 const jimp = require('jimp')
 
 const { Users } = require('../db/usersModel')
