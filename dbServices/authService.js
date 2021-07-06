@@ -11,19 +11,38 @@ const registration = async (password, email, subscription) => {
   })
   await user.save()
 }
-const login = async (email, passwordOnEnter) => {
-  const { password, _id, createdAt } = await User.findOne({
+const login = async (email, password) => {
+  let user = await User.findOne({
     email,
   })
-  const rightPassword = await bcrypt.compare(passwordOnEnter, password)
+  const rightPassword = await bcrypt.compare(password, user.password)
   if (rightPassword) {
-    const token = jwt.sign({ _id, createdAt }, process.env.JWT_SECRET)
-    return token
+    const createdAt = new Date()
+    const token = jwt.sign({ _id: user._id, createdAt }, process.env.JWT_SECRET)
+    user.token = token
+    user = await User.findOneAndUpdate(
+      { email },
+      {
+        $set: user,
+      },
+    )
+    console.log(user)
+    return user.token
   }
   return rightPassword
+}
+const logout = async token => {
+  let user = await User.findOneAndUpdate(
+    { token },
+    {
+      $set: { token: null },
+    },
+  )
+  user = await User.findById(user._id)
+  return user.token
 }
 const getUsersService = async () => {
   const users = await User.find({})
   return users
 }
-module.exports = { registration, login, getUsersService }
+module.exports = { registration, login, logout, getUsersService }

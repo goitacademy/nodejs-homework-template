@@ -1,6 +1,7 @@
 const {
   registration,
   login,
+  logout,
   getUsersService,
 } = require('../dbServices/authService')
 const registrationController = async (req, res) => {
@@ -18,6 +19,11 @@ const loginController = async (req, res) => {
     res.status(404).json({ message: 'user login error' })
   }
 }
+const logoutController = async (req, res) => {
+  const token = req.token
+  const nullToken = await logout(token)
+  res.status(200).json({ token: nullToken })
+}
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await getUsersService()
@@ -26,4 +32,9 @@ const getAllUsers = async (req, res) => {
     console.error(err)
   }
 }
-module.exports = { registrationController, loginController, getAllUsers }
+module.exports = {
+  registrationController,
+  loginController,
+  logoutController,
+  getAllUsers,
+}
