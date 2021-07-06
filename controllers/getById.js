@@ -1,6 +1,6 @@
 const contacts = require('../model/contacts.json')
 
-const getById = (req, res) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params
   const selectContact = contacts.find(item => item.id === contactId)
   if (!selectContact) {
@@ -11,7 +11,7 @@ const getById = (req, res) => {
     })
     return
   }
-  res.json({
+  await res.json({
     status: 'success',
     code: 200,
     data: {
@@ -20,4 +20,4 @@ const getById = (req, res) => {
   })
 }
 
-module.exports = getById
+module.exports = getContactById

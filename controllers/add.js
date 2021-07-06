@@ -3,11 +3,12 @@ const { v4 } = require('uuid')
 const contactSchema = require('../utils/validate')
 
 const contacts = require('../model/contacts.json')
+const updateJson = require('./updateJSON')
 
-const add = (req, res) => {
+const addContact = async (req, res) => {
   const { error } = contactSchema.validate(req.body)
   if (error) {
-    res.status(400).json({
+    await res.status(400).json({
       status: 'error',
       code: 400,
       message: error.message
@@ -17,13 +18,14 @@ const add = (req, res) => {
   const newContact = { id: v4(), ...req.body }
   contacts.push(newContact)
 
-  res.status(201).json({
+  await res.status(201).json({
     status: 'success',
     code: 201,
     data: {
       result: newContact
     }
   })
+  updateJson(contacts)
 }
 
-module.exports = add
+module.exports = addContact
