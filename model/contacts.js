@@ -1,26 +1,26 @@
-const fs = require("fs/promises");
-const path = require("path");
-const contacts = require("./contacts.json");
-const { v4 } = require("uuid");
-const Joi = require("joi");
+// const fs = require('fs/promises');
+// const path = require('path');
+const contacts = require('./contacts.json');
+const { v4 } = require('uuid');
+const { updateContactsJson, contactScheme } = require('./helpers')
+// const Joi = require('joi');
 
-const contactsPath = path.join(__dirname, "contacts.json");
-console.log(contactsPath);
+// const contactsPath = path.join(__dirname, 'contacts.json');
 
-const updateContactsJson = async (contacts) => {
-  const str = JSON.stringify(contacts);
-  await fs.writeFile(contactsPath, str);
-};
+// const updateContactsJson = async contacts => {
+//   const str = JSON.stringify(contacts);
+//   await fs.writeFile(contactsPath, str);
+// };
 
-const contactScheme = Joi.object({
-  name: Joi.string().min(2).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().min(2).required(),
-});
+// const contactScheme = Joi.object({
+//   name: Joi.string().min(2).required(),
+//   email: Joi.string().email().required(),
+//   phone: Joi.string().min(2).required(),
+// });
 
 const listContacts = async (req, res, next) => {
   await res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     data: {
       result: contacts,
@@ -31,17 +31,17 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
   const selectedContact = contacts.find(
-    (contact) => contact.id.toString() === contactId
+    contact => contact.id.toString() === contactId,
   );
   if (!selectedContact) {
     return await res.status(404).json({
-      status: "error",
+      status: 'error',
       code: 404,
-      message: "Not found",
+      message: 'Not found',
     });
   }
   await res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     data: {
       result: selectedContact,
@@ -51,42 +51,34 @@ const getContactById = async (req, res) => {
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  console.log(contactId);
+
   const index = contacts.findIndex(
-    (contact) => contact.id.toString() === contactId
+    contact => contact.id.toString() === contactId,
   );
 
   if (index === -1) {
     return res.status(404).json({
-      status: "error",
+      status: 'error',
       code: 404,
-      message: "Not found",
+      message: 'Not found',
     });
   }
 
   contacts.splice(index, 1);
 
   await res.status(200).json({
-    status: "success",
+    status: 'success',
     code: 200,
-    message: "contact deleted",
+    message: 'contact deleted',
   });
   updateContactsJson(contacts);
 };
 
-//     {
-// {
-//   "name": "Anna Nan",
-//   "email": "anna.nan@Donec.com",
-//   "phone": "(086) 738-2360"
-// }
-
 const addContact = async (req, res) => {
   const { error } = contactScheme.validate(req.body);
-  console.log(error);
   if (error) {
     await res.status(400).json({
-      status: "error",
+      status: 'error',
       code: 400,
       message: error.message,
     });
@@ -95,7 +87,7 @@ const addContact = async (req, res) => {
   contacts.push(newContact);
 
   await res.status(201).json({
-    status: "success",
+    status: 'success',
     code: 201,
     data: {
       result: newContact,
@@ -106,31 +98,29 @@ const addContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-const {name, email, phone} = req.body;
+  const { name, email, phone } = req.body;
   const index = contacts.findIndex(
-    (contact) => contact.id.toString() === contactId
+    contact => contact.id.toString() === contactId,
   );
   if (!name && !email && !phone) {
-     
-     return res.status(400).json({
-      status: "error",
+    return res.status(400).json({
+      status: 'error',
       code: 400,
-      message: "missing fields",
+      message: 'missing fields',
     });
   }
 
   if (index === -1) {
     return res.status(404).json({
-      status: "error",
+      status: 'error',
       code: 404,
-      message: "Not found",
+      message: 'Not found',
     });
   }
 
   contacts[index] = { ...contacts[index], ...req.body };
-  console.log(contacts)
   await res.status(201).json({
-    status: "success",
+    status: 'success',
     code: 201,
     data: {
       result: contacts[index],
