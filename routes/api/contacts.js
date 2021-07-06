@@ -45,24 +45,26 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
+ 
   try {
-    const { error } = await schemaAddContacts.validate(req.body);
-    if (error) {
-      return res.json({
-        status: 'error',
-        code:400,
-        message: "missing required name field"
-      })
-       return;
-    }
-    const contacts = Contacts.addContact(req.body);
+    const { error } =  schemaAddContacts.validate(req.body);
+    // console.log(error);
+    // if (error) {
+    //   return res.json({
+    //     status: 'error',
+    //     code:400,
+    //     message: "missing required name field"
+    //   })
+    //    return;
+    // }
+    const contacts = await Contacts.addContact(req.body);
+    
     res.status(201).json({
       status: "success",
-        code: 201,
-        data: {
-            result: contacts
-        }
-    })
+      code: 201,
+      data: { contacts }
+        
+    });
  }catch (error) {
     next(error)
   }
