@@ -1,22 +1,6 @@
-// const fs = require('fs/promises');
-// const path = require('path');
 const contacts = require('./contacts.json');
 const { v4 } = require('uuid');
 const { updateContactsJson, contactScheme } = require('./helpers')
-// const Joi = require('joi');
-
-// const contactsPath = path.join(__dirname, 'contacts.json');
-
-// const updateContactsJson = async contacts => {
-//   const str = JSON.stringify(contacts);
-//   await fs.writeFile(contactsPath, str);
-// };
-
-// const contactScheme = Joi.object({
-//   name: Joi.string().min(2).required(),
-//   email: Joi.string().email().required(),
-//   phone: Joi.string().min(2).required(),
-// });
 
 const listContacts = async (req, res, next) => {
   await res.json({
