@@ -1,10 +1,8 @@
 const express = require('express');
 
 const router = express.Router();
-const path = require('path');
+const { AVATARS_DIR } = require('../../helpers/uploadTemp')
 
-const avatarsDir = path.resolve('./public/avatars');
-
-router.use('', express.static(avatarsDir));
+router.use('', express.static(AVATARS_DIR));
 
 module.exports = router;
