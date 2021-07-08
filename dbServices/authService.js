@@ -18,7 +18,11 @@ const login = async (email, password) => {
   const rightPassword = await bcrypt.compare(password, user.password)
   if (rightPassword) {
     const createdAt = new Date()
-    const token = jwt.sign({ _id: user._id, createdAt }, process.env.JWT_SECRET)
+    const token = jwt.sign(
+      { _id: user._id, createdAt },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' },
+    )
     user.token = token
     user = await User.findOneAndUpdate(
       { email },
