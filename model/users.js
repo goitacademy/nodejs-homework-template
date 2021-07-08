@@ -27,9 +27,16 @@ const updateUserById = async (userId, body) => {
   return result;
 };
 
+const updateAvatar = async (userId, file, avatar, cb) => {
+  const avatarURL = await cb(file, avatar);
+  await User.findByIdAndUpdate(userId, { avatarURL }, { new: true });
+  return avatarURL;
+};
+
 module.exports = {
   findUserByEmail,
   updateToken,
   createUser,
-  updateUserById
+  updateUserById,
+  updateAvatar
 }
