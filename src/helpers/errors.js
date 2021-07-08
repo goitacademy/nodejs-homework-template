@@ -25,10 +25,17 @@ class NotAuthorizedError extends ContactsServiceError {
     this.status = 401
   }
 }
+class ConflictError extends ContactsServiceError {
+  constructor(message) {
+    super(message)
+    this.status = 409
+  }
+}
 
 module.exports = {
   ContactsServiceError,
   ValidationError,
   WrongParametersError,
   NotAuthorizedError,
+  ConflictError,
 }

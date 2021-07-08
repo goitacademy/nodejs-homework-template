@@ -9,6 +9,10 @@ const schemaContact = new mongoose.Schema({
   email: {
     type: String,
   },
+  owner: {
+    type: String,
+    required: true,
+  },
   phone: {
     type: String,
   },

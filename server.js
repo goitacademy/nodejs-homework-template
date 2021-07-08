@@ -10,6 +10,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 const { connectMongo } = require('./src/db/connection')
 const { contactsRouter } = require('./src/routers/contactsRouter')
+const { authRouter } = require('./src/routers/authRouter')
 const { errorHandler } = require('./src/helpers/apiHelpers')
 
 app.use(express.json())
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use(logger(formatsLogger))
 app.use('/api/contacts', contactsRouter)
+app.use('/api/users', authRouter)
 app.use(errorHandler)
 
 const start = async () => {
