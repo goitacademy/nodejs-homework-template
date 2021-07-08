@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const guard = require('../../helpers/guard');
-const userControlers = require('../../controllers/userControllers');
+const userControllers = require('../../controllers/userControllers');
 const upload = require('../../helpers/upload');
 
-router.post('/registration', userControlers.reg);
-router.post('/login', userControlers.login);
-router.post('/logout', guard, userControlers.logout);
-router.get('/current', guard, userControlers.getCurrentUser);
+router.post('/registration', userControllers.reg);
+router.post('/login', userControllers.login);
+router.post('/logout', guard, userControllers.logout);
+router.get('/current', guard, userControllers.getCurrentUser);
 router.patch(
   '/avatars',
   guard,
   upload.single('avatar'),
-  userControlers.avatars,
+  userControllers.avatars,
 );
-
+router.get('/verify/:verifyToken', userControllers.verify);
+router.post('/verify', userControllers.getVerifyToken);
 module.exports = router;
