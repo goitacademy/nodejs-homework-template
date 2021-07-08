@@ -2,11 +2,14 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 const cloudinary = require('cloudinary').v2;
 const { promisify } = require('util');
+const mailer = require('../services/nodemailer');
+const { nanoid } = require('nanoid');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { HttpCode } = require('../helpers/contactsHelpers');
 const fs = require('fs').promises;
 const path = require('path');
+const message = require('../services/message');
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -17,18 +20,26 @@ cloudinary.config({
 const uploadCloud = promisify(cloudinary.uploader.upload);
 
 const reg = async (req, res, next) => {
-  const { email } = req.body;
-  const user = await User.findUserByEmail(email);
-  if (user) {
-    return res.status(HttpCode.CONFLICT).json({
-      status: 'error',
-      code: HttpCode.CONFLICT,
-      data: 'Conflict',
-      message: 'This email is already use',
-    });
-  }
   try {
-    const newUser = await User.createUser(req.body);
+    const { email, name } = req.body;
+    const user = await User.findUserByEmail(email);
+    if (user) {
+      return res.status(HttpCode.CONFLICT).json({
+        status: 'error',
+        code: HttpCode.CONFLICT,
+        data: 'Conflict',
+        message: 'This email is already use',
+      });
+    }
+
+    const verifyToken = nanoid();
+    await mailer(message(email, verifyToken, name));
+
+    const newUser = await User.createUser({
+      ...req.body,
+      verify: false,
+      verifyToken,
+    });
     return res.status(HttpCode.CREATED).json({
       status: 'success',
       code: HttpCode.CREATED,
@@ -48,7 +59,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findUserByEmail(email);
-    if (!user || !user.validPassword(password)) {
+    if (!user || !user.validPassword(password) || !user.verify) {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'Error',
         code: HttpCode.UNAUTHORIZED,
@@ -134,4 +145,60 @@ const saveAvatarToCloud = async req => {
   return result;
 };
 
-module.exports = { reg, login, logout, getCurrentUser, avatars };
+const verify = async (req, res, next) => {
+  try {
+    const user = await User.findByVeryfiToken(req.params);
+    if (user) {
+      await User.updateVerifyToken(user.id, true, null);
+      return res.status(HttpCode.OK).json({
+        status: 'success',
+        code: HttpCode.OK,
+        data: {
+          message: 'Verification successful',
+        },
+      });
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message: 'Your verification token is not valid',
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+const getVerifyToken = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findUserByEmail(email);
+    if (user.verifyToken !== false) {
+      const { name, verifyToken } = user;
+      await mailer(message(email, verifyToken, name));
+      return res.status(HttpCode.OK).json({
+        status: 'success',
+        code: HttpCode.OK,
+        data: {
+          message: 'Verification email sent',
+        },
+      });
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message: 'Verification has already been passed',
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports = {
+  reg,
+  login,
+  logout,
+  getCurrentUser,
+  avatars,
+  verify,
+  getVerifyToken,
+};

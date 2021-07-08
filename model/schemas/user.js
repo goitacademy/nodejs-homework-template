@@ -44,11 +44,17 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      require: [true, 'Verify token is required'],
+    },
   },
   { versionKey: false, timestamps: true },
 );
-
-// TODO: hooks
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
@@ -60,8 +66,6 @@ userSchema.pre('save', async function (next) {
   );
   next();
 });
-
-// TODO: static method
 
 userSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
