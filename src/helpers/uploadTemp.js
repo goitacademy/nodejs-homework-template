@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
-const TEMP_DIR = path.resolve('tmp');
-const AVATARS_DIR = path.resolve('public/avatars');
+const TEMP_DIR = path.join(process.cwd(), process.env.TEMP_DIR);
+const AVATARS_DIR = path.join(process.cwd(), process.env.AVATARS_DIR);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
