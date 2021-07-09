@@ -1,13 +1,6 @@
-// const fs = require('fs/promises')
 const contacts = require("./contacts.json");
 const { v4 } = require("uuid");
-const Joi = require("joi");
-
-const contactShema = Joi.object({
-  name: Joi.string().min(1).required(),
-  email: Joi.string().min(1).required(),
-  phone: Joi.string().min(1).required(),
-});
+const { updateContactsJson, contactScheme } = require("./helpers");
 
 const listContacts = async (req, res) => {
   res.json({
@@ -64,20 +57,16 @@ const removeContact = async (req, res) => {
   });
 };
 
-// {
-//     "name": "Kyryl",
-//     "email": "test@test.com",
-//     "phone": "(111) 111-1111"
-// }
-
 const addContact = async (req, res) => {
-  const { error } = contactShema.validate(req.body);
+  const { error } = contactScheme.validate(req.body);
 
   if (error) {
     return res.status(404).json({
       status: "error",
       code: 404,
-      message: `missing required ${error.details.map(field => field.path)} field`,
+      message: `missing required ${error.details.map(
+        (field) => field.path
+      )} field`,
     });
   }
 
@@ -90,6 +79,7 @@ const addContact = async (req, res) => {
       result: newContact,
     },
   });
+  updateContactsJson(contacts);
 };
 
 const updateContact = async (req, res) => {
@@ -112,6 +102,7 @@ const updateContact = async (req, res) => {
       result: contacts[index],
     },
   });
+  updateContactsJson(contacts);
 };
 
 module.exports = {
