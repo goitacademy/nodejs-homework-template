@@ -1,33 +1,23 @@
-const fs = require('fs').promises;
-const jimp = require('jimp');
-const { AVATARS_DIR } = require('../helpers/uploadTemp')
-const path = require('path');
-const { v4: uuidv4 } = require('uuid')
+const { avatarSaver } = require('../helpers/avatarSaver')
+
+const { findUser } = require('../model/authService')
 
 const avatarUpdater = async (req, res) => {
+  const { _id } = req.user;
+  const currentUser = await findUser(_id);
+
   if (req.file) {
     const { file } = req;
-    // console.log(file)
-    const ava = await jimp.read(file.path);
-    ava
-      .autocrop()
-      .cover(
-        250,
-        250,
-        jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE
-      )
-      .writeAsync(file.path);
-    ava.resize(250, 250).writeAsync(file.path);
-    const fileExt = file.originalname.split('.')
-    const randomName = uuidv4()
-    const newName = randomName + '.' + fileExt[1]
-    file.originalname = newName
-    console.log(file.originalname)
-    await fs.rename(file.path, path.join(AVATARS_DIR, file.originalname));
-    // console.log(file.originalname)
+    const fileName = await avatarSaver(file)
+    const newAvatarUrl = ('/avatars/' + fileName)
+    currentUser.avatarURL = newAvatarUrl;
+    await currentUser.save();
+    const { avatarURL } = currentUser
+    res.status(200).json({ avatarURL });
   }
-
-  res.status(200).json({ message: 'file upload' });
+  if (!req.file) {
+    return res.status(400).json({ message: 'please, download file' });
+  }
 };
 
 module.exports = {

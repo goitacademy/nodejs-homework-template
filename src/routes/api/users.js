@@ -29,6 +29,7 @@ router.post(
 router.patch(
   '/avatars',
   upload.single('avatar'),
+  authMiddleware,
   FilesController.avatarUpdater
 );
 

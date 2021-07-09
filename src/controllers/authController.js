@@ -11,8 +11,8 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const userData = await loginUser(email, password);
   const { token, user } = userData;
-  const { subscription } = user;
-  res.status(200).json({ token, user: { email, subscription } });
+  const { subscription, avatarUrl } = user;
+  res.status(200).json({ token, user: { email, subscription, avatarUrl } });
 };
 
 const logout = async (req, res) => {
