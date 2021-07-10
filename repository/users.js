@@ -32,6 +32,15 @@ class UsersRepository {
     )
     return result
   }
+
+  async updateAvatar(id, avatar, idCloudAvatar) {
+    await this.model.updateOne({ _id: id }, { avatarURL: avatar, idCloudAvatar })
+  }
+
+  async getAvatar(id) {
+    const { avatarURL, idCloudAvatar } = await this.model.findOne({ _id: id })
+    return { avatarURL, idCloudAvatar }
+  }
 }
 
 module.exports = UsersRepository
