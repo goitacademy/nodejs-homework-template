@@ -1,26 +1,17 @@
-const { v4 } = require('uuid')
+const { contacts: service } = require('../../services')
 
-const { contactSchema } = require('../../utils/validateSchemas')
-
-const updateFile = require('./updateFile')
-
-const contacts = require('../../model/contacts.json')
-
-const addContact = async (req, res) => {
-  // eslint-disable-next-line no-useless-catch
+const addContact = async (req, res, next) => {
+  const { name, email, phone } = req.body
   try {
-    const { error } = contactSchema.validate(req.body)
-    if (error) {
+    const newContact = await service.add({ name, email, phone })
+    if (!newContact) {
       res.status(400).json({
         status: 'error',
         code: 404,
-        message: error.message,
+        message: 'Bad request',
       })
       return
     }
-    const newContact = { ...req.body, id: v4() }
-    contacts.push(newContact)
-    updateFile(contacts)
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -29,7 +20,7 @@ const addContact = async (req, res) => {
       },
     })
   } catch (error) {
-    throw (error)
+    next(error)
   }
 }
 

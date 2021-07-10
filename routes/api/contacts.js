@@ -12,6 +12,8 @@ router.post('/', express.json(), ctrl.addContact)
 
 router.put('/:contactId', express.json(), ctrl.updateContact)
 
+router.patch('/:contactId/favorite', express.json(), ctrl.updateStatus)
+
 router.delete('/:contactId', ctrl.removeContact)
 
 module.exports = router

@@ -1,17 +1,19 @@
-const contacts = require('../../model/contacts.json')
+const { contacts: service } = require('../../services')
 
-const removeContact = (req, res) => {
+const removeContact = async(req, res, next) => {
   const { contactId } = req.params
-  const index = contacts.findIndex((item) => item.id === Number(contactId))
-  const deleteContacts = contacts[index]
-  contacts.splice(index, 1)
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result: deleteContacts,
-    },
-  })
+  try {
+    const result = await service.del(contactId)
+    res.status(201).json({
+      status: 'success',
+      code: 201,
+      data: {
+        result
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
 }
 
 module.exports = removeContact
