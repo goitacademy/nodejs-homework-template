@@ -4,8 +4,7 @@ import cors from 'cors';
 
 import contactsRouter from './routes/api/contactsRouter.js';
 import authRouter from './routes/api/authRouter.js';
-import filesRouter from './routes/api/filesRouter.js';
-
+import { filesRouter } from './routes/api/filesRouter.js';
 import { errorHandler } from './helpers/apiHelpers.js';
 
 const app = express();
@@ -24,8 +23,5 @@ app.use(errorHandler);
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' });
 });
-// app.use((err, req, res, next) => {
-//     res.status(err.status).json({ message: err.message });
-// });
 
 export default app;

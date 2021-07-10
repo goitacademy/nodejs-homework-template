@@ -1,5 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import fs from 'fs/promises';
+import path from 'path';
+import jimp from 'jimp';
 import User from '../db/userModel.js';
 import {
     RegistrationConflictError,
@@ -56,4 +59,33 @@ const currentUser = async userId => {
     );
 };
 
-export { register, login, logout, currentUser };
+const changeAvatar = async (userId, token, avatarImg) => {
+    const AVATARS_PATH = path.resolve('public/avatars');
+    const img = await jimp.read(avatarImg.path);
+    await img
+        .autocrop()
+        .cover(
+            250,
+            250,
+            jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE,
+        )
+        .writeAsync(avatarImg.path);
+    await fs.rename(
+        avatarImg.path,
+        path.join(AVATARS_PATH, avatarImg.filename),
+    );
+    await User.findOneAndUpdate(
+        {
+            _id: userId,
+            token,
+        },
+        {
+            $set: {
+                avatarURL: `http://localhost:3001/public/avatars/${avatarImg.filename}`,
+            },
+        },
+    );
+    return `http://localhost:3001/public/avatars/${avatarImg.filename}`;
+};
+
+export { register, login, logout, currentUser, changeAvatar };

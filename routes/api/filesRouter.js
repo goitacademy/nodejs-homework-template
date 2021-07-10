@@ -1,18 +1,12 @@
 import express from 'express';
 import multer from 'multer';
-import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
-import filesController from '../../controllers/filesController.js';
-import { authValidation } from '../../middlewares/validationMiddleware.js';
+import uploadController from '../../controllers/uploadController.js';
 import { asyncWrapper } from '../../helpers/apiHelpers.js';
-import authMiddleware from '../../middlewares/authMiddleware.js';
 
-const FILE_DIR = path.resolve('public');
+const FILE_DIR = path.resolve('tmp');
 
 const filesRouter = new express.Router();
 const storage = multer.diskStorage({
@@ -27,12 +21,10 @@ const storage = multer.diskStorage({
 
 const uploadMiddleware = multer({ storage });
 
-filesRouter
-    .post(
-        '/upload',
-        [uploadMiddleware.single('avatar')],
-        asyncWrapper(filesController),
-    )
-    .use('/download', express.static('public'));
+filesRouter.post(
+    '/upload',
+    [uploadMiddleware.single('avatar')],
+    asyncWrapper(uploadController),
+);
 
-export default filesRouter;
+export { filesRouter, uploadMiddleware };
