@@ -22,5 +22,6 @@ router.post(
   uploadMiddleware.single('avatar'),
   asyncWrapper(uploadController),
 )
+router.use('/', express.static(AVATARS_DIR))
 
 module.exports = router

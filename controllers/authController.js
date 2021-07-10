@@ -2,6 +2,7 @@ const {
   registration,
   login,
   logout,
+  changeAvatar,
   getUsersService,
 } = require('../dbServices/authService')
 const registrationController = async (req, res) => {
@@ -24,6 +25,13 @@ const logoutController = async (req, res) => {
   const nullToken = await logout(token)
   res.status(200).json({ token: nullToken })
 }
+const avatarController = async (req, res) => {
+  const { avatarURL } = req.body
+  const token = req.token
+  // const [, token] = req.headers.authorisation.split(' ')
+  await changeAvatar(avatarURL, token)
+  res.status(200).json({ avatarURL })
+}
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await getUsersService()
@@ -36,5 +44,6 @@ module.exports = {
   registrationController,
   loginController,
   logoutController,
+  avatarController,
   getAllUsers,
 }

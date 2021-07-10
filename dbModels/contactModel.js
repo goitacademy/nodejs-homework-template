@@ -19,10 +19,6 @@ const contactsSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Set id of user'],
   },
-  //   owner: {
-  //     type: SchemaTypes.ObjectId,
-  //     ref: 'user',
-  //   },
 })
 const Contact = mongoose.model('Contact', contactsSchema)
 
