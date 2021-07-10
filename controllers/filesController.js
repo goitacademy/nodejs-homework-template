@@ -7,7 +7,7 @@ const Jimp = require('jimp')
 const uploadController = async (req, res) => {
   Jimp.read(`${UPLOADS_DIR}/${req.fileName}`)
     .then(avatar => {
-      avatar.resize(256, 256)
+      avatar.resize(250, 250)
     })
     .catch(err => {
       throw err
