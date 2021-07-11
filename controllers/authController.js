@@ -3,7 +3,9 @@ import {
     login,
     logout,
     currentUser,
+    changeAvatar,
 } from '../services/authService.js';
+import { WrongParametersError } from '../helpers/error.js';
 
 const registerController = async (req, res) => {
     const { email, password } = req.body;
@@ -29,9 +31,18 @@ const currentUserController = async (req, res) => {
     res.status(200).json(user);
 };
 
+const changeAvatarController = async (req, res) => {
+    if (!req.file) {
+        throw new WrongParametersError('Please, choose a file first!');
+    }
+    const avatarURL = await changeAvatar(req.user._id, req.token, req.file);
+    res.status(200).json({ message: avatarURL });
+};
+
 export {
     registerController,
     loginController,
     logoutController,
     currentUserController,
+    changeAvatarController,
 };
