@@ -2,8 +2,18 @@ const { User } = require('../dbModels/userModel')
 const bcrypt = require('bcrypt')
 const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const registration = async (password, email, subscription) => {
+  const msg = {
+    to: email,
+    from: 'peacefilip1989@example.com', // Use the email address or domain you verified above
+    subject: 'Sending with Twilio SendGrid is Fun',
+    text: 'and easy to do anywhere, even with Node.js',
+    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  }
+  await sgMail.send(msg)
   const avatarURL = gravatar.url(email)
 
   const user = new User({
