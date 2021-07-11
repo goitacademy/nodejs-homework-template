@@ -1,6 +1,8 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config()
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -22,13 +24,25 @@ app.use((req, res, next) => {
   })
 })
 
-app.use((err, req, res, next) => {
-  err.status = err.status ? err.status : 500
-  res.status(err.status).json({
-    status: err.status === 500 ? 'fail' : 'error',
-    code: err.status,
-    message: err.message
+app.use((error, _, res, __) => {
+  const { code = 500, message = 'Server error' } = error
+  res.status(code).json({
+    status: 'fail',
+    code,
+    message,
   })
 })
 
-module.exports = app
+const { DB_HOST, PORT = 3000 } = process.env
+
+mongoose
+  .connect(DB_HOST, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(async () => {
+    app.listen(PORT)
+    console.log(`Server running. Use our API on port: ${PORT}`)
+  })
+  .catch((error) => console.log(`Server not running. Error message: ${error.message}`))
