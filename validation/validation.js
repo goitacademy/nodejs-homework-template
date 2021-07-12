@@ -57,6 +57,15 @@ const schemaUpdateUserSubscription = Joi.object({
     .required(),
 });
 
+const schemaResendVerificationEmail = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: false },
+    })
+    .required(),
+});
+
 const validate = (schema, body, next) => {
   if (Object.keys(body).length === 0) {
     return next({ status: HttpCode.BAD_REQUEST, message: 'missing fields' })
@@ -109,6 +118,15 @@ const validateUpdateUserSubscription = (req, res, next) => {
   return validate(schemaUpdateUserSubscription, req.body, next);
 };
 
+const validateResendVerificationEmail = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    return next(
+      new CustomError(statusCode.BAD_REQUEST, 'missing required field email')
+    );
+  }
+  return validate(schemaResendVerificationEmail, req.body, next);
+};
+
 module.exports = {
   validateCreateContact,
   validateUpdateContact,
@@ -116,4 +134,5 @@ module.exports = {
   validateObjectId,
   validateCreateUser,
   validateUpdateUserSubscription,
+  validateResendVerificationEmail
 }

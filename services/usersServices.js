@@ -13,7 +13,9 @@ const {
   updateToken,
   createUser,
   updateUserById
-} = require('../model/users')
+} = require('../model/users');
+
+const { sendVerifyEmail } = require('./email');
 
 const signup = async ({ email, password }) => {
   const user = await findUserByEmail(email);
@@ -21,12 +23,17 @@ const signup = async ({ email, password }) => {
     throw new CustomError(HttpCode.CONFLICT, 'This email is already use');
   }
   const newUser = await createUser(email, password);
+  const { verifyToken } = newUser;
+  sendVerifyEmail(email, verifyToken);
   return newUser;
 };
 
 const login = async ({ email, password }) => {
   const user = await findUserByEmail(email);
   const isValidPassword = await user?.validPassword(password);
+  if (!user.verify) {
+    throw new CustomError(statusCode.UNAUTHORIZED, 'Invalid credentials');
+  }
   if (!user || !isValidPassword) {
     throw new CustomError(
       HttpCode.UNAUTHORIZED,
@@ -68,11 +75,25 @@ const saveUserAvatar = async (file, avatar) => {
   return path.join(process.env.AVATARS_FOLDER, newAvatar).replace('\\', '/');
 };
 
+const resendVerificationToken = async email => {
+  const user = await getUserByEmail(email);
+  if (user.verify) {
+    throw new CustomError(
+      statusCode.BAD_REQUEST,
+      'Verification has already been passed'
+    );
+  }
+  console.log(user);
+  const { verifyToken } = user;
+  sendVerifyEmail(email, verifyToken);
+};
+
 module.exports = {
   signup,
   login,
   logout,
   getCurrent,
   updateUser,
-  saveUserAvatar
+  saveUserAvatar,
+  resendVerificationToken
 }

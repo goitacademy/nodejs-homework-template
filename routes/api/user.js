@@ -9,12 +9,15 @@ const {
   logoutController,
   getCurrentUserController,
   updateUserSubscriptionController,
-  updateUserAvatarController
+  updateUserAvatarController,
+  verificationUserTokenController,
+  resendVerificationTokenController
 } = require('../../controllers/users');
 
 const {
   validateCreateUser,
   validateUpdateUserSubscription,
+  validateResendVerificationEmail
 } = require('../../validation/validation');
 
 
@@ -26,7 +29,18 @@ router.post('/login', validateCreateUser, asyncWrapper(loginController));
 
 router.post('/logout', asyncWrapper(logoutController));
 
+router.post(
+  '/verify',
+  validateResendVerificationEmail,
+  asyncWrapper(resendVerificationTokenController)
+);
+
 router.get('/current', authGuard, asyncWrapper(getCurrentUserController));
+
+router.get(
+  '/verify/:verificationToken',
+  asyncWrapper(verificationUserTokenController)
+);
 
 router.patch(
   '/subscription',

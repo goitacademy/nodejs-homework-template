@@ -1,4 +1,5 @@
-const { HttpCode } = require('../helpers/constants')
+const { HttpCode } = require('../helpers/constants');
+const { updateVerifyToken, getUserByVerifyToken } = require('../model/users');
 
 const {
   signup,
@@ -6,7 +7,8 @@ const {
   logout,
   getCurrent,
   updateUser,
-  saveUserAvatar
+  saveUserAvatar,
+  resendVerificationToken
 } = require('../services/usersServices');
 
 const signupController = async (req, res, next) => {
@@ -65,11 +67,28 @@ const updateUserAvatarController = async (req, res) => {
   res.json({ avatarURL });
 };
 
+const verificationUserTokenController = async (req, res) => {
+  const verifyToken = req.params.verificationToken;
+  const verifiedUser = await getUserByVerifyToken(verifyToken);
+  await updateVerifyToken(verifiedUser._id, true, null);
+  res.status(statusCode.OK).json({ message: 'Verification successful' });
+};
+
+const resendVerificationTokenController = async (req, res) => {
+  const { email } = req.body;
+  await resendVerificationToken(email);
+  res.status(statusCode.OK).json({
+    message: 'Verification email sent',
+  });
+};
+
 module.exports = {
   signupController,
   loginController,
   logoutController,
   getCurrentUserController,
   updateUserSubscriptionController,
-  updateUserAvatarController
+  updateUserAvatarController,
+  verificationUserTokenController,
+  resendVerificationTokenController
 }

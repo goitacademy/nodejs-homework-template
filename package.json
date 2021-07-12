@@ -20,9 +20,11 @@
     "jimp": "^0.16.1",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.15",
     "mongoose": "^5.12.15",
     "morgan": "1.10.0",
     "multer": "^1.4.2",
+    "nodemailer": "^6.6.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "uuidv4": "^6.2.10"

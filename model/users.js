@@ -1,5 +1,5 @@
+const { uuid } = require('uuidv4');
 const { User } = require('../schemas/userModel');
-
 const findUserByEmail = async email => {
   return await User.findOne({ email });
 };
@@ -9,7 +9,8 @@ const updateToken = async ({ contactId, token }) => {
 }
 
 const createUser = async (email, password) => {
-  const user = new User({ email, password });
+  const verifyToken = uuidv();
+  const user = new User({ email, password, verifyToken });
   return await user.save();
 };
 
@@ -33,10 +34,23 @@ const updateAvatar = async (userId, file, avatar, cb) => {
   return avatarURL;
 };
 
+const getUserByVerifyToken = async verifyToken => {
+  const verifiedUser = await User.findOne({ verifyToken });
+  if (!verifiedUser) {
+    throw new CustomError(statusCode.NOT_FOUND, 'User not found');
+  }
+  return verifiedUser;
+};
+
+const updateVerifyToken = async (userId, verify, verifyToken) =>
+  await User.findByIdAndUpdate(userId, { verify, verifyToken }, { new: true });
+
 module.exports = {
   findUserByEmail,
   updateToken,
   createUser,
   updateUserById,
-  updateAvatar
+  updateAvatar,
+  getUserByVerifyToken,
+  updateVerifyToken
 }
