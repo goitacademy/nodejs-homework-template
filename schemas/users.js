@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 const SALT_FACTOR = 6
 const { Schema } = mongoose
 
@@ -23,6 +24,16 @@ const userSchema = new Schema({
     default: 'starter'
   },
   token: {
+    type: String,
+    default: null,
+  },
+  avatarURL: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: '250' }, true)
+    },
+  },
+  idCloudAvatar: {
     type: String,
     default: null,
   },

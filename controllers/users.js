@@ -21,6 +21,7 @@ const signup = async (req, res, next) => {
       data: {
         id: newUser.id,
         email: newUser.email,
+        avatar: newUser.avatarURL,
       },
     })
   } catch (error) {
@@ -91,10 +92,20 @@ const subscription = async (req, res, next) => {
   }
 }
 
+const avatars = async (req, res, next) => {
+  const id = req.user.id
+  const pathFile = req.file.path
+  const url = await serviceUser.updateAvatar(id, pathFile)
+  return res
+    .status(HttpCode.OK)
+    .json({ status: 'success', code: HttpCode.OK, avatarUrl: url })
+}
+
 module.exports = {
   signup,
   login,
   logout,
   current,
-  subscription
+  subscription,
+  avatars
 }

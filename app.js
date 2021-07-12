@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 const { HttpCode } = require('./helpers/constants')
@@ -15,6 +16,7 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json({ limit: jsonLimit }))
 
+app.use(express.static(path.join(__dirname, '/public')))
 app.use(
   '/api/',
   rateLimit({
