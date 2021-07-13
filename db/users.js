@@ -1,7 +1,7 @@
 const User = require('../db/Shemas/usersModel')
 
 const findUserByEmail = async email => {
-  return await User.findOne({ email })
+  return await User.findOne({ email, verify: true })
 }
 
 const addUser = async options => {

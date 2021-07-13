@@ -5,13 +5,14 @@ const path = require('path')
 const { findUserByEmail, updateToken } = require('../db/users')
 const { IMAGE_DIR } = require('../helpers/contactsHelper')
 const User = require('../db/Shemas/usersModel')
+const { sendEmail } = require('../services/serviceEmail')
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 const login = async ({ email, password }) => {
   const user = await findUserByEmail(email)
 
-  if (!user || !(await user.validPassword(password))) {
+  if (!user || !((await user.validPassword(password)) || user.verify)) {
     return null
   }
   const id = user.id
@@ -61,8 +62,28 @@ const changeUserAvatar = async (req, uploadDir) => {
   )
   return updatedUser.avatarURL
 }
+
+const verifyUser = async ({ token }) => {
+  const user = await User.findOne({ verifyToken: token })
+  if (user) {
+    await user.updateOne({ verify: true, verifyToken: null })
+    return true
+  }
+  return false
+}
+
+const reVerifyUser = async email => {
+  const user = await User.findOne({ email, verify: false })
+
+  if (user) {
+    await sendEmail(user.verifyToken, email)
+    return true
+  }
+}
 module.exports = {
   login,
   logout,
   uploadAvatar,
+  verifyUser,
+  reVerifyUser,
 }

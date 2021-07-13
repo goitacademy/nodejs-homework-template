@@ -1,6 +1,14 @@
+// const sgMail = require('@sendgrid/mail')
 const { findUserByEmail, addUser } = require('../db/users')
-const { login, logout, uploadAvatar } = require('../services/serviceUsers')
+const {
+  login,
+  logout,
+  uploadAvatar,
+  verifyUser,
+  reVerifyUser,
+} = require('../services/serviceUsers')
 require('dotenv').config()
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const registration = async (req, res) => {
   const user = await findUserByEmail(req.body.email)
@@ -41,10 +49,34 @@ const setAvatar = async (req, res, next) => {
   res.status(200).json({ avatarUrl })
 }
 
+const verify = async (req, res, next) => {
+  try {
+    const result = await verifyUser(req.params)
+    if (result) {
+      return res.status(200).json({ message: 'Verification successful' })
+    }
+    return res.status(404).json({ message: 'Inavlid token' })
+  } catch (error) {}
+}
+
+const reVerify = async (req, res) => {
+  const result = await reVerifyUser(req.body.email)
+
+  if (result) {
+    return res
+      .status(200)
+      .json({ message: 'Email with verification has been sent' })
+  }
+
+  res.status(400).json({ message: 'Verification has already been passed' })
+}
+
 module.exports = {
   registration,
   logIn,
   logOut,
   findCurrentUser,
   setAvatar,
+  verify,
+  reVerify,
 }
