@@ -101,11 +101,59 @@ const avatars = async (req, res, next) => {
     .json({ status: 'success', code: HttpCode.OK, avatarUrl: url })
 }
 
+const verify = async (req, res, next) => {
+  try {
+    const result = await serviceUser.verify(req.params)
+    if (result) {
+      return res.status(HttpCode.OK).json({
+        status: 'success',
+        code: HttpCode.OK,
+        data: {
+          message: 'Verification successful',
+        },
+      })
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message:
+          'Your verification token is not valid. Contact with administration',
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+const reVerification = async (req, res, next) => {
+  try {
+    const result = await serviceUser.reVerify(req.body.email)
+
+    if (result) {
+      return res.status(HttpCode.OK).json({
+        status: 'success',
+        code: HttpCode.OK,
+        data: {
+          message: 'verification email sent successfully',
+        },
+      })
+    } else {
+      return next({
+        status: HttpCode.BAD_REQUEST,
+        message: 'Verification has been passed',
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   signup,
   login,
   logout,
   current,
   subscription,
-  avatars
+  avatars,
+  verify,
+  reVerification
 }
