@@ -4,6 +4,8 @@ import {
     logout,
     currentUser,
     changeAvatar,
+    emailVerification,
+    emailVerificationRepeat,
 } from '../services/authService.js';
 import { WrongParametersError } from '../helpers/error.js';
 
@@ -39,10 +41,22 @@ const changeAvatarController = async (req, res) => {
     res.status(200).json({ message: avatarURL });
 };
 
+const emailVerificationController = async (req, res) => {
+    await emailVerification(req.params.verificationToken);
+    res.status(200).json({ message: 'Verification successful' });
+};
+const emailVerificationRepeatController = async (req, res) => {
+    const { email } = req.body;
+    await emailVerificationRepeat(email);
+    res.status(200).json({ message: 'Verification email sent' });
+};
+
 export {
     registerController,
     loginController,
     logoutController,
     currentUserController,
     changeAvatarController,
+    emailVerificationController,
+    emailVerificationRepeatController,
 };

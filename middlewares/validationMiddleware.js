@@ -42,9 +42,17 @@ const authValidation = (req, res, next) => {
     isValid(schema, req, res, next);
 };
 
+const verifyEmailValidation = (req, res, next) => {
+    const schema = Joi.object({
+        email: Joi.string().email({ minDomainSegments: 2 }).required(),
+    });
+    isValid(schema, req, res, next);
+};
+
 export {
     addContactValidation,
     updateContactValidation,
     updateStatusContactValidation,
     authValidation,
+    verifyEmailValidation,
 };

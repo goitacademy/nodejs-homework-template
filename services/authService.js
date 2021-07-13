@@ -3,11 +3,17 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
 import jimp from 'jimp';
+import { v4 as uuidv4 } from 'uuid';
+import sgMail from '@sendgrid/mail';
 import User from '../db/userModel.js';
 import {
     RegistrationConflictError,
     NotAuthorizedError,
+    NoSuchUserError,
+    WrongParametersError,
 } from '../helpers/error.js';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const register = async (email, password) => {
     const emailConflict = await User.findOne({ email }, { email: 1, _id: 0 });
@@ -17,15 +23,27 @@ const register = async (email, password) => {
     const newUser = new User({
         email,
         password,
+        verifyToken: uuidv4(),
     });
     await newUser.save();
+
+    const msg = {
+        to: email,
+        from: 'dr.mashura@gmail.com',
+        subject: 'Thank you for registration',
+        text: 'Now check e-mail to verify your account',
+        html: `<strong>click on localhost:3001/api/users/verify/${newUser.verifyToken}`,
+    };
+
+    await sgMail.send(msg);
+
     return {
         user: { email: newUser.email, subscription: newUser.subscription },
     };
 };
 
 const login = async (email, password) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, verify: true });
     if (!user) {
         throw new NotAuthorizedError('Wrong email or password');
     }
@@ -88,4 +106,46 @@ const changeAvatar = async (userId, token, avatarImg) => {
     return `http://localhost:3001/public/avatars/${avatarImg.filename}`;
 };
 
-export { register, login, logout, currentUser, changeAvatar };
+const emailVerification = async verificationToken => {
+    if (!(await User.findOne({ verifyToken: verificationToken }))) {
+        throw new NoSuchUserError('User not found');
+    }
+    await User.findOneAndUpdate(
+        {
+            verifyToken: verificationToken,
+            verify: false,
+        },
+        {
+            $set: {
+                verify: true,
+                verifyToken: null,
+            },
+        },
+    );
+};
+
+const emailVerificationRepeat = async email => {
+    if (await User.findOne({ email, verify: true })) {
+        throw new WrongParametersError('Verification has already been passed');
+    }
+    const user = await User.findOne({ email, verify: false });
+    const msg = {
+        to: user.email,
+        from: 'dr.mashura@gmail.com',
+        subject: 'Thank you for registration',
+        text: 'Now check e-mail to verify your account',
+        html: `<strong>click on localhost:3001/api/users/verify/${user.verifyToken}`,
+    };
+
+    await sgMail.send(msg);
+};
+
+export {
+    register,
+    login,
+    logout,
+    currentUser,
+    changeAvatar,
+    emailVerification,
+    emailVerificationRepeat,
+};

@@ -5,8 +5,13 @@ import {
     currentUserController,
     logoutController,
     changeAvatarController,
+    emailVerificationController,
+    emailVerificationRepeatController,
 } from '../../controllers/authController.js';
-import { authValidation } from '../../middlewares/validationMiddleware.js';
+import {
+    authValidation,
+    verifyEmailValidation,
+} from '../../middlewares/validationMiddleware.js';
 import { asyncWrapper } from '../../helpers/apiHelpers.js';
 import authMiddleware from '../../middlewares/authMiddleware.js';
 import { uploadMiddleware } from './filesRouter.js';
@@ -21,6 +26,15 @@ authRouter
         '/avatars',
         [authMiddleware, uploadMiddleware.single('avatar')],
         asyncWrapper(changeAvatarController),
+    )
+    .get(
+        '/verify/:verificationToken',
+        asyncWrapper(emailVerificationController),
+    )
+    .post(
+        '/verify',
+        verifyEmailValidation,
+        asyncWrapper(emailVerificationRepeatController),
     );
 
 export default authRouter;

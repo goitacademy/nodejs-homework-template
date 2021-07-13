@@ -15,7 +15,7 @@ class ValidationError extends CustomError {
 class RegistrationConflictError extends CustomError {
     constructor(message) {
         super(message);
-        this.status = 409
+        this.status = 409;
     }
 }
 
@@ -32,10 +32,18 @@ class NotAuthorizedError extends CustomError {
         this.status = 401;
     }
 }
+class NoSuchUserError extends CustomError {
+    constructor(message) {
+        super(message);
+        this.status = 404;
+    }
+}
+
 export {
     CustomError,
     ValidationError,
     RegistrationConflictError,
     WrongParametersError,
     NotAuthorizedError,
+    NoSuchUserError,
 };
