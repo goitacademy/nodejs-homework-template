@@ -4,6 +4,7 @@ const {
   logout,
   changeAvatar,
   getUsersService,
+  verificationService,
 } = require('../dbServices/authService')
 const registrationController = async (req, res) => {
   const { password, email, subscription } = req.body
@@ -40,10 +41,15 @@ const getAllUsers = async (req, res) => {
     console.error(err)
   }
 }
+const virifyController = async (req, res) => {
+  await verificationService(req, res)
+}
+
 module.exports = {
   registrationController,
   loginController,
   logoutController,
   avatarController,
+  virifyController,
   getAllUsers,
 }

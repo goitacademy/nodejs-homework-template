@@ -6,14 +6,6 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const registration = async (password, email, subscription) => {
-  const msg = {
-    to: email,
-    from: 'peacefilip1989@example.com', // Use the email address or domain you verified above
-    subject: 'Sending with Twilio SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-  }
-  await sgMail.send(msg)
   const avatarURL = gravatar.url(email)
 
   const user = new User({
@@ -24,6 +16,14 @@ const registration = async (password, email, subscription) => {
   })
 
   await user.save()
+  const msg = {
+    to: email,
+    from: 'filiprulls2021@gmail.com', // Use the email address or domain you verified above
+    subject: 'First Greeting',
+    text: 'and easy to do anywhere, even with Node.js',
+    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  }
+  await sgMail.send(msg)
 }
 const login = async (email, password) => {
   let user = await User.findOne({
@@ -74,4 +74,15 @@ const getUsersService = async () => {
   const users = await User.find({})
   return users
 }
-module.exports = { registration, login, logout, changeAvatar, getUsersService }
+const verificationService = async (req, res) => {
+  // const token = req.params.verificationtoken
+}
+
+module.exports = {
+  registration,
+  login,
+  logout,
+  changeAvatar,
+  verificationService,
+  getUsersService,
+}
