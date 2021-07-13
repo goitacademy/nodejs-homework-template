@@ -9,7 +9,6 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.4.5",
     "bcrypt": "^5.0.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -22,6 +21,7 @@
     "mongoose": "^5.12.14",
     "morgan": "1.10.0",
     "multer": "^1.4.2",
+    "nodemailer": "^6.6.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
