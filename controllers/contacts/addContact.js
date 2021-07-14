@@ -1,5 +1,5 @@
 const { contacts: service } = require('../../services')
-const { createContactSchema } = require('../../utils/validateSchemas')
+const { createContactSchema } = require('../../utils/validateContactsSchemas')
 
 const addContact = async (req, res, next) => {
     const { body } = req

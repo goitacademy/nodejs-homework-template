@@ -1,6 +1,6 @@
 const { contacts: service } = require('../../services')
 const mongoose = require('mongoose')
-const { updateContactSchema } = require('../../utils/validateSchemas')
+const { updateContactSchema } = require('../../utils/validateContactsSchemas')
 
 const updateContact = async (req, res, next) => {
     const { id } = req.params

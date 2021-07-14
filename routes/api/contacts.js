@@ -1,17 +1,18 @@
 const express = require('express')
 const router = express.Router()
+const useAuth = require('./useAuth')
 const { contacts: ctrl } = require('../../controllers')
 
-router.get('/', ctrl.getAllContacts)
+router.get('/', useAuth, ctrl.getAllContacts)
 
-router.get('/:id', ctrl.getOneContact)
+router.get('/:id', useAuth, ctrl.getOneContact)
 
-router.post('/', express.json(), ctrl.addContact)
+router.post('/', express.json(), useAuth, ctrl.addContact)
 
-router.put('/:id', express.json(), ctrl.updateContact)
+router.put('/:id', express.json(), useAuth, ctrl.updateContact)
 
-router.patch('/:id/favorite', express.json(), ctrl.updateFavorite)
+router.patch('/:id/favorite', express.json(), useAuth, ctrl.updateFavorite)
 
-router.delete('/:id', ctrl.deleteContact)
+router.delete('/:id', useAuth, ctrl.deleteContact)
 
 module.exports = router

@@ -1,5 +1,5 @@
 const { contacts: service } = require('../../services')
-const { updateFavoriteSchema } = require('../../utils/validateSchemas')
+const { updateFavoriteSchema } = require('../../utils/validateContactsSchemas')
 const mongoose = require('mongoose')
 
 const updateFavorite = async (req, res, next) => {
