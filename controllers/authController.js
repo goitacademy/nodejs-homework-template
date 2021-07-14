@@ -42,7 +42,11 @@ const getAllUsers = async (req, res) => {
   }
 }
 const virifyController = async (req, res) => {
-  await verificationService(req, res)
+  const user = await verificationService(req)
+  if (user === null) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+  res.json({ message: 'Verification successful' })
 }
 
 module.exports = {

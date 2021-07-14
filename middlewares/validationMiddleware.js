@@ -31,7 +31,7 @@ const validateFavoriteStatus = async (req, res, next) => {
 const validateUser = async (req, res, next) => {
   const schema = Joi.object({
     password: Joi.string().min(6).max(30).required(),
-    email: Joi.string().email().required().max(30),
+    email: Joi.string().email().required().max(50),
   })
 
   const validationResult = schema.validate(req.body)
