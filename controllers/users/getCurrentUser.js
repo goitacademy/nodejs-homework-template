@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-const { users: service } = require('../../services')
+// const { users: service } = require('../../services')
 
 const getCurrentUser = async (req, res, next) => {
-    const { email } = req.body
+    // const { email } = req.body
     try {
         res.json({
             status: 'success',

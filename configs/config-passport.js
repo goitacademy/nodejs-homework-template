@@ -9,7 +9,7 @@ const { TOKEN_KEY } = process.env
 
 const settings = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretKey: TOKEN_KEY
+    secretOrKey: TOKEN_KEY
 }
 
 passport.use(

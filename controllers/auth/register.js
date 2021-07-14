@@ -8,7 +8,7 @@ const register = async (req, res, next) => {
     try {
         const result = await service.getOne({ email })
         if (result) {
-            return req.status(409).json({
+            return res.status(409).json({
                 status: 'error',
                 code: 409,
                 message: 'This user is already registered'

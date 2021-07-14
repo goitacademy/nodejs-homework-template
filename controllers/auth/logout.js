@@ -1,4 +1,4 @@
-const { users: service } = require("../../services")
+const { users: service } = require('../../services')
 
 const logout = async (req, res, next) => {
     const { user } = req

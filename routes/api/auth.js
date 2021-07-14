@@ -6,10 +6,10 @@ const useAuth = require('./useAuth')
 
 const router = express.Router()
 
-router.post('/users/signup', express.json(), ctrl.register)
+router.post('/signup', express.json(), ctrl.register)
 
-router.post('/users/login', express.json(), ctrl.login)
+router.post('/login', express.json(), ctrl.login)
 
-router.post('/users/logout', useAuth, ctrl.logout)
+router.post('/logout', useAuth, ctrl.logout)
 
 module.exports = router

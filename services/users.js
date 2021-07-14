@@ -15,12 +15,12 @@ const add = ({ email, password }) => {
 }
 
 const update = (id, data) => {
-    User.findByIdAndUpdate(id, data);
+    User.findByIdAndUpdate(id, data)
 }
 
 module.exports = {
     getOne,
     getById,
     add,
-    update
+    update,
 }

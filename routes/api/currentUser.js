@@ -6,6 +6,6 @@ const { users: ctrl } = require('../../controllers')
 
 const router = express.Router()
 
-router.get('/users/current', useAuth, ctrl.getCurrentUser)
+router.get('/current', useAuth, ctrl.getCurrentUser)
 
 module.exports = router
