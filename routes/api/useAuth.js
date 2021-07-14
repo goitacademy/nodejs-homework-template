@@ -6,7 +6,7 @@ const useAuth = (req, res, next) => {
             return res.status(401).json({
                 status: 'error',
                 code: 401,
-                message: "Not authorized"
+                message: 'Not authorized'
             })
         }
         req.user = user

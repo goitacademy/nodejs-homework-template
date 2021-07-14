@@ -4,6 +4,7 @@ require('dotenv').config()
 const { user: service } = require('../../services')
 
 const login = async (req, res, next) => {
+
     const { email, password } = req.body
 
     try {
@@ -27,7 +28,7 @@ const login = async (req, res, next) => {
                 token,
                 user: {
                     email,
-                    password
+                    subscription: 'starter'
                 }
             }
         })

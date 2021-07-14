@@ -24,11 +24,12 @@ const register = async (req, res, next) => {
         res.status(201).json({
             status: 'success',
             code: 201,
-            message: "User is successfully added",
+            message: 'User is successfully added',
             data: {
+                token,
                 user: {
                     email,
-                    subscription: "starter",
+                    subscription: 'starter',
                 }
             }
         })
