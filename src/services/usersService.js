@@ -1,18 +1,18 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const gravatar = require('gravatar');
+
 const { Users } = require('../db/usersModel')
 const { NotAuthorizedError, RegistrationConflictError } = require('../helpers/errors')
 
 
 const signup = async ({ password, email, subscription }) => {
   const isEmailBooked = await Users.findOne({ email })
-
   if (isEmailBooked) {
     throw new RegistrationConflictError(`User with ${email} is already exists.`)
   }
-
-  const newUser = new Users({ password, email, subscription })
-  
+  const avatarURL = gravatar.url(email, {s: '250'}, true);
+  const newUser = new Users({ password, email, subscription, avatarURL })
   await newUser.save()
 }
 
@@ -43,22 +43,9 @@ const logout = async (userId) => {
   await Users.findByIdAndUpdate(userId , {$set: {token: null}})
 }
 
-const checkCurrentUser = async (authorization) => {
-  if (!authorization) {
-    throw new NotAuthorizedError("Please provide a token.")
-  }
-
-  const [tokenType, token] = authorization.split(" ")
-  if (tokenType !== 'Bearer') {
-    throw new NotAuthorizedError("Invalid token type.")
-  }
-
+const checkCurrentUser = async (token) => {
   const user = await Users.findOne({ token })
     .select({ password: 0, "__v": 0 })
-  
-  if (!user) {
-    throw new NotAuthorizedError("Invalid token.")
-  }
 
   return user
 }

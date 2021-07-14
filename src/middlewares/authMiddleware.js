@@ -9,18 +9,18 @@ const authMiddleware = async (req, res, next) => {
   }
 
   const [tokenType, token] = authorization.split(" ")
+
   if (tokenType !== 'Bearer') {
     next(new NotAuthorizedError("Invalid token type."))
   }
   
-  try { 
-    const { _id } = jwt.decode(token, process.env.JWT_SECRET)
-  
-    const user = await Users.findOne({token})
+  const user = await Users.findOne({token})
     if (!user) {
       next(new NotAuthorizedError("Invalid token."))
     }
-      
+
+  try { 
+    const { _id } = jwt.decode(token, process.env.JWT_SECRET)
     req.userId = _id
     req.token = token
     next()
