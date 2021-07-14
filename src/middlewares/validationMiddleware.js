@@ -67,5 +67,16 @@ module.exports = {
     const validationResult = schema.validate(req.body)
     notifyIfError(validationResult, next)
     next()
+  },
+
+  repeatedVerifyValidation: (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string()
+        .email()
+        .required()
+    })
+    const validationResult = schema.validate(req.body)
+    notifyIfError(validationResult, next)
+    next()
   }
 }

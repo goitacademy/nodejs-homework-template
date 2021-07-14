@@ -33,10 +33,26 @@ class RegistrationConflictError extends ClientError {
   }
 }
 
+class NotVarifiedError extends ClientError {
+  constructor(message) {
+    super(message)
+    this.status = 404;
+  }
+}
+
+class AlreadyVarifiedError extends ClientError {
+  constructor(message) {
+    super(message)
+    this.status = 400;
+  }
+}
+
 module.exports = {
   ClientError,
   ValidationError,
   WrongParametersError,
   NotAuthorizedError,
-  RegistrationConflictError
+  RegistrationConflictError,
+  NotVarifiedError,
+  AlreadyVarifiedError
 }

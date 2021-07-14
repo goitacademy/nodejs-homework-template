@@ -12,10 +12,12 @@ const {
   logoutController,
   currentUserController,
   switchSubscriptionController,
-  changeAvatarController
+  changeAvatarController,
+  verifyController,
+  repeatedVerifyController
 } = require('../controllers/usersController')
 
-const { userValidation } = require('../middlewares/validationMiddleware')
+const { userValidation, repeatedVerifyValidation} = require('../middlewares/validationMiddleware')
 const { authMiddleware } = require('../middlewares/authMiddleware')
 
 const AVATAR_TMP_DIR = path.resolve('./tmp')
@@ -36,5 +38,7 @@ router.post('/logout', authMiddleware, asyncWrapper(logoutController))
 router.get('/current', authMiddleware, asyncWrapper(currentUserController))
 router.patch('/', asyncWrapper(switchSubscriptionController))
 router.patch('/avatars', authMiddleware,  uploadMiddleware.single('avatar'), asyncWrapper(changeAvatarController))
+router.get('/verify/:verificationToken', asyncWrapper(verifyController))
+router.post('/verify', repeatedVerifyValidation, asyncWrapper(repeatedVerifyController))
 
 module.exports = { authRouter: router}

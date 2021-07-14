@@ -3,7 +3,9 @@ const {
   login,
   logout,
   checkCurrentUser,
-  switchSubscription
+  switchSubscription,
+  verify,
+  repeatedVerify
 } = require('../services/usersService')
 
 const { changeAvatar } = require('../services/avatarsService')
@@ -51,11 +53,25 @@ const changeAvatarController = async (req, res) => {
   res.json({ status: "success", avatarURL})
 }
 
+const verifyController = async (req, res) => {
+  const { verificationToken } = req.params
+  await verify(verificationToken)
+  res.json({ message: 'Verification successful'})
+}
+
+const repeatedVerifyController = async (req, res) => {
+  const { email } = req.body
+  await repeatedVerify(email)
+  res.json({ message: "Verification email sent"})
+}
+
 module.exports = {
   signupController,
   loginController,
   logoutController,
   currentUserController,
   switchSubscriptionController,
-  changeAvatarController
+  changeAvatarController,
+  verifyController,
+  repeatedVerifyController
 }
