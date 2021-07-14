@@ -12,5 +12,6 @@ router.post('/', ctrl.add)
 router.delete('/:contactId', ctrl.del)
 
 router.patch('/:contactId', ctrl.patch)
+router.patch('/:contactId/favorite', ctrl.patchFavorite)
 
 module.exports = router
