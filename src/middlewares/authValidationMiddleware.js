@@ -12,6 +12,7 @@ module.exports = {
         .required(),
       password: Joi.string().required(),
       subscription: Joi.string(),
+      avatarURL: Joi.string(),
       token: Joi.string().default(false),
     })
 

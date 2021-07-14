@@ -4,7 +4,7 @@ const {
   userRegistration,
   userLogin,
   userLogOut,
-  getCurrentUser,
+  updateAvatar,
 } = require('../services/authService')
 
 const registrationController = async (req, res) => {
@@ -35,11 +35,8 @@ const logOutController = async (req, res) => {
 }
 
 const getCurrentUserController = async (req, res) => {
-  const { _id: userId } = req.user
-
-  const user = await getCurrentUser(userId)
-
-  res.json({ status: 'success', user })
+  const { subscription, email } = req.user
+  res.json({ status: 'success', subscription, email })
 }
 
 const subscriptionController = async (req, res) => {
@@ -58,10 +55,25 @@ const subscriptionController = async (req, res) => {
   res.json({ status: 'success', updatedUser })
 }
 
+const updateAvatarController = async (req, res) => {
+  const { path: temporaryName, originalname } = req.file
+  const [, extension] = originalname.split('.')
+  const { _id } = req.user
+  const avatarURL = await updateAvatar(
+    temporaryName,
+    originalname,
+    _id,
+    extension,
+  )
+
+  res.json({ avatarURL, status: 'success' })
+}
+
 module.exports = {
   registrationController,
   loginController,
   logOutController,
   getCurrentUserController,
   subscriptionController,
+  updateAvatarController,
 }
