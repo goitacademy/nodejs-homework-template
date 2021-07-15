@@ -5,20 +5,23 @@ const {
   changeAvatar,
   getUsersService,
   verificationService,
+  verificationCheckService,
 } = require('../dbServices/authService')
 const registrationController = async (req, res) => {
   const { password, email, subscription } = req.body
 
   await registration(password, email, subscription)
-  res.status(201).json({ message: 'user added' })
+  res.status(201).json({ message: 'user added. Please verify by email' })
 }
 const loginController = async (req, res) => {
   const { password, email } = req.body
-  const token = await login(email, password)
-  if (token) {
-    res.status(200).json({ message: 'user login success', token })
-  } else {
+  const user = await login(email, password)
+  if (!user) {
     res.status(404).json({ message: 'user login error' })
+  } else if (!user.verify) {
+    res.status(400).json({ message: 'Please, verify user by email' })
+  } else if (user.token) {
+    res.status(200).json({ message: 'user login success', token: user.token })
   }
 }
 const logoutController = async (req, res) => {
@@ -48,6 +51,15 @@ const virifyController = async (req, res) => {
   }
   res.json({ message: 'Verification successful' })
 }
+const checkVerificationController = async (req, res) => {
+  const { email } = req.body
+  const check = await verificationCheckService(email)
+  if (!check) {
+    res.status(200).json({ message: 'Verification email has been sent again' })
+  } else {
+    res.status(400).json({ message: 'Verification has already been passed' })
+  }
+}
 
 module.exports = {
   registrationController,
@@ -55,5 +67,6 @@ module.exports = {
   logoutController,
   avatarController,
   virifyController,
+  checkVerificationController,
   getAllUsers,
 }

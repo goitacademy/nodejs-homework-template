@@ -3,7 +3,7 @@ const Joi = require('joi')
 const validationMiddleware = async (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
-    email: Joi.string().email().required().max(30),
+    email: Joi.string().email().required().max(50),
     phone: Joi.string().min(10).max(14).required(),
     favorite: Joi.boolean().optional(),
   })
@@ -41,5 +41,22 @@ const validateUser = async (req, res, next) => {
   }
   next()
 }
+const validateVerification = async (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().max(50),
+  })
 
-module.exports = { validationMiddleware, validateFavoriteStatus, validateUser }
+  const validationResult = schema.validate(req.body)
+  if (validationResult.error) {
+    await res.status(400).json({ message: 'missing required field email' })
+    return
+  }
+  next()
+}
+
+module.exports = {
+  validationMiddleware,
+  validateFavoriteStatus,
+  validateUser,
+  validateVerification,
+}
