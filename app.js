@@ -1,6 +1,9 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+// const path = require('path')
+// const fs = require('fs/promises')
+// const multer = require('multer')
 const mongoose = require('mongoose')
 const app = express()
 
@@ -17,7 +20,33 @@ app.use(express.json())
 
 app.use('/api/v1/contacts', api.contacts)
 app.use('/api/v1/auth', api.auth)
-app.use('/api/v1/users', api.currentUser)
+app.use('/api/v1/users', api.users)
+
+// const tempDir = path.join(process.cwd(), 'temp')
+// const uploadDir = path.join(process.cwd(), 'public', 'avatars')
+
+// app.patch('/users/avatars', upload.single('avatar'), async (req, res, next) => {
+//   const { path: tempPath, originalname } = req.file
+//   const fileName = path.join(uploadDir, originalname)
+
+//   try {
+//     const img = await jimp.read(tempPath)
+//     await img.autocrop().cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE).writeAsync(tempPath)
+//     await fs.rename(tempPath, fileName)
+//     res.json({
+//       status: 'success',
+//       code: 200,
+//       data: {
+//         result: {
+//           avatarURL: fileName
+//         }
+//       }
+//     })
+//   } catch (error) {
+//     await fs.unlink(tempPath)
+//     next(error)
+//   }
+// })
 
 app.use((_, res, __) => {
   res.status(404).json({

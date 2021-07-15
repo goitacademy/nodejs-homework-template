@@ -15,7 +15,11 @@ const add = ({ email, password }) => {
 }
 
 const update = (id, data) => {
-    User.findByIdAndUpdate(id, data)
+    return User.findByIdAndUpdate(id, data)
+}
+
+const updateAvatar = (id, avatar) => {
+    return User.updateOne({ _id: id }, { avatar })
 }
 
 module.exports = {
@@ -23,4 +27,5 @@ module.exports = {
     getById,
     add,
     update,
+    updateAvatar
 }

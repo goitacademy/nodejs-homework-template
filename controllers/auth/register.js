@@ -30,6 +30,7 @@ const register = async (req, res, next) => {
                 user: {
                     email,
                     subscription: 'starter',
+                    avatar: data.avatar
                 }
             }
         })
