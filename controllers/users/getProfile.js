@@ -1,41 +1,21 @@
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
-
-const { users: service } = require('../../services')
-
 const getProfile = async (req, res, next) => {
+  const { email } = req.body
   try {
-    const { SECRET_KEY } = process.env
-    const [, token] = req.headers.Authorization.split(' ')
-    const { id } = jwt.verify(token, SECRET_KEY)
-    const user = await service.getById(id)
     res.json({
       status: 'success',
       code: 200,
       data: {
-        result: user
+        email,
+        subscription: 'starter'
       }
     })
   } catch (error) {
-    res.status(403).json({
+    res.status(401).json({
       status: 'error',
-      code: 403,
-      message: 'Invalid token'
+      code: 401,
+      message: 'Not authorized'
     })
   }
 }
 
 module.exports = getProfile
-
-// const getProfile = async (req, res, next) => {
-//   const { password, ...userInfo } = req.user
-//   res.json({
-//     status: 'success',
-//     code: 200,
-//     data: {
-//       result: userInfo,
-//     },
-//   })
-// }
-
-// module.exports = getProfile

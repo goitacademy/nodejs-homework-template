@@ -10,6 +10,6 @@ router.post('/register', express.json(), ctrl.register)
 
 router.post('/login', express.json(), ctrl.login)
 
-router.get('/logout', useAuth, ctrl.logout)
+router.post('/logout', useAuth, ctrl.logout)
 
 module.exports = router

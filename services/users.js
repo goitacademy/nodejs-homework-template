@@ -14,8 +14,8 @@ const findById = (id) => {
   return User.findById(id)
 }
 
-const update = (id, user) => {
-  return User.FindByIdAndUpdate(id, user)
+const update = (id, data) => {
+  return User.findByIdAndUpdate(id, data)
 }
 
 module.exports = {

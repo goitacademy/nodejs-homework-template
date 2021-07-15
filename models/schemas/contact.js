@@ -1,4 +1,5 @@
-const { Schema, SchemaTypes } = require('mongoose')
+const mongoose = require('mongoose')
+const { Schema } = mongoose
 
 const contactSchema = Schema({
   name: {
@@ -19,7 +20,7 @@ const contactSchema = Schema({
     default: false,
   },
   owner: {
-    type: SchemaTypes.ObjectId,
+    type: mongoose.SchemaTypes.ObjectId,
     ref: 'user',
   }
 })
