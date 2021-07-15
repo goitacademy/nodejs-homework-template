@@ -1,27 +1,27 @@
-const contacts = require('../model/contacts.json')
-const updateJson = require('./updateJSON')
+const { Contact } = require('../service')
 
-const updateContact = async (req, res) => {
+const updateContact = async (req, res, next) => {
+  const { body } = req
   const { contactId } = req.params
-  // const { name, email, phone } = req.body
-  const index = contacts.findIndex(item => item.id === contactId)
-  if (index === -1) {
-    res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: 'Not found'
-    })
-    return
-  }
-  contacts[index] = { ...req.body, _id: contactId }
-  await res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result: contacts[index]
+  try {
+    const result = await Contact.findByIdAndUpdate(contactId, body, { new: true },)
+    if (!result) {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found',
+      })
     }
-  })
-  updateJson(contacts)
+    res.json({
+      status: 'success',
+      code: 201,
+      data: {
+        result,
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
 }
 
 module.exports = updateContact
