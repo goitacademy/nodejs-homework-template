@@ -4,7 +4,6 @@ const { nextTick } = require("process");
 const contacts = require("./contacts.json");
 
 const contactsPath = path.resolve(__dirname, './contacts.json');;
-//console.log(contactsPath);
 
 const listContacts = async () => {
   let list;
