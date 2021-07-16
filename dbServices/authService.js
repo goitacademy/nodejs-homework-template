@@ -25,8 +25,8 @@ const registration = async (password, email, subscription) => {
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: email,
-        pass: password,
+        user: 'cordia.wolff@ethereal.email',
+        pass: 'P5Bp1rWDZHhNbejZrd',
       },
       tls: {
         rejectUnauthorized: false,
@@ -34,7 +34,7 @@ const registration = async (password, email, subscription) => {
     })
 
     await transporter.sendMail({
-      from: 'peacefilip1989@gmail.com',
+      from: 'cordia.wolff@ethereal.email',
       to: email,
       subject: 'Verify your email  ✔',
       text: `Please confirm your email adress GET localhost:3001/api/users/verify/${verificationtoken}`,
@@ -106,9 +106,8 @@ const verificationService = async req => {
 }
 const verificationCheckService = async email => {
   const user = await User.findOne({ email })
-  const password = await bcrypt.compare(user.password, '10')
-  if (user.verfy) {
-    return user.verfy
+  if (user.verify) {
+    return user.verify
   } else {
     async function main() {
       const transporter = nodemailer.createTransport({
@@ -116,8 +115,8 @@ const verificationCheckService = async email => {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-          user: email,
-          pass: password,
+          user: 'cordia.wolff@ethereal.email',
+          pass: 'P5Bp1rWDZHhNbejZrd',
         },
         tls: {
           rejectUnauthorized: false,
