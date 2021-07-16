@@ -5,13 +5,9 @@ const updateStatusContact = async (req, res, next) => {
   const { body } = req;
 
   try {
-    const result = await Contact.findByIdAndUpdate(
-      { _id: contactId },
-      { favorite: !body.favorite },
-      {
-        new: true,
-      }
-    );
+    const result = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
     res.json({
       status: "success",
       code: 200,
@@ -23,4 +19,5 @@ const updateStatusContact = async (req, res, next) => {
     next(error);
   }
 };
+
 module.exports = updateStatusContact;
