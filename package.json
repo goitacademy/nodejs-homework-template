@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
@@ -12,8 +11,11 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "joi": "^17.4.1",
+    "mongodb": "^4.0.0",
+    "mongoose": "^5.13.3",
     "morgan": "1.10.0"
   },
   "devDependencies": {

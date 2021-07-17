@@ -1,4 +1,4 @@
-module.exports = {
+/* module.exports = {
   env: {
     commonjs: true,
     es2021: true,
@@ -13,3 +13,4 @@ module.exports = {
     "space-before-function-paren": "off",
   },
 };
+ */
