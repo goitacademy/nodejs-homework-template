@@ -1,5 +1,6 @@
 const express = require("express");
 const router = new express.Router();
+const { authMidleware } = require("../../midlewares/authMidlware");
 const {
   listContacts,
   getContactById,
@@ -13,6 +14,8 @@ const {
   patchContactsValidation,
   patchStatusContactValidation,
 } = require("../../midlewares/validationMidlware");
+
+router.use(authMidleware);
 
 router.get("/", async (req, res, next) => {
   let cont = await listContacts();
