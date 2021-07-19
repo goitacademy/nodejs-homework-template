@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     status: 'error',
     code: HttpCode.NOT_FOUND,
     message: `Use api on routes ${req.baseUrl}/api/contacts`,
-    data: 'Not Found',
+    data: 'Not Found'
   })
 })
 
@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
     status: err.status === 500 ? 'fail' : 'error',
     code: err.status,
     message: err.message,
-    data: err.status === 500 ? 'Internal Server Error' : err.data,
+    data: err.status === 500 ? 'Internal Server Error' : err.data
   })
 })
 

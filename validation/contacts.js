@@ -6,12 +6,12 @@ const schemaCreate = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ['com', 'net'] }
     })
     .required(),
   phone: Joi.string()
-    .pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
-    .required(),
+    .pattern(/^[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
+    .required()
 })
 
 const schemaUpdate = Joi.object({
@@ -19,12 +19,16 @@ const schemaUpdate = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ['com', 'net'] }
     })
     .optional(),
   phone: Joi.string()
-    .pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
-    .optional(),
+    .pattern(/^[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
+    .optional()
+})
+
+const schemaUpdateStatus = Joi.object({
+  favorite: Joi.boolean().required()
 })
 
 const validateContact = (schema, body, next) => {
@@ -34,16 +38,20 @@ const validateContact = (schema, body, next) => {
     return next({
       status: HttpCode.BAD_REQUEST,
       message,
-      data: 'Bad Request',
+      data: 'Bad Request'
     })
   }
   next()
 }
 
-module.exports.validateCreateContact = (req, res, next) => {
+module.exports.validateCreateContact = (req, _, next) => {
   return validateContact(schemaCreate, req.body, next)
 }
 
-module.exports.validateUpdateContact = (req, res, next) => {
+module.exports.validateUpdateContact = (req, _, next) => {
   return validateContact(schemaUpdate, req.body, next)
+}
+
+module.exports.validateUpdateContactStatus = (req, _, next) => {
+  return validateContact(schemaUpdateStatus, req.body, next)
 }

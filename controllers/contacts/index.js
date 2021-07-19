@@ -2,6 +2,7 @@ const getAll = require('./getAll')
 const getById = require('./getById')
 const add = require('./add')
 const update = require('./update')
+const updateStatus = require('./updateStatus')
 const remove = require('./remove')
 
 module.exports = {
@@ -9,5 +10,6 @@ module.exports = {
   getById,
   add,
   update,
-  remove,
+  updateStatus,
+  remove
 }
