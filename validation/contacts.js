@@ -11,7 +11,8 @@ const schemaCreate = Joi.object({
     .required(),
   phone: Joi.string()
     .pattern(/^[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
-    .required()
+    .required(),
+  favorite: Joi.boolean().optional()
 })
 
 const schemaUpdate = Joi.object({
@@ -24,7 +25,8 @@ const schemaUpdate = Joi.object({
     .optional(),
   phone: Joi.string()
     .pattern(/^[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im)
-    .optional()
+    .optional(),
+  favorite: Joi.boolean().optional()
 })
 
 const schemaUpdateStatus = Joi.object({
