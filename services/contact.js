@@ -29,11 +29,7 @@ const remove = async (id) => {
 
 const update = async (id, updateContact) => {
   try {
-    return await Contact.findByIdAndUpdate(
-      id,
-      { ...updateContact },
-      { new: true }
-    )
+    return await Contact.findByIdAndUpdate(id, updateContact, { new: true })
   } catch (error) {
     if (error.message.includes('Cast to ObjectId failed')) return null
     throw error
@@ -42,11 +38,7 @@ const update = async (id, updateContact) => {
 
 const updateStatusContact = async (id, updateContact) => {
   try {
-    return await Contact.findByIdAndUpdate(
-      id,
-      { ...updateContact },
-      { new: true }
-    )
+    return await Contact.findByIdAndUpdate(id, updateContact, { new: true })
   } catch (error) {
     if (error.message.includes('Cast to ObjectId failed')) return null
     throw error
