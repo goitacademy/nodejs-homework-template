@@ -67,7 +67,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    index = await Contacts.removeContact(id);
+    const index = await Contacts.removeContact(id);
     if (index===-1) {
       res.status(404).json({
             status: "error",
@@ -115,5 +115,36 @@ router.patch('/:contactId', async (req, res, next) => {
     next(error)
   }
 });
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const id = req.params.contactId;
+    const body = req.body;
+    console.log(body);
+    if (!body) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "missing field favorite"
+      });
+    }
+    const result = await Contacts.updateStatusContact(id, body)
+    if (!result) {
+      return res.status(404).json({
+            status: "error",
+            code: 404,
+            message: "Not found"
+        });  
+    }
+    return res.status(200).json({
+          status: "success",
+          code: 200,
+          data: { result }
+        })
+    
+  } catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router
