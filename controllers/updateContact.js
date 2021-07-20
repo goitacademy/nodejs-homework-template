@@ -1,4 +1,4 @@
-const { Contact } = require('../model/contact.model')
+const Contact = require('../model/contact.model')
 const { updateContactSchema } = require('../utils/validate/schemas')
 
 const updateContact = async (req, res, next) => {

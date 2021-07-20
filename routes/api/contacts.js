@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-// const contactCtrl = require('../../model')
-
 const contactCtrl = require('../../controllers')
 
 router.get('/', contactCtrl.listContacts)
