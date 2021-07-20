@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
+
 require('dotenv').config()
-const { DB_HOST } = process.env
+const { DB_USER, DB_PASS, DB_NAME } = process.env
+const DB_HOST = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.xs0ub.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
 
 const connection = mongoose.connect(DB_HOST, {
   promiseLibrary: global.Promise,
