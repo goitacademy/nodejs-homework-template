@@ -18,6 +18,6 @@ router.delete('/:contactId', ctrl.del);
 
 router.patch('/:contactId', express.json(), ctrl.update);
 
-router.patch('/:contactId', express.json(), ctrl.updateStatus);
+router.patch('/:contactId/favorite', express.json(), ctrl.updateStatus);
 
 module.exports = router;
