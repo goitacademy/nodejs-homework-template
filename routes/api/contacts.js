@@ -9,4 +9,6 @@ router.post("/", controlValidation, PhoneContacts.postContact);
 router.delete("/:contactId", PhoneContacts.deleteContact);
 
 router.patch("/:contactId", PatchContact, PhoneContacts.patchContact);
+
+router.patch("/:contactId/favorite", PatchContact, PhoneContacts.patchFavorite);
 module.exports = router;

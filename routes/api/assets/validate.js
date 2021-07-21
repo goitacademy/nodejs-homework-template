@@ -18,6 +18,7 @@ function PatchContact(req, res, next) {
     name: Joi.string().min(3),
     email: Joi.string().email(),
     phone: Joi.string(),
+    favorite: Joi.boolean(),
   }).min(1);
   const pachValid = createValate.validate(req.body);
   if (pachValid.error) {

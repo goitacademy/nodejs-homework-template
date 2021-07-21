@@ -11,8 +11,11 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "joi": "^17.4.0",
+    "mongodb": "^4.0.1",
+    "mongoose": "^5.13.3",
     "morgan": "1.10.0"
   },
   "devDependencies": {
@@ -22,5 +25,21 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "2.0.7"
-  }
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "bin": {
+    "template": "server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evgenii77777/nodejs-homework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Evgenii77777/nodejs-homework/issues"
+  },
+  "homepage": "https://github.com/Evgenii77777/nodejs-homework#readme"
 }
