@@ -1,6 +1,6 @@
 const { contact: Contact } = require('../service');
 
-const getById = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -25,4 +25,4 @@ const getById = async (req, res, next) => {
   }
 };
 
-module.exports = getById;
+module.exports = getContactById;

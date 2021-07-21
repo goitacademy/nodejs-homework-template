@@ -1,6 +1,6 @@
 const { contact: Contact } = require('../service');
 
-const add = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   const { body } = req;
   try {
     const result = await Contact.add(body);
@@ -16,4 +16,4 @@ const add = async (req, res, next) => {
   }
 };
 
-module.exports = add;
+module.exports = addContact;

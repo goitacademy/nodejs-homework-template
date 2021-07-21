@@ -1,10 +1,10 @@
 const { Contact } = require('../model');
 
-const getAll = () => {
+const listContact = () => {
   return Contact.find();
 };
 
-const getById = async id => {
+const getContactById = async id => {
   try {
     const result = await Contact.findById(id);
     return result;
@@ -16,7 +16,7 @@ const getById = async id => {
   }
 };
 
-const del = async id => {
+const removeContact = async id => {
   try {
     const result = await Contact.findByIdAndDelete(id);
     return result;
@@ -28,13 +28,27 @@ const del = async id => {
   }
 };
 
-const add = newContact => {
+const addContact = newContact => {
   return Contact.create(newContact);
 };
 
-const update = async (id, updateContact) => {
+const updateContact = async (id, updateContacts) => {
   try {
-    const result = await Contact.findByIdAndUpdate(id, updateContact, {
+    const result = await Contact.findByIdAndUpdate(id, updateContacts, {
+      new: true,
+    });
+    return result;
+  } catch (error) {
+    if (error.message.includes('Cast to ObjectId failed')) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+const updateStatusContact = async (id, updateStatusContacts) => {
+  try {
+    const result = await Contact.findByIdAndUpdate(id, updateStatusContacts, {
       new: true,
     });
     return result;
@@ -47,9 +61,10 @@ const update = async (id, updateContact) => {
 };
 
 module.exports = {
-  getAll,
-  add,
-  getById,
-  update,
-  del,
+  listContact,
+  addContact,
+  getContactById,
+  updateContact,
+  removeContact,
+  updateStatusContact
 };

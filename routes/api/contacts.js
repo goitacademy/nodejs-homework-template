@@ -8,16 +8,21 @@ const {
 
 const { contacts: ctrl } = require('../../controllers');
 
-router.get('/', ctrl.getAll);
+router.get('/', ctrl.listContact);
 
-router.get('/:contactId', ctrl.getById);
+router.get('/:contactId', ctrl.getContactById);
 
-router.post('/', express.json(), validateMiddleware(validateContact), ctrl.add);
+router.post(
+  '/',
+  express.json(),
+  validateMiddleware(validateContact),
+  ctrl.addContact,
+);
 
-router.delete('/:contactId', ctrl.del);
+router.delete('/:contactId', ctrl.removeContact);
 
-router.patch('/:contactId', express.json(), ctrl.update);
+router.patch('/:contactId', express.json(), ctrl.updateContact);
 
-router.patch('/:contactId/favorite', express.json(), ctrl.updateStatus);
+router.patch('/:contactId/favorite', express.json(), ctrl.updateStatusContact);
 
 module.exports = router;

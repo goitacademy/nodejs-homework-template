@@ -1,6 +1,6 @@
 const { contact: Contact } = require('../service');
 
-const del = async (req, res, next) => {
+const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -26,4 +26,4 @@ const del = async (req, res, next) => {
   }
 };
 
-module.exports = del;
+module.exports = removeContact;

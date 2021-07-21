@@ -1,6 +1,6 @@
 const { contact: Contact } = require('../service');
 
-const update = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -33,4 +33,4 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = update;
+module.exports = updateContact;

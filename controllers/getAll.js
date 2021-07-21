@@ -1,6 +1,6 @@
 const service = require('../service');
 
-const getAll = async (req, res, next) => {
+const listContact = async (req, res, next) => {
   try {
     const result = await service.getAll();
 
@@ -16,4 +16,4 @@ const getAll = async (req, res, next) => {
   }
 };
 
-module.exports = getAll;
+module.exports = listContact;
