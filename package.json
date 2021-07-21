@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "start": "cross-env NODE_ENV=production node ./app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
@@ -12,10 +12,14 @@
     "body-parser": "^1.19.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "joi": "^17.4.1",
+    "mongodb": "^4.0.1",
+    "mongoose": "^5.13.3",
     "morgan": "1.10.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
