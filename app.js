@@ -1,14 +1,14 @@
 const express = require('express');
-const logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
+const mongoose = require('mongoose');
 
-const contactsRouter = require('./routes/api/contacts');
+const { DB_HOST, PORT = 3000 } = process.env;
 
 const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const contactsRouter = require('./routes/api/contacts');
 
-app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
@@ -21,11 +21,13 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
-// app.use((err, req, res, next) => {
-//   const status = err.status || 500;
-//   res
-//     .status(status)
-//     .json({ status: 'fail', code: status, message: err.message });
-// });
+
+mongoose
+  .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Database running');
+    app.listen(PORT);
+  })
+  .catch(error => console.log(error));
 
 module.exports = app;

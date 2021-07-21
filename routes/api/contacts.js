@@ -1,80 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const { contacts: ctrl } = require('../../model');
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contacts = await ctrl.listContacts();
+const { contacts: ctrl } = require('../../controllers');
 
-    return res.json({ status: 'success', code: 200, data: { contacts } });
-  } catch (error) {
-    next(error);
-  }
-});
+const { validateMiddleware } = require('../../middleware');
+const {
+  contact: { validateContact },
+} = require('../../model/schemas');
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await ctrl.getContactById(req.params.contactId);
+router.get('/', ctrl.listContact);
 
-    if (contact) {
-      return res
-        .status(200)
-        .json({ status: 'success', code: 200, data: { contact } });
-    }
+router.get('/:contactId', ctrl.getContactById);
 
-    return res.json({ status: 'error', code: 404, message: 'Not found' });
-  } catch (error) {
-    next(error);
-  }
-});
+router.post(
+  '/',
+  express.json(),
+  validateMiddleware(validateContact),
+  ctrl.addContact,
+);
 
-router.post('/', async (req, res, next) => {
-  try {
-    const contact = await ctrl.addContact(req.body);
+router.delete('/:contactId', ctrl.removeContact);
 
-    return res
-      .status(201)
-      .json({ status: 'success', code: 201, data: { contact } });
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch('/:contactId', express.json(), ctrl.updateContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await ctrl.removeContact(req.params.contactId);
-
-    if (contact) {
-      return res.status(200).json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-        message: 'Contact deleted',
-      });
-    }
-
-    return res.json({ status: 'error', code: 404, message: 'Not found' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await ctrl.updateContact(req.params.contactId, req.body);
-
-    if (contact) {
-      return res.status(200).json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
-    }
-
-    return res.json({ status: 'error', code: 404, message: 'Not found' });
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch('/:contactId/favorite', express.json(), ctrl.updateStatusContact);
 
 module.exports = router;
