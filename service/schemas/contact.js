@@ -1,7 +1,8 @@
+/* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const contactsSchema = new Schema(
+const contactSchema = Schema(
   {
     name: {
       type: String,
@@ -9,6 +10,10 @@ const contactsSchema = new Schema(
     },
     email: {
       type: String,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        'Please fill a valid email address',
+      ],
     },
     phone: {
       type: String,
@@ -21,6 +26,6 @@ const contactsSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contact = mongoose.model('contacts', contactsSchema);
+const Contact = mongoose.model('contact', contactSchema);
 
 module.exports = { Contact };

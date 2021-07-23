@@ -4,20 +4,46 @@ const getAllContact = async () => {
   return Contact.find();
 };
 
-const getContactsById = (id) => {
-  return Contact.findOne({ _id: id });
+const getContactsById = async (id) => {
+  try {
+    const result = await Contact.findById(id);
+    return result;
+  } catch (error) {
+    if (error.message.includes('Cast to ObjectId failed')) {
+      return null;
+    }
+    throw error;
+  }
 };
 
 const createContact = ({ name, email, phone }) => {
   return Contact.create({ name, email, phone });
 };
 
-const updateContact = (id, fields) => {
-  return Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateContact = async (id, favorite) => {
+  try {
+    const result = await Contact.findByIdAndUpdate(id, favorite, {
+      new: true,
+    });
+    return result;
+  } catch (error) {
+    if (error.message.includes('Cast to ObjectId failed')) {
+      return null;
+    }
+    throw error;
+  }
 };
 
-const removeContact = (id) => {
-  return Contact.findByIdAndDelete({ _id: id });
+const removeContact = async (id) => {
+  try {
+    const result = await Contact.findByIdAndDelete(id)
+    return result
+  } catch (error) {
+    if (error.message.includes('Cast to ObjectId failed')) {
+      return null
+    }
+    throw error
+  }
 };
 
 module.exports = {
