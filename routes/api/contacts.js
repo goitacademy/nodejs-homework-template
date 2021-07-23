@@ -1,14 +1,21 @@
-const { Router } = require("express");
-const PhoneContacts = require("../api/controller");
-const { controlValidation, PatchContact } = require("./assets/validate");
-const router = Router();
-router.get("/", PhoneContacts.getContacts);
-router.get("/:contactId", PhoneContacts.findContactById);
+const express = require("express");
+const router = express.Router();
+const validate = require("./validation");
+const contactsController = require("../../controllers/contacts");
 
-router.post("/", controlValidation, PhoneContacts.postContact);
-router.delete("/:contactId", PhoneContacts.deleteContact);
+router
+  .get("/", contactsController.getAll)
+  .post("/", validate.createContact, contactsController.create);
 
-router.patch("/:contactId", PatchContact, PhoneContacts.patchContact);
+router
+  .get("/:id", contactsController.getById)
+  .delete("/:id", contactsController.remove)
+  .put("/:id", validate.updateContact, contactsController.update);
 
-router.patch("/:contactId/favorite", PatchContact, PhoneContacts.patchFavorite);
+router.patch(
+  "/:id/vaccinated",
+  validate.updateStatusContact,
+  contactsController.updateStatus
+);
+
 module.exports = router;
