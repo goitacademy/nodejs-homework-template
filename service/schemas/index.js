@@ -17,7 +17,7 @@ const updateContact = (id, fields) => {
 };
 
 const removeContact = (id) => {
-  return Contact.findByIdAndRemove({ _id: id });
+  return Contact.findByIdAndDelete({ _id: id });
 };
 
 module.exports = {

@@ -71,7 +71,7 @@ const create = async (req, res, next) => {
     res.status(201).json({
       status: 'success',
       code: 201,
-      data: { task: result },
+      data: { contacts: result },
     });
   } catch (e) {
     console.error(e);
@@ -117,10 +117,10 @@ const updateStatus = async (req, res, next) => {
         data: { contacts: result },
       });
     } else {
-      res.status(404).json({
+      res.status(400).json({
         status: 'error',
-        code: 404,
-        message: `Not found task id: ${id}`,
+        code: 400,
+        message: `missing field favorite: ${id}`,
         data: 'Not Found',
       });
     }
