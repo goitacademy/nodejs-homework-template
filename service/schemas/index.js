@@ -1,4 +1,4 @@
-const Contact = require('../schemas/contact');
+const { Contact } = require('../schemas/contact');
 
 const getAllContact = async () => {
   return Contact.find();
