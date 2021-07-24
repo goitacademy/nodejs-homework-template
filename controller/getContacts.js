@@ -1,4 +1,4 @@
-const service = require('../service/schemas');
+const service = require('../model/schemas');
 
 const getContacts = async (req, res, next) => {
   try {

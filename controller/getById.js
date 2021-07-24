@@ -1,4 +1,4 @@
-const service = require('../service/schemas');
+const service = require('../model/schemas');
 
 const getById = async (req, res, next) => {
   const { id } = req.params;

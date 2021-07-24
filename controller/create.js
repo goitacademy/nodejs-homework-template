@@ -1,4 +1,4 @@
-const service = require('../service/schemas');
+const service = require('../model/schemas');
 
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;

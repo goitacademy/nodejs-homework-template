@@ -1,4 +1,4 @@
-const service = require('../service/schemas');
+const service = require('../model/schemas');
 
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
