@@ -1,9 +1,9 @@
-const { contact: Contact } = require('../service');
+const { contact: service } = require('../service');
 
 const addContact = async (req, res, next) => {
   const { body } = req;
   try {
-    const result = await Contact.add(body);
+    const result = await service.addContact(body);
     res.status(201).json({
       status: 'success',
       code: 201,

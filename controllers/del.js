@@ -1,10 +1,10 @@
-const { contact: Contact } = require('../service');
+const { contact: service } = require('../service');
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const result = await Contact.remove(contactId);
+    const result = await service.removeContact(contactId);
     if (!result) {
       return res.status(404).json({
         status: 'error',

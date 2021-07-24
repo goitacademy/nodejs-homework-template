@@ -1,4 +1,4 @@
-const { contact: Contact } = require('../service');
+const { contact: service } = require('../service');
 
 const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
@@ -6,7 +6,7 @@ const updateStatusContact = async (req, res, next) => {
   const { favorite = false } = req.body;
 
   try {
-    const result = await Contact.updateStatus(contactId, { favorite });
+    const result = await service.updateStatusContact(contactId, { favorite });
 
     if (Object.keys(req.body).length === 0) {
       return res.status(404).json({

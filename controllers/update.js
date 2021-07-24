@@ -1,10 +1,10 @@
-const { contact: Contact } = require('../service');
+const { contact: service } = require('../service');
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const result = await Contact.update(contactId, { ...req.body });
+    const result = await service.updateContact(contactId, { ...req.body });
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({
         status: 'error',
