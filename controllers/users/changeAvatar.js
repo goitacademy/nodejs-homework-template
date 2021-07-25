@@ -1,29 +1,42 @@
-// const jimp = require('jimp')
-// const path = require('path')
-// const fs = require('fs/promises')
+const { uploadCloud } = require('../../helpers')
+const fs = require('fs/promises')
+const cloudinary = require('cloudinary').v2
 const { users: service } = require('../../services')
-// const uploadDir = path.join(process.cwd(), 'public', 'avatars')
+
 
 const changeAvatar = async (req, res, next) => {
     const id = req.user._id
     const pathFile = req.file.path
-    const url = await service.updateAvatar(id, pathFile)
+    const oldAvatar = await service.getAvatar(id)
+    const { public_id: idCloudAvatar, secure_url: avatarURL } = await uploadCloud(pathFile)
+    const url = await service.updateAvatar(id, idCloudAvatar, avatarURL)
 
     try {
-        // const img = await jimp.read(pathFile)
-        // await img.autocrop().cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE).writeAsync(pathFile)
-        // await fs.rename(pathFile, fileName)
+        if (!url || !req.user.token) {
+            res.status(401).json({
+                status: 'error',
+                code: 401,
+                message: 'Not authorized',
+            })
+            return
+        }
+
+        cloudinary.uploader.destroy(oldAvatar.idCloudAvatar, function (err, result) {
+            console.log(err, result)
+        })
+
+        await fs.unlink(pathFile)
+
         res.json({
             status: 'success',
             code: 200,
             data: {
                 result: {
-                    avatarURL: url
+                    avatarURL: avatrURL
                 }
             }
         })
     } catch (error) {
-        // await fs.unlink(tempPath)
         next(error)
     }
 }

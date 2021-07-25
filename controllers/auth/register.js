@@ -21,6 +21,7 @@ const register = async (req, res, next) => {
             id: data._id
         }
         const token = jwt.sign(payload, TOKEN_KEY)
+
         res.status(201).json({
             status: 'success',
             code: 201,

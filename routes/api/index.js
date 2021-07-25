@@ -5,5 +5,5 @@ const users = require('./users')
 module.exports = {
     contacts,
     auth,
-    users
+    users,
 }

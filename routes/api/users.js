@@ -2,7 +2,7 @@ const express = require('express')
 
 const useAuth = require('./useAuth')
 
-const upload = require('../../helpers')
+const { upload } = require('../../helpers')
 
 const { users: ctrl } = require('../../controllers')
 
