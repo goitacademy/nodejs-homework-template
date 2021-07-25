@@ -4,7 +4,6 @@ require('dotenv').config()
 const { user: service } = require('../../services')
 
 const login = async (req, res, next) => {
-
     const { email, password } = req.body
 
     try {
@@ -21,6 +20,7 @@ const login = async (req, res, next) => {
         }
         const { TOKEN_KEY } = process.env
         const token = jwt.sign(payload, TOKEN_KEY)
+        await service.update(user._id, { token })
         res.json({
             status: 'success',
             code: 200,
@@ -32,8 +32,7 @@ const login = async (req, res, next) => {
                 }
             }
         })
-    }
-    catch (error) {
+    } catch (error) {
         next(error)
     }
 }

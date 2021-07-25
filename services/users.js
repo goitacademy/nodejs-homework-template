@@ -14,8 +14,21 @@ const add = ({ email, password }) => {
     return newUser.save()
 }
 
-const update = (id, data) => {
-    User.findByIdAndUpdate(id, data)
+const update = (id, token) => {
+    return User.findByIdAndUpdate(id, token)
+}
+
+const updateToken = (id, token) => {
+    return User.findByIdAndUpdate(id, token)
+}
+
+const getAvatar = (id) => {
+    const { idCloudAvatar, avatarURL } = User.findOne(id)
+    return { idCloudAvatar, avatarURL }
+}
+
+const updateAvatar = (id, idCloudAvatar, avatarURL) => {
+    return User.findByIdAndUpdate(id, { idCloudAvatar, avatarURL })
 }
 
 module.exports = {
@@ -23,4 +36,7 @@ module.exports = {
     getById,
     add,
     update,
+    updateToken,
+    getAvatar,
+    updateAvatar
 }

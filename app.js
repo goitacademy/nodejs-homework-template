@@ -2,10 +2,19 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const app = express()
-
+const path = require('path')
+const cloudinary = require('cloudinary').v2
 require('dotenv').config()
 require('./configs/config-passport')
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  secure: true
+})
+
+const app = express()
 
 const api = require('./routes/api')
 
@@ -15,9 +24,11 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use(express.static(path.join(__dirname, './public/avatars')))
+
 app.use('/api/v1/contacts', api.contacts)
 app.use('/api/v1/auth', api.auth)
-app.use('/api/v1/users', api.currentUser)
+app.use('/api/v1/users', api.users)
 
 app.use((_, res, __) => {
   res.status(404).json({
