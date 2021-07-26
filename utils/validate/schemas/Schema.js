@@ -12,7 +12,13 @@ const schemaUpdateContact=Joi.object({
     phone: Joi.string()
 })
 
+const schemaSignupValidate = Joi.object({
+    email: Joi.string().email().required(),
+    password:Joi.string().min(8).required()
+})
+
 module.exports = {
     schemaAddContacts,
-    schemaUpdateContact
+    schemaUpdateContact,
+    schemaSignupValidate
 }

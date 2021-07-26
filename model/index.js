@@ -2,7 +2,8 @@ const fs = require('fs/promises')
 const path = require("path")
 const contacts = require('./contacts.json');
 const { v4 } = require("uuid");
-const Contact=require('../model/contact')
+const Contact = require('../model/contact')
+const User = require('../model/user');
 
 const getData = async () => {
   const data = await fs.readFile(path.join(__dirname, "contacts.json"), "utf8");
@@ -40,7 +41,21 @@ const updateStatusContact = async (contactId, body) => {
   const result = await Contact.findByIdAndUpdate(contactId, body, {new:true});
   return result
 }
+const getOne = (filter) => {
+  return User.findOne(filter)
+}
 
+const add = ({ email, password }) => {
+  const newUser = new User({ email });
+  newUser.setPassword(password);
+  return newUser.save();
+}
+
+const getById = (id) => User.findById(id);
+
+const updateById = (id, updateInfo) => {
+    return User.findByIdAndUpdate(id, updateInfo)
+}
 
 module.exports = {
   listContacts,
@@ -48,5 +63,9 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact
+  updateStatusContact,
+  getOne,
+  add,
+  getById,
+  updateById
 }
