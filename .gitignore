@@ -1,1 +1,7 @@
 node_modules
+.idea/vcs.xml
+.idea/nodejs-homework-template.iml
+.idea/modules.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/codeStyles/Project.xml
+.idea/codeStyles/codeStyleConfig.xml
