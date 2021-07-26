@@ -15,19 +15,17 @@ const config = {
 
 const transporter = nodemailer.createTransport(config)
 
-const sendMail = async (email, verifyToken) => {
+const sendVerificationEmail = ({ email, verifyToken }) => {
     const msg = {
         from: 'viktoriia.khimich@meta.ua',
         to: email,
         subject: 'Please verify your account',
         html: `Welcome to our web-site! To verify your account please go by <a href="http://localhost:3000/api/v1/users/verify/${verifyToken}></a>`,
     }
-    try {
-        const result = await transporter.sendMail(msg)
-        return result
-    } catch (error) {
-        console.log(error)
-    }
+    transporter
+        .sendMail(msg)
+        .then(info => console.log(info))
+        .catch(error => console.log(error))
 }
 
-module.exports = sendMail
+module.exports = sendVerificationEmail

@@ -5,5 +5,5 @@ const updateFavoriteSchema = require('./updateFavorite')
 module.exports = {
     createContactSchema,
     updateContactSchema,
-    updateFavoriteSchema
+    updateFavoriteSchema,
 }
