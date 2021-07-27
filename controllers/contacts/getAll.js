@@ -1,4 +1,4 @@
-const { contact: service } = require('../service');
+const { contact: service } = require('../../service');
 
 const listContact = async (req, res, next) => {
   const { query } = req;
