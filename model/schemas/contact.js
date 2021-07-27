@@ -28,6 +28,10 @@ const schemaContact = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   { versionKey: false, timestamps: true },
 );
@@ -46,5 +50,12 @@ const contactValidate = Joi.object({
     .max(14)
     .required(),
 });
+const сontactValidateByFavorite = contactForUpdate => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+  const { error } = schema.validate(contactForUpdate);
+  return error;
+};
 
-module.exports = { schemaContact, contactValidate };
+module.exports = { schemaContact, contactValidate, сontactValidateByFavorite };

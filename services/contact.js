@@ -1,6 +1,6 @@
 const { Contact } = require('../model');
 
-const listContact = () => {
+const listContacts = () => {
   return Contact.find();
 };
 
@@ -61,7 +61,7 @@ const updateStatusContact = async (id, updateStatusContacts) => {
 };
 
 module.exports = {
-  listContact,
+  listContacts,
   getContactById,
   addContact,
   updateContact,
