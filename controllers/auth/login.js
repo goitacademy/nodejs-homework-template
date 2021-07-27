@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const { user: service } = require('../../services');
-console.log(service);
+console.log(service, 'servAuth');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -22,6 +22,7 @@ const login = async (req, res, next) => {
       id: user._id,
     };
     const token = jwt.sign(payload, SECRET_KEY);
+    console.log(token);
     await service.updateUserById(user._id, { token });
     res.json({
       status: 'success',

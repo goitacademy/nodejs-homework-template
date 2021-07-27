@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { auth: ctrl } = require('../../controllers');
-console.log(ctrl, 'done-auth');
+console.log(ctrl, 'routeAuth');
 const { validateMiddleware, authtenticate } = require('../../middleware');
 const {
   user: { validateUser },
@@ -21,6 +21,5 @@ router.post(
   ctrl.login,
 );
 router.get('/logout', authtenticate, ctrl.logout);
-router.get('/current', express.json(), authtenticate, ctrl.getUser);
 
 module.exports = router;

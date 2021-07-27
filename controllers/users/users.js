@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const getUser = (req, res, next) => {
+const getUser = (req, res, __) => {
   const userProfile = {
     email: req.user.email,
     subscription: req.user.subscription,

@@ -7,6 +7,7 @@ const validateMiddleware = validator => {
         code: 400,
         message: error.message,
       });
+      return;
     }
     next();
   };

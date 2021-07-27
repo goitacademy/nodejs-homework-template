@@ -9,6 +9,7 @@ const contactValidateMiddleware = (req, res, next) => {
       code: 400,
       message: error.message,
     });
+    return;
   }
   next();
 };

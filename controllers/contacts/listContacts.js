@@ -1,4 +1,5 @@
 const { contact: service } = require('../../services');
+console.log(service, 'servContact');
 
 const listContacts = async (req, res, next) => {
   const { query } = req;

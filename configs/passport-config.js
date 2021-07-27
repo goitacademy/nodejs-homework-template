@@ -9,7 +9,7 @@ const settings = {
 };
 const jwtStrategy = new Strategy(settings, async (payload, done) => {
   try {
-    const user = await service.getOneUser({ _id: payload.id });
+    const user = await service.getUserById({ _id: payload.id });
     if (!user) {
       throw new Error('Not found');
     }
