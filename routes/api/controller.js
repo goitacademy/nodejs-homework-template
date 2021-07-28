@@ -1,47 +1,72 @@
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require('../../model/index.js')
+// const Joi = require('joi')
+// const {
+// Types: { ObjectId },
+// } = require('mongoose')
+const Contact = require('./mongoose.js')
 
-class PhoneContacts {
-  getContacts(req, res) {
-    const data = listContacts()
-    if (!data) {
-      return res.status(400).json({ message: 'Not found' })
-    }
-    return res.status(200).json(data)
-  }
+async function getContacts(req, res) {
+  const contacts = await Contact.find({})
+  res.json(contacts)
+}
 
-  findContactById(req, res) {
-    const data = getContactById(req.params.contactId)
-    if (!data) {
-      return res.status(400).json({ message: 'Not found' })
-    }
-    return res.status(200).json(data)
-  }
+async function findContactById(req, res) {
+  const {
+    params: { contactId },
+  } = req
+  const contactById = await Contact.findById(contactId)
+  if (!contactById) res.status(400).send({ message: 'Not found' })
+  res.json(contactById)
+}
 
-  postContact(req, res) {
-    const data = addContact(req.body)
-    return res.status(201).json(data)
-  }
-
-  deleteContact(req, res) {
-    const data = removeContact(req.params.contactId)
-    if (!data) {
-      return res.status(400).json({ message: 'Not found' })
-    }
-    return res.status(200).json({ message: 'contact delete' })
-  }
-
-  patchContact(req, res) {
-    const data = updateContact(req.params.contactId, req.body)
-    if (!data) {
-      return res.status(400).json({ message: 'Not found' })
-    }
-    return res.status(200).json(data)
+async function postContact(req, res) {
+  try {
+    const { body } = req
+    const newContact = await Contact.create(body)
+    res.json(newContact)
+  } catch (error) {
+    res.status(400).send(error.message)
   }
 }
-module.exports = new PhoneContacts()
+
+async function deleteContact(req, res) {
+  const {
+    params: { contactId },
+  } = req
+  const removeContact = await Contact.findByIdAndDelete(contactId)
+  if (!removeContact) res.status(400).send({ message: 'Not found' })
+  res.status(200).send({ message: 'contact delete' })
+}
+
+async function patchContact(req, res) {
+  const updateContact = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    {
+      new: true,
+    }
+  )
+  if (!updateContact) res.status(400).send({ message: 'Not found' })
+  res.json(updateContact)
+}
+
+async function patchFavorite(req, res) {
+  const updateFavorite = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    {
+      new: true,
+    }
+  )
+  if (!updateFavorite)
+    res.status(400).send({ message: 'missing field favorite' })
+  res.json(updateFavorite)
+}
+
+module.exports = {
+  getContacts,
+  findContactById,
+  postContact,
+  deleteContact,
+  patchContact,
+  patchFavorite,
+}

@@ -13,4 +13,10 @@ router.patch(
   PatchContact,
   PhoneContacts.patchContact
 )
+
+router.patch(
+  '/:contactId/favorite',
+  PatchContact,
+  PhoneContacts.patchFavorite,
+)
 module.exports = router
