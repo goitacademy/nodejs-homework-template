@@ -1,20 +1,21 @@
-const fs = require("fs").promises;
-const path = require("path");
+const { Contact } = require("../../models/index");
 
-const contactsPath = path.basename(
-  "C:/Users/yarik/Documents/GitHub/Node.js/nodejs-homework-rest-api/contacts.json"
-);
-
-const getAll = async (req, res) => {
-  const file = await fs.readFile(contactsPath, "utf-8");
-  const contacts = await JSON.parse(file);
-  await res.json({
-    status: "success",
-    code: 200,
-    data: {
-      result: contacts,
-    },
-  });
+const getAll = async (req, res, next) => {
+  try {
+    const result = await Contact.find({});
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      error.code = 400;
+    }
+    next(error);
+  }
 };
 
 module.exports = getAll;

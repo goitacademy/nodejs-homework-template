@@ -1,50 +1,25 @@
-const fs = require("fs").promises;
-const path = require("path");
+const { Contact } = require("../../models/index");
 
-const contactsPath = path.basename(
-  "C:/Users/yarik/Documents/GitHub/Node.js/nodejs-homework-rest-api/contacts.json"
-);
-
-const del = async (req, res) => {
+const del = async (req, res, next) => {
+  const { body } = req;
   const { contactId } = req.params;
 
-  const file = await fs.readFile(contactsPath, "utf-8");
-  const contacts = await JSON.parse(file);
-
-  const index = await contacts.findIndex(
-    (contact) => contact.id === Number(contactId)
-  );
-  console.log(index);
-  if (!index) {
+  try {
+    const result = await Contact.findByIdAndDelete({ _id: contactId }, body);
+    res.json({
+      status: "success",
+      code: 204,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
     res.status(404).json({
       status: "error",
       code: 404,
-      message: "Not found !",
+      message: "Not found",
     });
-    return;
   }
-  const newContacts = await contacts.filter(
-    (contact) => contact.id !== Number(contactId)
-  );
-
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newContacts),
-    "utf8",
-    (error) => {
-      if (error) {
-        console.log(error.message);
-      }
-    }
-  );
-
-  await res.status(200).json({
-    status: "success",
-    code: 200,
-    data: {
-      result: "No content",
-    },
-  });
 };
 
 module.exports = del;

@@ -1,8 +1,16 @@
 const { Contact } = require("../../models/index");
-const update = async (req, res, next) => {
+
+const updateFav = async (req, res, next) => {
   const { body } = req;
   const { contactId } = req.params;
   try {
+    if (body.favorite === undefined) {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Missing field favorite",
+      });
+    }
     const result = await Contact.findByIdAndUpdate({ _id: contactId }, body, {
       new: true,
     });
@@ -21,4 +29,4 @@ const update = async (req, res, next) => {
     });
   }
 };
-module.exports = update;
+module.exports = updateFav;

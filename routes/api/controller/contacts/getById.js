@@ -1,33 +1,24 @@
-const fs = require("fs").promises;
-const path = require("path");
+const { Contact } = require("../../models/index");
 
-const contactsPath = path.basename(
-  "C:/Users/yarik/Documents/GitHub/Node.js/nodejs-homework-rest-api/contacts.json"
-);
-
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const file = await fs.readFile(contactsPath, "utf-8");
-  const contacts = await JSON.parse(file);
-  const selectContact = await contacts.find(
-    (contact) => contact.id === Number(contactId)
-  );
-  if (!selectContact) {
+
+  try {
+    const result = await Contact.findOne({ _id: contactId });
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
     res.status(404).json({
       status: "error",
       code: 404,
-      message: "Contact with this id not found !",
+      data: "Not found",
     });
-    return;
   }
-
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      result: selectContact,
-    },
-  });
 };
 
 module.exports = getById;
