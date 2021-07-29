@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const {contacts} = require('../controllers')
 
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })

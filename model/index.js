@@ -60,14 +60,13 @@ const updateContactList = async (contacts) => {
   }
 }
 
-
 const updateContact = async (contactId, body) => {
   try {
     const contactList = await listContacts()
     const initialContact = await getContactById(contactId)
     const updatedInitialContact = { ...initialContact, ...body }
     const updateContactList = contactList.map(({ id }) => id === Number(contactId) ? updatedInitialContact : null)
-    await fs.writeFile('./contacts.json', JSON.stringify(updateContactList, null, 2))
+    await fs.writeFile(contactsPath, JSON.stringify(updateContactList, null, 2))
     return updatedInitialContact
   } catch (error) {
     return error
