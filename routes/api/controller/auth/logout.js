@@ -3,9 +3,6 @@ const User = require("../../models/schemas/userSchema");
 
 const logout = async (req, res) => {
   const user = req.user;
-  console.log(1);
-  console.log(user);
-
   try {
     await User.findOneAndUpdate({ _id: user.id }, { token: null });
     res.status(HTTP_CODES.OK).json("User is logouted");

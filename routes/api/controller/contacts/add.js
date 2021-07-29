@@ -21,7 +21,11 @@ const add = async (req, res, next) => {
     });
   } catch (error) {
     if (error.code === 11000) {
-      error.code = 400;
+      res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "User with this email already registered !",
+      });
     }
     next(error);
   }

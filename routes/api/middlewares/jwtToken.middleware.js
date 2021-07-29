@@ -19,7 +19,6 @@ const jwtTokenMiddleware = async (req, res, next) => {
         .status(HTTP_CODES.BAD_REQUEST)
         .json({ error: "User is not sigin" });
     }
-    console.log("4");
     req.user = user;
 
     next();

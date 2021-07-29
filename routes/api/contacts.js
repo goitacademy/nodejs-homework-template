@@ -9,12 +9,12 @@ router.get("/", jwtMiddelware, ctrl.getAll);
 
 router.get("/:contactId", jwtMiddelware, ctrl.getById);
 
-router.post("/", ctrl.add);
+router.post("/", jwtMiddelware, ctrl.add);
 
-router.put("/:contactId", ctrl.update);
+router.put("/:contactId", jwtMiddelware, ctrl.update);
 
-router.delete("/:contactId", ctrl.del);
+router.delete("/:contactId", jwtMiddelware, ctrl.del);
 
-router.put("/favorite/:contactId", ctrl.updateFav);
+router.put("/favorite/:contactId", jwtMiddelware, ctrl.updateFav);
 
 module.exports = router;

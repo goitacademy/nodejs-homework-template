@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
 
     const newUser = await User.create({ email, password: hashedPassword });
 
-    res.status(HTTP_CODES.CREATED).json({ email, id: newUser._id });
+    res.status(HTTP_CODES.CREATED).json({ email, password: newUser.password });
   } catch (error) {
     res.status(HTTP_CODES.BAD_REQUEST).json({ error: error.message });
   }

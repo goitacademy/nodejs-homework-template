@@ -10,6 +10,8 @@ router.post("/register", ctrl.register);
 
 router.post("/login", ctrl.login);
 
+router.get("/current", jwtMiddelware, ctrl.current);
+
 router.get("/logout", jwtMiddelware, ctrl.logout);
 
 module.exports = router;

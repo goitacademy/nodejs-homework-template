@@ -1,11 +1,10 @@
 const { Contact } = require("../../models/index");
 
 const del = async (req, res, next) => {
-  const { body } = req;
   const { contactId } = req.params;
 
   try {
-    const result = await Contact.findByIdAndDelete({ _id: contactId }, body);
+    const result = await Contact.findByIdAndDelete({ _id: contactId });
     res.json({
       status: "success",
       code: 204,
