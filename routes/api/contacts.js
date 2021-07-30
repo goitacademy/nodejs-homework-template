@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+
 const jwtMiddelware = require("./middlewares/jwtToken.middleware");
 
 const { contacts: ctrl } = require("./controller");

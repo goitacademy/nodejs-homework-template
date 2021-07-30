@@ -12,25 +12,19 @@ const login = async (req, res, next) => {
         .status(HTTP_CODES.UNAUTHORIZED)
         .json({ error: "Wrong credentials" });
     }
-
     const isPasswordCorrect = bcrypt.compareSync(password, candidate.password);
-
     if (!isPasswordCorrect) {
       return res
         .status(HTTP_CODES.UNAUTHORIZED)
         .json({ error: "Wrong credentials" });
     }
     const { JWT_SECRET_KEY } = process.env;
-
     const payload = {
       email,
       id: candidate._id,
     };
-
     const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1d" });
-
     await User.findOneAndUpdate({ _id: candidate._id }, { token });
-
     res.status(HTTP_CODES.OK).json({ token });
   } catch (error) {
     res.status(HTTP_CODES.BAD_REQUEST).json({ error: error.message });
