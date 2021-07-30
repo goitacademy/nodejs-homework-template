@@ -2,7 +2,6 @@ const User = require("../../models/schemas/userSchema");
 const bcrypt = require("bcrypt");
 const HTTP_CODES = require("../../../../helpers/httpStatusCodes");
 
-console.log(User);
 const register = async (req, res, next) => {
   const { email, password } = req.body;
   try {
