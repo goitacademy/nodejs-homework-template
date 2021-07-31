@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { contacts: ctrl } = require("../../controllers");
 
-router.get("/", express.json(), ctrl.listContacts);
+router.get("/", ctrl.listContacts);
 
 router.get("/:contactId", ctrl.getContactById);
 
