@@ -1,9 +1,9 @@
 const contactValidateMiddleware = require('./contactValidateMiddleware');
 const validateMiddleware = require('./validateMiddleware');
-const authtenticate = require('./authtentificate');
+const authenticate = require('./authentificate');
 
 module.exports = {
   contactValidateMiddleware,
   validateMiddleware,
-  authtenticate,
+  authenticate,
 };

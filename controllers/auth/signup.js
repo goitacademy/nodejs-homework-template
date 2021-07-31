@@ -1,4 +1,5 @@
 const { user: service } = require('../../services');
+console.log(service, 'servAuth');
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;

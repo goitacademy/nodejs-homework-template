@@ -6,7 +6,7 @@ const passport = require('passport');
 3. Токен валиден, пользователь найден => error = null, user = {}
 */
 
-const authtenticate = (req, res, next) => {
+const authenticate = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (error, user) => {
     if (error || !user || !user.token) {
       res.status(401).json({
@@ -21,4 +21,4 @@ const authtenticate = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports = authtenticate;
+module.exports = authenticate;
