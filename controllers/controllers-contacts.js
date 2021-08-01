@@ -12,8 +12,8 @@ const getAll = async (req, res, next) => {
     } catch (error) {
       next(error)
     }
-  }
-  
+}
+
 const getById = async (req, res, next) => {
     try {
       const contactById = await getContactById(req.params.contactId)
@@ -33,7 +33,7 @@ const getById = async (req, res, next) => {
     } catch (error) {
       next(error)
     }
-  }
+}
 
 const create = async (req, res, next) => {
     try {
@@ -54,8 +54,8 @@ const create = async (req, res, next) => {
     } catch (error) {
       next(error)
     }
-  }
-  
+}
+
 const update = async (req, res, next) => {
     try {
       const updatedContact = await updateContact(req.params.contactId, req.body)
@@ -82,9 +82,9 @@ const remove = async (req, res, next) => {
     try {
       const id = req.params.contactId
       const contactList = await listContacts()
-      const contactListId = contactList.map(({ id }) => id)
-      if (contactListId.some(listId => listId === Number(id))) {
-        const contactById = await removeContact(id)
+      const contact = contactList.filter(({ id }) => id === Number(id))
+      if (contact) {
+        await removeContact(id)
         return res.status(code.OK).json({
           status: 'success',
           massage: 'contact deleted',
@@ -100,7 +100,7 @@ const remove = async (req, res, next) => {
     } catch (error) {
       next(error)
     }
-  }
+}
 
 module.exports = {
   getAll,
