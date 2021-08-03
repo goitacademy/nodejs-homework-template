@@ -1,4 +1,4 @@
-const HTTP_CODES = require("../../../helpers/httpStatusCodes");
+const HTTP_CODES = require("../helpers/httpStatusCodes");
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
 
