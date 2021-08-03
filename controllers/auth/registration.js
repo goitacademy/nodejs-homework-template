@@ -1,5 +1,6 @@
 const userService = require('../../services/auth');
 const { authValidateSchema } = require('../../utils/schema');
+const gravatar = require('gravatar');
 
 const registr = async (req, res, next) => {
   const { email, password } = req.body;
@@ -26,7 +27,10 @@ const registr = async (req, res, next) => {
     return;
   }
   try {
-    await userService.add({ email, password });
+    const avatarURL = gravatar.url(email);
+
+    await userService.add({ email, password, avatarURL });
+
     res.status(201).json({
       status: 'Success',
       code: 201,
