@@ -8,7 +8,6 @@ const auth = (req, res, next) => {
         if (header) {
             token = header.split(' ')[1]
         }
-
         if (!user || err || token !== user.token) {
             return res.json({
                 status: 401,
