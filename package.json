@@ -14,12 +14,17 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
+
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.3",
+
+    "express": "4.17.1",
+    "joi": "^17.4.0",
+    
     "mongoose-validator": "^2.1.0",
     "morgan": "1.10.0",
     "passport": "^0.4.1",

@@ -29,6 +29,7 @@ const contactsSchema = Schema(
     favorite: {
       type: Boolean,
       default: false,
+
 		},
 		owner: {
       type: Schema.Types.ObjectId,
@@ -37,6 +38,7 @@ const contactsSchema = Schema(
   },
 	{ versionKey: false, timestamps: false },
 	
+
 );
 
 const Contact = model('contact', contactsSchema);
