@@ -1,8 +1,10 @@
-const bcrypt = require("bcryptjs");
+const { User } = require('../models');
 
-const { User } = require("../models");
+const getById = id => {
+  return User.findById(id);
+};
 
-const getOne = (filter) => {
+const getOne = filter => {
   return User.findOne(filter);
 };
 
@@ -12,4 +14,8 @@ const addUser = ({ email, password }) => {
   return newUser.save();
 };
 
-module.exports = { getOne, addUser };
+const updateById = (id, updateInfo) => {
+  return User.findByIdAndUpdate(id, updateInfo);
+};
+
+module.exports = { getById, getOne, addUser, updateById };

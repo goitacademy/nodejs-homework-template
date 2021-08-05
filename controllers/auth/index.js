@@ -1,9 +1,9 @@
-const register = require("./register.js");
-const login = require("./login.js");
-const logout = require("./logout.js");
+const signup = require('./signup.js');
+const login = require('./login.js');
+const logout = require('./logout.js');
 
 module.exports = {
-  register,
+  signup,
   login,
   logout,
 };
