@@ -1,10 +1,10 @@
-const fs = require("fs/promises");
-const path = require("path");
-const Joi = require("joi");
+const fs = require('fs/promises');
+const path = require('path');
+const Joi = require('joi');
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join(__dirname, 'contacts.json');
 
-const updateContactsJson = async (contacts) => {
+const updateContactsJson = async contacts => {
   const str = JSON.stringify(contacts);
   await fs.writeFile(contactsPath, str);
 };
