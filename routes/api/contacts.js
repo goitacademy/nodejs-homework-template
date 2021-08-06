@@ -9,7 +9,7 @@ const {
   updateContact,
   removeContact,
 } = require('../../model/index');
-// const { validationContact } = require('./valid-contacts-router');
+const { validationContact } = require('./valid-contacts-router');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -51,7 +51,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validationContact, async (req, res, next) => {
   console.log(req);
   try {
     const contact = await addContact(req.body);
@@ -88,7 +88,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validationContact, async (req, res, next) => {
   try {
     const contact = await updateContact(req.params.contactId, req.body);
     if (contact) {
@@ -111,7 +111,7 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', validationContact, async (req, res, next) => {
   try {
     const contact = await updateContact(req.params.contactId, req.body);
     if (contact) {
