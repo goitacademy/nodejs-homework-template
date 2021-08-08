@@ -1,75 +1,48 @@
 const fs = require("fs").promises
 const path = require("path")
-
+const Contact = require('../Contact')
 class ContactsService {
     constructor() { }
-    
-    contactsPath = path.join(__dirname, '../db/contacts.json')
 
-    listContacts = async () => {
-        try {
-            const contacts = await fs.readFile(this.contactsPath, 'utf-8')
-            return JSON.parse(contacts)
-        } catch (e) {
-            console.log("Ошибка при чтении файла");
-        }
+    async create(contact) {
+        const createdContact = await Contact.create(contact)
+        return createdContact
     }
-
-    getContactById = async (id) => {
-        try {
-            const contacts = await this.listContacts()
-            return contacts.find(el => el.id == id)   
-        } catch (e) {
-            console.log("Ошибка при чтении файла");
-        }
+    async getAll() {
+        const contacts = await Contact.find()
+        console.log('contacts', contacts);
+        return contacts
     }
-
-    removeContact = async (id) => {
-        try {
-            const contacts = await this.listContacts()
-            const updatedContacts = contacts.filter((el) => el.id != id)
-            if (updatedContacts.length === contacts.length) {
-                return null
-            }
-            await fs.writeFile(this.contactsPath, JSON.stringify(updatedContacts))
-            return await this.listContacts()
-        } catch (e) {
-            console.log("Ошибка при работе с файлом");
+    async getById(id) {
+        if (!id) {
+            throw new Error("id is not specified")
         }
+        const contact = await Contact.findById(id)
+        return contact
     }
-
-    updateContact = async (id, body) => {
-        try {
-            const contacts = await this.listContacts()
-            const contact = await this.getContactById(id)
-            if (!contact) return
-            const updatedContacts = contacts.map(el => {
-                if (el.id == id) {
-                    return {id: el.id, ...body}
-                }
-                return el
-            })
-            await fs.writeFile(this.contactsPath, JSON.stringify(updatedContacts))
-            const newContact = await this.getContactById(id)
-            return newContact
-        } catch (e) {
-            console.log("Ошибка при работе с файлом");
+    async remove(id) {
+        if (!id) {
+            throw new Error("id is not specified")
         }
+        await Contact.findByIdAndDelete(id)
+        const contacts = await Contact.find()
+        return contacts
     }
-
-    addContact = async (body) => {
-        try {
-            const contacts = await this.listContacts()
-            const id = contacts[contacts.length - 1].id + 1
-            contacts.push({
-                id: id,
-                ...body,
-            })
-            await fs.writeFile(this.contactsPath, JSON.stringify(contacts))
-            return await this.getContactById(id)
-        } catch (e) {
-            console.log("Ошибка при работе с файлом");
+    async update(id, contact) {
+        if (!id) {
+            throw new Error("id is not specified")
         }
+        const updatedContact = await Contact.findByIdAndUpdate(id, contact, {new: true})
+        return updatedContact
+    }
+    async updateStatus(id, updateBody) {
+        if (!id) {
+            throw new Error("id is not specified")
+        }
+        console.log(updateBody);
+        const filter = { _id: id }
+        const updatedContact = Contact.findOneAndUpdate(filter, updateBody, { new: true })
+        return updatedContact
     }
 }
 

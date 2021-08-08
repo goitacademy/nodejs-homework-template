@@ -2,11 +2,11 @@
 // const contacts = require('./contacts.json')
 const ContactsService = require("../service/contactService.js")
 const http = require("../helpers/status.js")
-const {contactsSchema} = require("../helpers/validation_schema")
+const {contactsSchema, contactStatusSchema} = require("../helpers/validation_schema")
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await ContactsService.listContacts()
+    const contacts = await ContactsService.getAll()
     return res.status(http.OK).json({
       status: "success",
       code: http.OK,
@@ -23,7 +23,7 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const { id } = req.params
-    const contact = await ContactsService.getContactById(id)
+    const contact = await ContactsService.getById(id)
     if (!contact) {
       return next({
         status: http.NOT_FOUND,
@@ -55,7 +55,7 @@ const updateContact = async (req, res, next) => {
       })
     }
     await contactsSchema.validateAsync(body)
-    const contact = await ContactsService.updateContact(id, body)
+    const contact = await ContactsService.update(id, body)
     if (!contact) {
       return next({
         status: http.NOT_FOUND,
@@ -78,7 +78,7 @@ const updateContact = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     await contactsSchema.validateAsync(req.body)
-    const newContact = await ContactsService.addContact(req.body)
+    const newContact = await ContactsService.create(req.body)
     return res.status(http.CREATED).json({
       status: http.CREATED,
       code: http.CREATED,
@@ -101,7 +101,7 @@ const removeContact = async (req, res, next) => {
         message: "id is not specified"
       })
     }
-    const contacts = await ContactsService.removeContact(id)
+    const contacts = await ContactsService.remove(id)
     if (!contacts) {
       return next({
         status: http.NOT_FOUND,
@@ -122,10 +122,35 @@ const removeContact = async (req, res, next) => {
   }
 }
 
+const updateContactStatus = async (req, res, next) => {
+  const { id } = req.params
+  if (!id) {
+    return res.status(http.BAD_REQUEST).json({
+      status: "error",
+      code: http.BAD_REQUEST,
+      message: "id is not specified"
+    })
+  }
+  try {
+    await contactStatusSchema.validateAsync(req.body)
+    const updatedContact = await ContactsService.updateStatus(id, req.body)
+    return res.status(http.CREATED).json({
+      status: http.CREATED,
+      code: http.CREATED,
+      data: {
+        entity: updatedContact
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateContactStatus,
 }
