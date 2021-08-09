@@ -6,16 +6,21 @@ const userShema = Schema(
   {
     password: {
       type: String,
+      min: [6, 'Password should contain minimum 6 characters'],
       required: [true, 'Password is required'],
     },
     email: {
       type: String,
       required: [true, 'Email is required'],
+      validate: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/, 'Provided email is invalid. Provide email in aaa@bbb.ccc format'],
       unique: true,
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: {
+        values: ['starter', 'pro', 'business'],
+        message: `This subscription is not allowed. Allowed values: 'starter', 'pro', 'business'`,
+      },
       default: 'starter',
     },
     token: {

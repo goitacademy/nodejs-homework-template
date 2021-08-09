@@ -1,7 +1,7 @@
 const { model } = require('mongoose');
 
-const { contactShema } = require('./schemas');
+const { contactSchema } = require('./schemas');
 
-const Contact = model('contact', contactShema);
+const Contact = model('contact', contactSchema);
 
 module.exports = Contact;
