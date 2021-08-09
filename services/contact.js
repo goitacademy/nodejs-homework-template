@@ -6,26 +6,24 @@ const addContact = newContact => {
 };
 
 const listContacts = (userId, query) => {
-  const {
-    page,
-    limit,
-    offset,
-    sortBy,
-    favorite,
-  } = query;
+  const { page, limit, offset, sortBy, favorite } = query;
 
-  const options = {
+  const paginateOptions = {
     page: page || 1,
     limit: limit || 20,
     offset: offset || [(page - 1) * limit],
     sort: {
       ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
     },
-    favorite: favorite || null,
     customLabels: paginationLabels,
   };
 
-  return Contact.paginate({}, options);
+  const queryList = { owner: userId };
+  if (favorite) {
+    queryList.favorite = favorite;
+  }
+
+  return Contact.paginate(queryList, paginateOptions);
 };
 
 const getContactById = (userId, contactId) => {
