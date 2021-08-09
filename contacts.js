@@ -11,8 +11,6 @@ function updateContact(contactId, name, email, phone, errorMessage) {
       contact.name = name
       contact.email = email
       contact.phone = phone
-      console.log(`Contact with ID ${contactId} updated!`)
-      console.table(contacts)
       return contact
     }
   })

@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { validateContatct } = require('../middlewares')
+const { validateContatct, validateContactUpdate } = require('../middlewares')
 const { contacts: ctrl } = require('../controllers')
 
 const router = express.Router()
@@ -13,7 +13,7 @@ router.post('/', validateContatct, ctrl.addContact)
 
 router.delete('/:contactId', ctrl.removeContact)
 
-router.put('/:contactId', validateContatct, ctrl.updateContact)
+router.put('/:contactId', validateContactUpdate, ctrl.updateContact)
 
 module.exports = {
   router
