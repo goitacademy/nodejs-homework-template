@@ -1,6 +1,7 @@
-const { Schema, SchemaTypes } = require('mongoose');
+const { Schema, SchemaTypes, model } = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
-const contactShema = Schema(
+const contactSchema = Schema(
   {
     name: {
       type: String,
@@ -9,9 +10,11 @@ const contactShema = Schema(
     },
     email: {
       type: String,
+      validate: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/, 'Provided email is invalid. Provide email in aaa@bbb.ccc format'],
     },
     phone: {
       type: String,
+      validate: [/^\+\d{12}$/, 'Provided phone is invalid. Provide phone in +XXXXXXXXXXXX format'],
     },
     favorite: {
       type: Boolean,
@@ -25,4 +28,6 @@ const contactShema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-module.exports = contactShema;
+contactSchema.plugin(mongoosePaginate);
+
+module.exports = contactSchema;
