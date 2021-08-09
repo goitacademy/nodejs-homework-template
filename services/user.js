@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const gravatar = require('gravatar');
 
 const getById = id => {
   return User.findById(id);
@@ -9,7 +10,8 @@ const getOne = filter => {
 };
 
 const addUser = ({ email, password }) => {
-  const newUser = new User({ email });
+  const avatarURL = gravatar.url(email);
+  const newUser = new User({ email, avatarURL });
   newUser.setPassword(password);
   return newUser.save();
 };

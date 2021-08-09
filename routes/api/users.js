@@ -1,6 +1,6 @@
 const express = require('express');
 const { users: ctrl } = require('../../controllers');
-const { authenticate } = require('../../middlewares');
+const { authenticate, uploadAvatar } = require('../../middlewares');
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.get('/logout', authenticate, ctrl.logout);
 router.get('/current', express.json(), authenticate, ctrl.getCurrentUser);
 
 router.patch('/', express.json(), authenticate, ctrl.updateUser);
+
+router.patch('/avatars', authenticate, uploadAvatar.single('avatar'), ctrl.updateAvatar);
 
 module.exports = router;

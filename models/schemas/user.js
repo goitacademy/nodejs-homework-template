@@ -12,7 +12,10 @@ const userShema = Schema(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      validate: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/, 'Provided email is invalid. Provide email in aaa@bbb.ccc format'],
+      validate: [
+        /^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/,
+        'Provided email is invalid. Provide email in aaa@bbb.ccc format',
+      ],
       unique: true,
     },
     subscription: {
@@ -22,6 +25,9 @@ const userShema = Schema(
         message: `This subscription is not allowed. Allowed values: 'starter', 'pro', 'business'`,
       },
       default: 'starter',
+    },
+    avatarURL: {
+      type: String,
     },
     token: {
       type: String,
