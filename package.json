@@ -12,7 +12,14 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "express-validator": "^6.12.1",
+    "joi": "^17.4.1",
+    "joi-phone-number": "^5.0.1",
+    "lowdb": "^2.1.0",
+    "morgan": "1.10.0",
+    "postman": "^0.2.0",
+    "uuid": "^8.3.2",
+    "uuidv4": "^6.2.11"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
