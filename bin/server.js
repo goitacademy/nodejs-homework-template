@@ -4,8 +4,6 @@ require('dotenv').config();
 
 const { PORT = 3000, DB_HOST } = process.env;
 
-/* const DB_HOST = `mongodb+srv://${DB_USER}:${DB_USER_PASS}@cluster0.emw6k.mongodb.net/${DB_NAME}?retryWrites=true&w=majority` */
-
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
