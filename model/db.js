@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-catch */
 /* eslint-disable semi */
 const fs = require('fs').promises;
@@ -49,23 +50,33 @@ const addContact = async body => {
   );
   return newContact;
 };
+const mongoose = require('mongoose');
+require('dotenv').config();
+const uriDb = process.env.URI_DB;
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const contact = contacts.find(({ id }) => id.toString() === contactId);
-  if (contact) {
-    contacts[contact.id - 1] = { ...contact, ...body };
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), 'utf8');
-    return contacts[contact.id - 1];
-  } else {
-    return undefined;
-  }
-};
+const db = mongoose.connect(uriDb, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+mongoose.connection.on('connected', () => {
+  console.log('Database connection successful');
+});
+
+mongoose.connection.on('error', err => {
+  console.log(`Database connection error db: ${err.message}`);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Database connection successful');
+});
+
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  console.log('Database connection closed and app terminated');
+  process.exit(1);
+});
+
+module.exports = db;

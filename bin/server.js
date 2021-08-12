@@ -1,7 +1,42 @@
-const app = require('../app');
+/* eslint-disable semi */
+const Contact = require('./schemas/contact');
 
-const PORT = process.env.PORT || 3000;
+const listContacts = async () => {
+  const results = await Contact.find({});
+  return results;
+};
 
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`);
-});
+const getContactById = async contactId => {
+  const result = await Contact.findOne({ _id: contactId });
+
+  return result;
+};
+
+const removeContact = async contactId => {
+  const result = await Contact.findByIdAndRemove({
+    _id: contactId,
+  });
+  return result;
+};
+
+const addContact = async body => {
+  const result = await Contact.create(body);
+  return result;
+};
+
+const updateContact = async (contactId, body) => {
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true },
+  );
+  return result;
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
