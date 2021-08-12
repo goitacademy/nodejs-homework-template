@@ -1,18 +1,23 @@
-const express = require("express");
-const router = express.Router();
-const ctrlUsers = require("../../controller/users");
-const { validateSign } = require("../../services/validationUser.js");
-const auth = require("../../services/auth");
-const upload = require("../../services/upload");
 
-router.post("/signup", validateSign, ctrlUsers.register);
+const express = require('express')
+const router = express.Router()
+const ctrlUsers = require('../../controller/users')
+const {
+    validateSign
+} = require('../../services/validationUser.js')
+const auth = require('../../services/auth')
+const upload = require('../../services/upload')
 
-router.post("/signin", validateSign, ctrlUsers.login);
+router.post('/signup', validateSign, ctrlUsers.register)
 
-router.post("/logout", auth, ctrlUsers.logout);
+router.post('/signin', validateSign, ctrlUsers.login)
 
-router.get("/current", auth, ctrlUsers.currentUser);
+router.post('/logout', auth, ctrlUsers.logout)
 
-router.patch("/avatars", auth, upload.single("avatar"), ctrlUsers.updateAvatar);
+router.get('/current', auth, ctrlUsers.currentUser)
 
-module.exports = router;
+router.patch('/avatars', auth, upload.single('avatar'), ctrlUsers.updateAvatar)
+
+router.get('/verify/:verificationToken', ctrlUsers.verifyUser)
+
+module.exports = router
