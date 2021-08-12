@@ -31,9 +31,8 @@ class EmailService {
                 name,
                 intro: 'Welcome to nodejs-rest-api!',
                 action: {
-                    instructions: 'To get started please click here:',
+                    instructions: 'Please click here:',
                     button: {
-                        color: '#22BC66',
                         text: 'Confirm your account',
                         link: `${this.link}/api/users/verify/${verifyToken}`
                     }
