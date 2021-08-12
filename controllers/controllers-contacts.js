@@ -102,10 +102,31 @@ const remove = async (req, res, next) => {
   }
 }
 
+const patchPost = async (req, res, next) => {
+  try {
+    const contact = await updateContact(req.params.contactId, req.body)
+    if (contact) {
+      return res.status(code.OK).json({
+        status: 'success',
+        code: code.OK,
+        data: { contact },
+      })
+    } else {
+      return next({
+        status: code.NOT_FOUND,
+        data: 'Not Found',
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   remove,
+  patchPost,
 }
