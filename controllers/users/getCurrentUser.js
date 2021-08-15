@@ -1,4 +1,3 @@
-  
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
 const getCurrentUser = (req, res, next) => {

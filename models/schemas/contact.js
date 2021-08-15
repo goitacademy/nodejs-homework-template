@@ -1,4 +1,3 @@
-  
 const { Schema, SchemaTypes } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 

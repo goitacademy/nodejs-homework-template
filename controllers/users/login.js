@@ -7,12 +7,20 @@ const login = async (req, res, next) => {
   try {
     const user = await service.getOne({ email });
     if (!user || !user.validatePassword(password)) {
-      res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         status: 'Error',
         code: HTTP_STATUS.UNAUTHORIZED,
         message: 'Email or password is wrong',
       });
     }
+    if (!user.verified) {
+      return res.status(HTTP_STATUS.CONFLICT).json({
+        status: 'Error',
+        code: HTTP_STATUS.CONFLICT,
+        message: 'User email is not verified. Please check your email',
+      });
+    }
+
     const { SECRET } = process.env;
     const payload = {
       id: user._id,

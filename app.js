@@ -15,6 +15,8 @@ app.use(express.json());
 app.use('/api/v1/contacts', api.contacts);
 app.use('/api/v1/users', api.users);
 
+app.use(express.static('public'));
+
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
 });

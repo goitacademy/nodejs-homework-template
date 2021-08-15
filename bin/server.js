@@ -8,6 +8,7 @@ mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
   .then(() => {
     console.log(`Server running. Use our API on port: ${PORT}`);

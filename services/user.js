@@ -4,8 +4,9 @@ const getById = id => User.findById(id);
 
 const getOne = filter => User.findOne(filter);
 
-const addUser = ({ email, password }) => {
-  const newUser = new User({ email });
+const addUser = async ({ password, ...other }) => {
+  console.log('other :>> ', other);
+  const newUser = await new User(other);
   newUser.setPassword(password);
   return newUser.save();
 };

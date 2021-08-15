@@ -1,4 +1,3 @@
-  
 const { contact: service } = require('../../services');
 const HTTP_STATUS = require('../../utils/httpStatusCodes');
 
