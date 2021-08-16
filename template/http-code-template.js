@@ -5,4 +5,11 @@ const code = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 }
-module.exports = { code }
+
+const sub = {
+  STARTER: 'starter',
+  PRO: 'pro',
+  BUSINESS: 'business',
+}
+
+module.exports = { code, sub }
