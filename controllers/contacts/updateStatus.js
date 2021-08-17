@@ -2,23 +2,28 @@ const { contacts: service } = require("../../services");
 
 const updateStatus = async (req, res, next) => {
   try {
-    const userId = req.user?.id;
-    const contact = await Contacts.updateContact(
-      userId,
+      const contact = await service.updateContact(
       req.params.contactId,
       req.body
     );
+    if (!body) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "missing field favorite"
+      });
+    }
     if (contact) {
-      return res.status(HttpCode.OK).json({
+      return res.status(200).json({
         status: "success",
-        code: HttpCode.OK,
+        code: 200,
         message: "contact update",
         data: { contact },
       });
     } else {
-      return res.status(HttpCode.NOT_FOUND).json({
+      return res.status(404).json({
         status: "error",
-        code: HttpCode.NOT_FOUND,
+        code: 404,
         data: "Not found",
       });
     }
