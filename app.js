@@ -19,7 +19,10 @@ app.use((_,__, next) => next(ErrorException.NotFound))
 
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
-  res.status(statusCode).json({ message: err.message })
+  res.status(statusCode).json({
+    message: err.message,
+    ...(err.errors ? {errors : err.errors} : {})
+  })
 })
 
 module.exports = app

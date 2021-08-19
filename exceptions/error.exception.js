@@ -1,8 +1,9 @@
 module.exports = class ErrorException extends Error {
 
-	constructor(status, message) {
+	constructor(status, message, errors) {
 		super(message);
 		this.status = status;
+		this.errors = errors
 	}
 
 	static BadRequest(message, errors = []) {
