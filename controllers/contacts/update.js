@@ -1,7 +1,16 @@
 const data = require('../../model')
+const { updateContactSchema } = require('../../validation')
 
 const update = async (req, res, next) => {
   try {
+    const { error } = updateContactSchema.validate(req.body)
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message
+      })
+    }
+
     const { contactId } = req.params
     const updateContact = await data.updateContact(contactId, req.body)
 
