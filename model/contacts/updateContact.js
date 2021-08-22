@@ -4,7 +4,7 @@ const update = require("./update");
 const updateContact = async(contactId, body) => {
     try {
         const contacts = await listContacts();
-        const idx = contacts.findIndex(item => item.id === contactId);
+        const idx = contacts.findIndex(item => String(item.id) === String(contactId));
         if(idx === -1){
             return null;
         }
