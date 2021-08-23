@@ -9,15 +9,15 @@ const updateContact = async (req, res, next) => {
     }
 
     const { contactId } = req.params;
-    const updateContact = await contactsOperations.updateContact(contactId, req.body);
-    if (!updateContact) {
+    const updatedContact = await contactsOperations.updateContact(contactId, req.body);
+    if (!updatedContact) {
       return res.status(404).json({
         message: "Not found",
       });
     }
 
     res.json({
-      updateContact,
+      updatedContact,
     });
   } catch (error) {
     next(error);
