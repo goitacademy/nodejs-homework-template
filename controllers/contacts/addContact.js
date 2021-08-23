@@ -5,7 +5,7 @@ const addContact = async (req, res, next) => {
   try {
     const { error } = contactJoiSchema.validate(req.body);
     if (error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: error.message,
       });
     }

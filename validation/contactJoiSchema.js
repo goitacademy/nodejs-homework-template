@@ -9,7 +9,7 @@ const contactJoiSchema = Joi.object({
       )
     )
     .required(),
-  phone: Joi.string().pattern(new RegExp("^([0-9]{3}) [0-9]{3}-[0-9]{4}$")).required(),
+  phone: Joi.string().pattern(new RegExp("^.[0-9]{3}. [0-9]{3}-[0-9]{4}$")).required(),
 });
 
 module.exports = contactJoiSchema;
