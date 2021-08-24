@@ -1,7 +1,8 @@
 const app = require('../app')
 const mongoose = require("mongoose")
-const PORT = process.env.PORT || 3000
-const DB_URL = "mongodb+srv://root:root@cluster0.2jy6m.mongodb.net/db_contacts?retryWrites=true&w=majority"
+const PORT = process.env.PORT || 5000
+const DB_URL = process.env.DB_URL
+// console.log(process.env);
 
 async function startApp() {
   try {

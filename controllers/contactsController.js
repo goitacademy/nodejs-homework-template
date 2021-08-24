@@ -1,8 +1,12 @@
 // const fs = require('fs/promises')
 // const contacts = require('./contacts.json')
-const ContactsService = require("../service/contactService.js")
+const ContactsService = require("../services/contactService.js")
 const http = require("../helpers/status.js")
-const {contactsSchema, contactStatusSchema} = require("../helpers/validation_schema")
+const {
+  contactsSchema,
+  contactStatusSchema,
+  contactsUpdateSchema,
+} = require("../helpers/contacts_validation_schema")
 
 const listContacts = async (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 const fs = require("fs").promises
 const path = require("path")
-const Contact = require('../Contact')
+const Contact = require('../schemas/contactSchema')
 class ContactsService {
     constructor() { }
 
