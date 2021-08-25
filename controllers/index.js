@@ -9,9 +9,9 @@ const addContact = require('./addContact')
 const updateContact = require('./updateContact')
 
 module.exports = {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
 }
