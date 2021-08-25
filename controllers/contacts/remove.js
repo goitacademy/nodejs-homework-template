@@ -9,8 +9,8 @@ const remove = async (req, res, next) => {
         message: `Contact ${contactId} was not found`
       })
     }
-    res.json({
-      removeContact
+    res.status(200).json({
+      message: 'Contact deleted'
     })
   } catch (error) {
     next(error)

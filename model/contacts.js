@@ -52,7 +52,7 @@ async function updateContact(contactId, newData) {
   }
   allContacts[specifiedContactIndex] = {
     ...allContacts[specifiedContactIndex],
-    newData
+    ...newData
   }
   const contacsJsonString = JSON.stringify(allContacts)
   await fs.writeFile(contactsPath, contacsJsonString)

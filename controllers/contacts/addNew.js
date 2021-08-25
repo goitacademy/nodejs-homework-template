@@ -10,7 +10,7 @@ const addNew = async (req, res, next) => {
       })
     }
     const newContact = await contactsOperations.addContact(req.body)
-    res.json({
+    res.status(201).json({
       newContact
     })
   } catch (error) {
