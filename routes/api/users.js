@@ -16,6 +16,7 @@ router.get('/refresh', usersController.refresh)
 router.get('/current', authMiddleware, usersController.getCurrentUser)
 router.patch(
   '/avatars',
+  authMiddleware,
   uploadMiddleware.single('avatar'),
   usersController.avatars
 )
