@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const gravatar = require('gravatar');
 
 const User = new mongoose.Schema({
   password: {
@@ -21,7 +22,13 @@ const User = new mongoose.Schema({
   },
   activationLink: {
     type: String,
-  }
+  },
+  avatarURL: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: '250' }, true);
+    }
+  },
   // token: {
   //   type: String,
   //   default: null,

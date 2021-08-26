@@ -13,6 +13,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.static('public'));
 
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', usersRouter)

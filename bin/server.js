@@ -1,5 +1,7 @@
 const app = require('../app')
 const mongoose = require("mongoose")
+require('dotenv').config()
+
 const PORT = process.env.PORT || 5000
 const DB_URL = process.env.DB_URL
 // console.log(process.env);

@@ -11,13 +11,18 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "bcrypt": "^5.0.1",
+    "cloudinary": "^1.26.3",
     "cookie-parser": "^1.4.5",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.16.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
     "morgan": "1.10.0",
+    "multer": "^1.4.3",
     "nodemailer": "^6.6.3",
     "uuid": "^8.3.2"
   },

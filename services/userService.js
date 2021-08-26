@@ -1,10 +1,13 @@
 const User = require('../schemas/userSchema')
 const bcrypt = require('bcrypt')
 const TokenService = require('./tokenService')
+const fs = require('fs').promises
 const UserDto = require("../dtos/userDto")
 const uuid = require('uuid')
 const MailService = require('./mailService')
-
+const jimp = require('jimp')
+const path = require('path')
+require('dotenv').config()
 class UserService {
     constructor() { }
 
@@ -16,11 +19,11 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3)
         const activationLink = uuid.v4()
         const user = await User.create({ email, password: hashPassword, activationLink })
-        await MailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
-        const userDto = new UserDto(user) 
+        await MailService.sendActivationMail(email, `${process.env.API_URL}/api/users/activate/${activationLink}`)
+        const userDto = new UserDto(user)
         const tokens = await TokenService.generateToken({ ...userDto })
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...tokens,user: userDto}
+        return { ...tokens, user: userDto }
     }
 
     async activate(activationLink) {
@@ -32,7 +35,7 @@ class UserService {
         await user.save()
     }
     
-    async login({email, password}) {
+    async login({ email, password }) {
         const user = await User.findOne({ email })
         if (!user) {
             throw new Error("Пользователь с таким email не найден")
@@ -42,21 +45,20 @@ class UserService {
             throw new Error("Неверный пароль")
         }
         const userDto = new UserDto(user)
-        const tokens = TokenService.generateToken({ ...userDto })
+        const tokens = await TokenService.generateToken({ ...userDto })
+        console.log(tokens);
         
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...tokens, user: userDto}
+        return { ...tokens, user: userDto }
     }
 
     async logout(refreshToken) {
         const token = await TokenService.removeToken(refreshToken)
         return token
-        // console.log('contacts', contacts);
-        // return contacts
     }
 
     async getCurrentUser(refreshToken) {
-        const {user} = await TokenService.findToken(refreshToken)
+        const { user } = await TokenService.findToken(refreshToken)
         const currentUser = await User.findById(user)
         if (!currentUser) {
             throw new Error("Пользователя не найдено")
@@ -78,7 +80,25 @@ class UserService {
         const tokens = TokenService.generateToken({ ...userDto })
         
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
-        return {...tokens, user: userDto}
+        return { ...tokens, user: userDto }
+    }
+
+    async updateAvatar(refreshToken, file) {
+        const pathFile = file.path
+        const { user } = await TokenService.findToken(refreshToken)
+        file.originalname = user + '.jpg'
+        const img = await jimp.read(pathFile)
+        await img
+            .autocrop()
+            .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE)
+            .writeAsync(pathFile)
+        
+        await fs.rename(pathFile, path.join(process.env.USERS_DIR, file.originalname))
+        console.log('PATH FILE', pathFile);
+        const update = { avatarURL: path.join(process.cwd(), process.env.USERS_DIR, file.originalname) };
+        const filter = { _id: user };
+        const currentUser = await User.findOneAndUpdate(filter, update)
+        return currentUser
     }
 }
 

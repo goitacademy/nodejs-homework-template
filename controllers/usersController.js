@@ -1,12 +1,17 @@
 // const fs = require('fs/promises')
 // const contacts = require('./contacts.json')
+const path = require('path')
+require('dotenv').config()
+const fs = require('fs').promises
 const UserService = require("../services/userService.js")
 const http = require("../helpers/status.js")
-const {
-  signupSchema,
-  loginSchema,
-} = require("../helpers/users_validation_schema")
+// const {
+//   signupSchema,
+//   loginSchema,
+// } = require("../helpers/users_validation_schema")
 const validator = require('../helpers/users_validation_schema')
+const USERS_DIR = path.join(process.cwd(), process.env.USERS_DIR)
+const jimp = require('jimp')
 
 class UserControllers {
   tokenMaxAge = 30 * 24 * 60 * 60 * 1000
@@ -49,15 +54,13 @@ class UserControllers {
   }
 
   getCurrentUser = async (req, res, next) => {
-    const { refreshToken } = res.cookies;
+    const { refreshToken } = req.cookies;
     try {
       const user = await UserService.getCurrentUser(refreshToken)
-      return res.status(http.DELETED).json({
+      return res.status(http.OK).json({
         status: "success",
         code: http.OK,
-        entity: {
-          ...user,
-        }
+        entity: user
       })
     } catch (e) {
       next(e)
@@ -81,6 +84,21 @@ class UserControllers {
       const userData = await UserService.refresh(refreshToken)
       res.cookie('refreshToken', userData.refreshToken, {maxAge: this.tokenMaxAge, httpOnly: true})
       return res.json(userData)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  avatars = async (req, res, next) => {
+    // console.log(req.user.id);
+    const {refreshToken} = req.cookies
+    try {
+      const updatedUser = await UserService.updateAvatar(refreshToken, req.file)
+      return res.status(http.OK).json({
+        status: "success",
+        code: http.OK,
+        entity: updatedUser,
+      })
     } catch (e) {
       next(e)
     }
