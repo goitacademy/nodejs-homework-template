@@ -12,6 +12,6 @@ const addContact = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
 };
-
 module.exports = addContact;
