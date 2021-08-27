@@ -29,3 +29,56 @@
 - `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
 - `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
 - `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+
+Конспект:
+
+<!-- Базовый метод -->
+const http = require('http')
+
+const server = http.createServer((req, res) => {
+const { url } = req;
+switch (url) {
+case '/':
+res.write('Home page');
+break;
+case '/contacts':
+res.write('Contacts page');
+break;
+
+    default:
+      res.write('Not found');
+}
+
+res.end()
+})
+
+server.listen(4000)
+
+
+<!-- Через Express -->
+const express = require('express');
+const contacts = require('../model/contacts.json')
+
+const app = express();
+
+app.use((req, res, next) => {
+  console.log('Midleware at first');
+  next();
+})
+
+app.get('/', (req, res) => {
+
+  res.send('<h1>Home Page</h1>')
+})
+
+app.get('/contacts', (req, res) => {
+  // res.send('<h1>Contacts Page</h1>')
+  res.json(contacts)
+})
+
+//мидлвар который можно ставить после методов запроса:
+app.use((_, res) => {
+  res.status(404).send('Not found')
+})
+
+app.listen(4000, ()=> console.log('Server is running'));
