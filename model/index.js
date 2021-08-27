@@ -50,7 +50,7 @@ const addContact = async body => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const [contactToUpdate] = contacts.filter(item => item.id === contactId);
+  const [contactToUpdate] = contacts.find(item => item.id === contactId);
   if (contactToUpdate) {
     Object.assign(contactToUpdate, body);
     await update(contacts);
