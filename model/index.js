@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs").promises;
 const contactsPath = path.join(__dirname, "contacts.json");
-const { v4: uuid } = require("uuid");
 
 const readContacts = async () => {
   const data = await fs.readFile(contactsPath);
@@ -53,7 +52,6 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     const newContact = {
-      id: uuid(),
       ...body,
     };
     const contacts = await readContacts();
