@@ -1,9 +1,9 @@
-const {Contact} = require('../../models')
+const { Contact } = require("../../models");
 
 const add = async (req, res, next) => {
   try {
     const newContact = await Contact.create(req.body);
-    if("favorite" in newContact){
+    if ("favorite" in newContact) {
       newContact.favorite = false;
     }
     res.status(201).json({

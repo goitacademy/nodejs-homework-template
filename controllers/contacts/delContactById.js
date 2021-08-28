@@ -1,5 +1,4 @@
-const {Contact} = require('../../models')
-
+const { Contact } = require("../../models");
 
 const updateContactById = async (req, res, next) => {
   try {

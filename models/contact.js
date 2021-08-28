@@ -14,11 +14,11 @@ const contactSchema = Schema(
     },
     email: {
       type: String,
-      // match: emailmask,
+      match: emailmask,
     },
     phone: {
       type: String,
-      // match: phonemask,
+      match: phonemask,
     },
     favorite: {
       type: Boolean,
@@ -28,8 +28,6 @@ const contactSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-
-
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, joiSchema};
+module.exports = { Contact, joiSchema };
