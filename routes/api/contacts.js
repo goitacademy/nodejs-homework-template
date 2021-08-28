@@ -4,6 +4,7 @@ const ctrl = require("../../controllers");
 const {
   validationCreateContact,
   validationUpdateContact,
+  validationUpdateStatusContact,
 } = require("./validation");
 
 router.get("/", ctrl.getAll);
@@ -16,4 +17,9 @@ router.delete("/:contactId", ctrl.remove);
 
 router.put("/:contactId", validationUpdateContact, ctrl.update);
 
+router.patch(
+  "/:contactId/favorite",
+  validationUpdateStatusContact,
+  ctrl.updateStatus
+);
 module.exports = router;

@@ -14,6 +14,8 @@ const schemaCreateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .required(),
+
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaUpdateContact = Joi.object({
@@ -30,7 +32,13 @@ const schemaUpdateContact = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .optional(),
-}).or("name", "email", "phone");
+
+  favorite: Joi.boolean().optional(),
+}).or("name", "email", "phone", "favorite");
+
+const schemaUpdateStatusContact = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const validate = async (schema, obj, next, message) => {
   try {
@@ -52,5 +60,13 @@ module.exports = {
   },
   validationUpdateContact: (req, res, next, message = "missing fields") => {
     return validate(schemaUpdateContact, req.body, next, message);
+  },
+  validationUpdateStatusContact: (
+    req,
+    res,
+    next,
+    message = "missing field favorite"
+  ) => {
+    return validate(schemaUpdateStatusContact, req.body, next, message);
   },
 };
