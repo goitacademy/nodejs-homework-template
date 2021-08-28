@@ -2,14 +2,6 @@ const { Contact } = require('../../model')
 
 const update = async (req, res, next) => {
   try {
-    // const { error } = joiContactSchema.validate(req.body)
-
-    // if (error) {
-    //   return res.status(400).json({
-    //     message: error.message
-    //   })
-    // }
-
     const { contactId } = req.params
     const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true})
 
