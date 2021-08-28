@@ -1,19 +1,16 @@
-const { joiContactSchema } = require("../../validation");
-const addContact = require("../../model/contacts/addContact");
+const {Contact} = require('../../models')
 
 const add = async (req, res, next) => {
   try {
-    const { error } = joiContactSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({
-        message: "missing required name field",
-      });
+    const newContact = await Contact.create(req.body);
+    if("favorite" in newContact){
+      newContact.favorite = false;
     }
-    const newContact = await addContact(req.body);
     res.status(201).json({
       newContact,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
