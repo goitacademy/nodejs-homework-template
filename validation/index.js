@@ -1,4 +1,3 @@
-const contactSchema = require("./contactSchema");
-module.exports = {
-  contactSchema,
-};
+const validation = require("./validation");
+
+module.exports = { validation };
