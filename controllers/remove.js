@@ -1,4 +1,4 @@
-const Contacts = require("../model/products");
+const Contacts = require("../repositories");
 
 const remove = async (req, res, next) => {
   try {
@@ -8,6 +8,7 @@ const remove = async (req, res, next) => {
         status: "success",
         message: "contact deleted",
         code: 200,
+        data: { contact },
       });
     }
     return res.json({ status: "error", code: 404, message: "Not found" });

@@ -1,4 +1,4 @@
-const Contacts = require("../model/products");
+const Contacts = require("../repositories");
 
 const add = async (req, res, next) => {
   try {
