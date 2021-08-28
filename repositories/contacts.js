@@ -1,6 +1,3 @@
-// const path = require("path");
-// const fs = require("fs").promises;
-// const contactsPath = path.join(__dirname, "contacts.json");
 const { Contact } = require("../model/contact");
 
 const readContacts = async () => {

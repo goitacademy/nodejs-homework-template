@@ -1,8 +1,5 @@
 const app = require("../app");
 const db = require("../model/db");
-// const dotenv = require("dotenv");
-// const mongoose = require("mongoose");
-// dotenv.config();
 const { PORT = 3000 } = process.env;
 db.then(
   app.listen(PORT, () => {
