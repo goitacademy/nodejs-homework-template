@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    semi: ['error', 'never'],
     'comma-dangle': 'off',
     'space-before-function-paren': 'off',
   },
