@@ -15,10 +15,7 @@ const signup = async (req, res, next) => {
     res.status(201).json({
       status: "created",
       code: 201,
-      user: {
-        email: "example@example.com",
-        subscription: "starter",
-      },
+      message: "Successfully registered",
     });
   } catch (error) {}
 };

@@ -4,6 +4,6 @@ const logout = require("./logout");
 
 module.exports = {
   signup,
-  //   signin,
-  //   logout,
+  signin,
+  logout,
 };

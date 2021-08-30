@@ -5,7 +5,7 @@ const validation = (schema) => {
       return res.status(400).json({
         status: "Bad Request",
         code: 400,
-        message: "Ошибка от Joi или другой библиотеки валидации",
+        message: "error.message",
       });
     }
     next();

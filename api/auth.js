@@ -4,7 +4,7 @@ const { auth: ctrl } = require("../controllers");
 
 const router = express.Router();
 
-const { validation } = require("../middlewares");
+const { validation, authenticate } = require("../middlewares");
 const {
   user: { joiSchema },
 } = require("../models/schemas");
@@ -12,10 +12,12 @@ const {
 router.post("/signup", validation(joiSchema), ctrl.signup);
 // router.post("/register", ctrl.register);
 
-// router.post("/signin", ctrl.signin);
+router.post("/signin", ctrl.signin);
 // router.post("/login", ctrl.login);
 
-// router.get("/logout", ctrl.logout);
+router.post("/logout", authenticate, ctrl.logout);
+
+router.get("/current", authenticate, ctrl.logout);
 
 // =============================
 

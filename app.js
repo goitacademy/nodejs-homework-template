@@ -7,12 +7,12 @@ const api = require("./api");
 
 const app = express();
 
-app.use(cors());
-
 // Обработчик тела запроса в формате json
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/v1/auth", api.auth);
+app.use("/api/v1/contacts", api.contacts);
 
 app.use((_, res) => {
   res.status(404).send({
@@ -40,11 +40,11 @@ mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+    // useCreateIndex: true,
+    // useFindAndModify: false,
   })
   .then(() => {
-    app.listen(PORT);
+    // app.listen(PORT);
     console.log("Database connection successful");
   })
   .catch((error) => console.log(error));
@@ -83,4 +83,4 @@ mongoose
 //   res.status(500).json({ message: err.message });
 // });
 
-// module.exports = app;
+module.exports = app;
