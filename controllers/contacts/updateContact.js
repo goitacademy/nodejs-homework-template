@@ -1,27 +1,19 @@
-const contactsOperations = require('../../model/contacts')
-const { contactJoiSchema } = require('../../validation')
+const { Contact } = require("../../models");
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = contactJoiSchema.validate(req.body)
-    if (error) {
-      return res.status(400).json({ message: error.message })
-    }
+    const { contactId } = req.params;
 
-    const { contactId } = req.params
-    const updatedContact = await contactsOperations.updateContact(contactId, req.body)
-    if (!updatedContact) {
-      return res.status(404).json({
-        message: 'Not found',
-      })
-    }
+    const contacts = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
 
-    res.json({
-      updatedContact,
-    })
+    if (!contacts) return res.status(404).json({ message: "Not found" });
+
+    res.json({ contacts });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-module.exports = updateContact
+module.exports = updateContact;
