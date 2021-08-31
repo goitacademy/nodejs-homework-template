@@ -1,7 +1,6 @@
 const express = require("express");
 
 const { contacts: ctrl } = require("../controllers");
-// const { validation } = require("../../middleware/validateContact.js");
 
 const router = express.Router();
 

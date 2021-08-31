@@ -28,7 +28,7 @@ app.use((error, _, res, __) => {
   res.status(status).json({
     status: "error",
     code: status,
-    message,
+    error,
   });
 });
 
@@ -48,39 +48,3 @@ mongoose
     console.log("Database connection successful");
   })
   .catch((error) => console.log(error));
-
-// Hashing of passwords
-// const bcrypt = require("bcryptjs");
-
-// const password = "password";
-
-// const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-
-// console.log(hashPassword);
-
-// const result = bcrypt.compareSync(password, hashPassword);
-// console.log(result);
-
-// ==================================
-
-// const logger = require("morgan");
-
-// const contactsRouter = require("./routes/api/contacts");
-
-// const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-// app.use(logger(formatsLogger));
-
-// app.use(express.json());
-
-// app.use("/api/contacts", contactsRouter);
-
-// app.use((req, res) => {
-//   res.status(404).json({ message: "Not found" });
-// });
-
-// app.use((err, req, res, next) => {
-//   res.status(500).json({ message: err.message });
-// });
-
-module.exports = app;
