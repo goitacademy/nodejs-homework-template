@@ -14,6 +14,7 @@ app.use(cors());
 app.use("/api/v1/auth", api.auth);
 app.use("/api/v1/contacts", api.contacts);
 
+// Processing of non-existant requests
 app.use((_, res) => {
   res.status(404).send({
     status: "error",
@@ -32,9 +33,8 @@ app.use((error, _, res, __) => {
   });
 });
 
-const { DB_HOST, PORT = 3000 } = process.env;
-
 // Connecting to the DB
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose
   .connect(DB_HOST, {
@@ -43,8 +43,10 @@ mongoose
     // useCreateIndex: true,
     // useFindAndModify: false,
   })
-  .then(() => {
+  .then(async () => {
     // app.listen(PORT);
     console.log("Database connection successful");
   })
   .catch((error) => console.log(error));
+
+module.exports = app;
