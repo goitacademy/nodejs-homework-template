@@ -1,6 +1,10 @@
 const express = require('express')
 
+const { joiSchema } = require("../../models/contact");
+const { validation } = require("../../middlewares");
 const ctrl = require("../../controllers/contacts");
+
+const validationMiddleware = validation(joiSchema);
 
 const router = express.Router()
 
@@ -8,11 +12,11 @@ router.get('/', ctrl.getAllContacts);
 
 router.get('/:contactId', ctrl.getById);
 
-router.post('/', ctrl.add);
+router.post('/', validationMiddleware, ctrl.add);
 
 router.delete('/:contactId', ctrl.delContactById);
 
-router.patch('/:contactId', ctrl.updateContactById);
+router.patch('/:contactId', validationMiddleware, ctrl.updateContactById);
 
 module.exports = router
 
