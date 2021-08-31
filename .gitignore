@@ -1,1 +1,4 @@
-node_modules
+node_modules/
+packege.look.json
+.env
+config.js

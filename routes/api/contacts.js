@@ -6,16 +6,25 @@ const {
   add,
   updateContactById,
   delContactById,
+  updateStatusContact,
 } = require("../../controllers/contacts");
+
+const { Contact } = require("../../models");
+
+const { validation } = require("../../middlewares");
+
+const validationMiddleware = validation(Contact);
 
 router.get("/", getAllContacts);
 
 router.get("/:contactId", getById);
 
-router.post("/", add);
+router.post("/", validationMiddleware, add);
 
 router.delete("/:contactId", delContactById);
 
-router.patch("/:contactId", updateContactById);
+router.patch("/:contactId", validationMiddleware, updateContactById);
+
+router.patch("/:contactId/favorite", validationMiddleware, updateStatusContact);
 
 module.exports = router;
