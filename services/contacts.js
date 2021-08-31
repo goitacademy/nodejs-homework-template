@@ -1,4 +1,4 @@
-const { Contact } = require("../model");
+const { Contact } = require("../models");
 
 const listContacts = () => {
   return Contact.find({}, "_id name email phone favorite");
@@ -8,7 +8,7 @@ const getById = (contactId) => {
   return Contact.findById(contactId, "_id name email phone favorite");
 };
 
-const addContact = (newContact) => {
+const add = (newContact) => {
   return Contact.create(newContact);
 };
 
@@ -26,7 +26,7 @@ const updateStatusContact = (contactId, data) => {
 
 module.exports = {
   listContacts,
-  addContact,
+  add,
   getById,
   updateById,
   removeById,
