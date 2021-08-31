@@ -1,8 +1,12 @@
-const contactsOperations = require('../../model')
+const { Contact } = require('../../model')
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsOperations.listContacts()
+    console.log(Contact)
+    const contacts = await Contact.find()
+    if (!contacts) {
+      res.status(404).json({ message: 'not found' })
+    }
     res.json({ contacts })
   } catch (error) {
     next(error)
