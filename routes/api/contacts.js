@@ -18,6 +18,8 @@ router.delete('/:contactId', ctrl.delContactById);
 
 router.patch('/:contactId', validationMiddleware, ctrl.updateContactById);
 
+router.patch('/:contactId/favorite', ctrl.updateContactByFavorite);
+
 module.exports = router
 
     // "name": "Lois Lane",
