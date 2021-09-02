@@ -1,8 +1,8 @@
 const express = require("express");
 
-const validationSchema = require("../../validation");
+const validationSchema = require("../../../validation");
 
-const contactsOperations = require("../../model");
+const contactsOperations = require("../../../model");
 
 const router = express.Router();
 
