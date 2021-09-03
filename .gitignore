@@ -1,2 +1,11 @@
 .idea
+<<<<<<< HEAD
 node_modules
+=======
+.vscode
+package-lock.json
+yarn.lock
+yarn.log
+node_modules/
+.env
+>>>>>>> origin/hw-03-mongodb
