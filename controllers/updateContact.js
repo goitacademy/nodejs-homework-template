@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const contactsOperations = require('../model')
 const { contactJoiSchema } = require('../validation')
 
@@ -20,18 +19,6 @@ const updateContact = async (req, res, next) => {
     res.json({
       updatedContact,
     })
-=======
-const { Contact } = require('../model')
-
-const updateContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params
-    const contacts = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
-    if (!contacts) {
-      return res.status(404).json({ message: 'Not found required contact' })
-    }
-    res.status(200).json({ contacts })
->>>>>>> origin/hw-03-mongodb
   } catch (error) {
     next(error)
   }
