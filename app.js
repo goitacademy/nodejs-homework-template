@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 
-const {usersRouter} = require('./routes/api')
+const { usersRouter, ordersRouter } = require("./routes/api");
 
 const app = express();
 
@@ -16,13 +16,19 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/orders", ordersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = err.message, name } = err;
+  res.status(status).json({
+    status: name,
+    code: status,
+    message,
+  });
 });
 
 module.exports = app;
