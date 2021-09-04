@@ -19,17 +19,17 @@ const userSchema = Schema({
   //   enum: ["starter", "pro", "business"],
   //   default: "starter"
   // },
-  // token: {
-  //   type: String,
-  //   default: null,
-  // },
+  token: {
+    type: String,
+    default: null,
+  },
 }, { versionKey: false, timestamps: true })
 
 const joiUserSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().min(6).required(),
   // subscription:
-  // token:
+  token: Joi.string().default(null),
 })
 
 const User = model('user', userSchema)
