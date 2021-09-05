@@ -20,6 +20,10 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   {
     versionKey: false,
@@ -27,7 +31,7 @@ const contactSchema = Schema(
   }
 );
 const joiContactSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string().min(3).required(),
   email: Joi.string()
     .pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
     .required(),
