@@ -1,80 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-const contactsOperations = require('../../model');
-const validate = require('../../validation/validationContactSchema');
+const ctrl = require('../../controllers');
+const {
+  joiSchemaAddContact,
+  joiSchemaUpdateContact,
+} = require('../../models/contact');
+const { validation } = require('../../middlewares');
 
-router.get('/', async (_req, res, next) => {
-  try {
-    const contacts = await contactsOperations.listContacts();
-    res.json({
-      contacts,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/', ctrl.getAll);
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await contactsOperations.getContactById(contactId);
-    if (!contact) {
-      return res.status(404).json({
-        message: 'Not found',
-      });
-    }
-    res.json({
-      contact,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/:contactId', ctrl.getById);
 
-router.post('/', validate.addContact, async (req, res, next) => {
-  try {
-    const newContact = await contactsOperations.addContact(req.body);
-    res.status(201).json({
-      newContact,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.post('/', validation(joiSchemaAddContact), ctrl.add);
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const deleteContact = await contactsOperations.removeContact(contactId);
-    if (!deleteContact) {
-      return res.status(404).json({
-        message: 'Not found',
-      });
-    }
-    res.json({
-      deleteContact,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete('/:contactId', ctrl.del);
 
-router.put('/:id', validate.updateContact, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const updateContact = await contactsOperations.updateContact(id, req.body);
-    if (!updateContact) {
-      return res.status(404).json({
-        message: 'Not found',
-      });
-    }
-    res.json({
-      updateContact,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.put('/:id', validation(joiSchemaUpdateContact), ctrl.update);
+
+router.patch(
+  '/:contactId/favorite',
+  validation(joiSchemaUpdateContact),
+  ctrl.updateFavorite
+);
 
 module.exports = router;
