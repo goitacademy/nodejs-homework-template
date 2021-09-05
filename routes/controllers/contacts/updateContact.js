@@ -1,14 +1,11 @@
-const contactsOps = require('../../../model');
-const { schemaUpdateContact } = require('../../api/validation');
+const { Contact } = require('../../../models');
 
 const updateContacts = async (req, res, next) => {
   try {
-    const { error } = schemaUpdateContact.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: 'missing field' });
-    }
     const { contactId: id } = req.params;
-    const updatedById = await contactsOps.updateContact(id, req.body);
+    const updatedById = await Contact.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (updatedById) {
       return res
         .status(200)

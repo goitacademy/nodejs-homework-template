@@ -1,9 +1,9 @@
-const contactsOps = require('../../../model');
+const { Contact } = require('../../../models');
 
 const getContactById = async (req, res, next) => {
   try {
     const { contactId: id } = req.params;
-    const contactById = await contactsOps.getContactById(id);
+    const contactById = await Contact.findById(id);
     if (contactById) {
       return res
         .status(200)
