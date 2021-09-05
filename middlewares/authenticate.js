@@ -14,8 +14,6 @@ const authenticate = async (req, res, next) => {
       })
     }
 
-    const { SECRET_KEY } = process.env
-    const { id } = jwt.verify(token, SECRET_KEY)
     const user = await User.findOne({ token })
 
     if (!user) {

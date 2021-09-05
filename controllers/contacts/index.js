@@ -4,6 +4,7 @@ const add = require('./add')
 const update = require('./update')
 const remove = require('./remove')
 const updateStatus = require('./updateStatus')
+const getFavorite = require('./getFavorite')
 
 module.exports = {
   getAll,
@@ -12,4 +13,5 @@ module.exports = {
   update,
   remove,
   updateStatus,
+  getFavorite,
 }
