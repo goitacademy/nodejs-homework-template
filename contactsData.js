@@ -3,9 +3,7 @@ const fs = require('fs').promises
 const path = require('path')
 
 const contactsPath = path.join(__dirname, './model/contacts.json')
-// console.log(contactsPath);
 
-// TODO: задокументировать каждую функцию
 async function listContacts() {
   try {
     const data = await fs.readFile(contactsPath)
@@ -22,12 +20,9 @@ async function getContactById(contactId) {
     const selectContactById = contacts.find(item => item.id == contactId)
     if (!selectContactById) {
       return null
-      // throw new Error(`Contact with id=${contactId} not found`)
     }
-    // console.log(selectContactById)
     return selectContactById
   } catch (error) {
-    // throw error
   }
 }
 
@@ -39,11 +34,9 @@ async function removeContact(contactId) {
       return null
     }
     const newListContacts = contacts.filter(item => item.id !== contactId)
-    // const delProduct = products.splice(idx, 1);
     await updateListContacts(newListContacts)
     return contacts[idx]
   } catch (error) {
-    // throw error
   }
 }
 
@@ -51,7 +44,6 @@ async function addContact(data) {
   try {
     const newContact = { ...data, id: v4() }
     const contacts = await listContacts()
-    //   const newListContacts =  contacts.push(newContact);
     const newListContacts = [...contacts, newContact]
     await updateListContacts(newListContacts)
     return newContact
@@ -75,7 +67,6 @@ async function updateContact(contactId, updateInfo) {
     await updateListContacts(contacts)
     return contacts[idx]
   } catch (error) {
-    // throw error
   }
 }
 
