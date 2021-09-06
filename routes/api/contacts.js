@@ -3,12 +3,10 @@ const router = express.Router()
 
 const { contactSchema } = require('../../validation')
 const contactsOperations = require('../../contactsData')
-// console.log(contactsOperations)
 
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts()
-    // console.log(contacts)
     res.json({
       status: 'success',
       code: 200,
@@ -36,12 +34,10 @@ router.get('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  // res.json({ message: 'template message' })
 })
 
 router.post('/', async (req, res, next) => {
   try {
-    // console.log(req.body)
     const { error } = contactSchema.validate(req.body)
     if (error) {
       return res.status(400).json({
@@ -49,18 +45,16 @@ router.post('/', async (req, res, next) => {
       })
     }
     const newContact = await contactsOperations.addContact(req.body)
-    console.log(newContact)
     res.status(201).json({
       newContact
     })
   } catch (error) {
-
+    next(error)
   }
 })
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    console.log(req.body)
     const { error } = contactSchema.validate(req.body)
     if (error) {
       return res.status(400).json({
@@ -68,14 +62,12 @@ router.put('/:contactId', async (req, res, next) => {
       })
     }
     const { contactId } = req.params
-    console.log(contactId)
     const updateContact = await contactsOperations.updateContact(contactId, req.body)
-    console.log(updateContact)
     res.status(200).json({
       updateContact
     })
   } catch (error) {
-
+    next(error)
   }
 })
 
@@ -95,15 +87,6 @@ router.delete('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  // res.json({ message: 'template message' })
 })
-
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.patch('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 
 module.exports = router
