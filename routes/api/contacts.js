@@ -1,24 +1,25 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// функция обработчик запросов называються Контроллеры они могут быть вынесены в отдельные файлы
+const {
+  getContacts,
+  getContactId,
+  postContacts,
+  deleteContact,
+  putContact,
+  patchContact,
+} = require("../../controllers/contactsController");
+const {
+  validationData,
+  patchValidation,
+} = require("../../middlwarer/validation");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getContacts);
+router.get("/:contactId", getContactId);
+router.post("/", validationData, postContacts);
+router.delete("/:contactId", deleteContact);
+router.put("/:contactId", validationData, putContact);
+router.patch("/:contactId", patchValidation, patchContact);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
