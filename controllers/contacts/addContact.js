@@ -1,12 +1,10 @@
 const { Contact } = require('../../model')
 
 const addContact = async (req, res, next) => {
-  try {
-    const additionalContacts = await Contact.create(req.body)
-    res.status(201).json({ additionalContacts })
-  } catch (error) {
-    next(error)
-  }
+  const newContact = { ...req.body, owner: req.user._id }
+  const additionalContact = await Contact.create(newContact)
+
+  res.status(201).json({ data: additionalContact })
 }
 
 module.exports = addContact
