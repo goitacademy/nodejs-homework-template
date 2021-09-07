@@ -9,13 +9,16 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "commander": "^8.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
     "express": "4.17.1",
+    "http-errors": "^1.7.2",
     "joi": "^17.4.2",
     "joi-phone-validation": "^1.0.7",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.2",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
