@@ -1,0 +1,63 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add bcript
+
+PATH: 
+  C:\Users\User\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\User\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\User\AppData\Roaming\npm;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Program Files\heroku\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  16.3.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/bcript: Not found
+      at Request.params.callback [as _callback] (C:\Users\User\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66992:18)
+      at Request.self.callback (C:\Users\User\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140763:22)
+      at Request.emit (node:events:394:28)
+      at Request.<anonymous> (C:\Users\User\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141735:10)
+      at Request.emit (node:events:394:28)
+      at IncomingMessage.<anonymous> (C:\Users\User\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141657:12)
+      at Object.onceWrapper (node:events:513:28)
+      at IncomingMessage.emit (node:events:406:35)
+      at endReadableNT (node:internal/streams/readable:1329:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "template",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node ./bin/server.js",
+      "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+      "lint": "eslint **/*.js",
+      "lint:fix": "eslint --fix **/*.js"
+    },
+    "dependencies": {
+      "cors": "2.8.5",
+      "cross-env": "7.0.3",
+      "dotenv": "^10.0.0",
+      "express": "4.17.1",
+      "joi": "^17.4.2",
+      "mongoose": "^5.13.8",
+      "morgan": "1.10.0"
+    },
+    "devDependencies": {
+      "eslint": "^7.19.0",
+      "eslint-config-standard": "^16.0.2",
+      "eslint-plugin-import": "^2.22.1",
+      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-promise": "^4.2.1",
+      "nodemon": "2.0.7"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
