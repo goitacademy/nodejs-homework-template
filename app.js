@@ -1,5 +1,3 @@
-// const { DB_HOST, PORT = 3000 } = process.env /// ----
-
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
@@ -15,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
-console.log('Hello')
+
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' })
 })

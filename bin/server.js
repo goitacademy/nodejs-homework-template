@@ -10,10 +10,10 @@ mongoose.connect(DB_HOST, {
   useUnifiedTopology: true
 }).then(() => {
   app.listen(PORT, () => {
-    console.log(`Server running. Use our API on port: ${PORT}`)
+    console.log('Database connection successful')
   })
 })
   .catch((error) => {
-    console.log(error);
+    console.log(error)
     process.exit(1)
   })

@@ -5,9 +5,9 @@ const updateById = require('./updateById')
 const delById = require('./deleteById')
 
 module.exports = {
-  listContacts,
-  getById,
-  add,
-  updateById,
-  delById
+  // listContacts,
+  // getById,
+  // add,
+  // updateById,
+  // delById
 }
