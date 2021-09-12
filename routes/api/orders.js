@@ -8,7 +8,9 @@ const {
 } = require("../../middlewares");
 const { getAllOrders, addOrder } = require("../../controllers/orders");
 
+
 const router = express.Router();
+// console.log(validation(joiSchema));
 
 const orderValidationMiddleware = validation(joiSchema);
 
