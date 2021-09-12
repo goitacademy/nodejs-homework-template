@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-var Jimp = require('jimp');
+var Jimp = require("jimp");
 
 const tempDir = path.join(__dirname, "../", "tmp");
 
@@ -21,22 +21,22 @@ const tempDir = path.join(__dirname, "../", "tmp");
 // });
 
 // module.exports = upload;
-const multerConfig =  multer.diskStorage({
-    destination: (req, file, cb)=>{
-        cb(null, tempDir);
-    },
-    filename: (req, file, cb) =>{
-        const {id} = req.params;
-        const newNameAvatar = `${id}-${file.originalname}`;
-        cb(null, newNameAvatar);
-    },
-    limits: {
-        fileSize: 1024
-    }
+const multerConfig = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, tempDir);
+  },
+  filename: (req, file, cb) => {
+    const { id } = req.params;
+    const newNameAvatar = `${id}-${file.originalname}`;
+    cb(null, newNameAvatar);
+  },
+  limits: {
+    fileSize: 1024,
+  },
 });
 
 const upload = multer({
-    storage: multerConfig
+  storage: multerConfig,
 });
 
 module.exports = upload;

@@ -19,8 +19,8 @@ const userSchema = Schema(
       unique: true,
     },
     avatarURL: {
-        type: String,
-        default: "",
+      type: String,
+      default: "",
     },
 
     subscription: {
@@ -36,14 +36,13 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
-userSchema.methods.comparePassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
-}
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const joiUserSchema = Joi.object({
   password: Joi.string().min(5).required(),
@@ -54,5 +53,3 @@ const joiUserSchema = Joi.object({
 const User = model("user", userSchema);
 
 module.exports = { User, joiUserSchema };
-
-
