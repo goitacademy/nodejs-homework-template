@@ -18,15 +18,24 @@ const validationData = (req, res, next) => {
   });
   checkValidation(schema, req, res, next);
 };
-const patchValidation = (req, res, next) => {
+const updateContactValidation = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).optional(),
-    phone: Joi.string().min(7).max(10).optional(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-      .optional(),
+    name: Joi.string().min(3).max(30),
+    phone: Joi.string().min(7).max(14),
+    email: Joi.string().email({ minDomainSegments: 2 }),
+  }).min(1);
+  checkValidation(schema, req, res, next);
+};
+
+const updateStatusContactValidation = (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
   });
   checkValidation(schema, req, res, next);
 };
 
-module.exports = { validationData, patchValidation };
+module.exports = {
+  validationData,
+  updateContactValidation,
+  updateStatusContactValidation,
+};
