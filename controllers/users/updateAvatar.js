@@ -17,7 +17,7 @@ const updateAvatar = async (req, res) => {
     await fs.rename(tempPath, uploadPath)
     const avatarURL = `/avatars/${id}/${originalname}`
     await User.findByIdAndUpdate(id, { avatarURL })
-    res.json({ result: avatarURL })
+    res.json({ avatarURL: avatarURL })
   } catch (error) {
     await fs.unlink(tempPath)
     throw error
