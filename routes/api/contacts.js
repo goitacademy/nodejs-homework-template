@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const contactsOperation = require("../../model");
+const { contactsSchema } = require("../../schemas");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -40,6 +41,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      const err = new Error(error.message);
+      err.status = 404;
+      throw err;
+    }
     const contact = await contactsOperation.addContact(req.body);
     res.status(201).json({
       status: "success",
@@ -77,6 +84,12 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      const err = new Error(error.message);
+      err.status = 404;
+      throw err;
+    }
     const { contactId } = req.params;
     const contact = await contactsOperation.updateContactById(
       contactId,
