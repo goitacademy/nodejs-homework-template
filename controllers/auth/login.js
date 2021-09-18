@@ -20,12 +20,10 @@ const login = async (req, res) => {
   const payload = { id: user._id }
 
   const { SECRET_KEY } = process.env
+
   const token = jwt.sign(payload, SECRET_KEY)
-  const loggedUser = await User.findByIdAndUpdate(
-    user._id,
-    { token },
-    { new: true }
-  )
+
+  const loggedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true })
   res.json({ token, loggedUser })
 }
 
