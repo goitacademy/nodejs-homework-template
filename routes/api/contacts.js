@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const contactsOperation = require("../../model");
-const { contactsSchema } = require("../../schemas");
+const contactsSchema = require("../../schemas");
 
 router.get("/", async (req, res, next) => {
   try {
