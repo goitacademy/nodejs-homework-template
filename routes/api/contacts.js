@@ -28,7 +28,7 @@ router.put(
 
 router.patch('/:contactId/favorite',
   tryCatchWrapper(authenticate),
-  tryCatchWrapper(ctrl.updateStatusContact
-  ))
+  tryCatchWrapper(ctrl.updateFavorite)
+)
 
 module.exports = router
