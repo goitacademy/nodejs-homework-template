@@ -1,3 +1,5 @@
 const { Contact, JoiContactSchema } = require('./contactModel')
 
-module.exports = { Contact, JoiContactSchema }
+const { User, JoiUserSchema } = require('./userModel')
+
+module.exports = { Contact, JoiContactSchema, User, JoiUserSchema }
