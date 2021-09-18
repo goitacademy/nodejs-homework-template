@@ -1,4 +1,3 @@
-const fs = require("fs/promises");
 const getAllContacts = require("./getAllContacts");
 const updateContacts = require("./updateContacts");
 
