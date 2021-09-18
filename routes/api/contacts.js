@@ -11,7 +11,11 @@ router.get('/', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.listContacts
 
 router.get('/:contactId', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.getContactById))
 
-router.post('/', tryCatchWrapper(authenticate), validationContactMiddleware, tryCatchWrapper(ctrl.addContact))
+router.post('/',
+  tryCatchWrapper(authenticate),
+  validationContactMiddleware,
+  tryCatchWrapper(ctrl.addContact
+  ))
 
 router.delete('/:contactId', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.removeContact))
 
@@ -22,6 +26,9 @@ router.put(
   tryCatchWrapper(ctrl.updateContact)
 )
 
-router.patch('/:contactId/favorite', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.updateStatusContact))
+router.patch('/:contactId/favorite',
+  tryCatchWrapper(authenticate),
+  tryCatchWrapper(ctrl.updateStatusContact
+  ))
 
 module.exports = router

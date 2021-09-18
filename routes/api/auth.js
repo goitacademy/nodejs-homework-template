@@ -18,8 +18,7 @@ router.get('/logout', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.logout
 
 router.patch('/', tryCatchWrapper(authenticate), tryCatchWrapper(ctrl.updateCurrentUserSubscription))
 
-router.patch(
-  '/avatars',
+router.patch('/avatars',
   tryCatchWrapper(authenticate),
   tryCatchWrapper(upload.single('avatarURL')),
   tryCatchWrapper(ctrl.updateUserAvatar)
