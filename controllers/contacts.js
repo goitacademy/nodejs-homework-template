@@ -1,14 +1,13 @@
-const { BadRequest, NotFound } = require("http-errors");
+const { NotFound } = require("http-errors");
 const contactsOperation = require("../model");
-const contactsSchema = require("../schemas");
 const { sendSuccessResponse } = require("../utils");
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (req, res) => {
   const contacts = await contactsOperation.listContacts();
   sendSuccessResponse(res, { contacts });
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await contactsOperation.getContactById(contactId);
   if (!contact) {
@@ -17,16 +16,12 @@ const getContactById = async (req, res, next) => {
   sendSuccessResponse(res, { contact });
 };
 
-const addContact = async (req, res, next) => {
-  const { error } = contactsSchema.validate(req.body);
-  if (error) {
-    throw new BadRequest(error.message);
-  }
+const addContact = async (req, res) => {
   const contact = await contactsOperation.addContact(req.body);
   sendSuccessResponse(res, { contact }, 201);
 };
 
-const removeContactById = async (req, res, next) => {
+const removeContactById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await contactsOperation.removeContactById(contactId);
 
@@ -37,11 +32,7 @@ const removeContactById = async (req, res, next) => {
   sendSuccessResponse(res, { message: "Success remove", contact });
 };
 
-const updateContactById = async (req, res, next) => {
-  const { error } = contactsSchema.validate(req.body);
-  if (error) {
-    throw new BadRequest(error.message);
-  }
+const updateContactById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await contactsOperation.updateContactById(
     contactId,
