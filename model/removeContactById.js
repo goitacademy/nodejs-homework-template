@@ -10,9 +10,11 @@ const removeContactById = async (contactId) => {
     return null;
   }
 
+  const removeContact = contacts[idx];
+
   contacts.splice(idx, 1);
   await updateContacts(contacts);
-  return "Success remove";
+  return removeContact;
 };
 
 module.exports = removeContactById;
