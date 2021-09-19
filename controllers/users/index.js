@@ -1,9 +1,9 @@
-const register = require("./register");
-// const login = require("./login");
-// const logout = require("./logout");
+const getAll = require('./getAll')
+const add = require('./add')
+const updateImg = require('./updateImg')
 
 module.exports = {
-    register,
-    // login,
-    // logout,
-};
+  getAll,
+  add,
+  updateImg,
+}

@@ -1,7 +1,6 @@
 const validation = (schema) => {
   const validFunc = (req, res, next) => {
-    // ф-ція робочих запитів
-    const { error } = schema.validate(req.body) // req.body - тіло запиту
+    const { error } = schema.validate(req.body)
     if (error) {
       return res.status(400).json({
         message: error.message,

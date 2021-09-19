@@ -27,7 +27,7 @@ const updateImg = async (req, res) => {
     /** Файл повинен знаходитися: Треба сворити нове і'мя, яке складається з шляху contactsDir до папки, id, імені файла  */
     const uploadPath = path.join(contactsDir, id, originalname) // req.params.id
     console.log('* uploadPath:', uploadPath)
-  
+
     // try {
     const file = await Jimp.read(tempPath)
     await file.resize(250, 250).write(tempPath)

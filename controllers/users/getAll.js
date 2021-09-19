@@ -1,13 +1,13 @@
-const { Contact } = require('../../models')
+const { User } = require('../../models')
 
 const getAll = async (req, res) => {
   const { page = 1, limit = 2 } = req.query
-  
-  const skip = (page - 1) * limit
-  const total = await Contact.estimatedDocumentCount()
 
-  const result = await Contact.find({}, '', { skip, limit: +limit })
-  
+  const skip = (page - 1) * limit
+  const total = await User.estimatedDocumentCount()
+
+  const result = await User.find({}, '', { skip, limit: +limit })
+
   res.json({
     status: 'success',
     code: 200,

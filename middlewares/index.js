@@ -3,8 +3,8 @@ const controllerWrapper = require('./controllerWrapper')
 const upload = require('./upload')
 
 module.exports = {
-    validation,
-    controllerWrapper,
-    upload,
+  validation,
+  controllerWrapper,
+  upload,
 
-};
+}
