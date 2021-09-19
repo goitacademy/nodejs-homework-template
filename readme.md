@@ -38,3 +38,6 @@
   исправлениями простых ошибок
 
 qffOVlDVIGwjaNlI
+
+const
+DB_HOST=mongodb+srv://Lora:qffOVlDVIGwjaNlI@cluster0.6vlus.mongodb.net/contacts?retryWrites=true&w=majority

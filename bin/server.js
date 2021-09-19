@@ -1,16 +1,20 @@
 const app = require('../app');
 const mongoose = require('mongoose');
+require('dotenv').config();
+// const dotenv = require('dotenv');
 
-const { DB_HOST } = require('../config');
+// dotenv.config();
+
+const { DB_HOST, PORT = 3000 } = process.env;
 
 // const PORT = process.env.PORT || 3000
-const { PORT = 3000 } = process.env;
+// const { PORT = 3000 } = process.env;
 
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
     // useCreateIndex: true,
-    useUnifiedTOpology: true,
+    useUnifiedTopology: true,
   })
   .then(() => {
     app.listen(PORT, () => {
