@@ -1,4 +1,4 @@
-const sendSuccess = require("./sendSuccess");
-const sendError = require("./sendError");
+const { sendSuccess } = require('./sendSuccess')
+const sendError = require('./sendError')
 
-module.exports = { sendSuccess, sendError };
+module.exports = { sendSuccess, sendError }

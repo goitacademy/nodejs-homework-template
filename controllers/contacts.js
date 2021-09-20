@@ -1,47 +1,50 @@
-const { sendSuccessResponse, sendError } = require("../utils");
-const contactsOperetaions = require("../model/contacts");
+const { sendSuccess, sendError } = require('../utils')
 
-const getAll = async (req, res) => {
-  const result = await contactsOperetaions.getAll();
-  sendSuccessResponse(res, { result });
-};
+const contactsOperetaions = require('../model')
+const listContacts = async (req, res) => {
+  const result = await contactsOperetaions.listContacts()
+  sendSuccess(res, { result })
+}
 
-const getById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsOperetaions.getById(id);
+const getContactById = async (req, res) => {
+  const { contactId } = req.params
+  const result = await contactsOperetaions.getContactById(contactId)
   if (!result) {
-    throw sendError.NotFound(id);
+    throw sendError.NotFound(res, contactId)
   }
-  sendSuccessResponse(res, { result });
-};
+  sendSuccess(res, { result })
+}
 
-const add = async (req, res) => {
-  const result = await contactsOperetaions.add(req.body);
-  sendSuccessResponse(res, { result }, 201);
-};
+const addContact = async (req, res) => {
+  const result = await contactsOperetaions.addContact(req.body)
+  sendSuccess(res, { result }, 201)
+}
 
-const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsOperetaions.updateById(id, req.body);
+const updateContactById = async (req, res) => {
+  const { contactId } = req.params
+  const result = await contactsOperetaions.updateContactById(
+    contactId,
+    req.body
+  )
   if (!result) {
-    throw sendError.NotFound(id);
+    throw sendError.NotFound(contactId)
   }
-  sendSuccessResponse(res, { result });
-};
+  sendSuccess(res, { result })
+}
 
-const removeById = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await contactsOperetaions.removeById(id);
+const removeContactById = async (req, res, next) => {
+  const { contactId } = req.params
+  const result = await contactsOperetaions.removeContactById(contactId)
   if (!result) {
-    throw sendError.NotFound(id);
+    throw sendError.NotFound(contactId)
   }
-  sendSuccessResponse(res, { message: "Success delete" });
-};
+  sendSuccess(res, { message: 'Success delete' })
+}
 
 module.exports = {
-  getAll,
-  getById,
-  add,
-  updateById,
-  removeById,
-};
+  listContacts,
+  getContactById,
+  addContact,
+  updateContactById,
+  removeContactById,
+}
