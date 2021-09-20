@@ -1,4 +1,4 @@
-const { Contact } = require('../models');
+const { Contact } = require("../../models");
 
 const getById = async (req, res, next) => {
   try {
@@ -6,11 +6,11 @@ const getById = async (req, res, next) => {
     const contact = await Contact.findById(contactId);
     if (!contact) {
       return res.status(404).json({
-        message: 'Not found',
+        message: "Not found",
       });
     }
     res.json({
-      status: 'success',
+      status: "success",
       code: 200,
       data: { contact },
     });
