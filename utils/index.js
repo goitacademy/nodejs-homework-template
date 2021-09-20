@@ -1,4 +1,6 @@
 const { sendSuccess } = require('./sendSuccess')
-const sendError = require('./sendError')
+const { sendNotFound } = require('./sendNotFound')
+const { sendBadRequest } = require('./sendBadRequest')
+const { isEmpty } = require('./isEmpty')
 
-module.exports = { sendSuccess, sendError }
+module.exports = { sendSuccess, sendNotFound, sendBadRequest, isEmpty }

@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { contactSchema } = require('../../schemas')
+const { contactAddSchema, contactUpdateSchema } = require('../../schemas')
 const { controllerWrapper, validation } = require('../../middlwares')
 const { contacts: contactsController } = require('../../controllers')
 
@@ -12,7 +12,7 @@ router.get('/:contactId', controllerWrapper(contactsController.getContactById))
 
 router.post(
   '/',
-  validation(contactSchema),
+  validation(contactAddSchema),
   controllerWrapper(contactsController.addContact)
 )
 
@@ -23,7 +23,7 @@ router.delete(
 
 router.put(
   '/:contactId',
-  validation(contactSchema),
+  validation(contactUpdateSchema),
   controllerWrapper(contactsController.updateContactById)
 )
 

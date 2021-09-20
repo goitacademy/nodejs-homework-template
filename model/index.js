@@ -3,19 +3,28 @@ const path = require('path')
 const { v4 } = require('uuid')
 
 const contactsPath = path.join(__dirname, './contacts.json')
-async function listContacts() {
+
+async function readContacts() {
   try {
     const data = await fs.readFile(contactsPath)
     const contactsList = JSON.parse(data)
     return contactsList
   } catch (error) {
-    console.error()
+    throw console.error()
+  }
+}
+
+async function listContacts() {
+  try {
+    return await readContacts()
+  } catch (error) {
+    console.log(error.message)
   }
 }
 
 async function getContactById(contactId) {
   try {
-    const contactsList = await listContacts()
+    const contactsList = await readContacts()
     const contact = contactsList.find(
       (contact) => String(contact.id) === String(contactId)
     )
@@ -30,7 +39,7 @@ async function getContactById(contactId) {
 
 async function removeContactById(contactId) {
   try {
-    const contactsList = await listContacts()
+    const contactsList = await readContacts()
     const idx = contactsList.findIndex(
       (contact) => String(contact.id) === String(contactId)
     )
@@ -38,9 +47,10 @@ async function removeContactById(contactId) {
       console.log(`Сontact with id= ${contactId} not found`)
       return null
     }
-    contactsList.splice(idx, 1)
+    const removedContact = contactsList.splice(idx, 1)
 
     await fs.writeFile(contactsPath, JSON.stringify(contactsList))
+    return removedContact
   } catch (error) {
     console.log(error.message)
   }
@@ -48,7 +58,7 @@ async function removeContactById(contactId) {
 
 async function addContact(body) {
   try {
-    const contactsList = await listContacts()
+    const contactsList = await readContacts()
     const newContact = { id: v4(), ...body }
     const newContactsList = [...contactsList, newContact]
     await fs.writeFile(contactsPath, JSON.stringify(newContactsList))
@@ -60,24 +70,22 @@ async function addContact(body) {
 
 async function updateContactById(contactId, body) {
   try {
-    const contactsList = await listContacts()
-    const idx = contactsList.findIndex(
+    const contactsList = await readContacts()
+    const contactFouUpdate = contactsList.find(
       (contact) => String(contact.id) === String(contactId)
     )
-    if (idx === -1) {
-      console.log(`Сontact with id= ${contactId} not found`)
-      return null
-    }
-    const updateContact = { id: v4(), ...body }
-    const updateContactsList = contactsList.map((contact) => {
-      if (String(contact.id) === String(contactId)) {
-        return updateContact
-      }
-      return contact
-    })
+    if (contactFouUpdate) {
+      const updateContact = { ...contactFouUpdate, ...body }
+      const updateContactsList = contactsList.map((contact) => {
+        if (String(contact.id) === String(contactId)) {
+          return updateContact
+        }
+        return contact
+      })
 
-    await fs.writeFile(contactsPath, JSON.stringify(updateContactsList))
-    return updateContact
+      await fs.writeFile(contactsPath, JSON.stringify(updateContactsList))
+      return updateContact
+    }
   } catch (error) {
     console.error(error.message)
   }

@@ -1,5 +1,4 @@
 const validation = (schema) => {
-  console.log('schema:', schema)
   return async (req, res, next) => {
     const { error } = schema.validate(req.body)
     if (error) {
