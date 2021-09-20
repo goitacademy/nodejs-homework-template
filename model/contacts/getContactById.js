@@ -2,16 +2,20 @@ const listContacts = require('./listContacts')
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts()
-  const contact = contacts.find((person) => person.id === contactId)
+  // (item.id.toString() === contactId.toString())
+  const contact = contacts.find(
+    (person) => person.id.toString() === contactId.toString(),
+  )
   if (!contact) {
     return null
   }
+  console.log(contact)
   return contact
 }
 
 module.exports = getContactById
 
-//==============old version ===================================
+//= ============= old version ===================================
 // const fs = require('fs')
 // const path = require('path')
 // const contactsPath = path.join(__dirname, 'db', 'contacts.json')
@@ -31,4 +35,4 @@ module.exports = getContactById
 //     return contact
 //   })
 // }
-//==================================
+//= =================================

@@ -20,7 +20,7 @@ const removeContact = async (contactId) => {
 
 module.exports = removeContact
 
-//======================== old version =============================
+//= ======================= old version =============================
 // function removeContact(contactId) {
 //   fs.readFile(contactsPath, 'utf-8', (error, data) => {
 //     if (error) {
@@ -37,4 +37,4 @@ module.exports = removeContact
 //     fs.writeFile(contactsPath, JSON.stringify(contacts))
 //   })
 // }
-//=========================================
+//= ========================================

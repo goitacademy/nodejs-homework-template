@@ -9,7 +9,7 @@ const addContact = async (name, email, phone) => {
   const contacts = await listContacts()
   const newContact = { id: v4(), name, email, phone }
   contacts.push(newContact)
-  //const newContacts = [...contacts, newContact]
+  // const newContacts = [...contacts, newContact]
   await fs.writeFile(contactsPath, JSON.stringify(contacts))
   // await fs.writeFile(contactsPath, JSON.stringify(newContacts))
   return newContact
@@ -17,7 +17,7 @@ const addContact = async (name, email, phone) => {
 
 module.exports = addContact
 
-//====================old version ======================
+//= ===================old version ======================
 // function addContact(name, email, phone) {
 //   fs.readFile(contactsPath, 'utf-8', (error, data) => {
 //     if (error) {
@@ -33,4 +33,4 @@ module.exports = addContact
 //     fs.writeFile(contactsPath, JSON.stringify(newContact))
 //   })
 // }
-//======================================================
+//= ====================================================
