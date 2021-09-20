@@ -1,4 +1,5 @@
 const app = require('../app')
+// console.log(process.env)
 
 const PORT = process.env.PORT || 3000
 
