@@ -9,6 +9,6 @@ const contactUpdateSchema = Joi.object({
     })
     .optional(),
   phone: Joi.string().min(2).max(30).optional(),
-})
+}).or('name', 'email', 'phone')
 
 module.exports = contactUpdateSchema

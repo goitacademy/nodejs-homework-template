@@ -1,9 +1,4 @@
-const {
-  sendSuccess,
-  sendNotFound,
-  sendBadRequest,
-  isEmpty,
-} = require('../utils')
+const { sendSuccess, sendNotFound, sendBadRequest } = require('../utils')
 
 const contactsOperetaions = require('../model')
 
@@ -30,10 +25,6 @@ const addContact = async (req, res) => {
 const updateContactById = async (req, res) => {
   const { contactId } = req.params
 
-  if (isEmpty(req.body)) {
-    sendBadRequest(res, contactId)
-    return
-  }
   const result = await contactsOperetaions.updateContactById(
     contactId,
     req.body
