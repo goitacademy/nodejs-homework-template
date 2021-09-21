@@ -1,4 +1,4 @@
-const User = require("../../repositories/users");
+const User = require("../userRequest");
 const { HttpCode } = require("../../helpers/constants");
 
 const logout = async (req, res, next) => {

@@ -1,4 +1,4 @@
-const User = require("../../repositories/users");
+const User = require("../userRequest");
 const { HttpCode } = require("../../helpers/constants");
 
 const signup = async (req, res, next) => {
@@ -12,12 +12,12 @@ const signup = async (req, res, next) => {
         message: "Email in use",
       });
     }
-    const { subscription, email } = await User.create(req.body);
+    const { subscription, email, avatarURL } = await User.create(req.body);
 
     return res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.CREATED,
-      user: { email, subscription },
+      user: { email, subscription, avatarURL },
     });
   } catch (e) {
     next(e);

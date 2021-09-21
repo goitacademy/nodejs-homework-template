@@ -1,4 +1,4 @@
-const User = require("../../repositories/users");
+const User = require("../userRequest");
 const { HttpCode } = require("../../helpers/constants");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -15,7 +15,7 @@ const login = async (req, res, next) => {
         message: "Email or password is wrong",
       });
     }
-    const { id, email, subscription } = user;
+    const { id, email, subscription, avatarURL } = user;
     const payload = { id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     await User.updateToken(id, token);
@@ -23,7 +23,7 @@ const login = async (req, res, next) => {
       status: "success",
       code: 200,
       token: token,
-      user: { email, subscription },
+      user: { email, subscription, avatarURL },
     });
   } catch (e) {
     next(e);
