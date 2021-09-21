@@ -1,8 +1,12 @@
-const sendBadRequest = (res, id, status = 400) => {
-  res.status(status).json({
+const { isEmpty } = require('./isEmpty')
+
+const sendBadRequest = ({ body }, res, error) => {
+  const err = isEmpty(body) ? 'missing fields: ' : ''
+
+  res.status(400).json({
     status: 'error',
-    code: status,
-    message: 'Bad request: missing fields',
+    code: 400,
+    message: err + error.message,
   })
 }
 

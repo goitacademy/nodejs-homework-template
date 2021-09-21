@@ -5,10 +5,10 @@ const contactAddSchema = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'org', 'ua', 'ru', 'gov'] },
+      tlds: { allow: ['com', 'net', 'org', 'ua', 'ru', 'gov', 'uk'] },
     })
     .required(),
-  phone: Joi.string().min(2).max(30).required(),
+  phone: Joi.string().min(7).max(15).required(),
 })
 
 module.exports = contactAddSchema

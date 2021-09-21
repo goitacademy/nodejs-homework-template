@@ -8,7 +8,7 @@ const contactUpdateSchema = Joi.object({
       tlds: { allow: ['com', 'net', 'org', 'ua', 'ru', 'gov'] },
     })
     .optional(),
-  phone: Joi.string().min(2).max(30).optional(),
+  phone: Joi.string().min(2).max(15).optional(),
 }).or('name', 'email', 'phone')
 
 module.exports = contactUpdateSchema

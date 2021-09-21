@@ -1,4 +1,4 @@
-const { sendSuccess, sendNotFound, sendBadRequest } = require('../utils')
+const { sendSuccess, sendNotFound } = require('../utils')
 
 const contactsOperetaions = require('../model')
 
