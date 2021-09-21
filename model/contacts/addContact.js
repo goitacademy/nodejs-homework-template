@@ -5,9 +5,14 @@ const { v4 } = require('uuid')
 const listContacts = require('./listContacts')
 const contactsPath = path.join(__dirname, 'contacts.json')
 
-const addContact = async (name, email, phone) => {
+const addContact = async (data) => {
   const contacts = await listContacts()
-  const newContact = { id: v4(), name, email, phone }
+  // проверка на уникальность не делается. Если работаем с базой данных, то она делается в схеме базы(т.е. на стороне backend)
+  const uniqName = contacts.find(({ name }) => name === data.name)
+  if (uniqName) {
+    throw new Error(`Contact with name ${data.name} already exist`)
+  }
+  const newContact = { id: v4(), ...data }
   contacts.push(newContact)
   // const newContacts = [...contacts, newContact]
   await fs.writeFile(contactsPath, JSON.stringify(contacts))
