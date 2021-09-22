@@ -1,14 +1,17 @@
-const { Schema, model } = require('mongoose');
-const Joi = require('joi');
+const mongoosePaginate = require("mongoose-paginate-v2");
+const { Schema, SchemaTypes, model } = require("mongoose");
+const Joi = require("joi");
 
 const contactSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      index: 1,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
+      unique: true,
     },
     phone: {
       type: String,
@@ -16,6 +19,10 @@ const contactSchema = Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
@@ -35,7 +42,9 @@ const joiSchemaUpdateContact = Joi.object({
   favorite: Joi.boolean().optional(),
 });
 
-const Contact = model('contact', contactSchema);
+contactSchema.plugin(mongoosePaginate);
+
+const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,

@@ -1,4 +1,4 @@
-const { Contact } = require('../models');
+const { Contact } = require("../../models");
 
 const updateFavorite = async (req, res, next) => {
   try {
@@ -13,11 +13,11 @@ const updateFavorite = async (req, res, next) => {
     );
     if (!updateContact) {
       return res.status(404).json({
-        message: 'Not found',
+        message: "Not found",
       });
     }
     res.json({
-      status: 'success',
+      status: "success",
       code: 200,
       data: { updateContact },
     });
