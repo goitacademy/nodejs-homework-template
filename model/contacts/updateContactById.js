@@ -1,10 +1,12 @@
 const getAllContacts = require("./getAll");
 const updateContacts = require("./updateContacts");
 
-const updateContactById = async (id, data) => {
+const updateContactById = async (contactId, data) => {
   const contacts = await getAllContacts();
 
-  const idx = contacts.findIndex((contact) => contact.id === id);
+  const idx = contacts.findIndex(
+    (contact) => String(contact.id) === String(contactId)
+  );
   if (idx === -1) {
     return null;
   }
@@ -12,17 +14,17 @@ const updateContactById = async (id, data) => {
   contacts[idx] = updateContact;
 
   await updateContacts(contacts);
-  return updateContacts;
+  return updateContact;
 };
 module.exports = updateContactById;
 
 // import contactsOperations from "./index.js";
 
-// const updateContactById = async (id, data) => {
+// const updateContactById = async (contactId, data) => {
 //   const contacts = await contactsOperations.getAllContacts();
 //   const updateContacts = await contactsOperations.updateContacts(contacts);
 
-//   const idx = contacts.findIndex((contact) => contact.id === id);
+//   const idx = contacts.findIndex((contact) => contact.id === contactId);
 //   if (idx === -1) {
 //     return null;
 //   }
@@ -30,6 +32,6 @@ module.exports = updateContactById;
 //   contacts[idx] = updateContact;
 
 //   await updateContacts(contacts);
-//   return updateContacts;
+//   return updateContact;
 // };
 // export default updateContactById;

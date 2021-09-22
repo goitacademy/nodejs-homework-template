@@ -70,10 +70,13 @@ router.put("/:contactId", async (req, res, next) => {
       err.status = 400;
       throw err;
     }
-    const { id } = req.params;
-    const result = await contactsOperations.updateContactsById(id, req.body);
+    const { contactId } = req.params;
+    const result = await contactsOperations.updateContactsById(
+      contactId,
+      req.body
+    );
     if (!result) {
-      const error = new Error(`Product with id=${id} not found`);
+      const error = new Error(`Product with id=${contactId} not found`);
       error.status = 404;
       throw error;
     }
@@ -91,10 +94,10 @@ router.put("/:contactId", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactsOperations.removeContactById(id);
+    const { contactId } = req.params;
+    const result = await contactsOperations.removeContactById(contactId);
     if (!result) {
-      const error = new Error(`Product with id=${id} not found`);
+      const error = new Error(`Product with id=${contactId} not found`);
       error.status = 404;
       throw error;
     }
