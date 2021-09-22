@@ -1,8 +1,9 @@
 const express = require("express");
-const contactsOperations = require("../../model/index");
 const router = express.Router();
-const { contactsSchema } = require("../../schemas");
+const contactsOperations = require("../../model/contacts");
+const contactsSchema = require("../../schemas/contacts");
 
+// GET /api/contacts
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts();
@@ -18,6 +19,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// GET /api/contacts/3
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
@@ -49,7 +51,6 @@ router.post("/", async (req, res, next) => {
       throw err;
     }
     const result = await contactsOperations.addContact(req.body);
-    // console.log(req.body); //считать тело запроса
     res.status(201).json({
       status: "success",
       code: 201,
@@ -71,7 +72,7 @@ router.put("/:contactId", async (req, res, next) => {
       throw err;
     }
     const { contactId } = req.params;
-    const result = await contactsOperations.updateContactsById(
+    const result = await contactsOperations.updateContactById(
       contactId,
       req.body
     );

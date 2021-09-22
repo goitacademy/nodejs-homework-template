@@ -1,5 +1,5 @@
 const { nanoid } = require("nanoid");
-const getAllContacts = require("./getAll");
+const getAllContacts = require("./getAllContacts");
 const updateContacts = require("./updateContacts");
 
 const addContact = async (data) => {
@@ -11,17 +11,3 @@ const addContact = async (data) => {
   return newContact;
 };
 module.exports = addContact;
-
-// import contactsOperations from "./index.js";
-// import { nanoid } from "nanoid";
-
-// const addContact = async (data) => {
-//   const contacts = await contactsOperations.getAllContacts();
-//   const newContact = { ...data, id: nanoid() };
-//   contacts.push(newContact);
-
-//   await contactsOperations.updateContacts(contacts);
-//   return newContact;
-// };
-
-// export default addContact;
