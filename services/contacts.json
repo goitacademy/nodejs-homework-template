@@ -25,15 +25,9 @@
     },
     {
         "id": 7,
-        "name": "Reuben Henry",
-        "email": "pharetra.ut@dictum.co.uk",
-        "phone": "(715) 598-5792"
-    },
-    {
-        "id": 8,
-        "name": "Toni Shmoli",
-        "email": "raer@mail.com",
-        "phone": "(036) 236-36545"
+        "name": "Kate",
+        "email": "gata@mail.com",
+        "phone": "123-12365-12"
     },
     {
         "id": 9,
@@ -64,5 +58,11 @@
         "name": "Toni Koni",
         "email": "raer@mail.com",
         "phone": "(036) 236-36545"
+    },
+    {
+        "id": "uo7RZFDLJ68V39J6sOnik",
+        "name": "Petya",
+        "email": "gata@mail.com",
+        "phone": "123-12365-12"
     }
 ]
