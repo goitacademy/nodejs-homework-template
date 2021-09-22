@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+const boolParser = require("express-query-boolean");
 
 const { authRouter, contactsRouter } = require("./routes/api");
 
@@ -13,6 +14,7 @@ app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json({ limit: 10000 }));
+app.use(boolParser());
 
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);

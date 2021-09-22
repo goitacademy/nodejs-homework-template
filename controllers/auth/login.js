@@ -27,9 +27,9 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-  const token = jwt.sign(payload, SECRET_KEY, {
-    expiresIn: "2h",
-  });
+  const token = jwt.sign(payload, SECRET_KEY,
+    { expiresIn: "2h", }
+  );
 
   await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
@@ -38,6 +38,6 @@ const login = async (req, res) => {
     code: 200,
     token,
   });
-};;
+};
 
 module.exports = login;

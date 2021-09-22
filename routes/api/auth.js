@@ -21,7 +21,7 @@ router.get(
 );
 
 router.get(
-  "logout",
+  "/logout",
   controllerWrapper(authentication),
   controllerWrapper(ctrl.logout)
 );
