@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-
 const { usersRouter, ordersRouter } = require('./routes/api')
 
 const app = express()

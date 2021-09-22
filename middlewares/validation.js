@@ -8,7 +8,6 @@ const validation = (schema) => {
     }
     next()
   }
-
   return validFunc
 }
 

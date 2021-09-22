@@ -57,7 +57,6 @@ userSchema.methods.comparePassword = function (password) {
   )
   return bcrypt.compareSync(password, this.password)
 }
-
 userSchema.methods.createVerificationToken = function () {
   this.verificationToken = v4()
   console.log(
