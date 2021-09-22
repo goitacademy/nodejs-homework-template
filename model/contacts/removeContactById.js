@@ -1,42 +1,20 @@
-const getAllContacts = require("./getAll");
+const getAllContacts = require("./getAllContacts");
 const updateContacts = require("./updateContacts");
 
 const removeContactById = async (contactId) => {
   const contacts = await getAllContacts();
-  //   const newContacts = contacts.filter(
-  //     (contact) => contact.id !== Number(contactId)
-  //   );
-  //   await updateContacts(newContacts);
-  //   return "Success remove";
-
-  const idx = contacts.findIndex((contact) => contact.id !== Number(contactId));
-  if (idx === -1) {
+  const index = contacts.findIndex(
+    (contact) => String(contact.id) === String(contactId)
+  );
+  if (index === -1) {
     return null;
   }
+  const removeContact = contacts[index];
 
-  contacts.splice(idx, 1);
+  contacts.splice(index, 1);
   await updateContacts(contacts);
-  return "Success remove";
+  console.table(removeContact);
+  return removeContact;
 };
 
 module.exports = removeContactById;
-
-// import contactsOperations from "./index.js";
-
-// const removeContactById = async (contactId) => {
-//   const contacts = await contactsOperations.getAllContacts();
-
-//   const idx = contacts.findIndex(
-//     (contact) => String(contact.id) === String(contactId)
-//   );
-//   if (idx === -1) {
-//     return null;
-//   }
-//   const removeContact = contacts[idx];
-
-//   contacts.splice(idx, 1);
-//   await updateContacts(contacts);
-//   return removeContact;
-// };
-
-// export default removeContactById;

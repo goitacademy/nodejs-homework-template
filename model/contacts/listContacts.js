@@ -1,4 +1,4 @@
-const getAllContacts = require("./getAll");
+const getAllContacts = require("./getAllContacts");
 
 const listContacts = async () => {
   const contacts = await getAllContacts();
@@ -6,12 +6,3 @@ const listContacts = async () => {
 };
 
 module.exports = listContacts;
-
-// import contactsOperations from "./index.js";
-
-// const listContacts = async () => {
-//   const contacts = await contactsOperations.getAllContacts();
-//   return contacts;
-// };
-
-// export default listContacts;
