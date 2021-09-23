@@ -8,7 +8,7 @@ const validation = (schema) => {
     }
     next()
   }
-
   return validFunc
 }
+
 module.exports = validation

@@ -1,9 +1,12 @@
-const getAll = require('./getAll')
-const add = require('./add')
-const updateImg = require('./updateImg')
+const register = require('./register')
+const login = require('./login')
+const logout = require('./logout')
+const verify = require('./verify')
 
 module.exports = {
-  getAll,
-  add,
-  updateImg,
+  register,
+  login,
+  logout,
+  verify,
+
 }
