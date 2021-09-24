@@ -6,15 +6,15 @@ const getAll = async (req, res, next) => {
       sortBy,
       sortByDesc,
       filter,
-      isFavorite = null,
+      favorite = null,
       page = 1,
       limit = 20,
     } = req.query;
 
     const optionsSearch = { owner: req.user._id };
 
-    if (isFavorite !== null) {
-      optionsSearch.favorite = isFavorite;
+    if (favorite !== null) {
+      optionsSearch.favorite = favorite;
     };
 
     const { docs: contacts, ...rest } = await Contact.paginate(optionsSearch, {
@@ -36,18 +36,6 @@ const getAll = async (req, res, next) => {
         ...rest,
       },
     });
-
-    // const contacts = await Contact.find({ owner: req.user._id }).populate(
-    //   "owner",
-    //   "_id email subscription"
-    // );
-    // res.json({
-    //   status: "success",
-    //   code: 200,
-    //   data: {
-    //     contacts,
-    //   },
-    // });
   } catch (error) {
     next(error);
   }
