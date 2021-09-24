@@ -23,8 +23,13 @@ app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, _req, res, _next) => {
-  res.status(500).json({ message: err.message });
+app.use((error, _req, res, _next) => {
+  const { status = 500, message = "Server error" } = error;
+  res.status(status).json({
+    status: "error",
+    code: status,
+    message,
+  });
 });
 
 process.on("unhandledRejection", (reason, promise) => {
