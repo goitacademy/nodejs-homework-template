@@ -8,8 +8,7 @@ const listContacts = async (req, res, next) => {
         .status(200)
         .json({ status: 'succsess', code: 201, data: { contacts } })
     } else {
-      return res
-        .json({ status: 'error', code: 500, message: 'Server error' })
+      throw new Error()
     }
   } catch (err) {
     next(err)

@@ -9,8 +9,7 @@ const removeContactController = async (req, res, next) => {
         .status(201)
         .json({ status: 'succsess', code: 200, message: 'contact deleted' })
     } else {
-      return res
-        .json({ status: 'error', code: 404, message: 'Not found' })
+      throw new Error('404')
     }
   } catch (err) {
     next(err)

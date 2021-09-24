@@ -7,12 +7,13 @@ const {
   removeContactController,
   changeContactController
 } = require('../../controllers')
+const contactValidator = require('../../middlewares/validatorCreation')
 
 router.get('/', listContactsController)
 
 router.get('/:contactId', getContactByIdController)
 
-router.post('/', addContactController)
+router.post('/', contactValidator, addContactController)
 
 router.delete('/:contactId', removeContactController)
 

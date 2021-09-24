@@ -7,11 +7,9 @@ const changeContactController = async (req, res, next) => {
     const changedContact = await changeContactModel(contactId, bodyRequest)
     if (changedContact) {
       return res
-        .status(200)
         .json({ status: 'succsess', code: 200, data: changedContact })
     } else {
-      return res
-        .json({ status: 'error', code: 404, message: 'Not found' })
+      throw new Error('404')
     }
   } catch (err) {
     next(err)

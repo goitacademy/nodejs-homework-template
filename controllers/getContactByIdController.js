@@ -9,9 +9,7 @@ const getContactByIdController = async (req, res, next) => {
         .status(201)
         .json({ status: 'succsess', code: 200, data: { contact } })
     } else {
-      return res
-        .status(404)
-        .json({ status: 'error', code: 404, message: 'Not found' })
+      throw new Error('404')
     }
   } catch (err) {
     next(err)
