@@ -3,7 +3,7 @@ const updateContacts = require('./update-contacstList')
 
 const removeContact = async contactId => {
   const contacts = await listContacts()
-  const idx = contacts.findIndex(i => i.id.toString() === contactId)
+  const idx = contacts.findIndex(i => i.id.toString() === contactId.toString())
   if (idx === -1) {
     return null
   }
