@@ -10,10 +10,10 @@ const listContacts = async(req, res) => {
 }
 
 const getContactById = async(req, res) => {
-  const { id } = req.params
-  const result = await contactsOperations.getContactById(id)
+  const { contactId } = req.params
+  const result = await contactsOperations.getContactById(contactId)
   if (!result) {
-    throw new NotFound(`Contact with id=${id} not found`)
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
   sendSuccessRes(res, { result })
 }
@@ -24,19 +24,19 @@ const addContact = async(req, res) => {
 }
 
 const updateContact = async(req, res) => {
-  const { id } = req.params
-  const result = await contactsOperations.updateContact(id, req.body)
+  const { contactId } = req.params
+  const result = await contactsOperations.updateContact(contactId, req.body)
   if (!result) {
-    throw new NotFound(`Contact with id=${id} not found`)
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
   sendSuccessRes(res, { result })
 }
 
 const removeContact = async(req, res, next) => {
-  const { id } = req.params
-  const result = await contactsOperations.removeContact(id)
+  const { contactId } = req.params
+  const result = await contactsOperations.removeContact(contactId)
   if (!result) {
-    throw new NotFound(`Contact with id=${id} not found`)
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
   sendSuccessRes(res, { message: 'Success delete' })
 }
