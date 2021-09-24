@@ -1,17 +1,18 @@
-const fs = require('fs/promises')
+// const fs = require('fs/promises')
 const { nanoid } = require('nanoid')
-const contactsOperations = require('../index.js')
-const contactsPath = require('./filePath.js')
+const getAll = require('./getAll.js')
+// const contactsPath = require('./filePath.js')
+const updateContact = require('./updateContact.js')
 
-const addContact = async (name, email, phone) => {
+const addContact = async (data) => {
   try {
-    const contacts = await contactsOperations.getAll()
-    const newContact = { name, email, phone, id: nanoid() }
+    const contacts = await getAll()
+    const newContact = { ...data, id: nanoid() }
     contacts.push(newContact)
     console.table(newContact)
 
-    await fs.writeFile(contactsPath, JSON.stringify(contacts))
-    console.table(await contactsOperations.getAll())
+    await updateContact(contacts)
+    console.table(await getAll())
     return newContact
   } catch (error) {
     console.log(error.message)

@@ -16,5 +16,5 @@ const contacts = require('../contacts/contacts.json')
 
 const getAll = async () => contacts
 
-console.log(contacts)
+// console.log(contacts)
 module.exports = getAll

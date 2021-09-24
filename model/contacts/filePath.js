@@ -5,6 +5,6 @@ const path = require('path')
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = dirname(__filename)
 
-const contactsPath = path.join(__dirname, '..', 'contacts', 'contacts.json')
+const contactsPath = path.join(__dirname, 'contacts.json')
 
 module.exports = contactsPath
