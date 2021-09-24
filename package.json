@@ -1,25 +1,23 @@
 {
-  "name": "template",
-  "version": "0.0.0",
-  "private": true,
+  "name": "nodejs-homework-rest-api",
+  "version": "1.0.0",
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6) Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "bin": {
+    "nodejs-homework-rest-api": "server.js"
+  },
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "cors": "2.8.5",
-    "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanSokurenko/nodejs-homework-rest-api.git"
   },
-  "devDependencies": {
-    "eslint": "^7.19.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomanSokurenko/nodejs-homework-rest-api/issues"
+  },
+  "homepage": "https://github.com/RomanSokurenko/nodejs-homework-rest-api#readme"
 }
