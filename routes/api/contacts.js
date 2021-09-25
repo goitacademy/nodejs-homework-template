@@ -95,7 +95,6 @@ router.put('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  // res.json({ message: 'template message' })
 })
 
 module.exports = router
