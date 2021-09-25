@@ -4,7 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const boolParser = require("express-query-boolean");
 
-const { authRouter, contactsRouter } = require("./routes/api");
+const { authRouter, usersRouter, contactsRouter } = require("./routes/api");
 
 const app = express();
 
@@ -14,9 +14,11 @@ app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json({ limit: 10000 }));
+app.use(express.static("public"));
 app.use(boolParser());
 
 app.use("/api/users", authRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((_req, res) => {
