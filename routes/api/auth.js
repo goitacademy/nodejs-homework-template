@@ -15,6 +15,5 @@ router.post(
 );
 
 router.post('/login', userValidationMiddleware, controllerWrapper(ctrl.login));
-// router.get('./logout', controllerWrapper(ctrl.logout));
 
 module.exports = router;
