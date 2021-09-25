@@ -5,6 +5,7 @@ const contactSchema = Joi.object({
   email: Joi.string().email().min(5).required(),
   phone: Joi.string()
     .pattern(/^[0-9]/)
+    .min(5)
     .max(12)
     .required(),
 })
