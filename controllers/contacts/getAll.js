@@ -36,18 +36,6 @@ const getAll = async (req, res, next) => {
         ...rest,
       },
     });
-
-    // const contacts = await Contact.find({ owner: req.user._id }).populate(
-    //   "owner",
-    //   "_id email subscription"
-    // );
-    // res.json({
-    //   status: "success",
-    //   code: 200,
-    //   data: {
-    //     contacts,
-    //   },
-    // });
   } catch (error) {
     next(error);
   }
