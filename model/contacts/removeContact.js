@@ -1,28 +1,16 @@
-import fs from 'fs/promises'
+const getAll = require('./getAll.js')
+const updateContacts = require('./updateContacts.js')
 
-import contactsPath from './filePath.js'
-import contactsOperations from './index.js'
+async function removeContact(contactId) {
+  const contacts = await getAll()
+  const idx = contacts.findIndex((contact) => String(contact.id) === contactId)
 
-async function removeContact(id) {
-  try {
-    const contacts = await contactsOperations.getAll()
-    const removeContact = await contactsOperations.getContactById(id)
-    const newContacts = contacts.filter((contact) => String(contact.id) !== id)
-
-    if (!removeContact) {
-      console.log(`Contact with such id=${id} cannot not found!`)
-      return
-    }
-
-    await fs.writeFile(contactsPath, JSON.stringify(newContacts))
-    console.log(
-      `Contact with such id "${id}" was deleted! Please find below the updated list of contacts: `,
-    )
-    console.table(await contactsOperations.getAll())
-    console.log('Success remove')
-  } catch (error) {
-    console.log(error.message)
+  if (idx === -1) {
+    return null
   }
+  contacts.splice(idx, 1)
+  await updateContacts(contacts)
+  return 'Success remove'
 }
 
-export default removeContact
+module.exports = removeContact
