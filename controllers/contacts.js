@@ -3,7 +3,7 @@ const { Contact } = require("../models");
 const { sendSuccessResponse } = require("../utils");
 
 const listContacts = async (req, res) => {
-  const contacts = await Contact.find({});
+  const contacts = await Contact.find({}, "_id name email phone favorite");
   sendSuccessResponse(res, { contacts });
 };
 
