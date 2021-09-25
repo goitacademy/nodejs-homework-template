@@ -1,15 +1,18 @@
 const { NotFound } = require("http-errors");
-const contactsOperation = require("../model/contacts");
+const { Contact } = require("../models");
 const { sendSuccessResponse } = require("../utils");
 
 const listContacts = async (req, res) => {
-  const contacts = await contactsOperation.listContacts();
+  const contacts = await Contact.find({});
   sendSuccessResponse(res, { contacts });
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsOperation.getContactById(contactId);
+  const contact = await Contact.findById(
+    contactId,
+    "_id name email phone favorite"
+  );
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
@@ -17,13 +20,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const contact = await contactsOperation.addContact(req.body);
+  const contact = await Contact.create(req.body);
   sendSuccessResponse(res, { contact }, 201);
 };
 
 const removeContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsOperation.removeContactById(contactId);
+  const contact = await Contact.findByIdAndRemove(contactId);
 
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
@@ -34,9 +37,22 @@ const removeContactById = async (req, res) => {
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsOperation.updateContactById(
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!contact) {
+    throw new NotFound(`Contact with id=${contactId} not found`);
+  }
+  sendSuccessResponse(res, { contact });
+};
+
+const updateFavoriteStatus = async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  const contact = await Contact.findByIdAndUpdate(
     contactId,
-    req.body
+    { favorite },
+    { new: true }
   );
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
@@ -50,4 +66,5 @@ module.exports = {
   addContact,
   removeContactById,
   updateContactById,
+  updateFavoriteStatus,
 };
