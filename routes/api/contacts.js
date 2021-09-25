@@ -51,15 +51,36 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+// router.delete('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body)
+    if (error) {
+      const err = new Error(error.message)
+      err.status = 400
+      throw err
+    }
+    const { contactId } = req.params
+    const result = await contactsOperations.updateById(contactId, req.body)
+    if (!result) {
+      const error = new Error(`Product with id=${contactId} not found`)
+      error.status = 404
+      throw error
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { result },
+    })
+  } catch (error) {
+    next(error)
+  }
   // res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
 })
 
 module.exports = router
