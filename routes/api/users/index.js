@@ -11,5 +11,7 @@ router.post("/login", validationAutUser, ctrl.login);
 router.post("/logout", guard, ctrl.logout);
 router.get("/current", guard, ctrl.current);
 router.patch("/avatars", guard, upload.single("avatar"), ctrl.avatars);
+router.get("/verify/:verificationToken", ctrl.verify);
+router.post("/verify", ctrl.repeatEmailVerifitation);
 
 module.exports = router;
