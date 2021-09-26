@@ -9,10 +9,12 @@ const {
   postContact,
 } = require('../../controllers')
 
+const { addContactValidation, patchContactValidation } = require('../../middlewares/validationMiddleware')
+
 router.get('/', getContacts)
 router.get('/:contactId', getContactById)
-router.post('/', postContact)
+router.post('/', addContactValidation, postContact)
 router.delete('/:contactId', deleteContact)
-router.patch('/:contactId', updateContact)
+router.patch('/:contactId', patchContactValidation, updateContact)
 
 module.exports = router
