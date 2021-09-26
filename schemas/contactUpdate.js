@@ -9,7 +9,7 @@ const contactUpdateSchema = Joi.object({
     })
     .optional(),
   phone: Joi.string().min(2).max(15).optional(),
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean().optional(),
 }).or('name', 'email', 'phone', 'favorite')
 
 module.exports = contactUpdateSchema
