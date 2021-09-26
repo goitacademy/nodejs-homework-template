@@ -32,3 +32,5 @@
 
 lll ------ C5Sei*i8rafAVJ*
 lll ------ Glemakk
+
+lll ------ mongodb+srv://Glemakk:C5Sei*i8rafAVJ*@cluster0.wl721.mongodb.net/db-contacts?retryWrites=true&w=majoritygit
