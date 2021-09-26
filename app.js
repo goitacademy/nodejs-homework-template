@@ -1,3 +1,20 @@
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config()
+
+const { DB_HOST } = process.env
+
+mongoose.connect(DB_HOST, {
+  useNewURLParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => {
+    console.log('Database connection successful')
+  })
+  .catch(error => {
+    console.log(error.message)
+  })
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
