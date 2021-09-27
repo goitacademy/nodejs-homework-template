@@ -1,6 +1,6 @@
 const { NotFound } = require('http-errors');
 
-const contactsOperations = require('../model/contacts');
+const contactsOperations = require('../../model/contacts');
 
 const listContacts = async (_, res, next) => {
   const contacts = await contactsOperations.listContacts();
