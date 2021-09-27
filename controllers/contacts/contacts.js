@@ -1,6 +1,6 @@
 const createError = require('http-errors')
 const Joi = require('joi')
-const contactsFunctions = require('../model')
+const contactsFunctions = require('../../model/contacts')
 const joiSchema = Joi.object({ name: Joi.string().required(), email: Joi.string().required(), phone: Joi.string().required() })
 
 const listContacts = async (req, res, next) => {
