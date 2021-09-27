@@ -11,8 +11,12 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-json": "^3.1.0",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "joi": "^17.4.2",
+    "morgan": "1.10.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
