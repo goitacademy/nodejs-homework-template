@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable eol-last */
 const Joi = require('joi')
 
 const joiSchema = Joi.object({
