@@ -1,17 +1,18 @@
 const listContacts = require('./listContacts')
 const updateContacts = require('./updateContacts')
 
-const removeContact = async (contactId) => {
+async function removeContact(contactId) {
   try {
     const contacts = await listContacts()
-    const index = contacts.findIndex((item) => item.id === Number(contactId))
+    const idx = contacts.findIndex((item) => item.id.toString() === contactId)
 
-    if (!index) {
+    if (!idx) {
       throw new Error('ID incorrect')
     }
-    contacts.splice(index, 1)
+
+    contacts.splice(idx, 1)
     await updateContacts(contacts)
-    console.log(`Contact #${contactId} was removed`)
+    return 'Success remove'
   } catch (error) {
     console.log(error)
   }
