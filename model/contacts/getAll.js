@@ -1,4 +1,4 @@
-const contacts = require('./contacts.json')
+const contacts = require('../../db/contacts.json')
 /*
 const data = fs.readFileSync("./products.json");
 const products = JSON.parse(data);
