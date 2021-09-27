@@ -1,8 +1,8 @@
-const listContactsController = require('./listContactsController')
-const getContactByIdController = require('./getContactByIdController')
-const addContactController = require('./addContactController')
-const removeContactController = require('./removeContactController')
-const changeContactController = require('./changeContactController')
+const listContactsController = require('./contacts/listContactsController')
+const getContactByIdController = require('./contacts/getContactByIdController')
+const addContactController = require('./contacts/addContactController')
+const removeContactController = require('./contacts/removeContactController')
+const changeContactController = require('./contacts/changeContactController')
 
 module.exports = {
   listContactsController,

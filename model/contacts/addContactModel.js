@@ -1,8 +1,8 @@
 const fs = require('fs/promises')
 const path = require('path')
 const { nanoid: generateId } = require('nanoid')
-const phoneNumberFormatter = require('../utils/phoneNumberFormatter')
-const PATH_DB = path.join(__dirname, 'contacts.json')
+const phoneNumberFormatter = require('../../utils/phoneNumberFormatter')
+const PATH_DB = path.join(__dirname, '..', 'contacts.json')
 
 const addContactModel = async ({ name, email, phone }) => {
   try {
