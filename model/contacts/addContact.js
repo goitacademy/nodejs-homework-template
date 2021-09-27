@@ -4,7 +4,7 @@ const updateContactsList = require('./updateContact');
 
 const listContacts = require('./listContacts');
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
   const newContact = {
     name,
@@ -12,6 +12,7 @@ async function addContact(name, email, phone) {
     phone,
     id: nanoid()
   };
+  console.log(newContact)
   const updateContacts = [...contacts, newContact];
 
   await updateContactsList(updateContacts);

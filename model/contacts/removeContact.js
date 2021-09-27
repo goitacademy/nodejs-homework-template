@@ -1,18 +1,21 @@
-const fs = require('fs/promises');
-const path = require('path');
+const updateContact = require('./updateContact')
 
 const listContacts = require('./listContacts');
-const contactsPath = path.join(__dirname, './contacts.json');
 
 async function removeContact(contactId) {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex(contact => contact.id === contactId);
-  if (idx === -1) {
-    return null;
-  };
-  contacts.splice(idx, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return contacts[idx];
+  try {
+    const contacts = await listContacts();
+    const idx = contacts.findIndex(contact => (contact.id).toString() === contactId);
+    if (idx === -1) {
+      return null;
+    }
+    contacts.splice(idx, 1);
+    await updateContact(contacts);
+    return contacts[idx];
+  } catch (error) {
+    throw (error.message)
+  }
 };
 
+// console.log(typeof (removeContact));
 module.export = removeContact;

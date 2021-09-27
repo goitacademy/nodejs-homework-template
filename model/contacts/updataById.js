@@ -3,7 +3,7 @@ const listContacts = require('./listContacts');
 
 const updateById = async (id, data) => {
   const contacts = await listContacts();
-  const idx = contacts.find(contact => contact.id === id);
+  const idx = contacts.find(contact => contact.id.toString() === id);
   if (idx === -1) {
     return null;
   }

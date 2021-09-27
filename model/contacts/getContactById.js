@@ -3,7 +3,7 @@ const listContacts = require('./listContacts');
 async function getContactById(contactId) {
   const allContacts = await listContacts();
   // console.log(allContacts);
-  const idx = allContacts.findIndex(contact => contact.id === contactId);
+  const idx = allContacts.findIndex(contact => (contact.id).toString() === contactId);
   if (idx === -1) {
     return null;
   }
