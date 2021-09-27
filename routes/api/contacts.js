@@ -7,7 +7,7 @@ const {
   deleteContact,
   updateContact,
   postContact,
-} = require('../../controllers')
+} = require('../../controllers/contacts')
 
 const { addContactValidation, patchContactValidation } = require('../../middlewares/validationMiddleware')
 

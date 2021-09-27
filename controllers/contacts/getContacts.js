@@ -1,4 +1,4 @@
-const { getListContacts } = require('../model/contacts/index')
+const { getListContacts } = require('../../model/contacts/index')
 
 const getContacts = async (req, res, next) => {
   try {
