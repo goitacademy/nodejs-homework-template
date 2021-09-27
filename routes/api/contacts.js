@@ -22,8 +22,9 @@ router.get('/', async (req, res, next) => {
 
 // GET contact by ID //
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.id);
+  const contact = await getContactById(req.params);
 
+  // res.json(req.params);
   if (contact) {
     return res.json(contact);
   }
