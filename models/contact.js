@@ -1,13 +1,11 @@
-const {Shema, model} = require('mongoose')
+const {Sсhema, model} = require('mongoose')
 const Joi = require("joi");
 
-const codeRegexp = /^[0-9]{9}$/
-
-const contactSchema = Shema({
+const contactSchema = Sсhema({
   name: {
     type: String,
     required: [true, 'Set name for contact'],
-  }
+  },
   email: {
     type: String,
   },
