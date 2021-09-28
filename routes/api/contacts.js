@@ -12,10 +12,9 @@ router.get('/:contactId', ctrl.getById)
 
 router.post('/', validation(joiSchema),ctrl.add)
 
-router.delete('/:contactId', ctrl.remove)
-
 router.put ('/:contactId', validation(joiSchema), ctrl.updateById)
 router.patch('/:contactId/active', validation(updateFavoriteJoiSchema), ctrl.updateActive)
 
+router.delete('/:contactId', ctrl.remove)
 
 module.exports = router

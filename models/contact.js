@@ -15,7 +15,7 @@ const contactSchema = Schema({
   phone: {
     type: String,
     unique: true,
-  match: codeRegexp
+  match: codeRegexp,
   },
   favorite: {
     type: Boolean,
