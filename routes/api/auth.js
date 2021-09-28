@@ -21,15 +21,15 @@ router.post(
 
 router.post('/login', userValidationMiddleware, controllerWrapper(ctrl.login));
 
-router.get('/logout', authenticate, ctrl.logout);
+router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
 
-router.get('/current', authenticate, ctrl.getCurrentUser);
+router.get('/current', authenticate, controllerWrapper(ctrl.getCurrentUser));
 
 router.patch(
   '/avatars',
   authenticate,
   upload.single('avatar'),
-  ctrl.updateAvatar,
+  controllerWrapper(ctrl.updateAvatar),
 );
 
 module.exports = router;
