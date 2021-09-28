@@ -9,6 +9,7 @@ const contactAddSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(7).max(15).required(),
+  favorite: Joi.boolean().optional(),
 })
 
 module.exports = contactAddSchema
