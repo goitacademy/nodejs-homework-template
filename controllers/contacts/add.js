@@ -1,19 +1,11 @@
-const contactsOperations = require('../../model')
+/* const contactsOperations = require('../../model') */
+const { Contact } = require("../../models");
+const { contactSchema } = require("../../models/contact");
 
 
 const add = async (req, res, next) => {
   try { 
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: error.message,
-      })
-      return
-    }
-    
-    const result = await contactsOperations.addContact(req.body)
+    const result = await Product.create(req.body)
     res.status(201).json({
       status: "success",
       code: 201,

@@ -1,9 +1,12 @@
-const contactsOperations = require('../../model')
+const { Contact } = require("../../models");
 
 const getById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsOperations.getContactById(contactId);
+    const result = await Contact.findOne(
+      { _id: contactId },
+      '_id name email phone favorite',
+    );
     if (!result) {
      
       const error = new Error(`Contact with id=${contactId} not found`);

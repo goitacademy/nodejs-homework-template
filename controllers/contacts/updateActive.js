@@ -1,10 +1,16 @@
-
 const { Contact, contactSchema } = require("../../models");
 
-const updateById = async (req, res, next) => {
+const updateActive = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+        const { active } = req.body;
+
+         if (favorite === undefined) {
+      return res.status(400).json({
+        message: 'missing field favorite',
+      })
+    }
+        const result = await Contact.findByIdAndUpdate(contactId, { active }, { new:true,});
         if (!result) {
             res.status(404).json({
                 status: 'error',
@@ -26,4 +32,4 @@ const updateById = async (req, res, next) => {
 };
 
 
-module.exports = updateById;
+module.exports = updateActive;
