@@ -1,4 +1,4 @@
-const contacts = require('../contacts/contacts.json')
+const contacts = require('../../bd/contacts.json')
 
 const getAll = async () => contacts
 
