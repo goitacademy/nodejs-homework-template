@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { Unauthorized } = require("http-errors");
+const { Unauthorized, NotFound } = require("http-errors");
 const jwt = require("jsonwebtoken");
 
 const { User } = require("../../models");
@@ -10,17 +10,16 @@ const login = async (req, res) => {
 
   if (!user) {
     throw new Unauthorized("Email or password is wrong");
-    // return res.status(401).json({
-    //   status: "Unauthorized",
-    //   code: 401,
-    //   message: "Email or password is wrong",
-    // });
   };
 
   const hashPassword = user.password;
   const compareResult = bcrypt.compareSync(password, hashPassword);
   if (!compareResult) {
     throw new Unauthorized("Email or password is wrong");
+  };
+
+  if (!user.verify) {
+    throw new NotFound("Email is not confirmed!");
   };
 
   const { SECRET_KEY } = process.env;

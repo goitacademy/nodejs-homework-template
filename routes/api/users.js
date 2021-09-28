@@ -10,6 +10,10 @@ const {
 
 const router = express.Router();
 
+router.get("/verify/:verifyToken", controllerWrapper(ctrl.verify));
+
+router.post("/", controllerWrapper(ctrl.repeatEmail));
+
 router.get(
   "/current",
   controllerWrapper(authentication),
