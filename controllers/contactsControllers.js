@@ -5,7 +5,7 @@ const {
   removeContact,
   updateContact,
   updateStatusContact,
-} = require('../model/index')
+} = require('../models/contact')
 
 const getContactsController = async (req, res) => {
   const contacts = await getAllContacts()

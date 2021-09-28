@@ -1,0 +1,5 @@
+const express = require('express')
+const { getContactsController, deleteContactController } = require('../../controllers/contactsControllers')
+const router = express.Router()
+router.get('/', getContactsController)
+router.delete('/:id', deleteContactController)

@@ -1,8 +1,12 @@
 const { Contact } = require('../schemas/contacts')
 
-const getAllContacts = async () => {
-  const contacts = await Contact.find()
-  console.log(contacts)
+const getAllContacts = async (req) => {
+  const { page = 1, limit = 20 } = req.query
+  const skip = (page - 1) * limit
+  const contacts = await Contact.find({ owner: req.user._id }, '', {
+    skip,
+    limit: +limit,
+  }).populate('owner', '_id email')
   return contacts
 }
 const getContactById = async (contactId) => {
@@ -31,8 +35,11 @@ const updateStatusContact = async (contactId, { favorite }) => {
   return updatedContact
 }
 
-const removeContact = async (contactId) => {
-  const contact = await Contact.findByIdAndRemove(contactId)
+const removeContact = async (req) => {
+  const { contactId } = req.params
+
+  const findOne = { _id: contactId, owner: req.user._id }
+  const contact = await Contact.findByIdAndDelete(findOne)
   return contact
 }
 

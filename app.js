@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const { DB_HOST } = process.env
 
+const { sendResponse } = require('./helpers')
+
+const authRouter = require('./routes/api/auth')
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
@@ -16,23 +19,17 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/api/auth', authRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+  sendResponse({ res, status: 404, statusMessage: 'error', data: { message: 'Not found' } })
 })
 
 app.use((error, _, res, __) => {
-  const { status = 500, message = 'Server error' } = error
-  res.status(status).json({
-    status: 'error',
-    code: status,
-    message
-  })
+  const { status = 500 } = error
+  sendResponse({ res, status, statusMessage: 'error', data: { message: 'Server error' } })
 })
-// app.use((err, req, res, next) => {
-//   res.status(500).json({ message: err.message.replace(/"/g, '') })
-// })
 
 mongoose.connect(DB_HOST, {
   useNewUrlParser: true,

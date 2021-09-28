@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
 
-const { Schema, model } = mongoose
+const { Schema, SchemaTypes, model } = mongoose
 
 const contactSchema = Schema({
   name: {
@@ -17,6 +17,10 @@ const contactSchema = Schema({
   favorite: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: SchemaTypes.ObjectId,
+    ref: 'user',
   },
 })
 
