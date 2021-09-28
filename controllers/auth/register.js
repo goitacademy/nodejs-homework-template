@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 const bcrypt = require('bcryptjs');
+
 const gravatar = require('gravatar');
+
 const { Conflict } = require('http-errors');
 const { User } = require('../../models');
 
@@ -12,11 +14,13 @@ const register = async (req, res, next) => {
     throw new Conflict('Already register');
   }
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
   await User.create({
     email,
     password: hashPassword,
     avatarURL: gravatar.url(email),
   });
+
   res.status(201).json({
     status: 'success',
     code: 201,

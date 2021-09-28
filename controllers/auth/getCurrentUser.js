@@ -1,3 +1,4 @@
+
 const { User } = require('../../models');
 
 const getCurrentUser = async (req, res, _) => {
@@ -9,6 +10,7 @@ const getCurrentUser = async (req, res, _) => {
     email: email,
     subscription: subscription,
     avatarURL: avatarURL,
+
   });
 };
 

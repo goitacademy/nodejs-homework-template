@@ -1,8 +1,12 @@
+
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { BadRequest } = require('http-errors');
 const { User } = require('../../models');
+
 require('dotenv').config();
+
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -25,10 +29,12 @@ const login = async (req, res, next) => {
   await User.findByIdAndUpdate(user._id, { token });
   return res.json({
     token,
+
     user: {
       email,
       subscription: 'starter',
     },
+
   });
 };
 
