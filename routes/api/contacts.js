@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
+const { BadRequest, NotFound } = require('http-errors')
 
-const contactOperations = require("../../model/index")
-const {contactSchema} = require ("../../schemas")
+const contactOperations = require('../../model/index')
+const { contactSchema } = require('../../schemas')
 
 router.get('/', async (req, res, next) => {
   try {
-    const result = await contactOperations.listContacts()
+    const result = await contactOperations.getAllContacts()
     res.json({
-      status: "success",
+      status: 'success',
       code: 200,
       data: { result }
     })
@@ -19,15 +20,13 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params
-    const result = await contactOperations.getContactById(id)
+    const { contactId } = req.params
+    const result = await contactOperations.getContactById(contactId)
     if (!result) {
-      const error = new Error(`Contact with id=${id} not found`)
-      error.status = 404
-      throw error
+      throw new NotFound(`Contact with id=${contactId} not found`)
     }
     res.json({
-      status: "success",
+      status: 'success',
       code: 200,
       data: { result }
     })
@@ -41,13 +40,11 @@ router.post('/', async (req, res, next) => {
     console.log(req.body)
     const { error } = contactSchema.validate(req.body)
     if (error) {
-      const err = new Error(error.message)
-      err.status = 400
-      throw err
+      throw new NotFound(error.message)
     }
     const result = await contactOperations.addContact(req.body)
     res.status(201).json({
-      status: "success",
+      status: 'success',
       code: 201,
       data: { result }
     })
@@ -57,26 +54,35 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { contactId } = req.params
+    const result = await contactOperations.removeContact(contactId)
+    if (!result) {
+      throw new NotFound(`Contact with id=${contactId} not found`)
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      message: 'Contact deleted'
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body)
     if (error) {
-      const err = new Error(error.message)
-      err.status = 400
-      throw err
+      throw new BadRequest(error.message)
     }
-    const {id} = req.params
-    const result = await contactOperations.updateContact(id, req.body)
+    const { contactId } = req.params
+    const result = await contactOperations.updateContact(contactId, req.body)
     if (!result) {
-      const error = new Error(`Contact with id=${id} not found`)
-      error.status = 404
-      throw error
+      throw new NotFound(`Contact with id=${contactId} not found`)
     }
     res.json({
-      status: "success",
+      status: 'success',
       code: 200,
       data: { result }
     })
