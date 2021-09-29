@@ -11,6 +11,8 @@ const joiOptionalSchema = Joi.object({
   email: Joi.string(),
   phone: Joi.string()
 })
+  .or('name', 'email', 'phone')
+// .min(1)
 
 module.exports = {
   joiStrictSchema,

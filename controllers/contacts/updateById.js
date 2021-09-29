@@ -1,12 +1,13 @@
 // const createError = require("http-errors")
-const { BadRequest, NotFound, InternalServerError } = require('http-errors')
+// const { BadRequest, NotFound, InternalServerError } = require('http-errors')
+const { NotFound, InternalServerError } = require('http-errors')
 
 const contacstOperations = require('../../model/contacts')
 
 const updateById = async (req, res, next) => {
   const { contactId } = req.params
 
-  if (!(req.body.name || req.body.email || req.body.phone)) throw new BadRequest('Missing fields to update')
+  // if (!(req.body.name || req.body.email || req.body.phone)) throw new BadRequest('Missing fields to update')
 
   const contactData = await contacstOperations.updateContact(contactId, req.body)
 
