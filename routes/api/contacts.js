@@ -1,24 +1,19 @@
-const express = require('express')
-const router = express.Router()
+/* eslint-disable new-cap */
+const express = require('express');
+const { controllerWrapper, validation } = require('../../middlewares/index');
+const { contactSchema } = require('../../schemas/index');
+const { contacts: ctrl } = require('../../controllers');
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', controllerWrapper(ctrl.getAll));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', controllerWrapper(ctrl.getById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', validation(contactSchema), controllerWrapper(ctrl.add));
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', controllerWrapper(ctrl.removeById));
+
+router.patch('/:contactId', validation(contactSchema), controllerWrapper(ctrl.updateById))
 
 module.exports = router
