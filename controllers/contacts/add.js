@@ -5,7 +5,7 @@ const { contactSchema } = require("../../models/contact");
 
 const add = async (req, res, next) => {
   try { 
-    const result = await Product.create(req.body)
+    const result = await Contact.create(req.body)
     res.status(201).json({
       status: "success",
       code: 201,

@@ -32,7 +32,7 @@ const joiSchema = Joi.object({
    name: Joi.string().min(1).required(),
   email: Joi.string().min(1).required(),
   phone: Joi.string().pattern(codeRegexp).required(),
-  favorite: Joi.boolean().required()
+  favorite: Joi.boolean()
 });
 
 const updateFavoriteJoiSchema = Joi.object({
