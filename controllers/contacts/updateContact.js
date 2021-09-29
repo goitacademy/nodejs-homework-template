@@ -1,17 +1,19 @@
 const fs = require('fs/promises');
-const contacts = require('../../model/contacts.json');
-const {listContacts} = require('./index');
+const { listContacts } = require('./listContacts');
+const path = require('path');
+const { json } = require('express');
+
+const contactsPath = path.join(__dirname, '../../model/contacts.json');
 
 const updateContact = async (contactId, body) => {
   try {
     const data = await listContacts();
-    const idPos = data.find(item => item.id === Number(contactId));
-
-    if (idPos) {
-      data[idPos] = { ...data[idPos], body };
-      fs.writeFile(contacts, JSON.stringify(contacts));
+    const idPos = data.findIndex(item => String(item.id) === String(contactId));
+    if (idPos > 0) {
+      data[idPos] = { ...data[idPos], ...body };
+      await fs.writeFile(contactsPath, JSON.stringify(data));
       
-      return JSON.parse(data[idPos]);
+      return data[idPos];
     }
 
     return json({ "message": "Not found" });
