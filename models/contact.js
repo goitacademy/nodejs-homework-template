@@ -3,7 +3,6 @@ const Joi = require('joi')
 
 const phoneRegexp = /^\(\d{3}\)(\s)\d{3}(-)\d{4}$/
 const emailRegexp = /\S+@\S+\.\S+$/
-// const emailRegexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const contactSchema = Schema({
   name: {
@@ -14,13 +13,11 @@ const contactSchema = Schema({
   email: {
     type: String,
     required: [true, 'Set email for connect'],
-    unique: true,
     match: emailRegexp
   },
   phone: {
     type: String,
     required: [true, 'Set phone for connect'],
-    unique: true,
     match: phoneRegexp
   },
   favourite: {
@@ -36,9 +33,14 @@ const joiSchema = Joi.object({
   favourite: Joi.boolean()
 })
 
+const updateFavouriteJoiSchema = Joi.object({
+  favourite: Joi.boolean().required()
+})
+
 const Contact = model('contact', contactSchema)
 
 module.exports = {
   joiSchema,
-  Contact
+  Contact,
+  updateFavouriteJoiSchema
 }
