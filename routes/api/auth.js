@@ -10,7 +10,6 @@ const {
   upload,
 } = require('../../middlewares');
 
-
 const router = express.Router();
 
 const userValidationMiddleware = validation(joiSchema);
@@ -23,7 +22,6 @@ router.post(
 
 router.post('/login', userValidationMiddleware, controllerWrapper(ctrl.login));
 
-
 router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
 
 router.get('/current', authenticate, controllerWrapper(ctrl.getCurrentUser));
@@ -35,5 +33,6 @@ router.patch(
   controllerWrapper(ctrl.updateAvatar),
 );
 
+router.get('/verify/:verifyToken', controllerWrapper(ctrl.verify));
 
 module.exports = router;

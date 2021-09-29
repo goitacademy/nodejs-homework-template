@@ -1,5 +1,3 @@
-
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { BadRequest } = require('http-errors');
@@ -7,12 +5,14 @@ const { User } = require('../../models');
 
 require('dotenv').config();
 
-
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw new BadRequest('Wrong email');
+  }
+  if (!user.verify) {
+    throw new BadRequest('User not found');
   }
   const hashPassword = user.password;
   const compareResult = bcrypt.compareSync(password, hashPassword);
@@ -34,9 +34,7 @@ const login = async (req, res, next) => {
       email,
       subscription: 'starter',
     },
-
   });
 };
 
 module.exports = login;
-

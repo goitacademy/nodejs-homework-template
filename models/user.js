@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-const bcrypt = require('bcryptjs');
+// const { v4 } = require('uuid');
+// const bcrypt = require('bcryptjs');
 
 const userSchema = Schema(
   {
@@ -23,19 +24,29 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
     avatarURL: {
       type: String,
       default: '',
     },
-
   },
   { versionKey: false, timestamps: true },
 );
 
-userSchema.methods.setPassword = function (password) {
-  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-};
+// userSchema.methods.setPassword = function (password) {
+//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// };
+
+// userSchema.methods.createVerifyToken = function () {
+//   this.verifyToken = v4();
+// };
 
 const joiSchema = Joi.object({
   password: Joi.string().min(6).required(),
@@ -44,7 +55,6 @@ const joiSchema = Joi.object({
   token: Joi.string(),
 
   avatarURL: Joi.string(),
-
 });
 
 const User = model('user', userSchema);
