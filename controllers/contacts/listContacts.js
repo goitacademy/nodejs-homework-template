@@ -1,9 +1,9 @@
-const contactsOperations = require('../../model/contacts')
-const sendSuccessResponse = require('../../helpers')
+// const { Contact } = require('../../models')
+// const sendSuccessResponse = require('../../helpers')
 
-const listContacts = async (req, res) => {
-  const result = await contactsOperations.listContacts()
-  sendSuccessResponse(res, { data: result })
-}
+// const listContacts = async (req, res) => {
+//   const result = await Contact.find({}, '_id name email phone favorite')
+//   sendSuccessResponse(res, { result })
+// }
 
-module.exports = listContacts
+// module.exports = listContacts
