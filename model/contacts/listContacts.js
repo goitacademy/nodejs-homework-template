@@ -1,0 +1,6 @@
+/* eslint-disable eol-last */
+const contacts = require('./contacts.json')
+
+const listContacts = async() => contacts
+
+module.exports = listContacts
