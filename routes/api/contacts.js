@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { BadRequest, NotFound } = require('http-errors')
 
-const contactOperations = require('../../model/index')
+const contactOperations = require('../../model')
 const { contactSchema } = require('../../schemas')
 
 router.get('/', async (req, res, next) => {

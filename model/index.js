@@ -2,7 +2,7 @@ const { v4 } = require('uuid')
 const fs = require('fs/promises')
 const path = require('path')
 
-const contactsPath = path.join('db/contacts.json')
+const contactsPath = path.join('model/contacts.json')
 
 const getAllContacts = async () => {
   try {
@@ -11,6 +11,7 @@ const getAllContacts = async () => {
     return parseContacts
   } catch (error) {
     console.log(error.message)
+    throw error
   }
 }
 
@@ -23,38 +24,40 @@ const getContactById = async (contactId) => {
     }
     return contactById
   } catch (error) {
-    throw error
-  }
-}
-
-const removeContact = async (contactId) => {
-  try {
-    const contacts = await getAllContacts()
-    const newContacts = contacts.filter(contact => contact.id !== Number(id))
-    await updateContacts(newContacts)
-    return newContacts
-  }
-  catch (error) {
-    throw error
-  }
-}
-
-const addContact = async (body) => {
-  try {
-    const contacts = await getAllContacts()
-    const newContact = { ...data, id: v4() }
-    const newContacts = [...contacts, newContact]
-    await updateContacts(newContacts)
-    console.log(`newContact`, newContact)
-    return newContact
-  }
-  catch (error) {
+    console.log('error', error)
     throw error
   }
 }
 
 const updateContact = async (contactId, body) => {
+  const newContacts = { contactId, ...body }
   return await fs.writeFile(contactsPath, JSON.stringify(newContacts))
+}
+
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await getAllContacts()
+    const newContacts = contacts.filter(contact => contact.id !== Number(contactId))
+    await updateContact(newContacts)
+    return newContacts
+  } catch (error) {
+    console.log('error', error)
+    throw error
+  }
+}
+
+const addContact = async (data) => {
+  try {
+    const contacts = await getAllContacts()
+    const newContact = { ...data, id: v4() }
+    const newContacts = [...contacts, newContact]
+    await updateContact(newContacts)
+    console.log('newContact', newContact)
+    return newContact
+  } catch (error) {
+    console.log('error', error)
+    throw error
+  }
 }
 
 module.exports = {
