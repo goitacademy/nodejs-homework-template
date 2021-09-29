@@ -5,7 +5,34 @@ const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
+// const { DB_HOST } = process.env
 
+// const { Schema, model } = mongoose
+
+// const contactSchema = Schema({
+//   name: String,
+//   email: String,
+// })
+
+// const Contact = model('contact', contactSchema)
+// const newContact = {
+//   name: 'Inna',
+//   email: 'inna@i.ua',
+// }
+// mongoose
+//   .connect(DB_HOST, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     Contact.create(newContact, (error, data) => {
+//       console.log(error)
+//       console.log(data)
+//     })
+//   })
+//   .catch((error) => {
+//     console.log(error.message)
+//   })
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))

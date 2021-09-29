@@ -1,7 +1,7 @@
 const { sendSuccessRes } = require('../../helpers')
-const contactsOperations = require('../../model/contacts')
+const { Contact } = require('../../models')
 const addContacts = async (req, res) => {
-  const result = await contactsOperations.addContact(req.body)
+  const result = await Contact.create(req.body)
   sendSuccessRes(res, { result }, 201)
 }
 module.exports = addContacts

@@ -1,7 +1,7 @@
 const { sendSuccessRes } = require('../../helpers')
-const contactsOperations = require('../../model/contacts')
+const { Contact } = require('../../models')
 const getAllContacts = async (req, res) => {
-  const result = await contactsOperations.listContacts()
+  const result = await Contact.find({}, '_id name email phone favorite')
   sendSuccessRes(res, { result })
 }
 module.exports = getAllContacts
