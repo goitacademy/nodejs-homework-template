@@ -1,7 +1,17 @@
-const app = require('../app')
+const mongoose = require("mongoose");
+require("dotenv").config(); //переменная окружения появится в .env
 
-const PORT = process.env.PORT || 3000
+const app = require("../app");
 
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`)
-})
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => app.listen(PORT)) //запускаем сервер только после подключения к базе
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1); //закрывает все процесы на всякий случай
+  });

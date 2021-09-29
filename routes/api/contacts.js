@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const contactsSchema = require("../../schemas/contacts");
-// const { contactsSchema } = require("../../schemas");
+const { joiSchema, updateFavoriteJoiSchema } = require("../../models/contacts");
+// const { joiSchema } = require("../../models");
 const { controllerWrapper, validation } = require("../../middlewares");
 const { contacts: ctrl } = require("../../controllers");
 // console.log(ctrl);
@@ -12,12 +12,18 @@ router.get("/", controllerWrapper(ctrl.getAll));
 // GET /api/contacts/3
 router.get("/:contactId", controllerWrapper(ctrl.getContactById));
 
-router.post("/", validation(contactsSchema), ctrl.addContact);
+router.post("/", validation(joiSchema), ctrl.addContact);
 
 router.put(
   "/:contactId",
-  validation(contactsSchema),
+  validation(joiSchema),
   controllerWrapper(ctrl.updateContactsById)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validation(updateFavoriteJoiSchema),
+  controllerWrapper(ctrl.updateFavorite)
 );
 
 router.delete("/:contactId", controllerWrapper(ctrl.removeContactById));
