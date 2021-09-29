@@ -2,7 +2,7 @@
 const express = require('express');
 
 const { joiContactSchema } = require('../../models/contact');
-const { validation } = require('../../middlewares');
+const { validation, controllerWrapper } = require('../../middlewares');
 const ctrl = require('../../controllers/contacts');
 
 const validationMiddleware = validation(joiContactSchema);
@@ -13,7 +13,7 @@ router.get('/', ctrl.getAll);
 
 router.get('/:contactId', ctrl.getById);
 
-router.post('/', ctrl.add);
+router.post('/', validationMiddleware, controllerWrapper(ctrl.add));
 
 router.delete('/:contactId', ctrl.delById);
 
