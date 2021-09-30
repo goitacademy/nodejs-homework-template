@@ -8,17 +8,20 @@ const contactSchema = Schema({
   name: {
     type: String,
     required: [true, 'Set name for connect'],
-    minLength: 4
+    minLength: 4,
+    unique: true
   },
   email: {
     type: String,
     required: [true, 'Set email for connect'],
-    match: emailRegexp
+    match: emailRegexp,
+    unique: true
   },
   phone: {
     type: String,
     required: [true, 'Set phone for connect'],
-    match: phoneRegexp
+    match: phoneRegexp,
+    unique: true
   },
   favourite: {
     type: Boolean,
