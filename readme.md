@@ -1,4 +1,4 @@
-## GoIT Node.js Course Template Homework
+# GoIT Node.js Course Template Homework
 
 Выполните форк этого репозитория для выполнения домашних заданий (2-6)
 Форк создаст репозиторий на вашем http://github.com
@@ -23,7 +23,7 @@
 - При сдаче домашней работы есть ссылка на PR
 - JS-код чистый и понятный, для форматирования используется Prettier
 
-### Команды:
+## Команды:
 
 - `npm start` &mdash; старт сервера в режиме production
 - `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
