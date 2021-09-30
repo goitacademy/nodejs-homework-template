@@ -3,6 +3,7 @@ const getById = require('./getById')
 const add = require('./add')
 const remove = require('./remove')
 const updateById = require('./updateById')
+const updateActive = require('./updateActive')
 
 
 module.exports = {
@@ -11,4 +12,5 @@ module.exports = {
     add,
     remove,
     updateById,
+    updateActive
 }
