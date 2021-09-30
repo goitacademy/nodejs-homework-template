@@ -1,5 +1,5 @@
-const contacts = require('./contacts.json')
+const contacts = require("../../db/contacts.json");
 
-const listContacts = async () => contacts
+const listContacts = async () => contacts;
 
-module.exports = listContacts
+module.exports = listContacts;
