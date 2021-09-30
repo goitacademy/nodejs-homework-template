@@ -11,7 +11,7 @@ const login = async (req, res, next) => {
   if (!user) {
     throw new BadRequest('Wrong email');
   }
-  if (!user.verify) {
+  if (user.verify) {
     throw new BadRequest('User not found');
   }
   const hashPassword = user.password;

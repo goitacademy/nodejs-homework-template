@@ -17,7 +17,7 @@ const register = async (req, res, next) => {
   const data = {
     to: email,
     subject: 'Registration confirmation',
-    html: `<a href="http://localhost:3000/api/users/verify/${verifyToken}">Please confirm your registration</a>`,
+    html: `<a href="http://localhost:3000/api/auth/verify/${verifyToken}">Please confirm your registration</a>`,
   };
 
   await User.create({
@@ -32,8 +32,10 @@ const register = async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     code: 201,
+    email,
+    subscription: 'starter',
     message: 'Success register',
-    // html: `<a href="http://localhost:3000/api/users/verify/${verifyToken}">Please confirm your registration</a>`,
+    html: `<a href="http://localhost:3000/api/auth/verify/${verifyToken}">Please confirm your registration</a>`,
   });
 };
 
