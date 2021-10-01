@@ -1,31 +1,63 @@
-## GoIT Node.js Course Template Homework
+# h1 node-rest-api-server
 
-Выполните форк этого репозитория для выполнения домашних заданий (2-6)
-Форк создаст репозиторий на вашем http://github.com
+# h2 Commands for install and use
 
-Добавьте ментора в коллаборацию
+This is the example of the simplest CRUD rest-api on NodeJS + Mongoose.
 
-Для каждой домашней работы создавайте свою ветку.
+To run:
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+```
+npm install
 
-Каждая новая ветка для дз должна делаться с master
+npm run dev
+```
 
-После того как вы закончили выполнять домашнее задание в своей ветке, необходимо сделать пулл-реквест (PR). Потом добавить ментора для ревью кода. Только после того как ментор заапрувит PR, вы можете выполнить мердж ветки с домашним заданием в мастер.
+# h2 Connect to your own database
 
-Внимательно читайте комментарии ментора. Исправьте замечания и сделайте коммит в ветке с домашним заданием. Изменения подтянуться в PR автоматически после того как вы отправите коммит с исправлениями на github
-После исправления снова добавьте ментора на ревью кода.
+In order to use your database, you need to create an .env file in the project root and
+write the connection string to your database in the DB_HOST variable.
+Connection string in .env file:
+DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>?retryWrites=true&w=majority
 
-- При сдаче домашней работы есть ссылка на PR
-- JS-код чистый и понятный, для форматирования используется Prettier
+- <my_database> - the database to connect
+- <user> - users with read / write access to this database
+- <password> - user password
 
-### Команды:
+# h2 contact scheme
 
-- `npm start` &mdash; старт сервера в режиме production
-- `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
-- `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
-- `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+The example contains a CRUD implementation for one contact reference entity.
+
+The contact scheme looks like:
+
+```
+const contactSchema = Schema(
+{
+name: {
+type: String,
+required: [true, 'Set name for contact'],
+},
+email: {
+type: String,
+},
+phone: {
+type: String,
+},
+favorite: {
+type: Boolean,
+default: false,
+},
+},
+{ versionKey: false, timestamps: true }
+)
+```
+
+# h2 CRUD
+
+| Method | Endpoints                     | Notes                         |
+| ------ | ----------------------------- | ----------------------------- |
+| POST   | /contacts                     | Add contact                   |
+| GET    | /contacts                     | Get all contacts              |
+| GET    | /contacts/:contactId          | Get single contact            |
+| PUT    | /contacts/:contactId          | Update contact                |
+| PATCH  | /contacts/:contactId/favorite | Update contact favorite field |
+| DELETE | /contacts/:contactId          | Delete contact                |
