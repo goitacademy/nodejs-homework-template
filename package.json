@@ -14,7 +14,8 @@
     "express": "4.17.1",
     "http-errors": "^1.7.2",
     "joi": "^17.4.2",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^7.19.0",

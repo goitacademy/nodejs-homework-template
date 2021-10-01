@@ -29,8 +29,7 @@ const getContactById = async (contactId) => {
   }
 }
 
-const updateContact = async (contactId, body) => {
-  const newContacts = { contactId, ...body }
+const updateContact = async (newContacts) => {
   return await fs.writeFile(contactsPath, JSON.stringify(newContacts))
 }
 
@@ -60,10 +59,24 @@ const addContact = async (data) => {
   }
 }
 
+const updateContactById = async (contactId, data) => {
+  const contacts = await getAllContacts()
+  const idx = contacts.findIndex(contact => contact.id === Number(contactId))
+  if (idx === -1) {
+    return null
+  }
+  const newContact = { ...contacts[idx], ...data }
+  console.log('newContact', newContact)
+  contacts[idx] = newContact
+  await updateContact(contacts)
+  return newContact
+}
+
 module.exports = {
   getAllContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContactById,
   updateContact,
 }

@@ -37,7 +37,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    console.log(req.body)
+    console.log('req.body', req.body)
     const { error } = contactSchema.validate(req.body)
     if (error) {
       throw new NotFound(error.message)
@@ -77,7 +77,7 @@ router.put('/:contactId', async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const { contactId } = req.params
-    const result = await contactOperations.updateContact(contactId, req.body)
+    const result = await contactOperations.updateContactById(contactId, req.body)
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`)
     }
