@@ -1,8 +1,7 @@
 const Joi = require("joi");
 
 const patternPhone =
-  "\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}";
-// const patternPhone = "^[(][\\d]{3}[)]\\s[\\d]{3}[-][\\d]{4}"; // /^\+[0-9]{3}\s\((\d+)\)-\d{3}-\d{2}-\d{2}/ (+380 (**)-***-**-**) or ^[(][\d]{3}[)]\s[\d]{3}[-][\d]{4} or +?d{1,4}?[-.s]?(?d{1,3}?)?[-.s]?d{1,4}[-.s]?d{1,4}[-.s]?d{1,9}
+  "\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}"; // /^\+[0-9]{3}\s\((\d+)\)-\d{3}-\d{2}-\d{2}/ (+380 (**)-***-**-**) or ^[(][\d]{3}[)]\s[\d]{3}[-][\d]{4} or +?d{1,4}?[-.s]?(?d{1,3}?)?[-.s]?d{1,4}[-.s]?d{1,4}[-.s]?d{1,9}
 const patternId = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}";
 
 const schemaContact = Joi.object({
@@ -17,7 +16,7 @@ const schemaUpdateContact = Joi.object({
   email: Joi.string().email().optional(),
   phone: Joi.string().pattern(new RegExp(patternPhone)).optional(),
   isFavourite: Joi.boolean().optional(),
-});
+}).min(1);
 
 const schemaId = Joi.object({
   contactId: Joi.string().pattern(new RegExp(patternId)).required(),
