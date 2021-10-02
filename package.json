@@ -3,23 +3,46 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node app ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon index app ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "express": "^4.17.1",
+    "http-errors": "^1.8.0",
+    "joi": "^17.4.2",
+    "lowdb": "^3.0.0",
+    "morgan": "1.10.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
-  }
+    "nodemon": "^2.0.12"
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "bin": {
+    "template": "server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Olena-P/nodejs-homework-rest-api.git"
+  },
+  "keywords": [],
+  "author": "OLENA_PAVLIUK <P.O.W.9.7.21@GMAIL.COM>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Olena-P/nodejs-homework-rest-api/issues"
+  },
+  "homepage": "https://github.com/Olena-P/nodejs-homework-rest-api#readme"
 }
