@@ -1,7 +1,5 @@
 const getAll = require('./getAll')
-const fs = require('fs/promises')
-const path = require('path')
-const contactsPath = path.join(__dirname, '../../', 'model', 'contacts.json')
+const updateContacts = require('./updateContacts')
 
 const removeContact = async (contactId) => {
   const contacts = await getAll()
@@ -10,7 +8,7 @@ const removeContact = async (contactId) => {
     return null
   }
   contacts.splice(idx, 1)
-  await fs.writeFile(contactsPath, JSON.stringify(contacts))
+  await updateContacts(contacts)
   return true
 }
 module.exports = removeContact
