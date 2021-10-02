@@ -1,1 +1,72 @@
-[{"id":"1","isFavourite":true,"name":"Allen Raymond","email":"nulla.ante@vestibul.co.uk","phone":"(992) 914-3792"},{"id":"2","isFavourite":false,"name":"Chaim Lewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":"3","isFavourite":true,"name":"Kennedy Lane","email":"mattis.Cras@nonenimMauris.net","phone":"(542) 451-7038"},{"id":"4","isFavourite":false,"name":"Wylie Pope","email":"est@utquamvel.net","phone":"(692) 802-2949"},{"id":"5","isFavourite":true,"name":"Cyrus Jackson","email":"nibh@semsempererat.com","phone":"(501) 472-5218"},{"id":"6","isFavourite":false,"name":"Abbot Franks","email":"scelerisque@magnis.org","phone":"(186) 568-3720"},{"id":"7","isFavourite":false,"name":"Reuben Henry","email":"pharetra.ut@dictum.co.uk","phone":"(715) 598-5792"},{"id":"8","isFavourite":false,"name":"Simon Morton","email":"dui.Fusce.diam@Donec.com","phone":"(233) 738-2360"},{"id":"9","isFavourite":false,"name":"Thomas Lucas","email":"nec@Nulla.com","phone":"(704) 398-7993"},{"id":"10","isFavourite":true,"name":"Alec Howard","email":"Donec.elementum@scelerisquescelerisquedui.net","phone":"(748) 206-2688"},{"id":"beb1bd4f-561f-44a6-b89e-2d9a600a6372","isFavourite":false,"name":"Oleg","email":"oleg@gmail.com","phone":"(097) 954-7639"},{"id":"7c3ece4a-98ba-4466-8d08-4df2e2198a1e","isFavourite":false,"name":"Maryna2","email":"maryna@gmail.com","phone":"(097) 944-5667"},{"id":"ee80f992-334c-461b-b75c-31bd045edbc1","isFavourite":false,"name":"Maryna4","email":"maryna@gmail.com","phone":"0979445659"},{"id":"62916074-ef92-4876-b117-1e9bb95cf06a","isFavourite":false,"name":"Maryna4","email":"maryna@gmail.com","phone":"+380979445659"},{"id":"050a5e0a-b943-4113-9079-ef52fd0cbb81","isFavourite":false,"name":"Maryna4","email":"maryna@gmail.com","phone":"(097) 944-5659"}]
+[
+  {
+    "id": "1",
+    "isFavourite": true,
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792"
+  },
+  {
+    "id": "2",
+    "isFavourite": false,
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "3",
+    "isFavourite": true,
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038"
+  },
+  {
+    "id": "4",
+    "isFavourite": false,
+    "name": "Wylie Pope",
+    "email": "est@utquamvel.net",
+    "phone": "(692) 802-2949"
+  },
+  {
+    "id": "5",
+    "isFavourite": true,
+    "name": "Cyrus Jackson",
+    "email": "nibh@semsempererat.com",
+    "phone": "(501) 472-5218"
+  },
+  {
+    "id": "6",
+    "isFavourite": false,
+    "name": "Abbot Franks",
+    "email": "scelerisque@magnis.org",
+    "phone": "(186) 568-3720"
+  },
+  {
+    "id": "7",
+    "isFavourite": false,
+    "name": "Reuben Henry",
+    "email": "pharetra.ut@dictum.co.uk",
+    "phone": "(715) 598-5792"
+  },
+  {
+    "id": "8",
+    "isFavourite": false,
+    "name": "Simon Morton",
+    "email": "dui.Fusce.diam@Donec.com",
+    "phone": "(233) 738-2360"
+  },
+  {
+    "id": "9",
+    "isFavourite": false,
+    "name": "Thomas Lucas",
+    "email": "nec@Nulla.com",
+    "phone": "(704) 398-7993"
+  },
+  {
+    "id": "10",
+    "isFavourite": true,
+    "name": "Alec Howard",
+    "email": "Donec.elementum@scelerisquescelerisquedui.net",
+    "phone": "(748) 206-2688"
+  }
+]
