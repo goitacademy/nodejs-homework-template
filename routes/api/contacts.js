@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { controllerWrapper, validation } = require("./../../middlewares");
-const contactsControllers = require("../../controllers/products-controller");
+const contactsControllers = require("../../controllers/contacts/");
 const { addSchema, patchSchema } = require("./../../schemas");
 
 router.get("/", controllerWrapper(contactsControllers.getContacts));

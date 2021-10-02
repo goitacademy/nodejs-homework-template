@@ -2,8 +2,9 @@ const getContacts = require("./getContacts");
 const fs = require("fs/promises");
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.resolve("./db/contacts.json");
 
+console.log(__dirname);
 async function addContact(data) {
   const contacts = await getContacts();
   const newID = contacts[contacts.length - 1].id + 1;
