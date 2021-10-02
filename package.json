@@ -9,10 +9,16 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "http-error": "^0.0.6",
+    "http-errors": "^1.7.2",
+    "joi": "^17.4.2",
+    "morgan": "1.10.0",
+    "shortid": "^2.2.16",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
