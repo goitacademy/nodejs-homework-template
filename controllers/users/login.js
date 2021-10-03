@@ -1,6 +1,7 @@
-const { User } = require('../../models')
-
 const { BadRequest } = require('http-errors')
+const jwt = require('jsonwebtoken')
+const { User } = require('../../models')
+const { SECRET_KEY } = process.env
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -8,8 +9,11 @@ const login = async (req, res) => {
   if (!user || !user.comparePassword(password)) {
     throw new BadRequest('Invalid email or password')
   }
-
-  const token = 'ghsdfsdfsfg.hsgfdhdghdh.dfgdhdhsdsasa'
+  const payload = {
+    _id: user._id,
+  }
+  const token = jwt.sign(payload, SECRET_KEY)
+  //   const token = 'gdfhdfhf.segdhdfhf.gdfhfdh'
   res.json({
     status: 'success',
     code: 200,

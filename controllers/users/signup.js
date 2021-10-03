@@ -9,7 +9,7 @@ const signup = async (req, res) => {
     throw new Conflict('Already register')
   }
   const newUser = new User({ email })
-  newUser.setPasword(password)
+  newUser.setPassword(password)
   await newUser.save()
   // const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
   // const newUser = { email, password: hashPassword }
