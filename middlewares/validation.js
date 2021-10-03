@@ -1,3 +1,5 @@
+// функция-обертка для проверки данных на соответствие схеме контакта для БД
+
 const validation = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
