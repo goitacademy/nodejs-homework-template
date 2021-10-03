@@ -10,6 +10,7 @@ const getContactById = async (req, res, next) => {
     res.status(200).json({ contact, message: 'success' })
   } catch (error) {
     console.log(error.message)
+    next()
   }
 }
 
