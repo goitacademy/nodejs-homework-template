@@ -1,11 +1,13 @@
+/* eslint-disable spaced-comment */
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable eol-last */
 /* eslint-disable indent */
-const { NotFound } = require('http-errors')
+const { NotFound, BadRequest } = require('http-errors')
 
-const contactsOperations = require('../model/contacts')
+const { Contact } = require('../models')
 
 const listContacts = async(req, res, next) => {
-    const contacts = await contactsOperations.listContacts()
+    const contacts = await Contact.find({})
     res.json({
         status: 'success',
         code: 200,
@@ -17,7 +19,7 @@ const listContacts = async(req, res, next) => {
 
 const getContactById = async(req, res, next) => {
     const id = req.params.contactId
-    const contactById = await contactsOperations.getContactById(id)
+    const contactById = await Contact.findById(id)
     if (!contactById) {
         throw new NotFound(`Contact with id=${id} not found`)
     }
@@ -31,7 +33,7 @@ const getContactById = async(req, res, next) => {
 }
 
 const addContact = async(req, res, next) => {
-    const result = await contactsOperations.addContact(req.body)
+    const result = await Contact.create(req.body)
     res.status(201).json({
         status: 'success',
         code: 201,
@@ -43,7 +45,7 @@ const addContact = async(req, res, next) => {
 
 const removeContact = async(req, res, next) => {
     const id = req.params.contactId
-    const result = await contactsOperations.removeContact(id)
+    const result = await Contact.findByIdAndDelete(id)
     if (!result) {
         throw new NotFound(`Contact with id=${id} not found`)
     }
@@ -56,10 +58,14 @@ const removeContact = async(req, res, next) => {
 
 const updateContact = async(req, res, next) => {
     const id = req.params.contactId
-    const result = await contactsOperations.updateContact(id, req.body)
-    if (!result) {
+
+    const update = await Contact.findByIdAndUpdate(id, { $set: req.body })
+
+    if (!update) {
         throw new NotFound(`Contact with id=${id} not found`)
     }
+
+    const result = await Contact.findById(id)
     res.json({
         status: 'success',
         code: 200,
@@ -69,4 +75,36 @@ const updateContact = async(req, res, next) => {
     })
 }
 
-module.exports = { listContacts, getContactById, addContact, removeContact, updateContact }
+const updateStatusContact = async(req, res, next) => {
+    const id = req.params.contactId
+
+    if (JSON.stringify(req.body) === '{}') {
+        throw new BadRequest('missing field favorite')
+    }
+
+    const updateFavorite = await Contact.findByIdAndUpdate(id, {
+        $set: req.body
+    })
+
+    if (!updateFavorite) {
+        throw new NotFound(`Contact with id=${id} not found`)
+    }
+
+    const result = await Contact.findById(id)
+    res.json({
+        status: 'success',
+        code: 200,
+        data: {
+            result
+        }
+    })
+}
+
+module.exports = {
+    listContacts,
+    getContactById,
+    addContact,
+    removeContact,
+    updateContact,
+    updateStatusContact
+}
