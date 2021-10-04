@@ -18,3 +18,6 @@ module.exports = {
   addContact,
   updateContact,
 }
+const c = () => {
+  console.log(c)
+}
