@@ -2,12 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 const { controllerWrapper, validation } = require('../../middlewares')
-const { productSchema } = require('../../schemas')
+const { joiSchema } = require('../../models/contact')
 
 const {
   getContacts,
   getById,
-  add,
+  addContact,
   updateById,
   deleteById,
 } = require('../../controllers')
@@ -16,9 +16,11 @@ router.get('/', controllerWrapper(getContacts))
 
 router.get('/:contactId', controllerWrapper(getById))
 
-router.post('/', validation(productSchema), controllerWrapper(add))
+router.post('/', validation(joiSchema), controllerWrapper(addContact))
 
-router.patch('/:contactId', validation(productSchema),
+router.patch(
+  '/:contactId/favorite',
+  validation(joiSchema),
   controllerWrapper(updateById)
 )
 
