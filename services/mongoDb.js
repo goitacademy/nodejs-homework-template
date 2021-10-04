@@ -1,15 +1,10 @@
 const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+require('dotenv').config()
 
-dotenv.config()
+const DB_HOST = process.env.DB_HOST
 
-const URI = process.env.DB_URI
-
-const mongoDbConnect = mongoose.connect(URI, {
-  useNewUrlParcer: true,
-  useCreateIndex: true,
+const mongoDbConnect = mongoose.connect(DB_HOST, {
   useUnifiedTopology: true,
-  useFindAndModify: false,
 })
 
 mongoose.connection.on('connected', () => {
