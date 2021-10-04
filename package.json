@@ -18,7 +18,9 @@
     "mongoose": "^6.0.7",
     "joi-objectid": "^3.0.1",
     "dotenv": "^10.0.0",
-    "http-errors": "^1.8.0"
+    "http-errors": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
