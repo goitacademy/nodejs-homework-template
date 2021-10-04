@@ -1,13 +1,7 @@
-const contactsOperations = require('../model/contactsOperations')
+const contactsOperations = require('../model/contacts')
 const CreateError = require('http-errors')
-const Joi = require('joi')
-const { response } = require('express')
 
-const joiSchema = Joi.object({
-  name: Joi.string().min(3).required(),
-  email: Joi.string().email({ minDomainSegments: 2 }),
-  phone: Joi.string().min(3).required(),
-})
+// const { response } = require('express')
 
 const getAll = async (req, res, next) => {
   const contacts = await contactsOperations.listContacts()
@@ -39,10 +33,6 @@ const getById = async (req, res, next) => {
 }
 
 const add = async (req, res, next) => {
-  const { error } = joiSchema.validate(req.body)
-  if (error) {
-    throw new CreateError.BadRequest(error.message)
-  }
   const result = await contactsOperations.addContact(req.body)
   res.status(201).json({
     status: 'success',
@@ -72,10 +62,6 @@ const remove = async (req, res, next) => {
 }
 
 const updateById = async (req, res, next) => {
-  const { error } = joiSchema.validate(req.body)
-  if (error) {
-    throw new CreateError.BadRequest(404, error.message)
-  }
   const { contactId } = req.params
   const result = await contactsOperations.updateContactsById(
     Number(contactId),
