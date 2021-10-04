@@ -5,8 +5,7 @@ const validationId = () => {
   return async (req, res, next) => {
     const { error } = contactIdSchema.validate(req.params)
     if (error) {
-      next(new BadRequest(error.message))
-      return
+      return next(new BadRequest(error.message))
     }
     next()
   }

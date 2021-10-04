@@ -7,7 +7,7 @@ const signup = async (req, res) => {
 
   const user = await User.findOne({ email })
   if (user) {
-    throw new Conflict('Already signup')
+    throw new Conflict('Email in use')
   }
   const newUser = new User({ email })
 
@@ -16,9 +16,7 @@ const signup = async (req, res) => {
   await newUser.save()
 
   res.status(201).json({
-    status: 'success',
-    code: 201,
-    message: 'Success signup',
+    user: { email: newUser.email, subscription: newUser.subscription },
   })
 }
 
@@ -28,7 +26,7 @@ const signin = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email }, '_id email password')
   if (!user || !user.comparePassword(password)) {
-    throw new BadRequest('Invalid email or password')
+    throw new BadRequest('Email or password is wrong')
   }
 
   const { _id } = user
@@ -37,24 +35,17 @@ const signin = async (req, res) => {
   }
   const token = jwt.sign(payload, SECRET_KEY)
 
-  await User.findByIdAndUpdate(_id, { token })
+  const resUser = await User.findByIdAndUpdate(_id, { token })
   res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      token,
-    },
+    token: token,
+    user: { email: resUser.email, subscription: resUser.subscription },
   })
 }
 
 const signout = async (req, res) => {
   const { _id } = req.user
   await User.findByIdAndUpdate(_id, { token: null })
-  res.json({
-    status: 'success',
-    code: 200,
-    message: 'Success signout',
-  })
+  res.status(204).json({})
 }
 
 module.exports = { signup, signin, signout }

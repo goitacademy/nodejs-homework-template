@@ -1,4 +1,5 @@
 const { BadRequest } = require('http-errors')
+
 const { isEmpty } = require('../utils')
 
 const validation = (schema) => {
@@ -8,7 +9,8 @@ const validation = (schema) => {
       const err = isEmpty(req.body)
         ? 'missing fields55555:  '
         : '' + error.message
-      return new BadRequest(err)
+
+      return next(new BadRequest(err))
     }
     next()
   }
