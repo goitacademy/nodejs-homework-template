@@ -1,1 +1,7 @@
+
+.env
+package-lock.json
+yarn.lock
+yarn.log
+.vscode/
 node_modules
