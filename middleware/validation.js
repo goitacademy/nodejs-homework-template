@@ -5,7 +5,7 @@ const validation = (schema) => {
       res.status(400).json({
         status: 'error',
         code: 400,
-        message: error.message
+        message: error.message,
       })
       return
     }
@@ -13,4 +13,6 @@ const validation = (schema) => {
   }
 }
 
-module.exports = validation
+module.exports = {
+  validation
+}
