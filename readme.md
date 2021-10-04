@@ -132,7 +132,7 @@ REST API должен поддерживать следующие рауты.
 
 Создай аккаунт на [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). После чего в аккаунте создай новый проект и настрой **бесплатный кластер**. Во время настройки кластера выбери провайдера и регион как на скриншоте ниже. Если выбрать слишком удаленный регион, скорость ответа сервера будет дольше.
 
-![atlas cluster setup](./atlas-cluster.jpg)
+![atlas cluster setup](./img/atlas-cluster.jpg)
 
 ## Шаг 2
 
@@ -142,11 +142,11 @@ REST API должен поддерживать следующие рауты.
 
 Через Compass создай базу данных `db-contacts` и в ней коллекцию `contacts`. Возьми [ссылка на json](./contacts.json) и при помощи Compass наполни коллекцию `contacts` (сделай импорт) его содержимым.
 
-![data](./json-data.png)
+![data](./img/json-data.png)
 
 Если вы все сделали правильно, данные должны появиться в вашей базе в коллекции `contacts`
 
-![data](./mongo-data.png)
+![data](./img/mongo-data.png)
 
 ## Шаг 4
 
