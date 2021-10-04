@@ -1,15 +1,19 @@
 module.exports = {
-  env: {
-    commonjs: true,
-    es2021: true,
-    node: true,
-  },
-  extends: ['standard'],
-  parserOptions: {
-    ecmaVersion: 12,
-  },
-  rules: {
-    'comma-dangle': 'off',
-    'space-before-function-paren': 'off',
-  },
-}
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "plugin:react/recommended",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+    }
+};
