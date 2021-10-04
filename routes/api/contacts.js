@@ -1,10 +1,12 @@
 const express = require("express");
-const { controllerWrapper } = require("../../middlewares/index");
-const { contacts: ctrl } = require("../../controllers");
+const { controllerWrapper } = require("../../middlewares");
+const ctrl = require("../../controllers/contacts");
+
 const {
   validationAddedContact,
   validationUpdatedContact,
-} = require("./validation");
+} = require("../../middlewares/validation");
+
 const router = express.Router();
 
 router.get("/", controllerWrapper(ctrl.getAll));
