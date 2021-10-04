@@ -61,12 +61,50 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:contactId', async(req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body)
+    if (error) {
+      const err = new Error(error.message)
+      err.status = 400
+      throw err
+    }
+    const { contactId } = req.params
+    const result = await contactsOperations.updateContact(contactId, req.body)
+    if (!result) {
+      const error = new Error('Contact with id={id} not found')
+      error.status = 404
+      throw error
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        result
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.delete('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params
+    const result = await contactsOperations.removeContact(contactId)
+    if (!result) {
+      const error = new Error('Contact with id={id} not found')
+      error.status = 404
+      throw error
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      message: 'Success delete'
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router
