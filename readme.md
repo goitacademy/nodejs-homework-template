@@ -108,7 +108,7 @@ REST API должен поддерживать следующие рауты.
 2. [express-validator](https://github.com/express-validator/express-validator)
 3. [yup](https://github.com/jquense/yup)
 
-<img src="validator.png" width="640">
+<img src="./img/validator.png" width="640">
 
 ## Критерии приема дз #2-6
 
@@ -140,7 +140,7 @@ REST API должен поддерживать следующие рауты.
 
 ## Шаг 3
 
-Через Compass создай базу данных `db-contacts` и в ней коллекцию `contacts`. Возьми [ссылка на json](./contacts.json) и при помощи Compass наполни коллекцию `contacts` (сделай импорт) его содержимым.
+Через Compass создай базу данных `db-contacts` и в ней коллекцию `contacts`. Возьми [ссылка на json](./model/contacts.json) и при помощи Compass наполни коллекцию `contacts` (сделай импорт) его содержимым.
 
 ![data](./img/json-data.png)
 
@@ -150,7 +150,7 @@ REST API должен поддерживать следующие рауты.
 
 ## Шаг 4
 
-Используйте исходный код [домашней работы #2](../homework-02/README.md) и замените хранение контактов из json-файла на созданную вами базу данных.
+Используйте исходный код [домашней работы #2](https://github.com/Maryna-Skrypnyk/nodejs-homework-rest-api/tree/hw02) и замените хранение контактов из json-файла на созданную вами базу данных.
 
 - Напишите код для создания подключения к MongoDB при помощи [Mongoose](https://mongoosejs.com/).
 - При успешном подключении выведите в консоль сообщение `"Database connection successful"`.
