@@ -20,10 +20,10 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params
-    const result = await contactsOperations.getContactById(id)
+    const { contactId } = req.params
+    const result = await contactsOperations.getContactById(contactId)
     if (!result) {
-      const error = new Error(`Contact with id=${id} not found`)
+      const error = new Error(`Contact with id=${contactId} not found`)
       error.status = 404
       throw error
     }
