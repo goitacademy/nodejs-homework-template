@@ -27,7 +27,7 @@ const addContact = async (body) => {
   const contacts = await db.read();
   const newContact = {
     id: crypto.randomUUID(),
-    isFavourite: false,
+    isFavorite: false,
     ...body,
   };
   const newContacts = [...contacts, newContact];

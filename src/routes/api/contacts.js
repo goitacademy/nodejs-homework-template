@@ -3,7 +3,8 @@ const router = express.Router();
 // const Contacts = require("../../../model");
 const {
   validateContact,
-  validateUpdateContact,
+  // validateUpdateContact,
+  validateStatusContact,
   validateId,
 } = require("./validation");
 
@@ -26,6 +27,13 @@ router.put("/:contactId", validateId, validateContact, changeContact);
 
 router.delete("/:contactId", validateId, deleteContact);
 
-router.patch("/:contactId", validateId, validateUpdateContact, patchContact);
+// router.patch("/:contactId", validateId, validateUpdateContact, patchContact);
+
+router.patch(
+  "/:contactId/favorite",
+  validateId,
+  validateStatusContact,
+  patchContact
+);
 
 module.exports = router;
