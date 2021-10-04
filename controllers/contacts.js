@@ -1,5 +1,6 @@
-const { sendSuccess, sendNotFound } = require('../utils')
+const { sendSuccess } = require('../utils')
 const { Contact } = require('../model')
+const { NotFound } = require('http-errors')
 
 const listContacts = async (req, res) => {
   const result = await Contact.find({}, '_id name email phone favorite')
@@ -13,8 +14,7 @@ const getContactById = async (req, res) => {
     '_id name email phone favorite'
   )
   if (!result) {
-    sendNotFound(res, contactId)
-    return
+    throw new NotFound(`Contact with id=${contactId} not found!`)
   }
   sendSuccess(res, { result })
 }
@@ -31,8 +31,7 @@ const updateContactById = async (req, res) => {
   })
 
   if (!result) {
-    sendNotFound(res, contactId)
-    return
+    throw new NotFound(`Contact with id=${contactId} not found!`)
   }
   sendSuccess(res, { result })
 }
@@ -41,8 +40,7 @@ const removeContactById = async (req, res, next) => {
   const { contactId } = req.params
   const result = await Contact.findByIdAndDelete(contactId)
   if (!result) {
-    sendNotFound(res, contactId)
-    return
+    throw new NotFound(`Contact with id=${contactId} not found!`)
   }
   sendSuccess(res, { message: 'Contact deleted' })
 }
@@ -56,8 +54,7 @@ const updateStatusContact = async (req, res) => {
     { new: true }
   )
   if (!result) {
-    sendNotFound(res, contactId)
-    return
+    throw new NotFound(`Contact with id=${contactId} not found!`)
   }
   sendSuccess(res, { message: 'Status of contact updated' })
 }

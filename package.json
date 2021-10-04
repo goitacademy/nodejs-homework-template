@@ -17,7 +17,8 @@
     "uuid": "^8.3.2",
     "mongoose": "^6.0.7",
     "joi-objectid": "^3.0.1",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "http-errors": "^1.8.0"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
