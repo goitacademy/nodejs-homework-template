@@ -12,7 +12,7 @@ router.get("/", async (_req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", validateId, async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.contactId);
     if (contact) {
@@ -30,7 +30,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.put(
   "/:contactId",
-
+  validateId,
   validateContact,
   async (req, res, next) => {
     try {
@@ -79,7 +79,7 @@ router.delete("/:contactId", validateId, async (req, res, next) => {
 
 router.patch(
   "/:contactId",
-
+  validateId,
   validateContact,
   async (req, res, next) => {
     try {
