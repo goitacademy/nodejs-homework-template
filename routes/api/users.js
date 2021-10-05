@@ -15,4 +15,6 @@ router.post('/login', validation(userSchema), controllerWrapper(auth.signin))
 
 router.post('/logout', authenticate, controllerWrapper(auth.signout))
 
+router.get('/current', authenticate, controllerWrapper(auth.currentUser))
+
 module.exports = router

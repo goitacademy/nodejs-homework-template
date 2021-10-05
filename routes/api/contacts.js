@@ -9,12 +9,17 @@ const {
   controllerWrapper,
   validation,
   validationId,
+  authenticate,
 } = require('../../middlwares')
 const { contacts: contactsController } = require('../../controllers')
 
 const router = express.Router()
+router.use(authenticate)
+router.get(
+  '/',
 
-router.get('/', controllerWrapper(contactsController.listContacts))
+  controllerWrapper(contactsController.listContacts)
+)
 
 router.get(
   '/:contactId',
@@ -24,19 +29,22 @@ router.get(
 
 router.post(
   '/',
+
   validation(contactAddSchema),
   controllerWrapper(contactsController.addContact)
 )
 
 router.delete(
   '/:contactId',
+
   validationId(),
   controllerWrapper(contactsController.removeContactById)
 )
 
 router.put(
   '/:contactId',
-  [validationId(), validation(contactUpdateSchema)],
+
+  [(validationId(), validation(contactUpdateSchema))],
   controllerWrapper(contactsController.updateContactById)
 )
 

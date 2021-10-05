@@ -3,7 +3,7 @@ const { Contact } = require('../model')
 const { NotFound } = require('http-errors')
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({}, '_id name email phone favorite')
+  const result = await Contact.find({}, '_id name email phone favorite owner')
   sendSuccess(res, { result })
 }
 
@@ -20,7 +20,9 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body)
+  console.log('req:', req.body, req.user)
+  const newContact = { ...req.body, owner: req.user._id }
+  const result = await Contact.create(newContact)
   sendSuccess(res, { result }, 201)
 }
 
