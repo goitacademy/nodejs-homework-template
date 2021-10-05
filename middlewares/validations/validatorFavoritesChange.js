@@ -6,6 +6,9 @@ const validator = async (req, res, next) => {
       favorite: Joi.boolean().required()
     })
     const { error } = validator.validate(req.body)
+    if (!Object.keys(req.body).length) {
+      error.message = 'missing field favorite'
+    }
     if (error) {
       next(error)
     } else {
