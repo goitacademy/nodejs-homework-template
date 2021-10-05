@@ -9,7 +9,6 @@ mongoose.connect(DB_HOST, {
   useUnifiedTopology: true
 })
   .then(() => {
-    console.log('Database connection successful')
     app.listen(PORT)
   }
   )
