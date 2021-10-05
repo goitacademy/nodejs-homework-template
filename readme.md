@@ -2,7 +2,8 @@
 
 - [Commands for install and use](#Commands-for-install-and-use)
 - [Connect](#Connect-to-your-own-database)
-- [Scheme](#Contact-scheme)
+- [SchemeUser](#User-scheme)
+- [SchemeContact](#Contact-scheme)
 - [CRUD](#CRUD)
 
 ## Commands for install and use
@@ -19,8 +20,10 @@ npm run dev
 
 ## Connect to your own database
 
-In order to use your database, you need to create an .env file in the project root and
-write the connection string to your database in the DB_HOST variable.
+In order to use your database, you need to create an .env file in the project root and write the connection string to your database in the DB_HOST variable and SECRET_KEY variable for encrypt your password.
+
+An example .env file can be viewed in the file .env.example
+
 Connection string in .env file:
 DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>?retryWrites=true&w=majority
 
@@ -29,6 +32,32 @@ DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>
 - <user> - users with read / write access to this database
 - <password> - user password
 ```
+
+## User scheme
+
+const userSchema = new Schema(
+{
+password: {
+type: String,
+required: [true, 'Password is required'],
+},
+email: {
+type: String,
+required: [true, 'Email is required'],
+unique: true,
+},
+subscription: {
+type: String,
+enum: ['starter', 'pro', 'business'],
+default: 'starter',
+},
+token: {
+type: String,
+default: null,
+},
+},
+{ versionKey: false, timestamps: true }
+)
 
 ## Contact scheme
 
@@ -53,6 +82,9 @@ favorite: {
 type: Boolean,
 default: false,
 },
+owner: {
+type: SchemaTypes.ObjectId,
+ref: 'user',
 },
 { versionKey: false, timestamps: true }
 )
@@ -68,3 +100,8 @@ default: false,
 | PUT    | /contacts/:contactId          | Update contact                |
 | PATCH  | /contacts/:contactId/favorite | Update contact favorite field |
 | DELETE | /contacts/:contactId          | Delete contact                |
+| POST   | /users/signup                 | Registration of a new user    |
+| POST   | /users/login                  | Login                         |
+| POST   | /users/logout                 | Logout                        |
+| GET    | /users/current                | Get user data by token        |
+| ------ | ----------------------------- | ----------------------------- |

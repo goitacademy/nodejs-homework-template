@@ -6,9 +6,7 @@ const validation = (schema) => {
   return async (req, res, next) => {
     const { error } = schema.validate(req.body)
     if (error) {
-      const err = isEmpty(req.body)
-        ? 'missing fields55555:  '
-        : '' + error.message
+      const err = isEmpty(req.body) ? 'missing fields:  ' : '' + error.message
 
       return next(new BadRequest(err))
     }
