@@ -3,7 +3,6 @@ const { NotFound } = require("http-errors");
 const { sendSuccessResponse } = require("../../utils");
 
 const getContactById = async (req, res) => {
-  const { contactId } = req.params;
   // console.log(req.params); //все динамич.части хранятся
   const contact = await Contact.findById(req.params.contactId);
   if (!contact) {

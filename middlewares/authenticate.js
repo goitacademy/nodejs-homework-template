@@ -34,6 +34,7 @@ const authenticate = async (req, res, next) => {
   }
 
   try {
+    //разшифровываем токен в котором _id находится
     const { _id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(_id);
     if (!user.token) {
