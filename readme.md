@@ -7,3 +7,4 @@
 ![Joi](https://img.shields.io/bundlephobia/min/joi?color=grin&label=Joi)
 ![Morgan](https://img.shields.io/bundlephobia/min/morgan?color=grin&label=Morgan)
 ![Mongoose](https://img.shields.io/bundlephobia/min/mongoose?color=grin&label=Mongoose)
+![Nodemon](https://img.shields.io/bundlephobia/min/nodemon?color=green&label=Nodemon)
