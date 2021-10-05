@@ -7,11 +7,11 @@ const logout = async (req, res) => {
   //token: null - разлогинились. обновляем по _id
   await User.findByIdAndUpdate(_id, { token: null });
   sendSuccessResponse(res, null, 200);
-//   res.json({
-//     status: "success",
-//     code: 200,
-//     message: "Success logout",
-//   });
-// };
+  //   res.json({
+  //     status: "success",
+  //     code: 200,
+  //     message: "Success logout",
+  //   });
+};
 
 module.exports = logout;
