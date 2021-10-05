@@ -1,3 +1,4 @@
+const { BadRequest, NotFound } = require('http-errors')
 const { contactSchema } = require('../schemas')
 const contactsOperations = require('../model/contacts')
 
@@ -16,9 +17,7 @@ const getContactById = async (req, res, next) => {
   const { contactId } = req.params
   const result = await contactsOperations.getContactById(contactId)
   if (!result) {
-    const error = new Error(`Contact with id=${contactId} not found`)
-    error.status = 404
-    throw error
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
   res.json({
     status: 'success',
@@ -32,9 +31,7 @@ const getContactById = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   const { error } = contactSchema.validate(req.body)
   if (error) {
-    const err = new Error(error.message)
-    err.status = 400
-    throw err
+    throw new BadRequest(error.message)
   }
   const result = await contactsOperations.addContact(req.body)
   res.status(201).json({
@@ -49,9 +46,7 @@ const addContact = async (req, res, next) => {
 const updateContact = async(req, res, next) => {
   const { error } = contactSchema.validate(req.body)
   if (error) {
-    const err = new Error(error.message)
-    err.status = 400
-    throw err
+    throw new BadRequest(error.message)
   }
   const { contactId } = req.params
   const result = await contactsOperations.updateContact(contactId, req.body)
@@ -73,9 +68,7 @@ const removeContact = async (req, res, next) => {
   const { contactId } = req.params
   const result = await contactsOperations.removeContact(contactId)
   if (!result) {
-    const error = new Error('Contact with id={id} not found')
-    error.status = 404
-    throw error
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
   res.json({
     status: 'success',
