@@ -105,4 +105,4 @@ ref: 'user',
 | POST   | /users/login                  | Login                         |
 | POST   | /users/logout                 | Logout                        |
 | GET    | /users/current                | Get user data by token        |
-| ------ | ----------------------------- | ----------------------------- |
+
