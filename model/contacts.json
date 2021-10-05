@@ -1,62 +1,20 @@
 [
-  {
-    "id": 1,
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
-    "id": 2,
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
-  },
-  {
-    "id": 3,
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  {
-    "id": 4,
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
-  },
-  {
-    "id": 5,
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
-  },
-  {
-    "id": 6,
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
-    "id": 7,
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
-  },
-  {
-    "id": 8,
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
-  },
-  {
-    "id": 9,
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
-  {
-    "id": 10,
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
-  }
+    {
+        "name": "Enrico Fermi",
+        "email": "enrico1@mail.com",
+        "phone": "33-44-555",
+        "id": "e12f5e23-cd6a-4d7a-b2ff-c9609cf9fde2"
+    },
+    {
+        "name": "Alex",
+        "email": "alex@vestibul.co.uk",
+        "phone": "33-44-55",
+        "id": "e2ad1e3b-a14a-48a8-bece-2e94636f3a9a"
+    },
+    {
+        "name": "Tomas",
+        "email": "tomas@vestibul.co.uk",
+        "phone": "333-444-555",
+        "id": "ea3c601e-2fc3-46b1-8d16-e08339ea0705"
+    }
 ]
