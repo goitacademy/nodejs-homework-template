@@ -34,7 +34,8 @@ DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>
 ```
 
 ## User scheme
-
+The user scheme looks like:
+```
 const userSchema = new Schema(
 {
 password: {
@@ -58,7 +59,7 @@ default: null,
 },
 { versionKey: false, timestamps: true }
 )
-
+```
 ## Contact scheme
 
 The example contains a CRUD implementation for one contact reference entity.
