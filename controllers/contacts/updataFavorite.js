@@ -3,8 +3,8 @@ const { sendSuccessResponse } = require("../../utils");
 const { Contact } = require("../../models");
 
 const updateFavorite = async (req, res) => {
- const { contactId } = req.params;
- const {favorite} = req.body;
+  const { contactId } = req.params;
+  const { favorite } = req.body;
 
   const contact = await Contact.findByIdAndUpdate(
     contactId,

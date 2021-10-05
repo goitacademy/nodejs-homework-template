@@ -7,16 +7,8 @@ const removeContactById = async (req, res) => {
   const contact = await Contact.findByIdAndDelete(contactId);
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
-    // const error = new Error(`Product with id=${contactId} not found`);
-    // error.status = 404;
-    // throw error;
   }
   sendSuccessResponse(res, { message: "Success delete", contact });
-  // res.json({
-  //   status: "success",
-  //   code: 200,
-  //   message: "Success delete",
-  // });
 };
 
 module.exports = removeContactById;

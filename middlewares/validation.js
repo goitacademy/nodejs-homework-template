@@ -1,3 +1,4 @@
+//обработка валидации тела запроса
 const validation = (schema) => {
   return async (req, res, next) => {
     const { error } = schema.validate(req.body);
