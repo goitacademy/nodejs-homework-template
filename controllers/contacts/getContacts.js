@@ -7,6 +7,7 @@ const getContacts = async (req, res, next) => {
     res.status(200).json({ contacts, message: 'success' })
   } catch (error) {
     console.log(error.message)
+    next()
   }
 }
 

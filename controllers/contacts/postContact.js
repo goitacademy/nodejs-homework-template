@@ -10,6 +10,7 @@ const postContact = async (req, res, next) => {
     res.status(200).json({ newContact, message: 'success' })
   } catch (error) {
     console.log(error.message)
+    next()
   }
 }
 
