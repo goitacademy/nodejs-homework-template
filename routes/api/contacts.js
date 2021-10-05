@@ -5,10 +5,14 @@ const {
   getContactByIdController,
   addContactController,
   removeContactController,
-  changeContactController
+  changeContactController,
+  updateStatusContactController
 } = require('../../controllers')
-const contactValidator = require('../../middlewares/validatorCreation')
-const contactValidatorChanges = require('../../middlewares/validatorChanges')
+const {
+  contactValidator,
+  contactValidatorChanges,
+  contactValidatorFavoriteChanges
+} = require('../../middlewares/validations')
 
 router.get('/', listContactsController)
 
@@ -19,5 +23,7 @@ router.post('/', contactValidator, addContactController)
 router.delete('/:contactId', removeContactController)
 
 router.put('/:contactId', contactValidatorChanges, changeContactController)
+
+router.patch('/:contactId/favorite', contactValidatorFavoriteChanges, updateStatusContactController)
 
 module.exports = router
