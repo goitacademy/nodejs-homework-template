@@ -1,12 +1,9 @@
-const fs = require('fs/promises')
-const path = require('path')
-const PATH_DB = path.join(__dirname, '..', 'contacts.json')
+const Contact = require('../../schemas/contacts')
 
 const listContactsModel = async () => {
   try {
-    const contacts = await fs.readFile(PATH_DB, 'utf-8')
-    const parsedContacts = JSON.parse(contacts)
-    return parsedContacts
+    const contacts = await Contact.find()
+    return contacts
   } catch (err) {
     throw new Error(err)
   }

@@ -5,12 +5,8 @@ const changeContactController = async (req, res, next) => {
     const bodyRequest = req.body
     const { contactId } = req.params
     const changedContact = await changeContactModel(contactId, bodyRequest)
-    if (changedContact) {
-      return res
-        .json({ status: 'succsess', code: 200, data: changedContact })
-    } else {
-      throw new Error('404')
-    }
+    return res
+      .json({ status: 'succsess', code: 200, data: changedContact })
   } catch (err) {
     next(err)
   }

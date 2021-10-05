@@ -7,8 +7,9 @@ const contactSchema = new Schema({
     trim: true,
     lowercase: true,
   },
-  phone: String
-})
+  phone: String,
+  versionKey: false
+}, { versionKey: false })
 
 const Contact = model('contact', contactSchema)
 

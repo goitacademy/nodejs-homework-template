@@ -1,18 +1,14 @@
 const { listContactsModel } = require('../../model')
 
-const listContacts = async (req, res, next) => {
+const listContactsController = async (req, res, next) => {
   try {
     const contacts = await listContactsModel()
-    if (Object.keys(contacts).length) {
-      return res
-        .status(200)
-        .json({ status: 'succsess', code: 201, data: { contacts } })
-    } else {
-      throw new Error()
-    }
+    return res
+      .status(200)
+      .json({ status: 'succsess', code: 201, data: { contacts } })
   } catch (err) {
     next(err)
   }
 }
 
-module.exports = listContacts
+module.exports = listContactsController
