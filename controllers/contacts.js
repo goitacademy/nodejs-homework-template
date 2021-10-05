@@ -1,16 +1,11 @@
-const { BadRequest, NotFound } = require('http-errors')
-const { contactSchema } = require('../schemas')
+const { NotFound } = require('http-errors')
+
+const { sendSuccessRes } = require('../helpers')
 const contactsOperations = require('../model/contacts')
 
-const listContacts = async(req, res, next) => {
-  const contacts = await contactsOperations.listContacts()
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result: contacts
-    }
-  })
+const listContacts = async(req, res) => {
+  const result = await contactsOperations.listContacts()
+  sendSuccessRes(res, { result })
 }
 
 const getContactById = async (req, res, next) => {
@@ -19,49 +14,21 @@ const getContactById = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result
-    }
-  })
+  sendSuccessRes(res, { result })
 }
 
-const addContact = async (req, res, next) => {
-  const { error } = contactSchema.validate(req.body)
-  if (error) {
-    throw new BadRequest(error.message)
-  }
+const addContact = async (req, res) => {
   const result = await contactsOperations.addContact(req.body)
-  res.status(201).json({
-    status: 'success',
-    code: 201,
-    data: {
-      result
-    }
-  })
+  sendSuccessRes(res, { data: result }, 201)
 }
 
-const updateContact = async(req, res, next) => {
-  const { error } = contactSchema.validate(req.body)
-  if (error) {
-    throw new BadRequest(error.message)
-  }
+const updateContact = async(req, res) => {
   const { contactId } = req.params
   const result = await contactsOperations.updateContact(contactId, req.body)
   if (!result) {
-    const error = new Error('Contact with id={id} not found')
-    error.status = 404
-    throw error
+    throw new NotFound(`Contact with id=${contactId} not found`)
   }
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      result
-    }
-  })
+  sendSuccessRes(res, result, 200, 'Contact has been successfully update')
 }
 
 const removeContact = async (req, res, next) => {
@@ -70,12 +37,9 @@ const removeContact = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
-  res.json({
-    status: 'success',
-    code: 200,
-    message: 'Success delete'
-  })
+  sendSuccessRes(res, { message: 'Success delete' }) 
 }
+
 module.exports = {
   listContacts,
   getContactById,
