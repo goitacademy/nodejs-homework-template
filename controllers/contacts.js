@@ -37,7 +37,7 @@ const removeContact = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
-  sendSuccessRes(res, { message: 'Success delete' }) 
+  sendSuccessRes(res, { message: 'Success delete' })
 }
 
 module.exports = {
