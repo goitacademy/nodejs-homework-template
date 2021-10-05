@@ -5,7 +5,7 @@ const validation = (schema) => {
       res.status(400).json({
         status: 'error',
         code: 400,
-        message: error.message,
+        message: 'Ошибка от Joi или другой библиотеки  валидации',
       })
       return
     }
@@ -13,6 +13,4 @@ const validation = (schema) => {
   }
 }
 
-module.exports = {
-  validation
-}
+module.exports = validation
