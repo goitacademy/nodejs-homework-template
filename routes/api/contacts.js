@@ -18,11 +18,6 @@ router.get("/", async (req, res, next) => {
     });
   } catch (error) {
     next(error);
-    // res.status(500).json({
-    //   status: 'error',
-    //   code: 500,
-    //   message: 'Server error'
-    // })
   }
 
   router.get("/:id", async (req, res, next) => {
@@ -51,7 +46,6 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    // console.log(req.body);
     const { error } = contactSchema.validate(req.body);
     if (error) {
       const err = new Error(error.message);
@@ -118,24 +112,5 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-// router.get('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.get('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.patch('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 
 module.exports = router;
