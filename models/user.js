@@ -3,6 +3,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs"); // хеширование
+const jwt = require("jsonwebtoken");
 
 const userSchema = Schema(
   {
