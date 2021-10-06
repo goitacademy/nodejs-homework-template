@@ -11,6 +11,7 @@ const listContacts = async(req, res) => {
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params
   const result = await contactsOperations.getContactById(contactId)
+  console.log(`OM result: ${result}`)
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
@@ -28,7 +29,7 @@ const updateContact = async(req, res) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
-  sendSuccessRes(res, result, 200, 'Contact has been successfully update')
+  sendSuccessRes(res, { result })
 }
 
 const removeContact = async (req, res, next) => {
