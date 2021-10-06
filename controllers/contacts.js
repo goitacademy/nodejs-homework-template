@@ -24,7 +24,7 @@ const addContact = async (req, res) => {
 
 const removeContact = async (req, res) => {
     const { contactId } = req.params;
-    const result = Contact.findByIdAndDelete(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
         throw new NotFound(`Contact with ${contactId} id was not found`);
     }
