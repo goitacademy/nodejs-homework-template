@@ -1,10 +1,5 @@
 [
-  {
-    "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
+  {},
   {
     "id": "2",
     "name": "Chaim Lewis",
@@ -17,12 +12,7 @@
     "email": "mattis.Cras@nonenimMauris.net",
     "phone": "(542) 451-7038"
   },
-  {
-    "id": "4",
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
-  },
+  {},
   {
     "id": "5",
     "name": "Cyrus Jackson",
@@ -64,6 +54,27 @@
     "isFavorite": false,
     "name": "Robert",
     "email": "Robert.el@sceler.net",
+    "phone": "(123) 454-3456"
+  },
+  {
+    "id": "f39632af-664a-43bd-9971-6716028a8a03",
+    "isFavorite": false,
+    "name": "Robert",
+    "email": "Robert.el@sceler.net",
+    "phone": "(123) 454-3456"
+  },
+  {
+    "id": "2edd42ad-ca95-43b4-8d32-d01ff46eba4e",
+    "isFavorite": false,
+    "name": "kot",
+    "email": "kot.el@sceler.net",
+    "phone": "(123) 454-3456"
+  },
+  {
+    "id": "9cb8f4df-eaeb-4c46-801d-6bd6d61d470b",
+    "isFavorite": true,
+    "name": "kot",
+    "email": "kot.el@sceler.net",
     "phone": "(123) 454-3456"
   }
 ]

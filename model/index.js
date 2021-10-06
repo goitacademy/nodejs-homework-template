@@ -23,7 +23,17 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await db.read();
+  const index = contacts.findIndex(({ id }) => id === contactId);
+  if (index !== -1) {
+    const contact = contacts[index];
+    contacts[index] = { ...contact[index], ...body };
+    await db.write(contacts);
+    return contacts[index];
+  }
+  return null;
+};
 
 module.exports = {
   listContacts,
