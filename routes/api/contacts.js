@@ -3,7 +3,7 @@ const router = express.Router()
 const { BadRequest, NotFound } = require('http-errors')
 
 const contactOperations = require('../../model')
-const { contactSchema } = require('../../schemas')
+const { joiContactSchema } = require('../../models/contact')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -38,7 +38,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     console.log('req.body', req.body)
-    const { error } = contactSchema.validate(req.body)
+    const { error } = joiContactSchema.validate(req.body)
     if (error) {
       throw new NotFound(error.message)
     }
@@ -72,7 +72,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body)
+    const { error } = joiContactSchema.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
     }
