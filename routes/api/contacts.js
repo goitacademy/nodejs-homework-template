@@ -39,14 +39,15 @@ router.put("/:contactId", async (req, res, next) => {
       req.params.contactId,
       req.body
     );
+    console.log("contacts:", contacts);
     if (contacts) {
       return res
         .status(200)
-        .res.json({ status: "success", code: 200, data: { contacts } });
+        .json({ status: "success", code: 200, data: { contacts } });
     }
     return res
       .status(404)
-      .res.json({ status: "error", code: 404, message: "Not Found" });
+      .json({ status: "error", code: 404, message: "Not Found" });
   } catch (error) {
     next(error);
   }

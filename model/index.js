@@ -25,10 +25,10 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await db.read();
-  const index = contacts.findIndex(({ id }) => id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index !== -1) {
     const contact = contacts[index];
-    contacts[index] = { ...contact[index], ...body };
+    contacts[index] = { ...contact, ...body };
     await db.write(contacts);
     return contacts[index];
   }
