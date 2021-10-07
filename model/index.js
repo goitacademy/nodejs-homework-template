@@ -25,6 +25,7 @@ const removeContact = async (contactId) => {
   return null;
 }
 
+
 const addContact = async (body) => {
   const contacts = await db.read();
   const newContact = {
