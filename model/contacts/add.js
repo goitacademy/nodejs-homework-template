@@ -7,9 +7,7 @@ const add = async (data) => {
   const contacts = await getAll();
   const newContact = { ...data, id: v4() };
   contacts.push(newContact);
-  // const newContact = [...contacts, newContact];
   await updateContacts(contacts);
-  // await updateContacts(newContact);
   return newContact;
 };
 

@@ -7,11 +7,7 @@ const getById = async (id) => {
   if (idx === -1) {
     return null;
   }
-  // if(!contact){
-  //     return null;
-  // }
   return contacts[idx];
-  // return contacts;
 };
 
 module.exports = getById;
