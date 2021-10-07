@@ -11,7 +11,6 @@ const listContacts = async(req, res) => {
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params
   const result = await contactsOperations.getContactById(contactId)
-  console.log(`OM result: ${result}`)
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`)
   }
