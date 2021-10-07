@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { contactValidation } = require("./validation");
+
 const {
   listContacts,
   getContactById,
@@ -9,7 +11,7 @@ const {
   updateContact,
 } = require("../../model");
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (_req, res, _next) => {
   const contacts = await listContacts();
   res.json({
     status: "success",
@@ -19,7 +21,7 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", async (req, res, _next) => {
   const contact = await getContactById(req.params.contactId);
 
   if (contact.length > 0) {
@@ -38,7 +40,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", contactValidation, async (req, res, _next) => {
   const contact = await addContact(req.body);
   res.status(201).json({
     status: "success",
@@ -48,7 +50,7 @@ router.post("/", async (req, res, next) => {
   });
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", async (req, res, _next) => {
   const { contactId } = req.params;
   const remove = await removeContact(contactId);
 
@@ -63,10 +65,10 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", async (req, res, next) => {
+router.put("/:contactId", contactValidation, async (req, res, _next) => {
   const contact = await updateContact(req.params.contactId, req.body);
 
-  if (contact.length > 0) {
+  if (contact) {
     return res.json({
       status: "success",
       code: 200,
@@ -77,7 +79,7 @@ router.patch("/:contactId", async (req, res, next) => {
     return res.status(404).json({
       status: "error",
       code: 404,
-      message: `${contact.name} not found`,
+      message: "contact not found",
     });
   }
 });
