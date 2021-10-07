@@ -4,36 +4,53 @@ const {
   contactAddSchema,
   contactUpdateSchema,
   contactStatusUpdateSchema,
-} = require('../../schemas')
-const { controllerWrapper, validation } = require('../../middlwares')
+} = require('../../joiSchemas')
+const {
+  controllerWrapper,
+  validation,
+  validationId,
+  authenticate,
+} = require('../../middlwares')
 const { contacts: contactsController } = require('../../controllers')
 
 const router = express.Router()
+router.use(authenticate)
+router.get(
+  '/',
 
-router.get('/', controllerWrapper(contactsController.listContacts))
+  controllerWrapper(contactsController.listContacts)
+)
 
-router.get('/:contactId', controllerWrapper(contactsController.getContactById))
+router.get(
+  '/:contactId',
+  validationId(),
+  controllerWrapper(contactsController.getContactById)
+)
 
 router.post(
   '/',
+
   validation(contactAddSchema),
   controllerWrapper(contactsController.addContact)
 )
 
 router.delete(
   '/:contactId',
+
+  validationId(),
   controllerWrapper(contactsController.removeContactById)
 )
 
 router.put(
   '/:contactId',
-  validation(contactUpdateSchema),
+
+  [(validationId(), validation(contactUpdateSchema))],
   controllerWrapper(contactsController.updateContactById)
 )
 
 router.patch(
   '/:contactId/favorite',
-  validation(contactStatusUpdateSchema),
+  [validationId(), validation(contactStatusUpdateSchema)],
   controllerWrapper(contactsController.updateStatusContact)
 )
 

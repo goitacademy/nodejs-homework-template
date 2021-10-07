@@ -1,31 +1,108 @@
-## GoIT Node.js Course Template Homework
+# Node-rest-api-server
 
-Выполните форк этого репозитория для выполнения домашних заданий (2-6)
-Форк создаст репозиторий на вашем http://github.com
+- [Commands for install and use](#Commands-for-install-and-use)
+- [Connect](#Connect-to-your-own-database)
+- [SchemeUser](#User-scheme)
+- [SchemeContact](#Contact-scheme)
+- [CRUD](#CRUD)
 
-Добавьте ментора в коллаборацию
+## Commands for install and use
 
-Для каждой домашней работы создавайте свою ветку.
+This is the example of the simplest CRUD rest-api on NodeJS + Mongoose.
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+To run:
 
-Каждая новая ветка для дз должна делаться с master
+```
+npm install
 
-После того как вы закончили выполнять домашнее задание в своей ветке, необходимо сделать пулл-реквест (PR). Потом добавить ментора для ревью кода. Только после того как ментор заапрувит PR, вы можете выполнить мердж ветки с домашним заданием в мастер.
+npm run dev
+```
 
-Внимательно читайте комментарии ментора. Исправьте замечания и сделайте коммит в ветке с домашним заданием. Изменения подтянуться в PR автоматически после того как вы отправите коммит с исправлениями на github
-После исправления снова добавьте ментора на ревью кода.
+## Connect to your own database
 
-- При сдаче домашней работы есть ссылка на PR
-- JS-код чистый и понятный, для форматирования используется Prettier
+In order to use your database, you need to create an .env file in the project root and write the connection string to your database in the DB_HOST variable and SECRET_KEY variable for encrypt your password.
 
-### Команды:
+An example .env file can be viewed in the file .env.example
 
-- `npm start` &mdash; старт сервера в режиме production
-- `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
-- `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
-- `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+Connection string in .env file:
+DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>?retryWrites=true&w=majority
+
+```
+- <my_database> - the database to connect
+- <user> - users with read / write access to this database
+- <password> - user password
+```
+
+## User scheme
+The user scheme looks like:
+```
+const userSchema = new Schema(
+{
+password: {
+type: String,
+required: [true, 'Password is required'],
+},
+email: {
+type: String,
+required: [true, 'Email is required'],
+unique: true,
+},
+subscription: {
+type: String,
+enum: ['starter', 'pro', 'business'],
+default: 'starter',
+},
+token: {
+type: String,
+default: null,
+},
+},
+{ versionKey: false, timestamps: true }
+)
+```
+## Contact scheme
+
+The example contains a CRUD implementation for one contact reference entity.
+
+The contact scheme looks like:
+
+```
+const contactSchema = Schema(
+{
+name: {
+type: String,
+required: [true, 'Set name for contact'],
+},
+email: {
+type: String,
+},
+phone: {
+type: String,
+},
+favorite: {
+type: Boolean,
+default: false,
+},
+owner: {
+type: SchemaTypes.ObjectId,
+ref: 'user',
+},
+{ versionKey: false, timestamps: true }
+)
+```
+
+## CRUD
+
+| Method | Endpoints                     | Notes                         |
+| ------ | ----------------------------- | ----------------------------- |
+| POST   | /contacts                     | Add contact                   |
+| GET    | /contacts                     | Get all contacts              |
+| GET    | /contacts/:contactId          | Get single contact            |
+| PUT    | /contacts/:contactId          | Update contact                |
+| PATCH  | /contacts/:contactId/favorite | Update contact favorite field |
+| DELETE | /contacts/:contactId          | Delete contact                |
+| POST   | /users/signup                 | Registration of a new user    |
+| POST   | /users/login                  | Login                         |
+| POST   | /users/logout                 | Logout                        |
+| GET    | /users/current                | Get user data by token        |
+
