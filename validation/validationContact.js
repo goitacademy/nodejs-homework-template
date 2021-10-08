@@ -1,21 +1,30 @@
 const Joi = require('joi');
+const { ValidateContactName } = require('../config/constant');
+
+Joi.objectId = require('joi-objectid')(Joi);
 
 const schemaContacts = Joi.object({
-  name: Joi.string().min(1).max(40).required(),
+  name: Joi.string()
+    .min(ValidateContactName.MIN_NAME)
+    .max(ValidateContactName.MAX_NAME)
+    .required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaContactsChange = Joi.object({
-  name: Joi.string().min(3).max(20).optional(),
+  name: Joi.string()
+    .min(ValidateContactName.MIN_NAME)
+    .max(ValidateContactName.MAX_NAME)
+    .optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string().optional(),
+  favorite: Joi.boolean().optional(),
 });
 
-const patternId = '\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}';
-
 const schemaId = Joi.object({
-  contactId: Joi.string().pattern(new RegExp(patternId)).required(),
+  contactId: Joi.objectId().required(),
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -23,9 +32,9 @@ const validate = async (schema, obj, res, next) => {
     await schema.validateAsync(obj);
     next();
   } catch (err) {
-    res.status(404).json({
+    res.status(400).json({
       status: 'error',
-      code: 404,
+      code: 400,
       message: `Field ${err.message.replace(/"/g, '')}`,
     });
   }
