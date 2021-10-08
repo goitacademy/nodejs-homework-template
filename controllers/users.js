@@ -1,7 +1,7 @@
 const { Conflict, BadRequest } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../model')
-// const { sendSuccess } = require('../utils')
+const { sendSuccess } = require('../utils')
 
 const signup = async (req, res) => {
   const { email, password } = req.body
@@ -16,9 +16,7 @@ const signup = async (req, res) => {
 
   await newUser.save()
 
-  res.status(201).json({
-    user: { email, subscription: newUser.subscription },
-  })
+  sendSuccess.users(res, { email, subcriprion: newUser.subscription })
 }
 
 const { SECRET_KEY } = process.env
@@ -38,10 +36,7 @@ const signin = async (req, res) => {
 
   await User.findByIdAndUpdate(_id, { token })
 
-  res.json({
-    token: token,
-    user: { email, subscription },
-  })
+  sendSuccess.users(res, { token, email, subscription })
 }
 
 const signout = async (req, res) => {
@@ -52,18 +47,14 @@ const signout = async (req, res) => {
 
 const currentUser = async (req, res) => {
   const { email, subscription } = req.user
-  res.status(200).json({
-    user: { email, subscription },
-  })
+  sendSuccess.users(res, { email, subscription })
 }
 
 const updateSubscription = async (req, res) => {
   const { _id, email } = req.user
   const { subscription } = req.body
   await User.findByIdAndUpdate(_id, { subscription }, { new: true })
-  res.status(200).json({
-    user: { email, subscription },
-  })
+  sendSuccess.users(res, { email, subscription })
 }
 
 module.exports = { signup, signin, signout, currentUser, updateSubscription }
