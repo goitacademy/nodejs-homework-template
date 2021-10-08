@@ -6,7 +6,11 @@ const listContacts = async () => {
   return await db.read();
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const contacts = await db.read();
+  const [contact] = contacts.filter((contact) => contact.id === contactId);
+  return contact;
+};
 
 const removeContact = async (contactId) => {};
 
