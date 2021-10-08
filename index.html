@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <form action="" id="add-image" enctype="multipart/form-data">
+        <input type="file" name="image" />
+        <button>Добавить изображения</button>
+    </form> -->
+    <script>
+        const avatarRequest = fetch("http://localhost:3000/api/avatars");
+        avatarRequest
+            .then(response => response.json())
+            .then(result => {
+                const { name, photo } = result[0];
+                document.body.insertAdjacentHTML("beforeend", `<img src="http://localhost:3000${photo}" />`);
+            })
+            .catch(error => console.log(error.message))
+        // const imageAddForm = document.getElementById("add-image");
+        // const imageField = imageAddForm.querySelector("[name=image]");
+
+        // imageAddForm.addEventListener("submit", function(e){
+        //     e.preventDefault();
+        //     console.log(imageField.files[0]);
+        //     const form = new FormData();
+        //     form.append("image", imageField.files[0]);
+        // });
+
+    </script>
+</body>
+
+</html>
