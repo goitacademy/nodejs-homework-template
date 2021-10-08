@@ -3,4 +3,5 @@
 package-lock.json
 yarn.lock
 .env
+.config.js
 node_modules/

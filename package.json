@@ -10,12 +10,13 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
     "express": "^4.17.1",
     "http-errors": "^1.8.0",
     "joi": "^17.4.2",
     "lowdb": "^3.0.0",
+    "mongoose": "^6.0.9",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
   },
@@ -27,7 +28,7 @@
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.13"
   },
   "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
   "main": ".eslintrc.js",
