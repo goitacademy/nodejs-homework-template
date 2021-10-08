@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 const express = require('express')
 const router = express.Router()
 
@@ -21,7 +20,7 @@ router.delete('/:contactId', async (req, res, next) => {
 router.patch('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
-=======
+
 const express = require("express");
 const router = express.Router();
 const validate = require("./validation");
@@ -35,6 +34,6 @@ router
   .get("/:id", contactsController.getById)
   .delete("/:id", contactsController.remove)
   .patch("/:id", validate.updateContact, contactsController.update);
->>>>>>> Stashed changes
+
 
 module.exports = router
