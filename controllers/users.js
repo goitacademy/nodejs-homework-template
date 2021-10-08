@@ -50,11 +50,7 @@ const signout = async (req, res) => {
 }
 
 const currentUser = async (req, res) => {
-  const user = await User.findById(req.user.id)
-  if (!user) {
-    throw new Unauthorized('Not authorized')
-  }
-  const { email, subscription } = user
+  const { email, subscription } = req.user
   res.status(200).json({
     user: { email, subscription },
   })
