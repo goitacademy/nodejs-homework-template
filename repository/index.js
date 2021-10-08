@@ -17,11 +17,14 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  return await Contact.findByIdAndUpdate(
-    { _id: contactId },
-    { ...body },
-    { new: true }
-  );
+  return await Contact.findByIdAndUpdate(contactId, { ...body }, { new: true });
+
+  // or
+  // return await Contact.findByIdAndUpdate(
+  //   { _id: contactId },
+  //   { ...body },
+  //   { new: true }
+  // );
 };
 
 module.exports = {
