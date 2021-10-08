@@ -38,3 +38,4 @@
 - `yarn`
 - `yarn start:dev`
 - `yarn add express cors mongoose`
+- `yarn add dotenv`

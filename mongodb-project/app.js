@@ -1,5 +1,9 @@
-const DB_HOST = require("./config");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+const DB_HOST = process.env;
+
+dotenv.config();
 
 mongoose
   .connect(DB_HOST, {
@@ -7,7 +11,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Database connect success");
+    console.log("Database connection successful");
   })
   .catch((error) => {
     console.log(error.message);
