@@ -13,7 +13,6 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-  patchContact,
   deleteContact,
 } = require("../../controllers/controllersContacts");
 
@@ -27,7 +26,7 @@ router.put("/:contactId", [validateId, validateContact], updateContact);
 
 router.delete("/:contactId", validateId, deleteContact);
 
-router.patch("/:contactId", [validateId, validateUpdateContact], patchContact);
+router.patch("/:contactId", [validateId, validateUpdateContact], updateContact);
 
 router.patch(
   "/:contactId/favorite",
