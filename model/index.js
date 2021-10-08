@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 // const fs = require('fs/promises')
 // const contacts = require('./contacts.json')
 
@@ -11,7 +10,7 @@ const removeContact = async (contactId) => {}
 const addContact = async (body) => {}
 
 const updateContact = async (contactId, body) => {}
-=======
+
 const Contact = require("./schemas/contact");
 
 const listContacts = async () => {
@@ -44,7 +43,6 @@ const removeContact = async (id) => {
   });
   return result;
 };
->>>>>>> Stashed changes
 
 module.exports = {
   listContacts,
