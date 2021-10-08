@@ -1,6 +1,7 @@
-const { Conflict, BadRequest, Unauthorized } = require('http-errors')
+const { Conflict, BadRequest } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../model')
+// const { sendSuccess } = require('../utils')
 
 const signup = async (req, res) => {
   const { email, password } = req.body
@@ -55,4 +56,14 @@ const currentUser = async (req, res) => {
     user: { email, subscription },
   })
 }
-module.exports = { signup, signin, signout, currentUser }
+
+const updateSubscription = async (req, res) => {
+  const { _id, email } = req.user
+  const { subscription } = req.body
+  await User.findByIdAndUpdate(_id, { subscription }, { new: true })
+  res.status(200).json({
+    user: { email, subscription },
+  })
+}
+
+module.exports = { signup, signin, signout, currentUser, updateSubscription }

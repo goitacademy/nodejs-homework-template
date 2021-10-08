@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const {
+  constants: { subcriptionValue },
+} = require('../utils')
 
 const userSchema = new Schema(
   {
@@ -15,7 +18,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: [...subcriptionValue],
       default: 'starter',
     },
     token: {
