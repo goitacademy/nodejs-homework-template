@@ -1,39 +1,38 @@
 const express = require("express");
 const router = express.Router();
-// const Contacts = require("../../../model");
 const {
   validateContact,
   validateUpdateContact,
   validateStatusContact,
   validateId,
-} = require("./validation");
+} = require("./validationContact");
 
 const {
   getContacts,
-  getContactById,
+  getContact,
   addContact,
-  changeContact,
+  updateContact,
+  updateStatusContact,
   patchContact,
   deleteContact,
 } = require("../../controllers/controllersContacts");
 
 router.get("/", getContacts);
 
-router.get("/:contactId", validateId, getContactById);
+router.get("/:contactId", validateId, getContact);
 
 router.post("/", validateContact, addContact);
 
-router.put("/:contactId", validateId, validateContact, changeContact);
+router.put("/:contactId", [validateId, validateContact], updateContact);
 
 router.delete("/:contactId", validateId, deleteContact);
 
-router.patch("/:contactId", validateId, validateUpdateContact, patchContact);
+router.patch("/:contactId", [validateId, validateUpdateContact], patchContact);
 
 router.patch(
   "/:contactId/favorite",
-  validateId,
-  validateStatusContact,
-  patchContact
+  [validateId, validateStatusContact],
+  updateStatusContact
 );
 
 module.exports = router;
