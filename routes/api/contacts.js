@@ -59,7 +59,6 @@ router.put("/:contactId", validateUpdateContact, async (req, res, next) => {
       req.params.contactId,
       req.body
     );
-    console.log("contacts:", contacts);
     if (contacts) {
       return res
         .status(200)
