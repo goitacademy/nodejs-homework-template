@@ -2,12 +2,12 @@ const express = require('express')
 const router = express.Router()
 const { BadRequest, NotFound } = require('http-errors')
 
-const contactOperations = require('../../model')
-const { contactSchema } = require('../../schemas')
+const { Contact } = require('../../models')
+const { joiContactSchema, updateFavoriteJoiSchema } = require('../../models/contact')
 
 router.get('/', async (req, res, next) => {
   try {
-    const result = await contactOperations.getAllContacts()
+    const result = await Contact.find({}, '_id, name , email , phone')
     res.json({
       status: 'success',
       code: 200,
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const result = await contactOperations.getContactById(contactId)
+    const result = await Contact.findById(contactId, '_id, name , email , phone')
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`)
     }
@@ -38,11 +38,11 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     console.log('req.body', req.body)
-    const { error } = contactSchema.validate(req.body)
+    const { error } = joiContactSchema.validate(req.body)
     if (error) {
       throw new NotFound(error.message)
     }
-    const result = await contactOperations.addContact(req.body)
+    const result = await Contact.create(req.body)
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -56,7 +56,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const result = await contactOperations.removeContact(contactId)
+    const result = await Contact.findByIdAndRemove(contactId)
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`)
     }
@@ -72,12 +72,37 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body)
+    const { error } = joiContactSchema.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
     }
     const { contactId } = req.params
-    const result = await contactOperations.updateContactById(contactId, req.body)
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+    if (!result) {
+      throw new NotFound(`Contact with id=${contactId} not found`)
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { result }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const { error } = updateFavoriteJoiSchema.validate(req.body)
+    if (error) {
+      throw new BadRequest(error.message)
+    }
+    const { contactId } = req.params
+    const { favorite } = req.body
+    if (!favorite) {
+      throw new BadRequest('missing field favorite')
+    }
+    const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true })
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`)
     }
