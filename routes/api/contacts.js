@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Contacts = require("../../model");
 
-const { validateContact } = require("./validation");
-
+const { validateContact } = require("../validation");
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();

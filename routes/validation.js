@@ -1,7 +1,9 @@
 const Joi = require("joi");
+
 const reqexEmail = /^\S+@\S+\.\S+$/;
 const reqexPhoneNumber =
   /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
+
 const schemaContact = Joi.object({
   name: Joi.string().alphanum().min(1).required(),
   email: Joi.string().pattern(new RegExp(reqexEmail)).required(),
@@ -16,7 +18,7 @@ const validate = async (schema, obj, res, next) => {
     res.status(400).json({
       status: "error",
       code: 400,
-      message: "missing required name field",
+      message: "missing or incorrect name field",
     });
   }
 };
