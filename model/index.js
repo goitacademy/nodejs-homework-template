@@ -6,9 +6,22 @@ const listContacts = async () => {
   return await db.read();
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const contacts = await db.read();
+  const [contact] = contacts.filter((el) => el.id === contactId);
+  return contact;
+};
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const contacts = await db.read();
+  const index = contacts.findIndex((el) => el.id === contactId);
+  if (index !== -1) {
+    contacts.splice(index, 1);
+    await db.write(contacts);
+    return contacts[index];
+  }
+  return null;
+};
 
 const addContact = async (body) => {
   const contact = await db.read();
