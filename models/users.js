@@ -20,14 +20,19 @@ const userSchema = Schema({
   token: {
     type: String,
     default: null,
-},
+  },
+  avatarURL: {
+    type: String,
+    default: "",
+  }
 }, {versionKey: false, timestamps: true})
 
 const joiSchema = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().min(6).required(),
     subscription: Joi.string()/* .required() */,
-    token: Joi.string()/* .required() */,
+  token: Joi.string()/* .required() */,
+    avatar: Joi.string(),
 })
 
 const User = model("user", userSchema);

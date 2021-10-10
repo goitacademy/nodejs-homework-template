@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const { joiSchema, updateFavoriteJoiSchema } = require("../../models/contact")
-const {validation} = require('../../middlewares')
+const {validation, authenticate} = require('../../middlewares')
 const {  ctrl } = require("../../controllers")
 /* console.log(ctrl) */
 
 
-router.get('/', ctrl.getAll)
+router.get('/',authenticate , ctrl.getAll)
 
 router.get('/:contactId', ctrl.getById)
 
