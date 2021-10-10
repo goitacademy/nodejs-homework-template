@@ -5,29 +5,40 @@ const {
   yupContactSchema,
   updateFavoriteYupSchema,
 } = require('../../models/contact');
-const { controllerWrapper, validation } = require('../../middlewares');
+const {
+  controllerWrapper,
+  validation,
+  authenticate,
+} = require('../../middlewares');
 const ctrl = require('../../controllers/contacts');
 
-router.get('/', controllerWrapper(ctrl.listContacts));
+router.get('/', authenticate, controllerWrapper(ctrl.listContacts));
 
-router.get('/:contactId', controllerWrapper(ctrl.getContactById));
+router.get('/:contactId', authenticate, controllerWrapper(ctrl.getContactById));
 
 router.post(
   '/',
+  authenticate,
   validation(yupContactSchema),
   controllerWrapper(ctrl.addContact),
 );
 
-router.delete('/:contactId', controllerWrapper(ctrl.removeContact));
+router.delete(
+  '/:contactId',
+  authenticate,
+  controllerWrapper(ctrl.removeContact),
+);
 
 router.put(
   '/:contactId',
+  authenticate,
   validation(yupContactSchema),
   controllerWrapper(ctrl.updateContact),
 );
 
 router.patch(
   '/:contactId/favorite',
+  authenticate,
   validation(updateFavoriteYupSchema),
   controllerWrapper(ctrl.updateStatusContact),
 );
