@@ -3,7 +3,7 @@ const { NotFound, BadRequest } = require('http-errors');
 const { Contact } = require('../../models/contacts');
 
 const listContacts = async (_, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({}, '_id name email phone favorite');
   res.json({
     status: 'success',
     code: 200,
@@ -15,7 +15,7 @@ const listContacts = async (_, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findOne({ _id: contactId });
+  const contact = await Contact.findOne({ _id: contactId }, '_id name email phone favorite');
   if (!contact) {
     throw new NotFound(`Product with id ${contactId} not found`)
   }
