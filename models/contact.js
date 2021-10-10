@@ -1,13 +1,27 @@
-// const Joi = require("joi");
-const yup = require('yup')
+const { Schema, model } = require('mongoose');
+const yup = require('yup');
 
-// const contactSchema = Joi.object({
-// name: Joi.string().min(1).required(),
-// price: Joi.number().min(0.01).required(),
-// location: Joi.string().min(1).required(),
-// })
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true },
+);
 
-const contactSchema = yup.object({
+const yupContactSchema = yup.object({
   name: yup
     .string()
     .required('Обязательное поле')
@@ -22,9 +36,18 @@ const contactSchema = yup.object({
       /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
       'Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +',
     ),
-  email: yup
-    .string()
-    .required('Обязательное поле')
-})
+  email: yup.string().required('Обязательное поле'),
+  favorite: yup.boolean(),
+});
 
-module.exports = contactSchema
+const updateFavoriteYupSchema = yup.object({
+  favorite: yup.boolean().required(),
+});
+
+const Contact = model('contact', contactSchema);
+
+module.exports = {
+  yupContactSchema,
+  updateFavoriteYupSchema,
+  Contact,
+};

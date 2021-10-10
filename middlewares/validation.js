@@ -1,17 +1,17 @@
-const validation = (schema) => {
-  return async(req, res, next) => {
+const validation = schema => {
+  return async (req, res, next) => {
     try {
-      await schema.validate(req.body)
+      await schema.validate(req.body);
     } catch (error) {
       res.status(400).json({
         status: 'error',
         code: 400,
-        message: (`Error ${error.path} - ${error.errors}`)
-      })
-      return
+        message: `Error ${error.path} - ${error.errors}`,
+      });
+      return;
     }
-    next()
-  }
-}
+    next();
+  };
+};
 
-module.exports = validation
+module.exports = validation;
