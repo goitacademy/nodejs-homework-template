@@ -5,20 +5,20 @@ const controlContacts = require('../../model/index')
 
 router.get('/', async (req, res, next) => {
   const data = await controlContacts.listContacts()
-  res.json(data)
+  res.status(200).json(data)
 })
 
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params
 
   const data = await controlContacts.getContactById(contactId)
-  data ? res.json(data) : res.status(404).json({ message: 'Not found' })
+  data ? res.status(200).json(data) : res.status(404).json({ message: 'Not found' })
 })
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body
 
-  if (!name.trim().length || !email.trim().length || !phone.trim().length) {
+  if (!name?.trim().length || !email?.trim().length || !phone?.trim().length) {
     res.status(400).json({ message: 'missing required name field' })
     return
   }
@@ -41,7 +41,7 @@ router.patch('/:contactId', async (req, res, next) => {
   const updateItems = {}
   const obj = Object.keys(req.body)
   if (obj.length === 0) {
-    res.status(400).json({ message: '"missing fields"' })
+    res.status(400).json({ message: 'missing fields' })
     return
   }
   for (const key of obj) {
@@ -53,9 +53,5 @@ router.patch('/:contactId', async (req, res, next) => {
     ? res.status(200).json(data)
     : res.status(404).json({ message: 'Not found' })
 })
-
-// const sendResponse = (status, message) => {
-
-// }
 
 module.exports = router
