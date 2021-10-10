@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Joi = require('joi')
 
 const controlContacts = require('../../model/index')
 
@@ -16,12 +17,35 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body
+  // const { name, email, phone } = req.body
 
-  if (!name?.trim().length || !email?.trim().length || !phone?.trim().length) {
-    res.status(400).json({ message: 'missing required name field' })
+  const shema = Joi.object({
+    name: Joi.string()
+      .alphanum()
+      .min(2)
+      .max(10)
+      .required(),
+    email: Joi.string()
+      .email()
+      .required(),
+    phone: Joi.number()
+      .integer()
+      .min(89000000000)
+      .max(89999999999)
+      .required()
+  })
+
+  const { error } = shema.validate(req.body)
+
+  if (error) {
+    const text = error?.details[0].message.replace(/["]/g, '')
+    res.status(400).json({ message: text })
     return
   }
+  // if (!name?.trim().length || !email?.trim().length || !phone?.trim().length) {
+  //   res.status(400).json({ message: 'missing required name field' })
+  //   return
+  // }
 
   const updateData = await controlContacts.addContact(req.body)
   res.status(201).json(updateData)
@@ -38,12 +62,39 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId', async (req, res, next) => {
   const { contactId } = req.params
-  const updateItems = {}
+
   const obj = Object.keys(req.body)
   if (obj.length === 0) {
     res.status(400).json({ message: 'missing fields' })
     return
   }
+
+  const shema = Joi.object({
+    name: Joi.string()
+      .alphanum()
+      .min(2)
+      .max(10)
+      .allow(''),
+    email: Joi.string()
+      .email()
+      .allow(''),
+    phone: Joi.number()
+      .integer()
+      .min(89000000000)
+      .max(89999999999)
+      .allow(''),
+
+  })
+
+  const { error } = shema.validate(req.body)
+
+  if (error) {
+    const text = error?.details[0].message.replace(/["]/g, '')
+    res.status(400).json({ message: text })
+    return
+  }
+
+  const updateItems = {}
   for (const key of obj) {
     if (req.body[key].trim().length !== 0) updateItems[key] = req.body[key]
   }
