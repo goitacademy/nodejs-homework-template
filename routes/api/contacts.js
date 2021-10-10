@@ -1,23 +1,16 @@
 const express = require("express");
 const createError = require("http-errors");
-const Joi = require("joi");
-const contactsOpertions = require("../../model");
-
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-
+const { Contact } = require("../../models");
+const { joiSchema } = require("../../models");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await contactsOpertions.listContacts();
+    const result = await Contact.find({}, "id name email phone");
     res.json({
       status: "success",
       code: 200,
-      data: { contacts },
+      data: { result },
     });
   } catch (error) {
     next(error);
@@ -27,7 +20,8 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await contactsOpertions.getContactById(contactId);
+    const contact = await Contact.findById(contactId);
+    // const contact = await Contact.findOne({ _id: contactId });
     if (!contact) {
       // eslint-disable-next-line new-cap
       throw new createError(404, `Contact with id - ${contactId} not found`);
@@ -49,7 +43,7 @@ router.post("/", async (req, res, next) => {
       // eslint-disable-next-line new-cap
       throw new createError(400, `bad request`);
     }
-    const result = await contactsOpertions.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: "success added",
       code: 201,
@@ -63,7 +57,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsOpertions.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       // eslint-disable-next-line new-cap
       throw new createError(404, `Contact with id - ${contactId} not found`);
@@ -87,7 +81,9 @@ router.patch("/:contactId", async (req, res, next) => {
       // eslint-disable-next-line new-cap
       throw new createError(400, `bad request`);
     }
-    const result = await contactsOpertions.updateContactId(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       // eslint-disable-next-line new-cap
       throw new createError(404, `Contact with id - ${contactId} not found`);
