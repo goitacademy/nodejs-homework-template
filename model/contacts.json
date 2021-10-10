@@ -1,1 +1,87 @@
-[{"id":1,"name":"Allen Raymond","email":"nulla.ante@vestibul.co.uk","phone":"(992) 914-3792"},{"id":2,"name":"Chaim Lewis","email":"dui.in@egetlacus.ca","phone":"(294) 840-6685"},{"id":3,"name":"Kennedy Lane","email":"mattis.Cras@nonenimMauris.net","phone":"(542) 451-7038"},{"id":4,"name":"Wylie Pope","email":"est@utquamvel.net","phone":"(692) 802-2949"},{"id":5,"name":"Cyrus Jackson","email":"nibh@semsempererat.com","phone":"(501) 472-5218"},{"id":6,"name":"Abbot Franks","email":"scelerisque@magnis.org","phone":"(186) 568-3720"},{"id":7,"name":"Reuben Henry","email":"pharetra.ut@dictum.co.uk","phone":"(715) 598-5792"},{"id":8,"name":"Simon Morton","email":"dui.Fusce.diam@Donec.com","phone":"(233) 738-2360"},{"id":9,"name":"Thomas Lucas","email":"nec@Nulla.com","phone":"(704) 398-7993"},{"id":10,"name":"Alec Howard","email":"Donec.elementum@scelerisquescelerisquedui.net","phone":"(748) 206-2688"},{"id":"b442d440-07f0-4b24-980b-acbd32cd38be","name":"Success Post","email":"ahefi@gmail.com","phone":"(546) 850-4545"}]
+[
+  {
+    "id": 1,
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792"
+  },
+  {
+    "id": 2,
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": 3,
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038"
+  },
+  {
+    "id": 4,
+    "name": "Wylie Pope",
+    "email": "est@utquamvel.net",
+    "phone": "(692) 802-2949"
+  },
+  {
+    "id": 5,
+    "name": "Cyrus Jackson",
+    "email": "nibh@semsempererat.com",
+    "phone": "(501) 472-5218"
+  },
+  {
+    "id": 6,
+    "name": "Abbot Franks",
+    "email": "scelerisque@magnis.org",
+    "phone": "(186) 568-3720"
+  },
+  {
+    "id": 7,
+    "name": "Reuben Henry",
+    "email": "pharetra.ut@dictum.co.uk",
+    "phone": "(715) 598-5792"
+  },
+  {
+    "id": 8,
+    "name": "Simon Morton",
+    "email": "dui.Fusce.diam@Donec.com",
+    "phone": "(233) 738-2360"
+  },
+  {
+    "id": 9,
+    "name": "Thomas Lucas",
+    "email": "nec@Nulla.com",
+    "phone": "(704) 398-7993"
+  },
+  {
+    "id": 10,
+    "name": "Alec Howard",
+    "email": "Donec.elementum@scelerisquescelerisquedui.net",
+    "phone": "(748) 206-2688"
+  },
+  {
+    "id": "825eb88d-3621-491e-b8b3-7ae9eef11bc3",
+    "name": "Axsel Proyst",
+    "email": "axsyshfi@gmail.com",
+    "phone": "(546) 888-5858",
+    "isFavorite": false
+  },
+  {
+    "id": "319031e1-6971-45c4-adf4-702c77c8bce8",
+    "name": "Axsel Proyst",
+    "email": "axsyshifi@gmail.com",
+    "phone": "(886) 888-5858"
+  },
+  {
+    "id": "76caed62-8102-460c-987c-05c855be05cb",
+    "name": "Alen Prost",
+    "email": "ahgghfi@gmail.com",
+    "phone": "(546) 850-4748"
+  },
+  {
+    "id": "2ecff7f3-b8de-4e52-9b19-fc2644079c3d",
+    "name": "Jon Prou",
+    "email": "axsyshifi@gmail.com",
+    "phone": "(886) 888-5858"
+  }
+]
