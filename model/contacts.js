@@ -1,6 +1,4 @@
-// const createError = require("http-errors");
 const { Contact } = require("../service/schemas");
-
 const listContacts = async () => {
   const data = await Contact.find({});
   return data;
