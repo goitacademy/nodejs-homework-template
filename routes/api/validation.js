@@ -2,7 +2,8 @@ const Joi = require('joi');
 
 const patterns = {
   name: /^[\w\sа-яА-Я]+$/,
-  phone: /^(?:\+\s?\d+\s?)?(?:\(\d{1,4}\))?(?:[-\s./]?\d){5,}$/,
+  phone:
+    /^(?:\+\s?\d{1,2}\s?)?(?:\(\d{1,4}\)|\d{1,4})?\s?\d+([-\s/.]?)(?:\d\1?)+(?<=^(?:\D?\d\D?){5,14})\d$/,
   id: /^\d+$|^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/,
 };
 
@@ -10,13 +11,19 @@ const schemaContact = Joi.object({
   name: Joi.string().min(3).max(30).pattern(patterns.name).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().pattern(patterns.phone).required(),
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaContactPatch = Joi.object({
   name: Joi.string().min(3).max(30).pattern(patterns.name).optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string().pattern(patterns.phone).optional(),
+  favorite: Joi.boolean().optional(),
 }).min(1);
+
+const schemaContactStatusPatch = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const schemaContactId = Joi.object({
   contactId: Joi.string().pattern(patterns.id).required(),
@@ -41,6 +48,10 @@ module.exports.validateContact = async (req, res, next) => {
 
 module.exports.validateContactPatch = async (req, res, next) => {
   return await validate(schemaContactPatch, req.body, res, next);
+};
+
+module.exports.validateContactStatusPatch = async (req, res, next) => {
+  return await validate(schemaContactStatusPatch, req.body, res, next);
 };
 
 module.exports.validateContactId = async (req, res, next) => {
