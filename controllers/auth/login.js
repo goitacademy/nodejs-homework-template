@@ -9,7 +9,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email }, '_id email password');
   if (!user || !user.comparePassword(password)) {
-    throw new BadRequest('Invalid email or password');
+    throw new BadRequest('Email or password is wrong');
   }
   const { _id } = user;
   const payload = {
