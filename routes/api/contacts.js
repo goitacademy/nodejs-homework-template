@@ -17,8 +17,6 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  // const { name, email, phone } = req.body
-
   const shema = Joi.object({
     name: Joi.string()
       .alphanum()
@@ -42,10 +40,6 @@ router.post('/', async (req, res, next) => {
     res.status(400).json({ message: text })
     return
   }
-  // if (!name?.trim().length || !email?.trim().length || !phone?.trim().length) {
-  //   res.status(400).json({ message: 'missing required name field' })
-  //   return
-  // }
 
   const updateData = await controlContacts.addContact(req.body)
   res.status(201).json(updateData)
