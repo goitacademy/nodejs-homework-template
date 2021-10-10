@@ -14,6 +14,7 @@
     "crypto": "^1.0.1",
     "express": "4.17.1",
     "joi": "^17.4.2",
+    "joi-objectid": "^4.0.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
