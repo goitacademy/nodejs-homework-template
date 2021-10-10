@@ -1,23 +1,23 @@
 const express = require("express");
 
 const { controllerWrapper, validation } = require("../../middlewares");
-const { contactSchema } = require("../../schemas");
+const { contactSchema } = require("../../schema");
 const { contacts: ctrl } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", controllerWrapper(ctrl.getAll));
+router.get("/", ctrl.getAll);
 
-router.get("/:id", controllerWrapper(ctrl.getById));
+router.get("/:contactId", controllerWrapper(ctrl.getById));
 
 router.post("/", validation(contactSchema), controllerWrapper(ctrl.add));
 
 router.put(
-  "/:id",
+  "/:contactId",
   validation(contactSchema),
   controllerWrapper(ctrl.updateById)
 );
 
-router.delete("/:id", controllerWrapper(ctrl.removeById));
+router.delete("/:contactId", controllerWrapper(ctrl.removeById));
 
 module.exports = router;

@@ -1,63 +1,55 @@
 const { NotFound } = require("http-errors");
 
-const contactsOperations = require("../model/contacts");
+const contactsOperation = require("../model/index");
 
 const getAll = async (req, res, next) => {
-  const contacts = await contactsOperations.getAll();
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      contacts,
-    },
-  });
+  const allContacts = await contactsOperation.getContacts();
+  res.json(allContacts);
 };
 
 const getById = async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await contactsOperations.getById(id);
-  if (!contact) {
-    throw new NotFound(`Contacts with id=${id} not found`);
+  const { contactId } = req.params;
+  const contactById = await contactsOperation.getContactById(contactId);
+  if (!contactById) {
+    throw new NotFound(`Contact with id = ${contactId} not found`);
   }
-  res.json(contact);
+  res.json(contactById);
 };
 
 const add = async (req, res, next) => {
-  const result = await contactsOperations.add(req.body);
+  const newContact = await contactsOperation.addContact(req.body);
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
-      result,
+      newContact,
     },
   });
 };
-
 const updateById = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await contactsOperations.updateById(id, req.body);
-  if (!result) {
-    throw new NotFound(`Contacts with id=${id} not found`);
+  const { body } = req;
+  const { contactId } = req.params;
+  const updatedContact = await contactsOperation.updateContact(contactId, body);
+  if (!updatedContact) {
+    throw new NotFound(`Contact with id = ${contactId} not found`);
   }
   res.json({
     status: "success",
     code: 200,
-    data: {
-      result,
-    },
+    data: { updatedContact },
   });
 };
 
 const removeById = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await contactsOperations.removeById(id);
-  if (!result) {
-    throw new NotFound(`Contacts with id=${id} not found`);
+  const { contactId } = req.params;
+  const removeContact = await contactsOperation.removeContact(contactId);
+  if (!removeContact) {
+    throw new NotFound(`Contact with id = ${contactId} not found`);
   }
   res.json({
     status: "success",
     code: 200,
-    message: "Success delete",
+    message: "Contact deleted",
   });
 };
 
