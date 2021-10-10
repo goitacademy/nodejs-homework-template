@@ -4,7 +4,7 @@ const joiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean().default(false),
 });
 const validate = (schema, obj, next) => {
   const { error } = schema.validate(obj);
