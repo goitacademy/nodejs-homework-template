@@ -4,6 +4,7 @@ const {
   controllerWrapper,
   validation,
   authenticate,
+  upload,
 } = require('../../middlwares')
 const { users: auth } = require('../../controllers')
 
@@ -22,6 +23,12 @@ router.patch(
   authenticate,
   validation(userSubscriptionUpdateSchema),
   controllerWrapper(auth.updateSubscription)
+)
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  controllerWrapper(auth.updateAvatar)
 )
 
 module.exports = router

@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
 const {
   constants: { subcriptionValue },
 } = require('../utils')
@@ -20,6 +21,12 @@ const userSchema = new Schema(
       type: String,
       enum: [...subcriptionValue],
       default: 'starter',
+    },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: '250' }, true)
+      },
     },
     token: {
       type: String,
