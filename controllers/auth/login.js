@@ -20,6 +20,5 @@ const login = async(req, res) => {
   sendSuccessResponse(res, { token }, 200)
 }
 
-module.exports = {
+module.exports =
   login
-}
