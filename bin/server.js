@@ -1,4 +1,4 @@
-const app = require('../app')
+const app = require("../app");
 
 const app = require("../app");
 const db = require("../model/db");
@@ -18,4 +18,3 @@ db.then(() => {
   console.log(err.message);
   process.exit(1);
 });
-
