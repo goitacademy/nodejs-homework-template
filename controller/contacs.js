@@ -1,9 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const Contacts = require("../../model/index");
-const validate = require("./validation");
+const Contacts = require("../model/index");
 
-router.get("/", async (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();
     return res.json({
@@ -16,9 +13,9 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.get("/:id", async (req, res, next) => {
+const getById = async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id);
     if (contact) {
@@ -39,9 +36,9 @@ router.get("/:id", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post("/", validate.addContact, async (req, res, next) => {
+const create = async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
     return res.status(201).json({
@@ -54,9 +51,9 @@ router.post("/", validate.addContact, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+const remove = async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.id);
     if (contact) {
@@ -77,9 +74,9 @@ router.delete("/:id", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.patch("/:id", validate.updateContact, async (req, res, next) => {
+const update = async (req, res, next) => {
   try {
     const contact = await Contacts.updateContact(req.params.id, req.body);
     if (contact) {
@@ -100,23 +97,12 @@ router.patch("/:id", validate.updateContact, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-
-const express = require("express");
-const router = express.Router();
-const validate = require("./validation");
-const contactsController = require("../../controller/contacts");
-
-router
-  .get("/", contactsController.getAll)
-  .post("/", validate.addContact, contactsController.create);
-
-router
-  .get("/:id", contactsController.getById)
-  .delete("/:id", contactsController.remove)
-  .patch("/:id", validate.updateContact, contactsController.update);
-
-
-module.exports = router
-
+module.exports = {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+};
