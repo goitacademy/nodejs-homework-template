@@ -4,7 +4,7 @@ const {
   UpdateStatusContactJoiSchema,
 } = require("../../models/contact");
 const { controllerWrapper, validation } = require("../../middlewares");
-const { contacts: ctrl } = require("../../controllers/contacts");
+const ctrl = require("../../controllers/contacts");
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.put(
   controllerWrapper(ctrl.updateById)
 );
 
-router.path(
+router.patch(
   "/:contactId/favorite",
   validation(UpdateStatusContactJoiSchema),
   controllerWrapper(ctrl.updateStatusContact)

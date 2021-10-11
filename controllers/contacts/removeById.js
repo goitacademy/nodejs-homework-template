@@ -2,7 +2,7 @@ const { NotFound } = require("http-errors");
 const { sendSuccessRes } = require("../../helpers");
 const { Contact } = require("../../models");
 
-const removeById = async (req, res, next) => {
+const removeById = async (req, res) => {
   const { id } = req.params;
 
   const result = await Contact.findByIdAndRemove(
