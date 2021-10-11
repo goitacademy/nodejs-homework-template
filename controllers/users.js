@@ -4,8 +4,7 @@ const { User } = require('../model')
 const { sendSuccess, avatarConvert } = require('../utils')
 const path = require('path')
 const fs = require('fs/promises')
-const uploadDir = path.join(__dirname, 'public')
-const tempDir = path.join(__dirname, 'tmp')
+const uploadDir = path.join(__dirname, '../', 'public')
 
 const signup = async (req, res) => {
   const { email, password } = req.body
@@ -73,14 +72,14 @@ const updateAvatar = async (req, res) => {
   const { _id } = req.user
   await avatarConvert(tmpName)
   const [extention] = originalname.split('.').reverse()
-  const newFileName = `product_main-image_${_id}.${extention}`
+  const newFileName = `avatar-image_${_id}.${extention}`
   const fileName = path.join(uploadDir, 'avatars', newFileName)
 
   await fs.rename(tmpName, fileName)
 
   const { avatarURL } = await User.findByIdAndUpdate(
     _id,
-    { avatarURL: req.file },
+    { avatarURL: fileName },
     { new: true }
   )
   res.status(200).json({
