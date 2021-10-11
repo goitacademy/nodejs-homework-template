@@ -7,7 +7,7 @@ const { joiContactSchema, updateFavoriteJoiSchema } = require('../../models/cont
 
 router.get('/', async (req, res, next) => {
   try {
-    const result = await Contact.find({}, '_id, name , email , phone')
+    const result = await Contact.find({}, '_id, name , email , phone , owner')
     res.json({
       status: 'success',
       code: 200,
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const result = await Contact.findById(contactId, '_id, name , email , phone')
+    const result = await Contact.findById(contactId, '_id, name , email , phone , owner')
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`)
     }
@@ -42,7 +42,8 @@ router.post('/', async (req, res, next) => {
     if (error) {
       throw new NotFound(error.message)
     }
-    const result = await Contact.create(req.body)
+    const newContact = { ...req.body, owner: req.user._id }
+    const result = await Contact.create(newContact, '_id name email phone owner ')
     res.status(201).json({
       status: 'success',
       code: 201,
