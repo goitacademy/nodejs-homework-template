@@ -4,10 +4,26 @@ const { BadRequest, NotFound } = require('http-errors')
 
 const { Contact } = require('../../models')
 const { joiContactSchema, updateFavoriteJoiSchema } = require('../../models/contact')
+const { authenticate } = require('../../middleware')
 
-router.get('/', async (req, res, next) => {
+router.get('/all', async (req, res, next) => {
   try {
     const result = await Contact.find({}, '_id, name , email , phone , owner')
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { result }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/', authenticate, async (req, res, next) => {
+  const { _id } = req.user
+
+  try {
+    const result = await Contact.find({ owner: _id }, '_id, name , email , phone , owner')
     res.json({
       status: 'success',
       code: 200,
@@ -35,15 +51,16 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
+  const { _id } = req.user
   try {
     console.log('req.body', req.body)
     const { error } = joiContactSchema.validate(req.body)
     if (error) {
       throw new NotFound(error.message)
     }
-    const newContact = { ...req.body, owner: req.user._id }
-    const result = await Contact.create(newContact, '_id name email phone owner ')
+    const newContact = { ...req.body, owner: _id }
+    const result = await Contact.create(newContact)
     res.status(201).json({
       status: 'success',
       code: 201,

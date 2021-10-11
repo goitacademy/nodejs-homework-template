@@ -2,7 +2,7 @@ const Joi = require('joi')
 // const bcrypt = require('bcryptjs')
 // const jwt = require('jsonwebtoken')
 
-const { Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const userSchema = Schema({
   password: {

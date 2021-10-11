@@ -6,7 +6,7 @@ const { SECRET_KEY } = process.env
 
 const authenticate = async (req, res, next) => {
   const { authorization } = req.headers
-  console.log(authorization)
+
   if (!authorization) {
     res.status(401).json({
       status: 'error',
@@ -15,7 +15,9 @@ const authenticate = async (req, res, next) => {
     })
     return
   }
-  const [bearer, token] = authorization.split('')
+
+  const [bearer, token] = authorization.split(' ')
+
   if (bearer !== 'Bearer') {
     res.status(401).json({
       status: 'error',
@@ -24,7 +26,10 @@ const authenticate = async (req, res, next) => {
     })
     return
   }
+
   try {
+    console.log('token :>> ', token)
+    console.log('secret :>> ', SECRET_KEY)
     const { _id } = jwt.verify(token, SECRET_KEY)
     const user = await User.findById(_id)
     if (!user.token) {
@@ -35,6 +40,7 @@ const authenticate = async (req, res, next) => {
       })
       return
     }
+
     req.user = user
     next()
   } catch (error) {
