@@ -11,12 +11,16 @@ const {
 } = require('../../controllers/contacts')
 
 const { addContactValidation, patchContactValidation } = require('../../middlewares/validationMiddleware')
+const { asyncWrapper } = require('../../helpers/apiHelpers')
+const { authMiddleware } = require('../../middlewares/authMiddleware')
 
-router.get('/', getContacts)
-router.get('/:contactId', getContactById)
-router.post('/', addContactValidation, postContact)
-router.delete('/:contactId', deleteContact)
-router.patch('/:contactId', patchContactValidation, updateContact)
-router.patch('/:contactId/favorite', patchContactValidation, changeFavoriteContact)
+router.use(authMiddleware)
+
+router.get('/', asyncWrapper(getContacts))
+router.get('/:contactId', asyncWrapper(getContactById))
+router.post('/', addContactValidation, asyncWrapper(postContact))
+router.delete('/:contactId', asyncWrapper(deleteContact))
+router.patch('/:contactId', patchContactValidation, asyncWrapper(updateContact))
+router.patch('/:contactId/favorite', patchContactValidation, asyncWrapper(changeFavoriteContact))
 
 module.exports = router

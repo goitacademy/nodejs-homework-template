@@ -33,4 +33,21 @@ const patchContactValidation = (req, res, next) => {
   next()
 }
 
-module.exports = { addContactValidation, patchContactValidation }
+const userValidation = (req, res, next) => {
+  const schema = Joi.object({
+    password: Joi.string().required(),
+    email: Joi.string().required(),
+    subscription: Joi.string().optional(),
+    token: Joi.string().optional()
+  })
+
+  const validationResult = schema.validate(req.body)
+
+  if (validationResult.error) {
+    return res.status(400).json({ status: validationResult.error.details })
+  }
+
+  next()
+}
+
+module.exports = { addContactValidation, patchContactValidation, userValidation }
