@@ -82,10 +82,7 @@ const updateAvatar = async (req, res) => {
     { avatarURL: fileName },
     { new: true }
   )
-  res.status(200).json({
-    status: 'success',
-    avatarURL,
-  })
+  sendSuccess.avatar(res, avatarURL)
 }
 
 module.exports = {
