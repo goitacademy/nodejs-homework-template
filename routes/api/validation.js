@@ -1,27 +1,37 @@
-const Joi = require('joi');
+const Joi = require("joi")
+Joi.objectId = require("joi-objectid")(Joi)
 
-const schemaContact = Joi.object({
-    
-            "name": Joi.string().alphanum().min(1).max(20).required(),
-            "email": Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-            "phone":  Joi.string().alphanum().min(10).max(17).required(),
-        
-})
+const schema = Joi.object({
+  name: Joi.string().pattern(new RegExp("^[a-zA-Z0-9_ ]*$")),
+  phone: Joi.string().alphanum().min(10).max(17).required(),
+  favorite: Joi.boolean(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
 
-const validate = async(schema, obj, res, next) => {
-    try {
-        await schema.validateAsync(obj)
-        next()
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ status: 'error', code: 400, message:error.message})
-    }
-}
+const validate = async (schema, object, res, next) => {
+  try {
+    await schema.validateAsync(object);
+    next();
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      code: 400,
+      message: err.message.replace(/"/g, ""),
+    });
+  }
+};
 
-module.exports.validateContact = async(req, res, next) => {
-    return await validate(schemaContact, req.body, res, next)
-}
+const schemaId = Joi.object({
+  id: Joi.objectId().required(),
+});
 
-// -> { value: {}, error: '"username" is required' }
+module.exports.validateContacts = async (req, res, next) => {
+  return await validate(schema, req.body, res, next);
+};
 
-// Also -
+module.exports.validateId = async (req, res, next) => {
+  return await validate(schemaId, req.params, res, next);
+};
