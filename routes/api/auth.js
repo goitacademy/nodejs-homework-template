@@ -17,6 +17,6 @@ router.post(
 );
 router.post('/login', validation(yupUserSchema), controllerWrapper(ctrl.login));
 router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
-// router.get('/current', authenticate, controllerWrapper(authController.current));
+router.get('/current', authenticate, controllerWrapper(ctrl.current));
 
 module.exports = router;
