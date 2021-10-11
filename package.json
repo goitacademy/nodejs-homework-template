@@ -13,16 +13,20 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.4.2",
+    "joi-objectid": "^4.0.2",
+    "mongodb": "^4.1.2",
+    "mongoose": "^6.0.9",
     "morgan": "1.10.0",
+    "npx": "^10.2.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "eslint": "^7.19.0",
-    "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "nodemon": "^2.0.7"
   }
 }
