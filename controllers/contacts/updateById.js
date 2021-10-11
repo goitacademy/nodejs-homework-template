@@ -1,6 +1,6 @@
 const { NotFound } = require("http-errors");
 const { sendSuccessRes } = require("../../helpers");
-const { Contact } = require("../../models");
+const { Contact } = require("../../models/contact");
 
 const updateById = async (req, res) => {
   const result = await Contact.updateContact(req.params.contactId, req.body);
