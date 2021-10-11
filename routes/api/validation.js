@@ -1,4 +1,5 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const schemaContact = Joi.object({
   name: Joi.string().min(1).max(20).required(),
@@ -7,7 +8,7 @@ const schemaContact = Joi.object({
 });
 
 const schemaId = Joi.object({
-  contactId: Joi.string().required(),
+  contactId: Joi.objectId().required(),
 });
 
 const validate = async (schema, obj, res, next) => {
