@@ -17,6 +17,4 @@ router.put('/:contactId', authentication, validation(updateContactJoiSchema), co
 
 router.patch('/:contactId/favorite', authentication, validation(updateFavoriteJoiSchema), controllerWrapper(ctrl.updateFavoriteStatus));
 
-router.get('/contacts?favorite=true', authentication, controllerWrapper(ctrl.filterByFavorite));
-
 module.exports = router;
