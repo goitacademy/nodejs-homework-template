@@ -38,19 +38,22 @@ userSchema.methods.createToken = function () {
     const payload = {
         _id: this._id
     };
-    return jwt.sign(payload, SECRET_KEY);
+    return jwt.sign(payload, SECRET_KEY, {expiresIn: '1h'});
 }
-
-// {expiresIn: '1h'}
 
 const userJoiSchema = Joi.object({
     password: Joi.string().min(6).required(),
-    email: Joi.string().min(1).required()
+    email: Joi.string().min(1).required().valid(starter)
 });
+
+const updateSubscriptionJoiSchema = Joi.object({
+    subscription: Joi.string().required()
+})
 
 const User = model('user', userSchema);
 
 module.exports = {
     userJoiSchema,
+    updateSubscriptionJoiSchema,
     User
 }
