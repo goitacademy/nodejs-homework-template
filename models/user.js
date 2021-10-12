@@ -1,6 +1,4 @@
 const Joi = require('joi')
-// const bcrypt = require('bcryptjs')
-// const jwt = require('jsonwebtoken')
 
 const { Schema, model } = require('mongoose')
 
@@ -26,25 +24,13 @@ const userSchema = Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-// userSchema.methods.setPassword = function (password) {
-//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-// }
-
-// userSchema.methods.comparePassword = function (password) {
-//   return bcrypt.compareSync(password, this.password)
-// }
-
-// const { SEKRET_KEY } = process.env
-// userSchema.methods.createToken = funktion(){
-//   const payload = {
-//     _id: this._id
-//   }
-//   return jwt.sign(payload, SEKRET_KEY)
-// }
-
 const joiUserSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().required(),
+  subscription: Joi.string(),
+})
+
+const updateSubscriptionJoiSchema = Joi.object({
   subscription: Joi.string(),
 })
 
@@ -52,5 +38,6 @@ const User = model('user', userSchema)
 
 module.exports = {
   User,
-  joiUserSchema
+  joiUserSchema,
+  updateSubscriptionJoiSchema
 }

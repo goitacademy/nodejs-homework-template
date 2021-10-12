@@ -19,7 +19,7 @@ const login = async (req, res, next) => {
   }
 
   const token = jwt.sign(payload, SEKRET_KEY)
-  // const token = user.createToken()
+
   await User.findByIdAndUpdate(_id, { token })
 
   res.json({
