@@ -59,13 +59,12 @@ const removeContact = async(req, res, next) => {
 const updateContact = async(req, res, next) => {
     const id = req.params.contactId
 
-    const update = await Contact.findByIdAndUpdate(id, { $set: req.body })
+    const result = await Contact.findByIdAndUpdate(id, { $set: req.body }, { new: true })
 
-    if (!update) {
+    if (!result) {
         throw new NotFound(`Contact with id=${id} not found`)
     }
 
-    const result = await Contact.findById(id)
     res.json({
         status: 'success',
         code: 200,
@@ -82,15 +81,14 @@ const updateStatusContact = async(req, res, next) => {
         throw new BadRequest('missing field favorite')
     }
 
-    const updateFavorite = await Contact.findByIdAndUpdate(id, {
+    const result = await Contact.findByIdAndUpdate(id, {
         $set: req.body
-    })
+    }, { new: true })
 
-    if (!updateFavorite) {
+    if (!result) {
         throw new NotFound(`Contact with id=${id} not found`)
     }
 
-    const result = await Contact.findById(id)
     res.json({
         status: 'success',
         code: 200,
