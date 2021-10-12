@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { auth: ctrl } = require("../../controller");
+const { auth: ctrl } = require("../../controller/indexContacts");
 const { validateContact } = require("../../service/validation");
 const { JoiSchema } = require("../../model/user");
 const router = express.Router();
