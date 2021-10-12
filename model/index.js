@@ -10,49 +10,42 @@ const getCollection = async (db, name) => {
 const listContacts = async () => {
   const contacts = await getCollection(db, "Contacts");
   const result = await contacts.find({}).toArray();
-  console.log(result);
   return result;
 };
 
-const getContactById = async (contactId) => {
-  const contacts = await db.read();
-  const [contact] = contacts.filter((contact) => contact.id === contactId);
-  return contact;
+const getContactById = async (id) => {
+  const contacts = await getCollection(db, "Contacts");
+  const oid = new ObjectId(id);
+  const [result] = await contacts.find({ _id: oid }).toArray();
+  return result;
 };
 
-const removeContact = async (contactId) => {
-  const contacts = await db.read();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    const [result] = contacts.splice(index, 1);
-    await db.write(contacts);
-    return result;
-  }
-  return null;
+const removeContact = async (id) => {
+  const contacts = await getCollection(db, "Contacts");
+  const oid = new ObjectId(id);
+  const { value: result } = await contacts.findOneAndDelete({ _id: oid });
+  return result;
 };
 
 const addContact = async (body) => {
-  const contacts = await db.read();
   const newContact = {
     isFavorite: false,
     ...body,
   };
-
-  contacts.push(newContact);
-  await db.write(contacts);
-  return newContact;
+  const contacts = await getCollection(db, "Contacts");
+  const result = await contacts.insertOne(newContact);
+  return await getContactById(result.insertedId);
 };
 
-const updateContact = async (contactId, body) => {
-  const contacts = await db.read();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    const contact = contacts[index];
-    contacts[index] = { ...contact, ...body };
-    await db.write(contacts);
-    return contacts[index];
-  }
-  return null;
+const updateContact = async (id, body) => {
+  const contacts = await getCollection(db, "Contacts");
+  const oid = new ObjectId(id);
+  const { value: result } = await contacts.findOneAndUpdate(
+    { _id: oid },
+    { $set: body },
+    { returnDocument: "after" }
+  );
+  return result;
 };
 
 module.exports = {
