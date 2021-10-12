@@ -1,0 +1,63 @@
+[
+    {
+      "name": "Vasya",
+      "email": "dui.in@egetlacus.ca",
+      "phone": "(294) 840-6685",
+      "favorite": false
+    },
+    {
+      "name": "Kennedy Lane",
+      "email": "mattis.Cras@nonenimMauris.net",
+      "phone": "(542) 451-7038",
+      "favorite": true
+    },
+    {
+      "name": "Wylie Pope",
+      "email": "est@utquamvel.net",
+      "phone": "(692) 802-2949",
+      "favorite": true
+    },
+    {
+      "name": "Cyrus Jackson",
+      "email": "nibh@semsempererat.com",
+      "phone": "(501) 472-5218",
+      "favorite": true
+    },
+    {
+      "name": "Abbot Franks",
+      "email": "scelerisque@magnis.org",
+      "phone": "(186) 568-3720",
+      "favorite": true
+    },
+    {
+      "name": "Reuben Henry",
+      "email": "pharetra.ut@dictum.co.uk",
+      "phone": "(715) 598-5792",
+      "favorite": true
+  
+    },
+    {
+      "name": "Simon Morton",
+      "email": "dui.Fusce.diam@Donec.com",
+      "phone": "(233) 738-2360",
+      "favorite": true
+    },
+    {
+      "name": "Thomas Lucas",
+      "email": "nec@Nulla.com",
+      "phone": "(704) 398-7993",
+      "favorite": true
+    },
+    {
+      "name": "Dona Veb",
+      "email": "dona.veb@gmail.com",
+      "phone": "(077) 888-7788",
+      "favorite": true
+    },
+    {
+      "name": "Evgen",
+      "email": "evgdev.mois@gmail.com",
+      "phone": "(998) 919-3900",
+      "favorite": true
+    }
+  ]
