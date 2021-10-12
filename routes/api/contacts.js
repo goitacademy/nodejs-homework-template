@@ -12,5 +12,6 @@ router.post('/', authenticate, validation(joiContactSchema), ctrs.postNewContact
 router.delete('/:contactId', controllerWrapper(ctrs.deleteContact))
 router.put('/:contactId', validation(joiContactSchema), controllerWrapper(ctrs.putContact))
 router.patch('/:contactId/favorite', validation(updateFavoriteJoiSchema), controllerWrapper(ctrs.updateContactFavorite))
+router.get('/all?favorite=true', controllerWrapper(ctrs.getFavoriteContacts))
 
 module.exports = router
