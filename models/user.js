@@ -43,7 +43,7 @@ userSchema.methods.createToken = function () {
 
 const userJoiSchema = Joi.object({
     password: Joi.string().min(6).required(),
-    email: Joi.string().min(1).required().valid(starter)
+    email: Joi.string().min(1).required()
 });
 
 const updateSubscriptionJoiSchema = Joi.object({
