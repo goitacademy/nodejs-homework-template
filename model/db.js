@@ -1,21 +1,23 @@
-const { read, write } = require("fs");
-const fs = require("fs/promises");
-const path = require("path");
+const { MongoClient } = require("mongodb");
+require("dotenv").config();
 
-class FileAdapter {
-  constructor(file) {
-    this.store = path.join(__dirname, file);
-  }
+const uri = process.env.URI_DB;
 
-  async read() {
-    const result = await fs.readFile(this.store, "utf-8");
-    const data = JSON.parse(result);
-    return data;
-  }
+const db = MongoClient.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-  async write(data) {
-    await fs.writeFile(this.store, JSON.stringify(data));
-  }
-}
+process.on("SIGINT", async () => {
+  const client = await db;
+  client.close();
+  console.log("Connection to DB closed");
+});
 
-module.exports = FileAdapter;
+// client.connect((err) => {
+//   const collection = client.db("test").collection("devices");
+//   // perform actions on the collection object
+//   client.close();
+// });
+
+module.exports = db;

@@ -1,9 +1,17 @@
-const crypto = require("crypto");
-const DB = require("./db");
-const db = new DB("contacts.json");
+const { ObjectId } = require("mongodb");
+const db = require("./db");
+
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
+};
 
 const listContacts = async () => {
-  return await db.read();
+  const contacts = await getCollection(db, "Contacts");
+  const result = await contacts.find({}).toArray();
+  console.log(result);
+  return result;
 };
 
 const getContactById = async (contactId) => {
@@ -26,7 +34,6 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contacts = await db.read();
   const newContact = {
-    id: crypto.randomUUID(),
     isFavorite: false,
     ...body,
   };
