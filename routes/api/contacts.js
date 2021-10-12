@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", validateId, async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id);
     if (contact) {
@@ -41,7 +41,7 @@ router.post("/", validateContact, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", validateId, async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.id);
     if (contact) {
@@ -59,7 +59,7 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put(
   "/:id",
-
+  validateId,
   validateUpdateContact,
   async (req, res, next) => {
     try {
