@@ -12,7 +12,6 @@ const getContacts = async (req, res, next) => {
 const getContact = async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id);
-    console.log(contact);
     if (contact) {
       return res
         .status(200)
