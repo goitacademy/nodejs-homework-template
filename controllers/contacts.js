@@ -1,9 +1,9 @@
 const { NotFound } = require('http-errors');
-
-const contactsOperation = require('../model/contacts');
+// const service = require('../service')
+const { Contact } = require('../model/contacts');
 
 const getAll = async (req, res, next) => {
-  const contacts = await contactsOperation.listContacts();
+  const contacts = await Contact.find({});
   res.json({
     status: 'success',
     code: 200,
@@ -16,7 +16,7 @@ const getAll = async (req, res, next) => {
 const getById = async(req, res, next) => {
   const { contactId } = req.params;
   console.log(typeof (contactId));
-  const contact = await contactsOperation.getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
@@ -28,7 +28,7 @@ const getById = async(req, res, next) => {
 }
 
 const add = async (req, res, next) => {
-  const result = await contactsOperation.addContact(req.body)
+  const result = await Contact.create(req.body)
   res.json({
     status: 'success',
     code: 201,
@@ -40,7 +40,7 @@ const add = async (req, res, next) => {
 
 const removeById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contactsOperation.removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not faund`);
   }
@@ -53,7 +53,24 @@ const removeById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contactsOperation.updateById(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  if (!result) {
+    throw new NotFound(`Contact with id=${contactId} not faund`);
+  }
+  res.json({
+    status: 'success',
+    code: 201,
+    data: {
+      result
+    }
+  })
+};
+
+// обновление ТОЛЬКО поля любимый контакт
+const updateStatus = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not faund`);
   }
@@ -71,5 +88,6 @@ module.exports = {
   getById,
   add,
   removeById,
-  updateById
+  updateById,
+  updateStatus
 }
