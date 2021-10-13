@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Contacts = require("../../model");
+const Contacts = require("../../repository");
 const {
   validateContact,
   validateUpdateContact,
@@ -19,6 +19,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", validateId, async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.id);
+    console.log(contact);
     if (contact) {
       return res
         .status(200)
