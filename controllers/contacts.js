@@ -1,5 +1,5 @@
 const { contactSchema } = require("../schemas");
-const contactsOperations = require("../model");
+const contactsOperations = require("../model/contacts");
 const { BadRequest, NotFound } = require("http-errors");
 
 const { sendSuccessRes } = require("../helpers");
