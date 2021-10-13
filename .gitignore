@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-node_modules
-=======
 .env
 .env.example
 node_modules/
->>>>>>> Stashed changes

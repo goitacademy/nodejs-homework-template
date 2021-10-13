@@ -9,12 +9,6 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-<<<<<<< Updated upstream
-    "cors": "2.8.5",
-    "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
-=======
     "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -34,7 +28,6 @@
     "passport-jwt": "4.0.0",
     "single": "^0.2.1",
     "uuid": "8.3.2"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "^7.19.0",
