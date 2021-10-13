@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "nodejs-rest-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,39 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "morgan": "1.10.0"
+=======
+    "bcryptjs": "^2.4.3",
+    "cors": "2.8.5",
+    "cross-env": "7.0.3",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "express-rate-limit": "5.2.6",
+    "helmet": "4.4.1",
+    "http-errors": "^1.8.0",
+    "jimp": "^0.16.1",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "3.6.4",
+    "mongoose": "5.11.18",
+    "mongoose-paginate-v2": "1.3.16",
+    "morgan": "1.10.0",
+    "passport": "0.4.1",
+    "passport-jwt": "4.0.0",
+    "single": "^0.2.1",
+    "uuid": "8.3.2"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "^7.19.0",
+    "eslint-config-prettier": "7.2.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-json": "2.1.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "2.0.7"
