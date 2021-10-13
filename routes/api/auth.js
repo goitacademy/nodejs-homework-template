@@ -2,6 +2,7 @@ const express = require('express');
 
 const { joiSchema, joiSubscrSchema } = require("../../models/user");
 const { controllerWrapper, validation, authenticate, upload } = require('../../middlewares');
+
 const { auth: ctrl } = require("../../controllers");
 
 const router = express.Router();

@@ -30,6 +30,8 @@ require('dotenv').config()
 
 const authRouter = require("./routes/api/auth")
 
+const authRouter = require("./routes/api/auth")
+
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
@@ -66,6 +68,8 @@ app.use(express.static('public'))
 // app.get('/api/avatars', async (req, res) => {
   // res.json(avatars)
 // })
+app.use("/api/v1/auth", authRouter)
+
 app.use("/api/v1/auth", authRouter)
 
 app.use('/api/contacts', contactsRouter)

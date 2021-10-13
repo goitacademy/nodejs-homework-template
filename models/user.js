@@ -27,6 +27,7 @@ const userSchema = Schema({
     avatarURL: {
       type: String,
     },
+
 }, { versionKey: false, timestamps: true });
 
 userSchema.methods.setPassword = function (password) {
@@ -43,6 +44,7 @@ userSchema.methods.setAvatar = function (avatar) {
 const joiSubscrSchema = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business').required(),
 })
+
 
 userSchema.methods.createToken = function () {
     const payload = {
@@ -63,3 +65,4 @@ module.exports = {
     joiSchema,
     joiSubscrSchema,
 }
+
