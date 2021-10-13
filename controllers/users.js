@@ -1,6 +1,10 @@
-const { Conflict, BadRequest, Unauthorized } = require('http-errors')
+const { Conflict, BadRequest } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../model')
+const { sendSuccess, avatarConvert } = require('../utils')
+const path = require('path')
+const fs = require('fs/promises')
+const uploadDir = path.join(__dirname, '../', 'public')
 
 const signup = async (req, res) => {
   const { email, password } = req.body
@@ -15,8 +19,10 @@ const signup = async (req, res) => {
 
   await newUser.save()
 
-  res.status(201).json({
-    user: { email, subscription: newUser.subscription },
+  sendSuccess.users(res, {
+    email,
+    subcriprion: newUser.subscription,
+    avatarURL: newUser.avatarURL,
   })
 }
 
@@ -37,10 +43,7 @@ const signin = async (req, res) => {
 
   await User.findByIdAndUpdate(_id, { token })
 
-  res.json({
-    token: token,
-    user: { email, subscription },
-  })
+  sendSuccess.users(res, { token, email, subscription })
 }
 
 const signout = async (req, res) => {
@@ -50,13 +53,43 @@ const signout = async (req, res) => {
 }
 
 const currentUser = async (req, res) => {
-  const user = await User.findById(req.user.id)
-  if (!user) {
-    throw new Unauthorized('Not authorized')
-  }
-  const { email, subscription } = user
-  res.status(200).json({
-    user: { email, subscription },
-  })
+  const { email, subscription } = req.user
+  sendSuccess.users(res, { email, subscription })
 }
-module.exports = { signup, signin, signout, currentUser }
+
+const updateSubscription = async (req, res) => {
+  const { _id, email } = req.user
+  const { subscription } = req.body
+  await User.findByIdAndUpdate(_id, { subscription }, { new: true })
+  sendSuccess.users(res, { email, subscription })
+}
+
+const updateAvatar = async (req, res) => {
+  const { originalname, path: tmpName } = req.file
+  if (!req.file) {
+    throw new BadRequest('No found file in request!')
+  }
+  const { _id } = req.user
+  await avatarConvert(tmpName)
+  const [extention] = originalname.split('.').reverse()
+  const newFileName = `avatar-image_${_id}.${extention}`
+  const fileName = path.join(uploadDir, 'avatars', newFileName)
+
+  await fs.rename(tmpName, fileName)
+
+  const { avatarURL } = await User.findByIdAndUpdate(
+    _id,
+    { avatarURL: fileName },
+    { new: true }
+  )
+  sendSuccess.avatar(res, avatarURL)
+}
+
+module.exports = {
+  signup,
+  signin,
+  signout,
+  currentUser,
+  updateSubscription,
+  updateAvatar,
+}

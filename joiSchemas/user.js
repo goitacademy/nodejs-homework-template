@@ -1,4 +1,7 @@
 const Joi = require('joi')
+const {
+  constants: { subcriptionValue },
+} = require('../utils')
 
 const userSchema = Joi.object({
   email: Joi.string()
@@ -8,6 +11,7 @@ const userSchema = Joi.object({
     })
     .required(),
   password: Joi.string().min(6).required(),
+  subscription: Joi.any().valid(...subcriptionValue),
 })
 
 module.exports = userSchema

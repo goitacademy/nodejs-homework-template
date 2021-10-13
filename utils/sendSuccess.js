@@ -1,9 +1,19 @@
-const sendSuccess = (res, data, status = 200) => {
+const contacts = (res, results, message = '', status = 200) => {
   res.status(status).json({
-    status: 'success',
-    code: status,
-    data,
+    message: `${status}OK.` + message,
+    results,
   })
 }
 
-module.exports = { sendSuccess }
+const users = (res, user, status = 200) => {
+  res.status(status).json({
+    user,
+  })
+}
+const avatar = (res, avatarURL, status = 200) => {
+  res.status(status).json({
+    avatarURL,
+  })
+}
+
+module.exports = { contacts, users, avatar }

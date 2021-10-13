@@ -7,7 +7,7 @@ const listContacts = async (req, res) => {
     { owner: req.user._id },
     '_id name email phone favorite'
   )
-  sendSuccess(res, { result })
+  sendSuccess.contacts(res, result)
 }
 
 const getContactById = async (req, res) => {
@@ -20,13 +20,13 @@ const getContactById = async (req, res) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found!`)
   }
-  sendSuccess(res, { result })
+  sendSuccess.contacts(res, result)
 }
 
 const addContact = async (req, res) => {
   const newContact = { ...req.body, owner: req.user._id }
   const result = await Contact.create(newContact)
-  sendSuccess(res, { result }, 201)
+  sendSuccess.contacts(res, result, 'Contact added!', 201)
 }
 
 const updateContactById = async (req, res) => {
@@ -42,7 +42,7 @@ const updateContactById = async (req, res) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found!`)
   }
-  sendSuccess(res, { result })
+  sendSuccess.contacts(res, result, `Contact with id=${contactId} updated!`)
 }
 
 const removeContactById = async (req, res, next) => {
@@ -54,7 +54,7 @@ const removeContactById = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found!`)
   }
-  sendSuccess(res, { message: 'Contact deleted' })
+  sendSuccess.contacts(res, result, `Contact with id=${contactId} deleted!`)
 }
 
 const updateStatusContact = async (req, res) => {
@@ -68,7 +68,11 @@ const updateStatusContact = async (req, res) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found!`)
   }
-  sendSuccess(res, { message: 'Status of contact updated' })
+  sendSuccess.contacts(
+    res,
+    result,
+    `Status of contact with id=${contactId} updated`
+  )
 }
 
 module.exports = {

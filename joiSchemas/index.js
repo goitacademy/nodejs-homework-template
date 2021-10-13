@@ -3,6 +3,7 @@ const contactUpdateSchema = require('./contactUpdate')
 const contactStatusUpdateSchema = require('./contactStatusUpdate')
 const contactIdSchema = require('./contactId')
 const userSchema = require('./user')
+const userSubscriptionUpdateSchema = require('./userSubscriptionUpdate')
 
 module.exports = {
   contactAddSchema,
@@ -10,4 +11,5 @@ module.exports = {
   contactStatusUpdateSchema,
   contactIdSchema,
   userSchema,
+  userSubscriptionUpdateSchema,
 }

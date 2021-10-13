@@ -34,7 +34,9 @@ DB_HOST=mongodb+srv://<user>:<password>@cluster0.avhnq.mongodb.net/<my_database>
 ```
 
 ## User scheme
+
 The user scheme looks like:
+
 ```
 const userSchema = new Schema(
 {
@@ -52,6 +54,12 @@ type: String,
 enum: ['starter', 'pro', 'business'],
 default: 'starter',
 },
+avatarURL: {
+type: String,
+default: function () {
+return gravatar.url(this.email, { s: '250' }, true)
+},
+},
 token: {
 type: String,
 default: null,
@@ -60,6 +68,7 @@ default: null,
 { versionKey: false, timestamps: true }
 )
 ```
+
 ## Contact scheme
 
 The example contains a CRUD implementation for one contact reference entity.
@@ -105,4 +114,5 @@ ref: 'user',
 | POST   | /users/login                  | Login                         |
 | POST   | /users/logout                 | Logout                        |
 | GET    | /users/current                | Get user data by token        |
-
+| PATCH  | /users/subscription           | Update user's subscription    |
+| PATCH  | /users/avatars                | Update user's avatar          |
