@@ -24,6 +24,9 @@ const userSchema = Schema({
         type: String,
         default: null,
     },
+    avatarURL: {
+      type: String,
+    },
 }, { versionKey: false, timestamps: true });
 
 userSchema.methods.setPassword = function (password) {
@@ -33,6 +36,13 @@ userSchema.methods.setPassword = function (password) {
 userSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 }
+
+userSchema.methods.setAvatar = function (avatar) {
+    this.avatarURL = avatar;
+}
+const joiSubscrSchema = Joi.object({
+  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+})
 
 userSchema.methods.createToken = function () {
     const payload = {
@@ -51,5 +61,5 @@ const User = model("user", userSchema);
 module.exports = {
     User,
     joiSchema,
+    joiSubscrSchema,
 }
-

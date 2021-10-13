@@ -1,14 +1,36 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const { v4 } = require("uuid");
-const fs = require("fs/promises");
+// const { v4 } = require('uuid')
+// const fs = require('fs/promises')
+require('dotenv').config()
+
+// const multer = require("multer");
+// const path = require("path");
+
+// const tempDir = path.join(__dirname, 'temp');
+// const uploadDir = path.join(__dirname, "public");
+// console.log(uploadDir)
+
+// const multerSetting = multer.diskStorage({
+  // destination: (req, file, cb) => {
+    // cb(null, tempDir);
+  // },
+  // filename: (req, file, cb) => {
+    // cb(null, file.originalname);
+  // },
+  // limits: {
+    // fileSize: 2048,
+  // },
+// });
+// 
+// const uploadMiddleware = multer({
+    // storage: multerSetting
+// });
 
 const authRouter = require("./routes/api/auth")
 
 const contactsRouter = require('./routes/api/contacts')
-
-const avatarsRouter = require("./routes/api/avatars");
 
 const app = express()
 
@@ -17,18 +39,33 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
-app.use(express.static("public"));
+app.use(express.static('public'))
 
-app.use("api/avatars", avatarsRouter)
-
-const {DB_HOST, PORT = 3000} = process.env;
-
-mongoose.connect(DB_HOST).then(()=> app.listen(PORT))
-    .catch(error => {
-        console.log(error.message);
-        process.exit(1);
-    });
-
+// const avatars = []
+// app.post("/api/avatars", uploadMiddleware.single("image"), async (req, res) => {
+  // const { originalname, path: tempName } = req.file;
+  // const fileName = path.join(uploadDir, 'avatars', originalname)
+  // try {
+    // await fs.rename(tempName, fileName)
+    // const image = path.join('public/avatars', originalname)
+    // const newAvatars = { ...req.body, id: v4(), image };
+    // avatars.push(newAvatars);
+    // res.status(201).json({
+      // status: 'success',
+      // code: 201,
+      // data: {
+        // result: newAvatars,
+      // },
+    // });
+    // 
+  // } catch (error) {
+    // await fs.unlink(tempName);
+  // }
+  // 
+// })
+// app.get('/api/avatars', async (req, res) => {
+  // res.json(avatars)
+// })
 app.use("/api/v1/auth", authRouter)
 
 app.use('/api/contacts', contactsRouter)

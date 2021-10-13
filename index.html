@@ -2,36 +2,29 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 </head>
 
 <body>
-    <!-- <form action="" id="add-image" enctype="multipart/form-data">
-        <input type="file" name="image" />
-        <button>Добавить изображения</button>
-    </form> -->
+    <div id="avatars"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.22.0/axios.js"></script>
     <script>
-        const avatarRequest = fetch("http://localhost:3000/api/avatars");
-        avatarRequest
-            .then(response => response.json())
-            .then(result => {
-                const { name, photo } = result[0];
-                document.body.insertAdjacentHTML("beforeend", `<img src="http://localhost:3000${photo}" />`);
-            })
-            .catch(error => console.log(error.message))
-        // const imageAddForm = document.getElementById("add-image");
-        // const imageField = imageAddForm.querySelector("[name=image]");
+        const usersContainer = document.getElementById("avatars");
+        const usersRequest = axios.get("http://localhost:3000/api/avatars");
+        usersRequest
+            .then(({ data }) => {
+                console.log(data)
+                const usersElements = data.map(item => `<div>
+                <h5>${item.name}</h5>
+                <img src="http://localhost:3000/${item.image}" /></div>`).join();
+                usersContainer.insertAdjacentHTML("beforeend", usersElements)
 
-        // imageAddForm.addEventListener("submit", function(e){
-        //     e.preventDefault();
-        //     console.log(imageField.files[0]);
-        //     const form = new FormData();
-        //     form.append("image", imageField.files[0]);
-        // });
-
+            }
+            )
+            .catch(error => console.log(error.massage))
     </script>
 </body>
 
