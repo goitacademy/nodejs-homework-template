@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const Joi = require('joi');
 
 const contactSchema = Schema({
@@ -33,6 +35,8 @@ const updateFavoriteJoiSchema = Joi.object({
   favorite: Joi.boolean().required()
 });
 
+contactSchema.plugin(mongoosePaginate);
+
 const Contact = model("contact", contactSchema);
 
 
@@ -41,3 +45,4 @@ module.exports = {
   updateFavoriteJoiSchema,
   Contact
 };
+

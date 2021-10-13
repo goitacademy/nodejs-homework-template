@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="avatars"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.22.0/axios.js"></script>
+    <script>
+        const usersContainer = document.getElementById("avatars");
+        const usersRequest = axios.get("http://localhost:3000/api/avatars");
+        usersRequest
+            .then(({ data }) => {
+                console.log(data)
+                const usersElements = data.map(item => `<div>
+                <h5>${item.name}</h5>
+                <img src="http://localhost:3000/${item.image}" /></div>`).join();
+                usersContainer.insertAdjacentHTML("beforeend", usersElements)
+
+            }
+            )
+            .catch(error => console.log(error.massage))
+    </script>
+</body>
+
+</html>
