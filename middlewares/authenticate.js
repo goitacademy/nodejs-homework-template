@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 
-const {User} = require('.models./')
+const { User } = require('.models./')
 
-const {SECRET_KEY} = process.env
+const { SECRET_KEY } = process.env
 
 const authenticate = async(req, res, next) => {
   const { authorization } = req.headers
@@ -13,7 +13,7 @@ const authenticate = async(req, res, next) => {
       code: 401,
       message: 'Not authorized'
     })
-    return;
+    return
   }
   try {
     const { _id } = jwt.verify(token, SECRET_KEY)
@@ -34,7 +34,6 @@ const authenticate = async(req, res, next) => {
       code: 401,
       message: 'Not authorized'
     })
-    return
   }
 }
 
