@@ -1,8 +1,8 @@
-const contactOperations = require('../../model/contacts')
+const { Contact } = require('../../models')
 const { sendSuccessRes } = require('../../helpers')
 
 const getContacts = async (req, res) => {
-  const contacts = await contactOperations.listContacts()
+  const contacts = await Contact.find()
 
   sendSuccessRes(res, { contacts })
 }
