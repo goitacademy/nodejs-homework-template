@@ -1,4 +1,5 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const schemaContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -11,12 +12,16 @@ const schemaContact = Joi.object({
     // eslint-disable-next-line no-useless-escape
     .regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
     .required(),
+
+  favorite: Joi.boolean().optional(),
 });
 
-const pattern = /\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}/;
+const schemaStatusContact = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const schemaId = Joi.object({
-  id: Joi.string().pattern(new RegExp(pattern)).required(),
+  contactId: Joi.objectId().required(),
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -27,13 +32,17 @@ const validate = async (schema, obj, res, next) => {
     res.status(400).json({
       status: "error",
       code: 400,
-      message: `missing required ${err.message.replace(/"/g, " ")} field`,
+      message: `missing required name field ${err.message.replace(/"/g, "")}`,
     });
   }
 };
 
 module.exports.validateContact = async (req, res, next) => {
   return await validate(schemaContact, req.body, res, next);
+};
+
+module.exports.validateStatusContact = async (req, res, next) => {
+  return await validate(schemaStatusContact, req.body, res, next);
 };
 
 module.exports.validateId = async (req, res, next) => {
