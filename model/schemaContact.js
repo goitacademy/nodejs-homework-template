@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaTypes } = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const contactSchema = new Schema(
   {
@@ -19,6 +20,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+    },
   },
   {
     versionKey: false,
@@ -26,7 +31,7 @@ const contactSchema = new Schema(
     toObject: { virtuals: true },
     toJSON: {
       virtuals: true,
-      transform: function (doc, ret) {
+      transform: function (_doc, ret) {
         delete ret._id;
         return ret;
       },
@@ -42,6 +47,8 @@ contactSchema.virtual('status').get(function () {
   return 'not best friend';
 });
 
-const Contact = model('contact', contactSchema);
+contactSchema.plugin(mongoosePaginate);
 
-module.exports = Contact;
+const Contacts = model('contact', contactSchema);
+
+module.exports = Contacts;
