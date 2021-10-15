@@ -12,6 +12,9 @@ const contactSchema = Schema({
   phone: {
     type: String,
   },
+  avatarURL: {
+    type: String
+  },
   favorite: {
     type: Boolean,
     default: false,
@@ -26,6 +29,7 @@ const joiContactSchema = Joi.object({
   name: Joi.string().min(1).required(),
   email: Joi.string().min(3).required(),
   phone: Joi.string().min(1).required(),
+  avatarURL: Joi.string(),
   favorite: Joi.boolean()
 })
 
