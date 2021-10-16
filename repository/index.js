@@ -17,6 +17,9 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const result = await Contact.create(body);
+  if (!body.favorite) {
+    result.favorite = false;
+  }
   return result;
 };
 
