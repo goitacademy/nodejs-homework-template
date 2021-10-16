@@ -28,8 +28,6 @@ const authenticate = async (req, res, next) => {
   }
 
   try {
-    console.log('token :>> ', token)
-    console.log('secret :>> ', SECRET_KEY)
     const { _id } = jwt.verify(token, SECRET_KEY)
     const user = await User.findById(_id)
     if (!user.token) {
