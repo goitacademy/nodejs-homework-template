@@ -1,14 +1,25 @@
 const express = require("express");
 
-const { auth: ctrl } = require("../../controller/indexContacts");
-const { validateContact } = require("../../service/validation");
-const { JoiSchema } = require("../../model/user");
+const authController = require("../../controller/auth");
+const { validator } = require("../../middlewares");
+const { joiSchema } = require("../../schemas/users");
+const { auth: ctrl } = require("../../controller");
 const router = express.Router();
+
 // router
 //   .get("/", contactsController.listContacts)
-router.post("/register", validateContact(ctrl.register));
-router.post("/login", validateContact(ctrl.login));
-router.get("/logout", validateContact(ctrl.logout));
+router.post(
+  "/register",
+  // validator(joiSchema),
+  authController.register
+);
+
+router.post(
+  "/login",
+  // validator(joiSchema),
+  authController.login
+);
+router.get("/logout", authController.logout);
 // router
 //   .get("/:contactId", contactsController.getById)
 //   .delete("/:contactId", contactsController.removeContact)

@@ -1,7 +1,10 @@
-const { Shema, model } = require("mongoose");
-const Joi = require("joi");
+// const { Schema, model } = require("mongoose");
 
-const userShema = Shema({
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
+// const Joi = require("joi");
+
+const userSchema = Schema({
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -22,16 +25,16 @@ const userShema = Shema({
   },
 });
 
-const JoiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  subscription: Joi.string().required().default(starter),
-  token: Joi.string().default(null),
-});
+// const JoiSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   subscription: Joi.string().required().default(starter),
+//   token: Joi.string().default(null),
+// });
 
-const User = model("user", userShema);
+const User = model("users", userSchema);
 
-model.exports = {
+module.exports = {
   User,
-  JoiSchema,
+  // JoiSchema,
 };

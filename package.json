@@ -9,18 +9,24 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
     "express": "4.17.1",
+    "express-validator": "^5.3.1",
     "http-error": "^0.0.6",
     "http-errors": "^1.7.2",
     "joi": "^17.4.2",
-    "mongoose": "^6.0.8",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.10",
     "morgan": "1.10.0",
     "shortid": "^2.2.16",
-    "uuid": "^8.3.2"
+    "unit": "^1.4.3-0",
+    "uuid": "^8.3.2",
+    "validate.js": "^0.13.1",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
