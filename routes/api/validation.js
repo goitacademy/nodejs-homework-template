@@ -4,6 +4,11 @@ const schemaContacts = Joi.object({
   name: Joi.string().alphanum().min(5).max(25).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean().optional(),
+});
+
+const schemaFavorite = Joi.object({
+  favorite: Joi.boolean().optional(),
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -21,4 +26,8 @@ const validate = async (schema, obj, res, next) => {
 
 module.exports.contactValidation = async (req, res, next) => {
   return await validate(schemaContacts, req.body, res, next);
+};
+
+module.exports.favoriteValidation = async (req, res, next) => {
+  return await validate(schemaFavorite, req.body, res, next);
 };
