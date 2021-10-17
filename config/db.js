@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const URI = process.env.MONGO_URL;
+const uri = process.env.MONGO_URL;
 
-const db = mongoose.connect(URI, {
+const db = mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -18,7 +18,7 @@ mongoose.connection.on("error", (err) => {
 
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
-  console.log("Connection to DB closed");
+  console.log("Connection to DB closed.");
   process.exit(1);
 });
 
