@@ -12,8 +12,8 @@ mongoose.connection.on('connection', () => {
   console.log('Mongoose connection to DB Contacts');
 });
 
-mongoose.connection.on('connection', err => {
-  console.log(`Mongoose connection to DB Contacts error ${err.message}`);
+mongoose.connection.on('connection', error => {
+  console.log(`Mongoose connection to DB Contacts error ${error.message}`);
 });
 
 process.on('SIGINT', async () => {
