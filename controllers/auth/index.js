@@ -2,10 +2,14 @@
 /* eslint-disable eol-last */
 const signup = require('./signup')
 const login = require('./login')
-const logaut = require('./logaut')
+const logout = require('./logout')
+const getUser = require('./getUser')
+const updateSubscription = require('./updateSubscription')
 
 module.exports = {
     signup,
     login,
-    logaut
+    logout,
+    getUser,
+    updateSubscription
 }
