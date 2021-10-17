@@ -1,40 +1,30 @@
-// const { Schema, model } = require("mongoose");
+const { User } = require("../schemas/users");
 
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
-// const Joi = require("joi");
+const findByEmail = async (email) => {
+  return await User.findOne({ email });
+};
 
-const userSchema = Schema({
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-});
+const findById = async (id) => {
+  return await User.findOne({ _id: id });
+};
 
-// const JoiSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   subscription: Joi.string().required().default(starter),
-//   token: Joi.string().default(null),
-// });
+const create = async ({ email, password }) => {
+  const user = new User({ email, password });
+  return await user.save();
+};
 
-const User = model("users", userSchema);
+const updateToken = async (id, token) => {
+  return await User.updateOne({ _id: id }, { token });
+};
+
+const updateSubUser = async (id, subscription) => {
+  return await User.updateOne({ _id: id }, { subscription });
+};
 
 module.exports = {
-  User,
-  // JoiSchema,
+  findByEmail,
+  findById,
+  create,
+  updateToken,
+  updateSubUser,
 };
