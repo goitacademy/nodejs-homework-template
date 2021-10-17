@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "cross-env NODE_ENV=production node app ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon app ./bin/server.js",
+    "lint": "eslint /*.js",
+    "lint:fix": "eslint --fix /*.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -30,6 +30,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "demon": "^1.4.4",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-config-standard": "^16.0.2",
@@ -38,5 +39,23 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "2.0.7"
-  }
+
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "bin": {
+    "nodejs-rest-api": "server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OleksandrVasylchuk/nodejs-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OleksandrVasylchuk/nodejs-rest-api/issues"
+  },
+  "homepage": "https://github.com/OleksandrVasylchuk/nodejs-rest-api#readme"
+
 }
