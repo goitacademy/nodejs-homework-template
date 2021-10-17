@@ -1,9 +1,14 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../../model/user");
+const { Unauthorized } = require("http-errors");
+const { bcrypt } = require("bcryptjs");
 // const { Conflict } = require("http-errors");
-const { HttpCode } = require("../../service/httpcode");
+// const { HttpCode } = require("../../service/httpcode");
 require("dotenv").config();
+// const SECRET_KEY = process.env.JWT_SECRET;
 const SECRET_KEY = process.env.JWT_SECRET;
+console.log(SECRET_KEY);
+
 
 const register = async (req, res, next) => {
   try {
@@ -11,29 +16,29 @@ const register = async (req, res, next) => {
     const user = await Users.findByEmail(email);
     if (user) {
       return next({
-        status: HttpCode.CONFLICT,
+        status: 409,
         message: "Email in use",
       });
     }
     const newUser = await Users.create(req.body);
-    return res.status(HttpCode.CREATED).json({
-      status: "success",
-      code: HttpCode.CREATED,
-      data: {
-        user: {
-          email: newUser.email,
-          subscription: newUser.subscription,
-        },
+    return res.status(201).json({
+      // status: "success",
+      // code: 201,
+      // data: {
+      user: {
+        email: newUser.email,
+        subscription: newUser.subscription,
       },
+      // },
     });
-  } catch (e) {
+  } catch (error) {
     if (e.name === "ValidationError" || e.name === "MongoError") {
       return next({
-        status: HttpCode.BAD_REQUEST,
+        status: 400,
         message: e.message.replace(/"/g, ""),
       });
     }
-    next(e);
+    next(error);
   }
 };
 
@@ -41,10 +46,21 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
+    console.log(email);
+    console.log(password);
     const isValidPassword = await user.validPassword(password);
+    // const isCorrectPassword = bcrypt.compareSync(password, user.password);
+    // if (!isCorrectPassword) {
+    //   throw new Unauthorized(`Password wrong`);
+    // }
+    // if (!user.comparePassword(password)) {
+    //   throw new Unauthorized(`Password wrong`);
+    // }
+    console.log(isValidPassword);
+
     if (!user || !isValidPassword) {
       return next({
-        status: HttpCode.UNAUTHORIZED,
+        status: 401,
         message: "Email or password is wrong",
       });
     }
@@ -52,9 +68,9 @@ const login = async (req, res, next) => {
     const payload = { id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     await Users.updateToken(id, token);
-    return res.status(HttpCode.OK).json({
+    return res.status(200).json({
       status: "success",
-      code: HttpCode.OK,
+      code: 200,
       data: {
         token,
         user: {
@@ -63,30 +79,30 @@ const login = async (req, res, next) => {
         },
       },
     });
-  } catch (e) {
-    if (e.name === "TypeError") {
+  } catch (error) {
+    if (error.name === "TypeError") {
       return next({
-        status: HttpCode.BAD_REQUEST,
+        status: 400,
         message: "Bad request",
       });
     }
-    next(e);
+    next(error);
   }
 };
 
 const logout = async (req, res, _next) => {
   const id = req.user.id;
   await Users.updateToken(id, null);
-  return res.status(HttpCode.NO_CONTENT).json({});
+  return res.status(204).json({});
 };
 
 const currentUser = async (req, res, next) => {
   const id = req.user.id;
   try {
     const user = await Users.findById(id);
-    return res.status(HttpCode.OK).json({
+    return res.status(200).json({
       status: "success",
-      code: HttpCode.OK,
+      code: 200,
       data: {
         user: {
           email: user.email,
@@ -94,8 +110,8 @@ const currentUser = async (req, res, next) => {
         },
       },
     });
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -106,7 +122,7 @@ const updateSub = async (req, res, next) => {
     const user = await Users.findById(id);
     return res.json({
       status: "success",
-      code: HttpCode.OK,
+      code: 200,
       data: {
         user: {
           email: user.email,
@@ -114,14 +130,14 @@ const updateSub = async (req, res, next) => {
         },
       },
     });
-  } catch (e) {
-    if (e.name === "CastError") {
+  } catch (error) {
+    if (error.name === "CastError") {
       return next({
-        status: HttpCode.NOT_FOUND,
+        status: 404,
         message: "Not Found",
       });
     }
-    next(e);
+    next(error);
   }
 };
 

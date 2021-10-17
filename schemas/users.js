@@ -29,26 +29,24 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// const joiSchemaUser = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   // subscription: Joi.string().required().default(starter),
-//   subscription: Joi.string().required(),
-//   token: Joi.string().default(null),
-// });
-userSchema.methods.setPassword = function (password) {
-  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// userSchema.methods.setPassword = function (password) {
+//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// };
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+userSchema.methods.validPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
-// const joiSchema = Joi.object({
-//   password: Joi.string().min(10).required(),
-//   email: Joi.string().required(),
-//   subscription: Joi.string(),
-//   token: Joi.string(),
-// });
-
 const User = model("user", userSchema);
-// console.log(User);
 
 module.exports = {
   User,

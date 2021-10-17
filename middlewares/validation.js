@@ -11,7 +11,8 @@ const validate = (schema, obj, next) => {
   if (error) {
     return next({
       status: 400,
-      message: "Bad request",
+      // message: "Bad request",
+      message: "Ошибка от Joi или другой библиотеки валидации",
     });
   }
   next();
@@ -21,8 +22,6 @@ const joiSchemaAuth = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(7).required(),
 });
-
-
 
 module.exports.validateContact = (req, _res, next) => {
   return validate(joiSchema, req.body, next);
