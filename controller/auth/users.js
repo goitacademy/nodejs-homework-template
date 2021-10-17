@@ -9,7 +9,6 @@ require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET;
 console.log(SECRET_KEY);
 
-
 const register = async (req, res, next) => {
   try {
     const { email } = req.body;
