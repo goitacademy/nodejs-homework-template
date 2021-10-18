@@ -6,6 +6,7 @@ const {
   createContact,
   deleteContact,
   changeContact,
+  changeStatusContact,
 } = require("../../controllers/contacts");
 
 const { validateContact, validateId } = require("./validation");
@@ -19,5 +20,11 @@ router.post("/", validateContact, createContact);
 router.delete("/:contactId", validateId, deleteContact);
 
 router.put("/:contactId", [validateId, validateContact], changeContact);
+
+router.patch(
+  "/:contactId/favorite",
+  [validateId, validateContact],
+  changeStatusContact
+);
 
 module.exports = router;
