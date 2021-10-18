@@ -6,8 +6,8 @@ const { bcrypt } = require("bcryptjs");
 // const { HttpCode } = require("../../service/httpcode");
 require("dotenv").config();
 // const SECRET_KEY = process.env.JWT_SECRET;
-const SECRET_KEY = process.env.JWT_SECRET;
-console.log(SECRET_KEY);
+const { SECRET_KEY } = process.env;
+// console.log(SECRET_KEY);
 
 const register = async (req, res, next) => {
   try {
@@ -31,10 +31,10 @@ const register = async (req, res, next) => {
       // },
     });
   } catch (error) {
-    if (e.name === "ValidationError" || e.name === "MongoError") {
+    if (error.name === "ValidationError" || e.name === "MongoError") {
       return next({
         status: 400,
-        message: e.message.replace(/"/g, ""),
+        message: error.message.replace(/"/g, ""),
       });
     }
     next(error);
@@ -45,23 +45,24 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findByEmail(email);
-    console.log(email);
-    console.log(password);
+    if (!user) {
+      throw new Unauthorized("Email or password is wrong");
+    }
     const isValidPassword = await user.validPassword(password);
     // const isCorrectPassword = bcrypt.compareSync(password, user.password);
     // if (!isCorrectPassword) {
     //   throw new Unauthorized(`Password wrong`);
     // }
-    // if (!user.comparePassword(password)) {
-    //   throw new Unauthorized(`Password wrong`);
+    // if (!user) {
+    //   throw new Unauthorized(`email wrong`);
     // }
-    console.log(isValidPassword);
 
     if (!user || !isValidPassword) {
-      return next({
-        status: 401,
-        message: "Email or password is wrong",
-      });
+      throw new Unauthorized("Email or password is wrong");
+      // return next({
+      //   status: 401,
+      //   message: "Email or password is wrong",
+      // });
     }
     const id = user._id;
     const payload = { id };
@@ -79,13 +80,15 @@ const login = async (req, res, next) => {
       },
     });
   } catch (error) {
-    if (error.name === "TypeError") {
-      return next({
-        status: 400,
-        message: "Bad request",
-      });
-    }
     next(error);
+
+    // console.log(error);
+    // if (error.name === "TypeError") {
+    //   return next({
+    //     status: 400,
+    //     message: "Bad request",
+    //   });
+    // }
   }
 };
 
@@ -94,6 +97,11 @@ const logout = async (req, res, _next) => {
   await Users.updateToken(id, null);
   return res.status(204).json({});
 };
+// const logout = async (req, res) => {
+//   const { _id } = req.user;
+//   await Users.findByIdAndUpdate(_id, { token: null });
+//   res.status(204).json();
+// };
 
 const currentUser = async (req, res, next) => {
   const id = req.user.id;

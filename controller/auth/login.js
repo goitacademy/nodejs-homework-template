@@ -16,7 +16,7 @@
 //   };
 //   const token = jwt.sign(payload, SECRET_KEY);
 //   await User.findByIdAndUpdate(user._id, { token });
-  
+
 //   res.json({
 //     code: 200,
 //     data: {
