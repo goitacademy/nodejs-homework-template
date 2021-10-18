@@ -11,7 +11,7 @@ router.get('/:contactId', authenticate, controllerWrapper(ctrs.getContactById))
 router.post('/', upload.single('image'), authenticate, validation(joiContactSchema), ctrs.postNewContact)
 router.delete('/:contactId', authenticate, controllerWrapper(ctrs.deleteContact))
 router.put('/:contactId', authenticate, validation(joiContactSchema), controllerWrapper(ctrs.putContact))
-router.patch('/:contactId/favorite', validation(updateFavoriteJoiSchema), controllerWrapper(ctrs.updateContactFavorite))
-// router.get('/all?favorite=true', controllerWrapper(ctrs.getFavoriteContacts))
+router.patch('/:contactId/favorite', authenticate, validation(updateFavoriteJoiSchema), controllerWrapper(ctrs.updateContactFavorite))
+// router.get('/all', authenticate, controllerWrapper(ctrs.getContactsBySearchQuery))
 
 module.exports = router
