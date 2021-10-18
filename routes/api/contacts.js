@@ -10,9 +10,7 @@ const {
   addContact,
   updateContactById,
   removeContact
-} = require('../../controllers/contacts')
-
-console.log(contactSchema)
+} = require('../../controllers/index')
 
 router.get('/', controllerWrapper(listContacts))
 
