@@ -2,7 +2,8 @@ const express = require('express');
 // const { controllerWrapper, validation } = require('../../middlewares');
 const controllerWrapper = require('../../middlewares/controllerWrapper');
 const validation = require('../../middlewares/validation');
-const authenticate = require('../../middlewares/authenticate')
+const authenticate = require('../../middlewares/authenticate');
+const upload = require('../../middlewares')
 const { joiSchema } = require('../../model/user');
 const { auth: ctrl } = require('../../controllers');
 
@@ -18,5 +19,7 @@ router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
 
 // '/api/users/current'
 // router.get('/current', authenticate, controllerWrapper(ctrl.current));
-router.get('/current', authenticate, controllerWrapper(ctrl.current))
+router.get('/current', authenticate, controllerWrapper(ctrl.current));
+
+router.patch('/avatars', authenticate, upload.single('avatar'), controllerWrapper(ctrl.chengeAvatar))
 module.exports = router;
