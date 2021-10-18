@@ -1,3 +1,5 @@
+const Users = require("../repository/users");
+
 const registration = async (req, res, next) => {
   res.json({});
 };
