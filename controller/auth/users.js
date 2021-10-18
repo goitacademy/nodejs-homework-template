@@ -92,16 +92,16 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res, _next) => {
-  const id = req.user.id;
-  await Users.updateToken(id, null);
-  return res.status(204).json({});
-};
-// const logout = async (req, res) => {
-//   const { _id } = req.user;
-//   await Users.findByIdAndUpdate(_id, { token: null });
-//   res.status(204).json();
+// const logout = async (req, res, _next) => {
+//   const id = req.user.id;
+//   await Users.updateToken(id, null);
+//   return res.status(204).json({});
 // };
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await Users.findByIdAndUpdate(_id, { token: null });
+  res.status(204).json();
+};
 
 const currentUser = async (req, res, next) => {
   const id = req.user.id;
