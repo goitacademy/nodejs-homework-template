@@ -1,5 +1,9 @@
 const express = require('express')
-const { userSchema, userSubscriptionUpdateSchema } = require('../../joiSchemas')
+const {
+  userSchema,
+  userSubscriptionUpdateSchema,
+  userEmailSchema,
+} = require('../../joiSchemas')
 const {
   controllerWrapper,
   validation,
@@ -11,6 +15,14 @@ const { users: auth } = require('../../controllers')
 const router = express.Router()
 
 router.post('/singup', validation(userSchema), controllerWrapper(auth.signup))
+
+router.get('/verify/:verifyToken', controllerWrapper(auth.verify))
+
+router.post(
+  '/verify',
+  validation(userEmailSchema),
+  controllerWrapper(auth.repeatVerify)
+)
 
 router.post('/login', validation(userSchema), controllerWrapper(auth.signin))
 

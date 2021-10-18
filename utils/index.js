@@ -6,4 +6,6 @@ const constants = require('./constants')
 
 const avatarConvert = require('./avatarConvert')
 
-module.exports = { sendSuccess, isEmpty, constants, avatarConvert }
+const sendEmail = require('./sendEmail')
+
+module.exports = { sendSuccess, isEmpty, constants, avatarConvert, sendEmail }
