@@ -7,7 +7,7 @@ const { joiSchema } = require('../../model/user');
 const { auth: ctrl } = require('../../controllers');
 
 const router = express.Router();
-router.patch('/', authenticate, controllerWrapper(ctrl.subscription));
+// router.patch('/', controllerWrapper(ctrl.subscription));
 // '/api/users/signup'
 router.post('/signup', validation(joiSchema), controllerWrapper(ctrl.signup));
 // '/api/users/login'
