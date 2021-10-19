@@ -1,7 +1,7 @@
-const db = require('../config/db');
-const app = require('../app');
+const db = require('../config/db')
+const app = require('../app')
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000
 
 db.then(() => {
   app.listen(PORT, () => {
@@ -9,5 +9,4 @@ db.then(() => {
   })
 }).catch((err) => {
   console.log(`Server not run. Error: ${err.message}`)
-
 })
