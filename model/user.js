@@ -43,7 +43,7 @@ const userSchema = new Schema(
   }
 );
 
-//пишем хук для соения пароля
+//пишем хук для соления пароля
 userSchema.pre("save", async function (next) {
   // перед тем как сохранить
   if (this.isModified("password")) {
@@ -53,6 +53,12 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
+
+// пишем метод для проверки пароля при логинизации
+userSchema.methods.isValidPassword = async function (password) {
+  //метод становится экземпляром класса Юзер
+  return await bcrypt.compare(password, this.password); //сравнивает пароли. Возвращает буль
+};
 
 const User = model("user", userSchema);
 
