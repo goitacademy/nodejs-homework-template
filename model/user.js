@@ -1,5 +1,8 @@
 const { Schema, model } = require("mongoose");
 const { Subscription } = require("../config/constants");
+const bcrypt = require("bcryptjs");
+const SALT_FACTOR = 6;
+
 const userSchema = new Schema(
   {
     name: {
@@ -39,6 +42,17 @@ const userSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+//пишем хук для соения пароля
+userSchema.pre("save", async function (next) {
+  // перед тем как сохранить
+  if (this.isModified("password")) {
+    //проверяем есть изменения в пароле или нет
+    const salt = await bcrypt.genSalt(SALT_FACTOR);
+    this.password = await bcrypt.hash(this.password, salt); // шифруем пароль, превращаем в хеш
+  }
+  next();
+});
 
 const User = model("user", userSchema);
 

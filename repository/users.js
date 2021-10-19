@@ -5,8 +5,8 @@ const findByEmail = async (email) => {
 };
 
 const create = async (options) => {
-  const user = new User(options);
-  return await user.save();
+  const user = new User(options); //создали экземпляр юзера
+  return await user.save(); // сохранили экземпляр в базу
 };
 
 module.exports = {
