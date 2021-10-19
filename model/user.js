@@ -12,7 +12,7 @@ const userSchema = new Schema(
       unique: true,
       validate(value) {
         const re = /\S+@\S+.\S+/;
-        return re.test(String(value)).toLowerCase();
+        return re.test(String(value).toLowerCase());
       },
     },
     password: { type: String, required: true },

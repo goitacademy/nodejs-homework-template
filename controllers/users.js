@@ -1,7 +1,31 @@
 const Users = require("../repository/users");
+const { HttpCode } = require("../config/constants");
 
 const registration = async (req, res, next) => {
-  res.json({});
+  const { name, email, password, subscription } = req.body;
+  const user = await Users.findByEmail(email);
+  if (user) {
+    return res.status(HttpCode.CONFLICT).json({
+      status: "Error",
+      code: HttpCode.CONFLICT,
+      message: "Email is already use",
+    });
+  }
+  try {
+    const newUser = await Users.create({ name, email, password, subscription });
+    return res.status(HttpCode.CREATED).json({
+      status: "Success",
+      code: HttpCode.CREATED,
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        subscription: newUser.subscription,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const login = async (req, res, next) => {
