@@ -1,5 +1,5 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const uri = process.env.URI_DB;
 
@@ -13,8 +13,10 @@ mongoose.connection.on("connected", () => {
 });
 
 mongoose.connection.on("error", (err) => {
-  console.log(`Mongoose disconnection ${err.message}`);
+  console.log(`Mongoose connection error ${err.message}`);
 });
+
+//  disconnected
 
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
