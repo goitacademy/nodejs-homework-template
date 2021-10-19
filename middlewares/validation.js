@@ -11,7 +11,6 @@ const validate = (schema, obj, next) => {
   if (error) {
     return next({
       status: 400,
-      // message: "Bad request",
       message: "Ошибка от Joi или другой библиотеки валидации",
     });
   }

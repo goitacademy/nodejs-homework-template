@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../../model/user");
 const { Unauthorized } = require("http-errors");
-const { bcrypt } = require("bcryptjs");
-// const { Conflict } = require("http-errors");
-// const { HttpCode } = require("../../service/httpcode");
+
 require("dotenv").config();
-// const SECRET_KEY = process.env.JWT_SECRET;
+
 const { SECRET_KEY } = process.env;
-// console.log(SECRET_KEY);
 
 const register = async (req, res, next) => {
   try {
@@ -21,25 +18,16 @@ const register = async (req, res, next) => {
     }
     const newUser = await Users.create(req.body);
     return res.status(201).json({
-      // status: "success",
-      // code: 201,
-      // data: {
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
       },
-      // },
     });
   } catch (error) {
-    if (error.name === "ValidationError" || e.name === "MongoError") {
-      return next({
-        status: 400,
-        message: error.message.replace(/"/g, ""),
-      });
-    }
-    next(error);
+     next(error);
   }
 };
+
 
 const login = async (req, res, next) => {
   try {
@@ -49,20 +37,8 @@ const login = async (req, res, next) => {
       throw new Unauthorized("Email or password is wrong");
     }
     const isValidPassword = await user.validPassword(password);
-    // const isCorrectPassword = bcrypt.compareSync(password, user.password);
-    // if (!isCorrectPassword) {
-    //   throw new Unauthorized(`Password wrong`);
-    // }
-    // if (!user) {
-    //   throw new Unauthorized(`email wrong`);
-    // }
-
     if (!user || !isValidPassword) {
       throw new Unauthorized("Email or password is wrong");
-      // return next({
-      //   status: 401,
-      //   message: "Email or password is wrong",
-      // });
     }
     const id = user._id;
     const payload = { id };
@@ -81,27 +57,13 @@ const login = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
-
-    // console.log(error);
-    // if (error.name === "TypeError") {
-    //   return next({
-    //     status: 400,
-    //     message: "Bad request",
-    //   });
-    // }
   }
 };
-
 const logout = async (req, res, _next) => {
   const id = req.user.id;
   await Users.updateToken(id, null);
   return res.status(204).json({});
 };
-// const logout = async (req, res) => {
-//   const { _id } = req.user;
-//   await Users.findByIdAndUpdate(_id, { token: null });
-//   res.status(204).json();
-// };
 
 const currentUser = async (req, res, next) => {
   const id = req.user.id;
@@ -122,36 +84,9 @@ const currentUser = async (req, res, next) => {
   }
 };
 
-const updateSub = async (req, res, next) => {
-  const id = req.user.id;
-  try {
-    await Users.updateSubUser(id, req.body.subscription);
-    const user = await Users.findById(id);
-    return res.json({
-      status: "success",
-      code: 200,
-      data: {
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      },
-    });
-  } catch (error) {
-    if (error.name === "CastError") {
-      return next({
-        status: 404,
-        message: "Not Found",
-      });
-    }
-    next(error);
-  }
-};
-
 module.exports = {
   register,
   login,
   logout,
   currentUser,
-  updateSub,
 };
