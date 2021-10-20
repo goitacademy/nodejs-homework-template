@@ -14,30 +14,28 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await db.read();
-  const [contact] = contacts.filter((el) => el.id === contactId);
-  return contact;
+  const collection = await getCollection(db, "contacts");
+  const oid = new ObjectId(contactId);
+  const [result] = await collection.find({ _id: oid }).toArray();
+  return result;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await db.read();
-  const index = contacts.findIndex((el) => el.id === contactId);
-  if (index !== -1) {
-    contacts.splice(index, 1);
-    await db.write(contacts);
-    return contacts[index];
-  }
-  return null;
+  const collection = await getCollection(db, "contacts");
+  const oid = new ObjectId(contactId);
+
+  const { value: result } = await collection.findOneAndDelete({ _id: oid });
+  return result;
 };
 
 const addContact = async (body) => {
-  const contact = await db.read();
   const newContact = {
+    favorite: false,
     ...body,
   };
-  contact.push(newContact);
-  await db.write(contact);
-  return newContact;
+  const collection = await getCollection(db, "cats");
+  const result = await collection.insertOne(newContact);
+  return await getContactById(result.insertedId);
 };
 
 const updateContact = async (contactId, body) => {
