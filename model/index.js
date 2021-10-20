@@ -8,7 +8,7 @@ const getCollection = async (db, name) => {
 };
 
 const listContacts = async () => {
-  const collection = await getCollection(db, "cats");
+  const collection = await getCollection(db, "contacts");
   const results = await collection.find({}).toArray();
   return results;
 };
@@ -33,7 +33,6 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contact = await db.read();
   const newContact = {
-    id: crypto.randomUUID(),
     ...body,
   };
   contact.push(newContact);
