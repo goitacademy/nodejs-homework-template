@@ -1,9 +1,16 @@
-const crypto = require("crypto");
-const DB = require("./db");
-const db = new DB("contacts.json");
+const { ObjectId } = require("mongodb");
+const db = require("./db");
+
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
+};
 
 const listContacts = async () => {
-  return await db.read();
+  const collection = await getCollection(db, "cats");
+  const results = await collection.find({}).toArray();
+  return results;
 };
 
 const getContactById = async (contactId) => {
