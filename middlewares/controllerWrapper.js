@@ -1,13 +1,11 @@
-/* eslint-disable eol-last */
-/* eslint-disable indent */
 const controllerWrapper = (ctrl) => {
     return async(req, res, next) => {
         try {
-            await ctrl(req, res, next)
+            await ctrl(req, res, next);
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
-}
+    };
+};
 
-module.exports = controllerWrapper
+module.exports = controllerWrapper;

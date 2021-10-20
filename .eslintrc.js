@@ -1,6 +1,5 @@
 /* eslint-disable quotes */
-/* eslint-disable eol-last */
-/* eslint-disable indent */
+
 module.exports = {
     env: {
         commonjs: true,
@@ -12,7 +11,7 @@ module.exports = {
         ecmaVersion: 12,
     },
     rules: {
-        "comma-dangle": "off",
+        "comma-dangle": "on",
         "space-before-function-paren": "off",
     },
-}
+};

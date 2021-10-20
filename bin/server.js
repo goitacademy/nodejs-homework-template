@@ -1,5 +1,3 @@
-/* eslint-disable indent */
-/* eslint-disable eol-last */
 const mongoose = require('mongoose')
 require('dotenv').config()
 

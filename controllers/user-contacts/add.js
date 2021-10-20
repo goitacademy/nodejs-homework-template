@@ -1,6 +1,3 @@
-/* eslint-disable object-curly-spacing */
-/* eslint-disable eol-last */
-/* eslint-disable indent */
 const { Contact } = require('../../models')
 
 const add = async(req, res) => {

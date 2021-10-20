@@ -1,24 +1,31 @@
 /* eslint-disable new-cap */
-/* eslint-disable indent */
-/* eslint-disable eol-last */
-const express = require('express')
 
-const { controllerWrapper, validation } = require('../../middlewares')
-const { joiSchema, statusJoiSchema } = require('../../models/contact')
-const { contacts: ctrl } = require('../../controllers')
+const express = require("express");
 
-const router = express.Router()
+const { controllerWrapper, validation } = require("../../middlewares");
+const { joiSchema, statusJoiSchema } = require("../../models/contact");
+const { contacts: ctrl } = require("../../controllers");
 
-router.get('/', controllerWrapper(ctrl.listContacts))
+const router = express.Router();
 
-router.get('/:contactId', controllerWrapper(ctrl.getContactById))
+router.get("/", controllerWrapper(ctrl.listContacts));
 
-router.post('/', validation(joiSchema), controllerWrapper(ctrl.addContact))
+router.get("/:contactId", controllerWrapper(ctrl.getContactById));
 
-router.put('/:contactId', validation(joiSchema), controllerWrapper(ctrl.updateContact))
+router.post("/", validation(joiSchema), controllerWrapper(ctrl.addContact));
 
-router.delete('/:contactId', controllerWrapper(ctrl.removeContact))
+router.put(
+    "/:contactId",
+    validation(joiSchema),
+    controllerWrapper(ctrl.updateContact)
+);
 
-router.patch('/:contactId/favorite', validation(statusJoiSchema), controllerWrapper(ctrl.updateStatusContact))
+router.delete("/:contactId", controllerWrapper(ctrl.removeContact));
 
-module.exports = router
+router.patch(
+    "/:contactId/favorite",
+    validation(statusJoiSchema),
+    controllerWrapper(ctrl.updateStatusContact)
+);
+
+module.exports = router;

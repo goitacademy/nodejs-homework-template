@@ -1,5 +1,3 @@
-/* eslint-disable eol-last */
-/* eslint-disable indent */
 const { Contact } = require('../../models')
 
 const getAll = async(req, res) => {
