@@ -11,6 +11,7 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+app.use(express.static('public'));
 app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -26,11 +27,13 @@ app.use((_req, res) => {
     .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
 });
 
-app.use((err, _req, res, _next) => {
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-    status: 'fail',
-    code: HttpCode.INTERNAL_SERVER_ERROR,
-    message: err.message,
+app.use((error, _req, res, _next) => {
+  const statusCode = error.status || HttpCode.INTERNAL_SERVER_ERROR;
+
+  res.status(statusCode).json({
+    status: statusCode === HttpCode.INTERNAL_SERVER_ERROR ? 'Fail' : 'error',
+    code: statusCode,
+    message: error.message,
   });
 });
 
