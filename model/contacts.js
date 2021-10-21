@@ -1,10 +1,12 @@
 const { Schema, model } = require("mongoose");
+const { ValidContactName } = require("../config/constant");
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "Set name for contact"],
+      minLength: ValidContactName.MIN_NAME_LENGTH,
     },
     email: {
       type: String,

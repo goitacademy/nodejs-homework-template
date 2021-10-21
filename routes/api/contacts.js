@@ -11,28 +11,24 @@ const {
 
 const {
   validateContact,
-  // validateId,
-  // validateUpdateContact,
+  validateId,
+  validateUpdateContact,
+  validateFavoriteStatus,
 } = require("../validation");
 
 router.get("/", getContacts);
 
-router.get("/:contactId", getContact);
+router.get("/:contactId", validateId, getContact);
 
 router.post("/", validateContact, createContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", validateId, deleteContact);
 
-router.put(
-  "/:contactId",
-  // validateId,
-  // validateUpdateContact,
-  updateContact
-);
+router.put("/:contactId", [validateId, validateUpdateContact], updateContact);
 
 router.patch(
   "/:contactId/favorite/",
-  // validateUpdateContact,
+  [validateId, validateFavoriteStatus],
   updateFavoriteContact
 );
 
