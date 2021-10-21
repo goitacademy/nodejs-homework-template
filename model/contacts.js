@@ -1,4 +1,4 @@
-const { Contact } = require("../service/schemas");
+const { Contact } = require("../schemas/contacts");
 const listContacts = async () => {
   const data = await Contact.find({});
   return data;
@@ -14,7 +14,7 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-   const data = await Contact.findByIdAndUpdate(
+  const data = await Contact.findByIdAndUpdate(
     { _id: contactId },
     { ...body },
     { new: true }
