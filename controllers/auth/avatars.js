@@ -1,13 +1,15 @@
 const path = require('path');
-const fs = require('fs/promises');
+const fs = require('fs').promises;
 const Jimp = require('jimp');
 
 const { User } = require("../../models");
 const { sendSuccessRes } = require('../../helpers');
-const uploadDir = path.join(__dirname, '../../', "public");
+
+const uploadDir = path.join(__dirname, '../../', 'public');
 
 const avatars = async (req, res) => {
     const { originalname, path: tempDir } = req.file;
+
     try {
         const [extension] = originalname.split('.').reverse();
         const newImageName = `user_${req.user._id}_avatar.${extension}`;
@@ -19,7 +21,7 @@ const avatars = async (req, res) => {
         fs.unlink(tempDir);
 
         const avatar = path.join('/avatars', newImageName);
-
+        console.log(avatar)
         const { avatarURL } = await User.findByIdAndUpdate(
             req.user._id,
             {
@@ -27,11 +29,13 @@ const avatars = async (req, res) => {
             },
             { new: true },
         )
+
         sendSuccessRes(res, { avatarURL });
     } catch (error) {
         fs.unlink(tempDir);
         console.log(error);
     }
+
 }
 
 module.exports = avatars;
