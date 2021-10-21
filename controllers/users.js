@@ -60,8 +60,10 @@ const logout = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const { name, subscription } = req.user;
-  return res.status(200).json({ message: "Success", name, subscription });
+  const { name, email, subscription } = req.user;
+  return res
+    .status(200)
+    .json({ message: "Success", name, email, subscription });
 };
 
 module.exports = {
