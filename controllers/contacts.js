@@ -3,7 +3,10 @@ const { NotFound } = require('http-errors');
 const { Contact } = require('../model/contacts');
 
 const getAll = async (req, res, next) => {
-  const contacts = await Contact.find({});
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const { _id } = req.user;
+  const contacts = await Contact.find({ owner: _id }, 'name favorite phone email', { skip, limit: +limit }).populate('owner', 'email');
   res.json({
     status: 'success',
     code: 200,
@@ -28,7 +31,11 @@ const getById = async(req, res, next) => {
 }
 
 const add = async (req, res, next) => {
-  const result = await Contact.create(req.body)
+  const { _id } = req.user;
+  const contact = new Contact(req.body);
+  contact.owner = _id;
+
+  const result = await Contact.create(contact)
   res.json({
     status: 'success',
     code: 201,
