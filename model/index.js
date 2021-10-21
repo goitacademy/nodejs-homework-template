@@ -33,22 +33,21 @@ const addContact = async (body) => {
     favorite: false,
     ...body,
   };
-  const collection = await getCollection(db, "cats");
+  const collection = await getCollection(db, "contacts");
   const result = await collection.insertOne(newContact);
   return await getContactById(result.insertedId);
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await db.read();
-  const index = contacts.findIndex((el) => el.id === contactId);
-  if (index !== -1) {
-    contacts[index] = { ...contacts[index], ...body };
-    await db.write(contacts);
-    return contacts[index];
-  }
-  return null;
+  const collection = await getCollection(db, "contacts");
+  const oid = new ObjectId(contactId);
+  const { value: result } = await collection.findOneAndUpdate(
+    { _id: oid },
+    { $set: body },
+    { returnDocument: "after" }
+  );
+  return result;
 };
-
 module.exports = {
   listContacts,
   getContactById,
