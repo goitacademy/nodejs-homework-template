@@ -5,9 +5,17 @@ const listContacts = async (userId, query) => {
   //   path: "owner",
   //   select: "name email ",
   // });
-  const { limit = 5, offset = 5 } = query;
+  const { sortBy, sortByDesc, limit = 5, offset = 5 } = query;
   const searchOptions = { owner: userId };
-  const results = await Contact.paginate(searchOptions, { limit, offset });
+  const results = await Contact.paginate(searchOptions, {
+    limit,
+    offset,
+    sort: {
+      ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
+      ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
+    },
+    populate: { path: "owner", select: "name email " },
+  });
   const { docs: contacts } = results;
   delete results.docs;
   return { ...results, contacts };
