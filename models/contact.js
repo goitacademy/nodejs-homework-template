@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const mongoosePaginate = require('mongoose-paginate-v2')
+
 const Joi = require('joi');
 
 const contactSchema = Schema({
@@ -38,8 +39,10 @@ contactSchema.plugin(mongoosePaginate);
 
 const Contact = model("contact", contactSchema);
 
+
 module.exports = {
   joiSchema,
   updateFavoriteJoiSchema,
   Contact
 };
+

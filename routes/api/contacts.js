@@ -18,3 +18,4 @@ router.put('/:contactId', authenticate, validation(joiSchema), controllerWrapper
 router.patch("/:contactId", authenticate, validation(updateFavoriteJoiSchema), controllerWrapper(ctrl.updateFavoriteContact));
 
 module.exports = router;
+
