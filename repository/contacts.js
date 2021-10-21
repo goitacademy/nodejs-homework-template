@@ -5,8 +5,18 @@ const listContacts = async (userId, query) => {
   //   path: "owner",
   //   select: "name email ",
   // });
-  const { sortBy, sortByDesc, limit = 5, offset = 5 } = query;
+  const {
+    sortBy,
+    sortByDesc,
+    filter,
+    favorite = null,
+    limit = 5,
+    offset = 5,
+  } = query;
   const searchOptions = { owner: userId };
+  if (favorite !== null) {
+    searchOptions.favorite = favorite;
+  }
   const results = await Contact.paginate(searchOptions, {
     limit,
     offset,
@@ -14,6 +24,7 @@ const listContacts = async (userId, query) => {
       ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
       ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
     },
+    select: filter ? filter.split("|").join(" ") : "",
     populate: { path: "owner", select: "name email " },
   });
   const { docs: contacts } = results;
