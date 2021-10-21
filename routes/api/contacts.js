@@ -4,7 +4,7 @@ const Contacts = require("../../repository/contacts");
 
 const {
   validateContact,
-  validateId,
+  // validateId,
   validateUpdateContact,
 } = require("../validation");
 
@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", validateId, async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
     const contact = await Contacts.getContactById(req.params.contactId);
     if (contact) {
@@ -42,7 +42,7 @@ router.post("/", validateContact, async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", validateId, async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.contactId);
     if (contact) {
@@ -60,8 +60,8 @@ router.delete("/:contactId", validateId, async (req, res, next) => {
 
 router.put(
   "/:contactId",
-  validateId,
-  validateUpdateContact,
+  // validateId,
+  // validateUpdateContact,
   async (req, res, next) => {
     try {
       const contact = await Contacts.updateContact(
@@ -83,12 +83,14 @@ router.put(
 );
 
 router.patch(
-  "/:id/vaccinated/",
-  validateId,
-  validateUpdateContact,
+  "/:contactId/favorite/",
+  // validateUpdateContact,
   async (req, res, next) => {
     try {
-      const contact = await Contacts.updateContact(req.params.id, req.body);
+      const contact = await Contacts.updateContact(
+        req.params.contactId,
+        req.body
+      );
       if (contact) {
         return res
           .status(200)
