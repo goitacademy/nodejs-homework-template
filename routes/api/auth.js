@@ -15,12 +15,15 @@ router.post(
     validation(joiSchema),
     controllerWrapper(ctrl.signup)
 );
+
 router.post(
     "/users/login",
     validation(joiSchema),
     controllerWrapper(ctrl.login)
 );
+
 router.get("/users/current", authenticate, controllerWrapper(ctrl.getUser));
+
 router.get("/users/logout", authenticate, controllerWrapper(ctrl.logout));
 
 module.exports = router;
