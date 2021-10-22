@@ -19,16 +19,34 @@ const getContactById = async (contactId) => {
     const data = await fs.readFile(contactsPath)
 
     const structuredData = JSON.parse(data.toString())
-    const [contact] = structuredData.filter((el) => {
+    const contact = structuredData.find((el) => {
       return el.id === Number(contactId)
     })
-    return ({ contact })
+    return (contact)
   } catch (err) {
     console.log(err.message)
   }
 }
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {
+  try {
+    const data = await fs.readFile(contactsPath)
+
+    const structuredData = JSON.parse(data.toString())
+    const target = structuredData.find((el) => {
+      return el.id === Number(contactId)
+    })
+    if (target) {
+      const newData = structuredData.filter((el) => {
+        return el.id !== Number(contactId)
+      })
+      await fs.writeFile(contactsPath, JSON.stringify(newData, null, 2))
+      return (target)
+    }
+  } catch (err) {
+    console.log(err.message)
+  }
+}
 
 const addContact = async (body) => {
   try {
@@ -41,7 +59,7 @@ const addContact = async (body) => {
 
     structuredData.push(newContact)
 
-    fs.writeFile(contactsPath, JSON.stringify(structuredData, null, 2))
+    await fs.writeFile(contactsPath, JSON.stringify(structuredData, null, 2))
 
     return (newContact)
   } catch (err) {
@@ -49,7 +67,27 @@ const addContact = async (body) => {
   }
 }
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contactsPath)
+
+    const structuredData = JSON.parse(data.toString())
+
+    const target = structuredData.find((el) => {
+      return el.id === Number(contactId)
+    })
+    if (target) {
+      const renewedContact = { ...target, ...body }
+      const newData = structuredData.map(contact => {
+        return (contact.id === Number(contactId) ? renewedContact : contact)
+      })
+      await fs.writeFile(contactsPath, JSON.stringify(newData, null, 2))
+      return (renewedContact)
+    }
+  } catch (err) {
+    console.log(err.message)
+  }
+}
 
 module.exports = {
   listContacts,
