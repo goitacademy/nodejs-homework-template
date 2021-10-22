@@ -49,7 +49,7 @@ Routes description
 - POST api/contacts
   add
   {
-  "name": "Adam Smith"
+  "name": "Adam Smith",
   "email": "123@ukr.net",
   "phone": "098-324-42-42"
   }
