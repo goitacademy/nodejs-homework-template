@@ -11,3 +11,7 @@ exports.updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string(),
 }).min(1);
+
+exports.updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});

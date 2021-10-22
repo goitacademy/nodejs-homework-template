@@ -1,29 +1,65 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const logger = require("morgan");
 const cors = require("cors");
+const contactRouter = require("./contact/contact.routers");
 
-const contactsRouter = require("./routes/api/contacts");
+dotenv.config();
 
-const app = express();
+const PORT = process.env.PORT || 3030;
+const MONGO_URL = process.env.MONGO_URL;
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+start();
 
-app.use(logger(formatsLogger));
-app.use(cors());
-app.use(express.json());
+function start() {
+  const app = initServer();
+  connectMiddlewares(app);
+  declareRoutes(app);
+  connectToDb();
+  initErrorHandling(app);
+  listen(app);
+}
+function initServer() {
+  return express();
+}
 
-app.use("/api/contacts", contactsRouter);
+function connectMiddlewares(app) {
+  const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+  app.use(logger(formatsLogger));
+  app.use(cors());
+  app.use(express.json());
+}
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
-});
+function declareRoutes(app) {
+  app.use("/contacts", contactRouter);
+}
 
-app.use((err, req, res, next) => {
-  res.status(err.status).json({ message: err.message });
-});
+async function connectToDb() {
+  try {
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Database connection successful");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+function initErrorHandling(app) {
+  app.use((err, req, res, next) => {
+    const statusCode = err.status || 500;
+    return res.status(statusCode).send({
+      name: err.name,
+      status: statusCode,
+      message: err.message,
+    });
+  });
+}
 
-const PORT = process.env.PORT || 3002;
-
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`);
-});
+function listen(app) {
+  app.listen(PORT, () => {
+    console.log("Server is listeting on port", PORT);
+  });
+}

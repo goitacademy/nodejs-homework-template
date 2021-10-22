@@ -1,12 +1,10 @@
-exports.validate = (schema, isUpdate = false, reqPart = "body") => {
+exports.validate = (schema, reqPart = "body") => {
   return (req, res, next) => {
     const validationResult = schema.validate(req[reqPart], {
       stripUnknown: true,
     });
     if (validationResult.error) {
-      return res.status(400).send({
-        message: isUpdate ? "missing fields" : "missing required name field",
-      });
+      return res.status(404).send(validationResult.error);
     }
     req.body = validationResult.value;
 
