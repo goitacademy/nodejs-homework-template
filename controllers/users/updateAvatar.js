@@ -8,6 +8,7 @@ const updateAvatar = async(req, res, next) => {
     const [extension] = originalname.split(".").reverse();
     const filename = `${_id}.${extension}`;
     const uploadDir = path.join(__dirname, "../../", "public\\avatars", filename);
+
     try {
         await fs.rename(tempDir, uploadDir);
         const image = path.join("avatars", filename);
