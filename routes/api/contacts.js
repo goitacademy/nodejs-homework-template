@@ -1,5 +1,3 @@
-/* eslint-disable new-cap */
-
 const express = require("express");
 
 const { controllerWrapper, validation } = require("../../middlewares");

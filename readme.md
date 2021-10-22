@@ -1,31 +1,66 @@
-## GoIT Node.js Course Template Homework
+//auth
 
-Выполните форк этого репозитория для выполнения домашних заданий (2-6)
-Форк создаст репозиторий на вашем http://github.com
+- POST api/auth/users/signup
+  {
+  "email": "123@ukr.net",
+  "password": "1234567"
+  }
 
-Добавьте ментора в коллаборацию
+- POST api/auth/users/login
+  {
+  "email": "123@ukr.net",
+  "password": "1234567"
+  }
 
-Для каждой домашней работы создавайте свою ветку.
+- GET api/auth/users/current
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+- GET api/auth/users/logout
 
-Каждая новая ветка для дз должна делаться с master
+//users
 
-После того как вы закончили выполнять домашнее задание в своей ветке, необходимо сделать пулл-реквест (PR). Потом добавить ментора для ревью кода. Только после того как ментор заапрувит PR, вы можете выполнить мердж ветки с домашним заданием в мастер.
+- PATCH api/users
+  {
+  "subscription": ["starter", "pro", "business"]
+  }
 
-Внимательно читайте комментарии ментора. Исправьте замечания и сделайте коммит в ветке с домашним заданием. Изменения подтянуться в PR автоматически после того как вы отправите коммит с исправлениями на github
-После исправления снова добавьте ментора на ревью кода.
+- PATCH api/users/avatars
+  form-data: avatar
 
-- При сдаче домашней работы есть ссылка на PR
-- JS-код чистый и понятный, для форматирования используется Prettier
+//usercontacts
 
-### Команды:
+- GET api/usercontacts
 
-- `npm start` &mdash; старт сервера в режиме production
-- `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
-- `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
-- `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
+- POST api/usercontacts
+  add
+  {
+  "name": "Adam Smith"
+  "email": "123@ukr.net",
+  "phone": "098-324-42-42"
+  }
+
+//contacts
+
+- GET api/contacts
+
+- GET api/contacts/:contactId
+
+- POST api/contacts
+  add
+  {
+  "name": "Adam Smith"
+  "email": "123@ukr.net",
+  "phone": "098-324-42-42"
+  }
+
+- PUT api/contacts/:contactId
+  update
+  {
+  "name": "Piter Lewis"
+  }
+
+- DELETE api/contacts/:contactId
+- PATCH api/contacts/:contactId/favorite
+  update status
+  {
+  "favorite": true/false
+  }

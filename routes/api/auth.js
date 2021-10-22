@@ -5,7 +5,7 @@ const {
     validation,
     authenticate,
 } = require("../../middlewares");
-const { joiSchema, joiSubscriptionSchema } = require("../../models/user");
+const { joiSchema } = require("../../models/user");
 const { auth: ctrl } = require("../../controllers");
 
 const router = express.Router();
@@ -21,12 +21,6 @@ router.post(
     controllerWrapper(ctrl.login)
 );
 router.get("/users/current", authenticate, controllerWrapper(ctrl.getUser));
-router.patch(
-    "/users",
-    authenticate,
-    validation(joiSubscriptionSchema),
-    controllerWrapper(ctrl.updateSubscription)
-);
 router.get("/users/logout", authenticate, controllerWrapper(ctrl.logout));
 
 module.exports = router;
