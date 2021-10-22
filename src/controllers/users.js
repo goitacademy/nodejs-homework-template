@@ -1,35 +1,42 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../../repository/users");
+// const fs = require("fs/promises");
+const path = require("path");
+const mkdirp = require("mkdirp");
 const { HttpCode } = require("../../config/constants");
+const UploadService = require("../../service/file-upload");
+// const UploadService = require("../../service/cloud-upload");
+
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const signup = async (req, res, next) => {
-  const { email, password, subscription } = req.body;
-  const user = await Users.findByEmail(email);
+  const { name, email, password, subscription } = req.body
+  const user = await Users.findByEmail(email)
   if (user) {
     return res.status(HttpCode.CONFLICT).json({
-      status: "error",
+      status: 'error',
       code: HttpCode.CONFLICT,
-      message: "Email in use",
-    });
+      message: 'Email is already exist',
+    })
   }
-
   try {
-    const newUser = await Users.create({ email, password, subscription });
+    const newUser = await Users.create({ name, email, password, subscription })
     return res.status(HttpCode.CREATED).json({
-      status: "success",
+      status: 'success',
       code: HttpCode.CREATED,
       data: {
         id: newUser.id,
+        name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatar,
       },
-    });
-  } catch (error) {
-    next(error);
+    })
+  } catch (e) {
+    next(e)
   }
-};
+}
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -62,8 +69,55 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
+// ! Local Storage
+const uploadAvatar = async (req, res, next) => {
+  const id = String(req.user._id);
+  const file = req.file;
+  const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+  const destination = path.join(AVATAR_OF_USERS, id);
+  await mkdirp(destination);
+
+  const uploadService = new UploadService(destination);
+  const avatarUrl = await uploadService.save(file, id);
+  await Users.updateAvatar(id, avatarUrl);
+
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    data: { avatar: avatarUrl },
+  });
+};
+
+// //! Cloud Storage
+// const uploadAvatar = async (req, res, next) => {
+//   const { id, idUserCloud } = req.user
+//   const file = req.file
+
+//   const destination = 'Avatars'
+//   const uploadService = new UploadService(destination)
+//   const { avatarUrl, returnIdUserCloud } = await uploadService.save(
+//     file.path,
+//     idUserCloud,
+//   )
+
+//   await Users.updateAvatar(id, avatarUrl, returnIdUserCloud)
+//   try {
+//     await fs.unlink(file.path)
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+//   return res.status(HttpCode.OK).json({
+//     status: 'success',
+//     code: HttpCode.OK,
+//     date: {
+//       avatar: avatarUrl,
+//     },
+//   })
+// }
+
 module.exports = {
   signup,
   login,
   logout,
+  uploadAvatar,
 };
