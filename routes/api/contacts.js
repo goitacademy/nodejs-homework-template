@@ -82,10 +82,55 @@ router.delete('/:contactId', async (req, res, next) => {
 router.patch('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
+    const validatedFields = await contactSchema.updateContact.validate(
+      req.body,
+      {
+        abortEarly: false,
+      },
+    )
+    if (!Object.keys(validatedFields).length) {
+      const error = new Error('Incorrect field(s)')
+      error.status = 400
+      throw error
+    }
+    const result = await contactsOperations.updateContact(contactId, req.body)
+    if (!result) {
+      const error = new Error('Not found')
+      error.status = 404
+      throw error
+    }
+    res.json({
+      status: 200,
+      data: {
+        result,
+      },
+    })
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const { name, errors } = error
+      const err = new Error(`${name}: ${errors.join(', ')}`)
+      err.status = 400
+      throw err
+    }
+    next(error)
+  }
+})
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const { contactId } = req.params
+    if (Object.keys(req.body).length === 0) {
+      const error = new Error('missing field favorite')
+      error.status = 400
+      throw error
+    }
     await contactSchema.updateContact.validate(req.body, {
       abortEarly: false,
     })
-    const result = await contactsOperations.updateContact(contactId, req.body)
+    const result = await contactsOperations.updateStatusContact(
+      contactId,
+      req.body,
+    )
     if (!result) {
       const error = new Error('Not found')
       error.status = 404

@@ -1,66 +1,59 @@
-const fs = require('fs/promises')
-const path = require('path')
-const { nanoid } = require('nanoid')
-
-const contactsPath = path.join(__dirname, 'contacts.json')
-
-async function updateContactsDb(data) {
-  await fs.writeFile(contactsPath, JSON.stringify(data))
-}
+const { Contact } = require('./contact')
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, 'utf-8')
-  return JSON.parse(data)
+  const data = await Contact.find({}, '_id name phone email favorite')
+  return data
 }
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts()
-  const contact = contacts.find((el) => el.id.toString() === contactId)
-  if (!contact) {
+  try {
+    const contact = await Contact.findById(
+      contactId,
+      '_id name phone email favorite',
+    )
+    return contact
+  } catch (error) {
     return null
   }
-  return contact
 }
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts()
-  const indexToRemove = contacts.findIndex(
-    (el) => el.id.toString() === contactId,
-  )
-  if (indexToRemove < 0) {
+  try {
+    const contactToRemove = Contact.findByIdAndDelete(contactId)
+    return contactToRemove
+  } catch (error) {
     return null
   }
-  const contact = contacts[indexToRemove]
-  contacts.splice(indexToRemove, 1)
-  await updateContactsDb(contacts)
-  return contact
 }
 
 const addContact = async (body) => {
-  const contacts = await listContacts()
-  const id = nanoid(4)
-  const newContact = {
-    ...body,
-    id,
-  }
-  contacts.push(newContact)
-  await updateContactsDb(contacts)
+  const newContact = await Contact.create(body, '_id name phone email favorite')
   return newContact
 }
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts()
-  const contact = contacts.find((el) => el.id.toString() === contactId)
-  if (!contact) {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    })
+    return updatedContact
+  } catch (error) {
     return null
   }
-  const updatedContact = {
-    ...contact,
-    ...body,
+}
+
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const { favorite } = body
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true },
+    )
+    return updatedContact
+  } catch (error) {
+    return null
   }
-  contacts.push(updatedContact)
-  await updateContactsDb(contacts)
-  return updatedContact
 }
 
 module.exports = {
@@ -69,4 +62,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 }

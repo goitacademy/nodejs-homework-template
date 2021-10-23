@@ -6,6 +6,7 @@ const addContact = yup.object().shape({
   name: yup.string().min(2).matches(nameRegEx).required(),
   email: yup.string().email().required(),
   phone: yup.string().matches(phoneRegEx).required(),
+  favorite: yup.boolean().default(false),
 })
 
 const updateContact = yup
@@ -15,6 +16,7 @@ const updateContact = yup
     name: yup.string().min(2).matches(nameRegEx),
     email: yup.string().email(),
     phone: yup.string().matches(phoneRegEx),
+    favorite: yup.boolean().default(false),
   })
 
 module.exports = { addContact, updateContact }
