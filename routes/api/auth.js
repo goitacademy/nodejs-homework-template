@@ -6,6 +6,7 @@ const {
   validation,
   controllerWrapper,
   aunthenticate,
+  upload,
 } = require('../../middlewares')
 const { joiUserSchema } = require('../../models/user')
 
@@ -34,6 +35,12 @@ router.get(
   '/contacts?',
   controllerWrapper(aunthenticate),
   controllerWrapper(ctrl.favorite),
+)
+router.patch(
+  '/users/avatars',
+  controllerWrapper(aunthenticate),
+  upload.single('avatar'),
+  controllerWrapper(ctrl.updateAvatars),
 )
 
 module.exports = router
