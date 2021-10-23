@@ -8,11 +8,13 @@ const router = express.Router();
 
 router.get("/", authenticate, validation(joiSchema), async (req, res, next) => {
   try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
     const { _id } = req.user;
-    const result = await Contact.find(
-      { owner: _id },
-      "id name email phone"
-    ).populate("owner", "email");
+    const result = await Contact.find({ owner: _id }, "", {
+      skip: +skip,
+      limit: +limit,
+    }).populate("owner", "email");
     res.json({
       status: "success",
       code: 200,
