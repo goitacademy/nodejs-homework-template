@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { validatePostPutContact, validatePatchContact } = require('../../middlewares/validation')
 const { listContacts, getContactById, addContact, updateContact, removeContact } = require('../../model/index')
 
 router.get('/', async (req, res, next) => {
@@ -36,7 +37,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validatePostPutContact, async (req, res, next) => {
   const { name, email, phone } = req.body
   try {
     const data = await addContact({ name, email, phone })
@@ -71,7 +72,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', validatePatchContact, async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ status: 'bad request' })
   }
@@ -93,7 +94,7 @@ router.patch('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validatePostPutContact, async (req, res, next) => {
   const { contactId } = req.params
   try {
     const data = await updateContact(contactId, req.body)
