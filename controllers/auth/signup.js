@@ -22,7 +22,8 @@ const signup = async (req, res) => {
     data: {
       user: {
         email: newUser.email,
-        subscription: 'starter'
+        subscription: 'starter',
+        avatarURL: newUser.avatarURL
       }
     }
   });

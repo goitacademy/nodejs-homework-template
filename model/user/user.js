@@ -25,7 +25,7 @@ const userSchema = Schema({
   },
   avatarURL: {
     type: String,
-
+    required: true
   }
 
 }, { versionKey: false, timestamps: true });
@@ -39,7 +39,7 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 userSchema.methods.setAvatar = function (email) {
-  this.avatarURL = gravatar.url(email, { s: '200', r: 'pg', d: '404' });
+  this.avatarURL = gravatar.url(`${email}`);
 }
 
 const joiSchema = Joi.object({
