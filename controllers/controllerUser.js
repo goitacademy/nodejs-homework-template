@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
-const mkdirp = require('mkdirp');
-const path = require('path');
+// const mkdirp = require('mkdirp');
+// const path = require('path');
+// const UploadService = require('../service/file-upload');
+const fs = require('fs/promises');
 const Users = require('../repository/users');
-const UploadService = require('../service/file-upload');
+const UploadService = require('../service/cloud-upload');
 const { HttpCode } = require('../config/constants');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -116,24 +118,51 @@ const patchUser = async (req, res, _next) => {
   }
 };
 
+// Local storage
+// const patchUploadAvatars = async (req, res, _next) => {
+//   const userId = String(req.user._id);
+//   const file = req.file;
+//   const AVATARS = process.env.AVATARS_OF_USER;
+//   const destination = path.join(AVATARS, userId);
+
+//   await mkdirp(destination);
+
+//   const uploadService = new UploadService(destination);
+//   const avatarURL = await uploadService.save(file, userId);
+
+//   await Users.updateAvatar(userId, avatarURL);
+
+//   console.log(uploadService);
+
+//   return res.status(HttpCode.OK).json({
+//     status: HttpCode.OK,
+//     avatarURL,
+//   });
+// };
+
+// Cloud storage
 const patchUploadAvatars = async (req, res, _next) => {
-  const userId = String(req.user._id);
+  const { id, idUserCloud } = req.user;
   const file = req.file;
-  const AVATARS = process.env.AVATARS_OF_USER;
-  const destination = path.join(AVATARS, userId);
-
-  await mkdirp(destination);
-
+  const destination = 'Avatars';
   const uploadService = new UploadService(destination);
-  const avatarURL = await uploadService.save(file, userId);
+  const { avatarURL, returnIdUserCloud } = await uploadService.save(
+    file.path,
+    idUserCloud,
+  );
 
-  await Users.updateAvatar(userId, avatarURL);
+  await Users.updateAvatar(id, avatarURL, returnIdUserCloud);
 
-  console.log(uploadService);
+  try {
+    await fs.unlink(file.path);
+  } catch (error) {
+    console.log(error.message);
+  }
 
   return res.status(HttpCode.OK).json({
     status: HttpCode.OK,
     avatarURL,
+    idUserCloud: returnIdUserCloud,
   });
 };
 
