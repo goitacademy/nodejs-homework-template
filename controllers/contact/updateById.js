@@ -1,5 +1,5 @@
 const { NotFound } = require('http-errors')
-const { Contact } = require('../models')
+const { Contact } = require('../../models')
 
 const updateStatusContact = (contactId, body) => {
   return Contact.findByIdAndUpdate(contactId, body, { new: true })
