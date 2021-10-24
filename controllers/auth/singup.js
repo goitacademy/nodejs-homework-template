@@ -1,11 +1,12 @@
-const { User } = require('../../models')
 const bcrypt = require('bcryptjs')
 const { Conflict } = require('http-errors')
 const gravatar = require('gravatar')
 const fs = require('fs/promises')
 const path = require('path')
 
-const avatarDir = path.join(__dirname, '../../', 'public/avatars')
+const { User } = require('../../models')
+
+const avatarsDir = path.join(__dirname, '../../', 'public/avatars')
 
 const singup = async (req, res, next) => {
   const { email, password } = req.body
@@ -19,9 +20,9 @@ const singup = async (req, res, next) => {
   const result = await User.create({
     email,
     password: hashPassword,
-    avatarURL: defaultAvatar
+    avatarURL: defaultAvatar,
   })
-  const dirPath = path.join(avatarDir, `${result._id}`)
+  const dirPath = path.join(avatarsDir, `${result._id}`)
   await fs.mkdir(dirPath)
 
   res.status(201).json({
