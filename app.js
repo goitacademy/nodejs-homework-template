@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const contactsRouter = require('./routes/contacts/contacts');
 const usersRouter = require('./routes/users/users');
-const { HttpCode } = require('./config/constants');
+const { HttpCode, Limits } = require('./config/constants');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.static('public'));
 app.use(helmet());
 app.get('env') !== 'test' && app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json({ limit: 10000 }));
+app.use(express.json({ limit: Limits.LIMITS_EXPRESS_JSON }));
 app.use(boolParser());
 
 app.use('/api/users', usersRouter);
