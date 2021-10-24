@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../../model/user");
 const { Unauthorized } = require("http-errors");
+const fs = require("fs/promises");
+const path = require("path");
+const Jimp = require("jimp");
 
+//const { User } = require("../../models");
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
@@ -83,9 +87,56 @@ const currentUser = async (req, res, next) => {
   }
 };
 
+
+
+
+
+const avatarDir = path.join(__dirname, "../../public/avatars");
+const updateAvatar = async (req, res) => {
+   const { path: tempPath, originalname } = req.file;
+
+  try {
+    const { _id } = req.user;
+   
+
+    const newName = `${_id.toString()}${originalname}`;
+    const uploadPath = path.join(avatarDir, newName);
+    const file = await Jimp.read(tempPath);
+
+    await file.resize(250, 250).write(tempPath);
+    await fs.rename(tempPath, uploadPath);
+    const avatarURL = `/avatars/${newName}`;
+
+    await Users.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result: avatarURL,
+      },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   register,
   login,
   logout,
   currentUser,
+  updateAvatar,
 };
