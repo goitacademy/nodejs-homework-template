@@ -24,10 +24,9 @@ const register = async (req, res, next) => {
       },
     });
   } catch (error) {
-     next(error);
+    next(error);
   }
 };
-
 
 const login = async (req, res, next) => {
   try {
