@@ -87,17 +87,33 @@ const currentUser = async (req, res, next) => {
   }
 };
 
-
-
-
+// const updateAvatar = async (req, res) => {
+//   const { _id } = req.user;
+//   const { path: tempDir, originalname } = req.file;
+//   const [extension] = originalname.split(".").reverse();
+//   const filename = `${_id}.${extension}`;
+//   const uploadDir = path.join(__dirname, "../../", "public\\avatars", filename);
+//   try {
+//     await fs.rename(tempDir, uploadDir);
+//     const image = path.join("avatars", filename);
+//     await Users.findByIdAndUpdate(_id, { avatarURL: image });
+//     res.json({
+//       status: "success",
+//       code: 201,
+//       message: "Update avatar success",
+//     });
+//   } catch (error) {
+//     await fs.unlink(tempDir);
+//     next(error);
+//   }
+// };
 
 const avatarDir = path.join(__dirname, "../../public/avatars");
 const updateAvatar = async (req, res) => {
-   const { path: tempPath, originalname } = req.file;
+  const { path: tempPath, originalname } = req.file;
 
   try {
     const { _id } = req.user;
-   
 
     const newName = `${_id.toString()}${originalname}`;
     const uploadPath = path.join(avatarDir, newName);
@@ -117,21 +133,10 @@ const updateAvatar = async (req, res) => {
       },
     });
   } catch (error) {
-    throw new Error(error);
+    // throw new Error(error);
+    next(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
   register,
