@@ -21,9 +21,9 @@ const joiSchemaAuth = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(7).required(),
 
-  // subscription: Joi.string() /* .required() */,
-  // token: Joi.string() /* .required() */,
-  // avatar: Joi.string(),
+  subscription: Joi.string() /* .required() */,
+  token: Joi.string() /* .required() */,
+  avatarURL: Joi.string(),
 });
 
 module.exports.validateContact = (req, _res, next) => {
