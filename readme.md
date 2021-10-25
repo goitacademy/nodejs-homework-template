@@ -24,7 +24,7 @@ This is an application for recording personal contacts. In the application you n
 
 ---
 
-<!-- 1. Install all dependencies ```console npm i```
+1. Install all dependencies ```console npm i```
 2. Create **.env** folder
     * URI_DB = **"mongodb+srv://"name user":"password"@"name folder DB".mongodb.net/test"**
     * JWT_SECRET_KEY =  **"your key"**
@@ -32,7 +32,7 @@ This is an application for recording personal contacts. In the application you n
     * CLOUD_API_KEY = **"your key"**
     * CLOUD_API_SECRET = **"your secret"**
 3. Launch the application ```console npm run start:dev```
-4. Go to **[Postman](https://www.postman.com/)** -->
+4. Go to **[Postman](https://www.postman.com/)** 
   
 ---
 
