@@ -23,8 +23,16 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const Limits = {
+  REGISTRATION_AND_ENTRANCE_LIMITS: 15 * 60 * 1000,
+  MAX_REGISTRATION_AND_ENTRANCE_LIMITS: 50,
+  LIMITS_FIELD_SIZE: 2000000,
+  LIMITS_EXPRESS_JSON: 10000,
+};
+
 module.exports = {
   ValidateContactName,
   Subscription,
   HttpCode,
+  Limits,
 };

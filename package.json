@@ -6,23 +6,30 @@
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "cross-env NODE_ENV=test jest --no-cache --verbose",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.27.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
     "express": "4.17.1",
     "express-query-boolean": "^2.0.0",
     "express-rate-limit": "^5.5.0",
+    "gravatar": "^1.8.2",
     "helmet": "^4.6.0",
+    "jimp": "^0.16.1",
     "joi": "^17.4.2",
     "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
+    "mkdirp": "^1.0.4",
     "mongoose": "^6.0.8",
     "mongoose-paginate-v2": "^1.4.2",
     "morgan": "1.10.0",
+    "multer": "^1.4.3",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0"
   },
@@ -33,6 +40,8 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "jest": "^27.3.1",
+    "nodemon": "2.0.7",
+    "supertest": "^6.1.6"
   }
 }
