@@ -24,6 +24,10 @@ router.post('/', async (req, res, next) => {
     return res.status(400).json({ message: 'missing required name field' });
   }
 
+  if ('error' in data) {
+    return res.status(400).json({ message: data.error });
+  }
+
   res.status(201).json(data);
 });
 

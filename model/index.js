@@ -1,7 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-// const contacts = require('./contacts.json');
-const Joi = require('joi');
+const joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const {
   isPhoneInContacts,
@@ -11,44 +10,53 @@ const {
   searchContactById,
   editContact,
 } = require('./helpers.js');
-const contactsPath = path.join(__dirname, './contacts.json');
 
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+const schema = joi.object({
+  name: joi.string().alphanum().min(3).max(30).required(),
 
-  email: Joi.string().email({ minDomainSegments: 2 }),
+  email: joi.string().email({ minDomainSegments: 2 }).required(),
 
-  phone: Joi.string(),
+  phone: joi
+    .string()
+    .pattern(/^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/)
+    .required(),
 });
 
-const listContacts = () => readData(contactsPath);
+const listContacts = () => readData();
 
 const getContactById = async (contactId) => {
+  const contacts = await listContacts();
   return await contacts.find(({ id }) => id.toString() === contactId.toString());
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await readData(contactsPath);
-  const removedContact = await searchContactById(contacts, contactId);
+  const contacts = await listContacts();
+  const removedContact = await getContactById(contactId);
 
   if (!removedContact) {
     return null;
   }
-  const refreshedContacts = contactsArr.filter(({ id }) => id.toString() !== contactId.toString());
+  const refreshedContacts = contacts.filter(({ id }) => id.toString() !== contactId.toString());
 
-  await writeData(contactsPath, refreshedContacts);
+  await writeData(refreshedContacts);
 
   return removedContact;
 };
 
 const addContact = async (body) => {
-  if (Object.keys(body).length < 3 || Object.keys(body).some((field) => body[field] === '')) return null;
+  const { error } = schema.validate(body);
+
+  if (error) {
+    const message = error.details[0].message;
+    return { error: message };
+  }
 
   const newContact = { id: uuidv4(), ...body };
-  const contacts = await readData(contactsPath);
+  const contacts = await listContacts();
+
   contacts.push(newContact);
 
-  await writeData(contactsPath, contacts);
+  await writeData(contacts);
 
   return newContact;
 };
@@ -58,7 +66,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
     return null;
   }
 
-  const contacts = await readData(contactsPath);
+  const contacts = await listContacts();
   const searchedIndex = await contacts.findIndex(({ id }) => id.toString() === contactId.toString());
 
   if (searchedIndex === -1) {
@@ -67,7 +75,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
 
   contacts[searchedIndex] = editContact(contacts[searchedIndex], { name, email, phone });
 
-  await writeData(contactsPath, contacts);
+  await writeData(contacts);
 
   return contacts[searchedIndex];
 };

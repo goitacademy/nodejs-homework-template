@@ -1,11 +1,14 @@
 const fs = require('fs/promises');
+const path = require('path');
 
-const readData = async (filePath) => {
+const contactsPath = path.join(__dirname, './contacts.json');
+
+const readData = async (filePath = contactsPath) => {
   const data = await fs.readFile(filePath, 'utf-8');
   return JSON.parse(data);
 };
 
-const writeData = async (filePath, data) => {
+const writeData = async (data, filePath = contactsPath) => {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 };
 
