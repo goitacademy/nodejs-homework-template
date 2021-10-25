@@ -1,9 +1,8 @@
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
 const { HttpCode } = require("../config/constants");
 require("dotenv").config();
-// const SECRET_KEY = process.env.JWT_SECRET_KEY;
-// const { findUserByEmail, create } = require("../repository/users");
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const userRegistration = async (req, res, next) => {
   // 1. из req.body достаем все нужные поля {email, password, subscription, token?}
@@ -46,16 +45,16 @@ const userLogin = async (req, res, next) => {
       message: "Invalid credentials",
     });
   }
-  res.json({});
-  //   const id = user._id;
-  //   const payload = { id };
-  //   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-  //   await Users.updateToken({ id, token });
-  //   return res.status(HttpCode.OK).json({
-  //     status: "success",
-  //     cod: HttpCode.OK,
-  //     data: { token },
-  //   });
+  // res.json({});
+  const id = user._id;
+  const payload = { id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  await Users.updateToken(id, token);
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    cod: HttpCode.OK,
+    data: { token },
+  });
 };
 const userLogout = async (req, res, next) => {
   res.json();

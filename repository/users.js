@@ -9,7 +9,7 @@ const create = async ({ email, password, subscription }) => {
   return await user.save();
 };
 
-const updateToken = async ({ id, token }) => {
+const updateToken = async (id, token) => {
   return await User.updateOne({ _id: id }, { token });
 };
 module.exports = {
