@@ -1,66 +1,71 @@
+const path = require('path')
+const mkdirp = require('mkdirp')
+const { Conflict, BadRequest } = require('http-errors')
 const User = require('../model/user')
 const Users = require('../repository/usersDB')
-// const createError = require('http-errors')
+const { sendSuccessRes } = require('../helpers/sendSuccessRes')
+const UploadService = require('../services/upload-file')
 
-const registration = async (req, res, next) => {
-    const { email } = req.body
-    const user = await Users.findByEmail(email)
-    if (user) {
-    return res.status(409).json({
-      status: 'error',
-      code: 409,
-      message: 'Email is already exist',
-    })
-    }
-    
-  try {
-      const newUser = await Users.create(req.body)
-      return res.status(201).json({
-        status: 'success',
-        code: 201,
-        data: {
-          email: newUser.email,
-          subscription: newUser.subscription,
-          id: newUser.id,
-        }
-      })
-  } catch (error) {
-    next(error)
-  }
+
+const uploadAvatar = async (req, res) => {
+  const id = String(req.user._id)
+  const file = req.file
+
+  const resultDestination = path.join(__dirname, '../', 'public/avatars', id)
+  await mkdirp(resultDestination)
+
+  const UploadServ = new UploadService(resultDestination)
+  const avatarUrl = await UploadServ.save(id, file)
+  await Users.updateAvatar(id, avatarUrl)
+  return sendSuccessRes(res, 
+    {
+      avatarUrl,
+    },
+  )
+
 }
 
-const login = async (req, res, next) => {
+const registration = async (req, res) => {
+  const { email } = req.body
+  const user = await Users.findByEmail(email)
+  if (user) {
+    throw new Conflict('Email is already exis')
+  }
+    
+  const newUser = await Users.create(req.body)
+  return sendSuccessRes(res, 
+    {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      id: newUser.id,
+      avatarUrl: newUser.avatarUrl,
+    },
+    201
+  )
+}
+
+const login = async (req, res) => {
   const { email, password } = req.body
   const user = await Users.findByEmail(email)
   if (!user || !user.comparePassword(password)) {
-    return res.status(400).json({
-      status: 'error',
-      code: 401,
-      message: 'Email or password is wrong',
-    })
-    // throw new createError.BadRequest("Email or password is wrong");
+    throw new BadRequest("Email or password is wrong");
   }
     
-  try {
-    const token = user.createToken();
-    await Users.updateToken(user._id, token);
-    return res.status(200).json({
-      status: 'success',
-      code: 200,
-      data: {
-        token,
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        }
+  const token = user.createToken();
+  await Users.updateToken(user._id, token);
+  return sendSuccessRes(res, 
+    {
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+        avatarUrl: user.avatarUrl,
       }
-    })
-  } catch (error) {
-    next(error)
-  }
+    }
+  )
 }
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
   const { _id } = req.user
   await Users.updateToken(_id, null)
   res.json({
@@ -70,16 +75,14 @@ const logout = async (req, res, next) => {
   });
 }
 
-const getCurrentUser = async (req, res, next) => {
+const getCurrentUser = async (req, res) => {
   const { email, subscription } = req.user
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
+  sendSuccessRes(res, 
+    {
       email,
       subscription,
     }
-  })
+  )
 }
 
 module.exports = {
@@ -87,4 +90,5 @@ module.exports = {
   login,
   logout,
   getCurrentUser,
+  uploadAvatar,
 }

@@ -1,9 +1,13 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
 
 require('dotenv').config()
 const SECRET_KEY = process.env.JWT_SECRET_KEY
+
+const SALT_FACTOR = 10
+
 
 const userSchema = new Schema(
     {
@@ -26,6 +30,12 @@ const userSchema = new Schema(
             type: String,
             default: null,
         },
+        avatarUrl: {
+            type: String,
+            default: function () {
+                return gravatar.url(this.email, { s: '250' }, true)
+            },
+        },
     },
     {
         versionKey: false,
@@ -41,7 +51,7 @@ const userSchema = new Schema(
 )
 
 userSchema.methods.setPassword = function(password){
-    this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+    this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_FACTOR))
 }
 
 userSchema.methods.comparePassword = function(password){
