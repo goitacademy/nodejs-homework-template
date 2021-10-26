@@ -1,6 +1,7 @@
 const {NotFound} = require("http-errors");
 
 const {sendSuccessRes} = require("../helpers");
+
 const { Contact } = require('../models');
 
 const listContacts = async (req, res) => {

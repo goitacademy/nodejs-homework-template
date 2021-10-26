@@ -52,6 +52,7 @@ const joiSubscrSchema = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business').required(),
 })
 
+
 userSchema.methods.createToken = function () {
     const payload = {
         _id: this._id
@@ -72,3 +73,4 @@ module.exports = {
     joiSchema,
     joiSubscrSchema,
 }
+
