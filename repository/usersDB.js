@@ -19,8 +19,8 @@ const updateToken = async (id, token) => {
   return await User.findByIdAndUpdate(id, {token})
 }
 
-const updateAvatar = async (id, avatar) => {
-  return await User.findByIdAndUpdate(id, {avatar})
+const updateAvatar = async (id, avatarUrl) => {
+  return await User.findByIdAndUpdate(id, {avatarUrl}, {new: true})
 }
 
 module.exports = { findById, findByEmail, create, updateToken, updateAvatar }

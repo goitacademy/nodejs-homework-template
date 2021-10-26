@@ -24,6 +24,7 @@ class UploadService {
   async save(idUser, file) {
     await this.transformAvatar(file.path)
     await fs.rename(file.path, path.join(this.destination, file.filename))
+    console.log('PATH', path.join('/avatars', idUser, file.filename))
     return path.join('/avatars', idUser, file.filename)
   }
 }

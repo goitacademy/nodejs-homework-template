@@ -16,10 +16,10 @@ const uploadAvatar = async (req, res) => {
 
   const UploadServ = new UploadService(resultDestination)
   const avatarUrl = await UploadServ.save(id, file)
-  await Users.updateAvatar(id, avatarUrl)
+  const result = await Users.updateAvatar(id, avatarUrl)
   return sendSuccessRes(res, 
     {
-      avatarUrl,
+      avatarUrl: result.avatarUrl,
     },
   )
 
