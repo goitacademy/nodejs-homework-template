@@ -1,7 +1,10 @@
 const express = require("express");
+// const multer = require("multer");
+const path = require("path");
 const router = express.Router();
-const authController = require("../../controller/auth/users");
 
+const authController = require("../../controller/auth/users");
+const fs = require("fs/promises");
 const { validateAuth } = require("../../middlewares/validation");
 const authenticate = require("../../middlewares/authenticate");
 
@@ -14,7 +17,7 @@ router.get("/current", authenticate, authController.currentUser);
 
 router.patch(
   "/avatars",
-  authenticate,
+  // authenticate,
   upload.single("avatar"),
   authController.updateAvatar
 );
