@@ -1,4 +1,4 @@
-const { readData } = require("./helpers");
+const {readData} = require('./helpers');
 
 const listContacts = () => readData();
 

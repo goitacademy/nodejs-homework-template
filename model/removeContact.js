@@ -1,6 +1,6 @@
-const listContacts = require("./listContacts");
-const getContactById = require("./getContactById");
-const { writeData } = require("./helpers");
+const listContacts = require('./listContacts');
+const getContactById = require('./getContactById');
+const {writeData} = require('./helpers');
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
@@ -11,7 +11,7 @@ const removeContact = async (contactId) => {
   }
 
   const refreshedContacts = contacts.filter(
-    ({ id }) => id.toString() !== contactId.toString()
+      ({id}) => id.toString() !== contactId.toString(),
   );
 
   await writeData(refreshedContacts);

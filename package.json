@@ -18,7 +18,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "eslint": "^7.19.0",
+    "eslint": "^8.1.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
