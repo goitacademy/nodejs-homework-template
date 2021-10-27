@@ -1,10 +1,10 @@
 {
-  "name": "template",
+  "name": "nodejs-homework",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "start": "cross-env NODE_ENV=production node app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon app.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
@@ -12,7 +12,11 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "joi": "^17.4.0",
+    "morgan": "1.10.0",
+    "uniqid": "^5.3.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^5.13.2"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
