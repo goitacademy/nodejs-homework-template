@@ -17,7 +17,7 @@ class CreateSenderNodemailer {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_SENDERS_UKR,
+        user: process.env.EMAIL_SENDERS_META,
         pass: process.env.PASSWORD,
       },
     };
