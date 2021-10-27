@@ -4,6 +4,8 @@ const logout = require('./logout')
 const current = require('./current')
 const favorite = require('./favorite')
 const updateAvatars = require('./updateAvatars')
+const verify = require('./verify')
+const reverify = require('./reverify')
 
 module.exports = {
   singup,
@@ -12,4 +14,6 @@ module.exports = {
   current,
   favorite,
   updateAvatars,
+  verify,
+  reverify,
 }
