@@ -7,11 +7,14 @@ const {
   current,
   patchUser,
   patchUploadAvatars,
+  verifyUser,
+  repeatEmailVerifyUser,
 } = require('../../controllers/controllerUser');
 const {
   validateUser,
   validateUsersPatch,
 } = require('../../validation/validationUser');
+const wrapper = require('../../helpers/errorHandler');
 
 const guard = require('../../helpers/guard');
 const loginLimit = require('../../helpers/rote-limit-login');
@@ -23,5 +26,8 @@ router.post('/logout', guard, logout);
 router.get('/current', guard, current);
 router.patch('/avatars', guard, uploads.single('avatars'), patchUploadAvatars);
 router.patch('/', guard, validateUsersPatch, patchUser);
+
+router.post('/verify', repeatEmailVerifyUser);
+router.get('/verify/:verificationToken', wrapper(verifyUser));
 
 module.exports = router;
