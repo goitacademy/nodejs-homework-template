@@ -1,3 +1,4 @@
+const { BadRequest } = require("http-errors");
 const jwt = require("jsonwebtoken");
 const Users = require("../../model/user");
 const { User } = require("../../schemas/users");
@@ -7,7 +8,6 @@ const path = require("path");
 const Jimp = require("jimp");
 const gravatar = require("gravatar");
 
-//const { User } = require("../../models");
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
@@ -92,7 +92,6 @@ const currentUser = async (req, res, next) => {
     next(error);
   }
 };
-
 const uploadDir = path.join(__dirname, "../../", "public");
 
 const updateAvatar = async (req, res) => {
@@ -101,26 +100,21 @@ const updateAvatar = async (req, res) => {
   try {
     const newImageName = `${Date.now().toString()}-${req.file.originalname}`;
     const originalImage = await Jimp.read(tempDir);
-
     const resizedImage = await originalImage.cover(250, 250);
-
     await resizedImage.write(`${uploadDir}/avatars/${newImageName}`);
-
-    fs.unlink(tempDir);
-
+    
     const avatar = path.join("/avatars", newImageName);
-
-    const { avatarURL } = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        avatarURL: avatar,
-      },
-      { new: true }
-    );
+    const { _id: id } = req.user;
+    await User.findByIdAndUpdate(id, { avatarURL: avatar });
 
     res.status(201).json({
-      avatarURL,
+      status: "success",
+      code: 200,
+      data: {
+        result: avatar,
+      },
     });
+    
   } catch (error) {
     fs.unlink(tempDir);
     console.log(error);

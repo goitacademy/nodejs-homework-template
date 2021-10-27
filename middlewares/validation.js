@@ -21,8 +21,8 @@ const joiSchemaAuth = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(7).required(),
 
-  subscription: Joi.string() /* .required() */,
-  token: Joi.string() /* .required() */,
+  subscription: Joi.string(),
+  token: Joi.string(),
   avatarURL: Joi.string(),
 });
 
