@@ -5,9 +5,10 @@ const {
   userLogin,
   userLogout,
 } = require("../../controllers/users");
+const guard = require("../../helpers/guard");
 
 router.post("/signup", userRegistration);
 router.post("/login", userLogin);
-router.post("/logout", userLogout);
+router.post("/logout", guard, userLogout);
 
 module.exports = router;

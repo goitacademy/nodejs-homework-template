@@ -57,7 +57,9 @@ const userLogin = async (req, res, next) => {
   });
 };
 const userLogout = async (req, res, next) => {
-  res.json();
+  const id = req.user._id;
+  await Users.updateToken(id, null);
+  res.status(HttpCode.NO_CONTENT).json({});
 };
 
 module.exports = {
