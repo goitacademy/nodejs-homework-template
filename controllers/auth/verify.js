@@ -12,7 +12,7 @@ const verify = async (req, res) => {
       verifyToken: null,
       verify: true
     })
-  res.send('<h2>Email подтверждёт</h2>')
+  res.send('<h2>Email подтверждён</h2>')
 }
 
 module.exports = verify
