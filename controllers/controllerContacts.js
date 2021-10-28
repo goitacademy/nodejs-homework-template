@@ -49,7 +49,7 @@ const deletePosts = async (req, res) => {
     });
   }
 
-  throw new CustomError(404, 'Not Found');
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not Found');
 };
 
 const changePosts = async (req, res) => {
