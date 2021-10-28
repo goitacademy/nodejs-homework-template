@@ -13,6 +13,7 @@ const {
 const {
   validateUser,
   validateUsersPatch,
+  validateUserVerify,
 } = require('../../validation/validationUser');
 const wrapper = require('../../helpers/errorHandler');
 
@@ -27,7 +28,7 @@ router.get('/current', guard, current);
 router.patch('/avatars', guard, uploads.single('avatars'), patchUploadAvatars);
 router.patch('/', guard, validateUsersPatch, patchUser);
 
-router.post('/verify', repeatEmailVerifyUser);
+router.post('/verify', validateUserVerify, repeatEmailVerifyUser);
 router.get('/verify/:verificationToken', wrapper(verifyUser));
 
 module.exports = router;

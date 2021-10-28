@@ -172,11 +172,21 @@ const verifyUser = async (req, res, _next) => {
       },
     });
   }
+
+  return res.status(HttpCode.NOT_FOUND).json({
+    status: 'success',
+    code: HttpCode.NOT_FOUND,
+    data: {
+      message: 'User not found',
+    },
+  });
 };
 
 const repeatEmailVerifyUser = async (req, res, _next) => {
   const { email } = req.body;
   const user = await Users.findByEmail(email);
+
+  console.log(user);
 
   if (user) {
     const { email, verifyToken } = user;
@@ -188,11 +198,21 @@ const repeatEmailVerifyUser = async (req, res, _next) => {
     const statusEmail = await emailService.sendVerifyEmail(email, verifyToken);
   }
 
+  if (user?.verify) {
+    return res.status(HttpCode.BAD_REQUEST).json({
+      status: 'error',
+      code: HttpCode.BAD_REQUEST,
+      data: {
+        message: 'Verification has already been passed',
+      },
+    });
+  }
+
   return res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
     data: {
-      message: 'Verification successful',
+      message: 'Verification email sent',
     },
   });
 };

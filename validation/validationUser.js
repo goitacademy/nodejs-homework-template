@@ -13,6 +13,10 @@ const schemaUsersPatch = Joi.object({
     .required(),
 });
 
+const schemaUsersVerifyEmail = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 const validate = async (schema, obj, res, next) => {
   try {
     await schema.validateAsync(obj);
@@ -32,4 +36,8 @@ module.exports.validateUsersPatch = async (req, res, next) => {
 
 module.exports.validateUser = async (req, res, next) => {
   return await validate(schemaUsersSignup, req.body, res, next);
+};
+
+module.exports.validateUserVerify = async (req, res, next) => {
+  return await validate(schemaUsersVerifyEmail, req.body, res, next);
 };
