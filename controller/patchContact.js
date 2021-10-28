@@ -1,4 +1,4 @@
-const updateContact = require("../model/updateContact");
+const updateContact = require('../model/updateContact');
 
 const patchContact = async (req, res, next) => {
   const data = await updateContact(req.params.contactId, req.body);

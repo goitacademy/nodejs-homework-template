@@ -1,10 +1,10 @@
-const { writeData, editContact } = require("./helpers");
-const listContacts = require("./listContacts");
+const {writeData, editContact} = require('./helpers');
+const listContacts = require('./listContacts');
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const searchedIndex = await contacts.findIndex(
-    ({ id }) => id.toString() === contactId.toString()
+      ({id}) => id.toString() === contactId.toString(),
   );
 
   contacts[searchedIndex] = editContact(contacts[searchedIndex], {

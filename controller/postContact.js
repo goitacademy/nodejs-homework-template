@@ -1,4 +1,4 @@
-const addContact = require("../model/addContact");
+const addContact = require('../model/addContact');
 
 const postContact = async (req, res, next) => {
   const data = await addContact(req.body);
