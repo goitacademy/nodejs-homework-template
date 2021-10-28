@@ -7,7 +7,7 @@ const removeContact = async (req, res) => {
   const { id } = req.params
   const result = await Contact.findByIdAndDelete(id)
   if (!result) {
-    throw new NotFound(`Product with id=${id} not found`)
+    throw new NotFound(`Contact with id=${id} not found`)
   }
   sendSuccessRes(res, { message: 'Success delete' })
 }
