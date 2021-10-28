@@ -23,12 +23,15 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.name === "ValidationError") {
-    return res
-      .status(400)
-      .json({ status: "Error", code: 400, message: err.message });
-  }
-  res.status(500).json({ status: "fail", code: 500, message: err.message });
+  const statusCode =
+    err.status ||
+    (500)
+      .status(statusCode)
+      .json({
+        status: statusCode === 500 ? "fail" : "error",
+        code: statusCode,
+        message: err.message,
+      });
 });
 
 module.exports = app;

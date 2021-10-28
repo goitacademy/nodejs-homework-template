@@ -24,6 +24,7 @@ const registration = async (req, res, next) => {
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatar,
       },
     });
   } catch (error) {
@@ -59,6 +60,13 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
+const uploadAvatar = async (req, res, next) => {
+  const pic = req.file;
+  console.log(pic);
+
+  return res.status(HttpCode.OK).json({ pic });
+};
+
 const getUser = async (req, res, next) => {
   const { name, email, subscription } = req.user;
   return res
@@ -70,5 +78,6 @@ module.exports = {
   registration,
   login,
   logout,
+  uploadAvatar,
   getUser,
 };
