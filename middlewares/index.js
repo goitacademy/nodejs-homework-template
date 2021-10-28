@@ -1,8 +1,8 @@
-const { checkFieldInContact, checkIdInContact } = require("./checkMiddleware");
+const {checkFieldInContact, checkIdInContact} = require('./checkMiddleware');
 const {
   addContactValidation,
   updateContactValidation,
-} = require("./validationMiddleware");
+} = require('./validationMiddleware');
 
 module.exports = {
   checkFieldInContact,
