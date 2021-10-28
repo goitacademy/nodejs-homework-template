@@ -2,6 +2,7 @@ const {checkFieldInContact, checkIdInContact} = require('./checkMiddleware');
 const {
   addContactValidation,
   updateContactValidation,
+  updateStatusContactValidation,
 } = require('./validationMiddleware');
 
 module.exports = {
@@ -9,4 +10,5 @@ module.exports = {
   checkIdInContact,
   addContactValidation,
   updateContactValidation,
+  updateStatusContactValidation,
 };

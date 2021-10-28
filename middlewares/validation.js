@@ -12,6 +12,8 @@ const validateContact = (contact, requiredFields = []) => {
     email: joi.string().email({minDomainSegments: 2}),
 
     phone: joi.string().pattern(phonePattern, 'phone'),
+
+    favorite: joi.boolean(),
   });
 
   contactSchema = contactSchema.fork(requiredFields, (field) =>

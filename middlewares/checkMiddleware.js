@@ -1,13 +1,15 @@
-const listContacts = require('../model/listContacts');
-const {isEmailInContacts, isPhoneInContacts} = require('../model/helpers');
+const {Contact} = require('../model/contactSchema');
+
+const {isEmailInContacts, isPhoneInContacts} = require('../helpers');
 
 const checkFieldInContact = async (req, res, next) => {
-  const contacts = await listContacts();
+  const contacts = await Contact.find();
   const {email, phone} = req.body;
+  const {contactId} = req.params;
 
   if (
-    (await isEmailInContacts(contacts, email)) ||
-    (await isPhoneInContacts(contacts, phone))
+    (await isEmailInContacts(contacts, email, contactId)) ||
+    (await isPhoneInContacts(contacts, phone, contactId))
   ) {
     return res
         .status(400)
@@ -20,7 +22,7 @@ const checkFieldInContact = async (req, res, next) => {
 const checkIdInContact = async (req, res, next) => {
   const {contactId} = req.params;
 
-  const contacts = await listContacts();
+  const contacts = await Contact.find();
   const searchedIndex = await contacts.findIndex(
       ({id}) => id.toString() === contactId.toString(),
   );
