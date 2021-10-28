@@ -1,7 +1,7 @@
 const { BadRequest } = require("http-errors");
 const jwt = require("jsonwebtoken");
 const Users = require("../../model/user");
-const { User } = require("../../schemas/users");
+const User = require("../../schemas/users");
 const { Unauthorized } = require("http-errors");
 const fs = require("fs/promises");
 const path = require("path");
@@ -92,31 +92,42 @@ const currentUser = async (req, res, next) => {
     next(error);
   }
 };
+
 const uploadDir = path.join(__dirname, "../../", "public");
 
 const updateAvatar = async (req, res) => {
   const { originalname, path: tempDir } = req.file;
 
+  const token = req.headers.autorization;
+  console.log(req.headers.authorization);
+  const user = await Users.findByToken(token);
+  console.log(user);
+  // const { _id } = req.user;
+  const id = user._id;
+  console.log(id);
   try {
     const newImageName = `${Date.now().toString()}-${req.file.originalname}`;
     const originalImage = await Jimp.read(tempDir);
     const resizedImage = await originalImage.cover(250, 250);
     await resizedImage.write(`${uploadDir}/avatars/${newImageName}`);
-    
-    const avatar = path.join("/avatars", newImageName);
-    const { _id: id } = req.user;
-    await User.findByIdAndUpdate(id, { avatarURL: avatar });
 
-    res.status(201).json({
+    const avatar = path.join("/avatars", newImageName);
+    // const { _id: id } = req.user;
+    // await User.findByIdAndUpdate({ _id: id }, { avatarURL: avatar });
+    // await Users.findByIdAndUpdate(id, { avatarURL: avatar });
+    await Users.updateAvatar(id, avatar);
+    res.json({
       status: "success",
-      code: 200,
+      code: 201,
+      message: "Update avatar success",
       data: {
-        result: avatar,
+        user: {
+          avatarURL: avatar,
+        },
       },
     });
-    
   } catch (error) {
-    fs.unlink(tempDir);
+    await fs.unlink(tempDir);
     console.log(error);
   }
 };
