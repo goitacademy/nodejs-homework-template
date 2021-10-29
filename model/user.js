@@ -20,7 +20,6 @@ const updateAvatar = async (id, avatar) => {
   return await User.updateOne({ _id: id }, { avatarURL: avatar });
 };
 const findByToken = async (token) => {
-  console.log("findByToken:" + token);
   return await User.findOne({ token: token });
 };
 
