@@ -1,6 +1,6 @@
 const validateContact = require('./validation');
 const {responseErrorOrNext} = require('../helpers');
-const {BadRequest, NotFound} = require('http-errors');
+const {BadRequest} = require('http-errors');
 
 const addContactValidation = async (req, res, next) => {
   const requiredFields = ['name', 'email', 'phone'];
