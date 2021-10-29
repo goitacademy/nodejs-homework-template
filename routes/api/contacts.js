@@ -21,23 +21,23 @@ const router = express.Router();
 router.get('/', getContacts);
 
 router.get('/:contactId',
-    checkIdInContact,
+    asyncWrapper([checkIdInContact]),
     asyncWrapper(getContactById));
 
 router.delete('/:contactId',
-    checkIdInContact,
+    asyncWrapper([checkIdInContact]),
     asyncWrapper(deleteContact));
 
 router.post('/',
-    [addContactValidation, checkFieldInContact],
+    asyncWrapper([addContactValidation, checkFieldInContact]),
     asyncWrapper(postContact));
 
 router.patch('/:contactId',
-    [updateContactValidation, checkIdInContact, checkFieldInContact],
+    asyncWrapper([updateContactValidation, checkIdInContact, checkFieldInContact]),
     asyncWrapper(updateContact));
 
 router.patch('/:contactId/favorite',
-    [checkIdInContact, updateStatusContactValidation],
+    asyncWrapper([checkIdInContact, updateStatusContactValidation]),
     asyncWrapper(updateStatusContact));
 
 module.exports = router;
