@@ -95,12 +95,20 @@ const currentUser = async (req, res, next) => {
 
 const uploadDir = path.join(__dirname, "../../", "public");
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
+  const { authorization } = req.headers;
+  const [bearer, token] = authorization.split(" ");
+  if (bearer !== "Bearer") {
+    throw new Unauthorized("Not authorized");
+  }
+
   const { originalname, path: tempDir } = req.file;
 
-  const token = req.headers.autorization;
-  console.log(req.headers.authorization);
+  // const token = req.headers.autorization;
+  // console.log(req.headers.authorization);
+  console.log(token);
   const user = await Users.findByToken(token);
+
   console.log(user);
   // const { _id } = req.user;
   const id = user._id;
@@ -129,6 +137,7 @@ const updateAvatar = async (req, res) => {
   } catch (error) {
     await fs.unlink(tempDir);
     console.log(error);
+    next(error);
   }
 };
 
