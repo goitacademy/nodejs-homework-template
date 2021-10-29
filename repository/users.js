@@ -17,14 +17,24 @@ const updateToken = async (id, token) => {
   return await User.updateOne({ _id: id }, { token });
 };
 
+const updateTokenVerify = async (id, isVerified, verifyToken) => {
+  return await User.updateOne({ _id: id }, { isVerified, verifyToken })
+}
+
 const updateAvatar = async (id, avatar, idUserCloud = null) => {
   return await User.updateOne({ _id: id }, { avatar, idUserCloud });
 };
+
+const findUserByVerifyToken = async (verifyToken) => {
+  return await User.findOne({ verifyToken })
+}
 
 module.exports = {
   findById,
   findByEmail,
   create,
   updateToken,
-  updateAvatar
+  updateAvatar,
+  updateTokenVerify,
+  findUserByVerifyToken
 };
