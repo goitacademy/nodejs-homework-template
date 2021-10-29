@@ -18,7 +18,6 @@ const getAll = async (req, res, next) => {
 
 const getById = async(req, res, next) => {
   const { contactId } = req.params;
-  console.log(typeof (contactId));
   const contact = await Contact.findById(contactId);
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);

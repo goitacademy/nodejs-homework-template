@@ -7,11 +7,13 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 const authRouter = require('./routes/api/auth');
 const contactsRouter = require('./routes/api/contacts');
 // показывает в терминале: метод, путь, статус
-app.use(logger(formatsLogger))
+app.use(logger(formatsLogger));
 // разрешает кросдаменные запросы
-app.use(cors())
+app.use(cors());
+// разрешаем отдавать статику из папки public
+app.use(express.static('public'));
 // указывает, что тело запроса нужно перевести в json
-app.use(express.json())
+app.use(express.json());
 
 app.use('/api/users', authRouter);
 app.use('/api/contacts', contactsRouter);

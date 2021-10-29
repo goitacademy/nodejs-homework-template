@@ -2,22 +2,18 @@ const { NotFound } = require('http-errors');
 const { User } = require('../../model/user');
 
 const verify = async (req, res) => {
-  const { verificationToken } = req.user;
-
-  const user = await User.findOne({ verificationToken });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verifyToken: verificationToken });
   if (!user) {
-    throw new NotFound('User not found')
+    throw NotFound();
   }
+  await User.findByIdAndUpdate(user._id, { verify: true, verifyToken: null });
 
-  res.status(200).json({
+  res.json({
     status: 'success',
     code: 200,
-    data: {
-      email: user.email,
-      subscription: user.subscription
-    }
-
+    message: 'Email succes verify'
   })
-}
+};
 
 module.exports = verify;
