@@ -12,6 +12,8 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "http-errors": "^1.8.0",
+    "joi": "^17.4.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
