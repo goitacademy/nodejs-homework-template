@@ -1,4 +1,4 @@
-const validateContact = require('./validation');
+const validateContact = require('../helpers');
 const {responseErrorOrNext} = require('../helpers');
 const {BadRequest} = require('http-errors');
 

@@ -18,26 +18,28 @@ const {asyncWrapper} = require('../../helpers');
 
 const router = express.Router();
 
-router.get('/', getContacts);
+router.get('/', [getContacts]);
 
 router.get('/:contactId',
     asyncWrapper([checkIdInContact]),
-    asyncWrapper(getContactById));
+    asyncWrapper([getContactById]));
 
 router.delete('/:contactId',
     asyncWrapper([checkIdInContact]),
-    asyncWrapper(deleteContact));
+    asyncWrapper([deleteContact]));
 
 router.post('/',
     asyncWrapper([addContactValidation, checkFieldInContact]),
-    asyncWrapper(postContact));
+    asyncWrapper([postContact]));
 
 router.patch('/:contactId',
-    asyncWrapper([updateContactValidation, checkIdInContact, checkFieldInContact]),
-    asyncWrapper(updateContact));
+    asyncWrapper(
+        [updateContactValidation, checkIdInContact, checkFieldInContact],
+    ),
+    asyncWrapper([updateContact]));
 
 router.patch('/:contactId/favorite',
     asyncWrapper([checkIdInContact, updateStatusContactValidation]),
-    asyncWrapper(updateStatusContact));
+    asyncWrapper([updateStatusContact]));
 
 module.exports = router;

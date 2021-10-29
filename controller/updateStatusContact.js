@@ -7,7 +7,7 @@ const updateStatusContact = async (req, res, next) => {
   await Contact.findByIdAndUpdate(contactId, {favorite});
 
   const updatedContact = await Contact.findById(contactId);
-  
+
   res.status(200).json({
     message: `Contact's status updated`,
     data: {updatedContact},

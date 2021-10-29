@@ -4,7 +4,7 @@ const postContact = async (req, res, next) => {
   const newContact = new Contact({...req.body});
 
   newContact.save();
-  
+
   res.status(201).json({message: 'Contact added', data: {newContact}});
 };
 
