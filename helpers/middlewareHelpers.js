@@ -1,3 +1,5 @@
+const {BadRequest} = require('http-errors');
+
 const isPhoneInContacts = async (contacts, newPhone, contactId) =>
   await contacts.some(({_id, phone}) =>
     phone === newPhone && !_id.toString().includes(contactId),
@@ -11,7 +13,7 @@ const isEmailInContacts = async (contacts, newEmail, contactId) =>
 const responseErrorOrNext = (error, res, next) => {
   if (error) {
     const {message} = error.details[0];
-    return res.status(400).json({message});
+    next(new BadRequest(message));
   }
 
   next();

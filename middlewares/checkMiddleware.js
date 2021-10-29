@@ -1,5 +1,5 @@
+const {BadRequest, NotFound} = require('http-errors');
 const {Contact} = require('../model/contactSchema');
-
 const {isEmailInContacts, isPhoneInContacts} = require('../helpers');
 
 const checkFieldInContact = async (req, res, next) => {
@@ -11,9 +11,7 @@ const checkFieldInContact = async (req, res, next) => {
     (await isEmailInContacts(contacts, email, contactId)) ||
     (await isPhoneInContacts(contacts, phone, contactId))
   ) {
-    return res
-        .status(400)
-        .json({message: 'Contact with same email or phone already exists.'});
+    next(new BadRequest('Contact with same email or phone already exists.'));
   }
 
   next();
@@ -28,7 +26,7 @@ const checkIdInContact = async (req, res, next) => {
   );
 
   if (searchedIndex === -1) {
-    return res.status(404).json({message: 'Not found'});
+    next(new NotFound('Not found'));
   }
 
   next();

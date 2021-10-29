@@ -14,25 +14,30 @@ const {
   checkIdInContact,
   updateStatusContactValidation,
 } = require('../../middlewares');
+const {asyncWrapper} = require('../../helpers');
 
 const router = express.Router();
 
 router.get('/', getContacts);
 
-router.get('/:contactId', checkIdInContact, getContactById);
+router.get('/:contactId',
+    checkIdInContact,
+    asyncWrapper(getContactById));
 
-router.delete('/:contactId', checkIdInContact, deleteContact);
+router.delete('/:contactId',
+    checkIdInContact,
+    asyncWrapper(deleteContact));
 
 router.post('/',
     [addContactValidation, checkFieldInContact],
-    postContact);
+    asyncWrapper(postContact));
 
 router.patch('/:contactId',
     [updateContactValidation, checkIdInContact, checkFieldInContact],
-    updateContact);
+    asyncWrapper(updateContact));
 
 router.patch('/:contactId/favorite',
     [checkIdInContact, updateStatusContactValidation],
-    updateStatusContact);
+    asyncWrapper(updateStatusContact));
 
 module.exports = router;
