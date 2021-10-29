@@ -18,5 +18,7 @@ router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
 
 // '/api/users/current'
 // router.get('/current', authenticate, controllerWrapper(ctrl.current));
-router.get('/current', authenticate, controllerWrapper(ctrl.current))
+router.get('/current', authenticate, controllerWrapper(ctrl.current));
+
+router.get('/werify/:verificationToken', controllerWrapper(ctrl.verify));
 module.exports = router;

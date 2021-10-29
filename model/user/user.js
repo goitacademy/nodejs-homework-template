@@ -22,7 +22,14 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
-
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  }
 }, { versionKey: false, timestamps: true });
 // метод для чеширования пароля
 userSchema.methods.setPassword = function (password) {

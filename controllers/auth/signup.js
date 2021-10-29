@@ -1,5 +1,6 @@
 const { Conflict } = require('http-errors');
 const { User } = require('../../model/user');
+const { nanoid } = require('nanoid')
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
