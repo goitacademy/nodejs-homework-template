@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const contactsOperations = require('../../model/contacts')
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'templates message' })
+  const contacts = await contactsOperations.listContacts()
+  res.json(contacts)
+  // res.json({ message: 'templates message uhuuuuu' })
 })
 
 router.get('/:contactId', async (req, res, next) => {
@@ -17,7 +20,7 @@ router.delete('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-router.patch('/:contactId', async (req, res, next) => {
+router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
