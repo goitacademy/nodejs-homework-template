@@ -10,7 +10,9 @@ const signup = async (req, res) => {
   const newUser = new User({ email });
   // хешируем пароль и добавляем его новому пользователю
   newUser.setPassword(password);
-  // сохраняем в базе ного пользователя с хешированным паролем
+  // создаем пользователю аватар
+  newUser.setAvatar(email);
+  // сохраняем в базе нового пользователя с хешированным паролем и аватаром
   await newUser.save();
   // await User.create({ email, password });
   res.status(201).json({
@@ -20,7 +22,8 @@ const signup = async (req, res) => {
     data: {
       user: {
         email: newUser.email,
-        subscription: 'starter'
+        subscription: 'starter',
+        avatarURL: newUser.avatarURL
       }
     }
   });
