@@ -2,7 +2,8 @@ const {
   isPhoneInContacts,
   isEmailInContacts,
   responseErrorOrNext,
-} = require('./middlewareHelpers');
+} = require('./checkHelpers');
+const validateContact = require('./validationHelpers');
 const asyncWrapper = require('./controllerWrapper');
 
 module.exports = {
@@ -10,4 +11,5 @@ module.exports = {
   isEmailInContacts,
   responseErrorOrNext,
   asyncWrapper,
+  validateContact,
 };
