@@ -21,10 +21,7 @@ const removeContact = async (contactId) => {
   const [deletedContact] = contacts.filter(contact => contact.id === contactId)
 
   if (!deletedContact) {
-    const error = {
-      status: 'Contact not found'
-    }
-    return error
+    return null
   }
   const newContactList = contacts.filter(contact => contact.id !== contactId)
   await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(newContactList, null, 2))
@@ -36,50 +33,37 @@ const addContact = async ({ name, email, phone }) => {
 
   const isContackAlreadyExist = contacts.some(contact => contact.name === name || contact.email === email || contact.phone === phone)
 
-  if (!isContackAlreadyExist) {
-    const idGenerator = () => {
-      const now = new Date()
-      const id = `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`
-      return Number(id)
-    }
-
-    const newContact = {
-      id: idGenerator(),
-      name,
-      email,
-      phone
-    }
-
-    contacts.push(newContact)
-    await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, null, 2))
-    return newContact
+  if (isContackAlreadyExist) {
+    return null
   }
-  const error = {
-    status: 'BadRequest',
-    code: 400,
-    message: 'Contact already exist'
+  const idGenerator = () => {
+    const now = new Date()
+    const id = `${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`
+    return Number(id)
   }
-  return error
+
+  const newContact = {
+    id: idGenerator(),
+    name,
+    email,
+    phone
+  }
+
+  contacts.push(newContact)
+  await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, null, 2))
+  return newContact
 }
 
 const updateContact = async (contactId, { name, email, phone }) => {
   const contacts = await contactsPath()
   const idx = contacts.findIndex(item => item.id === contactId)
   if (idx === -1) {
-    const error = {
-      status: 'Contact not found'
-    }
-    return error
+    return 'Contact not found'
   }
   const nonRenewableСontacts = contacts.filter(item => item.id !== contactId)
   const isContackAlreadyExist = nonRenewableСontacts.some(contact => contact.name === name || contact.email === email || contact.phone === phone)
   if (isContackAlreadyExist) {
-    const error = {
-      status: 'BadRequest',
-      code: 400,
-      message: 'Contact already exist'
-    }
-    return error
+    return 'Contact already exist'
   }
   contacts[idx] = { id: contactId, name, email, phone }
   await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, null, 2))

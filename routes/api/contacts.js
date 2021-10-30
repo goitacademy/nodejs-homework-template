@@ -12,7 +12,7 @@ const {
 
 const joiShema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ru', 'org', 'lv'] } }).required(),
+  email: Joi.string().required(),
   phone: Joi.string().required(),
 })
 
@@ -53,8 +53,8 @@ router.post('/', async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const contact = await addContact(req.body)
-    if (contact.status === 'BadRequest') {
-      throw new BadRequest(contact.message)
+    if (!contact) {
+      throw new BadRequest('Contact already exist')
     }
     res.status(201).json({
       status: 'sucsess',
@@ -70,10 +70,10 @@ router.delete('/:contactId', async (req, res, next) => {
   try {
     const idNormalize = Number(req.params.contactId)
     const contact = await removeContact(idNormalize)
-    if (contact.status === 'Contact not found') {
+    if (contact === null) {
       throw new NotFound(`Contact with id ${idNormalize} not found`)
     }
-    res.json({ message: 'contact deleted' })
+    res.json({ message: 'Contact deleted' })
   } catch (error) {
     next(error)
   }
@@ -87,21 +87,17 @@ router.put('/:contactId', async (req, res, next) => {
     }
     const idNormalize = Number(req.params.contactId)
     const updatedContact = await updateContact(idNormalize, req.body)
-    switch (updatedContact.status) {
-      case 'Contact not found':
-        throw new NotFound(`Contact with id ${idNormalize} not found`)
-        // eslint-disable-next-line no-unreachable
-        break
-      case 'BadRequest':
-        throw new BadRequest(updatedContact.message)
-        // eslint-disable-next-line no-unreachable
-        break
-      default: res.json({
-        status: 'sucsess',
-        code: 200,
-        data: { updatedContact }
-      })
+    if (updatedContact === 'Contact not found') {
+      throw new NotFound(`Contact with id ${idNormalize} not found`)
     }
+    if (updatedContact === 'Contact already exist') {
+      throw new BadRequest(updatedContact)
+    }
+    res.json({
+      status: 'sucsess',
+      code: 200,
+      data: { updatedContact }
+    })
   } catch (error) {
     next(error)
   }
