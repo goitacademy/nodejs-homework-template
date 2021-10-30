@@ -3,11 +3,11 @@ const Contacts = require("../repository/contacts");
 const getContacts = async (req, res, next) => {
   try {
     // console.log(req.method);
-    // console.log(req);
+    console.log(req.query);
 
     const userId = req.user._id;
-    const contacts = await Contacts.listContacts(userId);
-    res.json({ status: "success", cod: 200, data: { contacts } });
+    const data = await Contacts.listContacts(userId, req.query);
+    res.json({ status: "success", cod: 200, data: { ...data } });
   } catch (error) {
     next(error);
   }
@@ -16,7 +16,7 @@ const getContacts = async (req, res, next) => {
 const getContact = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const contact = await Contacts.updateContact(req.params.contactId, userId);
+    const contact = await Contacts.getContactById(req.params.contactId, userId);
     // console.log(req.params);
 
     console.log(contact);

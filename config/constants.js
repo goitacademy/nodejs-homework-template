@@ -14,10 +14,17 @@ const HttpCode = {
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   CONFLICT: 409,
+  TOO_MANY_REQUESTS: 429,
   INTERNAL_SERVER_ERROR: 500,
+};
+const RareLimits = {
+  WINDOW_MS: 1 * 60 * 1000,
+  MAX_REQUESTS: 3,
+  JSON_LIMIT: 10000,
 };
 
 module.exports = {
   Status,
   HttpCode,
+  RareLimits,
 };
