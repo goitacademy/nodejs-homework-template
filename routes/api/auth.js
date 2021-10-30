@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { joiSchema, joiSchemaSub } = require("../../models/user");
+const {
+  joiSchema,
+  joiSchemaSub,
+  joiSchemaVerify,
+} = require("../../models/user");
 const {
   validation,
   controllerWrapper,
@@ -13,6 +17,7 @@ const router = express.Router();
 
 const userValidationMiddleware = validation(joiSchema);
 const subValidationMiddleware = validation(joiSchemaSub);
+const verifyValidationMiddleware = validation(joiSchemaVerify);
 
 router.post("/signup", userValidationMiddleware, controllerWrapper(ctrl.reg));
 
@@ -42,6 +47,14 @@ router.patch(
   controllerWrapper(authenticate),
   upload.single("avatar"),
   controllerWrapper(ctrl.updateAvatar)
+);
+
+router.get("/verify/:verifyToken", controllerWrapper(ctrl.verify));
+
+router.post(
+  "/verify",
+  verifyValidationMiddleware,
+  controllerWrapper(ctrl.reVerify)
 );
 
 module.exports = router;

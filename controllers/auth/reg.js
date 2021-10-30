@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
-const { Conflict } = require("http-errors");
 const gravatar = require("gravatar");
+const { v4 } = require("uuid");
+const { Conflict } = require("http-errors");
+const { sendMail } = require("../../utils");
 const { User } = require("../../models");
 
 const reg = async (req, res) => {
@@ -12,11 +14,19 @@ const reg = async (req, res) => {
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   const defaultAvatar = gravatar.url(email, { s: "250" }, true);
-  const { subscription } = await User.create({
+  const { subscription, verifyToken } = await User.create({
     email,
     password: hashPassword,
     avatarURL: defaultAvatar,
+    verifyToken: v4(),
   });
+
+  const regEmail = {
+    to: email,
+    subject: "Registration",
+    html: `<a href="http://localhost:3000/api/users/verify/${verifyToken}">Confirm registration</a>`,
+  };
+  await sendMail(regEmail);
 
   res.status(201).json({
     status: "Created",
