@@ -15,7 +15,12 @@ const removeContact = async(contactId) =>{
     // return filtrContact
 
     //////// second way////////
-    const indexContact = allContacts.findIndex(item => item.id === Number(contactId))
+    const indexContact = allContacts.findIndex(item => { 
+        if (Number(contactId)) {
+            return item.id === Number(contactId)
+        }
+        return item.id === contactId
+    } )
     if (indexContact === -1) {
         console.log(chalk.red('Contact with this ID not found!'));
         return null
