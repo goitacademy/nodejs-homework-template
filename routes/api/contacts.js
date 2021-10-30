@@ -55,14 +55,13 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
     const { error } = joiSchema.validate(req.body);
     if (error) {
       throw new BadRequest(error.message);
     }
 
     const newContact = await contactsOperations.addContact(req.body);
-    console.log(newContact);
+
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
@@ -87,8 +86,27 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = joiSchema.validate(req.body);
+    if (error) {
+      throw new BadRequest(error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contactsOperations.updateById(contactId, req.body);
+    if (!result) {
+      throw new NotFound(`Contact with id=${contactId} not found`);
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
