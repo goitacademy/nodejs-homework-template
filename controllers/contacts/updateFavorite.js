@@ -1,7 +1,7 @@
 const { NotFound, BadRequest } = require("http-errors");
 const { Contact } = require("../../models");
 
-const updateFavorite = async (req, res, next) => {
+const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
   const owner = req.user._id;
   const { favorite } = req.body;

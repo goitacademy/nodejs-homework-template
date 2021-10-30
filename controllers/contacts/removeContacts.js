@@ -1,7 +1,7 @@
 const { NotFound } = require("http-errors");
 const { Contact } = require("../../models");
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req, res) => {
   const { contactId } = req.params;
   const owner = req.user._id;
   const deleteContact = await Contact.findOneAndRemove({

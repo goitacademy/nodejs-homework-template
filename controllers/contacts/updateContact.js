@@ -1,18 +1,16 @@
-const { NotFound, BadRequest } = require("http-errors");
+const { NotFound } = require("http-errors");
 const { Contact } = require("../../models");
 
-const updateFavorite = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const owner = req.user._id;
-  const { favorite } = req.body;
   const updateContact = await Contact.findOneAndUpdate(
     { _id: contactId, owner },
-    { favorite },
-    { new: true }
+    req.body,
+    {
+      new: true,
+    }
   );
-  if (favorite === undefined) {
-    throw new BadRequest("missing field favorite");
-  }
   if (!updateContact) {
     throw new NotFound("Not found");
   }
@@ -23,4 +21,4 @@ const updateFavorite = async (req, res, next) => {
   });
 };
 
-module.exports = updateFavorite;
+module.exports = updateContact;
