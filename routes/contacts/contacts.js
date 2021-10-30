@@ -14,27 +14,33 @@ const {
   updateStatusFavoriteContact,
 } = require("../../controllers/contacts");
 const guard = require("../../helpers/guard");
+const wrapError = require("../../helpers/errorhendler");
 
-router.get("/", guard, getContacts);
+router.get("/", guard, wrapError(getContacts));
 
-router.get("/:contactId", guard, validateIdContact, getContact);
+router.get("/:contactId", guard, validateIdContact, wrapError(getContact));
 
-router.post("/", guard, validateContact, createContact);
+router.post("/", guard, validateContact, wrapError(createContact));
 
-router.delete("/:contactId", guard, validateIdContact, deleteContact);
+router.delete(
+  "/:contactId",
+  guard,
+  validateIdContact,
+  wrapError(deleteContact)
+);
 
 router.put(
   "/:contactId",
   guard,
   [validateIdContact, validateContact],
-  updateContact
+  wrapError(updateContact)
 );
 
 router.patch(
   "/:contactId/favorite",
   guard,
   [validateIdContact, validateStatusContact],
-  updateStatusFavoriteContact
+  wrapError(updateStatusFavoriteContact)
 );
 
 module.exports = router;
