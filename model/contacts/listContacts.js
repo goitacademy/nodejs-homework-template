@@ -1,6 +1,5 @@
 const readContact = require("./readContact");
 
-const listContacts = async () => {
-  return await readContact();
-};
+const listContacts = async () => readContact();
+
 module.exports = listContacts;

@@ -13,7 +13,7 @@ const removeContact = async (contactId) => {
     ({ id }) => Number(id) !== Number(contactId)
   );
   await updateContacts(newContacts);
-  console.table(newContacts);
+
   return contacts[idx];
 };
 

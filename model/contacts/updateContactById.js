@@ -8,7 +8,8 @@ const updateContactById = async (id, body) => {
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = { id, ...body };
+
+  contacts[idx] = { ...contacts[idx], ...body };
   await updateContacts(contacts);
   return contacts[idx];
 };

@@ -1,6 +1,6 @@
 const express = require("express");
 const { NotFound, BadRequest } = require("http-errors");
-const Joi = require("joi");
+
 const {
   listContacts,
   addContact,
@@ -8,17 +8,7 @@ const {
   updateContactById,
   getContactById,
 } = require("../../model/contacts");
-
-const joiSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
-    .required(),
-});
+const { updateSchema, contactSchema } = require("../../validation");
 
 const router = express.Router();
 
@@ -58,7 +48,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
+    const { error } = contactSchema.validate(req.body);
     if (error) {
       throw new BadRequest(error.message);
     }
@@ -94,7 +84,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
+    const { error } = updateSchema.validate(req.body);
     if (error) {
       throw new BadRequest(error.message);
     }
