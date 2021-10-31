@@ -34,6 +34,7 @@ const userRegistration = async (req, res, next) => {
 const userLogin = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await Users.findUserByEmail(email);
+  console.log(user);
   const isValidPassword = await user.isValidPassword(password);
   if (!user || !isValidPassword) {
     // UNAUTHORIZED+
@@ -42,6 +43,7 @@ const userLogin = async (req, res, next) => {
     throw new CustomError(HttpCode.UNAUTHORIZED, "Invalid credentials");
   }
   // res.json({});
+
   const id = user._id;
   const payload = { id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
@@ -49,17 +51,40 @@ const userLogin = async (req, res, next) => {
   return res.status(HttpCode.OK).json({
     status: "success",
     cod: HttpCode.OK,
-    data: { token },
+    data: {
+      token: token,
+      user: { email: user.email, subscription: user.subscription },
+    },
   });
 };
+
+const updateUserSubscription = async (req, res, next) => {
+  const { subscription } = req.body;
+  // const user = req.user;
+
+  const userId = req.user._id;
+  const user = await Users.updateSubscription({ subscription }, userId);
+
+  if (user) {
+    return res.status(200).json({
+      status: "success",
+      cod: 200,
+      data: { user: { email: user.email, subscription: user.subscription } },
+    });
+  }
+  // если изменить раут - 404 в app.js
+  throw new CustomError(404, "updateUserSubscription Not Found");
+};
+
 const userLogout = async (req, res, next) => {
   const id = req.user._id;
   await Users.updateToken(id, null);
-  throw new CustomError(HttpCode.NO_CONTENT);
+  res.status(HttpCode.NO_CONTENT).json({});
 };
 
 module.exports = {
   userRegistration,
   userLogin,
+  updateUserSubscription,
   userLogout,
 };

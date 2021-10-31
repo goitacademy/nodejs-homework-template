@@ -16,9 +16,20 @@ const create = async ({ email, password, subscription }) => {
 const updateToken = async (id, token) => {
   return await User.updateOne({ _id: id }, { token });
 };
+
+const updateSubscription = async (body, userId) => {
+  const updateSubscription = await User.findByIdAndUpdate(
+    { _id: userId },
+    { ...body },
+    { new: true }
+  );
+  return updateSubscription;
+};
+
 module.exports = {
   findById,
   findUserByEmail,
   create,
   updateToken,
+  updateSubscription,
 };
