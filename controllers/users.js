@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
 const { HttpCode } = require("../config/constants");
+const CustomError = require("../helpers/customError");
+
 require("dotenv").config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -13,37 +15,31 @@ const userRegistration = async (req, res, next) => {
   const { email, password, subscription } = req.body;
   const user = await Users.findUserByEmail(email);
   if (user) {
-    return res.status(HttpCode.CONFLICT).json({
-      status: "error",
-      cod: HttpCode.CONFLICT,
-      message: "Email is already exist",
-    });
+    // CONFLICT +
+    // 400 "It's ValidationError" если убрать одну строку из боди
+    throw new CustomError(HttpCode.CONFLICT, "Email is already exist");
   }
-  try {
-    const newUser = await Users.create({ email, password, subscription });
-    return res.status(HttpCode.CREATED).json({
-      status: "success",
-      cod: HttpCode.CREATED,
-      data: {
-        id: newUser.id,
-        email: newUser.email,
-        subscription: newUser.subscription,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
+
+  const newUser = await Users.create({ email, password, subscription });
+  return res.status(HttpCode.CREATED).json({
+    status: "success",
+    cod: HttpCode.CREATED,
+    data: {
+      id: newUser.id,
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
 };
 const userLogin = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await Users.findUserByEmail(email);
   const isValidPassword = await user.isValidPassword(password);
   if (!user || !isValidPassword) {
-    return res.status(HttpCode.UNAUTHORIZED).json({
-      status: "error",
-      cod: HttpCode.UNAUTHORIZED,
-      message: "Invalid credentials",
-    });
+    // UNAUTHORIZED+
+    // 404 in app.js +
+    // 500 +  because havn't validation
+    throw new CustomError(HttpCode.UNAUTHORIZED, "Invalid credentials");
   }
   // res.json({});
   const id = user._id;
@@ -59,7 +55,7 @@ const userLogin = async (req, res, next) => {
 const userLogout = async (req, res, next) => {
   const id = req.user._id;
   await Users.updateToken(id, null);
-  res.status(HttpCode.NO_CONTENT).json({});
+  throw new CustomError(HttpCode.NO_CONTENT);
 };
 
 module.exports = {
