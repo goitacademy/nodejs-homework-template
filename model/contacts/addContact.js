@@ -9,5 +9,6 @@ const addContact = async (data) => {
   const newContact = { id, ...data };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return newContact;
 };
 module.exports = addContact;
