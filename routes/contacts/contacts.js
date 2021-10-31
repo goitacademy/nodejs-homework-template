@@ -15,8 +15,20 @@ const {
 } = require("../../controllers/contacts");
 const guard = require("../../helpers/guard");
 const wrapError = require("../../helpers/errorhendler");
+const role = require("../../helpers/role");
+const { Status } = require("../../config/constants");
 
 router.get("/", guard, wrapError(getContacts));
+router.get(
+  "/role",
+  guard,
+  role(Status.BUSINESS),
+  wrapError((req, res, next) => {
+    res
+      .status(200)
+      .json({ status: "success", cod: 200, message: "Only for business" });
+  })
+);
 
 router.get("/:contactId", guard, validateIdContact, wrapError(getContact));
 

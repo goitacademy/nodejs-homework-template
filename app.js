@@ -18,6 +18,11 @@ app.use(cors());
 app.use(express.json({ limit: RareLimits.JSON_LIMIT }));
 app.use(boolParser());
 
+app.use((req, res, next) => {
+  // установили глобальную переменную
+  app.set("lang", req.acceptsLanguages(["en", "ru"]));
+  next();
+});
 app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
