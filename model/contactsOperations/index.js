@@ -9,5 +9,5 @@ module.exports = {
   getContactById,
   addContact,
   removeContact,
-  updateContactById
+  updateContactById,
 }
