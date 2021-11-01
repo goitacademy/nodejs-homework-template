@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node ./bin/server.ts",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
-    "lint": "eslint \"**/*.js\"",
-    "lint:fix": "eslint --fix \"**/*.js\""
+    "start": "ts-node ./src/bin/server.ts",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./src/bin/server.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint --fix . --ext .ts"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -26,6 +26,8 @@
     "@types/http-errors": "^1.8.1",
     "@types/joi": "^17.2.3",
     "@types/morgan": "^1.9.3",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
     "eslint": "^8.1.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-standard": "^16.0.2",
