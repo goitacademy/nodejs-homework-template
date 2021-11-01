@@ -1,10 +1,6 @@
 const Contact = require("../model/contact");
 
 const listContacts = async (userId, query) => {
-  // const results = await Contact.find({ owner: userId }).populate({
-  //   path: "owner",
-  //   select: "email subscription createdAt  updatedAt",
-  // });
   const {
     sortBy,
     sortByDesc,
@@ -27,7 +23,7 @@ const listContacts = async (userId, query) => {
     select: filter ? filter.split("|").join(" ") : "",
     populate: {
       path: "owner",
-      select: "email subscription createdAt  updatedAt",
+      select: "email subscription _id",
     },
   });
   const { docs: contacts } = results;

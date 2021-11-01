@@ -3,45 +3,49 @@ const { HttpCode } = require("../config/constans");
 const { CustomError } = require("../helpers/customError");
 
 const getContacts = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const data = await Contacts.listContacts(userId, req.query);
   return res.status(HttpCode.OK).json({
     status: "success",
     code: HttpCode.OK,
     data: { ...data },
+    message: "Contact loaded",
   });
 };
 
 const getContact = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const contact = await Contacts.getContactById(req.params.contactId, userId);
   if (contact) {
     return res
       .status(HttpCode.OK)
       .json({ status: "success", code: HttpCode.OK, data: { contact } });
   }
+  newFunction();
 
-  throw new CustomError(404, "Not Found!");
+  function newFunction() {
+    throw new CustomError(404, "Not Found!");
+  }
 };
 
 const updateContact = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const contact = await Contacts.updateContact(
     req.params.contactId,
     req.body,
     userId
   );
+
   if (contact) {
     return res
       .status(HttpCode.OK)
       .json({ status: "success", code: HttpCode.OK, data: { contact } });
   }
-
   throw new CustomError(404, "Not Found!");
 };
 
 const createContact = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const contact = await Contacts.addContact({ ...req.body, owner: userId });
   res
     .status(HttpCode.CREATED)
@@ -49,7 +53,7 @@ const createContact = async (req, res) => {
 };
 
 const removeContact = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const contact = await Contacts.removeContact(req.params.contactId, userId);
   if (contact) {
     return res
@@ -61,7 +65,7 @@ const removeContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
-  const userId = req.user._id;
+  const userId = req.user?.id;
   const contact = await Contacts.updateContact(
     req.params.contactId,
     req.body,

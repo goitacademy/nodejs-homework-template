@@ -42,6 +42,16 @@ contactSchema.path("name").validate(function (value) {
   return re.test(String(value));
 });
 
+contactSchema.path("email").validate((value) => {
+  const result = /([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})/;
+  return result.test(String(value));
+});
+
+contactSchema.path("phone").validate((value) => {
+  const result = /[(][0-9]{3}[)][\s][0-9]{3}[-][0-9]{4}/;
+  return result.test(String(value));
+});
+
 contactSchema.plugin(mongoosePaginate);
 
 const Contact = model("contact", contactSchema);

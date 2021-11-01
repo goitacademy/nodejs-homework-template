@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
+
+const path = require("path");
+const UploadService = require("../services/file-upload");
 const { HttpCode } = require("../config/constans");
-require("dotenv").config();
+const mkdirp = require("mkdirp");
+
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const signup = async (req, res, next) => {
@@ -23,6 +27,7 @@ const signup = async (req, res, next) => {
         id: newUser.id,
         email: newUser.email,
         password: newUser.password,
+        avatar: newUser.avatar,
       },
     });
   } catch (e) {
@@ -57,6 +62,24 @@ const logout = async (req, res) => {
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
+// Local storage
+const uploadAvatar = async (req, res) => {
+  const id = String(req.user._id);
+  const file = req.file;
+  const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+  const destination = path.join(AVATAR_OF_USERS, id);
+  await mkdirp(destination);
+  const uploadService = new UploadService(destination);
+  const avatarUrl = await uploadService.save(file, id);
+  await Users.updateAvatar(id, avatarUrl);
+
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    data: { avatar: avatarUrl },
+  });
+};
+
 const current = async (req, res, next) => {
   try {
     const id = req.user.id;
@@ -84,8 +107,8 @@ const current = async (req, res, next) => {
 
 const updateSubUser = async (req, res, next) => {
   try {
-    const { subscription } = req.body;
-    const user = await Users.updateSub(subscription);
+    const { subscription, id } = req.body;
+    const user = await Users.updateSub(subscription, id);
 
     return res.status(HttpCode.OK).json({
       status: "success",
@@ -97,4 +120,11 @@ const updateSubUser = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, logout, current, updateSubUser };
+module.exports = {
+  signup,
+  login,
+  logout,
+  current,
+  updateSubUser,
+  uploadAvatar,
+};
