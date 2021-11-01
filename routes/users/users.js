@@ -11,7 +11,6 @@ const guard = require("../../helpers/guard");
 const limitLogin = require("../../helpers/rate-limit-login");
 const wrapError = require("../../helpers/errorhendler");
 
-// router.patch("/", wrapError(userSubscription));
 router.post("/signup", validateUser, wrapError(userRegistration));
 router.post("/login", validateUser, limitLogin, wrapError(userLogin));
 router.post("/logout", guard, wrapError(userLogout));

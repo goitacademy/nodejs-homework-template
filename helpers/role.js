@@ -10,8 +10,6 @@ const role = (role) => (req, res, next) => {
       message: FORBIDDEN[req.app.get("lang")], // вытянули глобальную переменную
     });
   }
-  //   console.log(req.user);
-
   return next();
 };
 module.exports = role;

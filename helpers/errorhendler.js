@@ -1,3 +1,5 @@
+const { HttpCode } = require("../config/constants");
+
 const wrapper = (fn) => async (req, res, next) => {
   try {
     const result = await fn(req, res, next);
@@ -5,10 +7,10 @@ const wrapper = (fn) => async (req, res, next) => {
   } catch (error) {
     switch (error.name) {
       case "ValidationError":
-        res.status(400).json({
+        res.status(HttpCode.BAD_REQUEST).json({
           status: "error",
-          code: 400,
-          message: "It's ValidationError",
+          code: HttpCode.BAD_REQUEST,
+          message: "missing required name field",
         });
         break;
       case "CustomError":

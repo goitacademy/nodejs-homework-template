@@ -1,6 +1,6 @@
 const Joi = require("joi");
+const { HttpCode } = require("../../config/constants");
 
-// const patternTel = "^[- +()0-9]+$";
 const regularExpression =
   "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$";
 const schema = Joi.object({
@@ -11,12 +11,11 @@ const schema = Joi.object({
       tlds: { allow: ["com", "net", "ua", "ru", "pl"] },
     })
     .required(),
-
-  subscription: Joi.string().allow("starter", "pro", "business").optional(),
+  subscription: Joi.string().valid("starter", "pro", "business").optional(),
 });
 
 const schemaSubscriptionUser = Joi.object({
-  subscription: Joi.string().allow("starter", "pro", "business").required(),
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -24,14 +23,11 @@ const validate = async (schema, obj, res, next) => {
     await schema.validateAsync(obj);
     next();
   } catch (err) {
-    console.log(err.name); // ValidationError;
-
-    res.status(400).json({
+    res.status(HttpCode.BAD_REQUEST).json({
       status: "error",
-      code: 400,
-      message: "It's validation Error: missing required name field",
-      // message: err.message,
-      // message: `Field ${err.message.replace(/"/g, "")}`,
+      code: HttpCode.BAD_REQUEST,
+      message: "missing required name field",
+      //   message: `Field ${err.message.replace(/"/g, "")}`,
     });
   }
 };
