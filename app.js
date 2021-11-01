@@ -2,24 +2,30 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contacts')
-
 const app = express()
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const contactsRouter = require('./routes/api/contacts/contacts')
 
-app.use(logger(formatsLogger))
+const formatLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
+app.use(logger(formatLogger))
 app.use(cors())
+
+// if the request has a body then execute json.parse()(string json to object)
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+  res.status(404).json({
+    message: 'not found',
+  })
 })
 
+// If the error handler has 4 arguments, then express will pass it to the 1st
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = 'Server error' } = err
+  res.status(status).json({ message })
 })
 
 module.exports = app
