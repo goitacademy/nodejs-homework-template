@@ -1,7 +1,8 @@
-const app = require('../app')
+const chalk = require("chalk");
+const app = require("../app");
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`)
-})
+  console.log(chalk.blueBright(`Server running. Use our API on port: ${PORT}`));
+});
