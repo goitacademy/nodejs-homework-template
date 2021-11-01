@@ -8,8 +8,6 @@ const fs = require("fs/promises");
 const path = require("path");
 const Jimp = require("jimp");
 const gravatar = require("gravatar");
-// const { nanoid } = require("nanoid");
-
 const { v4: uuidv4 } = require("uuid");
 const { sendEmail } = require("../../helpers");
 const { token } = require("morgan");
@@ -21,7 +19,6 @@ const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const verifyToken = uuidv4();
-    console.log(verifyToken);
     const user = await Users.findByEmail(email);
     if (user) {
       return next({
@@ -30,7 +27,7 @@ const register = async (req, res, next) => {
       });
     }
     const newUser = await Users.createVerify(email, password, verifyToken);
-    console.log(newUser);
+
     const mail = {
       to: email,
       subject: "Подтверждение регистрации на сайте",
@@ -62,8 +59,8 @@ const login = async (req, res, next) => {
       throw new Unauthorized("Email or password is wrong, or email not verify");
     }
     const isValidPassword = await user.validPassword(password);
-    // || !user.verify
-    if (!user || !isValidPassword) {
+
+    if (!user || !isValidPassword || !user.verify) {
       throw new Unauthorized("Email or password is wrong,or email not verify");
     }
     const id = user._id;
@@ -161,7 +158,6 @@ const verify = async (req, res, next) => {
     message: "Verification successful",
   });
 };
-// console.log(verify());
 const reSend = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -171,12 +167,10 @@ const reSend = async (req, res) => {
     });
   }
 
-  // const user = await User.findOne({ email });
   const user = await Users.findByEmail(email);
   if (!user) {
     throw new NotFound("User not found");
   }
-  console.log(user.verify);
   if (user.verify) {
     return res.json({
       status: "success",

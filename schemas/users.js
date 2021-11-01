@@ -35,8 +35,7 @@ const userSchema = new Schema(
     },
     verifyToken: {
       type: String,
-      // default: null,
-      required: [true, "Verify token is required"],
+       required: [true, "Verify token is required"],
     },
   },
 
@@ -51,22 +50,22 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-userSchema.methods.setPassword = function (password) {
-  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-};
+// userSchema.methods.setPassword = function (password) {
+//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// };
 
-userSchema.methods.comparePassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
-};
+// userSchema.methods.comparePassword = function (password) {
+//   return bcrypt.compareSync(password, this.password);
+// };
 userSchema.methods.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-userSchema.methods.setAvatar = function (avatar) {
-  this.avatarURL = avatar;
-};
-userSchema.methods.setVerifyToken = function (verifyToken) {
-  this.verifyToken = verifyToken;
-};
+// userSchema.methods.setAvatar = function (avatar) {
+//   this.avatarURL = avatar;
+// };
+// userSchema.methods.setVerifyToken = function (verifyToken) {
+//   this.verifyToken = verifyToken;
+// };
 const User = model("user", userSchema);
 
 module.exports = {
