@@ -22,6 +22,6 @@ const ContactSchema = Schema({
   timestamps: true
 })
 
-const Contact = model('contact', ContactSchema)
+const Contact = model('_contact', ContactSchema)
 
 module.exports = Contact
