@@ -10,18 +10,24 @@ const {
 } = require('./validation');
 
 const guard = require('../../helpers/guard');
+const wrapError = require('../../helpers/errorHandles');
 
-router.get('/', guard, ctrlContacts.getContacts);
+router.get('/', guard, wrapError(ctrlContacts.getContacts));
 
-router.get('/:contactId', guard, validateContactId, ctrlContacts.getContact);
+router.get(
+  '/:contactId',
+  guard,
+  validateContactId,
+  wrapError(ctrlContacts.getContact),
+);
 
-router.post('/', guard, validateContact, ctrlContacts.saveContact);
+router.post('/', guard, validateContact, wrapError(ctrlContacts.saveContact));
 
 router.delete(
   '/:contactId',
   guard,
   validateContactId,
-  ctrlContacts.removeContact,
+  wrapError(ctrlContacts.removeContact),
 );
 
 router.put(
@@ -29,7 +35,7 @@ router.put(
   guard,
   validateContactId,
   validateContactPatch,
-  ctrlContacts.updateContact,
+  wrapError(ctrlContacts.updateContact),
 );
 
 router.patch(
@@ -37,7 +43,7 @@ router.patch(
   guard,
   validateContactId,
   validateContactStatusPatch,
-  ctrlContacts.updateStatusFavoriteContact,
+  wrapError(ctrlContacts.updateStatusFavoriteContact),
 );
 
 module.exports = router;
