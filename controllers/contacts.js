@@ -1,97 +1,70 @@
 const Contacts = require("../repository/contacts");
+const { CustomError } = require("../helpers/customError");
 
-const getContacts = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const data = await Contacts.listContacts(userId, req.query);
-    res.json({ status: "success", code: 200, data: { ...data } });
-  } catch (error) {
-    next(error);
-  }
+const getContacts = async (req, res) => {
+  const userId = req.user._id;
+  const data = await Contacts.listContacts(userId, req.query);
+  res.json({ status: "success", code: 200, data: { ...data } });
 };
 
 const gatContact = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const contact = await Contacts.getContactById(req.params.contactId, userId);
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: "error", code: 404, message: "Not found" });
-    }
-    return res
-      .status(200)
-      .json({ status: "success", code: 200, data: { contact } });
-  } catch (error) {
-    next(error);
+  const userId = req.user._id;
+  const contact = await Contacts.getContactById(req.params.contactId, userId);
+  if (!contact) {
+    throw new CustomError(404, "Not found");
   }
+  return res
+    .status(200)
+    .json({ status: "success", code: 200, data: { contact } });
 };
 
 const createContact = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const contact = await Contacts.addContact({ ...req.body, owner: userId });
-    res.status(201).json({ status: "success", code: 201, data: { contact } });
-  } catch (error) {
-    next(error);
-  }
+  const userId = req.user._id;
+  const contact = await Contacts.addContact({ ...req.body, owner: userId });
+  res.status(201).json({ status: "success", code: 201, data: { contact } });
 };
 
 const deleteContact = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const contacts = await Contacts.removeContact(req.params.contactId, userId);
-    res.status(204).json();
-  } catch (error) {
-    res
-      .status(404)
-      .json({ status: "error", code: 404, message: error.message });
-    next(error);
+  const userId = req.user._id;
+  const contact = await Contacts.removeContact(req.params.contactId, userId);
+  if (contact) {
+    return res
+      .status(200)
+      .json({ status: "success", code: 200, data: { contact } });
   }
+  throw new CustomError(404, "Not found");
 };
 
 const changeContact = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const contact = await Contacts.updateContact(
-      req.params.contactId,
-      req.body,
-      userId
-    );
+  const userId = req.user._id;
+  const contact = await Contacts.updateContact(
+    req.params.contactId,
+    req.body,
+    userId
+  );
 
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: "error", code: 404, message: "Not found" });
-    }
-    return res
-      .status(200)
-      .json({ status: "success", code: 200, data: { contact } });
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw new CustomError(404, "Not found");
   }
+  return res
+    .status(200)
+    .json({ status: "success", code: 200, data: { contact } });
 };
 
 const changeStatusContact = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const contact = await Contacts.updateStatusContact(
-      req.params.contactId,
-      req.body,
-      userId
-    );
+  const userId = req.user._id;
+  const contact = await Contacts.updateStatusContact(
+    req.params.contactId,
+    req.body,
+    userId
+  );
 
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: "error", code: 404, message: "Not found" });
-    }
-    return res
-      .status(200)
-      .json({ status: "success", code: 200, data: { contact } });
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw new CustomError(404, "Not found");
   }
+  return res
+    .status(200)
+    .json({ status: "success", code: 200, data: { contact } });
 };
 
 module.exports = {

@@ -13,21 +13,28 @@ const { validateContact, validateId } = require("./validation");
 
 const guard = require("../../helpers/guard");
 
-router.get("/", guard, getContacts);
+const wrapError = require("../../helpers/errorHandler");
 
-router.get("/:contactId", guard, validateId, gatContact);
+router.get("/", guard, wrapError(getContacts));
 
-router.post("/", guard, validateContact, createContact);
+router.get("/:contactId", guard, validateId, wrapError(gatContact));
 
-router.delete("/:contactId", guard, validateId, deleteContact);
+router.post("/", guard, validateContact, wrapError(createContact));
 
-router.put("/:contactId", guard, [validateId, validateContact], changeContact);
+router.delete("/:contactId", guard, validateId, wrapError(deleteContact));
+
+router.put(
+  "/:contactId",
+  guard,
+  [validateId, validateContact],
+  wrapError(changeContact)
+);
 
 router.patch(
   "/:contactId/favorite",
   guard,
   [validateId, validateContact],
-  changeStatusContact
+  wrapError(changeStatusContact)
 );
 
 module.exports = router;
