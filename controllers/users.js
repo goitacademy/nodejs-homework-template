@@ -1,36 +1,31 @@
 const jwt = require('jsonwebtoken');
 const Users = require('../repository/users');
-const { HttpCode } = require('../config/constants');
+
+const CustomError = require('../helpers/customError');
+const { HttpCode, ResponseStatus } = require('../config/constants');
 
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const signup = async (req, res, next) => {
   const { email, password, subscription } = req.body;
-
   const user = await Users.findByEmail(email);
+
   if (user) {
-    return res.status(HttpCode.CONFLICT).json({
-      status: 'error',
-      code: HttpCode.CONFLICT,
-      message: 'Email in use',
-    });
+    throw new CustomError(HttpCode.CONFLICT, 'Email in use');
   }
 
-  try {
-    const newUser = await Users.create({ email, password, subscription });
-    return res.status(HttpCode.CREATED).json({
-      status: 'success',
-      code: HttpCode.CREATED,
-      data: {
-        id: newUser.id,
-        email: newUser.email,
-        subscription: newUser.subscription,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+  const newUser = await Users.create({ email, password, subscription });
+
+  return res.status(HttpCode.CREATED).json({
+    status: ResponseStatus.SUCCESS,
+    code: HttpCode.CREATED,
+    data: {
+      id: newUser.id,
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
 };
 
 const login = async (req, res, next) => {
@@ -40,11 +35,7 @@ const login = async (req, res, next) => {
   const isValidPassword = await user?.isValidPassword(password);
 
   if (!user || !isValidPassword) {
-    return res.status(HttpCode.UNAUTHORIZED).json({
-      status: 'error',
-      code: HttpCode.UNAUTHORIZED,
-      message: 'Invalid credentials',
-    });
+    throw new CustomError(HttpCode.UNAUTHORIZED, 'Email or password is wrong');
   }
 
   const { _id: id, subscription } = user;

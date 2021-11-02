@@ -6,7 +6,7 @@ const helmet = require('helmet');
 
 const usersRouter = require('./routes/users/users');
 const contactsRouter = require('./routes/contacts/contacts');
-const { HttpCode } = require('./config/constants');
+const { HttpCode, ResponseStatus } = require('./config/constants');
 
 const app = express();
 
@@ -22,19 +22,19 @@ app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
+  res.status(HttpCode.NOT_FOUND).json({
+    status: ResponseStatus.ERROR,
+    code: HttpCode.NOT_FOUND,
+    message: 'Not found',
+  });
 });
 
 app.use((err, req, res, next) => {
-  res
-    .status(HttpCode.INTERNAL_SERVER_ERROR)
-    .json({
-      status: 'fail',
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: err.message,
-    });
+  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+    status: ResponseStatus.FAIL,
+    code: HttpCode.INTERNAL_SERVER_ERROR,
+    message: err.message,
+  });
 });
 
 module.exports = app;

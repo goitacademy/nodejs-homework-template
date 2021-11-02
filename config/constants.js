@@ -23,8 +23,15 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const ResponseStatus = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+  FAIL: 'fail',
+};
+
 module.exports = {
   ValidContactName,
   Subscription,
   HttpCode,
+  ResponseStatus,
 };

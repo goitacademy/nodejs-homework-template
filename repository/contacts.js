@@ -8,8 +8,9 @@ const listContacts = async (userId, query) => {
     favorite = null,
     limit = 5,
     page = 1,
-  } = query; // TODO: Add query validation
+  } = query;
   const searchOptions = { owner: userId };
+
   if (favorite !== null) {
     searchOptions.favorite = favorite;
   }
