@@ -12,7 +12,7 @@ const {
 const {
   addContactValidation,
   updateContactValidation,
-} = require('../../validation/validation')
+} = require('../../middleware/validation')
 
 router.get('/', listContactsController)
 

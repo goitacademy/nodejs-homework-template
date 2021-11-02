@@ -1,4 +1,4 @@
-const { removeContact } = require('../../contacts')
+const { removeContact } = require('../../model/contacts')
 
 const { readFile } = require('../../js')
 const contactsPath = require('./supportData')

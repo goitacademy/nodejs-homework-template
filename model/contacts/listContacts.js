@@ -1,4 +1,4 @@
-const { readFile } = require('../js')
+const { readFile } = require('../../js')
 const contactsPath = require('./supportData')
 
 const listContacts = async () => {
