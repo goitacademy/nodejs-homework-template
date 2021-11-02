@@ -1,5 +1,6 @@
 const fs = require('fs/promises')
 const path = require('path')
+const { nanoid } = require('nanoid')
 
 const contactsPath = path.join(__dirname, './contacts.json')
 
@@ -36,8 +37,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const contacts = await listContacts(contactsPath)
-  const lastContactOfContacts = contacts[contacts.length - 1]
-  const newContactId = lastContactOfContacts.id + 1
+  const newContactId = nanoid()
   const newContact = { ...body, id: newContactId }
   contacts.push(newContact)
   await updateContacts(contacts)
@@ -50,7 +50,7 @@ const updateContact = async (contactId, body) => {
   if (!contactIdx) {
     return null
   }
-  contacts[contactIdx] = { ...body, id: contactId }
+  contacts[contactIdx] = { ...contacts[contactIdx], ...body }
   await updateContacts(contacts)
   return contacts[contactIdx]
 }

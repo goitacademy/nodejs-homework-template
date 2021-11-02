@@ -3,7 +3,7 @@ const router = express.Router()
 const { NotFound, BadRequest } = require('http-errors')
 const Joi = require('joi')
 
-const joiSchema = Joi.object({
+const joiSchemaAdd = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().min(4).required().email(),
   phone: Joi.string()
@@ -11,6 +11,15 @@ const joiSchema = Joi.object({
     .max(14)
     .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers')
     .required(),
+})
+
+const joiSchemaPut = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().min(4).email(),
+  phone: Joi.string()
+    .min(9)
+    .max(14)
+    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers'),
 })
 
 const {
@@ -40,8 +49,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const numberId = Number(contactId)
-    const result = await getContactById(numberId)
+    const result = await getContactById(contactId)
     if (!result) {
       throw new NotFound('Not found')
     }
@@ -60,7 +68,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body)
+    const { error } = joiSchemaAdd.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
     }
@@ -80,8 +88,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const numberId = Number(contactId)
-    const result = await removeContact(numberId)
+    const result = await removeContact(contactId)
     if (!result) {
       throw new NotFound('Not found')
     }
@@ -95,13 +102,12 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body)
+    const { error } = joiSchemaPut.validate(req.body)
     if (error) {
       throw new BadRequest('missing fields')
     }
     const { contactId } = req.params
-    const numberId = Number(contactId)
-    const result = await updateContact(numberId, req.body)
+    const result = await updateContact(contactId, req.body)
     res.status(201).json({
       status: 'success',
       code: 200,
