@@ -1,9 +1,11 @@
-import getContacts from './getContacts';
-import getContactById from './getContactById';
-import deleteContact from './deleteContact';
-import postContact from './postContact';
-import updateContact from './updateContact';
-import updateStatusContact from './updateStatusContact';
+import {
+  getContacts,
+  getContactById,
+  postContact,
+  updateContact,
+  updateStatusContact,
+  deleteContact,
+} from "./contactsController";
 
 export {
   getContacts,
