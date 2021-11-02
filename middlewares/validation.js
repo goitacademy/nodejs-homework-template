@@ -44,7 +44,20 @@ const validatePatchContact = async (req, res, next) => {
   next()
 }
 
+const validatePatchStatusContact = async (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  })
+  try {
+    await schema.validateAsync(req.body)
+  } catch (err) {
+    return res.status(400).json({ status: err.details })
+  }
+  next()
+}
+
 module.exports = {
   validatePostPutContact,
-  validatePatchContact
+  validatePatchContact,
+  validatePatchStatusContact
 }

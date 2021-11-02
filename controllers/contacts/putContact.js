@@ -1,9 +1,9 @@
-const { updateContact } = require('../../model/contacts')
+const { replaceContact } = require('../../model/contacts')
 
 const putContact = async (req, res, next) => {
   const { contactId } = req.params
   try {
-    const data = await updateContact(contactId, req.body)
+    const data = await replaceContact(contactId, req.body)
     if (!data) {
       return res.status(404).json({ status: 'failure, no contact found' })
     }
