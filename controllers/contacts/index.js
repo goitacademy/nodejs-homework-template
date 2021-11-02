@@ -1,3 +1,7 @@
-const getAllContacts = require('./getAllContacts')
+const getAllContactsCtrl = require('./getAllContactsCtrl')
+const getContactByIdCtrl = require('./getContactByIdCtrl')
+const addContactCtrl = require('./addContactCtrl')
+const removeContactCtrl = require('./removeContactCtrl')
+const updateContactCtrl = require('./updateContactCtrl')
 
-module.exports = { getAllContacts }
+module.exports = { getAllContactsCtrl, getContactByIdCtrl, addContactCtrl, removeContactCtrl, updateContactCtrl }
