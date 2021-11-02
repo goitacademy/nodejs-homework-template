@@ -1,15 +1,68 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const fs = require('fs').promises;
+const uniqid = require('uniqid');
+const path = require('path');
+const contactsPath = path.resolve('./model/contacts.json');
+const { trimData } = require('../utils/utils');
 
-const listContacts = async () => {}
+const listContacts = async () => {
+  return await fs.readFile(contactsPath, 'utf8');
+};
 
-const getContactById = async (contactId) => {}
+const parsedContacts = async () => {
+  const contacts = await listContacts(contactsPath, 'utf8');
+  return JSON.parse(contacts);
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async contactId => {
+  const contacts = await parsedContacts();
 
-const addContact = async (body) => {}
+  return contacts.find(({ id }) => id == contactId); // ==
+};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async dataId => {
+  const contactId = Number(dataId);
+  const contacts = await parsedContacts();
+  const contact = contacts.find(({ id }) => String(id) === String(contactId));
+
+  const updatedContacts = contacts.filter(({ id }) => id !== contactId);
+  const data = JSON.stringify(updatedContacts);
+
+  fs.writeFile(contactsPath, data);
+
+  return contact;
+};
+
+const addContact = async body => {
+  let contacts = await parsedContacts();
+  trimData(body);
+  body.id = uniqid();
+
+  contacts = [...contacts, body];
+  const data = JSON.stringify(contacts);
+  await fs.writeFile(contactsPath, data);
+  return body;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await parsedContacts();
+  const data = [];
+  let foundContact = null;
+  trimData(body);
+
+  contacts.forEach(contact => {
+    if (contact.id == contactId) {
+      foundContact = { ...contact, ...body };
+      data.push(foundContact);
+    } else {
+      data.push(contact);
+    }
+  });
+
+  const updatedContacts = JSON.stringify(data);
+  fs.writeFile(contactsPath, updatedContacts);
+
+  return foundContact;
+};
 
 module.exports = {
   listContacts,
@@ -17,4 +70,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
