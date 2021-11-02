@@ -1,4 +1,3 @@
-// import * as yup from 'yup';
 const yup = require('yup');
 
 const phoneRegExp =
@@ -7,11 +6,7 @@ const phoneRegExp =
 let schema = yup.object().shape({
   name: yup.string(),
   email: yup.string().email(),
-  phone: yup
-    .string()
-    .trim()
-    // .strict({ isStrict: true })
-    .matches(phoneRegExp, 'Phone number is not valid'),
+  phone: yup.string().trim().matches(phoneRegExp, 'Phone number is not valid'),
   id: yup.string(),
 });
 
