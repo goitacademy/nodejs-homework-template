@@ -65,7 +65,15 @@ const updateContact = async (contactId, { name, email, phone }) => {
   if (isContackAlreadyExist) {
     return 'Contact already exist'
   }
-  contacts[idx] = { id: contactId, name, email, phone }
+  const createUpdatedContact = (name = contacts[idx].name, email = contacts[idx].email, phone = contacts[idx].phone) => {
+    return {
+      id: contactId,
+      name,
+      email,
+      phone
+    }
+  }
+  contacts[idx] = createUpdatedContact(name, email, phone)
   await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(contacts, null, 2))
   return contacts[idx]
 }
@@ -77,3 +85,4 @@ module.exports = {
   addContact,
   updateContact,
 }
+// {name = contacts[idx].name}, {email= contacts[idx].email}, {phone= contacts[idx].phone }

@@ -15,6 +15,23 @@ const joiShema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 })
+const putJoiShema = Joi.alternatives().try(
+  Joi.object({
+    name: Joi.string().allow(''),
+    email: Joi.string().allow(''),
+    phone: Joi.string().required()
+  }),
+  Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().allow(''),
+    phone: Joi.string().allow('')
+  }),
+  Joi.object({
+    name: Joi.string().allow(''),
+    email: Joi.string().required(),
+    phone: Joi.string().allow('')
+  })
+)
 
 router.get('/', async (req, res, next) => {
   try {
@@ -81,9 +98,9 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = joiShema.validate(req.body)
+    const { error } = putJoiShema.validate(req.body)
     if (error) {
-      throw new BadRequest(error.message)
+      throw new BadRequest('missing fields')
     }
     const idNormalize = Number(req.params.contactId)
     const updatedContact = await updateContact(idNormalize, req.body)
