@@ -2,11 +2,12 @@ const { Unauthorized } = require('http-errors')
 const { User } = require('../../models')
 
 const updateUser = async (req, res) => {
-  const { email, subscription } = req.body
+  const { _id, email } = req.user
+  const { email: userEmail, subscription } = req.body
 
-  await User.findOneAndUpdate(email, { subscription })
+  await User.findOneAndUpdate(_id, { subscription })
 
-  if (!email) {
+  if (!_id || userEmail !== email) {
     throw new Unauthorized('Not authorized')
   }
 
