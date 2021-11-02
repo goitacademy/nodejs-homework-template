@@ -7,11 +7,11 @@ const getAllContactsCtrl = async (req, res, next) => {
       status: 'success',
       code: 200,
       data: {
-        result: data
-      }
+        result: data,
+      },
     })
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }
 

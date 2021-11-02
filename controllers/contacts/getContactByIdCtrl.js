@@ -12,10 +12,10 @@ const getContactByIdCtrl = async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      data: { data }
+      data: { data },
     })
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }
 

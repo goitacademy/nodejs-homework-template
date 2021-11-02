@@ -1,22 +1,24 @@
-
 const { addContact } = require('../../model/contacts')
-
+const { joiContactsShcemaAdd } = require('../../validation/contactSchema')
 const addContactCtrl = async (req, res, next) => {
-  const { name, email, number } = req.body
+  const { name, email, phone } = req.body
 
-  console.log(!(name && email && number))
   try {
-    if (!(name && email && number)) {
-      return res.status(400).json({ message: 'missing required name field' })
+    const { error } = joiContactsShcemaAdd.validate(req.body)
+
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: error.message })
     }
-    const data = await addContact(name, email, number)
+    const data = await addContact(name, email, phone)
     res.json({
       status: 'success',
       code: 201,
-      data: { data }
+      data: { data },
     })
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }
 

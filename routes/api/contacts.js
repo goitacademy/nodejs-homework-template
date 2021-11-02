@@ -10,6 +10,6 @@ router.post('/', contactsControllers.addContactCtrl)
 
 router.delete('/:contactId', contactsControllers.removeContactCtrl)
 
-// router.patch('/:contactId', contactsControllers.updateContactCtrl)
+router.patch('/:contactId', contactsControllers.updateContactCtrl)
 
 module.exports = router

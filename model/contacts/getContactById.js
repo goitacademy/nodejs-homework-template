@@ -6,7 +6,9 @@ const getContactById = async contactId => {
     const contacts = await listContacts()
 
     const getContact = contacts.find(item => item.id === Number(contactId))
-
+    if (!getContact) {
+      return null
+    }
     return getContact
   } catch (error) {
     throw error

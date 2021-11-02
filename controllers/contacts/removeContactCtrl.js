@@ -11,10 +11,10 @@ const removeContactCtrl = async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      data: { message: 'contact deleted' }
+      data: { message: 'contact deleted' },
     })
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 }
 

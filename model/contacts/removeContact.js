@@ -7,17 +7,17 @@ const removeContact = async contactId => {
   try {
     const contacts = await listContacts()
 
-    const idx = contacts.findIndex(item => item.id === contactId)
-    if (idx === -1) {
-      throw new Error(`Contact with id=${contactId} not found`)
+    const contact = contacts.find(item => item.id === Number(contactId))
+
+    if (contact) {
+      const newContacts = contacts.filter(item => item.id !== Number(contactId))
+
+      const contactsString = JSON.stringify(newContacts)
+
+      await fs.writeFile(contactsPath, contactsString)
+
+      return contact
     }
-
-    const newContacts = contacts.filter(item => item.id !== contactId)
-    const contactsString = JSON.stringify(newContacts)
-
-    await fs.writeFile(contactsPath, contactsString)
-    console.table(contacts[idx])
-    return contacts[idx]
   } catch (error) {
     throw error
   }
