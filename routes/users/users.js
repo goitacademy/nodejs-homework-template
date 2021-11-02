@@ -21,11 +21,15 @@ router.post(
   wrapError(ctrlUsers.login),
 );
 
-router.post(
-  '/logout',
+router.post('/logout', guard, wrapError(ctrlUsers.logout));
+
+router.get('/current', guard, wrapError(ctrlUsers.getCurrentUser));
+
+router.patch(
+  '/',
   guard,
   validateUserSubscriptionPatch,
-  wrapError(ctrlUsers.logout),
+  wrapError(ctrlUsers.updateSubscription),
 );
 
 module.exports = router;

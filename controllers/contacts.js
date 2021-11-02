@@ -39,7 +39,7 @@ const saveContact = async (req, res) => {
   });
 };
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req, res) => {
   const userId = req.user._id;
   const contact = await Contacts.removeContact(req.params.contactId, userId);
 
@@ -55,7 +55,7 @@ const removeContact = async (req, res, next) => {
   throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const userId = req.user._id;
   const contact = await Contacts.updateContact(
     req.params.contactId,
@@ -73,7 +73,7 @@ const updateContact = async (req, res, next) => {
   throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
 };
 
-const updateStatusFavoriteContact = async (req, res, next) => {
+const updateStatusFavoriteContact = async (req, res) => {
   const userId = req.user._id;
   const contact = await Contacts.updateContact(
     req.params.contactId,

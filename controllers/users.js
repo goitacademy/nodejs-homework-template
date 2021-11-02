@@ -7,7 +7,7 @@ const { HttpCode, ResponseStatus } = require('../config/constants');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-const signup = async (req, res, next) => {
+const signup = async (req, res) => {
   const { email, password, subscription } = req.body;
   const user = await Users.findByEmail(email);
 
@@ -28,7 +28,7 @@ const signup = async (req, res, next) => {
   });
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await Users.findByEmail(email);
@@ -44,9 +44,9 @@ const login = async (req, res, next) => {
   await Users.updateToken(id, token);
 
   return res.status(HttpCode.OK).json({
-    status: 'success',
+    status: ResponseStatus.SUCCESS,
     code: HttpCode.OK,
-    date: {
+    data: {
       token,
       user: {
         email,
@@ -56,11 +56,43 @@ const login = async (req, res, next) => {
   });
 };
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
   const { _id: id } = req.user;
   await Users.updateToken(id, null);
 
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
-module.exports = { signup, login, logout };
+const getCurrentUser = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  return res.status(HttpCode.OK).json({
+    status: ResponseStatus.SUCCESS,
+    code: HttpCode.OK,
+    data: {
+      email,
+      subscription,
+    },
+  });
+};
+
+const updateSubscription = async (req, res) => {
+  const userId = req.user._id;
+  const user = await Users.updateSubscription(userId, req.body);
+
+  if (user) {
+    return res.status(HttpCode.OK).json({
+      status: ResponseStatus.SUCCESS,
+      code: HttpCode.OK,
+      data: {
+        id: user.userId,
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  }
+
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
+};
+
+module.exports = { signup, login, logout, getCurrentUser, updateSubscription };
