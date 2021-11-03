@@ -7,7 +7,7 @@ const validation = (schema) => {
             return res.
                 status(HTTP_CODS.BAD_REQUEST)
                 .json({
-                    "message": "missing field favorite"
+                    "message": error.message
                 });
         }
         next();
