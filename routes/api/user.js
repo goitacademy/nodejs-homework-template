@@ -10,4 +10,8 @@ router.patch('/', authenticate, validation(subscriptionSchema), controllerWrappe
 
 router.patch('/avatars', authenticate, upload.single('avatar'), controllerWrapper(users.updateAvatar))
 
+router.get('/verify/:verificationToken', controllerWrapper(users.verify))
+
+router.post('/verify', controllerWrapper(users.repeatVerify))
+
 module.exports = router

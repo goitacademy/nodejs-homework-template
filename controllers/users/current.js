@@ -1,9 +1,9 @@
 const { Unauthorized } = require('http-errors')
-const { User } = require('../../model/schemas/userModel')
+const { User } = require('../../models')
 
 const current = async (req, res, next) => {
   try {
-    const { _id, email, subscription } = req.user
+    const { _id, email } = req.user
     const currentUser = await User.findById(_id)
     if (!currentUser) {
       throw new Unauthorized('Not authorized')
@@ -11,9 +11,9 @@ const current = async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      data: {
+      user: {
         email,
-        subscription
+        subscription: 'starter'
       }
     })
   } catch (error) {
