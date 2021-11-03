@@ -11,7 +11,7 @@ const validateContact = (
   requiredFields: string[] = []
 ): ValidationResult => {
   let contactSchema = joi.object({
-    name: joi.string().min(3).max(30).pattern(namePattern, "name"),
+    name: joi.string().min(1).max(30).pattern(namePattern, "name"),
 
     email: joi.string().email({ minDomainSegments: 2 }),
 
