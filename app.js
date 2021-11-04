@@ -1,9 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const { DB_HOST } = require('./config')
+const { DB_HOST } = process.env
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -33,4 +34,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
 
-module.exports = app
+// module.exports = app
