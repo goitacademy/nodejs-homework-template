@@ -1,5 +1,5 @@
 const { updateContact } = require('../../model/contacts')
-const { joiContactsShcemaUpd } = require('../../validation/contactSchema')
+const { joiContactsShcemaUpd } = require('../../middlewares/validation/contactSchema')
 
 const updateContactCtrl = async (req, res, next) => {
   const { contactId } = req.params

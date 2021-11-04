@@ -1,5 +1,5 @@
 const { addContact } = require('../../model/contacts')
-const { joiContactsShcemaAdd } = require('../../validation/contactSchema')
+const { joiContactsShcemaAdd } = require('../../middlewares/validation/contactSchema')
 const addContactCtrl = async (req, res, next) => {
   const { name, email, phone } = req.body
 

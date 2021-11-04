@@ -1,12 +1,23 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+const { DB_HOST } = require('./config')
 
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
+mongoose.connect(DB_HOST, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true
+})
+  .then(() => {})
+  .catch(error => console.log(error))
 
 app.use(logger(formatsLogger))
 app.use(cors())
