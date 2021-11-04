@@ -85,4 +85,3 @@ module.exports = {
   addContact,
   updateContact,
 }
-// {name = contacts[idx].name}, {email= contacts[idx].email}, {phone= contacts[idx].phone }
