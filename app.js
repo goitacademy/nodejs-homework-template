@@ -17,7 +17,7 @@ mongoose.connect(DB_HOST, {
   useCreateIndex: true,
   useUnifiedTopology: true
 })
-  .then(() => {})
+  .then(() => { app.lisent(3000) })
   .catch(error => console.log(error))
 
 app.use(logger(formatsLogger))
