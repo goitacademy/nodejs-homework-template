@@ -42,7 +42,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', validate.createContacts, async (req, res, next) => {
+router.post('/', validate.createContact, async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body)
     res.status(201).json({
@@ -91,12 +91,14 @@ router.put('/:contactId', async (req, res, next) => {
           { name, email, phone }
       },
       )
+    } else {
+      return res.json({
+        status: 'error',
+        code: '404',
+        data: 'missing fields'
+      })
     }
-    return res.json({
-      status: 'error',
-      code: '404',
-      data: 'missing fields'
-    })
+
 
   } catch (error) {
     next(error)
@@ -105,15 +107,22 @@ router.put('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId', validate.updateContact, async (req, res, next) => {
   try {
-    const { name, email, phone } = await Contacts.updateContact(req.params.contactId, req.body)
-    if (name || email || phone) {
+    const { phone } = await Contacts.updateContact(req.params.contactId, req.body)
+    if (phone) {
       res.json({
         status: 'success',
         code: '200',
         data:
-          { name, email, phone }
+          { phone }
       },
       )
+    }
+    else {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        data: "Not Found",
+      });
     }
   } catch (error) {
     next(error)

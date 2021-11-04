@@ -1,12 +1,8 @@
 const Joi = require('joi');
 
 const schemaContactCreate = Joi.object({
-    name: Joi.string()
-        .alphanum()
-        .min(1)
-        .max(30)
-        .required(),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    name: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email().min(3).max(30).required(),
     phone: Joi.string()
         .length(10)
         .pattern(/^[0-9]+$/)
@@ -41,7 +37,7 @@ const validate = (schema, obj, next) => {
     next()
 }
 
-module.exports.createContacts = async (req, res, next) => {
+module.exports.createContact = async (req, res, next) => {
     return await validate(schemaContactCreate, req.body, res, next)
 }
 
