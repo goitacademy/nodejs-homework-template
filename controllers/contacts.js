@@ -1,8 +1,13 @@
+/* eslint-disable no-tabs */
 const { NotFound } = require('http-errors')
 const { Contact } = require('../models')
 
 const listContacts = async (req, res) => {
-    const contacts = await Contact.find({})
+	const { _id } = req.user
+	const { page = 1, limit = 10 } = req.query
+	const skip = (page - 1) * limit
+
+  const contacts = await Contact.find({ owner: _id }, '_id content owner', { skip, limit: +limit }).populate('owner', 'email')
     res.json({
         status: 'success',
         code: 200,

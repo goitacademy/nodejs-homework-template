@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-tabs */
 const { Schema, model } = require('mongoose')
 const Joi = require('joi')
 
@@ -21,7 +23,11 @@ const contactSchema = Schema({
         type: Boolean,
         default: false,
     },
-})
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: 'user',
+		}
+}, { versionKey: false, timestamp: true })
 
 const post = Joi.object({
     name: Joi.string().min(2).max(40).required(),
