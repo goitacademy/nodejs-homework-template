@@ -10,7 +10,6 @@ const userSchema = Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-		match: emailRegexp
   },
   email: {
     type: String,
@@ -26,10 +25,15 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
+	avatarURL: {
+		type: String,
+		required: true,
+	},
 }, { versionKey: false, timestamps: true })
 
 userSchema.methods.setPassword = function(password) {
     this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+		console.log(this.password)
 }
 
 userSchema.methods.comparePassword = function(password) {
