@@ -3,7 +3,6 @@ const path = require('path')
 
 const crypto = require('crypto')
 
-// const contacts = require('./contacts.json')
 const contactsPath = path.join(__dirname, './contacts.json')
 
 const readContact = async () => {
@@ -49,7 +48,7 @@ const removeContact = async (contactId) => {
   return delContact
 }
 
-// !=====================================update by id================================
+// =====================================update by id================================
 const updateContactById = async (contactId, body) => {
   const contact = await readContact()
   console.log(body)
