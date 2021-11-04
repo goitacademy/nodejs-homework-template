@@ -31,7 +31,7 @@ const removeContact = async (contactId) => {
 const addContact = async ({ name, email, phone }) => {
   const contacts = await contactsPath()
 
-  const isContackAlreadyExist = contacts.some(contact => contact.name === name || contact.email === email || contact.phone === phone)
+  const isContackAlreadyExist = contacts.some(contact => contact.email === email || contact.phone === phone)
 
   if (isContackAlreadyExist) {
     return null
@@ -61,7 +61,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
     return 'Contact not found'
   }
   const nonRenewableСontacts = contacts.filter(item => item.id !== contactId)
-  const isContackAlreadyExist = nonRenewableСontacts.some(contact => contact.name === name || contact.email === email || contact.phone === phone)
+  const isContackAlreadyExist = nonRenewableСontacts.some(contact => contact.email === email || contact.phone === phone)
   if (isContackAlreadyExist) {
     return 'Contact already exist'
   }
