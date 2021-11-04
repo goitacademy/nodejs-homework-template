@@ -19,7 +19,7 @@ app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err: IError, _: Request, res: Response, __: NextFunction) => {
+app.use((err: IError, _: Request, res: Response) => {
   const { status = 500, message = "Internal server error" } = err;
   res.status(status).json({ message });
 });
