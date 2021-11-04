@@ -1,24 +1,26 @@
 const express = require("express");
 const router = express.Router();
-
+// const joiSchema = require("../../../middlewares/validation/contacts");
+const { validation } = require("../../../middlewares/validation");
+const { joiContactsSchema } = require("../../../validations");
 const contactsControllers = require("../../../controllers/contacts");
-
-/**
- * 1.Получить все контакты
- * 2.Получить один контакт по id
- * 3.Добавить новый контакт
- * 4.Удалить контакт по id
- * 5.Обновить контакт по id
- */
 
 router.get("/", contactsControllers.listContactsController);
 
 router.get("/:contactId", contactsControllers.getContactByIdController);
 
-router.post("/", contactsControllers.addContactController);
+router.post(
+  "/",
+  validation(joiContactsSchema),
+  contactsControllers.addContactController
+);
 
 router.delete("/:contactId", contactsControllers.removeContactController);
 
-router.put("/:contactId", contactsControllers.updateByIdController);
+router.put(
+  "/:contactId",
+  validation(joiContactsSchema),
+  contactsControllers.updateByIdController
+);
 
 module.exports = router;
