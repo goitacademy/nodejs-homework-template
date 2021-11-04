@@ -11,6 +11,7 @@ const {
 const guard = require('../../helpers/guard');
 const loginLimit = require('../../helpers/rate-limit-login');
 const wrapError = require('../../helpers/errorHandles');
+const upload = require('../../helpers/uploads');
 
 router.post('/signup', validateUserSignup, wrapError(ctrlUsers.signup));
 
@@ -30,6 +31,13 @@ router.patch(
   guard,
   validateUserSubscriptionPatch,
   wrapError(ctrlUsers.updateSubscription),
+);
+
+router.patch(
+  '/avatar',
+  guard,
+  upload.single('avatar'),
+  wrapError(ctrlUsers.uploadAvatar),
 );
 
 module.exports = router;

@@ -4,6 +4,9 @@ const cors = require('cors');
 const boolParser = require('express-query-boolean');
 const helmet = require('helmet');
 
+require('dotenv').config();
+const USERS_AVATARS = process.env.USERS_AVATARS;
+
 const usersRouter = require('./routes/users/users');
 const contactsRouter = require('./routes/contacts/contacts');
 const { HttpCode, ResponseStatus } = require('./config/constants');
@@ -12,6 +15,7 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+app.use(express.static(USERS_AVATARS));
 app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -30,9 +34,14 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-    status: ResponseStatus.FAIL,
-    code: HttpCode.INTERNAL_SERVER_ERROR,
+  const statusCode = err.status || 500;
+
+  res.status(statusCode).json({
+    status:
+      statusCode === HttpCode.INTERNAL_SERVER_ERROR
+        ? ResponseStatus.FAIL
+        : ResponseStatus.ERROR,
+    code: statusCode,
     message: err.message,
   });
 });

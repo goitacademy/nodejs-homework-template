@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const mkdirp = require('mkdirp');
 const Users = require('../repository/users');
+const UploadService = require('../services/file-upload');
 
 const CustomError = require('../helpers/customError');
 const { HttpCode, ResponseStatus } = require('../config/constants');
@@ -24,6 +27,7 @@ const signup = async (req, res) => {
       id: newUser.id,
       email: newUser.email,
       subscription: newUser.subscription,
+      avatar: newUser.avatar,
     },
   });
 };
@@ -57,7 +61,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { _id: id } = req.user;
+  const id = req.user._id;
   await Users.updateToken(id, null);
 
   return res.status(HttpCode.NO_CONTENT).json({});
@@ -95,4 +99,32 @@ const updateSubscription = async (req, res) => {
   throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
 };
 
-module.exports = { signup, login, logout, getCurrentUser, updateSubscription };
+const uploadAvatar = async (req, res) => {
+  const id = String(req.user._id);
+  const file = req.file;
+
+  const USERS_AVATARS = process.env.USERS_AVATARS;
+  const destination = path.join(USERS_AVATARS, id);
+  await mkdirp(destination);
+
+  const uploadService = new UploadService(destination);
+  const avatarUrl = await uploadService.save(file, id);
+  await Users.updateAvatar(id, avatarUrl);
+
+  return res.status(HttpCode.OK).json({
+    status: ResponseStatus.SUCCESS,
+    code: HttpCode.OK,
+    data: {
+      avatar: avatarUrl,
+    },
+  });
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  getCurrentUser,
+  updateSubscription,
+  uploadAvatar,
+};
