@@ -18,6 +18,7 @@ const registration = async (req, res, next) => {
     });
   }
   try {
+    //TODO send email
     const newUser = await Users.create({ name, email, password, subscription });
     return res.status(HttpCode.CREATED).json({
       status: "Success",
@@ -39,7 +40,7 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
   const isValidPassword = await user.isValidPassword(password);
-  if (!user || !isValidPassword) {
+  if (!user || !isValidPassword || !user?.isVerified) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: "Error",
       code: HttpCode.UNAUTHORIZED,
@@ -87,10 +88,16 @@ const getUser = async (req, res, next) => {
     .json({ message: "Success", name, email, subscription });
 };
 
+const verifyUser = async (req, res, next) => {};
+
+const repeatEmailForVerifyUser = async (req, res, next) => {};
+
 module.exports = {
   registration,
   login,
   logout,
   uploadAvatar,
   getUser,
+  verifyUser,
+  repeatEmailForVerifyUser,
 };
