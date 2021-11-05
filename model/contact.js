@@ -1,22 +1,27 @@
-const { Schema, model } = require("mongoose");
+const { Schema, SchemaTypes, model } = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: [true, 'Set name for contact'],
     },
     email: {
       type: String,
-      required: [true, "Set email for contact"],
+      required: [true, 'Set email for contact'],
     },
     phone: {
       type: String,
-      required: [true, "Set phone for contact"],
+      required: [true, 'Set phone for contact'],
     },
     isFavorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
     },
   },
   {
@@ -30,22 +35,24 @@ const contactSchema = new Schema(
       },
     },
     toObject: { virtuals: true },
-  }
+  },
 );
 
-contactSchema.virtual("status").get(function () {
+contactSchema.virtual('status').get(function () {
   if (this.isFavorite === true) {
-    return "This contact is Favorite";
+    return 'This contact is Favorite';
   }
 
-  return "This contact is not Favorite";
+  return 'This contact is not Favorite';
 });
 
-contactSchema.path("name").validate(function (value) {
+contactSchema.path('name').validate(function (value) {
   const pattern = /[A-Z]\w+/;
   return pattern.test(String(value));
 });
 
-const Contact = model("contact", contactSchema);
+contactSchema.plugin(mongoosePaginate);
+
+const Contact = model('contact', contactSchema);
 
 module.exports = Contact;
