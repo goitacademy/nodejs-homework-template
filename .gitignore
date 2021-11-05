@@ -1,4 +1,4 @@
 node_modules
 .env
-upload
-user-avatars
+public/avatars
+tmp .

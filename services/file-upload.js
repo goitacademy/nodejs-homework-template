@@ -22,7 +22,6 @@ class UploadFileAvatar {
   }
 
   async save(file, idUser) {
-    console.log(file);
     await this.transformAvatar(file.path);
     await fs.rename(file.path, path.join(this.destination, file.filename));
 
