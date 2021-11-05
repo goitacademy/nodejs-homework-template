@@ -38,7 +38,7 @@ router.post(
   asyncWrapper([postContact])
 );
 
-router.patch(
+router.put(
   "/:contactId",
   asyncWrapper([
     updateContactValidation,
