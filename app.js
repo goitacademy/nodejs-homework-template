@@ -1,18 +1,23 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const dotenv = require('dotenv')
+dotenv.config({ path: './config/config.env' })
 
 const contactsRouter = require('./routes/contactsApi/contacts')
 
+// Init application
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+// Middlewares
 app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+app.use(cors()) // enable cors
+app.use(express.json()) // json body parse
 
-app.use('/api/contacts', contactsRouter)
+// Mounts routers
+app.use('/api/v1/contacts', contactsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
