@@ -2,6 +2,8 @@ const Users = require("../repository/users");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { HttpCode } = require("../config/constants");
+const EmailService = require("../services/email/service");
+const { CreateSenderNodemailer } = require("../services/email/sender");
 const UploadService = require("../services/file-upload");
 const mkdirp = require("mkdirp");
 require("dotenv").config();
@@ -20,6 +22,15 @@ const registration = async (req, res, next) => {
   try {
     //TODO send email
     const newUser = await Users.create({ name, email, password, subscription });
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      new CreateSenderNodemailer()
+    );
+    const statusEmail = await emailService.sendVerifyEmail(
+      newUser.email,
+      newUser.name,
+      newUser.verifyToken
+    );
     return res.status(HttpCode.CREATED).json({
       status: "Success",
       code: HttpCode.CREATED,
@@ -29,6 +40,7 @@ const registration = async (req, res, next) => {
         email: newUser.email,
         subscription: newUser.subscription,
         avatar: newUser.avatar,
+        successEmail: statusEmail,
       },
     });
   } catch (error) {

@@ -5,20 +5,21 @@ class EmailService {
     this.sender = sender; //sendgrid or nodemailer
     switch (env) {
       case "development":
-        this.link = "http://localhost:3030";
+        this.link = "http://127.0.0.1:3030";
         break;
       case "production":
         this.link = "link for production";
         break;
       default:
+        this.link = "http://127.0.0.1:3030";
         break;
     }
   }
   createTemplateEmail(name, verifyToken) {
     const mailGenerator = new Mailgen({
-      theme: "neopolitan",
+      theme: "default",
       product: {
-        name: "Test mail app",
+        name: "Mailgen",
         link: this.link,
       },
     });
@@ -41,7 +42,7 @@ class EmailService {
     return mailGenerator.generate(email);
   }
 
-  async senVerifyEmail(email, name, verifyToken) {
+  async sendVerifyEmail(email, name, verifyToken) {
     const emailHTML = this.createTemplateEmail(name, verifyToken);
     const msg = { to: email, subject: "Verify your email", email: emailHTML };
     try {
