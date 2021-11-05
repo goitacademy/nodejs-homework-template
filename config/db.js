@@ -17,6 +17,7 @@ mongoose.connection.on('error', error => {
 });
 
 process.on('SIGINT', async () => {
+
   await mongoose.connection.close();
   console.log('Connection to DB closed');
   process.exit();

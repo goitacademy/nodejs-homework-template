@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const { registration, login, logout,getCurrentUser, uploadAvatar } = require('../../controllers/users');
@@ -12,4 +13,5 @@ router.post('/logout', guard, logout);
 router.patch('/avatar', guard, upload.single('avatarURL'),uploadAvatar);
 
 router.get('/current', guard, getCurrentUser);
+
 module.exports = router;

@@ -1,3 +1,4 @@
+
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
@@ -21,6 +22,7 @@ app.use(boolParser());
 
 app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
+
 
 app.use((req, res) => {
   res.status(404).json({ status: 'error', code: 404, message: 'Not found' });

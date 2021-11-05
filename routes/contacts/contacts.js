@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const {
@@ -37,5 +38,6 @@ router.patch(
   [validateId, validateStatusContact],
   wrapError(updateStatusFavorite),
 );
+
 
 module.exports = router;
