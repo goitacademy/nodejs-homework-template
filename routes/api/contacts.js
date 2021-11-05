@@ -1,38 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const { NotFound, BadRequest } = require('http-errors')
-const Joi = require('joi')
+const { NotFound } = require('http-errors')
+const { validation, controllerWrapper } = require('../../middlewares')
+const { Contact, joiSchemaAdd, joiSchemaPut } = require('../../models/contact')
 
-const joiSchemaAdd = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().min(4).required().email(),
-  phone: Joi.string()
-    .min(9)
-    .max(14)
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers')
-    .required(),
-})
+// const {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// } = require('../../controllers')
 
-const joiSchemaPut = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().min(4).email(),
-  phone: Joi.string()
-    .min(9)
-    .max(14)
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers'),
-})
-
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../model/index')
-
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await listContacts()
+router.get(
+  '/',
+  controllerWrapper(async (req, res) => {
+    const result = await Contact.find({})
     res.json({
       message: 'Get contacts list',
       status: 'success',
@@ -41,15 +24,14 @@ router.get('/', async (req, res, next) => {
         result,
       },
     })
-  } catch (error) {
-    next(error)
-  }
-})
+  })
+)
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
+router.get(
+  '/:contactId',
+  controllerWrapper(async (req, res) => {
     const { contactId } = req.params
-    const result = await getContactById(contactId)
+    const result = await Contact.findById(contactId)
     if (!result) {
       throw new NotFound('Not found')
     }
@@ -61,18 +43,14 @@ router.get('/:contactId', async (req, res, next) => {
         result,
       },
     })
-  } catch (error) {
-    next(error)
-  }
-})
+  })
+)
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = joiSchemaAdd.validate(req.body)
-    if (error) {
-      throw new BadRequest(error.message)
-    }
-    const result = await addContact(req.body)
+router.post(
+  '/',
+  validation(joiSchemaAdd),
+  controllerWrapper(async (req, res, next) => {
+    const result = await Contact.create(req.body)
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -80,44 +58,66 @@ router.post('/', async (req, res, next) => {
         result,
       },
     })
-  } catch (error) {
-    next(error)
-  }
-})
+  })
+)
 
 router.delete('/:contactId', async (req, res, next) => {
-  try {
+  const { contactId } = req.params
+  const result = await Contact.findByIdAndRemove(contactId)
+  if (!result) {
+    throw new NotFound('Not found')
+  }
+  res.json({
+    message: 'contact deleted',
+  })
+})
+
+router.put(
+  '/:contactId',
+  validation(joiSchemaPut),
+  controllerWrapper(async (req, res) => {
     const { contactId } = req.params
-    const result = await removeContact(contactId)
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    })
     if (!result) {
       throw new NotFound('Not found')
     }
-    res.json({
-      message: 'contact deleted',
-    })
-  } catch (error) {
-    next(error)
-  }
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = joiSchemaPut.validate(req.body)
-    if (error) {
-      throw new BadRequest('missing fields')
-    }
-    const { contactId } = req.params
-    const result = await updateContact(contactId, req.body)
-    res.status(201).json({
+    res.json({
       status: 'success',
       code: 200,
       data: {
         result,
       },
     })
-  } catch (error) {
-    next(error)
-  }
-})
+  })
+)
+
+router.patch(
+  '/:contactId/favorite',
+  controllerWrapper(async (req, res) => {
+    const { contactId } = req.params
+    const { favorite } = req.body
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      {
+        new: true,
+      }
+    )
+    if (!result) {
+      throw new NotFound('Not found')
+    }
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        result,
+      },
+    })
+  })
+)
 
 module.exports = router
