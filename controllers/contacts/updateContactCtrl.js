@@ -11,7 +11,7 @@ const updateContactCtrl = async (req, res, next) => {
     const data = await Contact.findByIdAndUpdate(contactId, req.body)
 
     if (!data) {
-      return res.status(404).json({ maessage: 'Not found' })
+      return res.status(404).json({ maessage: 'form updCtr Not found' })
     }
 
     res.json({
