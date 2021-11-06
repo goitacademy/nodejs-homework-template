@@ -34,6 +34,8 @@ This is an application for recording personal contacts. In the application you n
 3. Launch the application ```npm run start:dev```
 4. Go to **[Postman](https://www.postman.com/)** 
   
+  
+  ## to be continued...
 ---
 
 ## Endpoint
