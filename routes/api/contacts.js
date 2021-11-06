@@ -1,54 +1,106 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const createError = require("http-errors");
+const { NotFound, BadRequest } = require("http-errors");
+const Joi = require("joi");
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../../model/index')
+} = require("../../model/index");
 
-const { addPostValidation } = require('../../middlewares')
+const joiSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.number().required(),
+});
 
-router.get('/', async (req, res, next) => {
-  const contacts = await listContacts()
-  res.status(200).json({ contacts, status: 'success' })
-})
-
-router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId)
-  if (!contact) {
-    return res.status(404).json({ message: 'Not found' })
+router.get("/", async (req, res, next) => {
+  try {
+    const contacts = await listContacts();
+    res.json({
+      status: "success",
+      code: 200,
+      data: { contacts },
+    });
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ contact, status: 'success' })
-})
+});
 
-router.post('/', addPostValidation, async (req, res, next) => {
-  const newContact = await addContact(req.body)
-  if (!newContact) {
-    return res.status(400).json({ message: 'missing required name field' })
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await getContactById(contactId);
+    if (!result) {
+      throw new createError(404, `Prodcut with id=${contactId} not found`);
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: { result },
+    });
+  } catch (error) {
+    next(error);
   }
-  res
-    .status(201)
-    .json({ newContact, message: 'New contact is added succesfully' })
-})
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  const contacts = await removeContact(req.params.contactId)
-  if (!contacts) {
-    return res.status(404).json({ message: 'Not found' })
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = joiSchema.validate(req.body);
+    if (error) {
+      throw new BadRequest(error.message);
+    }
+    const result = await addContact(req.body);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
   }
-  res.json({ contacts, message: `contact ${req.params.contactId} is deleted` })
-})
+});
 
-router.patch('/:contactId', addPostValidation, async (req, res, next) => {
-  const contact = await updateContact(req.params.contactId, req.body)
-  if (!contact) {
-    return res.status(404).json({ message: 'Not found' })
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await removeContact(contactId);
+    if (!result) {
+      throw new NotFound(`Product with id=${contactId} not found`);
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "Remove success",
+    });
+  } catch (error) {
+    next(error);
   }
-  res
-    .status(200)
-    .json({ contact, message: `Contact ${contact.id} is changed` })
-})
+});
 
-module.exports = router
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = joiSchema.validate(req.body);
+    if (error) {
+      throw new BadRequest(error.message);
+    }
+    const { contactId } = req.params;
+    const result = await updateContact(contactId, req.body);
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
