@@ -1,4 +1,4 @@
-const { listContacts } = require("./getAll");
+const listContacts = require("./getAll");
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();

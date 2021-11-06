@@ -1,5 +1,5 @@
-const { listContacts } = require("./getAll");
-const { updateContacts } = require("./updateDB");
+const listContacts = require("./getAll");
+const updateContacts = require("./updateDB");
 const uniqid = require("uniqid");
 
 const addContact = async (body) => {
