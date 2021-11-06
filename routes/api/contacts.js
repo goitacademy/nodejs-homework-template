@@ -34,7 +34,7 @@ router.get("/:contactId", async (req, res, next) => {
     const contact = await getContactById(id);
 
     if (!contact) {
-      const error = new Error("Contact not found");
+      const error = new Error("Not found");
       error.status = 404;
       throw error;
     }
@@ -72,7 +72,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
     const deletedContact = await deleteContactById(id);
     if (!deletedContact) {
-      const deleteError = new Error("Delete failed. Wrong id.");
+      const deleteError = new Error("Not found");
       deleteError.status = 404;
       throw deleteError;
     }
@@ -80,7 +80,7 @@ router.delete("/:contactId", async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      message: "Successfully deleted!",
+      message: "Contact deleted",
       data: {
         deletedContact,
       },
@@ -100,7 +100,7 @@ router.put(
       const updatedContact = await updateContactById(id, req.body);
 
       if (!updatedContact) {
-        const error = new Error("Contact not found");
+        const error = new Error("Not found");
         error.status = 404;
         throw error;
       }
