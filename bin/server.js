@@ -4,7 +4,7 @@ require("dotenv").config();
 const UPLOAD_DIR = process.env.UPLOAD_DIR;
 const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
 const mkdirp = require("mkdirp");
-
+// const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || 3000;
 
 db.then(() => {

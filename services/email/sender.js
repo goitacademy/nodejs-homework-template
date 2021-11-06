@@ -8,12 +8,14 @@ class CreateSenderNodemailer {
       port: 465,
       secure: true,
       auth: {
-        user: "test-nodejs@meta.ua",
-        pass: process.env.PASSWORD,
+        user: "mostotest@meta.ua",
+        pass: process.env.PASSWORD_NEW,
       },
     };
+    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    // const transporter = nodemailer.createTransport(config);
     const transporter = nodemailer.createTransport(config);
-    return await transporter.sendMail({ ...msg, from: "test-nodejs@meta.ua" });
+    return await transporter.sendMail({ ...msg, from: "mostotest@meta.ua" });
   }
 }
 

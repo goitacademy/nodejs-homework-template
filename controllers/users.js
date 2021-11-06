@@ -100,7 +100,22 @@ const getUser = async (req, res, next) => {
     .json({ message: "Success", name, email, subscription });
 };
 
-const verifyUser = async (req, res, next) => {};
+const verifyUser = async (req, res, next) => {
+  const user = await Users.findUserByVerifyToken(req.params.token);
+  if (user) {
+    await Users.updateTokenVerify(user._id, true, null);
+    return res.status(HttpCode.OK).json({
+      status: "Success",
+      code: HttpCode.OK,
+      date: { message: "Success" },
+    });
+  }
+  return res.status(HttpCode.BAD_REQUEST).json({
+    status: "Error",
+    code: HttpCode.BAD_REQUEST,
+    message: "Invalid token",
+  });
+};
 
 const repeatEmailForVerifyUser = async (req, res, next) => {};
 
