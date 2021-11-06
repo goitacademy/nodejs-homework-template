@@ -1,11 +1,8 @@
-const { BadRequest } = require('http-errors')
-const { add } = require('../../models/contacts')
+const { Contact } = require('../../models')
 
-const addContact = async (req, res, next) => {
-  const contact = await add(req.body)
-  if (!contact) {
-    throw new BadRequest('Contact already exist')
-  }
+const addContact = async (req, res) => {
+  const contact = await Contact.create(req.body)
+
   res.status(201).json({
     status: 'sucsess',
     code: 201,
