@@ -1,5 +1,5 @@
 <!--lint disable no-literal-urls-->
-# Vitaliy-Yakovlev/goit-node.js-hw-2-6-rest-api
+# Rest-API
 
   <p align="center">
   <a href="https://nodejs.org/">
