@@ -117,7 +117,27 @@ const verifyUser = async (req, res, next) => {
   });
 };
 
-const repeatEmailForVerifyUser = async (req, res, next) => {};
+const repeatEmailForVerifyUser = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await Users.findByEmail(email);
+  if (user) {
+    const { email, name, verifyToken } = user;
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      new CreateSenderNodemailer()
+    );
+    const statusEmail = await emailService.sendVerifyEmail(
+      email,
+      name,
+      verifyToken
+    );
+  }
+  return res.status(HttpCode.OK).json({
+    status: "Success",
+    code: HttpCode.OK,
+    date: { message: "Success" },
+  });
+};
 
 module.exports = {
   registration,
