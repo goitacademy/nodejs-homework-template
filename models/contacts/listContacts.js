@@ -1,7 +1,7 @@
-const readData = require("./readData");
+const readData = require('./readData')
 
 const listContacts = async () => {
-  return await readData();
-};
+  return await readData()
+}
 
-module.exports = listContacts;
+module.exports = listContacts
