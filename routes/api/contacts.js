@@ -3,10 +3,10 @@ const Joi = require('joi')
 
 const {
   listContacts,
-  getContactById,
+  getContactsById,
   removeContact,
   addContact,
-  updateContactById,
+  updateContactsById,
 } = require('../../model/index')
 
 const joiSchema = Joi.object({
@@ -19,7 +19,7 @@ const joiSchemaUpdate = Joi.object({
   name: Joi.string().min(3).max(30).optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string().optional(),
-})
+}).or('name', 'email', 'phone')
 
 const router = express.Router()
 
@@ -44,7 +44,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const result = await getContactById(contactId)
+    const result = await getContactsById(contactId)
     if (result === void 0) {
       res.status(404).json({
         status: 'error',
@@ -109,7 +109,7 @@ router.delete('/:contactId', async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      message: 'Contact deleted',
+      message: `Contact whith id=${contactId} deleted `,
     })
   } catch (error) {
     next(error)
@@ -120,7 +120,6 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = joiSchemaUpdate.validate(req.body)
-    console.log(error)
     if (error) {
       res.status(400).json({
         status: 'error',
@@ -130,19 +129,19 @@ router.put('/:contactId', async (req, res, next) => {
       return
     }
     const { contactId } = req.params
-    const result = await updateContactById(contactId, req.body)
+    const result = await updateContactsById(contactId, req.body)
     if (!result) {
       res.status(404).json({
         status: 'error',
         code: 404,
-        message: 'Contacts not found'
+        message: 'Contact not found'
       })
       return
     }
     res.json({
       status: 'success',
       code: 200,
-      message: 'Update contacts',
+      message: 'Update contact',
       data: {
         result
       },

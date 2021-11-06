@@ -5,32 +5,32 @@ const crypto = require('crypto')
 
 const contactsPath = path.join(__dirname, './contacts.json')
 
-const readContact = async () => {
+const readContacts = async () => {
   const result = await fs.readFile(contactsPath, 'utf8')
   return JSON.parse(result)
 }
 
 // ====================================update================================
-const updateContact = async (newContact) => {
+const updateContacts = async (newContact) => {
   const contactStr = JSON.stringify(newContact)
   await fs.writeFile(contactsPath, contactStr)
 }
 
 // =======================================list============================
-const listContacts = async () => readContact()
+const listContacts = async () => readContacts()
 
 // =====================================get================================
-const getContactById = async (contactId) => {
-  const contact = await readContact()
-  const result = contact.find((item) => item.id === +contactId)
-  // if (!result) {
-  //   return null
-  // }
+const getContactsById = async (contactId) => {
+  const contact = await readContacts()
+  const result = contact.find((item) => item.id.toString() === contactId)
+  if (!result) {
+    return null
+  }
   return result
 }
 // =====================================add================================
 const addContact = async (name, email, phone) => {
-  const contact = await readContact()
+  const contact = await readContacts()
   const newContact = { id: crypto.randomUUID(), name, email, phone }
   contact.push(newContact)
   await fs.writeFile(contactsPath, JSON.stringify(contact, null, 2))
@@ -38,34 +38,33 @@ const addContact = async (name, email, phone) => {
 }
 // =====================================remove================================
 const removeContact = async (contactId) => {
-  const contact = await readContact()
-  const idx = contact.findIndex((item) => item.id === +contactId)
+  const contact = await readContacts()
+  const idx = contact.find((item) => item.id.toString() === contactId)
   if (idx === -1) {
     return null
   }
-  const delContact = contact.splice(idx, 1)
-  await updateContact(contact)
-  return delContact
+  const newContacts = contact.filter((item) => item.id.toString() !== contactId)
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2))
+  return contact
 }
 
 // =====================================update by id================================
 const updateContactById = async (contactId, body) => {
-  const contact = await readContact()
-  console.log(body)
-  if (!body) {
+  const contact = await readContacts()
+
+  const idx = contact.findIndex(item => item.id.toString() === contactId)
+  if (idx === -1) {
     return null
   }
-  const idx = contact.findIndex(item => item.id === +contactId)
-
-  contact[idx] = { ...body, contactId }
-  await updateContact(contact)
+  contact[idx] = { ...contact[idx], ...body }
+  await fs.writeFile(contactsPath, JSON.stringify(contact, null, 2))
 
   return contact[idx]
 }
 
 module.exports = {
   listContacts,
-  getContactById,
+  getContactsById,
   removeContact,
   addContact,
   updateContactById,
