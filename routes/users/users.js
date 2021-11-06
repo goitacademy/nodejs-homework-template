@@ -20,7 +20,7 @@ router.post("/logout", guard, logout); //проверяем зарегестри
 router.get("/current", guard, getUser);
 router.patch("/avatar", guard, upload.single("avatar"), uploadAvatar);
 
-router.get("/verify:token", wrapError(verifyUser));
+router.get("/verify/:token", wrapError(verifyUser));
 router.post("/verify", repeatEmailForVerifyUser);
 
 module.exports = router;
