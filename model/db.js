@@ -1,20 +1,30 @@
-const fs = require('fs/promises');
-const path = require('path');
 
-class FileAdapter {
-    constructor(file) {
-        this.store = path.join(__dirname, file)
-    }
+const mongoose = require('mongoose');
+require('dotenv').config()
+const uri = process.env.URI_DB;
 
-    async read() {
-        const result = await fs.readFile(this.store, 'utf-8')
-        const data = JSON.parse(result)
-        return data
-    }
+const db = mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
 
-    async write(data) {
-        await fs.writeFile(this.store, JSON.stringify(data))
-    }
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose connection to db')
+})
 
-}
-module.exports = FileAdapter
+mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected')
+})
+
+mongoose.connection.on('error', (err) => {
+    console.log(`Mongoose connection error: ${err.message}`)
+})
+
+process.on('SIGINT', async () => {
+    await mongoose.connection.close()
+    console.log('Connection for db closed and app termination')
+    process.exit(1)
+})
+
+
+module.exports = db

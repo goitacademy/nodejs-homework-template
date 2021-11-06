@@ -37,10 +37,10 @@ const validate = (schema, obj, next) => {
     next()
 }
 
-module.exports.createContact = async (req, res, next) => {
+module.exports.contactCreate = async (req, res, next) => {
     return await validate(schemaContactCreate, req.body, res, next)
 }
 
-module.exports.updateContact = (req, res, next) => {
+module.exports.contactUpdate = (req, res, next) => {
     return validate(schemaContactUpdate, req.body, next)
 }

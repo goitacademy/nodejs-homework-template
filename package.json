@@ -6,15 +6,19 @@
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "dev:debug": "node --inspect ./bin/server.js"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "eslint-config-prettier": "^8.3.0",
     "express": "4.17.1",
     "joi": "^17.4.2",
     "lowdb": "^3.0.0",
+    "mongoose": "^6.0.12",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
   },
