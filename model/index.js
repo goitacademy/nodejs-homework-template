@@ -10,12 +10,6 @@ const readContacts = async () => {
   return JSON.parse(result)
 }
 
-// ====================================update================================
-const updateContacts = async (newContact) => {
-  const contactStr = JSON.stringify(newContact)
-  await fs.writeFile(contactsPath, contactStr)
-}
-
 // =======================================list============================
 const listContacts = async () => readContacts()
 
