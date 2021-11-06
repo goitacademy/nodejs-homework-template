@@ -4,14 +4,6 @@ const { NotFound } = require('http-errors')
 const { validation, controllerWrapper } = require('../../middlewares')
 const { Contact, joiSchemaAdd, joiSchemaPut } = require('../../models/contact')
 
-// const {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// } = require('../../controllers')
-
 router.get(
   '/',
   controllerWrapper(async (req, res) => {
