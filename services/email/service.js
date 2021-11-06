@@ -5,7 +5,7 @@ class EmailService {
     this.sender = sender; //sendgrid or nodemailer
     switch (env) {
       case "development":
-        this.link = "https://cef0-91-214-85-111.ngrok.io";
+        this.link = "https://d8a3-91-214-85-111.ngrok.io";
         break;
       case "production":
         this.link = "link for production";
@@ -45,7 +45,7 @@ class EmailService {
   async sendVerifyEmail(email, name, verifyToken) {
     const emailHTML = this.createTemplateEmail(name, verifyToken);
     console.log(email);
-    const msg = { to: email, subject: "Verify your email", email: emailHTML };
+    const msg = { to: email, subject: "Verify your email", html: emailHTML };
     try {
       const result = await this.sender.send(msg);
       console.log(result);
