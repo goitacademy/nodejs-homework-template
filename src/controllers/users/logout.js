@@ -1,4 +1,4 @@
-const { User } = require("../../models/user")
+const { User } = require("../../models/users.schema")
 const HTTP_CODS = require("../../helpers/httpCodes");
 
 const logout = async (req, res)=> {

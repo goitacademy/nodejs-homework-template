@@ -1,5 +1,5 @@
 const { Contact } = require("./contacts.schema");
-const { User } = require("./user")
+const { User } = require("./users.schema")
 module.exports = {
   Contact,
   User

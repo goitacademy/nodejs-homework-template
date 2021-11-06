@@ -1,5 +1,9 @@
 #.DS_Store
 .DS_Store
+.env
+
+vscode
+tmp
 
 # Logs
 logs
