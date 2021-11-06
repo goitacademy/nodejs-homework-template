@@ -15,8 +15,8 @@ const listContacts = async () => readContacts()
 
 // =====================================get================================
 const getContactsById = async (contactId) => {
-  const contact = await readContacts()
-  const result = contact.find((item) => item.id.toString() === contactId)
+  const contacts = await readContacts()
+  const result = contacts.find((item) => item.id.toString() === contactId)
   if (!result) {
     return null
   }
@@ -24,36 +24,36 @@ const getContactsById = async (contactId) => {
 }
 // =====================================add================================
 const addContact = async (name, email, phone) => {
-  const contact = await readContacts()
+  const contacts = await readContacts()
   const newContact = { id: crypto.randomUUID(), name, email, phone }
-  contact.push(newContact)
-  await fs.writeFile(contactsPath, JSON.stringify(contact, null, 2))
+  contacts.push(newContact)
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
   return newContact
 }
 // =====================================remove================================
 const removeContact = async (contactId) => {
-  const contact = await readContacts()
-  const idx = contact.find((item) => item.id.toString() === contactId)
+  const contacts = await readContacts()
+  const idx = contacts.find((item) => item.id.toString() === contactId)
   if (idx === -1) {
     return null
   }
-  const newContacts = contact.filter((item) => item.id.toString() !== contactId)
+  const newContacts = contacts.filter((item) => item.id.toString() !== contactId)
   await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2))
-  return contact
+  return contacts
 }
 
 // =====================================update by id================================
 const updateContactById = async (contactId, body) => {
-  const contact = await readContacts()
+  const contacts = await readContacts()
 
-  const idx = contact.findIndex(item => item.id.toString() === contactId)
+  const idx = contacts.findIndex(item => item.id.toString() === contactId)
   if (idx === -1) {
     return null
   }
-  contact[idx] = { ...contact[idx], ...body }
-  await fs.writeFile(contactsPath, JSON.stringify(contact, null, 2))
+  contacts[idx] = { ...contacts[idx], ...body }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
 
-  return contact[idx]
+  return contacts[idx]
 }
 
 module.exports = {

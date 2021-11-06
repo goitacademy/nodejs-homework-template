@@ -79,13 +79,13 @@ router.post('/', async (req, res, next) => {
       })
       return
     }
-    const contact = await addContact(req.body)
+    const result = await addContact(req.body)
     res.status(201).json({
       status: 'success',
       code: 201,
       message: 'Add new contact',
       data: {
-        contact
+        result
       },
     })
   } catch (error) {
