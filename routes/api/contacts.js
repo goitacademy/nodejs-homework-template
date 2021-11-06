@@ -8,7 +8,7 @@ const {
   updateContact,
 } = require('../../model/index')
 
-const { addPostValidation } = require('../../middlewares/middlewars')
+const { addPostValidation } = require('../../middlewares')
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts()

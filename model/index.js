@@ -56,25 +56,12 @@ const updateContact = async (contactId, body) => {
   if (!body) {
     return null
   }
-  const { name, email, phone } = body
-  let i = null
+  const i = contacts.findIndex(
+    (contact) => contact.id === +contactId || contact.id === contactId
+  )
+  const newBody = { ...body, id: crypto.randomUUID() }
 
-  contacts.map((item, indx) => {
-    if (item.id === +contactId || item.id === contactId) {
-      if (name) {
-        item.name = name
-      }
-      if (email) {
-        item.email = email
-      }
-      if (phone) {
-        item.phone = phone
-      }
-      i = indx
-      return item
-    }
-    return item
-  })
+  contacts[i] = { ...contacts[i], ...newBody }
   await fs.writeFile(contactsPath, JSON.stringify(contacts))
   return contacts[i]
 }

@@ -4,8 +4,8 @@ module.exports = {
   addPostValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(20).required(),
-      email: Joi.string().email(),
-      phone: Joi.number().max(10),
+      email: Joi.string().email().required(),
+      phone: Joi.number().max(10).required(),
     })
 
     const validationResult = schema.validate(req.body)
