@@ -1,11 +1,10 @@
-const { getContactById } = require('../../model/contacts')
+const Contact = require('../../model/contact')
 
 const getContactByIdCtrl = async (req, res, next) => {
-  // eslint-disable-next-line no-empty
   const { contactId } = req.params
 
   try {
-    const data = await getContactById(contactId)
+    const data = await Contact.findById(contactId)
     if (!data) {
       return res.status(404).json({ message: 'Not found' })
     }
