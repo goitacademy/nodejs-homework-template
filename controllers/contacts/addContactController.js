@@ -1,17 +1,17 @@
-const { BadRequest } = require("http-errors");
-const joiSchema = require("../../middlewares/validation/contacts");
-const contactsOperations = require("../../model/contacts");
+// const contactsOperations = require("../../model/contacts");
+const { Product } = require("../../models");
 
 const addContactController = async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
-    if (error) {
-      throw new BadRequest(error.message);
-    }
+    const result = await Product.create(req.body);
 
-    const newContact = await contactsOperations.addContact(req.body);
-
-    res.status(201).json(newContact);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        result,
+      },
+    });
   } catch (error) {
     next(error);
   }
