@@ -1,8 +1,14 @@
-const contactsOperations = require('../model');
 const CreateError = require('http-errors');
+const { Contact } = require('../models');
 
-const listContacts = async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts();
+const listContacts = async (req, res) => {
+  const { page = 1, limit = 2 } = req.query;
+  const skip = (page - 1) * limit;
+  const { _id } = req.user;
+  const contacts = await Contact.find({ owner: _id }, '_id', {
+    skip,
+    limit: +limit,
+  }).populate('owner', 'email');
   res.json({
     status: 'success',
     code: 200,
@@ -12,17 +18,19 @@ const listContacts = async (req, res, next) => {
   });
 };
 
-const getById = async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await contactsOperations.getContactById(id);
+const getById = async (req, res) => {
+  const { _id } = req.params;
+  const contactId = req.params.contactId;
+  const contact = await Contact.findById({ _id: contactId, owner: _id });
   if (!contact) {
-    throw new CreateError(404, `Prooduct with id=${id} not found`);
+    throw new CreateError(404, `Prooduct with id=${contactId} not found`);
   }
   res.json(contact);
 };
 
-const addContact = async (req, res, next) => {
-  const result = await contactsOperations.addContact(req.body);
+const addContact = async (req, res) => {
+  const newContact = { ...req.body, owner: req.user._id };
+  const result = await Contact.create(newContact);
   res.status(201).json({
     status: 'success',
     code: 201,
@@ -32,9 +40,9 @@ const addContact = async (req, res, next) => {
   });
 };
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsOperations.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw new CreateError(404, `Prooduct with id=${id} not found`);
   }
@@ -45,9 +53,9 @@ const deleteContact = async (req, res, next) => {
   });
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsOperations.updateById(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body);
   if (!result) {
     throw new CreateError(404, `Product with id=${id} not found`);
   }
@@ -59,10 +67,27 @@ const updateContact = async (req, res, next) => {
     },
   });
 };
+
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body);
+  if (!result) {
+    throw new CreateError(404, 'missing field favorite');
+  }
+  res.json({
+    status: 'success',
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
+
 module.exports = {
   listContacts,
   getById,
   addContact,
   deleteContact,
   updateContact,
+  updateStatusContact,
 };
