@@ -25,13 +25,10 @@ const updateContact = async (contactId, body) => {
   if (!body) {
     return null
   }
-  const { name, email, phone } = body
   const indx = contacts.findIndex(
     (item) => item.id === +contactId || item.id === contactId
   )
-  if (name) contacts[indx].name = name
-  if (email) contacts[indx].email = email
-  if (phone) contacts[indx].phone = phone
+  contacts[indx] = { ...contacts[indx], ...body }
   await fs.writeFile(contactsPath, JSON.stringify(contacts))
   return contacts[indx]
 }
