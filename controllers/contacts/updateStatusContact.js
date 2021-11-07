@@ -8,7 +8,7 @@ const updateStatusContact = async (req, res, next) => {
       return res.status(400).json({ message: 'missing field favorite' })
     }
 
-    const data = await Contact.findByIdAndUpdate(contactId, req.body)
+    const data = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
 
     if (!data) {
       return res.status(404).json({ maessage: 'form status Not found' })
