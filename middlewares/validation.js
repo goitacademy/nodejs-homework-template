@@ -1,15 +1,15 @@
-const { BadRequest } = require("http-errors");
+const { BadRequest } = require('http-errors')
 
 const validation = (schema) => {
   const validationMiddleware = (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(req.body)
     if (error) {
-      const newError = new BadRequest(error.message);
-      next(newError);
+      const newError = new BadRequest(error.message)
+      next(newError)
     }
-    next();
-  };
-  return validationMiddleware;
-};
+    next()
+  }
+  return validationMiddleware
+}
 
-module.exports = validation;
+module.exports = validation
