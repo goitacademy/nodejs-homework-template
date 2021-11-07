@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const createError = require('http-errors')
+const CreateError = require('http-errors')
 const { NotFound, BadRequest } = require('http-errors')
 const Joi = require('joi')
 const {
@@ -40,7 +40,7 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params
     const result = await getContactById(contactId)
     if (!result) {
-      throw new createError(404, `Prodcut with id=${contactId} not found`)
+      throw new CreateError(404, `Prodcut with id=${contactId} not found`)
     }
     res.json({
       status: 'success',
