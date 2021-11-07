@@ -2,7 +2,7 @@ const listContacts = require("./getAll");
 const updateContacts = require("./updateDB");
 const uniqid = require("uniqid");
 
-const addContact = async (body) => {
+const add = async (body) => {
   const contacts = await listContacts();
   const newContact = { ...body, id: uniqid() };
   contacts.push(newContact);
@@ -10,4 +10,4 @@ const addContact = async (body) => {
   return newContact;
 };
 
-module.exports = addContact;
+module.exports = add;

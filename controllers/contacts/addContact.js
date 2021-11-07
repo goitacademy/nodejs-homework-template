@@ -1,9 +1,10 @@
-const { operations } = require("../../model/contacts");
+const operations = require("../../model/contacts");
+const schemaAdd = require("../../validation/JoiSchema");
 
 const addContact = async (req, res, next) => {
   try {
     const body = req.body;
-    const contact = await operations.addContact(body);
+    const contact = await operations.add(body);
     res.status(201).json({
       status: "success",
       code: 201,
