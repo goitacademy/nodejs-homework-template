@@ -6,16 +6,18 @@ const postContact = require('../../controllers/contacts/postContact')
 const deleteContact = require('../../controllers/contacts/deleteContact')
 const putContact = require('../../controllers/contacts/putContact')
 
+const addValidation = require('../../middleware/validation/contactValidation')
+
 const router = express.Router()
 
 router.get('/', getContacts)
 
 router.get('/:id', getContactById)
 
-router.post('/', postContact)
+router.post('/', addValidation, postContact)
 
 router.delete('/:id', deleteContact)
 
-router.put('/:id', putContact)
+router.put('/:id', addValidation, putContact)
 
 module.exports = router

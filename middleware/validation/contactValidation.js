@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { BadRequest } = require('http-errors')
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
@@ -6,4 +7,12 @@ const joiSchema = Joi.object({
   phone: Joi.string().min(14).max(14).required(),
 })
 
-module.exports = joiSchema
+const addValidation = (req, res, next) => {
+  const { error } = joiSchema.validate(req.body)
+  if (error) {
+    throw new BadRequest(error.message)
+  }
+  next()
+}
+
+module.exports = addValidation

@@ -1,13 +1,8 @@
-const { BadRequest, NotFound } = require('http-errors')
+const { NotFound } = require('http-errors')
 const contactsOperations = require('../../models/contacts')
-const joiSchema = require('../../middleware/validation/contactValidation')
 
 const putContact = async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body)
-    if (error) {
-      throw new BadRequest(error.message)
-    }
     const { id } = req.params
     const result = await contactsOperations.updateContact(id, req.body)
     if (!result) {
