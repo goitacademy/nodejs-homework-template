@@ -2,9 +2,9 @@ const Joi = require('joi')
 
 const addContactValidation = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
+    name: Joi.string().regex(/^[a-zA-Z0-9,. ]*$/).min(3).max(30).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    phone: Joi.string().min(4).max(14).required()
+    phone: Joi.string().regex(/^[0-9,. -/+]*$/).min(4).max(14).required()
   })
 
   const validationResult = schema.validate(req.body)
@@ -17,9 +17,9 @@ const addContactValidation = (req, res, next) => {
 
 const updateContactValidation = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
+    name: Joi.string().regex(/^[a-zA-Z0-9,. ]*$/).min(3).max(30).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    phone: Joi.string().min(4).max(14).required()
+    phone: Joi.string().regex(/^[0-9,. -/+]*$/).min(4).max(14).required()
   })
 
   const validationResult = schema.validate(req.body)
