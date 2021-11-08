@@ -1,8 +1,7 @@
-const { readFile } = require('../../js')
-const contactsPath = require('./supportData')
+const { ContactModel } = require('../../db/contactModelMongoose')
 
 const listContacts = async () => {
-  const data = await readFile(contactsPath)
+  const data = await ContactModel.find()
   return data
 }
 

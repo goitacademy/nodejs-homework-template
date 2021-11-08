@@ -7,21 +7,26 @@ const {
   listContactsController,
   removeContactController,
   updateContactController,
+  updateStatusContactController
 } = require('../../controllers/contacts')
 
 const {
   addContactValidation,
   updateContactValidation,
+  patchContactValidation
 } = require('../../middleware/validation')
+const { errorHandler } = require('../../helpers/errorHandler')
 
-router.get('/', listContactsController)
+router.get('/', errorHandler(listContactsController))
 
-router.get('/:contactId', getContactByIdController)
+router.get('/:contactId', errorHandler(getContactByIdController))
 
-router.post('/', addContactValidation, addContactController)
+router.post('/', addContactValidation, errorHandler(addContactController))
 
-router.delete('/:contactId', removeContactController)
+router.delete('/:contactId', errorHandler(removeContactController))
 
-router.put('/:contactId', updateContactValidation, updateContactController)
+router.put('/:contactId', updateContactValidation, errorHandler(updateContactController))
+
+router.patch('/:contactId/favorite', patchContactValidation, errorHandler(updateStatusContactController))
 
 module.exports = router
