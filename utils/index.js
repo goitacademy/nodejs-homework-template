@@ -1,3 +1,4 @@
-const token = require('./tokenOperations')
+const token = require("./tokenOperations");
+const upload = require("./multer");
 
-module.exports = token
+module.exports = { token, upload };

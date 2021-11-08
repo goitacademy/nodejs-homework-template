@@ -1,11 +1,11 @@
 const controller = (control) => {
   return async (req, res, next) => {
     try {
-      await control(req, res)
+      await control(req, res);
     } catch (error) {
-      next(error)
+      next(error);
     }
-  }
-}
+  };
+};
 
-module.exports = controller
+module.exports = controller;

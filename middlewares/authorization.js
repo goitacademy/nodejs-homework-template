@@ -1,30 +1,30 @@
-const token = require('../utils')
-const Errors = require('http-errors')
+const token = require("../utils");
+const Errors = require("http-errors");
 
 const authorization = () => {
   return async (req, res, next) => {
     if (!req.headers.authorization) {
       try {
-        throw new Errors.Unauthorized('not authorization')
+        throw new Errors.Unauthorized("not authorization");
       } catch (error) {
-        next(error)
+        next(error);
       }
     }
-    const [bearer, userToken] = req?.headers?.authorization.split(' ')
+    const [bearer, userToken] = req?.headers?.authorization.split(" ");
     if (!bearer && !userToken) {
       try {
-        throw new Errors.Unauthorized('not authorization')
+        throw new Errors.Unauthorized("not authorization");
       } catch (error) {
-        next(error)
+        next(error);
       }
     }
     try {
-      token.verify(userToken)
+      token.verify(userToken);
     } catch (error) {
-      next(error)
+      next(error);
     }
-    next()
-  }
-}
+    next();
+  };
+};
 
-module.exports = authorization
+module.exports = authorization;
