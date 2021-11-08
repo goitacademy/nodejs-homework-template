@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa7ef25a-bd40-4e4d-8adb-66ebb386dbd0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
@@ -39,7 +40,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636366948718</updated>
-      <workItem from="1636366951516" duration="1136000" />
+      <workItem from="1636366951516" duration="1462000" />
+      <workItem from="1636368460340" duration="296000" />
     </task>
     <servers />
   </component>
@@ -86,5 +88,6 @@
         <entry key="2f629652-a977-41a5-8f36-2105f31f2d5b" value="TOOL_WINDOW" />
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
