@@ -1,5 +1,7 @@
 const colors = require('./colors')
+const regex = require('./regex')
 
 module.exports = {
-  colors
+  colors,
+  regex
 }
