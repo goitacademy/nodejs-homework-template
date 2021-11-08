@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { contacts: ctrl } = require('../../controllers/index')
 const { validation, controllerWrapper } = require('../../middlewars')
-const { joiShema, patchShema } = require('../../models/contact')
+const { joiShema, patchShema, putSchema } = require('../../models/contact')
 
 router.get('/', controllerWrapper(ctrl.getAllContacts))
 
@@ -13,7 +13,7 @@ router.post('/', validation(joiShema), controllerWrapper(ctrl.addContact))
 
 router.delete('/:contactId', controllerWrapper(ctrl.removeContact))
 
-router.put('/:contactId', validation(joiShema), controllerWrapper(ctrl.updateContact))
+router.put('/:contactId', validation(putSchema), controllerWrapper(ctrl.updateContact))
 
 router.patch('/:contactId/favorite', validation(patchShema), controllerWrapper(ctrl.updateStatusContact))
 

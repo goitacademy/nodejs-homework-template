@@ -24,6 +24,33 @@ const patchShema = Joi.object({
   favorite: Joi.boolean().required()
 })
 
+const putSchema = Joi.alternatives().try(
+  Joi.object({
+    name: Joi.string().allow(''),
+    email: Joi.string().allow(''),
+    phone: Joi.string().required(),
+    favorite: Joi.boolean()
+  }),
+  Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().allow(''),
+    phone: Joi.string().allow(''),
+    favorite: Joi.boolean()
+  }),
+  Joi.object({
+    name: Joi.string().allow(''),
+    email: Joi.string().required(),
+    phone: Joi.string().allow(''),
+    favorite: Joi.boolean()
+  }),
+  Joi.object({
+    name: Joi.string().allow(''),
+    email: Joi.string().allow(''),
+    phone: Joi.string().allow(''),
+    favorite: Joi.boolean().required()
+  })
+)
+
 const joiShema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
@@ -31,4 +58,4 @@ const joiShema = Joi.object({
   favorite: Joi.boolean()
 })
 
-module.exports = { Contact, joiShema, patchShema }
+module.exports = { Contact, joiShema, patchShema, putSchema }
