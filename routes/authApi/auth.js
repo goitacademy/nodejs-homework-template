@@ -1,12 +1,12 @@
 const router = require('express').Router()
-const checkValidity = require('../../middlewares/validation')
+const { checkValidity, controllerWrapper } = require('../../middlewares')
 const { joiUserSchema } = require('../../schemas/joiSchemas')
 const { authRegister, authLogin, authLogout } = require('../../controllers/auth')
 
-router.post('/register', checkValidity(joiUserSchema), authRegister)
+router.post('/register', checkValidity(joiUserSchema), controllerWrapper(authRegister))
 
-router.post('/login', authLogin)
+router.post('/login', controllerWrapper(authLogin))
 
-router.get('/logout', authLogout)
+router.get('/logout', controllerWrapper(authLogout))
 
 module.exports = router
