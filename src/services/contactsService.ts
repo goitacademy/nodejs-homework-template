@@ -7,17 +7,20 @@ const getContactById = async (contactId: string) =>
   await Contact.findById(contactId);
 
 const postContact = async (contact: IContact) => {
-  const newContact = new Contact(contact);
+  const newContact = await new Contact(contact);
 
-  newContact.save();
+  await newContact.save();
 
   return newContact;
 };
 
 const updateContact = async (contactId: string, contact: IContact) => {
-  await Contact.findByIdAndUpdate(contactId, { $set: contact });
+  // await Contact.findByIdAndUpdate(contactId, { $set: contact });
 
-  const newContact = await Contact.findById(contactId);
+  // const newContact = await Contact.findById(contactId);
+  const newContact = await Contact.findByIdAndUpdate(contactId, {
+    $set: contact,
+  });
 
   return newContact;
 };

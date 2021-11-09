@@ -9,7 +9,8 @@ const isPhoneInContacts = async (
   contactId: string
 ): Promise<boolean> =>
   await contacts.some(
-    ({ id, phone }) => phone === newPhone && !id.toString().includes(contactId)
+    ({ _id, phone }) =>
+      phone === newPhone && !_id.toString().includes(contactId)
   );
 
 const isEmailInContacts = async (
@@ -18,7 +19,8 @@ const isEmailInContacts = async (
   contactId: string
 ): Promise<boolean> =>
   await contacts.some(
-    ({ id, email }) => email === newEmail && !id.toString().includes(contactId)
+    ({ _id, email }) =>
+      email === newEmail && !_id.toString().includes(contactId)
   );
 
 const responseErrorOrNext = (

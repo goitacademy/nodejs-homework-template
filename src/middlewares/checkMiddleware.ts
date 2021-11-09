@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { BadRequest, NotFound } from "http-errors";
 import { Contact } from "../model";
-import { isEmailInContacts, isPhoneInContacts } from "../helpers";
-import { IContact } from "../helpers";
+import {
+  isEmailInContacts,
+  isPhoneInContacts,
+  IContact,
+  ID_LENGTH,
+} from "../helpers";
 
 const checkFieldInContact = async (
   req: Request,
@@ -17,7 +21,9 @@ const checkFieldInContact = async (
     (await isEmailInContacts(contacts, email, contactId)) ||
     (await isPhoneInContacts(contacts, phone, contactId))
   ) {
-    next(new BadRequest("Contact with same email or phone already exists."));
+    return next(
+      new BadRequest("Contact with same email or phone already exists.")
+    );
   }
 
   next();
@@ -30,13 +36,14 @@ const checkIdInContact = async (
 ) => {
   const { contactId } = req.params;
 
-  const contacts: Array<IContact> = await Contact.find();
-  const searchedIndex = await contacts.findIndex(
-    ({ id }) => id.toString() === contactId.toString()
-  );
+  if (contactId.length !== ID_LENGTH) {
+    return next(new BadRequest("Contact's ID length must be equal to 24"));
+  }
 
-  if (searchedIndex === -1) {
-    next(new NotFound("Not found"));
+  const searchedContact: IContact = await Contact.findById(contactId);
+
+  if (searchedContact === null) {
+    return next(new NotFound("Not found"));
   }
 
   next();

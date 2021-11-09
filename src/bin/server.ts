@@ -7,8 +7,6 @@ const start = async () => {
   try {
     await connectMongo();
 
-    console.log("Database connection successful.");
-
     app.listen(PORT, () => {
       console.log(`Server is running on port: ${PORT}`);
     });

@@ -18,7 +18,7 @@ import { asyncWrapper } from "../../helpers";
 
 const router = express.Router();
 
-router.get("/", [getContacts]);
+router.get("/", asyncWrapper([getContacts]));
 
 router.get(
   "/:contactId",

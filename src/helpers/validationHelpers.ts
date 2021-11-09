@@ -1,6 +1,8 @@
 import joi, { ValidationResult } from "joi";
 import { IContact } from ".";
 
+const ID_LENGTH: number = 24;
+
 const phonePattern =
   /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
 
@@ -27,4 +29,4 @@ const validateContact = (
   return contactSchema.validate(contact);
 };
 
-export = validateContact;
+export { validateContact, ID_LENGTH };

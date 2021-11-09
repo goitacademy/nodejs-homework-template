@@ -16,4 +16,4 @@ const asyncWrapper = (callbacks: Array<CallbackFunction>) =>
       }
     }
   );
-export = asyncWrapper;
+export { asyncWrapper };
