@@ -2,7 +2,6 @@ printWidth: 100
 useTabs: false
 semi: true
 singleQuote: true
-# trailingComma: 'all'
 trailingComma: 'off'
 bracketSpacing: true
 arrowParens: 'avoid'

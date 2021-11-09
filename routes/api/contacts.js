@@ -1,25 +1,13 @@
 const express = require('express')
-const Joi = require('joi')
-
+const { joiSchema, joiSchemaUpdate } = require('../../model/Schemas/contact')
 const {
   listContacts,
   getContactsById,
   removeContact,
   addContact,
-  updateContactsById,
+  updateContactById,
+  updateStatusContact,
 } = require('../../model/index')
-
-const joiSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().pattern(/^[(][\d]{3}[)]\s[\d]{3}[-][\d]{4}/).required(),
-})
-
-const joiSchemaUpdate = Joi.object({
-  name: Joi.string().min(3).max(30).optional(),
-  email: Joi.string().email().optional(),
-  phone: Joi.string().optional(),
-}).or('name', 'email', 'phone')
 
 const router = express.Router()
 
@@ -45,7 +33,7 @@ router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params
     const result = await getContactsById(contactId)
-    if (result === void 0) {
+    if (!result) {
       res.status(404).json({
         status: 'error',
         code: 404,
@@ -70,7 +58,6 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body)
-    console.log(error)
     if (error) {
       res.status(400).json({
         status: 'error',
@@ -102,7 +89,7 @@ router.delete('/:contactId', async (req, res, next) => {
       res.status(404).json({
         status: 'error',
         code: 404,
-        message: 'Contacts not found'
+        message: `Contacts whith id=${contactId} not found`
       })
       return
     }
@@ -124,12 +111,48 @@ router.put('/:contactId', async (req, res, next) => {
       res.status(400).json({
         status: 'error',
         code: 400,
-        message: 'Missing field'
+        message: 'Missing field favorite'
       })
       return
     }
     const { contactId } = req.params
-    const result = await updateContactsById(contactId, req.body)
+    const result = await updateContactById(contactId, req.body)
+    if (!result) {
+      res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found'
+      })
+      return
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      message: 'Update contact',
+      data: {
+        result
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+// ------------------------PATCH favorite-------------------
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const { error } = joiSchema.validate(req.body)
+    if (!error) {
+      res.status(400).json({
+        status: 'error',
+        code: 400,
+        message: 'Missing field favorite'
+      })
+      return
+    }
+    const { contactId } = req.params
+    const { favorite } = req.body
+    const result = await updateStatusContact(contactId, { favorite })
     if (!result) {
       res.status(404).json({
         status: 'error',
@@ -141,7 +164,7 @@ router.put('/:contactId', async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      message: 'Update contact',
+      message: 'Update status contact',
       data: {
         result
       },

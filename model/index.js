@@ -1,65 +1,60 @@
-const fs = require('fs/promises')
-const path = require('path')
-
-const crypto = require('crypto')
-
-const contactsPath = path.join(__dirname, './contacts.json')
-
-const readContacts = async () => {
-  const result = await fs.readFile(contactsPath, 'utf8')
-  return JSON.parse(result)
-}
+const { Contact } = require('./Schemas/contact')
 
 // =======================================list============================
-const listContacts = async () => readContacts()
+const listContacts = async () => {
+  const result = await Contact.find({})
+  return result
+}
 
 // =====================================get================================
 const getContactsById = async (contactId) => {
-  const contacts = await readContacts()
-  const result = contacts.find((item) => item.id.toString() === contactId)
+  const result = await Contact.findById(contactId)
   if (!result) {
     return null
   }
   return result
 }
+
 // =====================================add================================
-const addContact = async (name, email, phone) => {
-  const contacts = await readContacts()
-  const newContact = { id: crypto.randomUUID(), name, email, phone }
-  contacts.push(newContact)
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-  return newContact
-}
-// =====================================remove================================
-const removeContact = async (contactId) => {
-  const contacts = await readContacts()
-  const idx = contacts.find((item) => item.id.toString() === contactId)
-  if (idx === -1) {
-    return null
-  }
-  const newContacts = contacts.filter((item) => item.id.toString() !== contactId)
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2))
-  return contacts
+const addContact = async (body) => {
+  const result = await Contact.create(body)
+  return result
 }
 
 // =====================================update by id================================
 const updateContactById = async (contactId, body) => {
-  const contacts = await readContacts()
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true }
+  )
+  return result
+}
 
-  const idx = contacts.findIndex(item => item.id.toString() === contactId)
-  if (idx === -1) {
+// =====================================remove================================
+const removeContact = async (contactId) => {
+  const result = await Contact.findByIdAndRemove({ _id: contactId })
+  if (result === -1) {
     return null
   }
-  contacts[idx] = { ...contacts[idx], ...body }
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+  return result
+}
 
-  return contacts[idx]
+// =====================================favorite================================
+const updateStatusContact = async (contactId, body) => {
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true }
+  )
+  return result
 }
 
 module.exports = {
   listContacts,
   getContactsById,
-  removeContact,
   addContact,
   updateContactById,
+  removeContact,
+  updateStatusContact,
 }
