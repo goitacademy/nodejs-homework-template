@@ -3,7 +3,7 @@ import logger from "morgan";
 import cors from "cors";
 import { IError } from "./helpers";
 
-import { router as contactsRouter } from "./routes/api";
+import { contactRouter, userRouter } from "./routes/api";
 
 const app: Application = express();
 
@@ -13,7 +13,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactRouter);
+app.use("/api/users", userRouter);
 
 app.use((_, res: Response) => {
   res.status(404).json({ message: "Not found" });

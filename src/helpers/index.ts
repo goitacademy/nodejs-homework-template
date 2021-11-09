@@ -3,18 +3,20 @@ import {
   isEmailInContacts,
   responseErrorOrNext,
 } from "./checkHelpers";
-import { validateContact, ID_LENGTH } from "./validationHelpers";
+import { validateObject, ID_LENGTH } from "./validationHelpers";
 import { asyncWrapper } from "./asyncWrapper";
-import { IError } from "./error.interface";
-import { IContact } from "./contact.interface";
+import { IContact, IError, IUser } from "./interfaces";
+import * as patterns from "./regexpPatterns";
 
 export {
   isPhoneInContacts,
   isEmailInContacts,
   responseErrorOrNext,
   asyncWrapper,
-  validateContact,
+  validateObject,
   IError,
   IContact,
+  IUser,
   ID_LENGTH,
+  patterns,
 };

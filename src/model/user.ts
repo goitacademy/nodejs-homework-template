@@ -1,4 +1,16 @@
 import { Schema, model } from "mongoose";
+import joi from "joi";
+import { patterns } from "./../helpers";
+
+let joiUserSchema = joi.object({
+  email: joi.string().email({ minDomainSegments: 2 }).required(),
+
+  password: joi
+    .string()
+    .length(8)
+    .pattern(patterns.password, "password")
+    .required(),
+});
 
 const userSchema = new Schema({
   password: {
@@ -23,4 +35,4 @@ const userSchema = new Schema({
 
 const User = model("User", userSchema);
 
-export { userSchema, User };
+export { userSchema, joiUserSchema, User };

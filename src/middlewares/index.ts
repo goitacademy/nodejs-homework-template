@@ -1,9 +1,10 @@
-import {checkFieldInContact, checkIdInContact} from './checkMiddleware';
+import { checkFieldInContact, checkIdInContact } from "./checkMiddleware";
 import {
   addContactValidation,
   updateContactValidation,
   updateStatusContactValidation,
-} from './validationMiddleware';
+} from "./contactValidationMiddleware";
+import { signupUserValidation } from "./userValidationMiddleware";
 
 export {
   checkFieldInContact,
@@ -11,4 +12,5 @@ export {
   addContactValidation,
   updateContactValidation,
   updateStatusContactValidation,
+  signupUserValidation,
 };

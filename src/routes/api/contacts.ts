@@ -54,4 +54,4 @@ router.patch(
   asyncWrapper([updateStatusContact])
 );
 
-export = router;
+export { router };

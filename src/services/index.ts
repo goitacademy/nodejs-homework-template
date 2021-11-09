@@ -1,3 +1,4 @@
-import * as contactService from './contactsService';
+import * as contactService from "./contactsService";
+import * as userService from "./usersService";
 
-export { contactService };
+export { contactService, userService };

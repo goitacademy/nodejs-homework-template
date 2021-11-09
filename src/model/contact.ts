@@ -1,4 +1,16 @@
 import { Schema, model } from "mongoose";
+import joi from "joi";
+import { patterns } from "./../helpers";
+
+let joiContactSchema = joi.object({
+  name: joi.string().min(1).max(30).pattern(patterns.name, "name"),
+
+  email: joi.string().email({ minDomainSegments: 2 }),
+
+  phone: joi.string().pattern(patterns.phone, "phone"),
+
+  favorite: joi.boolean(),
+});
 
 const contactSchema = new Schema({
   name: {
@@ -25,4 +37,4 @@ const contactSchema = new Schema({
 
 const Contact = model("Contact", contactSchema);
 
-export { contactSchema, Contact };
+export { contactSchema, joiContactSchema, Contact };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { BadRequest } from "http-errors";
-import { responseErrorOrNext, validateContact } from "../helpers";
+import { responseErrorOrNext, validateObject } from "../helpers";
+import { joiContactSchema } from "../model";
 
 const addContactValidation = async (
   req: Request,
@@ -9,7 +10,7 @@ const addContactValidation = async (
 ) => {
   const requiredFields = ["name", "email", "phone"];
 
-  const { error } = validateContact(req.body, requiredFields);
+  const { error } = validateObject(req.body, joiContactSchema, requiredFields);
 
   responseErrorOrNext(error, res, next);
 };
@@ -19,7 +20,7 @@ const updateContactValidation = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { error } = validateContact(req.body);
+  const { error } = validateObject(req.body, joiContactSchema);
 
   if (Object.keys(req.body).length === 0) {
     next(new BadRequest("Empty request's body"));
@@ -33,7 +34,7 @@ const updateStatusContactValidation = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { error } = validateContact(req.body, ["favorite"]);
+  const { error } = validateObject(req.body, joiContactSchema, ["favorite"]);
 
   responseErrorOrNext(error, res, next);
 };

@@ -1,3 +1,4 @@
-import router from './contacts';
+import { router as contactRouter } from "./contacts";
+import { router as userRouter } from "./users";
 
-export {router};
+export { contactRouter, userRouter };

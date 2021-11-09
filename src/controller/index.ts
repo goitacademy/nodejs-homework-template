@@ -7,6 +7,8 @@ import {
   deleteContact,
 } from "./contactsController";
 
+import { signupUser } from "./usersController";
+
 export {
   getContacts,
   getContactById,
@@ -14,4 +16,5 @@ export {
   postContact,
   updateContact,
   updateStatusContact,
+  signupUser,
 };

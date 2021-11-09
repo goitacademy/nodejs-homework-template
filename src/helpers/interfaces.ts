@@ -6,3 +6,13 @@ export interface IContact {
   owner: string;
   favorite: boolean;
 }
+
+export interface IUser {
+  email: string;
+  password: string;
+}
+
+export interface IError {
+  status: number;
+  message: string;
+}
