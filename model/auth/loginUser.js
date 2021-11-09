@@ -1,5 +1,6 @@
 const User = require('../../schemas/User')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const loginUser = async (body) => {
   try {
@@ -13,7 +14,12 @@ const loginUser = async (body) => {
     if (!compareResult) {
       return null
     }
-    const token = 'dfgdfgdfd.dgdgdgdfg.dgfdgdgdf'
+    const payload = {
+      id: user._id
+    }
+    const { SECRET_KEY } = process.env
+    const token = jwt.sign(payload, SECRET_KEY)
+
     return token
   } catch (err) {
     console.log(err.message)

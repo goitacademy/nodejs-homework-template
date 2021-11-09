@@ -1,9 +1,9 @@
 const router = require('express').Router()
-const { checkValidity, controllerWrapper } = require('../../middlewares')
+const { checkValidity, controllerWrapper, authorize } = require('../../middlewares')
 const { joiPostPutContactSchema, joiPatchContactSchema, joiPatchStatusContactSchema } = require('../../schemas/joiSchemas')
 const { getAllContacts, getOneContactById, postContact, patchContact, putContact, deleteContact } = require('../../controllers/contacts')
 
-router.get('/', controllerWrapper(getAllContacts))
+router.get('/', authorize, controllerWrapper(getAllContacts))
 
 router.get('/:contactId', controllerWrapper(getOneContactById))
 
