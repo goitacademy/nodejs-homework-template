@@ -1,14 +1,14 @@
-const { readFile } = require('../../js')
-const contactsPath = require('./supportData')
+const { ContactModel } = require('../../db/contactModelMongoose')
 
 const getContactById = async (contactId) => {
-  const data = await readFile(contactsPath)
-  const neededContact = data.find((el) => Number(el.id) === Number(contactId))
+  const neededContact = await ContactModel.findOne({
+    _id: contactId
+  })
 
-  if (neededContact) {
-    return neededContact
+  if (!neededContact) {
+    return null
   }
-  return null
+  return neededContact
 }
 
 module.exports = getContactById
