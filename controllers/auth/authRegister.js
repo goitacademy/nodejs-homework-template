@@ -1,9 +1,8 @@
 const { registerUser } = require('../../model/auth')
 
 const authRegister = async (req, res, next) => {
-  const { email, password, subscription, token } = req.body
   try {
-    const data = await registerUser({ email, password, subscription, token })
+    const data = await registerUser(req.body)
     if (!data) {
       return res.status(409).json({
         status: 'error',
