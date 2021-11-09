@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
 const {
   getAllContacts,
@@ -7,19 +7,19 @@ const {
   deleteContactById,
   addNewContact,
   contactUpdate,
-} = require('../../controllers')
+} = require("../../controllers");
 
-const { validation } = require('../../middlewares')
-const { joiSchema, joiSchemaUpdate } = require('../../validations')
+const { validation, controllerWrapper } = require("../../middlewares");
+const { joiSchema, joiSchemaUpdate } = require("../../validations");
 
-router.get('/', getAllContacts)
+router.get("/", controllerWrapper(getAllContacts));
 
-router.get('/:contactId', getContById)
+router.get("/:contactId", controllerWrapper(getContById));
 
-router.post('/', validation(joiSchema), addNewContact)
+router.post("/", validation(joiSchema), controllerWrapper(addNewContact));
 
-router.delete('/:contactId', deleteContactById)
+router.delete("/:contactId", controllerWrapper(deleteContactById));
 
-router.put('/:contactId', validation(joiSchemaUpdate), contactUpdate)
+router.put("/:contactId", validation(joiSchemaUpdate), contactUpdate);
 
-module.exports = router
+module.exports = router;
