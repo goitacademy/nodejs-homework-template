@@ -20,6 +20,8 @@ const loginUser = async (body) => {
     const { SECRET_KEY } = process.env
     const token = jwt.sign(payload, SECRET_KEY)
 
+    await User.findByIdAndUpdate(user._id, { token })
+
     return token
   } catch (err) {
     console.log(err.message)

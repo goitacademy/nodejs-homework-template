@@ -10,10 +10,15 @@ const authorize = async (req, res, next) => {
       throw new Error()
     }
 
-    const { id } = jwt.verify(token, SECRET_KEY)
+    jwt.verify(token, SECRET_KEY)
 
-    const user = await User.findById(id)
+    const user = await User.findOne({ token })
+    if (!user) {
+      throw new Error()
+    }
+
     req.user = user
+
     next()
   } catch (error) {
     throw new Error()

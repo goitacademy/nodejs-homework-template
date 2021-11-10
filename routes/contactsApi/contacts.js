@@ -5,9 +5,9 @@ const { getAllContacts, getOneContactById, postContact, patchContact, putContact
 
 router.get('/', authorize, controllerWrapper(getAllContacts))
 
-router.get('/:contactId', controllerWrapper(getOneContactById))
+router.get('/:contactId', authorize, controllerWrapper(getOneContactById))
 
-router.post('/', checkValidity(joiPostPutContactSchema), controllerWrapper(postContact))
+router.post('/', authorize, checkValidity(joiPostPutContactSchema), controllerWrapper(postContact))
 
 router.patch('/:contactId', checkValidity(joiPatchContactSchema), controllerWrapper(patchContact))
 
