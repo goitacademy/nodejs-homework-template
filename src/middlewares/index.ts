@@ -4,7 +4,10 @@ import {
   updateContactValidation,
   updateStatusContactValidation,
 } from "./contactValidationMiddleware";
-import { signupUserValidation } from "./userValidationMiddleware";
+import {
+  signupUserValidation,
+  checkEmailInUsers,
+} from "./userValidationMiddleware";
 
 export {
   checkFieldInContact,
@@ -13,4 +16,5 @@ export {
   updateContactValidation,
   updateStatusContactValidation,
   signupUserValidation,
+  checkEmailInUsers,
 };

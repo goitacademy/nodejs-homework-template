@@ -1,13 +1,13 @@
 import express from "express";
 import { signupUser } from "./../../controller";
 import { asyncWrapper } from "../../helpers";
-import { signupUserValidation } from "./../../middlewares";
+import { signupUserValidation, checkEmailInUsers } from "./../../middlewares";
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  asyncWrapper([signupUserValidation]),
+  asyncWrapper([signupUserValidation, checkEmailInUsers]),
   asyncWrapper([signupUser])
 );
 router.post("/login", function () {});

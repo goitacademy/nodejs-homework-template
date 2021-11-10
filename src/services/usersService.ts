@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { User } from "../model";
 import { IUser } from "../helpers";
 
