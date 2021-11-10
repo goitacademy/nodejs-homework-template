@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { regex } = require('../helpers')
+const { regex, subscriptions } = require('../helpers')
 
 const joiPostPutContactSchema = Joi.object({
   name: Joi.string()
@@ -40,9 +40,14 @@ const joiUserSchema = Joi.object({
     .required()
 })
 
+const joiPatchSubscriptionUserSchema = Joi.object({
+  subscription: Joi.string().valid(...subscriptions).required(),
+})
+
 module.exports = {
   joiPostPutContactSchema,
   joiPatchContactSchema,
   joiPatchStatusContactSchema,
-  joiUserSchema
+  joiUserSchema,
+  joiPatchSubscriptionUserSchema
 }

@@ -17,7 +17,7 @@ const authorize = async (req, res, next) => {
     jwt.verify(token, SECRET_KEY)
 
     const user = await User.findOne({ token })
-    console.log(user)
+
     if (!user) {
       res.json({
         status: 'Unauthorized',

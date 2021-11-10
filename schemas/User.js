@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose')
-const { regex } = require('../helpers')
+const { regex, subscriptions } = require('../helpers')
 
 const UserSchema = Schema(
   {
@@ -16,7 +16,7 @@ const UserSchema = Schema(
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: [...subscriptions],
       default: 'starter'
     },
     token: {
