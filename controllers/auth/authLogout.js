@@ -4,8 +4,8 @@ const authLogout = async (req, res, next) => {
   await logoutUser(req.user)
   res.json({
     status: 'success',
-    code: 200,
-    message: 'Success logout'
+    code: 204,
+    message: 'No Content'
   })
 }
 

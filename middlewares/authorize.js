@@ -7,21 +7,31 @@ const authorize = async (req, res, next) => {
   try {
     const [bearer, token] = req.headers.authorization.split(' ')
     if (bearer !== 'Bearer') {
-      throw new Error()
+      res.json({
+        status: 'Unauthorized',
+        code: 401,
+        message: 'Not authorized'
+      })
     }
 
     jwt.verify(token, SECRET_KEY)
 
     const user = await User.findOne({ token })
+    console.log(user)
     if (!user) {
-      throw new Error()
+      res.json({
+        status: 'Unauthorized',
+        code: 401,
+        message: 'Not authorized'
+      })
     }
 
     req.user = user
 
     next()
   } catch (error) {
-    throw new Error()
+    console.log(error)
+    next(error)
   }
 }
 
