@@ -1,21 +1,21 @@
 const express = require('express')
 const router = express.Router()
+
 const contactsCtrl = require('../../controllers/contacts')
-const { joiContactsShcemaAdd, joiContactsShcemaUpd } = require('../../middlewares/validation/joiSchema')
-const validation = require('../../middlewares/validation/validation')
-const authenticate = require('../../middlewares/authenticate')
-const controllerWrapper = require('../../middlewares/controllerWrapper')
+const { joiContactsShcemaAdd, joiContactsShcemaUpd } = require('../../middlewares/validation')
+const { validation } = require('../../middlewares/validation')
+const { controllerWrapper, authenticate } = require('../../middlewares')
 
-router.get('/', controllerWrapper(authenticate), contactsCtrl.getAllContactsCtrl)
+router.get('/', controllerWrapper(authenticate), controllerWrapper(contactsCtrl.getAllContactsCtrl))
 
-router.get('/:contactId', contactsCtrl.getContactByIdCtrl)
+router.get('/:contactId', controllerWrapper(authenticate), controllerWrapper(contactsCtrl.getContactByIdCtrl))
 
-router.post('/', controllerWrapper(authenticate), validation(joiContactsShcemaAdd), contactsCtrl.addContactCtrl)
+router.post('/', controllerWrapper(authenticate), validation(joiContactsShcemaAdd), controllerWrapper(contactsCtrl.addContactCtrl))
 
-router.delete('/:contactId', contactsCtrl.removeContactCtrl)
+router.delete('/:contactId', controllerWrapper(authenticate), controllerWrapper(contactsCtrl.removeContactCtrl))
 
-router.patch('/:contactId', validation(joiContactsShcemaUpd), contactsCtrl.updateContactCtrl)
+router.patch('/:contactId', controllerWrapper(authenticate), validation(joiContactsShcemaUpd), controllerWrapper(contactsCtrl.updateContactCtrl))
 
-router.patch('/:contactId/favorite', contactsCtrl.updateStatusContact)
+router.patch('/:contactId/favorite', controllerWrapper(authenticate), controllerWrapper(contactsCtrl.updateStatusContact))
 
 module.exports = router
