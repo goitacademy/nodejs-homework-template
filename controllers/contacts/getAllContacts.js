@@ -1,18 +1,15 @@
 const { listContacts } = require('../../model/contacts')
 
 const getAllContacts = async (req, res, next) => {
-  try {
-    const data = await listContacts()
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result: data
-      }
-    })
-  } catch (error) {
-    console.log(error)
-  }
+  const owner = req.user._id
+  const data = await listContacts(owner, req.query)
+  res.json({
+    status: 'success',
+    code: 200,
+    data: {
+      result: data
+    }
+  })
 }
 
 module.exports = { getAllContacts }

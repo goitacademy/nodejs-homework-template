@@ -5,6 +5,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: './config/config.env' })
 
 const contactsRouter = require('./routes/contactsApi/contacts')
+const authRouter = require('./routes/authApi/auth')
 
 // Init application
 const app = express()
@@ -18,13 +19,19 @@ app.use(express.json()) // json body parse
 
 // Mounts routers
 app.use('/api/v1/contacts', contactsRouter)
+app.use('/api/v1/auth', authRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = 'Server error' } = err
+  res.status(status).json({
+    status: 'Error',
+    code: status,
+    message
+  })
 })
 
 module.exports = app

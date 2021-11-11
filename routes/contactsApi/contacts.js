@@ -1,19 +1,20 @@
 const router = require('express').Router()
-const { validatePostPutContact, validatePatchContact, validatePatchStatusContact } = require('../../middlewares/validation')
+const { checkValidity, controllerWrapper, authorize } = require('../../middlewares')
+const { joiPostPutContactSchema, joiPatchContactSchema, joiPatchStatusContactSchema } = require('../../schemas/joiSchemas')
 const { getAllContacts, getOneContactById, postContact, patchContact, putContact, deleteContact } = require('../../controllers/contacts')
 
-router.get('/', getAllContacts)
+router.get('/', authorize, controllerWrapper(getAllContacts))
 
-router.get('/:contactId', getOneContactById)
+router.get('/:contactId', authorize, controllerWrapper(getOneContactById))
 
-router.post('/', validatePostPutContact, postContact)
+router.post('/', authorize, checkValidity(joiPostPutContactSchema), controllerWrapper(postContact))
 
-router.patch('/:contactId', validatePatchContact, patchContact)
+router.patch('/:contactId', checkValidity(joiPatchContactSchema), controllerWrapper(patchContact))
 
-router.put('/:contactId', validatePostPutContact, putContact)
+router.put('/:contactId', checkValidity(joiPostPutContactSchema), controllerWrapper(putContact))
 
-router.delete('/:contactId', deleteContact)
+router.delete('/:contactId', controllerWrapper(deleteContact))
 
-router.patch('/:contactId/favorite', validatePatchStatusContact, patchContact)
+router.patch('/:contactId/favorite', checkValidity(joiPatchStatusContactSchema), controllerWrapper(patchContact))
 
 module.exports = router
