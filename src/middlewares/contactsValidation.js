@@ -13,9 +13,8 @@ const postValidate = (req, res, next) => {
   });
 
   const validationResult = schema.validate(req.body);
-  console.log(validationResult);
+
   if (validationResult.error) {
-    console.log("postValidate");
     return res.status(400).json({ status: validationResult.error.details });
   }
   next();
@@ -32,9 +31,7 @@ const patchPutValidate = (req, res, next) => {
   });
 
   const validationResult = schema.validate(req.body);
-  console.log(validationResult);
   if (validationResult.error) {
-    console.log("postValidate");
     return res.status(400).json({ status: validationResult.error.details });
   }
   next();
