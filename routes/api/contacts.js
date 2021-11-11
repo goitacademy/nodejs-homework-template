@@ -1,123 +1,26 @@
 const express = require('express')
 const router = express.Router()
-const { NotFound, BadRequest } = require('http-errors')
-const Joi = require('joi')
+const { contacts: controllers } = require('../../controllers')
+const { validation, controllerWrapper } = require('../../middlewares')
+const { joiSchemaAdd, joiSchemaPut } = require('../../models/contact')
 
-const joiSchemaAdd = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().min(4).required().email(),
-  phone: Joi.string()
-    .min(9)
-    .max(14)
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers')
-    .required(),
-})
+router.get('/', controllerWrapper(controllers.getAll))
 
-const joiSchemaPut = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().min(4).email(),
-  phone: Joi.string()
-    .min(9)
-    .max(14)
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/, 'numbers'),
-})
+router.get('/:contactId', controllerWrapper(controllers.getById))
 
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../model/index')
+router.post('/', validation(joiSchemaAdd), controllerWrapper(controllers.add))
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await listContacts()
-    res.json({
-      message: 'Get contacts list',
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
+router.delete('/:contactId', controllerWrapper(controllers.removeById))
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params
-    const result = await getContactById(contactId)
-    if (!result) {
-      throw new NotFound('Not found')
-    }
-    res.json({
-      message: 'Get contact by contactId',
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
+router.put(
+  '/:contactId',
+  validation(joiSchemaPut),
+  controllerWrapper(controllers.updateById)
+)
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = joiSchemaAdd.validate(req.body)
-    if (error) {
-      throw new BadRequest(error.message)
-    }
-    const result = await addContact(req.body)
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params
-    const result = await removeContact(contactId)
-    if (!result) {
-      throw new NotFound('Not found')
-    }
-    res.json({
-      message: 'contact deleted',
-    })
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = joiSchemaPut.validate(req.body)
-    if (error) {
-      throw new BadRequest('missing fields')
-    }
-    const { contactId } = req.params
-    const result = await updateContact(contactId, req.body)
-    res.status(201).json({
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
+router.patch(
+  '/:contactId/favorite',
+  controllerWrapper(controllers.updaateFavorite)
+)
 
 module.exports = router
