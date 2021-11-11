@@ -1,5 +1,6 @@
 const express = require('express')
 const { joiSchema, joiSchemaUpdate } = require('../../model/Schemas/contact')
+
 const {
   listContacts,
   getContactsById,
@@ -58,6 +59,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body)
+
     if (error) {
       res.status(400).json({
         status: 'error',
@@ -153,6 +155,7 @@ router.patch('/:contactId/favorite', async (req, res, next) => {
     const { contactId } = req.params
     const { favorite } = req.body
     const result = await updateStatusContact(contactId, { favorite })
+
     if (!result) {
       res.status(404).json({
         status: 'error',

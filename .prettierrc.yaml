@@ -6,3 +6,4 @@ trailingComma: 'off'
 bracketSpacing: true
 arrowParens: 'avoid'
 proseWrap: 'always'
+
