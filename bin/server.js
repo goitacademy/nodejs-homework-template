@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const app = require('../app')
+require('dotenv').config()
 
 const { PORT = 3000, DB_HOST } = process.env
 

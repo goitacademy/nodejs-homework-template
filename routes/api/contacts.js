@@ -23,6 +23,6 @@ router.delete('/:contactId', controllerWrapper(deleteContactById))
 
 router.put('/:contactId', validation(joiSchemaUpdate), contactUpdate)
 
-router.patch('/:contactId/favorite', updateStatus)
+router.patch('/:contactId/favorite', validation(joiSchemaUpdate), updateStatus)
 
 module.exports = router
