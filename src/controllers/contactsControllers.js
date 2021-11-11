@@ -54,17 +54,14 @@ const updateContact = async (req, res) => {
   const { name, email, phone } = req.body;
   const { contactId } = req.params;
   contacts.forEach((el) => {
-    if (el.id === contactId) {
-      el.name = name;
-      el.email = email;
-      el.phone = phone.toString();
+    if (el.id.toString() === contactId.toString()) {
+      el.name = name ? name : el.name;
+      el.email = email ? email : el.email;
+      el.phone = phone ? phone.toString() : el.phone;
     }
   });
-  //   console.log(updatedContacts);
-  console.log(contacts);
-  //   const json = JSON.stringify(updatedContact);
-  //   console.log(json);
-  //   fs.writeFile(contactsPath, updatedContact);
+  const json = JSON.stringify(contacts);
+  fs.writeFile(contactsPath, json);
   res.json({ message: "Contact updated" });
 };
 

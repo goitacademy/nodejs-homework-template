@@ -20,6 +20,6 @@ router.post("/", postValidate, addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", patchPutValidate, updateContact);
+router.patch("/:contactId", patchPutValidate, updateContact);
 
 module.exports = router;
