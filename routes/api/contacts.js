@@ -37,7 +37,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { name, email, phone } = await schema.validateAsync(req.query)
+    const { name, email, phone } = await schema.validateAsync(req.body)
     const newContact = { id: crypto.randomInt(0, 100000), name, email, phone }
     addContact(newContact)
     res.status(201)
@@ -45,7 +45,7 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     console.log(error)
     res.status(400)
-    res.json({ message: 'missing required name field' })
+    res.json({ message: error.message })
   }
 })
 
@@ -62,7 +62,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const body = await schema.validateAsync(req.query)
+    const body = await schema.validateAsync(req.body)
     const updatedContact = await updateContact(req.params.contactId, body)
     res.status(200)
     res.json(updatedContact)
