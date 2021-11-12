@@ -23,11 +23,6 @@ const isEmailInContacts = async (
       email === newEmail && !_id.toString().includes(contactId)
   );
 
-const isEmailInUsers = async (
-  users: Array<IUser>,
-  newEmail: string
-): Promise<boolean> => await users.some(({ email }) => email === newEmail);
-
 const responseErrorOrNext = (
   error: Joi.ValidationError | undefined,
   res: Response,
@@ -41,9 +36,4 @@ const responseErrorOrNext = (
   next();
 };
 
-export {
-  isPhoneInContacts,
-  isEmailInContacts,
-  responseErrorOrNext,
-  isEmailInUsers,
-};
+export { isPhoneInContacts, isEmailInContacts, responseErrorOrNext };

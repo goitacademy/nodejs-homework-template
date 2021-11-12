@@ -15,20 +15,23 @@ const postContact = async (contact: IContact) => {
 };
 
 const updateContact = async (contactId: string, contact: IContact) => {
-  // await Contact.findByIdAndUpdate(contactId, { $set: contact });
-
-  // const newContact = await Contact.findById(contactId);
-  const newContact = await Contact.findByIdAndUpdate(contactId, {
-    $set: contact,
-  });
+  const newContact = await Contact.findByIdAndUpdate(
+    contactId,
+    {
+      $set: contact,
+    },
+    { new: true }
+  );
 
   return newContact;
 };
 
 const updateStatusContact = async (contactId: string, favorite: boolean) => {
-  await Contact.findByIdAndUpdate(contactId, { favorite });
-
-  const updatedContact = await Contact.findById(contactId);
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
 
   return updatedContact;
 };

@@ -1,7 +1,6 @@
 import {
   isPhoneInContacts,
   isEmailInContacts,
-  isEmailInUsers,
   responseErrorOrNext,
 } from "./checkHelpers";
 import { validateObject, ID_LENGTH } from "./validationHelpers";
@@ -12,7 +11,6 @@ import * as patterns from "./regexpPatterns";
 export {
   isPhoneInContacts,
   isEmailInContacts,
-  isEmailInUsers,
   responseErrorOrNext,
   asyncWrapper,
   validateObject,

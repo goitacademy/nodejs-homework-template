@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { Conflict } from "http-errors";
 import { responseErrorOrNext, validateObject } from "../helpers";
 import { joiUserSchema, User } from "./../model";
-import { IUser } from "./../helpers";
-import { isEmailInUsers } from "../helpers";
 
 const signupUserValidation = async (
   req: Request,
@@ -22,10 +20,10 @@ const checkEmailInUsers = async (
   res: Response,
   next: NextFunction
 ) => {
-  const users: Array<IUser> = await User.find();
   const { email } = req.body;
+  const user = await User.findOne({ email });
 
-  if (await isEmailInUsers(users, email)) {
+  if (user) {
     return next(new Conflict("User with same email already exists."));
   }
 

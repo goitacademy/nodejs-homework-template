@@ -1,9 +1,10 @@
 import { Schema, model } from "mongoose";
 import joi from "joi";
-import { patterns } from "./../helpers";
+import bcrypt from "bcrypt";
 import PasswordComplexity from "joi-password-complexity";
+import { SALT_COUNT } from "./../config";
 
-let joiUserSchema = joi.object({
+const joiUserSchema = joi.object({
   email: joi.string().email({ minDomainSegments: 2 }).required(),
 
   password: PasswordComplexity({
@@ -15,7 +16,6 @@ let joiUserSchema = joi.object({
     symbol: 1,
     requirementCount: 4,
   }),
-  // .pattern(patterns.password, "password")
 });
 
 const userSchema = new Schema(
@@ -41,6 +41,14 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_COUNT));
+};
+
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const User = model("User", userSchema);
 

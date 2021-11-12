@@ -8,8 +8,10 @@ export interface IContact {
 }
 
 export interface IUser {
+  readonly _id: string;
   email: string;
   password: string;
+  subscription: string;
 }
 
 export interface IError {

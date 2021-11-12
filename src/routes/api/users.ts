@@ -1,7 +1,11 @@
 import express from "express";
-import { signupUser } from "./../../controller";
+import { signupUser, loginUser } from "./../../controller";
 import { asyncWrapper } from "../../helpers";
-import { signupUserValidation, checkEmailInUsers } from "./../../middlewares";
+import {
+  signupUserValidation,
+  checkEmailInUsers,
+  checkUserCredentials,
+} from "./../../middlewares";
 
 const router = express.Router();
 
@@ -10,6 +14,10 @@ router.post(
   asyncWrapper([signupUserValidation, checkEmailInUsers]),
   asyncWrapper([signupUser])
 );
-router.post("/login", function () {});
+router.post(
+  "/login",
+  asyncWrapper([checkUserCredentials]),
+  asyncWrapper([loginUser])
+);
 
 export { router };

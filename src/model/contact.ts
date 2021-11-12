@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import joi from "joi";
 import { patterns } from "./../helpers";
 
-let joiContactSchema = joi.object({
+const joiContactSchema = joi.object({
   name: joi.string().min(1).max(30).pattern(patterns.name, "name"),
 
   email: joi.string().email({ minDomainSegments: 2 }),

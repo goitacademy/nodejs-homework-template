@@ -1,7 +1,7 @@
 import joi, { ValidationResult } from "joi";
 import { IContact, IUser } from ".";
 
-const ID_LENGTH: number = 24;
+const ID_LENGTH = 24;
 
 const validateObject = (
   contact: IContact | IUser,
