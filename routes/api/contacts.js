@@ -18,8 +18,8 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
   try {
-    const { contactId } = req.params;
     const data = await contactsActions.getContactById(contactId);
     if (!data) {
       const error = new Error("Not found");
@@ -50,8 +50,8 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
   try {
-    const { contactId } = req.params;
     const data = await contactsActions.removeContact(contactId);
     if (!data) {
       const error = new Error("Not found");
@@ -69,8 +69,29 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.put("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  try {
+    const data = await contactsActions.updateContact(contactId, req.body);
+    if (!name ?? !email ?? !phone) {
+      const error = new Error("missing fields");
+      error.status = 400;
+      throw error;
+    }
+    if (!data) {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
+    res.status(200).json({
+      status: "success",
+      code: 201,
+      data: data
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

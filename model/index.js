@@ -52,7 +52,7 @@ const addContact = async body => {
   try {
     const contacts = await listContacts();
     const id = shortid();
-    const newContact = { ...body, id };
+    const newContact = { id, ...body };
     contacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
     return newContact;
@@ -61,7 +61,29 @@ const addContact = async body => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const contact = contacts.find(
+      item =>
+        item.id
+          .toString()
+          .toLowerCase()
+          .trim() !==
+        contactId
+          .toString()
+          .toLowerCase()
+          .trim()
+    );
+    if (!contact) return null;
+    const updContact = { contactId, ...body };
+    contacts.push(updContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return updContact;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 module.exports = {
   listContacts,
