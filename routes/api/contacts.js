@@ -10,7 +10,7 @@ router.get("/", async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      data: { data }
+      data: data
     });
   } catch (error) {
     next(error);
@@ -22,14 +22,14 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const data = await contactsActions.getContactById(contactId);
     if (!data) {
-      const error = new Error("Contact not found");
+      const error = new Error("Not found");
       error.status = 404;
       throw error;
     }
     res.json({
       status: "success",
       code: 200,
-      data: { data }
+      data: data
     });
   } catch (error) {
     next(error);
@@ -42,7 +42,7 @@ router.post("/", async (req, res, next) => {
     res.status(201).json({
       status: "success",
       code: 201,
-      data: { data }
+      data: data
     });
   } catch (error) {
     next(error);
@@ -50,7 +50,23 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { contactId } = req.params;
+    const data = await contactsActions.removeContact(contactId);
+    if (!data) {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "contact deleted",
+      data: data
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.patch("/:contactId", async (req, res, next) => {
