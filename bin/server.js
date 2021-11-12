@@ -1,7 +1,10 @@
-const app = require('../app')
+/* eslint-disable quotes */
+/* eslint-disable semi */
+const app = require("../app.js");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`)
-})
+  console.log(`Server running. Use our API on port: ${PORT}`);
+});
