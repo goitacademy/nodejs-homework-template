@@ -1,19 +1,19 @@
-const Contact = require('../../model/contact')
+const { BadRequest } = require('http-errors')
 
-const addContactCtrl = async (req, res, next) => {
-  try {
-    if (!req.body) {
-      return res.status(400).json({ message: 'missing required name field' })
-    }
-    const data = await Contact.create(req.body)
-    res.json({
-      status: 'success',
-      code: 201,
-      data: { data },
-    })
-  } catch (error) {
-    next(error)
+const { Contact } = require('../../models')
+
+const addContactCtrl = async (req, res) => {
+  if (!req.body) {
+    throw new BadRequest('missing required name field')
   }
+
+  const newContact = { ...req.body, owner: req.user._id }
+  const data = await Contact.create(newContact)
+  res.json({
+    status: 'success',
+    code: 201,
+    data,
+  })
 }
 
 module.exports = addContactCtrl

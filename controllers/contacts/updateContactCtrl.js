@@ -1,27 +1,24 @@
-const Contact = require('../../model/contact')
+const { BadRequest, NotFound } = require('http-errors')
 
-const updateContactCtrl = async (req, res, next) => {
+const { Contact } = require('../../models')
+
+const updateContactCtrl = async (req, res) => {
   const { contactId } = req.params
 
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: 'missing fields' })
+    throw new BadRequest('missing fields')
   }
 
-  try {
-    const data = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+  const data = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
 
-    if (!data) {
-      return res.status(404).json({ maessage: 'form updCtr Not found' })
-    }
-
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { data },
-    })
-  } catch (error) {
-    next(error)
+  if (!data) {
+    throw new NotFound('form updCtr Not found')
   }
+  res.json({
+    status: 'success',
+    code: 200,
+    data,
+  })
 }
 
 module.exports = updateContactCtrl
