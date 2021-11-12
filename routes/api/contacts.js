@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const contactsActions = require("../../model");
+const contactBodyValidator = require("../../middlewares/validationMiddleware.js");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -36,7 +37,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", contactBodyValidator, async (req, res, next) => {
   try {
     const data = await contactsActions.addContact(req.body);
     res.status(201).json({
@@ -69,7 +70,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", contactBodyValidator, async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
   try {
