@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 const {SECRET_KEY} = process.env
 
 const authenticate = async (req, res, next) => {
-
 try {
      const [bearer, token] = req.headers.authorization.split(" ")
     if (bearer !== "Bearer") {
@@ -23,15 +22,10 @@ try {
     }
     req.user = user
     next()
-    
+
 } catch (error) {
     next(error)
 }
-
-  
-    
-           
-
 }
 
 module.exports=authenticate  

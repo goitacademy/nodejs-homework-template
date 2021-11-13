@@ -12,12 +12,10 @@ const loginController = async(req, res, next)=> {
         if (!user) {
             throw new NotFound(`User with email: ${email} not found`)
         }
-
         const compareResult = bcript.compareSync(password, user.password)
         if (!compareResult) {
             throw new Unauthorized('Email or password is wrong')
         }
-
         const payload = {
             id: user._id
         }
