@@ -1,7 +1,8 @@
 const fs = require('fs').promises;
 const uniqid = require('uniqid');
 const path = require('path');
-const contactsPath = path.resolve('./model/contacts.json');
+// const contactsPath = path.resolve('./model/contacts.json');
+const contactsPath = path.join(__dirname, './contacts.json');
 const { trimData } = require('../utils/utils');
 
 const listContacts = async () => {
@@ -16,12 +17,12 @@ const parsedContacts = async () => {
 const getContactById = async contactId => {
   const contacts = await parsedContacts();
 
-  return contacts.find(({ id }) => id == contactId); // ==
+  const res = contacts.find(({ id }) => id == contactId);
+  if (!res) return null;
+  return res;
 };
 
 const removeContact = async dataId => {
-  // const contactId = Number(dataId);
-  // console.log(Number(dataId));
   const contacts = await parsedContacts();
   const contact = contacts.find(({ id }) => String(id) === String(dataId));
 
