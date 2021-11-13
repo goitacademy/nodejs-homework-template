@@ -6,12 +6,13 @@ const {Contact}= require('../../model')
 
 const postContactController = async (req, res, next) => {
   try {
+    const newUser = {...req.body, owner: req.user._id}
     const { error } =
       joySchema.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
     }
-    const newContact = await Contact.create(req.body)
+    const newContact = await Contact.create(newUser)
      res.status(201).json({
      status: 'success',
      code: 201,
