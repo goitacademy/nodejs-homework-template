@@ -1,18 +1,15 @@
-const Joi = require('joi')
 const { BadRequest } = require('http-errors')
 
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().min(14).max(14).required(),
-})
-
-const addValidation = (req, res, next) => {
-  const { error } = joiSchema.validate(req.body)
-  if (error) {
-    throw new BadRequest(error.message)
+const contactValidation = schema => {
+  const validationMiddleware = (req, res, next) => {
+    const { error } = schema.validate(req.body)
+    if (error) {
+      const newError = new BadRequest(error.message)
+      next(newError)
+    }
+    next()
   }
-  next()
+  return validationMiddleware
 }
 
-module.exports = addValidation
+module.exports = contactValidation
