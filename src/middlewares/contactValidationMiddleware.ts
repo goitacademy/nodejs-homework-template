@@ -10,6 +10,8 @@ const addContactValidation = async (
 ) => {
   const requiredFields = ["name", "email", "phone"];
 
+  console.log("re.body: ", req.body);
+
   const { error } = validateObject(req.body, joiContactSchema, requiredFields);
 
   responseErrorOrNext(error, res, next);

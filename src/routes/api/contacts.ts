@@ -13,34 +13,36 @@ import {
   checkFieldInContact,
   checkIdInContact,
   updateStatusContactValidation,
+  authenticateUser,
 } from "../../middlewares";
 import { asyncWrapper } from "../../helpers";
 
 const router = express.Router();
 
-router.get("/", asyncWrapper([getContacts]));
+router.get("/", asyncWrapper([authenticateUser]), asyncWrapper([getContacts]));
 
 router.get(
   "/:contactId",
-  asyncWrapper([checkIdInContact]),
+  asyncWrapper([authenticateUser, checkIdInContact]),
   asyncWrapper([getContactById])
 );
 
 router.delete(
   "/:contactId",
-  asyncWrapper([checkIdInContact]),
+  asyncWrapper([authenticateUser, checkIdInContact]),
   asyncWrapper([deleteContact])
 );
 
 router.post(
   "/",
-  asyncWrapper([addContactValidation, checkFieldInContact]),
+  asyncWrapper([authenticateUser, addContactValidation, checkFieldInContact]),
   asyncWrapper([postContact])
 );
 
 router.put(
   "/:contactId",
   asyncWrapper([
+    authenticateUser,
     updateContactValidation,
     checkIdInContact,
     checkFieldInContact,
@@ -50,7 +52,11 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
-  asyncWrapper([checkIdInContact, updateStatusContactValidation]),
+  asyncWrapper([
+    authenticateUser,
+    checkIdInContact,
+    updateStatusContactValidation,
+  ]),
   asyncWrapper([updateStatusContact])
 );
 

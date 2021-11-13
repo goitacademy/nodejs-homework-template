@@ -3,15 +3,13 @@ import {
   checkIdInContact,
   checkUserCredentials,
 } from "./checkMiddleware";
+import { authenticateUser } from "./checkTokenMiddleware";
 import {
   addContactValidation,
   updateContactValidation,
   updateStatusContactValidation,
 } from "./contactValidationMiddleware";
-import {
-  signupUserValidation,
-  checkEmailInUsers,
-} from "./userValidationMiddleware";
+import { userValidation, checkEmailInUsers } from "./userValidationMiddleware";
 
 export {
   checkFieldInContact,
@@ -19,7 +17,8 @@ export {
   addContactValidation,
   updateContactValidation,
   updateStatusContactValidation,
-  signupUserValidation,
+  userValidation,
   checkEmailInUsers,
   checkUserCredentials,
+  authenticateUser,
 };

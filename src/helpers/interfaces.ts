@@ -1,9 +1,10 @@
+import { Schema } from "mongoose";
 export interface IContact {
   readonly _id: string;
   name: string;
   phone: string;
   email: string;
-  owner: string;
+  owner: Schema.Types.ObjectId;
   favorite: boolean;
 }
 

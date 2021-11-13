@@ -1,17 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 
-const signupUser = async (req: Request, res: Response, __: NextFunction) => {
-  const { email } = await userService.signupUser(req.body);
+const signup = async (req: Request, res: Response, _: NextFunction) => {
+  const { email } = await userService.signup(req.body);
 
   res.status(200).json({ message: "success", data: { email } });
 };
 
-const loginUser = async (req: Request, res: Response, __: NextFunction) => {
+const login = async (req: Request, res: Response, _: NextFunction) => {
   const {
     searchedUser: { email, subscription },
     token,
-  } = await userService.loginUser(req.body);
+  } = await userService.login(req.body);
 
   res.status(200).json({
     message: "success",
@@ -19,4 +19,19 @@ const loginUser = async (req: Request, res: Response, __: NextFunction) => {
   });
 };
 
-export { signupUser, loginUser };
+const logout = async (req: Request, res: Response, _: NextFunction) => {
+  await userService.logout(req.body.user);
+
+  res.status(204).json();
+};
+
+const current = async (req: Request, res: Response, _: NextFunction) => {
+  const { email, subscription } = await userService.current(req.body.user);
+
+  res.status(200).json({
+    message: "success",
+    data: { user: { email, subscription } },
+  });
+};
+
+export { signup, login, logout, current };

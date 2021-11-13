@@ -3,7 +3,7 @@ import { Conflict } from "http-errors";
 import { responseErrorOrNext, validateObject } from "../helpers";
 import { joiUserSchema, User } from "./../model";
 
-const signupUserValidation = async (
+const userValidation = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -30,4 +30,4 @@ const checkEmailInUsers = async (
   next();
 };
 
-export { signupUserValidation, checkEmailInUsers };
+export { userValidation, checkEmailInUsers };

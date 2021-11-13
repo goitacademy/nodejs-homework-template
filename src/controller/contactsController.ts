@@ -1,26 +1,36 @@
 import { Request, Response, NextFunction } from "express";
 import { contactService } from "../services";
 
-const getContacts = async (_: Request, res: Response, __: NextFunction) => {
-  const contacts = await contactService.getContacts();
+type UpdateBodyStrings = { owner: string; favorite: boolean };
+
+const getContacts = async (req: Request, res: Response, __: NextFunction) => {
+  const ownerId: string = req.body.owner;
+
+  const contacts = await contactService.getAll(ownerId);
 
   res.status(200).json({ message: "success", data: { contacts } });
 };
 
 const getContactById = async (req: Request, res: Response, _: NextFunction) => {
-  const contact = await contactService.getContactById(req.params.contactId);
+  const ownerId: string = req.body.owner;
+  const contactId: string = req.params.contactId;
+
+  const contact = await contactService.getById(ownerId, contactId);
 
   res.status(200).json({ message: "success", data: { contact } });
 };
 
 const postContact = async (req: Request, res: Response, _: NextFunction) => {
-  const newContact = await contactService.postContact({ ...req.body });
+  const newContact = await contactService.post(req.body);
 
   res.status(201).json({ message: "Contact added", data: { newContact } });
 };
 
 const updateContact = async (req: Request, res: Response, _: NextFunction) => {
-  const newContact = await contactService.updateContact(req.params.contactId, {
+  const owner: string = req.body.owner;
+  const contactId: string = req.params.contactId;
+
+  const newContact = await contactService.update(owner, contactId, {
     ...req.body,
   });
 
@@ -32,9 +42,13 @@ const updateStatusContact = async (
   res: Response,
   _: NextFunction
 ) => {
-  const updatedContact = await contactService.updateStatusContact(
-    req.params.contactId,
-    req.body.favorite
+  const { owner, favorite }: UpdateBodyStrings = req.body;
+  const contactId: string = req.params.contactId;
+
+  const updatedContact = await contactService.updateStatus(
+    owner,
+    contactId,
+    favorite
   );
 
   res
@@ -43,7 +57,10 @@ const updateStatusContact = async (
 };
 
 const deleteContact = async (req: Request, res: Response, _: NextFunction) => {
-  const contact = await contactService.deleteContact(req.params.contactId);
+  const owner: string = req.body.owner;
+  const contactId: string = req.params.contactId;
+
+  const contact = await contactService.deleteById(owner, contactId);
 
   res.status(200).json({ message: "Contact deleted", data: { contact } });
 };

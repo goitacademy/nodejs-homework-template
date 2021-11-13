@@ -1,12 +1,16 @@
 import { Contact } from "../model";
 import { IContact } from "../helpers";
 
-const getContacts = async () => await Contact.find();
+const getAll = async (ownerId: string) =>
+  await Contact.find({ owner: ownerId }).populate("owner", "_id email");
 
-const getContactById = async (contactId: string) =>
-  await Contact.findById(contactId);
+const getById = async (ownerId: string, contactId: string) =>
+  await Contact.findById({ owner: ownerId, _id: contactId }).populate(
+    "owner",
+    "_id email"
+  );
 
-const postContact = async (contact: IContact) => {
+const post = async (contact: IContact) => {
   const newContact = await new Contact(contact);
 
   await newContact.save();
@@ -14,9 +18,13 @@ const postContact = async (contact: IContact) => {
   return newContact;
 };
 
-const updateContact = async (contactId: string, contact: IContact) => {
-  const newContact = await Contact.findByIdAndUpdate(
-    contactId,
+const update = async (
+  ownerId: string,
+  contactId: string,
+  contact: IContact
+) => {
+  const newContact = await Contact.findOneAndUpdate(
+    { owner: ownerId, _id: contactId },
     {
       $set: contact,
     },
@@ -26,9 +34,13 @@ const updateContact = async (contactId: string, contact: IContact) => {
   return newContact;
 };
 
-const updateStatusContact = async (contactId: string, favorite: boolean) => {
-  const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
+const updateStatus = async (
+  ownerId: string,
+  contactId: string,
+  favorite: boolean
+) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { owner: ownerId, _id: contactId },
     { favorite },
     { new: true }
   );
@@ -36,17 +48,13 @@ const updateStatusContact = async (contactId: string, favorite: boolean) => {
   return updatedContact;
 };
 
-const deleteContact = async (contactId: string) => {
-  const contact = await Contact.findByIdAndRemove(contactId);
+const deleteById = async (ownerId: string, contactId: string) => {
+  const contact = await Contact.findOneAndRemove({
+    owner: ownerId,
+    _id: contactId,
+  });
 
   return contact;
 };
 
-export {
-  getContacts,
-  getContactById,
-  postContact,
-  updateContact,
-  updateStatusContact,
-  deleteContact,
-};
+export { getAll, getById, post, update, updateStatus, deleteById };

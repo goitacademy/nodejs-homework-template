@@ -64,7 +64,7 @@ const checkUserCredentials = async (
   }
 
   if (!user.comparePassword(password)) {
-    next(new Unauthorized(`Wrong login/password`));
+    next(new Unauthorized(`Email or password is wrong`));
   }
 
   next();
