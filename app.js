@@ -1,19 +1,17 @@
-// Anastasia
-// PKgAr7tWmDdJoamv
-// mongodb+srv://Anastasia:PKgAr7tWmDdJoamv@cluster0.ptu4v.mongodb.net/nodejs-homework-template?retryWrites=true&w=majority
-
-
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const DB_HOST = "mongodb+srv://Anastasia:PKgAr7tWmDdJoamv@cluster0.ptu4v.mongodb.net/nodejs-homework-template?retryWrites=true&w=majority"
+require('dotenv').config()
+
+const { DB_HOST } = process.env
+console.log(DB_HOST);
 
 mongoose.connect(DB_HOST).then(() => {
-  // app.listen(3000)
+  console.log("Database connection successful");
 }).catch(err => {
 console.log(err.message)
-// process.exit(1)
+process.exit(1)
 })
 
 const {contactsRouter} = require('./routes/api')

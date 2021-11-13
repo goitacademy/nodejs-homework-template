@@ -1,6 +1,6 @@
-const contactsOperations = require('../../model/contacts')
 const { BadRequest } = require('http-errors')
-const joySchema = require('../../middlewares/validation/contacts')
+const { joySchema } = require('../../model/contact')
+const {Contact} = require('../../model')
 
 const updateContactByIdController = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ const updateContactByIdController = async (req, res, next) => {
     }
     
     const {contactId}= req.params
-    const newContact = await contactsOperations.updateContactById(contactId, req.body)
+    const newContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true})
     if (!newContact) {
       throw new error("Not found")
     }
