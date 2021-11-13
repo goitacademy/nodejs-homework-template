@@ -1,20 +1,20 @@
-const { User } = require("../../model");
-const { Conflict } = require("http-errors");
+const { User } = require('../../model')
+const { Conflict } = require('http-errors')
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const { email, password } = req.body
+  const user = await User.findOne({ email })
   if (user) {
-    throw new Conflict(`User with email=${email} already exist`);
+    throw new Conflict(`User with email=${email} already exist`)
   }
-  const newUser = new User({ email });
-  newUser.setPassword(password);
-  await newUser.save();
+  const newUser = new User({ email })
+  newUser.setPassword(password)
+  await newUser.save()
   res.status(201).json({
-    status: "success",
+    status: 'success',
     code: 201,
-    message: "Register success",
-  });
-};
+    message: 'Register success',
+  })
+}
 
-module.exports = register;
+module.exports = register
