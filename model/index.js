@@ -1,6 +1,3 @@
-
-// const contacts = require('./contacts.json')
-
 const fs = require('fs/promises')
 const path = require('path')
 const contactsPath = path.resolve('./model/contacts.json')
@@ -32,14 +29,12 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts()
-  await removeContact(contactId)
-  const updatedContact = {
-    id: contactId,
-    name: body.name,
-    email: body.email,
-    phone: body.phone
-  }
-  contacts.push(updatedContact)
+  const contactIndex = contacts.findIndex((el) => el.id === Number(contactId))
+  const updatedContact = contacts[contactIndex]
+  updatedContact.id = Number(contactId)
+  updatedContact.name = body.name
+  updatedContact.email = body.email
+  updatedContact.phone = body.phone
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
   return updatedContact
 }
@@ -51,5 +46,3 @@ module.exports = {
   addContact,
   updateContact,
 }
-
-listContacts()

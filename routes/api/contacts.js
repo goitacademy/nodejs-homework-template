@@ -5,7 +5,7 @@ const Joi = require('joi')
 
 const schema = Joi.object(
   {
-    name: Joi.string().alphanum().min(3).max(30).required(),
+    name: Joi.string().min(3).max(30).required().regex(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
     phone: Joi.string().min(8).max(99).required(),
   })
@@ -68,7 +68,7 @@ router.put('/:contactId', async (req, res, next) => {
     res.json(updatedContact)
   } catch (error) {
     res.status(400)
-    res.json({ message: 'Not found' })
+    res.json({ message: error.message })
   }
 })
 
