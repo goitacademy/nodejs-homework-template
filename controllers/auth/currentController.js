@@ -10,7 +10,7 @@ const currentController = async (req, res, next)=>{
             throw new Unauthorized('Not authorized')
         }
         const { email, subscription } = currentUser;
-         res.status(200).json({ email, subscription })
+        res.status(200).json({ status: 'ok', code: 200, data: { email, subscription }} )
     }    catch (error) {
           next(error)
     };
