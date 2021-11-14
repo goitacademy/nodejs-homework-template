@@ -4,7 +4,10 @@ const { Product } = require("../../models");
 const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await Product.findById(contactId);
+    const contact = await Product.findById(contactId).populate(
+      "owner",
+      "_id email"
+    );
     if (!contact) {
       throw new NotFound(`Contact with id=${contactId} not found`);
     }

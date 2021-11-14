@@ -14,7 +14,7 @@ const updateFavoriteController = async (req, res, next) => {
       {
         new: true,
       }
-    );
+    ).populate("owner", "_id email");
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`);
     }
