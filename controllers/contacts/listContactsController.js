@@ -6,6 +6,7 @@ const listContactsController = async (req, res, next) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
     const { _id } = req.user;
+
     const result = await Product.find(
       { owner: _id },
       "_id name email phone favorite owner",

@@ -9,6 +9,11 @@ const {
 const contactsControllers = require("../../../controllers/contacts");
 
 router.get("/", authenticate, contactsControllers.listContactsController);
+router.get(
+  "/filter",
+  authenticate,
+  contactsControllers.listContactsFavoriteController
+);
 
 router.get(
   "/:contactId",
