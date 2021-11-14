@@ -3,8 +3,8 @@ const { User, joiShemaUser } = require('./user')
 
 module.exports = {
   Contact,
+  User,
   joiSchemaAdd,
   joiSchemaPut,
-  User,
   joiShemaUser,
 }
