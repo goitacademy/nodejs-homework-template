@@ -7,6 +7,7 @@ export {
   joiContactSchema,
   Contact,
   joiUserSchema,
+  userSchema,
   User,
   connectMongo,
 };

@@ -1,11 +1,12 @@
 import express from "express";
-import { signup, login, logout, current } from "./../../controller";
+import { signup, login, logout, current, subscribe } from "./../../controller";
 import { asyncWrapper } from "../../helpers";
 import {
   userValidation,
   checkEmailInUsers,
   checkUserCredentials,
   authenticateUser,
+  checkSubscription,
 } from "./../../middlewares";
 
 const router = express.Router();
@@ -32,6 +33,12 @@ router.get(
   "/current",
   asyncWrapper([authenticateUser]),
   asyncWrapper([current])
+);
+
+router.patch(
+  "/",
+  asyncWrapper([authenticateUser, checkSubscription]),
+  asyncWrapper([subscribe])
 );
 
 export { router };

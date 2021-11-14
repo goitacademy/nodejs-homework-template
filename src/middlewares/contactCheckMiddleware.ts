@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { BadRequest, NotFound, Unauthorized } from "http-errors";
-import bcrypt from "bcrypt";
-import { Contact, User } from "../model";
+import { BadRequest, NotFound } from "http-errors";
+import { Contact } from "../model";
 import {
   isEmailInContacts,
   isPhoneInContacts,
@@ -50,24 +49,4 @@ const checkIdInContact = async (
   next();
 };
 
-const checkUserCredentials = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    next(new NotFound(`User with email "${email}" not found`));
-  }
-
-  if (!user.comparePassword(password)) {
-    next(new Unauthorized(`Email or password is wrong`));
-  }
-
-  next();
-};
-
-export { checkFieldInContact, checkIdInContact, checkUserCredentials };
+export { checkFieldInContact, checkIdInContact };

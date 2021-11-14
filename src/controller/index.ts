@@ -7,7 +7,7 @@ import {
   deleteContact,
 } from "./contactsController";
 
-import { signup, login, logout, current } from "./usersController";
+import { signup, login, logout, current, subscribe } from "./usersController";
 
 export {
   getContacts,
@@ -20,4 +20,5 @@ export {
   login,
   logout,
   current,
+  subscribe,
 };

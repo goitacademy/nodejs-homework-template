@@ -5,10 +5,10 @@ const ID_LENGTH = 24;
 
 const validateObject = (
   contact: IContact | IUser,
-  joiSchema: joi.ObjectSchema<any>,
+  joiSchema: joi.ObjectSchema<object>,
   requiredFields: string[] = []
 ): ValidationResult => {
-  let objectSchema: joi.ObjectSchema<any> = Object.create(joiSchema);
+  let objectSchema: joi.ObjectSchema<object> = Object.create(joiSchema);
 
   objectSchema = objectSchema.fork(requiredFields, (field) => field.required());
 

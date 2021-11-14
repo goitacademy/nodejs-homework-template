@@ -1,6 +1,6 @@
+import jwt from "jsonwebtoken";
 import { User } from "../model";
 import { IUser } from "../helpers";
-import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "./../config";
 
 const signup = async (user: IUser) => {
@@ -36,4 +36,16 @@ const current = async (user: IUser) => {
   return searchedUser;
 };
 
-export { signup, login, logout, current };
+const subscribe = async (user: IUser, subscription: string) => {
+  const updatedUser: IUser = await User.findByIdAndUpdate(
+    user._id,
+    {
+      subscription,
+    },
+    { new: true }
+  );
+
+  return updatedUser;
+};
+
+export { signup, login, logout, current, subscribe };

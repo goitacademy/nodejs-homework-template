@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { Response, NextFunction } from "express";
 import { BadRequest } from "http-errors";
-import { IContact, IUser } from ".";
+import { IContact } from ".";
 
 const isPhoneInContacts = async (
   contacts: Array<IContact>,

@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import joi from "joi";
 import { patterns } from "./../helpers";
-import { User } from "./";
 
 const contactSchema = new Schema(
   {

@@ -1,15 +1,19 @@
 import {
   checkFieldInContact,
   checkIdInContact,
+} from "./contactCheckMiddleware";
+import {
+  checkEmailInUsers,
+  checkSubscription,
+  authenticateUser,
   checkUserCredentials,
-} from "./checkMiddleware";
-import { authenticateUser } from "./checkTokenMiddleware";
+} from "./userCheckMiddleware";
 import {
   addContactValidation,
   updateContactValidation,
   updateStatusContactValidation,
 } from "./contactValidationMiddleware";
-import { userValidation, checkEmailInUsers } from "./userValidationMiddleware";
+import { userValidation } from "./userValidationMiddleware";
 
 export {
   checkFieldInContact,
@@ -21,4 +25,5 @@ export {
   checkEmailInUsers,
   checkUserCredentials,
   authenticateUser,
+  checkSubscription,
 };

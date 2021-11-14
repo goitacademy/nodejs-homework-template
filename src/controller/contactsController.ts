@@ -1,17 +1,17 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { contactService } from "../services";
 
 type UpdateBodyStrings = { owner: string; favorite: boolean };
 
-const getContacts = async (req: Request, res: Response, __: NextFunction) => {
+const getContacts = async (req: Request, res: Response) => {
   const ownerId: string = req.body.owner;
 
-  const contacts = await contactService.getAll(ownerId);
+  const contacts = await contactService.getAll(ownerId, req);
 
   res.status(200).json({ message: "success", data: { contacts } });
 };
 
-const getContactById = async (req: Request, res: Response, _: NextFunction) => {
+const getContactById = async (req: Request, res: Response) => {
   const ownerId: string = req.body.owner;
   const contactId: string = req.params.contactId;
 
@@ -20,13 +20,13 @@ const getContactById = async (req: Request, res: Response, _: NextFunction) => {
   res.status(200).json({ message: "success", data: { contact } });
 };
 
-const postContact = async (req: Request, res: Response, _: NextFunction) => {
+const postContact = async (req: Request, res: Response) => {
   const newContact = await contactService.post(req.body);
 
   res.status(201).json({ message: "Contact added", data: { newContact } });
 };
 
-const updateContact = async (req: Request, res: Response, _: NextFunction) => {
+const updateContact = async (req: Request, res: Response) => {
   const owner: string = req.body.owner;
   const contactId: string = req.params.contactId;
 
@@ -37,11 +37,7 @@ const updateContact = async (req: Request, res: Response, _: NextFunction) => {
   res.status(200).json({ message: "Contact updated", data: { newContact } });
 };
 
-const updateStatusContact = async (
-  req: Request,
-  res: Response,
-  _: NextFunction
-) => {
+const updateStatusContact = async (req: Request, res: Response) => {
   const { owner, favorite }: UpdateBodyStrings = req.body;
   const contactId: string = req.params.contactId;
 
@@ -56,7 +52,7 @@ const updateStatusContact = async (
     .json({ message: `Contact's status updated`, data: { updatedContact } });
 };
 
-const deleteContact = async (req: Request, res: Response, _: NextFunction) => {
+const deleteContact = async (req: Request, res: Response) => {
   const owner: string = req.body.owner;
   const contactId: string = req.params.contactId;
 
