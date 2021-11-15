@@ -10,7 +10,13 @@ const listContacts = async (owner, queries) => {
     }
     const { page = 1, limit = 3 } = queries
     const skip = (page - 1) * limit
-    return await Contact.find({ ...options }, '_id name email phone favorite owner', { skip, limit: +limit }).populate('owner', '_id email')
+    const total = await Contact.countDocuments({ ...options })
+    const result = await Contact.find({ ...options }, '_id name email phone favorite owner', { skip, limit: +limit }).populate('owner', '_id email')
+    return {
+      total,
+      pages: Math.ceil(total / limit),
+      result
+    }
   } catch (error) {
     console.log(error)
   }
