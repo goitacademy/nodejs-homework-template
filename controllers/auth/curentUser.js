@@ -1,8 +1,8 @@
 const { User } = require('../../models')
 
 const curentUser = async (req, res) => {
-  const { _id, email, subscription } = req.user
-  await User.findByIdAndUpdate(_id)
+  const { _id } = req.user
+  const { email, subscription } = await User.findOne(_id)
   res.json({
     status: 'OK',
     code: 200,
