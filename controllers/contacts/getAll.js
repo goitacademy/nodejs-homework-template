@@ -1,11 +1,12 @@
-const contactsOperation = require("../../model/oldFiles/index");
+const { Contact } = require('../../model')
+
 const getAll = async (_, res, next) => {
   try {
-    const result = await contactsOperation.listContacts();
-    res.json(result);
+    const result = await Contact.find({})
+    res.json(result)
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
-module.exports = getAll;
+module.exports = getAll

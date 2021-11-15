@@ -1,25 +1,24 @@
-// const CreateError = require("http-errors");
-const express = require('express')
-const router = express.Router()
-// const contactsOperation = require("../../model/index");
-const Joi = require('joi')
-const { validation400 } = require('../../middlewares')
-const { contacts: ctrl } = require('../../controllers')
+const express = require("express");
+const router = express.Router();
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
+const { validation400 } = require("../../middlewares");
+const { contacts: ctrl } = require("../../controllers");
+const { contactJoiSchema } = require("../../model/contact");
 
-router.get('/', ctrl.getAll)
+router.get("/", ctrl.getAll);
 
-router.get('/:contactId', ctrl.getContactId)
+router.get("/:contactId", ctrl.getContactId);
 
-router.post('/', validation400(schema), ctrl.postContact)
+router.post("/", validation400(contactJoiSchema), ctrl.postContact);
 
-router.delete('/:contactId', ctrl.deleteContact)
+router.delete("/:contactId", ctrl.deleteContact);
 
-router.put('/:contactId', validation400(schema), ctrl.putContact)
+router.put(
+  "/:contactId",
+  validation400(contactJoiSchema),
+  ctrl.selectedContact
+);
 
-module.exports = router
+router.patch("/:contactId/favorite", ctrl.putContact);
+
+module.exports = router;
