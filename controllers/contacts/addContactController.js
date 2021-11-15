@@ -3,7 +3,8 @@ const { Product } = require("../../models");
 
 const addContactController = async (req, res, next) => {
   try {
-    const result = await Product.create(req.body);
+    const newProduct = { ...req.body, owner: req.user._id };
+    const result = await Product.create(newProduct);
 
     res.status(201).json({
       status: "success",

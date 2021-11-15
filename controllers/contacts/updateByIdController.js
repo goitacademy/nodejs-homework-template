@@ -6,7 +6,7 @@ const updateByIdController = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await Product.findByIdAndUpdate(contactId, req.body, {
       new: true,
-    });
+    }).populate("owner", "_id email");
     if (!result) {
       throw new NotFound(`Contact with id=${contactId} not found`);
     }
