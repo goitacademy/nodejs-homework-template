@@ -1,6 +1,5 @@
 const { BadRequest, NotFound, Unauthorized } = require("http-errors");
 const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
 
 const { User } = require("../../model");
 
@@ -12,13 +11,7 @@ const login = async (req, res) => {
   if (!user || !user.comparePassword(password)) {
     throw new Unauthorized("Wrong email or password");
   }
-  // if(!user){
-  //     throw new NotFound(`User with email=${email} not found`);
-  // }
-  // const compareResult = bcrypt.compareSync(password, user.password);
-  // if(!compareResult){
-  //     throw new Unauthorized("Password wrong");
-  // }
+
   const payload = {
     id: user._id,
   };
