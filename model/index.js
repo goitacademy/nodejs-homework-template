@@ -1,5 +1,5 @@
-const fs = require('fs').promises
-const { join } = require("path")
+const fs = require('fs').promises;
+const { join } = require('path');
 
 const contactsPath = join(__dirname, 'contacts.json');
 
@@ -45,29 +45,29 @@ async function addContact(name, email, phone) {
 
   const id = randomId(data.map(e => e.id));
 
-  if (id === -1) return Promise.reject("full id pull")
+  if (id === -1) return Promise.reject('full id pull');
 
   data.push({ id, name, email, phone });
 
   await serialize(contactsPath, data);
 
-  return id
+  return id;
 }
 
 const updateContact = async (contactId, name, email, phone) => {
   const data = await deserialize(contactsPath);
 
-  const obj=data.find(e=>e.id===contactId)
+  const obj = data.find(e => e.id === contactId);
 
-  if(!obj) return Promise.reject("not found")
+  if (!obj) return Promise.reject('not found');
 
-  obj.name=name
-  obj.email=email
-  obj.phone=phone
+  obj.name = name;
+  obj.email = email;
+  obj.phone = phone;
 
   await serialize(contactsPath, data);
 
-  return contactId
-}
+  return contactId;
+};
 
 module.exports = { listContacts, getContactById, removeContact, addContact, updateContact };
