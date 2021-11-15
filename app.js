@@ -16,6 +16,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors()) // enable cors
 app.use(express.json()) // json body parse
+app.use(express.static('public')) // static files
 
 // Mounts routers
 app.use('/api/v1/contacts', contactsRouter)
