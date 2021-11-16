@@ -4,7 +4,7 @@ const router = express.Router()
 const authCtrl = require('../../controllers/auth')
 const { joiUserSchema } = require('../../middlewares/validation')
 const { validation } = require('../../middlewares/validation')
-const { controllerWrapper, authenticate } = require('../../middlewares')
+const { controllerWrapper, authenticate, uploadImg } = require('../../middlewares')
 
 const validUser = validation(joiUserSchema)
 
@@ -17,5 +17,8 @@ router.get('/logout', controllerWrapper(authenticate), controllerWrapper(authCtr
 router.get('/current', controllerWrapper(authenticate), controllerWrapper(authCtrl.current))
 
 router.patch('/subscription', controllerWrapper(authenticate), controllerWrapper(authCtrl.subscription))
+
+// router.patch('/avatars/:contactId',uploadImg.single('img'), controllerWrapper(authCtrl.updImg))
+router.patch('/avatars', uploadImg.single('img'), controllerWrapper(authenticate), controllerWrapper(authCtrl.updImg))
 
 module.exports = router

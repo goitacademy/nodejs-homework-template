@@ -11,11 +11,6 @@ const login = async (req, res) => {
 
   if (!user) {
     throw new Unauthorized('Email or password is wrong')
-    // return res.status(401).json({
-    //   status: 'error',
-    //   code: 401,
-    //   message: 'Email or password is wrong'
-    // })
   }
 
   const hashPassword = user.password

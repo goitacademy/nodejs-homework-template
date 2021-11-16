@@ -17,8 +17,8 @@ const joiContactsShcemaUpd = Joi.object({
 })
 
 const joiUserSchema = Joi.object({
-  password: Joi.string().required().min(6),
   email: Joi.string().required().pattern(emailRegexp),
+  password: Joi.string().required().min(6),
   subscription: Joi.string().optional()
 })
 
