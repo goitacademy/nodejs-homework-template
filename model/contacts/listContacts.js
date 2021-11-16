@@ -1,7 +1,7 @@
 const { ContactModel } = require('../../db/contactModel')
 
-const listContacts = async (userId) => {
-  const data = await ContactModel.find({owner: userId})
+const listContacts = async (userId, pagination) => {
+  const data = await ContactModel.find({owner: userId}, '', {skip: pagination.page, limit: pagination.limit})
   return data
 }
 
