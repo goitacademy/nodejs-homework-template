@@ -4,7 +4,6 @@ const {
 
 const listContacts = async (userId, pagination, favorite = null) => {
   if (!favorite) {
-
     const data = await ContactModel.find({
       owner: userId
     }, '', {
@@ -21,7 +20,6 @@ const listContacts = async (userId, pagination, favorite = null) => {
     limit: pagination.limit
   })
   return data
-
 }
 
 module.exports = listContacts

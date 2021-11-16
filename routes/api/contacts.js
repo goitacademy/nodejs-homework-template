@@ -16,11 +16,11 @@ const {
   patchContactValidation
 } = require('../../middleware/validation')
 const { errorHandler } = require('../../helpers/errorHandler')
-const {authenticateUser} = require('../../middleware/authenticateUser')
+const { authenticateUser } = require('../../middleware/authenticateUser')
 
 router.get('/', authenticateUser, errorHandler(listContactsController))
 
-router.get('/:contactId', authenticateUser,errorHandler(getContactByIdController))
+router.get('/:contactId', authenticateUser, errorHandler(getContactByIdController))
 
 router.post('/', authenticateUser, addContactValidation, errorHandler(addContactController))
 
