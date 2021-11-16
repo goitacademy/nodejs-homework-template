@@ -1,4 +1,3 @@
-
 const {
     signin
 } = require('../../model/auth')
