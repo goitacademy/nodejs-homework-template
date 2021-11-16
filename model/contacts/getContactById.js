@@ -1,4 +1,4 @@
-const { ContactModel } = require('../../db/contactModelMongoose')
+const { ContactModel } = require('../../db/contactModel')
 
 const getContactById = async (contactId) => {
   const neededContact = await ContactModel.findOne({

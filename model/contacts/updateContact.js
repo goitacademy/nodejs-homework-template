@@ -1,4 +1,4 @@
-const { ContactModel } = require('../../db/contactModelMongoose')
+const { ContactModel } = require('../../db/contactModel')
 
 const updateContactById = async(id, data) => {
   const updatedContact = await ContactModel.findByIdAndUpdate(id, { $set: data })

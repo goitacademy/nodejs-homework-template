@@ -1,6 +1,6 @@
 const {
   ContactModel
-} = require('../../db/contactModelMongoose')
+} = require('../../db/contactModel')
 
 const updateStatusContact = async (id, status) => {
   const data = await ContactModel.findByIdAndUpdate(id, {

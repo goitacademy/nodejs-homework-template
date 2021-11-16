@@ -1,6 +1,6 @@
 const {
   ContactModel
-} = require('../../db/contactModelMongoose')
+} = require('../../db/contactModel')
 
 const removeContact = async (contactId) => {
   const deletedContact = await ContactModel.findByIdAndRemove(contactId)
