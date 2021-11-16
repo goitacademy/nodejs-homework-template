@@ -5,8 +5,8 @@ const {
 const patchUserController = async (req, res) => {
   const { _id } = req.user
   const { subscription } = req.body
-  const patched = await patchUser(_id, subscription)
-  res.status(200).json({ patched })
+  await patchUser(_id, subscription)
+  res.status(200).json({ message: 'success' })
 }
 module.exports = {
   patchUserController
