@@ -1,4 +1,4 @@
-const listContacts = require('./listContats')
+const listContacts = require('./listContacts')
 const updateContacts = require('./updateContact')
 
 const removeContactById = async (contactId) => {

@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid')
-const listContacts = require('./listContats')
+const listContacts = require('./listContacts')
 const updateContact = require('./updateContact')
 
 const addContact = async (data) => {
