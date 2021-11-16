@@ -1,4 +1,4 @@
-const { Unauthorized, NotFound } = require('http-errors')
+const { Unauthorized } = require('http-errors')
 const jwt = require('jsonwebtoken')
 
 const { User } = require('../model')
@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
       const { _id } = jwt.verify(token, SECRET_KEY)
       const user = await User.findById(_id)
       if (!user) {
-        throw new NotFound('User not found')
+        throw new Unauthorized('User not found')
       }
       if (!user.token) {
         throw new Unauthorized()
