@@ -1,16 +1,12 @@
 /* eslint-disable quotes */
 /* eslint-disable semi */
 
-const fs = require("fs/promises");
-const path = require("path");
-const shortid = require("shortid");
-
-const contactsPath = path.join(__dirname, "contacts.json");
+const { Contact } = require("../schema/contactSchema.js");
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    return JSON.parse(data);
+    const data = await Contact.find({});
+    return data;
   } catch (error) {
     console.log(error.message);
   }
@@ -18,9 +14,8 @@ const listContacts = async () => {
 
 const getContactById = async contactId => {
   try {
-    const contacts = await listContacts();
-    const contact = await contacts.find(item => item.id.toString() === contactId);
-    return contact;
+    const data = await Contact.findById(contactId);
+    return data;
   } catch (error) {
     console.log(error.message);
   }
@@ -28,20 +23,8 @@ const getContactById = async contactId => {
 
 const removeContact = async contactId => {
   try {
-    const contacts = await listContacts();
-    const newContactsList = contacts.filter(
-      item =>
-        item.id
-          .toString()
-          .toLowerCase()
-          .trim() !==
-        contactId
-          .toString()
-          .toLowerCase()
-          .trim()
-    );
-    await fs.writeFile(contactsPath, JSON.stringify(newContactsList));
-    return newContactsList;
+    const data = await Contact.findByIdAndDelete(contactId);
+    return data;
   } catch (error) {
     console.log(error.message);
   }
@@ -49,12 +32,8 @@ const removeContact = async contactId => {
 
 const addContact = async body => {
   try {
-    const contacts = await listContacts();
-    const id = shortid();
-    const newContact = { id, ...body };
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return newContact;
+    const data = await Contact.create(body);
+    return data;
   } catch (error) {
     console.log(error.message);
   }
@@ -62,23 +41,8 @@ const addContact = async body => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const contacts = await listContacts();
-    const contact = contacts.find(
-      item =>
-        item.id
-          .toString()
-          .toLowerCase()
-          .trim() !==
-        contactId
-          .toString()
-          .toLowerCase()
-          .trim()
-    );
-    if (!contact) return null;
-    const updContact = { contactId, ...body };
-    contacts.push(updContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return updContact;
+    const data = await Contact.findByIdAndUpdate(contactId, body, { new: true });
+    return data;
   } catch (error) {
     console.log(error.message);
   }
