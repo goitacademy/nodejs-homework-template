@@ -1,8 +1,17 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const fs = require("fs/promises");
+const path = require("path");
+// const contacts = require("./contacts.json");
+const contactsPath = path.resolve("./model/contacts.json");
 
 const listContacts = async (req, res) => {
-  res.json({ message: "template message" });
+  try {
+    const data = await fs.readFile(contactsPath, "utf8");
+    const contacts = JSON.parse(data);
+    console.table(contacts);
+    return contacts;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getContactById = async (contactId) => {};
