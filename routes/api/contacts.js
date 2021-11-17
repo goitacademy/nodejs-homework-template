@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
-// const { , removeContact } = require('../../controllers/contacts')
-const { listContacts, getContactById, addContact, removeContact } = require('../../model')
+const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../model')
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (_, res) => {
   const contacts = await listContacts()
   res.json({
     status: 'Success',
@@ -12,7 +11,7 @@ router.get('/', async (req, res, next) => {
   })
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', async (req, res) => {
   const { contactId } = req.params
   const contact = await getContactById(contactId)
   if (!contact.length) res.status(404).send({ message: 'Not found' })
@@ -23,19 +22,18 @@ router.get('/:contactId', async (req, res, next) => {
   })
 })
 
-router.post('/', async (req, res, next) => {
-  console.log('this is post')
-  const { name, email, phone } = req.body
+router.post('/', async (req, res) => {
+  const body = req.body
   let message = ''
 
-  if (!name) message = "missing required 'name' data"
-  if (!email) message = "missing required 'email' data"
-  if (!phone) message = "missing required 'phone' data"
+  if (!body.name) message = "missing required 'name' data"
+  if (!body.email) message = "missing required 'email' data"
+  if (!body.phone) message = "missing required 'phone' data"
   if (message) {
     res.status(400).send({ error: message })
     return
   }
-  const newContact = await addContact(name, email, phone)
+  const newContact = await addContact(body)
   if (newContact.message) {
     res.status(400).send({ error: newContact.message })
     return
@@ -47,7 +45,7 @@ router.post('/', async (req, res, next) => {
   })
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params
   const error = await removeContact(contactId)
   if (error.message) {
@@ -61,14 +59,25 @@ router.delete('/:contactId', async (req, res, next) => {
   })
 })
 
-router.patch('/:contactId', async (req, res, next) => {
-  // Получает параметр contactId
-  // Получает body в json-формате c обновлением любых полей name, email и phone
-  // Если body нет, возвращает json с ключом {"message": "missing fields"} и статусом 400
-  // Если с body все хорошо, вызывает функцию updateContact(contactId, body) (напиши ее) для обновления контакта в файле contacts.json
-  // По результату работы функции возвращает обновленный объект контакта и статусом 200. В противном случае, возвращает json с ключом "message": "Not found" и статусом 404
+router.patch('/:contactId', async (req, res) => {
+  const body = req.body
+  const { contactId } = req.params
 
-  res.json({ message: 'template message' })
+  if (!body.name || !body.email || !body.phone || !contactId) {
+    res.status(400).send({ message: 'missing fields' })
+    return
+  }
+  const patchedContact = await updateContact(contactId, body)
+  if (patchedContact.message) {
+    const code = patchedContact.message === 'Not found' ? 404 : 400
+    res.status(code).send({ error: patchedContact.message })
+    return
+  }
+  res.json({
+    status: 'Updated',
+    code: 200,
+    data: { result: patchedContact },
+  })
 })
 
 module.exports = router

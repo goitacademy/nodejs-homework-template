@@ -6,24 +6,26 @@ const getMaxId = contacts => {
   return maxId
 }
 
-const checkNewContact = ({ name, email, phone }, contacts) => {
+const checkNewContact = ({ name, email, phone }, contacts, id) => {
   let result = true
   let message = ''
   contacts.forEach(contact => {
-    if (contact.name === name) {
-      message = 'Error. This name - ' + name + ' already exists'
-      result = false
-    }
-    if (contact.email === email) {
-      message = 'Error. This email - ' + email + ' already exists'
-      result = false
-    }
-    if (contact.phone === phone) {
-      message = 'Error. This phone - ' + phone + ' already exists'
-      result = false
+    if (contact.id !== id) {
+      if (contact.name === name) {
+        message = 'Error. This name - ' + name + ' already exists'
+        result = false
+      }
+      if (contact.email === email) {
+        console.log(contact.id)
+        message = 'Error. This email - ' + email + ' already exists'
+        result = false
+      }
+      if (contact.phone === phone) {
+        message = 'Error. This phone - ' + phone + ' already exists'
+        result = false
+      }
     }
   })
-  if (message) console.log(message)
   return { result, message }
 }
 

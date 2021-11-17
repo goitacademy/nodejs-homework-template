@@ -5,7 +5,7 @@ const fs = require('fs').promises
 const { dbPath } = require('../bin/settings')
 const contactsPath = path.resolve(dbPath)
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contacts = await listContacts()
 
   try {
