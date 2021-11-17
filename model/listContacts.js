@@ -10,8 +10,8 @@ async function listContacts() {
     const contacts = JSON.parse(data)
     return contacts
   } catch (error) {
-    console.log(error)
-    throw error
+    console.log('Catch error', error.message)
+    return error
   }
 }
 

@@ -24,7 +24,7 @@ const checkNewContact = ({ name, email, phone }, contacts) => {
     }
   })
   if (message) console.log(message)
-  return result
+  return { result, message }
 }
 
 module.exports = {

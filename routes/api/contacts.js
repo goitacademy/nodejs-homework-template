@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-// const { addContact, getContactById, listContacts, removeContact } = require('../../controllers/contacts')
-const { listContacts, getContactById, addContact } = require('../../model')
+// const { , removeContact } = require('../../controllers/contacts')
+const { listContacts, getContactById, addContact, removeContact } = require('../../model')
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts()
@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params
   const contact = await getContactById(contactId)
-  console.log(contactId)
+  if (!contact.length) res.status(404).send({ message: 'Not found' })
   res.json({
     status: 'Success',
     code: 200,
@@ -36,10 +36,10 @@ router.post('/', async (req, res, next) => {
     return
   }
   const newContact = await addContact(name, email, phone)
-  // Если с body все хорошо, добавляет уникальный идентификатор в объект контакта
-  // Вызывает функцию addContact(body) для сохранения контакта в файле contacts.json
-  // По результату работы функции возвращает объект с добавленным id {id, name, email, phone} и статусом 201
-
+  if (newContact.message) {
+    res.status(400).send({ error: newContact.message })
+    return
+  }
   res.json({
     status: 'Created',
     code: 201,
@@ -48,13 +48,17 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  // Не получает body
-  // Получает параметр contactId
-  // вызывает функцию removeContact для работы с json-файлом contacts.json
-  // если такой id есть, возвращает json формата {"message": "contact deleted"} и статусом 200
-  // если такого id нет, возвращает json с ключом "message": "Not found" и статусом 404
-
-  res.json({ message: 'template message' })
+  const { contactId } = req.params
+  const error = await removeContact(contactId)
+  if (error.message) {
+    res.status(404).send({ message: error.message })
+    return
+  }
+  res.json({
+    status: 'Success',
+    code: 200,
+    data: { message: 'contact deleted' },
+  })
 })
 
 router.patch('/:contactId', async (req, res, next) => {
