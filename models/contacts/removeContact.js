@@ -2,7 +2,7 @@ const fs = require('fs/promises')
 const path = require('path')
 const readData = require('./readData')
 
-const contactsPath = path.join(__dirname, '../../models/contacts/contacts.json')
+const contactsPath = path.join(__dirname, '../../db/contacts.json')
 
 const removeContact = async (contactId) => {
   const allContacts = await readData()

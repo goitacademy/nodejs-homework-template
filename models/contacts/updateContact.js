@@ -2,12 +2,12 @@ const fs = require('fs/promises')
 const path = require('path')
 const readData = require('./readData')
 
-const contactsPath = path.join(__dirname, '../../models/contacts/contacts.json')
+const contactsPath = path.join(__dirname, '../../db/contacts.json')
 
 const updateContact = async (id, data) => {
   const contacts = await readData()
 
-  const idx = contacts.findIndex(item => JSON.parse(item.id) === JSON.parse(id))
+  const idx = contacts.findIndex(item => JSON.stringify(item.id) === id)
   if (idx === -1) {
     return null
   }
