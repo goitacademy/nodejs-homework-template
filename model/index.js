@@ -48,10 +48,21 @@ const updateContact = async (contactId, body) => {
   }
 };
 
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const { favorite } = body;
+    const data = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
+    return data;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact
+  updateContact,
+  updateStatusContact
 };
