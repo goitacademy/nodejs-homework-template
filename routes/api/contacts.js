@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const listContacts = require("../../model/index");
 
-router.get("/", listContacts);
+router.get("/", async (req, res, next) => {
+  res.json({ message: "template message" });
+});
 
 router.get("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });

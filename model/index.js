@@ -1,29 +1,7 @@
-const fs = require("fs/promises");
-const contacts = require("./contacts.json");
-// const path = require("path");
-// const contacts = path.resolve("model/contacts.json");
-let posts = [
-  { id: "1", topic: "test1", text: "test text1" },
-  { id: "2", topic: "test2", text: "test text2" },
-  { id: "3", topic: "test3", text: "test text3" },
-];
+// const fs = require('fs/promises')
+// const contacts = require('./contacts.json')
 
-const listContacts = async () => {
-  await res.json({ posts });
-};
-// try {
-//   // const contacts = await Contacts.listContacts();
-//   return res.json({
-//     status: "success",
-//     code: 200,
-//     data: {
-//       contacts,
-//     },
-//   });
-// } catch (error) {
-//   console.log(error);
-// }
-// };
+const listContacts = async () => {};
 
 const getContactById = async (contactId) => {};
 
