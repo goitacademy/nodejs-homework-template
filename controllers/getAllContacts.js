@@ -1,13 +1,18 @@
 const { Contact } = require('../model')
 
 const getAllContacts = async (req, res) => {
-  if (req.query) {
+  if (req.query.page && req.query.limit) {
     return null
   }
   let { page, limit } = req.query
   page = +page
   limit = +limit
-  if (typeof page !== 'number' && typeof limit !== 'number') {
+  if (
+    typeof page !== 'number' &&
+    isNaN(page) &&
+    typeof limit !== 'number' &&
+    isNaN(limit)
+  ) {
     return null
   }
 
