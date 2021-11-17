@@ -26,6 +26,7 @@ const contactSchema = Schema(
     timestamp: true
   }
 );
+
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact };
+module.exports = Contact;
