@@ -1,15 +1,10 @@
 const express = require('express')
 const router = express.Router()
 // const { addContact, getContactById, listContacts, removeContact } = require('../../controllers/contacts')
-const { listContacts, getContactById } = require('../../model')
+const { listContacts, getContactById, addContact } = require('../../model')
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts()
-
-  // ничего не получает
-  // вызывает функцию listContacts для работы с json-файлом contacts.json
-  // возвращает массив всех контактов в json-формате со статусом 200
-  // res.sendStatus(200)
   res.json({
     status: 'Success',
     code: 200,
@@ -26,23 +21,30 @@ router.get('/:contactId', async (req, res, next) => {
     code: 200,
     data: { result: contact },
   })
-  // Не получает body
-  // Получает параметр contactId
-  // вызывает функцию getById для работы с json-файлом contacts.json
-  // если такой id есть, возвращает объект контакта в json-формате со статусом 200
-  // если такого id нет, возвращает json с ключом "message": "Not found" и статусом 404
-
-  // res.json({ message: 'template message' })
 })
 
 router.post('/', async (req, res, next) => {
-  // Получает body в формате {name, email, phone}
-  // Если в body нет каких-то обязательных полей, возвращает json с ключом {"message": "missing required name field"} и статусом 400
+  console.log('this is post')
+  const { name, email, phone } = req.body
+  let message = ''
+
+  if (!name) message = "missing required 'name' data"
+  if (!email) message = "missing required 'email' data"
+  if (!phone) message = "missing required 'phone' data"
+  if (message) {
+    res.status(400).send({ error: message })
+    return
+  }
+  const newContact = await addContact(name, email, phone)
   // Если с body все хорошо, добавляет уникальный идентификатор в объект контакта
   // Вызывает функцию addContact(body) для сохранения контакта в файле contacts.json
   // По результату работы функции возвращает объект с добавленным id {id, name, email, phone} и статусом 201
 
-  res.json({ message: 'template message' })
+  res.json({
+    status: 'Created',
+    code: 201,
+    data: { result: newContact },
+  })
 })
 
 router.delete('/:contactId', async (req, res, next) => {

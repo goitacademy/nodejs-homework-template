@@ -2,13 +2,12 @@ const listContacts = require('./listContacts')
 const { checkNewContact, getMaxId } = require('../helpers/functions')
 const path = require('path')
 const fs = require('fs').promises
-const { dbPath } = require('../settings')
+const { dbPath } = require('../bin/settings')
 const contactsPath = path.resolve(dbPath)
 
 async function addContact(name, email, phone) {
   const contacts = await listContacts()
   const id = getMaxId(contacts) + 1
-  console.log('phone', phone)
 
   if (phone.length !== 10) {
     console.log('Incorrect phone number. Number must contain 10 didgit like 3621234567')

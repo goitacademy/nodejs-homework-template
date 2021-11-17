@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs').promises
-const { dbPath } = require('../settings')
+const { dbPath } = require('../bin/settings')
 console.log(' dbPath - ', dbPath)
 const contactsPath = path.resolve(dbPath)
 
