@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const listContacts = require("../../model/index.js");
+const listContacts = require("../../model/index");
 
 router.get("/", listContacts);
 
