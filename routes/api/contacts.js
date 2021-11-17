@@ -7,19 +7,22 @@ const {
   deleteContactById,
   addNewContact,
   contactUpdate,
+  updateStatus,
 } = require('../../controllers')
 
-const { validation } = require('../../middlewares')
+const { validation, controllerWrapper } = require('../../middlewares')
 const { joiSchema, joiSchemaUpdate } = require('../../validations')
 
-router.get('/', getAllContacts)
+router.get('/', controllerWrapper(getAllContacts))
 
-router.get('/:contactId', getContById)
+router.get('/:contactId', controllerWrapper(getContById))
 
-router.post('/', validation(joiSchema), addNewContact)
+router.post('/', validation(joiSchema), controllerWrapper(addNewContact))
 
-router.delete('/:contactId', deleteContactById)
+router.delete('/:contactId', controllerWrapper(deleteContactById))
 
 router.put('/:contactId', validation(joiSchemaUpdate), contactUpdate)
+
+router.patch('/:contactId/favorite', validation(joiSchemaUpdate), updateStatus)
 
 module.exports = router
