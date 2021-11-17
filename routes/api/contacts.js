@@ -1,6 +1,22 @@
 const express = require('express')
 const router = express.Router()
+const Joi = require('joi')
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../model')
+const schemaBody = Joi.object({
+  name: Joi.string()
+    .pattern(/^[a-zA-Z ]+$/, 'only letters')
+    .min(3)
+    .max(30)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/, 'only numbers')
+    .required(),
+})
+const schemaId = Joi.number().required()
 
 router.get('/', async (_, res) => {
   const contacts = await listContacts()
@@ -13,6 +29,13 @@ router.get('/', async (_, res) => {
 
 router.get('/:contactId', async (req, res) => {
   const { contactId } = req.params
+  const { error } = schemaId.validate(contactId)
+
+  if (error) {
+    console.log('error - ', error)
+    res.status(400).send({ message: error.message })
+    return
+  }
   const contact = await getContactById(contactId)
   if (!contact.length) res.status(404).send({ message: 'Not found' })
   res.json({
@@ -24,18 +47,16 @@ router.get('/:contactId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const body = req.body
-  let message = ''
+  const { error } = schemaBody.validate(body)
 
-  if (!body.name) message = "missing required 'name' data"
-  if (!body.email) message = "missing required 'email' data"
-  if (!body.phone) message = "missing required 'phone' data"
-  if (message) {
-    res.status(400).send({ error: message })
+  if (error) {
+    console.log('error - ', error)
+    res.status(400).send({ message: error.message })
     return
   }
   const newContact = await addContact(body)
   if (newContact.message) {
-    res.status(400).send({ error: newContact.message })
+    res.status(400).send({ message: newContact.message })
     return
   }
   res.json({
@@ -47,7 +68,14 @@ router.post('/', async (req, res) => {
 
 router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params
-  const error = await removeContact(contactId)
+  let { error } = schemaId.validate(contactId)
+
+  if (error) {
+    console.log('error - ', error)
+    res.status(400).send({ message: error.message })
+    return
+  }
+  error = await removeContact(contactId)
   if (error.message) {
     res.status(404).send({ message: error.message })
     return
@@ -62,9 +90,12 @@ router.delete('/:contactId', async (req, res) => {
 router.patch('/:contactId', async (req, res) => {
   const body = req.body
   const { contactId } = req.params
+  let { error } = schemaBody.validate(body)
+  if (!error) error = schemaId.validate(contactId).error
 
-  if (!body.name || !body.email || !body.phone || !contactId) {
-    res.status(400).send({ message: 'missing fields' })
+  if (error) {
+    console.log('error - ', error)
+    res.status(400).send({ message: error.message })
     return
   }
   const patchedContact = await updateContact(contactId, body)
@@ -74,7 +105,7 @@ router.patch('/:contactId', async (req, res) => {
     return
   }
   res.json({
-    status: 'Updated',
+    status: 'Success',
     code: 200,
     data: { result: patchedContact },
   })

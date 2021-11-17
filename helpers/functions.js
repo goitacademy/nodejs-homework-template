@@ -6,11 +6,11 @@ const getMaxId = contacts => {
   return maxId
 }
 
-const checkNewContact = ({ name, email, phone }, contacts, id) => {
+const checkNewContact = ({ name, email, phone }, contacts, skipId = null) => {
   let result = true
   let message = ''
   contacts.forEach(contact => {
-    if (contact.id !== id) {
+    if (contact.id !== skipId) {
       if (contact.name === name) {
         message = 'Error. This name - ' + name + ' already exists'
         result = false
