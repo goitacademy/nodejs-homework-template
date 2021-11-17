@@ -1,6 +1,6 @@
 const { BadRequest } = require('http-errors')
 
-const contactValidation = schema => {
+const validation = schema => {
   const validationMiddleware = (req, res, next) => {
     const { error } = schema.validate(req.body)
     if (error) {
@@ -12,4 +12,4 @@ const contactValidation = schema => {
   return validationMiddleware
 }
 
-module.exports = contactValidation
+module.exports = validation
