@@ -1,9 +1,11 @@
-const updateContact = require("../../model/contacts/updateContact");
+const { Product } = require("../../model");
 
 const updateContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    const result = await Product.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       res
         .status(404)

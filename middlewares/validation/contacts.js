@@ -11,6 +11,7 @@ const contactsValidation = (req, res, next) => {
       })
       .required(),
     phone: Joi.number().required(),
+    favorite: Joi.boolean(),
   });
   const result = schema.validate(req.body);
   if (result.error) {
