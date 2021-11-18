@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { body, validationResult } = require('express-validator')
 const listContacts = require('../../model/index')
 
 router.get('/', async (req, res, next) => {
