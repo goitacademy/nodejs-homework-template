@@ -1,5 +1,5 @@
 const settings = {
-  dbPath: './model/contacts.json',
+  dbPath: './db/contacts.json',
 }
 
 module.exports = settings

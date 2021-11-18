@@ -5,7 +5,6 @@ const removeContact = require('./removeContact')
 const updateContact = require('./updateContact')
 
 module.exports = {
-  dbPath: './model/contacts.json',
   addContact,
   listContacts,
   getContactById,
