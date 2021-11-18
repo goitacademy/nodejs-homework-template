@@ -7,11 +7,7 @@ const { contacts: ctrl } = require('../../contactsOperations')
 router.get('/', controllerWrapper(ctrl.listContacts))
 router.get('/:contactId', controllerWrapper(ctrl.getContactById))
 
-router.post(
-  '/',
-  validator(contactsSchema),
-  controllerWrapper(ctrl.addContact)
-)
+router.post('/', validator(contactsSchema), controllerWrapper(ctrl.addContact))
 
 router.delete('/:contactId', controllerWrapper(ctrl.removeContactById))
 
