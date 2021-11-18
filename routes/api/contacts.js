@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { validationResult, validateId } = require('express-validator')
-const listContacts = require('../../model/controllers/index')
+const listContacts = require('../../contactsOperations')
 
 router.get('/', async (req, res, next) => {
   try {
