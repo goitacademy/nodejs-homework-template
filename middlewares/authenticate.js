@@ -7,7 +7,7 @@ const { SECRET_KEY } = process.env
 const authenticate = async (req, res, next) => {
   try {
     if (typeof req.headers.authorization !== 'string') {
-      return null
+      throw new Error()
     }
     const [bearer, token] = req.headers.authorization.split(' ')
     if (bearer !== 'Bearer') {

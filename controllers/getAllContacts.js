@@ -1,19 +1,16 @@
+const { BadRequest } = require('http-errors')
 const { Contact } = require('../model')
 
 const getAllContacts = async (req, res) => {
-  if (req.query.page && req.query.limit) {
-    return null
-  }
-  let { page, limit } = req.query
+  let { page = 1, limit = 20 } = req.query
   page = +page
   limit = +limit
-  if (
-    typeof page !== 'number' &&
-    isNaN(page) &&
-    typeof limit !== 'number' &&
-    isNaN(limit)
-  ) {
-    return null
+
+  if (Number.isNaN(page)) {
+    throw new BadRequest()
+  }
+  if (Number.isNaN(limit)) {
+    throw new BadRequest()
   }
 
   const skip = (page - 1) * limit
