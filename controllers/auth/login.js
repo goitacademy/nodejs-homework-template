@@ -1,11 +1,10 @@
 const { NotFound, BadRequest, Unauthorized } = require('http-errors')
 const jwt = require('jsonwebtoken')
-// const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
 const { User } = require('../../models')
 const { SECRET_KEY } = process.env
-console.log(SECRET_KEY)
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -15,6 +14,7 @@ const login = async (req, res) => {
   //   if (!user) {
   //     throw new NotFound(`User with email=${email} not found`)
   //   }
+
   //   const compareResult = bcrypt.compareSync(password, user.password)
   //   if (!compareResult) {
   //     throw new Unauthorized('Password wrong')
@@ -27,10 +27,8 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   }
-
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '100h' })
-  //   console.log(token)
-
+  await User.findByIdAndUpdate(user._id, { token })
   res.json({
     status: 'success',
     code: 200,

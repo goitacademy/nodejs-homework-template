@@ -35,12 +35,12 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password)
 }
 
-const User = model('user', userSchema)
-
 const joiSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().required(),
 })
+
+const User = model('user', userSchema)
 
 module.exports = {
   User,

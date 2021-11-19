@@ -8,9 +8,9 @@ const { joiSchema } = require('../../models/contact')
 
 const router = express.Router()
 
-router.get('/', controllerWrapper(ctrl.listContacts))
+router.get('/', authenticate, controllerWrapper(ctrl.listContacts))
 
-router.get('/:id', controllerWrapper(ctrl.getByIdContact))
+router.get('/:id', authenticate, controllerWrapper(ctrl.getByIdContact))
 
 router.post(
   '/',
@@ -19,10 +19,19 @@ router.post(
   controllerWrapper(ctrl.addContact),
 )
 
-router.delete('/:id', controllerWrapper(ctrl.removeContact))
+router.delete('/:id', authenticate, controllerWrapper(ctrl.removeContact))
 
-router.put('/:id', validation(joiSchema), controllerWrapper(ctrl.updateContact))
+router.put(
+  '/:id',
+  authenticate,
+  validation(joiSchema),
+  controllerWrapper(ctrl.updateContact),
+)
 
-router.patch('/:id/favorite', controllerWrapper(ctrl.changeFavorite))
+router.patch(
+  '/:id/favorite',
+  authenticate,
+  controllerWrapper(ctrl.changeFavorite),
+)
 
 module.exports = router

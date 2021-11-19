@@ -1,9 +1,10 @@
 const { Unauthorized, NotFound } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../../models')
+require('dotenv').config()
+// console.log(User)
 
 const { SECRET_KEY } = process.env
-console.log(SECRET_KEY)
 
 const authenticate = async (req, res, next) => {
   try {
@@ -17,10 +18,11 @@ const authenticate = async (req, res, next) => {
       if (!user) {
         throw new NotFound('User not found')
       }
-
+      if (!user.token) {
+        throw new Unauthorized()
+      }
       req.user = user
-      console.log(user)
-      //   next()
+      next()
     } catch (error) {
       throw new Unauthorized(error.message)
     }

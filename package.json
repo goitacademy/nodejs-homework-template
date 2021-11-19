@@ -17,7 +17,7 @@
     "http-errors": "^1.8.1",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.12",
+    "mongoose": "^6.0.13",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
   },
