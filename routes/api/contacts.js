@@ -3,24 +3,20 @@ const router = express.Router()
 const { controllerWrapper, validator } = require('../../middlewares')
 const { contactsSchema } = require('../../schemas')
 // const { contacts: ctrl } = require('../../contactsOperations/contacts/contacts')
-const {listContacts} = require('../../contactsOperations/contacts/contacts')
-const getContactById = require('../../contactsOperations/contacts/contacts')
-const addContact = require('../../contactsOperations/contacts/contacts')
-const removeContactById = require('../../contactsOperations/contacts/contacts')
-const updateContactById = require('../../contactsOperations/contacts/contacts')
-// const listContacts = require('../../model/controllers/listContacts')
+const {contacts} = require('../../contactsOperations')
 
-router.get('/', controllerWrapper(listContacts))
-router.get('/:contactId', controllerWrapper(getContactById))
 
-router.post('/', validator(contactsSchema), controllerWrapper(addContact))
+router.get('/', controllerWrapper(contacts.listContacts))
+router.get('/:contactId', controllerWrapper(contacts.getContactById))
 
-router.delete('/:contactId', controllerWrapper(removeContactById))
+router.post('/', validator(contactsSchema), controllerWrapper(contacts.addContact))
+
+router.delete('/:contactId', controllerWrapper(contacts.removeContactById))
 
 router.put(
   '/:contactId',
   validator(contactsSchema),
-  controllerWrapper(updateContactById)
+  controllerWrapper(contacts.updateContactById)
 )
 
 // router.get('/', async (req, res, next) => {

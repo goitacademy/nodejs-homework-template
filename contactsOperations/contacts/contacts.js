@@ -7,8 +7,8 @@ const listContacts = async (req, res, next) => {
     code: 200,
     data: { contacts }
   })
-  console.log(req.url)
-  console.log(contacts)
+  // console.log(req.url)
+  // console.log(contacts)
 }
 // listContacts()
 
