@@ -29,9 +29,11 @@ const updateContact = async (contactId, body) => {
 }
 
 const updateFavoriteContact = async (contactId, body) => {
-  const { name, email, phone } = body
-  await Post.findByIdAndUpdate(contactId, { $set: { name, email, phone, favorite: true } })
-  return { name, email, phone, favorite: true }
+  const { name, email, phone, favorite } = body
+  let isFavorite = true
+  if (favorite === void 0 || favorite === true) { isFavorite = true } else { isFavorite = false }
+  await Post.findByIdAndUpdate(contactId, { $set: { name, email, phone, favorite: isFavorite } })
+  return { name, email, phone, favorite: isFavorite }
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-const connectMongo = async() => {
-  return mongoose.connect('mongodb+srv://danek:danek1994@cluster0.rjq1f.mongodb.net/db-contacts?retryWrites=true&w=majority')
+const connectMongo = async () => {
+  return mongoose.connect(process.env.MONGO_URL)
 }
 module.exports = { connectMongo }

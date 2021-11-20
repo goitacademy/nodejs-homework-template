@@ -7,6 +7,7 @@ const schema = Joi.object(
     name: Joi.string().min(3).max(30).required().regex(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
     phone: Joi.string().min(8).max(99).required(),
+    favorite: Joi.boolean(),
   })
 
 const {
@@ -39,7 +40,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { name, email, phone } = await schema.validateAsync(req.body)
     const newContact = { name, email, phone }
-    addContact(newContact)
+    await addContact(newContact)
     res.status(201)
     res.json(newContact)
   } catch (error) {
@@ -74,11 +75,7 @@ router.put('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId/favorite', async (req, res, next) => {
   try {
-    if (req.body === {}) {
-      res.status(400)
-      res.json({ message: 'missing field favorite' })
-      return
-    }
+    await schema.validateAsync(req.body)
     const updatedContact = await updateFavoriteContact(req.params.contactId, req.body)
     res.status(200)
     res.json(updatedContact)
