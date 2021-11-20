@@ -3,13 +3,14 @@ const router = express.Router()
 const { controllerWrapper, validator } = require('../../middlewares')
 const { contactsSchema } = require('../../schemas')
 // const { contacts: ctrl } = require('../../contactsOperations/contacts/contacts')
-const listContacts = require('../../contactsOperations/contacts/contacts')
+// const listContacts = require('../../contactsOperations/contacts/contacts')
 const getContactById = require('../../contactsOperations/contacts/contacts')
 const addContact = require('../../contactsOperations/contacts/contacts')
 const removeContactById = require('../../contactsOperations/contacts/contacts')
 const updateContactById = require('../../contactsOperations/contacts/contacts')
+const listContacts = require('../../model/controllers/listContacts')
 
-router.get('/', controllerWrapper(listContacts))
+// router.get('/', controllerWrapper(listContacts))
 router.get('/:contactId', controllerWrapper(getContactById))
 
 router.post('/', validator(contactsSchema), controllerWrapper(addContact))
@@ -22,15 +23,17 @@ router.put(
   controllerWrapper(updateContactById)
 )
 
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const contacts = await listContacts()
-//     res.json({ status: 'success', code: 200, data: { contacts } })
-//   } catch (error) {
-//     next(error)
-//   }
-//   console.log(contacts)
-// })
+router.get('/', async (req, res, next) => {
+  try {
+    const contacts = await listContacts()
+    res.json({ status: 'success', code: 200, data: { contacts } })
+    console.log(req.url)
+    console.log(req.method)
+    console.log(contacts)
+  } catch (error) {
+    next(error)
+  }
+})
 
 // router.get('/:contactId', async (req, res, next) => {
 //   try {
