@@ -7,6 +7,8 @@ const addContact = async (data) => {
   const newContact = { ...data, id: uuidv4() }
   contacts.push(newContact)
   await updateContact(contacts)
+  // console.log(newContact)
   return newContact
 }
+// addContact('tess', '2@mail.com', '25555')
 module.exports = addContact

@@ -2,20 +2,24 @@ const express = require('express')
 const router = express.Router()
 const { controllerWrapper, validator } = require('../../middlewares')
 const { contactsSchema } = require('../../schemas')
-const { contacts: ctrl } = require('../../contactsOperations')
-// const listContacts = require('../../contactsOperations/contacts/contacts')
+// const { contacts: ctrl } = require('../../contactsOperations/contacts/contacts')
+const listContacts = require('../../contactsOperations/contacts/contacts')
+const getContactById = require('../../contactsOperations/contacts/contacts')
+const addContact = require('../../contactsOperations/contacts/contacts')
+const removeContactById = require('../../contactsOperations/contacts/contacts')
+const updateContactById = require('../../contactsOperations/contacts/contacts')
 
-router.get('/', controllerWrapper(ctrl.listContacts))
-router.get('/:contactId', controllerWrapper(ctrl.getContactById))
+router.get('/', controllerWrapper(listContacts))
+router.get('/:contactId', controllerWrapper(getContactById))
 
-router.post('/', validator(contactsSchema), controllerWrapper(ctrl.addContact))
+router.post('/', validator(contactsSchema), controllerWrapper(addContact))
 
-router.delete('/:contactId', controllerWrapper(ctrl.removeContactById))
+router.delete('/:contactId', controllerWrapper(removeContactById))
 
 router.put(
   '/:contactId',
   validator(contactsSchema),
-  controllerWrapper(ctrl.updateContactById)
+  controllerWrapper(updateContactById)
 )
 
 // router.get('/', async (req, res, next) => {
@@ -25,6 +29,7 @@ router.put(
 //   } catch (error) {
 //     next(error)
 //   }
+//   console.log(contacts)
 // })
 
 // router.get('/:contactId', async (req, res, next) => {

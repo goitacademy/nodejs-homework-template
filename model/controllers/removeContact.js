@@ -14,7 +14,9 @@ const removeContactById = async (contactId) => {
 
   contacts.splice(idx, 1)
   await updateContacts(contacts)
+  // console.log(contacts)
   return removeContact
 }
+// removeContactById(1)
 
 module.exports = removeContactById

@@ -7,9 +7,11 @@ const listContacts = async (req, res, next) => {
     code: 200,
     contacts
   })
+  console.log(res.json)
 }
+// listContacts()
 
-const getById = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   const { contactId } = req.params
   const contact = await contactsOperations.getById(Number(contactId))
   if (!contact) {
@@ -28,7 +30,7 @@ const getById = async (req, res, next) => {
     })
 }
 
-const add = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   const result = await contactsOperations.addContact(req.body)
   res.status(201).json({
     status: 'successfully created',
@@ -37,7 +39,7 @@ const add = async (req, res, next) => {
   })
 }
 
-const updateById = async (req, res, next) => {
+const updateContactById = async (req, res, next) => {
   const { contactId } = req.params
   const result = await contactsOperations.updateContact(Number(contactId), req.body)
   if (!result) {
@@ -55,7 +57,7 @@ const updateById = async (req, res, next) => {
   })
 }
 
-const removeById = async (req, res, next) => {
+const removeContactById = async (req, res, next) => {
   const { contactId } = req.params
   const contact = await contactsOperations.removeContact(Number(contactId))
   if (!contact) {
@@ -75,9 +77,9 @@ const removeById = async (req, res, next) => {
 
 module.exports = {
   listContacts,
-  getById,
-  add,
-  updateById,
-  removeById
+  getContactById,
+  addContact,
+  updateContactById,
+  removeContactById
 
 }
