@@ -13,6 +13,7 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.4.2",
+    "mongoose": "^6.0.13",
     "morgan": "1.10.0",
     "uuid": "^8.3.2"
   },
@@ -23,5 +24,20 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "2.0.7"
-  }
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
+  "main": "app.js",
+  "bin": {
+    "template": "server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aleksandra605/nodejs-homework-rest-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aleksandra605/nodejs-homework-rest-api/issues"
+  },
+  "homepage": "https://github.com/Aleksandra605/nodejs-homework-rest-api#readme"
 }
