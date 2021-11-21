@@ -1,7 +1,5 @@
 const fs = require("fs/promises");
 const path = require("path");
-// const contacts = require("./contacts.json");
-const contactsPath = path.resolve("./model/contacts.json");
 
 const listContacts = require("./listContacts.js");
 const getContactById = require("./getContactById.js");

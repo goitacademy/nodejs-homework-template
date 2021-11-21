@@ -19,8 +19,10 @@ router.post(
 
 router.delete("/:contactId", controlWrapper(controllerContacts.removeContact));
 
-router.patch("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put(
+  "/:contactId",
+  validation(schemaUpdateContact),
+  controlWrapper(controllerContacts.updateContactById)
+);
 
 module.exports = router;
