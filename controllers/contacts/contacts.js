@@ -1,6 +1,6 @@
-const contactsOperations = require('../../model/controllers')
+const contactsOperations = require('../../model/contactsOperations')
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (req, res) => {
   const contacts = await contactsOperations.listContacts()
   res.json({
     status: 'success',
@@ -9,9 +9,10 @@ const listContacts = async (req, res, next) => {
   })
 }
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params
-  const contact = await contactsOperations.getContactById(Number(contactId))
+  console.log((contactId))
+  const contact = await contactsOperations.getContactById((contactId))
   if (!contact) {
     res.status(404).json({
       status: 'error',
@@ -27,7 +28,7 @@ const getContactById = async (req, res, next) => {
   })
 }
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const result = await contactsOperations.addContact(req.body)
   res.status(201).json({
     status: 'successfully created',
@@ -36,7 +37,7 @@ const addContact = async (req, res, next) => {
   })
 }
 
-const updateContactById = async (req, res, next) => {
+const updateContactById = async (req, res) => {
   const { contactId } = req.params
   const result = await contactsOperations.updateContactById(
     contactId,
@@ -52,14 +53,14 @@ const updateContactById = async (req, res, next) => {
   }
   res.json({
     status: 'successfuly updated',
-    code: 202,
-    data: { result }
+    code: 200,
+    result
   })
 }
 
-const removeContactById = async (req, res, next) => {
+const removeContactById = async (req, res) => {
   const { contactId } = req.params
-  const contact = await contactsOperations.removeContact(Number(contactId))
+  const contact = await contactsOperations.removeContact((contactId))
   if (!contact) {
     res.status(404).json({
       status: 'error',
@@ -70,7 +71,7 @@ const removeContactById = async (req, res, next) => {
   }
   res.json({
     status: 'successfully deleted',
-    code: 204,
+    code: 200,
   })
 }
 
