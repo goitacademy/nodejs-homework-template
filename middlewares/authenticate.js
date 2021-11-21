@@ -3,16 +3,6 @@ const { Unauthorized, NotFound } = require("http-errors");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
-/*
-1. Извлекает заголовок authrization
-2. Строку в массив по пробелу
-3. Проверяем первое слово "Bearer"
-4. ПРоверяем токен на валидность
-5. Находим в базе пользователя по id из токена
-6. Прикрепляем его к запросу (объект req)
-7. Передаем запрос дальше(next)
-*/
-
 const authenticate = async (req, res, next) => {
   try {
     const [bearer, token] = req.headers.authorization.split(" ");
@@ -24,6 +14,9 @@ const authenticate = async (req, res, next) => {
       const user = await User.findById(id, "_id email");
       if (!user) {
         throw new NotFound("User not found");
+      }
+      if (!user.token) {
+        throw new Unauthorized();
       }
       req.user = user;
       //   console.log(user);
@@ -37,3 +30,13 @@ const authenticate = async (req, res, next) => {
 };
 
 module.exports = authenticate;
+
+/*
+1. Извлекает заголовок authrization
+2. Строку в массив по пробелу
+3. Проверяем первое слово "Bearer"
+4. ПРоверяем токен на валидность
+5. Находим в базе пользователя по id из токена
+6. Прикрепляем его к запросу (объект req)
+7. Передаем запрос дальше(next)
+*/
