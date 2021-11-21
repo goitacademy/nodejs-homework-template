@@ -38,7 +38,6 @@ const addContact = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
   const { contactId } = req.params
-  const result = await contactsOperations.updateContact(
   const result = await contactsOperations.updateContactById(
     contactId,
     req.body
