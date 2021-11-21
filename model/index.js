@@ -1,20 +1,17 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
-
-const listContacts = async () => {}
-
-const getContactById = async (contactId) => {}
-
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
+/* eslint-disable semi */
+/* eslint-disable quotes */
+const listContacts = require("./listContacts");
+const getContactById = require("./getContactById");
+const updateListContacts = require("./updateListContacts");
+const removeContact = require("./removeContact");
+const addContact = require("./addContact");
+const updateContactById = require("./updateContactById");
 
 module.exports = {
   listContacts,
   getContactById,
+  updateListContacts,
   removeContact,
   addContact,
-  updateContact,
-}
+  updateContactById,
+};
