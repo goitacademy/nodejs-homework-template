@@ -1,14 +1,14 @@
 const listContacts = require('./listContacts')
 const updateContacts = require('./updateContacts')
 
-const updateContactById = async (id, data) => {
+const updateContactById = async (contactId, data) => {
   const contacts = await listContacts()
-  const idx = contacts.findIndex(item => item.id === id)
+  const idx = contacts.findIndex(item => item.id === contactId)
 
   if (idx === -1) {
     return null
   }
-  contacts[idx] = { ...data, id }
+  contacts[idx] = { ...data, contactId }
   await updateContacts(contacts)
   return contacts[idx]
 }
