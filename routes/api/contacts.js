@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const controllerContacts = require("../../controller");
+const { controlWrapper } = require("../../middlewares");
 
-router.get("/", controllerContacts.listContacts);
+router.get("/", controlWrapper(controllerContacts.listContacts));
 
-router.get("/:contactId", controllerContacts.getContactById);
+router.get("/:contactId", controlWrapper(controllerContacts.getContactById));
 
 router.post("/", async (req, res, next) => {
   res.json({ message: "template message" });
