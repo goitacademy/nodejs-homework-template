@@ -1,25 +1,25 @@
 const express = require('express')
 const authRouter = express.Router()
 const {
-    authenticateUser
+  authenticateUser
 } = require('../../middleware/authenticateUser')
 const {
-    signupController,
-    signinController,
-    signoutController,
-    currentController,
-    patchUserController,
-    patchAvatarController
+  signupController,
+  signinController,
+  signoutController,
+  currentController,
+  patchUserController,
+  patchAvatarController
 } = require('../../controllers/auth')
 const {
-    registrationValidation
+  registrationValidation
 } = require('../../middleware/validation')
 
 const {
-    errorHandler
+  errorHandler
 } = require('../../helpers/errorHandler')
 const {
-    uploadMiddleware
+  uploadMiddleware
 } = require('../../middleware/uploadAvatarMiddleware')
 
 authRouter.post('/signup', registrationValidation, errorHandler(signupController))
