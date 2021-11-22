@@ -1,5 +1,5 @@
 const { listContacts, getContactById, addContact, removeContact, updateById } = require('../../model/index')
-const { contactSchema } = require('../../contactsSchema/contactSchema')
+const { contactSchema } = require('../../contactsSchema')
 
 const getContacts = async (req, res, next) => {
   try {
