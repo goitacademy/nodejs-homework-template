@@ -23,7 +23,7 @@ const update = async (req, res) => {
     const userId = token.getIdByToken(userToken);
     const normalizePath = path.join("/avatars", req.file.filename);
     const updatedAvatar = await UserModel.findByIdAndUpdate(
-        "61891ad7552c21952062eb4f",
+        // "61891ad7552c21952062eb4f",
         {
             avatarURL: normalizePath,
         },
