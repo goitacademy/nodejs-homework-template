@@ -4,11 +4,13 @@ const {
 const {
   Conflict
 } = require('http-errors')
+const gravatar = require('gravatar')
 
 const signup = async (email, password) => {
   const newUser = new UserModel({
     email,
-    password
+    password,
+    avatarURL: gravatar.url(email)
   })
   const existenceCheck = await UserModel.findOne({
     email

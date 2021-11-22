@@ -13,7 +13,7 @@ module.exports = {
     'space-before-function-paren': 'off',
     quotes: [
       'error',
-      'single'
+      'single'.
     ],
   },
 }
