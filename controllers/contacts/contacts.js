@@ -39,10 +39,8 @@ const addContact = async (req, res) => {
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params
-  const result = await contactsOperations.updateContactById(
-    contactId,
-    req.body
-  )
+  const result = await contactsOperations.updateContactById(contactId, req.body)
+  // console.log(result)
   if (!result) {
     res.status(404).json({
       status: 'error',
