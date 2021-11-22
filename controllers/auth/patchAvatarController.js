@@ -13,21 +13,22 @@ const avatarsDirectory = path.join(__dirname, '../../public/avatars')
 const patchAvatarController = async (req, res) => {
   const {
     originalname,
-    path: originalFilePath
+    path: temporaryFilePath
   } = req.file
   const resultDirectory = path.join(avatarsDirectory, `${req.user._id}_${originalname}`)
+  const { _id } = req.user
   try {
-    await fs.rename(originalFilePath, resultDirectory)
+    await fs.rename(temporaryFilePath, resultDirectory)
     jimp.read(resultDirectory).then(image => image.resize(250, 250).write(resultDirectory))
-    const src = path.join('./avatars', `${req.user._id}_${originalname}`)
-    await UserModel.findByIdAndUpdate(req.user._id, {
+    const src = path.join('./avatars', `${_id}_${originalname}`)
+    await UserModel.findByIdAndUpdate(_id, {
       avatarURL: src
     })
     res.status(200).json({
       newAvatar: src
     })
   } catch (err) {
-    await fs.unlink(originalFilePath)
+    await fs.unlink(temporaryFilePath)
     throw new Unauthorized('Not authorized')
   }
 }

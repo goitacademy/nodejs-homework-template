@@ -27,6 +27,10 @@ authRouter.post('/login', registrationValidation, errorHandler(signinController)
 authRouter.post('/logout', authenticateUser, errorHandler(signoutController))
 authRouter.post('/current', authenticateUser, errorHandler(currentController))
 authRouter.patch('/', authenticateUser, errorHandler(patchUserController))
-authRouter.patch('/avatar', authenticateUser, uploadMiddleware.single('newAvatar'), errorHandler(patchAvatarController))
+authRouter.patch('/avatar',
+  authenticateUser,
+  uploadMiddleware.single('newAvatar'),
+  errorHandler(patchAvatarController)
+)
 
 module.exports = authRouter
