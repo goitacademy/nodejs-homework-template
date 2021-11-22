@@ -8,7 +8,7 @@ const {
 } = require('http-errors')
 const jimp = require('jimp')
 
-const avatarsDirectory = path.join(__dirname, '../../public/avatarsqqq')
+const avatarsDirectory = path.join(__dirname, '../../public/avatars')
 
 const patchAvatarController = async (req, res) => {
   const {
