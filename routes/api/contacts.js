@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const {
-  listContacts,
+  getAllContacts,
   getContactById,
-  removeContact,
   addContact,
+  deleteContact,
   updateContact,
-} = require('../../model/index');
-const Joi = require('joi');
-const { required } = require('joi');
+  updateFavorite,
+} = require('../../controllers/index');
 
-const schemaContactJoi = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-}); // вынести в отдельный файл
+const { schemaContactJoi } = require('../../model/contact');
 
 const validation = (schema) => {
   const contactValidation = (req, res, next) => {
@@ -28,45 +23,16 @@ const validation = (schema) => {
   return contactValidation;
 };
 
-router.get('/', (req, res, next) => {
-  listContacts()
-    .then((contacts) => res.json(contacts))
-    // .catch((err) => next(err));
-    .catch((err) => res.send(err));
-});
+router.get('/', getAllContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
+router.get('/:contactId', getContactById);
 
-  getContactById(contactId)
-    .then((contact) => res.json(contact))
-    .catch(() => res.status(404).send({ message: 'Not found' }));
-});
+router.post('/', validation(schemaContactJoi), addContact);
 
-router.post('/', validation(schemaContactJoi), async (req, res, next) => {
-  const { name, email, phone } = req.body;
+router.delete('/:contactId', deleteContact);
 
-  addContact(name, email, phone)
-    .then((r) => res.status(201).json(r))
-    .catch((err) => res.send(err));
-});
+router.put('/:contactId', validation(schemaContactJoi), updateContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  removeContact(contactId)
-    .then(() => res.json({ message: 'Contact deleted.' }))
-    .catch((err) => res.status(404).send({ message: 'Not found' }));
-});
-
-router.put(
-  '/:contactId',
-  validation(schemaContactJoi),
-  async (req, res, next) => {
-    const { contactId } = req.params;
-    updateContact(contactId, req.body)
-      .then((r) => res.json(r))
-      .catch((err) => res.status(404).send({ message: 'Not found' }));
-  }
-);
+router.patch('/:contactId/favorite', updateFavorite);
 
 module.exports = router;
