@@ -16,17 +16,18 @@ const {
   patchContactValidation
 } = require('../../middleware/validation')
 const { errorHandler } = require('../../helpers/errorHandler')
+const { authenticateUser } = require('../../middleware/authenticateUser')
 
-router.get('/', errorHandler(listContactsController))
+router.get('/', authenticateUser, errorHandler(listContactsController))
 
-router.get('/:contactId', errorHandler(getContactByIdController))
+router.get('/:contactId', authenticateUser, errorHandler(getContactByIdController))
 
-router.post('/', addContactValidation, errorHandler(addContactController))
+router.post('/', authenticateUser, addContactValidation, errorHandler(addContactController))
 
-router.delete('/:contactId', errorHandler(removeContactController))
+router.delete('/:contactId', authenticateUser, errorHandler(removeContactController))
 
-router.put('/:contactId', updateContactValidation, errorHandler(updateContactController))
+router.put('/:contactId', authenticateUser, updateContactValidation, errorHandler(updateContactController))
 
-router.patch('/:contactId/favorite', patchContactValidation, errorHandler(updateStatusContactController))
+router.patch('/:contactId/favorite', authenticateUser, patchContactValidation, errorHandler(updateStatusContactController))
 
 module.exports = router
