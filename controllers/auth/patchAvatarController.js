@@ -8,15 +8,15 @@ const {
 } = require('http-errors')
 const jimp = require('jimp')
 
-const avatarsDirectory = path.join(__dirname, '../../public/avatars')
+const avatarsDirectory = path.join(__dirname, '../../public/avatarsqqq')
 
 const patchAvatarController = async (req, res) => {
+  const {
+    originalname,
+    path: originalFilePath
+  } = req.file
+  const resultDirectory = path.join(avatarsDirectory, `${req.user._id}_${originalname}`)
   try {
-    const {
-      originalname,
-      path: originalFilePath
-    } = req.file
-    const resultDirectory = path.join(avatarsDirectory, `${req.user._id}_${originalname}`)
     await fs.rename(originalFilePath, resultDirectory)
     jimp.read(resultDirectory).then(image => image.resize(250, 250).write(resultDirectory))
     const src = path.join('./avatars', `${req.user._id}_${originalname}`)
@@ -27,6 +27,7 @@ const patchAvatarController = async (req, res) => {
       newAvatar: src
     })
   } catch (err) {
+    await fs.unlink(originalFilePath)
     throw new Unauthorized('Not authorized')
   }
 }
