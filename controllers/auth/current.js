@@ -2,7 +2,9 @@ const { Unauthorized } = require("http-errors");
 const { User } = require("../../models");
 
 const current = async (req, res) => {
+  console.log(req.user);
   const { token } = req.user;
+
   const user = await User.findOne({ token });
 
   if (!user) {
