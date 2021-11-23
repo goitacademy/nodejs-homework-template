@@ -1,21 +1,15 @@
 const conatctBodyValidation = require("../../middlewares/validation/contactBodyValidation");
 const express = require("express");
 const router = express.Router();
-const {
-  getContactsList,
-  getContactByIdHandler,
-  postContact,
-  deleteContact,
-  putContact,
-} = require("../../common");
+const { contacts } = require("../../model/controllers");
 
-router.get("/", getContactsList);
-router.get("/:contactId", getContactByIdHandler);
+router.get("/", contacts.getContactsList);
+router.get("/:contactId", contacts.getContactByIdHandler);
 
-router.post("/", conatctBodyValidation, postContact);
+router.post("/", conatctBodyValidation, contacts.postContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", contacts.deleteContact);
 
-router.put("/:contactId", conatctBodyValidation, putContact);
+router.put("/:contactId", conatctBodyValidation, contacts.putContact);
 
 module.exports = router;

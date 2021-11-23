@@ -1,4 +1,4 @@
-const { updateContact } = require("../../controllers");
+const { updateContact } = require("../../contacts");
 
 const putContact = async (req, res) => {
   const { contactId } = req.params;
