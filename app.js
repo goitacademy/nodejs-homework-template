@@ -5,8 +5,6 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
-// const { DB_HOST } = process.env
-
 const contactsRouter = require('./routes/api/contacts')
 const authRouter = require('./routes/api/auth')
 
@@ -22,11 +20,11 @@ app.use('/api/auth', authRouter)
 
 app.use('/api/contacts', contactsRouter)
 
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, next) => {
   const { status = 500, message = 'Server error' } = err
   res.status(status).json({ message })
 })

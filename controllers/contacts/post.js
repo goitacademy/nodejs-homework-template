@@ -1,4 +1,3 @@
-// const contactsOperation = require("../../model/oldFiles/index");
 const { Contact } = require('../../model')
 
 const postContact = async (req, res, next) => {
@@ -15,7 +14,6 @@ const postContact = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  // res.json({ message: "template message" });
 }
 
 module.exports = postContact
