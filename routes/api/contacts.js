@@ -1,24 +1,43 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
 
-const { validation400 } = require("../../middlewares");
-const { contacts: ctrl } = require("../../controllers");
-const { contactJoiSchema } = require("../../model/contact");
+const {
+  validation400,
+  authenticate,
+  controllerWrapper,
+} = require('../../middlewares')
+const { contacts: ctrl } = require('../../controllers')
+const { contactJoiSchema } = require('../../model/contact')
 
-router.get("/", ctrl.getAll);
+const router = express.Router()
 
-router.get("/:contactId", ctrl.getContactId);
+router.get('/', authenticate, controllerWrapper(ctrl.getAll))
 
-router.post("/", validation400(contactJoiSchema), ctrl.postContact);
+router.get('/:contactId', authenticate, controllerWrapper(ctrl.getContactId))
 
-router.delete("/:contactId", ctrl.deleteContact);
+router.post(
+  '/',
+  authenticate,
+  validation400(contactJoiSchema),
+  ctrl.postContact
+)
+
+router.delete(
+  '/:contactId',
+  authenticate,
+  controllerWrapper(ctrl.deleteContact)
+)
 
 router.put(
-  "/:contactId",
+  '/:contactId',
+  authenticate,
   validation400(contactJoiSchema),
-  ctrl.selectedContact
-);
+  controllerWrapper(ctrl.selectedContact)
+)
 
-router.patch("/:contactId/favorite", ctrl.putContact);
+router.patch(
+  '/:contactId/favorite',
+  authenticate,
+  controllerWrapper(ctrl.putContact)
+)
 
-module.exports = router;
+module.exports = router
