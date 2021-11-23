@@ -34,11 +34,11 @@ async function addContact ({name, email, phone}) {
 
 const updateContact = async (contactId, data) => {
       const contactList = await listContacts();
-      const idx = contactList.findIndex(item => item.id === contactId);
-          if(idx === -1){
-              return null;
-          }
-      contactList[idx] = {...data, contactId};
+      const idx = contactList.findIndex(contact => contact.id === Number(contactId));
+      if(idx === -1){
+        return null;
+      }
+      contactList[idx] = {id: Number(contactId), ...data};    
       await fs.writeFile(contactsPath, JSON.stringify(contactList), 'utf8');
       return contactList[idx];
     }
