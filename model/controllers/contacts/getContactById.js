@@ -1,4 +1,4 @@
-const { getContactById } = require("../../controllers");
+const { getContactById } = require("../../contacts");
 const getContactByIdHandler = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
