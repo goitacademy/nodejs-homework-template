@@ -3,7 +3,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "/contacts.json");
+const contactsPath = path.resolve("db", "contacts.json");
 
 // listContacts - получить список контактов.
 const listContacts = async () => {
