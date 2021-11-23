@@ -32,7 +32,7 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params
     const contactById = await contactsOperations.getContactById(contactId)
     if (!contactById) {
-      throw new NotFound('Not found')
+      throw new NotFound(`Product with id=${contactId} not found`)
     }
     res.json({
       status: 'success',
@@ -76,7 +76,7 @@ router.delete('/:contactId', async (req, res, next) => {
     res.json({
       status: 'success',
       code: 200,
-      message: 'product deleted',
+      message: 'contact deleted',
       data: {
         result
       }
@@ -88,9 +88,10 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const {error} = contactSchema.validate(req.body)
+    const { error } = contactSchema.validate(req.body)
     if (error) {
       error.status = 400
+      error.message = 'missing fields'
       throw error
     }
     const { contactId } = req.params
