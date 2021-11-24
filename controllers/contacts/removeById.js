@@ -10,7 +10,7 @@ const removeById = async (req, res, next) => {
             err.status = 404;
             throw err;
         }
-        res.status(200).json({ message: 'contact deleted' });
+        res.json({ message: 'contact deleted' });
     } catch (err) {
         next(err);
     }
