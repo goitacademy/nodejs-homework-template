@@ -1,6 +1,6 @@
 const { v4 } = require("uuid");
 
-const updateContacts = require("./updateContacts");
+const updateContacts = require("../updateContacts");
 const listContacts = require("./listContacts");
 
 const addContact = async (data) => {

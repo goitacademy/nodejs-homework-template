@@ -1,5 +1,5 @@
 const updateContacts = require("./updateContacts");
-const listContacts = require("./listContacts");
+const listContacts = require("./contacts/listContacts");
 
 const updateContact = async (id, data) => {
   const contacts = await listContacts();
