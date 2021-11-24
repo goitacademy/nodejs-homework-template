@@ -15,6 +15,9 @@ const postSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: String,
+  }
 })
 const Post = mongoose.model('contacts', postSchema)
 module.exports = { Post }
