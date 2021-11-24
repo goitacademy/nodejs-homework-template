@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 
-const filePathContacts = require("./filePath.js");
+const filePathContacts = require("./db/filePath.js");
 
 const listContacts = async () => {
   const data = await fs.readFile(filePathContacts, "utf8");
