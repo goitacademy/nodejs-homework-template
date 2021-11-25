@@ -90,5 +90,21 @@
       "email": "spider-man@gmail.com",
       "phone": "(555) 121-4121"
     }
+  },
+  {
+    "id": 54,
+    "name": {
+      "name": "Jonny Blaze",
+      "email": "gost-rider@gmail.com",
+      "phone": "(666) 343-6685"
+    }
+  },
+  {
+    "id": 417,
+    "name": {
+      "name": "Dany De Vito",
+      "email": "little-man@egetlacus.ca",
+      "phone": "(112) 111-6685"
+    }
   }
 ]
