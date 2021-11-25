@@ -1,44 +1,91 @@
-const Joi = require('joi')
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
+const { ValidLengthName, StatusCode } = require('../../config/constants');
 
-const schemaContact = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().pattern(/^[(][\d]{3}[)]\s[\d]{3}[-][\d]{4}/).required(),
-    isFavorite: Joi.boolean().optional(),
+const MIN_LENGTH_NAME = ValidLengthName.MIN_LENGTH_NAME;
+const MAX_LENGTH_NAME = ValidLengthName.MAX_LENGTH_NAME;
+const BAD_REQUEST = StatusCode.BAD_REQUEST;
+
+
+const validContact = Joi.object({
+    name: Joi.string()
+        .min(MIN_LENGTH_NAME)
+        .max(MAX_LENGTH_NAME)
+        .required(),
+    email: Joi.string()
+        .email()
+        .required(),
+    phone: Joi.string()
+        .pattern(/\(\d{3}\)\s\d{3}-\d{4}/)
+        .required(),
+    favorite: Joi.boolean().optional(),
 });
 
-const schemaStatusContact = Joi.object({
-    isFavorite: Joi.boolean().optional(),
-})
+const validUpdateContact = Joi.object({
+    name: Joi.string()
+        .min(MIN_LENGTH_NAME)
+        .max(MAX_LENGTH_NAME)
+        .optional(),
+    email: Joi.string()
+        .email()
+        .optional(),
+    phone: Joi.string()
+        .pattern(/\(\d{3}\)\s\d{3}-\d{4}/)
+        .optional(),
+    favorite: Joi.boolean().optional(),
+}).min(1);
 
-const pattern = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}";
+const validPutContact = Joi.object({
+    name: Joi.string()
+        .min(MIN_LENGTH_NAME)
+        .max(MAX_LENGTH_NAME)
+        .optional(),
+    email: Joi.string()
+        .email()
+        .optional(),
+    phone: Joi.string()
+        .pattern(/\(\d{3}\)\s\d{3}-\d{4}/)
+        .optional(),
+    favorite: Joi.boolean().optional(),
+});
 
-const schemaId = Joi.object({
-    contactId: Joi.string().pattern(new RegExp(pattern)).required(),
-})
+const validStatusContact = Joi.object({
+    favorite: Joi.boolean().required(),
+});
+
+const validId = Joi.object({
+    contactId: Joi.objectId().required(),
+});
 
 const validate = async (schema, obj, res, next) => {
-      try {
-          await schema.validateAsync(obj);
-          next();
+    try {
+        await schema.validateAsync(obj);
+        next();
     } catch (err) {
-          res.status(400).json({
-              status: 'error',
-              code: 400,
-              message: `Field ${err.message.replace(/"/g, '')}`,
-          });
-       }
-}
+        res.status(BAD_REQUEST).json({
+            status: 'error',
+            code: BAD_REQUEST,
+            message: `Field ${err.message.replace(/"/g, '')}`,
+        });
+    }
+};
 
-module.exports.validateContact = async (req, res, next) => {
-    return await validate(schemaContact, req.body, res, next)
-}
-  
-module.exports.validateStatusContact = async (req, res, next) => {
-    return await validate(schemaStatusContact, req.body, res, next)
-}
+module.exports.validContact = (req, res, next) => {
+    return validate(validContact, req.body, res, next);
+};
 
-module.exports.validateId = async (req, res, next) => {
-    return await validate(schemaId, req.params, res, next)
-}
+module.exports.validUpdateContact = (req, res, next) => {
+    return validate(validUpdateContact, req.body, res, next);
+};
 
+module.exports.validPutContact = (req, res, next) => {
+    return validate(validPutContact, req.body, res, next);
+};
+
+module.exports.validStatusContact = (req, res, next) => {
+    return validate(validStatusContact, req.body, res, next);
+};
+
+module.exports.validId = (req, res, next) => {
+    return validate(validId, req.params, res, next);
+};
