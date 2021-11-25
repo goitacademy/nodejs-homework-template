@@ -1,15 +1,26 @@
-const conatctBodyValidation = require("../../middlewares/validation/contactBodyValidation");
+const {
+  conatctBodyValidation,
+  favoriteValidation,
+} = require("../../middlewares/validation");
 const express = require("express");
 const router = express.Router();
-const { contacts } = require("../../model/controllers");
+const { contacts: ctrl } = require("../../controllers");
+const ctrlWrapper = require("../../middlewares/ctrtWrapper");
 
-router.get("/", contacts.getContactsList);
-router.get("/:contactId", contacts.getContactByIdHandler);
+router.get("/", ctrlWrapper(ctrl.getContactsList));
 
-router.post("/", conatctBodyValidation, contacts.postContact);
+router.get("/:contactId", ctrlWrapper(ctrl.getContactByIdHandler));
 
-router.delete("/:contactId", contacts.deleteContact);
+router.post("/", conatctBodyValidation, ctrlWrapper(ctrl.postContact));
 
-router.put("/:contactId", conatctBodyValidation, contacts.putContact);
+router.delete("/:contactId", ctrlWrapper(ctrl.deleteContact));
+
+router.put("/:contactId", conatctBodyValidation, ctrlWrapper(ctrl.putContact));
+
+router.patch(
+  "/:contactId/favorite",
+  favoriteValidation,
+  ctrlWrapper(ctrl.changeFavorite)
+);
 
 module.exports = router;
