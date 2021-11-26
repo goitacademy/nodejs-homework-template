@@ -3,6 +3,7 @@ const getContactByIdHandler = require("./getContactById");
 const postContact = require("./postContact");
 const deleteContact = require("./deleteContact");
 const putContact = require("./putContact");
+const changeFavorite = require("./changeFavorite");
 
 module.exports = {
   getContactByIdHandler,
@@ -10,4 +11,5 @@ module.exports = {
   postContact,
   deleteContact,
   putContact,
+  changeFavorite,
 };
