@@ -8,7 +8,7 @@ const DB_URL = process.env.DB_URL
 
 async function startApp() {
   try {
-    await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
+    await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})
     console.log("Database connection successful");
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`)
