@@ -12,8 +12,11 @@ const {
   logout,
   current,
   updateImage,
+  verify,
+  newVerify,
 } = require("../../../controllers/auth");
 const { joiSchema } = require("../../../models/user");
+// const { verify } = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -27,5 +30,7 @@ router.patch(
   upload.single("image"),
   controllerWrapper(updateImage)
 );
+router.get("/verify/:verificationToken", controllerWrapper(verify));
+router.post("/verify/", controllerWrapper(newVerify));
 
 module.exports = router;
