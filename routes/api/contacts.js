@@ -4,6 +4,7 @@ const { contacts: ctrl } = require('../../controllers')
 const { controllerWrapper } = require('../../middleware/wrapper')
 const { validation } = require('../../middleware/validation')
 const { authenticate } = require('../../middleware/authenticate')
+const { upload } = require('../../middleware/upload')
 const { joiSchema } = require('../../models/contact')
 
 const router = express.Router()
@@ -32,6 +33,13 @@ router.patch(
   '/:id/favorite',
   authenticate,
   controllerWrapper(ctrl.changeFavorite),
+)
+
+router.patch(
+  '/:id/image',
+  authenticate,
+  upload.single('image'),
+  controllerWrapper(ctrl.updateImage),
 )
 
 module.exports = router

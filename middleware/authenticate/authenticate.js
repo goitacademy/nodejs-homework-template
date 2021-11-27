@@ -2,7 +2,6 @@ const { Unauthorized, NotFound } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../../models')
 require('dotenv').config()
-// console.log(User)
 
 const { SECRET_KEY } = process.env
 
