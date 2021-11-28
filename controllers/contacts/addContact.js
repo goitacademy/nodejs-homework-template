@@ -9,7 +9,6 @@ const addContact = async (req, res) => {
   res.status(201).json({
     status: 'success',
     code: 201,
-    message: 'missing required name field',
     data: {
       result
     }
