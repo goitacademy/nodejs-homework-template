@@ -4,6 +4,7 @@ const {
   validation400,
   authenticate,
   controllerWrapper,
+  upload,
 } = require('../../middlewares')
 const { contacts: ctrl } = require('../../controllers')
 const { contactJoiSchema } = require('../../model/contact')
@@ -38,6 +39,12 @@ router.patch(
   '/:contactId/favorite',
   authenticate,
   controllerWrapper(ctrl.putContact)
+)
+router.patch(
+  '/:contactId/users/avatars',
+  upload.single('avatar'),
+  authenticate,
+  controllerWrapper(ctrl.updateAvatars)
 )
 
 module.exports = router
