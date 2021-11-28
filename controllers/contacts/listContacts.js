@@ -1,9 +1,9 @@
 /* eslint-disable quotes */
 /* eslint-disable semi */
-const contactsOperations = require("../../model");
+const { Contact } = require("../../models");
 
 const listContacts = async (req, res) => {
-  const contacts = await contactsOperations.listContacts();
+  const contacts = await Contact.find({});
   res.json({
     message: "success",
     code: 200,

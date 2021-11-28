@@ -1,13 +1,12 @@
 /* eslint-disable quotes */
 /* eslint-disable semi */
-const contactsOperations = require("../../model");
+const { Contact } = require("../../models");
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  const updateContact = await contactsOperations.updateContactById(
-    contactId,
-    req.body
-  );
+  const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true, // для возврата обновленного контакта, нужно указать этот параметр. В противном случае будет присылать старый контакт.
+  });
   if (!updateContact) {
     const error = new Error(
       `Can not update contact, because id=${contactId} not found.`
