@@ -5,10 +5,10 @@ const listContacts = require('./listContacts')
 
 const addContact = async (data) => {
   const contacts = await listContacts()
-  const newContactList = { ...data, id: v4() }
-  contacts.push(newContactList)
+  const newContact = { ...data, id: v4() }
+  contacts.push(newContact)
   await updateContact(contacts)
-  return newContactList
+  return newContact
 }
 
 module.exports = addContact
