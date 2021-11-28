@@ -1,5 +1,5 @@
 const contacts = require('./contacts')
 
-module.export = {
+module.exports = {
   contacts
 }
