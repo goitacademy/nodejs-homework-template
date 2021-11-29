@@ -3,7 +3,7 @@ const {
 } = require('../../db/contactModel')
 
 const listContacts = async (userId, pagination, favorite = null) => {
-  if (!favorite) {
+  if (!favorite && pagination.page !== NaN && pagination.limit !== NaN) {
     const data = await ContactModel.find({
       owner: userId
     }, '', {
