@@ -4,6 +4,8 @@ const { signupController } = require('./signupController')
 const { currentController } = require('./currentController')
 const { patchUserController } = require('./patchUserController')
 const { patchAvatarController } = require('./patchAvatarController')
+const { verifyUserController } = require('./verifyUserController')
+const { repeatVerificationController } = require('./repeatVerificationController')
 
 module.exports = {
   signoutController,
@@ -11,5 +13,7 @@ module.exports = {
   signupController,
   currentController,
   patchUserController,
-  patchAvatarController
+  patchAvatarController,
+  verifyUserController,
+  repeatVerificationController
 }

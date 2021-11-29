@@ -9,18 +9,25 @@ const {
   signoutController,
   currentController,
   patchUserController,
-  patchAvatarController
+  patchAvatarController,
+  verifyUserController,
+  repeatVerificationController
 } = require('../../controllers/auth')
 const {
   registrationValidation
 } = require('../../middleware/validation')
-
 const {
   errorHandler
 } = require('../../helpers/errorHandler')
 const {
   uploadMiddleware
 } = require('../../middleware/uploadAvatarMiddleware')
+const {
+  emailVerificationValidator
+} = require('../../middleware/emailVerificationValidator')
+const {
+  userCheckByEmail
+} = require('../../middleware/userCheckByEmail')
 
 authRouter.post('/signup', registrationValidation, errorHandler(signupController))
 authRouter.post('/login', registrationValidation, errorHandler(signinController))
@@ -32,5 +39,7 @@ authRouter.patch('/avatar',
   uploadMiddleware.single('newAvatar'),
   errorHandler(patchAvatarController)
 )
+authRouter.get('/verify/:verificationToken', errorHandler(verifyUserController))
+authRouter.post('/verify/', emailVerificationValidator, userCheckByEmail, errorHandler(repeatVerificationController))
 
 module.exports = authRouter

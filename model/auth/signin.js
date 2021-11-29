@@ -4,9 +4,9 @@ const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 
 const signin = async (email, password) => {
-  const user = await UserModel.findOne({ email })
+  const user = await UserModel.findOne({ email, verify: true })
   if (!user) {
-    throw new Unauthorized('Email or password is wrong')
+    throw new Unauthorized('Credentials are wrong or you didn*t verify your email')
   }
   const check = await bcrypt.compare(password, user.password)
   if (!check) throw new Unauthorized('Email or password is wrong')

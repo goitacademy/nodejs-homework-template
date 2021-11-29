@@ -5,16 +5,20 @@ const {
   Conflict
 } = require('http-errors')
 const gravatar = require('gravatar')
+const { nanoid } = require('nanoid')
 
 const signup = async (email, password) => {
+  const verificationToken = nanoid()
   const newUser = new UserModel({
     email,
     password,
-    avatarURL: gravatar.url(email)
+    avatarURL: gravatar.url(email),
+    verificationToken
   })
   const existenceCheck = await UserModel.findOne({
-    email
+    email, verify: false
   })
+
   if (!existenceCheck) {
     const user = await newUser.save()
     return user
