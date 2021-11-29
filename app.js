@@ -2,6 +2,9 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -9,9 +12,7 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-const DB_HOST =
-  "mongodb+srv://yuragms:8DMDjaeKyTh9NR8@cluster0.yg8ew.mongodb.net/phoneBook?retryWrites=true&w=majority";
-
+const { DB_HOST } = process.env;
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database connect"))
