@@ -3,6 +3,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
+
+// Можно require("dotenv").config() - заменить двумя строками ниже.
+// const dotenv = require("dotenv");
+// dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
 
