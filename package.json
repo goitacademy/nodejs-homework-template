@@ -11,15 +11,23 @@
   },
   "dependencies": {
     "-": "^0.0.1",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^10.0.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-json": "^3.1.0",
     "express": "4.17.1",
     "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
     "lowdb": "^3.0.0",
     "mongoose": "^6.0.12",
+    "mongoose-paginate-v2": "^1.4.2",
     "morgan": "1.10.0",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
