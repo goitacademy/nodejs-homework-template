@@ -1,3 +1,9 @@
+CqZwf42Y4J2bO4h3 password
+
+mongodb+srv://vuavso16:<password>@cluster0.14gce.mongodb.net/test
+
+mongodb+srv://vuavso16:CqZwf42Y4J2bO4h3@cluster0.14gce.mongodb.net/test
+
 ## GoIT Node.js Course Template Homework
 
 Выполните форк этого репозитория для выполнения домашних заданий (2-6)
