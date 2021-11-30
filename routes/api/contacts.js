@@ -42,7 +42,7 @@ router.patch(
 );
 router.patch(
   "/:contactId/users/avatars",
-  upload.any("avatar"),
+  upload.single("avatar"),
   authenticate,
   controllerWrapper(ctrl.updateAvatars)
 );
