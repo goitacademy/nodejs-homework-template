@@ -25,16 +25,16 @@ const loginUser = async (email, password) => {
 }
 const logoutUser = async (userId) => {
   const user = await User.findOne({ _id: userId })
-  if (Object.keys(user).length === 0) { return undefined }
+  if (Object.keys(user).length === 0 || user.token === null) { return undefined }
   await User.findByIdAndUpdate(user._id, { $set: { token: null } })
   return user
 }
 const currentUser = async (userId) => {
-  const { email, subscription } = await User.findOne({ _id: userId })
-  if (!email) { return undefined }
+  const user = await User.findOne({ _id: userId })
+  if (!user.email || user.token === null) { return undefined }
   const responseUser = {}
-  responseUser.email = email
-  responseUser.subscription = subscription
+  responseUser.email = user.email
+  responseUser.subscription = user.subscription
   return responseUser
 }
 

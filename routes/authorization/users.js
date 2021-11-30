@@ -33,7 +33,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/logout', authMiddleware, async (req, res, next) => {
   const { _id } = req.user
   const userLogout = await logoutUser(_id)
-  if (userLogout) {
+  if (userLogout !== undefined) {
     res.status(204)
     res.json('No content')
     return
@@ -45,7 +45,7 @@ router.post('/logout', authMiddleware, async (req, res, next) => {
 router.get('/current', authMiddleware, async (req, res, next) => {
   const { _id } = req.user
   const userCurrent = await currentUser(_id)
-  if (Object.keys(userCurrent).length !== 0) {
+  if (userCurrent !== undefined) {
     res.status(200)
     res.json(userCurrent)
     return
