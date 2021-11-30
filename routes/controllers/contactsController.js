@@ -1,100 +1,93 @@
-const createError = require('http-errors')
+const { Contact } = require("../../db/contactsModel");
+const createError = require("http-errors");
 
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../model/index.js')
+const getContactsController = async (req, res) => {
+  const contacts = await Contact.find({});
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result: contacts,
+    },
+  });
+};
 
-const getContactsController = async (req, res, next) => {
-  try {
-    const contacts = await listContacts()
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result: contacts,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+const getContactByIdController = async (req, res) => {
+  const id = req.params.contactId;
+  const result = await Contact.findById(id);
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result: result,
+    },
+  });
+};
 
-const getContactByIdController = async (req, res, next) => {
-  try {
-    const { contactId } = req.params
-    const contact = await getContactById(contactId)
+const addContactController = async (req, res) => {
+  const { name, email, phone, favorite } = req.body;
+  const contact = new Contact({ name, email, phone, favorite });
+  await contact.save();
+  res.status(201).json({
+    status: "success",
+    code: 201,
+    data: {
+      contact,
+    },
+  });
+};
 
-    if (!contact) {
-      throw createError(404, `Contact with id=${contactId} not found`)
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result: contact,
-      },
-    })
-  } catch (error) {
-    next(error)
+const deleteContactController = async (req, res) => {
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndDelete(id);
+  if (!result) {
+    throw createError(404, `Contact with id=${id} not found`);
   }
-}
-const addContactController = async (req, res, next) => {
-  try {
-    const body = req.body
-    const result = await addContact(body)
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-}
-const deleteContactController = async (req, res, next) => {
-  try {
-    const id = req.params.contactId
-    const result = await removeContact(id)
-    if (!result) {
-      throw createError(404, `Contact with id=${id} not found`)
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      message: 'Contact deleted',
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Contact deleted",
+    data: {
+      result,
+    },
+  });
+};
 
-const updateContactController = async (req, res, next) => {
-  try {
-    const id = req.params.contactId
-    const result = await updateContact(id, req.body)
-    if (!result) {
-      throw createError(404, `Contact with id=${id} not found`)
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    })
-  } catch (error) {
-    next(error)
+const updateContactController = async (req, res) => {
+  const { name, email, phone, favorite } = req.body;
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndUpdate(id, {
+    $set: { name, email, phone, favorite },
+  });
+
+  if (!result) {
+    throw createError(404, `Contact with id=${id} not found`);
   }
-}
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
+const updateFavoriteController = async (req, res) => {
+  const { favorite } = req.body;
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndUpdate(id, {
+    $set: { favorite },
+  });
+  if (!favorite) {
+    throw createError(404, "missing field favorite");
+  }
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
 
 module.exports = {
   getContactsController,
@@ -102,4 +95,5 @@ module.exports = {
   addContactController,
   deleteContactController,
   updateContactController,
-}
+  updateFavoriteController,
+};

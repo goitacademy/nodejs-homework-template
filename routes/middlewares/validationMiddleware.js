@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require("joi");
 
 module.exports = {
   contactValidator: (req, res, next) => {
@@ -10,11 +10,12 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().min(10).max(15).required(),
-    })
-    const validationResult = schema.validate(req.body)
+      favorite: Joi.boolean(),
+    });
+    const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details })
+      return res.status(400).json({ status: validationResult.error.details });
     }
-    next()
+    next();
   },
-}
+};
