@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { User } = require('../db/userModel')
+const {
+  ValidationError,
+} = require('../helpers/errors')
 
 const signupUser = async (email, password) => {
   const user = new User({ email, password })
@@ -12,7 +15,7 @@ const signupUser = async (email, password) => {
 const loginUser = async (email, password) => {
   const user = await User.findOne({ email })
   if (!user || !await bcrypt.compare(password, user.password)) {
-    throw new Error('Email or password is wrong')
+    throw new ValidationError('Email or password is wrong')
   }
   const token = jwt.sign({
     _id: user._id
