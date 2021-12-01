@@ -12,15 +12,6 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-const { DB_HOST } = process.env;
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connect"))
-  .catch((error) => {
-    console.log(error.message);
-    process.exit(1);
-  });
-
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
