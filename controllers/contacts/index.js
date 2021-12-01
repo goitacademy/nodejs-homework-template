@@ -4,7 +4,6 @@ const postContact = require('./post')
 const deleteContact = require('./deleteContact')
 const putContact = require('./putContact')
 const selectedContact = require('./selectedContact')
-const updateAvatars = require('./updateAvatars')
 
 module.exports = {
   getAll,
@@ -13,5 +12,4 @@ module.exports = {
   deleteContact,
   putContact,
   selectedContact,
-  updateAvatars,
 }
