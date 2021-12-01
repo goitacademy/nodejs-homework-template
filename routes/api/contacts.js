@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { validation, ctrlWrapper } = require('../../middlewares');
+const { validation, ctrlWrapper, authenticate } = require('../../middlewares');
 
 const {
   getAll,
@@ -11,11 +11,12 @@ const {
   updateStatusContact,
 } = require('../../controllers');
 
-const { schema, statusSchema } = require('../../model/contact');
+const { contact } = require('../../model');
+const { schema, statusSchema } = contact;
 
-router.get('/', ctrlWrapper(getAll));
+router.get('/', authenticate, ctrlWrapper(getAll));
 router.get('/:contactId', ctrlWrapper(getById));
-router.post('/', validation(schema), ctrlWrapper(updateContacts));
+router.post('/', authenticate, validation(schema), ctrlWrapper(updateContacts));
 router.put('/:contactId', validation(schema), ctrlWrapper(putById));
 router.patch('/:contactId/favorite', validation(statusSchema), ctrlWrapper(updateStatusContact));
 router.delete('/:contactId', ctrlWrapper(removeById));

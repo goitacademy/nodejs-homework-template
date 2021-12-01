@@ -1,6 +1,6 @@
 // const fs = require('fs/promises');
 // const filePath = require('./filePath');
-const {Contact} = require('../model/contact');
+const { Contact } = require('../model/contact');
 
 const getAll = async (_, res) => {
   try {

@@ -1,7 +1,9 @@
 const { Contact } = require('../model/contact');
 
 const updateContacts = async (req, res) => {
-  const result = await Contact.create(req.body);
+  console.log('-0-0-0-0-0', req.user);
+  const newContact = { ...req.body, owner: req.user._id };
+  const result = await Contact.create(newContact);
 
   res.status(201).json({
     status: 'success',
