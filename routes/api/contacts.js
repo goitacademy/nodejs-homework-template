@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { authMiddleware } = require('../../middlewares/authMiddleware')
 const Joi = require('joi')
 
 const schema = Joi.object(
@@ -19,15 +20,22 @@ const {
   updateFavoriteContact,
 } = require('../../model/index')
 
+router.use(authMiddleware)
 router.get('/', async (req, res, next) => {
-  const contacts = await listContacts()
-  res.status(200)
-  res.json(contacts)
+  try {
+    const { _id } = req.user
+    const contacts = await listContacts(_id)
+    res.status(200)
+    res.json(contacts)
+  } catch (error) {
+    res.json(error.message)
+  }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const id = req.params.contactId
-  const contact = await getContactById(id)
+  const contactId = req.params.contactId
+  const { _id } = req.user
+  const contact = await getContactById(contactId, _id)
   if (contact === void 0 || contact === null) {
     res.status(404)
     res.json({ message: 'Not found' })
@@ -39,8 +47,9 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { name, email, phone } = await schema.validateAsync(req.body)
+    const { _id } = req.user
     const newContact = { name, email, phone }
-    await addContact(newContact)
+    await addContact(newContact, _id)
     res.status(201)
     res.json(newContact)
   } catch (error) {
@@ -51,8 +60,9 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const id = req.params.contactId
-  const contact = await removeContact(id)
+  const contactId = req.params.contactId
+  const { _id } = req.user
+  const contact = await removeContact(contactId, _id)
   if (contact === void 0) {
     res.status(404)
     res.json({ message: 'Not found' })
@@ -63,8 +73,10 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
+    const { _id } = req.user
     const body = await schema.validateAsync(req.body)
-    const updatedContact = await updateContact(req.params.contactId, body)
+    const updatedContact = await updateContact(req.params.contactId, body, _id)
+    if (!updatedContact) { res.json({ message: 'Not found' }) }
     res.status(200)
     res.json(updatedContact)
   } catch (error) {
@@ -77,6 +89,7 @@ router.patch('/:contactId/favorite', async (req, res, next) => {
   try {
     await schema.validateAsync(req.body)
     const updatedContact = await updateFavoriteContact(req.params.contactId, req.body)
+    if (!updatedContact) { res.json({ message: 'Not found' }) }
     res.status(200)
     res.json(updatedContact)
   } catch (error) {
