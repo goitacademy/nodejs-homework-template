@@ -20,4 +20,8 @@ router.get('/logout', authenticate, controllerWrapper(ctrl.logout))
 
 router.get('/current', authenticate, controllerWrapper(ctrl.current))
 
+router.get('/verify/:verificationToken', controllerWrapper(ctrl.verify))
+
+router.post('/verify', controllerWrapper(ctrl.recheck))
+
 module.exports = router
