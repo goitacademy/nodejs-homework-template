@@ -28,7 +28,7 @@ const loginUser = async (email, password) => {
 }
 const logoutUser = async (userId) => {
   const user = await User.findOne({ _id: userId })
-  if (user === undefined || Object.keys(user).length === 0 || user.token === null) { return undefined }
+  if (user === undefined) { return undefined }
   await User.findByIdAndUpdate(user._id, { $set: { token: null } })
   return user
 }
