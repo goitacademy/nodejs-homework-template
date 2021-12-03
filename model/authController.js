@@ -4,9 +4,11 @@ const { User } = require('../db/userModel')
 const {
   ValidationError,
 } = require('../helpers/errors')
+const gravatar = require('gravatar')
 
 const signupUser = async (email, password) => {
-  const user = new User({ email, password })
+  const avatarURL = gravatar.url(email)
+  const user = new User({ email, password, avatarURL })
   await user.save()
   const responseUser = {}
   responseUser.user = user
@@ -41,6 +43,14 @@ const currentUser = async (userId) => {
   return responseUser
 }
 
+const addAvatar = async (_id, avatar) => {
+  const user = await User.findOne({ _id })
+  await User.findByIdAndUpdate(user._id, { $set: { avatarURL: avatar } })
+  const responseUser = {}
+  responseUser.avatar = avatar
+  return responseUser
+}
+
 // ошибки таймкод 1:34:00
 
 module.exports = {
@@ -48,4 +58,5 @@ module.exports = {
   loginUser,
   logoutUser,
   currentUser,
+  addAvatar,
 }

@@ -1,12 +1,18 @@
 const express = require('express')
 const { authMiddleware } = require('../../middlewares/authMiddleware')
+const fs = require('fs/promises')
+const path = require('path')
 const router = express.Router()
+const upload = require('../../middlewares/uploadMiddleware')
 const {
   signupUser,
   loginUser,
   logoutUser,
-  currentUser
+  currentUser,
+  addAvatar
 } = require('../../model/authController')
+
+const avatarDir = path.join(__dirname, '../../public/avatars')
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -52,6 +58,28 @@ router.get('/current', authMiddleware, async (req, res, next) => {
   }
   res.status(401)
   res.json('Not authorized')
+})
+
+router.patch('/avatars', authMiddleware, upload.single('avatar'), async (req, res, next) => {
+  const { _id } = req.user
+  if (req.file === undefined) {
+    res.status(401)
+    res.json('No any file')
+    return
+  }
+  const { path: tempUpload, originalname } = req.file
+  try {
+    const resultUpload = path.join(avatarDir, originalname)
+    await fs.rename(tempUpload, resultUpload)
+    const avatar = path.join('/avatars', originalname)
+    const newAvatar = await addAvatar(_id, avatar)
+    res.status(200)
+    res.json(newAvatar)
+    return
+  } catch (error) {
+    res.status(401)
+    res.json(error)
+  }
 })
 
 module.exports = router

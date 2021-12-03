@@ -19,8 +19,16 @@ class TokenError extends ValidationError {
     this.status = 401
   }
 }
+
+class FileError extends ValidationError {
+  constructor(message) {
+    super(message)
+    this.status = 401
+  }
+}
 module.exports = {
   ValidationError,
   NotAuthorizedError,
-  TokenError
+  TokenError,
+  FileError
 }
