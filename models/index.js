@@ -6,8 +6,13 @@ const {
   statusContactJoiSchema,
 } = require("./contact");
 
+const { User, userRegisterJoiSchema, userLoginJoiSchema } = require("./user");
+
 module.exports = {
   Contact,
   contactJoiSchema,
   statusContactJoiSchema,
+  User,
+  userRegisterJoiSchema,
+  userLoginJoiSchema,
 };

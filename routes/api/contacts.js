@@ -1,11 +1,12 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
 const express = require("express");
-const router = express.Router();
+
 const { validation, ctrlWrapper } = require("../../middlewares");
 const { contactJoiSchema, statusContactJoiSchema } = require("../../models");
-
 const { contacts: ctrl } = require("../../controllers");
+
+const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.listContacts));
 
