@@ -1,5 +1,5 @@
 const { HTTP404Error } = require("../../helpers/errorHandlers");
-const { updateContact } = require("../../services");
+const { updateContact } = require("../../services/contacts");
 
 const putContact = async (req, res) => {
   const { contactId } = req.params;
