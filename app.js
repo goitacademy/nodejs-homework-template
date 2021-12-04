@@ -1,6 +1,10 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -25,3 +29,5 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+// mongodb+srv://yuragms:<8DMDjaeKyTh9NR8>@cluster0.yg8ew.mongodb.net/test
