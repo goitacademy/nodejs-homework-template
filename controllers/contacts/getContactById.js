@@ -1,5 +1,5 @@
 const { HTTP400Error } = require("../../helpers/errorHandlers");
-const { getContactById } = require("../../services");
+const { getContactById } = require("../../services/contacts");
 
 const getContactByIdHandler = async (req, res) => {
   const { contactId } = req.params;

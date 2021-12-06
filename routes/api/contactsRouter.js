@@ -1,17 +1,24 @@
+const express = require("express");
 const {
   conatctBodyValidation,
   favoriteValidation,
-} = require("../../middlewares/validation");
-const express = require("express");
-const router = express.Router();
+} = require("../../middlewares/contactsValidation");
+const { tokenValidation } = require("../../middlewares/auth");
 const { contacts: ctrl } = require("../../controllers");
 const ctrlWrapper = require("../../middlewares/ctrtWrapper");
 
-router.get("/", ctrlWrapper(ctrl.getContactsList));
+const router = express.Router();
+
+router.get("/", tokenValidation, ctrlWrapper(ctrl.getContactsList));
 
 router.get("/:contactId", ctrlWrapper(ctrl.getContactByIdHandler));
 
-router.post("/", conatctBodyValidation, ctrlWrapper(ctrl.postContact));
+router.post(
+  "/",
+  tokenValidation,
+  conatctBodyValidation,
+  ctrlWrapper(ctrl.postContact)
+);
 
 router.delete("/:contactId", ctrlWrapper(ctrl.deleteContact));
 

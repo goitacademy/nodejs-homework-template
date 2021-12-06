@@ -1,5 +1,5 @@
 const { HTTP404Error } = require("../../helpers/errorHandlers");
-const { removeContact } = require("../../services");
+const { removeContact } = require("../../services/contacts");
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;

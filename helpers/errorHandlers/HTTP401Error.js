@@ -1,14 +1,14 @@
 const httpStatusCode = require("./httpStatusCode");
 const BaseError = require("./baseError");
 
-class HTTP400Error extends BaseError {
+class HTTP401Error extends BaseError {
   constructor(
     name,
-    statusCode = httpStatusCode.BAD_REQUEST,
-    description = "Bad Request"
+    statusCode = httpStatusCode.UNAUTHORIZED,
+    description = "Unauthorized"
   ) {
     super(name, statusCode, description);
   }
 }
 
-module.exports = HTTP400Error;
+module.exports = HTTP401Error;

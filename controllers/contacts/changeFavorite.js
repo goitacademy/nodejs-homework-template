@@ -1,5 +1,5 @@
 const { HTTP404Error } = require("../../helpers/errorHandlers");
-const { updateFavorite } = require("../../services");
+const { updateFavorite } = require("../../services/contacts");
 
 const changeFavorite = async (req, res) => {
   const { contactId } = req.params;
