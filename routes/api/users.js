@@ -8,7 +8,7 @@ const { users: ctrl } = require('../../controllers');
 const router = express.Router();
 
 router.post('/signup', validation(joiSignupSchema), ctrlWrapper(ctrl.signup));
-router.get('/login');
+router.post('/login', validation(joiLoginSchema), ctrlWrapper(ctrl.login));
 router.get('/logout');
 router.get('/current');
 

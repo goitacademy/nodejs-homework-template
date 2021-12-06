@@ -12,7 +12,6 @@ const signup = async (req, res) => {
   }
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  console.log(hashPassword);
   const user = await User.create({ name, email, password: hashPassword });
 
   res.status(201).json({
