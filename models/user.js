@@ -7,7 +7,7 @@ const userSchema = Schema(
       type: String,
       required: true,
       minLength: 6,
-      maxlength: 255,
+      // maxlength: 255,
     },
     name: {
       type: String,
