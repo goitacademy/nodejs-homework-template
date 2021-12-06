@@ -8,7 +8,6 @@ const userSchema = Schema(
       type: String,
       required: true,
       minLength: 6,
-      // maxlength: 255,
     },
     name: {
       type: String,
@@ -24,9 +23,14 @@ const userSchema = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
-    token: {
-      type: String,
-      default: null,
+    //  token: {
+    //    type: String,
+    //    default: null,
+    //  },
+
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
     },
   },
   { versionKey: false, timestamps: true },
