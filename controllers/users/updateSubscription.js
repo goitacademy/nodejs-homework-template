@@ -1,5 +1,5 @@
 const { User } = require('../../models');
-var { NotFound } = require('http-errors');
+const { NotFound } = require('http-errors');
 
 const updateSubscription = async (req, res) => {
   const { userId } = req.params;

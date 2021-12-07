@@ -1,14 +1,13 @@
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
+const { Conflict } = require('http-errors');
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   const userFind = await User.findOne({ email });
 
   if (userFind) {
-    const error = new Error(`Email ${email} in use`);
-    error.status = 409;
-    throw error;
+    throw new Conflict(`Email ${email} in use`);
   }
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
