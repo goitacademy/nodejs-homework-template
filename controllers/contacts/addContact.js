@@ -1,8 +1,8 @@
+const { Contact } = require('../../models')
 const { NotFound } = require('http-errors')
-const contactsOperations = require('../../model/contacts')
 
 const addContact = async (req, res) => {
-  const result = contactsOperations.addContact(req.body)
+  const result = await Contact.create(req.body)
   if (!result) {
     throw new NotFound('missing required name field')
   }
