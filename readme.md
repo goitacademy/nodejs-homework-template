@@ -37,3 +37,6 @@
   oge9E2lqL0tCvPJa
 
 mongodb+srv://Wences81:oge9E2lqL0tCvPJa@cluster0.bcrsh.mongodb.net/test
+
+const DB_HOST =
+mongodb+srv://Wences81:oge9E2lqL0tCvPJa@cluster0.bcrsh.mongodb.net/phone_book?retryWrites=true&w=majority
