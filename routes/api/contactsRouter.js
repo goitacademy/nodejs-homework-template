@@ -4,9 +4,8 @@ const {
   favoriteValidation,
 } = require("../../middlewares/contactsValidation");
 const { tokenValidation } = require("../../middlewares/auth");
-const { contacts: ctrl } = require("../../controllers");
 const ctrlWrapper = require("../../middlewares/ctrtWrapper");
-const Contacts = require("../../classControllers/contacts/Contacts");
+const Contacts = require("../../classControllers/Contacts");
 const contacts = new Contacts();
 
 const router = express.Router();
@@ -33,7 +32,7 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   favoriteValidation,
-  ctrlWrapper(ctrl.changeFavorite)
+  ctrlWrapper(contacts.changeFavorite)
 );
 
 module.exports = router;

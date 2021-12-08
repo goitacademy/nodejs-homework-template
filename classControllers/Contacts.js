@@ -1,11 +1,12 @@
-const { HTTP400Error, HTTP404Error } = require("../../helpers/errorHandlers");
+const { HTTP400Error, HTTP404Error } = require("../helpers/errorHandlers");
 const {
   listContacts,
   getContactsByQuery,
   addContact,
   updateContact,
   removeContact,
-} = require("../../services/contacts");
+  updateFavorite,
+} = require("../services/contacts");
 
 class Contacts {
   async getContactsList(req, res) {
@@ -13,10 +14,17 @@ class Contacts {
       const result = await getContactsByQuery("favorite");
       return res.json({ data: result, status: "success", code: 200 });
     }
-    const { page, limit } = req.query;
-    const skip = (page - 1) * limit;
-    const { _id } = req.user;
-    const result = await listContacts(_id, skip, limit);
+
+    if (req.query.page) {
+      const { page, limit } = req.query;
+      const skip = (page - 1) * limit;
+      const { _id } = req.user;
+      const result = await listContactsPerPage(_id, skip, limit);
+
+      return res.json({ data: result, status: "success", code: 200 });
+    }
+
+    const result = await listContacts();
 
     return res.json({ data: result, status: "success", code: 200 });
   }
@@ -78,6 +86,17 @@ class Contacts {
       status: "success",
       code: 200,
     });
+  }
+
+  async changeFavorite(req, res) {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+
+    const result = await updateFavorite(contactId, { favorite });
+    if (!result) {
+      throw new HTTP404Error(`There is no such contact with id: ${contactId}`);
+    }
+    return res.json({ data: result, status: "success", code: 200 });
   }
 }
 
