@@ -15,12 +15,16 @@ const { Contact } = require("../../model");
 
 const listContacts = async (req, res) => {
   const { _id } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner: _id }, "", {
+  let filter = { owner: _id };
+  if (favorite) {
+    filter = { owner: _id, favorite };
+  }
+  const result = await Contact.find(filter, "", {
     skip,
     limit: Number(limit),
-  });
+  }).populate("owner", "id email");
   res.json({
     status: "success",
     code: 200,
