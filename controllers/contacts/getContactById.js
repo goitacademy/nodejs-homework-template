@@ -12,7 +12,7 @@ const getContactById = async (req, res) => {
   res.json({
     status: 'success',
     code: 200,
-    message: 'сontant uploaded',
+    message: 'сontact loaded',
     data: {
       contact,
     },

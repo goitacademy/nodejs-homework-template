@@ -1,10 +1,17 @@
 const { Contact } = require('../../models');
+const { BadRequest } = require('http-errors');
 
 const listContacts = async (req, res) => {
   const { _id } = req.user;
 
   const { page = 1, limit = 10, favorite = null } = req.query;
   const skip = (page - 1) * limit;
+
+  const reg = new RegExp(/^[0-9]*$/);
+
+  if (reg.test(page) === false || reg.test(limit) === false) {
+    throw new BadRequest(`page and limit - not a bad type, there should only be numbers`);
+  }
 
   if (favorite === null) {
     contacts = await Contact.find({ owner: _id }, '', {
@@ -19,12 +26,13 @@ const listContacts = async (req, res) => {
       skip,
       limit: Number(limit),
     }).populate('owner', '_id name email subscription');
+    totalPage = contacts.length;
   }
 
   res.json({
     status: 'success',
     code: 200,
-    message: 'Contants uploaded',
+    message: 'сontants uploaded',
     data: {
       contacts,
       page: Number(page),

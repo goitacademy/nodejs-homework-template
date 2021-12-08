@@ -6,7 +6,7 @@ const addContact = async (req, res) => {
   res.status(201).json({
     status: 'success',
     code: 201,
-    message: 'contancts uploaded',
+    message: 'contact added',
     data: {
       contact,
     },
