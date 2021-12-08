@@ -1,5 +1,3 @@
-const contactsOperation = require('../../model');
-
 const getAll = async (_, res) => {
   const contacts = await contactsOperation.listContacts();
   if (!contacts) {
