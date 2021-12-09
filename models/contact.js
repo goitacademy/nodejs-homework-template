@@ -27,6 +27,7 @@ const joiSchemaAdd = Joi.object({
   name: Joi.string().alphanum().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().regex(phoneRegex).required(),
+  favorite: Joi.boolean(),
 });
 
 const joiSchemaUpdate = Joi.object({
@@ -35,10 +36,15 @@ const joiSchemaUpdate = Joi.object({
   phone: Joi.string().regex(phoneRegex).optional(),
 }).or('name', 'email', 'phone');
 
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const Contact = model('contact', contactSchema);
 
 module.exports = {
   Contact,
   joiSchemaAdd,
   joiSchemaUpdate,
+  favoriteJoiSchema,
 };
