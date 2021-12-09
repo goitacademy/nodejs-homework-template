@@ -7,12 +7,12 @@ const { joiSchemaAdd, joiSchemaUpdate } = require('../../models/contact');
 
 router.get('/', ctrlWrapper(ctrl.getAll));
 
-// router.get('/:contactId', ctrlWrapper(ctrl.getById));
+router.get('/:contactId', ctrlWrapper(ctrl.getById));
 
-// router.post('/', validation(joiSchemaAdd), ctrlWrapper(ctrl.add));
+router.post('/', validation(joiSchemaAdd), ctrlWrapper(ctrl.add));
 
-// router.delete('/:contactId', ctrlWrapper(ctrl.removeById));
+router.delete('/:contactId', ctrlWrapper(ctrl.removeById));
 
-// router.put('/:contactId', validation(joiSchemaUpdate), ctrlWrapper(ctrl.updateById));
+router.put('/:contactId', validation(joiSchemaUpdate), ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
