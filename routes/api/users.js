@@ -12,7 +12,7 @@ router.post('/login', validation(joiLoginSchema), ctrlWrapper(ctrl.login));
 router.get('/logout', userCurrent, ctrlWrapper(ctrl.logout));
 router.get('/current', userCurrent, ctrlWrapper(ctrl.getCurrent));
 router.patch(
-  '/:userId',
+  '/',
   userCurrent,
   validation(joiSubscriptionSchema),
   ctrlWrapper(ctrl.updateSubscription),
