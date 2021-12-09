@@ -1,12 +1,8 @@
-const {
-    getContactById
-  } = require("../../model/contacts/index");
-
-
-const getById = async (req, res, next) => {
+const delelteContact = async (req, res, next) => {
     try { 
       const {contactId} = req.params
-      const result = await getContactById(contactId)
+      const result = await removeContact(contactId)
+  
       if (!result) {
         const error = new Error (`contact with ${contactId} not found`)
         error.status = 404;
@@ -23,6 +19,6 @@ const getById = async (req, res, next) => {
      } catch (error) {
           next(error)
      }
-    }
+  }
 
-    module.exports = getById
+  module.exports = delelteContact
