@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const createError = require('http-errors')
 
 const connectMongo = async () => {
   try {
@@ -9,7 +8,7 @@ const connectMongo = async () => {
     })
     console.log('Database connection successful')
   } catch (error) {
-    createError(error)
+    console.log(error.message)
     process.exit(1)
   }
 }

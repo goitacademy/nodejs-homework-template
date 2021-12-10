@@ -1,8 +1,17 @@
-const { Contact } = require('../../db/contactsModel')
-const createError = require('http-errors')
+const {
+  getContacts,
+  addContact,
+  deleteContact,
+  getById,
+  updateContact,
+  patchFavorite,
+} = require('../services/contactsServices')
 
 const getContactsController = async (req, res) => {
-  const contacts = await Contact.find({})
+  const { id: owner } = req.user
+  const { page = 1, limit = 10 } = req.query
+  const skip = (Number(page) - 1) * Number(limit)
+  const contacts = await getContacts(owner, skip, Number(limit))
   res.json({
     status: 'success',
     code: 200,
@@ -13,11 +22,9 @@ const getContactsController = async (req, res) => {
 }
 
 const getContactByIdController = async (req, res) => {
-  const id = req.params.contactId
-  const result = await Contact.findById(id)
-  if (!result) {
-    throw createError(404, `Contact with id=${id} not found`)
-  }
+  const { contactId } = req.params
+  const { id: owner } = req.user
+  const result = await getById(contactId, owner)
   res.json({
     status: 'success',
     code: 200,
@@ -28,12 +35,11 @@ const getContactByIdController = async (req, res) => {
 }
 
 const addContactController = async (req, res) => {
+  const { id: owner } = req.user
   const { name, email, phone, favorite } = req.body
-  const contact = new Contact({ name, email, phone, favorite })
-  await contact.save()
+  const contact = await addContact({ name, email, phone, favorite }, owner)
   res.status(201).json({
     status: 'success',
-    code: 201,
     data: {
       contact,
     },
@@ -41,11 +47,9 @@ const addContactController = async (req, res) => {
 }
 
 const deleteContactController = async (req, res) => {
-  const id = req.params.contactId
-  const result = await Contact.findByIdAndDelete(id)
-  if (!result) {
-    throw createError(404, `Contact with id=${id} not found`)
-  }
+  const { contactId } = req.params
+  const { id: owner } = req.user
+  const result = await deleteContact(contactId, owner)
   res.json({
     status: 'success',
     code: 200,
@@ -57,15 +61,19 @@ const deleteContactController = async (req, res) => {
 }
 
 const updateContactController = async (req, res) => {
+  const { contactId } = req.params
+  const { id: owner } = req.user
   const { name, email, phone, favorite } = req.body
-  const id = req.params.contactId
-  const result = await Contact.findByIdAndUpdate(id, {
-    $set: { name, email, phone, favorite },
-  })
-
-  if (!result) {
-    throw createError(404, `Contact with id=${id} not found`)
-  }
+  const result = await updateContact(
+    contactId,
+    {
+      name,
+      email,
+      phone,
+      favorite,
+    },
+    owner
+  )
   res.json({
     status: 'success',
     code: 200,
@@ -76,16 +84,9 @@ const updateContactController = async (req, res) => {
 }
 const updateFavoriteController = async (req, res) => {
   const { favorite } = req.body
-  const id = req.params.contactId
-  const result = await Contact.findByIdAndUpdate(id, {
-    $set: { favorite },
-  })
-  if (!result) {
-    throw createError(404, `Contact with id=${id} not found`)
-  }
-  if (!favorite) {
-    throw createError(404, 'missing field favorite')
-  }
+  const { contactId } = req.params
+  const { id: owner } = req.user
+  const result = await patchFavorite(contactId, favorite, owner)
   res.json({
     status: 'success',
     code: 200,

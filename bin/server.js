@@ -11,7 +11,6 @@ const start = async () => {
       console.log(`Server running. Use our API on port: ${PORT}`)
     })
   } catch (error) {
-    console.log('server crushed')
     console.log(error.message)
   }
 }
