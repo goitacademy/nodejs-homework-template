@@ -34,6 +34,7 @@ const login = async (req, res) => {
     status: "success",
     code: 201,
     data: {
+      email,
       token,
     },
   });
