@@ -1,19 +1,20 @@
 const { Contact } = require('../../models');
+const { NotFound } = require('http-errors');
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findById(contactId);
+  const { _id: userId } = req.user;
 
-  if (!contact) {
-    const error = new Error(`Contact with Id=${contactId} not found`);
-    error.status = 404;
-    throw error;
+  const contact = await Contact.findOne({ _id: contactId, owner: userId });
+
+  if (!contact || contact === []) {
+    throw new NotFound(`contact with ID=${contactId} not found`);
   }
 
   res.json({
     status: 'success',
     code: 200,
-    message: 'Contant uploaded',
+    message: 'сontact loaded',
     data: {
       contact,
     },
