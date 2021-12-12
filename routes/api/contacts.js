@@ -8,14 +8,15 @@ const controllerContacts = require("../../controller/contacts");
 
 const { joiSchema, statusJoiSchema } = require("../../model");
 
-const { controlWrapper, validation } = require("../../middlewares");
+const { controlWrapper, validation, auth } = require("../../middlewares");
 
-router.get("/", controlWrapper(controllerContacts.listContacts));
+router.get("/", auth, controlWrapper(controllerContacts.listContacts));
 
 router.get("/:contactId", controlWrapper(controllerContacts.getContactById));
 
 router.post(
   "/",
+  auth,
   validation(joiSchema),
   controlWrapper(controllerContacts.addContact)
 );
