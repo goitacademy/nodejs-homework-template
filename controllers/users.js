@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
+const fs = require("fs").promises;
+const UploadService = require("../services/cloud-upload");
 const { StatusCode, Subscription } = require("../config/constants");
 require("dotenv").config();
 
@@ -35,6 +37,7 @@ const signup = async (req, res, next) => {
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatarURL,
       },
     });
   } catch (error) {
@@ -45,7 +48,6 @@ const signup = async (req, res, next) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findByEmail(email);
-  // const isValidPassword = await user?.isValidPassword(password);
   const isValidPassword =
     (await user) === null || (await user) === undefined
       ? undefined
@@ -80,7 +82,7 @@ const logout = async (req, res) => {
 const currentUser = async (req, res, next) => {
   try {
     // const id = req.user._id;
-    const {_id:id, name, email, subscription } = req.user;
+    const { _id:id, name, email, subscription } = req.user;
     return res.status(OK).json({
       status: "success",
       code: OK,
@@ -152,6 +154,34 @@ const onlyBusiness = async (_req, res) => {
   });
 };
 
+
+
+const uploadAvatar = async (req, res, _next) => {
+  const { id, idUserCloud } = req.user;
+  const file = req.file;
+
+  const destination = "Avatars";
+  const uploadService = new UploadService(destination);
+  const { avatarUrl, returnIdUserCloud } = await uploadService.save(
+    file.path,
+    idUserCloud
+  );
+
+  await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
+  try {
+    await fs.unlink(file.path);
+  } catch (error) {
+    console.log(error.message);
+  }
+  return res.status(OK).json({
+    status: "success",
+    code: OK,
+    data: {
+      avatar: avatarUrl,
+    },
+  });
+};
+
 module.exports = {
   signup,
   login,
@@ -161,4 +191,5 @@ module.exports = {
   onlyStarter,
   onlyPro,
   onlyBusiness,
+  uploadAvatar,
 };
