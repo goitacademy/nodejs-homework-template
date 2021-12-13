@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('joi')
 
 const schemaContact = Joi.object({
     name: Joi.string().min(1).max(20).required(),
