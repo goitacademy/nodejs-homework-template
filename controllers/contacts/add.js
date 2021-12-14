@@ -1,8 +1,9 @@
 const contactsOperation = require('../../model/contacts');
-const contactSchema = require('../../schemas');
+// const { Contact } = require('../../models');
+const joiSchema = require('../../models/contact');
 
 const add = async (req, res) => {
-  const { error } = contactSchema.validate(req.body);
+  const { error } = joiSchema.validate(req.body);
   if (error) {
     error.status = 400;
     throw error;
