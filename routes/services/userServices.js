@@ -2,15 +2,21 @@ const { User } = require('../../db/userModel')
 const { Conflict, Unauthorized, NotFound } = require('http-errors')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
+const fs = require('fs').promises
+const path = require('path')
+const Jimp = require('jimp')
 
 const registration = async (email, password) => {
   const userExist = await User.findOne({ email })
+  const avatarURL = gravatar.url(email)
   if (userExist) {
     throw new Conflict(`User with email ${email} is already exist`)
   }
   const user = new User({
     email,
     password,
+    avatarURL,
   })
   await user.save()
 }
@@ -52,6 +58,28 @@ const updateSubscription = async (id, subscription) => {
   return result
 }
 
+const updateAvatar = async (id, tempUpload, originalname) => {
+  const newName = `${id}_${originalname}`
+  try {
+    const resultUpload = path.join(
+      __dirname,
+      '../../',
+      'public',
+      'avatars',
+      newName
+    )
+    const file = await Jimp.read(tempUpload)
+    await file.resize(250, 250).write(tempUpload)
+    await fs.rename(tempUpload, resultUpload)
+    const avatarURL = path.join('public', 'avatars', newName)
+    const result = await User.findByIdAndUpdate(id, { avatarURL })
+    return result
+  } catch (error) {
+    await fs.unlink(tempUpload)
+    console.log(error.message)
+  }
+}
+
 module.exports = {
   registration,
   login,
@@ -59,4 +87,5 @@ module.exports = {
   logout,
   addToken,
   updateSubscription,
+  updateAvatar,
 }

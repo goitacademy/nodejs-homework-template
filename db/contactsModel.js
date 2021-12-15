@@ -20,6 +20,7 @@ const contactSchema = new Schema({
     ref: 'user',
   },
 })
+
 const Contact = model('Contact', contactSchema)
 module.exports = {
   Contact,
