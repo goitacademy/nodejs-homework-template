@@ -1,5 +1,6 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaTypes } = require('mongoose');
 const Joi = require('joi');
+
 const contactSchema = Schema(
   {
     name: {
@@ -15,6 +16,10 @@ const contactSchema = Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
     },
   },
   { versionKey: false, timestamps: true },
@@ -32,6 +37,7 @@ const joiSchema = Joi.object({
 const favoriteJoiSchema = Joi.object({
   favorite: Joi.boolean(),
 });
+
 const Contact = model('contact', contactSchema);
 
 module.exports = {
