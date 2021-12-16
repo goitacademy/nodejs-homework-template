@@ -1,17 +1,11 @@
-const mongoose = require("mongoose")
+
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require("dotenv").config()
 
-const DB_HOST = "mongodb+srv://Sasha:q1w2e3r4@cluster0.mqilp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-mongoose.connect(DB_HOST)
-  .then(()=> console.log("Database connection successful"))
-  .catch(error => {
-  console.log(error.message)
-  process.exit(1)
-}
-  );
 
 
 const contactsRouter = require('./routes/api/contacts')
