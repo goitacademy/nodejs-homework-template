@@ -5,6 +5,7 @@ const {
   auth,
   upload,
   validation,
+  sizeChangerImage,
 } = require("../../middlewares");
 const { users: controllerContacts } = require("../../controller");
 const { subscriptionJoiSchema } = require("../../model");
@@ -22,6 +23,7 @@ router.patch(
   "/avatars",
   auth,
   upload.single("avatar"),
+  sizeChangerImage,
   controlWrapper(controllerContacts.updateAvatar)
 );
 
