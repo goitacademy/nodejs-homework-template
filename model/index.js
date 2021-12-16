@@ -18,8 +18,6 @@ const getContactById = async contactId => {
   return orderContact;
 };
 
-const removeContact = async contactId => {};
-
 const addContact = async body => {
   const contactsList = await listContacts();
 
@@ -34,6 +32,8 @@ const addContact = async body => {
 
   return add;
 };
+
+const removeContact = async contactId => {};
 
 const updateContact = async (contactId, body) => {};
 
