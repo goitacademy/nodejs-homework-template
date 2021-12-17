@@ -1,3 +1,4 @@
+/* eslint-disable */
 const fs = require('fs/promises');
 const path = require('path');
 
@@ -33,14 +34,41 @@ const addContact = async body => {
   return add;
 };
 
-const removeContact = async contactId => {};
+const removeContact = async contactId => {
+  const contactsList = await listContacts();
+  const contactIndex = contactsList.findIndex(
+    ({ id }) => id === Number(contactId),
+  );
 
-const updateContact = async (contactId, body) => {};
+  if (contactIndex === -1) {
+    return null;
+  }
+
+  const deleteContact = await contactsList.splice(contactIndex, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contactsList));
+
+  return deleteContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contactsList = await listContacts();
+  const contactIndex = contactsList.findIndex(
+    ({ id }) => id === Number(contactId),
+  );
+
+  if (contactIndex === -1) {
+    return null;
+  }
+
+  contactsList[contactIndex] = { ...contactsList[contactIndex], ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(contactsList));
+  return contactsList[contactIndex];
+};
 
 module.exports = {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 };

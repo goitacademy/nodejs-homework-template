@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Joi = require('joi');
 
 const contactsSchema = Joi.object({
