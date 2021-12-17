@@ -58,13 +58,13 @@ const updateContact = async (contactId, body) => {
   try {
     const index = contacts.findIndex((contact) => contact.id === contactId);
     if (index !== -1) {
-      const updateContact = { id: contactId, ...body };
-      const [index] = updateContact;
+      const updatedContact = { id: contactId, ...contacts[index], ...body };
+      contacts[index] = updatedContact;
       await fs.writeFile(
         path.join(__dirname, "contacts.json"),
         JSON.stringify(contacts, null, 2)
       );
-      return result;
+      return updatedContact;
     }
     return null;
   } catch (error) {
