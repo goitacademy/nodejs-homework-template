@@ -2,7 +2,6 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import contactsRouter from "./routes/api/contacts";
-// import "./model/controllers";
 
 const app = express();
 
