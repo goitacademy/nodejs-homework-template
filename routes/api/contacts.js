@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateCreate, validateUpdate, validateId } from "./validation";
+import { validateAdd, validateUpdate, validateId } from "./validation";
 import operations from "../../model/controllers/operations";
 const router = new Router();
 
@@ -17,7 +17,7 @@ router.get("/:id", validateId, async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-router.post("/", validateCreate, async (req, res, next) => {
+router.post("/", validateAdd, async (req, res, next) => {
   const createContact = await operations.addContact(req.body);
   res.status(201).json(createContact);
 });
