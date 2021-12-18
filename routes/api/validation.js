@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const createSchema = Joi.object({
     name: Joi.string().required(),
@@ -34,6 +34,9 @@ export const validateUpdate = async (req, res, next) =>{
         if (type === 'object.unknown'){
             return res.status(400).json({message: err.message})
         }
+        if (type === "object.missing") {
+            return res.status(400).json({ message: err.message.replace(/"/g, "") });
+          }
         return res
         .status(400)
         .json({message: `missing fields` })
