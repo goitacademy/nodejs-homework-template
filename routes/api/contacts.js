@@ -55,7 +55,7 @@ router.delete('/:contactId', validateId, async (req, res, next) => {
 });
 
 router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'NODE HW-02 DONE' });
+  res.json({ message: 'home work node 02' });
 });
 
 module.exports = router;
