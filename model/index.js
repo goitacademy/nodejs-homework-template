@@ -44,7 +44,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (name, email, phone) => {
   try {
-    const newObj = { id: v4(), name, email, phone };
+    const newObj = { id: v4(), ...name, ...email, ...phone };
     const list = await listContacts();
     const newList = [...list, newObj];
     await updateContacts(newList);
