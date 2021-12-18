@@ -1,24 +1,51 @@
-const express = require('express')
-const router = express.Router()
+import express from "express";
+import {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} from "../../model/components/index";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { validationCreate, validationUpdate, validationId } from "./validation";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (_req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json(contacts);
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", validationId, async (req, res, next) => {
+  const { id } = req.params;
+  const contact = await getContactById(id);
+  if (contact) {
+    return res.status(200).json(contact);
+  }
+  res.status(404).json({ message: "Not found" });
+});
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validationCreate, async (req, res, next) => {
+  const newContact = await addContact(req.body);
+  res.status(201).json(newContact);
+});
 
-module.exports = router
+router.delete("/:id", validationId, async (req, res, next) => {
+  const { id } = req.params;
+  const contact = await removeContact(id);
+  if (contact) {
+    return res.status(200).json({ message: "contact deleted" });
+  }
+  res.status(404).json({ message: "Not found" });
+});
+
+router.patch("/:id", validationId, validationUpdate, async (req, res, next) => {
+  const { id } = req.params;
+  const contact = await updateContact(id, req.body);
+  if (contact) {
+    return res.status(200).json(contact);
+  }
+  res.status(404).json({ message: "Not found" });
+});
+
+export default router;
