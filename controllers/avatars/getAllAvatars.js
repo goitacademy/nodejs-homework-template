@@ -1,11 +1,11 @@
-// const { User } = require('../../models');
-const path = require('path');
 const fs = require('fs/promises');
+const path = require('path');
 
-// const avatarsDir = path.join(__dirname, '../../publik/avatars');
+const getAllAvatars = async (req, res) => {
+  const avatar = req.params;
 
-const uploadAvatars = async (req, res) => {
-  //   const { _id } = req.user;
+  const avatarsDir = path.join(__dirname, '../../publik/avatars');
+
   //   const { path: tempUpload, originalname } = req.file;
   //   const resultUploaded = path.join(avatarsDir, originalname);
   //   try {
@@ -17,7 +17,13 @@ const uploadAvatars = async (req, res) => {
   //     });
   //   } catch (error) {
   //     await fs.unlink(tempUpload);
+
+  fs.readFile('publik/avatars', function (err, data) {
+    if (err) throw err;
+    res.write(data);
+  });
   //   }
+  //   res.status(201).json(avatarsDir, avatar);
 };
 
-module.exports = uploadAvatars;
+module.exports = getAllAvatars;

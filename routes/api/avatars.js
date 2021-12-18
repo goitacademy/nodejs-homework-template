@@ -1,10 +1,11 @@
 const express = require('express');
 
 const { userCurrent, uploadAvatar } = require('../../middlewares');
-const { uploadAvatars: ctrl } = require('../../controllers');
+const { avatars: ctrl } = require('../../controllers');
 
 const router = express.Router();
 
-router.post('/', userCurrent, uploadAvatar.single('image'), ctrl.uploadAvatars);
+router.post('/', userCurrent, uploadAvatar.single('avatar'), ctrl.uploadAvatars);
+// router.get('/:avatar', ctrl.getAllAvatars);
 
 module.exports = router;
