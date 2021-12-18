@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'homework done' })
+  res.json({ message: 'Home work #2 done' })
 })
 
 router.get('/:contactId', async (req, res, next) => {
