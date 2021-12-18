@@ -4,6 +4,12 @@ const Joi = require("joi");
 const { NotFound, BadRequest } = require("http-errors");
 const contactsOperations = require("../../model/index");
 
+const joiSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const products = await contactsOperations.listContacts();
@@ -11,12 +17,6 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
-});
-
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
 });
 
 router.get("/:contactId", async (req, res, next) => {
@@ -37,12 +37,12 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body);
     if (error) {
-      throw new BadRequest(error.message);
+      throw new Error();
     }
     const newCcontact = await contactsOperations.addContact(req.body);
     res.status(201).json(newCcontact);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: "missing required name field" });
   }
 });
 
@@ -64,7 +64,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body);
     if (error) {
-      throw new BadRequest(error.message);
+      return res.status(400).json({ message: "missing fields" });
     }
     const { contactId } = req.params;
 
