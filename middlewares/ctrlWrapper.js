@@ -3,8 +3,7 @@ const ctrlWrapper = (ctrl) => {
     try {
       await ctrl(req, res, next);
     } catch (error) {
-      console.log(error.status);
-      if (error.message.includes("Contact with")) {
+      if (error.message.includes("NO.")) {
         error.status = 404;
       }
       next(error);
