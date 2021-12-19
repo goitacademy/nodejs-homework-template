@@ -1,62 +1,27 @@
 [
-  {
-    "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
-    "id": "2",
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
-  },
-  {
-    "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  {
-    "id": "4",
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
-  },
-  {
-    "id": "5",
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
-  },
-  {
-    "id": "6",
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
-    "id": "7",
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
-  },
-  {
-    "id": "8",
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
-  },
-  {
-    "id": "9",
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
+  { "id": "1", "name": "Allen Raymond", "email": "nulla.ante@vestibul.co.uk", "phone": "(992) 914-3792" },
+  { "id": "2", "name": "Chaim Lewis", "email": "dui.in@egetlacus.ca", "phone": "(294) 840-6685" },
+  { "id": "3", "name": "Kennedy Lane", "email": "mattis.Cras@nonenimMauris.net", "phone": "(542) 451-7038" },
+  { "id": "4", "name": "Wylie Pope", "email": "est@utquamvel.net", "phone": "(692) 802-2949" },
+  { "id": "5", "name": "Cyrus Jackson", "email": "nibh@semsempererat.com", "phone": "(501) 472-5218" },
+  { "id": "7", "name": "Reuben Henry", "email": "pharetra.ut@dictum.co.uk", "phone": "(715) 598-5792" },
+  { "id": "8", "name": "Simon Morton", "email": "dui.Fusce.diam@Donec.com", "phone": "(233) 738-2360" },
+  { "id": "9", "name": "Thomas Lucas", "email": "nec@Nulla.com", "phone": "(704) 398-7993" },
   {
     "id": "10",
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  }
+  },
+  { "id": "11", "name": "Serg", "email": "my@ukr.net", "phone": "+380671234567" },
+  { "id": "12", "name": "Serg", "email": "my@ukr.net", "phone": "+380671234567" },
+  { "id": "13", "name": "Timka", "email": "his@ukr.net", "phone": "+380671234567" },
+  { "id": "14", "name": "Sviatik", "email": "sviat@ukr.net", "phone": "+380673322333" },
+  { "id": "15", "name": "Tania", "email": "tet@ukr.net", "phone": "+380673322333" },
+  { "id": "16", "name": "Terminator", "email": "termin@gmail.net", "phone": "+380882345664" },
+  { "id": "17", "name": "Rivz", "email": "destroyer@gmail.com", "phone": "+380882355554" },
+  { "id": "18", "name": "Kianu", "email": "neo@gmail.com", "phone": "+380882355554" },
+  { "id": "19", "name": "Jacky Chan", "email": "karate@gmail.com", "phone": "+380882355554" },
+  { "id": "20", "name": "Bruce Willice", "email": "karate@gmail.com", "phone": "+380882355554" },
+  { "id": "21", "name": "Анжелина Джоли", "email": "smith@gmail.com", "phone": "+380882355554" }
 ]
