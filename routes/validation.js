@@ -18,7 +18,7 @@ const updateSchema = Joi.object({
 
 export const validateCreate = async (req, res, next) => {
   try {
-    const value = await createSchema.validateAsync(req.body);
+    await createSchema.validateAsync(req.body);
   } catch (err) {
     return res
       .status(400)
@@ -29,7 +29,7 @@ export const validateCreate = async (req, res, next) => {
 
 export const validateUpdate = async (req, res, next) => {
   try {
-    const value = await updateSchema.validateAsync(req.body);
+    await updateSchema.validateAsync(req.body);
   } catch (err) {
     const [{ type }] = err.details;
     if (type === "object.unknown") {
@@ -42,7 +42,7 @@ export const validateUpdate = async (req, res, next) => {
 
 export const validateId = async (req, res, next) => {
   try {
-    const value = await idSchema.validateAsync(req.params);
+    await idSchema.validateAsync(req.params);
   } catch (err) {
     return res
       .status(400)
