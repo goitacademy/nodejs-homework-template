@@ -20,9 +20,6 @@ router.get("/:id", async (req, res, next) => {
     const contactById = await contactsOperations.getContactById(id);
     if (!contactById) {
       throw new createError(404, `Contact with id=${id} not found`);
-      // const error = new Error(`Contact with id ${id} not found`);
-      // error.status = 404;
-      // throw error;
     }
     res.status(200).json(contactById);
   } catch (error) {
