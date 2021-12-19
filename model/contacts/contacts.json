@@ -61,7 +61,13 @@
     },
     {
         "id": "11",
-        "name": "Wylie Pope",
+        "name": "Kalie Pope",
+        "email": "est@utquamvel.net",
+        "phone": "(692) 802-2949"
+    },
+    {
+        "id": "12",
+        "name": "Kalie Pope",
         "email": "est@utquamvel.net",
         "phone": "(692) 802-2949"
     }
