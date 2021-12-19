@@ -13,8 +13,7 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.5.0",
-    "morgan": "1.10.0",
-    "node": "^17.2.0"
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
