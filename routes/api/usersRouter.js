@@ -22,7 +22,6 @@ const { authMiddleware } = require('../middlewares/authMiddleware')
 
 router.post(
   '/signup',
-  upload.single('avatar'),
   registrationValidator,
   asyncWrapper(userRegistration)
 )
