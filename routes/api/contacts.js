@@ -1,6 +1,9 @@
 import express from "express";
-import model from "../../model/index";
-import { validateCreate, validateUpdate } from "./validation";
+import model from "../../model/contacts/index";
+import {
+  validateCreate,
+  validateUpdate,
+} from "../../midllewares/validation/validation";
 
 const router = express.Router();
 
