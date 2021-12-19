@@ -1,5 +1,6 @@
 const {Schema, model} = require("mongoose");
 const Joi = require("joi");
+const codeRegexp = /^[0-9]{9}$/;
 // const { string } = require("joi");
 const validateEmail = function(email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -26,8 +27,21 @@ const contactSchema = Schema({
         type: Number,
         required: [true],
     },
-    mail: EmailSchema,
+        code: {
+        type: String,
+        required: true,
+        unique: true,
+        match: codeRegexp
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+        required: true
+    },
+     mail: EmailSchema,
 }, {versionKey: false, timestamps: true});
+   
+
 
 const joiSchema = Joi.object({
     name: Joi.string().required(),
@@ -35,7 +49,7 @@ const joiSchema = Joi.object({
     phone: Joi.number().required(),
 });
 
-const Contact = model("Contact", contactSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = {
     Contact,
