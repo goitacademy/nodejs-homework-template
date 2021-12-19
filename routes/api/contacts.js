@@ -1,6 +1,7 @@
 import { Router } from "express";
 import contactsApp from "../../contactsApp/index";
-import { validateCreate, validateUpdate, validateId } from "./validations";
+import middleware from "../../middleware";
+
 const router = new Router();
 
 router.get("/", async (_req, res, _next) => {
@@ -8,7 +9,7 @@ router.get("/", async (_req, res, _next) => {
   res.status(200).json(contacts);
 });
 
-router.get("/:id", validateId, async (req, res, _next) => {
+router.get("/:id", middleware.validateId, async (req, res, _next) => {
   const { id } = req.params;
   const contact = await contactsApp.getContactById(id);
   if (contact) {
@@ -17,12 +18,12 @@ router.get("/:id", validateId, async (req, res, _next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-router.post("/", validateCreate, async (req, res, _next) => {
+router.post("/", middleware.validateCreate, async (req, res, _next) => {
   const newContact = await contactsApp.addContact(req.body);
   res.status(201).json(newContact);
 });
 
-router.delete("/:id", validateId, async (req, res, next) => {
+router.delete("/:id", middleware.validateId, async (req, res, next) => {
   const { id } = req.params;
   const contact = await contactsApp.removeContact(id);
   if (contact) {
@@ -35,13 +36,18 @@ router.delete("/:id", validateId, async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-router.put("/:id", validateId, validateUpdate, async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await contactsApp.updateContact(id, req.body);
-  if (contact) {
-    return res.status(200).json(contact);
+router.put(
+  "/:id",
+  middleware.validateId,
+  middleware.validateUpdate,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const contact = await contactsApp.updateContact(id, req.body);
+    if (contact) {
+      return res.status(200).json(contact);
+    }
+    res.status(404).json({ message: "Not found" });
   }
-  res.status(404).json({ message: "Not found" });
-});
+);
 
 export default router;
