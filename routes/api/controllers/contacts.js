@@ -5,9 +5,13 @@ import {
   removeContact,
   addContact,
   updateContact,
-} from "../../model/components/index";
+} from "../../../model/contacts/index";
 
-import { validationCreate, validationUpdate, validationId } from "./validation";
+import {
+  validationCreate,
+  validationUpdate,
+  validationId,
+} from "../../../midllewares/validation";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import contacts from "../contacts.json";
+import contacts from "../../db/contacts.json";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -17,7 +17,7 @@ const removeContact = async (contactId) => {
   console.log("RemoveContact is done!");
 
   await fs.writeFile(
-    path.join(__dirname, "../contacts.json"),
+    path.join(__dirname, "../../db", "contacts.json"),
 
     JSON.stringify(contacts, null, 4)
   );

@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import contacts from "../contacts.json";
+import contacts from "../../db/contacts.json";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,7 +15,7 @@ const updateContact = async (contactId, body) => {
   const updated = { id: contactId, ...contacts[getId], ...body };
   contacts[getId] = updated;
   await fs.writeFile(
-    path.join(__dirname, "../contacts.json"),
+    path.join(__dirname, "../../db", "contacts.json"),
 
     JSON.stringify(contacts, null, 4)
   );
