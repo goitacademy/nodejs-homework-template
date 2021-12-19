@@ -5,6 +5,7 @@ const { validateContact, validateId } = require('./validation.js');
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log(req.method);
     const contacts = await Contacts.listContacts();
     res.json({ status: 'success', code: 200, data: { contacts } });
   } catch (error) {
@@ -52,9 +53,22 @@ router.delete('/:contactId', validateId, async (req, res, next) => {
     next(error);
   }
 });
+router.put("/:contactId",validateContact, async (req, res, next) => {
+  let body = req.body;
+  let newContact;
+  const { contactId } = req.params;
+  if (!body) {
+    res.status(400).json({ message: "missing fields" });
+  }
+  newContact = await updateContact(contactId, body);
+  if (!newContact) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.json({ newContact });
+});
 
 router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'home work node 02' });
+  res.json({ message: 'template message' });
 });
 
 module.exports = router;

@@ -6,20 +6,7 @@ const listContacts = async () => {
   return await db.read();
 };
 
-// const getContactById = async contactId => {
-//   try {
-//     const data = await db.readFile();
-//     const contacts = JSON.parse(data);
 
-//     const requiredContact = contacts.find(
-//       contact => contact.id.toString() === contactId
-//     )
-
-//     return requiredContact
-//   } catch (e) {
-//     throw new Error(e)
-//   }
-// }
 const getContactById = async (contactId) => {
   const data = await listContacts();
   const result = data.find(({ id }) => id === contactId);
