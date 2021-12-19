@@ -6,6 +6,8 @@ const createSchema = Joi.object({
     phone: Joi.string().required()
 })
 
+const idSchema = Joi.object({id: Joi.string().required()})
+
 const updateSchema = Joi.object({
     name: Joi.string().optional(),
     email: Joi.string().email().optional(),
@@ -21,9 +23,18 @@ export const validatorCreate = async (req, res, next) => {
     next ()
 }
 
+export const validatorId= async (req, res, next) => {
+    try {
+    const value = await idSchema.validateAsync(req.params)
+    } catch (err) {
+        return res.status(400).json({message: `${err.message.replace(/"/g, '')}`})
+    }
+    next ()
+}
+
 export const validatorUpdate = async (req, res, next) => {
     try {
-    const value = await createSchema.validateAsync(req.body)
+    const value = await updateSchema.validateAsync(req.body)
     } catch (err) {
         const [{ type }] = err.details
         if (type === 'object.unknown') {

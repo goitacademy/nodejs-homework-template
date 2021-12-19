@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import model from '../../model/index'
-import { validatorCreate, validatorUpdate } from './validation'
+import { validatorCreate, validatorId, validatorUpdate } from './validation'
 
 const router = new Router()
 
@@ -9,13 +9,13 @@ router.get('/', async (req, res, next) => {
   res.status(200).json(contacts)
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validatorId, async (req, res, next) => {
   const {id} = req.params
   const contact = await model.getContactById(id)
-  if (contact) {
-    return res.status(200).json(contact)
-  }
-  res.status(404).json({ message: "Not found" })
+   if (contact) {
+     return res.status(200).json(contact)
+   }
+   res.status(404).json({ message: `Not found contact with id: ${id}` })
 })
 
 router.post('/', validatorCreate, async (req, res, next) => {
@@ -23,22 +23,22 @@ router.post('/', validatorCreate, async (req, res, next) => {
   res.status(201).json(newContact)
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', validatorId, async (req, res, next) => {
   const {id} = req.params
   const contact = await model.removeContact(id)
-  if (contact) {
-    return res.status(200).json({message: "Contact deleted"})
-  }
-  res.status(404).json({ message: "Not found" })
+   if (contact) {
+     return res.status(200).json({message: "Contact deleted"})
+    }
+   res.status(404).json({ message: `Couldn't delete this contact, because it NOT FOUND` })
 })
 
-router.put('/:id', validatorUpdate, async (req, res, next) => {
+router.put('/:id', validatorId, validatorUpdate, async (req, res, next) => {
   const {id} = req.params
   const contact = await model.updateContact(id, req.body)
   if (contact) {
     return res.status(200).json(contact)
   }
-  res.status(404).json({ message: "Not found" })
+  res.status(404).json({ message: `Not found contact with id: ${id}` })
 })
 
 export default router

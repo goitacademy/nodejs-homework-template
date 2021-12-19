@@ -1,8 +1,8 @@
 [
   {
     "id": "1",
-    "name": "Sara",
-    "email": "sara@vestibul.co.uk",
+    "name": "John",
+    "email": "John@vestibul.co.uk",
     "phone": "(992) 914-3792"
   },
   {
@@ -13,8 +13,8 @@
   },
   {
     "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
+    "name": "Rosie",
+    "email": "Rosie@vestibul.co.uk",
     "phone": "(542) 451-7038"
   },
   {
@@ -58,11 +58,5 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  },
-  {
-    "id": "f2f10c1c-8cd8-40a5-b6cd-debdf254bf94",
-    "name": "John",
-    "email": "John@semsempererat.com",
-    "phone": "(456) 098-7654"
   }
 ]
