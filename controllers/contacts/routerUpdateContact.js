@@ -1,8 +1,8 @@
-import express from "express";
-import model from "../../../model/contacts/index";
-import { validateUpdate } from "../../../midllewares/validation/validation";
+import { Router } from "express";
+import model from "../../model/contacts/index";
+import { validateUpdate } from "../../midllewares/validation/validation";
 
-const routerUpdateContact = express.Router();
+const routerUpdateContact = new Router();
 
 routerUpdateContact.put("/:id", validateUpdate, async (req, res, next) => {
   const { id } = req.params;

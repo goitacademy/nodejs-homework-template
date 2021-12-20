@@ -2,7 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 
-import contactsRouter from "./routes/controllers/contacts";
+import contactsRouter from "./controllers/contacts";
 
 const app = express();
 
@@ -10,8 +10,8 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json()); //json
-app.use(express.urlencoded({ extended: false })); //forms submit
+app.use(express.json()); // json
+app.use(express.urlencoded({ extended: false })); // forms submit
 
 app.use("/api/contacts", contactsRouter.routerListContacts);
 app.use("/api/contacts", contactsRouter.routerGetContactById);

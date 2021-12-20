@@ -1,7 +1,7 @@
-import express from "express";
-import model from "../../../model/contacts/index";
+import { Router } from "express";
+import model from "../../model/contacts/index";
 
-const routerRemoveContact = express.Router();
+const routerRemoveContact = new Router();
 
 routerRemoveContact.delete("/:id", async (req, res, next) => {
   const { id } = req.params;

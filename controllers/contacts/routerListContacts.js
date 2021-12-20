@@ -1,7 +1,7 @@
-import express from "express";
-import model from "../../../model/contacts/index";
+import { Router } from "express";
+import model from "../../model/contacts/index";
 
-const routerListContacts = express.Router();
+const routerListContacts = new Router();
 
 routerListContacts.get("/", async (req, res, next) => {
   const contacts = await model.listContacts();
