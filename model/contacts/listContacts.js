@@ -1,4 +1,4 @@
-import contacts from '../contacts.json'
+import contacts from '../../db/contacts.json'
 const listContacts = async () => {
   return contacts
 }

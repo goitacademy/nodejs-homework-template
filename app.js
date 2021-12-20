@@ -2,7 +2,7 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 
-import contactsRouter from './routes/api/contacts'
+import contactsRouter from './controllers/contacts'
 
 const app = express()
 
@@ -12,7 +12,11 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use('/api/contacts', contactsRouter.routerAddNewContact)
+app.use('/api/contacts', contactsRouter.routerDeleteContact)
+app.use('/api/contacts', contactsRouter.routerGetAllContacts)
+app.use('/api/contacts', contactsRouter.routerGetContactById)
+app.use('/api/contacts', contactsRouter.routerUpdateContact)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
