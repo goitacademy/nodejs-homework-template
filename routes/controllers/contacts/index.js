@@ -1,7 +1,13 @@
-import routerA from "./putUpdateContact";
-import routerB from "./getContactById";
-import routerC from "./getListContacts";
-import routerD from "./postAddContact";
-import routerE from "./deleteContact";
+import routerListContacts from "./routerListContacts";
+import routerGetContactById from "./routerContactById";
+import routerRemoveContact from "./routerDeleteContact";
+import routerAddContact from "./routerAddContact";
+import routerUpdateContact from "./routerUpdateContact";
 
-export default { routerA, routerB, routerC, routerD, routerE };
+export default {
+  routerListContacts,
+  routerGetContactById,
+  routerRemoveContact,
+  routerAddContact,
+  routerUpdateContact,
+};
