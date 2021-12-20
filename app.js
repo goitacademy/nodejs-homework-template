@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import routers from "./controllers/contacts";
+import routers from "./routes/contacts";
 
 const app = express();
 
