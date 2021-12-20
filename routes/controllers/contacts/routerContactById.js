@@ -1,9 +1,9 @@
 import express from "express";
 import model from "../../../model/contacts/index";
 
-const router = express.Router();
+const routerGetContactById = express.Router();
 
-router.get("/:id", async (req, res, next) => {
+routerGetContactById.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   const contact = await model.getContactById(id);
   if (contact) {
@@ -12,4 +12,4 @@ router.get("/:id", async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-export default router;
+export default routerGetContactById;
