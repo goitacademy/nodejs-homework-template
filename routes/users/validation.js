@@ -33,13 +33,17 @@ const schemaUpdateSubscriptionUser = Joi.object({
     .required(),
 });
 
+const schemaResendingEmail = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 const validate = async (schema, obj, next) => {
   try {
     await schema.validateAsync(obj);
     return next();
   } catch (err) {
     next({
-      status: "error",
+      status: "err",
       code: BAD_REQUEST,
       message: `Field ${err.message.replace(/"/g, "")}!`,
     });
@@ -50,10 +54,14 @@ module.exports.validateCreateUser = (req, _res, next) => {
   return validate(schemaAddUser, req.body, next);
 };
 
-module.exports.validateUpdateSubscription = (req, _res, next) => {
+module.exports.validateSubscriptionUpdate = (req, _res, next) => {
   return validate(schemaUpdateSubscriptionUser, req.body, next);
 };
 
 module.exports.validateLogin = (req, _res, next) => {
   return validate(schemaLogin, req.body, next);
+};
+
+module.exports.validateResendingEmail = (req, _res, next) => {
+  return validate(schemaResendingEmail, req.body, next);
 };

@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../repository/users");
+const fs = require("fs").promises;
+const UploadService = require("../services/cloud-upload");
 const { StatusCode, Subscription } = require("../config/constants");
 require("dotenv").config();
+const EmailService = require("../services/email/service");
+const { CreateSenderSendGrid } = require("../services/email/sender"); 
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -27,6 +31,15 @@ const signup = async (req, res, next) => {
   }
   try {
     const newUser = await Users.create({ name, email, password, subscription });
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      new CreateSenderSendGrid()
+    );
+    const statusEmail = await emailService.sendVerifyEmail(
+      newUser.email,
+      newUser.name,
+      newUser.verifyToken
+    );
     return res.status(CREATED).json({
       status: "success",
       code: CREATED,
@@ -35,12 +48,16 @@ const signup = async (req, res, next) => {
         name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatarURL,
+        successEmail: statusEmail,
       },
     });
   } catch (error) {
     next(error);
   }
 };
+
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -51,7 +68,10 @@ const login = async (req, res) => {
       ? undefined
       : await user.isValidPassword(password);
 
-  if (!user || !isValidPassword) {
+  // if (!user || !isValidPassword || !user?.verify) {
+  if (
+    !user || !isValidPassword || !user === null || !user === undefined ? undefined : !user.verify
+  ) {
     return res.status(UNAUTHORIZED).json({
       status: "error",
       code: UNAUTHORIZED,
@@ -80,7 +100,7 @@ const logout = async (req, res) => {
 const currentUser = async (req, res, next) => {
   try {
     // const id = req.user._id;
-    const {_id:id, name, email, subscription } = req.user;
+    const { _id:id, name, email, subscription } = req.user;
     return res.status(OK).json({
       status: "success",
       code: OK,
@@ -152,6 +172,81 @@ const onlyBusiness = async (_req, res) => {
   });
 };
 
+
+
+const uploadAvatar = async (req, res, _next) => {
+  const { id, idUserCloud } = req.user;
+  const file = req.file;
+
+  const destination = "Avatars";
+  const uploadService = new UploadService(destination);
+  const { avatarUrl, returnIdUserCloud } = await uploadService.save(
+    file.path,
+    idUserCloud
+  );
+
+  await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
+  try {
+    await fs.unlink(file.path);
+  } catch (error) {
+    console.log(error.message);
+  }
+  return res.status(OK).json({
+    status: "success",
+    code: OK,
+    data: {
+      avatar: avatarUrl,
+    },
+  });
+};
+
+const verifyUser = async (req, res, next) => {
+  const user = await Users.findUserByVerifyToken(req.params.verifyToken);
+
+  if (user) {
+    await Users.updateTokenVerify(user._id, true, null);
+    return res.json({
+      status: "success",
+      code: OK,
+      message: "Verification successful!",
+    });
+  }
+  return res.status(NOT_FOUND).json({
+    status: "error",
+    code: NOT_FOUND,
+    message: "User not Found!",
+  });
+};
+
+const repeatEmailForVerifyUser = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await Users.findByEmail(email);
+
+  if (user && user.verify) {
+    return res.status(BAD_REQUEST).json({
+      status: "error",
+      code: BAD_REQUEST,
+      message: "Verification has already been passed!",
+    });
+  }
+
+  if (user) {
+    const { email, name, verifyToken } = user;
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      new CreateSenderSendGrid()
+    );
+    await emailService.sendVerifyEmail(email, name, verifyToken);
+  }
+  return res.status(OK).json({
+    status: "success",
+    code: OK,
+    data: {
+      message: "Verification email sent!",
+    },
+  });
+};
+
 module.exports = {
   signup,
   login,
@@ -161,4 +256,7 @@ module.exports = {
   onlyStarter,
   onlyPro,
   onlyBusiness,
+  uploadAvatar,
+  verifyUser,
+  repeatEmailForVerifyUser,
 };

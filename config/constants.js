@@ -29,5 +29,15 @@ const Subscription = {
   BUSINESS: "business",
 };
 
+const LimitSize = {
+  FIELD_SIZE: 2000000,
+  AvatarSize: 250,
+};
 
-module.exports = { StatusCode, ValidLengthName, Subscription, ValidPassword };
+const TransformAvatar = {
+  SIZE_WIDTH: 250,
+  SIZE_HEIGHT: 250,
+};
+
+
+module.exports = { StatusCode, ValidLengthName, Subscription, ValidPassword, LimitSize, TransformAvatar, };

@@ -1,29 +1,36 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
+require("dotenv").config();
+let uri;
 
-const uri = process.env.URI_DB;
+if (process.env.NODE_ENV === "test") {
+  uri = process.env.URI_DB_TEST;
+} else {
+  uri = process.env.URI_DB;
+}
 
 const db = mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-mongoose.connection.on('connected', () => {
-    console.log('Database connection successful');
-});
+if (process.env.NODE_ENV === "test") {
+  mongoose.connection.on("connected", () => {
+    console.log("Mongoose connection to DB!");
+  });
 
-mongoose.connection.on('error', (error) => {
-    console.log(`Database connection error: ${error.mesage}`);
-});
+  mongoose.connection.on("error", (err) => {
+    console.log(`Mongoose connection error ${err.message}!`);
+  });
 
-mongoose.connection.on('disconnected', () => {
-    console.log('Database disconnected');
-});
+  mongoose.connection.on("disconnected", () => {
+    console.log("Database disconnected!");
+  });
+}
 
-process.on('SIGINT', async () => {
-    await mongoose.connection.close();
-    console.log('Database connection closed and app termination');
-    process.exit(1);
+process.on("SIGINT", async () => {
+  await mongoose.connection.close();
+  console.log("Database connection closed through app termination!");
+  process.exit(1);
 });
 
 module.exports = db;
