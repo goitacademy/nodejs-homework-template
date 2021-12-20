@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { validateId } from "../../../middlewares/contacts/validation";
-import operations from "../../../model/operations";
+import { validateId } from "../../middlewares/contacts/validation";
+import operations from "../../model/operations";
 const deleteRouter = new Router();
 
 deleteRouter.delete("/:id", validateId, async (req, res, next) => {

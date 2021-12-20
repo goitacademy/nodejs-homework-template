@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   validateUpdate,
   validateId,
-} from "../../../middlewares/contacts/validation";
-import operations from "../../../model/operations";
+} from "../../middlewares/contacts/validation";
+import operations from "../../model/operations";
 const updateRouter = new Router();
 updateRouter.put("/:id", validateId, validateUpdate, async (req, res, next) => {
   const { id } = req.params;

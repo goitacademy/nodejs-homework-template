@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import routers from "./routes/controllers/contacts";
+import routers from "./controllers/contacts";
 
 const app = express();
 
@@ -12,7 +12,6 @@ app.use(cors());
 app.use(express.json()); //json
 app.use(express.urlencoded({ extended: false })); // forms
 
-// app.use("/api/contacts", contactsRouter);
 app.use("/contacts", routers.updateRouter);
 app.use("/contacts/", routers.createRouter);
 app.use("/contacts/", routers.deleteRouter);

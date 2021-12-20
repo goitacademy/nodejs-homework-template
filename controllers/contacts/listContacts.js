@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import operations from "../../../model/operations";
+import operations from "../../model/operations";
 const listContactsRouter = new Router();
 
 listContactsRouter.get("/", async (req, res, next) => {
