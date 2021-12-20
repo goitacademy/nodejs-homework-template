@@ -55,7 +55,6 @@ router.put("/:contactId", async (req, res, next) => {
       throw new BadRequest(error.message);
     }
     const { contactId } = req.params;
-    console.log(contactId);
     const updateContact = await contactsOperations.updateById(
       contactId,
       req.body
