@@ -19,23 +19,28 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  console.log("hi");
+  console.log(contactId);
   try {
-    const { id } = req.params;
-    console.log(id);
-    const contact = await contactsOperations.getContactById(id);
+    const contact = await contactsOperations.getContactById(contactId);
+
     if (!contact) {
       res.status(404).json({
         message: "Server Error"
       })
-      res.json(contact)
-
-    } catch (error) {
-      res.status(500).json({
-        message: "Server Error"
-      })
     }
-  })
+    res.json(contact);
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error"
+    })
+  }
+})
+
+
 
 router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' })
