@@ -7,13 +7,13 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const listContacts = async () => {
-  return contacts
-}
+  return contacts;
+};
 
 const getContactById = async (contactId) => {
-  const [contact] = contacts.find((contact) => contact.id === contactId)
-  return contact
-}
+  const result = contacts.find((contact) => contact.id === contactId)
+  return result;
+};
 
 const removeContact = async (contactId) => {
   const index = contacts.findIndex((contact) => contact.id === contactId)
@@ -23,10 +23,10 @@ const removeContact = async (contactId) => {
       path.join(__dirname, 'contacts.json'),
       JSON.stringify(contacts, null, 2),
     )
-    return result
+    return result;
   }
   return null
-}
+};
 
 const addContact = async ({ name, email, phone }) => {
   const newContact = { id: randomUUID(), name, email, phone }
@@ -36,7 +36,7 @@ const addContact = async ({ name, email, phone }) => {
     JSON.stringify(contacts, null, 2),
   )
   return newContact
-}
+};
 
 const updateContact = async (contactId, body) => {
   const index = contacts.findIndex((contact) => contact.id === contactId)
@@ -50,7 +50,7 @@ const updateContact = async (contactId, body) => {
     return updatedContact
   }
   return null
-}
+};
 
 export default {
   listContacts,
