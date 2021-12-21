@@ -4,14 +4,14 @@ import { validateCreate, validateUpdate, validateId } from './validation'
 
 const router = new Router()
 
-router.get('/', async (req, res, next) => {
-  const contacts = await model.listContacts()
+router.get('/', (req, res, next) => {
+  const contacts = model.listContacts()
   res.status(200).json(contacts)
 })
 
-router.get('/:id', validateId, async (req, res, next) => {
+router.get('/:id', validateId, (req, res, next) => {
   const { id } = req.params
-  const contact = await model.getContactById(id)
+  const contact = model.getContactById(id)
   if (contact) {
     return res.status(200).json(contact)
   }
