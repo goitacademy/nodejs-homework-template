@@ -1,13 +1,10 @@
-const getContactsList = require("./getContactsList");
+const fs = require("fs/promises");
+const contactsPath = require("./contactsPath");
 
 const listContacts = async () => {
-    try {
-        const contactsListArr = await getContactsList();
-        return console.table(contactsListArr);;
-    } catch (error) {
-        console.log(error)
-    }
+    const data = await fs.readFile(contactsPath);
+    const contacts = JSON.parse(data);
+    return contacts;
 };
 
 module.exports = listContacts;
-
