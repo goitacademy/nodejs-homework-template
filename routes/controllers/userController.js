@@ -5,6 +5,7 @@ const {
   logout,
   addToken,
   updateSubscription,
+  updateAvatar,
 } = require('../services/userServices')
 
 const userRegistration = async (req, res) => {
@@ -58,10 +59,19 @@ const userSubscription = async (req, res) => {
   res.json({ status: 'success' })
 }
 
+const userAvatar = async (req, res) => {
+  const { path: tempUpload, originalname } = req.file
+  const { id } = req.user
+  const result = await updateAvatar(id, tempUpload, originalname)
+  const { avatarURL } = result
+  res.status(200).json({ status: 'Ok', code: 200, data: { avatarURL } })
+}
+
 module.exports = {
   userRegistration,
   userLogin,
   userGetCurrent,
   userLogOut,
   userSubscription,
+  userAvatar,
 }
