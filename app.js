@@ -2,7 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 
-import contactsRouter from "./routes/controllers/contacts";
+import contactsRouter from "./routes/api/contacts";
 
 const app = express();
 
@@ -13,11 +13,7 @@ app.use(cors());
 app.use(express.json()); // json
 app.use(express.urlencoded({ extended: false })); // forms submit
 
-app.use("/api/contacts", contactsRouter.routerListContacts);
-app.use("/api/contacts", contactsRouter.routerGetContactById);
-app.use("/api/contacts", contactsRouter.routerRemoveContact);
-app.use("/api/contacts", contactsRouter.routerAddContact);
-app.use("/api/contacts", contactsRouter.routerUpdateContact);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

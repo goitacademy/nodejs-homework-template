@@ -3,6 +3,7 @@ import addContact from "./addContact";
 import removeContact from "./removeContact";
 import getContactById from "./getContactById";
 import listContacts from "./listContacts";
+import updateStatusContact from "./updateStatusContact";
 
 export default {
   updateContact,
@@ -10,4 +11,5 @@ export default {
   removeContact,
   getContactById,
   listContacts,
+  updateStatusContact,
 };
