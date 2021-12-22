@@ -1,8 +1,8 @@
 import db from '../../db/connection'
 import { ObjectId } from 'mongodb'
-import { fileURLToPath } from 'url'
-import path, { dirname } from 'path'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+// import { fileURLToPath } from 'url'
+// import path, { dirname } from 'path'
+// const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const removeContact = async (id) => {
   const client = await db
