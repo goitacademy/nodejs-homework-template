@@ -32,7 +32,7 @@ router.delete("/:id", validateId, async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", validateId, validateUpdate, async (req, res, next) => {
   const { id } = req.params;
   const contact = await model.updateContact(id, req.body);
   if (contact) {

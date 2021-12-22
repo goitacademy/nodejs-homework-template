@@ -3,7 +3,6 @@ import path from "path";
 import { randomUUID } from "crypto";
 import contacts from "./contacts.json";
 import { fileURLToPath } from "url";
-import req from "express/lib/request";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -17,22 +16,22 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  const contactsForRemove = contacts.find((contact) => contact.id == contactId);
-  if (contactsForRemove) {
-    const contactsNew = contacts.filter(
-      (contact) => contact !== contactsForRemove
-    );
+  const contactsForRemoveIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+  if (contactsForRemoveIndex !== -1) {
+    const [result] = contacts.splice(contactsForRemoveIndex, 1);
     await fs.writeFile(
       path.join(__dirname, "contacts.json"),
-      JSON.stringify(contactsNew, null, 2)
+      JSON.stringify(contacts, null, 2)
     );
-    return contactsForRemove;
+    return result;
   }
+  return null;
 };
 
 const addContact = async ({ name, email, phone }) => {
-  const contacts = await readContent();
-  const newContact = { name, email, phone, id: randomUUID() };
+  const newContact = { id: randomUUID(), name, email, phone };
   contacts.push(newContact);
   await fs.writeFile(
     path.join(__dirname, "contacts.json"),
@@ -43,22 +42,22 @@ const addContact = async ({ name, email, phone }) => {
 
 const updateContact = async (contactId, body) => {
   const contactsForUpdateIndex = contacts.findIndex(
-    (contact) => contact.id == contactId
+    (contact) => contact.id === contactId
   );
-  if (contactsForUpdateIndex !== 1) {
+  if (contactsForUpdateIndex !== -1) {
     const contactsUpdated = {
       id: contactId,
       ...contacts[contactsForUpdateIndex],
       ...body,
     };
     contacts[contactsForUpdateIndex] = contactsUpdated;
-
     await fs.writeFile(
       path.join(__dirname, "contacts.json"),
       JSON.stringify(contacts, null, 2)
     );
     return contactsUpdated;
   }
+  return null;
 };
 
 export default {
