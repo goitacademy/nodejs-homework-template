@@ -8,7 +8,7 @@ const sendEmail = async (mail, token) => {
     to: mail,
     from: "tar86irina@gmail.com",
     subject: "Регистрация в сервисе Contacts",
-    html: `<p>Для подтверждения регистрации перейдите по ссылке</p><a>localhost:3001/api/users/verify/${token}<a>`,
+    html: `<a href="localhost:3001/api/users/verify/${token}>Для подтверждения регистрации перейдите по ссылке</a>`,
   };
   try {
     sgMail.send(email);
