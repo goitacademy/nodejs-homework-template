@@ -12,10 +12,6 @@ const updateSchema = Joi.object({
     phone: Joi.string().optional(),
 }).or('name', 'email', 'phone');
 
-const idShema = Joi.object({
-    id: Joi.string().required()
-})
-
 export const validateCreate = async (req, res, next) => {
     try {
         const value = await createSchema.validateAsync(req.body)
@@ -43,6 +39,10 @@ export const validateUpdate = async (req, res, next) => {
     }
     next()
 }
+
+const idShema = Joi.object({
+    id: Joi.string().required()
+})
 
 export const validateId = async (req, res, next) => {
     try {
