@@ -1,24 +1,13 @@
-import fs from "fs/promises";
-import path from "path";
-import { randomUUID } from "crypto";
-import contacts from "../../db/contacts.json";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const addContact = async ({ name, email, phone }) => {
-  const addContact = {
-    id: randomUUID(),
-    name,
-    email,
-    phone,
+import db from "../../db";
+import { getCollection } from "./getCollection";
+const addContact = async (body) => {
+  const collection = await getCollection(db, "contacts");
+  const newContact = {
+    favorite: false,
+    ...body,
   };
-  contacts.push(addContact);
-  await fs.writeFile(
-    path.join(__dirname, "../../db/contacts.json"),
-    JSON.stringify(contacts, null, 2)
-  );
-  return addContact;
+  const result = await collection.insertOne(newContact);
+  return result;
 };
 
 export default addContact;

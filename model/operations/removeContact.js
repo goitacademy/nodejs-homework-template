@@ -1,23 +1,12 @@
-import fs from "fs/promises";
-import path from "path";
-import contacts from "../../db/contacts.json";
-import { fileURLToPath } from "url";
+import { ObjectId } from "mongodb";
+import db from "../../db";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { getCollection } from "./getCollection";
 const removeContact = async (contactId) => {
-  const id = contacts.findIndex(
-    (contact) => contactId === contact.id.toString()
-  );
-  if (id === -1) {
-    return null;
-  }
-
-  const update = contacts.splice(id, 1);
-  await fs.writeFile(
-    path.join(__dirname, "../../db/contacts.json"),
-    JSON.stringify(contacts, null, 2)
-  );
-  return update;
+  const collection = await getCollection(db, "contacts");
+  const id = ObjectId(contactId);
+  const { value: result } = await collection.findOneAndDelete({ _id: id });
+  return result;
 };
 
 export default removeContact;

@@ -5,6 +5,7 @@ const listContactsRouter = new Router();
 
 listContactsRouter.get("/", async (req, res, next) => {
   const contacts = await operations.listContacts();
+  console.log(contacts);
   res.status(200).json(contacts);
 });
 export default listContactsRouter;
