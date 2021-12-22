@@ -1,4 +1,5 @@
 import { Router } from 'express'
+
 import { validationId } from '../../midllewares/validation/contactValidation'
 import { getContactById } from '../../model/contacts'
 const routerGetContactById = new Router()
