@@ -10,7 +10,7 @@ const updateSchema = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string().optional(),
-}).or("name", "emaul", "phone");
+}).or("name", "email", "phone");
 
 const idSchema = Joi.object({ id: Joi.string().required() });
 
