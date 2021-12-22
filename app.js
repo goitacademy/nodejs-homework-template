@@ -1,6 +1,18 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+const DB_HOST =
+  'mongodb+srv://Iliya:FlVFkFYctwEt63f2@cluster0.x6i3d.mongodb.net/Phone-Book?retryWrites=true&w=majority';
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log('Database connection successful'))
+  .catch(error => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
 const contactsRouter = require('./routes/api/contacts');
 
