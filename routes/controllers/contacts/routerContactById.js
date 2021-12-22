@@ -1,5 +1,5 @@
 import { Router } from "express";
-import model from "../../model/contacts/index";
+import model from "../../../model/contacts/index";
 
 const routerGetContactById = new Router();
 

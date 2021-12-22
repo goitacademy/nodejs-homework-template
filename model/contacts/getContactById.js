@@ -1,12 +1,12 @@
-import contacts from "../../db/contacts.json";
+import db from "../../db/db";
+import { ObjectId } from "mongodb";
 
 const getContactById = async (contactId) => {
-  try {
-    const [contact] = contacts.filter((contact) => contact.id === contactId);
-    return contact;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const client = await db;
+  const collection = await client.db().collection("contacts");
+  const id = ObjectId(contactId);
+  const [result] = await collection.find({ _id: id }).toArray();
+  return result;
 };
 
 export default getContactById;

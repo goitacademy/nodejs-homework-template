@@ -1,6 +1,6 @@
 import { Router } from "express";
-import model from "../../model/contacts/index";
-import { validateUpdate } from "../../midllewares/validation/validation";
+import model from "../../../model/contacts/index";
+import { validateUpdate } from "../../../midllewares/validation/validation";
 
 const routerUpdateContact = new Router();
 

@@ -1,11 +1,9 @@
-import contacts from "../../db/contacts.json";
+import db from "../../db/db";
 
 const listContacts = async () => {
-  try {
-    return contacts;
-  } catch (error) {
-    console.log(error.message);
-  }
+  const client = await db;
+  const collection = await client.db().collection("contacts").find().toArray();
+  return collection;
 };
 
 export default listContacts;
