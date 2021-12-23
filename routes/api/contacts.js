@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { listContacts } = require("../../model/index");
+const { listContacts, getContactById } = require("../../model/index");
 
 router.get("/", async (req, res, next) => {
   const result = await listContacts();
 
-  res.json({
+  res.status(200).json({
     status: "success",
     code: 200,
     data: result,
@@ -14,7 +14,12 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const result = await getContactById(contactId);
+
+  res
+    .status(200)
+    .json({ status: "success", code: 200, message: "get by ID", data: result });
 });
 
 router.post("/", async (req, res, next) => {
