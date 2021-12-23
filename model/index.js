@@ -11,6 +11,7 @@ const listContacts = async () => {
     return contacts;
   } catch (e) {
     console.log(e);
+    throw e.message;
   }
 };
 
@@ -21,6 +22,7 @@ const getContactById = async contactId => {
     return contact;
   } catch (e) {
     console.log(e);
+    throw e.message;
   }
 };
 
@@ -36,6 +38,7 @@ const removeContact = async contactId => {
     return contacts[idx];
   } catch (e) {
     console.log(e);
+    throw e.message;
   }
 };
 
@@ -50,6 +53,7 @@ const addContact = async body => {
     return newContact;
   } catch (e) {
     console.log(e);
+    throw e.message;
   }
 };
 
@@ -67,6 +71,7 @@ const updateContact = async (contactId, body) => {
     return updatedContact;
   } catch (e) {
     console.log(e);
+    throw e.message;
   }
 };
 
