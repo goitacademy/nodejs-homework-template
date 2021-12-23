@@ -1,4 +1,3 @@
-import fs from 'fs/promises'
 import listContacts from './listContacts'
 import getContactById from './getContactById'
 import removeContact from './removeContact'
