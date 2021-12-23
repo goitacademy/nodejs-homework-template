@@ -3,7 +3,6 @@ const path = require('path')
 const contacts = require('./contacts.json')
 
 const pathContacts = path.resolve('./model/contacts.json')
-// console.log(contacts)
 
 const listContacts = async () => {
   const contacts = await fs.readFile(pathContacts, 'utf-8')
@@ -19,7 +18,6 @@ const removeContact = async (contactId) => {
   const data = await fs.readFile(pathContacts, 'utf-8')
   const newData = JSON.parse(data).filter(item=>item.id !== contactId.toString())
   await fs.writeFile(pathContacts, JSON.stringify(newData))
-  
 }
 
 const addContact = async (body) => {
@@ -40,8 +38,7 @@ const updateContact = async (contactId, body) => {
   })
   await fs.writeFile(pathContacts, JSON.stringify(newData))  
 }
-// updateContact(1)
-// getContactById(123)
+
 module.exports = {
   listContacts,
   getContactById,
