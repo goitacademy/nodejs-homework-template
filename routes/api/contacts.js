@@ -15,7 +15,7 @@ router.get("/:id", validateId, async (req, res, next) => {
   if (contact) {
     return res.status(200).json(contact);
   }
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Contact not found" });
 });
 
 router.post("/", validateCreate, async (req, res, next) => {
@@ -29,7 +29,7 @@ router.delete("/:id", validateId, async (req, res, next) => {
   if (contact) {
     return res.status(200).json({ message: "Contact deleted" });
   }
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Contact not found for delete" });
 });
 
 router.put("/:id", validateId, validateUpdate, async (req, res, next) => {
@@ -38,7 +38,7 @@ router.put("/:id", validateId, validateUpdate, async (req, res, next) => {
   if (contact) {
     return res.status(200).json(contact);
   }
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Contact not found for update" });
 });
 
 export default router;
