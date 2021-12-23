@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import model from '../../model/index'
+import model from '../../model/index.js'
 import { validateCreate, validateUpdate, validateId } from './validation'
 
 const router = new Router()
