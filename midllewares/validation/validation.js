@@ -12,6 +12,8 @@ const updateSchema = Joi.object({
   phone: Joi.string().optional(),
 }).or("name", "email", "phone");
 
+const idSchema = Joi.object({ id: Joi.string().required() });
+
 export const validateCreate = async (req, res, next) => {
   try {
     const value = await createSchema.validateAsync(req.body);
@@ -27,7 +29,22 @@ export const validateUpdate = async (req, res, next) => {
   try {
     const value = await updateSchema.validateAsync(req.body);
   } catch (error) {
+    const [{ type }] = error.details;
+    if (type === "object unknown") {
+      return res.status(400).json({ message: error.message });
+    }
     return res.status(400).json({ message: "missing fields" });
+  }
+  next();
+};
+
+export const validateId = async (req, res, next) => {
+  try {
+    const value = await idSchema.validateAsync(req.params);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: ` ${error.message.replace(/"/g, "")}` });
   }
   next();
 };
