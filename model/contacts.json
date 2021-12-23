@@ -1,5 +1,17 @@
 [
   {
+    "id": "1",
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792"
+  },
+  {
+    "id": "2",
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
     "id": "3",
     "name": "Kennedy Lane",
     "email": "mattis.Cras@nonenimMauris.net",
@@ -46,5 +58,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "name": "Oleg",
+    "email": "oleg@mail.com",
+    "phone": "(555) 555-5555",
+    "id": "a979b56d-1f11-4046-ac26-a9ffdcc6d2ae"
   }
 ]

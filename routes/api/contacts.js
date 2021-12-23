@@ -4,6 +4,7 @@ const {
   listContacts,
   getContactById,
   removeContact,
+  addContact,
 } = require("../../model/index");
 
 router.get("/", async (req, res, next) => {
@@ -38,7 +39,14 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const body = req.body;
+  const result = await addContact(body);
+  res.status(200).json({
+    status: "success",
+    code: 201,
+    message: "POST",
+    data: result,
+  });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
