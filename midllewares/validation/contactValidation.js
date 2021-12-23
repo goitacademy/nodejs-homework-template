@@ -40,7 +40,9 @@ export const validationId = async (req, res, next) => {
   try {
     const value = await idSchema.validateAsync(req.params)
   } catch (error) {
-    return res.status(400).json({ message: `${err.message.replace(/"/g, '')}` })
+    return res
+      .status(400)
+      .json({ message: `${error.message.replace(/"/g, '')}` })
   }
   next()
 }
