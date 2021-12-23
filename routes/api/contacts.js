@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const { NotFound, BadRequest } = require("http-errors");
+const { NotFound } = require("http-errors");
 const contactsOperations = require("../../model/index");
 
 const joiSchema = Joi.object({
