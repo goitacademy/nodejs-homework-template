@@ -3,6 +3,7 @@ import { removeContact } from '../../model/contacts'
 import { validationId } from '../../midllewares/validation/contactValidation'
 const routerDeleteContact = new Router()
 
+// routerDeleteContact.delete('/:id', async (req, res, next) => {
 routerDeleteContact.delete('/:id', validationId, async (req, res, next) => {
   const { id } = req.params
   const contact = await removeContact(id)
