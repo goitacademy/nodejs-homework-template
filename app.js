@@ -1,10 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Dima:dimon468255@cluster0.f36mr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+dotenv.config();
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
