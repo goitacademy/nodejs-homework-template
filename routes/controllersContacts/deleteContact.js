@@ -15,7 +15,7 @@ routerDeleteContact.delete(
         "🚀 ~ file: contacts.js ~ line 29 ~ router.delete ~ contact",
         contact
       );
-      return res.status(200).json({ message: "Contact deleted" });
+      return res.status(200).json({ contact });
     }
     res.status(404).json({ message: "Not found" });
   }

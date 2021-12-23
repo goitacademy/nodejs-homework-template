@@ -13,7 +13,7 @@ const validateUpdate = async (req, res, next) => {
     if (type === "object.unknown") {
       return res.status(400).json({ message: error.message.replace(/"/g, "") });
     }
-    return res.status(400).json({ message: `missing fields` });
+    return res.status(400).json({ message: error.message.replace(/"/g, "") });
   }
   next();
 };

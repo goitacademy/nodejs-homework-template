@@ -4,6 +4,7 @@ import contactsApp from "../../contactsApp/index";
 const routerListContacts = new Router();
 routerListContacts.get("/", async (_req, res, _next) => {
   const contacts = await contactsApp.listContacts();
+  // console.log(contacts);
   res.status(200).json(contacts);
 });
 export default routerListContacts;
