@@ -3,32 +3,25 @@ import contactsController from "../../controllers/contacts";
 import {
   validateCreate,
   validateUpdate,
+  validateUpdateFavorite,
 } from "../../midllewares/validation/validation";
 
 const router = express.Router();
 
-router.get("/", async (_, res) =>
-  contactsController.listContactsController(res)
-);
+router.get("/", contactsController.listContactsController);
 
-router.get("/:id", async (req, res) =>
-  contactsController.getContactByIdController(req, res)
-);
+router.get("/:id", contactsController.getContactByIdController);
 
-router.post("/", validateCreate, async (req, res) =>
-  contactsController.addContactController(req, res)
-);
+router.post("/", validateCreate, contactsController.addContactController);
 
-router.delete("/:id", async (req, res) =>
-  contactsController.removeContactController(req, res)
-);
+router.delete("/:id", contactsController.removeContactController);
 
-router.put("/:id", validateUpdate, async (req, res) =>
-  contactsController.updateContactController(req, res)
-);
+router.put("/:id", validateUpdate, contactsController.updateContactController);
 
-router.patch("/:id/favorite/", async (req, res) =>
-  contactsController.updateStatusContactController(req, res)
+router.patch(
+  "/:id/favorite/",
+  validateUpdateFavorite,
+  contactsController.updateStatusContactController
 );
 
 export default router;

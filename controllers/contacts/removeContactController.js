@@ -1,8 +1,8 @@
-import model from "../../model/contacts";
+import repositoryContacts from "../../repository";
 
-const removeContactController = async (req, res) => {
+const removeContactController = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await model.removeContact(id);
+  const contact = await repositoryContacts.removeContact(id);
   if (contact) {
     return res.status(200).json({ contact });
   }

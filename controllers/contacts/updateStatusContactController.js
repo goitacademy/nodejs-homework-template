@@ -1,11 +1,9 @@
-import model from "../../model/contacts";
+import repositoryContacts from "../../repository";
 
-const updateStatusContactController = async (req, res) => {
+const updateStatusContactController = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await model.updateStatusContact(id, req.body);
-  if (req.body === null) {
-    res.status(400).json({ message: "missing field favorite" });
-  } else {
+  const contact = await repositoryContacts.updateContact(id, req.body);
+  if (contact) {
     return res.status(200).json(contact);
   }
   res.status(404).json({ message: "Not found" });
