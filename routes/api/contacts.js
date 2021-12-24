@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require("joi");
 const { NotFound } = require("http-errors");
 const contactsOperations = require("../../model/index");
+const { Contact } = require("../../model");
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
@@ -39,7 +40,7 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw new Error();
     }
-    const newCcontact = await contactsOperations.addContact(req.body);
+    const newCcontact = await Contact.create(req.body);
     res.status(201).json(newCcontact);
   } catch (error) {
     res.status(400).json({ message: "missing required name field" });
