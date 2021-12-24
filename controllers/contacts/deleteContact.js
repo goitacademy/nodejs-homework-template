@@ -1,5 +1,6 @@
-import { removeContact } from "../../repository";
+import { removeContact } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
+
 export const removeContactCb = async (req, res, next) => {
   const { id } = req.params;
   const contact = await removeContact(id);

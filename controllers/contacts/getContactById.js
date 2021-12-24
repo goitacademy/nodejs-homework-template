@@ -1,5 +1,6 @@
 import { HttpCode } from "../../lib/constants";
-import { getContactById } from "../../repository";
+import { getContactById } from "../../repository/contacts";
+
 export const getContactByIdCb = async (req, res, next) => {
   const { id } = req.params;
   const contact = await getContactById(id);

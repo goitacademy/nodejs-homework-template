@@ -1,4 +1,4 @@
-import { listContacts } from "../../repository";
+import { listContacts } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
 
 export const getContacts = async (req, res, next) => {
