@@ -40,12 +40,12 @@ const contactSchema = new Schema(
   },
 )
 
-contactSchema.virtual('status').get(function () {
-  if (this.age >= 40) {
-    return 'old'
-  }
-  return 'young'
-})
+// contactSchema.virtual('status').get(function () {
+//   if (this.age >= 40) {
+//     return 'old'
+//   }
+//   return 'young'
+// })
 
 const Contact = model('contact', contactSchema)
 
