@@ -1,11 +1,7 @@
 import { Router } from "express";
-
-import operations from "../../model/operations";
+import { getContacts } from "../../controllers/contacts";
+import { validateQuery } from "../../middlewares/contacts/validation";
 const listContactsRouter = new Router();
 
-listContactsRouter.get("/", async (req, res, next) => {
-  const contacts = await operations.listContacts();
-  console.log(contacts);
-  res.status(200).json(contacts);
-});
+listContactsRouter.get("/", validateQuery, getContacts);
 export default listContactsRouter;
