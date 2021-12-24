@@ -1,18 +1,12 @@
 const express = require("express");
 const createError = require("http-errors");
 const router = express.Router();
-const contactsOperation = require("../../model/index");
-const Joi = require("joi");
-
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const { Contact } = require("../../model");
+const { joiSchema } = require("../../model/contact");
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await contactsOperation.listContacts();
+    const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -39,7 +33,7 @@ router.post("/", async (req, res, next) => {
       error.status = 400;
       throw error;
     }
-    const newContact = await contactsOperation.addContact(req.body);
+    const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
