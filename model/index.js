@@ -1,56 +1,53 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { randomUUID } from 'crypto';
-import contacts from './contacts.json';
-import { fileURLToPath } from 'url';
+import db from './db';
+import { ObjectId } from 'mongodb';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const getCollection = async (db, name) => {
+  const client = await db;
+  const collection = await client.db().collection(name);
+  return collection;
+};
 
 const listContacts = async () => {
-    return contacts;
+  const collection = await getCollection(db, 'contacts')
+  const result = await collection.find().toArray();
+  return result;
 };
 
 const getContactById = async (contactId) => {
-    const [contact] = contacts.filter(contact => contact.id === contactId);
-    return contact;
+  const collection = await getCollection(db, 'contacts');
+  const id = ObjectId(contactId);
+  console.log(id.getTimestamp());
+  const result = await collection.find({ _id: id }).toArray();
+  return result;
 };
 
 const removeContact = async (contactId) => {
-  const removeId = contacts.findIndex(
-    (contact) => contact.id === contactId
-  );
-  if (removeId !== -1) {
-    const [newResult] = contacts.splice(removeId, 1);
-    await fs
-          .writeFile(path.join(__dirname, 'contacts.json'),
-            JSON.stringify(contacts, null, 2));
-    return newResult;
-  }
-  return null;
+  const collection = await getCollection(db, 'contacts');
+  const id = ObjectId(contactId);
+  const { value: result } = await collection.findOneAndDelete({ _id: id });
+  return result;
 };
 
-const addContact = async ({name, email, phone}) => {
-    const newContact = { id: randomUUID(), name, email, phone };
-    contacts.push(newContact);
-    await fs
-        .writeFile(path.join(__dirname, 'contacts.json'),
-          JSON.stringify(contacts, null, 2));
-    return newContact;
+const addContact = async (body) => {
+  const collection = await getCollection(db, 'contacts');
+  const newContact = {
+    ...body,
+    favorite: false,
+  };
+  const result = await collection.insertOne(newContact);
+  return result;
 };
 
 const updateContact = async (contactId, body) => {
-  const removeId = contacts.findIndex(
-  (contact) => contact.id === contactId
+  const collection = await getCollection(db, 'contacts');
+  const id = ObjectId(contactId);
+  const { value: result } = await collection.findOneAndUpdate(
+    { _id: id },
+    { $set: body },
+    { returnDocument: 'after' },
   );
-  if (removeId !== -1) {
-    const updatedContact = { id: contactId, ...contacts[removeId],...body };
-    contacts[removeId] = updatedContact;
-    await fs
-          .writeFile(path.join(__dirname, 'contacts.json'),
-            JSON.stringify(contacts, null, 2));
-    return updatedContact;
-  }
-  return null;
+  return result;
 }
 
 export default {

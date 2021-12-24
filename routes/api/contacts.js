@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   const contacts = await model.listContacts();
+  console.log(contacts);
   res.json(contacts)
 });
 
@@ -26,7 +27,7 @@ router.delete('/:id', validateId, async (req, res, next) => {
   const { id } = req.params;
   const contact = await model.removeContact(id)
   contact ?
-    res.status(200).json({ message: 'contact deleted' }) :
+    res.status(200).json({ contact }) :
     res.status(404).json({ message: 'Not found' });
 });
 
