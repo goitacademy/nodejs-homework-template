@@ -20,7 +20,13 @@ const getContactById = async (contactId) => {
    return contact;
 }
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {
+  const allContacts = await listContacts();
+  const removeContactById = allContacts.filter(contact => contact.id !== String(contactId));
+  console.log("removeContactById", removeContactById);
+   fs.writeFile(contactsPath, JSON.stringify(removeContactById, null, 2));
+   return removeContactById;
+}
 
 const addContact = async (body) => {
   const contactList = await listContacts();
@@ -31,7 +37,7 @@ const addContact = async (body) => {
   
 }
 
-const updateContact = async ({contactId, body}) => {
+const updateContact = async (contactId, body) => {
   const contactList = await listContacts();
   const idx = contactList.findIndex(item => item.id === contactId);
   if (idx === -1){
@@ -50,21 +56,3 @@ module.exports = {
   updateContact,
 }
 
-
-
-// router.put("/:id", async(req, res, next)=> {
-//   try {
-//       const {error} = joiSchema.validate(req.body);
-//       if(error){
-//           throw new BadRequest(error.message);
-//       }
-//       const {id} = req.params;
-//       const updateProduct = await productsOperations.updateById({id, ...req.body});
-//       if(!updateProduct){
-//           throw new NotFound();
-//       }
-//       res.json(updateProduct);
-//   } catch (error) {
-//       next(error);
-//   }
-// })

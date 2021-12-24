@@ -27,9 +27,6 @@ router.get("/:contactId", async (req, res, next) => {
       const error = new Error("Not Found");
       error.status = 404;
       throw error;
-      // return res.status(404).json({
-      //   message: "Contact Not Found",
-      // });
     }
     res.json(contact);
   } catch (error) {
@@ -52,7 +49,7 @@ router.post("/", async (req,res,next) => {
     }
     const newContact = await contactsOperations.addContact(req.body)
     res.status(201).json(newContact); 
-   // console.log("req.body", req.body)  // req.body показывает инфо для записи 
+   // console.log("req.body", req.body)  // req.body показывает объект для записи 
   } catch (error) {
     next(error);
   }}
@@ -60,50 +57,46 @@ router.post("/", async (req,res,next) => {
 
 // Обновление контакта 
 
-router.put("/:id", async(req, res, next) => {
+router.put("/:contactId", async(req, res, next) => {
   try {
     const {error} = validationSchema.validate(req.body);
     if(error){
       res.status(400).json({message: "missing required name field"});
       throw error;}
 
-      const {id} = req.params;
-      console.log("req.params", req.params);
-      console.log("req.body", req.body);
-      const updateContact = await contactsOperations.updateContact(req.params, ...req.body);
-        res.json(updateContact);
+      const {contactId} = req.params;
+      // console.log("req.params", req.params);
+      // console.log("req.body", req.body);
+      const updateContact = await contactsOperations.updateContact(contactId, req.body);
 
       if (!updateContact) {
         const error = new Error("Not Found");
         error.status = 404;
         throw error;}
+        res.json(updateContact);
 
   } catch (error) {
     next(error);
   }}
 )
 
+router.delete("/:contactId", async(req, res, next) => {
+  try {
+    const {contactId} = req.params;
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+    const contactToBeDeleted = await contactsOperations.getContactById(contactId);
+    if(!contactToBeDeleted){
+      const error = new Error("Contact has not been Found");
+      error.status = 404;
+      throw error;
+    }
+    
+    await contactsOperations.removeContact(contactId);
+     res.json({message: "contact deleted"})
 
-router.patch("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
-
-
-
-// const updateById = async ({id, name, price}) => {
-//     const products = await getAll();
-//     const idx = products.findIndex(item => item.id === id);
-//     if(idx === -1){
-//         return null;
-//     }
-//     products[idx] = {id, name, price};
-//     await updateProducts(products);
-//     return products[idx];
-// }
-
