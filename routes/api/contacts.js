@@ -3,8 +3,9 @@ const router = express.Router();
 
 const { NotFound } = require("http-errors");
 const contactsOperations = require("../../model/index");
-const { Contact, joiSchema } = require("../../model");
-
+const { Contact } = require("../../model");
+const { joiSchema } = require("../../model/contact");
+console.log(Contact);
 router.get("/", async (req, res, next) => {
   try {
     const products = await contactsOperations.listContacts();
