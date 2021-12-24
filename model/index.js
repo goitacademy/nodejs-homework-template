@@ -1,6 +1,6 @@
-const { Contact, joiSchema } = require("./contact");
+const { Contact } = require("./contact");
 
-module.exports = { Contact, joiSchema };
+module.exports = { Contact };
 
 // const fs = require("fs/promises");
 // const path = require("path");
