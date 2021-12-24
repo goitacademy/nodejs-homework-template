@@ -10,21 +10,15 @@
 
 ## Шаг 1
 
----
-
 Создай аккаунт на [MongoDB Atlas](https://www.mongodb.com/atlas/database). После чего в аккаунте создай новый проект и настрой **бесплатный кластер**. Во время настройки кластера выбери провайдера и регион как на скриншоте ниже. Если выбрать слишком удаленный регион, скорость ответа сервера будет дольше.
 
 [![atlas cluster](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/atlas-cluster.jpg)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/atlas-cluster.jpg)
 
 ## Шаг 2
 
----
-
 Установи графический редактор [MongoDB Compass](https://www.mongodb.com/try/download/compass) для удобной работы с базой данных для MongoDB. Настрой подключение своей облачной базы данных к Compass. В MongoDB Atlas не забудь создать пользователя с правами администратора.
 
 ## Шаг 3
-
----
 
 Через Compass создай базу данных `db-contacts` и в ней коллекцию `contacts`. Возьми [ссылка на json](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/contacts.json) и при помощи Compass наполни коллекцию `contacts` (сделай импорт) его содержимым.
 [![json-data.png](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/json-data.png)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/json-data.png)
@@ -32,8 +26,6 @@
 [![mongo-data.png](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/mongo-data.png)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/mongo-data.png)
 
 ## Шаг 4
-
----
 
 Используйте исходный код [домашней работы #2](https://github.com/goitacademy/nodejs-homework/blob/master/homework-02/README.md) и замените хранение контактов из json-файла на созданную вами базу данных.
 
@@ -63,8 +55,6 @@ default: false,
 ```
 
 ## Шаг 5
-
----
 
 У нас появилось в контактах дополнительное поле статуса `favorite`, которое принимает логическое значение `true` или `false`. Оно отвечает за то, что в избранном или нет находится указанный контакт. Реализуй для обновления статуса контакта новый маршрут
 
