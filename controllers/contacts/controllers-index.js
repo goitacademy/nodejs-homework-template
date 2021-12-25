@@ -1,48 +1,64 @@
 import repositoryContacts from '../../repository/repository-contacts'
+import { HttpCode, ERROR } from '../../libs/constants';
 
-router.get('/', async (req, res, next) => {
-  const contacts = await repositoryContacts.listContacts();
-  console.log(contacts);
-  res.json(contacts)
-});
+const getContacts = async (req, res, next) => {
+  const contacts = await repositoryContacts.listContacts(req.query);
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { ...contacts }
+  })
+};
 
-router.get('/:id', validateId, async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   const { id } = req.params;
   const contact = await repositoryContacts.getContactById(id);
   contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'not found' });
-});
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { contact }
+    }) :
+    res.status(HttpCode.NOT_FOUND).json(ERROR);
+};
 
-router.post('/', validateCreate, async (req, res, next) => {
+const getAddContact = async (req, res, next) => {
   const newContact = await repositoryContacts.addContact(req.body);
-  res.status(201).json(newContact);
-});
+  res.status(HttpCode.CREATED).json({
+    status: 'success',
+      code: HttpCode.CREATED,
+      data: { contact: newContact }
+  });
+};
 
-router.delete('/:id', validateId, async (req, res, next) => {
+const getRemoveContact = async (req, res, next) => {
   const { id } = req.params;
   const contact = await repositoryContacts.removeContact(id)
   contact ?
-    res.status(200).json({ contact }) :
-    res.status(404).json({ message: 'Not found' });
-});
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { contact }
+    }) :
+    res.status(HttpCode.NOT_FOUND).json(ERROR);
+};
 
-router.put('/:id', validateId, validateUpdate, async (req, res, next) => {
+const getUpdateContact = async (req, res, next) => {
   const { id } = req.params;
   const contact = await repositoryContacts.updateContact(id, req.body);
   contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'Not found' });
-});
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      data: { contact }
+    }) :
+    res.status(HttpCode.NOT_FOUND).json(ERROR);
+};
 
-router.patch(
-  '/:id/favorite',
-  validateId,
-  validateUpdateFavorite,
-  async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await repositoryContacts.updateContact(id, req.body);
-  contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'Not found' });
-});
+export {
+    getContacts,
+    getContactById,
+    getAddContact,
+    getRemoveContact,
+    getUpdateContact,
+}

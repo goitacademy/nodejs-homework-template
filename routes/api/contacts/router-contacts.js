@@ -1,59 +1,36 @@
 import { Router } from 'express';
-import repositoryContacts from '../../../repository/repository-contacts';
 import {
   validateCreate,
   validateId,
   validateUpdate,
-  validateUpdateFavorite
+  validateUpdateFavorite,
+  validateQuery
 } from './validation';
+import {
+  getAddContact,
+  getContactById,
+  getContacts,
+  getRemoveContact,
+  getUpdateContact
+} from '../../../controllers/contacts/controllers-index';
 
 const router = new Router();
 
-router.get('/', async (req, res, next) => {
-  const contacts = await repositoryContacts.listContacts();
-  console.log(contacts);
-  res.json(contacts)
-});
+router.get('/',validateQuery, getContacts);
 
-router.get('/:id', validateId, async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await repositoryContacts.getContactById(id);
-  contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'not found' });
-});
+router.get('/:id', validateId, getContactById);
 
-router.post('/', validateCreate, async (req, res, next) => {
-  const newContact = await repositoryContacts.addContact(req.body);
-  res.status(201).json(newContact);
-});
+router.post('/', validateCreate, getAddContact);
 
-router.delete('/:id', validateId, async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await repositoryContacts.removeContact(id)
-  contact ?
-    res.status(200).json({ contact }) :
-    res.status(404).json({ message: 'Not found' });
-});
+router.delete('/:id', validateId, getRemoveContact);
 
-router.put('/:id', validateId, validateUpdate, async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await repositoryContacts.updateContact(id, req.body);
-  contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'Not found' });
-});
+router.put('/:id', validateId, validateUpdate, getUpdateContact);
 
 router.patch(
   '/:id/favorite',
   validateId,
   validateUpdateFavorite,
-  async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await repositoryContacts.updateContact(id, req.body);
-  contact ?
-    res.status(200).json(contact) :
-    res.status(404).json({ message: 'Not found' });
-});
+  getUpdateContact
+);
 
 export default router;
