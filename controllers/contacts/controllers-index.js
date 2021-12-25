@@ -1,31 +1,27 @@
-import express from 'express';
-import model from '../../model/index';
-import { validateCreate, validateId, validateUpdate } from './validation';
-
-const router = express.Router();
+import repositoryContacts from '../../repository/repository-contacts'
 
 router.get('/', async (req, res, next) => {
-  const contacts = await model.listContacts();
+  const contacts = await repositoryContacts.listContacts();
   console.log(contacts);
   res.json(contacts)
 });
 
 router.get('/:id', validateId, async (req, res, next) => {
   const { id } = req.params;
-  const contact = await model.getContactById(id);
+  const contact = await repositoryContacts.getContactById(id);
   contact ?
     res.status(200).json(contact) :
     res.status(404).json({ message: 'not found' });
 });
 
 router.post('/', validateCreate, async (req, res, next) => {
-  const newContact = await model.addContact(req.body);
+  const newContact = await repositoryContacts.addContact(req.body);
   res.status(201).json(newContact);
 });
 
 router.delete('/:id', validateId, async (req, res, next) => {
   const { id } = req.params;
-  const contact = await model.removeContact(id)
+  const contact = await repositoryContacts.removeContact(id)
   contact ?
     res.status(200).json({ contact }) :
     res.status(404).json({ message: 'Not found' });
@@ -33,10 +29,20 @@ router.delete('/:id', validateId, async (req, res, next) => {
 
 router.put('/:id', validateId, validateUpdate, async (req, res, next) => {
   const { id } = req.params;
-  const contact = await model.updateContact(id, req.body);
+  const contact = await repositoryContacts.updateContact(id, req.body);
   contact ?
     res.status(200).json(contact) :
     res.status(404).json({ message: 'Not found' });
 });
 
-export default router;
+router.patch(
+  '/:id/favorite',
+  validateId,
+  validateUpdateFavorite,
+  async (req, res, next) => {
+  const { id } = req.params;
+  const contact = await repositoryContacts.updateContact(id, req.body);
+  contact ?
+    res.status(200).json(contact) :
+    res.status(404).json({ message: 'Not found' });
+});
