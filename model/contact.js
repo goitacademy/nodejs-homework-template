@@ -9,7 +9,11 @@ const phonePattern =
 
 const contactSchema = Schema(
   {
-    name: { type: String, required: true, match: namePattern },
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+      match: namePattern,
+    },
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true, unique: true, match: phonePattern },
     favorite: { type: Boolean, default: false },
@@ -20,9 +24,9 @@ const contactSchema = Schema(
 const Contact = model("contact", contactSchema);
 
 const joiSchema = Joi.object({
-  name: Joi.string().min(3).max(30).pattern(namePattern).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().pattern(phonePattern).required(),
+  name: Joi.string().min(3).max(30).pattern(namePattern),
+  email: Joi.string().email(),
+  phone: Joi.string().pattern(phonePattern),
   favorite: Joi.boolean(),
 });
 

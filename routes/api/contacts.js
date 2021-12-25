@@ -12,6 +12,12 @@ router.post("/", validation(joiSchema), controllerWrap(ctrl.addContact));
 
 router.put("/:id", validation(joiSchema), controllerWrap(ctrl.updateContact));
 
+router.patch(
+  "/:id/favorite",
+  validation(joiSchema),
+  controllerWrap(ctrl.updateStatusContact)
+);
+
 router.delete("/:id", controllerWrap(ctrl.removeContact));
 
 module.exports = router;
