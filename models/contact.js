@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const Joi = require("joi");
 
 const patternPhone = "\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{2})[- ]?(\\d{2})";
