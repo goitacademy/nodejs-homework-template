@@ -1,5 +1,12 @@
 import express from "express";
-import contactsController from "../../controllers/contacts";
+import {
+  listContactsController,
+  getContactByIdController,
+  addContactController,
+  removeContactController,
+  updateContactController,
+  updateStatusContactController,
+} from "../../controllers";
 import {
   validateCreate,
   validateUpdate,
@@ -10,25 +17,20 @@ import {
 
 const router = express.Router();
 
-router.get("/", validateQuery, contactsController.listContactsController);
+router.get("/", validateQuery, listContactsController);
 
-router.get("/:id", validateId, contactsController.getContactByIdController);
+router.get("/:id", validateId, getContactByIdController);
 
-router.post("/", validateCreate, contactsController.addContactController);
+router.post("/", validateCreate, addContactController);
 
-router.delete("/:id", validateId, contactsController.removeContactController);
+router.delete("/:id", validateId, removeContactController);
 
-router.put(
-  "/:id",
-  validateId,
-  validateUpdate,
-  contactsController.updateContactController
-);
+router.put("/:id", validateId, validateUpdate, updateContactController);
 
 router.patch(
   "/:id/favorite/",
   validateUpdateFavorite,
-  contactsController.updateStatusContactController
+  updateStatusContactController
 );
 
 export default router;

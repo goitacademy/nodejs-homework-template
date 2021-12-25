@@ -5,7 +5,7 @@ import addContactController from "./addContactController";
 import updateContactController from "./updateContactController";
 import updateStatusContactController from "./updateStatusContactController";
 
-export default {
+export {
   listContactsController,
   getContactByIdController,
   addContactController,
