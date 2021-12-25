@@ -22,7 +22,7 @@ connection.on("disconnected", () => {
 });
 
 process.on("SIGINT", async () => {
-  client.close();
+  connection.close();
   console.log("Connection DB closed");
   process.exit(1);
 });
