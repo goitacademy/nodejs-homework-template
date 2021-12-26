@@ -1,8 +1,10 @@
 import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
+import { HttpCode } from './lib/constants'
+import { NotFound } from './lib/messages'
 
-import contactsRouter from './controllers/contacts'
+import contactsRouter from './routes/api/contacts'
 
 const app = express()
 
@@ -16,11 +18,18 @@ app.use(express.urlencoded({ extended: false })) // forms
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+  return res.status(HttpCode.Not_Found).json({
+    status: 'error',
+    code: HttpCode.NOT_FOUND,
+    message: NotFound,
+  })
 })
-
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+    status: 'fail',
+    code: HttpCode.INTERNAL_SERVER_ERROR,
+    message: err.message,
+  })
 })
 
 export default app

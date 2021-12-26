@@ -3,7 +3,7 @@ import { HttpCode } from '../../lib/constants'
 import { NotFound } from '../../lib/messages'
 // import { colors } from '../../helpers'
 
-const updateContactContr = async (req, res, next) => {
+const updatePartOfContact = async (req, res, next) => {
   const { id } = req.params
   const contact = await updateContact(id, req.body)
   if (contact) {
@@ -21,4 +21,4 @@ const updateContactContr = async (req, res, next) => {
   })
 }
 
-export default updateContactContr
+export default updatePartOfContact
