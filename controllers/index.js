@@ -1,7 +1,7 @@
 const contacts = require("./contacts/index.js")
-const signUp = require("./auth/index")
+const users = require("./users/index")
 
 module.exports = {
     contacts,
-    signUp
+    users
 }
