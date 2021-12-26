@@ -1,14 +1,11 @@
-import db from "../db";
-import { ObjectId } from "mongodb";
+import Contact from "../../model/contact";
+
 const updateContact = async (contactId, body) => {
   try {
-    const client = await db;
-    const collection = await client.db().collection("contacts");
-    const id = ObjectId(contactId);
-    const { value: result } = await collection.findOneAndUpdate(
-      { _id: id },
-      { $set: body },
-      { returnDocument: "after" }
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { ...body },
+      { new: true }
     );
     return result;
   } catch (error) {

@@ -1,15 +1,9 @@
-import db from "../db";
+import Contact from "../../model/contact";
 
 const addContact = async (body) => {
   try {
-    const client = await db;
-    const collection = await client.db().collection("contacts");
-    const newContact = {
-      favorite: false,
-      ...body,
-    };
-    const result = await collection.insertOne(newContact);
-    return result;
+    const newContact = await Contact.create(body);
+    return newContact;
   } catch (error) {
     console.log(error.message);
   }

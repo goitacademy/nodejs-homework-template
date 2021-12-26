@@ -1,12 +1,8 @@
-import db from "../db";
-import { ObjectId } from "mongodb";
+import Contact from "../../model/contact";
+
 const getContactById = async (contactId) => {
   try {
-    const client = await db;
-    const collection = await client.db().collection("contacts");
-    const id = ObjectId(contactId);
-    console.log(id.getTimestamp());
-    const [result] = await collection.find({ _id: id }).toArray();
+    const result = await Contact.findById(contactId);
     return result;
   } catch (error) {
     console.log(error.message);

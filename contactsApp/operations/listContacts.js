@@ -1,9 +1,29 @@
-import db from "../db";
-const listContacts = async () => {
-  const client = await db;
-  const collection = await client.db().collection("contacts");
-  const result = await collection.find().toArray();
-  return result;
+import Contact from "../../model/contact";
+
+const listContacts = async (
+  sortBy,
+  sortByDesc,
+  filter,
+  limit = 10,
+  skip = 0
+) => {
+  let sortCriteria = null;
+  const total = await Contact.find().countDocuments();
+  let result = Contact.find();
+  if (sortBy) {
+    sortCriteria = { [`${sortBy}`]: 1 };
+  }
+  if (sortByDesc) {
+    sortCriteria = { [`${sortByDesc}`]: -1 };
+  }
+  if (filter) {
+    result = result.select(filter.split("|").join(" "));
+  }
+  result = await result
+    .skip(Number(skip))
+    .limit(Number(limit))
+    .sort(sortCriteria);
+  return { total, contacts: result };
 };
 
 export default listContacts;

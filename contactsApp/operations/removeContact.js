@@ -1,13 +1,8 @@
-import db from "../db";
-import { ObjectId } from "mongodb";
+import Contact from "../../model/contact";
+
 const removeContact = async (contactId) => {
   try {
-    const client = await db;
-    const collection = await client.db().collection("contacts");
-    const id = ObjectId(contactId);
-    const { value: deletedContact } = await collection.findOneAndDelete({
-      _id: id,
-    });
+    const deletedContact = await Contact.findByIdAndRemove(contactId);
     return deletedContact;
   } catch (error) {
     console.log(error.message);
