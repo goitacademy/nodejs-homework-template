@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
+  updateContact,
 } = require("../../model/index");
 
 router.get("/", async (req, res, next) => {
@@ -20,7 +21,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await getContactById(contactId);
+  const result = await getById(contactId);
 
   if (!result) {
     res.status(404).json({
@@ -41,6 +42,12 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const body = req.body;
   const result = await addContact(body);
+  if (!result) {
+    res.status(400).json({
+      code: 400,
+      message: "missing required name field",
+    });
+  }
   res.status(200).json({
     status: "success",
     code: 201,
@@ -61,16 +68,25 @@ router.delete("/:contactId", async (req, res, next) => {
     });
   }
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
-    code: 204,
-    message: "delete by ID",
+    code: 200,
+    message: "contact deleted",
     data: result,
   });
 });
 
-router.patch("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.put("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { body } = req;
+
+  const result = await updateContact(contactId, body);
+
+  if (!result) {
+    res.status(400).json({ message: "missing fields" });
+  }
+
+  res.status(200).json({ status: "success", message: "PUT", data: result });
 });
 
 module.exports = router;
