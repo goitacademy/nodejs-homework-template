@@ -1,7 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const sgMail = require("@sendgrid/mail");
+// const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
@@ -12,19 +12,19 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-const { SENDGRID_API_KEY } = process.env;
-sgMail.setApiKey(SENDGRID_API_KEY);
-const email = {
-  to: "wegod24947@wiicheat.com",
-  from: "yura.gms@gmail.com",
-  subject: "Новая заявка с сайта",
-  html: "<p>С сайта пришла новая заявка</p>",
-};
+// const { SENDGRID_API_KEY } = process.env;
+// sgMail.setApiKey(SENDGRID_API_KEY);
+// const email = {
+//   to: "wegod24947@wiicheat.com",
+//   from: "yura.gms@gmail.com",
+//   subject: "Новая заявка с сайта",
+//   html: "<p>С сайта пришла новая заявка</p>",
+// };
 
-sgMail
-  .send(email)
-  .then(() => console.log("Email send success"))
-  .catch((error) => console.log(error.message));
+// sgMail
+//   .send(email)
+//   .then(() => console.log("Email send success"))
+//   .catch((error) => console.log(error.message));
 
 app.use(logger(formatsLogger));
 app.use(cors());
