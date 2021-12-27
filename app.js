@@ -11,7 +11,20 @@ const contactsRouter = require("./routes/api/contacts");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+
 const { SENDGRID_API_KEY } = process.env;
+sgMail.setApiKey(SENDGRID_API_KEY);
+const email = {
+  to: "wegod24947@wiicheat.com",
+  from: "yura.gms@gmail.com",
+  subject: "Новая заявка с сайта",
+  html: "<p>С сайта пришла новая заявка</p>",
+};
+
+sgMail
+  .send(email)
+  .then(() => console.log("Email send success"))
+  .catch((error) => console.log(error.message));
 
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -35,3 +48,4 @@ app.use((err, req, res, next) => {
 module.exports = app;
 
 // mongodb+srv://yuragms:<8DMDjaeKyTh9NR8>@cluster0.yg8ew.mongodb.net/test
+// wegod24947@wiicheat.com
