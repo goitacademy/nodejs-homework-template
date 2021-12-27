@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
@@ -10,6 +11,7 @@ const contactsRouter = require("./routes/api/contacts");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+const { SENDGRID_API_KEY } = process.env;
 
 app.use(logger(formatsLogger));
 app.use(cors());
