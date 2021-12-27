@@ -1,6 +1,5 @@
 import { Router } from "express";
 import contactsApp from "../../contactsApp/index";
-// import { getContacts } from "../../controllers/";
 import middleware from "../../middleware";
 import { HttpCode } from "../../lib/constants";
 const routerListContacts = new Router();
