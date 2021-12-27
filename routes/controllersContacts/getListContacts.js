@@ -1,8 +1,6 @@
 import { Router } from "express";
-import { getContacts } from "../../controllers/contacts";
-// import contactsApp from "../../contactsApp/index";
-import middleware from "../../middleware";
-// import { HttpCode } from "../../lib/constants";
+import { getContacts } from "../../controllers";
+import { validateQuery } from "../../middleware";
 const routerListContacts = new Router();
-routerListContacts.get("/", middleware.validateQuery, getContacts);
+routerListContacts.get("/", validateQuery, getContacts);
 export default routerListContacts;

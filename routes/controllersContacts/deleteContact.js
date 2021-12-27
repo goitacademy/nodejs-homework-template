@@ -1,10 +1,8 @@
 import { Router } from "express";
-import { removeContact } from "../../controllers/contacts";
-// import contactsApp from "../../contactsApp/index";
-import middleware from "../../middleware";
-// import { HttpCode } from "../../lib/constants";
+import { removeContact } from "../../controllers";
+import { validateId } from "../../middleware";
 
 const routerDeleteContact = new Router();
 
-routerDeleteContact.delete("/:id", middleware.validateId, removeContact);
+routerDeleteContact.delete("/:id", validateId, removeContact);
 export default routerDeleteContact;

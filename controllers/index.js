@@ -6,7 +6,7 @@ import {
   updateContact,
 } from "./contacts";
 
-export default {
+export {
   getContacts,
   getContactById,
   addContact,

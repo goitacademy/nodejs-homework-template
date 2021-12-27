@@ -1,9 +1,7 @@
 import { Router } from "express";
-import { addContact } from "../../controllers/contacts";
-// import contactsApp from "../../contactsApp/index";
-import middleware from "../../middleware";
-// import { HttpCode } from "../../lib/constants";
+import { addContact } from "../../controllers";
+import { validateCreate } from "../../middleware";
 
 const routerPostContact = new Router();
-routerPostContact.post("/", middleware.validateCreate, addContact);
+routerPostContact.post("/", validateCreate, addContact);
 export default routerPostContact;

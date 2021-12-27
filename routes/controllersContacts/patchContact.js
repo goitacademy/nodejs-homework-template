@@ -1,14 +1,12 @@
 import { Router } from "express";
-import { updateContact } from "../../controllers/contacts";
-// import contactsApp from "../../contactsApp/index";
-import middleware from "../../middleware";
-// import { HttpCode } from "../../lib/constants";
+import { updateContact } from "../../controllers";
+import { validateId, validateUpdateFavorite } from "../../middleware";
 
 const routerPatchContact = new Router();
 routerPatchContact.patch(
   "/:id/favorite",
-  middleware.validateId,
-  middleware.validateUpdateFavorite,
+  validateId,
+  validateUpdateFavorite,
   updateContact
 );
 export default routerPatchContact;
