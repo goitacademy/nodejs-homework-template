@@ -1,8 +1,14 @@
-import validateId from "./validationsContacts/validateId";
-import validateCreate from "./validationsContacts/validateCreate";
-import validateUpdate from "./validationsContacts/validateUpdate";
-export default {
+import {
+  validateId,
   validateCreate,
   validateUpdate,
+  validateUpdateFavorite,
+  validateQuery,
+} from "./validationsContacts";
+export {
   validateId,
+  validateCreate,
+  validateUpdate,
+  validateUpdateFavorite,
+  validateQuery,
 };

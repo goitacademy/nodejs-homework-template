@@ -1,12 +1,16 @@
-import routerListContacts from "./controllersContacts/getListContacts";
-import routerGetContactById from "./controllersContacts/getContactById";
-import routerPostContact from "./controllersContacts/postContact";
-import routerDeleteContact from "./controllersContacts/deleteContact";
-import routerPutContact from "./controllersContacts/putContact";
-export default {
+import {
   routerListContacts,
   routerGetContactById,
   routerPostContact,
   routerDeleteContact,
   routerPutContact,
+  routerPatchContact,
+} from "./controllersContacts";
+export {
+  routerListContacts,
+  routerGetContactById,
+  routerPostContact,
+  routerDeleteContact,
+  routerPutContact,
+  routerPatchContact,
 };
