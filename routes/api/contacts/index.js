@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import {getContacts, getContactById, addContact, removeContact, updateContact} from '../../../controllers/contacts/index'
 import { validatorCreate, validatorId, validatorUpdate, validatorUpdateFavorite} from '../../../midllewares/validation/contactValidation'
+import {getContacts, getContactById, addContact, removeContact, updateContact} from '../../../controllers/contacts/index'
 
 const router = new Router()
 
