@@ -6,6 +6,7 @@ import {
   updateContact,
 } from "./contacts";
 
+
 export default {
   getContacts,
   getContactById,
