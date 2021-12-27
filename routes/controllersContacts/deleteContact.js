@@ -1,5 +1,5 @@
 import { Router } from "express";
-import removeContact from "../../controllers/contacts/removeContact";
+import { removeContact } from "../../controllers/contacts";
 // import contactsApp from "../../contactsApp/index";
 import middleware from "../../middleware";
 // import { HttpCode } from "../../lib/constants";

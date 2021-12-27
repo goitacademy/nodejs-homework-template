@@ -9,7 +9,7 @@ import updateContact from "./updateContact";
 // console.log(addContact);
 // console.log(removeContact)
 // console.log(updateContact);
-export default {
+export {
   getContacts,
   getContactById,
   addContact,
