@@ -4,9 +4,13 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['standard', 'prettier'],
+  extends: ["standard"],
   parserOptions: {
     ecmaVersion: 12,
   },
-  rules: {},
-}
+  rules: {
+    "comma-dangle": "off",
+    "space-before-function-paren": "off",
+    "quotes":"double"
+  }
+};
