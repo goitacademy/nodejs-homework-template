@@ -1,8 +1,20 @@
 import Contact from "../models/contacts/contact";
 
-const listContacts = async () => {
-    const result = await Contact.find()
-    return result
+const listContacts = async ({sortBy, sortByDesc, filter, limit=10, skip=0}) => {
+    let sortCriterion = null
+    const total = await Contact.find().countDocuments()
+    let result = Contact.find()
+    if (sortBy) {
+        sortCriterion = {[`${sortBy}`]: 1}
+    }
+    if (sortByDesc) {
+        sortCriterion = {[`${sortByDesc}`]: -1}
+    }
+    if (filter) {
+        result = result.select(filter.split('::').join(' '))
+    }
+    result = await result.skip(Number(skip)).limit(Number(limit)).sort(sortCriterion)
+    return {total, contacts: result}
 }
 
 const getContactById = async (contactId) => {

@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import { validatorCreate, validatorId, validatorUpdate, validatorUpdateFavorite} from '../../../midllewares/validation/contactValidation'
+import { validatorCreate, validatorId, validatorUpdate, validatorUpdateFavorite, validatorQuery} from '../../../midllewares/validation/contactValidation'
 import {getContacts, getContactById, addContact, removeContact, updateContact} from '../../../controllers/contacts/index'
 
 const router = new Router()
 
-router.get('/', getContacts)
+router.get('/',validatorQuery, getContacts)
 
 router.get('/:id', validatorId, getContactById)
 

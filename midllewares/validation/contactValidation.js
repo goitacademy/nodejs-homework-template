@@ -24,6 +24,18 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.bool().required(),
 })
 
+const regLimit = /\d+/
+
+const querySchema = Joi.object({
+    limit: Joi.string().pattern(new RegExp(regLimit)).optional(),
+    skip: Joi.number().min(0).optional(),
+    sortBy: Joi.string().valid('name', 'age', 'email').optional(),
+    sortByDesc: Joi.string().valid('name', 'age', 'email').optional(),
+    filter: Joi.string()
+    // eslint-disable-next-line prefer-regex-literals
+    .pattern(new RegExp('(name::email::age)')).optional()
+})
+
 export const validatorCreate = async (req, res, next) => {
     try {
         await createSchema.validateAsync(req.body)
@@ -62,6 +74,15 @@ export const validatorUpdateFavorite = async (req, res, next) => {
             return res.status(400).json({message: "Missing field favorite"})
         }
         return res.status(400).json({message: err.message})
+    }
+    next ()
+}
+
+export const validatorQuery = async (req, res, next) => {
+    try {
+        await querySchema.validateAsync(req.query)
+    } catch (err) {
+            return res.status(400).json({message: `Missing field ${err.message.replace(/"/g, '')}`})
     }
     next ()
 }
