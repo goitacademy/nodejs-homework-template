@@ -32,6 +32,8 @@ router.get(
   controlWrapper(controllerContacts.verifyEmail)
 );
 
+router.get("/verify/", controlWrapper(controllerContacts.verifyAgain));
+
 module.exports = router;
 
 // {

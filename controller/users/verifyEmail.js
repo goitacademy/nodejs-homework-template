@@ -1,6 +1,6 @@
 const { NotFound } = require("http-errors");
 
-const { User } = require("../../models");
+const { User } = require("../../model");
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
@@ -12,8 +12,8 @@ const verifyEmail = async (req, res) => {
     verify: true,
     verificationToken: null,
   });
-  res.json({
-    message: "Verify success",
+  res.status(200).json({
+    message: "Verification successful",
   });
 };
 
