@@ -4,6 +4,7 @@ import cors from "cors";
 import { HttpCode } from "./lib/constants";
 
 import contactsRouter from "./routes/api/contacts";
+import usersRouter from "./routes/users/users";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(express.urlencoded({ extended: false })); // forms submit
 
 app.use("/api/contacts", contactsRouter);
 
+app.use("/api/users", usersRouter);
+
 app.use((req, res) => {
   res
     .status(HttpCode.NOT_FOUND)
@@ -23,13 +26,11 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res
-    .status(HttpCode.INTERNAL_SERVER_ERROR)
-    .json({
-      status: "fail",
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: err.message,
-    });
+  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+    status: "fail",
+    code: HttpCode.INTERNAL_SERVER_ERROR,
+    message: err.message,
+  });
 });
 
 export default app;

@@ -26,6 +26,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    // owner: {
+    //   type: SchemaTypes.ObjectId,
+    //   ref: 'user',
+    // }
   },
   {
     versionKey: false,

@@ -13,7 +13,7 @@ import {
   validateId,
   validateUpdateFavorite,
   validateQuery,
-} from "../../midllewares/validation/validation";
+} from "../../midllewares/validation/validationContacts";
 
 const router = express.Router();
 
