@@ -1,5 +1,5 @@
 import app from "../app";
-import db from "../db/db";
+import db from "../config/db";
 // eslint-disable-next-line no-unused-vars
 import { colors } from "../helpers";
 
