@@ -1,44 +1,5 @@
-import { Router } from 'express'
-import model from '../../models/contacts/index'
-import { validatorCreate, validatorId, validatorUpdate } from '../../midllewares/validation/contactValidation'
-
-const router = new Router()
-
-router.get('/', async (req, res, next) => {
-   const contacts = await model.listContacts()
-   res.status(200).json(contacts)
- })
-
-router.get('/:id', validatorId, async (req, res, next) => {
-   const {id} = req.params
-   const contact = await model.getContactById(id)
-    if (contact) {
-      return res.status(200).json(contact)
-    }
-    res.status(404).json({ message: `Not found contact with id: ${id}` })
- })
-
-router.post('/', validatorCreate, async (req, res, next) => {
-   const newContact = await model.addContact(req.body)
-   res.status(201).json(newContact)
- })
-
-router.delete('/:id', validatorId, async (req, res, next) => {
-   const {id} = req.params
-   const contact = await model.removeContact(id)
-    if (contact) {
-      return res.status(200).json({message: "Contact deleted"})
-     }
-    res.status(404).json({ message: `Couldn't delete this contact, because it NOT FOUND` })
- })
-
-router.put('/:id', validatorId, validatorUpdate, async (req, res, next) => {
-   const {id} = req.params
-   const contact = await model.updateContact(id, req.body)
-   if (contact) {
-     return res.status(200).json(contact)
-   }
-   res.status(404).json({ message: `Not found contact with id: ${id}` })
- })
-
-export default router
+export { getContacts } from "./getContacts"
+export { getContactById } from "./getContactById"
+export { addContact } from "./addContact"
+export { removeContact } from "./removeContact"
+export { updateContact } from "./updateContact"
