@@ -2,6 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import routers from "./routes/contacts";
+import usersRouter from "./routes/users/users";
 import { HttpCode } from "./lib/constants";
 
 const app = express();
@@ -18,6 +19,8 @@ app.use("/contacts/", routers.createRouter);
 app.use("/contacts/", routers.deleteRouter);
 app.use("/contacts/", routers.getByIdRouter);
 app.use("/contacts/", routers.patchContactRouter);
+
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res
