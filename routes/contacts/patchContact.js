@@ -4,7 +4,7 @@ import {
   validateId,
   validateUpdateFavorite,
 } from "../../middlewares/contacts/validation";
-import guard from "../../../midllewares/guard";
+import guard from "../../middlewares/guard";
 
 const patchContactRouter = new Router();
 patchContactRouter.patch(

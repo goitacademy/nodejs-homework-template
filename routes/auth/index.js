@@ -3,9 +3,9 @@ import {
   signupController,
   loginController,
   logoutController,
-} from "../../../controllers/";
+} from "../../controllers/auth";
 
-import guard from "../../../midllewares/guard";
+import guard from "../../middlewares/guard";
 
 const router = express.Router();
 
