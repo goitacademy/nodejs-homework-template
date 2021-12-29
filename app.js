@@ -10,6 +10,8 @@ import {
   routerPutContact,
   routerPatchContact,
 } from "./routes";
+
+import authRouter from "./routes/auth";
 import { HttpCode } from "./lib/constants";
 const app = express();
 
@@ -18,6 +20,8 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+
+app.use("/auth", authRouter);
 app.use("/controllersContacts", routerListContacts);
 app.use("/controllersContacts", routerGetContactById);
 app.use("/controllersContacts", routerPostContact);
