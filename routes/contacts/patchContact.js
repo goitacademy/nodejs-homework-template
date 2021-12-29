@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { updateContactCb } from "../../controllers/contacts";
+import guard from "../../middlewares/users/guard";
 import {
   validateId,
   validateUpdateFavorite,
@@ -7,8 +8,7 @@ import {
 const patchContactRouter = new Router();
 patchContactRouter.patch(
   "/:id/favorite",
-  validateId,
-  validateUpdateFavorite,
+  [guard, validateId, validateUpdateFavorite],
   updateContactCb
 );
 export default patchContactRouter;

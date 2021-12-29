@@ -5,7 +5,7 @@ import deleteRouter from "./removeContact";
 import listContactsRouter from "./listContacts";
 import patchContactRouter from "./patchContact";
 
-export default {
+export {
   createRouter,
   getByIdRouter,
   updateRouter,
