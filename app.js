@@ -3,8 +3,8 @@ import logger from "morgan";
 import cors from "cors";
 import { HttpCode } from "./lib/constants";
 
+import authRouter from "./routes/api/auth";
 import contactsRouter from "./routes/api/contacts";
-import usersRouter from "./routes/users/users";
 
 const app = express();
 
@@ -13,11 +13,10 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json()); // json
-app.use(express.urlencoded({ extended: false })); // forms submit
+// app.use(express.urlencoded({ extended: false })); // forms submit
 
+app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
-
-app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res
