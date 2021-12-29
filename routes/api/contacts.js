@@ -1,71 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../model/index')
+const {controllerWrapper, validation} = require("../../middlewares");
+const contactsController = require('../../controllers')
+const contactJoiSchema = require("../../schemas");
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contacts = await listContacts()
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { result: contacts },
-    })
-    // res.json({ contacts })
-  } catch (error) {
-    next(error)
-  }
-})
+router.get('/', controllerWrapper(contactsController.getAll))
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params
-    const result = await getContactById(id)
-    console.log(result)
-    if (!result) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Product whith id=${id} not found`,
-      })
-      return
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { result },
-    })
-  } catch (error) {
-    next(error)
-  }
-})
+router.get('/:id', controllerWrapper(contactsController.getContactById))
 
-router.post('/', async (req, res, next) => {
-  try {
-    const result = await addContact(req.body)
-    console.log(req.body);
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: { result },
-    })
-    console.log(result);
-  } catch (error) {
-    next(error)
-  }
-})
+router.post('/', validation(contactJoiSchema), controllerWrapper(contactsController.addContact))
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:id', controllerWrapper(contactsController.removeContact))
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:id', validation(contactJoiSchema), controllerWrapper(contactsController.updateContact))
 
 module.exports = router
