@@ -8,12 +8,12 @@ import {
 
 const router = express.Router();
 
-router.post("/users/signup", userSignupController);
+router.post("/signup", userSignupController);
 
-router.post("/users/login", userLoginController);
+router.post("/login", userLoginController);
 
-router.get("/users/logout", userLogoutController);
+router.get("/logout", userLogoutController);
 
-router.get("/users/current", userCurrentController);
+router.get("/current", userCurrentController);
 
 export default router;
