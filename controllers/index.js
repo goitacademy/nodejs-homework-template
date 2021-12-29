@@ -6,11 +6,10 @@ import {
     updateContact,
   } from "./contacts";
 import {
-    userSignupController,
-    userLoginController,
-    userLogoutController,
-    userCurrentController,
-  } from "./users";
+  signupController,
+  loginController,
+  logoutController,
+  } from "./auth";
 
   export {
     listContacts,
@@ -18,8 +17,7 @@ import {
     addContact,
     deleteContact,
     updateContact,
-    userSignupController,
-    userLoginController,
-    userLogoutController,
-    userCurrentController,
+    signupController,
+    loginController,
+    logoutController,
   };

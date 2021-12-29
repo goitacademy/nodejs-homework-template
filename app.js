@@ -2,7 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import routers from "./routes/contacts";
-import usersRouter from "./routes/users/users";
+import usersRouter from "./routes/auth";
 import { HttpCode } from "./lib/constants";
 
 const app = express();
