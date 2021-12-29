@@ -4,11 +4,13 @@ import {
   validateId,
   validateUpdateFavorite,
 } from "../../middlewares/contacts/validation";
+import guard from "../../../midllewares/guard";
+
 const patchContactRouter = new Router();
 patchContactRouter.patch(
   "/:id/favorite",
+  [guard, validateUpdateFavorite],
   validateId,
-  validateUpdateFavorite,
   updateContactCb
 );
 export default patchContactRouter;
