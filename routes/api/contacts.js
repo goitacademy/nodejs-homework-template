@@ -8,8 +8,13 @@ const router = express.Router();
 
 router.get('/', authToken, async (req, res, next) => {
   try {
+    const { page = 1, limit } = req.query;
     const { _id } = req.user;
-    const contacts = await Contact.find({ owner: _id }, '');
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({ owner: _id }, '', {
+      skip,
+      limit: +limit,
+    });
     res.json(contacts);
   } catch (error) {
     next(error);
