@@ -6,16 +6,17 @@ const { authToken } = require('../../middleware');
 const { Contact } = require('../../model');
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', authToken, async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { _id } = req.user;
+    const contacts = await Contact.find({ owner: _id }, '');
     res.json(contacts);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authToken, async (req, res, next) => {
   const { id } = req.params;
   try {
     const contacts = await Contact.findById(id);

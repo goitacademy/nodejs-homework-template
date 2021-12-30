@@ -54,7 +54,7 @@ router.post('/login', async (req, res, next) => {
     const payload = {
       id: _id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
     await User.findByIdAndUpdate(_id, { token });
     res.json({ token, user: { email } });
   } catch (error) {
