@@ -4,6 +4,9 @@ const { BadRequest, Conflict, Unauthorized } = require('http-errors');
 const { joiRegisterSchema, joiLoginSchema } = require('../../model/user');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+
+const { SECRET_KEY } = process.env;
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -46,6 +49,14 @@ router.post('/login', async (req, res, next) => {
     if (!passwordCompare) {
       throw new Unauthorized('Email or password is wrong');
     }
+    const { _id } = user;
+
+    const payload = {
+      id: _id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    await User.findByIdAndUpdate(_id, { token });
+    res.json({ token, user: { email } });
   } catch (error) {
     next(error);
   }

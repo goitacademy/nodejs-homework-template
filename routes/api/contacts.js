@@ -1,12 +1,14 @@
 const express = require('express');
-const router = express.Router();
-const { contactsSchema } = require('../../validation');
 
-const contact = require('../../model');
+const { contactsSchema } = require('../../validation');
+const { authToken } = require('../../middleware');
+
+const { Contact } = require('../../model');
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await contact.find();
+    const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -16,7 +18,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const contacts = await contact.findById(id);
+    const contacts = await Contact.findById(id);
     if (!contacts) {
       return res.status(404).json({ message: 'Not found', code: 404 });
     }
@@ -29,14 +31,14 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', authToken, async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: 'missing required name field' });
     }
-
-    const contacts = await contact.create(req.body);
+    const { _id } = req.user;
+    const contacts = await Contact.create({ ...req.body, owner: _id });
     res.status(201).json({ contacts });
   } catch (error) {
     if (error.message.includes('validation failed')) {
@@ -50,7 +52,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const contacts = await contact.findByIdAndRemove(id);
+    const contacts = await Contact.findByIdAndRemove(id);
     if (!contacts) {
       return res.status(404).json({ message: 'Not found', code: 404 });
     }
@@ -70,7 +72,7 @@ router.put('/:id', async (req, res, next) => {
     if (error) {
       return res.status(400).json({ message: 'missing fields' });
     }
-    const updateContacts = await contact.findByIdAndUpdate(id, req.body, {
+    const updateContacts = await Contact.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     if (!updateContacts) {
@@ -94,7 +96,7 @@ router.patch('/:id/favorite', async (req, res, next) => {
     if (error) {
       return res.status(400).json({ message: 'missing field favorite' });
     }
-    const updateContacts = await contact.findByIdAndUpdate(
+    const updateContacts = await Contact.findByIdAndUpdate(
       id,
       { favorite },
       {

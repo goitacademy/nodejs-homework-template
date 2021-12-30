@@ -1,4 +1,4 @@
-const { Schema, model, SchemaTypes } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 
 const emailRegexp = /^\w+([.-]?\w+)+@\w+([.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/;
@@ -24,10 +24,7 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: 'user',
-    },
+ 
   },
   { versionKey: false, timestamps: true },
 );
