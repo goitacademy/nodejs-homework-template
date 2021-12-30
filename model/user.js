@@ -2,7 +2,7 @@ import pkg from "mongoose";
 import bcrypt from "bcryptjs";
 import { Role } from "../lib/constants";
 
-const { Schema, model, SchemaTypes } = pkg;
+const { Schema, model } = pkg;
 
 const userSchema = new Schema(
   {
@@ -28,10 +28,7 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: "user",
-    },
+
     role: {
       type: String,
       enum: {

@@ -25,7 +25,6 @@ const guard = async (req, res, next) => {
   }
   const payload = jwt.decode(token);
   const user = await repositoryUsers.findById(payload.id);
-  console.log(user);
   if (!user || user.token !== token) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: "error",

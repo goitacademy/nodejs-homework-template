@@ -1,6 +1,6 @@
 import pkg from "mongoose";
-
-const { Schema, model } = pkg;
+import { MIN_AGE, MAX_AGE } from "../lib/constants";
+const { Schema, SchemaTypes, model } = pkg;
 
 const contactSchema = new Schema(
   {
@@ -11,12 +11,24 @@ const contactSchema = new Schema(
     email: {
       type: String,
     },
+
     phone: {
       type: String,
+    },
+    age: {
+      type: Number,
+      min: MIN_AGE,
+      max: MAX_AGE,
+      default: null,
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   {
