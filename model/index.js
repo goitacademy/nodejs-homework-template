@@ -1,7 +1,5 @@
 const fs = require('fs/promises')
 const { v4 } = require('uuid')
-// const contacts = require('./contacts.json')
-
 const path = require('path')
 const contactsPath = path.join(__dirname, 'contacts.json')
 
@@ -57,20 +55,17 @@ const addContact = async (body) => {
   }
 }
 
-const updateContact = async ({ contactId, name, phone, email }) => {
-  console.log('contactId, name, phone, email', contactId, name, phone, email)
-  try {
-    const contacts = await listContacts()
-    const idx = contacts.findIndex((item) => item.id === contactId)
-    if (idx === -1) {
-      return null
-    }
-    contacts[idx] = { contactId, name, phone, email }
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-    return contacts[idx]
-  } catch (error) {
-    console.error(error.message)
+const updateContact = async (contactId, { name, phone, email }) => {
+  const contacts = await listContacts()
+
+  const idx = contacts.findIndex((item) => item.id === contactId)
+  if (idx === -1) {
+    return null
   }
+  contacts[idx] = { contactId, name, phone, email }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+
+  return contacts[idx]
 }
 
 module.exports = {

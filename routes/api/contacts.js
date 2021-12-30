@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-// const CreateError = require('http-error')
 const { NotFound, BadRequest } = require('http-error')
 const Joi = require('joi')
 const contactsOperations = require('../../model/index')
@@ -57,19 +56,18 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-// don't work
 router.patch('/:contactId', async (req, res, next) => {
-  // console.log('req.body', req.body)
   try {
     const { error } = joiSchema.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
     }
-    const { id } = req.params
-    const updateContact = await contactsOperations.updateContact({
-      id,
-      ...req.body,
-    })
+    const { contactId } = req.params
+    console.log('req.body', req.params)
+    const updateContact = await contactsOperations.updateContact(
+      contactId,
+      req.body
+    )
     if (!updateContact) {
       throw new NotFound()
     }
@@ -86,7 +84,7 @@ router.delete('/:contactId', async (req, res, next) => {
     if (!deleteContact) {
       throw new NotFound()
     }
-    res.json({ message: 'product delete' })
+    res.json({ message: 'product deleted' })
   } catch (error) {
     next(error)
   }
