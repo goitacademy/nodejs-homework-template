@@ -4,16 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node --es-module-specifier-resolution=node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon --es-module-specifier-resolution=node ./bin/server.js",
+    "start": "cross-env NODE_ENV=production node -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "joi": "^17.5.0",
+    "mongoose": "^6.1.3",
     "morgan": "1.10.0"
   },
   "devDependencies": {
