@@ -13,7 +13,7 @@ import {
   validateId,
   validateUpdateFavorite,
   validateQuery,
-} from "./validation";
+} from "../../../middlewares/validation/validation";
 
 const router = new Router();
 
