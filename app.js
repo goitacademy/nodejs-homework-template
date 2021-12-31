@@ -4,11 +4,13 @@ import cors from "cors";
 import routers from "./routes/contacts";
 import usersRouter from "./routes/auth";
 import { HttpCode } from "./lib/constants";
+import helmet from "helmet";
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json()); // json
