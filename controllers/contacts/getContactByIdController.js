@@ -3,7 +3,8 @@ import { HttpCode } from "../../lib/constants";
 
 const getContactByIdController = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await repositoryContacts.getContactById(id);
+  const { id: userId } = req.user;
+  const contact = await repositoryContacts.getContactById(userId, id);
   console.log(contact);
   if (contact) {
     return res

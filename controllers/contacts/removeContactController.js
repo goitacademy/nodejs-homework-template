@@ -3,7 +3,8 @@ import { HttpCode } from "../../lib/constants";
 
 const removeContactController = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await repositoryContacts.removeContact(id);
+  const { id: userId } = req.user;
+  const contact = await repositoryContacts.removeContact(userId, id);
   if (contact) {
     return res.status(HttpCode.OK).json({
       status: "success",
