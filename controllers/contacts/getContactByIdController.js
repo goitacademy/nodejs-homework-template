@@ -1,10 +1,10 @@
-import repositoryContacts from "../../repository";
+import { getContactById } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
 
 const getContactByIdController = async (req, res, next) => {
   const { id } = req.params;
   const { id: userId } = req.user;
-  const contact = await repositoryContacts.getContactById(userId, id);
+  const contact = await getContactById(userId, id);
   console.log(contact);
   if (contact) {
     return res

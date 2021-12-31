@@ -1,4 +1,4 @@
-import Contact from "../model/contactSchema";
+import Contact from "../../model/contactSchema";
 
 const getContactById = async (userId, contactId) => {
   try {

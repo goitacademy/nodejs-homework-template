@@ -4,7 +4,7 @@ import removeContact from "./removeContact";
 import getContactById from "./getContactById";
 import listContacts from "./listContacts";
 
-export default {
+export {
   updateContact,
   addContact,
   removeContact,

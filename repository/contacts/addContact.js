@@ -1,4 +1,4 @@
-import Contact from "../model/contactSchema";
+import Contact from "../../model/contactSchema";
 
 const addContact = async (userId, body) => {
   const result = await Contact.create({ ...body, owner: userId });

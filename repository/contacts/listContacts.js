@@ -1,4 +1,4 @@
-import Contact from "../model/contactSchema";
+import Contact from "../../model/contactSchema";
 
 const listContacts = async (
   userId,

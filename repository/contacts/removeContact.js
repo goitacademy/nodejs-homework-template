@@ -1,4 +1,4 @@
-import Contact from "../model/contactSchema";
+import Contact from "../../model/contactSchema";
 
 const removeContact = async (userId, contactId) => {
   const result = await Contact.findOneAndRemove({

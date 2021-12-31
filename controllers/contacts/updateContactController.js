@@ -1,10 +1,10 @@
-import repositoryContacts from "../../repository";
+import { updateContact } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
 
 const updateContactController = async (req, res, next) => {
   const { id } = req.params;
   const { id: userId } = req.user;
-  const contact = await repositoryContacts.updateContact(userId, id, req.body);
+  const contact = await updateContact(userId, id, req.body);
   if (contact) {
     return res
       .status(HttpCode.OK)

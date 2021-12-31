@@ -1,4 +1,4 @@
-import Contact from "../model/contactSchema";
+import Contact from "../../model/contactSchema";
 
 const updateContact = async (userId, contactId, body) => {
   const result = await Contact.findOneAndUpdate(
