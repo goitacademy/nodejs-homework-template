@@ -2,8 +2,9 @@ import { HttpCode } from "../../lib/constants";
 import { getContactById } from "../../repository/contacts";
 
 export const getContactByIdCb = async (req, res, next) => {
+  const {id: userId} = req.user;
   const { id } = req.params;
-  const contact = await getContactById(id);
+  const contact = await getContactById(userId, id);
   console.log(contact); // toObject
   if (contact) {
     return res
