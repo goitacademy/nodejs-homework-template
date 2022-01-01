@@ -1,10 +1,10 @@
 {
-  "name": "template",
-  "version": "0.0.0",
+  "name": "rest-api",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "start": "cross-env NODE_ENV=production node ./src/bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./src/bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
@@ -12,9 +12,11 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "joi": "^17.5.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "morgan": "1.10.0",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
