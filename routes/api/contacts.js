@@ -3,7 +3,8 @@ const router = express.Router();
 const { NotFound, BadRequest } = require('http-errors');
 const Joi = require('joi');
 
-const { Contact } = require('../../model/');
+const { Contact } = require('../../models/');
+const { authenticate } = require('../../middlewares/');
 
 const schemaUpdate = Joi.object({
   name: Joi.string()
@@ -23,9 +24,16 @@ const contactShemaUpdate = Joi.object({
   favorite: Joi.bool(),
 }).min(1);
 
-router.get('/', async (req, res, next) => {
+router.get('/', authenticate, async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { page = 1, limit = 20, favorite } = req.query;
+    const { _id } = req.user;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find(
+      { owner: _id, favorite },
+      '-createdAt -updatedAt',
+      { skip, limit: Number(limit) },
+    );
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -47,7 +55,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
   try {
     const { error } = schemaUpdate.validate(req.body);
 
@@ -55,14 +63,15 @@ router.post('/', async (req, res, next) => {
       throw new BadRequest(error.message);
     }
 
-    const newContact = await Contact.create(req.body);
+    const { _id } = req.user;
+    const newContact = await Contact.create({ ...req.body, owner: _id });
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticate, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedContact = await Contact.findByIdAndDelete(id);
@@ -76,7 +85,7 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authenticate, async (req, res, next) => {
   try {
     const { error } = contactShemaUpdate.validate(req.body);
 
@@ -99,7 +108,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.patch('/:id/favorite', async (req, res, next) => {
+router.patch('/:id/favorite', authenticate, async (req, res, next) => {
   try {
     const { error } = contactShemaUpdate.validate(req.body);
 
