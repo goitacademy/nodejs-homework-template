@@ -31,7 +31,7 @@ const querySchema = Joi.object({
         .optional(),
     filter: Joi.string()
         // eslint-disable-next-line-prefer-regex-literals
-        .pattern(new RegExp('(name|email|phone)\\|?(name|email|phone)+'))
+        // .pattern(new RegExp('(name|email|phone)\\|?(name|email|phone)+'))
         .optional(),
 });
 
