@@ -3,7 +3,8 @@ import { HttpCode } from "../../lib/constants";
 
 const updateContact = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await operations.updateContact(id, req.body);
+  const {id: userId} = req.user;
+  const contact = await operations.updateContact( userId, id, req.body );
   if (contact) {
     return res
       .status(HttpCode.OK)

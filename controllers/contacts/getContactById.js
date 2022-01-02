@@ -2,7 +2,8 @@ import operations from "../../contactsApp/index";
 import { HttpCode } from "../../lib/constants";
 const getContactById = async (req, res, _next) => {
   const { id } = req.params;
-  const contact = await operations.getContactById(id);
+  const {id: userId} = req.user;
+  const contact = await operations.getContactById( userId, id );
   console.log(contact);
   if (contact) {
     return res

@@ -2,7 +2,8 @@ import operations from "../../contactsApp/index";
 import { HttpCode } from "../../lib/constants";
 const removeContact = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await operations.removeContact(id);
+  const {id: userId} = req.user;
+  const contact = await operations.removeContact( userId, id );
   if (contact) {
     console.log(
       "🚀 ~ file: contacts.js ~ line 29 ~ router.delete ~ contact",

@@ -1,8 +1,8 @@
 import Contact from "../../model/contact";
 
-const getContactById = async (contactId) => {
+const getContactById = async (userId, contactId) => {
   try {
-    const result = await Contact.findById(contactId);
+    const result = await Contact.findOne({ _id: contactId, owner: userId });
     return result;
   } catch (error) {
     console.log(error.message);
