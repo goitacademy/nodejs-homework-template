@@ -1,3 +1,4 @@
 const validation = require("./validation");
 const controllerWrap = require("./controllerWrap");
-module.exports = { validation, controllerWrap };
+const authenticate = require("./authenticate");
+module.exports = { validation, controllerWrap, authenticate };

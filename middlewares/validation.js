@@ -16,3 +16,21 @@ const validation = (schema) => {
 };
 
 module.exports = validation;
+
+//Sync
+
+// const validation = (schema) => {
+//   const validationMiddleware = (req, _, next) => {
+//     const { error } = schema.validateAsync(req.body);
+//     if (error) {
+//       new BadRequest(
+//         `Missing required field: ${error.message.replace(/"/g, " ")}`
+//       );
+//       next(error);
+//     }
+//     next();
+//   };
+//   return validationMiddleware;
+// };
+
+// module.exports = validation;
