@@ -3,7 +3,7 @@ import { updateContact } from "../../repository/contacts";
 export const updateContactCb = async (req, res, next) => {
   const { id } = req.params;
   const { id: userId } = req.user;
-  const contact = await updateContact(id, userId, req.body);
+  const contact = await updateContact(userId, id, req.body);
   if (contact) {
     return res
       .status(HttpCode.OK)

@@ -3,6 +3,7 @@ import { getContactByIdCb } from "./getContactById";
 import { updateContactCb } from "./updateContact";
 import { getContacts } from "./listContacts";
 import { removeContactCb } from "./deleteContact";
+import ContactsService from "./contactsControllers";
 
 export {
   addContactCb,
@@ -10,4 +11,5 @@ export {
   updateContactCb,
   getContacts,
   removeContactCb,
+  ContactsService,
 };
