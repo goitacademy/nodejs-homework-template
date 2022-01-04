@@ -72,7 +72,7 @@ const updateContactById = async (req, res, next) => {
     next(error)
   }
 }
-const updateStatusById = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params
   const { favorite } = req.body
 
@@ -80,16 +80,16 @@ const updateStatusById = async (req, res, next) => {
     if (!favorite) {
       throw new BadRequest('missing field favorite')
     }
-    const updateStatusContact = await Contact.findByIdAndUpdate(
+    const updateContact = await Contact.findByIdAndUpdate(
       contactId,
       { favorite },
       { new: true }
     )
-    if (!updateStatusContact) {
+    if (!updateContact) {
       throw new NotFound()
     }
     res.status(200)
-    res.json(updateStatusContact)
+    res.json(updateContact)
   } catch (error) {
     next(error)
   }
@@ -113,6 +113,6 @@ module.exports = {
   getContactById,
   createContact,
   updateContactById,
-  updateStatusById,
+  updateStatusContact,
   deleteContactById,
 }

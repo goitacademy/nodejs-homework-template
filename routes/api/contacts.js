@@ -5,7 +5,7 @@ const {
   getContactById,
   createContact,
   updateContactById,
-  updateStatusById,
+  updateStatusContact,
   deleteContactById,
 } = require('../../controllers/contactController')
 
@@ -17,7 +17,7 @@ router.post('/', createContact)
 
 router.put('/:contactId', updateContactById)
 
-router.patch('/:contactId/favorite', updateStatusById)
+router.patch('/:contactId/favorite', updateStatusContact)
 
 router.delete('/:contactId', deleteContactById)
 
