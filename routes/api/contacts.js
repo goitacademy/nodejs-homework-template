@@ -9,7 +9,6 @@ const { Contact } = require("../../model");
 const { joiSchema } = require("../../model/contact");
 
 router.get("/", authenticate, async (req, res, next) => {
-  console.log(req.user);
   try {
     const { page = 1, limit = 10 } = req.query;
     const { _id } = req.user;
