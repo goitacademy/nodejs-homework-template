@@ -3,8 +3,10 @@ const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const { User } = require("../../model");
 const { joiSchema } = require("../../model/user");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
+const { SECRET_KEY } = process.env;
 
 router.post("/signup", async (req, resp, next) => {
   try {
@@ -20,7 +22,6 @@ router.post("/signup", async (req, resp, next) => {
     const salt = await bcrypt.genSalt(10);
 
     const hashPassword = await bcrypt.hash(password, salt);
-    console.log(hashPassword);
     const newUser = await User.create({ email, password: hashPassword });
     resp.status(201).json({
       user: {
@@ -47,6 +48,20 @@ router.post("/login", async (req, res, next) => {
     if (!passwordCompare) {
       throw Unauthorized("Email or password is wrong");
     }
+    const { _id } = user;
+    const payload = {
+      id: _id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    await User.findByIdAndUpdate(_id, { token });
+
+    res.json({
+      token,
+      user: {
+        email: user.email,
+      },
+    });
   } catch (error) {
     next(error);
   }
