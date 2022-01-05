@@ -7,6 +7,13 @@ import {
   updateStatusContactController,
 } from "./contacts";
 
+import {
+  signupController,
+  loginController,
+  logoutController,
+  getCurrentUserController,
+} from "./auth";
+
 export {
   listContactsController,
   getContactByIdController,
@@ -14,4 +21,8 @@ export {
   removeContactController,
   updateContactController,
   updateStatusContactController,
+  signupController,
+  loginController,
+  logoutController,
+  getCurrentUserController,
 };
