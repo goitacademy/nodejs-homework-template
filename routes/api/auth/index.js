@@ -7,10 +7,11 @@ import {
 } from "../../../controllers/";
 
 import guard from "../../../midllewares/guard";
+import limiter from "../../../midllewares/rateLimit";
 
 const router = express.Router();
 
-router.post("/signup", signupController);
+router.post("/signup", limiter(15 * 60 * 1000, 2), signupController);
 
 router.post("/login", loginController);
 
