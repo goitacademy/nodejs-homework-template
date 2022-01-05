@@ -1,44 +1,49 @@
 const express = require('express')
+const {NotFound, BadRequest} = require("http-errors")
 const router = express.Router();
-const Joi = require('joi');
-const contactsOperations = require('../../models/contacts/index')
 
-const schemaAdd = Joi.object({
-  name: Joi.string().min(3).max(25).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().regex(/[\s(]*\d{3}[)\s]* \d{3}-\d{4}$/).required()
-})
-
-const schemaUpdate = Joi.object({
-  id: Joi.string(),
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string()
-}).min(1)
-
+const {Contact, joiContactAddSchema, joiContactUpdateSchema, joiContactUpdateIsFavoriteSchema} = require('../../models/contact')
 
 router.get('/', async (req, res, next) => {
-  res.status(200).json(await contactsOperations.listContacts())
+  res.status(200).json(await Contact.find())
 })
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const contact = await contactsOperations.getById(id);
-  contact
-    ? res.status(200).json(contact)
-    : res.status(404).json({ message: `Contact with ID: ${id} not found!` })
+  try {
+    const contact = await Contact.findById(id);
+    if (!contact) {
+      throw NotFound(`Contact with ID: ${id} not found!`)
+    }
+    res.status(200).json(contact)
+  } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404
+    }
+    next(error)
+  }
+  
 })
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body;
   const newContact = { name, email, phone }
-  try { await schemaAdd.validateAsync(newContact)
-    if (!name || !email || !phone) {
-      return res.status(400).json({ message: "missing required name field" })
-    }
-    const newBody = await contactsOperations.addContact(newContact)
-      res.status(201).json(newBody)
+  try { await joiContactAddSchema.validateAsync(newContact)
+    const newBody = await Contact.create(newContact)
+    res.status(201).json({
+      message: `New contact with name: ${newBody.name} successfully created!`,
+      data: newBody
+    })
   } catch (error) {
+    if (error.message.includes("is required")) {
+      error.status = 400
+      error.message = "missing required fields!"
+    }
+
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404
+    }
+    
     next(error)
   }
 })
@@ -46,45 +51,77 @@ router.post('/', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const contact = await contactsOperations.getById(id);
-    contact
-      ? res.status(200).json(await contactsOperations.removeContact(id))
-      : res.status(404).json({message: "Not found"})
+    const contact = await Contact.findByIdAndRemove(id);
+    if (!contact) {
+      throw NotFound(`Contact with ID: ${id} not found!`)
+    }
+    res.status(200).json({
+      message: `Contact with ID: ${ id } successfully deleted!`,
+    })
   } catch (error) {
-    res.status(400).json({message: error.message})
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404
+    }
+    next(error)
   }
 })
 
 router.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { name, email, phone } = req.body;
-  const contact = await contactsOperations.getById(id);
-  if (!contact) {
-      return res.status(404).json({
-          message: "Not found",
-      })
-  }
-  const editedContact = {
-  id,
-  name: name || contact.name,
-  email: email || contact.email,
-  phone: phone || contact.phone
-  }
   
-  try {schemaUpdate.validateAsync(editedContact)
-    if (name || email || phone) {
-      const updatedContact = await contactsOperations.updateContact(id, editedContact)
-      res.status(200).json({
-          message: `Contact with ID: ${ id } successfully updated!`,
-          data: updatedContact
-        })
-      
+  try {
+    const { error } = await joiContactUpdateSchema.validateAsync(req.body)
+    if (error) {
+      throw new BadRequest(error.message);
     }
-    else {
-      res.status(400).json({ message: "missing fields" })
+    const updateStatusContact = await Contact.findByIdAndUpdate(id, req.body, {new: true})
+    if (!updateStatusContact) {
+      throw NotFound(`Contact with ID: ${id} not found!`)
     }
+    res.status(200).json({
+      message: `Contact with ID: ${ id } successfully updated!`,
+      data: updateStatusContact
+    })
   } catch (error) {
-    res.status(400).json({message: error.message})
+    if (error.message.includes("is required")) {
+      error.status = 400
+      error.message = "missing required fields!"
+    }
+
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404
+    }
+
+    next(error)
+  }
+})
+
+router.patch('/:id/favorite', async (req, res, next) => {
+  try {
+    const { error } = await joiContactUpdateIsFavoriteSchema.validateAsync(req.body)
+    if (error) {
+      throw new BadRequest(error.message);
+    }
+    const { id } = req.params;
+    const { favorite } = req.body
+
+    const updatedFavoriteContact = await Contact.findByIdAndUpdate(id, { favorite }, { new: true });
+    if (!updatedFavoriteContact) {
+      throw NotFound();
+    }
+    res.json({message: `Contact with ID: ${ id } successfully updated!`,
+      data: updatedFavoriteContact})
+  } catch (error) {
+    if (error.message.includes("is required")) {
+      error.status = 400
+      error.message = "missing field favorite!"
+    }
+
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404
+    }
+
+    next(error)
   }
 })
 
