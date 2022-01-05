@@ -1,7 +1,21 @@
-const app = require('../app')
+const app = require('../app');
+const mongoose = require("mongoose");
+const path = require("path");
 
-const PORT = process.env.PORT || 3000
+const envPath = path.join(__dirname, "../.env");
+require("dotenv").config({ path: envPath });
 
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`)
-})
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.connect(DB_HOST)
+  .then(() => {
+    console.log("Database connection successful");
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`)
+    });
+  })
+  .catch(error => {
+    console.log(error.message);
+    process.exit(1);
+  });
+
