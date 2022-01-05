@@ -17,7 +17,7 @@ router.post("/signup", async (req, resp, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
-      throw new Conflict("User already exist");
+      throw new Conflict("Email in use");
     }
     const salt = await bcrypt.genSalt(10);
 
@@ -26,6 +26,7 @@ router.post("/signup", async (req, resp, next) => {
     resp.status(201).json({
       user: {
         email: newUser.email,
+        subscription: "starter",
       },
     });
   } catch (error) {
