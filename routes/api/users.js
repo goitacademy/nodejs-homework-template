@@ -4,10 +4,11 @@ const router = express.Router();
 const { authenticate } = require("../../midlwares");
 
 router.get("/current", authenticate, async (req, res, next) => {
-  const { email } = req.user;
+  const { email, subscription } = req.user;
   res.json({
     user: {
       email,
+      subscription,
     },
   });
 });
