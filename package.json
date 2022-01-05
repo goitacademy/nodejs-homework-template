@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "gh-pages": "^3.2.3",
     "joi": "^17.5.0",
+    "mongoose": "^6.1.5",
     "morgan": "1.10.0"
   },
   "devDependencies": {
