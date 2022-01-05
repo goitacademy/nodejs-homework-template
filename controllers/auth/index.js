@@ -1,11 +1,3 @@
-import signupController from "./signupController";
-import loginController from "./loginController";
-import logoutController from "./logoutController";
-import getCurrentUserController from "./getCurrentController";
+import AuthControllers from "./authController";
 
-export {
-  signupController,
-  loginController,
-  logoutController,
-  getCurrentUserController,
-};
+export { AuthControllers };

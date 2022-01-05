@@ -1,12 +1,5 @@
 import express from "express";
-import {
-  listContactsController,
-  getContactByIdController,
-  addContactController,
-  removeContactController,
-  updateContactController,
-  updateStatusContactController,
-} from "../../../controllers";
+import { ContactsControllers } from "../../../controllers";
 
 import {
   validateCreate,
@@ -18,27 +11,45 @@ import {
 
 import guard from "../../../midllewares/guard";
 
+const contactsControllers = new ContactsControllers();
+
 const router = express.Router();
 
-router.get("/", [guard, validateQuery], listContactsController);
+router.get(
+  "/",
+  [guard, validateQuery],
+  contactsControllers.listContactsController
+);
 
-router.get("/:id", [guard, validateId], getContactByIdController);
+router.get(
+  "/:id",
+  [guard, validateId],
+  contactsControllers.getContactByIdController
+);
 
-router.post("/", [guard, validateCreate], addContactController);
+router.post(
+  "/",
+  [guard, validateCreate],
+  contactsControllers.addContactController
+);
 
-router.delete("/:id", [guard, validateId], removeContactController);
+router.delete(
+  "/:id",
+  [guard, validateId],
+  contactsControllers.removeContactController
+);
 
 router.put(
   "/:id",
   [guard, validateId],
   validateUpdate,
-  updateContactController
+  contactsControllers.updateContactController
 );
 
 router.patch(
   "/:id/favorite/",
   [guard, validateUpdateFavorite],
-  updateStatusContactController
+  contactsControllers.updateStatusContactController
 );
 
 export default router;

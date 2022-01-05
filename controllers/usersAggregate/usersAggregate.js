@@ -1,7 +1,7 @@
 import getStatisticsContacts from "../../repository/usersAggregate/getStatisticsContacts";
 import { HttpCode } from "../../lib/constants";
 
-const aggregation = async (req, res, next) => {
+const aggregationController = async (req, res, next) => {
   const { id } = req.params;
   const data = await getStatisticsContacts(id);
   if (data) {
@@ -16,4 +16,4 @@ const aggregation = async (req, res, next) => {
   });
 };
 
-export default aggregation;
+export default aggregationController;
