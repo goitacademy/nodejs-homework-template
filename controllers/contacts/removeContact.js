@@ -1,9 +1,12 @@
-const contactOperations = require("../../model/contacts/");
+const { Contact } = require("../../models/");
 const { NotFound } = require("http-errors");
 
 async function removeContact(req, res) {
     const { contactId } = req.params;
-    const contact = await contactOperations.removeContact(contactId);
+    if (!contactId.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new NotFound("Not found");
+    }
+    const contact = await Contact.findByIdAndRemove(contactId);
     if (!contact) {
         throw new NotFound(`Not found`);
     }

@@ -1,14 +1,15 @@
 const { Contact } = require("../../models/");
 const { NotFound } = require("http-errors");
 
-async function getById(req, res) {
+async function updateStatusContact(req, res) {
     const { contactId } = req.params;
+    const { favorite } = req.body;
     if (!contactId.match(/^[0-9a-fA-F]{24}$/)) {
         throw new NotFound("Not found");
     }
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
     if (!contact) {
-        throw new NotFound("Not found");
+        throw new NotFound(`Not found`);
     }
     res.json({
         status: "Success",
@@ -16,7 +17,7 @@ async function getById(req, res) {
         data: {
             result: contact
         }
-    })
-};
+    });
+}
 
-module.exports = getById;
+module.exports = updateStatusContact;
