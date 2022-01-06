@@ -13,6 +13,11 @@ const updateSchema=Joi.object({
 }).or('name', 'email', 'phone')
 
 
+const updateStatusSchema = Joi.object({
+    favorite:Joi.bool().required()
+})
+
+
 const validateAdd = async (req,res,next) => {
     try {
         await addSchema.validateAsync(req.body)
@@ -20,7 +25,7 @@ const validateAdd = async (req,res,next) => {
         const keyContact=error.message.split(' ').splice(0,1).join("").replace(/"/g,"");
         return res.status(400).json({message:`missing required ${keyContact} field`});
     }
-    next();
+    next()
 }
 
 const validateUpdate = async(req,res,next) => {
@@ -29,6 +34,17 @@ const validateUpdate = async(req,res,next) => {
     } catch (error) {
         return res.status(400).json({message:error.message.replace(/"/g,"")})
     }
+    next()
 }
 
-module.exports= {validateAdd,validateUpdate}
+const validateUpdateStatus = async (req,res,next) => {
+    try {
+        await updateStatusSchema.validateAsync(req.body)
+    } catch (error) {
+        const keyContact=error.message.split(' ').splice(0,1).join("").replace(/"/g,"");
+        return res.status(400).json({message:`missing required ${keyContact} field`});
+    }
+    next()
+}
+
+module.exports= {validateAdd,validateUpdate,validateUpdateStatus}

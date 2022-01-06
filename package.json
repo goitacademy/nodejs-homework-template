@@ -3,16 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "colors": "^1.4.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "joi": "^17.5.0",
+    "mongoose": "^6.1.5",
     "morgan": "1.10.0"
   },
   "devDependencies": {
