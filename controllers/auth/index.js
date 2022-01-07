@@ -23,7 +23,7 @@ const login = async (req, res, _next) => {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: "error",
       code: HttpCode.UNAUTHORIZED,
-      message: "Invalid credential",
+      message: "Invalid credential:(Email or password is wrong)",
     });
   }
   const token = authService.getToken(user);

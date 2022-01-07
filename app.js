@@ -1,6 +1,8 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import helmet from "helmet";
+import { HttpCode, LIMIT_JSON } from "./lib/constants";
 
 import {
   routerListContacts,
@@ -12,16 +14,22 @@ import {
 } from "./routes";
 
 import authRouter from "./routes/auth";
-import { HttpCode } from "./lib/constants";
+import usersRouter from "./routes/users";
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(helmet())
 app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: LIMIT_JSON}));
+app.use((req, res, next)=> {
+  app.set("lang", req.acceptsLanguages(["en", "ru", "ua"]))
+  next()
+});
 
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 app.use("/controllersContacts", routerListContacts);
 app.use("/controllersContacts", routerGetContactById);
 app.use("/controllersContacts", routerPostContact);

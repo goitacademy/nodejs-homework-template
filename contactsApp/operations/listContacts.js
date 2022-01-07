@@ -10,7 +10,10 @@ const listContacts = async (
 ) => {
   let sortCriteria = null;
   const total = await Contact.find({ owner: userId }).countDocuments();
-  let result = Contact.find({ owner: userId });
+  let result = Contact.find({ owner: userId }).populate({
+    path: "owner",
+    select: "name email age role",
+  })
   if (sortBy) {
     sortCriteria = { [`${sortBy}`]: 1 };
   }
