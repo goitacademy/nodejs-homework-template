@@ -1,22 +1,15 @@
 const express = require('express');
 const { NotFound, BadRequest } = require("http-errors");
-const Joi = require("joi");
 
-const contactsOperations = require("../../model/contacts");
+const { joiSchema } = require("../../models/contact");
+const { Contact } = require("../../models");
+
 
 const router = express.Router();
 
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-
-
 router.get('/', async (req, res, next) => {
   try {
-    console.log(contactsOperations);
-    const contacts = await contactsOperations.listContacts();
+    const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -27,13 +20,15 @@ router.get('/', async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await contactsOperations.getContactById(contactId);
-    console.log(contact)
+    const contact = await Contact.findById(contactId);
     if (!contact) {
       throw new NotFound();
     }
     res.json(contact);
   } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 404;
+    }
     next(error);
   }
 })
@@ -46,13 +41,14 @@ router.post('/', async (req, res, next) => {
       throw new BadRequest(error.message);
     }
 
-    const newContact = await contactsOperations.addContact(req.body);
+    const newContact = await Contact.create(req.body);
     res.status(201).json(newContact)
   } catch (error) {
+    if (error.message.includes("validation failed")) {
+      error.status = 400;
+    }
     next(error);
-
   }
-
 })
 
 
@@ -63,14 +59,41 @@ router.put("/:contactId", async (req, res, next) => {
       throw new BadRequest(error.message);
     }
     const { contactId } = req.params;
-    const updateContact = await contactsOperations.updateContact(
+    const updateContact = await Contact.findByIdAndUpdate(
       contactId,
-      req.body);
+      req.body,
+      { new: true }
+    );
     if (!updateContact) {
       throw new NotFound();
     }
     res.json(updateContact);
   } catch (error) {
+    if (error.message.includes("validation failed")) {
+      error.status = 400;
+    }
+    next(error);
+  }
+})
+
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const updateContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+    if (!updateContact) {
+      throw new NotFound();
+    }
+    res.json(updateContact);
+  } catch (error) {
+    if (error.message.includes("validation failed")) {
+      error.status = 400;
+    }
     next(error);
   }
 })
@@ -79,7 +102,7 @@ router.put("/:contactId", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const deleteContact = await contactsOperations.removeContact(contactId);
+    const deleteContact = await Contact.findByIdAndRemove(contactId);
     if (!deleteContact) {
       throw new NotFound();
     }
@@ -88,7 +111,6 @@ router.delete("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-
 
 module.exports = router;
 
