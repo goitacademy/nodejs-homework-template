@@ -32,7 +32,7 @@ const authenticate = async (req, res, next) => {
       req.user = user;
       next();
     } catch (error) {
-      throw new Unauthorized(error.message);
+      throw new Unauthorized();
     }
   } catch (error) {
     next(error);

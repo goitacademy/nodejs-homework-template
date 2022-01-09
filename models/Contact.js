@@ -1,10 +1,6 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
 const Joi = require("joi");
-
-const nameRegex = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
-
-const phoneRegex =
-  /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/;
+const { phoneRegex, nameRegex, emailRegex } = require("../config/constants");
 
 const contactSchema = Schema(
   {
@@ -13,7 +9,7 @@ const contactSchema = Schema(
       required: [true, "Set name for contact"],
       match: nameRegex,
     },
-    email: { type: String, required: true },
+    email: { type: String, required: true, match: emailRegex },
     phone: { type: String, required: true, match: phoneRegex },
     favorite: { type: Boolean, default: false },
 
@@ -29,7 +25,7 @@ const Contact = model("contact", contactSchema);
 
 const joiSchema = Joi.object({
   name: Joi.string().min(3).max(30).pattern(nameRegex),
-  email: Joi.string().email(),
+  email: Joi.string().email().pattern(emailRegex),
   phone: Joi.string().pattern(phoneRegex),
   favorite: Joi.bool(),
 });

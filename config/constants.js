@@ -14,4 +14,19 @@ const LIMIT_JSON = 5000;
 const TIME_REQUEST_LIMIT = 15 * 60 * 1000;
 const REQUEST_LIMIT = 2;
 
-module.exports = { HttpCode, LIMIT_JSON, TIME_REQUEST_LIMIT, REQUEST_LIMIT };
+const phoneRegex =
+  /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/;
+
+const nameRegex = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
+
+const emailRegex = /\S+@\S+\.\S+/;
+
+module.exports = {
+  HttpCode,
+  LIMIT_JSON,
+  TIME_REQUEST_LIMIT,
+  REQUEST_LIMIT,
+  phoneRegex,
+  nameRegex,
+  emailRegex,
+};

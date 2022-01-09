@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
+const { emailRegex } = require("../config/constants");
 
 const userSchema = Schema(
   {
@@ -13,6 +14,7 @@ const userSchema = Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      match: emailRegex,
     },
     subscription: {
       type: String,
@@ -27,7 +29,7 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-//Cоздание с помощью схемы
+//Cоздание с помощью схемы - sync
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
@@ -35,8 +37,21 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
+//Cоздание с помощью схемы - async
+// userSchema.pre("save", async function (next) {
+//   if (this.isModified("password")) {
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+//   }
+//   next();
+// });
+
+// userSchema.methods.comparePassword = async function (password) {
+//   return await bcrypt.compareSync(password, this.password);
+// };
+
 const joiUserSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().required().min(6),
   subscription: Joi.string(),
   token: Joi.string(),
