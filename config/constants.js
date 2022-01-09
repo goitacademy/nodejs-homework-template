@@ -11,5 +11,7 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 const LIMIT_JSON = 5000;
+const TIME_REQUEST_LIMIT = 15 * 60 * 1000;
+const REQUEST_LIMIT = 2;
 
-module.exports = { HttpCode, LIMIT_JSON };
+module.exports = { HttpCode, LIMIT_JSON, TIME_REQUEST_LIMIT, REQUEST_LIMIT };

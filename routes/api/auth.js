@@ -1,4 +1,5 @@
 const express = require("express");
+const { TIME_REQUEST_LIMIT, REQUEST_LIMIT } = require("../../config/constants");
 const {
   validation,
   controllerWrap,
@@ -12,7 +13,7 @@ const router = express.Router();
 // Route /api/auth/signup
 router.post(
   "/signup",
-  limiter(15 * 60 * 1000, 2),
+  limiter(TIME_REQUEST_LIMIT, REQUEST_LIMIT),
   validation(joiUserSchema),
   controllerWrap(ctrl.signup)
 );
@@ -20,6 +21,5 @@ router.post(
 router.post("/login", validation(joiUserSchema), controllerWrap(ctrl.login));
 
 router.get("/logout", authenticate, controllerWrap(ctrl.logout));
-router.get("/current", authenticate, controllerWrap(ctrl.current));
 
 module.exports = router;

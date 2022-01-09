@@ -6,7 +6,7 @@ const { NotFound, Unauthorized, BadRequest } = require("http-errors");
 // const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, subscription = "starter" } = req.body;
   const user = await User.findOne({ email });
   if (!user || !user.comparePassword(password)) {
     throw new BadRequest(`Wrong email or password`);
@@ -29,6 +29,10 @@ const login = async (req, res) => {
     code: 200,
     data: {
       token,
+      user: {
+        email,
+        subscription,
+      },
     },
   });
 };

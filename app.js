@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
+const usersRouter = require("./routes/api/users");
 const { LIMIT_JSON } = require("./config/constants");
 
 require("dotenv").config();
@@ -18,6 +19,7 @@ app.use(express.json({ limit: LIMIT_JSON })); // limit json
 
 app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });

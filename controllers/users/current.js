@@ -1,5 +1,4 @@
 const { User } = require("../../models");
-const { Unauthorized } = require("http-errors");
 
 const current = async (req, res) => {
   const { token, email, subscription } = req.user;
