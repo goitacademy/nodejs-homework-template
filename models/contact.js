@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const {Schema, model} = require("mongoose");
 const Joi = require("joi");
 
 const contactSchema = Schema({
@@ -21,14 +21,18 @@ const contactSchema = Schema({
         type: Boolean,
         default: false,
     },
-});
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
+}, { versionKey: false, timestamps: true });
 
 const contactJoiSchema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
     phone: Joi.string().regex(/^(\(\d{3}\) )\d{3}-\d{4}$/).required(),
     favorite: Joi.boolean(),
-  });
+});
 
 const contactFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required(),

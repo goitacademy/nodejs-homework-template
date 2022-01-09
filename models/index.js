@@ -1,7 +1,7 @@
 const {Contact} = require("./contact.js");
-
-console.log(Contact);
+const {User} = require("./user");
 
 module.exports = {
-    Contact
+    Contact,
+    User
 }
