@@ -31,7 +31,7 @@ const joiSchema = Joi.object({
   name: Joi.string().min(3).max(30).pattern(nameRegex),
   email: Joi.string().email(),
   phone: Joi.string().pattern(phoneRegex),
-  favorite: Joi.boolean(),
+  favorite: Joi.bool(),
 });
 
 module.exports = { Contact, joiSchema };

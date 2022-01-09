@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../models");
 const { Conflict } = require("http-errors");
 
-const register = async (req, res) => {
+const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -21,6 +21,10 @@ const register = async (req, res) => {
     status: "success",
     code: 201,
     message: "Register success",
+    // user: {
+    //   email: "example@mail.com",
+    //   subscription: "starter",
+    // },
   });
 };
-module.exports = register;
+module.exports = signup;

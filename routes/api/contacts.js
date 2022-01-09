@@ -33,6 +33,6 @@ router.patch(
   controllerWrap(ctrl.updateStatusContact)
 );
 
-router.delete("/:id", authenticate, controllerWrap(ctrl.removeContact));
+router.delete("/:id", controllerWrap(ctrl.removeContact));
 
 module.exports = router;

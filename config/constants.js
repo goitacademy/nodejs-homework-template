@@ -10,5 +10,6 @@ const HttpCode = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 };
+const LIMIT_JSON = 5000;
 
-module.exports = HttpCode;
+module.exports = { HttpCode, LIMIT_JSON };
