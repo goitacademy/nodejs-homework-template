@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import operations from '../../model/operations';
+import operations from '../../model/contacts';
 
 const router = new Router();
 
