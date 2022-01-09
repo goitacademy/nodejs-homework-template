@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 const express = require('express')
 const router = express.Router()
 const { NotFound, BadRequest } = require('http-errors')

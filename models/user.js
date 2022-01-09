@@ -44,10 +44,8 @@ const joiSchema = Joi.object({
 })
 
 const patchSubscriptionJoiSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).optional(),
-  password: Joi.string().min(6).optional(),
-  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
-})
+    subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+  })
 
 const User = model('user', userSchema)
 
