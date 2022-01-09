@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 const express = require('express')
 const router = express.Router()
 const { NotFound, BadRequest } = require('http-errors')
@@ -11,35 +12,41 @@ router.get('/', authenticate, async (req, res, next) => {
     const { page = 1, limit = 10, favorite } = req.query
     const { _id } = req.user
     const skip = (page - 1) * limit
-    const contacts = await Contact.find(
-      { owner: _id,favorite },
+    let contacts = await Contact.find(
+      { owner: _id, favorite },
       '-createdAt -updatedAt',
-      { skip, limit: Number(limit) }
-    ).find({ favorite }) // доп задание 2  - фильтрация результатов по параметру favorite
-    res.json(contacts)
-  } catch (error) {
-    next(error)
-  }
-})
-router.get('/', authenticate, async (req, res, next) => {
-  try {
-    const { page = 1, limit = 10, favorite } = req.query
-    const { _id } = req.user
-    const skip = (page - 1) * limit
-    let contacts = await Contact.find({ owner: _id }, '-createdAt -updatedAt', {
-      skip,
-      limit: Number(limit),
-    })
+      {
+        skip,
+        limit: Number(limit),
+      }
+    )
     // доп задание 2  - фильтрация результатов по параметру favorite
-    if (typeof favorite === 'string') {
-      contacts = contacts.filter(el => JSON.stringify(el.favorite) === favorite)
-      console.log(contacts)
+    if (favorite === undefined) {
+      contacts = await Contact.find({ owner: _id }, '-createdAt -updatedAt', {
+        skip,
+        limit: Number(limit),
+      })
     }
     res.json(contacts)
   } catch (error) {
     next(error)
   }
-}) 
+})
+router.get('/:id', authenticate, async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const product = await Contact.findById(id)
+    if (!product) {
+      throw new NotFound()
+    }
+    res.json(product)
+  } catch (error) {
+    if (error.message.includes('Cast to ObjectId failed')) {
+      error.status = 404
+    }
+    next(error)
+  }
+})
 // POST /api/products
 router.post('/', authenticate, async (req, res, next) => {
   try {
@@ -50,7 +57,6 @@ router.post('/', authenticate, async (req, res, next) => {
     if (!Object.keys(req.body).includes('favorite')) {
       req.body.favorite = false
     }
-    // console.log(req.user)
     const { _id } = req.user
 
     const newContact = await Contact.create({ ...req.body, owner: _id })
