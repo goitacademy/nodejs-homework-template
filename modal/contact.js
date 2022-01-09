@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+const { Schema, model,  SchemaTypes } = mongoose;
 import {MIN_AGE, MAX_AGE } from '../lib/constants.js';
 
 const contactSchema = new Schema({    
@@ -22,7 +22,12 @@ const contactSchema = new Schema({
         favorite: {
           type: Boolean,
           default: false,
-        },      
+        },  
+        owner:{
+          type:SchemaTypes.ObjectId,
+          ref: 'user',
+          required: true,              //ID from collection Users
+      }    
 },{
     versionKey: false,
     timestamps: true,
@@ -45,3 +50,4 @@ contactSchema.virtual('status').get(function(){
 const Contact = model('contact', contactSchema);
 
 export default Contact
+ 

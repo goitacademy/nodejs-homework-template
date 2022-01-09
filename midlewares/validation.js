@@ -1,7 +1,7 @@
 
 import joi from 'joi';
 import mongoose  from 'mongoose';
-import { MAX_AGE, MIN_AGE  } from '../../../lib/constants.js';
+import { MAX_AGE, MIN_AGE  } from '../lib/constants.js';
 
 const {Types}  =mongoose;
 
