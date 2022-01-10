@@ -6,5 +6,4 @@ const getAll = async (req, res) => {
   sendSuccessRes(res,{result})
 }
 
-
 module.exports = getAll
