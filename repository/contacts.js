@@ -1,4 +1,4 @@
-import Contact from "../models/contacts/contact";
+import Contact from "../models/contact/contact";
 
 const listContacts = async ({sortBy, sortByDesc, filter, limit=10, skip=0}) => {
     let sortCriterion = null
