@@ -1,24 +1,29 @@
 const express = require("express");
 // const Joi = require("joi");
 
-const { BadRequest, Conflict } = require("http-errors");
+
+const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 
 const { User } = require("../../models");
-const { joiSchema } = require("../../models/user");
+const { joiRegisterSchema, joiLoginSchema } = require("../../models/user");
 
 const router = express.Router();
 
+const { SECRET_KEY } = process.env;
+
 router.post("/register", async (req, res, next) => {
     try {
-        const { error } = joiSchema.validate(req.body)
+        const { error } = joiRegisterSchema.validate(req.body)
         if (error) {
             throw new BadRequest(error.message);
         }
         const { name, email, password } = req.body;
         const user = await User.findOne({ email });
         if (user) {
-            throw new Conflict("User already exist");
+            throw new Conflict("Email in use");
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -36,6 +41,39 @@ router.post("/register", async (req, res, next) => {
 
     }
 
+})
+
+router.post("/login", async (req, res, next) => {
+    try {
+        const { error } = joiLoginSchema.validate(req.body)
+        if (error) {
+            throw new BadRequest(error.message);
+        }
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw new Unauthorized("Email or password is wrong");
+        }
+        const passwordCompare = await bcrypt.compare(password, user.password);
+        if (!passwordCompare) {
+            throw new Unauthorized("Email or password is wrong");
+        }
+        const { _id, name } = user
+        const payload = {
+            id: _id
+        }
+
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+        res.json({
+            token,
+            user: {
+                email,
+                name
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
 })
 
 module.exports = router;
