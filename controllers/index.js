@@ -10,6 +10,4 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
-  
 }
-
