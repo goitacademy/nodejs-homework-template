@@ -10,5 +10,5 @@ export const signup = async (req, res, next) => {
         return res.status(HttpCode.CONFLICT).json({status: 'error', code: HttpCode.CONFLICT, message: 'Email in use' })
     }
     const data = await authService.create(req.body)
-    res.status(HttpCode.OK).json({status: 'success', code: HttpCode.OK, data})
+    res.status(HttpCode.CREATED).json({status: 'success', code: HttpCode.CREATED, data})
 }

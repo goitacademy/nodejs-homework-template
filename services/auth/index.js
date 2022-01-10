@@ -16,6 +16,11 @@ class AuthService {
         }
     }
 
+    async updateUserSubscription(id, subscription) {
+        const user = await repositoryUsers.updateUserSubscription(id, subscription);
+        return user;
+      }
+
     async getUser (email, password) {
         const user = await repositoryUsers.findByEmail(email)
         const isValidPassword = await user?.isValidPassword(password)
