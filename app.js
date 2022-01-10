@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const contactsRouter = require("./routes/contacts");
+const contactsRouter = require("./api/");
 
 const app = express();
 
@@ -16,10 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-app.use(
-  "/",
-  contactsRouter
-); /* первый параметр - рутовый маршрут от которого строятся все следующие из contactsRouter */
+app.use("/", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

@@ -17,3 +17,5 @@ try {
   console.log("DB connection Error: ");
   process.exit(1);
 }
+
+module.exports = mongoose;

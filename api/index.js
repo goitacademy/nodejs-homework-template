@@ -1,30 +1,13 @@
+/* ----------------- ROUTING ------------------- */
+
 const express = require("express");
 const router = express.Router();
-const contactsController = require("../controllers/contactsController");
-const { /* getContact, */ addContact } = require("../model/Contacts");
+const contactsController = require("../controllers/");
 
 router.get("/", async (req, res, next) => {
   res.render("index", { description: "Please use the following path to manage contacts: /api/contacts" });
 });
 
-// router.get("/api/contacts", async (req, res, next) => {
-//   try {
-//     console.log("Getting data from DB..");
-//     res.json(getContact());
-//   } catch (err) {
-//     console.log("error in the getting of all DB data", err);
-//   }
-// });
-
-router.post("/", async (req, res, next) => {
-  try {
-    console.log("Adding data DB..");
-    addContact(req.body);
-    res.send("Data Added!");
-  } catch (err) {
-    console.log("error in the getting of all DB data", err);
-  }
-});
 const subDomain = "/api/contacts/";
 router.get(subDomain, contactsController.listContacts);
 
