@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {MIN_AGE, MAX_AGE} from '../../lib/constants'
 
-const { Schema, model } = mongoose;
+const { Schema, SchemaTypes, model } = mongoose;
 
 const contactSchema = new Schema({
         name: {
@@ -24,6 +24,11 @@ const contactSchema = new Schema({
           type: Boolean,
           default: false,
         },
+        owner: {
+          type: SchemaTypes.ObjectId,
+          ref: 'user',
+          required: true
+        }
   }, {versionKey: false, timestamps: true, toJSON: {virtuals: true, transform: function(doc, ret){ delete ret._id
     return ret
   }}, toObject: {virtuals: true} });

@@ -3,7 +3,7 @@ import AuthService from '../../services/auth'
 
 const authService = new AuthService()
 
-export const registration = async (req, res, next) => {
+export const signup = async (req, res, next) => {
     const {email} = req.body
     const isUserExist = await authService.isUserExist(email)
     if (isUserExist) {
