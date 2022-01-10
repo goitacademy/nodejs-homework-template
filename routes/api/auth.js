@@ -2,6 +2,7 @@ const express = require("express");
 // const Joi = require("joi");
 
 const { BadRequest, Conflict } = require("http-errors");
+const bcrypt = require("bcryptjs");
 
 const { User } = require("../../models");
 const { joiSchema } = require("../../models/user");
@@ -19,7 +20,10 @@ router.post("/register", async (req, res, next) => {
         if (user) {
             throw new Conflict("User already exist");
         }
-        const newUser = await User.create(req.body);
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt)
+        const newUser = await User.create({ name, email, password: hashPassword });
         res.status(201).json({
             user: {
                 name: newUser.name,
