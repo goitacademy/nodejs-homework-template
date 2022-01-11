@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import model from '../../model/index';
-import { validateCreate, validateUpdate, validateId } from './validation';
+import * as model from '../../models/contacts';
+import { validateCreate, validateUpdate, validateId } from '../../midllewares/validation/contactValidation';
 
 const router = new Router();
 
