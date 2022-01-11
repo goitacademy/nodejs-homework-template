@@ -1,6 +1,6 @@
 import Joi from "joi";
 import pkg from "mongoose";
-import { MIN_AGE, MAX_AGE } from "../../lib/constants";
+import { MIN_AGE, MAX_AGE } from "../lib/constants";
 
 const { Types } = pkg;
 
