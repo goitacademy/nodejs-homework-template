@@ -29,26 +29,15 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-// Cоздание с помощью схемы - sync
+// Cоздание пароля с помощью схемы
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
+
 //Проверка пароля
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
-
-//Cоздание с помощью схемы - async
-// userSchema.pre("save", async function (next) {
-//   if (this.isModified("password")) {
-//     const salt = await bcrypt.genSalt(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-//   }
-//   next();
-// });
-// userSchema.methods.comparePassword = async function (password) {
-//   return await bcrypt.compareSync(password, this.password);
-// };
 
 const joiUserSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -63,3 +52,15 @@ const joiSubscriptionSchema = Joi.object({
 
 const User = model("user", userSchema);
 module.exports = { User, joiUserSchema, joiSubscriptionSchema };
+
+//Альтернатива  - Cоздание пароля с помощью схемы - async
+// userSchema.pre("save", async function (next) {
+//   if (this.isModified("password")) {
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+//   }
+//   next();
+// });
+// userSchema.methods.comparePassword = async function (password) {
+//   return await bcrypt.compareSync(password, this.password);
+// };

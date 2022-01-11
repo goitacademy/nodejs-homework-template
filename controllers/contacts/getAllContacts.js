@@ -12,7 +12,7 @@ const getAllContacts = async (req, res) => {
 
   let contacts = Contact.find(
     { owner: _id },
-    "name _id ",
+    "name _id email phone",
     { skip: Number(skip), limit: Number(limit) } //pagination
   ).populate("owner", "_id email"); //"owner"-field extends
 
