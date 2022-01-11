@@ -5,12 +5,22 @@ const {
   validation,
   controllerWrap,
   authenticate,
+  validationID,
 } = require("../../middlewares");
-const { joiSchema } = require("../../models/Contact");
+const {
+  joiSchema,
+  joiQuerySearchSchema,
+  joiFavoriteSchema,
+} = require("../../models/Contact");
 
-router.get("/", authenticate, controllerWrap(ctrl.getAllContacts));
+router.get(
+  "/",
+  authenticate,
+  validation(joiQuerySearchSchema),
+  controllerWrap(ctrl.getAllContacts)
+);
 
-router.get("/:id", authenticate, controllerWrap(ctrl.getContact));
+router.get("/:id", authenticate, validationID, controllerWrap(ctrl.getContact));
 
 router.post(
   "/",
@@ -22,6 +32,7 @@ router.post(
 router.put(
   "/:id",
   authenticate,
+  validationID,
   validation(joiSchema),
   controllerWrap(ctrl.updateContact)
 );
@@ -29,10 +40,16 @@ router.put(
 router.patch(
   "/:id/favorite",
   authenticate,
-  validation(joiSchema),
+  validationID,
+  validation(joiFavoriteSchema),
   controllerWrap(ctrl.updateStatusContact)
 );
 
-router.delete("/:id", controllerWrap(ctrl.removeContact));
+router.delete(
+  "/:id",
+  authenticate,
+  validationID,
+  controllerWrap(ctrl.removeContact)
+);
 
 module.exports = router;

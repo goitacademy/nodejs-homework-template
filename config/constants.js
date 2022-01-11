@@ -21,6 +21,11 @@ const nameRegex = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-я�
 
 const emailRegex = /\S+@\S+\.\S+/;
 
+const limitRegex = /\d+/;
+
+const filterRegex =
+  /[name|email|phone|favorite|createdAt|updatedAt}\\|?[name|email|phone|favorite|createdAt|updatedAt]+/;
+
 module.exports = {
   HttpCode,
   LIMIT_JSON,
@@ -29,4 +34,6 @@ module.exports = {
   phoneRegex,
   nameRegex,
   emailRegex,
+  limitRegex,
+  filterRegex,
 };

@@ -4,7 +4,8 @@ const { Contact } = require("../../models");
 const updateStatusContact = async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
-  if (!favorite) {
+
+  if (favorite === void 0) {
     throw new BadRequest("Missing field 'favorite'");
   }
   const result = await Contact.findByIdAndUpdate(

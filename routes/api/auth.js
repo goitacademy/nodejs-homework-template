@@ -7,7 +7,7 @@ const {
   limiter,
 } = require("../../middlewares");
 const { auth: ctrl } = require("../../controllers");
-const { joiUserSchema } = require("../../models/User");
+const { joiUserSchema, joiSubscriptionSchema } = require("../../models/User");
 const router = express.Router();
 
 // Route /api/auth/signup
@@ -22,5 +22,11 @@ router.post("/login", validation(joiUserSchema), controllerWrap(ctrl.login));
 
 router.get("/logout", authenticate, controllerWrap(ctrl.logout));
 router.get("/current", authenticate, controllerWrap(ctrl.current));
+router.patch(
+  "/",
+  authenticate,
+  validation(joiSubscriptionSchema),
+  controllerWrap(ctrl.subscriptionUpdate)
+);
 
 module.exports = router;

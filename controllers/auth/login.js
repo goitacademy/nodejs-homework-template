@@ -1,13 +1,14 @@
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../models");
-const { NotFound, Unauthorized, BadRequest } = require("http-errors");
+const { BadRequest } = require("http-errors");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
-  const { email, password, subscription = "starter" } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const { subscription } = user;
   if (!user || !user.comparePassword(password)) {
     throw new BadRequest(`Wrong email or password`);
   }
@@ -24,6 +25,7 @@ const login = async (req, res) => {
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
   await User.findByIdAndUpdate(user._id, { token });
+
   res.json({
     status: "success",
     code: 200,

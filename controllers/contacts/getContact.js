@@ -3,7 +3,10 @@ const { Contact } = require("../../models");
 
 const getContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findById(id);
+  const result = await Contact.findById(id).populate({
+    path: "owner",
+    select: "_id email",
+  });
   if (!result) {
     throw new NotFound(`Contact with id=${id} not found`);
   }

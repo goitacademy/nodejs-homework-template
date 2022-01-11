@@ -18,7 +18,6 @@ const validation = (schema) => {
 module.exports = validation;
 
 //Sync
-
 // const validation = (schema) => {
 //   const validationMiddleware = (req, _, next) => {
 //     const { error } = schema.validateAsync(req.body);

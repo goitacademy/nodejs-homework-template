@@ -1,6 +1,12 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { phoneRegex, nameRegex, emailRegex } = require("../config/constants");
+const {
+  phoneRegex,
+  nameRegex,
+  emailRegex,
+  limitRegex,
+  filterRegex,
+} = require("../config/constants");
 
 const contactSchema = Schema(
   {
@@ -14,7 +20,7 @@ const contactSchema = Schema(
     favorite: { type: Boolean, default: false },
 
     owner: {
-      type: SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
     },
   },
@@ -24,10 +30,41 @@ const contactSchema = Schema(
 const Contact = model("contact", contactSchema);
 
 const joiSchema = Joi.object({
-  name: Joi.string().min(3).max(30).pattern(nameRegex),
-  email: Joi.string().email().pattern(emailRegex),
-  phone: Joi.string().pattern(phoneRegex),
+  name: Joi.string().min(3).max(30).pattern(nameRegex).required(),
+  email: Joi.string().email().pattern(emailRegex).required(),
+  phone: Joi.string().pattern(phoneRegex).required(),
   favorite: Joi.bool(),
 });
 
-module.exports = { Contact, joiSchema };
+const joiQuerySearchSchema = Joi.object({
+  limit: Joi.string().pattern(limitRegex),
+  skip: Joi.number().min(0),
+  sortBy: Joi.string().valid(
+    "name",
+    "phone",
+    "email",
+    "favorite",
+    "createdAt",
+    "updatedAt"
+  ),
+  sortByDesc: Joi.string().valid(
+    "name",
+    "phone",
+    "email",
+    "favorite",
+    "createdAt",
+    "updatedAt"
+  ),
+  filter: Joi.string().pattern(filterRegex),
+});
+
+const joiFavoriteSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
+module.exports = {
+  Contact,
+  joiSchema,
+  joiQuerySearchSchema,
+  joiFavoriteSchema,
+};

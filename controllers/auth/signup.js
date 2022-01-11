@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const { User } = require("../../models");
 const { Conflict } = require("http-errors");
 
@@ -15,12 +15,16 @@ const signup = async (req, res) => {
 
   // Второй вариант
   //   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  //   const newUser = await User.create({ email, password: hashPassword });
+  //   const newUser = await User.create({ email, password: hashPassword, subscription });
 
   res.status(201).json({
     status: "success",
     code: 201,
     message: "Register success",
+    data: {
+      email,
+      subscription: newUser.subscription,
+    },
   });
 };
 module.exports = signup;

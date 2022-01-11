@@ -29,10 +29,11 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-//Cоздание с помощью схемы - sync
+// Cоздание с помощью схемы - sync
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
+//Проверка пароля
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
@@ -45,7 +46,6 @@ userSchema.methods.comparePassword = function (password) {
 //   }
 //   next();
 // });
-
 // userSchema.methods.comparePassword = async function (password) {
 //   return await bcrypt.compareSync(password, this.password);
 // };
@@ -53,9 +53,13 @@ userSchema.methods.comparePassword = function (password) {
 const joiUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required().min(6),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
   token: Joi.string(),
 });
 
+const joiSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
 const User = model("user", userSchema);
-module.exports = { User, joiUserSchema };
+module.exports = { User, joiUserSchema, joiSubscriptionSchema };
