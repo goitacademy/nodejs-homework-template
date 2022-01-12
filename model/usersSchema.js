@@ -37,7 +37,11 @@ const usersSchema = new Schema(
       type: String,
       default: function (){
         return gravatar.url(this.email, {s: '250'}, true)
-      }
+      },
+    },
+    idAvatarCloud:{
+      type: String,
+      default: null,
     }
   },
   {
