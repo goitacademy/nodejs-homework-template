@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import contacts from "../db/contacts.json";
+import contacts from "../../db/contacts.json";
 
 export const getContactById = async (contactId) => {
   try {

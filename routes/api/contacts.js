@@ -5,11 +5,11 @@ import {
   addContact,
   removeContact,
   updateContact,
-} from "../../model";
+} from "../../model/contacts";
 import {
   validateCreate,
   validateUpdate,
-} from "../api/validation";
+} from "../../middlewares/validation/validation";
 
 const router = new Router();
 

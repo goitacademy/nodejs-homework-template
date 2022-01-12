@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import chalk from "chalk";
-import contacts from "../db/contacts.json";
+import contacts from "../../db/contacts.json";
 
 const __dirname = path.dirname("db/contacts");
 
