@@ -1,5 +1,5 @@
-import { HttpCode } from "../../lib/constants";
-import AuthService from "../../service/auth";
+import { HttpCode } from '../../lib/constants';
+import AuthService from '../../service/auth';
 const authService = new AuthService();
 
 const registration = async (req, res, _next) => {
@@ -7,13 +7,13 @@ const registration = async (req, res, _next) => {
   const isUserExist = await authService.isUserExist(email);
   if (isUserExist) {
     return res.status(HttpCode.CONFLICT).json({
-      status: "error",
+      status: 'error',
       code: HttpCode.CONFLICT,
-      message: "This email is already exist",
+      message: 'This email is already exist',
     });
   }
   const data = await authService.create(req.body);
-  res.status(HttpCode.OK).json({ status: "success", code: HttpCode.OK, data });
+  res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data });
 };
 
 const login = async (req, res, _next) => {
@@ -21,16 +21,16 @@ const login = async (req, res, _next) => {
   const user = await authService.getUser(email, password);
   if (!user) {
     return res.status(HttpCode.UNAUTHORIZED).json({
-      status: "error",
+      status: 'error',
       code: HttpCode.UNAUTHORIZED,
-      message: "Invalid credential:(Email or password is wrong)",
+      message: 'Invalid credential:(Email or password is wrong)',
     });
   }
   const token = authService.getToken(user);
   await authService.setToken(user.id, token);
   res
     .status(HttpCode.OK)
-    .json({ status: "success", code: HttpCode.OK, data: { token } });
+    .json({ status: 'success', code: HttpCode.OK, data: { token } });
 };
 
 const logout = async (req, res, _next) => {
@@ -38,7 +38,7 @@ const logout = async (req, res, _next) => {
 
   res
     .status(HttpCode.NO_CONTENT)
-    .json({ status: "success", code: HttpCode.OK, data: {} });
+    .json({ status: 'success', code: HttpCode.OK, data: {} });
 };
 
 export { registration, login, logout };

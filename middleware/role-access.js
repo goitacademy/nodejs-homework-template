@@ -1,14 +1,13 @@
-import { HttpCode } from "../lib/constants";
-import { FORBIDDEN } from "../lib/messages";
+import { HttpCode } from '../lib/constants';
+import { FORBIDDEN } from '../lib/messages';
 
-
-const guard = (role) => async (req, res, next) => {
+const guard = role => async (req, res, next) => {
   const roleCurrentUser = req.user.role;
   if (roleCurrentUser !== role) {
-  return res.status(HttpCode.FORBIDDEN).json({
-    status: "error",
-    code: HttpCode.FORBIDDEN,
-    message: FORBIDDEN[req.app.get("lang")],
+    return res.status(HttpCode.FORBIDDEN).json({
+      status: 'error',
+      code: HttpCode.FORBIDDEN,
+      message: FORBIDDEN[req.app.get('lang')],
     });
   }
   next();
