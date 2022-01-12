@@ -10,6 +10,10 @@ import {
   loginController,
   logoutController,
   } from "./auth";
+import {
+  aggregation,
+  uploadAvatar,
+} from './users'; 
 
   export {
     listContacts,
@@ -20,4 +24,6 @@ import {
     signupController,
     loginController,
     logoutController,
+    aggregation,
+  uploadAvatar,
   };
