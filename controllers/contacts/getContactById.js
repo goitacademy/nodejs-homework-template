@@ -1,10 +1,11 @@
 const { NotFound } = require('http-errors')
-const contactsOperations = require('../model')
-const {sendSuccessRes} = require('../helpers')
+const {Contact} = require('../../models')
+const {sendSuccessRes} = require('../../helpers')
 
 const getContactById = async (req, res) => {
   const { id } = req.params
-  const result = await contactsOperations.getContactById(id)
+  const result = await Contact.findById(id, "_id name email phone favorite")
+  // const result = await Contact.findOne({ _id: id })
   if (!result) {
     throw new NotFound(`Product whith id=${id} not found`)
   }
@@ -12,3 +13,5 @@ const getContactById = async (req, res) => {
 }
 
 module.exports = getContactById
+
+
