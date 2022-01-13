@@ -1,5 +1,10 @@
 import { ContactsControllers } from "./contacts";
 import { AuthControllers } from "./auth";
-import { aggregationController } from "./usersAggregate";
+import { aggregationController, uploadAvatar } from "./usersAggregate";
 
-export { ContactsControllers, AuthControllers, aggregationController };
+export {
+  ContactsControllers,
+  AuthControllers,
+  aggregationController,
+  uploadAvatar,
+};

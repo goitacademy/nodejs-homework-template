@@ -19,6 +19,7 @@
     "express-rate-limit": "^6.0.4",
     "gravatar": "^1.8.2",
     "helmet": "^5.0.1",
+    "jimp": "^0.16.1",
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",

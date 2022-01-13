@@ -1,3 +1,4 @@
+import uploadAvatar from "./uploadAvatar";
 import aggregationController from "./usersAggregate";
 
-export { aggregationController };
+export { uploadAvatar, aggregationController };
