@@ -2,65 +2,246 @@
 
 # Cоздание REST API для работы с коллекцией контактов
 
-Создай ветку `hw03-mongodb` из ветки `master`.
+Создайте ветку `hw04-auth` из ветки `master`.
 
-Продолжи создание REST API для работы с коллекцией контактов.
+Продолжите создание REST API для работы с коллекцией контактов. Добавьте логику аутентификации/авторизации пользователя с помощью [JWT](https://jwt.io/).
 
 ## Шаг 1
 
-Создай аккаунт на [MongoDB Atlas](https://www.mongodb.com/atlas/database). После чего в аккаунте создай новый проект и настрой **бесплатный кластер**. Во время настройки кластера выбери провайдера и регион как на скриншоте ниже. Если выбрать слишком удаленный регион, скорость ответа сервера будет дольше.
-
-[![atlas cluster](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/atlas-cluster.jpg)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/atlas-cluster.jpg)
-
-## Шаг 2
-
-Установи графический редактор [MongoDB Compass](https://www.mongodb.com/try/download/compass) для удобной работы с базой данных для MongoDB. Настрой подключение своей облачной базы данных к Compass. В MongoDB Atlas не забудь создать пользователя с правами администратора.
-
-## Шаг 3
-
-Через Compass создай базу данных `db-contacts` и в ней коллекцию `contacts`. Возьми [ссылка на json](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/contacts.json) и при помощи Compass наполни коллекцию `contacts` (сделай импорт) его содержимым.
-[![json-data.png](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/json-data.png)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/json-data.png)
-Если вы все сделали правильно, данные должны появиться в вашей базе в коллекции `contacts`
-[![mongo-data.png](https://raw.githubusercontent.com/goitacademy/nodejs-homework/master/homework-03/mongo-data.png)](https://github.com/goitacademy/nodejs-homework/blob/master/homework-03/mongo-data.png)
-
-## Шаг 4
-
-Используйте исходный код [домашней работы #2](https://github.com/goitacademy/nodejs-homework/blob/master/homework-02/README.md) и замените хранение контактов из json-файла на созданную вами базу данных.
-
-Напишите код для создания подключения к MongoDB при помощи [Mongoose](https://mongoosejs.com/).
-При успешном подключении выведите в консоль сообщение `"Database connection successful"`.
-Обязательно обработайте ошибку подключения. Выведите в консоль сообщение ошибки и завершите процесс используя `process.exit(1)`.
-В функциях обработки запросов замените код CRUD-операций над контактами из файла, на Mongoose-методы для работы с коллекцией контактов в базе данных.
-Схема модели для коллекции `contacts`:
+В коде создайте схему и модель пользователя для коллекции `users`.
 
 ```javascript
 {
-name: {
-type: String,
-required: [true, 'Set name for contact'],
-},
-email: {
-type: String,
-},
-phone: {
-type: String,
-},
-favorite: {
-type: Boolean,
-default: false,
-},
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
+  token: {
+    type: String,
+    default: null,
+  },
 }
+```
+
+Чтобы каждый пользователь работал и видел только свои контакты в схеме контактов добавьте свойство `owner`
+
+```javascript
+owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
+```
+
+Примечание: `'user'` - название коллекции (в единственном числе), в которой хранятся пользователи.
+
+## Шаг 2
+
+### Регистрация
+
+Создайте эндпоинт `/users/signup`
+
+Сделать валидацию всех обязательных полей (`email` и `password`). При ошибке валидации вернуть Ошибку валидации.
+
+В случае успешной валидации в модели `User` создать пользователя по данным которые прошли валидацию. Для засолки паролей используй bcrypt или bcryptjs
+
+- Если почта уже используется кем-то другим, вернуть Ошибку Conflict.
+- В противном случае вернуть Успешный ответ.
+
+#### Registration request
+
+```javascript
+POST /users/signup
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com",
+  "password": "examplepassword"
+}
+```
+
+#### Registration validation error
+
+```javascript
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
+```
+
+#### Registration conflict error
+
+```javascript
+Status: 409 Conflict
+Content-Type: application/json
+ResponseBody: {
+  "message": "Email in use"
+}
+```
+
+#### Registration success response
+
+```javascript
+Status: 201 Created
+Content-Type: application/json
+ResponseBody: {
+  "user": {
+    "email": "example@example.com",
+    "subscription": "starter"
+  }
+}
+```
+
+### Логин
+
+Создайте эндпоинт `/users/login`
+
+В модели User найти пользователя по `email`.
+
+Сделать валидацию всех обязательных полей (`email` и `password`). При ошибке валидации вернуть Ошибку валидации.
+
+- В противном случае, сравнить пароль для найденного юзера, если пароли совпадают создать токен, сохранить в текущем юзере и вернуть Успешный ответ.
+- Если пароль или email неверный, вернуть Ошибку Unauthorized.
+  #### Login request
+  ```javascript
+  POST /users/login
+  Content-Type: application/json
+  RequestBody: {
+  "email": "example@example.com",
+  "password": "examplepassword"
+  }
+  ```
+  #### Login validation error
+  ```javascript
+  Status: 400 Bad Request
+  Content-Type: application/json
+  ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
+  ```
+  #### Login success response
+  ```javascript
+  Status: 200 OK
+  Content-Type: application/json
+  ResponseBody: {
+  "token": "exampletoken",
+  "user": {
+  "email": "example@example.com",
+  "subscription": "starter"
+  }
+  }
+  ```
+  #### Login auth error
+  ```javascript
+  Status: 401 Unauthorized
+  ResponseBody: {
+  "message": "Email or password is wrong"
+  }
+  ```
+
+## Шаг 3
+
+### Проверка токена
+
+Создайте мидлвар для проверки токена и добавь его ко всем маршрутам, которые должны быть защищены.
+
+- Мидлвар берет токен из заголовков `Authorization`, проверяет токен на валидность.
+- В случае ошибки вернуть Ошибку Unauthorized.
+- Если валидация прошла успешно, получить из токена `id` пользователя. Найти пользователя в базе данных по этому id.
+- Если пользователь существует и токен совпадает с тем, что находится в базе, записать его данные в `req.user` и вызвать метод`next()`.
+- сли пользователя с таким `id` не существует или токены не совпадают, вернуть Ошибку Unauthorized
+
+#### Middleware unauthorized error
+
+```javascript
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+"message": "Not authorized"
+}
+```
+
+## Шаг 4
+
+### Логаут
+
+Создайте ендпоинт `/users/logout`
+
+Добавьте в маршрут мидлвар проверки токена.
+
+- В модели `User` найти пользователя по `_id`.
+- Если пользователя не существует вернуть Ошибку Unauthorized.
+- В противном случае, удалить токен в текущем юзере и вернуть Успешный ответ.
+
+#### Logout request
+
+```javascript
+GET / users / logout;
+Authorization: "Bearer {{token}}";
+```
+
+#### Logout unauthorized error
+
+```javascript
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+"message": "Not authorized"
+}
+```
+
+#### Logout success response
+
+```javascript
+Status: 204 No Content
 ```
 
 ## Шаг 5
 
-У нас появилось в контактах дополнительное поле статуса `favorite`, которое принимает логическое значение `true` или `false`. Оно отвечает за то, что в избранном или нет находится указанный контакт. Реализуй для обновления статуса контакта новый маршрут
+### Текущий пользователь - получить данные юзера по токену
 
-### @ PATCH /api/contacts/:contactId/favorite
+Создайте эндпоинт `/users/current`
 
-- Получает параметр `contactId`
-- Получает `body` в json-формате c обновлением поля `favorite`
-- Если `body` нет, возвращает json с ключом {"message": `"missing field favorite"}` и статусом `400`
-- Если с `body` все хорошо, вызывает функцию `updateStatusContact(contactId, body)` (напиши ее) для обновления контакта в базе
-- По результату работы функции возвращает обновленный объект контакта и статусом `200`. В противном случае, возвращает json с ключом `"message": "Not found"` и статусом `404`
-  Для роута `POST /api/contacts` внесите изменения: если поле `favorite` не указали в `body`, то при сохранении в базу нового контакта, сделайте поле `favorite` равным по умолчанию `false`. Не забываем про валидацию данных!
+Добавьте в маршрут мидлвар проверки токена.
+
+- Если пользователя не существует вернуть Ошибку Unauthorized
+- В противном случае вернуть Успешный ответ
+
+#### Current user request
+
+```javascript
+GET / users / current;
+Authorization: "Bearer {{token}}";
+```
+
+#### Current user unauthorized error
+
+```javascript
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+"message": "Not authorized"
+}
+```
+
+#### Current user success response
+
+```javascript
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+"email": "example@example.com",
+"subscription": "starter"
+}
+```
+
+### Дополнительное задание - необязательное
+
+- Сделать пагинацию для коллекции контактов (GET /contacts?page=1&limit=20).
+- Сделать фильтрацию контактов по полю избранного (GET /contacts?favorite=true)
+- Обновление подписки (`subscription`) пользователя через эндпоинт `PATCH` /`users`. Подписка должна иметь одно из следующих значений`['starter', 'pro', 'business']`
