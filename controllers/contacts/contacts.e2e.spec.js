@@ -11,7 +11,7 @@ app.use(express.json())
 app.use('/api/contacts', router)
 
 const mockUser = {
-  email: 'krabatua@gmail.com',
+  email: 'lv08091mmi@gmail.com',
   password: '12345678',
 }
 
