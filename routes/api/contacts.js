@@ -3,13 +3,17 @@ const { NotFound, BadRequest } = require("http-errors");
 
 const { joiSchema } = require("../../models/contact");
 const { Contact } = require("../../models");
+const { authenticate } = require("../../middlewares")
 
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', authenticate, async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    const { _id } = req.user;
+    const contacts = await Contact.find({ owner: _id }, "name phone email", { skip, limit: +limit });
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -34,14 +38,16 @@ router.get("/:contactId", async (req, res, next) => {
 })
 
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
+  console.log(req.user)
   try {
     const { error } = joiSchema.validate(req.body);
+
     if (error) {
       throw new BadRequest(error.message);
     }
-
-    const newContact = await Contact.create(req.body);
+    const { _id } = req.user;
+    const newContact = await Contact.create({ ...req.body, owner: _id });
     res.status(201).json(newContact)
   } catch (error) {
     if (error.message.includes("validation failed")) {
