@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-const { connect, connection } = mongoose;
+import pkg from "mongoose";
+const { connect, connection } = pkg;
 
 const uri = process.env.URI_DB;
 
@@ -9,17 +9,14 @@ const db = connect(uri, {
 });
 
 connection.on("connected", () => {
-  console.log("Database connection successful");
+  console.log("Mongoose is connected to db!");
 });
-
 connection.on("err", (err) => {
   console.log(`Mongoose connection error: ${err.message}`);
 });
-
 connection.on("disconnected", () => {
-  console.log("Mongoose disconnected from DB");
+  console.log("Mongoose is disconnected from db!");
 });
-
 process.on("SIGINT", async () => {
   connection.close();
   console.log("Connection DB closed");
