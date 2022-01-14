@@ -14,7 +14,7 @@ export default {
   // cacheDirectory: "C:\\Users\\petro\\AppData\\Local\\Temp\\jest",
 
   // Automatically clear mock calls, instances and results before every test
-  // clearMocks: false,
+  clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
@@ -173,7 +173,7 @@ export default {
 
   // A map from regular expressions to paths to transformers
   // transform: undefined,
-
+  transform: {},
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
   //   "\\\\node_modules\\\\",
