@@ -1,7 +1,6 @@
 import { HttpCode } from "../../lib/constants";
-import AuthService from "../../service/auth";
+import authService from "../../service/auth";
 
-const authService = new AuthService();
 
 const signupController = async (req, res, next) => {
   try {

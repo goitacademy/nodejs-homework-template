@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { registration } from './index'
+import { signupController } from './index'
 import { HttpCode } from '../../lib/constants'
 import authService from '../../service/auth'
 
@@ -20,14 +20,14 @@ describe('Unit test registration', () => {
 
   test('SignUp new User', async () => {
     authService.isUserExist = jest.fn(async () => false)
-    await registration(req, res, next)
+    await signupController(req, res, next)
     expect(authService.isUserExist).toHaveBeenCalledWith(req.body.email)
     expect(res.status).toHaveBeenCalledWith(HttpCode.CREATED)
   })
 
   test('SignUp already exist User', async () => {
     authService.isUserExist = jest.fn(async () => true)
-    await registration(req, res, next)
+    await signupController(req, res, next)
     expect(authService.isUserExist).toHaveBeenCalledWith(req.body.email)
     expect(res.status).toHaveBeenCalledWith(HttpCode.CONFLICT)
   })
@@ -37,7 +37,7 @@ describe('Unit test registration', () => {
     authService.isUserExist = jest.fn(async () => {
       throw testError
     })
-    await registration(req, res, next)
+    await signupController(req, res, next)
     expect(authService.isUserExist).toHaveBeenCalledWith(req.body.email)
     expect(next).toHaveBeenCalledWith(testError)
   })

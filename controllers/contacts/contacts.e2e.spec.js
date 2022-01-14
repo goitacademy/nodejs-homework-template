@@ -3,12 +3,12 @@ import express from 'express'
 import request from 'supertest'
 import jwt from 'jsonwebtoken'
 import db from '../../lib/db'
-import router from '../../routes/api/contacts'
-import User from '../../model/user'
+import router from '../../routes/contacts'
+import User from '../../model/usersSchema'
 
 const app = express()
 app.use(express.json())
-app.use('/api/contacts', router)
+app.use('/contacts', router)
 
 const mockUser = {
   email: 'lv08091mmi@gmail.com',
