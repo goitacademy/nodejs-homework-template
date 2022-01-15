@@ -10,12 +10,13 @@ class AuthService {
   }
 
   async create(body) {
-    const { id, name, email, role } = await create(body);
+    const { id, name, email, role, avatar } = await create(body);
     return {
       id,
       name,
       email,
       role,
+      avatar,
     };
   }
 

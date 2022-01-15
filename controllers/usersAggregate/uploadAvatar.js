@@ -2,8 +2,9 @@ import { HttpCode } from "../../lib/constants";
 import {
   UploadFileService,
   LocalFileStorage,
-  CloudFileStorage,
+  // CloudFileStorage,
 } from "../../service/upload";
+
 const uploadAvatar = async (req, res, next) => {
   const uploadService = new UploadFileService(
     LocalFileStorage,
