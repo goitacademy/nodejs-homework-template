@@ -7,7 +7,7 @@ const contactsRouter = require("./routes/api/contacts");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-console.log(app.get("env"));
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
