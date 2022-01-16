@@ -19,11 +19,15 @@ const updateToken = async (id, token) => {
 const updateUser = async(id, subscription) =>{
     return await User.updateOne({id: id, subscription: subscription})
 }
+const updateAvatar = async (id, avatar) => {
+    return await User.updateOne({_id:id}, {avatar})
+}
 
 export default {
     findById,
     findByEmail,
     create,
     updateToken,
-    updateUser
+    updateUser,
+    updateAvatar
 }
