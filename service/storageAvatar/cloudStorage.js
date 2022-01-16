@@ -33,7 +33,7 @@ class CloudStorage {
     );
 
     await updateAvatar(this.userId, avatarUrl, newIdAvatarCloud);
-    // Почистить за собой папку upload
+    // Почистить за собой папку tmp
     await this.removeUploadFile(this.filePath);
     return avatarUrl;
   }

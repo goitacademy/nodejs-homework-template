@@ -1,6 +1,6 @@
 import Jimp from "jimp";
 
-class FileStorage {
+class AvatarStorage {
   constructor(Storage, file, user) {
     this.storage = new Storage(file, user);
     this.pathFile = file.path;
@@ -25,4 +25,4 @@ class FileStorage {
   }
 }
 
-export default FileStorage;
+export default AvatarStorage;
