@@ -1,13 +1,15 @@
 const express = require("express");
 
-const { validateContactData } = require("../../middleware/contactsValidation");
+const {
+  validateContactData,
+} = require("../../middleware/contacts/contactsValidation");
 const {
   getContactsController,
   getContactByIdController,
   postContactController,
   deleteContactController,
   putContactController,
-} = require("../../controllers/contactsController");
+} = require("../../controllers/contacts");
 
 const router = express.Router();
 
