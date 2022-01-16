@@ -14,14 +14,30 @@ router.get("/logout", authenticate, async (req, res, next) => {
 
 
 router.get("/current", authenticate, async (req, res, next) => {
-    const { name, email } = req.user;
+    const { name, subscription } = req.user;
     res.json({
         user: {
             name,
-            email
+            subscription
         }
     })
+});
 
+router.patch("/", authenticate, async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        const { subscription } = req.body;
+        const updatrContact = await User.findByIdAndUpdate(
+            _id,
+            { subscription },
+            {
+                new: true,
+            }
+        );
+        res.json(updatrContact);
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;

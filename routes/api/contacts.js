@@ -8,17 +8,63 @@ const { authenticate } = require("../../middlewares")
 
 const router = express.Router();
 
-router.get('/', authenticate, async (req, res, next) => {
+// router.get('/', authenticate, async (req, res, next) => {
+//   try {
+//     console.log(req.query)
+//     const { page = 1, limit = 20, favorite = true } = req.query;
+//     const skip = (page - 1) * limit;
+//     const { _id } = req.user;
+
+//     const contacts = await Contact.find(
+//       { owner: _id, favorite },
+//       '',
+//       { skip, limit: +limit }
+//     );
+
+//     // if (favorite) {
+//     //   const contacts = await Contact.find({ owner: _id, favorite }, '', {
+//     //     skip,
+//     //     limit: +limit,
+
+//     //   });
+//     //   res.json(contacts);
+//     // }
+
+//     res.json(contacts);
+//   } catch (error) {
+//     next(error);
+//   }
+// })
+
+
+router.get("/", authenticate, async (req, res, next) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    console.log(req.query);
+    const { page = 1, limit = 20, favorite = false } = req.query;
     const skip = (page - 1) * limit;
     const { _id } = req.user;
-    const contacts = await Contact.find({ owner: _id }, "name phone email", { skip, limit: +limit });
+
+    if (favorite) {
+      const contacts = await Contact.find(
+        { owner: _id, favorite },
+        "",
+        { skip, limit: Number(limit) }
+      );
+      res.json(contacts);
+    }
+
+    const contacts = await Contact.find(
+      { owner: _id },
+      '',
+      { skip, limit: +limit }
+    );
     res.json(contacts);
+
   } catch (error) {
     next(error);
   }
-})
+});
+
 
 
 router.get("/:contactId", async (req, res, next) => {
@@ -103,7 +149,6 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
     next(error);
   }
 })
-
 
 router.delete("/:contactId", async (req, res, next) => {
   try {

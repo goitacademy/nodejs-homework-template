@@ -9,13 +9,13 @@ const { joiRegisterSchema, joiLoginSchema } = require("../../models/user");
 const router = express.Router();
 const { SECRET_KEY } = process.env;
 
-router.post("/register", async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
     try {
         const { error } = joiRegisterSchema.validate(req.body)
         if (error) {
             throw new BadRequest(error.message);
         }
-        const { name, email, password } = req.body;
+        const { name, email, password, subscription } = req.body;
         const user = await User.findOne({ email });
         if (user) {
             throw new Conflict("Email in use");
@@ -23,17 +23,16 @@ router.post("/register", async (req, res, next) => {
 
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt)
-        const newUser = await User.create({ name, email, password: hashPassword });
+        const newUser = await User.create({ name, email, password: hashPassword, subscription });
         res.status(201).json({
             user: {
-                name: newUser.name,
-                email: newUser.email
+                email: newUser.email,
+                subscription: newUser.subscription,
             }
         })
 
     } catch (error) {
-        next(error)
-
+        next(error);
     }
 
 })
@@ -53,7 +52,7 @@ router.post("/login", async (req, res, next) => {
         if (!passwordCompare) {
             throw new Unauthorized("Email or password is wrong");
         }
-        const { _id, name } = user;
+        const { _id, subscription } = user;
         const payload = {
             id: _id
         }
@@ -63,7 +62,7 @@ router.post("/login", async (req, res, next) => {
             token,
             user: {
                 email,
-                name
+                subscription
             }
         })
     } catch (error) {
