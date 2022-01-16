@@ -3,7 +3,7 @@ import {
   UploadFileService,
   LocalFileStorage,
   // CloudFileStorage, //можно сменить хранилище на облачное
-} from "../../service/upload";
+} from "../../service/storageAvatar";
 
 const uploadAvatar = async (req, res, next) => {
   const uploadService = new UploadFileService(

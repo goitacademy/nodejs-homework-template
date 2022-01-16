@@ -1,6 +1,6 @@
 import { ContactsControllers } from "./contacts";
 import { AuthControllers } from "./auth";
-import { aggregationController, uploadAvatar } from "./usersAggregate";
+import { aggregationController, uploadAvatar } from "./users";
 
 export {
   ContactsControllers,
