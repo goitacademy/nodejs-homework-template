@@ -1,4 +1,3 @@
-// import User from "../../model/user"
 import jwt from "jsonwebtoken"
 import UsersRepository from "../../repository/users"
 const SECRET_KEY = process.env.JWT_SECRET_KEY
@@ -40,4 +39,4 @@ class AuthService {
     }
 }
 
-export default AuthService
+export default new AuthService() 
