@@ -1,13 +1,13 @@
 import { HttpCode } from "../../lib/constants";
 import {
   UploadFileService,
-  // LocalFileStorage,
-  CloudFileStorage,
+  LocalFileStorage,
+  // CloudFileStorage, //можно сменить хранилище на облачное
 } from "../../service/storageAvatar";
 
 const uploadAvatar = async (req, res, next) => {
   const uploadService = new UploadFileService(
-    CloudFileStorage,
+    LocalFileStorage,
     req.file,
     req.user
   );
