@@ -1,6 +1,5 @@
-import app from '../app';
-import db from '../library/db';
-
+import app from '../app'
+import db from '../lib/db'
 const PORT = process.env.PORT || 3000
 
 db.then(() => {
@@ -10,3 +9,4 @@ db.then(() => {
 }).catch(err => {
   console.log(`Server running with error: ${err.message}`)
 })
+
