@@ -1,16 +1,9 @@
 import { Router } from 'express'
+import { signup, login, logout, current } from '../../../controllers/auth'
 import {
-   signup,
-   login,
-   logout,
-   current
-    } from '../../../controllers/auth'
-
-    import {
-        validateSignup,
-        validateLogin
-        } from '../auth/validation'
-    
+    validateSignup,
+    validateLogin
+    } from '../auth/validation'
 import guard from '../../../middlewares/guard'
 const router = new Router()
 
