@@ -7,6 +7,7 @@ const { joiSchema } = require("../../models/contact");
 
 const router = express.Router();
 
+// Получение всех контактов
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const { page = 1, limit = 3 } = req.query;
@@ -23,10 +24,11 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+// Получение контакта по id
+router.get("/:contactId", authenticate, async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.findOneAndUpdate({ contactId, owner: _id });
     if (!contact) {
       throw new NotFound();
     }
@@ -39,6 +41,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
+// Создание нового контакта
 router.post("/", authenticate, async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body);
@@ -56,12 +59,20 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+// Обновление контакта
+router.put("/:contactId", authenticate, async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {
-      new: true,
-    });
+    const updateContact = await Contact.findOneAndUpdate(
+      {
+        contactId,
+        owner: _id,
+      },
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!updateContact) {
       throw new NotFound();
     }
@@ -74,12 +85,16 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+// Обновление статуса контакта
+router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { favorite } = req.body;
-    const updateContact = await Contact.findByIdAndUpdate(
-      contactId,
+    const updateContact = await Contact.findOneAndUpdate(
+      {
+        contactId,
+        owner: _id,
+      },
       { favorite },
       {
         new: true,
@@ -97,10 +112,14 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+// Удаление контакта
+router.delete("/:contactId", authenticate, async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const deleteCotatact = await Contact.findByIdAndRemove(contactId);
+    const deleteCotatact = await Contact.findOneAndDelete({
+      contactId,
+      owner: _id,
+    });
     if (!deleteCotatact) {
       throw new NotFound();
     }
