@@ -1,10 +1,11 @@
-const Contact = require('../../models/contact');
+const Contacts = require('../../repository/contacts');
 
 const updateStatusContact = async (req,res) => {
     const id = req.params.id
     const body = req.body;
+    const {id:userId} = req.user;
     try {
-        const contact = await Contact.findByIdAndUpdate(id,body,{new:true,runValidators:true});
+        const contact = await Contacts.updateStatus(userId, id, body);
         console.log(body)
 
         if(!contact) {

@@ -1,9 +1,10 @@
-const Contact = require('../../models/contact');
+const Contacts = require('../../repository/contacts');
 
 const getContact = async (req,res) => {
     const id = req.params.id
+    const {id:userId} = req.user;
     try {
-        const contact = await Contact.findById(id);
+        const contact = await Contacts.getById(userId, id);
 
         if(!contact) {
             return res.status(200).json({message:'Cannot find with ID',code:200, data:contact})

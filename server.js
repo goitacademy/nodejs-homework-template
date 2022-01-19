@@ -21,8 +21,11 @@ const connectDB = require('./config/db')
 
  // routes
  const contacts = require('./routes/contactsRouts');
- app.use('/api/contacts', contacts);
+ const users = require('./routes/usersRoutes');
 
+ app.use('/api/contacts', contacts);
+ app.use('/api/users', users);
+ 
  // page not found
  app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
