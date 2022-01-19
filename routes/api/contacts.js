@@ -8,18 +8,18 @@ const {
   updateStatusContact,
   deleteContactById,
 } = require('../../controllers/contactController')
-const { authenticate } = require('../../middlewares')
+const { authentication } = require('../../middlewares')
 
-router.get('/', authenticate, getAll)
+router.get('/', authentication, getAll)
 
-router.get('/:contactId', authenticate, getContactById)
+router.get('/:contactId', authentication, getContactById)
 
-router.post('/', authenticate, createContact)
+router.post('/', authentication, createContact)
 
-router.put('/:contactId', authenticate, updateContactById)
+router.put('/:contactId', authentication, updateContactById)
 
-router.patch('/:contactId/favorite', authenticate, updateStatusContact)
+router.patch('/:contactId/favorite', authentication, updateStatusContact)
 
-router.delete('/:contactId', authenticate, deleteContactById)
+router.delete('/:contactId', authentication, deleteContactById)
 
 module.exports = router
