@@ -20,25 +20,32 @@ const joiSchema = Joi.object({
   favorite: Joi.boolean,
 })
 
-const contactSchema = Schema({
-  name: {
-    type: String,
-    minlength: 2,
-    match: nameRegexp,
-    required: [true, 'Set name for contact'],
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      minlength: 2,
+      match: nameRegexp,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+      match: emailRegexp,
+    },
+    phone: {
+      type: String,
+      // match: phoneRegexp,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
-  email: {
-    type: String,
-    match: emailRegexp,
-  },
-  phone: {
-    type: String,
-    // match: phoneRegexp,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-})
+  { versionKey: false, timestamps: true }
+)
 const Contact = model('contact', contactSchema)
 module.exports = { Contact, joiSchema }
