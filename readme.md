@@ -1,170 +1,60 @@
-Домашнее задание 4
-Создайте ветку hw04-auth из ветки master.
+Домашнее задание 5
+Создай ветку hw05-avatars из ветки master.
 
-Продолжите создание REST API для работы с коллекцией контактов. Добавьте логику аутентификации/авторизации пользователя с помощью JWT.
+Продолжи создание REST API для работы с коллекцией контактов. Добавь возможность загрузки аватарки пользователя через Multer.
 
 Шаг 1
-В коде создайте схему и модель пользователя для коллекции users.
+Создай папку public для раздачи статики. В этой папке сделай папку avatars. Настрой Express на раздачу статических файлов из папки public.
+
+Положи любое изображение в папку public/avatars и проверь что раздача статики работает. При переходе по такому URL браузер отобразит изображение.
+
+http://localhost:<порт>/avatars/<имя файла с расширением>
+Шаг 2
+В схему пользователя добавь новое свойство avatarURL для хранения изображения.
 
 {
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter"
-  },
-  token: {
-    type: String,
-    default: null,
-  },
+  ...
+  avatarURL: String,
+  ...
 }
-Чтобы каждый пользователь работал и видел только свои контакты в схеме контактов добавьте свойство owner
-
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: 'user',
-    }
-Примечание: 'user' - название коллекции (в единственном числе), в которой хранятся пользователи.
-
-Шаг 2
-Регистрация
-Создайте эндпоинт /users/signup
-
-Сделать валидацию всех обязательных полей (email и password). При ошибке валидации вернуть Ошибку валидации.
-
-В случае успешной валидации в модели User создать пользователя по данным которые прошли валидацию. Для засолки паролей используй bcrypt или bcryptjs
-
-Если почта уже используется кем-то другим, вернуть Ошибку Conflict.
-В противном случае вернуть Успешный ответ.
-Registration request
-POST /users/signup
-Content-Type: application/json
-RequestBody: {
-  "email": "example@example.com",
-  "password": "examplepassword"
-}
-Registration validation error
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
-Registration conflict error
-Status: 409 Conflict
-Content-Type: application/json
-ResponseBody: {
-  "message": "Email in use"
-}
-Registration success response
-Status: 201 Created
-Content-Type: application/json
-ResponseBody: {
-  "user": {
-    "email": "example@example.com",
-    "subscription": "starter"
-  }
-}
-Логин
-Создайте эндпоинт /users/login
-
-В модели User найти пользователя по email.
-
-Сделать валидацию всех обязательных полей (email и password). При ошибке валидации вернуть Ошибку валидации.
-
-В противном случае, сравнить пароль для найденного юзера, если пароли совпадают создать токен, сохранить в текущем юзере и вернуть Успешный ответ.
-Если пароль или email неверный, вернуть Ошибку Unauthorized.
-Login request
-POST /users/login
-Content-Type: application/json
-RequestBody: {
-  "email": "example@example.com",
-  "password": "examplepassword"
-}
-Login validation error
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: <Ошибка от Joi или другой библиотеки  валидации>
-Login success response
-Status: 200 OK
-Content-Type: application/json
-ResponseBody: {
-  "token": "exampletoken",
-  "user": {
-    "email": "example@example.com",
-    "subscription": "starter"
-  }
-}
-Login auth error
-Status: 401 Unauthorized
-ResponseBody: {
-  "message": "Email or password is wrong"
-}
+Используй пакет gravatar для того чтобы при регистрации нового пользователя сразу сгенерить ему аватар по его email.
 Шаг 3
-Проверка токена
-Создайте мидлвар для проверки токена и добавь его ко всем маршрутам, которые должны быть защищены.
+При регистрации пользователя:
 
-Мидлвар берет токен из заголовков Authorization, проверяет токен на валидность.
-В случае ошибки вернуть Ошибку Unauthorized.
-Если валидация прошла успешно, получить из токена id пользователя. Найти пользователя в базе данных по этому id.
-Если пользователь существует и токен совпадает с тем, что находится в базе, записать его данные в req.user и вызвать методnext().
-Если пользователя с таким id не существует или токены не совпадают, вернуть Ошибку Unauthorized
-Middleware unauthorized error
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
+Создавай ссылку на аватарку пользователя с помощью gravatar
+Полученный URL сохрани в поле avatarURL во время создания пользователя
 Шаг 4
-Логаут
-Создайте ендпоинт /users/logout
+Добавь возможность обновления аватарки, создав эндпоинт /users/avatars и используя метод PATCH.
 
-Добавьте в маршрут мидлвар проверки токена.
+avatar upload from postman
 
-В модели User найти пользователя по _id.
-Если пользователя не существует вернуть Ошибку Unauthorized.
-В противном случае, удалить токен в текущем юзере и вернуть Успешный ответ.
-Logout request
-GET /users/logout
+# Запрос
+PATCH /users/avatars
+Content-Type: multipart/form-data
 Authorization: "Bearer {{token}}"
-Logout unauthorized error
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
-Logout success response
-Status: 204 No Content
-Шаг 5
-Текущий пользователь - получить данные юзера по токену
-Создайте эндпоинт /users/current
+RequestBody: загруженный файл
 
-Добавьте в маршрут мидлвар проверки токена.
-
-Если пользователя не существует вернуть Ошибку Unauthorized
-В противном случае вернуть Успешный ответ
-Current user request
-GET /users/current
-Authorization: "Bearer {{token}}"
-Current user unauthorized error
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
-Current user success response
+# Успешный ответ
 Status: 200 OK
 Content-Type: application/json
 ResponseBody: {
-  "email": "example@example.com",
-  "subscription": "starter"
+  "avatarURL": "тут будет ссылка на изображение"
 }
+
+# Неуспешный ответ
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+Создай папку tmp в корне проекта и сохраняй в неё загруженную аватарку.
+Обработай аватарку пакетом jimp и задай для нее размеры 250 на 250
+Перенеси аватарку пользователя из папки tmp в папку public/avatars и дай ей уникальное имя для конкретного пользователя.
+Полученный URL /avatars/<имя файла с расширением> сохрани в поле avatarURL пользователя
 Дополнительное задание - необязательное
-Сделать пагинацию для коллекции контактов (GET /contacts?page=1&limit=20).
-Сделать фильтрацию контактов по полю избранного (GET /contacts?favorite=true)
-Обновление подписки (subscription) пользователя через эндпоинт PATCH /users. Подписка должна иметь одно из следующих значений ['starter', 'pro', 'business']
+1. Написать unit-тесты для контроллера входа (login/signin)
+При помощи Jest
+
+ответ должен иметь статус-код 200
+в ответе должен возвращаться токен
+в ответе должен возвращаться объект user с 2 полями email и subscription, имеющие тип данных String

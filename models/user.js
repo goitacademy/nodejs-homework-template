@@ -23,6 +23,10 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+    default: ''
+  },
 })
 userSchema.methods.setPassword = function(password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
@@ -44,8 +48,8 @@ const joiSchema = Joi.object({
 })
 
 const patchSubscriptionJoiSchema = Joi.object({
-    subscription: Joi.string().valid('starter', 'pro', 'business').required(),
-  })
+  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+})
 
 const User = model('user', userSchema)
 

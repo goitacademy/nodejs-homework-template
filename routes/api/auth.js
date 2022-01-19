@@ -7,6 +7,7 @@ const { User } = require('../../models')
 const { joiSchema } = require('../../models/user')
 
 const router = express.Router()
+const gravatar = require('gravatar')
 
 const { SECRET_KEY } = process.env
 
@@ -16,7 +17,7 @@ router.post('/signup', async (req, res, next) => {
     if (error) {
       throw new BadRequest(error.message)
     }
-    const { name, email, password } = req.body
+    const { email, password } = req.body
     const user = await User.findOne({ email })
     if (user) {
       throw new Conflict('User already exist')
@@ -24,10 +25,14 @@ router.post('/signup', async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(password, salt)
-    const newUser = await User.create({ name, email, password: hashPassword })
+    const avatarURL = gravatar.url(email)
+    const newUser = await User.create({
+      email,
+      password: hashPassword,
+      avatarURL,
+    })
     res.status(201).json({
       user: {
-        name: newUser.name,
         email: newUser.email,
       },
     })
@@ -52,7 +57,7 @@ router.post('/login', async (req, res, next) => {
       throw new Unauthorized('Email or password is wrong')
     }
 
-    const { _id, name } = user
+    const { _id, subscription } = user
     const payload = {
       id: _id,
     }
@@ -62,7 +67,7 @@ router.post('/login', async (req, res, next) => {
       token,
       user: {
         email,
-        name,
+        subscription,
       },
     })
   } catch (error) {
