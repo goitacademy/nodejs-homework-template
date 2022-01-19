@@ -16,10 +16,10 @@ router.get('/:contactId', authenticate, getContactById)
 
 router.post('/', authenticate, createContact)
 
-router.put('/:contactId', updateContactById)
+router.put('/:contactId', authenticate, updateContactById)
 
-router.patch('/:contactId/favorite', updateStatusContact)
+router.patch('/:contactId/favorite', authenticate, updateStatusContact)
 
-router.delete('/:contactId', deleteContactById)
+router.delete('/:contactId', authenticate, deleteContactById)
 
 module.exports = router

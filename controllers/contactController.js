@@ -64,9 +64,17 @@ const updateContactById = async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const { contactId } = req.params
-    const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {
-      new: true,
-    })
+    // const { _id } = req.user
+
+    const updateContact = await Contact.findByIdAndUpdate(
+      contactId,
+
+      req.body,
+      {
+        new: true,
+      }
+    )
+
     if (!updateContact) {
       throw new NotFound()
     }
@@ -108,7 +116,10 @@ const updateStatusContact = async (req, res, next) => {
 const deleteContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params
-    const deleteContact = await Contact.findByIdAndRemove(contactId)
+    const { _id } = req.user
+    const deleteContact = await Contact.findByIdAndRemove(contactId, {
+      owner: _id,
+    })
 
     if (!deleteContact) {
       throw new NotFound()
