@@ -1,10 +1,20 @@
 const { NotFound, BadRequest } = require('http-error')
 const { joiSchema } = require('../model/contact')
-const { Contact } = require('../model/contact')
+const { Contact } = require('../model/index')
 
 const getAll = async (req, res, next) => {
   try {
-    const contacts = await Contact.find()
+    const { page = 1, limit = 10 } = req.query
+    const skip = (page - 1) * limit
+    const { _id } = req.user
+    const contacts = await Contact.find(
+      { owner: _id },
+      '-createdAt -updatedAt',
+      {
+        skip: skip,
+        limit: +limit,
+      }
+    )
     res.json(contacts)
   } catch (error) {
     next(error)
@@ -33,13 +43,14 @@ const createContact = async (req, res, next) => {
       error.status = 400
       throw new BadRequest(error.message)
     }
-    const newContact = await Contact.create(req.body)
+    const { _id } = req.user
+
+    const newContact = await Contact.create({ ...req.body, owner: _id })
     res.status(201).json(newContact)
   } catch (error) {
     if (
       error.message.includes('validation failed') ||
       error.message.includes('length must be at least')
-      //
     ) {
       error.status = 400
     }
@@ -64,7 +75,6 @@ const updateContactById = async (req, res, next) => {
     if (
       error.message.includes('validation failed') ||
       error.message.includes('length must be at least')
-      //
     ) {
       //   throw new NotFound()
       error.status = 400
