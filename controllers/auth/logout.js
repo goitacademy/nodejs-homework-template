@@ -1,7 +1,11 @@
-const { Conflict } = require('http-errors')
 const { sendSuccessRes } = require('../../helpers')
-const bcrypt = require('bcrypt')
+
 const { User } = require('../../models')
-const logout = async (req, res) => {}
+const logout = async (req, res) => {
+    const {_id} = req.user
+    const result = await User.findByIdAndUpdate(_id,{token: null})
+    const {email, subscription} = result
+    sendSuccessRes(res,{email, subscription})
+}
 
 module.exports = logout

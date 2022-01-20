@@ -15,8 +15,10 @@
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "express": "4.17.1",
+    "helmet": "^5.0.1",
     "http-errors": "^2.0.0",
     "joi": "^17.5.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.5",
     "morgan": "1.10.0"
   },
