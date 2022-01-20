@@ -5,12 +5,13 @@ import {
   validateUpdateFavorite,
 } from "../../middlewares/contacts/validation";
 import guard from "../../middlewares/guard";
+import wrapperError from "../../middlewares/error-handler";
 
 const patchContactRouter = new Router();
 patchContactRouter.patch(
   "/:id/favorite",
   [guard, validateUpdateFavorite],
-  validateId,
-  updateContactCb
+  wrapperError(validateId),
+  wrapperError(updateContactCb)
 );
 export default patchContactRouter;

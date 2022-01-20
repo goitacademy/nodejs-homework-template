@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { updateContactCb } from "../../controllers/contacts";
-
+import wrapperError from "../../middlewares/error-handler";
 import {
   validateUpdate,
   validateId,
@@ -8,5 +8,5 @@ import {
 import guard from "../../middlewares/guard";
 
 const updateRouter = new Router();
-updateRouter.put("/:id", [guard, validateId], validateUpdate, updateContactCb);
+updateRouter.put("/:id", [guard, validateId], wrapperError(validateUpdate), wrapperError(updateContactCb));
 export default updateRouter;
