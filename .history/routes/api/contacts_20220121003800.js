@@ -13,11 +13,10 @@ const addContactSchema = Joi.object({
 
 const updateContactSchema = Joi.object({
   name: Joi.string().min(3).max(30),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net", "ua"] },
-  }),
-  phone: Joi.number(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
+   
+  phone: Joi.number()
 });
 
 const router = express.Router();
@@ -73,11 +72,6 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      throw new CreateError(400, error.message);
-    }
-
     const { contactId } = req.params;
     const body = req.body;
     if (Object.keys(body).length === 0) {

@@ -43,31 +43,12 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-
-  let contact = contacts.find(
-    (contact) => contact.id.toString() === contactId.toString()
-  );
-
-  if (contact) {
-    contact = { ...contact, ...body };
-    contacts.forEach((cont, index) => {
-      if (cont.id.toString() === contact.id.toString()) {
-        contacts[index] = contact;
-      }
-    });
-  }
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return contact;
-};
+// const updateContact = async (contactId, body) => {}
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  // updateContact,
 };

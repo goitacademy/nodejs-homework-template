@@ -73,7 +73,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = updateContactSchema.validate(req.body);
+    const { error } = addContactSchema.validate(req.body);
     if (error) {
       throw new CreateError(400, error.message);
     }

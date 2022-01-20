@@ -11,15 +11,6 @@ const addContactSchema = Joi.object({
   phone: Joi.number().required(),
 });
 
-const updateContactSchema = Joi.object({
-  name: Joi.string().min(3).max(30),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net", "ua"] },
-  }),
-  phone: Joi.number(),
-});
-
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -72,26 +63,9 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      throw new CreateError(400, error.message);
-    }
-
-    const { contactId } = req.params;
-    const body = req.body;
-    if (Object.keys(body).length === 0) {
-      throw new CreateError(400, "missing fields");
-    }
-
-    const resUpdateContact = await contacts.updateContact(contactId, body);
-    if (resUpdateContact) {
-      res.status(200).json(resUpdateContact);
-    } else {
-      throw new CreateError(404, "Not found");
-    }
-  } catch (e) {
-    next(e);
+  const body = req.body;
+  if (Object.keys(body).length == 0) {
+    throw new CreateError(400, "missing fields");
   }
 });
 
