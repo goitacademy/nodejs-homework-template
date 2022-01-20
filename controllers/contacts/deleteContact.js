@@ -1,5 +1,6 @@
 import { removeContact } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
+import { CustomError } from '../../lib/custom-error';
 
 export const removeContactCb = async (req, res, next) => {
   const {id: userId} = req.user;
@@ -13,7 +14,6 @@ export const removeContactCb = async (req, res, next) => {
       message: "Contact deleted",
     });
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
+  throw new CustomError(HttpCode.NOT_FOUND, "Not found")
+  
 };

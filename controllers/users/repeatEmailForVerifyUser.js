@@ -1,12 +1,7 @@
 // import repositoryContacts from '../../repository/contacts'
 import repositoryUsers from '../../repository/users'
 import { HttpCode } from '../../lib/constants'
-// import {
-//   UploadFileService,
-//   LocalFileStorage,
-//   CloudFileStorage,
-// } from '../../service/file-storage'
-
+import { CustomError } from '../../lib/custom-error';
 import {
   EmailService,
   SenderNodemailer,
@@ -35,11 +30,7 @@ export const repeatEmailForVerifyUser = async (req, res, next) => {
           data: { message: 'Success' },
         })
       }
-      return res.status(HttpCode.UE).json({
-        status: 'error',
-        code: HttpCode.UE,
-        data: { message: 'Unprocessable Entity' },
-      })
+      throw new CustomError(HttpCode.SE, 'Service Unavailable')
     }
   
     res.status(HttpCode.NOT_FOUND).json({

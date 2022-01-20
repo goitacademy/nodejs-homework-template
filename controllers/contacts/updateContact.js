@@ -1,5 +1,7 @@
 import { HttpCode } from "../../lib/constants";
 import { updateContact } from "../../repository/contacts";
+import { CustomError } from '../../lib/custom-error';
+
 export const updateContactCb = async (req, res, next) => {
   const {id: userId} = req.user;
   const { id } = req.params;
@@ -9,7 +11,5 @@ export const updateContactCb = async (req, res, next) => {
       .status(HttpCode.OK)
       .json({ status: "success", code: HttpCode.OK, data: { contact } });
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
+  throw new CustomError(HttpCode.NOT_FOUND, "Not found")
 };

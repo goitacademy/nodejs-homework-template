@@ -1,7 +1,7 @@
 import { HttpCode } from "../../lib/constants";
 import AuthService from "../../service/auth";
 
-// const authService = new AuthService();
+
 
 const logoutController = async (req, res, next) => {
   await AuthService.setToken(req.user.id, null);

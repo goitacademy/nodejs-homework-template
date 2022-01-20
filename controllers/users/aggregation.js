@@ -1,10 +1,6 @@
 import repositoryContacts from '../../repository/contacts'
 import { HttpCode } from '../../lib/constants'
-// import {
-//   UploadFileService,
-//   LocalFileStorage,
-//   CloudFileStorage,
-// } from '../../service/file-storage'
+import { CustomError } from '../../lib/custom-error';
 
 export const aggregation = async (req, res, next) => {
     const { id } = req.params
@@ -14,7 +10,6 @@ export const aggregation = async (req, res, next) => {
         .status(HttpCode.OK)
         .json({ status: 'success', code: HttpCode.OK, data })
     }
-    res
-      .status(HttpCode.NOT_FOUND)
-      .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' })
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found')
+    
   }

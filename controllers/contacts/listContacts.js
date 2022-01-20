@@ -1,6 +1,7 @@
 import { listContacts } from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
 
+
 export const getContacts = async (req, res, next) => {
   const {id: userId} = req.user;
   const contacts = await listContacts(userId, req.query);

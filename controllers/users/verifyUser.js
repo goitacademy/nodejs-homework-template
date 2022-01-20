@@ -1,17 +1,7 @@
 // import repositoryContacts from '../../repository/contacts'
 import repositoryUsers from '../../repository/users'
 import { HttpCode } from '../../lib/constants'
-// import {
-//   UploadFileService,
-//   LocalFileStorage,
-//   CloudFileStorage,
-// } from '../../service/file-storage'
-
-// import {
-//   EmailService,
-//   SenderNodemailer,
-//   SenderSendgrid,
-// } from '../../service/email'
+import { CustomError } from '../../lib/custom-error';
 
 export const verifyUser = async (req, res, next) => {
     const verifyToken = req.params.token
@@ -29,10 +19,7 @@ export const verifyUser = async (req, res, next) => {
         data: { message: 'Success' },
       })
     }
-    res.status(HttpCode.BAD_REQUEST).json({
-      status: 'success',
-      code: HttpCode.BAD_REQUEST,
-      data: { message: 'Invalid token' },
-    })
+    throw new CustomError(HttpCode.BAD_REQUEST, 'Invalid token')
+  
   }
   
