@@ -32,10 +32,13 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-    status: "fail",
-    code: HttpCode.INTERNAL_SERVER_ERROR,
-    message: err.message,
-  });
+  const statusCode = err.status || HttpCode.INTERNAL_SERVER_ERROR
+  const status =
+    statusCode === HttpCode.INTERNAL_SERVER_ERROR ? 'fail' : 'error'
+    res.status().json({
+      status: status,
+      code: statusCode,
+      message: err.message,
+    })
 });
 export default app;

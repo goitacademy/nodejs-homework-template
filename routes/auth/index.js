@@ -4,15 +4,14 @@ import {
   loginController,
   logoutController,
 } from "../../controllers/auth";
-// import limiter from '../../middlewares/rate-limit'
-// import guard from "../../middlewares/guard";
-// const router = new Router()
+import wrapperError from "../../middlewares/error-handler";
+
 const router = express.Router();
 
-router.post("/signup", signupController);
+router.post("/signup", wrapperError(signupController));
 
-router.post("/login", loginController);
+router.post("/login", wrapperError(loginController));
 
-router.post("/logout",  logoutController);
+router.post("/logout",  wrapperError(logoutController));
 
 export default router;
