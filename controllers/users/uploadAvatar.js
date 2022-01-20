@@ -19,3 +19,5 @@ export const uploadAvatar = async (req, res, next) => {
       .status(HttpCode.OK)
       .json({ status: 'success', code: HttpCode.OK, data: { avatarUrl } })
   }
+
+  

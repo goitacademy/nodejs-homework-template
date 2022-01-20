@@ -13,6 +13,8 @@ import {
 import {
   aggregation,
   uploadAvatar,
+  verifyUser, 
+  repeatEmailForVerifyUser,
 } from './users'; 
 
   export {
@@ -26,4 +28,6 @@ import {
     logoutController,
     aggregation,
   uploadAvatar,
+  verifyUser,
+  repeatEmailForVerifyUser,
   };

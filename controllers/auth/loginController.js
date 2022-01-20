@@ -1,6 +1,6 @@
 import { HttpCode } from "../../lib/constants";
 import AuthService from "../../service/auth";
-
+import { EmailService, SenderNodemailer, SenderSendgrid } from "../../service/email";
 // const authService = new AuthService();
 
 
