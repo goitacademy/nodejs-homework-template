@@ -50,21 +50,6 @@ router.post("/", async (req, res, next) => {
   console.log(req.body);
 });
 
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contactsToDo.removeContact(id);
-    if (!result) {
-      // eslint-disable-next-line new-cap
-      throw new createError(404, "Not found");
-    }
-    res.json({ message: "contact deleted" });
-    // res.json(result)
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.put("/:id", async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
@@ -80,6 +65,21 @@ router.put("/:id", async (req, res, next) => {
       throw new createError(404, "Not found");
     }
     res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsToDo.removeContact(id);
+    if (!result) {
+      // eslint-disable-next-line new-cap
+      throw new createError(404, "Not found");
+    }
+    res.json({ message: "contact deleted" });
+    // res.json(result)
   } catch (error) {
     next(error);
   }
