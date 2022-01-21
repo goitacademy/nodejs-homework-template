@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 
+// eslint-disable-next-line
 const emailRegExp = /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/;
 
 const joiAddSchema = Joi.object({
@@ -17,23 +18,30 @@ const joiUpdSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const contactSchema = Schema({
-  name: {
-    type: String,
-    required: [true, 'Set name for contact'],
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+      match: emailRegExp,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
-  email: {
-    type: String,
-    match: emailRegExp,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { versionKey: false, timestamps: true },
+);
 
 const Contact = model('contact', contactSchema);
 
