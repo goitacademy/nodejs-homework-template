@@ -1,0 +1,61 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add shortId
+
+PATH: 
+  C:\Users\Admin\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Admin\bin;C:\Python39\Scripts;C:\Python39;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Admin\AppData\Roaming\npm;C:\Users\Admin\AppData\Local\GitHubDesktop\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/shortId: Not found
+      at Request.params.callback [as _callback] (C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:67029:18)
+      at Request.self.callback (C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140883:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141855:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (C:\Users\Admin\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141777:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "template",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node ./server.js",
+      "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+      "lint": "eslint **/*.js",
+      "lint:fix": "eslint --fix **/*.js"
+    },
+    "dependencies": {
+      "cors": "2.8.5",
+      "cross-env": "7.0.3",
+      "express": "4.17.1",
+      "morgan": "1.10.0"
+    },
+    "devDependencies": {
+      "eslint": "7.19.0",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-config-standard": "16.0.3",
+      "eslint-plugin-import": "2.25.3",
+      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-promise": "5.2.0",
+      "nodemon": "2.0.15"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
