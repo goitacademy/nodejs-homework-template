@@ -10,10 +10,13 @@ import { httpCode } from './lib/constants.js';
 
 const formatsLogger = app.get('env') ===  'development' ? 'dev' : 'short';
 
-app.use(helmet())
+app.use(helmet());
+
 app.use(logger(formatsLogger));
+app.use(express.static(process.env.FOLDER_FOR_AVATARS))
 app.use(cors());
 app.use(express.json()); //from JSON
+
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/auth', authRouter);
