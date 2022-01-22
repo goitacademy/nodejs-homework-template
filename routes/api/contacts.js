@@ -1,4 +1,5 @@
 const express = require('express');
+
 const createError = require('http-errors');
 // const Joi = require('joi');
 const router = express.Router()
@@ -67,7 +68,7 @@ router.delete('/:id', async(req, res, next) => {
     })
     // GETBYUPDATE
 router.put('/:id', async(req, res, next) => {
-    try {
+    try{
         const { id } = req.params;
         const updateContacts = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
@@ -82,7 +83,23 @@ router.put('/:id', async(req, res, next) => {
         }
         next(error);
     }
+
 })
+//GETBYUPDATE
+router.put('/:id', async (req, res, next) => {
+  try{
+const {id} = req.params;
+const updateContacts=await contactsOperation.updateById({id, ...req.body});
+const {error} = joiSchema.validate(req.body);
+if(error){
+  error.status = 400;
+  throw error;
+}
+if(!updateContacts){
+  throw new createError(404, "Not found");
+}
+res.json(updateContacts);
+
 
 router.patch("/:id/favorite", async(req, res, next) => {
     try {
@@ -101,6 +118,7 @@ router.patch("/:id/favorite", async(req, res, next) => {
         }
         next(error);
     }
+
 })
 
 module.exports = router

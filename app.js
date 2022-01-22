@@ -8,7 +8,9 @@ const contactsRouter = require('./routes/api/contacts');
 const app = express();
 
 
+
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+
 
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -21,9 +23,11 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+
     // eslint-disable-next-line indent
     const { status = 500, message = 'Server error' } = err;
     res.status(status).json({ message });
+
 })
 
 module.exports = app;
