@@ -1,19 +1,20 @@
 import {Router} from "express";
 const router = new Router();
-import {validateCreate, validateUpdte, validateId, validateUpdteFavorite, validateQuery} from './validation.js';
-import {getContacts, getContactById, removeContact, updateContact, addContact, updateStatusContact} from '../../../controller/contacts/index.js'
+import {validateCreate, validateUpdte, validateId, validateUpdteFavorite, validateQuery} from '../../../midlewares/validation.js';
+import {getContacts, getContactById, removeContact, updateContact, addContact} from '../../../controller/contacts/index.js';
+import guard from '../../../midlewares/guard.js';
 
-router.get('/',validateQuery, getContacts );
 
-router.get('/:id', validateId, getContactById);
+router.get('/',[guard, validateQuery], getContacts );
 
-router.post('/',validateCreate, addContact);
+router.get('/:id',[guard,  validateId], getContactById);
 
-router.delete('/:id', validateId, removeContact);
+router.post('/',[guard, validateCreate], addContact);
 
-router.put('/:id',validateId, validateUpdte, updateContact);
+router.delete('/:id',[guard,  validateId], removeContact);
 
-router.patch('/:id/favorite',validateUpdteFavorite, validateId, updateStatusContact);
+router.put('/:id',[guard, validateId], validateUpdte, updateContact);
+
+router.patch('/:id/favorite',[guard, validateId, validateUpdteFavorite], updateContact);
 
 export default router
-
