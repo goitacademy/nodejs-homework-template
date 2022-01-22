@@ -15,4 +15,13 @@ const agregation = async (req, res, next) =>{
     .json({message: `not found contact `})
 };
 
-export {agregation}
+const uploadAvatar = async(req, res, next) =>{
+    res.status(httpCode.OK).json({
+        status: 'success',
+        code: httpCode.OK,
+        message: 'Success!!!'
+
+    })
+}
+
+export {agregation, uploadAvatar}
