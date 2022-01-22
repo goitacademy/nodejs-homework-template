@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 import { role } from '../lib/constants.js';
 import bcrypt from 'bcryptjs';
+import gravatar from 'gravatar';
 
 const userSchema = new Schema({    
         name: {
@@ -32,6 +33,12 @@ const userSchema = new Schema({
          token: {
              type: String,
              default: null,
+         },
+         avatar:{
+             type: String,
+             default: function(params) {
+                return gravatar.url(this.email, { s: 250 }, true) 
+             }
          }
       
 },{

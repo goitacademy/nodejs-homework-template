@@ -13,9 +13,9 @@ const storage = multer.diskStorage({
   })
   
  export const upload = multer({ storage: storage, limits: {
-      fileSize: 500000},
+      fileSize: 5000000},
       fileFilter: (req, file, cb) =>{
-          if (file.mimetype.includes('images')) {
+          if (file.mimetype.includes('image')) {
               return cb(null, true)
           }
           cb(new Error('Wrong format file from avatar!'))
