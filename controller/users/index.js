@@ -18,6 +18,7 @@ const agregation = async (req, res, next) =>{
 
 const uploadAvatar = async(req, res, next) =>{
     const uploadServis = new UploadFileService(LocalFileStorage, req.file, req.user)
+    // const uploadServis = new UploadFileService(CloudFileStorage, req.file, req.user)
     const avatarUrl = await uploadServis.updateAvatar();
 
 
