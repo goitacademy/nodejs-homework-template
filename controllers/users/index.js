@@ -1,5 +1,10 @@
 import repositoryContacts from "../../repository/contacts";
 import { HttpCode } from "../../lib/constants";
+import {
+  UploadFileService,
+  LocalFileStorage,
+  CloudFileStorage,
+} from "../../service/file-storage";
 
 const aggregation = async (req, res, next) => {
   const { id } = req.params;
@@ -15,4 +20,16 @@ const aggregation = async (req, res, next) => {
     .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
 };
 
-export { aggregation };
+const uploadAvatar = async (req, res, next) => {
+  const uploadService = new UploadFileService(
+    CloudFileStorage,
+    req.file,
+    req.user
+  );
+  const avatarUrl = await uploadService.updateAvater();
+  res
+    .status(HttpCode.OK)
+    .json({ status: "success", code: HttpCode.OK, data: { avatarUrl } });
+};
+
+export { aggregation, uploadAvatar };
