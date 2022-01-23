@@ -16,6 +16,7 @@ const verifyToken = (token) => {
 const guard = async (req, res, next) => {
   const token = req.get("authorization")?.split(" ")[1];
   const isValidToken = verifyToken(token);
+  console.log(token);
   if (!isValidToken) {
     return res.status(HttpCode.UNAUTHORIZED).json({
       status: "error",
