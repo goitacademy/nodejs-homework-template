@@ -5,7 +5,12 @@ const Joi = require("joi");
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
-  price: Joi.number().min(0.01).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+  phone: Joi.string().required(),
+  // .pattern(new RegExp("^+380d{3}d{2}d{2}d{2}$")),
 });
 
 const contactsOperation = require("../../model/contacts");
@@ -16,7 +21,6 @@ router.get("/", async (req, res, next) => {
     res.json(contacts);
   } catch (error) {
     next(error);
-    // res.status(500).json({ message: "Server error" });
   }
 });
 
