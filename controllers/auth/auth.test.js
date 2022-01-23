@@ -3,8 +3,6 @@ import { registration } from "./index";
 import { HttpCode } from "../../lib/constants";
 import authService from "../../service/auth";
 
-//jest.mock("../../service/auth");
-
 describe("Unit test registration", () => {
   let req, res, next;
   beforeEach(() => {
