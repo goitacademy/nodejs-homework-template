@@ -62,6 +62,7 @@ router.delete("/:id", async (req, res, next) => {
       throw new NotFound();
     }
     res.json({ message: "contact deleted" });
+    // res.status(204).json({ message: "contact deleted" })-204 не отправляет тело;
   } catch (error) {
     next(error);
   }
