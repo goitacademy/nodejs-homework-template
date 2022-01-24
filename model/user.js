@@ -15,6 +15,7 @@ const joiRegisterSchema = Joi.object({
     .pattern(emailRegexp)
     .required(),
   subscription: Joi.string(),
+  // image: Joi.string(),
 })
 
 const joiLoginSchema = Joi.object({
@@ -44,6 +45,11 @@ const userSchema = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
+    avatarURL: {
+      type: String,
+      default: '',
+    },
+
     token: {
       type: String,
       default: null,

@@ -36,8 +36,17 @@ const getContactById = async (req, res, next) => {
     next(error)
   }
 }
+// const fs = require('fs/promises')
+// const path = require('path')
+// const avatarsDir = path.join('public/avatars')
 const createContact = async (req, res, next) => {
   try {
+    // const { path: tempUpload, filename } = req.file
+    // const newFilePath = path.join(avatarsDir, filename)
+    // await fs.rename(tempUpload, newFilePath)
+    // const image = `public/avatars//${filename}`
+    // const contact = { ...req.body, image, id: 1 }
+
     const { error } = joiSchema.validate(req.body)
     if (error) {
       error.status = 400
@@ -54,6 +63,7 @@ const createContact = async (req, res, next) => {
     ) {
       error.status = 400
     }
+
     next(error)
   }
 }
@@ -115,6 +125,7 @@ const updateStatusContact = async (req, res, next) => {
 
 const deleteContactById = async (req, res, next) => {
   try {
+    console.log('file', req.file)
     const { contactId } = req.params
     const { _id } = req.user
     const deleteContact = await Contact.findOneAndRemove(contactId, {
