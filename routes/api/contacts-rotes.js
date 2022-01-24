@@ -9,8 +9,7 @@ const contactsScheme = Joi.object({
 	name: Joi.string().required(),
 	email: Joi.string().email({
 		minDomainSegments: 2,
-		tlds: { allow: ["com", "net"] }.required(),
-		phone: Joi.string().required().length(14),
+		tlds: { allow: ["com", "net"] },
 	}),
 });
 
