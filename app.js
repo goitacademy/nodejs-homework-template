@@ -3,7 +3,6 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const router = require("./routes/api/contacts-rotes");
-// console.log("test", router);
 
 const app = express();
 
@@ -20,7 +19,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-	// const { status = 500, message = "Server error!" } = err;
+	const { status = 500, message = "Server error!" } = err;
 	res.status(500).json({ message: err.message });
 });
 

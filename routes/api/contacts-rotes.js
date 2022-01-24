@@ -7,12 +7,12 @@ const Joi = require("joi");
 
 const contactsScheme = Joi.object({
 	name: Joi.string().required(),
-	email: Joi.string()
-		.email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-		.required(),
-	phone: Joi.string().required().length(14),
+	email: Joi.string().email({
+		minDomainSegments: 2,
+		tlds: { allow: ["com", "net"] }.required(),
+		phone: Joi.string().required().length(14),
+	}),
 });
-// console.log(contacts);
 
 // GET ALL
 router.get("/", async (req, res, next) => {
@@ -75,7 +75,6 @@ router.post("/", async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
-	// console.log("ADD", req.body);
 	res.json({ message: "Contact sucessfully added" });
 });
 
@@ -83,15 +82,11 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
 	try {
 		const id = req.params.contactId;
-		// console.log("DELETE", req.params);
-		// console.log("DELETE,body", req.body);
 		const result = await contacts.removeContact(id);
 		if (!result || !id) {
 			throw createError(404, "Contact not found!");
 		}
-
 		res.json({ message: "Contact deleted" });
-		// res.json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -105,9 +100,6 @@ router.put("/:contactId", async (req, res, next) => {
 			throw createError(400, error.message);
 		}
 		const id = req.params.contactId;
-		// console.log("UPDATE", req.body.email);
-		// console.log("UPDATE", req.params);
-
 		const { name, email, phone } = req.body;
 
 		const result = await contacts.updateContact(id, name, email, phone);
@@ -117,12 +109,10 @@ router.put("/:contactId", async (req, res, next) => {
 		if (req.body === null) {
 			res.json({ message: "missing fields" });
 		}
-
 		res.json(result);
 	} catch (error) {
 		next(error);
 	}
-
 	res.json({ message: "Contact sucessfully updated" });
 });
 

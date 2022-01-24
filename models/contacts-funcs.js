@@ -1,6 +1,5 @@
 const fs = require("fs/promises");
 const path = require("path");
-// const shortid = require("shortid");
 const { nanoid } = require("nanoid");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
@@ -18,7 +17,6 @@ const getContactById = async (contactId) => {
 	if (!result) {
 		return null;
 	}
-	// console.log(result);
 	return result;
 };
 
@@ -31,17 +29,14 @@ const removeContact = async (contactId) => {
 	const removedContact = contacts[index];
 	contacts.splice(index, 1);
 	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	// console.log(removedContact);
 	return removedContact;
 };
 
 const addContact = async (name, email, phone) => {
-	// const newContact = { id: shortid.generate(), name, email, phone };
 	const newContact = { id: nanoid(), name, email, phone };
 	const contacts = await listContacts();
 	contacts.push(newContact);
 	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	// console.log(newContact);
 	return newContact;
 };
 
@@ -53,7 +48,6 @@ const updateContact = async (contactId, name, email, phone) => {
 	}
 	contacts[index] = { id: contacts[index].id, name, email, phone };
 	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	// console.log(contacts[index]);
 	return contacts[index];
 };
 
