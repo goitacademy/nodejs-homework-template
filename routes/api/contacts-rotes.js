@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const contacts = require("../../models/contacts-funcs");
-// const { NotFound } = require("http-errors");
 const createError = require("http-errors");
 const Joi = require("joi");
 
@@ -11,6 +10,7 @@ const contactsScheme = Joi.object({
 		minDomainSegments: 2,
 		tlds: { allow: ["com", "net"] },
 	}),
+	phone: Joi.string().required(),
 });
 
 // GET ALL
@@ -20,9 +20,6 @@ router.get("/", async (req, res, next) => {
 		res.json(result);
 	} catch (error) {
 		next(error);
-		// res.status(500).json({
-		// 	message: "Server error!",
-		// });
 	}
 });
 
@@ -33,23 +30,11 @@ router.get("/:contactId", async (req, res, next) => {
 		const id = req.params.contactId;
 		const result = await contacts.getContactById(id);
 		if (!result) {
-			// const error = new Error("Not found!");
-			// error.status = 404;
-			// throw error;
-
-			// res.status(404).json({
-			// 	message: "Contact not found!",
-			// });
-
-			// throw NotFound("Contact not found!");
 			throw createError(404, "Contact not found!");
 		}
 		res.json(result);
 	} catch (error) {
 		next(error);
-		// res.status(500).json({
-		// 	message: "Server error!",
-		// });
 	}
 });
 
@@ -104,14 +89,14 @@ router.put("/:contactId", async (req, res, next) => {
 		const result = await contacts.updateContact(id, name, email, phone);
 		if (!result) {
 			throw createError(404, "Contact not found!");
-		}
-		if (req.body === null) {
+		} else if (req.body === null) {
 			res.json({ message: "missing fields" });
 		}
 		res.json(result);
 	} catch (error) {
 		next(error);
 	}
+
 	res.json({ message: "Contact sucessfully updated" });
 });
 
