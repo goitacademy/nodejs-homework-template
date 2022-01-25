@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import gravatar from 'gravatar'
+import { randomUUID } from 'crypto'
 import { Role } from '../lib/constants'
 
 const { Schema, model } = mongoose
@@ -38,8 +39,16 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: function(){
-        return gravatar.url(this.email, {s: '250'}, true)
+      default: function () {
+        return gravatar.url(this.email, { s: '250' }, true)
+      },
+      verify: {
+        type: Boolean,
+        default: false,
+      },
+      verificationToken: {
+        type: String,
+        default: randomUUID,
       },
     }
   },

@@ -1,6 +1,7 @@
 import { HttpCode } from '../../lib/constants'
 import authService from '../../service/auth'
 import { CONFLICT, UNAUTHORIZED_LOGIN, UNAUTHORIZED } from '../../lib/messages';
+import { EmailService, SenderSendGrid } from '../../service/email'
 
 const signup = async (req, res, next) => {
   try {
@@ -13,10 +14,28 @@ const signup = async (req, res, next) => {
         message: CONFLICT.en,
       })
     }
-    const data = await authService.create(req.body)
-    res.status(HttpCode.CREATED).json({ status: 'success', code: HttpCode.CREATED, data })
-  } catch(err){
-     next(err)
+
+    const userData = await authService.create(req.body)
+
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      new SenderSendGrid(),
+    )
+
+    const isSend = await emailService.sendVerifyEmail(
+      email,
+      userData.name,
+      userData.verificationToken,
+    )
+    delete userData.verificationToken
+
+    res.status(HttpCode.CREATED).json({
+      status: 'success',
+      code: HttpCode.CREATED,
+      data: { ...userData, isSendEmailVerify: isSend },
+    })
+  } catch (err) {
+    next(err)
   }
 
 }
@@ -29,7 +48,7 @@ const login = async (req, res, next) => {
       return res.status(HttpCode.UNAUTHORIZED).json({
         status: 'error',
         code: HttpCode.UNAUTHORIZED,
-        message:  UNAUTHORIZED_LOGIN.en,
+        message: UNAUTHORIZED_LOGIN.en,
       })
     }
     const token = authService.getToken(user)
@@ -37,45 +56,47 @@ const login = async (req, res, next) => {
     res
       .status(HttpCode.OK)
       .json({ status: 'success', code: HttpCode.OK, data: { token } })
-  } catch(err) {
+  } catch (err) {
     next(err)
   }
 
 }
 
 const logout = async (req, res, next) => {
-   try {  await authService.setToken(req.user.id, null)
-  res
-    .status(HttpCode.NO_CONTENT)
-    .json({ status: 'success', code: HttpCode.OK, data: {} })
-  } catch(err) {
+  try {
+    await authService.setToken(req.user.id, null)
+    res
+      .status(HttpCode.NO_CONTENT)
+      .json({ status: 'success', code: HttpCode.OK, data: {} })
+  } catch (err) {
     next(err)
   }
 }
 
 const current = async (req, res) => {
-  try {  const { email } = req.user;
-  console.log(req.user);
-  if (!req.user.token || !req.user.id) {
-    return res.status(HttpCode.UNAUTHORIZED).json({
-      status: "error",
-      code: HttpCode.UNAUTHORIZED,
-      message: UNAUTHORIZED.en,
-    });
-  }
-  res.json({
-    status: "success",
-    code: HttpCode.OK,
-    data: {
-      user: {
-        email,
+  try {
+    const { email } = req.user;
+    console.log(req.user);
+    if (!req.user.token || !req.user.id) {
+      return res.status(HttpCode.UNAUTHORIZED).json({
+        status: "error",
+        code: HttpCode.UNAUTHORIZED,
+        message: UNAUTHORIZED.en,
+      });
+    }
+    res.json({
+      status: "success",
+      code: HttpCode.OK,
+      data: {
+        user: {
+          email,
+        },
       },
-    },
-  });
-} catch(err) {
-  next(err)
-}
+    });
+  } catch (err) {
+    next(err)
+  }
 };
 
 
-export { signup, login, logout, current}
+export { signup, login, logout, current }
