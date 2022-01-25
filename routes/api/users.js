@@ -100,7 +100,7 @@ router.patch('/', authenticate, async (req, res, next) => {
   try {
     const { subscription } = req.body;
     const { email } = req.user;
-    console.log(email);
+
     if (subscription === undefined) {
       throw new BadRequest('missing field subscription');
     }
