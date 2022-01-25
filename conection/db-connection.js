@@ -1,9 +1,9 @@
 import mongooseService from 'mongoose';
 const { connect, connection } = mongooseService;
 
-const uri = process.env.MONGO_URL;
+/* const uri = process.env.MONGO_URL; */
 
-const db = connect(uri, {
+const db = connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
