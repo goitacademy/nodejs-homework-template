@@ -2,6 +2,7 @@ const { Unauthorized, BadRequest, Conflict } = require('http-error')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 gravatar = require('gravatar')
+const Jimp = require('jimp')
 
 const fs = require('fs/promises')
 const path = require('path')
@@ -14,8 +15,6 @@ const { SECRET_KEY } = process.env
 
 const signupUser = async (req, res, next) => {
   try {
-    // console.log('req.body controllewr', req.body)
-
     const { error } = joiRegisterSchema.validate(req.body)
     if (error) {
       throw new BadRequest(error.message)
@@ -113,13 +112,22 @@ const getUser = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user
-    console.log('_id', _id)
+
     const { path: tempUpload, filename } = req.file
+
+    await Jimp.read(tempUpload)
+      .then((resizeImg) => {
+        return resizeImg.resize(250, 250).write(tempUpload)
+      })
+      .catch((err) => next(err))
+
     const [extension] = filename.split('.').reverse()
     const newFileName = `${_id}.${extension}`
+
     const newFilePath = path.join(avatarsDir, newFileName)
     await fs.rename(tempUpload, newFilePath)
     const avatarURL = path.join('avatars', newFileName)
+
     await User.findByIdAndUpdate(_id, { avatarURL }, { new: true })
     res.json(201).json(avatarURL)
   } catch (error) {
