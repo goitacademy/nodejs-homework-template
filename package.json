@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node --es-module-specifier-resolution=node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "cross-env NODE_ENV=production node -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development  nodemon -r dotenv/config --es-module-specifier-resolution=node ./bin/server.js",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -15,19 +16,24 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-rate-limit": "^6.1.0",
+    "gravatar": "^1.8.2",
     "helmet": "^4.6.0",
+    "jest": "^27.4.7",
+    "jimp": "^0.16.1",
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.5",
-    "morgan": "^1.10.0"
+    "mongoose": "^6.1.6",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4"
   },
   "devDependencies": {
-    "eslint": "^7.19.0",
+    "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "eslint-plugin-promise": "5.2.0",
+    "nodemon": "2.0.15"
   }
 }

@@ -1,19 +1,23 @@
-import User from "../model/user";
+import User from '../model/user'
 
-const findById = async (id) => {
-    return await User.findById(id)
-}
-const findByEmail = async (email) => {
-    return await User.findOne({email})
+const findById = (id) => {
+  return User.findById(id)
 }
 
-const create = async (body) => {
-    const user = new User(body)
-    return await user.save()
+const findByEmail = (email) => {
+  return User.findOne({ email })
 }
 
-const updateToken = async (id, token) => {
-    return await User.updateOne({_id: id}, { token })
+const create = (body) => {
+  const user = new User(body)
+  return user.save()
 }
 
-export default { findById, findByEmail, create, updateToken }
+const updateToken = (id, token) => {
+  return User.updateOne({ _id: id }, { token })
+}
+
+const updateAvatar = (id, avatar) => {
+  return User.updateOne({ _id: id }, { avatar })
+}
+export default { findById, findByEmail, create, updateToken, updateAvatar }
