@@ -8,7 +8,15 @@ const router = express.Router();
 const { BadRequest, Conflict, Unauthorized } = require('http-errors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { authenticate } = require('../../middlewares');
+const { authenticate, upload } = require('../../middlewares');
+const fs = require('fs').promises;
+const Jimp = require('jimp');
+const gravatar = require('gravatar/lib/gravatar');
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const avatarsDir = path.join(__dirname, '../../', 'public', 'avatars');
 
 const { SECRET_KEY } = process.env;
 
@@ -26,10 +34,12 @@ router.post('/signup', async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const avatarURL = gravatar.url(email);
 
     const newUser = await User.create({
       ...req.body,
       password: hashedPassword,
+      avatarURL,
     });
 
     res.status(201).json({
@@ -120,5 +130,40 @@ router.patch('/', authenticate, async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  async (req, res, next) => {
+    try {
+      const { path: tempUpload, filename } = req.file;
+      const { email } = req.user;
+
+      const extension = filename.split('.').at(-1);
+      const newFileName = `${req.user._id}.${extension}`;
+      const fileUpload = path.join(avatarsDir, newFileName);
+
+      const tempAvatar = await Jimp.read(tempUpload);
+      tempAvatar.resize(250, 250);
+      tempAvatar.write(tempUpload);
+
+      await fs.rename(tempUpload, fileUpload);
+      const avatarURL = path.join('avatars', newFileName);
+
+      const updatedUser = await User.findOneAndUpdate(
+        { email: email },
+        { avatarURL },
+        {
+          new: true,
+        },
+      );
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      await fs.unlink(tempUploadh);
+      next(error);
+    }
+  },
+);
 
 module.exports = router;

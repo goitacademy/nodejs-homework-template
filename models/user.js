@@ -35,6 +35,10 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      default: 'avatars/testpic.png',
+    },
   },
   { versionKey: false, timestamps: true },
 );

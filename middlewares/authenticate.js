@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { Unauthorized } = require('http-errors');
 const { User } = require('../models');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
@@ -21,6 +23,7 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       throw new Unauthorized('Not authorized');
     }
+
     req.user = user;
     next();
   } catch (error) {

@@ -3,15 +3,14 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const contactsRouter = require('./routes/api/contacts');
+const usersRouter = require('./routes/api/users');
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 dotenv.config(); // запись содержимого из .env (ключ доступа) в process.env
 const { DB_HOST } = process.env;
-
-const contactsRouter = require('./routes/api/contacts');
-const usersRouter = require('./routes/api/users');
 
 mongoose
   .connect(DB_HOST)
@@ -26,6 +25,7 @@ mongoose
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json()); // нужно для отправки тела запроса в формате json
+app.use(express.static('public')); // разрешает Express раздачу статичных файлов из папки public
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
