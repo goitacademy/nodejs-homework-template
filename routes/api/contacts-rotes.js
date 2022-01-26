@@ -55,7 +55,7 @@ router.post("/", async (req, res, next) => {
 		}
 		const { name, email, phone } = req.body;
 		const result = await contacts.addContact(name, email, phone);
-		res.status(201).json(result);
+		return res.status(201).json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -92,7 +92,7 @@ router.put("/:contactId", async (req, res, next) => {
 		} else if (req.body === null) {
 			res.json({ message: "missing fields" });
 		}
-		res.json(result);
+		return res.json(result);
 	} catch (error) {
 		next(error);
 	}
