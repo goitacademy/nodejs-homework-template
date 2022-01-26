@@ -13,7 +13,7 @@ async function putContactController(req, res, next) {
     );
 
     if (!updatedContact) {
-      throwNotFound();
+      throwNotFound(contactId);
     }
 
     res.json(successRes(updatedContact));
