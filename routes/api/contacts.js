@@ -1,14 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const contacts = require("../../model/index");
+const contacts = require("../../models/contacts");
 const createError = require("http-errors");
-const Joi = require("joi");
-
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+const { addValidation } = require("../../middlewares/validationContacts");
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -34,12 +28,8 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", addValidation, async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      throw new createError(400, error.message);
-    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -60,12 +50,9 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", addValidation, async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      throw new createError(400, error.message);
-    }
+    //////
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
     if (!req.body) {
