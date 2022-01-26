@@ -33,6 +33,7 @@ const signupUser = async (req, res, next) => {
       email,
       subscription,
     })
+    console.log()
     res.status(201).json({
       user: {
         email: newUser.email,
