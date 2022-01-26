@@ -21,6 +21,10 @@ const contactSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 
 const joiSchema = Joi.object({
@@ -32,4 +36,7 @@ const joiSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-module.exports = {Contact,joiSchema,};
+module.exports = {
+  Contact,
+  joiSchema,
+};
