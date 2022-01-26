@@ -14,6 +14,9 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+const express = require('express')
+const router = express.Router()
+
 
 router.get("/:contactId", async (req, res, next) => {
   try {
@@ -68,4 +71,9 @@ router.put("/:contactId", addValidation, async (req, res, next) => {
   }
 });
 
+
 module.exports = router;
+router.put('/:contactId', async (req, res, next) => {
+  res.json({ message: 'template message' })
+})
+module.exports = router
