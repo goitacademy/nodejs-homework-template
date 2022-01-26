@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "name": "Taman",
+    "name": "Allen Raymond",
     "email": "nulla.ante@vestibul.co.uk",
     "phone": "(992) 914-3792"
   },
@@ -30,6 +30,12 @@
     "phone": "(501) 472-5218"
   },
   {
+    "id": "6",
+    "name": "Abbot Franks",
+    "email": "scelerisque@magnis.org",
+    "phone": "(186) 568-3720"
+  },
+  {
     "id": "7",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
@@ -52,11 +58,5 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  },
-  {
-    "id": "af76e68e-4817-499c-8667-2e5d298d9ab6",
-    "name": "Vlad",
-    "email": "Vlad@gmail.com",
-    "phone": "721312-11-23"
   }
 ]
