@@ -1,18 +1,24 @@
-const { getContactById } = require("../../models/contacts");
+const { Contact } = require("../../models");
 const successRes = require("./successRes");
-const notFoundRes = require("./notFoundRes");
+const throwNotFound = require("./throwNotFound");
 
-async function getContactByIdController(req, res) {
-  const { contactId } = req.params;
+async function getContactByIdController(req, res, next) {
+  try {
+    const { contactId } = req.params;
 
-  const contact = await getContactById(contactId);
+    const contact = await Contact.findById(contactId);
 
-  if (!contact) {
-    res.status(404).json(notFoundRes(contactId));
-    return;
+    if (!contact) {
+      throwNotFound(contactId);
+    }
+
+    res.json(successRes(contact));
+  } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 400;
+    }
+    next(error);
   }
-
-  res.json(successRes(contact));
 }
 
 module.exports = getContactByIdController;

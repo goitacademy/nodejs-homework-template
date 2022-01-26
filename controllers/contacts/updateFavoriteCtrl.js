@@ -2,17 +2,21 @@ const { Contact } = require("../../models");
 const successRes = require("./successRes");
 const throwNotFound = require("./throwNotFound");
 
-async function deleteContactController(req, res, next) {
+async function updateFavoriteCtrl(req, res, next) {
   try {
     const { contactId } = req.params;
 
-    const deletedContact = await Contact.findByIdAndRemove(contactId);
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
 
-    if (!deletedContact) {
-      throwNotFound(contactId);
+    if (!updatedContact) {
+      throwNotFound();
     }
 
-    res.json(successRes(deletedContact));
+    res.json(successRes(updatedContact));
   } catch (error) {
     if (error.message.includes("Cast to ObjectId failed")) {
       error.status = 400;
@@ -21,4 +25,4 @@ async function deleteContactController(req, res, next) {
   }
 }
 
-module.exports = deleteContactController;
+module.exports = updateFavoriteCtrl;

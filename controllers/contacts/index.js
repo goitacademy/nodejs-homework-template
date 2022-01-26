@@ -3,6 +3,7 @@ const getContactByIdController = require("./getContactByIdController");
 const postContactController = require("./postContactController");
 const deleteContactController = require("./deleteContactController");
 const putContactController = require("./putContactController");
+const updateFavoriteCtrl = require("./updateFavoriteCtrl");
 
 module.exports = {
   getContactsController,
@@ -10,4 +11,5 @@ module.exports = {
   postContactController,
   deleteContactController,
   putContactController,
+  updateFavoriteCtrl,
 };
