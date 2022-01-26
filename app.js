@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/auth");
 
 const app = express();
 
@@ -16,14 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
-
-/*
-1. Получить все товары.
-2. Получить товар по id.
-3. Добавить товар.
-4. Обновить товар по id.
-5. Удалить товар по id.
-*/
+app.use("/api/auth", authRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
