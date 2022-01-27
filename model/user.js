@@ -15,7 +15,6 @@ const joiRegisterSchema = Joi.object({
     .pattern(emailRegexp)
     .required(),
   subscription: Joi.string(),
-  // image: Joi.string(),
 })
 
 const joiLoginSchema = Joi.object({

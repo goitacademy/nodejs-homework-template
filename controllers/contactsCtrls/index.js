@@ -5,7 +5,16 @@ const updateContactById = require('./updateContactById')
 const updateStatusContact = require('./updateStatusContact')
 const deleteContactById = require('./deleteContactById')
 
-const ctrl = {
+// const ctrl = {
+//   getAll,
+//   getContactById,
+//   createContact,
+//   updateContactById,
+//   updateStatusContact,
+//   deleteContactById,
+// }
+// module.exports = ctrl
+module.exports = {
   getAll,
   getContactById,
   createContact,
@@ -13,4 +22,3 @@ const ctrl = {
   updateStatusContact,
   deleteContactById,
 }
-module.exports = ctrl
