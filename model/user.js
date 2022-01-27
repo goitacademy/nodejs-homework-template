@@ -1,6 +1,7 @@
 import mongooseService from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { Roles } from '../connection/constants';
+import gravatar from 'gravatar';
 
 const { Schema, model, SchemaTypes } = mongooseService;
 
@@ -23,6 +24,12 @@ const userSchema = new Schema(
       type: String,
       enum: [Roles.STARTER, Roles.PRO, Roles.BUSINESS],
       default: Roles.STARTER,
+    },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: 250 }, true);
+      },
     },
     token: {
       type: String,

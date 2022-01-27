@@ -20,6 +20,9 @@ const updateUserSubscription = async (id, subscription) => {
 const updateToken = async (id, token) => {
   return await User.findOneAndUpdate({ _id: id }, { token });
 };
+const updateAvatar = async (id, avatarURL) => {
+  return await User.findOneAndUpdate({ _id: id }, { avatarURL });
+};
 
 const findById = async id => {
   return await User.findById(id);
@@ -29,6 +32,7 @@ export default {
   findByEmail,
   create,
   updateToken,
+  updateAvatar,
   findById,
   updateUserSubscription,
 };

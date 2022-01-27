@@ -16,3 +16,5 @@ export const Roles = {
   PRO: 'pro',
   BUSINESS: 'business',
 };
+
+export const LIMIT_JSON = 5000;
