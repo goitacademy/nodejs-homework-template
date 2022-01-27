@@ -11,6 +11,7 @@ import {
   SenderSendgrid,
   SenderNodemailer,
 } from "../../service/email";
+import { CustomError } from "../../lib/custom-error";
 
 const aggregation = async (req, res, next) => {
   const { id } = req.params;
@@ -21,9 +22,7 @@ const aggregation = async (req, res, next) => {
       .status(HttpCode.OK)
       .json({ status: "success", code: HttpCode.OK, data });
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({ status: "error", code: HttpCode.NOT_FOUND, message: "Not found" });
+  throw new CustomError(HttpCode.NOT_FOUND, "Not found");
 };
 
 const uploadAvatar = async (req, res, next) => {
@@ -50,11 +49,7 @@ const verifyUser = async (req, res, next) => {
       data: { message: "success" },
     });
   }
-  res.status(HttpCode.BAD_REQUEST).json({
-    status: "success",
-    code: HttpCode.BAD_REQUEST,
-    data: { message: "invalid token" },
-  });
+  throw new CustomError(HttpCode.BAD_REQUEST, "invalid token");
 };
 
 const repeatEmailVerifyUser = async (req, res, next) => {
@@ -79,17 +74,9 @@ const repeatEmailVerifyUser = async (req, res, next) => {
         data: { message: "success" },
       });
     }
-    return res.status(HttpCode.SERVICE_UNAVAILABLE).json({
-      status: "error",
-      code: HttpCode.SERVICE_UNAVAILABLE,
-      data: { message: "Service unavailable" },
-    });
+    throw new CustomError(HttpCode.SERVICE_UNAVAILABLE, "Service unavailable");
   }
-  res.status(HttpCode.NOT_FOUND).json({
-    status: "error",
-    code: HttpCode.NOT_FOUND,
-    data: { message: "User not found by email" },
-  });
+  throw new CustomError(HttpCode.NOT_FOUND, "User not found by email");
 };
 
 export { aggregation, uploadAvatar, verifyUser, repeatEmailVerifyUser };
