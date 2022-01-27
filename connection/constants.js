@@ -10,3 +10,9 @@ export const HttpCode = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 };
+
+export const Roles = {
+  STARTER: 'starter',
+  PRO: 'pro',
+  BUSINESS: 'business',
+};

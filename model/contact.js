@@ -1,6 +1,6 @@
 import mongooseService from 'mongoose';
 
-const { Schema, model } = mongooseService;
+const { Schema, SchemaTypes, model } = mongooseService;
 
 const contactSchema = new Schema(
   {
@@ -17,6 +17,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+      required: true,
     },
   },
   {
