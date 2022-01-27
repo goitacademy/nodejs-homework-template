@@ -1,10 +1,10 @@
 import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
-import { HttpCode } from './lib/constants';
+import { HttpCode } from './connection/constants';
 
-import contactsRouter from './routes/api/contacts';
-import usersRouter from './routes/api/auth';
+import contactsRouter from './routes/api/contacts/contacts';
+import usersRouter from './routes/api/auth/index';
 
 const app = express();
 

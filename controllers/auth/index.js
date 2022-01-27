@@ -1,5 +1,5 @@
 import AuthService from '../../services/auth';
-import { HttpCode } from '../../lib/constants';
+import { HttpCode } from '../../connection/constants';
 
 const authService = new AuthService();
 

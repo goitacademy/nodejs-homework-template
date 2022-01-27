@@ -1,6 +1,6 @@
 import mongooseService from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { Roles } from '../lib/constants';
+import { Roles } from '../connection/constants';
 
 const { Schema, model, SchemaTypes } = mongooseService;
 

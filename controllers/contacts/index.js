@@ -1,5 +1,5 @@
-import repositoryContacts from '../../repository/contacts';
-import { HttpCode } from '../../lib/constants';
+import repositoryContacts from '../../rep/contact';
+import { HttpCode } from '../../connection/constants';
 
 const getContacts = async (req, res, next) => {
   const { id: userId } = req.user;

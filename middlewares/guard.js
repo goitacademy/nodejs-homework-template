@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import UsersRepository from '../repository/users';
-import { HttpCode } from '../lib/constants';
+import UsersRepository from '../rep/users';
+import { HttpCode } from '../connection/constants';
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 

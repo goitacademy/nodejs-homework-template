@@ -1,4 +1,4 @@
-import { HttpCode } from '../lib/constants';
+import { HttpCode } from '../connection/constants';
 
 const roleAccess = role => async (req, res, next) => {
   const userRole = req.user.subscription;
