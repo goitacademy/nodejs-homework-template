@@ -1,6 +1,12 @@
 const { Unauthorized, BadRequest, Conflict } = require('http-error')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+gravatar = require('gravatar')
+const Jimp = require('jimp')
+
+const fs = require('fs/promises')
+const path = require('path')
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars')
 
 const { joiRegisterSchema, joiLoginSchema } = require('../model/user')
 const { User } = require('../model/index')
@@ -14,6 +20,7 @@ const signupUser = async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const { password, email, subscription } = req.body
+    const image = gravatar.url(email)
     const user = await User.findOne({ email })
     if (user) {
       throw new Conflict('Email in use')
@@ -22,13 +29,16 @@ const signupUser = async (req, res, next) => {
     const hashingPassword = await bcrypt.hash(password, salt)
     const newUser = await User.create({
       password: hashingPassword,
+      avatarURL: image,
       email,
       subscription,
     })
+    console.log()
     res.status(201).json({
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+        image: newUser.image,
       },
     })
   } catch (error) {
@@ -36,7 +46,6 @@ const signupUser = async (req, res, next) => {
   }
 }
 
-//
 const loginUser = async (req, res, next) => {
   try {
     const { error } = joiLoginSchema.validate(req.body)
@@ -101,10 +110,40 @@ const getUser = async (req, res, next) => {
     next()
   }
 }
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user
+
+    const { path: tempUpload, filename } = req.file
+
+    await Jimp.read(tempUpload)
+      .then((resizeImg) => {
+        return resizeImg.resize(250, 250).write(tempUpload)
+      })
+      .catch((err) => next(err))
+
+    const [extension] = filename.split('.').reverse()
+    const newFileName = `${_id}.${extension}`
+
+    const newFilePath = path.join(avatarsDir, newFileName)
+    await fs.rename(tempUpload, newFilePath)
+    const avatarURL = path.join('avatars', newFileName)
+
+    await User.findByIdAndUpdate(_id, { avatarURL }, { new: true })
+    res.json(201).json(avatarURL)
+  } catch (error) {
+    if (error) {
+      throw new Unauthorized('Not authorized')
+    }
+
+    next(error)
+  }
+}
 
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
   getUser,
+  updateAvatar,
 }

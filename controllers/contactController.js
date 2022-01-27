@@ -36,6 +36,7 @@ const getContactById = async (req, res, next) => {
     next(error)
   }
 }
+
 const createContact = async (req, res, next) => {
   try {
     const { error } = joiSchema.validate(req.body)
@@ -54,6 +55,7 @@ const createContact = async (req, res, next) => {
     ) {
       error.status = 400
     }
+
     next(error)
   }
 }
@@ -64,8 +66,6 @@ const updateContactById = async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const { contactId } = req.params
-    // const { _id } = req.user
-
     const updateContact = await Contact.findByIdAndUpdate(
       contactId,
 
@@ -115,11 +115,13 @@ const updateStatusContact = async (req, res, next) => {
 
 const deleteContactById = async (req, res, next) => {
   try {
+    console.log('file', req.file)
     const { contactId } = req.params
     const { _id } = req.user
-    const deleteContact = await Contact.findByIdAndRemove(contactId, {
+    const deleteContact = await Contact.findOneAndRemove(contactId, {
       owner: _id,
     })
+    // .findByIdAndRemove(contactId)
 
     if (!deleteContact) {
       throw new NotFound()
