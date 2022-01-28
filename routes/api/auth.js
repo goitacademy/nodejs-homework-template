@@ -78,15 +78,16 @@ router.post("/login", async (req, res, next) => {
     //     throw new Unauthorized("Password wrong")
     // }
 
-    const { _id, subscription } = user;
+    const { _id, name } = user;
     const payload = {
       id: _id,
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    // console.log(token);
     await User.findByIdAndUpdate(_id, { token });
     res.json({
       token,
-      user: { email, subscription },
+      user: { email, name },
     });
   } catch (error) {
     next(error);
