@@ -5,7 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import contactsRouter from './routes/API/contacts/index.js';
 import authRouter from './routes/API/users/index.js';
-import usersRouter from './routes/API/agregation/agregUsers.js';
+import usersRouter from './routes/API/auth/index.js';
 import { httpCode } from './lib/constants.js';
 
 const formatsLogger = app.get('env') ===  'development' ? 'dev' : 'short';

@@ -1,12 +1,13 @@
 import {Router} from "express";
 const router = new Router();
-import {registration, logIn, logOut} from '../../../controller/auth/index.js'
+import {agregation, uploadAvatar, verifyUser, repeatEmailForVerifyUser} from '../../../controller/users/index.js'
 import guard from '../../../midlewares/guard.js';
-import { validateUserCreate, logInUserCreate } from '../../../midlewares/validationUser.js'
+import { upload } from '../../../midlewares/upload.js';
+import {emailValidate} from '../../../midlewares/emailValidate.js'
 
+router.get('/stats/:id', guard, agregation);
+router.patch('/avatar', guard, upload.single('avatar') , uploadAvatar);
+router.get('/verify/:token',  verifyUser );
+router.post('/verify', emailValidate, repeatEmailForVerifyUser )
 
-router.post('/signup', validateUserCreate, registration);
-router.post('/login', logInUserCreate, logIn);
-router.post('/logout',guard, logOut);
-
-export default router   
+export default router  

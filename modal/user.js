@@ -3,6 +3,7 @@ const { Schema, model } = mongoose;
 import { role } from '../lib/constants.js';
 import bcrypt from 'bcryptjs';
 import gravatar from 'gravatar';
+import {randomUUID} from 'crypto';
 
 const userSchema = new Schema({    
         name: {
@@ -38,11 +39,20 @@ const userSchema = new Schema({
              type: String,
              default: function(params) {
                 return gravatar.url(this.email, { s: 250 }, true) 
-             }
+             },
+        
          },
          idAvatarCloud:{
             type: String,
             default: null,
+        },
+        isVerify: {
+            type: Boolean,
+            default: false
+        },
+        verifyTokenEmail: {
+            type: String,
+            default: randomUUID(),
         }
       
 },{
