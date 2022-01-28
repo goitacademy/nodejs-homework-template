@@ -73,8 +73,8 @@ const loginUser = async (req, res, next) => {
     res.json({
       token,
       user: {
-        email,
-        subscription,
+        email: user.email,
+        subscription: user.subscription,
       },
     })
   } catch (error) {

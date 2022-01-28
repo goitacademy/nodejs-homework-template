@@ -2,16 +2,12 @@ const request = require('supertest')
 const mongoose = require('mongoose')
 require('dotenv').config()
 const { Unauthorized } = require('http-error')
-const Joi = require('joi')
+
 const app = require('../app')
 
 const { DB_HOST } = process.env
 const { User } = require('../model')
 
-const joiValidation = Joi.object({
-  email: Joi.string(),
-  subscription: Joi.string(),
-})
 function errorEmail() {
   throw new Unauthorized('Email is wrong')
 }
@@ -50,32 +46,12 @@ describe('test user', () => {
     expect(userData).toBeTruthy()
 
     const { token, user } = response.body
+
     expect(token).toBeTruthy()
-
-    const validation = joiValidation.validate({
-      email: userData.email,
-      subscription: userData.subscription,
-    })
-    expect(user.email).toBe(validation.value.email)
-
-    const validString = {
-      email: userData.email,
-      subscription: userData.subscription,
-    }
-    expect(validString).toStrictEqual(validation.value)
+    expect(user.subscription).toBeTruthy()
+    expect(user.email).toBe(registerData.email)
 
     expect(() => errorEmail()).toThrow('Email is wrong')
     expect(() => errorPassword()).toThrow('Password is wrong')
   })
 })
-
-// expect(user).toBeTruthy()
-// // const {token, user} =
-// expect(response.body.token).toBeTruthy()
-
-// const validation = joiValidation.validate({
-//   email: user.email,
-//   subscription: user.subscription,
-// })
-
-// expect(response.body.user.email).toBe(validation.value.email) // work
