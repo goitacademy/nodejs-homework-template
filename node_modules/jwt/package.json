@@ -1,0 +1,20 @@
+{
+  "name": "jwt",
+  "description": "JSON Web Token for node.js",
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mattrobenolt/jwt-node.git"
+  },
+  "author": "Michael Hanson/Matt Robenolt",
+  "main": "./lib/jwt",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "node-base64": "0.0.1"
+  }
+}
