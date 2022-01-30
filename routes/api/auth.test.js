@@ -30,10 +30,8 @@ describe("test auth", () => {
       password: "1234567",
     };
 
-    await request(app).post("/api/users/login").send(loginData);
-    const response = await request(app)
-      .post("/api/users/login")
-      .send(loginData);
+    await request(app).post("/api/auth/login").send(loginData);
+    const response = await request(app).post("/api/auth/login").send(loginData);
 
     // проверка ответа
     expect(response.statusCode).toBe(201);
