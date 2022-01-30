@@ -18,5 +18,3 @@ mongoose
 // 8pIUh0zIwX7HB0y3
 // mongodb+srv://Julia:8pIUh0zIwX7HB0y3@cluster0.lab77.mongodb.net/test
 
-// sendgrid:
-// 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
