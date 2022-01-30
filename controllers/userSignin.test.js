@@ -48,7 +48,7 @@ describe('test user', () => {
     const { token, user } = response.body
 
     expect(token).toBeTruthy()
-    expect(user.subscription).toBeTruthy()
+    expect(user.subscription).toBe('string')
     expect(user.email).toBe(registerData.email)
 
     expect(() => errorEmail()).toThrow('Email is wrong')
