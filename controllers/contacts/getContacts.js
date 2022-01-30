@@ -6,7 +6,6 @@ async function getContacts(req, res, next) {
     res.json(result);
   } catch (error) {
     next(error);
-    // res.status(500).json({ message: 'Server error' });
   }
 }
 
