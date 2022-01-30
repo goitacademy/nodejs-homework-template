@@ -33,6 +33,7 @@ describe("test auth", () => {
 
     const response = await request(app).post("/api/auth/login").send(loginData);
 
+    console.log("Response result: ", response.body);
     // проверка ответа
     expect(response.statusCode).toBe(200);
     expect(response.body.user.token).not.toBe("");

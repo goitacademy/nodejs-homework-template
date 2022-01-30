@@ -81,7 +81,7 @@ router.post("/login", async (req, res, next) => {
     //     throw new Unauthorized("Password wrong")
     // }
 
-    const { _id, name } = user;
+    const { _id, name, subscription } = user;
     const payload = {
       id: _id,
     };
@@ -90,7 +90,7 @@ router.post("/login", async (req, res, next) => {
     await User.findByIdAndUpdate(_id, { token });
     res.json({
       token,
-      user: { email, name },
+      user: { email, name, subscription },
     });
   } catch (error) {
     next(error);
