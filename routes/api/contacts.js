@@ -1,28 +1,14 @@
 const express = require("express");
-const Joi = require("joi");
+
 const CreateError = require("http-errors");
+const Mongoose = require("mongoose");
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
-
-const schema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-
-  email: Joi.string().email({
-    tlds: { allow: ["com", "net"] },
-  }),
-
-  phone: Joi.string().min(10).max(10).messages({
-    "string.max": `"phone" should be 10 characters`,
-    "string.min": `"phone" should be 10 characters`,
-  }),
-})
-  .with("name", "email")
-  .with("email", "phone");
+const { Contact, schemas } = require("../../models/contact");
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find({}, "-createdAt -updatedAt");
     if (!result) {
       throw new CreateError(404, "Not found");
     }
@@ -35,7 +21,11 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    if (!Mongoose.Types.ObjectId.isValid(contactId)) {
+      throw new CreateError(404, "Not valid ID");
+    }
+
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
@@ -48,13 +38,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const body = await schema.validateAsync(req.body).catch((error) => {
-      const { details } = error;
+    const { error } = schemas.add.validate(req.body);
 
-      throw new CreateError(400, details[0].message);
-    });
-
-    const result = await contacts.addContact(body);
+    if (error) {
+      throw new CreateError(400, error.message);
+    }
+    const result = await Contact.create(req.body);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
@@ -68,7 +57,35 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    if (!Mongoose.Types.ObjectId.isValid(contactId)) {
+      throw new CreateError(404, "Not valid ID");
+    }
+
+    const result = await Contact.findByIdAndDelete(contactId);
+    if (!result) {
+      throw new CreateError(404, "Not found");
+    }
+
+    res.json({ message: "Contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    if (!Mongoose.Types.ObjectId.isValid(contactId)) {
+      throw new CreateError(404, "Not valid ID");
+    }
+    const { error } = await schemas.add.validate(req.body);
+    if (error) {
+      throw new CreateError(400, error.message);
+    }
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw new CreateError(404, "Not found");
     }
@@ -79,16 +96,21 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const body = await schema.validateAsync(req.body).catch((error) => {
-      const { details } = error;
+    if (!Mongoose.Types.ObjectId.isValid(contactId)) {
+      throw new CreateError(404, "Not valid ID");
+    }
 
-      throw new CreateError(400, details[0].message);
+    const { error } = await schemas.updateFavorite.validate(req.body);
+    if (error) {
+      throw new CreateError(400, error.message);
+    }
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
     });
-
-    const result = await contacts.updateContact(contactId, body);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
