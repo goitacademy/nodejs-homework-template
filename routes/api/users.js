@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs/promises");
+// const Jimp = require("jimp");
 
 const { User } = require("../../model");
 const { authenticate, upload } = require("../../middlewares");
@@ -56,7 +57,12 @@ router.patch(
     const avatarURL = path.join("avatars", newFileName);
     await User.findByIdAndUpdate(req.user._id, { avatarURL }, { new: true });
     res.json({ avatarURL });
+    // для хранения файлов можно установить пакет cloudinary
   }
 );
+
+//   const image = await Jimp.read ('/home/jimp/img.jpg');
+//   await image.resize(250,250)
+//   await image.write('/home/jimp/resize.jpeg');
 
 module.exports = router;

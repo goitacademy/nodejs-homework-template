@@ -2,6 +2,7 @@ const express = require("express");
 const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const { User } = require("../../model");
 const { joiRegisterSchema, joiLoginSchema } = require("../../model/user");
@@ -34,10 +35,12 @@ router.post("/signup", async (req, res, next) => {
     // console.log("salt", salt);
     const hashPassword = await bcrypt.hash(password, salt);
     // console.log("hashPassword", hashPassword);
+    const avatarURL = gravatar.url(email);
     const newUser = await User.create({
       name,
       email,
       password: hashPassword,
+      avatarURL,
       subscription,
     });
     res.status(201).json({
