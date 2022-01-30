@@ -16,7 +16,7 @@ describe("test auth", () => {
     mongoose.connect(DB_TEST_HOST).then(() => done());
   });
 
-  afterEach((done) => {
+  afterAll((done) => {
     mongoose.connection.db.dropCollection("users").then(() => {
       mongoose.connection.db.dropCollection("contacts").then(() => {
         mongoose.connection.close(() => done());
@@ -25,24 +25,22 @@ describe("test auth", () => {
   });
 
   test("test login route", async () => {
+    // для удобства здесь отправить запрос на создание пользователя
     const loginData = {
       email: "Elena123@gmail.com",
       password: "1234567",
     };
 
-    await request(app).post("/api/auth/login").send(loginData);
     const response = await request(app).post("/api/auth/login").send(loginData);
 
     // проверка ответа
-    expect(response.statusCode).toBe(201);
-    expect(response.body.message).toBe("Login is successfull");
+    expect(response.statusCode).toBe(200);
+    expect(response.body.user.token).not.toBe("");
 
     // проверка данных из базы
-    const user = await User.findById(response.body._id);
-    expect(user).toByThruthy();
+    const user = await User.findOne(response.body.email);
+    expect(user).toBeTruthy();
     expect(typeof response.body.user.email).toBe("string");
     expect(typeof response.body.user.subscription).toBe("string");
-    // expect(user.email).toBeType("string");
-    // expect(user.subscription).toBeType("string");
   });
 });
