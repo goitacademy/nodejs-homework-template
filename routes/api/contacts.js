@@ -1,7 +1,7 @@
 const express = require("express");
 
 const CreateError = require("http-errors");
-const { Mongoose } = require("mongoose");
+const Mongoose = require("mongoose");
 const router = express.Router();
 
 const { Contact, schemas } = require("../../models/contact");
