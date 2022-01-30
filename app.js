@@ -1,3 +1,11 @@
+const dotevn = require("dotevn");
+dotevn.config();
+
+// == 2 ===
+// require(dotevn).config();
+
+console.log(process.env.DB_HOST);
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
