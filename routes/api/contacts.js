@@ -55,7 +55,7 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", authenticate, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deleteContact = await Contact.findOneAndRemove(id);
@@ -68,7 +68,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", authenticate, async (req, res, next) => {
   const updateData = req.body;
   const { id } = req.params;
   try {
@@ -87,7 +87,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/:id/favorite", async (req, res, next) => {
+router.patch("/:id/favorite", authenticate, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { favorite } = req.body;
