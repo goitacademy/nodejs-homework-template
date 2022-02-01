@@ -1,27 +1,12 @@
 const express = require("express");
-const Joi = require("joi");
-const contacts = require("../../models/contacts");
 const CreateError = require("http-errors");
 const router = express.Router();
 
-const contactSchema = Joi.object({
-  name: Joi.string()
-    .pattern(/^[a-zA-Z]+/)
-    .min(3)
-    .max(30)
-    .required(),
-  email: Joi.string()
-    .required()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } }),
-  phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
-    .required(),
-});
+const { Contact, schemas } = require("../../models/contact");
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find({}, "-createdAt -updatedAt");
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,25 +16,31 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 400;
+    }
     next(error);
   }
 });
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = schemas.add.validate(req.body);
     if (error) {
       throw new CreateError(400, error.message);
     }
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
+    if (error.message.includes("validation failed")) {
+      error.status = 400;
+    }
     next(error);
   }
 });
@@ -57,12 +48,15 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 400;
+    }
     next(error);
   }
 });
@@ -72,17 +66,47 @@ router.put("/:contactId", async (req, res, next) => {
     if (!req.body) {
       throw new CreateError(404, "missing fields");
     }
-    const { error } = contactSchema.validate(req.body);
+    const { error } = schemas.add.validate(req.body);
     if (error) {
       throw new CreateError(400, error.message);
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw new CreateError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 400;
+    }
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    if (!req.body) {
+      throw new CreateError(400, "missing field favorite");
+    }
+    const { error } = schemas.patchFavorite.validate(req.body);
+    if (error) {
+      throw new CreateError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw new CreateError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    if (error.message.includes("Cast to ObjectId failed")) {
+      error.status = 400;
+    }
     next(error);
   }
 });
