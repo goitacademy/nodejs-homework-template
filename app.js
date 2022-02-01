@@ -2,10 +2,10 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const dotevn = require("dotevn");
-dotevn.config();
+const dotenv = require("dotenv");
+dotenv.config();
 // == 2 ===
-// require(dotevn).config();
+// require(dotenv).config();
 
 const contactsRouter = require("./routes/api/contacts");
 
