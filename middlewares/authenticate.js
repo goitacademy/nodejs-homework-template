@@ -13,6 +13,7 @@ const authenticate = async (req, res, next) => {
       message: 'Not authorized',
     })
   }
+  
   const [bearer, token] = authorization.split(" ")
 
   if (bearer !== "Bearer") {
