@@ -1,11 +1,9 @@
 const express = require('express')
 const CreateError = require("http-errors")
-
 const {Contact} = require("../../models")
 const {joiSchema} = require("../../models/contacts")
-
-
 const router = express.Router()
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -76,12 +74,13 @@ router.put('/:id', async (req, res, next) => {
 
 router.path("/:id/favorite", async (req, res, next) => {
   try {
-    const {error} = joiSchema.validate(req.body)
-      if(error) {
-        throw new CreateError(400, "missing field favorite")
-      }
+    // const {error} = joiSchema.validate(req.body)
+    //   if(error) {
+    //     throw new CreateError(400, "missing field favorite")
+    //   }
     const {id} = req.params
-    const contactToUpdate = await Contact.findByIdAndUpdate(id, req.body, {new: true })
+    const {favorite} = req.body
+    const contactToUpdate = await Contact.findByIdAndUpdate(id, favorite, {new: true })
       if(!contactToUpdate) {
         throw new CreateError(404, "Not found");
       }
