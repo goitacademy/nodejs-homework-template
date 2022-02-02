@@ -218,7 +218,6 @@ router.post('/verify', async (res, req, next) => {
     }
 
     const { verificationToken } = user;
-
     const data = {
       to: email,
       subject: 'Email verification',

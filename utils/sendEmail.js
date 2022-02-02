@@ -19,7 +19,6 @@ const sendEmail = async data => {
   try {
     const email = { ...data, from: `${SENDER_EMAIL}` };
     await sgMail.send(email);
-
     return true;
   } catch (err) {
     throw err;
