@@ -5,7 +5,7 @@ const {
   joiUpdSubscriptionSchema,
 } = require('../../models');
 const router = express.Router();
-const { BadRequest, Conflict, Unauthorized } = require('http-errors');
+const { BadRequest, Conflict, Unauthorized, NotFound } = require('http-errors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { authenticate, upload } = require('../../middlewares');
@@ -14,11 +14,13 @@ const Jimp = require('jimp');
 const gravatar = require('gravatar/lib/gravatar');
 const path = require('path');
 const dotenv = require('dotenv');
+const { nanoid } = require('nanoid');
+const { sendEmail } = require('../../utils');
+
 dotenv.config();
+const { SECRET_KEY, DOMAIN } = process.env;
 
 const avatarsDir = path.join(__dirname, '../../', 'public', 'avatars');
-
-const { SECRET_KEY } = process.env;
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -34,13 +36,24 @@ router.post('/signup', async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const verificationToken = nanoid();
     const avatarURL = gravatar.url(email);
 
     const newUser = await User.create({
       ...req.body,
+      verificationToken,
       password: hashedPassword,
       avatarURL,
     });
+    const data = {
+      to: email,
+      subject: 'Email verification',
+      html: `<p>Please verify your email</p>
+        <p>Byclicking on the following link, you are confirming your email address.</p>
+        <a target="_blank" href:"${DOMAIN}/auth/verify/${verificationToken}">Confirm email adress</a>`,
+    };
+
+    await sendEmail(data);
 
     res.status(201).json({
       user: {
@@ -66,6 +79,11 @@ router.post('/login', async (req, res, next) => {
     if (!user) {
       throw new Unauthorized('Email or password is wrong');
     }
+
+    if (!email.verify) {
+      throw new Unauthorized('Email not confirmed');
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
       throw new Unauthorized('Email or password is wrong');
@@ -165,5 +183,58 @@ router.patch(
     }
   },
 );
+
+router.get('verify/:verificationToken', async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+      throw new NotFound('User not found');
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      verificationToken: null,
+      verify: true,
+    });
+    res.json({ message: 'Verification successful' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/verify', async (res, req, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      throw new BadRequest('missing required field email');
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new NotFound('User not found');
+    }
+    if (user.verify) {
+      throw new BadRequest('Verification has already been passed');
+    }
+
+    const { verificationToken } = user;
+
+    const data = {
+      to: email,
+      subject: 'Email verification',
+      html: `<p>Please verify your email</p>
+        <p>By clicking on the following link, you are confirming your email address.</p>
+        <a target="_blank" href="${DOMAIN}/auth/verify/${verificationToken}">Confirm email adress</a>`,
+    };
+
+    await sendEmail(data);
+
+    res.status(200).json({
+      message: 'Verification email sent',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
