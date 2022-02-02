@@ -1,5 +1,6 @@
 const express = require("express");
 const CreateError = require("http-errors");
+const ObjectId = require("mongoose").Types.ObjectId;
 const router = express.Router();
 
 const { Contact, schemas } = require("../../models/contact");
@@ -16,15 +17,15 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    if (!ObjectId.isValid(contactId)) {
+      throw new CreateError(400, { message: "Invalid MongoDB ID" });
+    }
     const result = await Contact.findById(contactId);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
-    if (error.message.includes("Cast to ObjectId failed")) {
-      error.status = 400;
-    }
     next(error);
   }
 });
@@ -38,9 +39,6 @@ router.post("/", async (req, res, next) => {
     const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
-    if (error.message.includes("validation failed")) {
-      error.status = 400;
-    }
     next(error);
   }
 });
@@ -48,15 +46,15 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    if (!ObjectId.isValid(contactId)) {
+      throw new CreateError(400, { message: "Invalid MongoDB ID" });
+    }
     const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw new CreateError(404, "Not found");
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
-    if (error.message.includes("Cast to ObjectId failed")) {
-      error.status = 400;
-    }
     next(error);
   }
 });
@@ -71,6 +69,9 @@ router.put("/:contactId", async (req, res, next) => {
       throw new CreateError(400, error.message);
     }
     const { contactId } = req.params;
+    if (!ObjectId.isValid(contactId)) {
+      throw new CreateError(400, { message: "Invalid MongoDB ID" });
+    }
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
@@ -79,9 +80,6 @@ router.put("/:contactId", async (req, res, next) => {
     }
     res.json(result);
   } catch (error) {
-    if (error.message.includes("Cast to ObjectId failed")) {
-      error.status = 400;
-    }
     next(error);
   }
 });
@@ -96,6 +94,9 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
       throw new CreateError(400, error.message);
     }
     const { contactId } = req.params;
+    if (!ObjectId.isValid(contactId)) {
+      throw new CreateError(400, { message: "Invalid MongoDB ID" });
+    }
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
@@ -104,9 +105,6 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
     }
     res.json(result);
   } catch (error) {
-    if (error.message.includes("Cast to ObjectId failed")) {
-      error.status = 400;
-    }
     next(error);
   }
 });
