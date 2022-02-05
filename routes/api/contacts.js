@@ -10,6 +10,9 @@ const { authenticate } = require("../../middlewares");
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const { page = 1, limit = 20, favorite } = req.query;
+    if (!isNaN(page) && !isNaN(limit)) {
+      throw new CreateError(400, "Bad request");
+    }
     const skip = (page - 1) * limit;
     const { _id } = req.user;
     if (favorite) {
