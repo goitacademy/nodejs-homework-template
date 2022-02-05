@@ -15,11 +15,7 @@ const userSchema = Schema(
     },
     token: {
       type: String,
-      default: null,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
+      default: "",
     },
   },
   { versionKey: false, timestamps: true }

@@ -56,7 +56,7 @@ router.post("/login", async (req, res, next) => {
     const { subscription } = user;
     const payload = { id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-
+    await User.findByIdAndUpdate(user._id, { token });
     res.json({
       token,
       user: {
@@ -81,6 +81,16 @@ router.get("/logout", authenticate, async (req, res, next) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(204).send();
+});
+
+router.patch("/current", async (req, res, next) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { subscription });
+  res.json({
+    email: req.user.email,
+    subscription,
+  });
 });
 
 module.exports = router;
