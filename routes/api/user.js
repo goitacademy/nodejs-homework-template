@@ -83,7 +83,7 @@ router.get("/logout", authenticate, async (req, res, next) => {
   res.status(204).send();
 });
 
-router.patch("/current", async (req, res, next) => {
+router.patch("/current", authenticate, async (req, res, next) => {
   const { subscription } = req.body;
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { subscription });
