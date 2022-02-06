@@ -1,6 +1,7 @@
 const express = require('express');
 const contactValidation = require('../../midlewares/validation/contactValidation');
 const favoriteValidation = require('../../midlewares/validation/favoriteValidation');
+const authenticate = require('../../midlewares/authenticate');
 
 const {
   getContacts,
@@ -13,9 +14,9 @@ const {
 const router = express.Router();
 
 router
-  .get('/', getContacts)
+  .get('/', authenticate, getContacts)
   .get('/:contactId', getContactById)
-  .post('/', contactValidation, addContact)
+  .post('/', authenticate, contactValidation, addContact)
   .delete('/:contactId', deleteContact)
   .put('/:contactId', contactValidation, correctContact)
   .patch('/:contactId/favorite', favoriteValidation, updateContact);
