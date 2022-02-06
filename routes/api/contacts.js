@@ -1,5 +1,5 @@
 const express = require("express");
-const validation = require("../../middleware/validation");
+const { validation } = require("../../middleware");
 const { joiContactSchema, favoriteJoiSchema } = require("../../models");
 const {
   getContactsController,
@@ -22,10 +22,6 @@ router.delete("/:contactId", deleteContactController);
 
 router.put("/:contactId", validation(joiContactSchema), putContactController);
 
-router.patch(
-  "/:contactId/favorite",
-  validation(favoriteJoiSchema),
-  updateFavoriteCtrl
-);
+router.patch("/:contactId/favorite", validation(favoriteJoiSchema), updateFavoriteCtrl);
 
 module.exports = router;

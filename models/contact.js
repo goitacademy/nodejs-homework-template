@@ -3,23 +3,33 @@ const Joi = require("joi");
 
 const contactSchema = Schema(
   {
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
     name: {
       type: String,
       minlength: 2,
       maxlength: 30,
       required: [true, "Set name for contact"],
+      trim: true,
     },
     email: {
       type: String,
       required: [true, "Set email for contact"],
+      unique: true,
+      trim: true,
     },
     phone: {
       type: String,
       required: [true, "Set phone for contact"],
+      trim: true,
     },
     favorite: {
       type: Boolean,
       default: false,
+      trim: true,
     },
   },
   {

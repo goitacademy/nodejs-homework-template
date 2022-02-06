@@ -1,12 +1,17 @@
 const { Contact } = require("../../models");
-const successRes = require("./successRes");
+const successRes = require("../../utils/successRes");
 const throwNotFound = require("./throwNotFound");
 
 async function deleteContactController(req, res, next) {
   try {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
-    const deletedContact = await Contact.findByIdAndRemove(contactId);
+    const deletedContact = await Contact.findOneAndRemove({
+      owner: _id,
+      _id: contactId,
+    });
+    ``;
 
     if (!deletedContact) {
       throwNotFound(contactId);
