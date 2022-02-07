@@ -1,13 +1,17 @@
 const { Contact } = require("../../models");
-const successRes = require("./successRes");
+const successRes = require("../../utils/successRes");
 const throwNotFound = require("./throwNotFound");
 
 async function putContactController(req, res, next) {
   try {
     const { contactId } = req.params;
+    const { _id } = req.user;
 
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
+    const updatedContact = await Contact.findOneAndUpdate(
+      {
+        owner: _id,
+        _id: contactId,
+      },
       req.body,
       { new: true }
     );
