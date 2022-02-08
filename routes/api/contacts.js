@@ -9,53 +9,31 @@ const { authenticate } = require("../../middlewares");
 
 router.get("/", authenticate, async (req, res, next) => {
   try {
+    const { _id } = req.user;
+    const filter = { owner: _id };
+
     const { page = 1, limit = 20, favorite } = req.query;
     if (!isNaN(page) && !isNaN(limit)) {
       throw new CreateError(400, "Bad request");
     }
     const skip = (page - 1) * limit;
-    const { _id } = req.user;
-    if (favorite) {
-      const result = await Contact.find(
-        { owner: _id, favorite: true },
-        "-createdAt -updatedAt",
-        {
-          favorite: true,
-        }
-      ).populate("owner", "email");
-      if (!result) {
-        throw new CreateError(404, "Not found");
-      }
-      res.json(result);
-    } else {
-      const { _id } = req.user;
-      const result = await Contact.find(
-        { owner: _id, favorite: true },
-        "-createdAt -updatedAt",
-        {
-          favorite: false,
-        }
-      ).populate("owner", "email");
-      if (!result) {
-        throw new CreateError(404, "Not found");
-      }
-      res.json(result);
+
+    if (favorite && !["true", "false"].includes(favorite)) {
+      throw new CreateError(404, "Not found");
     }
 
-    if (favorite === null) {
-      const result = await Contact.find(
-        { owner: _id },
-        "-createdAt -updatedAt",
-        {
-          skip,
-          limit: +limit,
-        }
-      ).populate("owner", "email");
-      if (!result) {
-        throw new CreateError(404, "Not found");
-      }
-      res.json(result);
+    if (favorite !== undefined) {
+      filter.favorite = favorite;
     }
+
+    const result = await Contact.find({ filter }, "-createdAt -updatedAt", {
+      skip,
+      limit: +limit,
+    }).populate("owner", "email");
+    if (!result) {
+      throw new CreateError(404, "Not found");
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
