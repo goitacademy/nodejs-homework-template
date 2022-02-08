@@ -1,3 +1,5 @@
 const validators = require('./validators');
 
-module.exports = validators;
+module.exports = {
+    validators
+};

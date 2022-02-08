@@ -2,19 +2,23 @@ const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
 
-const { Contact } = require("../../models/contact");
-const {
-  contactSchema,
-  updateContactSchema,
-  updateFavoriteSchema
-} = require('../../helpers');
+const { authenticate } = require('../../middlewares');
+
+const { Contact } = require("../../models");
+const {validators :{
+  contactValidator
+}} = require('../../helpers');
+
 const exclusionString = "-createdAt -updatedAt";
 const searchByIdErrorMessage = "Cast to ObjectId failed"
 
-router.get('/', async (req, res, next) => {
+router.get('/', authenticate, async (req, res, next) => {
   try {
-    const contactList = await Contact.find({}, exclusionString);
-    console.log(contactList)
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page -1)* limit;
+    const { _id } = req.user;
+    const contactList = await Contact.find({owner: _id}, exclusionString,{skip, limit: Number(limit)})
+      .populate('owner', "email");
     res.status(200).json(contactList);
   } catch (err) {
       next(err);
@@ -33,19 +37,21 @@ router.get('/:contactId', async (req, res, next) => {
       if(err.message.includes(searchByIdErrorMessage)) {
         err.status = 404;
       }
-      next(err)
+      next(err) 
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
+  const {body} = req;
   try{
-    const {error} = contactSchema.validate(req.body);
+    const {error} = contactValidator.contactValidator.validate(body);
 
     if (error) {
       next(createError(400, error.message));
     }
 
-    const newContact = await Contact.create(req.body);
+    const data = {...body, owner: req.user._id};
+    const newContact = await Contact.create(data);
 
     res.status(201).json(newContact);
   } catch (err) {
@@ -56,13 +62,13 @@ router.post('/', async (req, res, next) => {
 router.patch('/:contactId/favorite', async (req, res, next) => {
   try {
     const {contactId} = req.params;
-    const {body} = req
-    console.log(123,body)
+    const {body} = req;
+
     if (!body) {
       next(createError(400, "missing field favorite"))
     }
 
-    const {error} = updateFavoriteSchema.validate(body);
+    const {error} = contactValidator.updateFavoriteSchema.validate(body);
     if (error) {
       next(createError(400, error.message));
     }
@@ -98,7 +104,7 @@ router.put('/:contactId', async (req, res, next) => {
       next(createError(400, "Missing fields"))
     }
 
-    const {error} = updateContactSchema.validate(body);
+    const {error} = contactValidator.updateContactSchema.validate(body);
     if (error) {
       next(createError(400, error.message));
     }
