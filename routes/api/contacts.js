@@ -13,9 +13,6 @@ router.get("/", authenticate, async (req, res, next) => {
     const filter = { owner: _id };
 
     const { page = 1, limit = 20, favorite } = req.query;
-    if (!isNaN(page) && !isNaN(limit)) {
-      throw new CreateError(400, "Bad request");
-    }
     const skip = (page - 1) * limit;
 
     if (favorite && !["true", "false"].includes(favorite)) {
@@ -26,7 +23,11 @@ router.get("/", authenticate, async (req, res, next) => {
       filter.favorite = favorite;
     }
 
-    const result = await Contact.find({ filter }, "-createdAt -updatedAt", {
+    if (isNaN(page) && isNaN(limit)) {
+      throw new CreateError(400, "Bad request");
+    }
+
+    const result = await Contact.find(filter, "-createdAt -updatedAt", {
       skip,
       limit: +limit,
     }).populate("owner", "email");
