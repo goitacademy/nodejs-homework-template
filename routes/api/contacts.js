@@ -1,8 +1,9 @@
-const express = require('express')
+ const express =  require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
+
+router.get('/', async (req, res, next) => {     
   res.json({ message: 'template message' })
 })
 
@@ -10,7 +11,7 @@ router.get('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-router.post('/', async (req, res, next) => {
+  router.post('/', async (req, res, next) => { 
   res.json({ message: 'template message' })
 })
 
@@ -19,7 +20,7 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+    res.json({ message: 'template message' })
 })
 
-module.exports = router
+  module.exports = router
