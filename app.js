@@ -10,7 +10,7 @@ const { contactsRouter } = require("./routes/api/contactsRouter");
 const {
   errorHandlerNotFound,
   errorHandlerServerError,
-} = require("./src/helpers/apiHelpers");
+} = require("./src/helpers");
 
 const app = express();
 

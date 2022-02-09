@@ -33,10 +33,12 @@ describe("test auth", () => {
       .post("/api/auth/users/login")
       .send(loginDate);
 
+    //   check response
     expect(response.statusCode).toBe(200);
 
     expect(response.body.token).toBeTruthy();
 
+    // check data in database
     const user = await User.findById(response.body._id);
     expect(user.name).toBe(loginDate.name);
     expect(user.email).toBe(loginDate.email);

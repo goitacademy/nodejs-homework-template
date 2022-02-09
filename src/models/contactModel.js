@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 
+// const { joiSchema } = require("../../src/middlewares/validationMiddleware");
 const joiSchema = Joi.object({
   name: Joi.string().min(2).max(30).required(),
   email: Joi.string().required(),
@@ -33,5 +34,6 @@ const contactSchema = Schema(
 );
 
 const Contact = model("contact", contactSchema);
+// "contact"-название коллекции в ед.числе(коллекция из db-contacts)
 
 module.exports = { joiSchema, Contact };

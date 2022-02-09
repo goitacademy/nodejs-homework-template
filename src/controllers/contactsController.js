@@ -101,11 +101,16 @@ const changeContactController = async (req, res, next) => {
 
 const patchContactController = async (req, res, next) => {
   try {
-  
+    // const { body } = req;
     const { contactId: id } = req.params;
     const { favorite } = req.body;
 
- 
+    // const { error } = joiSchema.validate(body);
+
+    // if (error) {
+    //   throw new BadRequest("missing field favorite");
+    // }
+
     const updateContact = await Contact.findByIdAndUpdate(
       id,
       { favorite },
@@ -113,7 +118,8 @@ const patchContactController = async (req, res, next) => {
         new: true,
       }
     );
-    
+    // findByIdAndUpdate-возвращает старый объект, а не новый обновленный. нужно добавить трейтий арг{new: true,}
+
     if (!updateContact) {
       throw new NotFound();
     }
@@ -133,7 +139,7 @@ const deleteContactController = async (req, res, next) => {
     const { contactId: id } = req.params;
 
     const deleteContact = await Contact.findByIdAndRemove(id);
-   
+    // findByIdAndRemove-возвращает удаляемый товар
 
     if (!deleteContact) {
       throw new NotFound();
@@ -145,7 +151,7 @@ const deleteContactController = async (req, res, next) => {
   }
 };
 
-    module.exports = {
+module.exports = {
   getContactsController,
   getContactByIdController,
   addContactController,
