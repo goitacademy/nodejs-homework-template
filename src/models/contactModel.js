@@ -1,7 +1,6 @@
 const Joi = require("joi");
 const { Schema, model } = require("mongoose");
-
-// const { joiSchema } = require("../../src/middlewares/validationMiddleware");
+  
 const joiSchema = Joi.object({
   name: Joi.string().min(2).max(30).required(),
   email: Joi.string().required(),
@@ -24,10 +23,6 @@ const contactSchema = Schema(
     favorite: {
       type: Boolean,
       default: false,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }

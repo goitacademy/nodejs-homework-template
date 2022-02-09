@@ -1,22 +1,17 @@
 // направить правильно запрос юзера на правильную бизнес логику
-// вся бизнес логика в сервис
 
-const { NotFound, BadRequest } = require("http-errors");
-
-const { joiSchema } = require("../models/contactModel");
-const { Contact } = require("../models");
+const {
+  getContacts,
+  getContactById,
+  addContact,
+  changeContactById,
+  patchContact,
+  deleteContactById,
+} = require("../services/contactsService");
 
 const getContactsController = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, favorite = true } = req.query;
-    const { _id } = req.user;
-    const skip = (page - 1) * limit;
-    const contacts = await Contact.find(
-      { owner: _id, favorite },
-      "-createdAt -updatedAt",
-      { skip, limit: +limit }
-      // skip-пропустить, limit-взять
-    );
+    const contacts = await getContacts();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -27,15 +22,7 @@ const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId: id } = req.params;
 
-    const contact = await Contact.findById(id);
-    // const contact = await Contact.findOne({ _id: id });
-    // findOne-возвращает {}
-
-    if (!contact) {
-      throw new NotFound();
-      // throw new createError(404, "Not found");
-    }
-
+    const contact = await getContactById(id);
     res.json(contact);
   } catch (error) {
     if (error.message.includes("Cast to ObjectId failed")) {
@@ -48,17 +35,9 @@ const getContactByIdController = async (req, res, next) => {
 
 const addContactController = async (req, res, next) => {
   try {
-    // const { name, email, phone } = req.body;
-    const { error } = joiSchema.validate(req.body);
+    const { body } = req;
 
-    if (error) {
-      throw new BadRequest("missing required name field");
-    }
-
-    const { _id } = req.user;
-    const newContact = await Contact.create({ ...req.body, owner: _id });
-    // const newContact = await Contact.create(({ name, email, phone });
-
+    const newContact = await addContact(body);
     res.status(201).json(newContact);
   } catch (error) {
     if (error.message.includes("validation failed")) {
@@ -74,27 +53,11 @@ const changeContactController = async (req, res, next) => {
     const { body } = req;
     const { contactId: id } = req.params;
 
-    const { error } = joiSchema.validate(body);
-
-    if (error) {
-      throw new BadRequest("missing fields");
-    }
-
-    const updateContact = await Contact.findByIdAndUpdate(id, body, {
+    const updateContact = await changeContactById(id, body, {
       new: true,
     });
-    // findByIdAndUpdate-возвращает старый объект, а не новый обновленный. нужно добавить трейтий арг{new: true,}
-
-    if (!updateContact) {
-      throw new NotFound();
-    }
-
     res.json(updateContact);
   } catch (error) {
-    if (error.message.includes("Validation failed")) {
-      error.status = 400;
-    }
-
     next(error);
   }
 };
@@ -105,25 +68,13 @@ const patchContactController = async (req, res, next) => {
     const { contactId: id } = req.params;
     const { favorite } = req.body;
 
-    // const { error } = joiSchema.validate(body);
-
-    // if (error) {
-    //   throw new BadRequest("missing field favorite");
-    // }
-
-    const updateContact = await Contact.findByIdAndUpdate(
+    const updateContact = await patchContact(
       id,
       { favorite },
       {
         new: true,
       }
     );
-    // findByIdAndUpdate-возвращает старый объект, а не новый обновленный. нужно добавить трейтий арг{new: true,}
-
-    if (!updateContact) {
-      throw new NotFound();
-    }
-
     res.json(updateContact);
   } catch (error) {
     if (error.message.includes("missing field favorite")) {
@@ -138,13 +89,7 @@ const deleteContactController = async (req, res, next) => {
   try {
     const { contactId: id } = req.params;
 
-    const deleteContact = await Contact.findByIdAndRemove(id);
-    // findByIdAndRemove-возвращает удаляемый товар
-
-    if (!deleteContact) {
-      throw new NotFound();
-    }
-
+    await deleteContactById(id);
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);

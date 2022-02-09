@@ -1,3 +1,9 @@
+// const asyncWrapper = (controller) => {
+//   return (req, res, next) => {
+//     controller(req, res).catch(next);
+//   };
+// };
+
 const errorHandlerNotFound = (req, res) => {
   res.status(404).json({ message: "Not found" });
 };

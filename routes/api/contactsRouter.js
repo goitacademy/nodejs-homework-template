@@ -1,10 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 
-// const { asyncWrapper } = require("../../src/helpers/apiHelpers");
-const { authenticate } = require("../../src/middlewares");
-
-// const contactsControllers = require("../../controllers");
 const {
   getContactsController,
   getContactByIdController,
@@ -14,25 +10,16 @@ const {
   deleteContactController,
 } = require("../../src/controllers/contactsController");
 
-// получить все
-// app.use("/api/contacts/...
-router.get("/", authenticate, getContactsController);
+router.get("/", getContactsController);
 
-// получить по id
-// app.use("/api/contacts/id...
-router.get("/:contactId", authenticate, getContactByIdController);
-// router.get("/", asyncWrapper(getContactByIdController));
+router.get("/:contactId", getContactByIdController);
 
-// добавить
-router.post("/", authenticate, addContactController);
+router.post("/", addContactController);
 
-// обновить
-router.put("/:contactId", authenticate, changeContactController);
+router.put("/:contactId", changeContactController);
 
-// обновить частично
-router.patch("/:contactId/favorite", authenticate, patchContactController);
+router.patch("/:contactId/favorite", patchContactController);
 
-// удалить
-router.delete("/:contactId", authenticate, deleteContactController);
+router.delete("/:contactId", deleteContactController);
 
 module.exports = { contactsRouter: router };
