@@ -1,5 +1,3 @@
-
-
 const listContacts = async () => {}
 
 const getContactById = async (contactId) => {}

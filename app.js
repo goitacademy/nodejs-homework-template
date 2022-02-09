@@ -1,25 +1,32 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-const contactsRouter = require('./routes/api/contacts')
+// писать в апп, что бы переменные окружения были доступны везде
+require("dotenv").config();
 
-const app = express()
+const { authRouter } = require("./routes/api/authRouter");
+const { contactsRouter } = require("./routes/api/contactsRouter");
+const {
+  errorHandlerNotFound,
+  errorHandlerServerError,
+} = require("./src/helpers/apiHelpers");
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const app = express();
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use('/api/contacts', contactsRouter)
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+app.use("/api/auth/users", authRouter);
+app.use("/api/contacts", contactsRouter);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+// порядок подключаемого промежуточного ПО имеет значение. В конце приложения идет обработка ошибок. Вначале происходит обработка несуществующего роута или ошибка 404
+app.use(errorHandlerNotFound);
 
-    module.exports = app
+app.use(errorHandlerServerError);
+
+module.exports = app;
