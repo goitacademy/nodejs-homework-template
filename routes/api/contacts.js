@@ -1,15 +1,16 @@
 const express = require('express')
 
 const ctrl = require('../../controllers/contacts')
+const { authenticate } = require('../../middlewares');
 
 const router = express.Router()
 
 
-router.get('/', ctrl.getContacts);
+router.get('/', authenticate, ctrl.getContacts);
 
 router.get('/:id', ctrl.getContactById);
 
-router.post('/', ctrl.addContact);
+router.post('/', authenticate, ctrl.addContact);
 
 router.put('/:id', ctrl.updateContact);
 
