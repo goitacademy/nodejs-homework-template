@@ -1,32 +1,5 @@
 const shortid = require('shortid')
 
-// const contacts = [
-//     {
-//         id: "NA4t_Ldoo",
-//         username: "test1",
-//         email: "test1@gmail.com"
-//     },
-//     {
-//         "id": "u7uYG3vSp",
-//         "username": "test1",
-//         "email": "test1@gmail.com"
-//     },
-//     {
-//         "id": "St7iLg5ko",
-//         "username": "test1",
-//         "email": "test1@gmail.com"
-//     },
-//     {
-//         "id": "QZTnQlLxNg",
-//         "username": "test1",
-//         "email": "test1@gmail.com"
-//     },
-//     {
-//         "id": "YWCmJU-2X",
-//         "username": "test1",
-//         "email": "test1@gmail.com"
-//     }
-// ]
 
 const path = require('path');
 const fs = require('fs').promises
