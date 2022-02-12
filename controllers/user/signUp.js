@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const createError = require('http-errors');
+const gravatar = require('gravatar')
 
-const { User } = require('../../models')
+const { User } = require('../../models');
 const { signupValidator } = require('../../helpers').validators;
 const {
     saltDifficult,
@@ -28,9 +29,10 @@ const signUp = async (req, res, next) => {
         }
 
         const salt = await bcrypt.genSalt(saltDifficult);
-        const hashPass = await bcrypt.hash(password, salt)
+        const hashPass = await bcrypt.hash(password, salt);
+        const avatarUrl = gravatar.url(email);
 
-        await User.create({email, password: hashPass});
+        await User.create({email, avatarUrl, password: hashPass});
 
         res.status(created.code).json({
             user: {
