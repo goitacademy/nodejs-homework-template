@@ -1,25 +1,73 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { validateRequestBody } = require("../../middlewares/validete");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts.js");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  if (!contacts) {
+    return res.status(400).json({ message: "contacts not found" });
+  }
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.status(200).json({ contacts });
+});
 
-module.exports = router
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+
+  if (contact.length === 0) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  res.status(200).json({ contact });
+});
+
+router.post("/", validateRequestBody(), async (req, res, next) => {
+  const { name, email, phone } = req.body;
+
+  const body = {
+    id: new Date().getTime().toString(),
+    name,
+    email,
+    phone,
+  };
+
+  await addContact(body);
+
+  res.status(201).json({ ...body });
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await removeContact(contactId);
+  res.status(result.status).json({ message: result.message });
+});
+
+router.put("/:contactId", validateRequestBody(), async (req, res, next) => {
+  const { contactId } = req.params;
+
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+
+  const data = await updateContact(contactId, req.body);
+
+  if (data.status === 400) {
+    return res.status(data.status).json({ message: data.result });
+  }
+
+  res.status(data.status).json(data.result);
+});
+
+module.exports = router;
