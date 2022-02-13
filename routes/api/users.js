@@ -1,5 +1,5 @@
 const express = require("express");
-const { validation, auth } = require("../../middleware");
+const { validation, auth, upload } = require("../../middleware");
 const { joiAuthSchema, joiSubscriptionSchema } = require("../../models");
 const ctrl = require("../../controllers/users");
 
@@ -14,5 +14,7 @@ router.get("/current", auth, ctrl.getCurrent);
 router.get("/logout", auth, ctrl.logout);
 
 router.patch("/", auth, validation(joiSubscriptionSchema), ctrl.updateSubscription);
+
+router.patch("/avatars", auth, upload.single("avatar"), ctrl.updateAvatar);
 
 module.exports = router;

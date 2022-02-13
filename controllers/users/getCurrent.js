@@ -1,13 +1,14 @@
 const successRes = require("../../utils/successRes");
 
 async function getCurrent(req, res, next) {
-  const { email, subscription } = req.user;
+  const { email, subscription, avatarURL } = req.user;
 
   try {
     res.json(
       successRes({
         email,
         subscription,
+        avatarURL,
       })
     );
   } catch (error) {

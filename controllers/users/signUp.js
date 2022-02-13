@@ -1,11 +1,12 @@
 const bcrypt = require("bcryptjs");
 const { Conflict } = require("http-errors");
+const gravatar = require("gravatar");
 const { User } = require("../../models");
 
 async function signUp(req, res, next) {
   try {
     const { email, password } = req.body;
-
+    gravatar.url(email);
     const user = await User.findOne({ email });
 
     if (user) {
@@ -13,8 +14,20 @@ async function signUp(req, res, next) {
     }
 
     const hashedPass = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const avatarURL = gravatar.url(
+      email,
+      {
+        s: "250",
+        d: "wavatar",
+      },
+      true
+    );
 
-    const newUser = await User.create({ email, password: hashedPass });
+    const newUser = await User.create({
+      email,
+      password: hashedPass,
+      avatarURL,
+    });
 
     res.status(201).json({
       status: "success",
@@ -23,6 +36,7 @@ async function signUp(req, res, next) {
         user: {
           email: newUser.email,
           subscription: newUser.subscription,
+          avatarURL: newUser.avatarURL,
         },
       },
     });
