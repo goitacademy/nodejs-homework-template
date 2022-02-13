@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const gravatar = require("gravatar");
 
 const { User } = require("../../models");
 const createToken = require("../../tokenService/createToken");
@@ -10,8 +11,9 @@ const signupUser = async (req, res, next) => {
   if (user) {
     throw createError(409, "`Email in use`");
   }
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await new User({ name, email, subscription });
+  const newUser = await new User({ name, email, avatarURL, subscription });
   await newUser.setPassword(password);
   await newUser.save();
 

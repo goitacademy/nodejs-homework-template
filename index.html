@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="contact-add-form" action="" enctype="multipart/form-data">
+      <input name="name" type="text" placeholder="Contact name" />
+      <input name="image" type="file" multiple />
+      <button type="submit">Добавить</button>
+    </form>
+
+    <script>
+      const contactAddForm = document.getElementById("contact-add-form");
+      contactAddForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        // console.log(this.elements.name.value);
+        formData.append("name", this.elements.name.value);
+        formData.append("image", this.elements.image.files[0]);
+        // console.log(this.elements.image.files);
+      });
+    </script>
+  </body>
+</html>
