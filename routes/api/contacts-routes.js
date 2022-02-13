@@ -3,6 +3,7 @@ const router = express.Router();
 const createError = require("http-errors");
 const Joi = require("joi");
 const Contact = require("../../models/contact");
+const mongoose = require("mongoose");
 
 const contactsAddScheme = Joi.object({
 	name: Joi.string().required(),
@@ -32,8 +33,12 @@ router.get("/", async (req, res, next) => {
 // GET BY ID
 router.get("/:contactId", async (req, res, next) => {
 	try {
-		const id = req.params.contactId;
-		const result = await Contact.findById(id);
+		const { contactId } = req.params;
+		if (!mongoose.Types.ObjectId.isValid(contactId)) {
+			throw createError(400, "invalid ID");
+		}
+
+		const result = await Contact.findById(contactId);
 		if (!result) {
 			throw createError(404, "Contact not found!");
 		}
@@ -42,6 +47,7 @@ router.get("/:contactId", async (req, res, next) => {
 		if (error.message.includes("Cast to ObjectId failed")) {
 			error.status = 404;
 		}
+
 		next(error);
 	}
 });
@@ -56,20 +62,19 @@ router.post("/", async (req, res, next) => {
 		const result = await Contact.create(req.body);
 		return res.status(201).json(result);
 	} catch (error) {
-		if (error.message.includes("Validation failed")) {
-			error.status = 400;
-		}
 		next(error);
 	}
-	res.json({ message: "Contact sucessfully added" });
 });
 
 // DELETE
 router.delete("/:contactId", async (req, res, next) => {
 	try {
-		const id = req.params.contactId;
-		const result = await Contact.findByIdAndDelete(id);
-		if (!result || !id) {
+		const { contactId } = req.params;
+		if (!mongoose.Types.ObjectId.isValid(contactId)) {
+			throw createError(400, "invalid ID");
+		}
+		const result = await Contact.findByIdAndDelete(contactId);
+		if (!result || !contactId) {
 			throw createError(404, "Contact not found!");
 		}
 		res.json({ message: "Contact deleted" });
@@ -85,20 +90,25 @@ router.put("/:contactId", async (req, res, next) => {
 		if (error) {
 			throw createError(400, error.message);
 		}
-		const id = req.params.contactId;
 
-		const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-		if (!result) {
-			throw createError(404, "Contact not found!");
-		} else if (req.body === null) {
+		const { contactId } = req.params;
+		if (!mongoose.Types.ObjectId.isValid(contactId)) {
+			throw createError(400, "invalid ID");
+		}
+
+		const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+			new: true,
+		});
+
+		if (req.body === null) {
 			res.json({ message: "Missing fields" });
+		} else if (!result) {
+			throw createError(404, "Contact not found!");
 		}
 		return res.json(result);
 	} catch (error) {
 		next(error);
 	}
-
-	res.json({ message: "Contact sucessfully updated" });
 });
 
 // CHANGE STATUS
@@ -108,8 +118,15 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
 		if (error) {
 			throw createError(400, error.message);
 		}
-		const id = req.params.contactId;
-		const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
+		const { contactId } = req.params;
+		if (!mongoose.Types.ObjectId.isValid(contactId)) {
+			throw createError(400, "invalid ID");
+		}
+
+		const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+			new: true,
+		});
 		if (!result) {
 			throw createError(404, "Contact not found");
 		}
