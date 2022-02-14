@@ -1,11 +1,14 @@
+// created by Irina Shushkevych
 const express = require('express')
 const {
   listContacts,
   getContactById,
   addContact,
-  updateContact,
+  updateAllContact,
   removeContact,
+  updateContact,
 } = require('../Controlers')
+const { postPutValidate, patchValidate } = require('../../middleware')
 
 const router = express.Router()
 
@@ -13,9 +16,11 @@ router.get('/', listContacts)
 
 router.get('/:contactId', getContactById)
 
-router.post('/', addContact)
+router.post('/', postPutValidate, addContact)
 
-router.put('/:contactId', updateContact)
+router.put('/:contactId', postPutValidate, updateAllContact)
+
+router.patch('/:contactId', patchValidate, updateContact)
 
 router.delete('/:contactId', removeContact)
 

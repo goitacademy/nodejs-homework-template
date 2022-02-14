@@ -8,6 +8,7 @@ const getContactById = async (req, res, next) => {
   const response = data.find((el) => el.id === contactId)
   if (!response) {
     res.locals.id = contactId
+    res.locals.code = 404
     next()
     return
   }
