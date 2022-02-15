@@ -1,5 +1,5 @@
 // created by Irina Shushkevych
-const { getContacts } = require('../../models')
+const { getContacts } = require('../../models/contacts')
 
 const listContacts = async (req, res, next) => {
   const data = await getContacts()

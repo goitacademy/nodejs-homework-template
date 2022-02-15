@@ -1,5 +1,5 @@
 // created by Irina Shushkevych
-const { updateDB, getContacts } = require('../../models')
+const { updateDB, getContacts } = require('../../models/contacts')
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params

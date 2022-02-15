@@ -7,8 +7,8 @@ const {
   updateAllContact,
   removeContact,
   updateContact,
-} = require('../Controlers')
-const { postPutValidate, patchValidate } = require('../../middleware')
+} = require('../../controllers/contacts')
+const { postPutValidate, patchValidate } = require('../../middlewares')
 
 const router = express.Router()
 

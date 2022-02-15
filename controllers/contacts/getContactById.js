@@ -1,5 +1,5 @@
 // created by Irina Shushkevych
-const { getContacts } = require('../../models')
+const { getContacts } = require('../../models/contacts')
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params

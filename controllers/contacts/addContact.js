@@ -1,5 +1,5 @@
 // created by Irina Shushkevych
-const { getId, getContacts, updateDB } = require('../../models')
+const { getId, getContacts, updateDB } = require('../../models/contacts')
 
 const addContact = async (req, res, next) => {
   if (req.res.locals.code) {

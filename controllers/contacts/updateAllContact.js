@@ -1,14 +1,13 @@
 // created by Irina Shushkevych
-const { updateDB, getContacts } = require('../../models')
+const { updateDB, getContacts } = require('../../models/contacts')
 
-const updateContact = async (req, res, next) => {
+const updateAllContact = async (req, res, next) => {
   if (req.res.locals.code) {
     res.locals.code = req.res.locals.code
     res.locals.message = req.res.locals.message
     next()
     return
   }
-
   const data = await getContacts()
   const { contactId } = req.params
   const { name, email, phone } = req.body
@@ -19,15 +18,9 @@ const updateContact = async (req, res, next) => {
     next()
     return
   }
-  if (name) {
-    data[idx].name = name
-  }
-  if (email) {
-    data[idx].email = email
-  }
-  if (phone) {
-    data[idx].phone = phone
-  }
+  data[idx].name = name
+  data[idx].email = email
+  data[idx].phone = phone
 
   await updateDB(data)
   res.status(200).json({
@@ -37,4 +30,4 @@ const updateContact = async (req, res, next) => {
   })
 }
 
-module.exports = updateContact
+module.exports = updateAllContact
