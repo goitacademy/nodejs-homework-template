@@ -14,4 +14,5 @@ router.get("/logout", authenticate, async (req, res, next) => {
 	await User.findByIdAndUpdate(_id, { token: "" });
 	res.status(204).send();
 });
+
 module.exports = router;
