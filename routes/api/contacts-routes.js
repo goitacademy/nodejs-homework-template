@@ -4,6 +4,7 @@ const createError = require("http-errors");
 const Joi = require("joi");
 const Contact = require("../../models/contact");
 const mongoose = require("mongoose");
+const { authenticate } = require("../../middlewares");
 
 const contactsAddScheme = Joi.object({
 	name: Joi.string().required(),
@@ -21,9 +22,10 @@ const contactsFavoriteScheme = Joi.object({
 });
 
 // GET ALL
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
 	try {
-		const result = await Contact.find();
+		const { _id } = req.user;
+		const result = await Contact.find({ owner: _id }).populate("owner");
 		res.json(result);
 	} catch (error) {
 		next(error);
@@ -31,7 +33,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // GET BY ID
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", authenticate, async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
@@ -49,13 +51,14 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 // ADD
-router.post("/", async (req, res, next) => {
+router.post("/", authenticate, async (req, res, next) => {
 	try {
 		const { error } = contactsAddScheme.validate(req.body);
 		if (error) {
 			throw createError(400, error.message);
 		}
-		const result = await Contact.create(req.body);
+		const data = { ...req.body, owner: req.user._id };
+		const result = await Contact.create(data);
 		return res.status(201).json(result);
 	} catch (error) {
 		next(error);
@@ -63,7 +66,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // DELETE
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", authenticate, async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
@@ -80,7 +83,7 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 // UPDATE
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", authenticate, async (req, res, next) => {
 	try {
 		const { error } = contactsAddScheme.validate(req.body);
 		if (error) {
@@ -108,7 +111,7 @@ router.put("/:contactId", async (req, res, next) => {
 });
 
 // CHANGE STATUS
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
 	try {
 		const { error } = contactsFavoriteScheme.validate(req.body);
 		if (error) {

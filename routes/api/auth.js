@@ -4,10 +4,9 @@ const { User, schemas } = require("../../models/user");
 const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
-console.log(SECRET_KEY);
-console.log(process.env.SECRET_KEY);
 
 // SIGNUP
 router.post("/signup", async (req, res, next) => {
@@ -43,7 +42,7 @@ router.post("/login", async (req, res, next) => {
 		if (error) {
 			throw createError(400, error.message);
 		}
-		const { email, password } = req.body;
+		const { email, password, subscription } = req.body;
 		const user = await User.findOne({ email });
 		if (!user) {
 			throw createError(401, "Email or password is wrong");
@@ -63,7 +62,7 @@ router.post("/login", async (req, res, next) => {
 			token,
 			user: {
 				email,
-				// subscription,
+				subscription,
 			},
 		});
 	} catch (error) {
