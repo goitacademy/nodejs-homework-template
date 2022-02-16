@@ -15,7 +15,7 @@ router.post("/signup", async (req, res, next) => {
 		if (error) {
 			throw createError(400, error.message);
 		}
-		const { email, password } = req.body;
+		const { email, password, subscription } = req.body;
 		const user = await User.findOne({ email });
 
 		if (user) {
@@ -27,7 +27,7 @@ router.post("/signup", async (req, res, next) => {
 		res.status(201).json({
 			user: {
 				email,
-				// subscription,
+				subscription,
 			},
 		});
 	} catch (error) {
