@@ -1,6 +1,8 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const usersRoutes = require('./routes/api/usersRoutes')
 
@@ -8,10 +10,16 @@ const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log('Database connected successfully'))
+  .catch((error) => console.log(error));
+
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+require('./config/config-passport')
 app.use('/users', usersRoutes)
 
 app.use((req, res) => {
