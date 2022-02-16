@@ -22,7 +22,7 @@ router.post("/register", async (req, res, next) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
-    const avatarURL = gravatar.url(email);
+    const avatarURL = gravatar.url(email, { protocol: "http", s: "250" });
     const result = await User.create({
       avatarURL,
       email,

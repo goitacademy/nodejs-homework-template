@@ -17,6 +17,10 @@ router.patch(
   authenticate,
   upload.single("avatar"),
   async (req, res, next) => {
+    if (!req.file) {
+      throw new CreateError(400, "File upload error!");
+    }
+    const host = `${req.protocol}://${req.headers.host}`;
     const { _id } = req.user;
     const { path: tempUpload, filename } = req.file;
     const [extention] = filename.split(".").reverse();
@@ -28,7 +32,7 @@ router.patch(
       await image.write(tempUpload);
       await fs.rename(tempUpload, resultUpload);
 
-      const avatarURL = path.join("avatars", newFileName);
+      const avatarURL = path.join(host, "avatars", newFileName);
       await User.findByIdAndUpdate(_id, { avatarURL });
       res.json({
         avatarURL,
