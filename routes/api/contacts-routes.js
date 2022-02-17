@@ -82,7 +82,7 @@ router.delete("/:contactId", authenticate, async (req, res, next) => {
 			throw createError(400, "invalid ID");
 		}
 		const result = await Contact.findByIdAndDelete(contactId);
-		if (!result || !contactId) {
+		if (!result) {
 			throw createError(404, "Contact not found!");
 		}
 		res.json({ message: "Contact deleted" });
@@ -108,9 +108,7 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
 			new: true,
 		});
 
-		if (req.body === null) {
-			res.json({ message: "Missing fields" });
-		} else if (!result) {
+		if (!result) {
 			throw createError(404, "Contact not found!");
 		}
 		return res.json(result);
