@@ -24,8 +24,12 @@ const contactsFavoriteScheme = Joi.object({
 // GET ALL
 router.get("/", authenticate, async (req, res, next) => {
 	try {
-		const { page = 1, limit = 10 } = req.query;
+		let { page = 1, limit = 10 } = req.query;
 		const { _id } = req.user;
+
+		page = Number(page);
+		limit = Number(limit);
+
 		const skip = (page - 1) * limit;
 		const result = await Contact.find(
 			{ owner: _id },
