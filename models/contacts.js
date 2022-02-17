@@ -48,7 +48,7 @@ const removeById = async (id) => {
   const contacts = await getAll();
   const deleteContact = contacts.find((contact) => contact.id === id);
   if (!deleteContact) {
-    null;
+    return null;
   }
   const newContacts = contacts.filter((contact) => contact.id !== id);
   await updateContacts(newContacts);
