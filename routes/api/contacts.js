@@ -9,7 +9,7 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:id", ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(productSchema), ctrlWrapper(ctrl.add));
+router.post("/", validation(updateProductSchema), ctrlWrapper(ctrl.add));
 
 router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
