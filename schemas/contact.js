@@ -6,10 +6,4 @@ const contactSchema = Joi.object({
   phone: Joi.number().required(),
 });
 
-const updateContactSchema = Joi.object({
-  email: Joi.string(),
-  name: Joi.string(),
-  phone: Joi.number(),
-});
-
-module.exports = { contactSchema, updateContactSchema };
+module.exports = { contactSchema };

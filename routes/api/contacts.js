@@ -2,7 +2,7 @@ const express = require("express");
 
 const { ctrlWrapper, validation } = require("../../middleware");
 const ctrl = require("../../controllers/products");
-const { contactSchema, updateContactSchema } = require("../../schemas/contact");
+const { contactSchema } = require("../../schemas/contact");
 const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.getAll));
@@ -13,10 +13,6 @@ router.post("/", validation(contactSchema), ctrlWrapper(ctrl.add));
 
 router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
-router.put(
-  "/:id",
-  validation(updateContactSchema),
-  ctrlWrapper(ctrl.updateById)
-);
+router.put("/:id", validation(contactSchema), ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
