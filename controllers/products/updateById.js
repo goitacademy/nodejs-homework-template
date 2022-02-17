@@ -6,9 +6,7 @@ const updateById = async (req, res, next) => {
   console.log(req.body);
   const result = await contacts.updateById(id, req.body);
   if (!result) throw createError(404, "Not found");
-  req.body
-    ? res.json(result)
-    : res.status(400).json({ message: "missing fields" });
+  res.json(result);
 };
 
 module.exports = updateById;
