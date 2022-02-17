@@ -39,7 +39,7 @@ const updateById = async (id, data) => {
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = { ...data, id };
+  contacts[idx] = { ...contacts[idx], ...data, id };
   await updateContacts(contacts);
   return contacts[idx];
 };

@@ -3,7 +3,7 @@ const validation = (schema) => {
     console.log(req.body);
     const { error } = schema.validate(req.body);
     if (error) {
-      return next(error);
+      next(error);
     }
     next();
   };

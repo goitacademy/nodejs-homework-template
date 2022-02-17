@@ -2,20 +2,20 @@ const express = require("express");
 
 const { ctrlWrapper, validation } = require("../../middleware");
 const ctrl = require("../../controllers/products");
-const { productSchema, updateProductSchema } = require("../../schemas/contact");
+const { contactSchema, updateContactSchema } = require("../../schemas/contact");
 const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:id", ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(updateProductSchema), ctrlWrapper(ctrl.add));
+router.post("/", validation(contactSchema), ctrlWrapper(ctrl.add));
 
 router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
 router.put(
   "/:id",
-  validation(updateProductSchema),
+  validation(updateContactSchema),
   ctrlWrapper(ctrl.updateById)
 );
 
