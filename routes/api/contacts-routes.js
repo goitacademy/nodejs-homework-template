@@ -24,15 +24,18 @@ const contactsFavoriteScheme = Joi.object({
 // GET ALL
 router.get("/", authenticate, async (req, res, next) => {
 	try {
-		let { page = 1, limit = 10 } = req.query;
-		page = Number(page);
-		limit = Number(limit);
-		const skip = (page - 1) * limit;
+		// let { page = 1, limit = 2 } = req.query;
+		// page = Number(page);
+		// limit = Number(limit);
+		// if (isNaN(page) || isNaN(limit)) {
+		// 	throw createError(400, "Page and limit must be a number");
+		// }
+		// const skip = (page - 1) * limit;
 
 		const { _id } = req.user;
 		const result = await Contact.find(
-			{ owner: _id },
-			{ skip, limit: +limit }
+			{ owner: _id }
+			// { skip, limit: +limit }
 		).populate("owner", "email");
 		res.json(result);
 	} catch (error) {
