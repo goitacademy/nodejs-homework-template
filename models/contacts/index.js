@@ -1,5 +1,4 @@
-const getId = require('./getId')
-const getContacts = require('./getContacts')
-const updateDB = require('./updateDB')
+const Contact = require('./model')
+const validation = require('./validationSchema')
 
-module.exports = { getId, getContacts, updateDB }
+module.exports = { ...validation, Contact}
