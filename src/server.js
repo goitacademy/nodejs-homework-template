@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const morgan = require('morgan')
 const cors = require("cors");
-
+const mongoose = require('mongoose')
 const {getConfig} = require("./config");
 const {contactsRouter} = require("./resources/contacts/contacts.router.controller");
 
@@ -12,10 +12,10 @@ class ContactsServer {
         this.app = null
     }
 
-    start() {
+    async start() {
         this.initServer()
         this.initConfig()
-        // this.initDatabase();
+        await this.initDatabase();
         this.initMiddlewares()
         this.initRoutes()
         this.initErrorHandling()
@@ -28,6 +28,10 @@ class ContactsServer {
 
     initConfig() {
         dotenv.config({path: path.resolve(__dirname, '../.env')})
+    };
+
+    async initDatabase(){
+        await mongoose.connect(getConfig().dbUrl)
     };
 
     initMiddlewares() {

@@ -1,29 +1,44 @@
 const {contactsModel} = require("./contacts.model");
-const {NotFound} = require('http-errors')
-
+const {NotFound,Conflict} = require("http-errors");
 
 class ContactsService {
-    constructor() {
+
+    async getContacts() {
+        return contactsModel.find()
     }
 
-    getContacts() {
-        return contactsModel.findContacts()
-    }
-
-    createContact(createParams) {
-        return contactsModel.insertContact(createParams)
+   async createContact(createParams) {
+        const existingContact = await contactsModel.findOne({ email: createParams.email });
+        if (existingContact) {
+            throw new Conflict("Contact with such email already exists");
+        }
+        return contactsModel.create(createParams);
     };
 
     async getContact(id) {
-        return await contactsModel.findContactById(id);
+        const contact = await contactsModel.findById(id);
+        if (!contact) {
+            throw new NotFound("contact not found");
+        }
+        return contact;
     }
 
     async updateContact(id, updateParams) {
-        return await contactsModel.updateContactById(id, updateParams)
+        const contact = await contactsModel.findByIdAndUpdate(id, updateParams, {
+            new: true,
+        });
+        if (!contact) {
+            throw new NotFound("contact not found");
+        }
+
+        return contact;
     }
 
     async deleteContact(id) {
-        return await contactsModel.removeById(id);
+        const deleteResult = await contactsModel.deleteOne({ _id: id });
+        if (!deleteResult.deletedCount) {
+            throw new NotFound("user not found");
+        }
     }
 }
 

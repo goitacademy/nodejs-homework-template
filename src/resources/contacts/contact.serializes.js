@@ -4,6 +4,7 @@ function serializeContact(contact) {
         name: contact.name,
         email: contact.email,
         phone: contact.email,
+        favorite:contact.favorite
     };
 }
 
