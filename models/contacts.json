@@ -13,7 +13,7 @@
   },
   {
     "id": "3",
-    "name": "Kennedy Lane",
+    "name": "Uppdated Kennedy Laneeeeeeeeee",
     "email": "mattis.Cras@nonenimMauris.net",
     "phone": "(542) 451-7038"
   },
@@ -58,5 +58,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "2cfc025f-6c73-4fbb-b1d0-cf7cd5ff696c",
+    "name": "Alexander test",
+    "email": "alexander@awesome.com",
+    "phone": "(666) 666-6666"
   }
 ]
