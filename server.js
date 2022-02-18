@@ -1,5 +1,10 @@
-const app = require('./app')
+// require('dotenv').config();
+const app = require('./app');
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const PORT = 8081;
+// const PORT = process.env.PORT || 8081;
+
+app.listen(PORT, error => {
+  if (error) console.error('Error at server launch: ', error);
+  console.log(`Server running at port: ${PORT}`);
+});
