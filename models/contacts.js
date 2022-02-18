@@ -11,7 +11,9 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
-  const contact = await contacts.find((contact) => contact.id === contactId);
+  const contact = await contacts.find((contact) => {
+    return contact.id === contactId;
+  });
   if (!contact) {
     return null;
   }
@@ -37,13 +39,13 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   const contacts = await listContacts();
-  const idx = contacts.findIndex((contact) => contact.id === contactId);
+  const idx = contacts.findIndex((contact) => contact.id === id);
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = { ...body };
+  contacts[idx] = { ...body, id };
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return contacts[idx];
 };
