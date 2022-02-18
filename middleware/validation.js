@@ -8,6 +8,7 @@ function validateAddedContact(req, res, next) {
       tlds: { allow: ["com", "net"] },
     }).required,
     phone: Joi.number().min(10).max(10).required,
+    favorite: Joi.bool().default(false).required(),
   });
   const { error } = schema.validate(req.body);
   if (error) {
@@ -24,6 +25,7 @@ function validateUpdatedContact(req, res, next) {
       tlds: { allow: ["com", "net"] },
     }),
     phone: Joi.number().min(10).max(10),
+    favorite: Joi.bool().default(false),
   });
   const { error } = schema.validate(req.body);
   if (error) {
