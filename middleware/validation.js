@@ -27,12 +27,23 @@ function validateUpdatedContact(req, res, next) {
   });
   const { error } = schema.validate(req.body);
   if (error) {
-    res.status(400).send(error);
+    return res.status(400).send(error);
   }
   next();
 }
 
+const validateFavField = (req, res, next) => {
+  const favSchema = Joi.object({
+    favorite: Joi.bool().default(false).required(),
+  });
+  const { error } = favSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error.message);
+  }
+  next();
+};
 module.exports = {
   validateAddedContact,
   validateUpdatedContact,
+  validateFavField,
 };

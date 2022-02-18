@@ -5,12 +5,14 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+  updateStatusContact,
+} = require("../../service/contacts");
 
 const {
   validateAddedContact,
   validateUpdatedContact,
-} = require("../../middlewares/validation");
+  validateFavField,
+} = require("../../middleware/validation");
 
 const router = express.Router();
 
@@ -23,5 +25,7 @@ router.post("/", validateAddedContact, addContact);
 router.delete("/:contactId", removeContact);
 
 router.put("/:contactId", validateUpdatedContact, updateContact);
+
+router.patch("/:contactId/favorite", validateFavField, updateStatusContact);
 
 module.exports = router;
