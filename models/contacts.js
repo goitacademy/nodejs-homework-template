@@ -27,9 +27,9 @@ const addContact = async (body) => {
   const contacts = await db.read()
   const newContact = {
     id: randomUUID(),
-    ...body,
+    ...body
   }
-  await contacts.push(newContact)
+  contacts.push(newContact)
   await db.write(contacts)
   return newContact
 }
