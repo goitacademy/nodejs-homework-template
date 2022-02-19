@@ -1,4 +1,3 @@
-/* eslint-disable prefer-regex-literals */
 const Joi = require('joi')
 
 const schemaCreateContact = Joi.object({
@@ -16,6 +15,5 @@ const schemaCreateContact = Joi.object({
   }),
   
 })
-
 
 module.exports = { schemaCreateContact }
