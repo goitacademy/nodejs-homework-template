@@ -1,17 +1,22 @@
 const Joi = require('joi');
 
 const schemaCreateContact = Joi.object({
-  name: Joi.string().min(3).max(30).required().messages({
-    'any.required': 'Поле name обязательное',
-    'string.empty': 'Поле name не может быть пустым',
-  }),
-  email: Joi.string().min(5).max(50).required().messages({
+  name: Joi.string()
+    .pattern(/^[a-zA-Zа-яА-Я ]+$/)
+    .min(2)
+    .max(40)
+    .required()
+    .messages({
+      'any.required': 'Поле name обязательное',
+      'string.empty': 'Поле name не может быть пустым',
+    }),
+  email: Joi.string().email().required().messages({
     'any.required': 'Поле email обязательное',
     'string.empty': 'Поле email не может быть пустым',
   }),
   phone: Joi.string()
     .pattern(/[0-9]+/)
-    .min(9)
+    .min(7)
     .max(20)
     .required()
     .messages({
@@ -21,47 +26,28 @@ const schemaCreateContact = Joi.object({
 });
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().min(3).max(30).optional().messages({
-    'any.optional': 'Поле name не обязательное',
-    'string.empty': 'Поле name не может быть пустым',
-  }),
-  email: Joi.string().min(5).max(50).optional().messages({
+  name: Joi.string()
+    .pattern(/^[a-zA-Zа-яА-Я ]+$/)
+    .min(2)
+    .max(40)
+    .optional()
+    .messages({
+      'any.optional': 'Поле name не обязательное',
+      'string.empty': 'Поле name не может быть пустым',
+    }),
+  email: Joi.string().email().optional().messages({
     'any.optional': 'Поле email не обязательное',
     'string.empty': 'Поле email не может быть пустым',
   }),
   phone: Joi.string()
     .pattern(/[0-9]+/)
+    .min(7)
+    .max(20)
     .optional()
     .messages({
       'any.optional': 'Поле phone не обязательное',
       'string.empty': 'Поле phone не может быть пустым',
     }),
 });
-
-// const schemaAddContactValidation = (req, res, next) => {
-//   const schema = Joi.object({
-//     name: Joi.string().alphanum().min(3).max(30).required(),
-//     email: Joi.string().alphanum().min(5).max(500).required(),
-//     phone: Joi.string().alphanum().min(5).max(500).required(),
-//   });
-//   const isValid = schema.validate(req.body);
-//   if (isValid.error) {
-//     return res.status(400).json({ status: isValid.error.details });
-//   }
-//   next();
-// };
-
-// const schemaUpdateContactValidation = (req, res, next) => {
-//   const schema = Joi.object({
-//     name: Joi.string().alphanum().min(3).max(30).optional(),
-//     email: Joi.string().alphanum().min(5).max(500).optional(),
-//     phone: Joi.string().alphanum().min(5).max(500).optional(),
-//   });
-//   const isValid = schema.validate(req.body);
-//   if (isValid.error) {
-//     return res.status(400).json({ status: isValid.error.details });
-//   }
-//   next();
-// };
 
 module.exports = { schemaCreateContact, schemaUpdateContact };

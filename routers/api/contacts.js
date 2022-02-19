@@ -13,7 +13,7 @@ const {
   putContact,
   patchContact,
   deleteContact,
-} = require('../../controllers/contactsController');
+} = require('../../controllers/contacts');
 
 const { validateBody } = require('../../middlewares/validateBody');
 

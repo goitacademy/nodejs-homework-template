@@ -1,6 +1,6 @@
 {
-  "name": "template",
-  "version": "0.0.0",
+  "name": "homework_nodejs_02_express",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",

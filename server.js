@@ -1,8 +1,7 @@
-// require('dotenv').config();
+require('dotenv').config();
 const app = require('./app');
 
-const PORT = 8081;
-// const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8081;
 
 app.listen(PORT, error => {
   if (error) console.error('Error at server launch: ', error);
