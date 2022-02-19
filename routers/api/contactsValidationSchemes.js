@@ -20,7 +20,7 @@ const schemaCreateContact = Joi.object({
     .max(20)
     .required()
     .messages({
-      'any.optional': 'Поле phone не обязательное',
+      'any.optional': 'Поле phone обязательное',
       'string.empty': 'Поле phone не может быть пустым',
     }),
 });

@@ -23,7 +23,7 @@ router
 
 router
   .get('/:contactId', getContactById)
-  .put('/:contactId', putContact)
+  .put('/:contactId', validateBody(schemaUpdateContact), putContact)
   .patch('/:contactId', validateBody(schemaUpdateContact), patchContact)
   .delete('/:contactId', deleteContact);
 
