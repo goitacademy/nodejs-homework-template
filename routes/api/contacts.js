@@ -1,10 +1,8 @@
 const express = require("express");
 const contactModel = require("../../models/contacts");
-const {
-  schemaCreateContact,
-  schemaUpdateContact,
-} = require("./contacts-validation-schemes");
-const { validateBody } = require("../../middlewares/validation");
+const { schemaCreateContact, schemaUpdateContact } = require("./");
+
+const { validateBody } = require("../../middlewares");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
