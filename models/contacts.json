@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
+    "email": "nulla.ante@gmail.com",
     "phone": "(992) 914-3792"
   },
   {
@@ -22,12 +22,6 @@
     "name": "Wylie Pope",
     "email": "est@utquamvel.net",
     "phone": "(692) 802-2949"
-  },
-  {
-    "id": "5",
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
   },
   {
     "id": "6",
@@ -58,5 +52,41 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "ceee71ca-4a76-4143-9fb1-45f8ef98e430",
+    "name": "Hrytsai Andrii",
+    "email": "a.gritsay2@gmail.com",
+    "phone": "(093) 091-2282"
+  },
+  {
+    "id": "2bac2df4-7f24-4802-909f-4a4595b28b8c",
+    "name": "Hrytsasi",
+    "email": "a.gritsay2@gmail.com",
+    "phone": "9929143792"
+  },
+  {
+    "id": "9f2e2d80-e1fb-41a7-8fae-d07cfd2d642d",
+    "name": "Hrytsas",
+    "email": "a.gritsay2@gmail.ua",
+    "phone": "9929143792"
+  },
+  {
+    "id": "bd20c602-6ce8-4dd1-9191-4edc5695eed3",
+    "name": "Hrytsas Andriy",
+    "email": "a.gritsay2@gmail.ua",
+    "phone": "9929143792"
+  },
+  {
+    "id": "71e312a9-5300-4542-b727-fc5576c30077",
+    "name": "Hrytsas Andriy",
+    "email": "a.gritsay2@gmail.ua",
+    "phone": "9929143792"
+  },
+  {
+    "id": "4586e10d-c565-4234-9848-a3c16c4e130a",
+    "name": "Hrytsas Andriy",
+    "email": "a.gritsay2@gmail.ua",
+    "phone": "(099) 253-3232"
   }
 ]
