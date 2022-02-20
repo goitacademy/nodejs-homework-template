@@ -6,6 +6,7 @@ const { User } = require("../../models/user");
 router.get("/current", authenticate, async (req, res, next) => {
 	res.json({
 		email: req.user.email,
+		subscription: req.user.subscription,
 	});
 });
 
