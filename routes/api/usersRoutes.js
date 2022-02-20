@@ -1,11 +1,12 @@
-const express = require('express')
 const router = express.Router()
 const userModel = require('../../model/User');
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const secret = process.env.JWT_SECRET
+const gravatar = require('gravatar');
 
 const auth = require('../../middlewares/auth');
+
 
 router.post('/signup', async (req, res, next) => {
   const { email, password } = req.body
@@ -20,6 +21,9 @@ router.post('/signup', async (req, res, next) => {
   }
   try {
     const newUser = new userModel({ email, password })
+    const avatar = gravatar.url(email);
+
+    newUser.avatarURL = avatar;
     newUser.setPassword(password)
     await newUser.save()
     res.status(201).json({
@@ -38,6 +42,7 @@ router.post('/signup', async (req, res, next) => {
     next(error)
   }
 })
+
 
 router.post('/login', async (req, res, next) => {
   const { email, password } = req.body

@@ -14,11 +14,12 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.0",
     "express": "4.17.1",
-    "mongoose": "^6.2.1",
+    "gravatar": "^1.8.2",
+    "mongoose": "^6.2.2",
     "morgan": "1.10.0",
-    "volleyball": "^1.5.1",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "volleyball": "^1.5.1"
   },
   "devDependencies": {
     "eslint": "^7.19.0",

@@ -2,6 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose');
+const serveStatic = require('serve-static')
 require('dotenv').config();
 
 const usersRoutes = require('./routes/api/usersRoutes')
@@ -20,6 +21,8 @@ app.use(cors())
 app.use(express.json())
 
 require('./config/config-passport')
+
+app.use(express.static('./public'))
 app.use('/users', usersRoutes)
 
 app.use((req, res) => {
