@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
+    "email": "nulla.ante@gmail.com",
     "phone": "(992) 914-3792"
   },
   {
@@ -22,12 +22,6 @@
     "name": "Wylie Pope",
     "email": "est@utquamvel.net",
     "phone": "(692) 802-2949"
-  },
-  {
-    "id": "5",
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
   },
   {
     "id": "6",
@@ -58,5 +52,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "ceee71ca-4a76-4143-9fb1-45f8ef98e430",
+    "name": "Hrytsai Andrii",
+    "email": "a.gritsay2@gmail.com",
+    "phone": "(093) 091-2282"
   }
 ]
