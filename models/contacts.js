@@ -1,4 +1,6 @@
+// first version
 // const fs = require('fs/promises')
+//
 const { randomUUID } = require("crypto");
 const DB = require("./db");
 const db = new DB("contacts.json");
