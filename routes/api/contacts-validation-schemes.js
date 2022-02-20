@@ -13,7 +13,6 @@ const schemaCreateContact = Joi.object({
     'any.required': 'Поле phone обязательное',
     'string.empty': 'Поле phone не может быть пустым',
   }),
-  
 })
 
 module.exports = { schemaCreateContact }
