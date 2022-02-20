@@ -1,3 +1,4 @@
+const express = require('express');
 const router = express.Router()
 const userModel = require('../../model/User');
 const jwt = require('jsonwebtoken')
@@ -5,17 +6,16 @@ const passport = require('passport')
 const secret = process.env.JWT_SECRET
 const gravatar = require('gravatar');
 
-const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
 
-const uploadDir = path.join(__dirname, '../../upload/avatars')
+const auth = require('../../middlewares/auth');
 const publicDir = path.join(__dirname, '../../public/avatars')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir)
+    cb(null, publicDir)
   },
   filename: (req, file, cb) => {
     const newFilename = `${new Date().getTime()}_${file.originalname}`;
@@ -27,7 +27,7 @@ const upload = multer({
   storage: storage,
 })
 
-router.patch('/avatars', upload.single('thumbnail'), async (req, res) => {
+router.patch('/avatars', auth, upload.single('thumbnail'), async (req, res) => {
   try {
     const { path: temporaryName, originalname } = req.file;
     const fileName = path.join(publicDir, originalname)
@@ -38,15 +38,12 @@ router.patch('/avatars', upload.single('thumbnail'), async (req, res) => {
       console.log(err);
       res.status(500).send(err);
     }
-    // Перемістіть файл з папки завантажень до папки thumbnails
-    const newShow = await Show.create({
-      title: req.body.title,
-      description: req.body.description,
-      releasedAt: req.body.releasedAt,
-      thumbnailUrl: req.file.filename, // Назва файлу
-    });
 
-    res.json(newShow);
+    const { email } = req.user
+    const user = await userModel.findOne({ email })
+    user.avatarURL = `http://localhost:5000/avatars/${originalname}`
+    user.save()
+    res.json(user.avatarURL);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
@@ -54,7 +51,6 @@ router.patch('/avatars', upload.single('thumbnail'), async (req, res) => {
 });
 
 
-const auth = require('../../middlewares/auth');
 
 router.post('/signup', async (req, res, next) => {
   const { email, password } = req.body
