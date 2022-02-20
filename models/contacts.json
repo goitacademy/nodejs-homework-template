@@ -12,22 +12,10 @@
     "phone": "(294) 840-6685"
   },
   {
-    "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  {
-    "id": "4",
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
-  },
-  {
     "id": "5",
     "name": "Cyrus Jackson",
     "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
+    "phone": "(777) 472-5218"
   },
   {
     "id": "6",
@@ -58,5 +46,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "e9135efd-921f-4327-85b9-69fd00c054f4",
+    "name": "Coret",
+    "email": "nibh@semsempererat.com",
+    "phone": "0954725218"
   }
 ]
