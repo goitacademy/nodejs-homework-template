@@ -1,6 +1,9 @@
 const express = require("express");
 const contactModel = require("../../models/contacts");
-const { schemaCreateContact } = require("./schemaValidations.js");
+const {
+  schemaCreateContact,
+  schemaUpdateContact,
+} = require("./schemaValidations.js");
 const { validateBody } = require("../../middlewares/validation");
 const router = express.Router();
 
@@ -27,7 +30,12 @@ router.post("/", validateBody(schemaCreateContact), async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   const contact = await contactModel.removeContact(req.params.contactId);
   if (contact) {
-    return res.json({ status: "success", code: 200, payload: { contact } });
+    return res.json({
+      status: "success",
+      code: 200,
+      payload: { contact },
+      message: "contact deleted",
+    });
   }
   return res
     .status(404)
@@ -36,12 +44,13 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put(
   "/:contactId",
-  validateBody(schemaCreateContact),
+  validateBody(schemaUpdateContact),
   async (req, res, next) => {
     const contact = await contactModel.updateContact(
       req.params.contactId,
       req.body
     );
+
     if (contact) {
       return res.json({ status: "success", code: 200, payload: { contact } });
     }
