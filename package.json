@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "nodejs-homework-rest-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,15 +12,18 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.6.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {
-    "eslint": "7.19.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "2.0.15",
+    "npx": "^10.2.2"
   }
 }
