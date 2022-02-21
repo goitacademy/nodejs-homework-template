@@ -2,8 +2,7 @@ const contactsOperations = require('../../models/contacts/operations')
 
 const updateContact = async (req, res, next) => {
     const { id } = req.params
-    console.log(req.body)
-    if (!req.body) { console.log('oops') }
+
     const result = await contactsOperations.updateContact(id, req.body)
 
     if (!result) {

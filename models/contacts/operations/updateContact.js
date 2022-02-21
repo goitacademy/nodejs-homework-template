@@ -4,7 +4,6 @@ const listContacts = require('./listContacts')
 const filePath = require("./filePath")
 
 const updateContact = async (contactId, body) => {
-    console.log('hh', body)
     const contacts = await listContacts()
     const idx = contacts.findIndex(item => item.id === contactId)
 
