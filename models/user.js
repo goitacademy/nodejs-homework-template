@@ -22,6 +22,9 @@ const userSchema = Schema({
         type: String,
         default: '',
     },
+    avatarURL: {
+        type: String
+    }
 }, { versionKey: false, timestamps: true });
 
 const registerJoiSchema = Joi.object({
