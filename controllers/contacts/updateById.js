@@ -1,8 +1,8 @@
-const {updateContact} = require('../../models/contacts');
+const {modelContacts} = require('../../models');
 
 const updateById = async (req, res) => {
   const {contactId} = req.params;
-  const updatedContact = await updateContact(contactId, req.body);
+  const updatedContact = await modelContacts.updateContact(contactId, req.body);
   if (!updatedContact) {
     res.status(404).json({
       status: 'error',
