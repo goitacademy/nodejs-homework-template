@@ -1,22 +1,19 @@
 // created by Irina Shushkevych
-const { getContacts } = require('../../models/contacts')
+const { contactSchema } = require('../../models')
+
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params
-  const data = await getContacts()
+  const data = await contactSchema.Contact.findById(contactId)
 
-  const response = data.find((el) => el.id === contactId)
-  if (!response) {
-    res.locals.id = contactId
-    res.locals.code = 404
-    next()
-    return
+  if (!data) {
+    return next({ id: contactId, status: 404 }) 
   }
 
   res.status(200).json({
     status: 'ok',
     code: 200,
-    data: response,
+    data,
   })
 }
 

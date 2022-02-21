@@ -2,14 +2,15 @@
 const { contactSchema } = require('../../models')
 
 
-const updateContact = async (req, res, next) => {
+const updateContactFavorites = async (req, res, next) => {
   const { contactId } = req.params
-  const data = await contactSchema.Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+  const { favorite } = req.body
+  const data = await contactSchema.Contact.findByIdAndUpdate(contactId, { favorite }, { new: true })
  
   if (!data){
     return next({ id: contactId, status: 404 })
-  }
 
+  }
   res.status(200).json({
     status: 'ok',
     code: 200,
@@ -17,4 +18,4 @@ const updateContact = async (req, res, next) => {
   })
 }
 
-module.exports = updateContact
+module.exports = updateContactFavorites

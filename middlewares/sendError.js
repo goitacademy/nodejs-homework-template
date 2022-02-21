@@ -1,13 +1,15 @@
 // created by Irina Shushkevych
-const sendError = (req, res, next) => {
-  const id = req.res.locals.id ?? null
-  const code = req.res.locals.code ?? null
-  const message = req.res.locals.message ?? null
+const sendError = (err, req, res, next) => {
+  const id = err.id ?? null
+  const code = err.status ?? 500
+  const message = id 
+      ? `Contacts with id = ${id} not found` 
+      : err.message || 'Server error'
 
-  res.status(code || 404).json({
+  res.status(code).json({
     status: `error`,
-    code: code || 404,
-    error: id ? `Contacts with id = ${id} not found` : message || 'Not found',
+    code,
+    error:{ message } 
   })
 }
 

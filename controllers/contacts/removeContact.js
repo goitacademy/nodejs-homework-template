@@ -1,20 +1,19 @@
 // created by Irina Shushkevych
-const { updateDB, getContacts } = require('../../models/contacts')
+const { contactSchema } = require('../../models')
+
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params
-  const data = await getContacts()
-  const contactIdx = data.findIndex((el) => el.id === contactId)
-  if (contactIdx === -1) {
-    res.locals.id = contactId
-    res.locals.code = 404
-    next()
-    return
+  const data = await contactSchema.Contact.findByIdAndRemove(contactId)
+
+  if (!data){
+    return next({ id: contactId, status: 404 })
   }
-  await updateDB(data.filter((el) => el.id !== contactId))
+  
   res.status(200).json({
     status: 'ok',
     code: 200,
+    data
   })
 }
 
