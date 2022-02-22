@@ -2,11 +2,11 @@ const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
 const { getConfig } = require("./config");
-const router = require("./routes/api/contacts");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const connectingDB = require("./db/db");
+const { authRouter } = require("./auth/auth.controller");
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
@@ -47,7 +47,7 @@ class ContactsServer {
   }
 
   initRoutes() {
-    this.app.use("/contacts", router);
+    this.app.use("/users/signup", authRouter);
   }
 
   initErrorHandling() {
