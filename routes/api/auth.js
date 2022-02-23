@@ -6,6 +6,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const gravatar = require("gravatar");
+
+
 const { SECRET_KEY } = process.env;
 
 // SIGNUP
@@ -23,7 +26,10 @@ router.post("/signup", async (req, res, next) => {
 		}
 		const salt = await bcrypt.genSalt(10);
 		const hashPassword = await bcrypt.hash(password, salt);
-		await User.create({ email, password: hashPassword });
+
+		const avatarURL = gravatar.url(email, { protocol: "https" });
+		await User.create({ email, avatarURL, password: hashPassword });
+
 		res.status(201).json({
 			user: {
 				email,
