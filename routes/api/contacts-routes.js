@@ -24,7 +24,6 @@ const contactsFavoriteScheme = Joi.object({
 // GET ALL
 router.get("/", authenticate, async (req, res, next) => {
 	try {
-
 		// let { page = 1, limit = 2 } = req.query;
 		// page = Number(page);
 		// limit = Number(limit);
@@ -52,11 +51,9 @@ router.get("/:contactId", authenticate, async (req, res, next) => {
 
 		const ownerId = req.user._id;
 
-
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
 			throw createError(400, "invalid ID");
 		}
-
 
 		const result = await Contact.findById({ _id: contactId, owner: ownerId });
 
@@ -123,7 +120,6 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
 			throw createError(400, "invalid ID");
 		}
 
-
 		const result = await Contact.findByIdAndUpdate(
 			{ _id: contactId, owner: ownerId },
 			req.body,
@@ -131,7 +127,6 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
 				new: true,
 			}
 		);
-
 
 		if (!result) {
 			throw createError(404, "Contact not found!");
@@ -158,8 +153,6 @@ router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
 			throw createError(400, "invalid ID");
 		}
 
-
-=======
 		const result = await Contact.findByIdAndUpdate(
 			{ _id: contactId, owner: ownerId },
 			req.body,
