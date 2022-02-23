@@ -4,7 +4,13 @@ const { contactSchema } = require('../../models')
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params
-  const data = await contactSchema.Contact.findByIdAndRemove(contactId)
+  const { id } = req.user
+  const data = await contactSchema.Contact.findOneAndRemove({
+    $and : [
+      {_id: contactId }, 
+      { owner: id }
+    ]
+  })
 
   if (!data){
     return next({ id: contactId, status: 404 })

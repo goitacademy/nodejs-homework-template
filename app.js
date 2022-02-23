@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const { sendError } = require('./middlewares')
 
-const contactsRouter = require('./routes/api/contacts')
+const {apiRouter} = require('./routes')
 
 const app = express()
 
@@ -16,7 +16,8 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use('/api/auth', apiRouter.authRouter)
+app.use('/api/contacts', apiRouter.contactsRouter)
 
 app.use(sendError)
 

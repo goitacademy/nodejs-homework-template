@@ -4,7 +4,16 @@ const { contactSchema } = require('../../models')
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params
-  const data = await contactSchema.Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+  const { id } = req.user
+  const data = await contactSchema.Contact.findOneAndUpdate(
+    {
+      $and : [
+        {_id: contactId }, 
+        { owner: id }
+      ]
+    },
+    req.body,
+    { new: true })
  
   if (!data){
     return next({ id: contactId, status: 404 })
