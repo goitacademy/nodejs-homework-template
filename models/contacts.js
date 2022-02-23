@@ -1,62 +1,66 @@
-const { randomUUID } = require('crypto')
-const DB = require('../db/adapterDB')
+const { randomUUID } = require("crypto");
+const DB = require("../db/adapterDB");
 
-const db = new DB('../db/contacts.json')
+const db = new DB("../db/contacts.json");
 
 const getContactsModel = async () => {
-  return await db.read()
-}
+  return await db.read();
+};
 
 const getContactByIdModel = async (contactId) => {
-  const contacts = await getContactsModel()
-  return contacts.find((el) => el.id === contactId)
-}
+  const contacts = await getContactsModel();
+  return contacts.find((el) => el.id === contactId);
+};
 
 const addContactModel = async (body) => {
-  const contacts = await getContactsModel()
-  const newContact = { id: randomUUID(), ...body }
-  contacts.push(newContact)
-  await db.write(contacts)
-  return newContact
-}
+  const contacts = await getContactsModel();
+  const newContact = { id: randomUUID(), ...body };
+  contacts.push(newContact);
+  await db.write(contacts);
+  return newContact;
+};
 
 const updateContactPutModel = async (contactId, body) => {
-  const contacts = await getContactsModel()
-  const contactIndex = contacts.findIndex((el) => el.id === contactId)
-  if (contactIndex === -1) return null
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
+  if (contactIndex === -1) return null;
   contacts[contactIndex] = {
-    id: contactId,
     ...contacts[contactIndex],
     ...body,
-  }
-  await db.write(contacts)
-  return contacts[contactIndex]
-}
+  };
+  await db.write(contacts);
+  return contacts[contactIndex];
+};
 
-const updateContactPatchModel = async (contactId, { name, email, phone }) => {
-  const contacts = await getContactsModel()
-  const contactIndex = contacts.findIndex((el) => el.id === contactId)
-  if (contactIndex === -1) return null
-  if (contacts[contactIndex].name !== name && name)
-    contacts[contactIndex].name = name
-  if (contacts[contactIndex].email !== email && email)
-    contacts[contactIndex].email = email
-  if (contacts[contactIndex].phone !== phone && phone)
-    contacts[contactIndex].phone = phone
-  await db.write(contacts)
-  return contacts[contactIndex]
-}
+const updateContactPatchModel = async (contactId, body) => {
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
+  if (contactIndex === -1) return null;
+  for (const keyPrev in contacts[contactIndex]) {
+    for (const key in body) {
+      if (
+        keyPrev === key &&
+        contacts[contactIndex][keyPrev] !== body[key] &&
+        body[key]
+      ) {
+        contacts[contactIndex][keyPrev] = body[key];
+      }
+    }
+  }
+  await db.write(contacts);
+  return contacts[contactIndex];
+};
 
 const deleteContactModel = async (contactId) => {
-  const contacts = await getContactsModel()
-  const contactIndex = contacts.findIndex((el) => el.id === contactId)
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
   if (contactIndex !== -1) {
-    const deleteContact = contacts.splice(contactIndex, 1)
-    await db.write(contacts)
-    return deleteContact
+    const deleteContact = contacts.splice(contactIndex, 1);
+    await db.write(contacts);
+    return deleteContact;
   }
-  return null
-}
+  return null;
+};
 
 module.exports = {
   getContactsModel,
@@ -65,4 +69,4 @@ module.exports = {
   updateContactPutModel,
   updateContactPatchModel,
   deleteContactModel,
-}
+};
