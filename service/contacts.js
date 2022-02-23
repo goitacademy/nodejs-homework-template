@@ -2,7 +2,7 @@ const { ContactsModel } = require("../contacts.model");
 
 const listContacts = async (req, res) => {
   try {
-    const contacts = await ContactsModel.find();
+    const contacts = await ContactsModel.find({ owner: req.user.id });
     res.json(contacts);
   } catch (error) {
     console.log(error.message);
@@ -33,7 +33,10 @@ const removeContact = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const newContact = await ContactsModel.create(req.body);
+    const newContact = await ContactsModel.create({
+      owner: req.user.id,
+      ...req.body,
+    });
     res.status(201).json(newContact);
   } catch (error) {
     console.log(error.message);
