@@ -11,6 +11,10 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
+// app.use((req, res, next) => {
+//   console.log(res)
+//   next()
+// })
 
 app.use('/api/contacts', contactsRouter)
 
