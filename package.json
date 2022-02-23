@@ -22,5 +22,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6)\r Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denis-tsibaev/nodejs-homework-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denis-tsibaev/nodejs-homework-rest-api/issues"
+  },
+  "homepage": "https://github.com/denis-tsibaev/nodejs-homework-rest-api#readme"
 }
