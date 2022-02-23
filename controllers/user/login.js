@@ -7,7 +7,8 @@ const { User } = require('../../models');
 const { signupValidator } = require('../../helpers').validators;
 const {
     badRequest,
-    wrongCredentials
+    wrongCredentials,
+    notVerify
 } = require('../../lib').HTTP_RESPONSES;
 
 const tokenTime = '1h';
@@ -25,6 +26,10 @@ const login = async (req, res, next) => {
         const user = await User.findOne({email});
 
         !user && next(createError(wrongCredentials.code, wrongCredentials.status));
+
+        if(!user.verify) {
+            next(createError(notVerify.code, notVerify.status))
+        }
 
         const compareResult = await bcrypt.compare(password, user.password);
 

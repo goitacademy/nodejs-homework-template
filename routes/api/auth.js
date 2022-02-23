@@ -8,8 +8,14 @@ const {
     login,
     logout,
     current,
-    avatars
+    avatars,
+    verify,
+    reVerify
 } = require('../../controllers').user;
+
+router.get('/verify/:verificationToken', verify)
+
+router.post('/verify/:verificationToken', reVerify)
 
 router.post('/signup', signUp)
 
