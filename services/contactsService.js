@@ -1,4 +1,4 @@
-const { Contact } = require("../db/contactModal");
+const { Contact } = require("../db/contactModel");
 const { WrongIdError } = require("../helpers/errors");
 
 const listContacts = async () => {

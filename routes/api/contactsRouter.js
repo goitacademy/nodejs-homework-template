@@ -6,7 +6,7 @@ const {
   putValidationContact,
   patchBodyValidation,
   patchValidationContact,
-} = require("../../middlewares/validation");
+} = require("../../middlewares/contactValidation");
 
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
@@ -19,23 +19,27 @@ const {
   removePostController,
 } = require("../../controllers/contactsController");
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get("/", asyncWrapper(getContactsController));
-router.get("/:contactId", asyncWrapper(getContactByIdController));
-router.post("/", postValidationContact, asyncWrapper(addPostController));
-router.put(
+contactsRouter.get("/", asyncWrapper(getContactsController));
+contactsRouter.get("/:contactId", asyncWrapper(getContactByIdController));
+contactsRouter.post(
+  "/",
+  postValidationContact,
+  asyncWrapper(addPostController)
+);
+contactsRouter.put(
   "/:contactId",
   putBodyValidation,
   putValidationContact,
   asyncWrapper(changePostController)
 );
-router.patch(
+contactsRouter.patch(
   "/:contactId/favorite",
   patchBodyValidation,
   patchValidationContact,
   asyncWrapper(patchPostController)
 );
-router.delete("/:contactId", asyncWrapper(removePostController));
+contactsRouter.delete("/:contactId", asyncWrapper(removePostController));
 
-module.exports = router;
+module.exports = contactsRouter;
