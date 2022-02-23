@@ -24,9 +24,11 @@ const contactsFavoriteScheme = Joi.object({
 // GET ALL
 router.get("/", authenticate, async (req, res, next) => {
 	try {
+
 		// let { page = 1, limit = 2 } = req.query;
 		// page = Number(page);
 		// limit = Number(limit);
+
 		// if (isNaN(page) || isNaN(limit)) {
 		// 	throw createError(400, "Page and limit must be a number");
 		// }
@@ -47,11 +49,17 @@ router.get("/", authenticate, async (req, res, next) => {
 router.get("/:contactId", authenticate, async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
+
+		const ownerId = req.user._id;
+
+
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
 			throw createError(400, "invalid ID");
 		}
 
-		const result = await Contact.findById(contactId);
+
+		const result = await Contact.findById({ _id: contactId, owner: ownerId });
+
 		if (!result) {
 			throw createError(404, "Contact not found!");
 		}
@@ -80,10 +88,16 @@ router.post("/", authenticate, async (req, res, next) => {
 router.delete("/:contactId", authenticate, async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
+
+		const ownerId = req.user._id;
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
 			throw createError(400, "invalid ID");
 		}
-		const result = await Contact.findByIdAndDelete(contactId);
+		const result = await Contact.findByIdAndDelete({
+			_id: contactId,
+			owner: ownerId,
+		});
+
 		if (!result) {
 			throw createError(404, "Contact not found!");
 		}
@@ -102,13 +116,22 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
 		}
 
 		const { contactId } = req.params;
+
+		const ownerId = req.user._id;
+
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
 			throw createError(400, "invalid ID");
 		}
 
-		const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-			new: true,
-		});
+
+		const result = await Contact.findByIdAndUpdate(
+			{ _id: contactId, owner: ownerId },
+			req.body,
+			{
+				new: true,
+			}
+		);
+
 
 		if (!result) {
 			throw createError(404, "Contact not found!");
@@ -128,13 +151,23 @@ router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
 		}
 
 		const { contactId } = req.params;
+
+		const ownerId = req.user._id;
+
 		if (!mongoose.Types.ObjectId.isValid(contactId)) {
 			throw createError(400, "invalid ID");
 		}
 
-		const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-			new: true,
-		});
+
+=======
+		const result = await Contact.findByIdAndUpdate(
+			{ _id: contactId, owner: ownerId },
+			req.body,
+			{
+				new: true,
+			}
+		);
+
 		if (!result) {
 			throw createError(404, "Contact not found");
 		}

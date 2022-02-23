@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { authenticate } = require("../../middlewares");
 const { User } = require("../../models/user");
+
 const { upload } = require("../../middlewares");
 const path = require("path");
 const fs = require("fs/promises");
@@ -16,11 +17,13 @@ router.get("/current", authenticate, async (req, res, next) => {
 });
 
 // USERS/LOGOUT
+
 router.get("/logout", authenticate, async (req, res, next) => {
 	const { _id } = req.user;
 	await User.findByIdAndUpdate(_id, { token: "" });
 	res.status(204).send();
 });
+
 
 // USERS/AVATARS
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
@@ -59,5 +62,6 @@ router.patch(
 		}
 	}
 );
+
 
 module.exports = router;
