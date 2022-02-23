@@ -1,12 +1,15 @@
-const DB = require("../../db/db");
-const db = new DB("../models/contacts.json");
+const contactMethod = require("../../models/contacts/index");
 
-const getContactById = async (contactId) => {
-  const contacts = await db.read();
-  const [contact] = contacts.filter((contact) => contact.id === contactId);
-  return contact;
+const { getContactById } = contactMethod.getContactById;
+
+const getByIdContact = async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId);
+  if (contact) {
+    return res.json({ status: "success", code: 200, payload: { contact } });
+  }
+  return res.json({ status: "error", code: 404, message: "Not Found" });
 };
 
 module.exports = {
-  getContactById,
+  getByIdContact,
 };

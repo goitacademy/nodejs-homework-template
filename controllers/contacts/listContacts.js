@@ -1,10 +1,12 @@
-const DB = require("../../db/db");
-const db = new DB("../models/contacts.json");
+const contactMethod = require("../../models/contacts/index");
 
-const listContacts = async () => {
-  return await db.read();
+const { listContacts } = contactMethod.listContacts;
+
+const getlistContacts = async (req, res, next) => {
+  const contacts = await listContacts();
+  res.json({ status: "success", code: 200, payload: { contacts } });
 };
 
 module.exports = {
-  listContacts,
+  getlistContacts,
 };

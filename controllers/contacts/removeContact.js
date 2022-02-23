@@ -1,17 +1,17 @@
-const DB = require("../../db/db");
-const db = new DB("../models/contacts.json");
+const contactMethod = require("../../models/contacts/index");
 
-const removeContact = async (contactId) => {
-  const contacts = await db.read();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    const [contact] = contacts.splice(index, 1);
-    await db.write(contacts);
-    return contact;
+const { removeContact } = contactMethod.removeContact;
+
+const delRemoveContact = async (req, res, next) => {
+  const contact = await removeContact(req.params.contactId);
+  if (contact) {
+    return res.json({ status: "success", code: 200, payload: { contact } });
   }
-  return null;
+  return res
+    .status(404)
+    .json({ status: "error", code: 404, message: "Not Found" });
 };
 
 module.exports = {
-  removeContact,
+  delRemoveContact,
 };
