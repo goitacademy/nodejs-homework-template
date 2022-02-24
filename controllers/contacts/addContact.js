@@ -8,7 +8,7 @@ const addContact = async (req, res, next) => {
       .status(201)
       .json({ status: 'success', code: 201, payload: { contact } });
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     next(error);
   }
 };
