@@ -8,6 +8,7 @@ connection
   .then(() => {
     console.log('Connecting to database...');
     app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
+    console.log('Database connection successful');
   })
   .catch(error => {
     console.error(`Server not running. Error message: ${error.message}`);
