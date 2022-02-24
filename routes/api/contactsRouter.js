@@ -10,6 +10,8 @@ const {
 
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
+const { tokenMiddleware } = require("../../middlewares/tokenMiddleware");
+
 const {
   getContactsController,
   getContactByIdController,
@@ -20,6 +22,8 @@ const {
 } = require("../../controllers/contactsController");
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(tokenMiddleware);
 
 contactsRouter.get("/", asyncWrapper(getContactsController));
 contactsRouter.get("/:contactId", asyncWrapper(getContactByIdController));

@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const { ValidationError, MissingBodyError } = require("../helpers/errors");
+const { ValidationError } = require("../helpers/errors");
 
 const patternName = /^[a-zA-Z0-9_ ]*$/;
 const paternPhone = /^[0-9()-_ ]*$/;
@@ -28,7 +28,7 @@ const postValidationContact = (req, res, next) => {
 
 const putBodyValidation = (req, res, next) => {
   if (!Object.keys(req.body).length) {
-    next(new MissingBodyError("missing fields"));
+    next(new ValidationError("missing fields"));
   }
 
   next();
@@ -57,7 +57,7 @@ const putValidationContact = (req, res, next) => {
 
 const patchBodyValidation = (req, res, next) => {
   if (!Object.keys(req.body).length) {
-    next(new MissingBodyError("missing field favorite"));
+    next(new ValidationError("missing field favorite"));
   }
 
   next();

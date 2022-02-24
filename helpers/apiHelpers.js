@@ -1,4 +1,9 @@
-const { ValidationError, WrongIdError, MissingBodyError } = require("./errors");
+const {
+  ValidationError,
+  WrongIdError,
+  DuplicationEmailError,
+  UnauthorizedError,
+} = require("./errors");
 
 const asyncWrapper = (controller) => {
   return (req, res, next) => {
@@ -10,7 +15,8 @@ const errorHandler = (error, req, res, next) => {
   if (
     error instanceof ValidationError ||
     error instanceof WrongIdError ||
-    error instanceof MissingBodyError
+    error instanceof DuplicationEmailError ||
+    error instanceof UnauthorizedError
   ) {
     return res.status(error.status).json({ message: error.message });
   }

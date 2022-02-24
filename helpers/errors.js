@@ -12,11 +12,23 @@ class WrongIdError extends Error {
   }
 }
 
-class MissingBodyError extends Error {
+class DuplicationEmailError extends Error {
   constructor(message) {
     super(message);
-    this.status = 400;
+    this.status = 409;
   }
 }
 
-module.exports = { ValidationError, WrongIdError, MissingBodyError };
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
+
+module.exports = {
+  ValidationError,
+  WrongIdError,
+  DuplicationEmailError,
+  UnauthorizedError,
+};
