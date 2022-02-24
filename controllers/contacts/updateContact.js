@@ -1,9 +1,10 @@
-const { gettingContactById } = require('../../models/contacts');
+const { updatingContact } = require('../../models/contacts');
 
-const getContactById = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
+    const { body } = req;
     const { contactId } = req.params;
-    const contact = await gettingContactById(contactId);
+    const contact = await updatingContact(contactId, body);
     if (contact) {
       return res
         .status(200)
@@ -21,4 +22,4 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-module.exports = getContactById;
+module.exports = updateContact;

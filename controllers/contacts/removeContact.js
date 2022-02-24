@@ -1,9 +1,9 @@
-const { gettingContactById } = require('../../models/contacts');
+const { removingContact } = require('../../models/contacts');
 
-const getContactById = async (req, res, next) => {
+const removeContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await gettingContactById(contactId);
+    const contact = await removingContact(contactId);
     if (contact) {
       return res
         .status(200)
@@ -21,4 +21,4 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-module.exports = getContactById;
+module.exports = removeContact;
