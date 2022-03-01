@@ -1,4 +1,4 @@
-const { updatingContact } = require('../../models/contacts');
+const Contact = require('../../models/contacts/schemaContact');
 
 const updateFavorite = async (req, res, next) => {
   try {
@@ -12,7 +12,11 @@ const updateFavorite = async (req, res, next) => {
     }
     const { favorite = false } = req.body;
     const { contactId } = req.params;
-    const contact = await updatingContact(contactId, { favorite });
+    const contact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { favorite },
+      { new: true },
+    );
     if (contact) {
       return res
         .status(200)

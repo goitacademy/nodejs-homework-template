@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { regexName, regexEmail, regexPhone } = require('../helpers/regex');
+const { regexName, regexEmail, regexPhone } = require('../../helpers/regex');
 
 const validateName = name => regexName.test(name);
 const validateEmail = email => regexEmail.test(email);

@@ -1,9 +1,9 @@
-const { gettingContactById } = require('../../models/contacts');
+const Contact = require('../../models/contacts/schemaContact');
 
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await gettingContactById(contactId);
+    const contact = await Contact.findOne({ _id: contactId });
     if (contact) {
       return res
         .status(200)
