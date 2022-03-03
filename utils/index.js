@@ -1,23 +1,17 @@
-const { addUniqueId, getField, jsonStringify } = require('./common');
-const { readContent, writeContent } = require('./content');
-const { isExistUser, isExistUserById } = require('./helpers');
-const { contactsPath, createPath } = require('./path');
-const { schemaValidatePOST, schemaValidatePUT } = require('./validates');
+const { schemaValidatePost, schemaValidatePut } = require('./schemes');
 const { messageStatusCode, paths, PORT } = require('./options');
+const { addUniqueId, status, answer } = require('./common');
+const { validatePost, validatePut } = require('../middleware');
 
 module.exports = {
-  addUniqueId,
-  getField,
-  jsonStringify,
-  readContent,
-  writeContent,
-  isExistUser,
-  isExistUserById,
-  contactsPath,
-  createPath,
-  schemaValidatePOST,
-  schemaValidatePUT,
+  schemaValidatePost,
+  schemaValidatePut,
   messageStatusCode,
+  validatePost,
+  addUniqueId,
+  validatePut,
+  status,
+  answer,
   paths,
   PORT,
 };

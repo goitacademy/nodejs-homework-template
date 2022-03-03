@@ -1,5 +1,5 @@
-const { jsonStringify } = require('./jsonStringify');
 const { addUniqueId } = require('./addUniqueId');
-const { getField } = require('./getField');
+const { answer } = require('./getObjAnswer');
+const { status } = require('./status');
 
-module.exports = { jsonStringify, addUniqueId, getField };
+module.exports = { status, addUniqueId, answer };

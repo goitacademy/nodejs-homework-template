@@ -1,82 +1,66 @@
 const express = require('express');
-const methods = require('../../models');
+
 const {
-  schemaValidatePOST,
-  schemaValidatePUT,
-  addUniqueId,
-  getField,
-  isExistUser,
-  isExistUserById,
+  status,
+  answer,
   messageStatusCode,
   paths,
+  schemaValidatePost,
+  schemaValidatePut,
 } = require('../../utils');
+const Contacts = require('../../models/contacts/contacts');
+const { validateBody } = require('../../middleware');
 
+const contacts = new Contacts();
 const router = express.Router();
 
 router.get(paths.main, async (req, res, next) => {
-  res.status(200).json(await methods.listContacts());
+  res.json(answer(status.success, 200, await contacts.listContacts()));
 });
 
 router.get(paths.contactId, async (req, res, next) => {
   const { id } = req.params;
-  const contact = await methods.getContactById(id);
-
+  const contact = await contacts.getContactById(id);
   if (contact) {
-    res.status(200).json(contact);
+    res.json(answer(status.success, 200, contact));
   } else {
-    res.status(404).json(messageStatusCode[404]);
+    res.status(404).json(answer(status.error, 404, messageStatusCode[404]));
   }
 });
 
-router.post(paths.main, async (req, res, next) => {
-  try {
-    const isValidBody = await schemaValidatePOST.validateAsync(req.body);
-    const contact = addUniqueId(isValidBody);
-    const isThisExistUser = await isExistUser(contact);
-    if (isThisExistUser) {
-      res.status(403).json(messageStatusCode[403]);
-    } else {
-      methods.addContact(contact);
-      res.status(201).json(contact);
-    }
-  } catch (error) {
-    const field = getField(error.message);
-    if (field) {
-      res
-        .status(400)
-        .json(messageStatusCode[400].missing_required.errorMessage(field));
-    } else {
-      res.status(400).json({ message: error.message });
-    }
+router.post(
+  paths.main,
+  validateBody(schemaValidatePost, answer, status),
+  async (req, res, next) => {
+    const contact = await contacts.addContact(req.body);
+    res.status(201).json(answer(status.error, 201, contact));
   }
-});
+);
 
 router.delete(paths.contactId, async (req, res, next) => {
   const { id } = req.params;
-
-  const isThisExistContact = await isExistUserById(id);
-  if (isThisExistContact) {
-    await methods.removeContact(id);
-    res.status(200).json(messageStatusCode[200]);
+  const contact = await contacts.removeContact(id);
+  if (contact) {
+    res.json(answer(status.success, 200, messageStatusCode[200]));
   } else {
-    res.status(404).json(messageStatusCode[404]);
+    res.status(404).json(answer(status.error, 404, messageStatusCode[404]));
   }
 });
 
-router.put(paths.contactId, async (req, res, next) => {
-  try {
+router.put(
+  paths.contactId,
+  validateBody(schemaValidatePut, answer, status),
+
+  async (req, res, next) => {
     const { id } = req.params;
-    await isExistUserById(id);
-    if (!Object.keys(req.body).length) {
-      res.status(400).json(messageStatusCode[400].missing_fields);
+    const { body } = req;
+    const contact = await contacts.updateContact(body, id);
+    if (contact) {
+      res.json(answer(status.success, 200, contact));
     } else {
-      const isValidBody = await schemaValidatePUT.validateAsync(req.body);
-      const updatingContact = await methods.updateContact(id, isValidBody);
-      res.status(200).json(updatingContact);
+      res.status(404).json(answer(status.error, 404, messageStatusCode[404]));
     }
-  } catch (error) {
-    res.status(404).json(messageStatusCode[404]);
   }
-});
+);
 
 module.exports = router;

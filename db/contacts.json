@@ -1,9 +1,9 @@
 [
   {
     "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
+    "name": "Cropp",
+    "email": "wer@gmail.com",
+    "phone": "+380665498877"
   },
   {
     "id": "2",
@@ -16,12 +16,6 @@
     "name": "Kennedy Lane",
     "email": "mattis.Cras@nonenimMauris.net",
     "phone": "(542) 451-7038"
-  },
-  {
-    "id": "4",
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
   },
   {
     "id": "5",
@@ -82,5 +76,23 @@
     "name": "HELPME",
     "email": "sparow@gmail.com",
     "phone": "0674587899"
+  },
+  {
+    "id": "9784bcdb-a566-4ed2-ab0e-34162266f3fc",
+    "name": "Liza",
+    "email": "liza.ann@gmail.com",
+    "phone": "+380632535537"
+  },
+  {
+    "id": "e702c862-06b8-4b92-a785-4f7ffb91dc3f",
+    "name": "Deskot",
+    "email": "Deskot.ann@gmail.com",
+    "phone": "+380637115537"
+  },
+  {
+    "id": "6ef2b7ce-4570-4cd7-b15c-edc63724c4cd",
+    "name": "Deskot",
+    "email": "Deskot.ann@gmail.com",
+    "phone": "+380667894511"
   }
 ]
