@@ -20,13 +20,13 @@ const joiUpdateContactSchema = Joi.object({
     .optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string().min(7).max(20).optional(),
-  favorite: Joi.bool().optional()
+  favorite: Joi.bool().optional(),
+  subscription: Joi.string().optional()
 
 })
 
 const joiUpdateContactFavoritsScheme = Joi.object({
   favorite: Joi.bool().required()
-
 })
 
 

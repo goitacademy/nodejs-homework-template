@@ -5,7 +5,17 @@ const { contactSchema } = require('../../models')
 const updateContactFavorites = async (req, res, next) => {
   const { contactId } = req.params
   const { favorite } = req.body
-  const data = await contactSchema.Contact.findByIdAndUpdate(contactId, { favorite }, { new: true })
+  const { id } = req.user
+  const data = await contactSchema.Contact.findOneAndUpdate(
+    {
+      $and : [
+        {_id: contactId }, 
+        { owner: id }
+      ]
+    }, 
+    { favorite }, 
+    { new: true }
+  )
  
   if (!data){
     return next({ id: contactId, status: 404 })

@@ -3,7 +3,11 @@ const { contactSchema } = require('../../models')
 
 
 const addContact = async (req, res, next) => {
-  const data = await contactSchema.Contact.create(req.body)
+  const { id } = req.user
+  const data = await contactSchema.Contact.create({
+    ...req.body, 
+    owner: id
+  })
   res.status(201).json({
     status: 'created',
     code: 201,
