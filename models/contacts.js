@@ -10,7 +10,6 @@ const listContacts = async () => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
-  console.log(parsedContacts);
   return {
     status: "success",
     code: 200,
@@ -25,8 +24,21 @@ const getContactById = async (contactId) => {
     if (err) throw err;
     return data;
   });
-  const contact = JSON.parse(contacts).find((e) => e.id === contactId);
-  return contact;
+  const parsedContacts = JSON.parse(contacts);
+  if (parsedContacts.find(({ id }) => id === contactId) !== undefined) {
+    const contact = parsedContacts.find((e) => e.id === contactId);
+    return {
+      status: "success",
+      code: 200,
+      data: contact,
+    };
+  } else {
+    return {
+      status: "error",
+      code: 404,
+      message: "Not found",
+    };
+  }
 };
 
 //
@@ -70,25 +82,37 @@ const addContact = async (body) => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
+  if (Object.entries(body).length < 3) {
+    return {
+      status: "error",
+      code: 400,
+      message: "Missing fields",
+    };
+  } else {
+    const { name, email, phone } = body;
+    const newContact = {
+      id: nanoid(),
+      name,
+      email,
+      phone,
+    };
 
-  const { name, email, phone } = body;
-  const newContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
-
-  const newContacts = [...parsedContacts, newContact];
-  fs.writeFile(
-    filePath,
-    JSON.stringify(newContacts, null, "\t"),
-    "utf8",
-    (err) => {
-      if (err) throw err;
-    }
-  );
-  return newContact;
+    const newContacts = [...parsedContacts, newContact];
+    fs.writeFile(
+      filePath,
+      JSON.stringify(newContacts, null, "\t"),
+      "utf8",
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    return {
+      status: "success",
+      code: 201,
+      message: "Contact added",
+      data: newContact,
+    };
+  }
 };
 
 //
@@ -103,15 +127,15 @@ const updateContact = async (contactId, body) => {
     }
   );
   const parsedContacts = JSON.parse(contacts);
-
-  const { name, email, phone } = body;
-  if (body === undefined || {}) {
+  console.log(Object.entries(body).length);
+  if (Object.entries(body).length === 0) {
     return {
       status: "error",
       code: 400,
       message: "Missing fields",
     };
   } else if (parsedContacts.find(({ id }) => id === contactId) !== undefined) {
+    const { name, email, phone } = body;
     const [updatedContact] = parsedContacts.filter(
       ({ id }) => id === contactId
     );
@@ -132,6 +156,7 @@ const updateContact = async (contactId, body) => {
     return {
       status: "success",
       code: 200,
+      message: "Contact updated",
       data: updatedContact,
     };
   } else {
