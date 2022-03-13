@@ -10,13 +10,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   listContacts()
-    .then((data) =>
-      res.json({
-        status: "success",
-        code: 200,
-        data,
-      })
-    )
+    .then((data) => res.json(data))
     .catch((err) => console.log(err));
 });
 
@@ -35,6 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
+
   addContact(body)
     .then((data) =>
       res.json({
@@ -48,25 +43,22 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  removeContact(contactId).then((message) => {
-    res.json({
-      status: "success",
-      code: 200,
-      message,
-    });
-  });
+  removeContact(contactId)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
-  updateContact(contactId, body).then((message) => {
-    res.json({
-      status: "success",
-      code: 200,
-      message,
-    });
-  });
+  console.log(body)
+  updateContact(contactId, body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
