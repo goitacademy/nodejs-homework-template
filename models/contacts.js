@@ -80,6 +80,14 @@ const addContact = async (body) => {
   });
   const parsedContacts = JSON.parse(contacts);
 
+  if (Object.entries(body).length < 3) {
+    return {
+      status: "error",
+      code: 404,
+      message: "All fields required!",
+    };
+  }
+
   const { name, email, phone } = body;
 
   const newContact = {
