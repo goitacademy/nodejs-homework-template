@@ -3,6 +3,7 @@ const {
   listContacts,
   getContactById,
   removeContact,
+  addContact,
 } = require("../../models/contacts.js");
 // const { jsonResponse } = require("../../utils/index.js");
 
@@ -24,7 +25,11 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const body = req.body;
+
+  addContact(body)
+    .then((data) => res.json(data))
+    .catch((err) => console.log(err));
 });
 
 router.delete("/:contactId", async (req, res, next) => {

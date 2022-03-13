@@ -80,6 +80,31 @@ const addContact = async (body) => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
+
+  const { name, email, phone } = body;
+
+  const newContact = {
+    id: nanoid(),
+    name,
+    email,
+    phone,
+  };
+
+  const newContacts = [...parsedContacts, newContact];
+  fs.writeFile(
+    filePath,
+    JSON.stringify(newContacts, null, "\t"),
+    "utf8",
+    (err) => {
+      if (err) throw err;
+    }
+  );
+  // return newContact;
+  return {
+    status: "success",
+    code: 201,
+    data: newContact,
+  };
 };
 
 const updateContact = async (contactId, body) => {};
