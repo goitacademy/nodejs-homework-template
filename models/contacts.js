@@ -116,27 +116,43 @@ const updateContact = async (contactId, body) => {
 
   const [contact] = parsedContacts.filter((el) => el.id === contactId);
 
-  // eslint-disable-next-line no-unused-expressions
-  name !== undefined ? (contact.name = name) : contact.name;
-  // eslint-disable-next-line no-unused-expressions
-  email !== undefined ? (contact.email = email) : contact.email;
-  // eslint-disable-next-line no-unused-expressions
-  phone !== undefined ? (contact.phone = phone) : contact.phone;
+  if (Object.entries(body).length === 0) {
+    console.log(body.length);
+    return {
+      status: "error",
+      code: 400,
+      message: "missing fields",
+    };
+  } else if (contact !== null) {
+    console.log(body.length);
+    // eslint-disable-next-line no-unused-expressions
+    name !== undefined ? (contact.name = name) : contact.name;
+    // eslint-disable-next-line no-unused-expressions
+    email !== undefined ? (contact.email = email) : contact.email;
+    // eslint-disable-next-line no-unused-expressions
+    phone !== undefined ? (contact.phone = phone) : contact.phone;
 
-  fs.writeFile(
-    filePath,
-    JSON.stringify(parsedContacts, null, "\t"),
-    "utf8",
-    (err) => {
-      if (err) throw err;
-    }
-  );
+    fs.writeFile(
+      filePath,
+      JSON.stringify(parsedContacts, null, "\t"),
+      "utf8",
+      (err) => {
+        if (err) throw err;
+      }
+    );
 
-  return {
-    status: "success",
-    code: 200,
-    data: parsedContacts,
-  };
+    return {
+      status: "success",
+      code: 200,
+      data: contact,
+    };
+  } else {
+    return {
+      status: "error",
+      code: 404,
+      message: "Not found",
+    };
+  }
 };
 
 module.exports = {
