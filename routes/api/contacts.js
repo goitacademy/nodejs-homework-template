@@ -4,8 +4,8 @@ const {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 } = require("../../models/contacts.js");
-// const { jsonResponse } = require("../../utils/index.js");
 
 const router = express.Router();
 
@@ -40,7 +40,12 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const body = req.body;
+
+  updateContact(contactId, body)
+    .then((data) => res.json(data))
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;

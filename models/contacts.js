@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-// const { json } = require("express");
 const path = require("path");
 const { nanoid } = require("nanoid");
 const filePath = path.join(__dirname, "contacts.json");
@@ -99,7 +98,6 @@ const addContact = async (body) => {
       if (err) throw err;
     }
   );
-  // return newContact;
   return {
     status: "success",
     code: 201,
@@ -107,7 +105,39 @@ const addContact = async (body) => {
   };
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) throw err;
+    return data;
+  });
+  const parsedContacts = JSON.parse(contacts);
+
+  const { name, email, phone } = body;
+
+  const [contact] = parsedContacts.filter((el) => el.id === contactId);
+
+  // eslint-disable-next-line no-unused-expressions
+  name !== undefined ? (contact.name = name) : contact.name;
+  // eslint-disable-next-line no-unused-expressions
+  email !== undefined ? (contact.email = email) : contact.email;
+  // eslint-disable-next-line no-unused-expressions
+  phone !== undefined ? (contact.phone = phone) : contact.phone;
+
+  fs.writeFile(
+    filePath,
+    JSON.stringify(parsedContacts, null, "\t"),
+    "utf8",
+    (err) => {
+      if (err) throw err;
+    }
+  );
+
+  return {
+    status: "success",
+    code: 200,
+    data: parsedContacts,
+  };
+};
 
 module.exports = {
   listContacts,
