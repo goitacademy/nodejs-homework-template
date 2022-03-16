@@ -72,12 +72,8 @@ router.put('/:id', async (req, res, next) => {
   }
 })
 
-router.path("/:id/favorite", async (req, res, next) => {
+router.patch("/:id/favorite", async (req, res, next) => {
   try {
-    // const {error} = joiSchema.validate(req.body)
-    //   if(error) {
-    //     throw new CreateError(400, "missing field favorite")
-    //   }
     const {id} = req.params
     const {favorite} = req.body
     const contactToUpdate = await Contact.findByIdAndUpdate(id, favorite, {new: true })
