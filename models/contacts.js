@@ -45,9 +45,27 @@ const removeContact = async (contactId) => {
   return newContacts
 }
 
-const addContact = async (body) => {}
+const addContact = async ({ name, email, phone }) => {
+  const contacts = await getJsonContacts()
+  const updatedContacts = [
+    ...contacts,
+    {
+      id: String(contacts.length + 1),
+      name,
+      email,
+      phone,
+    },
+  ]
 
-const updateContact = async (contactId, body) => {}
+  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts))
+
+  console.table(updatedContacts)
+  return updatedContacts
+}
+
+const updateContact = async (contactId, body) => {
+  const contacts = await getJsonContacts()
+}
 
 module.exports = {
   listContacts,
