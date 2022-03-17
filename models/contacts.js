@@ -1,3 +1,4 @@
+const res = require('express/lib/response')
 const fs = require('fs/promises')
 const contactsPath = './models/contacts.json'
 
@@ -31,7 +32,7 @@ const removeContact = async (contactId) => {
   const isInContacts = () =>
     contacts.find((contact) => Number(contact.id) === Number(contactId))
 
-  if (!isInContacts()) return
+  if (!isInContacts()) return 'Not found'
 
   await fs.writeFile(
     contactsPath,
@@ -40,31 +41,47 @@ const removeContact = async (contactId) => {
     )
   )
 
-  const newContacts = await getJsonContacts()
-  console.table(newContacts)
-  return newContacts
+  return 'contact deleted'
 }
 
 const addContact = async ({ name, email, phone }) => {
   const contacts = await getJsonContacts()
-  const updatedContacts = [
-    ...contacts,
-    {
-      id: String(contacts.length + 1),
-      name,
-      email,
-      phone,
-    },
-  ]
 
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts))
+  const newContact = {
+    id: String(contacts.length + 1),
+    name,
+    email,
+    phone,
+  }
 
-  console.table(updatedContacts)
-  return updatedContacts
+  fs.writeFile(contactsPath, JSON.stringify([...contacts, newContact]))
+
+  console.table(newContact)
+  return newContact
 }
 
 const updateContact = async (contactId, body) => {
   const contacts = await getJsonContacts()
+  let updated
+
+  const isInContacts = () =>
+    contacts.find((contact) => Number(contact.id) === Number(contactId))
+
+  if (!isInContacts()) return 'Not found'
+
+  fs.writeFile(
+    contactsPath,
+    JSON.stringify(
+      contacts.map((contact) => {
+        if (contact.id === contactId) {
+          updated = { ...contact, ...body }
+          return updated
+        }
+        return contact
+      })
+    )
+  )
+  return updated
 }
 
 module.exports = {
