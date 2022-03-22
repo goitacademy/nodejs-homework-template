@@ -5,10 +5,9 @@ const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
 const gravatar = require("gravatar");
-
-
+const { v4 } = require("uuid");
+const { sendMail } = require("../../helpers");
 const { SECRET_KEY } = process.env;
 
 // SIGNUP
@@ -26,9 +25,22 @@ router.post("/signup", async (req, res, next) => {
 		}
 		const salt = await bcrypt.genSalt(10);
 		const hashPassword = await bcrypt.hash(password, salt);
-
 		const avatarURL = gravatar.url(email, { protocol: "https" });
-		await User.create({ email, avatarURL, password: hashPassword });
+		const verificationToken = v4();
+		await User.create({
+			email,
+			avatarURL,
+			password: hashPassword,
+			verificationToken,
+		});
+
+		const mail = {
+			to: email,
+			subject: "Подтверждение email",
+			html: `<a target ="_blank" href='http://localhost:3000/api/users/${verificationToken}'>Нажмите чтобы подтвердить свой email</a>`,
+		};
+
+		await sendMail(mail);
 
 		res.status(201).json({
 			user: {
@@ -53,6 +65,11 @@ router.post("/login", async (req, res, next) => {
 		if (!user) {
 			throw createError(401, "Email or password is wrong");
 		}
+
+		if (!user.verify) {
+			throw createError(401, "Email is not verified");
+		}
+
 		const compareResult = await bcrypt.compare(password, user.password);
 		if (!compareResult) {
 			throw createError(401, "Email or password is wrong");
