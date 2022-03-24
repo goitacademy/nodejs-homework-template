@@ -1,15 +1,15 @@
 const express = require("express");
 const { contacts: ctrl } = require("../../controllers");
-const { validation, ctrlWrapper } = require("../../middlewars");
+const { validation, auth, ctrlWrapper } = require("../../middlewars");
 const { joiSchema, favoriteSchema } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.listContacts));
+router.get("/", auth, ctrlWrapper(ctrl.listContacts));
 
 router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 
-router.post("/", validation(joiSchema), ctrlWrapper(ctrl.addContact));
+router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.addContact));
 
 router.delete("/:contactId", ctrlWrapper(ctrl.removeContact));
 
