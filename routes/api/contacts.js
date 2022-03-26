@@ -1,22 +1,26 @@
 const express = require('express')
+const router = express.Router()
 const {
   getContactById,
   listContacts,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
-} = require('./../../models/contacts')
-const router = express.Router()
+} = require('./../../models/contacts-db')
 
 router.get('/', async (req, res, next) => {
-  const contacts = await listContacts()
-  res.json({ message: contacts })
+  res.json({ message: await listContacts() })
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  console.log('rqg', req.params.contactId)
   const contact = await getContactById(req.params.contactId)
-  res.json({ message: contact })
+  contact
+    ? res.json({ message: contact })
+    : res.status(404).json({
+        code: 404,
+        message: `Not found task id`,
+        data: 'Not Found',
+      })
 })
 
 router.post('/', async (req, res, next) => {
@@ -28,16 +32,43 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const status = await removeContact(req.params.contactId)
-  res.status(status === 'contact deleted' ? 200 : 404).json({ message: status })
+  const contact = await removeContact(req.params.contactId)
+  contact
+    ? res.json({ message: contact }).status(200)
+    : res.status(404).json({
+        code: 404,
+        message: `Not found task id`,
+        data: 'Not Found',
+      })
 })
 
 router.put('/:contactId', async (req, res, next) => {
   const { name, email, phone } = req.body
   if (!(name || email || phone))
     return res.status(400).json({ message: 'missing fields' })
+
   const contact = await updateContact(req.params.contactId, req.body)
-  res.status(contact === 'Not found' ? 404 : 200).json({ message: contact })
+
+  contact
+    ? res.json({ message: contact }).status(200)
+    : res.status(404).json({
+        code: 404,
+        message: `Not found `,
+      })
+})
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const { favorite } = req.body
+  if (!favorite)
+    return res.status(400).json({ message: 'missing required favorite field' })
+
+  const contact = await updateContact(req.params.contactId, req.body)
+  contact
+    ? res.json({ message: contact }).status(200)
+    : res.status(404).json({
+        code: 404,
+        message: `Not found `,
+      })
 })
 
 module.exports = router
