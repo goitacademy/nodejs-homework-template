@@ -8,8 +8,8 @@ class UsersService {
     }
 
     async create(body) {
-        const {email,subscription} = await Users.create(body);
-        return {email,subscription}
+        const {email,subscription,avatarURL} = await Users.create(body);
+        return {email,subscription,avatarURL}
     }
 
     async getUser(email, password) {
@@ -33,6 +33,7 @@ class UsersService {
         return await Users.updateToken(id,token);
     }
 
+
 }
 
-module.exports = UsersService;
+module.exports = new UsersService;

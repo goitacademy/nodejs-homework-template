@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 const logger = require('morgan')
 const {colors} = require('./helpers')
 const app = express();
-const connectDB = require('./config/db')
+const connectDB = require('./config/db');
+const fs = require('fs/promises')
 
  dotenv.config({path:'./config/.env'});
 
@@ -15,6 +16,8 @@ const connectDB = require('./config/db')
   
  // Parse Json
  app.use(express.json())
+ 
+app.use(express.static('public'))
 
  // Connect data-base
  connectDB();
@@ -30,7 +33,9 @@ const connectDB = require('./config/db')
  app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
   })
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
+  await fs.mkdir('tmp', {recursive:true},)
+
 console.log(`Server running. Use our API on port: ${PORT}` .red )
 })
 

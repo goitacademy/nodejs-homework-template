@@ -1,7 +1,6 @@
-const UsersService = require('../../services/users');
-const usersService = new UsersService();
+const usersService = require('../../services/users');
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
     try {
         const {email, password} = req.body;
         const user = await usersService.getUser(email,password);
@@ -16,7 +15,7 @@ const loginUser = async (req, res) => {
         return res.status(200).json({token:token, user:{email:Email,subscription}});
 
     } catch (error) {
-        res.status(400).json({message:error.message, code:400})
+        next(error)
     }
     
 }

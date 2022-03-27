@@ -8,6 +8,7 @@ const currentUser = require('./users/currentUser');
 const loginUser = require('./users/loginUser');
 const logoutUser = require('./users/logoutUser');
 const signupUser = require('./users/signupUser');
+const uploadAvatar = require('./users/uploadAvatar');
 
 module.exports = {addContact,getAllContacts,getContact,removeContact,updateContact,updateStatusContact,
-    currentUser, loginUser, logoutUser,signupUser}
+    currentUser, loginUser, logoutUser,signupUser, uploadAvatar}

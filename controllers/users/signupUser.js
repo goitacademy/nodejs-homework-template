@@ -1,7 +1,6 @@
-const UsersService = require('../../services/users');
-const usersService = new UsersService();
+const usersService = require('../../services/users');
 
-const signupUser = async (req, res) => {
+const signupUser = async (req, res, next) => {
     try {
         const {email} = req.body;
         const isUserExist = await usersService.isUserExist(email);
@@ -12,7 +11,7 @@ const signupUser = async (req, res) => {
         return res.status(201).json({user:user});
 
     } catch (error) {
-        res.status(400).json({message:error.message, code:400})
+        next(error)
     }
 }
 
