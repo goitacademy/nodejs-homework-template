@@ -30,7 +30,7 @@ router.delete('/:contactId', async (req, res, next) => {
    return res.status(404).json({status: 'eror', code: 404, massage: 'Not Faund'})
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validation(schemaCreateContact), async (req, res, next) => {
    const contacts = await contactsModel.updateContact(req.params.contactId, req.body)
    if (contacts) {
      return res.json({ status: 'success', code: 200, payload: {contacts} })
