@@ -1,8 +1,14 @@
 const {model,Schema} = require('mongoose');
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const { boolean } = require('joi');
 
 const userSchema = Schema({
+  name:{
+    type:String,
+    default: 'Guest'
+  },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -27,6 +33,15 @@ const userSchema = Schema({
         default:function() {
           return gravatar.url(this.email,{s:'250'}, true)
         }
+      },
+      isVerify:{
+        type:Boolean,
+        default:false
+      },
+      verifyTokenEmail:{
+        type:String,
+        required: [true, 'Verify token is required'],
+        default:crypto.randomUUID()
       }
 },
 {versionKey:false,timestamps:true}

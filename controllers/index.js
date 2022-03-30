@@ -9,6 +9,8 @@ const loginUser = require('./users/loginUser');
 const logoutUser = require('./users/logoutUser');
 const signupUser = require('./users/signupUser');
 const uploadAvatar = require('./users/uploadAvatar');
+const verifyUser = require('./users/verifyUser');
+const repeatVerifyUser = require('./users/repeatVerifyUser')
 
 module.exports = {addContact,getAllContacts,getContact,removeContact,updateContact,updateStatusContact,
-    currentUser, loginUser, logoutUser,signupUser, uploadAvatar}
+    currentUser, loginUser, logoutUser,signupUser, uploadAvatar, verifyUser,repeatVerifyUser}
