@@ -18,6 +18,7 @@ app.use(express.json())
 
 app.use('/api/auth', apiRouter.authRouter)
 app.use('/api/contacts', apiRouter.contactsRouter)
+app.use('/avatars', express.static('./public/avatars'))
 
 app.use(sendError)
 
