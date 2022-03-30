@@ -14,7 +14,7 @@ router.get('/:contactId', async (req, res, next) => {
    if (contacts) {
      return res.json({ status: 'success', code: 200, payload: {contacts} })
    }
-   return res.status(404).json({status: 'eror', code: 404, massage: 'Not Faund'})
+   return res.status(404).json({status: 'error', code: 404, message: 'Not Faund'})
 })
 
 router.post('/', validation(schemaCreateContact), async (req, res, next) => {
@@ -25,9 +25,9 @@ router.post('/', validation(schemaCreateContact), async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   const contacts = await contactsModel.removeContact(req.params.contactId)
    if (contacts) {
-     return res.json({ status: 'success', code: 200, payload: {contacts} })
+     return res.json({ status: 'success', code: 200, message: 'contact deleted', payload: {contacts} })
    }
-   return res.status(404).json({status: 'eror', code: 404, massage: 'Not Faund'})
+   return res.status(404).json({status: 'error', code: 404, message: 'Not found'})
 })
 
 router.put('/:contactId', validation(schemaCreateContact), async (req, res, next) => {
@@ -35,7 +35,7 @@ router.put('/:contactId', validation(schemaCreateContact), async (req, res, next
    if (contacts) {
      return res.json({ status: 'success', code: 200, payload: {contacts} })
    }
-   return res.status(404).json({status: 'eror', code: 404, massage: 'Not Faund'})
+   return res.status(404).json({status: 'error', code: 404, message: 'Not found'})
 })
 
 module.exports = router
