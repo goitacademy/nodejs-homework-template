@@ -1,7 +1,12 @@
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
+const Jimp = require("jimp");
 
 const { SECRET_KEY } = process.env;
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -11,13 +16,16 @@ const signUp = async (req, res) => {
       message: "Email in use",
     });
   }
-  const newUser = await User({ email });
+  const avatarURL = await gravatar.url(email);
+  await Jimp.read(avatarURL).then((image) => image.resize(250, 250));
+  const newUser = await User({ email, avatarURL });
   newUser.setPassword(password);
   await newUser.save();
   res.status(201).json({
     user: {
       email,
       subscription: "starter",
+      avatarURL,
     },
   });
 };
@@ -65,4 +73,21 @@ const currentUser = async (req, res) => {
     },
   });
 };
-module.exports = { signUp, login, logout, currentUser };
+
+const updateAvatar = async (req, res) => {
+  const { path: tmpUpload, originalname } = req.file;
+  const { _id: id } = req.user;
+  const imageName = `${id}_${originalname}`;
+  try {
+    const resultUpload = await path.join(avatarsDir, originalname);
+    await fs.rename(tmpUpload, resultUpload);
+    const avatarURL = path.join("public", "avatars", imageName);
+    // await Jimp.read(avatarURL).then((image) => image.resize(250, 250));
+    await User.findByIdAndUpdate(id, { avatarURL });
+    res.json({ avatarURL });
+  } catch (error) {
+    await fs.unlink(tmpUpload);
+    throw error;
+  }
+};
+module.exports = { signUp, login, logout, currentUser, updateAvatar };
