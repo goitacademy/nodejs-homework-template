@@ -4,7 +4,7 @@ const validate = (schema) => async (req, res, next) => {
         next()
         }    
     catch(err) {
-        return res.status(404).json({status: 'error', code: 404, message: err.message})
+        return res.status(404).json({status: 'eror', code: 404, message: err.message})
     }
 }
 
