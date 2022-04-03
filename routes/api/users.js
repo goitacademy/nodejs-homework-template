@@ -14,12 +14,14 @@ router.post('/login', async (req, res, next) => {
   const user = await User.findOne({ email })
 
   if (!user || !user.validPassword(password)) {
-    return res.status(400).json({
-      status: 'error',
-      code: 400,
-      message: 'Incorrect login or password',
-      data: 'Bad request',
-    })
+    return res
+      .json({
+        status: 'error',
+        code: 400,
+        message: 'Incorrect login or password',
+        data: 'Bad request',
+      })
+      .status(400)
   }
 
   const payload = {
@@ -45,25 +47,29 @@ router.post('/signup', async (req, res, next) => {
   const user = await User.findOne({ email })
 
   if (user) {
-    return res.status(409).json({
-      status: 'error',
-      code: 409,
-      message: 'Email is already in use',
-      data: 'Conflict',
-    })
+    return res
+      .json({
+        status: 'error',
+        code: 409,
+        message: 'Email is already in use',
+        data: 'Conflict',
+      })
+      .status(409)
   }
   try {
     const newUser = new User({ email })
 
     newUser.setPassword(password)
     await newUser.save()
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: {
-        message: 'Registration successful',
-      },
-    })
+    res
+      .json({
+        status: 'success',
+        code: 201,
+        data: {
+          message: 'Registration successful',
+        },
+      })
+      .status(201)
   } catch (error) {
     next(error)
   }
@@ -73,8 +79,6 @@ router.get('/logout', auth, async (req, res, next) => {
   const { _id: userId } = req.user
 
   await updateUserToken(userId, '')
-
-  console.log('isLog', isLog)
   res.json({
     status: 'success',
     code: 204,
@@ -88,8 +92,7 @@ router.get('/current', auth, async (req, res, next) => {
   const { _id: userId } = req.user
 
   const { email, subscription } = await getUserById(userId)
-
-  console.log('isLog', email, subscription)
+  
   res.json({
     status: 'success',
     code: 204,

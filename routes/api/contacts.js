@@ -31,7 +31,7 @@ router.post('/', auth, async (req, res, next) => {
   const { _id: owner } = req.user
 
   if (!(name && email && phone))
-    return res.status(404).json({ message: 'missing required name field' })
+    return res.json({ message: 'missing required name field' }).status(404)
 
   res.json({ message: await addContact({ ...req.body, owner }) }).status(200)
 })
@@ -54,7 +54,7 @@ router.put('/:contactId', auth, async (req, res, next) => {
   const { _id: owner } = req.user
 
   if (!(name || email || phone))
-    return res.status(400).json({ message: 'missing fields' })
+    return res.json({ message: 'missing fields' }).status(400)
 
   const contact = await updateContact(req.params.contactId, req.body, owner)
 
@@ -71,7 +71,7 @@ router.patch('/:contactId/favorite', auth, async (req, res, next) => {
   const { _id: owner } = req.user
 
   if (!favorite)
-    return res.status(404).json({ message: 'missing required favorite field' })
+    return res.json({ message: 'missing required favorite field' }).status(404)
 
   const contact = await updateContact(req.params.contactId, req.body, owner)
   contact
