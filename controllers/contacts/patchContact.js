@@ -1,8 +1,11 @@
-const { updateContact } = require("../../models/contacts");
+const { Contact } = require("../../models");
 
 const patchContact = async (req, res, next) => {
   try {
-    const contact = await updateContact(req.params.contactId, req.body);
+    const contact = await Contact.findByIdAndUpdate(
+      req.params.contactId,
+      req.body
+    );
     if (contact) {
       return res
         .status(200)
