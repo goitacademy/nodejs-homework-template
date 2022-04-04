@@ -21,14 +21,14 @@
 // };
 
 const { ObjectId } = require("mongodb");
+const DB = require("../../db/db");
 const { getCollection } = require("./listContacts");
-const { DB } = require("../../db/db");
 
 const updateContact = async (contactId, body) => {
   const collection = await getCollection(DB, "contacts");
   const objId = new ObjectId(contactId);
   console.log(objId);
-  const { vlue: result } = await collection.findOneAndUpdate(
+  const { value: result } = await collection.findOneAndUpdate(
     { _id: objId },
     { $set: body },
     { returnDocument: "after" }
