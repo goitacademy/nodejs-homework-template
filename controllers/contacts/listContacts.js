@@ -1,11 +1,10 @@
 const contactMethod = require("../../models/contacts/index");
 
 const { listContacts } = contactMethod.listContacts;
-const db = require("../../db/db");
-const getlistContacts = async (req, res, next) => {
-  console.table(db);
 
+const getlistContacts = async (req, res, next) => {
   const contacts = await listContacts();
+  console.log(contacts);
   res.json({ status: "success", code: 200, payload: { contacts } });
 };
 
