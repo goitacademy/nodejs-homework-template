@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "hw02-express",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.6.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {
