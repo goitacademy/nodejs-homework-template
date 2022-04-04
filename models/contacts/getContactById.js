@@ -9,13 +9,16 @@
 // module.exports = {
 //   getContactById,
 // };
-const { ObjectId } = require("mongodb");
-const { getCollection } = require("./listContacts.js");
 
-const { DB } = require("../../db/db.js");
+const { ObjectId } = require("mongodb");
+const { getCollection } = require("./listContacts");
+const { DB } = require("../../db/db");
+
 async function getContactById(contactId) {
   const collection = await getCollection(DB, "contacts");
-  const objId = 
+  const objId = new ObjectId(contactId);
+  const { value: result } = await collection.findOne({ _id: objId });
+  return result;
 }
 module.exports = {
   getContactById,

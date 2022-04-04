@@ -6,7 +6,7 @@ const addContact = async (body) => {
     ...body,
   };
   const result = await collection.insertOne(newContact);
-  return result;
+  return await collection.findOne({ _id: result.insertedId });
 };
 
 module.exports = {

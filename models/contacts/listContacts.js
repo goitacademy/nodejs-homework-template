@@ -6,12 +6,12 @@ const getCollection = async (db, nameCollection) => {
   return collection;
 };
 
-async function listContacts() {
+const listContacts = async () => {
   const collection = await getCollection(DB, "contacts");
-  const contacts = await collection.find({}).toArray();
-  console.log(collection);
-  return contacts;
-}
+  const result = await collection.find().toArray();
+  console.log(result);
+  return result;
+};
 
 module.exports = {
   listContacts,
