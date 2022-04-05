@@ -20,19 +20,21 @@
 //   updateContact,
 // };
 
-const { ObjectId } = require("mongodb");
 const DB = require("../../db/db");
+const { ObjectId } = require("mongodb");
 const { getCollection } = require("./listContacts");
-
 const updateContact = async (contactId, body) => {
   const collection = await getCollection(DB, "contacts");
+  console.log(collection);
+
   const objId = new ObjectId(contactId);
   console.log(objId);
-  const { value: result } = await collection.findOneAndUpdate(
+
+  const { value: result } = await collection.updateOne(
     { _id: objId },
-    { $set: body },
-    { returnDocument: "after" }
+    { $set: body }
   );
+
   return result;
 };
 

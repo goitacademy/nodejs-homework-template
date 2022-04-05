@@ -1,6 +1,5 @@
 const app = require("./app");
 const db = require("./db/db");
-// require("dotenv").config();
 
 db.then(() => {
   console.log("Connected to db");

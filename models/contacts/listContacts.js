@@ -9,7 +9,7 @@ const getCollection = async (db, nameCollection) => {
 const listContacts = async () => {
   const collection = await getCollection(DB, "contacts");
   const result = await collection.find().toArray();
-  console.log(result);
+
   return result;
 };
 

@@ -9,6 +9,11 @@ const {
   updateContactControl,
 } = require("../../controllers/contacts/index");
 
+const { validateBody } = require("../../middleware/validation");
+const {
+  schemaCreateContact,
+} = require("../../schemas/contacts-validation-schems");
+
 const { getlistContacts } = listContactsControl;
 const { getByIdContact } = getByIdContactControl;
 const { postAddContact } = postAddContactControl;
@@ -20,7 +25,7 @@ router.get("/", getlistContacts);
 
 router.get("/:contactId", getByIdContact);
 
-router.post("/", postAddContact);
+router.post("/", [validateBody(schemaCreateContact)], postAddContact);
 
 router.delete("/:contactId", delRemoveContact);
 
