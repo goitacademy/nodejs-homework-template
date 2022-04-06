@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const Joi = require('joi')
+const Joi = require('joi');
 
 const contactSchema = Schema({
     name: {
@@ -16,10 +16,15 @@ const contactSchema = Schema({
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
   }, {
     versionKey: false,
     timeStamp: true,
-})
+    
+});
 
 const joiContactSchema = Joi.object({
     name: Joi.string()
@@ -39,18 +44,19 @@ const joiContactSchema = Joi.object({
         .messages({
         'any.required': 'missing required phone field'
         }),
-    favorite: Joi.boolean()
-})
+    favorite: Joi.boolean(),
+    
+});
 
 const joiFavoriteSchema = Joi.object({
   favorite: Joi.boolean()
     .required(),
-})
+});
 
-const Contact = model('contacts', contactSchema);
+const Contact = model('contact', contactSchema);
 
 module.exports = {
     Contact,
     joiContactSchema,
     joiFavoriteSchema,
-}
+};
