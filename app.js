@@ -1,6 +1,13 @@
+// aYaeu4mnDd8J7yM2
+
+// mongodb+srv://Dima:aYaeu4mnDd8J7yM2@cluster0.spyu3.mongodb.net/test
+
+// mongodb+srv://Dima:aYaeu4mnDd8J7yM2@cluster0.spyu3.mongodb.net/phone_book?retryWrites=true&w=majority
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config();
 
 const contactsRouter = require('./routes/api/contacts')
 
