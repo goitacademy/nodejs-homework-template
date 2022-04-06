@@ -1,63 +1,25 @@
 const express = require("express");
-const contactModel = require("../../models/contacts");
-const {
-  schemaCreateContact,
-  schemaUpdateContact,
-} = require("./schemaValidations.js");
-const { validateBody } = require("../../middlewares/validation");
+
+const { validation, ctrlWrapper } = require("../../middlewares");
+const { joiSchema, statusJoiSchema } = require("../../models/contact");
+const { contacts: ctrl } = require("../../controllers");
+
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await contactModel.listContacts();
-  res.json({ status: "success", code: 200, payload: { contacts } });
-});
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", async (req, res, next) => {
-  const contact = await contactModel.getContactById(req.params.contactId);
-  if (contact) {
-    return res.json({ status: "success", code: 200, payload: { contact } });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
-});
+router.get("/:id", ctrlWrapper(ctrl.getById));
 
-router.post("/", validateBody(schemaCreateContact), async (req, res, next) => {
-  const contact = await contactModel.addContact(req.body);
-  res.status(201).json({ status: "success", code: 201, payload: { contact } });
-});
+router.post("/", validation(joiSchema), ctrlWrapper(ctrl.add));
 
-router.delete("/:contactId", async (req, res, next) => {
-  const contact = await contactModel.removeContact(req.params.contactId);
-  if (contact) {
-    return res.json({
-      status: "success",
-      code: 200,
-      payload: { contact },
-      message: "contact deleted",
-    });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
-});
+router.put("/:id", validation(joiSchema), ctrlWrapper(ctrl.updateById));
 
-router.put(
-  "/:contactId",
-  validateBody(schemaUpdateContact),
-  async (req, res, next) => {
-    const contact = await contactModel.updateContact(
-      req.params.contactId,
-      req.body
-    );
-
-    if (contact) {
-      return res.json({ status: "success", code: 200, payload: { contact } });
-    }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not found" });
-  }
+router.patch(
+  "/:id/favorite",
+  validation(statusJoiSchema),
+  ctrlWrapper(ctrl.updateStatus)
 );
+
+router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
