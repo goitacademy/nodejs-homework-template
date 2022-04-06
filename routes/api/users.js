@@ -13,6 +13,10 @@ router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 
 router.get("/current", auth, ctrlWrapper(ctrl.currentUser));
 
+router.get("/verify/:verifycationToken", ctrlWrapper(ctrl.verification));
+
+router.post("/verify", validation(joiSchema), ctrlWrapper(ctrl.reVerification));
+
 router.patch(
   "/avatars",
   auth,
