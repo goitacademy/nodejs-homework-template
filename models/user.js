@@ -23,12 +23,8 @@ const userSchema = Schema ({
 });
 
 const joiUserSchema = Joi.object({
-    password: Joi.string().required().message({
-        'any.required': 'missing required password field'
-    }),
-    email: Joi.string().required().message({
-        'any.required': 'missing required email field'
-    }),
+    password: Joi.string().required(),
+    email: Joi.string().required(),
     subscription: Joi.string(),
     token: Joi.string(),
 })
@@ -37,5 +33,5 @@ const User = model('user', userSchema);
 
 module.exports = {
     User,
-    joiUserSchema,
+    joiUserSchema
 }
