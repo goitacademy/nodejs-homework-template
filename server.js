@@ -1,5 +1,5 @@
 const app = require("./app");
-const db = require("./db/db");
+const db = require("./config/db");
 
 db.then(() => {
   console.log("Connected to db");
