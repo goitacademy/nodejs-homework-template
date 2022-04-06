@@ -6,17 +6,6 @@
 //   return collection;
 // };
 
-// const listContacts = async () => {
-//   const collection = await getCollection(DB, "contacts");
-//   const result = await collection.find().toArray();
-
-//   return result;
-// };
-
-// module.exports = {
-//   listContacts,
-//   getCollection,
-// };
 const Contact = require("../models/contacts");
 const listContacts = async () => {
   const result = await Contact.find();
