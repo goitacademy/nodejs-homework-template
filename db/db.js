@@ -1,5 +1,5 @@
-const fs = require('fs/promises')
-const {join} = require('path')
+const fs = require('fs/promises');
+const { join } = require('path');
 
 class FileAdapter {
     constructor(file) {
