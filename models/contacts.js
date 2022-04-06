@@ -13,3 +13,5 @@ const blogSchema = new Schema({
     favs: Number,
   },
 });
+
+module.export = blogSchema;

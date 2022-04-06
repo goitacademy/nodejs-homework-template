@@ -20,7 +20,7 @@
 //   updateContact,
 // };
 
-const DB = require("../../db/db");
+const DB = require("../config/db");
 const { ObjectId } = require("mongodb");
 const { getCollection } = require("./listContacts");
 const updateContact = async (contactId, body) => {

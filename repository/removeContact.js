@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const DB = require("../../config/db");
+const DB = require("../config/db");
 const { getCollection } = require("./listContacts");
 
 const removeContact = async (contactId) => {

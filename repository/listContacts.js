@@ -1,4 +1,4 @@
-const DB = require("../../config/db");
+const DB = require("../config/db");
 
 const getCollection = async (db, nameCollection) => {
   const client = await db;

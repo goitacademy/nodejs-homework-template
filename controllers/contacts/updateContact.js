@@ -1,4 +1,4 @@
-const contactMethod = require("../../repository/index");
+const contactMethod = require("../repository/index");
 
 const { updateContact } = contactMethod.updateContact;
 
