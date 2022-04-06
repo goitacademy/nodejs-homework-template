@@ -6,7 +6,6 @@ const updateContact = async (contactId, body) => {
     { ...body },
     { new: true }
   );
-  console.log(result);
 
   return result;
 };
