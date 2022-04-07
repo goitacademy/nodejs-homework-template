@@ -2,7 +2,7 @@ const { UserModel } = require("../db/users.model");
 const {Conflict, NotFound, Forbidden} = require('http-errors');
 const bcryptjs = require("bcryptjs");
 const {getConfig }= require('../config');
-const res = require("express/lib/response");
+// const res = require("express/lib/response");
 const jwt = require ('jsonwebtoken')
 
 
@@ -13,7 +13,7 @@ const existingUser = await UserModel.findOne({email})
 
 if(!!existingUser) {
     // res.status(409).send("Email in use")
-    throw new Conflict('Email  in use')
+    throw new Conflict('Email in use')
 }
 
 const {bcryptCostFactor} = getConfig();
