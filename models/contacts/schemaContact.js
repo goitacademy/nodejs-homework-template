@@ -1,20 +1,24 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema, model } = require('mongoose');
 const { regexName, regexEmail, regexPhone } = require('../../helpers/regex');
+const {
+  CONTACT_NAME_LIMIT,
+  CONTACT_EMAIL_LIMIT,
+  CONTACT_PHONE_LIMIT,
+} = require('../../helpers/constants');
 
 const validateName = name => regexName.test(name);
 const validateEmail = email => regexEmail.test(email);
 const validatePhone = phone => regexPhone.test(phone);
 
-const contactMongooseSchema = new Schema(
+const contactMongooseSchema = Schema(
   {
     name: {
       type: String,
       trim: true,
       lowercase: true,
-      minlength: 1,
-      maxlength: 50,
-      required: [true, 'Name field is required'],
+      minlength: CONTACT_NAME_LIMIT.MIN,
+      maxlength: CONTACT_NAME_LIMIT.MAX,
+      required: [true, 'Name is required'],
       validate: [validateName, 'Please fill a valid name'],
       match: [regexName, 'Please fill a valid name'],
     },
@@ -23,30 +27,35 @@ const contactMongooseSchema = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      minlength: 5,
-      maxlength: 100,
-      required: [true, 'Email field is required'],
+      minlength: CONTACT_EMAIL_LIMIT.MIN,
+      maxlength: CONTACT_EMAIL_LIMIT.MAX,
+      required: [true, 'Email is required'],
       validate: [validateEmail, 'Please fill a valid email address'],
       match: [regexEmail, 'Please fill a valid email address'],
       unique: true,
     },
     phone: {
       type: String,
-      minlength: 7,
-      maxlength: 30,
-      required: [true, 'Phone field is required'],
+      minlength: CONTACT_PHONE_LIMIT.MIN,
+      maxlength: CONTACT_PHONE_LIMIT.MAX,
+      required: [true, 'Phone is required'],
       validate: [validatePhone, 'Please fill a valid phone number'],
       match: [regexPhone, 'Please fill a valid phone number'],
     },
     favorite: {
       type: Boolean,
-      required: [false, "Favorite field isn't required"],
+      required: [false, "Favorite isn't required"],
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: [true, 'Owner is required'],
     },
   },
   { versionKey: false, timestamps: true },
 );
 
-const Contact = mongoose.model('contact', contactMongooseSchema);
+const Contact = model('contact', contactMongooseSchema);
 
 module.exports = Contact;

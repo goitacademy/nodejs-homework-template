@@ -1,15 +1,21 @@
-const Contact = require('../../models/contacts/schemaContact');
+const { Contact } = require('../../models');
+const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
 
-const getContacts = async (req, res, next) => {
-  try {
-    const contacts = await Contact.find({});
-    res
-      .status(200)
-      .json({ status: 'success', code: 200, payload: { contacts } });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
+const getContacts = async (req, res) => {
+  const { _id } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const contacts = await Contact.find({ owner: _id }, '', {
+    skip,
+    limit: Number(limit),
+  }).populate('owner', '_id name email');
+
+  res.status(HTTP_STATUS_CODE.OK).json({
+    status: STATUS.SUCCESS,
+    code: HTTP_STATUS_CODE.OK,
+    payload: { contacts },
+  });
 };
 
 module.exports = getContacts;

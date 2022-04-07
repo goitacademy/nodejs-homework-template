@@ -1,37 +1,37 @@
-const Contact = require('../../models/contacts/schemaContact');
+const { Contact } = require('../../models');
+const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
 
-const updateFavorite = async (req, res, next) => {
-  try {
-    if (req.body.favorite === undefined) {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: "Missing field favorite. {'favorite': boolean }",
-        payload: 'Missing field favorite',
-      });
-    }
-    const { favorite = false } = req.body;
-    const { contactId } = req.params;
-    const contact = await Contact.findByIdAndUpdate(
-      { _id: contactId },
-      { favorite },
-      { new: true },
-    );
-    if (contact) {
-      return res
-        .status(200)
-        .json({ status: 'success', code: 200, payload: { favorite } });
-    }
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
+const updateFavorite = async (req, res) => {
+  if (req.body.favorite === undefined) {
+    return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS.ERROR,
+      code: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "Missing field favorite. {'favorite': boolean }",
+      payload: 'Missing field favorite',
+    });
+  }
+  const { favorite = false } = req.body;
+  const { contactId } = req.params;
+  const contact = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { favorite },
+    { new: true },
+  ).populate('owner', '_id name email');
+
+  if (!contact) {
+    return res.status(HTTP_STATUS_CODE.NOT_FOUND).json({
+      status: STATUS.ERROR,
+      code: HTTP_STATUS_CODE.NOT_FOUND,
       message: `Not found contact by id:${contactId}`,
       payload: 'Not Found',
     });
-  } catch (error) {
-    console.error(error);
-    next(error);
   }
+
+  return res.status(HTTP_STATUS_CODE.OK).json({
+    status: STATUS.SUCCESS,
+    code: HTTP_STATUS_CODE.OK,
+    payload: { favorite },
+  });
 };
 
 module.exports = updateFavorite;
