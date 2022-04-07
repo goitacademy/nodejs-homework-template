@@ -1,7 +1,7 @@
 const { User } = require('../../models');
-const { Conflict } = require("http-error");
+const {Conflict} = require("http-errors");
 const bcrypt = require('bcrypt');
-console.log(Conflict)
+
 
 const signUp = async (req, res) => {
 
