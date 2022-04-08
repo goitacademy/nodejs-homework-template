@@ -1,10 +1,10 @@
 const express = require("express");
-const { authorize } = require("../../middlewares/authorize.middleware");
+const { authorize } = require("../../../middlewares/authorize.middleware");
 const {
   addContactValid,
   validatePatch,
   validatePut,
-} = require("../../middlewares/validator");
+} = require("../../../middlewares/validator");
 
 const {
   listContacts,
