@@ -17,6 +17,8 @@ exports.authorize=(...permissions)=>{
    
    const token = authHeader.replace('Bearer ', '');
 
+   console.log('token', token)
+
    let payload;
    const config = getConfig();
 

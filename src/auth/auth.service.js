@@ -6,14 +6,15 @@ const {getConfig }= require('../config');
 const jwt = require ('jsonwebtoken')
 
 
-const singUp = async (userParams)=> {
+const signUp = async (userParams, res)=> {
     
     const {username, email, password}= userParams;
 const existingUser = await UserModel.findOne({email})
 
 if(!!existingUser) {
-    // res.status(409).send("Email in use")
-    throw new Conflict('Email in use')
+    
+    res.status(409).json({ message: "Email in use" });
+    // throw new Conflict('Email in use')
 }
 
 const {bcryptCostFactor} = getConfig();
@@ -50,6 +51,6 @@ const createToken = (user) => {
 }
 
 module.exports ={
-    singUp,
+    signUp,
     signIn
 }

@@ -1,4 +1,5 @@
 const express = require("express");
+const { authorize } = require("../../middlewares/authorize.middleware");
 const {
   addContactValid,
   validatePatch,
@@ -16,11 +17,11 @@ const {
 
 const router = express.Router();
 
-router.get("/", listContacts);
-router.get("/:contactId", getContactById);
-router.post("/", addContactValid, addContact);
-router.delete("/:contactId", removeContact);
-router.put("/:contactId", validatePut, updateContact);
-router.patch("/:contactId", validatePatch, updateStatusContact);
+router.get("/", authorize(), listContacts);
+router.get("/:contactId",authorize(), getContactById);
+router.post("/", authorize(), addContactValid, addContact);
+router.delete("/:contactId",authorize(), removeContact);
+router.put("/:contactId", authorize(),validatePut, updateContact);
+router.patch("/:contactId",authorize(), validatePatch, updateStatusContact);
 
 module.exports = router;
