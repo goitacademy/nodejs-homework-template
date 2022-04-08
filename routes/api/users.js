@@ -1,7 +1,7 @@
 const express = require("express");
 const { users: ctrl } = require("../../controllers");
 const { validation, ctrlWrapper, auth, upload } = require("../../middlewars");
-const { joiSchema } = require("../../models/user");
+const { joiSchema, emailJoiSchema } = require("../../models/user");
 
 const router = express.Router();
 
@@ -15,7 +15,11 @@ router.get("/current", auth, ctrlWrapper(ctrl.currentUser));
 
 router.get("/verify/:verifycationToken", ctrlWrapper(ctrl.verification));
 
-router.post("/verify", validation(joiSchema), ctrlWrapper(ctrl.reVerification));
+router.post(
+  "/verify",
+  validation(emailJoiSchema),
+  ctrlWrapper(ctrl.reVerification)
+);
 
 router.patch(
   "/avatars",

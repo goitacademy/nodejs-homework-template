@@ -5,13 +5,11 @@ const fs = require("fs/promises");
 const path = require("path");
 const Jimp = require("jimp");
 const { NotFound } = require("http-errors");
-const sgMail = require("@sendgrid/mail");
 const { nanoid } = require("nanoid");
+const transporter = require("../helpers/nodemailer");
 
-const { SECRET_KEY, SENDGRID_API_KEY } = process.env;
+const { SECRET_KEY } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
-
-sgMail.setApiKey(SENDGRID_API_KEY);
 
 const signUp = async (req, res) => {
   try {
@@ -29,12 +27,12 @@ const signUp = async (req, res) => {
     await newUser.save();
     const mail = {
       to: email,
-      from: "shopoff98@gmail.com",
+      from: "shopoff98@meta.ua",
       subject: "Подтверждение email",
       html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердить email</a>`,
     };
 
-    await sgMail.send(mail);
+    await transporter.sendMail(mail);
 
     res.status(201).json({
       user: {
@@ -56,7 +54,7 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user || !user.verify || !user.comparePassword(password)) {
     res.status(409).json({
-      message: "Email or password is wrong",
+      message: "Email or password is wrong, or user unverify",
     });
   }
   const payload = await {
@@ -135,18 +133,17 @@ const reVerification = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    const verificationToken = nanoid();
     if (user.verify) {
       res.status(400).json({ message: "Verification has already been passed" });
     }
     const mail = {
       to: email,
-      from: "shopoff98@gmail.com",
+      from: "shopoff98@meta.ua",
       subject: "Подтверждение email",
-      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердить email</a>`,
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationToken}">Подтвердить email</a>`,
     };
 
-    await sgMail.send(mail);
+    await transporter.sendMail(mail);
 
     res.json({ message: "Verification email sent" });
   } catch (error) {
