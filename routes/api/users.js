@@ -8,6 +8,6 @@ const usersControllers = require('../../controllers/users');
 const router = express.Router();
 
 router.post('/signup', validateBody(joiUserSchema), ctrlWrapper(usersControllers.signup));
-router.post('/users/login', ctrlWrapper(usersControllers.login))
+router.post('/login', ctrlWrapper(usersControllers.login))
 
 module.exports = router;
