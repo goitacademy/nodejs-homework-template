@@ -1,6 +1,8 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const helmet = require('helmet');
+const limiter = require('./middlewares/rateLimit');
 
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
@@ -12,6 +14,8 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+app.use(limiter(15 * 60 * 1000, 100)); // 15 minutes
+app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
