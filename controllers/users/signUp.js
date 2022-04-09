@@ -9,7 +9,7 @@ const signUp = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) {
-        throw new Conflict("Email in use");
+        res.status(409).json({ message: "Email in use" });
     };
 
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
