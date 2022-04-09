@@ -7,7 +7,7 @@ const patchFavorite = async (req, res, next) => {
   if (!updatedContact) {
     res.status(404).json({ status: "error", code:404, message: "Not found"})
   }
-  res.json({ status: "success", code: 200, payload: updatedContact });
+  res.json({ status: "success", code: 200, data: updatedContact });
 }
 
 module.exports = patchFavorite;
