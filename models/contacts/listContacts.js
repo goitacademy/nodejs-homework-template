@@ -1,4 +1,4 @@
-const DB = require("../db");
+const DB = require("../../db/db.js");
 const db = new DB("contacts.json");
 
 const listContacts = async () => {

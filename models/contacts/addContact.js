@@ -1,5 +1,5 @@
 const { randomUUID } = require("crypto");
-const DB = require("../db");
+const DB = require("../../db/db.js");
 const db = new DB("contacts.json");
 
 const addContact = async (body) => {

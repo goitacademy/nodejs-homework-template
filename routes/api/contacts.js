@@ -1,66 +1,21 @@
 const express = require("express");
-const contactsModel = require("../../models/contactsModel");
-const { contactSchema } = require("./contacts-validation-schemes");
+const contactsControllers = require("../../controllers/contacts");
+const { contactSchema } = require("../../schemas/contacts-validation-schemes");
 const { validateBody } = require("../../middlewares/validation");
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await contactsModel.listContacts();
+router.get("/", contactsControllers.listContacts);
 
-  res.json({ status: "success", code: 200, payload: { contacts } });
-});
+router.get("/:contactId", contactsControllers.getContactById);
 
-router.get("/:contactId", async (req, res, next) => {
-  const contact = await contactsModel.getContactById(req.params.contactId);
+router.post("/", validateBody(contactSchema), contactsControllers.addContact);
 
-  if (contact) {
-    return res.json({ status: "success", code: 200, payload: { contact } });
-  }
-
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
-});
-
-router.post("/", validateBody(contactSchema), async (req, res, next) => {
-  const contact = await contactsModel.addContact(req.body);
-
-  res.status(201).json({ status: "success", code: 201, payload: { contact } });
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  const contact = await contactsModel.removeContact(req.params.contactId);
-
-  if (contact) {
-    return res.json({
-      status: "success",
-      code: 200,
-      message: "contact deleted",
-    });
-  }
-
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
-});
+router.delete("/:contactId", contactsControllers.removeContact);
 
 router.put(
   "/:contactId",
   validateBody(contactSchema),
-  async (req, res, next) => {
-    const contact = await contactsModel.updateContact(
-      req.params.contactId,
-      req.body
-    );
-
-    if (contact) {
-      return res.json({ status: "success", code: 200, payload: { contact } });
-    }
-
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
-  }
+  contactsControllers.updateContact
 );
 
 module.exports = router;
