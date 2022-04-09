@@ -2,7 +2,7 @@ const {
   validationCreateContact,
   validationUpdateContact,
   validationFavoriteContact,
-  validationMangoId,
+  validationContactId,
 } = require('./contact');
 
 const {
@@ -16,7 +16,7 @@ module.exports = {
   validationCreateContact,
   validationUpdateContact,
   validationFavoriteContact,
-  validationMangoId,
+  validationContactId,
   validationSignupUser,
   validationLoginUser,
   validationUpdateSubscription,

@@ -1,3 +1,4 @@
 const current = require('./current');
+const subscription = require('./subscription');
 
-module.exports = current;
+module.exports = { current, subscription };

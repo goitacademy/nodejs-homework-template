@@ -1,5 +1,5 @@
-const { login, logout, signup, subscription } = require('./auth');
-const current = require('./users');
+const { login, logout, signup } = require('./auth');
+const { current, subscription } = require('./users');
 
 const {
   getContacts,

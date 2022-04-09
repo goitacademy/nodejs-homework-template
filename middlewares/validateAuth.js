@@ -8,7 +8,7 @@ const { SECRET_KEY } = process.env;
 
 const validateAuth = async (req, _, next) => {
   const { authorization = '' } = req.headers;
-  const [bearer, token] = authorization.split(' ');
+  const [bearer, token] = authorization?.split(' ');
 
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
@@ -16,7 +16,6 @@ const validateAuth = async (req, _, next) => {
 
     const checkingTokenBearerUser =
       bearer !== MESSAGES.BEARER || !user || !user.token;
-
     if (checkingTokenBearerUser) {
       throw new Unauthorized(MESSAGES.NOTAUTHORIZED);
     }

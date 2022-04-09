@@ -2,7 +2,7 @@ const { Conflict } = require('http-errors');
 const { User } = require('../../models');
 const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
 
-const signup = async (req, res, next) => {
+const signup = async (req, res) => {
   const { name, email, password, subscription } = req.body;
 
   const userExist = await User.findOne({ email });
