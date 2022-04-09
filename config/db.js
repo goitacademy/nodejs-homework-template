@@ -3,6 +3,10 @@ require("dotenv").config();
 
 const uri = process.env.URI_DB;
 
+const db = mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.connection.on("connected", () => {
   console.log("Mongoose to connect to db");
 });
@@ -13,11 +17,6 @@ mongoose.connection.on("error", (err) => {
 
 mongoose.connection.on("disconnected", () => {
   console.log("Mongoose disconnected");
-});
-
-const db = mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 });
 
 process.on("SIGINT", async () => {

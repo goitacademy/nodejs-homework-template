@@ -16,8 +16,7 @@ const schemaCreateContact = Joi.object({
     .required(),
 });
 
-const schemaMongoId = Joi.objectId({
-  contactId: Joi.string().required(),
+const schemaMongoId = Joi.object({
+  contactId: Joi.objectId().required(),
 });
-
 module.exports = { schemaCreateContact, schemaMongoId };
