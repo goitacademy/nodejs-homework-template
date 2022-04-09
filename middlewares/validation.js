@@ -9,5 +9,17 @@ const validateBody = (schema) => async (req, res, next) => {
         .json({ status: 'error', code: 400, message: err.message })
     }
   }
+
+  const validateParams = (schema) => async (req, res, next) => {
+    try {
+      await schema.validateAsync(req.params)
+      next()
+    } catch (err) {
+      console.log(err.details)
+      return res
+        .status(400)
+        .json({ status: 'error', code: 400, message: err.message })
+    }
+  }
   
-  module.exports = { validateBody }
+  module.exports = { validateBody, validateParams }

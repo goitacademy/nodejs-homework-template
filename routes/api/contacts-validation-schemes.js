@@ -1,4 +1,5 @@
 const Joi = require('joi')
+Joi.objectId = require('joi-objectid')(Joi)
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().trim().min(3).max(30).required().messages({
@@ -15,4 +16,14 @@ const schemaCreateContact = Joi.object({
   }),
 })
 
-module.exports = { schemaCreateContact }
+const schemaFavoriteContact = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ 'any.required': 'missing field favorite' }),
+})
+
+const schemaMongoId = Joi.object({
+  contactId: Joi.objectId().required(),
+})
+
+module.exports = { schemaCreateContact, schemaFavoriteContact, schemaMongoId}
