@@ -8,7 +8,6 @@ const signup = async (req, res) => {
   const userExist = await User.findOne({ email });
   if (userExist) {
     throw new Conflict(`User with ${email} already exist`);
-    // return next(Conflict(`User with ${email} already exist`));
   }
 
   const newUser = new User({

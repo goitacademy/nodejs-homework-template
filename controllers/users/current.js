@@ -6,10 +6,7 @@ const current = async (req, res, next) => {
   const { id } = req.user;
   const userExist = await User.findById(id);
 
-  if (!userExist) {
-    return next(Unauthorized());
-    // throw new Unauthorized();
-  }
+  if (!userExist) next(Unauthorized());
 
   res.json({
     status: STATUS.SUCCESS,

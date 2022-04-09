@@ -9,10 +9,7 @@ const subscription = async (req, res, next) => {
   try {
     const user = await User.findById(id);
 
-    if (!user) {
-      return next(NotFound(`Not found user by id:${id}`));
-      // throw new NotFound(`Not found user by id:${id}`);
-    }
+    if (!user) next(NotFound(`Not found user by id:${id}`));
 
     user.updateSubscription(subscription);
     await user.save();

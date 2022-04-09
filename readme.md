@@ -37,61 +37,61 @@
 - `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими
   исправлениями простых ошибок
 
-# Routes:
+## Routes:
 
-## Contacts:
+### Contacts:
 
-### GET - http://localhost:8083/api/contacts --- Get All contacts.
+#### GET - http://localhost:8083/api/contacts/ --- Get All contacts.
 
-### GET - http://localhost:8083/api/contacts/:contactId --- Get contact by id ID.
+#### GET - http://localhost:8083/api/contacts/:contactId --- Get contact by id ID.
 
-### POST - http://localhost:8083/api/contacts --- Add new contact.
+#### POST - http://localhost:8083/api/contacts/ --- Add new contact.
 
-### DELETE - http://localhost:8083/api/contacts/:contactId --- Remove contact by ID.
+#### DELETE - http://localhost:8083/api/contacts/:contactId --- Remove contact by ID.
 
-### PUT - http://localhost:8083/api/contacts/:contactId --- Update contact by ID.
+#### PUT - http://localhost:8083/api/contacts/:contactId --- Update contact by ID.
 
-### PATCH - http://localhost:8083/api/contacts/:contactId/favorite --- Update status "favorite" of contact by ID.
+#### PATCH - http://localhost:8083/api/contacts/:contactId/favorite --- Update status "favorite" of contact by ID.
 
-## Auth:
+### Auth:
 
-### POST - http://localhost:8083/api/auth/signup --- User registration.
+#### POST - http://localhost:8083/api/auth/signup --- User registration.
 
-### POST - http://localhost:8083/api/auth/login --- Login user.
+#### POST - http://localhost:8083/api/auth/login --- Login user.
 
-### GET - http://localhost:8083/api/auth/signout --- User logging out.
+#### GET - http://localhost:8083/api/auth/logout --- User logging out.
 
-## Users
+### Users:
 
-### GET - http://localhost:8083/api/users/current --- Information about current user.
+#### GET - http://localhost:8083/api/users/current --- Information about current user.
 
-### PATCH - http://localhost:8083/api/users --- Update the user's "subscription".
+#### PATCH - http://localhost:8083/api/users/:userId/subscription --- Update the user's "subscription".
 
-## Query:
+### Query:
 
-### GET - http://localhost:8083/api/contacts?query --- Get All contacts by query.
+#### GET - http://localhost:8083/api/contacts?query --- Get All contacts by query.
 
-### page = number.
+#### page = number.
 
 - Choose from which page to show users: "page=1"
 
-### limit = number.
+#### limit = number.
 
 - Select the number of users to display: "limit=10"
 
-### sortByAsc = tag.
+#### sortByAsc = tag.
 
 - Sort by "tag" in ascending order: "sortByAsc=phone"
 
-### sortByDesc = tag.
+#### sortByDesc = tag.
 
 - Sort by "tag" in descending order: "sortByDesc=phone"
 
-### filter = tag1|tag2|tag3.
+#### filter = tag1|tag2|tag3.
 
 - Sort by "tags": "filter=name|age|date".
 
-### favorite = bool.
+#### favorite = bool.
 
 - Filter users by tag "favorite": "favorite=true" || "favorite=false" .
 
