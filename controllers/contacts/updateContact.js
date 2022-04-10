@@ -3,7 +3,7 @@ const contactMethod = require("../../repository/index");
 const { updateContact } = contactMethod.updateContact;
 
 const putUpdateContact = async (req, res, next) => {
-  const contact = await updateContact(req.body);
+  const contact = await updateContact(req.params.contactId, req.body);
   if (contact) {
     return res
       .status(201)
