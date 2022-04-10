@@ -1,4 +1,4 @@
-const { mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 const uri = process.env.URI_DB;
@@ -7,21 +7,22 @@ const db = mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 mongoose.connection.on("connected", () => {
-  console.log("Mongoose to connect to db");
+  console.log("Connected to DB");
 });
 
 mongoose.connection.on("error", (err) => {
-  console.log(`Mongoose connection error:  + ${err}`);
+  console.log(`Mongoose connection error: ${err}`);
 });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("Mongoose disconnected");
+  console.log("Disconnected from DB");
 });
 
 process.on("SIGINT", async () => {
   mongoose.connection.close(() => {
-    console.log("Disconnect from db");
+    console.log("Disconnected from DB");
     process.exit(1);
   });
 });
