@@ -42,6 +42,10 @@ const contactMongooseSchema = new Schema({
         required: [false, "Favorite field isn't required"],
         default: false,
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    }
 }, { versionKey: false, timestamps: true }, );
 
 const Contact = mongoose.model('contact', contactMongooseSchema);
