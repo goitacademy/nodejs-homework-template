@@ -7,12 +7,12 @@ const {
   postAddContactControl,
   removeContactControl,
   updateContactControl,
-} = require("../../controllers/contacts/index");
+} = require("../../../controllers/contacts/index");
 
-const { validateBody } = require("../../middleware/validation");
+const { validateBody } = require("../../../middleware/validation");
 const {
   schemaCreateContact,
-} = require("../../schemas/contacts-validation-schems");
+} = require("../../../schemas/contacts-validation-schems");
 
 const { getlistContacts } = listContactsControl;
 const { getByIdContact } = getByIdContactControl;
