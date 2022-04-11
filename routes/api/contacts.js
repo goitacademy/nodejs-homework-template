@@ -9,12 +9,8 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-<<<<<<< HEAD
   const contacts = await listContacts();
   res.json({ message: contacts });
-=======
-  res.json({ message: "template messageb" });
->>>>>>> 2c931a93ab41574995f45e2863127d1d79e4f9f3
 });
 
 router.get("/:contactId", async (req, res, next) => {
