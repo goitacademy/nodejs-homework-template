@@ -7,6 +7,7 @@ const {
   updateContact,
 } = require("../../models/contacts");
 const router = express.Router();
+const res = require("express/lib/response");
 
 router.get("/", async (req, res, next) => {
   const contacts = await listContacts();

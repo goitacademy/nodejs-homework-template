@@ -4,9 +4,22 @@ const contactsPath = "./models/contacts.json";
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   const contacts = await JSON.parse(data);
+<<<<<<< Updated upstream
   console.table(contacts);
   return contacts;
 };
+=======
+  return contacts;
+};
+
+function listContacts() {
+  fs.readFile(contactsPath)
+    .then((data) => JSON.parse(data))
+    .then((contact) => console.table(contact))
+    .catch((err) => console.log(err.message));
+  return contact;
+}
+>>>>>>> Stashed changes
 
 const getContactById = async (contactId) => {
   const data = await fs.readFile(contactsPath);
