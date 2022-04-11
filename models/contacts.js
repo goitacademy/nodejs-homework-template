@@ -1,19 +1,72 @@
-// const fs = require('fs/promises')
+const { randomUUID } = require("crypto");
+const DB = require("../db/adapterDB");
 
-const listContacts = async () => {}
+const db = new DB("../db/contacts.json");
 
-const getContactById = async (contactId) => {}
+const getContactsModel = async () => {
+  return await db.read();
+};
 
-const removeContact = async (contactId) => {}
+const getContactByIdModel = async (contactId) => {
+  const contacts = await getContactsModel();
+  return contacts.find((el) => el.id === contactId);
+};
 
-const addContact = async (body) => {}
+const addContactModel = async (body) => {
+  const contacts = await getContactsModel();
+  const newContact = { id: randomUUID(), ...body };
+  contacts.push(newContact);
+  await db.write(contacts);
+  return newContact;
+};
 
-const updateContact = async (contactId, body) => {}
+const updateContactPutModel = async (contactId, body) => {
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
+  if (contactIndex === -1) return null;
+  contacts[contactIndex] = {
+    ...contacts[contactIndex],
+    ...body,
+  };
+  await db.write(contacts);
+  return contacts[contactIndex];
+};
+
+const updateContactPatchModel = async (contactId, body) => {
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
+  if (contactIndex === -1) return null;
+  for (const keyPrev in contacts[contactIndex]) {
+    for (const key in body) {
+      if (
+        keyPrev === key &&
+        contacts[contactIndex][keyPrev] !== body[key] &&
+        body[key]
+      ) {
+        contacts[contactIndex][keyPrev] = body[key];
+      }
+    }
+  }
+  await db.write(contacts);
+  return contacts[contactIndex];
+};
+
+const deleteContactModel = async (contactId) => {
+  const contacts = await getContactsModel();
+  const contactIndex = contacts.findIndex((el) => el.id === contactId);
+  if (contactIndex !== -1) {
+    const deleteContact = contacts.splice(contactIndex, 1);
+    await db.write(contacts);
+    return deleteContact;
+  }
+  return null;
+};
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+  getContactsModel,
+  getContactByIdModel,
+  addContactModel,
+  updateContactPutModel,
+  updateContactPatchModel,
+  deleteContactModel,
+};
