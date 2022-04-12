@@ -1,4 +1,4 @@
-const Schema = require("../mongoose-db.js");
+const Schema = require("../mongoose.js");
 const mongoose = require("mongoose");
 
 const contactSchema = new Schema({

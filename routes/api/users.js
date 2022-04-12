@@ -33,13 +33,15 @@ router.post("/login", async (req, res, next) => {
 
   await updateUserToken(user.id, token);
 
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      token,
-    },
-  });
+  if (user) {
+    return res.json({
+      status: "success",
+      code: 200,
+      data: {
+        token,
+      },
+    });
+  }
 });
 
 router.post("/signup", async (req, res, next) => {
@@ -61,15 +63,17 @@ router.post("/signup", async (req, res, next) => {
 
     newUser.setPassword(password);
     await newUser.save();
-    res
-      .json({
-        status: "success",
-        code: 201,
-        data: {
-          message: "Registration successful",
-        },
-      })
-      .status(201);
+    if (password) {
+      res
+        .json({
+          status: "success",
+          code: 201,
+          data: {
+            message: "Registration successful",
+          },
+        })
+        .status(201);
+    }
   } catch (error) {
     next(error);
   }
