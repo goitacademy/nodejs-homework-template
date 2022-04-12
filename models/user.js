@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
-const { Role } = require("./constant");
+const { Role } = require("../libs/constant");
 const bcrypt = require("bcryptjs");
 const userSchema = new Schema({
   name: {

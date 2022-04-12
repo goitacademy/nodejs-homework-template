@@ -1,3 +1,5 @@
+const { HTTP_STATUS_CODE } = require("../libs/constant");
+
 class CustomeError extends Error {
   constructor(message, statusCode, name = "AppError") {
     super(message);
@@ -8,6 +10,32 @@ class CustomeError extends Error {
   }
 }
 
-const wrapper = (fn) => async (req, res, next) => {};
+const wrapper = (fn) => async (req, res, next) => {
+  try {
+    const result = await fn(req, res, next);
+    return result;
+  } catch (error) {
+    switch (error.name) {
+      case "validationError":
+        res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+          status: "error",
+          code: HTTP_STATUS_CODE.BAD_REQUEST,
+          message: error.message,
+        });
+        break;
+      case "AppError":
+        res.status(error.statusCode).json({
+          status: error.status,
+          code: error.statusCode,
+          message: error.message,
+        });
+        break;
 
-module.exports = { wrapper };
+      default:
+        next(error);
+        break;
+    }
+  }
+};
+
+module.exports = { wrapper, CustomeError };
