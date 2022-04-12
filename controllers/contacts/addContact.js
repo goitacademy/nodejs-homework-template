@@ -1,16 +1,19 @@
-const Contact = require('../../models/contacts/schemaContact');
+const {Contact, schemas} = require('../../models/contact');
+const createError = require('http-errors');
 
-const addContact = async(req, res, next) => {
+const addContact = async (req, res, next) => {
     try {
-        const { body } = req;
-        const contact = await Contact.create({...body });
-        res
-            .status(201)
-            .json({ status: 'success', code: 201, payload: { contact } });
+        const { error } = schemas.add.validate(req.body);
+        if (error) {
+            throw new createError(400, error.message);
+        }
+        const data = { ...req.body, owner: req.user._id };
+        const result = await Contact.create(data);
+        res.status(201).json(result);
     } catch (error) {
-        console.error(error);
-        next(error);
+        next(error)
     }
+  
 };
 
 module.exports = addContact;

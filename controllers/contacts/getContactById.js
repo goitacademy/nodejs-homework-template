@@ -1,24 +1,20 @@
-const Contact = require('../../models/contacts/schemaContact');
+const {Contact} = require('../../models/contact');
+const createError = require('http-errors');
 
-const getContactById = async(req, res, next) => {
+
+
+const getContactById = async (req, res, next) => {
     try {
-        const { contactId } = req.params;
-        const contact = await Contact.findOne({ _id: contactId });
-        if (contact) {
-            return res
-                .status(200)
-                .json({ status: 'success', code: 200, payload: { contact } });
+        const { id } = req.params;
+        const result = await Contact.findById(id);
+        if (!result) {
+            throw new createError(404, 'Not found');
         }
-        return res.status(404).json({
-            status: 'error',
-            code: 404,
-            message: `Not found contact by id:${contactId}`,
-            payload: 'Not Found',
-        });
+        res.json(result);
     } catch (error) {
-        console.error(error);
-        next(error);
+        next(error)
     }
+  
 };
 
 module.exports = getContactById;
