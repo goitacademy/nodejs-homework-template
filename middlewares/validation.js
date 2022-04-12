@@ -7,4 +7,14 @@ const validation = (schema) => async (req, res, next) => {
       .json({status: 'error', code: 400, massage: err.message})
   }  
 }
-module.exports = {validation}
+
+const validationParams = (schema) => async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.params) 
+    next()
+  } catch (err) { 
+      return res.status(400)
+      .json({status: 'error', code: 400, massage: err.message})
+  }  
+}
+module.exports = {validation, validationParams}
