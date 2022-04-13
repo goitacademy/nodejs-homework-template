@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 
-const {SECRET_KEY} = process.env;
+const { SECRET_KEY } = process.env;
 
-const login = async (req, res, next) => {
+const login = async(req, res, next) => {
     try {
         const { error } = schemas.register.validate(req.body);
         if (error) {
