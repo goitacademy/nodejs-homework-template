@@ -39,6 +39,21 @@ const MESSAGES = {
   JWTEXPIRED: 'jwt expired',
 };
 
+const DIRNAME = {
+  AVATARS: 'avatars',
+  PUBLIC: 'public',
+  TEMP: 'temp',
+};
+
+const FILESIZE = {
+  HALFMB: 524288,
+  ONEMB: 1048576,
+  TWOMB: 2097152,
+  THREEMB: 3145728,
+  FOURMB: 4194304,
+  FIVEMB: 5242880,
+};
+
 module.exports = {
   CONTACT_NAME_LIMIT,
   CONTACT_EMAIL_LIMIT,
@@ -50,4 +65,6 @@ module.exports = {
   HTTP_STATUS_CODE,
   STATUS,
   MESSAGES,
+  DIRNAME,
+  FILESIZE,
 };

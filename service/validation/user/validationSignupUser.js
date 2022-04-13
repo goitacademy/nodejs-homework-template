@@ -30,12 +30,17 @@ const validationSignupUser = Joi.object({
     }),
   subscription: Joi.string()
     .valid(...Object.values(USER_SUBSCRIPTION_TYPE))
+    .optional()
     .default(USER_SUBSCRIPTION_TYPE.STARTER)
     .messages({
       'any.only': `Subscription is one of: ${Object.values(
         USER_SUBSCRIPTION_TYPE,
       )}`,
     }),
+  avatarURL: Joi.string().optional().default(null).messages({
+    'any.optional': "avatarURL isn't required",
+    'string.empty': 'The avatarURL cannot be empty',
+  }),
 });
 
 module.exports = validationSignupUser;

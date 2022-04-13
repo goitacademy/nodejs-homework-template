@@ -12,14 +12,17 @@ const {
 
 const router = new express.Router();
 
+// http://localhost:8083/api/auth/signup
 router.post(
   '/signup',
   validateBody(validationSignupUser),
   controlWrapper(signup),
 );
 
+// http://localhost:8083/api/auth/login
 router.post('/login', validateBody(validationLoginUser), controlWrapper(login));
 
+// http://localhost:8083/api/auth/logout
 router.get('/logout', validateAuth, controlWrapper(logout));
 
 module.exports = router;

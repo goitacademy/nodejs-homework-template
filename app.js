@@ -17,6 +17,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(limiter(15 * 60 * 1000, 100)); // 15 minutes
 app.use(helmet());
 app.use(logger(formatsLogger));
+app.use(express.static(process.env.STATIC_FOLDER));
 app.use(cors());
 app.use(express.json());
 
