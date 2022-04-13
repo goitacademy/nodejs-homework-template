@@ -5,7 +5,7 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require('../../controllers/contacts');
+} = require('../../../controllers/contacts');
 const {
   schemaCreateContact,
   schemaMongoId,
@@ -14,19 +14,20 @@ const {
   validateBody,
   validateParams,
   validateUpdateFavorite,
-} = require('../../middlewares/validation');
+} = require('../../../middlewares/validation');
+const guard = require('../../../middlewares/guard')
 const router = express.Router();
 
-router.get('/', listContacts);
+router.get('/', guard, listContacts);
 
-router.get('/:contactId', validateParams(schemaMongoId), getContactById);
+router.get('/:contactId', guard, validateParams(schemaMongoId), getContactById);
 
-router.post('/', validateBody(schemaCreateContact), addContact);
+router.post('/', guard, validateBody(schemaCreateContact), addContact);
 
-router.delete('/:contactId', validateParams(schemaMongoId), removeContact);
+router.delete('/:contactId', guard, validateParams(schemaMongoId), removeContact);
 
 router.put(
-  '/:contactId',
+  '/:contactId', guard,
   validateBody(schemaCreateContact),
   validateParams(schemaMongoId),
   updateContact,
