@@ -18,4 +18,6 @@ router.put(
   contactsControllers.updateContact
 );
 
+router.patch("/:contactId/favorite", contactsControllers.updateStatusContact);
+
 module.exports = router;
