@@ -289,7 +289,7 @@
   dependencies:
     "fill-range" "^7.0.1"
 
-"bson@^4.2.2", "bson@^4.6.1", "bson@^4.6.2":
+"bson@^4.2.2", "bson@^4.6.1":
   "integrity" "sha512-VeJKHShcu1b/ugl0QiujlVuBepab714X9nNyBdA1kfekuDGecxgpTA2Z6nYbagrWFeiIyzSWIOzju3lhj+RNyQ=="
   "resolved" "https://registry.npmjs.org/bson/-/bson-4.6.2.tgz"
   "version" "4.6.2"
@@ -1549,25 +1549,13 @@
   "resolved" "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
   "version" "1.2.5"
 
-"mongodb-connection-string-url@^2.4.1", "mongodb-connection-string-url@^2.5.2":
+"mongodb-connection-string-url@^2.4.1":
   "integrity" "sha512-tWDyIG8cQlI5k3skB6ywaEA5F9f5OntrKKsT/Lteub2zgwSUlhqEN2inGgBTm8bpYJf8QYBdA/5naz65XDpczA=="
   "resolved" "https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-2.5.2.tgz"
   "version" "2.5.2"
   dependencies:
     "@types/whatwg-url" "^8.2.1"
     "whatwg-url" "^11.0.0"
-
-"mongodb@^4.5.0":
-  "integrity" "sha512-A2l8MjEpKojnhbCM0MK3+UOGUSGvTNNSv7AkP1fsT7tkambrkkqN/5F2y+PhzsV0Nbv58u04TETpkaSEdI2zKA=="
-  "resolved" "https://registry.npmjs.org/mongodb/-/mongodb-4.5.0.tgz"
-  "version" "4.5.0"
-  dependencies:
-    "bson" "^4.6.2"
-    "denque" "^2.0.1"
-    "mongodb-connection-string-url" "^2.5.2"
-    "socks" "^2.6.2"
-  optionalDependencies:
-    "saslprep" "^1.0.3"
 
 "mongodb@4.3.1":
   "integrity" "sha512-sNa8APSIk+r4x31ZwctKjuPSaeKuvUeNb/fu/3B6dRM02HpEgig7hTHM8A/PJQTlxuC/KFWlDlQjhsk/S43tBg=="
@@ -2099,7 +2087,7 @@
   "resolved" "https://registry.npmjs.org/smart-buffer/-/smart-buffer-4.2.0.tgz"
   "version" "4.2.0"
 
-"socks@^2.6.1", "socks@^2.6.2":
+"socks@^2.6.1":
   "integrity" "sha512-zDZhHhZRY9PxRruRMR7kMhnf3I8hDs4S3f9RecfnGxvcBHQcKcIH/oUcEWffsfl1XxdYlA7nnlGbbTvPz9D8gA=="
   "resolved" "https://registry.npmjs.org/socks/-/socks-2.6.2.tgz"
   "version" "2.6.2"

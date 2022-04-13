@@ -7,8 +7,7 @@ const db = mongoose.connect(uri, {
   useUnifiedTopology: true,
 });
 
-mongoose.connection.on(
-  'connected',
+mongoose.connection.on('connected', () =>
   console.log('Database connection successful'),
 );
 
