@@ -41,6 +41,12 @@ router.post("/login", async (req, res, next) => {
         token,
       },
     });
+  } else {
+    return res.json({
+      status: "error",
+      code: 400,
+      data: "Bad request",
+    });
   }
 });
 
@@ -73,6 +79,14 @@ router.post("/signup", async (req, res, next) => {
           },
         })
         .status(201);
+    } else {
+      res.json({
+        status: "error",
+        code: 400,
+        data: {
+          message: "Registration failed",
+        },
+      });
     }
   } catch (error) {
     next(error);
