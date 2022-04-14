@@ -1,30 +1,57 @@
-const express = require('express')
-
-const router = express.Router()
-
-const { validate } = require('../../middlewares/validation')
-const {
-  createContactScheme,
-  updateContactScheme,
-} = require('./contactsValidationSchemes')
-
+const express = require("express");
 const {
   getContacts,
   getContactById,
   addContact,
-  updateContactPut,
-  updateContactPatch,
+  updateContact,
   deleteContact,
-} = require('../../controllers/contacts')
+  updateContactFavorite,
+} = require("../../controllers/contacts");
+const validation = require("../../middlewares/validation");
+const tryCatchWrapper = require("../../middlewares/tryCatchWrapper");
+const {
+  createContactJoiSchema,
+  updateContactJoiSchema,
+  favoriteContactJoiSchema,
+  contactJoiId,
+} = require("../../models/contact");
+
+const router = express.Router();
 
 router
-  .get('/', getContacts)
-  .post('/', validate(createContactScheme), addContact)
+  .get("/", tryCatchWrapper(getContacts))
+  .post(
+    "/",
+    validation("body", createContactJoiSchema),
+    tryCatchWrapper(addContact)
+  );
 
 router
-  .get('/:contactId', getContactById)
-  .put('/:contactId', validate(updateContactScheme), updateContactPut)
-  .patch('/:contactId', validate(updateContactScheme), updateContactPatch)
-  .delete('/:contactId', deleteContact)
+  .get(
+    "/:contactId",
+    validation("params", contactJoiId),
+    tryCatchWrapper(getContactById)
+  )
+  .put(
+    "/:contactId",
+    [
+      validation("params", contactJoiId),
+      validation("body", updateContactJoiSchema),
+    ],
+    tryCatchWrapper(updateContact)
+  )
+  .delete(
+    "/:contactId",
+    validation("params", contactJoiId),
+    tryCatchWrapper(deleteContact)
+  )
+  .patch(
+    "/:contactId/favorite",
+    [
+      validation("params", contactJoiId),
+      validation("body", favoriteContactJoiSchema),
+    ],
+    tryCatchWrapper(updateContactFavorite)
+  );
 
-module.exports = router
+module.exports = router;

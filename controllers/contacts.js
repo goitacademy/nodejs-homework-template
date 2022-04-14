@@ -1,73 +1,77 @@
-const {
-  getContactsModel,
-  getContactByIdModel,
-  addContactModel,
-  updateContactPutModel,
-  updateContactPatchModel,
-  deleteContactModel,
-} = require("../models/contacts");
+const { Contact } = require("../models/contact");
 
-const getContacts = async (req, res, next) => {
-  const contacts = await getContactsModel();
+const getContacts = async (req, res) => {
+  const contacts = await Contact.find({});
   return res.json({ status: "success", code: 200, data: { contacts } });
 };
 
-const getContactById = async (req, res, next) => {
-  const contact = await getContactByIdModel(req.params.contactId);
+const getContactById = async (req, res) => {
+  const contact = await Contact.findOne({ _id: req.params.contactId });
   if (contact) {
-    return res.json({ status: "success", code: 200, data: { contact } });
+    res.json({ status: "success", code: 200, data: { contact } });
+  } else {
+    res.status(404).json({ status: "error", code: 404, message: "Not found" });
   }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
 };
 
-const addContact = async (req, res, next) => {
-  const contact = await addContactModel(req.body);
+const addContact = async (req, res) => {
+  const contact = await Contact.create(req.body);
   return res
     .status(201)
     .json({ status: "success", code: 201, data: { contact } });
 };
 
-const updateContactPut = async (req, res, next) => {
-  const contact = await updateContactPutModel(req.params.contactId, req.body);
+const updateContact = async (req, res) => {
+  const contact = await Contact.findByIdAndUpdate(
+    {
+      _id: req.params.contactId,
+    },
+    req.body,
+    { new: true }
+  );
   if (contact) {
-    return res.json({ status: "success", code: 200, data: { contact } });
+    res.json({ status: "success", code: 200, data: { contact } });
+  } else {
+    res.status(404).json({ status: "error", code: 404, message: "Not found" });
   }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
 };
 
-const updateContactPatch = async (req, res, next) => {
-  const contact = await updateContactPatchModel(req.params.contactId, req.body);
+const deleteContact = async (req, res) => {
+  const contact = await Contact.findByIdAndRemove({
+    _id: req.params.contactId,
+  });
   if (contact) {
-    return res.json({ status: "success", code: 200, data: { contact } });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
-};
-
-const deleteContact = async (req, res, next) => {
-  const contact = await deleteContactModel(req.params.contactId);
-  if (contact) {
-    return res.json({
+    res.json({
       status: "success",
       code: 200,
       message: "Contact deleted",
     });
+  } else {
+    res.status(404).json({ status: "error", code: 404, message: "Not found" });
   }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not found" });
+};
+
+const updateContactFavorite = async (req, res) => {
+  const { favorite } = req.body;
+  const contact = await Contact.findByIdAndUpdate(
+    {
+      _id: req.params.contactId,
+    },
+    { favorite },
+    { new: true }
+  );
+  if (contact) {
+    res.json({ status: "success", code: 200, data: { contact } });
+  } else {
+    res.status(404).json({ status: "error", code: 404, message: "Not found" });
+  }
 };
 
 module.exports = {
   getContacts,
   getContactById,
   addContact,
-  updateContactPut,
-  updateContactPatch,
+  updateContact,
   deleteContact,
+  updateContactFavorite,
 };
