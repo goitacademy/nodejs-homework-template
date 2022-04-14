@@ -1,5 +1,5 @@
 const express = require('express')
-const contactsModel = require('../../models/contacts')
+const contactsModel = require('../../repository/contacts')
 const {schemaCreateContact, schemaMongoId} = require('../validation')
 const {validation, validationParams} = require('../../middlewares/validation')
 const router = express.Router()

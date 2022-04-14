@@ -15,7 +15,7 @@
     "express": "4.17.1",
     "joi": "17.6.0",
     "joi-objectid": "^4.0.2",
-    "mongodb": "^4.5.0",
+    "mongoose": "^6.2.10",
     "morgan": "1.10.0"
   },
   "devDependencies": {
