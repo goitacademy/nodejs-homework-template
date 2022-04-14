@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
 const { Role } = require("../libs/constant");
+const { Schema, model } = mongoose;
 const bcrypt = require("bcryptjs");
 
 const userSchema = new Schema(
@@ -40,7 +40,6 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(6);
-    console.log("🚀 ~ file: user.js ~ line 43 ~ salt", salt);
     this.password = await bcrypt.hash(this.password, salt);
   }
   next();
