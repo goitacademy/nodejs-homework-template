@@ -3,9 +3,7 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 mongoose
-  .connect(
-    "mongodb+srv://kamilWitkowski123:testtest123@cluster0.wbiy6.mongodb.net/db-contacts"
-  )
+  .connect("mongodb+srv://PawSzat:HumanSus@cluster0.mevhp.mongodb.net/test")
   .then(() => console.log("Database connection successful"))
   .catch((err) => {
     console.log("err", err);
