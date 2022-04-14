@@ -9,7 +9,11 @@ const schemaCreateContact = Joi.object({
   phone: Joi.string()
     .pattern(/[0-9]+/)
     .required(),
-  favorite: Joi.boolean().default('false'),
+  favorite: Joi.boolean(),
 });
 
-module.exports = { schemaCreateContact };
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.string().valid('false', 'true').required(),
+});
+
+module.exports = { schemaCreateContact, favoriteJoiSchema };

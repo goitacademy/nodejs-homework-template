@@ -1,7 +1,7 @@
 const Contact = require('../models/contact');
 
 const listContacts = async () => {
-  const result = await Contact.find();
+  const result = await Contact.find({});
   return result;
 };
 
@@ -31,10 +31,23 @@ const updateContact = async (contactId, body) => {
   return result;
 };
 
+const updateStatusContact = async (contactId, body) => {
+  const { favorite } = body;
+  const result = await Contact.findOneAndUpdate(
+    {
+      _id: contactId,
+    },
+    { favorite },
+    { new: true },
+  );
+  return result;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

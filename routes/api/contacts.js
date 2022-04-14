@@ -1,6 +1,9 @@
 const express = require('express');
 const contactsRepository = require('../../repository/contacts');
-const { schemaCreateContact } = require('./contacts-validation');
+const {
+  schemaCreateContact,
+  favoriteJoiSchema,
+} = require('./contacts-validation');
 const { validateBody } = require('../../middlewares/validatioin');
 
 const router = express.Router();
@@ -52,17 +55,28 @@ router.put(
   },
 );
 
-router.patch('/:contactId/name', async (req, res, next) => {
-  const contact = await contactsRepository.updateContact(
-    req.params.contactId,
-    req.body,
-  );
-  if (contact) {
-    return res.json({ status: 'success', code: 200, payload: { contact } });
-  }
-  return res
-    .status(404)
-    .json({ status: 'error', code: 404, message: 'Not found' });
-});
+router.patch(
+  '/:contactId/favorite',
+  validateBody(favoriteJoiSchema),
+  async (req, res, next) => {
+    const contact = await contactsRepository.updateStatusContact(
+      req.params.contactId,
+      req.body,
+    );
+    if (!req.body) {
+      return res.json({
+        status: 'error',
+        code: 400,
+        message: 'missing field favorite',
+      });
+    }
+    if (contact) {
+      return res.json({ status: 'success', code: 200, payload: { contact } });
+    }
+    return res
+      .status(404)
+      .json({ status: 'error', code: 404, message: 'Not found' });
+  },
+);
 
 module.exports = router;
