@@ -1,4 +1,3 @@
-const gravatar = require('gravatar');
 const { Conflict } = require('http-errors');
 const { User } = require('../../models');
 const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
@@ -11,14 +10,12 @@ const signup = async (req, res) => {
     throw new Conflict(`User with ${email} already exist`);
   }
 
-  const avatarURL = gravatar.url(email);
   const newUser = new User({
     name,
     email,
     subscription,
-    avatarURL,
   });
-
+  newUser.setAvatar();
   newUser.setHashPassword(password);
   newUser.save();
 

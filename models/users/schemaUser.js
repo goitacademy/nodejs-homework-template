@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
 const { regexName, regexEmail } = require('../../helpers/regex');
 const {
   USER_NAME_LIMIT,
@@ -81,10 +82,8 @@ userMongooseSchema.methods.updateSubscription = function (newSubscription) {
   this.subscription = newSubscription;
 };
 
-userMongooseSchema.methods.setAvatar = function (avatarURL) {
-  this.avatarURL = avatarURL;
-
-  // TODO: rewrite to gravatar
+userMongooseSchema.methods.setAvatar = function () {
+  this.avatarURL = gravatar.url(this.email, { s: '250' }, true);
 };
 
 userMongooseSchema.methods.updateAvatar = function (avatarURL) {

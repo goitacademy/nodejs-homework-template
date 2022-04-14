@@ -1,33 +1,13 @@
 const fs = require('fs/promises');
-const path = require('path');
-const { User } = require('../../models');
-const {
-  HTTP_STATUS_CODE,
-  STATUS,
-  DIRNAME,
-} = require('../../helpers/constants.js');
-
-const avatarsDirectory = path.join(
-  process.cwd(),
-  DIRNAME.PUBLIC,
-  DIRNAME.AVATARS,
-);
+const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
+const { avatarService, localStorage } = require('../../service/avatar');
 
 const avatar = async (req, res, next) => {
-  const { id } = req.user;
-  const { path: temporaryName, originalname } = req.file;
-  const avatarName = `${id}_${Date.now()}_${originalname}`;
-
+  const { path: tempFilePath } = req.file;
   try {
-    const fileName = path.join(avatarsDirectory, avatarName);
-
-    await fs.rename(temporaryName, fileName);
-
-    const avatarURL = path.normalize(
-      path.join(DIRNAME.PUBLIC, DIRNAME.AVATARS, avatarName),
-    );
-
-    await User.findByIdAndUpdate(id, { avatarURL });
+    // (file.path , width , height)
+    await avatarService(req.file, 250, 250);
+    const avatarURL = await localStorage(req.file, req.user);
 
     res.status(HTTP_STATUS_CODE.OK).json({
       status: STATUS.SUCCESS,
@@ -36,7 +16,7 @@ const avatar = async (req, res, next) => {
       payload: { avatarURL },
     });
   } catch (error) {
-    await fs.unlink(temporaryName);
+    await fs.unlink(tempFilePath);
     next(error);
   }
 };

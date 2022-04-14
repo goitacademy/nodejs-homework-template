@@ -1,15 +1,15 @@
 const multer = require('multer');
 const path = require('path');
-const { DIRNAME, FILESIZE } = require('../helpers/constants');
+const { FILESIZE } = require('../helpers/constants');
 
-const temporaryDirectory = path.normalize(process.cwd(), DIRNAME.TEMP);
+const tempDirectory = path.join(process.cwd(), process.env.UPLOAD_FOLDER);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, temporaryDirectory);
+    cb(null, tempDirectory);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
+    cb(null, `${req.user.id}_${Date.now()}_${file.originalname}`);
   },
 });
 
