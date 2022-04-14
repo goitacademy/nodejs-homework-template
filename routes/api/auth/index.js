@@ -1,10 +1,11 @@
 const express = require("express");
-const router = express.Router();
 
-const { register, login, logout } = require("../../../controllers/auth");
+const { registration, login, logout } = require("../../../controllers/auth");
 const { wrapper: wrapperError } = require("../../../middleware/error-handler");
 
-router.post("/register", wrapperError(register));
+const router = express.Router();
+
+router.post("/registration", wrapperError(registration));
 router.post("/login", wrapperError(login));
 router.post("/logout", wrapperError(logout));
 

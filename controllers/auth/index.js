@@ -1,11 +1,11 @@
 const { authService } = require("../../services/auth/index");
 const { HTTP_STATUS_CODE } = require("../../libs/constant");
-const register = async (req, res) => {
-  const user = await authService.register(req.body);
+const registration = async (req, res) => {
+  const user = await authService.create(req.body);
   return res.status(HTTP_STATUS_CODE.CREATED).json({
     status: "success",
     code: HTTP_STATUS_CODE.CREATED,
-    payload: { user },
+    data: { ...user },
   });
 };
 
@@ -22,4 +22,4 @@ const logout = async (req, res) => {
   return res.status(HTTP_STATUS_CODE.NO_CONTENT).json();
 };
 
-module.exports = { register, login, logout };
+module.exports = { registration, login, logout };

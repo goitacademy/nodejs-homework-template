@@ -1,6 +1,6 @@
 const { HTTP_STATUS_CODE } = require("../libs/constant");
 
-class CustomeError extends Error {
+class CustomError extends Error {
   constructor(message, statusCode, name = "AppError") {
     super(message);
     this.statusCode = statusCode;
@@ -38,4 +38,4 @@ const wrapper = (fn) => async (req, res, next) => {
   }
 };
 
-module.exports = { wrapper, CustomeError };
+module.exports = { wrapper, CustomError };
