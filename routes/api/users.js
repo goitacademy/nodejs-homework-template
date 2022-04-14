@@ -8,8 +8,7 @@ require("dotenv").config();
 const gravatar = require("gravatar");
 const secret = process.env.SECRET;
 const multer = require("multer");
-const { storage } = require("./middleware/multer.js");
-const upload = multer({ storage });
+
 const Jimp = require("jimp");
 const fs = require("fs");
 
@@ -125,6 +124,13 @@ router.get("/current", auth, async (req, res, next) => {
   });
 });
 
+const storage = multer.diskStorage({
+  destination: "tmp/",
+  filename: (req, file, cb) => cb(null, file.originalname),
+  limits: { fileSize: 1048576 },
+});
+const upload = multer({ storage });
+
 router.patch(
   "/avatars",
   auth,
@@ -142,11 +148,11 @@ router.patch(
       });
     try {
       const result = await User.findByIdAndUpdate(_id, { avatarURL });
+      console.log(req.file);
       if (result) {
         fs.unlink(req.file.path, (err) => {
           console.error(err);
         });
-        console.log(req.file);
         res.status(200).json({
           status: "success",
           code: 200,
