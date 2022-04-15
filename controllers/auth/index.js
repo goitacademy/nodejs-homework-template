@@ -1,8 +1,8 @@
-const { authService } = require("../../services/auth/index");
+// const { authService } = require("../../services/auth/index");
 const { HTTP_STATUS_CODE } = require("../../libs/constant");
-
+const { User } = require("../../models/user");
 const registration = async (req, res) => {
-  const user = await authService.create(req.body);
+  const user = await User.create(req.body);
   return res.status(HTTP_STATUS_CODE.CREATED).json({
     status: "success",
     code: HTTP_STATUS_CODE.CREATED,
