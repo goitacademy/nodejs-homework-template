@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bCrypt = require("bcryptjs");
-
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -12,6 +11,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Email is required"],
     unique: true,
+  },
+  avatarURL: {
+    type: String,
   },
   subscription: {
     type: String,

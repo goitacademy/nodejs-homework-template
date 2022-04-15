@@ -4,10 +4,13 @@ const jwt = require("jsonwebtoken");
 const User = require("./../../service/schemas/user");
 const { auth } = require("./middleware/auth.js");
 const { getUserById, updateUserToken } = require("./utils");
-
 require("dotenv").config();
-
+const gravatar = require("gravatar");
 const secret = process.env.SECRET;
+const multer = require("multer");
+
+const Jimp = require("jimp");
+const fs = require("fs");
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -23,14 +26,12 @@ router.post("/login", async (req, res, next) => {
       })
       .status(400);
   }
-
   const payload = {
     id: user.id,
     email: user.email,
   };
 
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-
   await updateUserToken(user.id, token);
 
   if (user) {
@@ -53,6 +54,7 @@ router.post("/login", async (req, res, next) => {
 router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const avatarURL = gravatar.url(email);
 
   if (user) {
     return res
@@ -65,10 +67,10 @@ router.post("/signup", async (req, res, next) => {
       .status(409);
   }
   try {
-    const newUser = new User({ email });
-
+    const newUser = new User({ email, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
+
     if (password) {
       res
         .json({
@@ -108,7 +110,6 @@ router.get("/logout", auth, async (req, res, next) => {
 
 router.get("/current", auth, async (req, res, next) => {
   const { _id: userId } = req.user;
-
   const { email, subscription } = await getUserById(userId);
 
   res.json({
@@ -122,5 +123,57 @@ router.get("/current", auth, async (req, res, next) => {
     },
   });
 });
+
+const storage = multer.diskStorage({
+  destination: "tmp/",
+  filename: (req, file, cb) => cb(null, file.originalname),
+  limits: { fileSize: 1048576 },
+});
+const upload = multer({ storage });
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    const { _id } = req.user;
+    console.log(req.file);
+    const avatarURL = `./avatars/av_${_id}.png`;
+    Jimp.read(`tmp/${req.file.filename}`)
+      .then((avatar) => {
+        return avatar.resize(250, 250).write(`public/avatars/av_${_id}.png`);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    try {
+      const result = await User.findByIdAndUpdate(_id, { avatarURL });
+      console.log(req.file);
+      if (result) {
+        fs.unlink(req.file.path, (err) => {
+          console.error(err);
+        });
+        res.status(200).json({
+          status: "success",
+          code: 200,
+          message: "OK",
+          data: {
+            avatarURL,
+          },
+        });
+      } else {
+        res.status(404).json({
+          status: "error",
+          code: 404,
+          message: `user not found`,
+          data: "Not Found",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      next(e);
+    }
+  }
+);
 
 module.exports = router;
