@@ -1,4 +1,5 @@
 const express = require("express");
+const guard = require("../../../middleware/guard.js");
 const router = express.Router();
 
 const {
@@ -21,14 +22,14 @@ const { postAddContact } = postAddContactControl;
 const { delRemoveContact } = removeContactControl;
 const { putUpdateContact } = updateContactControl;
 
-router.get("/", getlistContacts);
+router.get("/", guard, getlistContacts);
 
-router.get("/:contactId", getByIdContact);
+router.get("/:contactId", guard, getByIdContact);
 
-router.post("/", [validateBody(schemaCreateContact)], postAddContact);
+router.post("/", guard, [validateBody(schemaCreateContact)], postAddContact);
 
-router.delete("/:contactId", delRemoveContact);
+router.delete("/:contactId", guard, delRemoveContact);
 
-router.put("/:contactId", putUpdateContact);
+router.put("/:contactId", guard, putUpdateContact);
 
 module.exports = router;
