@@ -3,14 +3,10 @@ const { current, subscription, avatar } = require('../../controllers');
 const {
   validateAuth,
   validateBody,
-  validateParams,
   controlWrapper,
   validateUpload,
 } = require('../../middlewares');
-const {
-  validationUserId,
-  validationUpdateSubscription,
-} = require('../../service/validation');
+const { validationUpdateSubscription } = require('../../service/validation');
 
 const router = new express.Router();
 
@@ -24,13 +20,10 @@ router.patch(
   avatar,
 );
 
-// http://localhost:8083/api/users/:userId/subscription
+// http://localhost:8083/api/users/subscription
 router.patch(
-  '/:userId/subscription',
-  [
-    validateBody(validationUpdateSubscription),
-    validateParams(validationUserId),
-  ],
+  '/subscription',
+  [validateAuth, validateBody(validationUpdateSubscription)],
   controlWrapper(subscription),
 );
 

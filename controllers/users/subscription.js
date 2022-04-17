@@ -4,7 +4,7 @@ const { HTTP_STATUS_CODE, STATUS } = require('../../helpers/constants.js');
 
 const subscription = async (req, res, next) => {
   const { subscription } = req.body;
-  const { userId: id } = req.params;
+  const { _id: id } = req.user;
 
   try {
     const user = await User.findById(id);
