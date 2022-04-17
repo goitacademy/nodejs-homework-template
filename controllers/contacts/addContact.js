@@ -1,9 +1,9 @@
-const contactMethod = require("../../repository/index");
+// const contactMethod = require("../../repository/index");
+// const { addContact } = contactMethod.addContact;
+const ContactsService = require("../../services/contacts/contacts");
 
-const { addContact } = contactMethod.addContact;
-
-const postAddContact = async (req, res, next) => {
-  const contact = await addContact(req.body);
+const postAddContact = async (req, res) => {
+  const contact = await ContactsService.create(req.body, req.user);
   if (contact) {
     return res
       .status(201)

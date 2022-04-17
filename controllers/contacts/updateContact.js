@@ -1,17 +1,18 @@
-const contactMethod = require("../../repository/index");
+// const contactMethod = require("../../repository/index");
+// const { updateContact } = contactMethod.updateContact;
 
-const { updateContact } = contactMethod.updateContact;
+const ContactsService = require("../../services/contacts/contacts");
 
-const putUpdateContact = async (req, res, next) => {
-  const contact = await updateContact(req.params.contactId, req.body);
-  if (contact) {
-    return res
-      .status(201)
-      .json({ status: "success", code: 201, payload: { contact } });
-  }
+const putUpdateContact = async (req, res) => {
+  const contact = await ContactsService.update(
+    req.params.contactId,
+    req.body,
+    req.user
+  );
+
   return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
+    .status(201)
+    .json({ status: "success", code: 201, payload: { contact } });
 };
 
 module.exports = {

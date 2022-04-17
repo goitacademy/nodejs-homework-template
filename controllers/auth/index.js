@@ -19,6 +19,9 @@ const login = async (req, res) => {
   });
 };
 
-const logout = async (req, res) => {};
+const logout = async (req, res) => {
+  await authService.logout(req.user.id);
+  return res.status(HTTP_STATUS_CODE.NO_CONTENT).json();
+};
 
 module.exports = { registration, login, logout };

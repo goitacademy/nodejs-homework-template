@@ -1,9 +1,7 @@
-const contactMethod = require("../../repository/index");
+const ContactsService = require("../../services/contacts/contacts");
 
-const { listContacts } = contactMethod.listContacts;
-
-const getlistContacts = async (req, res, next) => {
-  const contacts = await listContacts();
+const getlistContacts = async (req, res) => {
+  const contacts = await ContactsService.getAll(req.query, req.user);
   res.json({ status: "success", code: 200, payload: { contacts } });
 };
 
