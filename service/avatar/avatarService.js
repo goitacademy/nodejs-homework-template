@@ -18,7 +18,7 @@ const avatarService = async (file, width = 250, height = 250) => {
 
     return picture;
   } catch (error) {
-    console.log('avatarService: ', error.message);
+    // console.log('avatarService: ', error.message);
     throw new BadRequest(error.message);
   }
 };
