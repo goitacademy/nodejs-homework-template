@@ -1,5 +1,5 @@
 {
-  "name": "homework_nodejs_02_express",
+  "name": "homework_nodejs_05",
   "version": "0.1.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "start:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config ./server.js",
     "debug": "cross-env NODE_ENV=production node --inspect ./server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "cross-env NODE_ENV=test jest --setupFiles=dotenv/config --detectOpenHandles"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -36,6 +37,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
+    "jest": "^27.5.1",
     "nodemon": "2.0.15"
   }
 }
