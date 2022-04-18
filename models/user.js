@@ -46,6 +46,6 @@ const joiLoginSchema = Joi.object({
   subscription: Joi.string(),
 });
 
-const User = model("users", userSchema);
+const User = model("user", userSchema);
 
 module.exports = { User, joiAuthSchema, joiLoginSchema };

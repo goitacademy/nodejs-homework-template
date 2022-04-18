@@ -31,6 +31,7 @@ const joiSchema = Joi.object({
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
+
 const Contact = model("contacts", contactSchema);
 
 const statusJoiSchema = Joi.object({
