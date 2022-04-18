@@ -10,8 +10,23 @@ const { updateContact } = contactMethod.updateContact;
 
 class ContactsService {
   async getAll(query, user) {
-    const contacts = await listContacts(query, user);
-    return contacts;
+    const { limit = 5, skip = 0, sortBy, sortByDesc, filter } = query;
+    let sortCriteria = null;
+    let select = null;
+    if (sortBy) {
+      sortCriteria = { [sortBy]: 1 };
+    }
+    if (sortByDesc) {
+      sortCriteria = { [sortByDesc]: -1 };
+    }
+    if (filter) {
+      select = filter.split("|").join(" ");
+    }
+    const { total, results: contacts } = await listContacts(
+      { limit, skip, sortCriteria, select },
+      user
+    );
+    return { total, contacts };
   }
 
   async getById(id, user) {
