@@ -22,11 +22,12 @@ class ContactsService {
     if (filter) {
       select = filter.split("|").join(" ");
     }
-    const { total, results: contacts } = await listContacts(
+    const result = await listContacts(
       { limit, skip, sortCriteria, select },
       user
     );
-    return { total, contacts };
+
+    return result;
   }
 
   async getById(id, user) {
