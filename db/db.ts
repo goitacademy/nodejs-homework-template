@@ -1,4 +1,4 @@
-const fs = require("fs/promises");
+const fs = require("fs").promises;
 const { join } = require("path");
 
 class StorageAdapter {

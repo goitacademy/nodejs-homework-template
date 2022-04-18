@@ -1,14 +1,9 @@
-const DB = require("./db");
-const db = new DB("contacts.json");
+const DB = require("../db/db");
+const db = new DB("../db/contacts.json");
 
 const listContacts = async () => {
   return await db.read();
 };
-
-// const listContacts: () => Promise<void> = async () => {
-//   const contacts = JSON.parse(await fs.readFile(contactsPath));
-//   return contacts;
-// };
 
 const getContactById = async (contactId) => {};
 

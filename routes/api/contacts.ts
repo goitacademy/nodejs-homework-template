@@ -1,14 +1,10 @@
 import express from "express";
-// const contactsModel = require('../../models/contacts')
-const { listContacts } = require("../../models/contacts");
+const contactsModel = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  console.log("test1", typeof listContacts);
-  const contacts = await listContacts();
-  // const contacts = await contactsModel.listContacts();
-  console.log("contacts", contacts);
+  const contacts = await contactsModel.listContacts();
   res.json({ status: "success", code: 200, payload: { contacts } });
 });
 
