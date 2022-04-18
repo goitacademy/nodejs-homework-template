@@ -5,8 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.ts",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.ts",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint": "eslint **/*.ts",
+    "lint:fix": "eslint --fix **/*.ts"
   },
   "dependencies": {
     "cors": "2.8.5",
