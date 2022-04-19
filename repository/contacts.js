@@ -1,6 +1,6 @@
 // const {ObjectId} = require('mongodb')
 // const DB = require('../config/db')
-const Contact = require('../models/contacts')
+const { Contact } = require('../models/contacts')
 
 
 // const getCollection = async(db, nameCollection) => {
@@ -25,7 +25,7 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-  const result = await Contact.Create(body) 
+  const result = await Contact.create(body) 
   return result
 }
 
