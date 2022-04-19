@@ -1,6 +1,18 @@
-const app = require('./app')
-const PORT = process.env.PORT || 3001
+const app = require("./app");
+const mongoose = require("mongoose");
 
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`)
-})
+const { DATA_BASE, PORT } = process.env;
+
+mongoose
+  .connect(DATA_BASE)
+  .then(() =>
+    app.listen(PORT, function () {
+      console.log(
+        `Database connection successful. Use our API on port: ${PORT}`
+      );
+    })
+  )
+  .catch((error) => {
+    console.log(`Failed to connect to database. ${error.message}`);
+    process.exit(1);
+  });
