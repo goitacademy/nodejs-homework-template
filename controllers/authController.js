@@ -1,5 +1,6 @@
 const {User} = require('../models/auth.js')
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
 const {SECRET_KEY} = process.env;
 
 class AuthController {
@@ -15,7 +16,8 @@ class AuthController {
                         message: `User ${email} already exist`
                     });
             }
-            const newUser = new User({...req.body, password})
+            const avatarUrl = gravatar.url(email)
+            const newUser = new User({...req.body, password, avatarUrl})
             newUser.setPassword(password)
             newUser.save();
             // const newUser = await user.create({...req.body, "password": hashpwd});

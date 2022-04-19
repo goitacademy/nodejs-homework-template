@@ -21,6 +21,10 @@ const userSignUpSchema = new Schema( {
         type: String,
         default: null,
     },
+    avatarUrl: {
+        type: String,
+        required: true
+    }
 }, {versionKey: false,timestamps:true});
 
 userSignUpSchema.methods.setPassword = function (password) {
