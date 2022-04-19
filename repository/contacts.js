@@ -36,10 +36,18 @@ const updateContact = async (contactId, body) => {
     return result
 } 
 
+const updateStatusContact = async (contactId, body) => {
+  const result = await Contact.findOneAndUpdate(
+      {_id: contactId}, {...body}, {new: true},
+    )
+    return result
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 }

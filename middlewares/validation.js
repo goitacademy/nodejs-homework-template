@@ -14,7 +14,17 @@ const validationParams = (schema) => async (req, res, next) => {
     next()
   } catch (err) { 
       return res.status(400)
-      .json({status: 'error', code: 400, massage: err.message})
+      .json({status: 'error', code: 404, massage: 'Not found'})
   }  
 }
-module.exports = {validation, validationParams}
+
+const validationFavorite = (schema) => async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.body) 
+    next()
+  } catch (err) { 
+      return res.status(400)
+      .json({status: 'error', code: 400, massage: 'missing field favorite'})
+  }  
+}
+module.exports = {validation, validationParams, validationFavorite}
