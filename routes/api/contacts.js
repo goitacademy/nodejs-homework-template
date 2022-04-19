@@ -7,8 +7,7 @@ const {
   deleteContact,
   updateContactFavorite,
 } = require("../../controllers/contacts");
-const validation = require("../../middlewares/validation");
-const tryCatchWrapper = require("../../middlewares/tryCatchWrapper");
+const { authToken, validation, tryCatchWrapper } = require("../../middlewares");
 const {
   createContactJoiSchema,
   updateContactJoiSchema,
@@ -19,22 +18,23 @@ const {
 const router = express.Router();
 
 router
-  .get("/", tryCatchWrapper(getContacts))
+  .get("/", authToken, tryCatchWrapper(getContacts))
   .post(
     "/",
-    validation("body", createContactJoiSchema),
+    [authToken, validation("body", createContactJoiSchema)],
     tryCatchWrapper(addContact)
   );
 
 router
   .get(
     "/:contactId",
-    validation("params", contactJoiId),
+    [authToken, validation("params", contactJoiId)],
     tryCatchWrapper(getContactById)
   )
   .put(
     "/:contactId",
     [
+      authToken,
       validation("params", contactJoiId),
       validation("body", updateContactJoiSchema),
     ],
@@ -42,12 +42,13 @@ router
   )
   .delete(
     "/:contactId",
-    validation("params", contactJoiId),
+    [authToken, validation("params", contactJoiId)],
     tryCatchWrapper(deleteContact)
   )
   .patch(
     "/:contactId/favorite",
     [
+      authToken,
       validation("params", contactJoiId),
       validation("body", favoriteContactJoiSchema),
     ],
