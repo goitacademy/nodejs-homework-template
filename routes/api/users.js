@@ -8,7 +8,8 @@ require("dotenv").config();
 const gravatar = require("gravatar");
 const secret = process.env.SECRET;
 const multer = require("multer");
-
+const { sendMail } = require("./middleware/sendgrid");
+const { nanoid } = require("nanoid");
 const Jimp = require("jimp");
 const fs = require("fs");
 
@@ -55,7 +56,7 @@ router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   const avatarURL = gravatar.url(email);
-
+  const verificationToken = nanoid();
   if (user) {
     return res
       .json({
@@ -67,10 +68,10 @@ router.post("/signup", async (req, res, next) => {
       .status(409);
   }
   try {
-    const newUser = new User({ email, avatarURL });
+    const newUser = new User({ email, avatarURL, verificationToken });
     newUser.setPassword(password);
     await newUser.save();
-
+    sendMail(email, verificationToken);
     if (password) {
       res
         .json({
@@ -137,7 +138,6 @@ router.patch(
   upload.single("avatar"),
   async (req, res, next) => {
     const { _id } = req.user;
-    console.log(req.file);
     const avatarURL = `./avatars/av_${_id}.png`;
     Jimp.read(`tmp/${req.file.filename}`)
       .then((avatar) => {
@@ -148,7 +148,6 @@ router.patch(
       });
     try {
       const result = await User.findByIdAndUpdate(_id, { avatarURL });
-      console.log(req.file);
       if (result) {
         fs.unlink(req.file.path, (err) => {
           console.error(err);
@@ -175,5 +174,72 @@ router.patch(
     }
   }
 );
+
+router.get("/users/verify/:verificationToken", auth, async (req, res, next) => {
+  const { verificationToken } = req.params;
+  try {
+    const result = await updateVerificationToken(verificationToken);
+    if (result) {
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        message: "Verification succesful",
+        data: "OK",
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `User not found`,
+        data: "Not Found",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.post("/users/verify", auth, async (req, res, next) => {
+  const { email } = req.body;
+  if (!error) {
+    try {
+      const user = await getUser(email);
+      if (!user) {
+        res.status(404).json({
+          status: "error",
+          code: 404,
+          message: `User not found`,
+          data: "Not Found",
+        });
+      } else if (!user.isVerified) {
+        sendMail(email, user.verificationToken);
+        res.status(200).json({
+          status: "success",
+          code: 200,
+          message: "Verification email sent",
+          data: "OK",
+        });
+      } else {
+        res.status(400).json({
+          status: "error",
+          code: 400,
+          message: "Verification has already been passed",
+          data: "Bad request",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      next(e);
+    }
+  } else {
+    res.status(400).json({
+      status: "error",
+      code: 400,
+      message: error.details[0].message,
+      data: "Bad Request",
+    });
+  }
+});
 
 module.exports = router;
