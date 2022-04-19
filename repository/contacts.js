@@ -1,13 +1,4 @@
-// const {ObjectId} = require('mongodb')
-// const DB = require('../config/db')
 const { Contact } = require('../models/contacts')
-
-
-// const getCollection = async(db, nameCollection) => {
-//   const client = await db
-//   const collection = await client.db().collection(nameCollection)
-//   return collection
-// }
 
 const listContacts = async () => {
   const result = await Contact.find({})

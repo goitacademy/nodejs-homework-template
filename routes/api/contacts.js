@@ -1,5 +1,4 @@
 const express = require('express')
-// const contactsModel = require('../../repository/contacts')
 const {schemaCreateContact, schemaMongoId, schemaFavoriteContact} = require('../validation')
 const {validation, validationParams, validationFavorite} = require('../../middlewares/validation')
 const router = express.Router()
