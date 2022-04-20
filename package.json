@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.ts",
+    "start": "cross-env NODE_ENV=production nodemon ./server.ts",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.ts",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts"
