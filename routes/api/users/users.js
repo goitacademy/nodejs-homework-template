@@ -23,7 +23,7 @@ router.patch(
 router.patch(
   UsersRoutePaths.avatars,
   isLoggedIn,
-  upload.single("avatar"), // We expect 'avatar' key in form-data that will have new avatar file as its value
+  upload.single("avatar"), 
   Controllers.avatars,
 );
 

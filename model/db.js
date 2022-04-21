@@ -17,11 +17,6 @@ switch (process.env.NODE_ENV) {
 }
 
 const db = mongoose.connect(MONGO_CONNECTION, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  poolSize: 5,
 });
 
 mongoose.connection.on("connected", () => {
