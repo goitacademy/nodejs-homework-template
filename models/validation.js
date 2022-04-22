@@ -9,16 +9,20 @@ const validation = (data) => {
       .required(),
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
     phone: Joi.string()
-      .pattern(
-        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
-        'numbers',
-      )
+      .pattern(/^[0-9 -]+$/, 'numbers')
       .min(10)
       .max(16)
       .required(),
+    favorite: Joi.bool(),
   })
-
   return schema.validate(data)
 }
 
-module.exports = validation
+const favoriteValidation = (data) => {
+  const schema = Joi.object({
+    favorite: Joi.bool(),
+  })
+  return schema.validate(data)
+}
+
+module.exports = { validation, favoriteValidation }
