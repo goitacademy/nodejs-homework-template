@@ -29,31 +29,42 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  if (!contact) {
-    next(new CreateError.NotFound('Contact not found'));
-    return;
+  try {
+    const contact = await getContactById(req.params.contactId);
+    if (!contact) {
+      next(new CreateError.NotFound('Contact not found'));
+      return;
+    }
+    res.status(200).send(contact);
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).send(contact);
 });
 
 router.put(
   '/:contactId',
   reqValidateMid(updateContactSchema),
   async (req, res, next) => {
-    const contact = await updateContact(req.params.contactId, req.body);
-    res.status(200).send(contact);
+    try {
+      const contact = await updateContact(req.params.contactId, req.body);
+      res.status(200).send(contact);
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
 router.delete('/:contactId', async (req, res, next) => {
-  const isContactDeleted = await removeContact(req.params.contactId);
-  if (!isContactDeleted) {
-    next(new CreateError.NotFound('Contact not found'));
-    return;
+  try {
+    const isContactDeleted = await removeContact(req.params.contactId);
+    if (!isContactDeleted) {
+      next(new CreateError.NotFound('Contact not found'));
+      return;
+    }
+    res.status(204).send();
+  } catch (error) {
+    next(error);
   }
-  res.status(204).send();
 });
 
 module.exports = router;
