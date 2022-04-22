@@ -17,6 +17,7 @@ class AuthService {
             name: newUser.name,
             email: newUser.email,
             role: newUser.role,
+            avatar: newUser.avatar, 
             }
     }
     async login({ email, password }) {
