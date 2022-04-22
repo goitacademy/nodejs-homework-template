@@ -13,7 +13,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  if (contactsFunctions.getContactById()) {
+  if (!contactsFunctions.getContactById()) {
     res.status(404).json({
       status: "error",
       code: 404,
@@ -52,9 +52,9 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const body = req.body;
-  res.json({
+  res.status(201).json({
     status: "success",
-    code: 200,
+    code: 201,
     data: {
       contacts: await contactsFunctions.updateContact(
         req.params.contactId,
