@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 
@@ -15,11 +16,13 @@ const signup = async (req, res) => {
     });
   } else {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const avatarUrl = gravatar.url(email, { s: "200" }, true);
     const user = await User.create({
       name,
       email,
       password: hashPassword,
       subscription,
+      avatarUrl,
     });
     return res.status(201).json({
       status: "success",
@@ -29,6 +32,7 @@ const signup = async (req, res) => {
           name: user.name,
           email: user.email,
           subscription: user.subscription,
+          avatarUrl: user.avatarUrl,
         },
       },
     });
@@ -58,8 +62,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: null });
+  await User.findByIdAndUpdate(req.user._id, { token: null });
   return res.status(204).json({ status: "success", code: 204 });
 };
 
