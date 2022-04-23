@@ -1,76 +1,38 @@
 import express from "express";
-const contactsModel = require("../../models/contacts");
+const {
+  getList,
+  getById,
+  add,
+  remove,
+  update,
+} = require("../../controllers/contacts/index");
 const {
   schemaCreateContact,
   schemaUpdateContact,
+  schemaMongoId,
 } = require("./contacts-validation-schemes");
 const { validateBody, validateParams } = require("../../middleware/validation");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await contactsModel.listContacts();
-  res.json({ status: "success", code: 200, payload: { contacts } });
-});
+router.get("/", getList);
 
-router.get("/:contactId", async (req, res, next) => {
-  const contact = await contactsModel.getContactById(req.params.contactId);
-  if (contact) {
-    return res.json({ status: "success", code: 200, payload: { contact } });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
-});
+router.get("/:contactId", validateParams(schemaMongoId), getById);
 
-router.post("/", validateBody(schemaCreateContact), async (req, res, next) => {
-  const contact = await contactsModel.addContact(req.body);
-  res.status(201).json({ status: "success", code: 201, payload: { contact } });
-});
+router.post("/", validateBody(schemaCreateContact), add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  const contact = await contactsModel.removeContact(req.params.contactId);
-  if (contact) {
-    return res.json({
-      status: "success",
-      code: 200,
-      message: "Contact deleted",
-      payload: { contact },
-    });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
-});
+router.delete("/:contactId", validateParams(schemaMongoId), remove);
 
 router.put(
   "/:contactId",
-  validateParams(schemaUpdateContact),
-  async (req, res, next) => {
-    const contact = await contactsModel.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    if (contact) {
-      return res.json({ status: "success", code: 200, payload: { contact } });
-    }
-    return res
-      .status(404)
-      .json({ status: "error", code: 404, message: "Not Found" });
-  }
+  [validateBody(schemaUpdateContact), validateParams(schemaMongoId)],
+  update
 );
 
-router.patch("/:contactId", async (req, res, next) => {
-  const contact = await contactsModel.updateContact(
-    req.params.contactId,
-    req.body
-  );
-  if (contact) {
-    return res.json({ status: "success", code: 200, payload: { contact } });
-  }
-  return res
-    .status(404)
-    .json({ status: "error", code: 404, message: "Not Found" });
-});
+router.patch(
+  "/:contactId",
+  [validateBody(schemaUpdateContact), validateParams(schemaMongoId)],
+  update
+);
 
 module.exports = router;
