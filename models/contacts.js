@@ -91,15 +91,6 @@ const updateContact = async (contactId, body) => {
     }
   });
 
-  // const removeOldContact = contacts.filter((_, index) => index !== idx);
-  // const newContact = {
-  //   id: contacts[idx].id,
-  //   name: body.name,
-  //   email: body.email,
-  //   phone: body.phone,
-  // };
-
-  // const newContacts = [...removeOldContact, newContact];
   await fs.writeFile(filePath, JSON.stringify(contacts));
 
   return contacts[idx];

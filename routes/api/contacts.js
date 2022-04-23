@@ -32,6 +32,7 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const body = req.body;
   const addContact = await contactsFunctions.addContact(body);
+  console.log(addContact);
   if (addContact.error) {
     return res.status(400).json({
       status: "error",
