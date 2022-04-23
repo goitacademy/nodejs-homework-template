@@ -15,8 +15,12 @@ const { newContactSchema, updateContactSchema } = require('./schemas');
 const router = express.Router();
 
 router.post('/', reqValidateMid(newContactSchema), async (req, res, next) => {
-  const contact = await addContact(req.body);
-  res.status(201).send(contact);
+  try {
+    const contact = await addContact(req.body);
+    res.status(201).send(contact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get('/', async (req, res, next) => {
