@@ -13,8 +13,8 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  if (!contactsFunctions.getContactById()) {
-    res.status(404).json({
+  if (!(await contactsFunctions.getContactById(req.params.contactId))) {
+    return res.status(404).json({
       status: "error",
       code: 404,
       messege: `Contact with ${req.params.contactId} not found`,
@@ -31,30 +31,71 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
+  const addContact = await contactsFunctions.addContact(body);
+  if (addContact.error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      messege: `${addContact.error.details[0].message}`,
+    });
+  }
+
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
-      contacts: await contactsFunctions.addContact(body),
+      contacts: addContact,
     },
   });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.status(204).json({
+  if (!(await contactsFunctions.removeContact(req.params.contactId))) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Not found",
+    });
+  }
+  res.status(200).json({
     status: "success",
-    code: 204,
-    data: {
-      contacts: await contactsFunctions.removeContact(req.params.contactId),
-    },
+    code: 200,
+    data: await contactsFunctions.removeContact(req.params.contactId),
   });
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const body = req.body;
-  res.status(201).json({
+  if (Object.keys(body).length === 0) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "missing fields",
+    });
+  }
+
+  if (!(await contactsFunctions.updateContact(req.params.contactId, body))) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "Not found",
+    });
+  }
+  const putContact = await contactsFunctions.updateContact(
+    req.params.contactId,
+    body
+  );
+  if (putContact.error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      messege: `${putContact.error.details[0].message}`,
+    });
+  }
+
+  res.status(200).json({
     status: "success",
-    code: 201,
+    code: 200,
     data: {
       contacts: await contactsFunctions.updateContact(
         req.params.contactId,
