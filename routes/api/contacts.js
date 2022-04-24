@@ -1,4 +1,4 @@
-const express = require('express');
+const { Router } = require('express');
 const CreateError = require('http-errors');
 
 const {
@@ -8,59 +8,74 @@ const {
   removeContact,
   updateContact,
 } = require('../../models/contacts');
+const {
+  serializeContactResponce,
+  serializeContactsListResponce,
+} = require('./serialize');
 
-const { reqValidateMid } = require('./validate');
-const { newContactSchema, updateContactSchema } = require('./schemas');
+const {
+  reqValidateMid,
+  contactSchema,
+  updateContactSchema,
+} = require('./validation');
 
-const router = express.Router();
+const router = Router();
 
-router.post('/', reqValidateMid(newContactSchema), async (req, res, next) => {
+// CRUD - C
+
+router.post('/', reqValidateMid(contactSchema), async (req, res, next) => {
   try {
     const contact = await addContact(req.body);
-    res.status(201).send(contact);
+    res.status(201).send(serializeContactResponce(contact));
   } catch (error) {
     next(error);
   }
 });
+
+// CRUD - R
 
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    res.status(200).send(contacts);
+    res.status(200).send(serializeContactsListResponce(contacts));
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const contact = await getContactById(req.params.contactId);
+    const contact = await getContactById(req.params.id);
     if (!contact) {
       next(new CreateError.NotFound('Contact not found'));
       return;
     }
-    res.status(200).send(contact);
+    res.status(200).send(serializeContactResponce(contact));
   } catch (error) {
     next(error);
   }
 });
 
+// CRUD - U
+
 router.put(
-  '/:contactId',
+  '/:id',
   reqValidateMid(updateContactSchema),
   async (req, res, next) => {
     try {
-      const contact = await updateContact(req.params.contactId, req.body);
-      res.status(200).send(contact);
+      const contact = await updateContact(req.params.id, req.body);
+      res.status(200).send(serializeContactResponce(contact));
     } catch (error) {
       next(error);
     }
   },
 );
 
-router.delete('/:contactId', async (req, res, next) => {
+// CRUD - D
+
+router.delete('/:id', async (req, res, next) => {
   try {
-    const isContactDeleted = await removeContact(req.params.contactId);
+    const isContactDeleted = await removeContact(req.params.id);
     if (!isContactDeleted) {
       next(new CreateError.NotFound('Contact not found'));
       return;

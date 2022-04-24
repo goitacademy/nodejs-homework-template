@@ -1,6 +1,16 @@
 const joi = require('joi');
 
-exports.newContactSchema = joi.object({
+exports.reqValidateMid =
+  (schema, reqParamType = 'body') =>
+  (req, res, next) => {
+    const { error } = schema.validate(req[reqParamType]);
+    if (error) {
+      return res.status(400).send(error);
+    }
+    next();
+  };
+
+exports.contactSchema = joi.object({
   name: joi
     .string()
     .pattern(/^[a-zA-Z\s'’ʼ-]{3,30}$/)
@@ -14,5 +24,6 @@ exports.newContactSchema = joi.object({
 
 exports.updateContactSchema = joi.object({
   name: joi.string().pattern(/^[a-zA-Z\s'’ʼ-]{3,30}$/),
+  email: joi.string().email(),
   phone: joi.string(),
 });

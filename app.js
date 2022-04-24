@@ -3,14 +3,16 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const contactsRouter = require('./routes/api/contacts');
+const CORS = process.env.CORS ?? '*';
+console.log(CORS);
 
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use(morgan(formatsLogger));
-app.use(cors());
 app.use(express.json());
+app.use(cors({ origin: CORS }));
+app.use(morgan(formatsLogger));
 
 app.use('/api/contacts', contactsRouter);
 
