@@ -1,0 +1,16 @@
+const { nanoid } = require('nanoid');
+
+const findIndex = (data, id) => {
+  const index = data.findIndex(item => item.id === id);
+  return index !== -1 ? index : null;
+};
+
+exports.findIndex = findIndex;
+
+exports.generateNewId = contacts => {
+  let id = '';
+  do {
+    id = nanoid();
+  } while (findIndex(contacts, id));
+  return id;
+};
