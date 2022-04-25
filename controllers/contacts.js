@@ -18,10 +18,9 @@ const getContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  const { _id } = req.user;
   const contact = await Contact.findOne({
     _id: req.params.contactId,
-    owner: _id,
+    owner: req.user._id,
   }).populate("owner", "_id name email");
   if (contact) {
     return res.json({ status: "success", code: 200, data: { contact } });
@@ -33,19 +32,17 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const { _id } = req.user;
-  const contact = await Contact.create({ ...req.body, owner: _id });
+  const contact = await Contact.create({ ...req.body, owner: req.user._id });
   return res
     .status(201)
     .json({ status: "success", code: 201, data: { contact } });
 };
 
 const updateContact = async (req, res) => {
-  const { _id } = req.user;
   const contact = await Contact.findOneAndUpdate(
     {
       _id: req.params.contactId,
-      owner: _id,
+      owner: req.user._id,
     },
     req.body,
     { new: true }
@@ -60,10 +57,9 @@ const updateContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
-  const { _id } = req.user;
   const contact = await Contact.findOneAndRemove({
     _id: req.params.contactId,
-    owner: _id,
+    owner: req.user._id,
   });
   if (contact) {
     return res.json({
@@ -79,12 +75,11 @@ const deleteContact = async (req, res) => {
 };
 
 const updateContactFavorite = async (req, res) => {
-  const { _id } = req.user;
   const { favorite } = req.body;
   const contact = await Contact.findOneAndUpdate(
     {
       _id: req.params.contactId,
-      owner: _id,
+      owner: req.user._id,
     },
     { favorite },
     { new: true }
