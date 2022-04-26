@@ -1,3 +1,5 @@
+const { HTTP_STATUS_CODE } = require("../../libs/constants");
+
 const validateBody =
   (schema: any) =>
   async (req: any, res: any, next: any): Promise<any> => {
@@ -6,9 +8,11 @@ const validateBody =
       next();
     } catch (err) {
       console.log(err.details);
-      return res
-        .status(400)
-        .json({ status: "error", code: 400, message: err.message });
+      return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+        status: "error",
+        code: HTTP_STATUS_CODE.BAD_REQUEST,
+        message: err.message,
+      });
     }
   };
 
@@ -20,10 +24,13 @@ const validateParams =
       next();
     } catch (err) {
       console.log(err.details);
-      return res
-        .status(400)
-        .json({ status: "error", code: 400, message: err.message });
+      return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+        status: "error",
+        code: HTTP_STATUS_CODE.BAD_REQUEST,
+        message: err.message,
+      });
     }
   };
 
 module.exports = { validateBody, validateParams };
+export {};
