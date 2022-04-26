@@ -1,34 +1,25 @@
 const fs = require('fs').promises;
 const path = require('path');
-const CreateError = require('http-errors');
-const { findIndex, generateNewId } = require('../services/services,js');
+const { findIndex, generateNewId } = require('../helpers').helpers;
 
 const contactsPath = path.resolve('./models/contacts.json');
 
 // CRUD - C
 
-const addContact = async body => {
+const addContactbyId = async body => {
   const contacts = await listContacts();
   const id = generateNewId(contacts);
   const newContacts = [...contacts, { id, ...body }];
 
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(newContacts));
-    return { id, ...body };
-  } catch (error) {
-    throw new CreateError.BadGateway('Contacts data not found');
-  }
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  return { id, ...body };
 };
 
 // CRUD - R
 
 const listContacts = async () => {
-  try {
-    const contacts = await fs.readFile(contactsPath, 'utf8');
-    return JSON.parse(contacts);
-  } catch (error) {
-    throw new CreateError.BadGateway('Contacts data not found');
-  }
+  const contacts = await fs.readFile(contactsPath, 'utf8');
+  return JSON.parse(contacts);
 };
 
 const getContactById = async id => {
@@ -38,7 +29,7 @@ const getContactById = async id => {
 
 // CRUD - U
 
-const updateContact = async (id, body) => {
+const changeContact = async (id, body) => {
   const contacts = await listContacts();
   const index = findIndex(contacts, id);
   if (!index) return null;
@@ -48,12 +39,8 @@ const updateContact = async (id, body) => {
     ...body,
   };
 
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return contacts[index];
-  } catch (error) {
-    throw new CreateError.BadGateway('Contacts data not found');
-  }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return contacts[index];
 };
 
 // CRUD - D
@@ -65,18 +52,15 @@ const removeContact = async id => {
   if (!index) return false;
 
   contacts.splice(index, 1);
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return true;
-  } catch (error) {
-    throw new CreateError.BadGateway('Contacts data not found');
-  }
+
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return true;
 };
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
-  addContact,
-  updateContact,
+  addContactbyId,
+  changeContact,
 };

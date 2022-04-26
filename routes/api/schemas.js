@@ -1,15 +1,5 @@
 const joi = require('joi');
 
-exports.reqValidateMid =
-  (schema, reqParamType = 'body') =>
-  (req, res, next) => {
-    const { error } = schema.validate(req[reqParamType]);
-    if (error) {
-      return res.status(400).send(error);
-    }
-    next();
-  };
-
 exports.contactSchema = joi.object({
   name: joi
     .string()
