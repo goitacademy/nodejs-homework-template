@@ -51,7 +51,7 @@ const updateContactJoiSchema = Joi.object({
 const favoriteContactJoiSchema = Joi.object({
   favorite: Joi.bool()
     .required()
-    .messages({ "any.required": "Missing field favorite" }),
+    .messages({ "any.required": "Missing required field favorite" }),
 });
 
 const contactJoiId = Joi.object({

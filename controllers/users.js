@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const Jimp = require("jimp");
 const { User } = require("../models/user");
+const sendEmail = require("../services/sendGridEmail");
 
 const current = async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -80,8 +81,62 @@ const updateAvatar = async (req, res, next) => {
   }
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "User not found",
+    });
+  } else {
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Verification successful",
+    });
+  }
+};
+
+const reverifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      status: "error",
+      code: 404,
+      message: "User not found",
+    });
+  } else if (user && user.verify) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "Verification has already been passed",
+    });
+  } else if (user && !user.verify) {
+    const newEmail = {
+      to: email,
+      subject: "Please confirm your email address",
+      html: `<a target="_blank" href="http://localhost:3001/api/users/verify/${user.verificationToken}">Follow the link to confirm</a>`,
+    };
+    await sendEmail(newEmail);
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Verification email sent",
+    });
+  }
+};
+
 module.exports = {
   current,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  reverifyEmail,
 };

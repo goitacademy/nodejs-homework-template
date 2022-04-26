@@ -3,6 +3,8 @@ const {
   current,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  reverifyEmail,
 } = require("../../controllers/users");
 const {
   authToken,
@@ -10,7 +12,10 @@ const {
   tryCatchWrapper,
   upload,
 } = require("../../middlewares");
-const { subscriptionUserJoiSchema } = require("../../models/user");
+const {
+  subscriptionUserJoiSchema,
+  reverifyUserJoiSchema,
+} = require("../../models/user");
 
 const router = express.Router();
 
@@ -25,6 +30,12 @@ router
     "/avatars",
     [authToken, upload.single("avatar")],
     tryCatchWrapper(updateAvatar)
+  )
+  .get("/verify/:verificationToken", tryCatchWrapper(verifyEmail))
+  .post(
+    "/verify",
+    validation("body", reverifyUserJoiSchema),
+    tryCatchWrapper(reverifyEmail)
   );
 
 module.exports = router;

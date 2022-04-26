@@ -1,7 +1,9 @@
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
+const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
+const sendEmail = require("../services/sendGridEmail");
 
 const { SECRET_KEY } = process.env;
 
@@ -17,13 +19,21 @@ const signup = async (req, res) => {
   } else {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const avatarUrl = gravatar.url(email, { s: "200" }, true);
+    const verificationToken = nanoid();
     const user = await User.create({
       name,
       email,
       password: hashPassword,
       subscription,
       avatarUrl,
+      verificationToken,
     });
+    const newEmail = {
+      to: email,
+      subject: "Please confirm your email address",
+      html: `<a target="_blank" href="http://localhost:3001/api/users/verify/${verificationToken}">Follow the link to confirm</a>`,
+    };
+    await sendEmail(newEmail);
     return res.status(201).json({
       status: "success",
       code: 201,
@@ -33,6 +43,7 @@ const signup = async (req, res) => {
           email: user.email,
           subscription: user.subscription,
           avatarUrl: user.avatarUrl,
+          verificationToken: user.verificationToken,
         },
       },
     });
@@ -42,11 +53,11 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user || !bcrypt.compareSync(password, user.password)) {
+  if (!user || !user.verify || !bcrypt.compareSync(password, user.password)) {
     return res.status(401).json({
       status: "error",
       code: 401,
-      message: "Email or password is wrong",
+      message: "Email is wrong or not verify or password is wrong",
     });
   } else {
     const token = jwt.sign(
