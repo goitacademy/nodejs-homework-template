@@ -12,6 +12,7 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
+
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -36,8 +37,9 @@ router.post("/", addContactValid, addContact);
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const delContact = await removeContact(id);
+  console.log('delContact', delContact)
   if (!delContact.length) {
-    return res.json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
   res.status(200).json({ message: "Contact deleted" });
 });

@@ -1,12 +1,15 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { uid } = require("uid");
+
 const contactsPath = path.resolve(__dirname, "./contacts.json");
 
 const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath, "utf-8");
+    
     const normContacts = JSON.parse(contacts);
+   
     return normContacts;
   } catch (error) {
     console.log(error.message);
