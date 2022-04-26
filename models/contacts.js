@@ -63,6 +63,10 @@ const updateContact = async (req, res, next) => {
     const id = req.params.contactId;
     const editContact = contacts.filter((item) => item.id === id);
     const { name, email, phone } = req.body;
+
+    if( !name || !email || !phone ) {
+      res.status(400).json({ message: "Missing fields" });
+    }
     if (!editContact) {
       res.status(404).json({ message: "Not found" });
     } else {
