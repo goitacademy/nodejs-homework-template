@@ -2,19 +2,17 @@ const sgMail = require("@sendgrid/mail");
 const Mailgen = require("mailgen");
 require("dotenv").config();
 
-// Setting up SendGrid's API KEY
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Setting up Mailgen e-mail template generator
 const mailGenerator = new Mailgen({
   theme: "neopolitan",
   product: {
     name: process.env.SENDGRID_SENDER_NAME,
-    link: `http://localhost:${process.env.PORT || 3000}`, // while in dev, local host link is used
+    link: `http://localhost:${process.env.PORT || 3000}`,
   },
 });
 
-// Function to generate message with Mailgen's help
 const createMessage = (name, toEmail, verificationToken) => {
   const email = {
     body: {
@@ -45,7 +43,6 @@ const createMessage = (name, toEmail, verificationToken) => {
   };
 };
 
-// Function to send email with SendGrid's service and with email generated with Mailgen
 const sendVerificationEmail = async (name, toEmail, verificationToken) => {
   const message = createMessage(name, toEmail, verificationToken);
 
