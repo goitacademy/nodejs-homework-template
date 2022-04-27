@@ -4,7 +4,6 @@ const cors = require('cors');
 
 const contactsRouter = require('./routes/api/contacts');
 const CORS = process.env.CORS ?? '*';
-console.log(CORS);
 
 const app = express();
 

@@ -1,36 +1,33 @@
 const fs = require('fs').promises;
 const path = require('path');
-const { findIndex, generateNewId } = require('../helpers').helpers;
+const { generateNewId, findIndex } = require('../helpers/common');
 
 const contactsPath = path.resolve('./models/contacts.json');
 
 // CRUD - C
 
-const addContactbyId = async body => {
-  const contacts = await listContacts();
+const addContact = async (body, contacts) => {
   const id = generateNewId(contacts);
   const newContacts = [...contacts, { id, ...body }];
 
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  await whriteDataToFile(newContacts);
   return { id, ...body };
 };
 
 // CRUD - R
 
-const listContacts = async () => {
+const getContacts = async () => {
   const contacts = await fs.readFile(contactsPath, 'utf8');
   return JSON.parse(contacts);
 };
 
-const getContactById = async id => {
-  const contacts = await listContacts();
+const getContact = async (id, contacts) => {
   return contacts.find(contact => contact.id === id);
 };
 
 // CRUD - U
 
-const changeContact = async (id, body) => {
-  const contacts = await listContacts();
+const updateContact = async (id, body, contacts) => {
   const index = findIndex(contacts, id);
   if (!index) return null;
 
@@ -39,28 +36,31 @@ const changeContact = async (id, body) => {
     ...body,
   };
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  await whriteDataToFile(contacts);
   return contacts[index];
 };
 
 // CRUD - D
 
-const removeContact = async id => {
-  const contacts = await listContacts();
+const deleteContact = async (id, contacts) => {
   const index = findIndex(contacts, id);
 
   if (!index) return false;
 
   contacts.splice(index, 1);
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  await whriteDataToFile(contacts);
   return true;
 };
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContactbyId,
-  changeContact,
+const whriteDataToFile = async data => {
+  await fs.writeFile(contactsPath, JSON.stringify(data));
+};
+
+exports.model = {
+  getContacts,
+  getContact,
+  deleteContact,
+  addContact,
+  updateContact,
 };

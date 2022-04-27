@@ -1,6 +1,6 @@
 const joi = require('joi');
 
-exports.contactSchema = joi.object({
+const contact = joi.object({
   name: joi
     .string()
     .pattern(/^[a-zA-Z\s'’ʼ-]{3,30}$/)
@@ -12,8 +12,10 @@ exports.contactSchema = joi.object({
     .required(),
 });
 
-exports.updateContactSchema = joi.object({
+const updateContact = joi.object({
   name: joi.string().pattern(/^[a-zA-Z\s'’ʼ-]{3,30}$/),
   email: joi.string().email(),
   phone: joi.string(),
 });
+
+exports.schema = { contact, updateContact };
