@@ -1,7 +1,7 @@
 const express = require("express");
 const createError = require("http-errors");
-const { Contact, joiSchema } = require("../../models/contact");
-const add = require("../../controllers/add");
+const { Contact, joiSchema, joiBoolSchema } = require("../../models/contact");
+const ctrl = require("../../controllers");
 const { validation, ctrlWrapper } = require("../../middleware");
 
 const router = express.Router();
@@ -25,57 +25,28 @@ router.get("/:contactId", async (req, res, next) => {
     }
     res.json({ status: "success", code: 200, contact });
   } catch (error) {
-    // //APP// app.use((err, req, res, next) => {
-    //   res.status(500).json({ message: err.message });
-    // });
     next(error);
   }
 });
-router.post("/", validation(joiSchema), ctrlWrapper(add));
+router.post("/", validation(joiSchema), ctrlWrapper(ctrl.add));
 
-// router.post("/", async (req, res, next) => {
-//   try {
-//     const { error } = joiSchema.validate(req.body);
-//     if (error) {
-//       // eslint-disable-next-line new-cap
-//       throw new createError(400, error.message + "missing required name field");
-//     }
-//     const result = await Contact.create(req.body);
-//     console.log(result);
-//     res.status(201).json({ result });
-//   } catch (error) {
-//     next("err:", error);
-//   }
-// });
+router.put("/:contactId", validation(joiSchema), ctrlWrapper(ctrl.updateById));
+
+router.patch(
+  "/:contactId/favorite",
+  validation(joiBoolSchema),
+  ctrlWrapper(ctrl.updateFavoriteById)
+);
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    const data = await removeContact(id);
+    const data = await Contact.findByIdAndRemove(id);
     if (!data) {
       // eslint-disable-next-line new-cap
-      throw new createError(404, "Contact not found");
+      throw new createError.NotFound(404, "Contact not found");
     }
     res.status(200).json({ message: "contact deleted", data });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = joiSchema.validate(req.body);
-    if (error) {
-      // eslint-disable-next-line new-cap
-      throw new createError(400, error.message + "missing fields");
-    }
-    const id = req.params.contactId;
-    if (!id) {
-      // eslint-disable-next-line new-cap
-      throw new createError(404, "Not found");
-    }
-    await Contact.findByIdAndUpdate(id, req.body);
-    res.json({ status: "success", code: 200, data: req.body });
   } catch (error) {
     next(error);
   }

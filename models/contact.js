@@ -22,7 +22,10 @@ const joiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.bool(),
+});
+const joiBoolSchema = Joi.object({
+  favorite: Joi.bool().required(),
 });
 const Contact = model("contact", contatSchema);
-module.exports = { Contact, joiSchema };
+module.exports = { Contact, joiSchema, joiBoolSchema };
