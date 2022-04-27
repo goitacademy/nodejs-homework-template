@@ -1,12 +1,18 @@
 const express = require("express");
-const contacts = require("../../models/contacts.js");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../../models/index");
 const { createError, contactSchema } = require("../../helpers/index");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await listContacts();
     if (!result) {
       throw createError();
     }
@@ -19,7 +25,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await getContactById(contactId);
     if (!result) {
       throw createError(404);
     }
@@ -32,11 +38,10 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
-    console.log("error:", error);
     if (error) {
       throw createError(400, error);
     }
-    const result = await contacts.addContact(req.body);
+    const result = await addContact(req.body);
     res.json({ status: 201, message: "success", data: result });
   } catch (error) {
     next(error);
@@ -46,7 +51,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await removeContact(contactId);
     if (!result) {
       throw createError(404);
     }
@@ -63,7 +68,7 @@ router.put("/:contactId", async (req, res, next) => {
       throw createError(400, error);
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await updateContact(contactId, req.body);
     if (!result) {
       throw createError(404);
     }
