@@ -6,9 +6,6 @@ const {
   validateRequest,
 } = require('../../helpers/contacts/middlewares');
 const { schema } = require('../../helpers/contacts/schemas');
-// const { schema } = require('../../helpers/contacts');
-// const { catchError, validateRequest } =
-//   require('../../helpers/contacts').middlewares;
 const { model } = require('../../models/contacts');
 
 const router = Router();
