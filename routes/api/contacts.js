@@ -9,8 +9,6 @@ const { schema } = require('../../helpers/contacts/schemas');
 
 const router = Router();
 
-// CRUD - C
-
 router.post(
   '/',
   validateRequest(schema.contact),
