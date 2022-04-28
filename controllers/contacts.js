@@ -5,30 +5,27 @@ const {
 } = require('./serialize');
 
 const addContact = async (req, res) => {
-  const contact = await service.addContact(req.body, req.contacts);
+  const contact = await service.addContact(req.body);
   res.status(201).send(serializeContactResponce(contact));
 };
 
 const getContacts = async (req, res) => {
-  res.status(200).send(serializeContactsListResponce(req.contacts));
+  const contacts = await service.getContacts();
+  res.status(200).send(serializeContactsListResponce(contacts));
 };
 
 const getContact = async (req, res) => {
-  const contact = await service.getContact(req.params.id, req.contacts);
+  const contact = await service.getContact(req.params.id);
   res.status(200).send(serializeContactResponce(contact));
 };
 
 const updateContact = async (req, res) => {
-  const contact = await service.updateContact(
-    req.params.id,
-    req.body,
-    req.contacts,
-  );
+  const contact = await service.updateContact(req.params.id, req.body);
   res.status(200).send(serializeContactResponce(contact));
 };
 
 const deleteContact = async (req, res) => {
-  await service.deleteContact(req.params.id, req.contacts);
+  await service.deleteContact(req.params.id);
   res.status(204).send();
 };
 
