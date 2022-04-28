@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
+    "email": "nulla.ante@vestibul.com",
     "phone": "(992) 914-3792"
   },
   {
@@ -58,5 +58,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "06e074f5-874a-4998-a1a9-f0c45b4e312d",
+    "name": "Yulia Novakovska",
+    "email": "novakovska@gmail.com",
+    "phone": "(070) 111-1111"
   }
 ]
