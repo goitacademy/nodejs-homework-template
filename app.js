@@ -1,3 +1,9 @@
+//sydenham
+//mongodb+srv://Jaroslava:<password>@cluster0.gackj.mongodb.net/test
+
+
+
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
