@@ -24,7 +24,6 @@ const contactsSchema = new Schema({
 });
 
 const schemaErrorHandlingMiddlware = (error, doc, next) => {
-  console.log(error);
   if (error.name === 'MongoServerError' && error.code === 11000) {
     next(
       new errors[409](
