@@ -5,13 +5,20 @@ const addContact = async reqParams => await model.create(reqParams);
 
 const getContacts = async () => await model.find();
 
-const getContact = async id => await model.findById(id);
+const getContact = async id => {
+  const contact = await model.findById(id);
+  if (!contact) throw new NotFound('Contact not found');
+  return contact;
+};
 
-const updateContact = async (id, reqParams) =>
-  await model.findByIdAndUpdate(id, reqParams, {
+const updateContact = async (id, reqParams) => {
+  const contact = await model.findByIdAndUpdate(id, reqParams, {
     new: true,
     runValidators: true,
   });
+  if (!contact) throw new NotFound('Contact not found');
+  return contact;
+};
 
 const deleteContact = async id => {
   const result = await model.deleteOne({ _id: id });

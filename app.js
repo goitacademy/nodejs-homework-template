@@ -21,7 +21,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   const statusCode = err.status ?? 500;
-  res.status(statusCode).send(err.stack);
+  res.status(statusCode).send(err.message);
 });
 
 module.exports = app;
