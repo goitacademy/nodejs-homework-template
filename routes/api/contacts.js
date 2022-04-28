@@ -1,21 +1,12 @@
 const express = require("express");
-const Joi = require("joi");
 
 const { createError } = require("../../helpers");
 
 const contacts = require("../../models");
 
-const router = express.Router();
+const contactSchema = require("./validation");
 
-const contactSchema = Joi.object({
-  name: Joi.string()
-    .pattern(/^[a-zA-Z\s'’ʼ-]{3,30}$/)
-    .required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^[0-9()+\s-]{10,19}$/)
-    .required(),
-});
+const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
