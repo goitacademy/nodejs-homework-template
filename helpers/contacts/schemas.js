@@ -30,7 +30,7 @@ const id = joi.object({
     .string()
     .custom((value, helpers) => {
       if (!isValidObjectId(value)) {
-        return helpers.error('Contact not Found');
+        return helpers.error('Contact not Found. Invalid ID');
       }
       return value;
     })
