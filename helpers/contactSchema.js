@@ -10,7 +10,13 @@ const contactSchema = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
-  phone: phoneJoi.string().phoneNumber({ format: "national" }).required(),
+  phone: phoneJoi
+    .string()
+    .phoneNumber({ format: "international" })
+    .message(
+      "The phone number must be in international format. Start with + and be 12 digits long. Example (+380675034464)"
+    )
+    .required(),
 });
 
 module.exports = contactSchema;
