@@ -3,6 +3,26 @@ const path = require('path')
 const fs = require('fs/promises')
 
 class UsersController {
+    async verifyEmail(req, res) {
+        const {verificationToken} = req.params;
+        console.log(verificationToken)
+        const user = await User.findOne({verificationToken});
+        if (!user) {
+            res.json({
+                status: 'error',
+                code: 404,
+                message: 'User not found',
+            });
+        }
+        await User.findByIdAndUpdate(user._id, {
+            verify: true,
+            verificationToken: null,
+        });
+        res.json({
+            message: 'Verification successful',
+        });
+    }
+
     async getCurrent(req, res){
         const {email, subscription} = req.user
         res.json({

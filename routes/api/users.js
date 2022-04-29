@@ -13,5 +13,7 @@ UsersRouter.patch('/', auth, validateQuery(joiPatchUserSchema), UsersController.
 
 UsersRouter.patch('/avatar', auth, upload.single('avatar'), UsersController.updateAvatar)
 
+UsersRouter.get('/verify/:verificationToken', UsersController.verifyEmail)
+
 module.exports = UsersRouter;
 

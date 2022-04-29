@@ -1,7 +1,10 @@
 const {User} = require('../models/auth.js')
 const jwt = require('jsonwebtoken')
 const gravatar = require('gravatar')
+const {v4: uuidv4} = require('uuid');
 const {SECRET_KEY} = process.env;
+const sendEmail = require('../helpers/helpers')
+
 
 class AuthController {
     async signup (req, res, next) {
@@ -17,10 +20,15 @@ class AuthController {
                     });
             }
             const avatarUrl = gravatar.url(email)
-            const newUser = new User({...req.body, password, avatarUrl})
+            const verificationToken = uuidv4();
+            const newUser = new User({...req.body, password, avatarUrl, verificationToken})
             newUser.setPassword(password)
-            newUser.save();
-            // const newUser = await user.create({...req.body, "password": hashpwd});
+            await newUser.save();
+            await sendEmail({
+                to: email,
+                subject: 'Подтверждение email',
+                html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердите email</a>`,
+            });
             return res
                 .status(201)
                 .json({ status: "created",
@@ -38,7 +46,7 @@ class AuthController {
             const {email, password} = req.body;
             const user = await User.findOne({email});
             // const existUser = new User({...req.body, password})
-            if(!user || !user.comparePassword(password)){
+            if(!user || !user.verify || !user.comparePassword(password)){
                 return res
                     .status(401)
                     .json({ status: "Unauthorized",
