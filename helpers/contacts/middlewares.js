@@ -1,4 +1,4 @@
-const catchError = controller => async (req, res, next) => {
+const ctrlWrapper = controller => async (req, res, next) => {
   try {
     await controller(req, res, next);
   } catch (error) {
@@ -16,4 +16,4 @@ const validateRequest =
     next();
   };
 
-module.exports = { catchError, validateRequest };
+module.exports = { ctrlWrapper, validateRequest };
