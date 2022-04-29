@@ -6,7 +6,10 @@ const DB_HOST =
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database succes conect"))
-  .catch((error) => console.log(error.message));
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
 const express = require("express");
 const logger = require("morgan");
