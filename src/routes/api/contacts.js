@@ -10,14 +10,12 @@ const {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
   putContact,
 } = require("../../models/contacts");
 
 // router.get("/", listContacts);
 router.get("/", async (req, res, next) => {
   const contact = await listContacts();
-  // console.log('contact', contact)
   res.json(contact);
 });
 
@@ -42,34 +40,24 @@ router.delete("/:contactId", async (req, res, next) => {
   res.json({ status: "success" });
 });
 
-router.put("/:contactId", addPostValidation, putContact);
+// router.put("/:contactId", addPostValidation, putContact);
+router.put("/:contactId",addPostValidation, async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  console.log("contactId", contactId);
+  console.log(name, email, phone);
+  await putContact(contactId, { name, email, phone });
+  res.json({ status: "success" });
+});
 
-router.patch("/:contactId", patchValidation, updateContact);
+// router.patch("/:contactId", patchValidation, putContact);
+router.patch("/:contactId", patchValidation, async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  console.log("contactId", contactId);
+  console.log(name, email, phone);
+  await putContact(contactId, { name, email, phone });
+  res.json({ status: "success" });
+});
 
 module.exports = router;
-
-// const express = require('express')
-
-// const router = express.Router()
-
-// router.get('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.get('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// module.exports = router

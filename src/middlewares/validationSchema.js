@@ -29,7 +29,7 @@ module.exports = {
           tlds: { allow: ["com", "net"] },
         })
         .optional(),
-      phone: Joi.string().phoneNumber().optional(),
+      phone: Joi.string(),
     });
 
     const validationResult = schemaValid.validate(req.body);

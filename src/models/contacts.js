@@ -1,7 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
 const contactsPath = path.join(__dirname, "./contacts.json");
-// console.log('contactsPath', contactsPath)
 
 const listContacts = async () => {
   try {
@@ -27,10 +26,8 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const newContacts = contacts.filter(
-      (obj) => obj.id !== String(contactId)
-    );
-   return fs.writeFile(contactsPath, JSON.stringify(newContacts), (err) => {
+    const newContacts = contacts.filter((obj) => obj.id !== String(contactId));
+    return fs.writeFile(contactsPath, JSON.stringify(newContacts), (err) => {
       if (err) throw err;
     });
   } catch (error) {
@@ -41,10 +38,10 @@ const removeContact = async (contactId) => {
 const addContact = async (name, email, phone) => {
   try {
     const contacts = await listContacts();
-   
+
     const nextIdNumber = Number(contacts[contacts.length - 1].id) + 1;
-console.log('nextIdNumber', nextIdNumber)
-// console.log(name, email, phone)
+    console.log("nextIdNumber", nextIdNumber);
+    
     const newContact = {
       id: String(nextIdNumber),
       name: name,
@@ -53,7 +50,7 @@ console.log('nextIdNumber', nextIdNumber)
     };
 
     contacts.push(newContact);
-    console.log('contacts', contacts)
+    console.log("contacts", contacts);
 
     fs.writeFile(contactsPath, JSON.stringify(contacts), (err) => {
       if (err) throw err;
@@ -66,45 +63,25 @@ console.log('nextIdNumber', nextIdNumber)
 const putContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
-    const parseContacts = JSON.parse(contacts);
+    const { name, email, phone } = body;
+    const contactsNew = [];
 
-    const changeContact = {
-      id: contactId,
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-    };
-
-    parseContacts.filter((el) => el.id !== contactId).push(changeContact);
-
-    fs.writeFile(contactsPath, JSON.stringify(parseContacts), (err) => {
-      if (err) throw err;
-    });
-  } catch (error) {
-    console.error(error.message);
-  }
-};
-
-const updateContact = async (contactId, body) => {
-  try {
-    const contacts = await listContacts();
-    const parseContacts = JSON.parse(contacts);
-
-    parseContacts.forEach((contact) => {
-      if (contact.id === contactId) {
-        if (body.username) {
-          contact.username = body.username;
+    contacts.forEach((contact) => {
+      if (contact.id === String(contactId)) {
+        if (name) {
+          contact.name = name;
         }
-        if (body.email) {
-          contact.email = body.email;
+        if (email) {
+          contact.email = email;
         }
-        if (body.phone) {
-          contact.phone = body.phone;
+        if (phone) {
+          contact.phone = phone;
         }
       }
+      contactsNew.push(contact);
     });
 
-    fs.writeFile(contactsPath, JSON.stringify(parseContacts), (err) => {
+    fs.writeFile(contactsPath, JSON.stringify(contactsNew), (err) => {
       if (err) throw err;
     });
   } catch (error) {
@@ -118,12 +95,4 @@ module.exports = {
   removeContact,
   addContact,
   putContact,
-  updateContact,
 };
-
-// {
-//   "id": "2",
-//   "name": "Chaim Lewis",
-//   "email": "dui.in@egetlacus.ca",
-//   "phone": "(294) 840-6685"
-// }
