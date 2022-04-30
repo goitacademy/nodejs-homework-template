@@ -1,4 +1,6 @@
 const express = require('express')
+// Express - веб-фреймворк для написания веб-серверов на Node.js, имеет в своем распоряжении множество служебных методов HTTP и промежуточных обработчиков, чтобы создать надежный API или веб-сайт.
+
 const logger = require('morgan')
 const cors = require('cors')
 
