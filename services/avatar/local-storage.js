@@ -16,6 +16,7 @@ class LocalStorage {
     const urlOfAvatar = path.normalize(
       path.join(this.user.id, this.file.filename)
     );
+
     await Users.updateAvatar(this.user.id, urlOfAvatar);
     return urlOfAvatar;
   }

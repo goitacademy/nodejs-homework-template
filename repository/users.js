@@ -14,10 +14,10 @@ const create = async (body) => {
 };
 
 const updateToken = async (id, token) => {
-  return await User.findByIdAndUpdate(id, { token }); // updateOne
+  return await User.findByIdAndUpdate(id, { token });
 };
 
 const updateAvatar = async (id, avatar, cloudId = null) => {
-  return await User.findByIdAndUpdate(id, { avatar, cloudId }); // updateOne
+  return await User.findByIdAndUpdate(id, { avatar, cloudId });
 };
 module.exports = { findById, findByEmail, create, updateToken, updateAvatar };
