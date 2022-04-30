@@ -12,9 +12,7 @@ const listContacts = async () => {
 
 const getContactById = async contactId => {
   const contacts = await listContacts();
-  const contact = contacts.find(
-    contact => parseInt(contact.id) === parseInt(contactId),
-  );
+  const contact = contacts.find(contact => contact.id === contactId);
   return contact;
 };
 
@@ -40,13 +38,13 @@ async function addContact(contact) {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const updatedContacts = contacts.map(contact => {
-    if (parseInt(contact.id) === parseInt(contactId))
-      contact = { id: contact.id, ...body };
-    return contact;
-  });
-  await fs.writeFile(filePath, JSON.stringify(updatedContacts), 'utf8');
-  return { ...body, contactId };
+  const idx = contacts.findIndex(item => item.id === contactId);
+  if (idx === -1) {
+    return null;
+  }
+  contacts[idx] = { ...body, id: contactId };
+  await fs.writeFile(filePath, JSON.stringify(contacts), 'utf8');
+  return contacts[idx];
 };
 
 module.exports = {
