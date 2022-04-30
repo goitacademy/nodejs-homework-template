@@ -9,7 +9,7 @@ const validateAddedContact = (req, res, next) => {
             minDomainSegments: 2,
             tlds: { allow: ["com", "net"] },
         }).required(),
-        phone: Joi.number().min(10).max(13).required(),
+        phone: Joi.string().min(10).max(20).required(),
     });
     const { error } = schema.validate(req.body);
     if (error) {
@@ -24,8 +24,8 @@ const validateUpdatedContact = (req, res, next) => {
         email: Joi.string().email({
             minDomainSegments: 2,
             tlds: { allow: ["com", "net"] },
-        }).required(),
-        phone: Joi.number().min(10).max(13).required(),
+        }),
+        phone: Joi.string().min(10).max(20).required(),
     });
     const { error } = schema.validate(req.body);
     if (error) {
