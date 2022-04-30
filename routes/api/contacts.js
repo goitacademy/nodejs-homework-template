@@ -2,83 +2,29 @@ const express = require('express');
 
 const router = express.Router();
 
-const contacts = require('../../models/contacts');
-const { createError, contactsSchema } = require('../../helpers');
+const { validation } = require('../../middlewares');
+const { schemas } = require('../../models/contact');
+const { ctrlWrapper } = require('../../helpers');
+const controllers = require('../../controllers/contacts');
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/', ctrlWrapper(controllers.getAll));
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+router.get('/:contactId', ctrlWrapper(controllers.getById));
 
-    if (!result) {
-      throw createError(404);
-    }
+router.post('/', validation(schemas.add), ctrlWrapper(controllers.add));
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete('/:contactId', ctrlWrapper(controllers.removeById));
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { name, email, phone } = req.body;
+router.put(
+  '/:contactId',
+  validation(schemas.add),
+  ctrlWrapper(controllers.updateById)
+);
 
-    const { error } = contactsSchema.validate({ name, email, phone });
-    if (error) {
-      throw createError(400, error.message);
-    }
-
-    const result = await contacts.addContact(name, email, phone);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-
-    if (!result) {
-      throw createError(404);
-    }
-
-    res.json({ message: 'Contact deleted' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const { name, email, phone } = req.body;
-
-    const { error } = contactsSchema.validate({ name, email, phone });
-    if (error) {
-      throw createError(400, error.message);
-    }
-
-    const result = await contacts.updateContact(contactId, name, email, phone);
-    if (!result) {
-      throw createError(404);
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  '/:contactId/favorite',
+  validation(schemas.update),
+  ctrlWrapper(controllers.updateOneById)
+);
 
 module.exports = router;
