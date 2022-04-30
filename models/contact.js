@@ -27,7 +27,7 @@ const contactShema = Schema(
 );
 
 const joiContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(2).max(50).required(),
+  name: Joi.string().min(2).max(50).required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
@@ -38,6 +38,7 @@ const joiContactSchema = Joi.object({
     .pattern(phoneRegExp)
     .message("Enter the phone number in the format: (111) 222-3333")
     .required(),
+  favorite: Joi.boolean().default(false),
 });
 
 const Contact = model("contact", contactShema);
