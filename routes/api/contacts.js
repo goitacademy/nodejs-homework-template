@@ -1,5 +1,23 @@
 const express = require("express");
-const {userValidation}=require("../../validation/user")
+const Joi =require("joi")
+const newUserValidation=(data)=>{
+  const schema=Joi.object({
+      name:Joi.string().min(2).max(255).required(),
+      email:Joi.string().min(2).max(255).required().email(),
+      phone:Joi.string().min(2).max(20).required(),
+  })
+
+  return schema.validate(data)
+}
+const changeUserValidation=(data)=>{
+  const schema=Joi.object({
+      name:Joi.string().min(2).max(255),
+      email:Joi.string().min(2).max(255).email(),
+      phone:Joi.string().min(2).max(20),
+  }).min(1)
+
+  return schema.validate(data)
+}
 const {
   listContacts,
   getContactById,
@@ -23,7 +41,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const {error}=userValidation(req.body)
+  const {error}=newUserValidation(req.body)
   if(!error){
     const result=await addContact(req.body)
    return res.status(201).json(result);
@@ -42,7 +60,8 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const {error}=userValidation(req.body)
+  const {error}=changeUserValidation(req.body)
+  console.log(error);
   if(!error){
     const result=await updateContact(req.params.contactId,req.body)
    return res.status(200).json(result);
