@@ -1,80 +1,35 @@
 const express = require("express");
 
-const { createError } = require("../../helpers");
+const ctrl = require("../../controllers/contacts");
 
-const contacts = require("../../models");
+const { ctrlWrapper } = require("../../helpers");
 
-const contactSchema = require("./validation");
+const { validation, validationId } = require("../../middlewares");
+
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.getById(id);
-    if (!result) {
-      throw createError(404);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:id", validationId, ctrlWrapper(ctrl.getById));
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw createError(400, error.message);
-    }
-    const { name, email, phone } = req.body;
-    const result = await contacts.addContact(name, email, phone);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", ctrlWrapper(ctrl.add));
 
-router.put("/:id", async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw createError(400, error.message);
-    }
-    const { id } = req.params;
-    const { name, email, phone } = req.body;
-    const result = await contacts.updateContact(id, name, email, phone);
-    if (!result) {
-      throw createError(404);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put(
+  "/:id",
+  validationId,
+  validation(schemas.add),
+  ctrlWrapper(ctrl.updateById)
+);
 
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
-    if (!result) {
-      throw createError(404);
-    }
-    res.json({
-      message: "contact deleted",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  "/:id/favorite",
+  validationId,
+  validation(schemas.updateFavorite),
+  ctrlWrapper(ctrl.updateFavorite)
+);
+
+router.delete("/:id", validationId, ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
