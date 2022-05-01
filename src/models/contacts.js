@@ -40,7 +40,6 @@ const addContact = async (name, email, phone) => {
     const contacts = await listContacts();
 
     const nextIdNumber = Number(contacts[contacts.length - 1].id) + 1;
-    console.log("nextIdNumber", nextIdNumber);
     
     const newContact = {
       id: String(nextIdNumber),
@@ -50,21 +49,22 @@ const addContact = async (name, email, phone) => {
     };
 
     contacts.push(newContact);
-    console.log("contacts", contacts);
-
+    
     fs.writeFile(contactsPath, JSON.stringify(contacts), (err) => {
       if (err) throw err;
     });
+    return newContact;
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const putContact = async (contactId, body) => {
+const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
     const { name, email, phone } = body;
     const contactsNew = [];
+    let updateContactItem = {};
 
     contacts.forEach((contact) => {
       if (contact.id === String(contactId)) {
@@ -77,13 +77,14 @@ const putContact = async (contactId, body) => {
         if (phone) {
           contact.phone = phone;
         }
+        updateContactItem = contact;
       }
       contactsNew.push(contact);
     });
-
     fs.writeFile(contactsPath, JSON.stringify(contactsNew), (err) => {
       if (err) throw err;
     });
+    return updateContactItem;
   } catch (error) {
     console.error(error.message);
   }
@@ -94,5 +95,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  putContact,
+  updateContact,
 };

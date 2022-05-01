@@ -7,7 +7,7 @@ module.exports = {
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ["com", "net","ca","ua"] },
+          tlds: { allow: ["com", "net", "ca", "ua"] },
         })
         .required(),
       phone: Joi.string().required(),
@@ -15,11 +15,14 @@ module.exports = {
 
     const validationResult = schemaValid.validate(req.body);
     if (validationResult.error) {
-      return res.status(404).json({ status: validationResult.error.details });
+      return res.status(400).json({
+        message: "missing required name field",
+        status: validationResult.error.details,
+      });
     }
     next();
-    // const { username, email, phone } = req.body;
   },
+
   patchValidation: (req, res, next) => {
     const schemaValid = Joi.object({
       name: Joi.string().optional(),

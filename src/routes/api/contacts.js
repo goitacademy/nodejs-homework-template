@@ -10,54 +10,70 @@ const {
   getContactById,
   removeContact,
   addContact,
-  putContact,
+  updateContact,
 } = require("../../models/contacts");
 
-// router.get("/", listContacts);
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   const contact = await listContacts();
   res.json(contact);
 });
 
-// router.get("/:contactId", getContactById);
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", async (req, res) => {
   const { contactId } = req.params;
   const contactById = await getContactById(contactId);
-  res.json(contactById);
+  if (!contactById) {
+    return res.status(404).json({ status: "Not found" });
+  }
+  res.status(200).json(contactById);
 });
 
-// router.post("/", addPostValidation, addContact);
-router.post("/", addPostValidation, async (req, res, next) => {
+router.post("/", addPostValidation, async (req, res) => {
   const { name, email, phone } = req.body;
-  await addContact(name, email, phone);
-  res.json({ status: "success" });
+  const newContact = await addContact(name, email, phone);
+  res.status(201).json({ status: "success", newContact });
 });
 
-// router.delete("/:contactId", removeContact);
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  await removeContact(contactId);
-  res.json({ status: "success" });
+  const contactById = await getContactById(contactId);
+  if (!contactById) {
+    return res.status(404).json({ status: "Not found" });
+  } else {
+    await removeContact(contactId);
+    res.status(200).json({ message: "contact deleted" });
+  }
 });
 
-// router.put("/:contactId", addPostValidation, putContact);
-router.put("/:contactId",addPostValidation, async (req, res, next) => {
-  const { contactId } = req.params;
-  const { name, email, phone } = req.body;
-  console.log("contactId", contactId);
-  console.log(name, email, phone);
-  await putContact(contactId, { name, email, phone });
-  res.json({ status: "success" });
-});
-
-// router.patch("/:contactId", patchValidation, putContact);
-router.patch("/:contactId", patchValidation, async (req, res, next) => {
+router.put("/:contactId", addPostValidation, async (req, res) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
-  console.log("contactId", contactId);
-  console.log(name, email, phone);
-  await putContact(contactId, { name, email, phone });
-  res.json({ status: "success" });
+  const contactById = await getContactById(contactId);
+  if (!contactById) {
+    return res.status(404).json({ status: "Not found" });
+  } else {
+    const updateContactItem = await updateContact(contactId, {
+      name,
+      email,
+      phone,
+    });
+    res.status(200).json({ status: "success", updateContactItem });
+  }
+});
+
+router.patch("/:contactId", patchValidation, async (req, res) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  const contactById = await getContactById(contactId);
+  if (!contactById) {
+    return res.status(404).json({ status: "Not found" });
+  } else {
+    const updateContactItem = await updateContact(contactId, {
+      name,
+      email,
+      phone,
+    });
+    res.status(200).json({ status: "success", updateContactItem });
+  }
 });
 
 module.exports = router;
