@@ -1,7 +1,7 @@
 const createError = require('./createError');
-const contactsSchema = require('./validate');
+const ctrlWrapper = require('./ctrlWrapper');
 
 module.exports = {
+  ctrlWrapper,
   createError,
-  contactsSchema,
 };
