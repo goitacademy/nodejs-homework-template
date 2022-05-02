@@ -19,5 +19,11 @@ const MAX_REQ_BODY_SIZE = {
   LIMIT: 10000,
 };
 
-module.exports = { LIMIT_AGE, HTTP_STATUS_CODE, MAX_REQ_BODY_SIZE };
+const FOLDER_CLOUD_AVATAR = "avatars";
+module.exports = {
+  LIMIT_AGE,
+  HTTP_STATUS_CODE,
+  MAX_REQ_BODY_SIZE,
+  FOLDER_CLOUD_AVATAR,
+};
 export {};

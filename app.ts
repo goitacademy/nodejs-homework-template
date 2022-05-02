@@ -2,8 +2,10 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+
 const limiter = require("./middleware/rate-limit");
 const { MAX_REQ_BODY_SIZE } = require("./libs/constants");
+require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
@@ -16,6 +18,7 @@ app.use(limiter(15 * 60 * 1000, 100)); // Apply the rate limiting middleware to 
 app.use(helmet());
 
 app.use(logger(formatsLogger));
+app.use(express.static(process.env.STATIC_FOLDER));
 app.use(cors());
 app.use(express.json({ limit: MAX_REQ_BODY_SIZE.LIMIT }));
 

@@ -27,6 +27,7 @@ const schemaSignupUser = Joi.object({
     "string.empty": "The name field cannot be empty",
   }),
   subscription: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 const schemaLoginUser = Joi.object({

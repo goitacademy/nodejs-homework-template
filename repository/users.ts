@@ -26,5 +26,16 @@ const updateUser = async (id, body) => {
   return result;
 };
 
-module.exports = { findById, findByEmail, createUser, updateToken, updateUser };
+const updateAvatar = async (id, avatar) => {
+  return await User.findByIdAndUpdate(id, { avatar });
+};
+
+module.exports = {
+  findById,
+  findByEmail,
+  createUser,
+  updateToken,
+  updateUser,
+  updateAvatar,
+};
 export {};
