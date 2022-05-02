@@ -1,19 +1,40 @@
-// const fs = require('fs/promises')
+const errors = require('http-errors');
 
-const listContacts = async () => {}
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const getContactById = async (contactId) => {}
+const contactsSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Set email for contact'],
+    unique: true,
+  },
+  phone: {
+    type: String,
+    required: [true, 'Set phone for contact'],
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const removeContact = async (contactId) => {}
+const schemaErrorHandlingMiddlware = (error, doc, next) => {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    next(
+      new errors[409](
+        `User with email "${error.keyValue.email}" already exist`,
+      ),
+    );
+  } else {
+    next();
+  }
+};
 
-const addContact = async (body) => {}
+contactsSchema.post(['save', 'findOneAndUpdate'], schemaErrorHandlingMiddlware);
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+exports.model = mongoose.model('Contact', contactsSchema, 'contacts');
