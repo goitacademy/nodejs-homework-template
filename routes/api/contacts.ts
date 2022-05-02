@@ -10,7 +10,7 @@ const {
   schemaCreateContact,
   schemaUpdateContact,
   schemaMongoId,
-} = require("./contacts-validation-schemes");
+} = require("../../models/contacts-validation-schemes");
 const { validateBody, validateParams } = require("../../middleware/validation");
 
 const router = express.Router();

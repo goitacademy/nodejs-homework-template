@@ -1,31 +1,61 @@
-const contact = require("../models/contact");
+const Contact = require("../models/contact");
 
-const listContacts = async () => {
-  const result = await contact.find();
+const listContacts = async ({ limit, page, sort }, filter, user) => {
+  let option = {};
+  if (filter) {
+    option = { owner: user.id, favorite: filter };
+  }
+  if (!filter) {
+    option = { owner: user.id };
+  }
+
+  const { docs: contacts, ...rest } = await Contact.paginate(option, {
+    limit,
+    page,
+    sort,
+    select: "name email phone favorite",
+  });
+  return { contacts, ...rest };
+};
+
+const getContactById = async (contactId, user) => {
+  const result = await Contact.findOne({
+    _id: contactId,
+    owner: user.id,
+  }).populate({
+    path: "owner",
+    select: "email subscription",
+  });
   return result;
 };
 
-const getContactById = async (contactId) => {
-  const result = await contact.findOne({ _id: contactId });
+const removeContact = async (contactId, user) => {
+  const result = await Contact.findOneAndRemove({
+    _id: contactId,
+    owner: user.id,
+  });
   return result;
 };
 
-const removeContact = async (contactId) => {
-  const result = await contact.findOneAndRemove({ _id: contactId });
+const addContact = async (body, user) => {
+  const result = await Contact.create({ ...body, owner: user.id });
   return result;
 };
 
-const addContact = async (body) => {
-  const result = await contact.create(body);
-  return result;
-};
-
-const updateContact = async (contactId, body) => {
-  const result = await contact.findOneAndUpdate(
-    { _id: contactId },
+const updateContact = async (contactId, body, user) => {
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: user.id },
     { ...body },
     { new: true }
   );
+  return result;
+};
+
+const checkContact = async (body, user) => {
+  const result = await Contact.findOne({
+    $or: [{ name: body.name }, { email: body.email }, { phone: body.phone }],
+    owner: user.id,
+  });
   return result;
 };
 
@@ -35,5 +65,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  checkContact,
 };
 export {};

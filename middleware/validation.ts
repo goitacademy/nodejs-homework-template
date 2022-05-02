@@ -1,4 +1,4 @@
-const { HTTP_STATUS_CODE } = require("../../libs/constants");
+const { HTTP_STATUS_CODE } = require("../libs/constants");
 
 const validateBody =
   (schema: any) =>
