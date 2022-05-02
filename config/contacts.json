@@ -1,62 +1,88 @@
 [
   {
-    "id": "1",
+    "favorite": false,
     "name": "Allen Raymond",
+    "age": 40,
     "email": "nulla.ante@vestibul.co.uk",
     "phone": "(992) 914-3792"
   },
   {
-    "id": "2",
+    "favorite": false,
     "name": "Chaim Lewis",
+    "age": 40,
     "email": "dui.in@egetlacus.ca",
     "phone": "(294) 840-6685"
   },
   {
-    "id": "3",
+    "favorite": false,
     "name": "Kennedy Lane",
+    "age": 40,
     "email": "mattis.Cras@nonenimMauris.net",
     "phone": "(542) 451-7038"
   },
   {
-    "id": "4",
+    "favorite": false,
     "name": "Wylie Pope",
+    "age": 40,
     "email": "est@utquamvel.net",
     "phone": "(692) 802-2949"
   },
   {
-    "id": "5",
+    "favorite": false,
     "name": "Cyrus Jackson",
+    "age": 40,
     "email": "nibh@semsempererat.com",
     "phone": "(501) 472-5218"
   },
   {
-    "id": "6",
+    "favorite": false,
     "name": "Abbot Franks",
+    "age": 40,
     "email": "scelerisque@magnis.org",
     "phone": "(186) 568-3720"
   },
   {
-    "id": "7",
+    "favorite": false,
     "name": "Reuben Henry",
+    "age": 40,
     "email": "pharetra.ut@dictum.co.uk",
     "phone": "(715) 598-5792"
   },
   {
-    "id": "8",
+    "favorite": false,
     "name": "Simon Morton",
+    "age": 40,
     "email": "dui.Fusce.diam@Donec.com",
     "phone": "(233) 738-2360"
   },
   {
-    "id": "9",
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
+    "favorite": false,
+    "name": "Alex Raypinos",
+    "age": 40,
+    "email": "raypino@vestibul.co.uk",
+    "phone": "(992) 834-3799"
   },
   {
-    "id": "10",
+    "favorite": false,
     "name": "Alec Howard",
+    "age": 35,
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "favorite": false,
+    "name": "Lorenso Toldo",
+    "age": 55,
+    "email": "toldo.lorenso@egetlacus.ca",
+    "phone": "(992) 834-3799"
+  },
+  {
+    "name": "Niko Tata",
+    "email": "tata.dev@egetlacus.ca",
+    "age": 22,
+    "phone": "(992) 333-3799",
+    "favorite": false,
+    "createdAt": "2022-04-23T19:46:27.144Z",
+    "updatedAt": "2022-04-23T19:46:27.144Z"
   }
 ]
