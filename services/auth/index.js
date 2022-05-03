@@ -56,6 +56,8 @@ class AuthService {
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     return token;
   }
+  async verifyUser(token) {}
+  async reverifyEmail(email) {}
 }
 
 module.exports = new AuthService();
