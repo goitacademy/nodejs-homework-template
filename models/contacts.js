@@ -1,69 +1,44 @@
-// const fs = require('fs/promises')
-
-const fs = require("fs/promises");
-const path = require("path");
-const { v4 } = require("uuid");
-
-const contactsPath = path.join(__dirname, "contacts.json");
-
-const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
-};
-
-const getContactById = async (contactId) => {
-  const data = await listContacts();
-  const result = data.find(({ id }) => id === contactId);
-
-  return result;
-};
-
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const removedEl = [];
-  const newContacts = contacts.reduce((acc, el) => {
-    if (el.id === String(contactId)) {
-      removedEl.push(el);
-      return acc;
-    }
-    acc.push(el);
-    return acc;
-  }, []);
-
-  if (removedEl.length < 1) {
-    return null;
-  }
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
-
-  return removedEl;
-};
-
-const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
-
-  const newContact = { name, email, phone, id: v4() };
-
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return newContact;
-};
-
-const updateContact = async (id, { name, email, phone }) => {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex((item) => item.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  contacts[idx] = { id, name, email, phone };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[idx];
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      min: [2, "Short name"],
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      match: [
+        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+        "Please fill a valid email address",
+      ],
+      required: [true, "email is required"],
+    },
+    phone: {
+      type: String,
+      match: /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+      required: [true, "phone-number is required"],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
+const joiSchema = Joi.object({
+  name: Joi.string().min(2).max(20).required(),
+  email: Joi.string()
+    .pattern(
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    )
+    .required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+const Contact = model("contact", contactSchema);
+module.exports = { Contact, joiSchema, updateFavoriteSchema };
