@@ -24,6 +24,7 @@
     "joi": "17.6.0",
     "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
+    "mailgen": "^2.0.24",
     "mongoose": "^6.2.9",
     "mongoose-paginate-v2": "^1.6.3",
     "morgan": "1.10.0",

@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 const Users = require("../../repository/users");
 const { HTTP_STATUS_CODE } = require("../../libs/constant");
 const { CustomError } = require("../../middleware/error-handler");
+const EmailService = require("../email/service");
+const SenderNodemailer = require("../email/senders/nodemailer-sender");
+const SenderSendGrid = require("../email/senders/sendgrid-sender");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -13,6 +16,17 @@ class AuthService {
     }
     const newUser = await Users.create(body);
 
+    const sender = new SenderSendGrid();
+    const emailService = new EmailService(sender);
+    try {
+      await emailService.sendEmail(
+        newUser.email,
+        newUser.name,
+        newUser.verifyEmailToken
+      );
+    } catch (error) {
+      console.log(error);
+    }
     return {
       id: newUser.id,
       name: newUser.name,
@@ -56,8 +70,56 @@ class AuthService {
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     return token;
   }
-  async verifyUser(token) {}
-  async reverifyEmail(email) {}
+
+  async verifyUser(token) {
+    const user = await Users.findByToken(token);
+    if (!user) {
+      throw new CustomError(HTTP_STATUS_CODE.BAD_REQUEST, "Invalid token");
+    }
+
+    if (user && user.isVerify) {
+      throw new CustomError(
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "User already verified"
+      );
+    }
+
+    await Users.verifyUser(user.id);
+    return user;
+  }
+
+  async reverifyEmail(email) {
+    const user = await Users.findByEmail(email);
+    if (!user) {
+      throw new CustomError(
+        HTTP_STATUS_CODE.NOT_FOUND,
+        "User with email not found"
+      );
+    }
+
+    if (user && user.isVerify) {
+      throw new CustomError(
+        HTTP_STATUS_CODE.BAD_REQUEST,
+        "User already verified"
+      );
+    }
+
+    const sender = new SenderNodemailer();
+    const emailService = new EmailService(sender);
+    try {
+      await emailService.sendEmail(
+        user.email,
+        user.name,
+        user.verifyEmailToken
+      );
+    } catch (error) {
+      console.log(error);
+      throw new CustomError(
+        HTTP_STATUS_CODE.SERVICE_UNAVAILABLE,
+        "Error sending email"
+      );
+    }
+  }
 }
 
 module.exports = new AuthService();
