@@ -20,6 +20,7 @@ class AuthService {
       id: newUser.id,
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
     };
   }
 
@@ -63,7 +64,7 @@ class AuthService {
       email: user.email,
       subscription: user.subscription,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
     return token;
   }
 }

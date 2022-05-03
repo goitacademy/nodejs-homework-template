@@ -4,9 +4,11 @@ const { registration, login, logout } = require("../../controllers/auth/index");
 const {
   getCurrentUser,
   updateSubscription,
+  avatar,
 } = require("../../controllers/users/index");
 const limiter = require("../../middleware/rate-limit");
 const guard = require("../../middleware/guard");
+const upload = require("../../middleware/upload");
 const { validateBody } = require("../../middleware/validation");
 const { wrapper } = require("../../middleware/error-handler");
 const {
@@ -32,5 +34,6 @@ router.patch(
   validateBody(schemaSubscriptionUser),
   wrapper(updateSubscription)
 );
+router.patch("/avatars", guard, upload.single("avatar"), wrapper(avatar));
 
 module.exports = router;
