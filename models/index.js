@@ -1,13 +1,13 @@
 const {
 	contactSchema,
-	contactJoiSchema,
+	joiContactSchema,
 	joiStatusSchema,
 	Contact,
 } = require('./contact')
 
 module.exports = {
 	contactSchema,
-	contactJoiSchema,
+	joiContactSchema,
 	joiStatusSchema,
 	Contact,
 }

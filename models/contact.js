@@ -23,7 +23,7 @@ const contactSchema = Schema(
 	{ versionKey: false, timestamps: true }
 )
 
-const contactJoiSchema = Joi.object({
+const joiContactSchema = Joi.object({
 	name: Joi.string().min(2).max(50).required(),
 	email: Joi.string()
 		.email({
@@ -44,4 +44,4 @@ const joiStatusSchema = Joi.object({
 
 const Contact = model('contact', contactSchema)
 
-module.exports = { contactSchema, contactJoiSchema, joiStatusSchema, Contact }
+module.exports = { contactSchema, joiContactSchema, joiStatusSchema, Contact }
