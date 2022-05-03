@@ -3,7 +3,7 @@ const Joi = require('joi')
 
 const router = express.Router()
 
-const Book = require('../../models/contact')
+const Contact = require('../../models/contact')
 
 // const {
 // 	listContacts,
