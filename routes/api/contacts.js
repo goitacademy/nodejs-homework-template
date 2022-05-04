@@ -3,7 +3,7 @@ const express = require('express');
 const contactsController = require('../../controllers/contactsController');
 const validation = require('../../middlewares/validation');
 const tryCatchMiddleware = require('../../middlewares/tryCatchMiddleware');
-const contactSchema = require('../../schemas/contactsSchema.js');
+const { joiProduct, joiFavoriteField } = require('../../models/contact');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get('/:contactId', tryCatchMiddleware(contactsController.getOneContact));
 
 router.post(
   '/',
-  validation(contactSchema),
+  validation(joiProduct),
   tryCatchMiddleware(contactsController.addContact),
 );
 
@@ -24,8 +24,14 @@ router.delete(
 
 router.put(
   '/:contactId',
-  validation(contactSchema),
+  validation(joiProduct),
   tryCatchMiddleware(contactsController.updateContact),
+);
+
+router.patch(
+  '/:contactId/favorite',
+  validation(joiFavoriteField),
+  tryCatchMiddleware(contactsController.updateFavouriteField),
 );
 
 module.exports = router;
