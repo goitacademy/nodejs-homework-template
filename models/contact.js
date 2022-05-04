@@ -28,9 +28,6 @@ const joiProduct = Joi.object({
 });
 
 const joiFavoriteField = Joi.object({ favorite: Joi.boolean().required() });
-// const statusJoiSchema = Joi.object({
-//   status: Joi.string().valid('basic', 'sale', 'stock').required(),
-// });
 
 const Contact = model('contact', contactSchema);
 
