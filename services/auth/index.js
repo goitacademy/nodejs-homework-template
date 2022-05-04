@@ -113,7 +113,6 @@ class AuthService {
         user.verifyEmailToken
       );
     } catch (error) {
-      console.log(error);
       throw new CustomError(
         HTTP_STATUS_CODE.SERVICE_UNAVAILABLE,
         "Error sending email"

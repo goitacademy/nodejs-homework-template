@@ -20,7 +20,7 @@ router.post(
 router.post("/login", wrapperError(login));
 
 router.get("/verify-email/:token", wrapperError(verifyUser));
-router.get("/verify-email", wrapperError(reverifyEmail));
+router.post("/verify-email", wrapperError(reverifyEmail));
 
 router.post("/logout", guard, wrapperError(logout));
 module.exports = router;

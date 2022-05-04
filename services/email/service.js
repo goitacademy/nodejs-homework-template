@@ -3,7 +3,7 @@ const MailGen = require("mailgen");
 class EmailService {
   constructor(sender) {
     this.sender = sender;
-    this.link = "localhost:3000";
+    this.link = "https://c7ec-176-105-210-159.eu.ngrok.io";
     this.mailGenerator = new MailGen({
       theme: "default",
       product: {
