@@ -7,9 +7,9 @@ const contactsPath = path.resolve(__dirname, "./contacts.json");
 const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath, "utf-8");
-    
+
     const normContacts = JSON.parse(contacts);
-   
+
     return normContacts;
   } catch (error) {
     console.log(error.message);
@@ -64,7 +64,7 @@ const updateContact = async (req, res, next) => {
     const editContact = contacts.filter((item) => item.id === id);
     const { name, email, phone } = req.body;
 
-    if( !name || !email || !phone ) {
+    if (!name || !email || !phone) {
       res.status(400).json({ message: "Missing fields" });
     }
     if (!editContact) {
