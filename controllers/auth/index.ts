@@ -24,10 +24,36 @@ const logout = async (req, res) => {
   return res.status(HTTP_STATUS_CODE.NO_CONTENT).json();
 };
 
+const verify = async (req, res) => {
+  const token = req.params.verificationToken;
+  const user = await authService.verify(token);
+
+  return res.status(HTTP_STATUS_CODE.OK).json({
+    status: "success",
+    code: HTTP_STATUS_CODE.OK,
+    data: { message: `Verification successful. Welcome ${user.email}` },
+  });
+};
+
+const reverify = async (req, res) => {
+  const { email } = req.body;
+  await authService.reverify(email);
+
+  return res.status(HTTP_STATUS_CODE.OK).json({
+    status: "success",
+    code: HTTP_STATUS_CODE.OK,
+    data: {
+      message: "Verification email sent",
+    },
+  });
+};
+
 module.exports = {
   registration,
   login,
   logout,
+  verify,
+  reverify,
 };
 
 export {};

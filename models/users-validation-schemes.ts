@@ -27,7 +27,10 @@ const schemaSignupUser = Joi.object({
     "string.empty": "The name field cannot be empty",
   }),
   subscription: Joi.string(),
+  token: Joi.string(),
   avatarURL: Joi.string(),
+  verify: Joi.boolean(),
+  verificationToken: Joi.string(),
 });
 
 const schemaLoginUser = Joi.object({
@@ -45,9 +48,16 @@ const schemaSubscriptionUser = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const schemaVerifyUser = Joi.object({
+  email: Joi.string().email().required(),
+}).messages({
+  "any.required": "Missing field {{#label}}",
+});
+
 module.exports = {
   schemaSignupUser,
   schemaLoginUser,
   schemaSubscriptionUser,
+  schemaVerifyUser,
 };
 export {};

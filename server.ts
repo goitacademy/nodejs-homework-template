@@ -1,4 +1,4 @@
-const { mkdir } = require("fs/promises");
+const { mkdir } = require("fs").promises;
 import app from "./app";
 const db = require("./config/db");
 require("dotenv").config();

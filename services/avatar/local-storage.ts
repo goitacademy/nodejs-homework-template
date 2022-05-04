@@ -1,6 +1,6 @@
 const path = require("path");
-const fs = require("fs/promises");
-const Users = require("../../repository/users");
+const fs = require("fs").promises;
+const { updateAvatar } = require("../../repository/users");
 require("dotenv").config();
 
 class LocalStorage {
@@ -20,7 +20,7 @@ class LocalStorage {
     const urlOfAvatar = path.normalize(
       path.join("avatars", this.user.id, this.file.filename)
     );
-    await Users.updateAvatar(this.user.id, urlOfAvatar);
+    await updateAvatar(this.user.id, urlOfAvatar);
     return urlOfAvatar;
   }
 }

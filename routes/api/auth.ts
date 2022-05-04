@@ -1,6 +1,12 @@
 import express from "express";
 
-const { registration, login, logout } = require("../../controllers/auth/index");
+const {
+  registration,
+  login,
+  logout,
+  verify,
+  reverify,
+} = require("../../controllers/auth/index");
 const {
   getCurrentUser,
   updateSubscription,
@@ -15,6 +21,7 @@ const {
   schemaSignupUser,
   schemaLoginUser,
   schemaSubscriptionUser,
+  schemaVerifyUser,
 } = require("../../models/contacts-validation-schemes");
 const router = express.Router();
 
@@ -25,9 +32,12 @@ router.post(
   wrapper(registration)
 );
 router.post("/login", validateBody(schemaLoginUser), wrapper(login));
+router.post("/verify", validateBody(schemaVerifyUser), wrapper(reverify));
 router.get("/logout", guard, wrapper(logout));
 
 router.get("/current", guard, wrapper(getCurrentUser));
+router.get("/verify/:verificationToken", wrapper(verify));
+
 router.patch(
   "/",
   guard,
