@@ -20,6 +20,7 @@ const schema = Joi.object({
     .required()
 })
 
+
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts()
