@@ -14,7 +14,9 @@
     "express": "4.17.1",
     "joi": "^17.6.0",
     "morgan": "1.10.0",
-    "uid": "^2.0.0"
+
+    "nanoid": "^3.3.3"
+
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -24,5 +26,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Выполните форк этого репозитория для выполнения домашних заданий (2-6) Форк создаст репозиторий на вашем http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kateryna-Borysenko/nodejs-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kateryna-Borysenko/nodejs-rest-api/issues"
+  },
+  "homepage": "https://github.com/Kateryna-Borysenko/nodejs-rest-api#readme"
 }

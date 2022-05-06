@@ -1,88 +1,119 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { uid } = require("uid");
 
-const contactsPath = path.resolve(__dirname, "./contacts.json");
+const fs = require('fs/promises') // FileSystem
+const path = require('path')
+const { nanoid } = require('nanoid')
 
-const listContacts = async () => {
+const contactsPath = path.resolve(__dirname, './contacts.json')
+
+const getData = async () => {
+  const contacts = await fs.readFile(contactsPath, 'utf-8')
+  const data = JSON.parse(contacts)
+  return data
+}
+
+const listContacts = async (req, res) => {
   try {
+<<<<<<< HEAD
     const contacts = await fs.readFile(contactsPath, "utf-8");
 
     const normContacts = JSON.parse(contacts);
 
     return normContacts;
+=======
+    const contacts = await getData()
+    res.status(200).json(contacts);
+    return contacts
+>>>>>>> 055c59077117710439b767476f54db4676e1e51a
   } catch (error) {
-    console.log(error.message);
+    // отлавливает серверные ошибки прописанные в app.js
+    console.log('🍒 error:', error.massage)
+  }
+}
+
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
+  try {
+    const contacts = await getData()
+    const isId = contacts.some(item => item.id === contactId)
+    // console.log('🍒 isId', isId)
+    const contactById = await contacts.filter(item => item.id === contactId);
+    if (isId) {
+      res.status(200).json(contactById)
+    } else {
+      res.status(404).json({ message: `Contact with id:"${contactId}" was not found` });
+    }
+  } catch (error) {
+    console.log('🍒 error', error)
   }
 };
 
-const getContactById = async (contactId) => {
+
+const removeContact = async (req, res) => {
   try {
-    const contacts = await listContacts();
-    const contact = contacts.filter((item) => item.id === contactId);
-    return contact;
+    const { contactId } = req.params
+    const contacts = await getData()
+    const isId = contacts.some(item => item.id === contactId)
+
+    if (isId) {
+      const newContacts = contacts.filter(item => item.id !== contactId)
+      fs.writeFile(contactsPath, JSON.stringify(newContacts))
+      res.status(200).json({ message: `Contact with id:"${contactId}" was deleted` });
+    } else {
+      res.status(404).json({ message: `Contact with id:"${contactId}" was not found` })
+    }
   } catch (error) {
-    console.log(error.message);
+    console.log('🍒 error:', error.massage)
   }
-};
+}
 
-const removeContact = async (contactId) => {
+
+const addContact = async (req, res) => {
   try {
-    const contacts = await listContacts();
-    const newContacts = contacts.filter((item) => item.id !== contactId);
-    const delContacts = contacts.filter((item) => item.id === contactId);
-    fs.writeFile(contactsPath, JSON.stringify(newContacts));
-
-    return delContacts;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const addContact = async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
+    const contacts = await getData();
     const { name, email, phone } = req.body;
 
     if (name && email && phone) {
-      const newContact = { name, email, phone, id: uid(3) };
+      const newContact = { name, email, phone, id: nanoid() };
 
       fs.writeFile(contactsPath, JSON.stringify([...contacts, newContact]));
       res.status(201).json(newContact);
     } else {
-      res.status(400).json({ message: "missing required name field" });
+      res.status(400).json({ message: "Missing required name field" });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log('🍒 error', error)
   }
 };
 
-const updateContact = async (req, res, next) => {
+
+const updateContact = async (req, res) => {
   try {
-    const contacts = await listContacts();
-    const id = req.params.contactId;
-    const editContact = contacts.filter((item) => item.id === id);
+    const contacts = await getData();
+    const { contactId } = req.params
+    const isContact = contacts.some((item) => item.id === contactId);
     const { name, email, phone } = req.body;
 
+<<<<<<< HEAD
     if (!name || !email || !phone) {
+=======
+    if (Object.keys(req.body).length < 3) {
+>>>>>>> 055c59077117710439b767476f54db4676e1e51a
       res.status(400).json({ message: "Missing fields" });
-    }
-    if (!editContact) {
-      res.status(404).json({ message: "Not found" });
-    } else {
+    } else if (!isContact) res.status(404).json({ message: "Not found" });
+    else {
       contacts.forEach((item) => {
-        if (item.id === id) {
-          item.email = email || item.email;
+        if (item.id === contactId) {
           item.name = name || item.name;
+          item.email = email || item.email;
           item.phone = phone || item.phone;
         }
       });
+      fs.writeFile(contactsPath, JSON.stringify(contacts));
+      const updatedContact = contacts.filter((item) => item.id === contactId);
+      res.json(updatedContact);
     }
-    fs.writeFile(contactsPath, JSON.stringify(contacts));
-    const updCont = contacts.filter((el) => el.id === id);
-    res.status(200).json(updCont);
   } catch (error) {
-    console.log(error.message);
+    console.log('🍒 error', error)
   }
 };
 

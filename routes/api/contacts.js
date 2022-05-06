@@ -1,38 +1,31 @@
 const express = require("express");
 
 const {
-  addContactValid,
-  validatePatch,
-} = require("../../middlewares/validator");
 
-const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require('../../models/contacts')
 
-const router = express.Router();
+const {
+  validateAddedContact,
+  validateUpdatedContact,
+} = require('../../middlewares/validation');
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  if (!contacts) {
-    return res.status(400).json({ message: "contacts not found" });
-  }
-  res.status(200).json({ contacts });
-});
+const router = express.Router()
 
-router.get("/:contactId", async (req, res, next) => {
-  const id = req.params.contactId;
-  const contact = await getContactById(id);
-  if (!contact.length) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  res.status(200).json({ contact });
-});
+router.get('/', listContacts)
 
-router.post("/", addContactValid, addContact);
+router.get('/:contactId', getContactById)
+
+router.post('/', validateAddedContact, addContact)
+
+router.delete('/:contactId', removeContact)
+
+router.put('/:contactId', validateUpdatedContact, updateContact)
+
 
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
