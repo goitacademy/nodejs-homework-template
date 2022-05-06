@@ -24,7 +24,7 @@ router.post('/logout', authorization, ctrlWrapper(controllers.logout));
 router.get('/current', authorization, ctrlWrapper(controllers.getCurrent));
 
 router.patch(
-  '/:userId/subscription',
+  '/:id/subscription',
   validation(joiSubscriptionSchema),
   ctrlWrapper(controllers.updateSubscription)
 );

@@ -3,11 +3,11 @@ const { validationById } = require('../../middlewares');
 
 const updateSubscription = async (req, res) => {
   const { subscription } = req.body;
-  const { userId } = req.params;
-  validationById(userId);
+  const { id } = req.params;
+  validationById(id);
 
   const result = await User.findByIdAndUpdate(
-    userId,
+    id,
     { subscription },
     { new: true }
   );
