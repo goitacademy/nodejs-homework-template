@@ -1,28 +1,39 @@
-const express = require("express");
-
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../models/contacts');
+const express = require('express');
+const router = express.Router();
+const { Contact } = require('../../models/contacts');
 
 const {
   validateAddedContact,
-  validateUpdatedContact,
+  // validateUpdatedContact,
 } = require('../../middlewares/validation');
 
-const router = express.Router();
+router.get('/', async (req, res) => {
+  const contactsList = await Contact.find();
+  if (!contactsList) {
+    res.status(500).json({ success: false });
+  }
+  res.send(contactsList);
+});
 
-router.get('/', listContacts);
+// router.get('/:contactId', getContactById);
 
-router.get('/:contactId', getContactById);
+router.post('/', validateAddedContact, async (req, res) => {
+  let contact = new Contact({
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: req.body.favorite
+  })
+  contact = await contact.save();
 
-router.post('/', validateAddedContact, addContact);
+  if (!contact)
+    return res.status(400).send('the contact cannot be created!')
 
-router.delete('/:contactId', removeContact);
+  res.send(contact);
+});
 
-router.put('/:contactId', validateUpdatedContact, updateContact);
+// router.delete('/:contactId', removeContact);
+
+// router.put('/:contactId', validateUpdatedContact, updateContact);
 
 module.exports = router;

@@ -12,11 +12,12 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     console.log('✅ Database Connection is ready...')
   })
   .catch((err) => {
-    console.log('🍒 err', err)
+    console.log(err)
+    process.exit(1);// завершает процесс подключения
   })
 
 // Server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log('💻 Server is running http://localhost:', PORT);
+  console.log('✅ Server is running http://localhost:', PORT);
 })
