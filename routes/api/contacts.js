@@ -1,25 +1,42 @@
-const express = require('express')
+const express = require("express");
+
+const {
+
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require('../../models/contacts')
+
+const {
+  validateAddedContact,
+  validateUpdatedContact,
+} = require('../../middlewares/validation');
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', listContacts)
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', getContactById)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', validateAddedContact, addContact)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', removeContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', validateUpdatedContact, updateContact)
 
-module.exports = router
+
+router.delete("/:contactId", async (req, res, next) => {
+  const id = req.params.contactId;
+  const delContact = await removeContact(id);
+  console.log('delContact', delContact)
+  if (!delContact.length) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json({ message: "Contact deleted" });
+});
+
+router.put("/:contactId", validatePatch, updateContact);
+
+module.exports = router;
