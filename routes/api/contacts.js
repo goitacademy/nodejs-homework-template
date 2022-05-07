@@ -2,16 +2,21 @@ const express = require('express');
 
 const router = express.Router();
 
-const { validation } = require('../../middlewares');
+const { authorization, validation } = require('../../middlewares');
 const { schemas } = require('../../models/contact');
 const { ctrlWrapper } = require('../../helpers');
 const controllers = require('../../controllers/contacts');
 
-router.get('/', ctrlWrapper(controllers.getAll));
+router.get('/', authorization, ctrlWrapper(controllers.getAll));
 
 router.get('/:contactId', ctrlWrapper(controllers.getById));
 
-router.post('/', validation(schemas.add), ctrlWrapper(controllers.add));
+router.post(
+  '/',
+  authorization,
+  validation(schemas.add),
+  ctrlWrapper(controllers.add)
+);
 
 router.delete('/:contactId', ctrlWrapper(controllers.removeById));
 
