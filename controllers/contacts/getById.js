@@ -9,6 +9,8 @@ const getById = async (req, res) => {
         throw createError(404, "Not found")
     }
     res.json(result);
+    console.log(req.params);
+
 };
 
 module.exports = getById;
