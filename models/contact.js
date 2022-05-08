@@ -16,6 +16,11 @@ const contatSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: [true, "Owner is required"],
+  },
 });
 
 const joiSchema = Joi.object({
