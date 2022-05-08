@@ -1,10 +1,23 @@
-const app = require('./app')
+require("dotenv").config();
+const app = require('./app');
+const mongoose = require('mongoose');
 
-// localhost - локальный домен
-// для прослушивания соединения от клиента задействуем порт 3000 
-// запуск npm run start:dev
+// Database
+mongoose.connect(process.env.CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  dbName: 'contacts'
+})
+  .then(() => {
+    console.log('✅ Database Connection is ready...')
+  })
+  .catch((err) => {
+    console.log(err)
+    process.exit(1);// завершает процесс подключения
+  })
 
-// инициализируем сервер прослушиваем на порту 3000
-app.listen(3000, () => {
-  console.log('Server running. Use our API on port 3000')
+// Server
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log('✅ Server is running http://localhost:', PORT);
 })
