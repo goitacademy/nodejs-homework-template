@@ -8,7 +8,7 @@ const contacts = require("../../models/contacts");
 const schema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
 });
 
 const createError = require("../../helpers/createErr");
@@ -38,13 +38,12 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const newContact = req.body;
-    console.log("contact: ", newContact);
-    // const { error } = schema.validate(newContact);
-    // if (error) {
-    //   throw createError(400, {"message": "missing required name field"});
-    // }
-    // const result = contacts.addContact(newContact);
-    res.json(newContact);
+    const { error } = schema.validate(newContact);
+    if (error) {
+      throw createError(400, "missing required name field");
+    }
+    const result = await contacts.addContact(newContact);
+    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -54,13 +53,9 @@ router.post("/", async (req, res, next) => {
 
 router.patch("/:id", async (req, res, next) => {
   try {
-    const { newContact } = req.body;
-    const { error } = schema.validate(newContact);
-    if (error) {
-      throw createError(400, error.message);
-    }
+    const contactData = req.body;
     const contactId = req.params;
-    const result = contacts.updateContact(contactId);
+    const result = await contacts.updateContact(contactId, contactData);
     res.json(result);
   } catch (err) {
     next(err);

@@ -19,18 +19,34 @@ const getContactById = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const contacts = await fs.readFile(contactsPath);
-  const parsedContacts = JSON.parse(contacts);
-  const newContacts = [
-    ...parsedContacts,
-    {
-      id: String(parsedContacts.length + 1),
-      name: body.name,
-      email: body.email,
-      phone: String(body.phone),
-    },
-  ];
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  const contacts = await listContacts();
+  const newContact = {
+    id: String(contacts.length + 1),
+    name: body.name,
+    email: body.email,
+    phone: String(body.phone),
+  };
+  contacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  let result = contacts.find(
+    (contact) => Number(contact.id) === Number(contactId.id)
+  );
+  // console.log(result);
+  if (!result) {
+    return null;
+  }
+  result = {
+    ...result,
+    ...body,
+  };
+  console.log(result);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return result;
 };
 
 const removeContact = async (contactId) => {
@@ -42,19 +58,6 @@ const removeContact = async (contactId) => {
   const [result] = contacts.splice(idx, 1);
   !result || (await fs.writeFile(contactsPath, JSON.stringify(contacts)));
   return result;
-};
-
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const result = contacts.find((contact) => Number(contact.id) === contactId);
-  console.log(result);
-  if (!result) {
-    return null;
-  }
-  result.name = body.name;
-  result.phone = body.phone;
-  result.email = body.email;
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
 };
 
 module.exports = {
