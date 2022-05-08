@@ -28,8 +28,8 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", addPostValidation, async (req, res) => {
-  const { name, email, phone } = req.body;
-  const newContact = await addContact(name, email, phone);
+  const { name, email, phone,favorite } = req.body;
+  const newContact = await addContact(name, email, phone,favorite);
   res.status(201).json({ status: "success", newContact });
 });
 
