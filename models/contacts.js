@@ -33,20 +33,30 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  let result = contacts.find(
+  const result = contacts.find(
     (contact) => Number(contact.id) === Number(contactId.id)
   );
-  // console.log(result);
   if (!result) {
     return null;
   }
-  result = {
+
+  const newConacts = contacts.map((contact) => {
+    if (Number(contact.id) === Number(contactId.id)) {
+      contact = {
+        ...contact,
+        ...body,
+      };
+    }
+    return contact;
+  });
+
+  const response = {
     ...result,
     ...body,
   };
-  console.log(result);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return result;
+
+  await fs.writeFile(contactsPath, JSON.stringify(newConacts));
+  return response;
 };
 
 const removeContact = async (contactId) => {
