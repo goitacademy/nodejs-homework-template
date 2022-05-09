@@ -1,36 +1,19 @@
-const { v4 } = require("uuid");
+// const { v4 } = require("uuid");
 const {
   middlewareForPost,
-  middlewareForUpdate,
+  // middlewareForUpdate,
 } = require("../middlewares/middlewares");
-const users = [
-  {
-    id: "1",
-    name: "Mark",
-    number: "0631340660",
-    email: "markel@ukr.net",
-  },
-  {
-    id: "2",
-    name: "Roma",
-    number: "0974567284",
-    email: "markel_1@ukr.net",
-  },
-  {
-    id: "3",
-    name: "Sveta",
-    number: "0677115553",
-    email: "markel_2@ukr.net",
-  },
-];
+
+const { Contact } = require("../models/index");
 
 async function getAllUsers(req, res) {
-  res.json({ users });
+  const contacts = await Contact.find({});
+  res.json({ contacts });
 }
 
 async function getUserById(req, res) {
   const { contactId } = req.params;
-  const [user] = users.filter((item) => item.id === contactId);
+  const user = await Contact.findOne({ _id: contactId });
   if (!user) {
     res.status(404);
     res.json({ message: "Not found" });
@@ -41,50 +24,50 @@ async function getUserById(req, res) {
 
 async function addUser(req, res) {
   middlewareForPost(req, res);
-  const body = req.body;
-  const newContact = {
-    id: v4(),
-    ...body,
-  };
+  const result = await Contact.create(req.body);
+  // console.log("lsldkvnsdlkvnslKVNCD S,MVNLknvdslkfnwefhnegfljkerng", result);
+  // const newContact = {
+  //   id: v4(),
+  //   ...body,
+  // };
   res.status(201);
-  res.json(newContact);
-  users.push(newContact);
+  res.json(result);
 }
 
-async function deleteUserById(req, res) {
-  const { contactId } = req.params;
-  const userDelete = users.find((item) => item.id === contactId);
-  if (!userDelete) {
-    res.status(404);
-    res.json({ message: "Not found" });
-    return;
-  }
-  res.status(200);
-  res.json({ message: "contact deleted" });
-}
+// async function deleteUserById(req, res) {
+//   const { contactId } = req.params;
+//   const userDelete = users.find((item) => item.id === contactId);
+//   if (!userDelete) {
+//     res.status(404);
+//     res.json({ message: "Not found" });
+//     return;
+//   }
+//   res.status(200);
+//   res.json({ message: "contact deleted" });
+// }
 
-async function updateUser(req, res) {
-  middlewareForUpdate(req, res);
-  const { contactId } = req.params;
-  const { body } = req;
-  const user = users.find((item) => item.id === contactId);
-  if (!user) {
-    res.status(404);
-    res.json({ message: "Not found" });
-    return;
-  }
-  const updateUser = {
-    ...user,
-    ...body,
-  };
-  res.status(200);
-  res.json(updateUser);
-}
+// async function updateUser(req, res) {
+//   middlewareForUpdate(req, res);
+//   const { contactId } = req.params;
+//   const { body } = req;
+//   const user = users.find((item) => item.id === contactId);
+//   if (!user) {
+//     res.status(404);
+//     res.json({ message: "Not found" });
+//     return;
+//   }
+//   const updateUser = {
+//     ...user,
+//     ...body,
+//   };
+//   res.status(200);
+//   res.json(updateUser);
+// }
 
 module.exports = {
   getAllUsers,
   getUserById,
   addUser,
-  deleteUserById,
-  updateUser,
+  // deleteUserById,
+  // updateUser,
 };

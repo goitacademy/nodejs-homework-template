@@ -3,7 +3,7 @@ const Joi = require("joi");
 function middlewareForPost(req, res) {
   const schema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30).required(),
-    number: Joi.number().required().positive(),
+    phone: Joi.number().required().positive(),
     email: Joi.string().required().min(3).max(30),
   });
 
@@ -16,7 +16,7 @@ function middlewareForPost(req, res) {
 function middlewareForUpdate(req, res) {
   const schema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30),
-    number: Joi.number().positive(),
+    phone: Joi.number().positive(),
     email: Joi.string().min(3).max(30),
   });
 
