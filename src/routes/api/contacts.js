@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addPostValidation,
   patchValidation,
+  patchStatusValidation,
 } = require("../../middlewares/validationSchema");
 const router = express.Router();
 
@@ -28,8 +29,8 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", addPostValidation, async (req, res) => {
-  const { name, email, phone,favorite } = req.body;
-  const newContact = await addContact(name, email, phone,favorite);
+  const { name, email, phone, favorite } = req.body;
+  const newContact = await addContact(name, email, phone, favorite);
   res.status(201).json({ status: "success", newContact });
 });
 
@@ -46,7 +47,7 @@ router.delete("/:contactId", async (req, res) => {
 
 router.put("/:contactId", addPostValidation, async (req, res) => {
   const { contactId } = req.params;
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
   const contactById = await getContactById(contactId);
   if (!contactById) {
     return res.status(404).json({ status: "Not found" });
@@ -55,6 +56,7 @@ router.put("/:contactId", addPostValidation, async (req, res) => {
       name,
       email,
       phone,
+      favorite,
     });
     res.status(200).json({ status: "success", updateContactItem });
   }
@@ -62,7 +64,7 @@ router.put("/:contactId", addPostValidation, async (req, res) => {
 
 router.patch("/:contactId", patchValidation, async (req, res) => {
   const { contactId } = req.params;
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
   const contactById = await getContactById(contactId);
   if (!contactById) {
     return res.status(404).json({ status: "Not found" });
@@ -71,9 +73,28 @@ router.patch("/:contactId", patchValidation, async (req, res) => {
       name,
       email,
       phone,
+      favorite,
     });
     res.status(200).json({ status: "success", updateContactItem });
   }
 });
+
+router.patch(
+  "/:contactId/favorite",
+  patchStatusValidation,
+  async (req, res) => {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const contactById = await getContactById(contactId);
+    if (!contactById) {
+      return res.status(404).json({ status: "Not found" });
+    } else {
+      const updateContactItem = await updateContact(contactId, {
+        favorite,
+      });
+      res.status(200).json({ status: "success", updateContactItem });
+    }
+  }
+);
 
 module.exports = router;
