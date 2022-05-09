@@ -37,7 +37,7 @@ userSchema.methods.comparePassword = function (password) {
 const joiSchema = Joi.object({
   password: Joi.string(),
   email: Joi.string(),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
   token: Joi.string(),
 });
 

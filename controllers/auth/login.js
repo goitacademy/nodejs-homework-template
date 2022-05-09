@@ -10,6 +10,7 @@ const login = async (req, res) => {
     throw new Unauthorized(`Email or password is wrong`);
   }
   const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "30h" });
+  await User.findByIdAndUpdate(user._id, { token });
   res.json({ token });
 };
 
