@@ -1,7 +1,7 @@
-// const { v4 } = require("uuid");
 const {
   middlewareForPost,
-  // middlewareForUpdate,
+  middlewareForUpdate,
+  middlewareForUpdateStatus,
 } = require("../middlewares/middlewares");
 
 const { Contact } = require("../models/index");
@@ -25,49 +25,61 @@ async function getUserById(req, res) {
 async function addUser(req, res) {
   middlewareForPost(req, res);
   const result = await Contact.create(req.body);
-  // console.log("lsldkvnsdlkvnslKVNCD S,MVNLknvdslkfnwefhnegfljkerng", result);
-  // const newContact = {
-  //   id: v4(),
-  //   ...body,
-  // };
   res.status(201);
   res.json(result);
 }
 
-// async function deleteUserById(req, res) {
-//   const { contactId } = req.params;
-//   const userDelete = users.find((item) => item.id === contactId);
-//   if (!userDelete) {
-//     res.status(404);
-//     res.json({ message: "Not found" });
-//     return;
-//   }
-//   res.status(200);
-//   res.json({ message: "contact deleted" });
-// }
+async function deleteUserById(req, res) {
+  const { contactId } = req.params;
 
-// async function updateUser(req, res) {
-//   middlewareForUpdate(req, res);
-//   const { contactId } = req.params;
-//   const { body } = req;
-//   const user = users.find((item) => item.id === contactId);
-//   if (!user) {
-//     res.status(404);
-//     res.json({ message: "Not found" });
-//     return;
-//   }
-//   const updateUser = {
-//     ...user,
-//     ...body,
-//   };
-//   res.status(200);
-//   res.json(updateUser);
-// }
+  const userDelete = await Contact.findByIdAndRemove(contactId);
+  if (!userDelete) {
+    res.status(404);
+    res.json({ message: "Not found" });
+    return;
+  }
+  res.status(200);
+  res.json({
+    message: "contact deleted",
+    data: userDelete,
+  });
+}
+
+async function updateUser(req, res) {
+  middlewareForUpdate(req, res);
+  const { contactId } = req.params;
+  const { body } = req;
+  const user = await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  if (!user) {
+    res.status(404);
+    res.json({ message: "Not found" });
+    return;
+  }
+
+  res.status(200);
+  res.json(user);
+}
+
+async function updateStatusContact(req, res) {
+  middlewareForUpdateStatus(req, res);
+  const { contactId } = req.params;
+  const { body } = req;
+  const userStatus = await Contact.findByIdAndUpdate(contactId, body);
+  if (!userStatus) {
+    res.status(404);
+    res.json({ message: "Not found" });
+    return;
+  }
+
+  res.status(200);
+  res.json(userStatus);
+}
 
 module.exports = {
   getAllUsers,
   getUserById,
   addUser,
-  // deleteUserById,
-  // updateUser,
+  deleteUserById,
+  updateUser,
+  updateStatusContact,
 };
