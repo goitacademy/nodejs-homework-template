@@ -2,18 +2,11 @@ const express = require("express");
 const createError = require("http-errors");
 const { Contact, joiSchema, joiBoolSchema } = require("../../models/contact");
 const ctrl = require("../../controllers");
-const { validation, ctrlWrapper } = require("../../middleware");
+const { auth, validation, ctrlWrapper } = require("../../middleware");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await Contact.find({});
-    res.json({ status: "success", code: 200, result });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", auth, validation(joiSchema), ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", async (req, res, next) => {
   try {
@@ -28,7 +21,7 @@ router.get("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-router.post("/", validation(joiSchema), ctrlWrapper(ctrl.add));
+router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.add));
 
 router.put("/:contactId", validation(joiSchema), ctrlWrapper(ctrl.updateById));
 
