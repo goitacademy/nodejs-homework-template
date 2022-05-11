@@ -38,7 +38,7 @@ const removeContact = async (contactId) => {
       }
       //zmiana zawartości pliku
       stringArray = JSON.stringify(newArray);
-      fs.writeFile(contactsPath, stringArray)
+      await fs.writeFile(contactsPath, stringArray)
       if (response.toString() !== newArray.toString()) return true;
     })
     .catch((error) => console.log(error));
