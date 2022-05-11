@@ -27,7 +27,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   return listContacts()
-    .then((response) => {
+    .then(async (response) => {
       const newArray = response.filter(
         (contact) => contact.id !== contactId
       );
