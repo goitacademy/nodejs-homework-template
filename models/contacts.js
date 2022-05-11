@@ -18,7 +18,7 @@ const getContactById = async (contactId) => {
   return listContacts()
     .then((response) => {
       const foundContact = response.find(
-        (contact) => contact.id.toString() === contactId.toString()
+        (contact) => contact.id === contactId
       );
       if (foundContact) return foundContact;
     })
@@ -29,7 +29,7 @@ const removeContact = async (contactId) => {
   return listContacts()
     .then((response) => {
       const newArray = response.filter(
-        (contact) => contact.id.toString() !== contactId
+        (contact) => contact.id !== contactId
       );
       // porządkowanie id dla skróconej bazy kontaktów, w kolejności rosnacej
       const elements = newArray.length;
