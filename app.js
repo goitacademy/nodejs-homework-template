@@ -1,12 +1,10 @@
-const express = require('express');
 // Express - веб-фреймворк для написания веб-серверов на Node.js, имеет в своем распоряжении множество служебных методов HTTP и промежуточных обработчиков, чтобы создать надежный API или веб-сайт.
-
+const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
 const contactsRouter = require('./routes/api/contacts');
 const usersRouter = require('./routes/api/users');
-
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
