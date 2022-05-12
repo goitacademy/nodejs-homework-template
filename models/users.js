@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  password: {
+  passwordHash: {
     type: String,
     required: [true, 'Password is required'],
   },
@@ -21,4 +21,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-exports.Contact = mongoose.model('Contact', userSchema);
+exports.User = mongoose.model('User', userSchema);

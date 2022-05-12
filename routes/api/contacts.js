@@ -5,7 +5,7 @@ const { Contact } = require('../../models/contacts');
 const {
   validateAddedContact,
   validateUpdatedContact,
-} = require('../../middlewares/contactValidation');
+} = require('../../middlewares/validation');
 
 router.get('/', async (req, res) => {
   const contactsList = await Contact.find();
