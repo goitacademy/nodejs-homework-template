@@ -12,34 +12,29 @@ const userSchema = Schema(
 			required: [true, 'Email is required'],
 			unique: true,
 		},
-		subscription: {
-			type: String,
-			enum: ['starter', 'pro', 'business'],
-			default: 'starter',
-		},
-		token: {
-			type: String,
-			default: null,
-		},
+		// subscription: {
+		// 	type: String,
+		// 	enum: ['starter', 'pro', 'business'],
+		// 	default: 'starter',
+		// },
+		// token: {
+		// 	type: String,
+		// 	default: null,
+		// },
 	},
 	{ versionKey: false, timestamps: true }
 )
 
-const joiUserSchema = Joi.object({
+const joiSignupSchema = Joi.object({
 	password: Joi.string().min(6).required(),
-	email: Joi.string()
-		.email({
-			minDomainSegments: 2,
-			tlds: { allow: ['com', 'net'] },
-		})
-		.required(),
-	subscription: Joi.valid('starter', 'pro', 'business').default('starter'),
-	token: Joi.string().default(null),
+	email: Joi.string().required(),
+	// subscription: Joi.valid('starter', 'pro', 'business').default('starter'),
+	// token: Joi.string().default(null),
 })
 
 const User = model('user', userSchema)
 
 module.exports = {
 	User,
-	joiUserSchema,
+	joiSignupSchema,
 }

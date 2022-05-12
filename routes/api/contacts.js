@@ -1,34 +1,27 @@
 const express = require('express')
 const { ctrlWrapper, validation } = require('../../middlewars')
 const { joiContactSchema, joiStatusSchema } = require('../../middlewars')
-const {
-	getAllContacts,
-	getContactById,
-	addContact,
-	removeContact,
-	updateContact,
-	updateContactStatus,
-} = require('../../controllers')
+const { contacts: ctrl } = require('../../controllers')
 
 const router = express.Router()
 
-router.get('/', ctrlWrapper(getAllContacts))
+router.get('/', ctrlWrapper(ctrl.getAllContacts))
 
-router.get('/:contactId', ctrlWrapper(getContactById))
+router.get('/:contactId', ctrlWrapper(ctrl.getContactById))
 
-router.post('/', validation(joiContactSchema), ctrlWrapper(addContact))
+router.post('/', validation(joiContactSchema), ctrlWrapper(ctrl.addContact))
 
-router.delete('/:contactId', ctrlWrapper(removeContact))
+router.delete('/:contactId', ctrlWrapper(ctrl.removeContact))
 
 router.put(
 	'/:contactId',
 	validation(joiContactSchema),
-	ctrlWrapper(updateContact)
+	ctrlWrapper(ctrl.updateContact)
 )
 
 router.patch(
 	'/:contactId/favorite',
 	validation(joiStatusSchema),
-	ctrlWrapper(updateContactStatus)
+	ctrlWrapper(ctrl.updateContactStatus)
 )
 module.exports = router
