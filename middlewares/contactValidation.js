@@ -1,5 +1,4 @@
-// middlewares - это ф-ция которая может сделать промежуточный этап обработки нашего запроса
-// например: сделали запрос и нам после этого нужно в middleware сделать валидацию полей 
+// middleware - это ф-ция которая может сделать промежуточный этап обработки нашего запроса
 const Joi = require("joi");
 
 const validateAddedContact = (req, res, next) => {
@@ -13,7 +12,7 @@ const validateAddedContact = (req, res, next) => {
     if (error) {
         return res.status(400).send(error.message);
     }
-    next(); // позволяет перейти к следующему выполнению кода
+    next();
 };
 
 const validateUpdatedContact = (req, res, next) => {
