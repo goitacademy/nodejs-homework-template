@@ -1,5 +1,9 @@
 ## GoIT Node.js Course Template Homework
 
+//mongoDB
+//login:Volodymyr
+//pass:LrA5bm4RXvuRbY1J
+
 Выполните форк этого репозитория для выполнения домашних заданий (2-6)
 Форк создаст репозиторий на вашем http://github.com
 
