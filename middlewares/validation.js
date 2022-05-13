@@ -18,6 +18,7 @@ const validateAddedContact = (req, res, next) => {
   next(); // позволяет перейти к следующему выполнению кода
 };
 
+
 const validateUpdatedContact = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(2).max(20).required(),
@@ -48,8 +49,40 @@ const validateUser = (req, res, next) => {
   next();
 };
 
+
+/*
+проверка -  валидный ли token
+способ: authorization: Bearer <token>
+- получить token с header
+- верифицировать jwt - token 
+- if err -> 401
+- if ok -> req.userId 
+- next()
+*/
+const validateToken = async (req, res, next) => {
+  const jwt = require('jsonwebtoken');
+
+  try {
+    const header = req.headers.authorization || '';
+    const token = header.replace('Bearer ', '');
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log('🍒 payload', payload)
+
+    req.userId = payload.id;
+
+    next();
+
+  } catch (error) {
+    return res.status(401).send('user is not authorized');
+  }
+
+}
+
+
 module.exports = {
   validateAddedContact,
   validateUpdatedContact,
-  validateUser
+  validateUser,
+  validateToken
 };

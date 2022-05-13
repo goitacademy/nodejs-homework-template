@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validateUser } = require('../../middlewares/validation')
+const { validateUser, validateToken } = require('../../middlewares/validation')
 
 // const tokenValidation = require('../../middlewares/tokenValidation');
 
@@ -18,6 +18,7 @@ const { validateUser } = require('../../middlewares/validation')
 
 router.post('/signup', validateUser, async (req, res) => {
   const salt = process.env.BCRYPT_SALT_ROUNDS;
+
   // проверка существует ли пользователь с таким email
   const userExist = await User.findOne({ email: req.body.email })
   if (userExist) {
@@ -26,12 +27,13 @@ router.post('/signup', validateUser, async (req, res) => {
 
   let user = new User({
     email: req.body.email,
+    // parseInt(salt) - преобразование в число тк возвращается строка
     passwordHash: bcrypt.hashSync(req.body.password, parseInt(salt)),
   })
   user = await user.save();
 
   if (!user)
-    return res.status(400).send('the user cannot be created!')
+    return res.status(400).send('the user cannot be created!');
 
   res.send(user);
 })
@@ -60,7 +62,7 @@ router.post('/login', validateUser, async (req, res) => {
     const token = jwt.sign(
       // указываем что хотим положить в него 
       {
-        sub: user.id,
+        id: user.id,
       },
       jwtSecret,
       // время жизни нашего token
@@ -74,4 +76,17 @@ router.post('/login', validateUser, async (req, res) => {
 
 
 })
+
+
+router.get('/current', validateToken, async (req, res) => {
+  // console.log(req.userId);
+  const user = await User.findById(req.userId);
+
+  if (!user) {
+    return res.status(401).send('user is not authorized');
+  }
+  res.send(user);
+})
+
+
 module.exports = router;
