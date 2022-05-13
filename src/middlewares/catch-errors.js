@@ -3,7 +3,7 @@ module.exports.catchErrors = (middleware) => {
     try {
       await middleware(req, res);
     } catch (err) {
-      return res.status(404).json({ status: "Not found" });
+      return res.status(404).json({ status: "Not found , catch" });
     }
   };
 };

@@ -19,6 +19,7 @@ router.get(
   "/",
   catchErrors(async (req, res, next) => {
     const contact = await listContacts();
+
     res.status(200).json(contact);
   })
 );
@@ -28,6 +29,9 @@ router.get(
   catchErrors(async (req, res) => {
     const { contactId } = req.params;
     const contactById = await getContactById(contactId);
+    if (!contactById) {
+      return res.status(404).json({ status: "Not found" });
+    }
     res.status(200).json(contactById);
   })
 );
@@ -46,7 +50,10 @@ router.delete(
   "/:contactId",
   catchErrors(async (req, res) => {
     const { contactId } = req.params;
-    await removeContact(contactId);
+    const isRemove = await removeContact(contactId);
+    if (!isRemove) {
+      return res.status(404).json({ status: "Not found" });
+    }
     res.status(200).json({ message: "contact deleted" });
   })
 );
@@ -63,6 +70,9 @@ router.put(
       phone,
       favorite,
     });
+    if (!updateContactItem) {
+      return res.status(404).json({ status: "Not found" });
+    }
     res.status(200).json({ status: "success", updateContactItem });
   })
 );
@@ -79,6 +89,9 @@ router.patch(
       phone,
       favorite,
     });
+    if (!updateContactItem) {
+      return res.status(404).json({ status: "Not found" });
+    }
     res.status(200).json({ status: "success", updateContactItem });
   })
 );
@@ -92,6 +105,9 @@ router.patch(
     const updateContactItem = await updateContact(contactId, {
       favorite,
     });
+    if (!updateContactItem) {
+      return res.status(404).json({ status: "Not found" });
+    }
     res.status(200).json({ status: "success", updateContactItem });
   })
 );
