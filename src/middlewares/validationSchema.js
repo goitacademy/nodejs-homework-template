@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 module.exports = {
-  addPostValidation: (req, res, next) => {
+  fullPostValidation: (req, res, next) => {
     const schemaValid = Joi.object({
       name: Joi.string().required(),
       email: Joi.string()
@@ -11,6 +11,7 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().required(),
+      favorite: Joi.boolean().optional(),
     });
 
     const validationResult = schemaValid.validate(req.body);
@@ -33,11 +34,26 @@ module.exports = {
         })
         .optional(),
       phone: Joi.string(),
+      favorite: Joi.boolean(),
     });
 
     const validationResult = schemaValid.validate(req.body);
     if (validationResult.error) {
       return res.status(404).json({ status: validationResult.error.details });
+    }
+    next();
+  },
+  patchStatusValidation: (req, res, next) => {
+    const schemaValid = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+
+    const validationResult = schemaValid.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({
+        message: "missing field favorite",
+        status: validationResult.error.details,
+      });
     }
     next();
   },
