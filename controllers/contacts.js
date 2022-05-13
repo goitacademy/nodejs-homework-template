@@ -9,6 +9,20 @@ const get = async (req, res, next) => {
   }
 };
 
+const getOne = async (req, res, next) => {
+    const { contactId } = req.params;
+  try {
+      const contact = await service.getContactById(contactId);
+      if (!contact) {
+          res.status(404).json({message: "Contact not found"})
+      }
+    res.json(contact);
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
-  get,
+    get,
+    getOne
 };

@@ -18,13 +18,16 @@ router.get("/", contactController.get);
 //   listContacts().then(response => res.json( response ))
 // })
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  getContactById(contactId).then((response) => {
-    if (response) res.json(response);
-    else next(createError(404));
-  });
-});
+router.get("/:contactId", contactController.getOne)
+
+
+// router.get("/:contactId", async (req, res, next) => {
+//   const { contactId } = req.params;
+//   getContactById(contactId).then((response) => {
+//     if (response) res.json(response);
+//     else next(createError(404));
+//   });
+// });
 
 router.post("/", async (req, res, next) => {
   const { error, value } = schema.validate(req.body);
