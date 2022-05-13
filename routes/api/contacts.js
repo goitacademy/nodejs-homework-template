@@ -18,8 +18,7 @@ router.get("/", contactController.get);
 //   listContacts().then(response => res.json( response ))
 // })
 
-router.get("/:contactId", contactController.getOne)
-
+router.get("/:contactId", contactController.getOne);
 
 // router.get("/:contactId", async (req, res, next) => {
 //   const { contactId } = req.params;
@@ -29,14 +28,16 @@ router.get("/:contactId", contactController.getOne)
 //   });
 // });
 
-router.post("/", async (req, res, next) => {
-  const { error, value } = schema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: error.message });
-  }
-  addContact(value);
-  res.sendStatus(201);
-});
+router.post("/", contactController.post);
+
+// router.post("/", async (req, res, next) => {
+//   const { error, value } = schema.validate(req.body);
+//   if (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+//   addContact(value);
+//   res.sendStatus(201);
+// });
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
