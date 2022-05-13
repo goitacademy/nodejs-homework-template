@@ -12,6 +12,7 @@ const signup = async (req, res) => {
 		)
 	}
 	const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+	// eslint-disable-next-line no-unused-vars
 	const result = await User.create({
 		email,
 		password: hashPassword,

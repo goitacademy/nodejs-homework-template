@@ -5,7 +5,7 @@ const {
 	Contact,
 } = require('./contact')
 
-const { User, joiSignupSchema } = require('./user')
+const { User, joiSignupSchema, joiLoginSchema } = require('./user')
 
 module.exports = {
 	contactSchema,
@@ -14,4 +14,5 @@ module.exports = {
 	Contact,
 	User,
 	joiSignupSchema,
+	joiLoginSchema,
 }

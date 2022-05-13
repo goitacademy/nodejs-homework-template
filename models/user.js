@@ -32,9 +32,15 @@ const joiSignupSchema = Joi.object({
 	token: Joi.string(),
 })
 
+const joiLoginSchema = Joi.object({
+	password: Joi.string().min(6).required(),
+	email: Joi.string().required(),
+})
+
 const User = model('user', userSchema)
 
 module.exports = {
 	User,
 	joiSignupSchema,
+	joiLoginSchema,
 }
