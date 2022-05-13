@@ -2,7 +2,6 @@ const { User } = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const { createError } = require("../../helpers");
 const gravatar = require("gravatar");
-const { upload } = require("../../middlewares");
 
 const singup = async (req, res, next) => {
   const { email, password } = req.body;
