@@ -20,7 +20,7 @@ app.use(logger(formatsLogger));
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"))
+app.use(express.static("public"));
 // const path = require("path");
 
 app.use("/api/auth", authRouter);
@@ -36,14 +36,8 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-
-
-
-
-
-
-app.post("/public", upload.single("image"), async(req, res)=>{
-  console.log(req.file)
-})
+app.post("/public", upload.single("image"), async (req, res) => {
+  console.log(req.file);
+});
 
 module.exports = app;
