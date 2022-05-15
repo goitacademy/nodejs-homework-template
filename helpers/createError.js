@@ -1,10 +1,11 @@
-const statusMessages= {
-    404: 'Not found'
-}
+const statusMessages = {
+  404: "Not found",
+  400: "missing field favorite",
+ };
 const createError = (status, message = statusMessages[status]) => {
-    const error = new Error(message);
-    error.status = status;
-    return error;
-}
+  const error = new Error(message);
+  error.status = status;
+  return error;
+};
 
 module.exports = createError;
