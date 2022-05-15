@@ -30,7 +30,7 @@ const loginUser = async (body) => {
   }
 };
 
-const logoutUser = async (token) => {
+const findOneUser = async (token) => {
   const user = await Users.findOne(
     { token },
     { email: 1, subscription: 1, _id: 0 }
@@ -38,12 +38,4 @@ const logoutUser = async (token) => {
   return user;
 };
 
-const getCurrentUser = async (token) => {
-  const user = await Users.findOne(
-    { token },
-    { email: 1, subscription: 1, _id: 0 }
-  );
-  return user;
-};
-
-module.exports = { signupUser, loginUser, logoutUser, getCurrentUser };
+module.exports = { signupUser, loginUser, findOneUser };

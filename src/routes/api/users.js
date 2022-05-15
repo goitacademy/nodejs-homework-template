@@ -8,12 +8,7 @@ const {
 const { postAuthValidation } = require("../../middlewares/validationSchema");
 const router = express.Router();
 
-const {
-  signupUser,
-  loginUser,
-  logoutUser,
-  getCurrentUser,
-} = require("../../models/users");
+const { signupUser, loginUser, findOneUser } = require("../../models/users");
 
 router.post(
   "/signup",
@@ -48,7 +43,8 @@ router.get(
   "/logout",
   authenticate,
   catchErrors(async (req, res, next) => {
-    await logoutUser(req.user.token);
+    const userItem = await findOneUser(req.user.token);
+    userItem.token = null;
     res.sendStatus(204);
   })
 );
@@ -57,7 +53,7 @@ router.get(
   "/current",
   authenticate,
   catchErrors(async (req, res, next) => {
-    const user = await getCurrentUser(req.user.token);
+    const user = await findOneUser(req.user.token);
     res.status(200).send(user);
   })
 );
