@@ -67,7 +67,7 @@ const validateToken = async (req, res, next) => {
     const token = header.replace('Bearer ', '');
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log('🍒 payload', payload)
+    // console.log('🍒 payload', payload)
 
     req.userId = payload.id;
 

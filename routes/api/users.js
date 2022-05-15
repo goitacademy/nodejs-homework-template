@@ -3,9 +3,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validateUser, validateToken } = require('../../middlewares/validation')
+const { validateUser, validateToken } = require('../../middlewares/validation');
 
-// const tokenValidation = require('../../middlewares/tokenValidation');
 
 /* REGISTRATION /signup
  - делаем валидацию body 
@@ -15,7 +14,6 @@ const { validateUser, validateToken } = require('../../middlewares/validation')
  - хэшируем пароль
  - сохраняем пользователя и отправляем успешный запрос
 */
-
 router.post('/signup', validateUser, async (req, res) => {
   const salt = process.env.BCRYPT_SALT_ROUNDS;
 
@@ -32,11 +30,14 @@ router.post('/signup', validateUser, async (req, res) => {
   })
   user = await user.save();
 
-  if (!user)
+  if (!user) {
     return res.status(400).send('the user cannot be created!');
+  }
 
+  res.status(201).send('the user was created!');
   res.send(user);
 })
+
 
 /*
 login - вход пользователя на сайт
@@ -51,7 +52,7 @@ router.post('/login', validateUser, async (req, res) => {
   const jwtSecret = process.env.JWT_SECRET;
   const jwtExpiresIn = process.env.JWT_EXPIRES_IN;
 
-  const user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email });
 
   if (!user) {
     return res.status(404).send('The user not found');
@@ -69,17 +70,43 @@ router.post('/login', validateUser, async (req, res) => {
       { expiresIn: jwtExpiresIn }
     )
 
-    res.status(200).send({ user: user.email, token: token })
+    user = await await User.findByIdAndUpdate(
+      user._id,
+      {
+        token: token,
+      },
+      { new: true }
+    );
+
+    res.status(200).send(user);
+
   } else {
     res.status(409).send('email or password is wrong!');
   }
+})
+
+router.get('/logout', validateToken, async (req, res) => {
+
+  const user = await User.findByIdAndUpdate(
+    req.userId,
+    {
+      token: null,
+    },
+    { new: true }
+  );
+
+  // console.log('🍒 user', user)
 
 
+  if (!user)
+    res.status(401).send('not authorized');
+
+  res.status(204).send('no content');
 })
 
 
 router.get('/current', validateToken, async (req, res) => {
-  // console.log(req.userId);
+
   const user = await User.findById(req.userId);
 
   if (!user) {
