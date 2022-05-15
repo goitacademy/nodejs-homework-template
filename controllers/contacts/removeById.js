@@ -12,7 +12,7 @@ const removeById = async (req, res) => {
   if (!result) {
     throw createError(404, "Not found");
   }
-  res.json({ message: "contact was deleted" });
+  res.json({ message: "contact deleted" });
 };
 
 module.exports = removeById;
