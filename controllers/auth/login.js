@@ -10,11 +10,11 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user || !user.comparePassword(password)) {
-    throw new Unauthorized("Email or password is wrong");
+  if (!user || !user.verify || !user.comparePassword(password)) {
+    throw new Unauthorized(
+      "Email is wrong or not verified or password is wrong"
+    );
   }
-
-
 
   const payload = {
     id: user._id,
@@ -25,7 +25,7 @@ const login = async (req, res) => {
     status: "success",
     code: 200,
     data: {
-      token
+      token,
     },
   });
 };
