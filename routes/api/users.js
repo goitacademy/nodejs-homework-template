@@ -78,7 +78,7 @@ router.post('/login', validateUser, async (req, res) => {
       { new: true }
     );
 
-    res.status(200).send(user);
+    res.status(200).send({ user });
 
   } else {
     res.status(409).send('email or password is wrong!');
