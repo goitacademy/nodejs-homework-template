@@ -34,8 +34,12 @@ router.post('/signup', validateUser, async (req, res) => {
     return res.status(400).send('the user cannot be created!');
   }
 
-  res.status(201).send('the user was created!');
-  res.send(user);
+  res.status(201).send({
+    user: {
+      email: user.email,
+      subscription: user.subscription
+    }
+  });
 })
 
 
@@ -78,12 +82,19 @@ router.post('/login', validateUser, async (req, res) => {
       { new: true }
     );
 
-    res.status(200).send({ user });
+    res.status(200).send({
+      token: user.token,
+      user: {
+        email: user.email,
+        subscription: user.subscription
+      }
+    })
 
   } else {
     res.status(409).send('email or password is wrong!');
   }
 })
+
 
 router.get('/logout', validateToken, async (req, res) => {
 
@@ -96,7 +107,6 @@ router.get('/logout', validateToken, async (req, res) => {
   );
 
   // console.log('🍒 user', user)
-
 
   if (!user)
     res.status(401).send('not authorized');
@@ -112,8 +122,20 @@ router.get('/current', validateToken, async (req, res) => {
   if (!user) {
     return res.status(401).send('user is not authorized');
   }
-  res.send(user);
+  res.send({ email: user.email, subscription: user.subscription });
 })
+
+
+router.patch("/", validateToken, async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      subscription: req.body.subscription
+    }, {
+    new: true
+  })
+  res.send(user);
+});
 
 
 module.exports = router;
