@@ -1,16 +1,16 @@
-const { NotFound } = require("http-errors");
+const { BadRequest } = require("http-errors");
 const { User } = require("../../models/user");
 const { sendEmail } = require("../../helpers");
 
 const againVerifyEmail = async (req, res) => {
   const { email } = req.body;
   if (!email) {
-    throw NotFound(400, "Missing required field email");
+    throw BadRequest("Missing required field email");
   }
   const user = await User.findOne({ email });
 
   if (user.verify) {
-    throw NotFound(400, "Verification has already been passed");
+    throw BadRequest("Verification has already been passed");
   }
 
   const mail = {
