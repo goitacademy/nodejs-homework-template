@@ -2,7 +2,21 @@ const { Contact } = require('../models/contact');
 
 // Избавились от next в каждой функции, ибо юзаем его внутри мидлвары
 const getAllContacts = async (req, res) => {
-  const contacts = await Contact.find();
+  const { _id } = req.user;
+  const { page = 1, limit = 10, favorite = false } = req.query;
+  const skip = (page - 1) * limit;
+  if (favorite) {
+    const contacts = await Contact.find({ owner: _id, favorite }, '', {
+      skip,
+      limit: Number(limit),
+    }).populate('owner', '_id email');
+    res.json(contacts);
+    return;
+  }
+  const contacts = await Contact.find({ owner: _id }, '', {
+    skip,
+    limit: Number(limit),
+  }).populate('owner', '_id email');
   res.json(contacts);
 };
 
@@ -18,7 +32,8 @@ const getOneContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const contact = await Contact.create(req.body);
+  const { _id } = req.user;
+  const contact = await Contact.create({ ...req.body, owner: _id });
   res.status(201).json(contact);
 };
 
@@ -41,7 +56,7 @@ const updateContact = async (req, res) => {
   if (!updatedContact) {
     throw new Error(`Contact with id=${contactId} not found`);
   }
-  res.status(201).json(updatedContact);
+  res.status(201).json();
 };
 
 const updateFavouriteField = async (req, res) => {
