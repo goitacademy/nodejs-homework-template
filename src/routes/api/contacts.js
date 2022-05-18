@@ -19,7 +19,6 @@ router.get(
   "/",
   catchErrors(async (req, res, next) => {
     const contact = await listContacts();
-
     res.status(200).json(contact);
   })
 );
