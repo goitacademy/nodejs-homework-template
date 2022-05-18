@@ -70,7 +70,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   let newId = 0;
   const { name, email, phone } = body.value;
-  if (name === undefined || email === undefined || phone === undefined) {
+  if (name  || email  || phone) {
     return {
       message: "missing required name field",
       status: "error",
@@ -110,7 +110,7 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
-  if (name === undefined && email === undefined && phone === undefined) {
+  if (name && email && phone) {
     return { message: "missing fields", status: "error", code: 404 };
   }
   let chosenIndex = 0;
