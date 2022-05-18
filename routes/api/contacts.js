@@ -12,6 +12,7 @@ router.get('/', auth, tryCatchMiddleware(contactsController.getAllContacts));
 
 router.get(
   '/:contactId',
+  auth,
   tryCatchMiddleware(contactsController.getOneContact),
 );
 
@@ -24,17 +25,20 @@ router.post(
 
 router.delete(
   '/:contactId',
+  auth,
   tryCatchMiddleware(contactsController.deleteContact),
 );
 
 router.put(
   '/:contactId',
+  auth,
   validation(joiProduct),
   tryCatchMiddleware(contactsController.updateContact),
 );
 
 router.patch(
   '/:contactId/favorite',
+  auth,
   validation(joiFavoriteField),
   tryCatchMiddleware(contactsController.updateFavouriteField),
 );
