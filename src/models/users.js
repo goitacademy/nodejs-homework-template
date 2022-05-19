@@ -1,11 +1,18 @@
 const { Users } = require("../db/usersModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 require("dotenv").config();
 
 const signupUser = async (body) => {
-  const { email, password, subscription } = body;
+  const { email, password, subscription, avatarURL } = body;
+  console.log("avatarURL", avatarURL);
+  let avatarUserURL = avatarURL;
+  if (!avatarURL) {
+    avatarUserURL = gravatar.url(email, { protocol: "https", s: "100" });
+  }
+  console.log("avatarUserURL", avatarUserURL);
   const isSingup = await Users.create({
     email,
     password: await bcryptjs.hash(
@@ -13,6 +20,7 @@ const signupUser = async (body) => {
       Number(process.env.BCRYPT_SALT_ROUNDS)
     ),
     subscription,
+    avatarURL: avatarUserURL,
   });
   return isSingup;
 };
@@ -42,7 +50,7 @@ const logoutUser = async (token) => {
 const currentUser = async (token) => {
   const user = await Users.findOne(
     { token },
-    { email: 1, subscription: 1, _id: 0 }
+    { email: 1, subscription: 1, avatarURL: 1, _id: 0 }
   );
   return user;
 };
