@@ -1,5 +1,6 @@
 const { UserModel, JoiUserSchema } = require("../../models/user");
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 
 const signup = async (req, res, next) => {
   try {
@@ -10,6 +11,7 @@ const signup = async (req, res, next) => {
       });
     }
     const { email, password } = req.body;
+    const avatarURL = gravatar.url(email);
     const result = await UserModel.findOne({ email });
 
     if (result)
@@ -20,7 +22,7 @@ const signup = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const passwordToSave = bcrypt.hashSync(password, salt);
 
-    await UserModel.create({ email, password: passwordToSave });
+    await UserModel.create({ email, password: passwordToSave, avatarURL });
     return res.status(201).json({
       user: {
         email,

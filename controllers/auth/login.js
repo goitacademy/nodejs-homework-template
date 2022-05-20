@@ -13,6 +13,7 @@ const login = async (req, res, next) => {
       });
 
     const { email, password } = req.body;
+
     const result = await UserModel.findOne({ email });
 
     if (!result)
@@ -25,12 +26,14 @@ const login = async (req, res, next) => {
     if (comparePasswords) {
       const payload = { id: result._id };
       const token = jwt.sign(payload, SECRET_KEY);
+
       await UserModel.findByIdAndUpdate(result._id, { token });
       return res.status(200).json({
         token,
         user: {
           email,
           subscription: "starter",
+          avatarURL: result.avatarURL,
         },
       });
     }
