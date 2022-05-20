@@ -2,17 +2,13 @@ const { Users } = require("../db/usersModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 require("dotenv").config();
 
 const signupUser = async (body) => {
-  const { email, password, subscription, avatarURL } = body;
-  console.log("avatarURL", avatarURL);
-  let avatarUserURL = avatarURL;
-  if (!avatarURL) {
-    avatarUserURL = gravatar.url(email, { protocol: "https", s: "100" });
-  }
-  console.log("avatarUserURL", avatarUserURL);
+  const { email, password, subscription } = body;
+
   const isSingup = await Users.create({
     email,
     password: await bcryptjs.hash(
@@ -20,7 +16,7 @@ const signupUser = async (body) => {
       Number(process.env.BCRYPT_SALT_ROUNDS)
     ),
     subscription,
-    avatarURL: avatarUserURL,
+    avatarURL: gravatar.url(email, { s: "100", r: "x", d: "retro" }, false),
   });
   return isSingup;
 };
@@ -55,9 +51,31 @@ const currentUser = async (token) => {
   return user;
 };
 
+const avatarsUpdate = async (token, body) => {
+  const { path, filename } = body;
+console.log('filename', filename)
+ const newFile = await Jimp.read(path)
+  .then(filename => {
+    return filename
+      .resize(250, 250)
+      .writeAsync('./public/avatars/'+filename);    
+  })
+  .catch(err => {
+    console.error(err);
+  });
+  console.log('newFile', newFile)
+  const user = await Users.findOneAndUpdate(
+    { token },
+    { avatarURL: path },
+    { new: true }
+  );
+  return user;
+};
+
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
   currentUser,
+  avatarsUpdate,
 };
