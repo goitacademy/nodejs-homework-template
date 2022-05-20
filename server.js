@@ -1,5 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const uriDb = process.env.DB_URI;

@@ -2,6 +2,8 @@ const express = require("express");
 const contactController = require("../../controllers/contacts");
 const router = express.Router();
 
+// router.use("/auth",require("./auth"))
+
 router.get("/", contactController.get);
 
 router.get("/:contactId", contactController.getOne);

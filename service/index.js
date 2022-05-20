@@ -50,6 +50,7 @@ module.exports = {
   listContacts,
   getContactById,
   addContact,
+  updateContact,
   removeContact,
   updateStatusContact,
 };
