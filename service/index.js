@@ -6,13 +6,13 @@ const Contact = require("./schemas/contacts");
 const listContacts = () => Contact.find({}).lean();
 
 const getContactById = (contactId) => {
-  let objectIdContactId;
+  let isValid;
   try {
-    objectIdContactId = ObjectId(contactId);
+    isValid = ObjectId(contactId);
   } catch (err) {
     return null;
   }
-  return Contact.findOne({ _id: objectIdContactId }).lean();
+  return Contact.findOne({ _id: isValid }).lean();
 };
 
 const addContact = ({ name, email, phone, favorite }) =>
