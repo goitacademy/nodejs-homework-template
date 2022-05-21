@@ -2,9 +2,6 @@ const app = require('./app')
 const mongoose=require("mongoose")
 const dotenv=require("dotenv")
 
-// username=Yevhenii
-// password KVp1BBYaXypbs4rW
-
  
 
 dotenv.config()

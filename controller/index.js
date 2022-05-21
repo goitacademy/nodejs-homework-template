@@ -4,9 +4,9 @@ const get = async (req, res, next) => {
   try {
     const result = await service.getAllContacts();
     res.status(200).json({
-      data: {
+    
         contacts: result,
-      },
+ 
     });
   } catch (e) {
     res.status(404).json({ message: "Not found" });
@@ -35,7 +35,6 @@ const postNewContact = async (req, res, next) => {
     });
   } catch (e) {
     res.status(404).json({ message: "Not found" });
-    next(e);
   }
 };
 const deleteContact = async (req, res, next) => {
