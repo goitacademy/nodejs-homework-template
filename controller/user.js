@@ -52,7 +52,7 @@ const login =async(req,res,next)=>{
         const payload = {
           id: result._id
       } 
-      const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "1h"});
+      const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "10h"});
       const findAndUpdate=await service.updateUserById(result._id, {token})
       return res.status(200).json({
           token: token,

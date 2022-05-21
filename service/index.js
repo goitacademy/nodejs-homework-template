@@ -1,26 +1,26 @@
 const Contact = require("./schemas/Contact");
 const User = require("./schemas/user");
 
-const getAllContacts = async () => {
-  return Contact.find();
+const getAllContacts = async (owner) => {
+  return Contact.find({owner:owner}).populate("owner","email");
 };
-const getContactById = async (id) => {
-  return Contact.findOne({ _id: id });
+const getContactById = async (id,owner) => {
+  return Contact.findOne({ _id: id , owner:owner});
 };
-const postNewContact = async (name, email, phone, favorite) => {
-  return Contact.create({ name, email, phone, favorite });
+const postNewContact = async (name, email, phone, favorite,owner) => {
+  return Contact.create({ name, email, phone, favorite, owner });
 };
-const deleteContact = async (id) => {
-  return Contact.remove({ _id: id });
+const deleteContact = async (id,owner) => {
+  return Contact.deleteOne({ _id: id ,owner:owner});
 };
-const updateContact = async (id, name, email, phone, favorite) => {
+const updateContact = async (id, name, email, phone, favorite,owner) => {
   return Contact.updateOne(
-    { _id: id },
-    { name: name, email: email, phone: phone, favorite: favorite }
+    { _id: id,owner:owner },
+    { name: name, email: email, phone: phone, favorite: favorite}
   );
 };
-const updateContactFavorite = async (id, favorite) => {
-  return Contact.updateOne({ _id: id }, { favorite: favorite });
+const updateContactFavorite = async (id, favorite,owner) => {
+  return Contact.updateOne({ _id: id, owner:owner }, { favorite: favorite });
 };
 const getAllFavorite = async () => {
   return Contact.find({ favorite: true });

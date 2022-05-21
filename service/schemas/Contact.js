@@ -4,13 +4,16 @@ const contact = Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
+    unique: true
   },
   email: {
     type: String,
     required: [true],
+    unique: true
   },
   phone: {
     type: String,
+    unique: true,
     required: [true],
   },
   favorite: {

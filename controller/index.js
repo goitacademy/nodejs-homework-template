@@ -1,12 +1,13 @@
 const service = require("../service");
+const jwt=require("jsonwebtoken");
 
 const get = async (req, res, next) => {
   try {
-    const result = await service.getAllContacts();
+    const {_id}=req.user
+    const result = await service.getAllContacts(_id);
     res.status(200).json({
     
         contacts: result,
- 
     });
   } catch (e) {
     res.status(404).json({ message: "Not found" });
@@ -15,7 +16,14 @@ const get = async (req, res, next) => {
 };
 const getContactById = async (req, res, next) => {
   try {
-    const result = await service.getContactById(req.params.contactId);
+    const {_id}=req.user
+    const result = await service.getContactById(req.params.contactId,_id);
+    if(!result)
+    {
+      return res.status(403).json({
+        "message": "Access is denied"
+      })
+    }
     res.status(200).json({
       contacts: result,
     });
@@ -26,24 +34,33 @@ const getContactById = async (req, res, next) => {
 
 const postNewContact = async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
+  const {authorization}=req.headers
+  const [bearer, token]=authorization.split(" ");
+  const owner= jwt.verify(token,process.env.SECRET_KEY).id
+  
   try {
-    const result = await service.postNewContact(name, email, phone, favorite);
+    const result = await service.postNewContact(name, email, phone, favorite,owner);
     res.status(200).json({
-      data: {
         contacts: result,
-      },
     });
   } catch (e) {
+    console.log(e.message);
     res.status(404).json({ message: "Not found" });
   }
 };
 const deleteContact = async (req, res, next) => {
   try {
-    const result = await service.deleteContact(req.params.contactId);
+    const {_id}=req.user
+
+    const result = await service.deleteContact(req.params.contactId,_id);
+    if(result.deletedCount===0)
+    {
+      return res.status(403).json({
+        "message": "Access is denied"
+      })
+    }
     res.status(200).json({
-      data: {
         contacts: result,
-      },
     });
   } catch (e) {
     res.status(404).json({ message: "Not found" });
@@ -52,18 +69,21 @@ const deleteContact = async (req, res, next) => {
 };
 const updateContact = async (req, res, next) => {
   try {
-    const { name, email, phone, favorite } = req.body;
+    
+    const { name, email, phone, favorite, } = req.body;
     const id = req.params.contactId;
+    const {_id}=req.user
     const result = await service.updateContact(
       id,
       name,
       email,
       phone,
-      favorite
+      favorite,_id
     );
+
     res.status(200).json({
       data: {
-        contacts: result,
+        contacts: req.body,
       },
     });
   } catch (e) {
@@ -75,11 +95,18 @@ const updateContact = async (req, res, next) => {
 const updateContactFavorite = async (req, res, next) => {
   const { favorite } = req.body;
   const id = req.params.contactId;
+  const {_id}=req.user
 
   try {
-    const result = await service.updateContactFavorite(id, favorite);
+    const result = await service.updateContactFavorite(id, favorite,_id);
     if (!result.acknowledged) {
       return res.status(400).json({ message: "missing field favorite" });
+    }
+    if(result.matchedCount===0)
+    {
+      return res.status(403).json({
+        "message": "Access is denied"
+      })
     }
     res.status(200).json({
       data: {
@@ -88,7 +115,6 @@ const updateContactFavorite = async (req, res, next) => {
     });
   } catch (e) {
     res.status(404).json({ message: e.message });
-    next(e);
   }
 };
 const getAllFavorite = async(req, res, next)=>{
