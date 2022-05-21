@@ -23,7 +23,6 @@ const getAllContacts = async (req, res) => {
 const getOneContact = async (req, res) => {
   const { contactId } = req.params;
   const { _id } = req.user;
-  // const contact = await Contact.findById(contactId);
   await isYourContact(_id, contactId);
   const contact = await Contact.find({ owner: _id, _id: contactId });
   if (!contact) {
