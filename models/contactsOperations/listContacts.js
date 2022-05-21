@@ -1,8 +1,8 @@
 const fs = require("fs/promises");
-const contactsPath = require("../contacts.json");
+const contactsDatabase = require("./dbPath");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
+  const data = await fs.readFile(contactsDatabase);
   const contacts = JSON.parse(data);
   return contacts;
 };
