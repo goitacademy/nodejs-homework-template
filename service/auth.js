@@ -13,6 +13,7 @@ const signUser = async ({ res, value }) => {
     email: value.email,
     subscription: value.subscription,
   });
+
   await newUser.setPassword(value.password);
   await newUser.save();
 
@@ -32,9 +33,10 @@ const loginUser = async ({ value, res }) => {
     subscription: user.subscription,
   };
 
+
   const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "12h" });
 
-  return { token: token, user: { email: value.email, subscription: "starter"} };
+  return { token: token, user: { email: user.email, subscription: user.subscription} };
 
 };
 

@@ -13,7 +13,7 @@ const signup = async (req, res, next) => {
     const result = await authService.signUser({ value, res });
     res.status(201).json({ user: result });
   } catch (error) {
-    next(error);
+    next(error)
   }
 };
 
@@ -24,7 +24,7 @@ const login = async (req, res, next) => {
     const result = await authService.loginUser({ value, res });
     res.status(200).json({ result });
   } catch (error) {
-    next(error);
+    next(error)
   }
 };
 
