@@ -13,7 +13,23 @@ const {
   loginUser,
   currentUser,
   logoutUser,
+  avatarsUpdate,
 } = require("../../models/users");
+
+const multer = require("multer");
+const mime = require("mime-types");
+const uuid = require("uuid");
+
+const upload = multer({
+  storage: multer.diskStorage({
+    filename: (req, file, cb) => {
+      const extname = mime.extension(file.mimetype);
+      const filename = uuid.v4() + "." + extname;
+      cb(null, filename);
+    },
+    destination: "./tmp",
+  }),
+});
 
 router.post(
   "/signup",
@@ -26,6 +42,7 @@ router.post(
     });
   })
 );
+
 router.post(
   "/login",
   postAuthValidation,
@@ -58,6 +75,16 @@ router.get(
   authorize,
   catchErrors(async (req, res, next) => {
     const user = await currentUser(req.user.token);
+    res.status(200).send(user);
+  })
+);
+
+router.patch(
+  "/avatars",
+  authorize,
+  upload.single("avatar"),
+  catchErrors(async (req, res, next) => {
+    const user = await avatarsUpdate(req.user.token, req.file);
     res.status(200).send(user);
   })
 );

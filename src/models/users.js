@@ -1,11 +1,15 @@
 const { Users } = require("../db/usersModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const fs = require("fs").promises;
 
 require("dotenv").config();
 
 const signupUser = async (body) => {
   const { email, password, subscription } = body;
+
   const isSingup = await Users.create({
     email,
     password: await bcryptjs.hash(
@@ -13,6 +17,7 @@ const signupUser = async (body) => {
       Number(process.env.BCRYPT_SALT_ROUNDS)
     ),
     subscription,
+    avatarURL: gravatar.url(email, { s: "100", r: "x", d: "retro" }, false),
   });
   return isSingup;
 };
@@ -42,8 +47,24 @@ const logoutUser = async (token) => {
 const currentUser = async (token) => {
   const user = await Users.findOne(
     { token },
-    { email: 1, subscription: 1, _id: 0 }
+    { email: 1, subscription: 1, avatarURL: 1, _id: 0 }
   );
+  return user;
+};
+
+const avatarsUpdate = async (token, body) => {
+  const { path, filename } = body;
+console.log('filename', filename)
+ const newFile = await Jimp.read(path)
+ const newPath = "./public/avatars/" + filename;
+ await newFile.resize(250, 250).writeAsync(newPath);
+ await fs.unlink(path);
+
+ const user = await Users.findOneAndUpdate(
+   { token },
+   { avatarURL: newPath },
+   { new: true }
+ );
   return user;
 };
 
@@ -52,4 +73,5 @@ module.exports = {
   loginUser,
   logoutUser,
   currentUser,
+  avatarsUpdate,
 };
