@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    const { email } = req.user;
-    res.json({message: `You are authorized: ${email}`})
+    const { email, subscription } = req.user;
+    res.json({ email: email, subscription: subscription });
 })
 
 module.exports = router;

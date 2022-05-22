@@ -5,7 +5,7 @@ const authMiddleware = require("./middlewares/jwt")
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
-const listRouter = require("./routes/api/list");
+const listRouter = require("./routes/api/current");
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/users", authRouter)
-app.use("/list", authMiddleware, listRouter)
+app.use("/users/current", authMiddleware, listRouter)
 
 app.use((err, _, res, __) => {
 
