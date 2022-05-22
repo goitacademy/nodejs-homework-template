@@ -20,7 +20,6 @@ const multer = require("multer");
 const mime = require("mime-types");
 const uuid = require("uuid");
 
-
 const upload = multer({
   storage: multer.diskStorage({
     filename: (req, file, cb) => {
@@ -85,9 +84,7 @@ router.patch(
   authorize,
   upload.single("avatar"),
   catchErrors(async (req, res, next) => {
-    // console.log("req", req.file);
     const user = await avatarsUpdate(req.user.token, req.file);
-    
     res.status(200).send(user);
   })
 );
