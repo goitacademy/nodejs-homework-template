@@ -1,3 +1,4 @@
+const { subscribe } = require("moongose/routes");
 const Contact = require("./schemas/Contact");
 const User = require("./schemas/user");
 
@@ -40,6 +41,9 @@ const updateUserById = async (id, token) => {
 const getUserById = async (id) => {
   return User.findOne({ _id: id });
 };
+const updateSubscription =async(id,subscription)=>{
+  return User.updateOne({_id:id},{subscription:subscription})
+}
 module.exports = {
   getAllContacts,
   getContactById,
@@ -52,4 +56,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   getUserById,
+  updateSubscription,
 };

@@ -9,7 +9,7 @@ router.post("/signup", controller.signup)
 router.post("/login", controller.login)
 router.get("/logout",auth, controller.logout)
 router.get("/current",auth, controller.current)
-
+router.patch("/",auth,controller.updateSubscription)
 
 
 

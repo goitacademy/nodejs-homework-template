@@ -98,10 +98,31 @@ const current =async(req,res,next)=>{
   }
 
 }
+const updateSubscription =async (req,res,next)=>{
+  const {_id}=req.user
+  const subscription=req.body.subscription
+  const subscriptionType=['starter', 'pro', 'business']
+  
+  try {
+    if(subscriptionType.includes(subscription)){
+      await service.updateSubscription(_id,subscription )
+      return res.status(200).json({
+        email:req.user.email,
+        subscription:subscription,
+       })
+    }
+  return res.status(400).json({
+    "message":"use only:starte,pro,buiness"
+  })
+  } catch (error) {
+    next(error)
+  }
+}
   module.exports = {
     signup,
     login,
     logout,
-    current
+    current,
+    updateSubscription
   };
   
