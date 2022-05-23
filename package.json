@@ -1,17 +1,26 @@
 {
-  "name": "template",
+  "name": "nodejs-homework",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "start": "cross-env NODE_ENV=production node ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolodymyrTsyhylyk/nodejs-homework-rest-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VolodymyrTsyhylyk/nodejs-homework-rest-api/issues"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.5.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {

@@ -24,18 +24,6 @@
     "phone": "(692) 802-2949"
   },
   {
-    "id": "5",
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
-  },
-  {
-    "id": "6",
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
     "id": "7",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
@@ -58,5 +46,23 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "bac5dcfc-632c-468b-a076-94c1b7b01249",
+    "name": "Oksi",
+    "email": "oksi@egetlacus.ca",
+    "phone": "(394) 840-6685"
+  },
+  {
+    "id": "25f39681-0468-4d24-9371-62a5dead52d4",
+    "name": "Oksi",
+    "email": "oksi@egetlacus.ca",
+    "phone": "(394) 840-6685"
+  },
+  {
+    "id": "3233a7c4-0bfc-42fe-b252-8b517d00bb15",
+    "name": "Oleg",
+    "email": "oleg@vestibul.co.uk",
+    "phone": "(892) 914-3792"
   }
 ]
