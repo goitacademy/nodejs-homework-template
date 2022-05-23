@@ -1,8 +1,11 @@
 const Contact = require("./schemas/Contact");
 const User = require("./schemas/user");
 
-const getAllContacts = async (owner) => {
-  return Contact.find({owner:owner}).populate("owner","email");
+const getAllContacts = async (owner,favorite) => {
+  if(favorite===undefined){
+    return Contact.find({owner:owner}).populate("owner","email");
+  }
+  return Contact.find({owner:owner,favorite}).populate("owner","email");
 };
 const getContactById = async (id,owner) => {
   return Contact.findOne({ _id: id , owner:owner});
@@ -22,8 +25,8 @@ const updateContact = async (id, name, email, phone, favorite,owner) => {
 const updateContactFavorite = async (id, favorite,owner) => {
   return Contact.updateOne({ _id: id, owner:owner }, { favorite: favorite });
 };
-const getAllFavorite = async () => {
-  return Contact.find({ favorite: true });
+const getAllFavorite = async (favorite) => {
+  return Contact.find({ favorite: favorite });
 };
 const postNewUser = async (email, password) => {
   return User.create({ email, password });

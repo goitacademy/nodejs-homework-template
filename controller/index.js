@@ -2,15 +2,16 @@ const service = require("../service");
 const jwt=require("jsonwebtoken");
 
 const get = async (req, res, next) => {
+  
   try {
     const {_id}=req.user
-    const result = await service.getAllContacts(_id);
+    const result = await service.getAllContacts(_id,req.query.favorite);
     res.status(200).json({
     
         contacts: result,
     });
   } catch (e) {
-    res.status(404).json({ message: "Not found" });
+    // res.status(404).json({ message: "Not found" });
     next(e);
   }
 };
@@ -73,7 +74,7 @@ const updateContact = async (req, res, next) => {
     const { name, email, phone, favorite, } = req.body;
     const id = req.params.contactId;
     const {_id}=req.user
-    const result = await service.updateContact(
+     await service.updateContact(
       id,
       name,
       email,
@@ -119,7 +120,8 @@ const updateContactFavorite = async (req, res, next) => {
 };
 const getAllFavorite = async(req, res, next)=>{
     try {
-        const result = await service.getAllFavorite();
+      console.log(req.query.favorite);
+        const result = await service.getAllFavorite(req.query.favorite);
         res.status(200).json({
           data: {
             contacts: result,
