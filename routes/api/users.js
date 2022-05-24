@@ -5,6 +5,7 @@ const currentUserController = require('../../controllers/users/currentUserContro
 const validation = require('../../middlewares/validation');
 const tryCatchMiddleware = require('../../middlewares/tryCatchMiddleware');
 const auth = require('../../middlewares/auth');
+const upload = require('../../middlewares/upload');
 const { joiUser, joiSubscribtion } = require('../../models/user');
 
 const router = express.Router();
@@ -34,6 +35,13 @@ router.patch(
   auth,
   validation(joiSubscribtion),
   tryCatchMiddleware(currentUserController.updateSubscription),
+);
+
+router.patch(
+  '/avatars',
+  auth,
+  upload.single('avatar'),
+  tryCatchMiddleware(currentUserController.updateAvatar),
 );
 
 module.exports = router;
