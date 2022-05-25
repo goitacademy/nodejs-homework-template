@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const contactsOperations = require("../../models/contactsOperations");
+const { Contact } = require("../../models");
 
 const joiShema = Joi.object({
   name: Joi.string().required(),
@@ -9,7 +9,7 @@ const joiShema = Joi.object({
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = joiShema.validate(req.body);
+    const { error } = joiShema.validate(req.body, { new: true });
     if (error) {
       res.json({
         status: "error",
@@ -19,7 +19,7 @@ const updateContact = async (req, res, next) => {
     }
 
     const { contactId } = req.params;
-    const result = await contactsOperations.updateContact(contactId, req.body);
+    const result = await Contact.findOneAndUpdate(contactId, req.body);
 
     if (!result) {
       res.status(404).json({
