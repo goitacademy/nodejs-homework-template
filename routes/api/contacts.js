@@ -1,25 +1,41 @@
-const express = require('express')
+const express = require("express");
+const {
+  updateContact,
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+} = require("../../models/contacts.js");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const data = await listContacts();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json({ data, message: "success" });
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const data = await getContactById(req.params.contactId);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json({ data, message: "successS" });
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  const data = await addContact(req.body);
+  console.log(data);
+  res.json({ data, message: "successP" });
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  const data = await removeContact(req.params.contactId);
+  res.json({ data, message: "successDe" });
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  const data = await updateContact(req.params.contactId, req.body);
+  console.log(data);
+  res.json({ data, message: "successPu" });
+});
+
+module.exports = router;
