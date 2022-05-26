@@ -6,7 +6,7 @@ const {
   removeContact,
   updateContact,
 } = require('../../models/contacts');
-
+const { addValidation } = require('../../middlewares/validationMiddleware');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -34,7 +34,7 @@ router.get('/:contactId', async (req, res, next) => {
   });
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', addValidation, async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     code: 201,
@@ -44,18 +44,27 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
-  res.json({
+  const deleteContact = await removeContact(contactId);
+  if (deleteContact === null) {
+    return res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Contact with id=${contactId} not found`,
+    });
+  }
+  res.status(204).json({
     status: 'success',
-    code: 201,
-    data: { result: await removeContact(contactId) },
+    code: 204,
+    message: 'contact deleted',
+    data: { result: deleteContact },
   });
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', addValidation, async (req, res, next) => {
   const { contactId } = req.params;
   res.json({
     status: 'success',
-    code: 201,
+    code: 200,
     data: { result: await updateContact(contactId, req.body) },
   });
 });
