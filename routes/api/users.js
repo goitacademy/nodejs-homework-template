@@ -6,7 +6,7 @@ const validation = require('../../middlewares/validation');
 const tryCatchMiddleware = require('../../middlewares/tryCatchMiddleware');
 const auth = require('../../middlewares/auth');
 const upload = require('../../middlewares/upload');
-const { joiUser, joiSubscribtion } = require('../../models/user');
+const { joiUser, joiSubscribtion, joiReverify } = require('../../models/user');
 
 const router = express.Router();
 
@@ -28,6 +28,17 @@ router.get(
   '/current',
   auth,
   tryCatchMiddleware(currentUserController.getCurrent),
+);
+
+router.get(
+  '/verify/:verificationToken',
+  tryCatchMiddleware(currentUserController.verifyEmail),
+);
+
+router.post(
+  '/verify',
+  validation(joiReverify),
+  tryCatchMiddleware(currentUserController.reverifyEmail),
 );
 
 router.patch(

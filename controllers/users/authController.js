@@ -2,6 +2,8 @@ const { User } = require('../../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
+const { v4: uuidv4 } = require('uuid');
+const sendEmail = require('../../helpers/sendEmail');
 const SECRET_KEY = 'jsonwebtoken';
 
 const signup = async (req, res) => {
@@ -15,7 +17,22 @@ const signup = async (req, res) => {
 
   const avatarURL = gravatar.url(email);
   const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  await User.create({ email, password: hashedPassword, avatarURL });
+
+  const verificationToken = uuidv4();
+  await User.create({
+    email,
+    password: hashedPassword,
+    avatarURL,
+    verificationToken,
+  });
+
+  const mail = {
+    to: email,
+    subject: 'Подтверждения email',
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердить email</a>`,
+  };
+
+  await sendEmail(mail);
 
   res.status(201).json({
     user: {
@@ -29,8 +46,8 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user) {
-    const error = new Error('Email or password is wrong');
+  if (!user || !user.verify) {
+    const error = new Error('User not verified or Email or password is wrong');
     error.status = 401;
     throw error;
   }

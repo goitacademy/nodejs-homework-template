@@ -1,6 +1,8 @@
 const { User } = require('../../models/user');
 const fs = require('fs/promises');
 const path = require('path');
+const sendEmail = require('../../helpers/sendEmail');
+const { v4: uuidv4 } = require('uuid');
 
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
@@ -50,4 +52,63 @@ const updateAvatar = async (req, res) => {
   }
 };
 
-module.exports = { getCurrent, updateSubscription, updateAvatar };
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    const error = new Error(`Not found`);
+    error.status = 404;
+    throw error;
+  }
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.json({
+    message: 'Verify success',
+  });
+};
+
+const reverifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    const error = new Error(`Not found`);
+    error.status = 404;
+    throw error;
+  }
+
+  if (!user.verify) {
+    const verificationToken = uuidv4();
+    await User.findByIdAndUpdate(user._id, {
+      verificationToken,
+    });
+
+    const mail = {
+      to: email,
+      subject: 'Подтверждения email',
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердить email</a>`,
+    };
+
+    await sendEmail(mail);
+
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+
+    return res.json({
+      message: 'Verify success',
+    });
+  }
+  res.json({ message: 'Verification has already been passed' });
+};
+
+module.exports = {
+  getCurrent,
+  updateSubscription,
+  updateAvatar,
+  verifyEmail,
+  reverifyEmail,
+};

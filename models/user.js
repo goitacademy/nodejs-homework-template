@@ -24,6 +24,14 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 });
 
 const joiUser = Joi.object({
@@ -35,6 +43,10 @@ const joiSubscribtion = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
 
+const joiReverify = Joi.object({
+  email: Joi.string().required(),
+});
+
 const User = model('user', userSchema);
 
-module.exports = { User, joiUser, joiSubscribtion };
+module.exports = { User, joiUser, joiSubscribtion, joiReverify };
