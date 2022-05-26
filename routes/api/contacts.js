@@ -23,18 +23,18 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const data = await addContact(req.body);
-  console.log(data);
   res.json({ data, message: "successP" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const data = await removeContact(req.params.contactId);
+
   res.json({ data, message: "successDe" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const data = await updateContact(req.params.contactId, req.body);
-  console.log(data);
+  console.log(res.params);
   res.json({ data, message: "successPu" });
 });
 

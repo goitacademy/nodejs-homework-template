@@ -27,22 +27,18 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const data = await fs.readFile("./models/contacts.json", "utf8");
-  console.log(
-    JSON.stringify([...JSON.parse(data), { uniqId, name, email, phone }])
-  );
-  return JSON.stringify([...JSON.parse(data), { uniqId, name, email, phone }]);
+
+  return [...JSON.parse(data), { uniqId, name, email, phone }];
 };
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
   const data = await fs.readFile("./models/contacts.json", "utf8");
-  const parsedData = JSON.parse(data);
-  console.log(body);
-  return parsedData.forEach((contact) => {
+  return JSON.parse(data).forEach((contact) => {
     if (contactId === contact.id) {
       contact.name = name;
-      contact.name = email;
-      contact.name = phone;
+      contact.email = email;
+      contact.phone = phone;
       // if (name) {
       //   contact.name = name;
       // }
@@ -52,7 +48,7 @@ const updateContact = async (contactId, body) => {
       // if (phone) {
       //   contact.name = phone;
       // }
-      return { contactId, name, email, phone };
+      return contact;
     }
   });
 };
