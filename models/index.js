@@ -31,11 +31,11 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-  const newContact = {id: v4(), ...body};
   const contacts = await listContacts();
+  const newContact = {id: v4(), ...body};
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
+  return contacts;
 }
 
 const updateContact = async (contactId, body) => {

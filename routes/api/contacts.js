@@ -61,13 +61,13 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = joiShema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
       throw new BadRequest("message: missing fields");
     }
     const { contactId } = req.params;
-    const updatrContact = await contactsOperation.updateContact(contactId, req.body);
-    res.json(updatrContact);
+    const updateContact = await contactsOperation.updateContact(contactId, req.body);
+    res.json(updateContact);
   } catch (e) {
     next(e);
   }
