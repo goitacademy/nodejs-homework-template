@@ -11,10 +11,10 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await contacts.getContactById(contactId);
+    const { id } = req.params;
+    const contact = await contacts.getContactById(id);
     if (!contact) {
       const error = new Error();
       error.status = 404;
