@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const contactShema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string().max(25).required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
