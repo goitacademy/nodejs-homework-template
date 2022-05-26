@@ -13,7 +13,7 @@ const joiSchema = Joi.object({
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await contactsOperation.listContacts;
+    const contacts = await contactsOperation.listContacts();
     res.json(contacts);
   } catch (e) {
     next(e);
