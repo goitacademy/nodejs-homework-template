@@ -30,19 +30,20 @@ const removeContact = async (contactId) => {
   return contacts[idx];
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (name, email, phone) => {
   const contacts = await listContacts();
-  const newContact = { name, email, phone, id: v4() };
+  const newContact = { id: v4(), name, email, phone };
   await fs.writeFile(contactsPath, JSON.stringify([...contacts, newContact]));
   return newContact;
 };
 
 const updateContact = async (contactId, { name, email, phone }) => {
-  const contacts = listContacts();
-  const oldContact = removeContact(contactId);
+  const oldContact = await removeContact(contactId);
   if (!oldContact) {
     return null;
   }
+
+  const contacts = listContacts();
   const newContact = { name, email, phone, id: contactId };
   await fs.writeFile(contactsPath, JSON.stringify([...contacts, newContact]));
   return newContact;
