@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 const schema = Joi.object({
-  name: Joi.string().alphanum(),
+  name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string()
 });
