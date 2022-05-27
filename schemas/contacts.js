@@ -8,6 +8,4 @@ const contactSchema = Joi.object({
     .pattern(/^[0-9]+$/)
     .required(),
 });
-module.exports = {
-  contactSchema,
-};
+module.exports = contactSchema;
