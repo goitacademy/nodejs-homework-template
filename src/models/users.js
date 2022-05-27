@@ -103,6 +103,7 @@ const verificationUser = async (verificationToken) => {
       verificationToken: null,
       verify: true,
     },
+
     { new: true }
   );
   // user=await user.save();
@@ -110,31 +111,36 @@ const verificationUser = async (verificationToken) => {
   return user;
 };
 
-const verificationSecondUser=async (body) => {
+const verificationSecondUser = async (body) => {
   const { email } = body;
-  console.log("body", body); 
-  
-   await Users.findOne({ email, verify: false });
+  console.log("body", body);
 
-  const verificationToken = uuid.v4();
-  console.log("verificationToken", verificationToken);
+  const user = await Users.findOne({ email });
+  console.log("user verificationSecondUser", user);
+  if (!user.verify) {
+    const verificationToken = uuid.v4();
+    console.log("verificationToken", verificationToken);
 
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const msg = {
-    to: email, // Change to your recipient
-    from: "annsbchnk@gmail.com", // Change to your verified sender
-    subject: "Sending  verification email",
-    text: `http://localhost:3000/api/users/verify/${verificationToken}`,
-    html: `<p>verification <a href="http://localhost:3000/api/users/verify/${verificationToken}">link</a></p>`,
-  };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+      to: email, // Change to your recipient
+      from: "annsbchnk@gmail.com", // Change to your verified sender
+      subject: "Sending  verification email",
+      text: `http://localhost:3000/api/users/verify/${verificationToken}`,
+      html: `<p>verification <a href="http://localhost:3000/api/users/verify/${verificationToken}">link</a></p>`,
+    };
+   return await  sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+        return true;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    return false;
+  }
 };
 
 module.exports = {

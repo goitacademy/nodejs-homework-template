@@ -93,22 +93,29 @@ router.patch(
 );
 
 router.get(
-  "/verify/:verificationToken",  
-  catchErrors(async (req, res, next) => {    
-    console.log('req.params', req.params)
-    await verificationUser(req.params.verificationToken);
-    res.status(200).json({ message: "Verification successful" });
+  "/verify/:verificationToken",
+  catchErrors(async (req, res, next) => {
+    console.log("req.params", req.params);
+    const user = await verificationUser(req.params.verificationToken);
+    res.status(200).json({ message: "Verification successful", user });
   })
-)
+);
 
 router.post(
-  "/verify/",  
-  catchVerifyErrors(async (req, res, next) => {    
-    console.log('req.body', req.body)
-  
-    await verificationSecondUser(req.body);
-    res.status(200).json({ message: "Verification successful2222" });
+  "/verify/",
+  catchVerifyErrors(async (req, res, next) => {
+    console.log("req.body", req.body);
+
+    const result =await verificationSecondUser(req.body)
+
+    console.log('result', result)
+
+    if (result) {
+      res.status(200).json({ message: "Verification successful2222" });
+    } else {
+      res.status(400).json({ message: "Verification has already been passed" });
+    }
   })
-)
+);
 
 module.exports = router;
