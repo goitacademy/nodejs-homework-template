@@ -82,19 +82,19 @@ const updateContact = async (contactId, body) => {
   data.forEach((contact, idx) => {
     if (contactId === contact.id) {
       // console.log(contact);
-      contact.name = name;
-      contact.email = email;
-      contact.phone = phone;
+      // contact.name = name;
+      // contact.email = email;
+      // contact.phone = phone;
       // console.log(contact);
-      // if (name) {
-      //   contact.name = name;
-      // }
-      // if (email) {
-      //   contact.name = email;
-      // }
-      // if (phone) {
-      //   contact.name = phone;
-      // }
+      if (name) {
+        contact.name = name;
+      }
+      if (email) {
+        contact.email = email;
+      }
+      if (phone) {
+        contact.phone = phone;
+      }
       return contact;
     }
   });
