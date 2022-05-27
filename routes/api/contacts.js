@@ -1,6 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const contacts = require("../../models/contacts.js");
+const errorHandler = require("../../errorHandler");
 const router = express.Router();
 
 const schema = Joi.object({
@@ -28,10 +29,7 @@ router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const contact = await contacts.getContactById(id);
     if (!contact) {
-      const error = new Error();
-      error.status = 404;
-      error.message = "Not Found";
-      throw error;
+      errorHandler(404, "Not Found");
     }
     res.json(contact);
   } catch (e) {
@@ -44,10 +42,7 @@ router.post("/", async (req, res, next) => {
     const { error } = schema.validate(req.body);
 
     if (error) {
-      const er = new Error();
-      er.status = 400;
-      er.message = `${error.message}`;
-      throw er;
+      errorHandler(400, `${error.message}`);
     }
     const { name, email, phone } = req.body;
 
@@ -64,11 +59,9 @@ router.delete("/:id", async (req, res, next) => {
     const contact = await contacts.removeContact(id);
 
     if (!contact) {
-      const er = new Error();
-      er.status = 404;
-      er.message = "Not found";
-      throw er;
+      errorHandler(404, "Not found");
     }
+
     res.status(200).json({ message: "contact deleted" });
   } catch (e) {
     next(e);
@@ -80,10 +73,7 @@ router.put("/:id", async (req, res, next) => {
     const { error } = schema.validate(req.body);
 
     if (error) {
-      const er = new Error();
-      er.status = 400;
-      er.message = `${error.message}`;
-      throw er;
+      errorHandler(400, `${error.message}`);
     }
 
     const { name, email, phone } = req.body;
@@ -91,10 +81,7 @@ router.put("/:id", async (req, res, next) => {
     const contact = await contacts.updateContact(id, name, email, phone);
 
     if (!contact) {
-      const er = new Error();
-      er.status = 404;
-      er.message = "Not found";
-      throw er;
+      errorHandler(404, "Not found");
     }
 
     res.json(contact);
