@@ -5,6 +5,7 @@ const joiShema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const updateContact = async (req, res, next) => {

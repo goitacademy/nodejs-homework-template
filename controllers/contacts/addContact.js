@@ -5,6 +5,7 @@ const joiShema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const addContact = async (req, res, next) => {
@@ -17,7 +18,6 @@ const addContact = async (req, res, next) => {
         message: "missing required name field",
       });
     }
-
     const result = await Contact.create(req.body);
     res.json({
       status: "success",
