@@ -31,9 +31,35 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
 
-const updateContact = async (contactId, body) => {};
+  const deletedContact = allContacts[index];
+  if (index !== -1) {
+    allContacts.splice(index, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  }
+
+  return deletedContact ? deletedContact : null;
+};
+
+const updateContact = async (contactId, name, email, phone) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
+
+  if (index !== -1) {
+    allContacts[index].name = name;
+    allContacts[index].email = email;
+    allContacts[index].phone = phone;
+
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+    return allContacts[index];
+  } else {
+    return null;
+  }
+};
 
 module.exports = {
   listContacts,
