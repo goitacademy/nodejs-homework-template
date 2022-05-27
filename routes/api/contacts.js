@@ -34,7 +34,10 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const data = await updateContact(req.params.contactId, req.body);
-  console.log(res.params);
+  // console.log(data);
+  if (!data) {
+    return res.status(400).json({ message: "Failure" });
+  }
   res.json({ data, message: "successPu" });
 });
 
