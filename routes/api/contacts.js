@@ -36,12 +36,11 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  const {name, email, phone} = req.body;
   if (!req.body) {
     res.status(400).json({ message: "missing fields" });
   }
   const { contactId } = req.params;
-  const updatedContact = await contactsApi.updateContact(contactId, {name, email, phone});
+  const updatedContact = await contactsApi.updateContact(contactId, {...req.body});
   if (updatedContact) {
     res.status(200).json({ status: "success", code: 200, data: updatedContact });
   } else {
