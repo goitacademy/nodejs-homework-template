@@ -4,6 +4,7 @@ const {
   catchRegErrors,
   catchLogErrors,
   catchErrors,
+  catchVerifyErrors,
 } = require("../../middlewares/catch-errors");
 const { postAuthValidation } = require("../../middlewares/validationSchema");
 const router = express.Router();
@@ -14,6 +15,8 @@ const {
   currentUser,
   logoutUser,
   avatarsUpdate,
+  verificationUser,
+  verificationSecondUser,
 } = require("../../models/users");
 
 const multer = require("multer");
@@ -88,5 +91,24 @@ router.patch(
     res.status(200).send(user);
   })
 );
+
+router.get(
+  "/verify/:verificationToken",  
+  catchErrors(async (req, res, next) => {    
+    console.log('req.params', req.params)
+    await verificationUser(req.params.verificationToken);
+    res.status(200).json({ message: "Verification successful" });
+  })
+)
+
+router.post(
+  "/verify/",  
+  catchVerifyErrors(async (req, res, next) => {    
+    console.log('req.body', req.body)
+  
+    await verificationSecondUser(req.body);
+    res.status(200).json({ message: "Verification successful2222" });
+  })
+)
 
 module.exports = router;
