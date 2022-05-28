@@ -69,12 +69,12 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const body = req.body;
   if (!body) {
-    return res.json(400, { message: "missing fields----1" });
+    return res.json(400, { message: "missing fields" });
   }
   const { contactId } = req.params;
   const { error } = await Schema.validate(body);
   if (error) {
-    return res.json(400, { message: "missing required name field---2" });
+    return res.json(400, { message: "missing required name field" });
   }
   try {
     const contact = await updateContact(contactId, body);
