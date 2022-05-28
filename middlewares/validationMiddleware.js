@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().alphanum().min(2).max(30).required(),
 
   phone: Joi.required(),
 
@@ -13,16 +13,16 @@ const schema = Joi.object({
     .required(),
 });
 
-module.exports = {
-  addValidation: async (req, res, next) => {
-    const validation = schema.validate(req.body);
-    if (validation.error) {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: validation.error.details[0].message,
-      });
-    }
-    next();
-  },
+const addValidation = async (req, res, next) => {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: error.details[0].message,
+    });
+  }
+  next();
 };
+
+module.exports = addValidation;
