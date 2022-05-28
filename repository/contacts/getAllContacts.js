@@ -1,15 +1,15 @@
-const Contact = require("../../model");
+const { Contact } = require("../../model");
 
-const getAllContacts = async ({
-  sortBy,
-  sortByDesc,
-  filter,
-  limit = 10,
-  skip = 0,
-}) => {
+const getAllContacts = async (
+  userId,
+  { sortBy, sortByDesc, filter, limit = 10, skip = 0 }
+) => {
   let sortCriteria = null;
-  const total = await Contact.find().countDocuments();
-  let result = Contact.find();
+  const total = await Contact.find({ owner: userId }).countDocuments();
+  let result = Contact.find({ owner: userId }).populate({
+    path: "owner",
+    select: "id subscription email",
+  });
   if (sortBy) {
     sortCriteria = { [`${sortBy}`]: 1 };
   }

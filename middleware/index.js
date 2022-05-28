@@ -1,2 +1,5 @@
 const contactsValidation = require("./contactsValidation");
-module.exports = contactsValidation;
+const guard = require("./guard");
+const userValidation = require("./userValidation");
+
+module.exports = { guard, contactsValidation, userValidation };

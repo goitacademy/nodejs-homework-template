@@ -1,2 +1,3 @@
-const contactsMethod = require("./contacts");
-module.exports = contactsMethod;
+const contactRepository = require("./contacts");
+const userMethod = require("./user");
+module.exports = { userMethod, contactRepository };
