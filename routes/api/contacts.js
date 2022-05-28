@@ -6,9 +6,7 @@ const {
   removeContact,
   addContact,
 } = require("../../models/contacts.js");
-const {
-  addPostValidation,
-} = require("../../models/middlewares/ValidationMiddleware");
+const { addPostValidation } = require("../../middlewares/ValidationMiddleware");
 
 const router = express.Router();
 

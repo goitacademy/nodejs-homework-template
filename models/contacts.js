@@ -1,15 +1,15 @@
-const req = require("express/lib/request");
-const res = require("express/lib/response");
-
 const fs = require("fs").promises;
+const contactPath = "./models/contacts.json";
+const { v4: uuidv4 } = require("uuid");
+
 const listContacts = async () => {
-  const data = await fs.readFile("./models/contacts.json", "utf8");
+  const data = await fs.readFile(contactPath, "utf8");
 
   return JSON.parse(data);
 };
 
 const getContactById = async (contactId) => {
-  const data = await fs.readFile("./models/contacts.json", "utf8");
+  const data = await fs.readFile(contactPath, "utf8");
   if (!data) {
     throw new WrongParametersError(
       `Failure, no posts with id '${contactId}' found!`
@@ -24,7 +24,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const data = await listContacts();
-  const contactsWithoutRemovedContact = JSON.parse(data).filter(
+  const contactsWithoutRemovedContact = data.filter(
     (contact) => contact.id !== contactId
   );
   return contactsWithoutRemovedContact;
@@ -33,13 +33,16 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const data = await listContacts();
-  const id = new Date().getTime().toString();
+  const id = uuidv4();
   return [...data, { id, name, email, phone }];
 };
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
   const data = await listContacts();
+
+  const searchedContact = data.findIndex(contactId);
+  console.log(searchedContact);
 
   data.forEach((contact, idx) => {
     if (contactId === contact.id) {
@@ -55,7 +58,7 @@ const updateContact = async (contactId, body) => {
       return contact;
     }
   });
-  await fs.writeFile("./models/contacts.json", JSON.stringify(data));
+  await fs.writeFile(contactPath, JSON.stringify(data));
 };
 
 module.exports = {
