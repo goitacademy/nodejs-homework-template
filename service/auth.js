@@ -33,11 +33,30 @@ const loginUser = async ({ value, res }) => {
     subscription: user.subscription,
   };
 
-
   const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "12h" });
 
-  return { token: token, user: { email: user.email, subscription: user.subscription} };
+  const updatedUser = {
+    id: user._id,
+    email: user.email,
+    subscription: user.subscription,
+    token: token,
+  };
 
+  await User.findOneAndUpdate(
+    {
+      email: value.email,
+    },
+    { $set: updatedUser },
+    {
+      new: true,
+      runValidators: true,
+      strict: "throw",
+    }
+  );
+
+  return {
+    user: { email: user.email, subscription: user.subscription, token: token },
+  };
 };
 
 module.exports = {

@@ -5,7 +5,7 @@ require("dotenv").config();
 const uriDb = process.env.DB_URI;
 const port = process.env.PORT;
 
-require("./config/passport")
+require("./config/passport");
 
 const connection = mongoose.connect(uriDb, {
   useNewUrlParser: true,

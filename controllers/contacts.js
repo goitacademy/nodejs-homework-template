@@ -1,7 +1,4 @@
 const service = require("../service");
-const {
-  Types: { ObjectId },
-} = require("mongoose");
 
 const get = async (req, res, next) => {
   const { _id } = req.user;
@@ -56,7 +53,7 @@ const put = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id } = req.user;
   try {
-    const result = await service.updateContact(contactId, contactToUpdate,_id);
+    const result = await service.updateContact(contactId, contactToUpdate, _id);
     if (!result) {
       res.status(404).json({ message: "Contact not found" });
     } else {
@@ -75,7 +72,11 @@ const patchFavorite = async (req, res, next) => {
     if (favorite === undefined) {
       res.status(400).json({ message: "missing field favorite" });
     } else {
-      const result = await service.updateStatusContact(contactId, { favorite }, _id);
+      const result = await service.updateStatusContact(
+        contactId,
+        { favorite },
+        _id
+      );
       if (!result) {
         res.status(404).json({ message: "Not found" });
       } else {

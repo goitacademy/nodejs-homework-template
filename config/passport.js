@@ -14,6 +14,7 @@ passport.use(
   new Strategy(params, function (payload, done) {
     User.findOne({ _id: payload.id })
       .then((user) => {
+        console.log(user);
         if (!user) {
           return done(new Error("Not authorized"));
         }
