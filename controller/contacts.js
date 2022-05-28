@@ -47,7 +47,7 @@ const remove = async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contact = await service.removeContact(contactId);
-    if (contact !== null) {
+    if (contact) {
       res.json({
         data: contact,
         message: "contact deleted",
