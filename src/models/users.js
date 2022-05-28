@@ -12,8 +12,6 @@ require("dotenv").config();
 const signupUser = async (body) => {
   const { email, password, subscription } = body;
 
-  console.log("body", body);
-
   const isSingup = await Users.create({
     email,
     password: await bcryptjs.hash(
@@ -25,9 +23,7 @@ const signupUser = async (body) => {
     verificationToken: uuid.v4(),
   });
 
-  console.log("isSingup", isSingup);
   const verificationToken = uuid.v4();
-  console.log("verificationToken", verificationToken);
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
@@ -80,7 +76,6 @@ const currentUser = async (token) => {
 
 const avatarsUpdate = async (token, body) => {
   const { path, filename } = body;
-  console.log("filename", filename);
   const newFile = await Jimp.read(path);
   const newPath = "./public/avatars/" + filename;
   await newFile.resize(250, 250).writeAsync(newPath);
@@ -94,9 +89,7 @@ const avatarsUpdate = async (token, body) => {
   return user;
 };
 
-const verificationUser = async (verificationToken) => {
-  // const { verificationToken } = params;
-  console.log("verificationToken", verificationToken);
+const verificationUser = async (verificationToken) => {  
   const user = await Users.findOneAndUpdate(
     verificationToken,
     {
@@ -106,20 +99,14 @@ const verificationUser = async (verificationToken) => {
 
     { new: true }
   );
-  // user=await user.save();
-  console.log("user", user);
   return user;
 };
 
 const verificationSecondUser = async (body) => {
   const { email } = body;
-  console.log("body", body);
-
   const user = await Users.findOne({ email });
-  console.log("user verificationSecondUser", user);
   if (!user.verify) {
     const verificationToken = uuid.v4();
-    console.log("verificationToken", verificationToken);
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {

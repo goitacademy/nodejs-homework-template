@@ -25,7 +25,7 @@ module.exports.catchLogErrors = (middleware) => {
       await middleware(req, res);
     } catch (err) {
       return res.status(401).json({
-        ResponseBody: { message: "Email or password is wrong" },
+        ResponseBody: { message: "Email or password is wrong or none verify" },
       });
     }
   };
