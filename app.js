@@ -2,7 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const { HTTP_CODES, STATUS } = require('./helpers/constants.js')
+const { HTTP_CODES, STATUS } = require('./helpers/contacts')
 
 const { contactsRouter } = require('./routes')
 
