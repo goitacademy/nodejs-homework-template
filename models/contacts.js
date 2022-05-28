@@ -33,8 +33,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const data = await listContacts();
-  const id = uuidv4();
-  return [...data, { id, name, email, phone }];
+  return [...data, { id: uuidv4(), name, email, phone }];
 };
 
 const updateContact = async (contactId, body) => {
