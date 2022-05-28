@@ -1,3 +1,3 @@
-const contactsRouter = require("./contacts-api/contacts");
+const contactsRouter = require("./contacts/contacts");
 
 module.exports = contactsRouter;

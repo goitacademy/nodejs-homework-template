@@ -1,7 +1,14 @@
 const app = require("../app");
+const db = require("../config");
 
-const PORT = process.env.PORT || 3000;
+require("../helpers");
 
-app.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`);
+const { PORT } = process.env || 3001;
+
+db.then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running. API port: ${PORT}`.brightBlue.bold);
+  });
+}).catch((err) => {
+  console.log(`Server not running.Error: ${err.message}`.red.bold);
 });

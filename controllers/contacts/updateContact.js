@@ -1,9 +1,9 @@
 const repositoryContacts = require("../../repository");
 const { HttpCode } = require("../../utils");
 
-const getContactById = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await repositoryContacts.getById(id);
+  const contact = await repositoryContacts.updateContact(id, req.body);
   if (contact) {
     return res
       .status(HttpCode.OK)
@@ -12,8 +12,8 @@ const getContactById = async (req, res, next) => {
   res.status(HttpCode.NOT_FOUND).json({
     status: "error",
     code: HttpCode.NOT_FOUND,
-    message: "Not found",
+    message: `contact with id:'${id}' - not found`,
   });
 };
 
-module.exports = getContactById;
+module.exports = updateContact;
