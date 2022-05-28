@@ -47,12 +47,14 @@ const putContacts= async (req, res, next) => {
     el.number=number
     }  
     })
-    res.json({ message: 'success OK put' })
+    await fs.writeFile(contactFile, JSON.stringify(contacts))
+    res.json({contacts, message: 'success OK put' })
    }
 
 const deleteContacts=async (req, res, next) => {
    let contacts = await listContacts();
     contacts= contacts.filter(el=>el.id !== req.params.contactId)
+    await fs.writeFile(contactFile, JSON.stringify(contacts))
     res.json({contacts, message: 'success OK delete'})
    }
 const postContacts=async (req, res) => {
@@ -67,6 +69,7 @@ const postContacts=async (req, res) => {
     name,
     number
     })
+    await fs.writeFile(contactFile, JSON.stringify(contacts))
     res.json({ status: 'success OK' })
     }
 
