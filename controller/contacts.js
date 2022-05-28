@@ -1,5 +1,9 @@
 const service = require("../service");
-const { patternContact, patternFavorite } = require("../joi");
+const {
+  patternContactAdd,
+  patternContactUpdate,
+  patternFavorite,
+} = require("../joi");
 
 const get = async (req, res, next) => {
   try {
@@ -21,25 +25,21 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const validated = patternContact.validate(req.body);
+  const validated = patternContactAdd.validate(req.body);
   if (validated.error) {
-    res.json({ message: validated.error.message, status: "error", code: 400 });
-  }
-  const { name, email, phone } = validated.value;
-
-  if (name && email && phone) {
-    try {
-      const contact = await service.addContact({ name, email, phone });
-      res.json({ data: contact, status: "success", code: 201 });
-    } catch (err) {
-      next(err);
-    }
-  } else {
     return res.json({
       message: "missing required name field",
       status: "error",
       code: 400,
     });
+  }
+  const { name, email, phone } = validated.value;
+
+  try {
+    const contact = await service.addContact({ name, email, phone });
+    res.json({ data: contact, status: "success", code: 201 });
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -64,7 +64,7 @@ const remove = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const validated = patternContact.validate(req.body);
+  const validated = patternContactUpdate.validate(req.body);
   if (validated.error) {
     res.json({ message: validated.error.message, status: "error", code: 400 });
   }
@@ -89,7 +89,7 @@ const updateContact = async (req, res, next) => {
 const updateFavorite = async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
-  if (Object.keys(body).find(key => key === "favorite") !== "favorite") {
+  if (Object.keys(body).find((key) => key === "favorite") !== "favorite") {
     return res.json({
       message: "missing field favorite",
       status: "error",
