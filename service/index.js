@@ -3,26 +3,27 @@ const {
 } = require("mongoose");
 const Contact = require("./schemas/contacts");
 
-const listContacts = () => Contact.find({}).lean();
+const listContacts = (owner) => Contact.find({owner}).lean();
 
-const getContactById = (contactId) => {
+const getContactById = (contactId,id) => {
   let isValid;
   try {
     isValid = ObjectId(contactId);
   } catch (err) {
     return null;
   }
-  return Contact.findOne({ _id: isValid }).lean();
+  return Contact.findOne({owner:id, _id: isValid }).lean();
 };
 
-const addContact = ({ name, email, phone, favorite }) =>
-  Contact.create({ name, email, phone, favorite });
+const addContact = ({ name, email, phone, favorite, owner }) =>
+  Contact.create({ name, email, phone, favorite, owner });
 
-const removeContact = (contactId) => Contact.deleteOne({ _id: contactId });
+const removeContact = (contactId,id) => Contact.deleteOne({owner: id, _id: contactId });
 
-const updateContact = (contactId, contactToUpdate) =>
+const updateContact = (contactId, contactToUpdate, id) =>
   Contact.findOneAndUpdate(
     {
+      owner: id,
       _id: contactId,
     },
     { $set: contactToUpdate },
@@ -33,9 +34,10 @@ const updateContact = (contactId, contactToUpdate) =>
     }
   );
 
-const updateStatusContact = (contactId, body) =>
+const updateStatusContact = (contactId, body, id) =>
   Contact.findOneAndUpdate(
     {
+      owner: id,
       _id: contactId,
     },
     { $set: body },

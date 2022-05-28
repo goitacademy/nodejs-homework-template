@@ -15,7 +15,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts",authMiddleware, contactsRouter);
 app.use("/users", authRouter)
 app.use("/users/current", authMiddleware, listRouter)
 
