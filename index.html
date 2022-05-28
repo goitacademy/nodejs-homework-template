@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="" id="avatar-add-form" enctype="multipart/form-data">
+      <div><input type="text" name = "avatar" placeholder="Title" /></div>
+      <div><input type="file" name = "image" placeholder="Avatar" multiple/></div>
+      <div><button>Add</button></div>
+    </form>
+
+    <script>
+        const avatarAddForm = document.getElementById('avatar-add-form');
+         avatarAddForm.addEventListener('submit', function(e){
+             e.preventDefault();
+             const data = new FormData();
+             data.append('title', this.elements.title.value);
+             data.append('image', this.elements.image.files[0]);
+         })
+    </script>
+  </body>
+</html>
