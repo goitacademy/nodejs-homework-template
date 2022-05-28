@@ -15,8 +15,8 @@ const getContactById = async (contactId) => {
       `Failure, no posts with id '${contactId}' found!`
     );
   }
-  return JSON.parse(data).map((contact) => {
-    if (contactId === contact.id) {
+  return JSON.parse(data).find((contact) => {
+    if (contact.id === contactId || null) {
       return contact;
     }
   });
@@ -38,24 +38,13 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const { name, email, phone } = body;
   const data = await listContacts();
+  const contact = await getContactById(contactId);
+  const updatedContact = { ...contact, ...body };
 
-  const searchedContact = data.findIndex(contactId);
-  console.log(searchedContact);
-
-  data.forEach((contact, idx) => {
-    if (contactId === contact.id) {
-      if (name) {
-        contact.name = name;
-      }
-      if (email) {
-        contact.email = email;
-      }
-      if (phone) {
-        contact.phone = phone;
-      }
-      return contact;
+  data.forEach((contact, indexx) => {
+    if (contact.id === contactId) {
+      data[indexx] = updatedContact;
     }
   });
   await fs.writeFile(contactPath, JSON.stringify(data));
