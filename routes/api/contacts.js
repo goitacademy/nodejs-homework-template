@@ -6,6 +6,9 @@ const {
   removeContact,
   addContact,
 } = require("../../models/contacts.js");
+const {
+  addPostValidation,
+} = require("../../models/middlewares/ValidationMiddleware");
 
 const router = express.Router();
 
@@ -18,27 +21,24 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   const data = await getContactById(req.params.contactId);
 
-  res.json({ data, message: "successS" });
+  res.json({ data, message: "success" });
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", addPostValidation, async (req, res, next) => {
   const data = await addContact(req.body);
-  res.json({ data, message: "successP" });
+  res.json({ data, message: "success" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const data = await removeContact(req.params.contactId);
 
-  res.json({ data, message: "successDe" });
+  res.json({ data, message: "success" });
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", addPostValidation, async (req, res, next) => {
   const data = await updateContact(req.params.contactId, req.body);
-  // console.log(data);
-  // if (!data) {
-  //   return res.status(400).json({ message: "Failure" });
-  // }
-  res.json({ data, message: "successPu" });
+
+  res.json({ data, message: "success" });
 });
 
 module.exports = router;

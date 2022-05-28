@@ -1,10 +1,7 @@
 const req = require("express/lib/request");
-const uniqid = require("uniqid");
-const Joi = require("joi");
 const res = require("express/lib/response");
 
 const fs = require("fs").promises;
-const uniqId = uniqid();
 const listContacts = async () => {
   const data = await fs.readFile("./models/contacts.json", "utf8");
 
@@ -26,7 +23,7 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  const data = await fs.readFile("./models/contacts.json", "utf8");
+  const data = await listContacts();
   const contactsWithoutRemovedContact = JSON.parse(data).filter(
     (contact) => contact.id !== contactId
   );
@@ -35,57 +32,17 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
-
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(15).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string().required(),
-  });
-
-  const validateResult = schema.validate(body);
-  if (validateResult.error) {
-    return res.status(400).json;
-  }
-
-  const data = await fs.readFile("./models/contacts.json", "utf8");
-
-  return [...JSON.parse(data), { uniqId, name, email, phone }];
+  const data = await listContacts();
+  const id = new Date().getTime().toString();
+  return [...data, { id, name, email, phone }];
 };
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
-
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(15).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string().required(),
-  });
-
-  const validateResult = schema.validate(body);
-  if (validateResult.error) {
-    return res.status(400).json;
-  }
-
   const data = await listContacts();
-  console.log(data);
 
   data.forEach((contact, idx) => {
     if (contactId === contact.id) {
-      // console.log(contact);
-      // contact.name = name;
-      // contact.email = email;
-      // contact.phone = phone;
-      // console.log(contact);
       if (name) {
         contact.name = name;
       }
