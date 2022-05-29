@@ -1,25 +1,49 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
+  res.json({ contacts });
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const contact = await getContactById(contactId);
+  if (contact === null) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json({ contact });
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  const contact = await addContact(req.body);
+  if (contact === null) {
+    return res.status(400).json({ message: "missing required name field" });
+  }
+  return res.status(201).json({ status: "success", contact });
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const contacts = await removeContact(contactId);
+  if (contacts === null) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.status(201).json({ message: "contact deleted" });
+});
 
-module.exports = router
+router.put("/:contactId", async (req, res, next) => {
+  await updateContact(req.params.contactId, req.body);
+  res.json({ status: "success" });
+});
+
+module.exports = router;
