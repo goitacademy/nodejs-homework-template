@@ -18,7 +18,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    res.json(contacts);
+    res.status(200).json(contacts);
   } catch (err) {
     next(err);
   }
@@ -29,9 +29,9 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const contact = await getContactById(contactId);
     if (!contact) {
-      return res.json(404, { message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     }
-    await res.json(contact);
+    await res.status(200).json(contact);
   } catch (err) {
     next(err);
   }
@@ -42,11 +42,11 @@ router.post("/", async (req, res, next) => {
 
   try {
     if (error) {
-      return res.json(400, { message: "missing required name field" });
+      return res.status(400).json({ message: "missing required name field" });
     }
 
     const contact = await addContact(req.body);
-    await res.json(201, contact);
+    await res.status(201).json(contact);
   } catch (err) {
     next(err);
   }
@@ -58,9 +58,9 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const deletedContact = await removeContact(contactId);
     if (!deletedContact) {
-      return res.json(404, { message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     }
-    res.json(200, { message: "contact deleted" });
+    res.status(200).json({ message: "contact deleted" });
   } catch (err) {
     next(err);
   }
@@ -69,19 +69,19 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const body = req.body;
   if (!body) {
-    return res.json(400, { message: "missing fields" });
+    return res.status(400).json({ message: "missing fields" });
   }
   const { contactId } = req.params;
   const { error } = await Schema.validate(body);
   if (error) {
-    return res.json(400, { message: "missing required name field" });
+    return res.status(400).json({ message: "missing required name field" });
   }
   try {
     const contact = await updateContact(contactId, body);
     if (!contact) {
-      return res.json(400, { message: "Not found" });
+      return res.status(400).json({ message: "Not found" });
     }
-    res.json(200, contact);
+    res.status(200).json(contact);
   } catch (err) {
     next(err);
   }
