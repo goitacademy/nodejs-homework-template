@@ -8,7 +8,7 @@ const {
   getIdContacts,
   putContacts,
   postContacts,
-  deleteContacts}=require("../../controllers/contactsControllers")
+  deleteContacts}=require("../../controllers123/contactsControllers")
 
 router.get('/', getContacts )
 
