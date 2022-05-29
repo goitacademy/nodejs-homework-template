@@ -20,7 +20,7 @@ const signup = async (req, res) => {
     }
     const { name, email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) {
+    if (user) {
       res.status(409).json({
         status: "error",
         code: 409,
@@ -36,7 +36,6 @@ const signup = async (req, res) => {
       data: {
         user: {
           email,
-          name,
           subscription: "starter",
         },
       },

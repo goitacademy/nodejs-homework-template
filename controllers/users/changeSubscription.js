@@ -1,14 +1,11 @@
 const Joi = require("joi");
-const { Contact } = require("../../models");
+const { User } = require("../../models");
 
 const joiShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
-const addContact = async (req, res, next) => {
+const changeSubscription = async (req, res) => {
   try {
     const { error } = joiShema.validate(req.body);
     if (error) {
@@ -18,12 +15,20 @@ const addContact = async (req, res, next) => {
         message: "missing required name field",
       });
     }
+
     const { _id } = req.user;
-    const result = await Contact.create({ ...req.body, owner: _id });
+    const { subscription } = req.body;
+    const updatrContact = await User.findByIdAndUpdate(
+      _id,
+      { subscription },
+      { new: true }
+    );
     res.json({
       status: "success",
-      code: 201,
-      data: { result },
+      code: 200,
+      data: {
+        updatrContact,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -33,4 +38,4 @@ const addContact = async (req, res, next) => {
     });
   }
 };
-module.exports = addContact;
+module.exports = changeSubscription;
