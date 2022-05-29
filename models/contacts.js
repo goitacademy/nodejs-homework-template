@@ -31,31 +31,26 @@ const addContact = async (body) => {
   const sourceContacts = await listContacts();
   const newContacts = [...sourceContacts, newContact];
 
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts), "utf8");
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
   return newContact;
 };
 
 const updateContact = async (id, body) => {
   const sourceContacts = await listContacts();
-  let contactToUpdate = sourceContacts.filter(
-    (contact) => contact.id === String(id)
+  const index = sourceContacts.findIndex(
+    (contact) => String(contact.id) === String(id)
   );
 
-  if (contactToUpdate.length === 0) {
+  if (index === -1) {
     return null;
   }
 
-  contactToUpdate = { id, ...body };
+  const contact = { ...sourceContacts[index], ...body };
+  sourceContacts[index] = contact;
 
-  const сontactsToUpdate = sourceContacts.filter(
-    (contact) => contact.id !== String(id)
-  );
+  await fs.writeFile(contactsPath, JSON.stringify(sourceContacts));
 
-  const newContacts = [...сontactsToUpdate, contactToUpdate];
-
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts), "utf8");
-
-  return contactToUpdate;
+  return contact;
 };
 
 const removeContact = async (id) => {
@@ -68,7 +63,7 @@ const removeContact = async (id) => {
     return null;
   }
 
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts), "utf8");
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
   return sourceContacts.filter((contact) => contact.id === String(id));
 };
 
