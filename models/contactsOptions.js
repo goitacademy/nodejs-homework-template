@@ -54,12 +54,7 @@ async function updateContact(contactId, body) {
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = {
-    name: body.name ? body.name : contacts[idx].name,
-    email: body.email ? body.email : contacts[idx].email,
-    phone: body.phone ? body.phone : contacts[idx].phone,
-    id: contactId,
-  };
+  contacts[idx] = { ...contacts[idx], ...body };
 
   updateList(contacts);
   return contacts[idx];
