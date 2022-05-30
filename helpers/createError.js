@@ -1,6 +1,8 @@
 const statusMessages = {
-  404: 'Not found',
   400: 'missing required name filed',
+  404: 'Not found',
+  401: 'Unauthorised',
+  409: 'Conflict',
   500: 'Server ERROR',
 };
 

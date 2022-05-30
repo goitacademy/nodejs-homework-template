@@ -1,10 +1,10 @@
 const { isValidObjectId } = require('mongoose');
 const { createError } = require('../../helpers');
-const { Contact, shemas } = require('../../models/contact');
+const { Contact, schemas } = require('../../models/contact');
 
 const updateFav = async (req, res, next) => {
   try {
-    const { error } = shemas.upd.validate(req.body);
+    const { error } = schemas.upd.validate(req.body);
     if (error) {
       throw createError(400, 'missing fileds');
     }

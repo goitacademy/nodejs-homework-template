@@ -13,4 +13,3 @@ mongoose.connect(DB_HOST)
   process.emit(1);
   console.log(err.message)
 })
-
