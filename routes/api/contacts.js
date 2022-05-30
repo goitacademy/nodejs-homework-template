@@ -1,14 +1,13 @@
 const express = require("express");
 
-const contactsOperations = require("../../models/contacts.js");
-
-const contactShema = require("../../schemas/contactShema.js");
+const { joySchema, favoriteJoiSchema } = require("../../models/contact");
+const { Contact } = require("../../models/contact");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await contactsOperations.listContacts();
+    const contacts = await Contact.find({});
     res.json({
       status: "success",
       code: 200,
@@ -24,7 +23,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contactsOperations.getContactById(id);
+    const result = await Contact.findById(id);
     if (!result) {
       const error = new Error(`Contact with id=${id} not found`);
       error.status = 404;
@@ -44,12 +43,12 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contactShema.validate(req.body);
+    const { error } = joySchema.validate(req.body);
     if (error) {
       error.status = 400;
       throw error;
     }
-    const result = await contactsOperations.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: "success",
       code: 201,
@@ -65,7 +64,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contactsOperations.removeContact(id);
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       const error = new Error(`Contact with id=${id} not found`);
       error.status = 404;
@@ -86,14 +85,44 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = contactShema.validate(req.body);
+    const { error } = joySchema.validate(req.body);
     if (error) {
       error.status = 400;
       throw error;
     }
     const { id } = req.params;
-    const result = await contactsOperations.updateContact(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:id/favorite", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
+    const { error } = favoriteJoiSchema.validate(req.body);
+
+    const result = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true }
+    );
+    if (!result) {
+      const error = new Error(`missing field favorite`);
+      error.status = 400;
+    }
+    if (error) {
+      throw error;
+    }
     res.json({
       status: "success",
       code: 200,
