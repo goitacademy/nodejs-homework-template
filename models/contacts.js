@@ -1,19 +1,23 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const path = require('path');
+const { v4: uuid } = require('uuid');
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, '../models/contacts.json');
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+	listContacts,
+	getContactById,
+	removeContact,
+	addContact,
+	updateContact,
+};
