@@ -2,11 +2,11 @@ const User = require("../service/schemas/User");
 const jwt = require("jsonwebtoken");
 
 const signUser = async ({ res, value }) => {
-  const user = await User.findOne({
+  const existingUser = await User.findOne({
     email: value.email,
   });
 
-  if (user) {
+  if (existingUser) {
     return res.status(409).json({ message: "Email in use" });
   }
   const newUser = new User({
