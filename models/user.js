@@ -13,7 +13,7 @@ const userSchema = Schema(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unquire: true,
+      unique: true,
       match: emailRegexp,
     },
     subscription: {
@@ -24,6 +24,10 @@ const userSchema = Schema(
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
