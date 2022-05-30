@@ -1,123 +1,87 @@
 const express = require('express');
 const router = express.Router();
-const Contacts = require('../../models/contacts');
-const validate = require('../../services/validation');
+const Joi = require('joi');
+
+const contactsOperations = require('../../models');
+
+const joiScheme = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().required(),
+	phone: Joi.string().required(),
+});
 
 router.get('/', async (req, res, next) => {
 	try {
-		const contacts = await Contacts.listContacts();
-		return res.json({
-			status: 'success',
-			code: 200,
-			data: {
-				contacts,
-			},
-		});
-	} catch (e) {
-		next(e);
+		const contacts = await contactsOperations.listContacts();
+		res.json(contacts);
+	} catch (error) {
+		next(error);
 	}
 });
 
 router.get('/:contactId', async (req, res, next) => {
+	const { contactId } = req.params;
 	try {
-		const contact = await Contacts.getContactById(req.params.contactId);
-		if (contact) {
-			return res.json({
-				status: 'success',
-				code: 200,
-				data: {
-					contact,
-				},
-			});
-		} else {
-			return res.status(404).json({
-				status: 'error',
-				code: 404,
-				data: 'Not Found',
-			});
+		const contact = await contactsOperations.getContactById(contactId);
+		if (!contact) {
+			const error = new Error('Not found');
+			error.status = 404;
+			throw error;
 		}
-	} catch (e) {
-		next(e);
+		res.json(contact);
+	} catch (error) {
+		next(error);
 	}
 });
 
-router.post('/', validate.createContact, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
 	try {
-		const contact = await Contacts.addContact(req.body);
-		if (contact) {
-			return res.json({
-				status: 'success',
-				code: 200,
-				data: {
-					contact,
-				},
-			});
-		} else {
-			return res.status(404).json({
-				status: 'error',
-				code: 404,
-				data: 'Not Found',
-			});
+		const { error } = joiScheme.validate(req.body);
+		if (error) {
+			error.status = 400;
+			throw error;
 		}
-	} catch (e) {
-		next(e);
+		const newContact = await contactsOperations.addContact(req.body);
+		res.status(201).json(newContact);
+	} catch (error) {
+		next(error);
 	}
 });
 
 router.delete('/:contactId', async (req, res, next) => {
 	try {
-		const contact = await Contacts.removeContact(req.params.contactId);
-		if (contact) {
-			return res.json({
-				status: 'success',
-				code: 200,
-				data: {
-					contact,
-				},
-			});
-		} else {
-			return res.status(404).json({
-				status: 'error',
-				code: 404,
-				data: 'Not Found',
-			});
+		const { contactId } = req.params;
+		const deleteContact = await contactsOperations.removeContact(contactId);
+		if (!deleteContact) {
+			const error = new Error('Not found');
+			error.status = 404;
+			throw error;
 		}
-	} catch (e) {
-		next(e);
+		res.json({ message: 'contact deleted' });
+	} catch (error) {
+		next(error);
 	}
 });
 
-router.patch('/:contactId', validate.updateContact, async (req, res, next) => {
+router.patch('/:contactId', async (req, res, next) => {
 	try {
-		if (Object.keys(req.body).length === 0) {
-			return res.status(400).json({
-				status: 'missing fields',
-				code: 400,
-			});
+		const { error } = joiScheme.validate(req.body);
+		if (error) {
+			error.status = 400;
+			throw error;
 		}
-
-		const contact = await Contacts.updateContact(
-			req.params.contactId,
-			req.body
-		);
-
-		if (contact) {
-			return res.json({
-				status: 'success',
-				code: 200,
-				data: {
-					contact,
-				},
-			});
-		} else {
-			return res.status(404).json({
-				status: 'error',
-				code: 404,
-				data: 'Not Found',
-			});
+		const { contactId } = req.params;
+		const updateContact = await contactsOperations.updateContact({
+			contactId,
+			...req.body,
+		});
+		if (!updateContact) {
+			error.status = 400;
+			throw error;
 		}
-	} catch (e) {
-		next(e);
+		res.json(updateContact);
+	} catch (error) {
+		next(error);
 	}
 });
 
