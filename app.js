@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -24,3 +25,30 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+// GLVdLWSAZWCaRna0
+
+// GLVdLWSAZWCaRna0
+
+// GLVdLWSAZWCaRna0
+
+// mongodb+srv://MykolaVeres:GLVdLWSAZWCaRna0@clustermv.sn43eld.mongodb.net/test
+
+const dotenv = require("dotenv");
+dotenv.config();
+// const { DB_HOST, PORT = 3000 } = process.env;
+
+// const DB_HOST =
+//   "mongodb+srv://MykolaVeres:GLVdLWSAZWCaRna0@clustermv.sn43eld.mongodb.net/db-contacts?retryWrites=true&w=majority";
+
+// const mongoose = require("mongoose");
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => {
+//     console.log("Database connected");
+//     app.listen(PORT);
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//     process.exit(1);
+//   });
