@@ -1,5 +1,5 @@
 const express = require("express");
-const contactsOptions = require("../contactsOptions");
+const contactsOptions = require("../../models/contactsOptions");
 const router = express.Router();
 const Joi = require("joi");
 
