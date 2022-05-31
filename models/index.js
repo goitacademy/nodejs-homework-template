@@ -10,7 +10,6 @@ const listContacts = async () => {
 
   return data;
 };
-
 const getContactById = async contactId => {
   const allContacts = await listContacts();
 
