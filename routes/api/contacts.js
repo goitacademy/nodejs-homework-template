@@ -17,8 +17,6 @@ router.post(
   controllerWrapper(controllers.addContact)
 );
 
-router.delete("/:contactId", controllerWrapper(controllers.removeContact));
-
 router.put(
   "/:contactId",
   validation(contactSchemaJoi),
@@ -30,5 +28,7 @@ router.patch(
   validation(contactSchemaJoiFavorite),
   controllerWrapper(controllers.updateStatusContact)
 );
+
+router.delete("/:contactId", controllerWrapper(controllers.removeContact));
 
 module.exports = router;
