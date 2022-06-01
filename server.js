@@ -2,7 +2,6 @@ const app = require("./app");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-console.log(process.env);
 const { DB_HOST } = process.env;
 
 app.listen(3000, () => {
