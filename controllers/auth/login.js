@@ -1,25 +1,10 @@
 const bcrypt = require("bcryptjs");
 const { User } = require("../../models");
 const jwt = require("jsonwebtoken");
-
 const { SECRET_KEY } = process.env;
-const Joi = require("joi");
-
-const joiShema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
 
 const login = async (req, res) => {
   try {
-    const { error } = joiShema.validate(req.body);
-    if (error) {
-      res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing required name field",
-      });
-    }
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
@@ -30,6 +15,8 @@ const login = async (req, res) => {
       });
       return;
     }
+    const { subscription, name } = user;
+
     const comparePassword = bcrypt.compareSync(password, user.password);
     if (!comparePassword) {
       res.status(401).json({
@@ -40,12 +27,18 @@ const login = async (req, res) => {
     }
     const payload = { id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+
     await User.findByIdAndUpdate(user._id, { token });
     res.json({
       status: "success",
       code: 200,
       data: {
         token,
+      },
+      user: {
+        name,
+        email,
+        subscription,
       },
     });
   } catch {

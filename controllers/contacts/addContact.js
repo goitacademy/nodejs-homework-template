@@ -1,23 +1,7 @@
-const Joi = require("joi");
 const { Contact } = require("../../models");
-
-const joiShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
-});
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = joiShema.validate(req.body);
-    if (error) {
-      res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing required name field",
-      });
-    }
     const { _id } = req.user;
     const result = await Contact.create({ ...req.body, owner: _id });
     res.json({

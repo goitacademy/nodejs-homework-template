@@ -11,8 +11,10 @@ const updateAvatar = async (req, res) => {
   try {
     const resultUpload = path.join(avatarsDir, imageName);
     await fs.rename(tempUpload, resultUpload);
+
     const avatarURL = path.join("avatars", imageName);
     await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
     res.json({
       status: "success",
       code: 200,
@@ -22,6 +24,7 @@ const updateAvatar = async (req, res) => {
     });
   } catch (error) {
     await fs.unlink(tempUpload);
+
     res.status(500).json({
       status: "error",
       code: 500,

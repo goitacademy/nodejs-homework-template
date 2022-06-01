@@ -1,21 +1,7 @@
-const Joi = require("joi");
 const { User } = require("../../models");
-
-const joiShema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business"),
-});
 
 const changeSubscription = async (req, res) => {
   try {
-    const { error } = joiShema.validate(req.body);
-    if (error) {
-      res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing required name field",
-      });
-    }
-
     const { _id } = req.user;
     const { subscription } = req.body;
     const updatrContact = await User.findByIdAndUpdate(

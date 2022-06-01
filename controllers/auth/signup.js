@@ -1,25 +1,9 @@
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { User } = require("../../models");
-const Joi = require("joi");
-
-const joiShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
 
 const signup = async (req, res) => {
   try {
-    const { error } = joiShema.validate(req.body);
-    if (error) {
-      res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing required name field",
-      });
-    }
-
     const { name, email, password } = req.body;
     const avatarURL = gravatar.url(email);
 
