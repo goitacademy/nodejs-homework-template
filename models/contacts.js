@@ -2,33 +2,21 @@ const fs = require("fs/promises");
 const path = require("path");
 const contactsPath = path.join(__dirname, "contacts.json");
 const { nanoid } = require("nanoid");
-const Joi = require("joi");
-
-const validatinsContact = (data) => {
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
-      .required(),
-    phone: Joi.string().alphanum().min(3).max(30).required(),
-  });
-  const validationResult = schema.validate(data);
-  return validationResult;
-};
+const { joiShema } = require("../models/contact");
+const { Contact } = require("./contact");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const allContacts = JSON.parse(data);
-  return allContacts;
+  const data = await Contact.find({});
+  return data;
 };
 
 const getContactById = async (contactId) => {
-  const conacts = await listContacts();
-  const contactById = conacts.find((item) => item.id === contactId);
-  if (!contactById) {
+  const result = await Contact.findById(contactId);
+  console.log(result);
+  if (!result) {
     return null;
   }
-  return contactById;
+  return result;
 };
 
 const removeContact = async (contactId) => {
@@ -45,7 +33,7 @@ const removeContact = async (contactId) => {
 const addContact = async ({ name, email, phone }) => {
   const data = { name, email, phone };
   const conacts = await listContacts();
-  const validation = validatinsContact(data);
+  const validation = joiShema(data);
   if (!validation.error) {
     const newContact = { id: nanoid(3).toString(), ...data };
     conacts.push(newContact);
@@ -58,7 +46,7 @@ const addContact = async ({ name, email, phone }) => {
 const updateContact = async (contactId, body) => {
   const conacts = await listContacts();
   const { name, email, phone } = body;
-  const validation = validatinsContact(body);
+  const validation = joiShema(body);
   if (!validation.error) {
     conacts.forEach((contact) => {
       if (contact.id === contactId) {
