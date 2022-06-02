@@ -1,4 +1,4 @@
-const contactsOperations = require("../../models/contacts");
+const contactsOperations = require("../../services/contacts");
 const createError = require("http-errors");
 
 const getContactsById = async (req, res, next) => {
