@@ -38,16 +38,17 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
     const allContacts = await listContacts();
     let contactByID = null;
-    allContacts.forEach((item) => {
+    const newContacts = allContacts.map((item) => {
         if (item.id === contactId) {
-            item = { ...body, id: contactId };
+            item = { id: contactId, ...body };
             contactByID = item;
         }
+        return item;
     });
     if (!contactByID) {
         return null;
     }
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+    await fs.writeFile(contactsPath, JSON.stringify(newContacts));
     return contactByID;
 };
 
