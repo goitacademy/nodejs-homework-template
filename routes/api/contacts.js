@@ -12,7 +12,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
     const contactByID = await contactsDB.getContactById(req.params.contactId);
     if (!contactByID) {
-        res.status(404).json({ message: "status 404", response: null });
+        res.status(404).json({ message: "status 404, Contact not found", response: null });
         throw new Error(`Contact ${req.params.contactId} not found`);
     }
     res.status(200).json({ message: "status 200", response: contactByID });
@@ -31,7 +31,7 @@ router.post("/", addValidation, async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
     const removeContact = await contactsDB.removeContact(req.params.contactId);
     if (!removeContact) {
-        res.status(404).json({ message: "status 404", response: null });
+        res.status(404).json({ message: "status 404, Contact not found", response: null });
         throw new Error(`Contact ${req.params.contactId} not found`);
     }
     res.status(204).json({ message: "status 204", response: removeContact });
@@ -40,7 +40,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", updateValidation, async (req, res, next) => {
     const editContact = await contactsDB.updateContact(req.params.contactId, req.body);
     if (!editContact) {
-        res.status(404).json({ message: "status 404", response: null });
+        res.status(404).json({ message: "status 404, Contact not found", response: null });
         throw new Error(`Contact ${req.params.contactId} not found`);
     }
     res.status(200).json({ message: "status 200", response: editContact });
