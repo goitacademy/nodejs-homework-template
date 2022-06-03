@@ -14,10 +14,24 @@ const patternContactUpdate = Joi.object({
 
 const patternFavorite = Joi.object({
   favorite: Joi.boolean().required()
+});
+
+const patternUserAdd = Joi.object({
+  email: Joi.string().email().max(50).required(),
+  password: Joi.string().min(6).required(),
+  subscription: Joi.string(),
+  token: Joi.string(),
+  owner: Joi.object()
+})
+
+const patternUserPatch = Joi.object({
+  subscription: Joi.string()
 })
 
 module.exports = {
   patternContactAdd,
   patternContactUpdate,
-  patternFavorite
+  patternFavorite,
+  patternUserAdd,
+  patternUserPatch
 }

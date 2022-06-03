@@ -1,18 +1,19 @@
 const express = require("express");
-const router = express.Router()
-const contactsController = require('../../controller/contacts')
+const router = express.Router();
+const contactsController = require('../../controller/contacts');
+const authMiddleware = require('../../middlewares/jwt')
 
-router.get("/", contactsController.get);
+router.get("/", authMiddleware, contactsController.get);
 
-router.get("/:contactId", contactsController.getById);
+router.get("/:contactId", authMiddleware, contactsController.getById);
 
-router.post("/", contactsController.add);
+router.post("/", authMiddleware, contactsController.add);
 
-router.delete("/:contactId", contactsController.remove);
+router.delete("/:contactId", authMiddleware, contactsController.remove);
 
-router.put("/:contactId", contactsController.updateContact);
+router.put("/:contactId", authMiddleware, contactsController.updateContact);
 
-router.patch("/:contactId/favorite", contactsController.updateFavorite);
+router.patch("/:contactId/favorite", authMiddleware, contactsController.updateFavorite);
 
 // router.get("/:contactId", async (req, res, next) => {
 //   const {contactId} = req.params;

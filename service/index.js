@@ -1,16 +1,22 @@
 const {Contact} = require('./schemas/contacts')
+const {User} = require('./schemas/users')
 
-const getAllContacts = () => Contact.find().lean()
+// Contacts
+const getAllContacts = (id) => Contact.find({owner: id}).lean()
 
-const getContactById = (contactId) => Contact.findById(contactId)
+const getContactById = ({contactId, _id}) => Contact.findById({_id: contactId, owner: _id})
 
 const addContact = (body) => Contact.insertMany(body, {new: true})
 
-const removeContact = (id) => Contact.findOneAndDelete({_id: id})
+const removeContact = ({contactId, _id}) => Contact.findOneAndDelete({_id: contactId, owner: _id})
 
-const updateContact = (id, body) => Contact.findOneAndUpdate({_id: id}, body, {new: true})
+const updateContact = ({contactId, _id}, body) => Contact.findOneAndUpdate({_id: contactId, owner: _id}, body, {new: true})
 
-const updateFavorite = (id, body) => Contact.findOneAndUpdate({_id: id}, body, {new: true})
+const updateFavorite = ({contactId, _id}, body) => Contact.findOneAndUpdate({_id: contactId, owner: _id}, body, {new: true})
+
+// Users
+
+const findUser = (body) => User.findOne(body);
 
 module.exports = {
   getAllContacts,
@@ -18,5 +24,6 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
-  updateFavorite
+  updateFavorite,
+  findUser
 }

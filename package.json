@@ -9,12 +9,17 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
     "express": "4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.4",
     "morgan": "1.10.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
     "path": "^0.12.7"
   },
   "devDependencies": {

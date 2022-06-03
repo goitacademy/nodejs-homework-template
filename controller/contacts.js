@@ -6,8 +6,40 @@ const {
 } = require("../joi");
 
 const get = async (req, res, next) => {
+  const { page, limit, favorite } = req.query;
+  let paginatedContacts = [];
+  const { _id } = req.user;
   try {
-    const contacts = await service.getAllContacts();
+    const contacts = await service.getAllContacts(_id);
+    if (!page && !limit && favorite) {
+      const filtered = contacts.filter(
+        (contact) => String(contact.favorite) === favorite,
+      );
+      return res.json({ data: filtered, status: "success", code: 200 });
+    }
+    if (page && limit && !favorite) {
+      const start = (Number(page) - 1) * Number(limit);
+      const end = start + Number(limit);
+      paginatedContacts = contacts.slice(start, end);
+      return res.json({
+        data: paginatedContacts,
+        status: "success",
+        code: 200,
+      });
+    }
+    if (page && limit && favorite) {
+      const filtered = contacts.filter(
+        (contact) => String(contact.favorite) === favorite,
+      );
+      const start = (Number(page) - 1) * Number(limit);
+      const end = start + Number(limit);
+      paginatedContacts = filtered.slice(start, end);
+      return res.json({
+        data: paginatedContacts,
+        status: "success",
+        code: 200,
+      });
+    }
     res.json({ data: contacts, status: "success", code: 200 });
   } catch (err) {
     next(err);
@@ -16,8 +48,9 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
+  const { _id } = req.user;
   try {
-    const contact = await service.getContactById(contactId);
+    const contact = await service.getContactById({ contactId, _id });
     res.json({ data: contact, status: "success", code: 200 });
   } catch (err) {
     next(res.json({ message: "Not found", status: "error", code: 404 }));
@@ -25,6 +58,7 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
+  const { _id } = req.user;
   const validated = patternContactAdd.validate(req.body);
   if (validated.error) {
     return res.json({
@@ -36,7 +70,12 @@ const add = async (req, res, next) => {
   const { name, email, phone } = validated.value;
 
   try {
-    const contact = await service.addContact({ name, email, phone });
+    const contact = await service.addContact({
+      name,
+      email,
+      phone,
+      owner: _id,
+    });
     res.json({ data: contact, status: "success", code: 201 });
   } catch (err) {
     next(err);
@@ -44,9 +83,10 @@ const add = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   try {
-    const contact = await service.removeContact(contactId);
+    const contact = await service.removeContact({ contactId, _id });
     if (contact) {
       res.json({
         data: contact,
@@ -63,6 +103,7 @@ const remove = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const validated = patternContactUpdate.validate(req.body);
   if (validated.error) {
@@ -74,11 +115,14 @@ const updateContact = async (req, res, next) => {
     res.json({ message: "missing fields", status: "error", code: 400 });
   } else {
     try {
-      const contact = await service.updateContact(contactId, {
-        name,
-        email,
-        phone,
-      });
+      const contact = await service.updateContact(
+        { contactId, _id },
+        {
+          name,
+          email,
+          phone,
+        },
+      );
       res.json({ data: contact, status: "success", code: 200 });
     } catch (err) {
       next(res.json({ message: "Not found", status: "error", code: 404 }));
@@ -87,6 +131,7 @@ const updateContact = async (req, res, next) => {
 };
 
 const updateFavorite = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const body = req.body;
   if (Object.keys(body).find((key) => key === "favorite") !== "favorite") {
@@ -107,9 +152,12 @@ const updateFavorite = async (req, res, next) => {
     const { favorite } = validated.value;
 
     try {
-      const contact = await service.updateContact(contactId, {
-        favorite,
-      });
+      const contact = await service.updateContact(
+        { contactId, _id },
+        {
+          favorite,
+        },
+      );
       res.json({ data: contact, status: "success", code: 200 });
     } catch (err) {
       next(res.json({ message: "Not found", status: "error", code: 404 }));
