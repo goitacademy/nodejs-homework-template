@@ -25,7 +25,7 @@ const patternUserAdd = Joi.object({
 })
 
 const patternUserPatch = Joi.object({
-  subscription: Joi.string()
+  subscription: Joi.string().equal('starter', 'pro', 'business').required()
 })
 
 module.exports = {
