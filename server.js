@@ -1,18 +1,18 @@
 const app = require("./app");
 const mongoose = require("mongoose");
+
 require("dotenv").config();
 
-const { PORT = 3000, DB_HOST } = process.env;
+const { DB_HOST } = process.env;
 
-const DB_HOST1 = "";
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    console.log("DB is working");
-    app.listen(PORT);
+    console.log("Database connection successful");
+    app.listen(8000);
   })
   .then(() => {
-    console.log(`server is on ${PORT}`);
+    console.log(`server is on 8000`);
   })
   .catch((err) => {
     console.log("ERROR", err);
