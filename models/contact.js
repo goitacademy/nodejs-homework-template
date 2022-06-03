@@ -28,6 +28,10 @@ const schemaCreate = Joi.object({
   favorite: Joi.boolean(),
 });
 
+const schemaPath = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const Contact = model("contact", schema);
 
-module.exports = { Contact, schemaCreate };
+module.exports = { Contact, schemaCreate, schemaPath };

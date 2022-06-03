@@ -70,10 +70,25 @@ const updateContact = async (req, res, next) => {
   }
 };
 
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
+    const contact = await updateById(id, updatedData);
+    if (!contact) {
+      errorHandler(404, "Missing field favorite");
+    }
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
