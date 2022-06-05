@@ -1,76 +1,55 @@
-const fs = require('fs/promises');
-const path = require('path');
-const shortid = require('shortid');
 
-const contactFile = path.join(__dirname, 'contactList.json');
-//сonsole.log(contactFile)
-const listContacts = async () => {
-    const data = await fs.readFile(contactFile);
-    const contacts = JSON.parse(data);
-    return contacts;
-  };
-
-
-
-const getContacts=async(req, res, next) => {
- const contacts = await listContacts();
-     res.json({ contacts,message: 'template message' })
+const { 
+  getContacts,
+  getIdContacts,
+  putContacts,
+  postContacts,
+  deleteContacts,
+  updateStatusContact}=require('../services/contactsServis')
+const getContactsController=async (req, res, next) => {
+ const contacts= await getContacts()
+     res.json({ contacts})
      }
 
-const getIdContacts=async (req, res, next) => {
-    let contacts = await listContacts();
+const getIdContactsController=async (req, res) => {
+   const {contactId}=req.params;
+   const contacts= await getIdContacts(contactId)
+    res.json({contacts, message: 'template message'})
+    }
+
+const putContactsController= async (req, res, next) => {
+   const{
+    name,
+    email,
+    phone,
+    }=req.body;
     const {contactId}=req.params;
-    const [contact]=contacts.filter(el=>el.id === contactId)
+    await putContacts(contactId,{name,email,phone})
    
-    if(!contact){
-      res.status(400).json({ message: `failure, no user with id '${contactId}'`})
-    }
-    res.json({contact, message: 'template message'})
-    }
-
-const putContacts= async (req, res, next) => {
-    let contacts = await listContacts();
-    const{
-    name,
-    number
-    }=req.body;
-   
-    contacts.forEach(el=>{
-    if(el.id===req.params.contactId){
-    el.name=name,
-    el.number=number
-    }  
-    })
-    await fs.writeFile(contactFile, JSON.stringify(contacts))
-    res.json({contacts, message: 'success OK put' })
+    res.json({message: 'success OK put' })
    }
 
-const deleteContacts=async (req, res, next) => {
-   let contacts = await listContacts();
-    contacts= contacts.filter(el=>el.id !== req.params.contactId)
-    await fs.writeFile(contactFile, JSON.stringify(contacts))
-    res.json({contacts, message: 'success OK delete'})
+const deleteContactsController=async (req, res, next) => {
+ const {contactId}=req.params;
+ await deleteContacts(contactId)
+    res.json({ message: 'success OK delete'})
    }
-const postContacts=async (req, res) => {
-    let contacts = await listContacts();
-    const{
-    name,
-    number
-    }=req.body;
-    
-    contacts.push({
-    id: shortid.generate(),
-    name,
-    number
-    })
-    await fs.writeFile(contactFile, JSON.stringify(contacts))
+const postContactsController=async (req, res) => {
+    const{name,email,phone}=req.body;
+    await postContacts({ name,email,phone})
     res.json({ status: 'success OK' })
     }
-
+const patchIdContactsController=async (req, res) => {
+      const {contactId}=req.params;
+      const{favorite}=req.body; 
+      await updateStatusContact(contactId,{favorite})
+      res.json({ status: 'success OK' })
+   }
 
  module.exports={
-getContacts,
-getIdContacts,
-putContacts,
-postContacts,
-deleteContacts,}
+getContactsController,
+getIdContactsController,
+putContactsController,
+postContactsController,
+deleteContactsController,
+patchIdContactsController}
