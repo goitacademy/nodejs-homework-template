@@ -7,11 +7,11 @@ const listContacts = async () => {
     return data
 }
 
-const getContactById = async (contactId) => {
+const getById = async (contactId) => {
   const result = await listContacts()
     .then(data => JSON.parse(data).find(({id}) => id === contactId))
  
-  return JSON.stringify(result)
+  return result
 }
 
 const removeContact = async (contactId) => {
@@ -26,7 +26,7 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (newContact) => {
-  const isExistContact = getContactById(newContact.id).length
+  const isExistContact = getById(newContact.id).length
 
   const result = await listContacts()
     .then(data => [...JSON.parse(data), newContact])
@@ -40,7 +40,7 @@ const addContact = async (newContact) => {
         console.error(err)
       }
 
-  return JSON.stringify(newContact)
+  return newContact
 }
 
 const updateContact = async (contactId, body) => {
@@ -50,15 +50,13 @@ const updateContact = async (contactId, body) => {
 
   const findContact = result.find(({id}) => id === contactId)
 
-  console.log(findContact)
-
   const updateContact = {
     ...findContact,
     ...body
   }
 
   try {
-    if (findContact.length) {
+    if (findContact) {
       await fs.writeFile(contactsPath, JSON.stringify([...arayNotChange, updateContact]))
       return JSON.stringify(updateContact)
     }
@@ -66,13 +64,11 @@ const updateContact = async (contactId, body) => {
   } catch (err) {
       console.error(err)
     }
-  
-
 }
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
