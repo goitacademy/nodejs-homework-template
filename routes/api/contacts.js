@@ -15,8 +15,6 @@ const {
   updateStatusContact
 } = require('../../controllers/contactControllers');
 
-
-
 router.get('/', getAll)
 router.get('/:contactId', getById);
 router.patch('/:contactId', validateRequest(schemaPatch), updateStatusContact);

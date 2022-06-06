@@ -6,6 +6,4 @@ function createError(status, message) {
   return error
 }
 
-
-
 module.exports = { createError }
