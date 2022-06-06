@@ -16,17 +16,13 @@ const Joi = require('joi')
 			const validationResult = schema.validate(req.body)
 
 			if(validationResult.error) {
-				return res.status(400).json({status: validationResult.error.details})
+				return res.status(400).json({'message': 'missing required name field', status: validationResult.error.details})
 			}
 			next()
 		},
 
 		updateContactValidation: (req, res, next) => {
 			const schema = Joi.object({
-				id: Joi.string()
-					.min(3)
-					.max(100)
-					.optional(),
 				name: Joi.string()
 					.min(3)
 					.max(100)

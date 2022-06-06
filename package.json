@@ -14,7 +14,8 @@
     "dotenv": "^16.0.1",
     "express": "4.17.1",
     "joi": "^17.6.0",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "random-key": "^0.3.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",

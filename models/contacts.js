@@ -19,7 +19,7 @@ const removeContact = async (contactId) => {
     .then(data => JSON.parse(data).filter(({id}) => id !== contactId))
 
     try {
-      await fs.writeFile(contactsPath, result)  
+      await fs.writeFile(contactsPath, JSON.stringify(result))  
     } catch (err) {
         console.error(err)
       }
