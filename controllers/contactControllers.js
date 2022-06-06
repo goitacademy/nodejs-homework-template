@@ -26,15 +26,8 @@ const getById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const newContact = await contactService.addContact(name, email, phone);
-    if (!newContact) {
-      res.status(404).json({ message: "This name or number already exists" })
-
-    } else {
-
-      return res.status(201).json(newContact)
-    }
+    const newContact = await contactService.addContact(req.body);
+    return res.status(201).json(newContact)
   } catch (e) {
     next(e)
   }
