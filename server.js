@@ -1,6 +1,7 @@
 const app = require('./app');
 const mongoose = require("mongoose");
 require('dotenv').config();
+const {createFolderIfNotExist, uploadDir, storeDir} = require('./helpers')
 
 mongoose
   .connect(process.env.DB_HOST, {
@@ -9,6 +10,8 @@ mongoose
   })
   .then(() => {
   app.listen(3000, () => {
+    createFolderIfNotExist(uploadDir);
+    createFolderIfNotExist(storeDir);
     console.log("Database connection successful");
     console.log("Server running. Use our API on port: 3000")
   })
@@ -19,5 +22,4 @@ mongoose
     console.log("Server not running");
     process.exit(1);
   });
-
 

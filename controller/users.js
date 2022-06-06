@@ -4,6 +4,11 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { SECRET } = process.env;
 const { User } = require("../service/schemas/users");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs").promises;
+const { v4: uuidv4 } = require("uuid");
+const { isImage, storeDir } = require("../helpers");
 
 const add = async (req, res, next) => {
   const body = req.body;
@@ -23,11 +28,22 @@ const add = async (req, res, next) => {
     });
   }
   try {
-    const newUser = new User({ email });
+    const newUser = new User({
+      email,
+      avatarURL: gravatar.url(email, {
+        protocol: "http",
+        d: "identicon",
+        s: "250",
+      }),
+    });
     await newUser.setPassword(password);
     await newUser.save();
     res.json({
-      user: { email: newUser.email, subscription: "starter" },
+      user: {
+        email: newUser.email,
+        subscription: "starter",
+        avatarURL: newUser.avatarURL,
+      },
       status: "success",
       code: 201,
     });
@@ -84,25 +100,81 @@ const logout = async (req, res, next) => {
 };
 
 const check = async (req, res, next) => {
-  const {email, subscription, id} = req.user;
-  try{
-    const user = await service.findUser({_id: id});
-    if(user)
-    {res.json({data: {email, subscription}, status: "success", code: 200})}
-  } catch(err) {next(err)}
+  const { email, subscription, id } = req.user;
+  try {
+    const user = await service.findUser({ _id: id });
+    if (user) {
+      res.json({ data: { email, subscription }, status: "success", code: 200 });
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 const subs = async (req, res, next) => {
-  const {_id} = req.user;
+  const { _id } = req.user;
   const body = req.body;
   const validated = patternUserPatch.validate(body);
-  if(validated.error) {return res.json({message: validated.error.message, status: "failed", code: 400})}
-  try{
-  const user = await service.findUser({_id});
-  user.subscription = body.subscription;
+  if (validated.error) {
+    return res.json({
+      message: validated.error.message,
+      status: "failed",
+      code: 400,
+    });
+  }
+  try {
+    const user = await service.findUser({ _id });
+    user.subscription = body.subscription;
+    user.save();
+    res.json({
+      message: `Subscription has changed for ${body.subscription}`,
+      status: "success",
+      code: 201,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const setAvatar = async (req, res, next) => {
+  if (!req.user) {
+    return res.json({ message: "Unauthorized", status: "failed", code: 401 });
+  }
+  const { _id } = req.user;
+  if (!req.file) {
+    return res.json({
+      message: "This is not a photo",
+      status: "failed",
+      code: 400,
+    });
+  }
+  const { path: temporaryName } = req.file;
+  const extension = path.extname(temporaryName);
+  const fileName = path.join(storeDir, `${uuidv4()}${extension}`);
+  try {
+    const isValidImage = await isImage(temporaryName);
+    if (!isValidImage) {
+      await fs.unlink(temporaryName);
+      return res.json({
+        message: "This is not a proper image",
+        status: "failed",
+        code: 400,
+      });
+    }
+    await fs.rename(temporaryName, fileName);
+  } catch (err) {
+    await fs.unlink(temporaryName);
+    return res.json({ message: err });
+  }
+
+  const user = await service.findUser({ _id });
+  user.avatarURL = fileName;
   user.save();
-  res.json({message: `Subscription has changed for ${body.subscription}`, status: "success", code: 201})
-  } catch(err) {next(err)}
+  return res.json({
+    avatarURL: fileName,
+    status: "success",
+    code: 200,
+  });
 };
 
 module.exports = {
@@ -110,5 +182,6 @@ module.exports = {
   get,
   logout,
   check,
-  subs
+  subs,
+  setAvatar,
 };

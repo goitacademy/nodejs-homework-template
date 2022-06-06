@@ -1,18 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const usersController = require('../../controller/users');
-const authMiddleware = require('../../middlewares/jwt');
+const { multerInstance } = require("../../helpers");
+const usersController = require("../../controller/users");
+const authMiddleware = require("../../middlewares/jwt");
 
-router.post('/signup', usersController.add);
+router.patch(
+  "/avatars", authMiddleware,
+  multerInstance.single("picture"),
+  usersController.setAvatar,
+);
 
-router.post('/login', usersController.get);
+router.post("/signup", usersController.add);
+
+router.post("/login", usersController.get);
 
 router.post("/logout", authMiddleware, usersController.logout);
 
-router.get('/current', authMiddleware, usersController.check);
+router.get("/current", authMiddleware, usersController.check);
 
-router.patch('/', authMiddleware, usersController.subs)
+router.patch("/", authMiddleware, usersController.subs);
 
-
-
-module.exports = router
+module.exports = router;
