@@ -7,7 +7,7 @@ const listContacts = async () => {
     return data
 }
 
-const getContactById = async (contactId) => {
+const getById = async (contactId) => {
   const result = await listContacts()
     .then(data => JSON.parse(data).find(({id}) => id === contactId))
  
@@ -26,7 +26,7 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (newContact) => {
-  const isExistContact = getContactById(newContact.id).length
+  const isExistContact = getById(newContact.id).length
 
   const result = await listContacts()
     .then(data => [...JSON.parse(data), newContact])
@@ -68,7 +68,7 @@ const updateContact = async (contactId, body) => {
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
