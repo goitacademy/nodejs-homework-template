@@ -2,6 +2,11 @@ const express = require('express')
 const router = express.Router()
 const actions = require('../../models/contacts')
 
+const {
+  updateContactValidation,
+  addContactValidation
+} = require('../../src/middlewares/validationMiddleware')
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -40,10 +45,10 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', addContactValidation, async (req, res, next) => {
   const { body } = req
 
-  const result = await actions.addContact({id: getRandomInt(11, 1000), ...body})
+  const result = await actions.addContact({id: getRandomInt(11, 1000).toString(), ...body})
 
   res.status(201).json({ body: result })
 })
@@ -69,7 +74,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', updateContactValidation, async (req, res, next) => {
   const { body, params } = req
   
   try {
