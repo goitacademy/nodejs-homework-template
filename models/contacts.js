@@ -56,11 +56,8 @@ const updateContact = async (contactId, body) => {
   }
 
   try {
-    if (findContact) {
       await fs.writeFile(contactsPath, JSON.stringify([...arayNotChange, updateContact]))
       return JSON.stringify(updateContact)
-    }
-    else { return `Сontact ${body.name} don't exists!` }
   } catch (err) {
       console.error(err)
     }
