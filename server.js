@@ -1,6 +1,7 @@
-const app = require("./app");
+const { app, uploadDir, storeDir } = require("./app");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const { createFolderIfNotExist } = require("./helpers");
 
 const uriDb = process.env.DB_URI;
 const port = process.env.PORT;
@@ -15,7 +16,9 @@ const connection = mongoose.connect(uriDb, {
 connection
   .then(() => {
     console.log("Database connection successful");
-    app.listen(port, () => {
+    app.listen(port, async () => {
+      createFolderIfNotExist(uploadDir);
+      createFolderIfNotExist(storeDir);
       console.log("Server is running!");
     });
   })
