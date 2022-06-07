@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs").promises;
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
-const { isImage } = require("./helpers");
 var Jimp = require("jimp");
 
 const contactsRouter = require("./routes/api/contacts");
@@ -70,21 +69,14 @@ app.patch(
         .then((image) => {
           image.resize(250, 250).write(temporaryName);
         })
-        .catch((err) => {
+        .catch(async (err) => {
+          await fs.unlink(temporaryName)
           next(err);
         });
 
       await fs.rename(temporaryName, fileName);
     } catch (err) {
-      await fs.unlink(temporaryName);
       return next(err);
-    }
-
-    const isValidImage = await isImage(fileName);
-
-    if (!isValidImage) {
-      await fs.unlink(fileName);
-      return res.status(400).json({ message: "this is not a photo" });
     }
 
     const result = await User.findOneAndUpdate(

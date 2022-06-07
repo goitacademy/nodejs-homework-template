@@ -1,7 +1,7 @@
 const { app, uploadDir, storeDir } = require("./app");
 const mongoose = require("mongoose");
+const { createFolderIfNotExist } = require("./helper");
 require("dotenv").config();
-const { createFolderIfNotExist } = require("./helpers");
 
 const uriDb = process.env.DB_URI;
 const port = process.env.PORT;
