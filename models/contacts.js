@@ -1,9 +1,4 @@
-const fs = require("fs/promises");
-const path = require("path");
-const contactsPath = path.join(__dirname, "contacts.json");
-const { nanoid } = require("nanoid");
-const { joiShema } = require("../models/contact");
-const { Contact } = require("./contact");
+const { Contact, favoriteJoiShema, joiShema } = require("./contact");
 
 const listContacts = async () => {
   const data = await Contact.find({});
@@ -12,7 +7,6 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const result = await Contact.findById(contactId);
-  console.log(result);
   if (!result) {
     return null;
   }
@@ -20,42 +14,41 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  const conacts = await listContacts();
-  const removeId = conacts.findIndex((item) => item.id === contactId);
-  if (removeId === -1) {
+  const result = await Contact.findByIdAndRemove(contactId);
+  if (!result) {
     return null;
   }
-  const [removeContact] = conacts.splice(removeId, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(conacts));
-  return removeContact;
+  return result;
 };
 
-const addContact = async ({ name, email, phone }) => {
-  const data = { name, email, phone };
-  const conacts = await listContacts();
+const addContact = async (data) => {
   const validation = joiShema(data);
   if (!validation.error) {
-    const newContact = { id: nanoid(3).toString(), ...data };
-    conacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(conacts));
+    const newContact = await Contact.create(data);
     return newContact;
   }
   return null;
 };
 
 const updateContact = async (contactId, body) => {
-  const conacts = await listContacts();
-  const { name, email, phone } = body;
   const validation = joiShema(body);
   if (!validation.error) {
-    conacts.forEach((contact) => {
-      if (contact.id === contactId) {
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
-      }
+    const upContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
     });
-    await fs.writeFile(contactsPath, JSON.stringify(conacts));
+    return upContact;
+  }
+  return null;
+};
+
+const updateStatusContact = async (contactId, body) => {
+  const validation = favoriteJoiShema(body);
+  console.log("valid", validation);
+  if (!validation.error) {
+    const upContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
+    return upContact;
   }
   return null;
 };
@@ -66,4 +59,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
