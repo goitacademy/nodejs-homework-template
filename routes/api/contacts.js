@@ -45,7 +45,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const upContact = await updateContact(req.params.contactId, req.body);
   if (upContact === null) {
-    return res.status(400).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
   return res.status(200).json({ status: "success", upContact });
 });
@@ -53,7 +53,7 @@ router.put("/:contactId", async (req, res, next) => {
 router.patch("/:contactId", async (req, res, next) => {
   const upContact = await updateStatusContact(req.params.contactId, req.body);
   if (upContact === null) {
-    return res.status(400).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
   return res.status(200).json({ status: "success", upContact });
 });
