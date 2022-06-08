@@ -23,11 +23,16 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model("contacts", contactSchema);
+const Contact = model("contact", contactSchema);
 
 const contactAdd = Joi.object({
   name: Joi.string().pattern(codeRegexp.name).required(),
