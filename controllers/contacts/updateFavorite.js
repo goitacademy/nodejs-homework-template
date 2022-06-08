@@ -1,13 +1,16 @@
 const contactsOperations = require("../../services/contacts");
 const createError = require("http-errors");
 
-const updateContact = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    const { favorite } = req.body;
 
-    const result = await contactsOperations.updateContact(contactId, req.body);
+    const result = await contactsOperations.updateStatusContact(contactId, {
+      favorite,
+    });
     if (!result) {
-      throw createError(404, `Contact with id="${contactId}" not found`);
+      throw createError(400, `missing field favorite`);
     }
     res.status(200).json({
       status: "success",
@@ -21,4 +24,4 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-module.exports = updateContact;
+module.exports = updateStatusContact;
