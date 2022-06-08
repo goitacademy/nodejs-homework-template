@@ -1,5 +1,5 @@
 const express = require("express");
-const { schema, schemaStatus } = require("../../controllers/schema");
+const { schema, schemaStatus } = require("../../models/schema");
 const { validation, ctrlWrapper } = require("../../middlewares");
 const { contactsApi: ctrl } = require("../../controllers");
 
