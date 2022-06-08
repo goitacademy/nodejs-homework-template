@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { validation, controllerWrapper } = require("../../middlewares");
+const {
+  validation,
+  controllerWrapper,
+  signupUser,
+} = require("../../middlewares");
 const { signup: controllers } = require("../../controllers");
 const { userSignupSchemaJoi } = require("../../models");
 
@@ -11,5 +15,13 @@ router.post(
   validation(userSignupSchemaJoi),
   controllerWrapper(controllers.signup)
 );
+
+router.post(
+  "/login",
+  validation(userSignupSchemaJoi),
+  controllerWrapper(controllers.login)
+);
+
+router.get("/current", signupUser, controllerWrapper(controllers.getCurrent));
 
 module.exports = router;
