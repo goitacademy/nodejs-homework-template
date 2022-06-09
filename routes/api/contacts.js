@@ -24,16 +24,22 @@ router.post(
 
 router.put(
   "/:contactId",
+  signupUser,
   validation(contactSchemaJoi),
   controllerWrapper(controllers.updateContact)
 );
 
 router.patch(
   "/:contactId/favorite",
+  signupUser,
   validation(contactSchemaJoiFavorite),
   controllerWrapper(controllers.updateStatusContact)
 );
 
-router.delete("/:contactId", controllerWrapper(controllers.removeContact));
+router.delete(
+  "/:contactId",
+  signupUser,
+  controllerWrapper(controllers.removeContact)
+);
 
 module.exports = router;

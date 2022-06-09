@@ -51,15 +51,6 @@ const userSubscriptionSchemaJoi = Joi.object({
     .required(),
 });
 
-// const userLosinSchemaJoi = Joi.object({
-//   password: Joi.string().required(),
-//   email: Joi.string().required().email(),
-//   subscription: Joi.string()
-//     .default("starter")
-//     .valid("starter", "pro", "business"),
-//   token: Joi.string().default(null),
-// });
-
 const User = model("user", userSchema);
 
 module.exports = {

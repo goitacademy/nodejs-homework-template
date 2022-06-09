@@ -1,6 +1,5 @@
 const { User } = require("../../models");
 const createError = require("http-errors");
-// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { SECRET_KEY } = process.env;
@@ -13,13 +12,6 @@ const login = async (req, res) => {
     throw createError(401, `Email or password is wrong. Unauthorized`);
   }
 
-  // if (!user) {
-  //   throw createError(401, `Email or password is wrong. Unauthorized`);
-  // }
-  // const passCompare = bcrypt.compareSync(password, user.password);
-  // if (!passCompare) {
-  //   throw createError(401, `Email or password is wrong. Unauthorized`);
-  // }
   const payload = {
     id: user._id,
   };
