@@ -6,6 +6,8 @@ const contacts = require("../../models");
 
 const router = express.Router();
 
+const { generateError } = require("../../helpers");
+
 const joiScheme = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
@@ -37,7 +39,7 @@ router.post("/", async (req, res, next) => {
     const { error } = joiScheme.validate(req.body);
 
     if (error) {
-      // error;
+      throw generateError(400, error.message);
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -51,8 +53,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
   const result = await contacts.removeContact(contactId);
   if (!result) {
-    // throw error
-    res.json({ message: "Not deleted" });
+    throw generateError(404);
   }
 
   res.json({ message: "Contact deleted" });
@@ -68,7 +69,7 @@ router.put("/:contactId", async (req, res, next) => {
     const { error } = joiScheme.validate(req.body);
 
     if (error) {
-      //
+      throw generateError(400, error.message);
     }
 
     const { contactId } = req.params;
