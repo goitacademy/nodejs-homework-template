@@ -6,7 +6,10 @@ const {
   signupUser,
 } = require("../../middlewares");
 const { signup: controllers } = require("../../controllers");
-const { userSignupSchemaJoi } = require("../../models");
+const {
+  userSignupSchemaJoi,
+  userSubscriptionSchemaJoi,
+} = require("../../models");
 
 const router = express.Router();
 
@@ -25,5 +28,12 @@ router.post(
 router.get("/logout", signupUser, controllerWrapper(controllers.logout));
 
 router.get("/current", signupUser, controllerWrapper(controllers.getCurrent));
+
+router.patch(
+  "/:contactId/subscription",
+  signupUser,
+  validation(userSubscriptionSchemaJoi),
+  controllerWrapper(controllers.updateSubscription)
+);
 
 module.exports = router;

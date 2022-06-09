@@ -3,7 +3,7 @@ const createError = require("http-errors");
 // const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
-  const { email, password, subscription } = req.body;
+  const { email, password, subscription = "starter" } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw createError(409, `Email ${email} in use. Conflict`);

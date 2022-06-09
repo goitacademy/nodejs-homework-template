@@ -4,7 +4,11 @@ const {
   Contact,
 } = require("./contact");
 
-const { User, userSignupSchemaJoi } = require("./user");
+const {
+  User,
+  userSignupSchemaJoi,
+  userSubscriptionSchemaJoi,
+} = require("./user");
 
 module.exports = {
   contactSchemaJoiFavorite,
@@ -12,4 +16,5 @@ module.exports = {
   Contact,
   User,
   userSignupSchemaJoi,
+  userSubscriptionSchemaJoi,
 };
