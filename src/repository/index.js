@@ -1,3 +1,4 @@
 const contactsRepository = require('./contacts')
+const usersRepository = require('./users')
 
-module.exports = { contactsRepository }
+module.exports = { contactsRepository, usersRepository }
