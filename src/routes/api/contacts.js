@@ -8,19 +8,20 @@ const {
   updateById,
 } = require("../../controllers/index");
 
-// const { contactSchema } = require("../../schemas/contact");
+const { contactSchema } = require("../../schemas/index");
+const { validation } = require("../../middlewares/index");
 const router = express.Router();
 
-// const validateMiddleware = validation(contactSchema);
+const validateMiddleware = validation(contactSchema);
 
 router.get("/", getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", addById);
+router.post("/", validateMiddleware, addById);
 
 router.delete("/:contactId", deleteById);
 
-router.put("/:contactId", updateById);
+router.put("/:contactId", validateMiddleware, updateById);
 
 module.exports = router;

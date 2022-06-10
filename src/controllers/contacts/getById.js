@@ -8,6 +8,8 @@ const getById = router.get("/:contactId", async (req, res, next) => {
 
   if (!data) {
     return res.status(404).json({
+      status: "error",
+      code: 404,
       message: "Not found",
     });
   }
