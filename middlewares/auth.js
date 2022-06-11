@@ -16,7 +16,7 @@ const auth = async (req, _, next) => {
 
     const user = await User.findById(id);
 
-    if (!user) {
+    if (!user || !user.token) {
       throw new Unauthorized('Not authorized');
     }
 
