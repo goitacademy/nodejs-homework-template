@@ -17,5 +17,34 @@ const validationPatch = (schema) => {
     next();
   };
 };
-module.exports = { validationAdd, validationPatch };
+const validationRegister = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: "Ошибка от Joi или другой библиотеки валидации" });
+    }
+    next();
+  };
+};
+const validationSubsribtion = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({
+          message: "Ошибка от Joi проверьте правильность написания подписки",
+        });
+    }
+    next();
+  };
+};
+module.exports = {
+  validationAdd,
+  validationPatch,
+  validationRegister,
+  validationSubsribtion,
+};
 // Валидация

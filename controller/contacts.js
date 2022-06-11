@@ -1,12 +1,13 @@
 const contactsFunctions = require("../service/index");
 
 const getController = async (req, res, next) => {
+  const { _id } = req.user;
   try {
     res.status(200).json({
       status: "success",
       code: 200,
       data: {
-        contacts: await contactsFunctions.listContacts(),
+        contacts: await contactsFunctions.listContacts(_id, req.query),
       },
     });
   } catch (e) {
@@ -37,8 +38,10 @@ const getByIdController = async (req, res, next) => {
 };
 const addController = async (req, res, next) => {
   const body = req.body;
+  const { _id } = req.user;
+
   try {
-    const addContact = await contactsFunctions.addContact(body);
+    const addContact = await contactsFunctions.addContact(body, _id);
 
     if (addContact) {
       res.status(201).json({
@@ -77,6 +80,7 @@ const deleteController = async (req, res, next) => {
 };
 const putController = async (req, res, next) => {
   const body = req.body;
+
   try {
     const putContact = await contactsFunctions.updateContact(
       req.params.contactId,
@@ -109,6 +113,7 @@ const putController = async (req, res, next) => {
 };
 const favoriteController = async (req, res, next) => {
   const body = req.body;
+
   try {
     const result = await contactsFunctions.updateContact(
       req.params.contactId,

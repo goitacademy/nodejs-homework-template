@@ -18,6 +18,10 @@ const contact = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false }
 );
@@ -34,6 +38,7 @@ const joiSchema = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
+  favorite: Joi.boolean(),
 });
 const joiSchemaPut = Joi.object({
   name: Joi.string().min(3).max(30),
@@ -46,7 +51,7 @@ const joiSchemaPut = Joi.object({
   }),
 });
 const joiSchemaFavorite = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 const Contact = mongoose.model("contact", contact);
