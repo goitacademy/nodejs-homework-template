@@ -6,7 +6,7 @@ const { SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
   try {
-    const { email, password, subscription } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
 
     if (!user || !user.comparePassword(password)) {
@@ -17,7 +17,10 @@ const login = async (req, res, next) => {
       id: user._id,
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-    await User.findByIdAndUpdate(user._id, { token });
+    const result = await User.findByIdAndUpdate(user._id, { token });
+
+    const { subscription } = result;
+
     res.json({
       token,
       user: {
