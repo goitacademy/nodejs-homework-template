@@ -25,6 +25,6 @@ router.patch(
   ctrl.updateStatus
 );
 
-router.delete('/:contactId', idValidation(), ctrl.deleteById);
+router.delete('/:contactId', auth, idValidation(), ctrl.deleteById);
 
 module.exports = router;

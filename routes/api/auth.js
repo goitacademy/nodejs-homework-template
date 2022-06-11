@@ -9,6 +9,6 @@ router.post('/signup', validation(joiSchema), ctrl.signup);
 
 router.post('/login', validation(joiSchema), ctrl.login);
 
-router.post('/logout', auth, ctrl.logout);
+router.get('/logout', auth, ctrl.logout);
 
 module.exports = router;
