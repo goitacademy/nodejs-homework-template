@@ -1,14 +1,27 @@
-const express = require('express')
-
-const router = express.Router()
+const express = require('express');
+const { v4: uuidv4 } = require("uuid");
+const router = express.Router();
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+} = require('../../models/contacts');
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.status(200).json(await listContacts());
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const data = await getContactById(req.params.contactId);
+  if (data) {
+    res.status(200).json(data);
+  } else {
+    res.status(400).json({ message: "Not found" });
+  }
+  
+});
 
 router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' })
@@ -22,4 +35,4 @@ router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-module.exports = router
+module.exports = router;
