@@ -3,7 +3,7 @@ const { Contact } = require("../../models");
 const updateStatusContact = async (req, res) => {
   const { favorite } = req.body;
 
-  if (favorite === undefined) {
+  if (!favorite) {
     res.status(400).json({
       status: 400,
       data: { message: "Missing field favorite" },
