@@ -1,5 +1,5 @@
-const contactsOperations = require("../../models/contacts");
 const { NotFound } = require("http-errors");
+const contactsOperations = require("../../models/contacts");
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await contactsOperations.updateContact(contactId, req.body);
