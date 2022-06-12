@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Joi = require("joi");
+// const codeRegex = /\d{6}/;
 
 const contactSchema = Schema({
   name: {
@@ -15,15 +16,21 @@ const contactSchema = Schema({
     favorite: {
       type: Boolean,
       default: false,
-    },
+  },
+    //  code: {
+    //     type: String,
+    //     required: true,
+    //     match: codeRegex,
+    //     unique: true,
+    // },
 });
 
 const schemaCreate = Joi.object({
-    
-    name: Joi.string().min(2).required(),
-    email: Joi.string().required(),
-    phone: Joi.string().min(0).required(),
-    favorite: Joi.bool(),
+  name: Joi.string().min(2).required(),
+  email: Joi.string().required(),
+  phone: Joi.string().min(0).required(),
+  favorite: Joi.bool(),
+  // code: Joi.string().pattern(codeRegex).required(),
 });
 
 const schemaPatch = Joi.object({
@@ -34,5 +41,5 @@ const schemaPatch = Joi.object({
 const Contact = model('contact', contactSchema);
 
 module.exports = {
-    Contact, schemaCreate, schemaPatch
-}
+  Contact, schemaCreate, schemaPatch
+};
