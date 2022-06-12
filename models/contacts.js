@@ -3,8 +3,8 @@ const path = require("path");
 const { v4 } = require("uuid");
 const contactsPath = path.join(__dirname, "contacts.json");
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(data);
+  const result = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(result);
   return contacts;
 };
 
@@ -23,17 +23,17 @@ const removeContact = async (contactId) => {
   if (idx === -1) {
     return null;
   }
-  const [remContact] = contacts.splice(idx, 1);
+  const [result] = contacts.splice(idx, 1);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return remContact;
+  return result;
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (body) => {
   const contacts = await listContacts();
-  const newContact = { id: v4(), name, email, phone };
-  contacts.push(newContact);
+  const result = { id: v4(), ...body };
+  contacts.push(result);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return newContact;
+  return result;
 };
 
 const updateContact = async (id, body) => {
