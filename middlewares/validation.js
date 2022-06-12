@@ -1,10 +1,10 @@
 const validation = (schema) => {
-  return (req, res, next) => {
+  return (req, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
       error.status = 400;
       next(error);
-      return;
+      // return;
     }
     next();
   };
