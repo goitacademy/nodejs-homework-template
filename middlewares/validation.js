@@ -4,7 +4,6 @@ const validation = (schema) => {
     if (error) {
       error.status = 400;
       next(error);
-      // return;
     }
     next();
   };
