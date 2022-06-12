@@ -1,10 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const { getContactById } = require("../../models");
+const { Contact } = require("../../models");
 
-const getById = router.get("/:contactId", async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
-  const data = await getContactById(contactId);
+  const data = await Contact.findById(contactId);
 
   if (!data) {
     return res.status(404).json({
@@ -19,6 +17,6 @@ const getById = router.get("/:contactId", async (req, res, next) => {
     code: 200,
     data,
   });
-});
+};
 
 module.exports = getById;

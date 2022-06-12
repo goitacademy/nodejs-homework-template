@@ -3,25 +3,32 @@ const express = require("express");
 const {
   getAll,
   getById,
-  addById,
+  add,
   deleteById,
   updateById,
-} = require("../../controllers/index");
+  updateFavorite,
+} = require("../../controllers");
 
-const { contactSchema } = require("../../schemas/index");
-const { validation } = require("../../middlewares/index");
+const { joiSchema, favoriteJoiSchema } = require("../../models/contact");
+const { validation } = require("../../middlewares");
 const router = express.Router();
 
-const validateMiddleware = validation(contactSchema);
+const validateMiddleware = validation(joiSchema);
 
 router.get("/", getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", validateMiddleware, addById);
+router.post("/", validateMiddleware, add);
 
 router.delete("/:contactId", deleteById);
 
 router.put("/:contactId", validateMiddleware, updateById);
+
+router.patch(
+  "/:contactId/favorite",
+  validation(favoriteJoiSchema),
+  updateFavorite
+);
 
 module.exports = router;

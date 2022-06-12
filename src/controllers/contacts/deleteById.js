@@ -1,10 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const { removeContact } = require("../../models");
+const { Contact } = require("../../models");
 
-const deleteById = router.delete("/:contactId", async (req, res, next) => {
+const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const data = await removeContact(contactId);
+  const data = await Contact.findByIdAndDelete(contactId);
 
   if (!data) {
     return res.status(404).json({
@@ -20,6 +18,6 @@ const deleteById = router.delete("/:contactId", async (req, res, next) => {
     message: "contact deleted",
     data,
   });
-});
+};
 
 module.exports = deleteById;

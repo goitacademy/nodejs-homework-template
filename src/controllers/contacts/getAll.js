@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const { listContacts } = require("../../models");
+const { Contact } = require("../../models");
 
-const getAll = router.get("/", async (req, res, next) => {
-  const data = await listContacts();
+const getAll = async (req, res) => {
+  const data = await Contact.find({});
+
   res.json({
     status: "success",
     code: 200,
@@ -11,6 +10,6 @@ const getAll = router.get("/", async (req, res, next) => {
       contacts: data,
     },
   });
-});
+};
 
 module.exports = getAll;
