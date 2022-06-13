@@ -17,11 +17,15 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const joiSchema = Joi.object({
+const joiContactSchema = Joi.object({
   name: Joi.string().min(2).max(30).required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "gmail"] } })
@@ -35,4 +39,4 @@ const favoriteStatusSchema = Joi.object({
 });
 const Contact = model("Contact", contactSchema);
 
-module.exports = { Contact, joiSchema, favoriteStatusSchema };
+module.exports = { Contact, joiContactSchema, favoriteStatusSchema };
