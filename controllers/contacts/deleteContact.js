@@ -1,4 +1,4 @@
-const contactsOperations = require("../../models/contacts");
+const contactsOperations = require("../../repository/contacts");
 const { NotFound } = require("http-errors");
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
