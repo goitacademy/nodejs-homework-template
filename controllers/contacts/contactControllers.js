@@ -1,4 +1,4 @@
-const Contact = require("../../models/contacts");
+const { Contact } = require("../../models/contacts");
 
 const listContacts = async (_, res) => {
   const data = await Contact.find({});
@@ -9,33 +9,58 @@ const listContacts = async (_, res) => {
   });
 };
 
-const getContactById = async (req, res) => {};
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const data = await Contact.findById(contactId);
+  res.json({ status: "success", code: 200, data });
+};
 
 const removeContact = async (req, res) => {
-  //   const data = await listContacts();
-  //   const deletedContactIndex = data.findIndex(
-  //     ({ id }) => id === contactId.toString()
-  //   );
-  //   if (deletedContactIndex === -1) return null;
+  const { contactId } = req.params;
+  await Contact.findByIdAndDelete(contactId);
+  res.json({
+    message: "contact successfully deleted",
+    statusOperation: "success",
+  });
 };
 
 const addContact = async (req, res) => {
+  if (!req.body.favorite) req.body.favorite = false;
   const data = await Contact.create(req.body);
   res.status(201).json({
     status: "success",
     code: 201,
-    data: { data },
+    data,
   });
 };
 
 const updateContact = async (req, res) => {
-  //   const data = await listContacts();
-  //   const updatedContactIndex = data.findIndex(
-  //     ({ id }) => id === contactId.toString()
-  //   );
-  //   if (updatedContactIndex === -1) return null;
-  //   data[updatedContactIndex] = { ...data[updatedContactIndex], ...body };
-  //   return data[updatedContactIndex];
+  const { contactId } = req.params;
+  const data = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  res.json({
+    message: "contact successfully edit",
+    statusOperation: "success",
+    data,
+  });
+};
+
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  if (favorite === undefined)
+    res.status(400).json({ message: "missing field favorite" });
+  const data = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
+  res.json({
+    message: "contact successfully edit",
+    statusOperation: "success",
+    data,
+  });
 };
 
 module.exports = {
@@ -44,4 +69,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
