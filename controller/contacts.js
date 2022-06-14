@@ -1,8 +1,9 @@
-const { listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact } = require('./models/contacts');
+const { listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact } = require('../services/contacts');
 
 const get = async (req, res, next) => {
   try {
-      const results = await listContacts();
+    const {_id} = req.user;
+      const results = await listContacts(_id);
     res.json({
       status: 'success',
       code: 200,
@@ -21,23 +22,22 @@ const getById = async (req, res, next) => {
     const id = req.params.contactId;
     const result = await getContactById(id);
     if (result) {
-
-      res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        contact: result,
-      },
-    });
-    } else {
-       const code = 404;
-     res.status(code).json({
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact: result,
+        },
+      });
+    }
+      const code = 404;
+  
+      res.status(code).json({
         status: 'error',
         code: `${code}`,
         message: `Not found contact id: ${id}`,
         data: 'Not Found',
       });
-    }
   } catch (e) {
     console.error(e);
     next(e);
@@ -46,16 +46,17 @@ const getById = async (req, res, next) => {
 
 const post = async (req, res, next) => {
   try {
-    const newContact = await addContact(req.body);
+    const { _id } = req.user;
+    const newContact = await addContact(req.body, _id);
     if (newContact) {
-      res.json({
+      return res.json({
       status: 'success',
       code: 201,
       data: {
         contact: newContact,
       },
     });
-    } else {
+    } 
       const code = 400;
      res.status(code).json({
         status: 'error',
@@ -63,7 +64,7 @@ const post = async (req, res, next) => {
         message: `Bad Request`,
         data: 'Not Created',
       });
-    }
+    
   } catch (e) {
     console.error(e);
     next(e);
@@ -75,14 +76,14 @@ const put = async (req, res, next) => {
     const id = req.params.contactId;
     const contact = await updateContact(id, req.body);
     if (contact) {
-      res.json({
+      return res.json({
       status: 'success',
       code: 200,
       data: {
         contact: contact,
       },
     });
-    } else {
+    } 
       const code = 404;
      res.status(code).json({
         status: 'error',
@@ -90,7 +91,7 @@ const put = async (req, res, next) => {
         message: `Not found contact id: ${id}`,
         data: 'Not Updated',
       });
-    }
+   
   } catch (e) {
     console.error(e);
     next(e);
@@ -103,14 +104,14 @@ const remove = async (req, res, next) => {
     const deletedContact = await removeContact(id);
 
     if (deletedContact) {
-      res.json({
+      return res.json({
       status: 'success',
       code: 201,
       data: {
         contact: deletedContact,
       },
     });
-    } else {
+    } 
       const code = 404;
      res.status(code).json({
         status: 'error',
@@ -118,7 +119,7 @@ const remove = async (req, res, next) => {
         message: `Not found contact id: ${id}`,
         data: 'Not Deleted',
       });
-    }
+    
   } catch (e) {
     console.error(e);
     next(e);
@@ -130,7 +131,7 @@ const patch = async (req, res, next) => {
     const id = req.params.contactId;
     if (!req.body) {
        const code = 400;
-     res.status(code).json({
+     return res.status(code).json({
         status: 'error',
          code: `${code}`,
         message: 'missing field favorite',
@@ -140,14 +141,14 @@ const patch = async (req, res, next) => {
     const contact = await updateStatusContact(id, req.body);
 
     if (contact) {
-      res.json({
+      return res.json({
         status: 'success',
         code: 200,
         data: {
           contact: contact,
         }
       })
-    } else {
+    } 
       const code = 404;
      res.status(code).json({
         status: 'error',
@@ -155,7 +156,7 @@ const patch = async (req, res, next) => {
         message: `Not found contact id: ${id}`,
         data: 'Not Updated',
       });
-    }
+  
   } catch (e) {
     console.error(e);
     next(e);
