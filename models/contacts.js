@@ -8,10 +8,13 @@ const listContacts = async () => {
 }
 
 const getById = async (contactId) => {
-  const result = await listContacts()
-    .then(data => JSON.parse(data).find(({id}) => id === contactId))
- 
-  return result
+
+  try {
+    const result = await listContacts()
+      .then(data => JSON.parse(data).find(({id}) => id === contactId))
+  
+    return result
+  } catch (err) { console.error(err) }
 }
 
 const removeContact = async (contactId) => {
@@ -20,9 +23,7 @@ const removeContact = async (contactId) => {
 
     try {
       await fs.writeFile(contactsPath, JSON.stringify(result))  
-    } catch (err) {
-        console.error(err)
-      }
+    } catch (err) { console.error(err) }
 }
 
 const addContact = async (newContact) => {
