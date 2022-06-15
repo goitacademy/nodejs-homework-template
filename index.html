@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form" enctype="multipart/form-data">
+        <input type="file" name="image" multiple>
+        <button type=""submit>SEND</button>
+
+    </form>
+    <script>
+        const form = document.getElementById("form");
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+            const {image}= this.elements;
+            const data = new FormData();
+            data.append("image", image.files[0])
+        })
+    </script>
+</html>
