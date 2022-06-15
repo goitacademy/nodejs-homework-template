@@ -8,4 +8,6 @@ router.post("/signup", validate(joiUserSchema), ctrl.signup);
 
 router.post("/login", validate(joiUserSchema), ctrl.login);
 
+router.get("/current");
+
 module.exports = router;
