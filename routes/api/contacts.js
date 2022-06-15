@@ -6,7 +6,7 @@ const {
   addContactController,
   updateContactController,
   deleteContact
-} = require('../../src/controllers/contactsControllers')
+} = require('../../src/controllers')
 
 const {
   updateContactValidation,
