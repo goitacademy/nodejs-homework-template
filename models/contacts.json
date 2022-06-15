@@ -61,14 +61,20 @@
   },
   {
     "id": "15be41e0-ddf4-40e3-ab05-5b54f3ea6b9d",
-    "name": "testContact2",
-    "email": "testEmail2@mail.com",
-    "phone": "52525252"
+    "name": "testContact3",
+    "email": "testEmail3@mail.com",
+    "phone": "43343443"
   },
   {
     "id": "b3e51891-c494-439f-878a-0707b931021b",
     "name": "testContact1",
     "email": "testEmail1@mail.com",
     "phone": "12121212"
+  },
+  {
+    "id": "16a1f1e6-d984-42c8-83d1-e25fd5f9899d",
+    "name": "testContact2",
+    "email": "testEmail2@mail.com",
+    "phone": "52525252"
   }
 ]
