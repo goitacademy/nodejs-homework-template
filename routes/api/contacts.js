@@ -7,12 +7,13 @@ const {
   deleteById,
   putById,
 } = require("../../controllers/contactsControllers");
+const { fieldValidation } = require("../../middlewares/validation");
 
 router
   .get("/", getAll)
   .get("/:contactId", getOneById)
-  .post("/", postNew)
+  .post("/", fieldValidation, postNew)
   .delete("/:contactId", deleteById)
-  .put("/:contactId", putById);
+  .put("/:contactId", fieldValidation, putById);
 
 module.exports = router;
