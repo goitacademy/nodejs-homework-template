@@ -1,4 +1,5 @@
 const joi = require('joi')
+const {codeRegexp} = require('../../models/constants')
 
 const updateContactSchema = joi.object({
   name: joi.string()
@@ -8,7 +9,7 @@ const updateContactSchema = joi.object({
   email: joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .optional(),
-  phone: joi.string().length(10).pattern(/^[0-9]+$/).optional()
+  phone: joi.string().length(10).pattern(codeRegexp).optional()
 })
 
 module.exports = { updateContactSchema }
