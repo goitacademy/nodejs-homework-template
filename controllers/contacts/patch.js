@@ -7,16 +7,21 @@ const { Contact } = contactModel;
 
 const { NotFound } = createError;
 
-export const getById = async (req, res) => {
+export const updateStatus = async (req, res) => {
   const { contactId } = req.params;
+  const { favorite } = req.body;
   if (!mongoose.Types.ObjectId.isValid(contactId)) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
   res.status(200).json({
     status: "success",
     code: 200,
-    message: "Contact found",
+    message: "Status updated",
     data: {
       result,
     },
