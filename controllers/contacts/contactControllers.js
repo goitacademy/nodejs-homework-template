@@ -1,8 +1,20 @@
 const { Contact } = require("../../models/contacts");
-const { Conflict } = require("http-errors");
+// const { Conflict } = require("http-errors");
 
-const listContacts = async (_, res) => {
-  const data = await Contact.find({});
+const listContacts = async (req, res) => {
+  const { _id } = req.user;
+  const { page, limit, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  const options = { owner: _id, favorite: favorite };
+  if (options.favorite === undefined) {
+    delete options.favorite;
+  }
+
+  const data = await Contact.find(options, "", {
+    skip,
+    limit: Number(limit),
+    favorite: true,
+  }).populate("owner", "_id email");
   res.json({
     status: "success",
     code: 200,
@@ -26,12 +38,14 @@ const removeContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+  const { _id } = req.user;
   if (!req.body.favorite) req.body.favorite = false;
-  const contact = await Contact.findOne(req.email);
-  if (contact) {
-    throw new Conflict("Contact already in data");
-  }
-  const data = await Contact.create(req.body);
+  // const contact = await Contact.findOne(req.email);
+  // console.log("contact", contact);
+  // if (contact) {
+  //   throw new Conflict("Contact already in data");
+  // }
+  const data = await Contact.create({ ...req.body, owner: _id });
   res.status(201).json({
     status: "success",
     code: 201,
