@@ -4,6 +4,9 @@ const Joi = require("joi");
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -22,10 +25,6 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }

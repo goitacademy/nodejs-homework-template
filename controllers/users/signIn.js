@@ -1,5 +1,7 @@
 const { User } = require("../../models");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
@@ -11,6 +13,16 @@ const signIn = async (req, res) => {
     error.status = 401;
     throw error;
   }
+
+  const payload = {
+    id: alreadyInDB._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  res.json({
+    status: "success",
+    code: 200,
+    data: { token },
+  });
 };
 
 module.exports = signIn;
