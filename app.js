@@ -1,6 +1,6 @@
 import express from "express";
-import logger from "morgan";
 import cors from "cors";
+import logger from "morgan";
 import router from "./routes/api/contacts.js";
 
 export const app = express();
