@@ -1,4 +1,5 @@
 const { Contact } = require("../../models/contacts");
+const { Conflict } = require("http-errors");
 
 const listContacts = async (_, res) => {
   const data = await Contact.find({});
@@ -26,6 +27,10 @@ const removeContact = async (req, res) => {
 
 const addContact = async (req, res) => {
   if (!req.body.favorite) req.body.favorite = false;
+  const contact = await Contact.findOne(req.email);
+  if (contact) {
+    throw new Conflict("Contact already in data");
+  }
   const data = await Contact.create(req.body);
   res.status(201).json({
     status: "success",
