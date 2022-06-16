@@ -8,11 +8,24 @@ const { Contact } = contactModel;
 const { NotFound } = createError;
 
 export const removeById = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
+
   if (!mongoose.Types.ObjectId.isValid(contactId)) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
-  const result = await Contact.findByIdAndRemove(contactId);
+
+  const result = await Contact.findOneAndRemove({
+    owner: _id,
+    _id: contactId,
+  });
+
+  if (!result) {
+    throw new NotFound(
+      `Contact with id=${contactId} not found in your collection`
+    );
+  }
+
   res.status(200).json({
     status: "success",
     code: 200,
