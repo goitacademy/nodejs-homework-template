@@ -1,18 +1,21 @@
 const {Schema, model} = require('mongoose')
+const Joi = require('joi')
 const {codeRegexp} = require('./constants')
 
 const contactSchema = Schema({
   name: {
     type: String,
-   // required: [true, 'Set name for contact'],
+    required: [true, 'Set name for contact'],
   },
   email: {
     type: String,
-    unique: true
+    unique: true,
+    required: [true, 'Set email for contact'],
   },
   phone: {
     type: String,
-    match: codeRegexp
+    match: codeRegexp,
+    required: [true, 'Set phone for contact'],
   },
   favorite: {
     type: Boolean,
@@ -22,4 +25,27 @@ const contactSchema = Schema({
 
 const Contact = model('contact', contactSchema)
 
-module.exports = {Contact}
+const addContactJoiSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(100)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  phone: Joi.string().length(10).pattern(codeRegexp).required(),
+  favorite: Joi.boolean()
+})
+
+const updateContactJoiSchema = Joi.object().keys({
+  name: Joi.string()
+    .min(3)
+    .max(100)
+    .optional(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .optional(),
+  phone: Joi.string().length(10).pattern(codeRegexp).optional()
+})
+
+module.exports = { Contact, addContactJoiSchema, updateContactJoiSchema }

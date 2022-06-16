@@ -7,19 +7,20 @@ const {
   updateContactController,
   deleteContact
 } = require('../../src/controllers')
+const { validation } = require('../../src/middlewares/validationMiddleware')
 
 const {
-  updateContactValidation,
-  addContactValidation
-} = require('../../src/middlewares/validationMiddleware')
+  addContactJoiSchema,
+  updateContactJoiSchema
+} = require('../../models/contactSchema')
 
 router.get('/', getList)
 
 router.get('/:contactId', getContact)
 
-router.post('/', addContactValidation, addContactController)
+router.post('/', validation(addContactJoiSchema), addContactController)
 
-router.put('/:contactId', updateContactValidation, updateContactController)
+router.put('/:contactId', validation(updateContactJoiSchema), updateContactController)
 
 router.delete('/:contactId', deleteContact)
 
