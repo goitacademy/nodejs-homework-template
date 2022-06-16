@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
 const userIsAuth = async (req, res, next) => {
-  console.log(req.user);
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
@@ -20,7 +19,6 @@ const userIsAuth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log("error.message", error.message);
     if (error.message === "Invalid signature") {
       error.status = 401;
     }

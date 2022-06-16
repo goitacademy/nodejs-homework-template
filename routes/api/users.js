@@ -7,6 +7,7 @@ const userIsAuth = require("../../middlewares/userIsAuth");
 const {
   joiUserRegisterSchema,
   joiUserLoginSchema,
+  joiUserSubscriptionUpdateSchema,
 } = require("../../models/users");
 const userController = require("../../controllers/userLogin/userController");
 
@@ -14,11 +15,8 @@ router.post(
   "/signup",
   userValidation(joiUserRegisterSchema),
   controllerWrapper(userController.register)
-  //   controllerWrapper(register)
-  //   (req, res) => {
-  //     res.send("<h2>Register Page</h2>");
-  //   }
 );
+
 router.post(
   "/login",
   userValidation(joiUserLoginSchema),
@@ -31,6 +29,13 @@ router.get(
   "/current",
   userIsAuth,
   controllerWrapper(userController.getCurrentUser)
+);
+
+router.patch(
+  "/",
+  userIsAuth,
+  userValidation(joiUserSubscriptionUpdateSchema),
+  controllerWrapper(userController.updateSubscription)
 );
 
 module.exports = router;

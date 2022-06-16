@@ -3,13 +3,12 @@ const CreateError = require("http-errors");
 const controllerWrapper = (controller) => {
   return async (req, res, next) => {
     try {
-      console.log("wrapper", controller);
+      console.log("controllerWrapper", controller);
       await controller(req, res, next);
     } catch (error) {
       console.log("error");
       const newError = requestErrorType(controller, error);
       next(
-        // error,
         CreateError(newError.errorStatus, newError.errorMessage, {
           statusOperation: false,
           code: newError.errorStatus,

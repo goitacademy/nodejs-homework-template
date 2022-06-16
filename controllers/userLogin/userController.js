@@ -73,9 +73,25 @@ const getCurrentUser = (req, res) => {
   });
 };
 
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  const data = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+  res.json({
+    message: "contact successfully edit",
+    statusOperation: "success",
+    data,
+  });
+};
+
 module.exports = {
   register,
   login,
   logout,
   getCurrentUser,
+  updateSubscription,
 };

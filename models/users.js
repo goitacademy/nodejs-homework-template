@@ -33,7 +33,10 @@ const joiUserRegisterSchema = Joi.object({
     // .regex(new RegExp("^[a-zA-Z0-9]{3,30}$"))
     .trim()
     .required(),
-  subscription: Joi.string().default("starter").trim(),
+  subscription: Joi.string()
+    .default("starter")
+    .valid("starter", "pro", "business")
+    .trim(),
   token: [Joi.string(), Joi.number()],
 });
 
@@ -45,8 +48,13 @@ const joiUserLoginSchema = Joi.object({
     .required(),
 });
 
+const joiUserSubscriptionUpdateSchema = Joi.object({
+  subscription: Joi.any().valid("starter", "pro", "business"),
+});
+
 module.exports = {
   User,
   joiUserRegisterSchema,
   joiUserLoginSchema,
+  joiUserSubscriptionUpdateSchema,
 };
