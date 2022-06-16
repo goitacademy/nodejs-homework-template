@@ -1,49 +1,23 @@
 const express = require("express");
-const contactsDB = require("../../models/contacts");
 const { addValidation, updateValidation } = require("../middlewares/middlewaresapi.js");
-
 const router = express.Router();
+const {
+    getAllContacts,
+    getOneContact,
+    addContact,
+    deletContact,
+    updateContact,
+} = require("../../controllers/contacts/contacts");
 
-router.get("/", async (req, res, next) => {
-    const allContacts = await contactsDB.listContacts();
-    res.status(200).json({ message: "status 200", response: allContacts });
-});
+router.get("/", getAllContacts);
 
-router.get("/:contactId", async (req, res, next) => {
-    const contactByID = await contactsDB.getContactById(req.params.contactId);
-    if (!contactByID) {
-        res.status(404).json({ message: "status 404, Contact not found", response: null });
-        throw new Error(`Contact ${req.params.contactId} not found`);
-    }
-    res.status(200).json({ message: "status 200", response: contactByID });
-});
+router.get("/:contactId", getOneContact);
 
 // add contact
-router.post("/", addValidation, async (req, res, next) => {
-    const newContact = await contactsDB.addContact(req.body);
-    if (!newContact) {
-        res.status(404).json({ message: "status 404", response: null });
-        throw new Error(`Contact not created, i am sorry try again`);
-    }
-    res.status(200).json({ message: "status 200", response: newContact });
-});
+router.post("/", addValidation, addContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-    const removeContact = await contactsDB.removeContact(req.params.contactId);
-    if (!removeContact) {
-        res.status(404).json({ message: "status 404, Contact not found", response: null });
-        throw new Error(`Contact ${req.params.contactId} not found`);
-    }
-    res.status(204).json({ message: "status 204", response: removeContact });
-});
+router.delete("/:contactId", deletContact);
 
-router.put("/:contactId", updateValidation, async (req, res, next) => {
-    const editContact = await contactsDB.updateContact(req.params.contactId, req.body);
-    if (!editContact) {
-        res.status(404).json({ message: "status 404, Contact not found", response: null });
-        throw new Error(`Contact ${req.params.contactId} not found`);
-    }
-    res.status(200).json({ message: "status 200", response: editContact });
-});
+router.put("/:contactId", updateValidation, updateContact);
 
 module.exports = router;
