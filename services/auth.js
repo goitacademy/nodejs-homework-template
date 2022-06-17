@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const gravatar = require('gravatar');
 
 const { User } = require('../models/schemas/user');
 const { createError } = require("../helpers/errors");
@@ -18,11 +19,13 @@ const registerUser = async (userData) => {
 
     const password = userData.password;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const avatarURL = gravatar.url(userData.email);
 
     const user =
         await User.create({
             ...userData,
             password: hashedPassword,
+            avatarURL
         });
 
     return user;
@@ -57,6 +60,7 @@ const logoutUser = async (id) => {
     }
     await User.findByIdAndUpdate(id, {token: null})
 }
+
 
 
 
