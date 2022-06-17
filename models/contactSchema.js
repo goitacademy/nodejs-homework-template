@@ -5,17 +5,17 @@ const {codeRegexp} = require('./constants')
 const contactSchema = Schema({
   name: {
     type: String,
-    required: [true, 'Set name for contact'],
+    required: true,
   },
   email: {
     type: String,
     unique: true,
-    required: [true, 'Set email for contact'],
+    required: true,
   },
   phone: {
     type: String,
     match: codeRegexp,
-    required: [true, 'Set phone for contact'],
+    required: true,
   },
   favorite: {
     type: Boolean,
@@ -33,7 +33,10 @@ const addContactJoiSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
-  phone: Joi.string().length(10).pattern(codeRegexp).required(),
+  phone: Joi.string()
+    .length(10)
+    .pattern(codeRegexp)
+    .required(),
   favorite: Joi.boolean()
 })
 
@@ -45,7 +48,10 @@ const updateContactJoiSchema = Joi.object().keys({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .optional(),
-  phone: Joi.string().length(10).pattern(codeRegexp).optional()
+  phone: Joi.string()
+    .length(10)
+    .pattern(codeRegexp)
+    .optional()
 })
 
 module.exports = { Contact, addContactJoiSchema, updateContactJoiSchema }
