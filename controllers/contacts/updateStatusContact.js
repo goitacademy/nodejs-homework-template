@@ -9,7 +9,7 @@ const updateStatusContact = async (req, res) => {
     { new: true }
   );
   if (!result) {
-    throw new NotFound(`Not found`);
+    throw new NotFound({ status: 400, message: "missing field favorite" });
   }
   res.json({
     status: "success",

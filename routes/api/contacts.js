@@ -8,7 +8,6 @@ const validateMiddlewareFavorite = validation(favoriteContactSchema);
 router.get("/", ctrlWrapper(ctrl.listContacts));
 router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
-router.post("/", ctrlWrapper(ctrl.addContact));
 router.delete("/:contactId", ctrlWrapper(ctrl.deleteContact));
 router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateContact));
 router.patch(
