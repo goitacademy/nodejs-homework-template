@@ -1,6 +1,6 @@
 const { Contact } = require('../../../models/contactSchema')
 
-const addContactController = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   const { body } = req
 
     await Contact.create(body)
@@ -9,5 +9,5 @@ const addContactController = async (req, res, next) => {
 }
 
 module.exports = {
-  addContactController
+  addContact
 }

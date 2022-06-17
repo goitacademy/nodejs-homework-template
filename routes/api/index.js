@@ -3,7 +3,7 @@ const router = express.Router()
 const {
   getList,
   getContact,
-  addContactController,
+  addContact,
   updateContactController,
   deleteContact
 } = require('../../src/controllers')
@@ -18,7 +18,7 @@ router.get('/', getList)
 
 router.get('/:contactId', getContact)
 
-router.post('/', validation(addContactJoiSchema), addContactController)
+router.post('/', validation(addContactJoiSchema), addContact)
 
 router.put('/:contactId', validation(updateContactJoiSchema), updateContactController)
 
