@@ -7,14 +7,12 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-} = require("../../models/contacts");
+} = require("../../controllers/contacts/contacts");
 
+const { auth } = require("../../middlewares/auth");
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.json({ contacts });
-});
+router.get("/", auth, listContacts);
 
 router.get("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
@@ -25,13 +23,7 @@ router.get("/:contactId", async (req, res, next) => {
   res.status(200).json({ contact });
 });
 
-router.post("/", async (req, res, next) => {
-  const contact = await addContact(req.body);
-  if (contact === null) {
-    return res.status(400).json({ message: "missing required name field" });
-  }
-  return res.status(200).json({ status: "success", contact });
-});
+router.post("/", auth, addContact);
 
 router.delete("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
