@@ -1,20 +1,20 @@
-const {
-  getById,
-  updateContact
-} = require('../../../models/contacts')
+const { Contact } = require('../../../models/contactSchema')
+const { NotFound } = require('http-errors')
 
 const updateContactController = async (req, res) => {
   const { body, params } = req
-  const isExistContact = await getById(params.contactId)
 
-  if(body.length === 0) {
-    return res.status(400).json({ 'message': 'missing fields', status: 'failure' })
+ const result = await Contact.findByIdAndUpdate(params.contactId, body, { new: true})
+
+  if(!result) {
+    throw new NotFound(`Contact with id=${params.contactId} not found`)
   }
-  else if(isExistContact) { 
-    const result = await updateContact(params.contactId, body)
-    return res.status(200).json({ body: result, message: 'contact update', status: 'success' })
+    
+  else {
+    res.status(200)
+      .json({ body: result, message: 'contact update', code: 200, status: 'success' })
   }
-  else { return res.status(404).json({ message: 'Not found', status: 'failure' }) }
+
 }
 
 module.exports = {
