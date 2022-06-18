@@ -1,8 +1,7 @@
 const Joi = require('joi')
-const {
-  HTTP_CODES,
-  SUBSCRIPTION_TYPE,
-} = require('../../../helpers/constants')
+const { SUBSCRIPTION_TYPE }
+= require('../../../helpers/constants')
+const validate = require("../../../helpers/validate")
 
 const schemaSignupUser = Joi.object({
   email: Joi.string()
@@ -28,18 +27,6 @@ const schemaPatchSubscriptionUser = Joi.object({
     .required()
     .valid(...Object.values(SUBSCRIPTION_TYPE)),
 })
-
-const validate = async (schema, obj, next) => {
-  try {
-    await schema.validateAsync(obj)
-    return next()
-  } catch (error) {
-    next({
-      status: HTTP_CODES.BAD_REQUEST,
-      message: error.message.replace(/"/g, ''),
-    })
-  }
-}
 
 module.exports.validationSignupUser = ({ body }, _, next) => {
   return validate(schemaSignupUser, body, next)

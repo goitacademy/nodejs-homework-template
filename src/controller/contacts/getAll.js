@@ -4,8 +4,9 @@ const contactServices = require('../../services')
 
 const getAll = async (req, res, next) => {
   try {
-    const data = await contactServices.listContacts()
-    res.status(HTTP_CODES.OK).json({
+    const userId = req.user.id
+    const data = await contactServices.getContacts(userId, req.query)
+    return res.status(HTTP_CODES.OK).json({
       status: STATUS.SUCCESS,
       code: HTTP_CODES.OK,
       data,

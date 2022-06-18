@@ -1,4 +1,4 @@
-const model = require('../../schemas/user')
+const model = require('../../model/users')
 
 const findUserByEmail = async email => {
   try {

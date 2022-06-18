@@ -5,9 +5,27 @@ class ContactServices {
     this.repositories = { contacts: contactsRepository }
   }
 
-  async listContacts() {
+  async getContacts(userId, query) {
     try {
-      const data = await this.repositories.contacts.listContacts()
+      const {
+        docs: contacts,
+        totalDocs: total,
+        limit,
+        offset,
+      } = await this.repositories.contacts.getContacts(userId, query)
+      return { contacts, total, limit, offset }
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
+  async getContactById(userId, contactId) {
+    try {
+      const data = await this.repositories.contacts.getContactById(
+        userId,
+        contactId,
+      )
       return data
     } catch (error) {
       console.error(error)
@@ -15,9 +33,12 @@ class ContactServices {
     }
   }
 
-  async getContactById(contactId) {
+  async removeContact(userId, contactId) {
     try {
-      const data = await this.repositories.contacts.getContactById(contactId)
+      const data = await this.repositories.contacts.removeContact(
+        userId,
+        contactId,
+      )
       return data
     } catch (error) {
       console.error(error)
@@ -25,9 +46,9 @@ class ContactServices {
     }
   }
 
-  async removeContact(contactId) {
+  async addContact(userId, body) {
     try {
-      const data = await this.repositories.contacts.removeContact(contactId)
+      const data = await this.repositories.contacts.addContact(userId, body)
       return data
     } catch (error) {
       console.error(error)
@@ -35,19 +56,10 @@ class ContactServices {
     }
   }
 
-  async addContact(body) {
-    try {
-      const data = await this.repositories.contacts.addContact(body)
-      return data
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-  }
-
-  async updateContact(contactId, body) {
+  async updateContact(userId, contactId, body) {
     try {
       const data = await this.repositories.contacts.updateContact(
+        userId,
         contactId,
         body,
       )
@@ -58,9 +70,10 @@ class ContactServices {
     }
   }
 
-  async updateStatusContact(contactId, { favorite }) {
+  async updateContactFavorite(userId, contactId, { favorite }) {
     try {
-      const data = await this.repositories.contacts.updateStatusContact(
+      const data = await this.repositories.contacts.updateContactFavorite(
+        userId,
         contactId,
         { favorite },
       )

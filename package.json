@@ -10,27 +10,35 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.30.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv-expand": "^8.0.3",
     "express": "4.17.1",
     "express-rate-limit": "^6.4.0",
     "express-session": "^1.17.3",
+    "gravatar": "^1.8.2",
     "helmet": "^5.1.0",
+    "http-error": "0.0.6",
+    "jimp": "^0.16.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
-    "morgan": "1.10.0",
+    "mongoose-paginate-v2": "^1.6.3",
+    "morgan": "^1.10.0",
     "passport-jwt": "^4.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^28.1.2",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "2.0.15",
+    "supertest": "^6.2.3"
   }
 }

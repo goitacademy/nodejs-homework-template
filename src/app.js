@@ -2,6 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
+const path = require('path')
 
 const { HTTP_CODES, STATUS } = require('./helpers/constants')
 const { json } = require('./config/limits.json')
@@ -11,13 +12,30 @@ const { usersRouter } = require('./routes')
 
 const app = express()
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+switch (app.get('env')) {
+  case 'development':
+    app.use(logger('dev'))
+    break
+  case 'production':
+    app.use(logger('short'))
+    break
+  case 'test':
+    break
+  default:
+    break
+}
+
+// const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+// app.use(logger(formatsLogger))
 
 app.set('trust proxy', 1)
 app.use(helmet())
-app.use(logger(formatsLogger))
+
 app.use(cors())
 app.use(express.json({ limit: json.limit }))
+
+app.use(express.static(path.join(process.cwd(), 'public')))
+
 app.use('/api/', appLimiter)
 app.use('/api/v1/contacts', contactsRouter)
 app.use('/api/v1/users', usersRouter)

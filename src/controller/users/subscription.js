@@ -4,24 +4,38 @@ const { userServices } = require('../../services')
 
 const subscription = async (req, res, next) => {
   try {
+    const { body } = req
     const userID = req.user.id
-    const user = await userServices.updateUserSubscription(userID, req.body)
+    
 
-    if (user) {
-      return res.status(HTTP_CODES.OK).json({
+     if (body.subscription === undefined) {
+      return next({
+        status: HTTP_CODES.BAD_REQUEST,
+        code: HTTP_CODES.BAD_REQUEST,
+        message: 'missing field subscription',
+      })
+    }
+    const data = await userServices.subscription(userID, body)
+    return data
+      ? res.status(HTTP_CODES.OK).json({
         status: STATUS.SUCCESS,
         code: HTTP_CODES.OK,
         data: {
           user: {
-            email: user.email,
-            subscription: user.subscription,
+            email: data.email,
+            subscription: data.subscription,
           },
         },
       })
-    }
-  } catch (error) {
+      : next({
+        status: HTTP_CODES.NOT_FOUND,
+        code: HTTP_CODES.NOT_FOUND,
+        message: 'Not found',
+      })
+
+        } catch (error) {
     next(error)
   }
 }
-
+  
 module.exports = subscription

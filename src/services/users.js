@@ -5,9 +5,9 @@ class UserServices {
     this.repositories = { users: usersRepository }
   }
 
-  async createUser(body) {
+ async signupUser(body) {
     try {
-      const data = await this.repositories.users.createUser(body)
+      const data = await this.repositories.users.signupUser(body)
       return data
     } catch (error) {
       console.error(error)
@@ -35,12 +35,25 @@ class UserServices {
     }
   }
 
-  async updateUserSubscription(userId, body) {
+  async updateUserSubscription(userId, { subscription }) {
     try {
       const data = await this.repositories.users.updateUserSubscription(
         userId,
-        body,
+        { subscription },
       )
+      return data
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
+  async updateUserAvatar(userId, avatarURL, avatarCloudId = null) {
+    try {
+      const data = await this.repositories.users.updateUserAvatar(userId, {
+        avatarURL,
+        avatarCloudId,
+      })
       return data
     } catch (error) {
       console.error(error)
@@ -58,5 +71,6 @@ class UserServices {
     }
   }
 }
+
 
 module.exports = { UserServices }

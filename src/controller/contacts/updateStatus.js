@@ -8,6 +8,7 @@ const updateStatus = async (req, res, next) => {
       params: { contactId },
       body,
     } = req
+    const userId = req.user.id
     if (body.favorite === undefined) {
       return next({
         status: HTTP_CODES.BAD_REQUEST,
@@ -15,8 +16,8 @@ const updateStatus = async (req, res, next) => {
         message: 'missing field favorite',
       })
     }
-    const data = await contactServices.updateStatusContact(contactId, body)
-    data
+    const data = await contactServices.updateStatusContact(contactId, body, userId)
+    return data
       ? res.status(HTTP_CODES.OK).json({
         status: STATUS.SUCCESS,
         code: HTTP_CODES.OK,

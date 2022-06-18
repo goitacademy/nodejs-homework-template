@@ -1,6 +1,7 @@
 const passport = require('passport')
 const { Strategy, ExtractJwt } = require('passport-jwt')
-require('dotenv').config()
+require('dotenv-expand')(require('dotenv').config())
+
 const { userServices } = require('../services')
 const { HTTP_CODES, STATUS } = require('../helpers/constants')
 

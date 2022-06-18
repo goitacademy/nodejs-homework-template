@@ -1,6 +1,6 @@
 const model = require('../../model/contacts')
 
-const updateContact = async (userId, contactId, body) => {
+const updateStatusContact = async (userId, contactId, body) => {
   try {
     const data = await model.findByIdAndUpdate(
       { _id: contactId, owner: userId },
@@ -16,4 +16,4 @@ const updateContact = async (userId, contactId, body) => {
   }
 }
 
-module.exports = updateContact
+module.exports = updateStatusContact

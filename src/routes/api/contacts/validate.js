@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { HTTP_CODES } = require('../../../helpers/constants.js')
+const validate = require('../../../helpers/validate')
 
 const schemaAddContact = Joi.object({
   name: Joi.string().min(2).max(25).required(),
@@ -33,18 +33,6 @@ const schemaUpdateStatusContact = Joi.object({
   favorite: Joi.boolean().optional(),
 })
 
-const validate = async (schema, obj, next) => {
-  try {
-    await schema.validateAsync(obj)
-    return next()
-  } catch (error) {
-    next({
-      status: HTTP_CODES.BAD_REQUEST,
-      message: error.message.replace(/"/g, ''),
-    })
-  }
-}
-
 module.exports.validationAddContact = ({ body }, _, next) => {
   return validate(schemaAddContact, body, next)
 }
@@ -52,6 +40,6 @@ module.exports.validationAddContact = ({ body }, _, next) => {
 module.exports.validationUpdateContact = ({ body }, _, next) => {
   return validate(schemaUpdateContact, body, next)
 }
-module.exports.validationUpdateStatusContact = ({ body }, _, next) => {
+module.exports.validationSetFavoriteContact = ({ body }, _, next) => {
   return validate(schemaUpdateStatusContact, body, next)
 }

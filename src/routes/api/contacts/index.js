@@ -6,22 +6,22 @@ const guard = require('./../../../helpers/guard')
 const {
   validationAddContact,
   validationUpdateContact,
-  validationUpdateStatusContact,
-} = require('./validate')
+  validationSetFavoriteContact,
+} = require('./validate.js')
 
 router
-  .get('/', guard, contactsController.getAll)
-  .get('/:contactId', guard, contactsController.getById)
-  .post('/', [guard, validationAddContact], contactsController.add)
-  .delete('/:contactId', guard, contactsController.remove)
+  .get('/', guard, contactsController.getContacts)
+  .get('/:contactId', guard, contactsController.getContactById)
+  .post('/', [guard, validationAddContact], contactsController.addContact)
+  .delete('/:contactId', guard, contactsController.removeContact)
   .patch(
     '/:contactId',
     [guard, validationUpdateContact],
-    contactsController.update,
+    contactsController.updateContact,
   )
   .patch(
     '/:contactId/favorite',
-    [guard, validationUpdateStatusContact],
-    contactsController.updateStatus,
+    [guard, validationSetFavoriteContact],
+    contactsController.updateContactFavorite,
   )
 module.exports = router
