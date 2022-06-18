@@ -4,8 +4,8 @@ const ObjectID = require("bson-objectid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
-const updateContacts = async (contacts)=> {
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+const updateContacts = async (contacts) => {
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 }
 
 const listContacts = async () => {
@@ -47,7 +47,7 @@ const updateContact = async (contactId, body) => {
   if(idx === -1){
     return null;
   }
-  contacts[idx] = {...body, contactId};
+  contacts[idx] = {...body, id: contactId};
   updateContacts(contacts);
   return contacts[idx];
 }
