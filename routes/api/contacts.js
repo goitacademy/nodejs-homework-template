@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-
+// работаем с раутами
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
