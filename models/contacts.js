@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+const uuid = require("uuid");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 
@@ -18,10 +19,13 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
+  const contactToRemove =
+    contacts[contacts.findIndex((contact) => contact.id === contactId)];
+  console.log(contactToRemove);
   const newContacts = contacts.filter(({ id }) => id !== contactId);
   try {
     await fs.writeFile(contactsPath, JSON.stringify(newContacts));
-    console.log(`Contact with id=${contactId} was removed`);
+    return contactToRemove;
   } catch (err) {
     console.log(err.message);
   }
@@ -30,7 +34,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const contacts = await listContacts();
-  const newContact = { id: require("nanoid").nanoid(), name, email, phone };
+  const newContact = { id: uuid.v1(), name, email, phone };
   const newContacts = [...contacts, newContact];
   try {
     await fs.writeFile(contactsPath, JSON.stringify(newContacts));
