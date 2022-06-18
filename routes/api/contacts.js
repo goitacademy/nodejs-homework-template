@@ -33,8 +33,9 @@ router.get(
     const contact = await contactOperations.getContactById(contactId);
     if (contact) {
       res.status(200).json(contact);
+    } else {
+      throw new CreateError(404, { message: "Not found" });
     }
-    throw new CreateError(404, { message: "Not found" });
   })
 );
 
@@ -75,8 +76,9 @@ router.put(
     );
     if (updatedContact) {
       res.status(200).json(updatedContact);
+    } else {
+      throw new CreateError(400, { message: "Not found" });
     }
-    throw new CreateError(400, { message: "Not found" });
   })
 );
 
