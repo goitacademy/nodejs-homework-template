@@ -1,254 +1,79 @@
-# Домашнее задание 4
+# Домашнее задание 5
 
-Создайте ветку `hw04-auth` из ветки `master`.
+Создай ветку `hw05-avatars` из ветки `master`.
 
-Продолжите создание REST API для работы с коллекцией контактов. Добавьте логику аутентификации/авторизации пользователя с помощью [JWT](https://jwt.io/).
+Продолжи создание REST API для работы с коллекцией контактов. Добавь возможность загрузки аватарки пользователя через [Multer](https://github.com/expressjs/multer).
 
 ## Шаг 1
 
-В коде создайте схему и модель пользователя для коллекции `users`.
+Создай папку `public` для раздачи статики. В этой папке сделай папку `avatars`. Настрой Express на раздачу статических файлов из папки `public`.
 
-```js
-{
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter"
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-}
+Положи любое изображение в папку `public/avatars` и проверь что раздача статики работает. При переходе по такому URL браузер отобразит изображение.
+
+```shell
+http://localhost:<порт>/avatars/<имя файла с расширением>
 ```
-
-Чтобы каждый пользователь работал и видел только свои контакты в схеме контактов добавьте свойство `owner`
-
-```js
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
-    }
-```
-
-Примечание: `'user'` - название коллекции (в единственном числе), в которой хранятся пользователи.
 
 ## Шаг 2
 
-### Регистрация
-
-Создайте эндпоинт [`/users/signup`](#registration-request)
-
-Сделать валидацию всех обязательных полей (`email` и `password`). При ошибке валидации вернуть
-[Ошибку валидации](#registration-validation-error).
-
-В случае успешной валидации в модели `User` создать пользователя по данным которые прошли валидацию. Для засолки паролей используй [bcrypt](https://www.npmjs.com/package/bcrypt) или [bcryptjs](https://www.npmjs.com/package/bcryptjs)
-
-- Если почта уже используется кем-то другим, вернуть [Ошибку Conflict](#registration-conflict-error).
-- В противном случае вернуть [Успешный ответ](#registration-success-response).
-
-#### Registration request
+В схему пользователя добавь новое свойство `avatarURL` для хранения изображения.
 
 ```shell
-POST /users/signup
-Content-Type: application/json
-RequestBody: {
-  "email": "example@example.com",
-  "password": "examplepassword"
+{
+  ...
+  avatarURL: String,
+  ...
 }
 ```
 
-#### Registration validation error
-
-```shell
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: <Ошибка от Joi или другой библиотеки валидации>
-```
-
-#### Registration conflict error
-
-```shell
-Status: 409 Conflict
-Content-Type: application/json
-ResponseBody: {
-  "message": "Email in use"
-}
-```
-
-#### Registration success response
-
-```shell
-Status: 201 Created
-Content-Type: application/json
-ResponseBody: {
-  "user": {
-    "email": "example@example.com",
-    "subscription": "starter"
-  }
-}
-```
-
-### Логин
-
-Создайте эндпоинт [`/users/login`](#login-request)
-
-В модели `User` найти пользователя по `email`.
-
-Сделать валидацию всех обязательных полей (`email` и `password`). При ошибке валидации вернуть [Ошибку валидации](#validation-error-login).
-
-- В противном случае, сравнить пароль для найденного юзера, если пароли совпадают создать токен, сохранить в текущем юзере и вернуть [Успешный ответ](#login-success-response).
-- Если пароль или email неверный, вернуть [Ошибку Unauthorized](#login-auth-error).
-
-#### Login request
-
-```shell
-POST /users/login
-Content-Type: application/json
-RequestBody: {
-  "email": "example@example.com",
-  "password": "examplepassword"
-}
-```
-
-#### Login validation error
-
-```shell
-Status: 400 Bad Request
-Content-Type: application/json
-ResponseBody: <Ошибка от Joi или другой библиотеки  валидации>
-```
-
-#### Login success response
-
-```shell
-Status: 200 OK
-Content-Type: application/json
-ResponseBody: {
-  "token": "exampletoken",
-  "user": {
-    "email": "example@example.com",
-    "subscription": "starter"
-  }
-}
-```
-
-#### Login auth error
-
-```shell
-Status: 401 Unauthorized
-ResponseBody: {
-  "message": "Email or password is wrong"
-}
-```
+- Используй пакет [gravatar](https://www.npmjs.com/package/gravatar) для того чтобы при регистрации нового пользователя сразу сгенерить ему аватар по его `email`.
 
 ## Шаг 3
 
-### Проверка токена
+При регистрации пользователя:
 
-Создайте мидлвар для проверки токена и добавь его ко всем маршрутам, которые должны быть защищены.
-
-- Мидлвар берет токен из заголовков `Authorization`, проверяет токен на валидность.
-- В случае ошибки вернуть [Ошибку Unauthorized](#middleware-unauthorized-error).
-- Если валидация прошла успешно, получить из токена `id` пользователя. Найти пользователя в базе данных по этому id.
-- Если пользователь существует и токен совпадает с тем, что находится в базе, записать его данные в `req.user` и вызвать метод`next()`.
-- Если пользователя с таким `id` не существует или токены не совпадают, вернуть [Ошибку Unauthorized](#middleware-unauthorized-error)
-
-#### Middleware unauthorized error
-
-```shell
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
-```
+- Создавай ссылку на аватарку пользователя с помощью [gravatar](https://www.npmjs.com/package/gravatar)
+- Полученный URL сохрани в поле `avatarURL` во время создания пользователя
 
 ## Шаг 4
 
-### Логаут
+Добавь возможность обновления аватарки, создав эндпоинт `/users/avatars` и используя метод `PATCH`.
 
-Создайте ендпоинт [`/users/logout`](#logout-request)
-
-Добавьте в маршрут мидлвар проверки токена.
-
-- В модели `User` найти пользователя по `_id`.
-- Если пользователя не существует вернуть [Ошибку Unauthorized](#logout-unauthorized-error).
-- В противном случае, удалить токен в текущем юзере и вернуть [Успешный ответ](#logout-success-response).
-
-#### Logout request
+![avatar upload from postman](./avatar-upload.png)
 
 ```shell
-GET /users/logout
+# Запрос
+PATCH /users/avatars
+Content-Type: multipart/form-data
 Authorization: "Bearer {{token}}"
-```
+RequestBody: загруженный файл
 
-#### Logout unauthorized error
-
-```shell
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
-```
-
-#### Logout success response
-
-```shell
-Status: 204 No Content
-```
-
-## Шаг 5
-
-### Текущий пользователь - получить данные юзера по токену
-
-Создайте эндпоинт [`/users/current`](#current-user-request)
-
-Добавьте в маршрут мидлвар проверки токена.
-
-- Если пользователя не существует вернуть [Ошибку Unauthorized](#current-user-unauthorized-error)
-- В противном случае вернуть [Успешный ответ](#current-user-success-response)
-
-#### Current user request
-
-```shell
-GET /users/current
-Authorization: "Bearer {{token}}"
-```
-
-#### Current user unauthorized error
-
-```shell
-Status: 401 Unauthorized
-Content-Type: application/json
-ResponseBody: {
-  "message": "Not authorized"
-}
-```
-
-#### Current user success response
-
-```shell
+# Успешный ответ
 Status: 200 OK
 Content-Type: application/json
 ResponseBody: {
-  "email": "example@example.com",
-  "subscription": "starter"
+  "avatarURL": "тут будет ссылка на изображение"
+}
+
+# Неуспешный ответ
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
 }
 ```
 
+- Создай папку tmp в корне проекта и сохраняй в неё загруженную аватарку.
+- Обработай аватарку пакетом [jimp](https://www.npmjs.com/package/jimp) и задай для нее размеры 250 на 250
+- Перенеси аватарку пользователя из папки tmp в папку `public/avatars` и дай ей уникальное имя для конкретного пользователя.
+- Полученный `URL` `/avatars/<имя файла с расширением>` сохрани в поле `avatarURL` пользователя
+
 ## Дополнительное задание - необязательное
 
-- Сделать пагинацию для коллекции контактов (GET /contacts?page=1&limit=20).
-- Сделать фильтрацию контактов по полю избранного (GET /contacts?favorite=true)
-- Обновление подписки (`subscription`) пользователя через эндпоинт `PATCH` `/users`. Подписка должна иметь одно из следующих значений `['starter', 'pro', 'business']`
+### 1. Написать unit-тесты для контроллера входа (login/signin)
+
+При помощи [Jest](https://jestjs.io/ru/docs/getting-started)
+
+- ответ должен иметь статус-код 200
+- в ответе должен возвращаться токен
+- в ответе должен возвращаться объект `user` с 2 полями `email` и `subscription`, имеющие тип данных `String`
