@@ -18,6 +18,7 @@ module.exports = {
         .max(17)
         .required(),
     });
+
     const { error } = schema.validate(req.body);
     if (error) {
       const [errorMessage] = error.details;

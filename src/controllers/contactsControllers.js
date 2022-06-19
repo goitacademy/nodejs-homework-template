@@ -19,7 +19,7 @@ const getOneById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
-    contact.length !== 0
+    contact
       ? res.status(200).json(contact)
       : res.status(400).json({ message: "Not found" });
   } catch (error) {
@@ -40,8 +40,9 @@ const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await removeContact(contactId);
-    contact.length !== 0
-      ? res.status(204).json({ message: "contact deleted" })
+    console.log(contact);
+    contact
+      ? res.status(200).json({ message: `contact: ${contact.name} is deleted` })
       : res.status(404).json({ message: "Not found" });
   } catch (error) {
     next(error);
