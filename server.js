@@ -1,9 +1,9 @@
 const app = require('./app');
 const mongoose = require('mongoose');
 const connecting = mongoose.connect(
- ' mongodb+srv://1q2w3e:1q2w3e@cluster0.myxww8i.mongodb.net/?retryWrites=true',
+ 'mongodb+srv://1q2w3e:1q2w3e@cluster0.myxww8i.mongodb.net/?retryWrites=true',
  {
-   db: "contacts",
+   dbName: "db-contacts",
  }
 );
 connecting
