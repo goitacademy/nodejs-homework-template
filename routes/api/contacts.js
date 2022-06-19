@@ -7,13 +7,14 @@ const router = express.Router();
 
 
 router.get('/', async (req, res, next) => {
-  res.status(200).json(await listContacts());
+  const base = await Contacts.find();
+  res.status(200).json(base);
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const data = await getContactById(req.params.contactId);
+  const data = await Contacts.findById(req.params.contactId);
   if (data) {
-    res.status(200).json(data);
+    res.status(200).json({ data });
   } else {
     res.status(400).json({ message: "Not found" });
   }
@@ -21,20 +22,20 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const body = { id: uuidv4(), ...res.body };
+ 
   const { error } = await schema.validate(req.body);
   if (error) {
     res.status(400).json(error);
     return;
   }
-  res.status(201).json(await addContact(body));
+  res.status(201).json(await Contacts.create(req.body));
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  const data = await removeContact(req.params.contactId);
-  console.log(data);
+  const data = await Contacts.findByIdAndRemove(req.params.contactId);
+ 
   if (data) {
-    res.status(200).json({ message: "contakt deleted" });
+    res.status(200).json({ message: "contakt deleted", data });
 
   } else {
     res.status(404).json({ message: "Not found" });
@@ -47,7 +48,7 @@ router.put('/:contactId', async (req, res, next) => {
   if (error) {
     return res.status(400).json(error);
   }
-  const data = await updateContact(req.params.contactId, body);
+  const data = await Contacts.findByIdAndUpdate(req.params.contactId, body, { new: true});
   if (data) {
     return res.status(200).json(data);
 
