@@ -6,16 +6,16 @@ const { findUserById } = require("../services/users");
 const auth = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
-  console.log("authorisation", authorization);
+
   try {
     if (bearer !== "Bearer") {
-      throw new Unauthorized("Not authorized Bearer");
+      throw new Unauthorized("Not authorized");
     }
 
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await findUserById(id);
-    if (!user) {
-      throw new Unauthorized("Not authorized User");
+    if (!user || !user.token) {
+      throw new Unauthorized("Not authorized");
     }
     req.user = user;
     next();

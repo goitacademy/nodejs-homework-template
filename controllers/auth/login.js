@@ -1,4 +1,4 @@
-const { findUserByEmail } = require("../../services/users");
+const { findUserByEmail, findUserAndUpdate } = require("../../services/users");
 require("dotenv").config();
 const { comparePassword } = require("../../middlewares/passwordHash");
 const { Unauthorized } = require("http-errors");
@@ -20,6 +20,8 @@ const login = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, SECRET_KEY);
+    await findUserAndUpdate(user._id, { token });
+
     res.status(200).json({
       token,
       user: {
