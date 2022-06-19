@@ -1,5 +1,6 @@
 const { User, joiRegistrationShema } = require("../../models/user");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -12,11 +13,13 @@ const registerUser = async (req, res, next) => {
     return res.status(409).json({ message: "Email in use" });
   }
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  await User.create({ email, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  await User.create({ email, password: hashPassword, avatarURL });
   return res.status(201).json({
     user: {
       email,
       subscription: "starter",
+      avatarURL,
     },
   });
 };
