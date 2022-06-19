@@ -1,11 +1,11 @@
-const fs = require("fs/promises");
-const contactsPath = require("./contactsPath");
-const { v4 } = require("uuid");
-const updateContacts = require("./updateContacts");
+// const fs = require("fs/promises");
+// const contactsPath = require("./contactsPath");
+// const { v4 } = require("uuid");
+const updateContacts = require("../models/updateContacts");
+const { Contact } = require("../models/index");
 
 const listContacts = async () => {
-  const list = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(list);
+  const contacts = await Contact.find({});
   return contacts;
 };
 
@@ -31,10 +31,11 @@ const removeContact = async (id) => {
 };
 
 async function addContact(body) {
-  const contacts = await listContacts();
-  const newContact = { id: v4(), ...body };
-  contacts.push(newContact);
-  await updateContacts(contacts);
+  const newContact = await Contact.create(body);
+  // const contacts = await listContacts();
+  // const newContact = { id: v4(), ...body };
+  // contacts.push(newContact);
+  // await updateContacts(contacts);
   return newContact;
 }
 
