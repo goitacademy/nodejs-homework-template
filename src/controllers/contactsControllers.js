@@ -4,6 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  togleFavorite,
 } = require("../models/contacts");
 const { WrongParametrsError } = require("../middlewares/helpers/errors");
 
@@ -12,7 +13,7 @@ const getAll = async (req, res, next) => {
   res.status(200).json(contacts);
 };
 
-const getOneById = async (req, res, next) => {
+const getOneById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
   contact
@@ -25,7 +26,7 @@ const postNew = async (req, res, next) => {
   res.status(201).json(newContact);
 };
 
-const deleteById = async (req, res, next) => {
+const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await removeContact(contactId);
   contact
@@ -33,13 +34,23 @@ const deleteById = async (req, res, next) => {
     : res.status(404).json({ message: "Not found" });
 };
 
-const putById = async (req, res, next) => {
+const putById = async (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw new WrongParametrsError("missing fields");
   }
   const { contactId } = req.params;
   const updatedContact = await updateContact(contactId, req.body);
-  console.log("updated contact : ", updatedContact);
+  updatedContact
+    ? res.status(200).json(updatedContact)
+    : res.status(404).json({ message: "Not found" });
+};
+
+const patchFavotite = async (req, res) => {
+  if (Object.keys(req.body).length === 0) {
+    throw new WrongParametrsError("missing field favorite");
+  }
+  const { contactId } = req.params;
+  const updatedContact = await togleFavorite(contactId, req.body);
   updatedContact
     ? res.status(200).json(updatedContact)
     : res.status(404).json({ message: "Not found" });
@@ -51,4 +62,5 @@ module.exports = {
   postNew,
   deleteById,
   putById,
+  patchFavotite,
 };

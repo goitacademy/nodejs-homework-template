@@ -2,7 +2,7 @@ const Joi = require("joi");
 const { ValidationError } = require("./helpers/errors");
 
 module.exports = {
-  addFieldValidation: (req, res, next) => {
+  addFieldsValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().required(),
       email: Joi.string()
@@ -30,7 +30,7 @@ module.exports = {
     next();
   },
 
-  updateFieldValidation: (req, res, next) => {
+  updateFieldsValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string(),
       email: Joi.string().email({
@@ -44,6 +44,20 @@ module.exports = {
         .min(7)
         .max(17),
       favorite: Joi.boolean(),
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      const [errorMessage] = error.details;
+      throw new ValidationError(`${errorMessage.message}`);
+    }
+    next();
+  },
+
+  updateFaforiteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
     });
 
     const { error } = schema.validate(req.body);

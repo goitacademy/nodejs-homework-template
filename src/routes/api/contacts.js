@@ -8,18 +8,25 @@ const {
   postNew,
   deleteById,
   putById,
+  patchFavotite,
 } = require("../../controllers/contactsControllers");
 
 const {
-  addFieldValidation,
-  updateFieldValidation,
+  addFieldsValidation,
+  updateFieldsValidation,
+  updateFaforiteValidation,
 } = require("../../middlewares/validation");
 
 router
   .get("/", asyncWrapper(getAll))
   .get("/:contactId", asyncWrapper(getOneById))
-  .post("/", addFieldValidation, asyncWrapper(postNew))
+  .post("/", addFieldsValidation, asyncWrapper(postNew))
   .delete("/:contactId", asyncWrapper(deleteById))
-  .put("/:contactId", updateFieldValidation, asyncWrapper(putById));
+  .put("/:contactId", updateFieldsValidation, asyncWrapper(putById))
+  .patch(
+    "/:contactId/favorite",
+    updateFaforiteValidation,
+    asyncWrapper(patchFavotite)
+  );
 
 module.exports = router;

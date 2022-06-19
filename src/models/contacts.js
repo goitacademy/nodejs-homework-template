@@ -30,10 +30,21 @@ const updateContact = async (contactId, body) => {
   return data;
 };
 
+const togleFavorite = async (contactId, body) => {
+  // const { favorite } = body;
+  const data = await Contacts.findByIdAndUpdate(
+    contactId,
+    { $set: body },
+    { new: true }
+  );
+  return data;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  togleFavorite,
 };
