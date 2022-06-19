@@ -11,4 +11,14 @@ const createUser = async (email, password) => {
 const findUserById = async (id) => {
   return await User.findById(id);
 };
-module.exports = { findUserByEmail, createUser, findUserById };
+
+const findUserAndUpdate = async (id, token) => {
+  return await User.findByIdAndUpdate(id, token);
+};
+
+module.exports = {
+  findUserByEmail,
+  createUser,
+  findUserById,
+  findUserAndUpdate,
+};
