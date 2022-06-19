@@ -10,4 +10,6 @@ router.post("/login", validation(joiUserSchema), ctrl.login);
 
 router.get("/current", auth, usersCtrl.getCurrent);
 
+router.get("/logout", auth, ctrl.logout);
+
 module.exports = router;
