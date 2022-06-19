@@ -1,9 +1,10 @@
-const { contacts, email} = require('../services');
+const { contacts, email } = require('../services');
+
 
 
 const listContacts = async (req, res, next) => {
   try {
-      const allContacts = await contacts.listContacts();
+      const allContacts = await contacts.listContacts(req.query);
       email.sendEmail();
     res.json({
       status: 'success',
@@ -44,7 +45,8 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
     try {
-        const result = await contacts.addContact(req.body);
+        const { _id } = req.user;
+        const result = await contacts.addContact(req.body, _id);
         res.status(201).json({
             status: 'success',
             code: 201,
