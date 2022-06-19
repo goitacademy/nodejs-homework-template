@@ -1,3 +1,3 @@
 const validation = require('./validation');
-
-module.exports = validation;
+const userAuthorization = require('./userAuthorization');
+module.exports = { validation, userAuthorization };

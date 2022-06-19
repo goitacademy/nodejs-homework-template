@@ -11,11 +11,24 @@
   - "favorite": false
   - }
 
-### REST API
+### Пример регистрации нового пользователя:
+
+- {
+  - "name": "test",
+  - "email": "test@gmail.com",
+  - password: "password",
+  - subscription: ["starter", "pro", "business"], default: "starter" },
+
+}
+
+### REST API CONTACTS
 
 1. (метод get) список всех контактов
 
 - /api/v1/contacts/
+
+  - пагинация для коллекции списка контактов (по умолчанию page=1, limit=20)
+  - фильтрация коллекции списка контактов по полю favorite=true или favorite=false по умолчанию выводяться все контакты независимо от favorite.
 
 2. (метод get) информация о контакте по ID
 
@@ -36,6 +49,32 @@
 6. (метод patch) изменение статуса контакта по ID (с переданным boolean полем {favorite})
 
 - /api/v1/contacts/:contactId/favorite
+
+7. (метод get) список всех контактов с boolean полем {favorite})
+
+- /api/v1/contacts?favorite=false или /api/v1/contacts?favorite=true
+
+### REST API USERS
+
+1. (метод post) регистрация нового пользователя
+
+- /api/v1/users/signup
+
+2. (метод post) логин входа пользователя в личный кабинет
+
+- /api/v1/users/login
+
+3. (метод post) разлогинить пользователя выйти из личного кабинета
+
+- /api/v1/users/logout
+
+4. (метод get) получить данные о текущем пользователе
+
+- /api/v1/users/current
+
+5. (метод patch) обновление поля "subscription", текущего пользователе из следующих возможных вариантов, ['starter', 'pro', 'business'] по умолчанию "starter"
+
+- /api/v1/users/
 
 ### Команды:
 
