@@ -7,18 +7,11 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const data = await Contacts.findById(contactId);
-  // if (!data) {
-  //   throw new WrongParametrsError(`no contact with id ${id}`);
-  // }
   return data;
 };
 
-const addContact = async ({ name, email, phone }) => {
-  const newContact = new Contacts({
-    name,
-    email,
-    phone,
-  });
+const addContact = async (body) => {
+  const newContact = new Contacts(body);
   const data = await newContact.save();
   return data;
 };

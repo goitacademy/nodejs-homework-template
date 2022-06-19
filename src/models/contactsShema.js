@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const contaatsSchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     required: [true, "Set name for contact"],
   },
   email: {
