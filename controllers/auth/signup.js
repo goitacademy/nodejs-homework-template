@@ -1,11 +1,11 @@
 const { Conflict } = require("http-errors");
-const { findUser, createUser } = require("../../services/auth");
+const { findUserByEmail, createUser } = require("../../services/users");
 const { hashPassword } = require("../../middlewares/passwordHash");
 
 const signup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await findUser({ email });
+    const user = await findUserByEmail({ email });
     const hashedPassword = hashPassword(password);
 
     if (user) {

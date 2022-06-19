@@ -1,4 +1,4 @@
-const { findUser } = require("../../services/auth");
+const { findUserByEmail } = require("../../services/users");
 require("dotenv").config();
 const { comparePassword } = require("../../middlewares/passwordHash");
 const { Unauthorized } = require("http-errors");
@@ -8,7 +8,7 @@ const { SECRET_KEY } = process.env;
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await findUser({ email });
+    const user = await findUserByEmail({ email });
     const validPassword = comparePassword(password, user.password);
 
     if (!user || !validPassword) {
