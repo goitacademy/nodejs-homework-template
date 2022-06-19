@@ -12,4 +12,6 @@ router.get("/current", auth, usersCtrl.getCurrent);
 
 router.get("/logout", auth, ctrl.logout);
 
+router.patch("/", auth, usersCtrl.updateSubscription);
+
 module.exports = router;
