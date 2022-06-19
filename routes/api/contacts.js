@@ -1,14 +1,9 @@
 const express = require('express');
+const Contacts = require('../../models/contacts');
+const { schema } = require('../../validator');
 
 const router = express.Router();
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
-} = require('../../models/contacts');
-const { schema } = require('../../validator');
+
 
 
 router.get('/', async (req, res, next) => {
