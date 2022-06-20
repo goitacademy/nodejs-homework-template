@@ -5,16 +5,12 @@ const Joi = require('joi')
 
 const router = express.Router()
 
-
-// Схема валидации запросов
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required()
 })
 
-
-// Запрос за всеми контактами
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts()
@@ -27,8 +23,6 @@ router.get('/', async (req, res, next) => {
   
 })
 
-
-// Запрос за контактом по id
 router.get('/:id', async (req, res, next) => {
   try {
     const {id} = req.params
@@ -46,8 +40,6 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-
-// добавления контакта
 router.post('/', async (req, res, next) => {
     try {
       const {error} = contactAddSchema.validate(req.body)
@@ -64,7 +56,6 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-// удаление контакта
 router.delete('/:id', async (req, res, next) => {
   try {
     const {id} = req.params
@@ -84,7 +75,6 @@ router.delete('/:id', async (req, res, next) => {
   }
 })
 
-// обновление контакта
 router.put('/:id', async (req, res, next) => {
   try {
       const {error} = contactAddSchema.validate(req.body)
