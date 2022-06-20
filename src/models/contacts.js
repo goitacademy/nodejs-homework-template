@@ -31,7 +31,6 @@ const updateContact = async (contactId, body) => {
 };
 
 const togleFavorite = async (contactId, body) => {
-  // const { favorite } = body;
   const data = await Contacts.findByIdAndUpdate(
     contactId,
     { $set: body },
