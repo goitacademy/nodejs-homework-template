@@ -35,7 +35,7 @@ const addContactJoiSchema = Joi.object({
     .required(),
   phone: Joi.string()
     .length(10)
-    .pattern(codeRegexp)
+    .pattern(codeRegexp, 'phone number not valid')
     .required(),
   favorite: Joi.boolean()
 })

@@ -3,22 +3,20 @@
 const validation = (schema) => {
 	return (req, res, next) => {
     
-		const { error } = schema.validate(req.body)
-						
-				if (error) {					
-					res.status(400).json({
-						status: 'error',
-						message: 'Invalid request data',
-						data: req.body
-					});
-
-					next(error)
-				}
-
-				next()
+		try {
+			schema.validate(req.body)
+		} catch (err) {
+			res.status(400)
+				.json({
+								status: 'error',
+								message: 'Invalid request data',
+								data: req.body
+							})
+		}
+		next()
 	}
 }
 
-  module.exports = {
+module.exports = {
 		validation
   }
