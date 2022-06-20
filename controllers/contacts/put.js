@@ -1,0 +1,30 @@
+const Joi = require('joi')
+const actions = require('../../models/contacts')
+const createError = require('../../helpers/error')
+
+const putSchema = Joi.object({
+  name: Joi.string().max(50),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ru'] } }),
+  phone: Joi.string().pattern(/^[0-9+()-_ ]*$/).max(20)
+})
+
+const put = async (req, res, next) => {
+  try {
+    const { error } = putSchema.validate(req.body)
+    if (error) {
+      error.status = 400
+      throw new Error(error.message)
+    }
+    const {name, email, phone} = req.body
+    if (!name && !email && !phone) {
+      throw createError(400, 'Missing Fields')
+    }
+    const result = await actions.updateContact(req.params.contactId, req.body)
+    if (result === null) { // если контакта с таким id нет
+      throw createError(404)
+    }
+    res.json(result)
+  } catch (error) { next(error) }
+}
+
+module.exports = put
