@@ -1,19 +1,16 @@
-const {
-  getById,
-  removeContact
-} = require('../../../models/contacts')
+const { Contact } = require('../../../models/contactSchema')
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params
-  const isExistContact = await getById(contactId)
+ 
+  await Contact.findByIdAndRemove(contactId)
+    .then(data => {
+      if(!data) { return res.status(404).json({ message: 'Not found', status: 'failure' }) }
 
-    if (!isExistContact) {
-      return res.status(404).json({ message: 'Not found', status: 'failure' })
-    }
-    else {
-      await removeContact(contactId)
-      return res.status(200).json({ message: 'contact deleted', status: 'success' }) 
-    }
+      else {
+        return res.status(200).json({ message: 'contact deleted', status: 'success', data: data})
+      }
+    })    
 }
 
 module.exports = {

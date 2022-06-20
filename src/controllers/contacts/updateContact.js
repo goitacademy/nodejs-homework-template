@@ -5,7 +5,7 @@ const updateContactController = async (req, res) => {
 
   await Contact.findByIdAndUpdate(params.contactId, body, { new: true})
     .then(data => {
-      if(!data) { throw new Error("Contact not found")  }
+      if(!data) { res.status(404).json({ message: 'Not found', status: 'failure' }) }
 
       else {
         return res.status(200).json({
