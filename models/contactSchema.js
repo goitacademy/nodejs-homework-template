@@ -51,7 +51,13 @@ const updateContactJoiSchema = Joi.object().keys({
   phone: Joi.string()
     .length(10)
     .pattern(codeRegexp)
+    .optional(),
+  favorite: Joi.boolean()
     .optional()
 })
 
-module.exports = { Contact, addContactJoiSchema, updateContactJoiSchema }
+const updateContactStatusJoiSchema = Joi.object().keys({
+  favorite: Joi.boolean().required()
+})
+
+module.exports = { Contact, addContactJoiSchema, updateContactJoiSchema, updateContactStatusJoiSchema }
