@@ -15,7 +15,7 @@ const getContactById = async (contactId) => {
   const contacts = await listContacts()
   const findedContact = contacts.find(contact => contact.id === contactId)
   if (!findedContact) {
-    throw new Error(`Нету пользователя с id: ${contactId}`)
+    throw new Error('Not Found')
   }
   return findedContact
 
@@ -51,7 +51,7 @@ const updateContactById = async (id, {name, email, phone}) => {
   if (idx === -1) {
     return null
   }
-  contacts[idx] = {name, email, phone }
+  contacts[idx] = {name, email, phone, id }
   fs.writeFile(contactsPath, JSON.stringify(contacts))
   return contacts[idx]
 }

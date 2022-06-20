@@ -1,14 +1,26 @@
 [
     {
-        "email": "efunka@ramblr.ru",
+        "email": "egunka1988@gmail.com",
         "id": "1",
-        "name": "Igor",
-        "phone": "234 34 23"
+        "name": "Igor Gladkiy",
+        "phone": "(098) 321 12 14"
     },
     {
         "email": "efdnka@ramblr.ru",
         "id": "2",
         "name": "Anna",
         "phone": "234 11 12"
+    },
+    {
+        "email": "alex.grow@rambler.com.ua",
+        "id": "62d43fd2-b314-4622-b857-e9ea6754fcf9",
+        "name": "Alex Grow",
+        "phone": "(098) 222 22 11"
+    },
+    {
+        "email": "nina.coste@rambler.com.ua",
+        "id": "84c7e3c9-ef86-4150-8a85-48b6020bf2be",
+        "name": "Nina Coste",
+        "phone": "(093) 321 22 12"
     }
 ]
