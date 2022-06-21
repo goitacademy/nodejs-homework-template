@@ -4,6 +4,8 @@ import { logout } from "./logout.js";
 import { getCurrent } from "./getCurrent.js";
 import { updateSubscription } from "./patch.js";
 import { updateAvatar } from "./updateAvatar.js";
+import { reVerification } from "./reVerification.js";
+import { verifyEmail } from "./verifyEmail.js";
 
 const user = {
   register,
@@ -12,6 +14,8 @@ const user = {
   getCurrent,
   updateSubscription,
   updateAvatar,
+  reVerification,
+  verifyEmail,
 };
 
 export default user;

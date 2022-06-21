@@ -22,8 +22,10 @@ export const login = async (req, res) => {
     return name;
   };
 
-  if (!user || !bcrypt.compareSync(password, user.password)) {
-    throw new Unauthorized("Email or password is wrong");
+  if (!user || !user.verify || !bcrypt.compareSync(password, user.password)) {
+    throw new Unauthorized(
+      "Email is wrong or not verify, or password is wrong"
+    );
   }
 
   const payload = {

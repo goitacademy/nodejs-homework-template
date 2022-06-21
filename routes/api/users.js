@@ -15,10 +15,12 @@ const {
   getCurrent,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  reVerification,
 } = user;
 
 const { userModel } = models;
-const { joiUserSchema } = userModel;
+const { joiUserSchema, joiVerifySchema } = userModel;
 
 router.post("/signup", validation(joiUserSchema), ctrlWrapper(register));
 
@@ -35,4 +37,12 @@ router.patch(
   auth,
   upload.single("avatar"),
   ctrlWrapper(updateAvatar)
+);
+
+router.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
+
+router.post(
+  "/verify",
+  validation(joiVerifySchema),
+  ctrlWrapper(reVerification)
 );
