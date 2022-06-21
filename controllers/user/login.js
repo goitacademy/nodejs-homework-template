@@ -14,6 +14,7 @@ const { SECRET_KEY } = process.env;
 export const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const { subscription } = user;
 
   const userName = (mail) => {
     const indx = mail.indexOf("@");
@@ -39,6 +40,11 @@ export const login = async (req, res) => {
     message: `Welcome, ${userName(email)}!`,
     data: {
       token,
+
+      user: {
+        email: email,
+        subscription: subscription,
+      },
     },
   });
 };
