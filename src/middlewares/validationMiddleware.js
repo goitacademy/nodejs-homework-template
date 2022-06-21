@@ -1,17 +1,22 @@
-const Joi = require('joi')
-const { addContactSchema } = require('./addContactSchema')
-const { updateContactSchema } = require('./updateContactSchema')
 
-const actionValidation = (req, res, next, schema) => {
-	const validationResult = schema.validate(req.body)
 
-		if(validationResult.error) {
-			return res.status(400).json({'message': 'missing required name field', status: validationResult.error.details})
+const validation = (schema) => {
+	return (req, res, next) => {
+    
+		try {
+			schema.validate(req.body)
+		} catch (err) {
+			res.status(400)
+				.json({
+								status: 'error',
+								message: 'Invalid request data',
+								data: req.body
+							})
 		}
-	next()
+		next()
+	}
 }
 
-  module.exports = {
-		addContactValidation: (req, res, next) => actionValidation(req, res, next, addContactSchema),
-		updateContactValidation: (req, res, next) => actionValidation(req, res, next, updateContactSchema)
+module.exports = {
+		validation
   }
