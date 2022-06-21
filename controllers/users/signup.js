@@ -1,5 +1,6 @@
 const { Conflict } = require("http-errors");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const { User } = require("../../models/user");
 
 const signup = async (req, res, next) => {
@@ -9,19 +10,21 @@ const signup = async (req, res, next) => {
     if (user) {
       throw new Conflict(`Email ${email} in use`);
     }
+    const avatarURL = gravatar.url(email);
     // Вариант с созданием методов модели для хэширования
     // const newUser = new User({name, email});
     // newUser.setPassword(password);
     // newUser.save();
 
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const result = await User.create({ name, email, password: hashPassword });
+    const result = await User.create({
+      name,
+      email,
+      password: hashPassword,
+      avatarURL,
+    });
     res.status(201).json({
-      status: "success",
-      code: 201,
-      data: {
-        user: result,
-      },
+      user: result,
     });
   } catch (error) {
     next(error);

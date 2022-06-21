@@ -1,6 +1,10 @@
 const express = require("express");
-const validationMiddleware = require("../../middlewares/validationMiddleware");
-const authMiddleware = require("../../middlewares/authMiddleware");
+const {
+  validationMiddleware,
+  authMiddleware,
+  uploadMiddleware,
+} = require("../../middlewares");
+
 const {
   joiRegisterSchema,
   joiLoginSchema,
@@ -19,6 +23,13 @@ router.patch(
 router.post("/signup", validationMiddleware(joiRegisterSchema), users.signup);
 
 router.post("/login", validationMiddleware(joiLoginSchema), users.login);
+
+router.patch(
+  "/avatars",
+  authMiddleware,
+  uploadMiddleware.single("avatar"),
+  users.updateAvatar
+);
 
 router.get("/current", authMiddleware, users.getCurrent);
 

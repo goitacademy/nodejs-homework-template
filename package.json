@@ -14,11 +14,14 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
     "http-errors": "^2.0.0",
+    "jimp": "^0.16.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
