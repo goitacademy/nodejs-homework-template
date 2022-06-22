@@ -1,7 +1,7 @@
 ## CONTACTS API 
 Our resource allows you to create and store information about a person (name, е-mail address, phone number) in the contact book, using the[ Mongo database](https://cloud.mongodb.com/v2/62b196f45bfd3b47555aa300#metrics/replicaSet/62b1992510e61d3eefb643c1/explorer/db-contacts/contacts/find)
 
-###Available methods
+### Available methods
 * ```GET /contacts``` &mdash; method to get a list of all contacts
 * ```GET /contacts/{contactId}``` &mdash; method to get the right contact by id
 * ```POST /contacts``` &mdash; method for adding a new contact to the list
@@ -9,7 +9,7 @@ Our resource allows you to create and store information about a person (name, е
 * ```PATCH /contacts/{contactID}/favorite``` &mdash; method for updating the status of a favorite contact by id
 * ```DELETE /contacts/{contactId}``` &mdash; method to remove a contact from the list by id
 
-###Contacts
+### Contacts
 
 They're identified by their ids, which are unique integers, and live under ```/api/contacts/<contactId>```.
 All items have some of the following properties:
