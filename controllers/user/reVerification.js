@@ -1,11 +1,11 @@
 import models from "../../models/index.js";
 import createError from "http-errors";
-import helpers from "../../helpers/index.js";
+import services from "../../services/index.js";
 
 const { userModel } = models;
 const { User } = userModel;
 const { NotFound, BadRequest } = createError;
-const { sendMail } = helpers;
+const { sendMail } = services;
 
 export const reVerification = async (req, res) => {
   const { email } = req.body;

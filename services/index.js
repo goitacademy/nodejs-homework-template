@@ -1,7 +1,7 @@
 import { sendMail } from "./sendMail.js";
 
-const helpers = {
+const services = {
   sendMail,
 };
 
-export default helpers;
+export default services;

@@ -3,12 +3,12 @@ import createError from "http-errors";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import { v4 } from "uuid";
-import helpers from "../../helpers/index.js";
+import services from "../../services/index.js";
 
 const { userModel } = models;
 const { User } = userModel;
 const { Conflict } = createError;
-const { sendMail } = helpers;
+const { sendMail } = services;
 
 export const register = async (req, res) => {
   const { email, password } = req.body;

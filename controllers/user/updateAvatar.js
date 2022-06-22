@@ -24,7 +24,8 @@ export const updateAvatar = async (req, res) => {
   try {
     const resultUpload = path.join(avatarsDir, imageName);
     await imgResize(tempUpload, resultUpload);
-    await fs.rename(tempUpload, resultUpload);
+    // await fs.copyFile(tempUpload, resultUpload);
+    await fs.unlink(tempUpload);
     const avatarURL = path.join("public", "avatars", imageName);
     await User.findByIdAndUpdate(req.user._id, { avatarURL });
 
