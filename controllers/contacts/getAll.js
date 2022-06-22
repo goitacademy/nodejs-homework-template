@@ -1,6 +1,8 @@
-const contactsOperations = require("../../contactsOperations");
+// const contactsOperations = require("../../contactsOperations");
+const { Contact } = require("../../models");
 const getAll = async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts();
+  const { _id } = req.user;
+  const contacts = await Contact.find({ owner: _id }).populate("owner");
   try {
     res.json({
       status: "success",

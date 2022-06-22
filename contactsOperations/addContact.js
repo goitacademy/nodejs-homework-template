@@ -1,9 +1,9 @@
-const { Contact } = require("../models/index");
+// const { Contact } = require("../models/index");
 
-const addContact = async (body) => {
-  const newContact = await Contact.create(body);
+// const addContact = async (body) => {
+//   const newContact = await Contact.create(body);
 
-  return newContact;
-};
+//   return newContact;
+// };
 
-module.exports = addContact;
+// module.exports = addContact;

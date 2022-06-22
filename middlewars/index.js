@@ -1,3 +1,3 @@
 const validation = require("./validation");
-
-module.exports = { validation };
+const auth = require("./auth");
+module.exports = { validation, auth };
