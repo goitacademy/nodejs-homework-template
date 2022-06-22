@@ -1,6 +1,8 @@
+const shortid = require("shortid");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { User } = require("../../models");
+const { sendEmail } = require("../../helpers");
 
 const signup = async (req, res) => {
   try {
@@ -16,8 +18,26 @@ const signup = async (req, res) => {
       });
       return;
     }
+
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    await User.create({ name, email, password: hashPassword, avatarURL });
+
+    const verificationToken = shortid();
+    await User.create({
+      name,
+      email,
+      password: hashPassword,
+      avatarURL,
+      verificationToken,
+    });
+
+    const emailVerification = {
+      to: email,
+      subject: "Goit",
+      html: `<a href="http://localhost:3000/api/users/verify/${verificationToken}">Confirm email</a>`,
+    };
+
+    await sendEmail(emailVerification);
+
     res.status(201).json({
       status: "success",
       code: 201,
@@ -27,6 +47,7 @@ const signup = async (req, res) => {
           name,
           avatarURL,
           subscription: "starter",
+          verificationToken,
         },
       },
     });

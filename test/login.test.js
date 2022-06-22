@@ -28,8 +28,8 @@ describe(
 
     test("test login route", async () => {
       const loginDate = {
-        email: "protsiof@gmail.com",
-        password: "1111e411",
+        email: "Andriy@gmail.com",
+        password: "ta6k55",
       };
       const responseAfterLogin = await request(app)
         .post("/api/auth/login")

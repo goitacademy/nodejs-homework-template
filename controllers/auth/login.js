@@ -6,25 +6,21 @@ const { SECRET_KEY } = process.env;
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) {
-      res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Email or password is wrong",
-      });
-      return;
-    }
     const { subscription, name } = user;
 
     const comparePassword = bcrypt.compareSync(password, user.password);
-    if (!comparePassword) {
+
+    if (user || !comparePassword || !user.verify) {
       res.status(401).json({
         status: "error",
         code: 401,
-        message: "Password is wrong",
+        message: "Email / password are wrong or you are not verify your email",
       });
+      return;
     }
+
     const payload = { id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
