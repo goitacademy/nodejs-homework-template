@@ -2,11 +2,13 @@ const Joi = require("joi");
 
 const contactSchema = Joi.object({
   name: Joi.string().alphanum().max(22).required(),
-  email: Joi.string().email(),
+  email: Joi.string().pattern(
+    /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/
+  ),
   phone: Joi.string()
-    .pattern(/^[0-9]+$/, "numbers")
-    .min(10)
-    .max(12),
+    .pattern(/^\+\d{2}\(\d{3}\)\d{3}-\d{2}-\d{2}$/, "numbers")
+    .min(12)
+    .max(20),
   favorite: Joi.boolean(),
 });
 
