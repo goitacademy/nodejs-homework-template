@@ -1,26 +1,19 @@
 const { User } = require("../service/shemas/user");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const bcrypt = require("bcrypt");
 
-const { SECRET_KEY } = process.env;
+const { registerUser, loginUser } = require("../service");
+
 const registerController = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    return res.status(404).json({
-      status: "Error",
-
-      message: "Email in use",
-    });
-  }
-  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  await User.create({ email, password: hashPassword });
-  res.status(201).json({
+  const newUser = await registerUser(email, password);
+  // console.log(await registerUser(email, password));
+  return res.status(201).json({
     status: "success",
 
     user: {
       email: email,
+      avatarURL: newUser.avatarURL,
       subscription: "starter",
     },
   });
@@ -28,28 +21,15 @@ const registerController = async (req, res, next) => {
 
 const loginController = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  const hashPassword = bcrypt.compareSync(password, user.password);
-  if (!user || !hashPassword) {
-    return res.status(401).json({
-      status: "Error",
-
-      message: "Email or password is wrong",
-    });
-  }
-  const payload = {
-    id: user._id,
-  };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-  await User.findByIdAndUpdate(user._id, { token });
-  res.status(201).json({
+  const result = await loginUser(email, password);
+  res.status(200).json({
     status: "success",
 
-    token: token,
-
-    user: {
-      email: email,
-      subscription: "starter",
+    data: {
+      token: result,
+      // email: result.email,
+      // subscription: result.subscription,
+      // avatarURL: result.avatarURL,
     },
   });
 };
