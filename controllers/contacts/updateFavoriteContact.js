@@ -1,11 +1,11 @@
 const createError = require("http-errors");
-const contactsOperations = require("../../contactsOperations");
-
+// const contactsOperations = require("../../contactsOperations");
+const { Contact } = require("../../models");
 const updateFavoriteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { favorite } = req.body;
-    const result = await contactsOperations.updateFavorite(id, { favorite });
+    const result = await Contact.findByIdAndUpdate(id, favorite, { new: true });
     console.log(result);
     if (!result) {
       throw createError(404, `Contact with id=${id} not found`);
