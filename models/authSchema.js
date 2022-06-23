@@ -1,0 +1,60 @@
+const {Schema, model} = require('mongoose')
+const Joi = require('joi')
+
+const userSchema = Schema({
+  password: {
+    type: String,
+    minlength: 6,
+    required: [true, 'Password is required'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
+  token: {
+    type: String,
+    default: null,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  }
+}, { versionKey: false, timestamps: true })
+
+const User = model('contact', userSchema)
+
+const joiRegisterSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(100)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  password: Joi.string()
+    .min(6)
+    .max(100)
+    .required(),
+})
+
+const joiLoginSchema = Joi.object().keys({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  password: Joi.string()
+    .min(6)
+    .max(100)
+    .required()
+})
+
+const updateContactStatusJoiSchema = Joi.object().keys({
+  favorite: Joi.boolean().required()
+})
+
+module.exports = { User, joiRegisterSchema, joiLoginSchema, updateContactStatusJoiSchema }
