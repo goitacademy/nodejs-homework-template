@@ -1,9 +1,9 @@
-const { Contact } = require('../../../models')
+const { User } = require('../../../models')
 
-const addContact = async (req, res, next) => {
-  const { body } = req
+const register = async (req, res) => {
+  const { name, email, password } = req.body
 
-    await Contact.create(body)
+    await User.create(body)
       .then(data => res.status(201).json({
         body: data,
         message: 'contact create', 
@@ -14,5 +14,5 @@ const addContact = async (req, res, next) => {
 }
 
 module.exports = {
-  addContact
+  register
 }
