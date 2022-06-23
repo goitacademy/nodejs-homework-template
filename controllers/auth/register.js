@@ -1,4 +1,6 @@
 const { Conflict } = require("http-errors");
+const bcrypt = require("bcryptjs");
+
 const { User } = require("../../models");
 
 // signup
@@ -8,7 +10,8 @@ const register = async (req, res) => {
   if (user) {
     throw new Conflict(`User with ${email} already exist`);
   }
-  const result = await User.create({ email, password });
+  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const result = await User.create({ email, password: hashPassword });
   res.status(201).json({
     status: "succes",
     code: 201,
