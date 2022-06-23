@@ -40,7 +40,17 @@ const joiLoginSchema = Joi.object({
   }),
   password: Joi.string(),
 });
+const joiSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .default("starter"),
+});
 
 const User = model("user", userSchema);
 
-module.exports = { User, joiSignupSchema, joiLoginSchema };
+module.exports = {
+  User,
+  joiSignupSchema,
+  joiLoginSchema,
+  joiSubscriptionSchema,
+};
