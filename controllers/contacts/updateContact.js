@@ -1,5 +1,5 @@
 const { createError } = require("../../helpers");
-const contacts = require("../../models/contacts");
+const contacts = require("../../models/contact");
 const { contactsAddSchema } = require("../../schemas/contacts");
 
 const updateContact = async (req, res) => {
