@@ -9,7 +9,7 @@ const {
   removeContact,
   updateContact,
   updateFavorite
-} = require('../../controllers/contacts');
+} = require('../../controllers');
 
     
 const { schemaCreate, schemaPatch } = require('../../models/contact');
