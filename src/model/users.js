@@ -8,6 +8,10 @@ const SALT_FACTOR = 8
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, 'Password is required'],
+    },
     password: {
       type: String,
       required: [true, 'Password is required'],
@@ -44,6 +48,14 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+     verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
   },
   { versionKey: false, timestamps: true },
 )
@@ -59,6 +71,6 @@ userSchema.methods.isValidPassword = async function (password) {
   return bcrypt.compare(password, this.password)
 }
 
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('user', userSchema) 
 
 module.exports = User

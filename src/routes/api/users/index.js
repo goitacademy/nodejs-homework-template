@@ -11,6 +11,7 @@ const {
   validationSignupUser,
   validationLoginUser,
   validationPatchSubscriptionUser,
+  validationVerifyOneMoreTime,
 } = require('./validate.js')
 
 router
@@ -40,6 +41,12 @@ router
     '/avatars/cloud',
     [guard, upload.single('file')],
     usersController.updateCloudUserAvatar,
+  )
+  .get('/verify/:verificationToken', [], usersController.verifyUser)
+  .post(
+    '/verify',
+    [validationVerifyOneMoreTime],
+    usersController.verifyUserOneMoreTime,
   )
 
 module.exports = router

@@ -1,0 +1,546 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a Node.js contacts storage server.  ",
+    "version": "0.0.6",
+    "title": "Node.js Contacts storage",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "akunadjvili@gmail.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "schemes": ["http"],
+  "paths": {
+    "/users/": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Update user subscription",
+        "description": "",
+        "operationId": "updateUserSubscription",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "subscription": {
+                  "type": "string",
+                  "enum": ["starter", "pro", "business"],
+                  "description": "User subscription"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated subscription",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "subscription": {
+                          "type": "string",
+                          "enum": ["starter", "pro", "business"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "E-mail in use"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get current user",
+        "description": "",
+        "operationId": "getCurrentUser",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "subscription": {
+                          "type": "string",
+                          "enum": ["starter", "pro", "business"]
+                        },
+                        "avatarURL": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/users/verify/{verificationToken}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Confirm user account",
+        "description": "",
+        "operationId": "verifyUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "type": "string",
+            "in": "path",
+            "description": "Verification user ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification successful",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/users/verify": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Send verify token again",
+        "description": "",
+        "operationId": "verifyUserOneMoreTime",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User e-mail"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification email sent",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Verification has already been passed or User not found."
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "LogIn user",
+        "description": "",
+        "operationId": "loginUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User name"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "User password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "subscription": {
+                          "type": "string",
+                          "enum": ["starter", "pro", "business"]
+                        },
+                        "avatarURL": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Email or password is wrong"
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["users"],
+        "summary": "LogOut user",
+        "description": "",
+        "operationId": "logoutUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "204": {
+            "description": "Logout successful"
+          },
+          "403": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/users/signup": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Add a new user",
+        "description": "",
+        "operationId": "signupUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "User name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User e-mail"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "User password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        },
+                        "subscription": {
+                          "type": "string",
+                          "enum": ["starter", "pro", "business"]
+                        },
+                        "avatarURL": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "E-mail in use"
+          }
+        }
+      }
+    },
+    "/users/avatars": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "uploads an avatar",
+        "description": "",
+        "operationId": "updateUserAvatar",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Upload avatar successful",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "avatarURL": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/avatars/cloud": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "uploads an avatar to cloud",
+        "description": "",
+        "operationId": "updateCloudUserAvatar",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Upload to cloud avatar successful",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "avatarURL": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User name"
+        },
+        "email": {
+          "type": "string",
+          "description": "User e-mail"
+        },
+        "password": {
+          "type": "string",
+          "description": "User password"
+        },
+        "subscription": {
+          "type": "string",
+          "description": "User subscriptions",
+          "enum": ["starter", "pro", "business"]
+        },
+        "token": {
+          "type": "string",
+          "description": "User public token"
+        },
+        "avatarURL": {
+          "type": "string",
+          "description": "User host avatar path"
+        },
+        "avatarCloudId": {
+          "type": "string",
+          "description": "User avatar cloud id"
+        },
+        "verify": {
+          "type": "boolean",
+          "description": "User account verify status"
+        },
+        "verifyToken": {
+          "type": "string",
+          "description": "User accoubt verification token"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Adding contact's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Adding contact's e-mail"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Adding contact's phone"
+        },
+        "favorite": {
+          "type": "boolean",
+          "description": "Adding contact's mark, if it is favorite"
+        },
+        "owner": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "xml": {
+        "name": "Contact"
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@ const findUserByEmail = require('./findUserByEmail')
 const findUserById = require('./findUserById')
 const updateUserSubscription = require('./updateUserSubscription')
 const updateUserAvatar = require('./updateUserAvatar')
+const verifyUser = require('./verifyUser')
+const verifyUserOneMoreTime = require('./verifyUserOneMoreTime')
 
 module.exports = {
   createUser,
@@ -12,4 +14,6 @@ module.exports = {
   findUserById,
   updateUserSubscription,
   updateUserAvatar,
+  verifyUser,
+  verifyUserOneMoreTime,
 }

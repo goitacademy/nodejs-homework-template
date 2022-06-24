@@ -33,13 +33,19 @@ const schemaUpdateStatusContact = Joi.object({
   favorite: Joi.boolean().optional(),
 })
 
-module.exports.validationAddContact = ({ body }, _, next) => {
+const validationAddContact = ({ body }, _, next) => {
   return validate(schemaAddContact, body, next)
 }
 
-module.exports.validationUpdateContact = ({ body }, _, next) => {
+const validationUpdateContact = ({ body }, _, next) => {
   return validate(schemaUpdateContact, body, next)
 }
-module.exports.validationSetFavoriteContact = ({ body }, _, next) => {
+const validationSetFavoriteContact = ({ body }, _, next) => {
   return validate(schemaUpdateStatusContact, body, next)
+}
+
+module.exports = {
+  validationAddContact,
+  validationUpdateContact,
+  validationSetFavoriteContact,
 }
