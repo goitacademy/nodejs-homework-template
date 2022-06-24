@@ -17,4 +17,4 @@ const schema = new Schema({
     },
 });
 
-module.exports = model("contact", schema);
+module.exports = model("contacts", schema); // именует модель которая будет созданна при запросе к базе
