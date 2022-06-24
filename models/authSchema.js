@@ -1,5 +1,6 @@
 const {Schema, model} = require('mongoose')
 const Joi = require('joi')
+const bcrypt = require('bcryptjs')
 
 const userSchema = Schema({
   password: {
@@ -27,7 +28,11 @@ const userSchema = Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-const User = model('contact', userSchema)
+userSchema.methods.comparePassword = function(password){
+  return bcrypt.compareSync(password, this.password)
+}
+
+const User = model('user', userSchema)
 
 const joiRegisterSchema = Joi.object({
   name: Joi.string()
