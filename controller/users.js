@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs/promises');
 const { User } = require('../models/schemas/user');
 const Jimp = require('jimp');
+const { NotFound } = require("http-errors");
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -47,9 +48,26 @@ const changeAvatar = async (req, res, next) => {
     }
 }
 
+const verifyEmail = async(req, res) => {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+    if(!user){
+        throw NotFound();
+    }
+    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null});
+
+    res.json({
+        status: 'success',
+        code: 200,
+        data: {
+            message: "Verification successful",
+        }
+    });
+}
+
 
 
 
 module.exports = {
-    get, changeAvatar
+    get, changeAvatar, verifyEmail
 }

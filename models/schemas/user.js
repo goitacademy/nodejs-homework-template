@@ -20,7 +20,15 @@ const user = new Schema({
     type: String,
     default: null,
   },
-   avatarURL: String,
+  avatarURL: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 });
 
 const schemaCreate = Joi.object({

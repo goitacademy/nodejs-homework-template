@@ -10,7 +10,8 @@ const signup = async (req, res, next) => {
           message: 'Registration successful',
           user: {
                 email: user.email,
-                subscription: user.subscription
+              subscription: user.subscription,
+            verificationToken: user.verificationToken
           }
       },
     });

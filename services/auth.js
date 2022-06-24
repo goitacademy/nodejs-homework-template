@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
+const { nanoid } = require("nanoid");
+const sendEmail = require('../helpers/sendEmail');
 
 const { User } = require('../models/schemas/user');
 const { createError } = require("../helpers/errors");
@@ -17,6 +19,7 @@ const registerUser = async (userData) => {
         throw createError(409, 'User already exists.');
     }
 
+    const verificationToken = nanoid();
     const password = userData.password;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const avatarURL = gravatar.url(userData.email);
@@ -25,8 +28,18 @@ const registerUser = async (userData) => {
         await User.create({
             ...userData,
             password: hashedPassword,
-            avatarURL
+            avatarURL,
+            verificationToken
         });
+    
+    const mail = {
+        to: userData.email,
+        subject: "Welcome to Your Contacts! Confirm Your Email",
+        text: "Let's confirm your email address.",
+        html: `<a target="_blank" href="http://localhost:8000/api/users/verify/${verificationToken}">confirm your email</a>`
+    };
+
+    await sendEmail(mail);
 
     return user;
 }

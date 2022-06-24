@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.get('/current', auth, ctrlUsers.get);
 router.patch('/avatar', auth, upload.single('avatar'), ctrlUsers.changeAvatar);
+router.get("/verify/:verificationToken",  ctrlUsers.verifyEmail);
 
 module.exports = router
