@@ -1,9 +1,12 @@
-// const { createError } = require("../../helpers");
-// const contacts = require("../../models/contact");
-// const { contactsAddSchema } = require("../../schemas/contacts");
+const { Contact, schemas } = require("../../models/contact");
 
-const { Contact } = require("../../models");
+const { createError } = require("../../helpers");
+
 const addContact = async (req, res) => {
+  const { error } = schemas.contactsAddSchema.validate(req.body);
+  if (error) {
+    throw createError(400, error.message);
+  }
   const result = await Contact.create(req.body);
   res.status(201).json({
     status: "success",
@@ -13,14 +16,5 @@ const addContact = async (req, res) => {
     },
   });
 };
-
-// const addContact = async (req, res) => {
-//   const { error } = contactsAddSchema.validate(req.body);
-//   if (error) {
-//     throw createError(400, error.message);
-//   }
-//   const result = await contacts.addContact(req.body);
-//   res.status(201).json(result);
-// };
 
 module.exports = addContact;
