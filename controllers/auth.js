@@ -7,6 +7,7 @@ const registerUser = async (req, res, next) => {
       email: user.email,
       subscription: user.subscription,
       id: user._id,
+      avatarURL: user.avatarURL,
     });
   } catch (error) {
     next(error);
