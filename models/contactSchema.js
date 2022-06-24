@@ -5,7 +5,7 @@ const {codeRegexp} = require('./constants')
 const contactSchema = Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required'],
   },
   email: {
     type: String,
