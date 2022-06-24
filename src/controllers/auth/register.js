@@ -12,6 +12,10 @@ const register = async (req, res) => {
       throw new Conflict(`User with ${email} already exist`)
     }
 
+    else if(!password || password > 6) {
+      res.status(400).json({ message: 'Password must has min 6 symbol' })
+    }
+
     else {
       const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
       await User.create({name, email, password: hashPassword})
