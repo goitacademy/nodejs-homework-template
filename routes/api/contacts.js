@@ -1,19 +1,23 @@
 const express = require('express')
 const {ctrlWrapper} = require('../../helpers/ctrlWrapper')
+const {validation} = require('../../helpers/validation.js')
+
+const {joiSchema} = require('../../models/contact')
+
 const {contacts: ctrl} = require("../../controllers/")
 
 const router = express.Router()
 
 router.get('/', ctrlWrapper(ctrl.getAll))
 
-router.get('/:contactId', ctrlWrapper(ctrl.getById))
+router.get('/:id', ctrlWrapper(ctrl.getById))
 
 router.post('/', ctrlWrapper(ctrl.add))
 
-router.delete('/:contactId', ctrlWrapper(ctrl.deleteContact))
+router.delete('/:id', ctrlWrapper(ctrl.deleteContact))
 
-router.put('/:contactId', ctrlWrapper(ctrl.updateContact))
+router.put('/:id', ctrlWrapper(ctrl.updateContact))
 
-router.patch('/:contactId', ctrlWrapper(ctrl.updateFavourite))
+router.patch('/:id/favorite', ctrlWrapper(ctrl.updateFavourite))
 
 module.exports = router
