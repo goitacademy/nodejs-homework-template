@@ -18,6 +18,11 @@ const contactSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  },
 });
 
 const addSchema = Joi.object({
@@ -34,4 +39,3 @@ const statusSchema = Joi.object({
 const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, addSchema, statusSchema };
-

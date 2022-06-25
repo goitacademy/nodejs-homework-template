@@ -5,6 +5,7 @@ const updateStatusContact = async (req, res, next) => {
   const updateStatus = await Contact.findOneAndUpdate(contactId, req.body, {
     new: true,
   });
+  
   if (!updateStatus) {
       const error = new Error("Not found");
       error.status = 404;
