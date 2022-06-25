@@ -1,5 +1,5 @@
 const { usersRepository } = require('../repository')
-
+const { OPERATION_STATUS } = require('../helpers/constants')
 const jwt = require('jsonwebtoken')
 require('dotenv-expand')(require('dotenv').config())
 
@@ -13,9 +13,15 @@ class AuthServices {
   async loginUser({ email, password }) {
     try {
       const user = await this.repositories.users.findUserByEmail(email)
-
+        if (!user) {
+        return OPERATION_STATUS.USER_NOT_FOUND
+      }
       if (!user || !(await user.isValidPassword(password))) {
         return null
+      }
+
+       if (!user.verify) {
+        return OPERATION_STATUS.NEED_VERIFICATION
       }
       const id = user.id
       const payload = { id }

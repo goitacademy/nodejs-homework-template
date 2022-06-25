@@ -3,6 +3,9 @@ const logger = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const path = require('path')
+const swaggerUi = require('swagger-ui-express')
+
+const swaggerDocument = require('./docs/swagger.json')
 
 const { HTTP_CODES, STATUS } = require('./helpers/constants')
 const { json } = require('./config/limits.json')
@@ -40,6 +43,8 @@ app.use('/api/', appLimiter)
 app.use('/api/v1/contacts', contactsRouter)
 app.use('/api/v1/users', usersRouter)
 
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
 app.use((req, res) => {
   res.status(HTTP_CODES.NOT_FOUND).json({
     status: STATUS.ERROR,
@@ -66,6 +71,7 @@ app.use((err, req, res, next) => {
     },
   })
 })
+
 
 module.exports = app
 
