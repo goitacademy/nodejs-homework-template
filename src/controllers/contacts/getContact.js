@@ -1,4 +1,4 @@
-const { Contact } = require('../../../models/contactSchema')
+const { Contact } = require('../../../models')
 
 const getContact = async (req, res, next) => {
   const { contactId } = req.params
