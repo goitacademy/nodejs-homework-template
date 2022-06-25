@@ -1,5 +1,5 @@
 const express = require("express");
-const ctrl = require("../../controllers/contacts");
+const { contacts: ctrl } = require("../../controllers");
 const { ctrlWrapper } = require("../../helpers");
 
 const router = express.Router();
@@ -13,5 +13,7 @@ router.post("/", ctrlWrapper(ctrl.addContact));
 router.delete("/:id", ctrlWrapper(ctrl.removeContact));
 
 router.put("/:id", ctrlWrapper(ctrl.updateContact));
+
+router.patch("/:id/favorite", ctrlWrapper(ctrl.updateStatusContact));
 
 module.exports = router;
