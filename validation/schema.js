@@ -16,4 +16,25 @@ const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-module.exports = { contactSchema, favoriteSchema };
+const userSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string()
+    .pattern(
+      /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/
+    )
+    .required(),
+  subscription: Joi.string(),
+  token: Joi.string(),
+  owner: Joi.object(),
+});
+
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
+module.exports = {
+  contactSchema,
+  favoriteSchema,
+  userSchema,
+  subscriptionSchema,
+};
