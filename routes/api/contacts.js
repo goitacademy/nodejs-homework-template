@@ -8,12 +8,13 @@ const {
   updateStatusContact,
   remove,
 } = require("../../controllers");
+const auth = require("../../middlewares/auth");
 
-router.get("/", getAll);
+router.get("/", auth, getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", add);
+router.post("/", auth, add);
 
 router.put("/:contactId", update);
 

@@ -5,4 +5,5 @@ function createResponse(status, res, data) {
     data,
   });
 }
+
 module.exports = createResponse;
