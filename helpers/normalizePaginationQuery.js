@@ -3,8 +3,10 @@ const normalizePaginationQuery = (page, limit) => {
   const numberLimit = Number(limit);
 
   return {
-    normalizedPage: numberPage && numberPage > 0 ? numberPage : 1,
-    normalizedLimit: numberLimit && numberPage > 0 ? numberPage : 20,
+    normalizedPage:
+      numberPage && parseInt(numberPage) > 0 ? parseInt(numberLimit) : 1,
+    normalizedLimit:
+      numberLimit && parseInt(numberLimit) > 0 ? parseInt(numberLimit) : 20,
   };
 };
 
