@@ -1,9 +1,9 @@
 const { Contact } = require('../../../models')
 
 const addContact = async (req, res, next) => {
-  const { body } = req
+  const { body, user } = req
 
-    await Contact.create(body)
+    await Contact.create({...body, owner: user._id})
       .then(data => res.status(201).json({
         body: data,
         message: 'contact create', 
