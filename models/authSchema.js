@@ -22,10 +22,6 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  }
 }, { versionKey: false, timestamps: true })
 
 userSchema.methods.setPassword = function(password){

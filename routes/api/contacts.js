@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {contacts: ctrl} = require('../../src/controllers')
-const { validation } = require('../../src/middlewares')
+const { validation, auth } = require('../../src/middlewares')
 
 const {
   addContactJoiSchema,
@@ -13,7 +13,7 @@ router.get('/', ctrl.getAll)
 
 router.get('/:contactId', ctrl.getContact)
 
-router.post('/', validation(addContactJoiSchema), ctrl.addContact)
+router.post('/', auth, validation(addContactJoiSchema), ctrl.addContact)
 
 router.put('/:contactId', validation(updateContactJoiSchema), ctrl.updateContact)
 
