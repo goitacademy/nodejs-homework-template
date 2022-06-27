@@ -1,17 +1,22 @@
 const { Contact } = require("../../models/contacts");
+const { normalizePaginationQuery } = require("../../helpers");
 
 const listContacts = async (req, res) => {
   const { _id } = req.user;
-  const { page = 1, limit = 20, favorite } = req.query;
-  const skip = (page - 1) * limit;
-  const result = await Contact.find(
-    { owner: _id, favorite },
-    "-createdAt -updatedAt",
-    {
-      skip,
-      limit: Number(limit),
-    }
-  ).populate("owner", "email");
+  const { page, limit, favorite } = req.query;
+  const { normalizedPage, normalizedLimit } = normalizePaginationQuery(
+    page,
+    limit
+  );
+  const skip = (normalizedPage - 1) * normalizedLimit;
+  const query = { owner: _id };
+  if (favorite === "true") {
+    query.favorite = true;
+  }
+  const result = await Contact.find(query, "-createdAt -updatedAt", {
+    skip,
+    limit: normalizedLimit,
+  }).populate("owner", "email");
 
   res.json(result);
 };
