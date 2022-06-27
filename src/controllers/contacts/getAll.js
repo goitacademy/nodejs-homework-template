@@ -5,6 +5,4 @@ const getList = async (req, res) => {
   return res.json({ status: 'success', code: 200, contacts: data })
 }
 
-module.exports = {
-  getList
-}
+module.exports = getList
