@@ -1,4 +1,4 @@
-const { loginUser, logoutUser, registerUser } = require("./auth");
+const { loginUser, logoutUser, registerUser, confirm, resend } = require("./auth");
 
 const {
   listContacts,
@@ -14,6 +14,8 @@ module.exports =
   loginUser,
   logoutUser,
   registerUser,
+  confirm,
+  resend,
   listContacts,
   getContactById,
   addContact,

@@ -23,18 +23,24 @@ const registerUser = async (userData) => {
 
 const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
+  if (user && !user.verify) {
+    const error = new Error(`Please confirm your email`);
+    error.status = 401;
+    throw error;
+  };
+
   if (!user) {
     const error = new Error(`Login or password is not correct`);
     error.status = 401;
     throw error;
-  }
+  };
 
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
     const error = new Error(`Login or password is not correct`);
     error.status = 401;
     throw error;
-  }
+  };
 
   const payload = {
     id: user._id,
