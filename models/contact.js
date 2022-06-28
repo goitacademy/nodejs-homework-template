@@ -5,13 +5,15 @@ const Joi = require("joi")
 const contactSchema = Schema({
     name: {
         type: String,
-        required: [true, 'Set name for contact'],
+        required: true,
     },
     email: {
         type: String,
+        required: true,
     },
     phone: {
         type: String,
+        required: true,
     },
     favorite: {
         type: Boolean,
@@ -19,12 +21,21 @@ const contactSchema = Schema({
     },
 }, {versionKey: false, timestamps: true })
 
-const joiSchema = Joi.object({
+const add = Joi.object({
     name: Joi.string().required,
     email: Joi.string().required,
     phone: Joi.string().required,
-    favorite: Joi.boolean(),
+    favorite: Joi.bool()
 })
+
+const updateFavorite = Joi.object({
+    favorite: Joi.bool().required
+})
+
+const joiSchema = {
+    add,
+    updateFavorite
+}
 
 const Contact = model("contact", contactSchema)
 
