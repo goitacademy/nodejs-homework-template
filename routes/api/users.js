@@ -8,7 +8,7 @@ const {
   joiLoginSchema,
   joiSubscriptionSchema,
 } = require("../../models/user");
-router.post("/signup", validation(joiSignupSchema), controllers.signup);
+router.post("/signin", validation(joiSignupSchema), controllers.signin);
 router.post("/login", validation(joiLoginSchema), controllers.login);
 router.get("/current", auth, controllers.currentUser);
 router.post("/logout", auth, controllers.logout);
