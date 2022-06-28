@@ -14,12 +14,12 @@ router.post(
   ctrlWrapper(ctrl.register)
 );
 
-router.get("verify/:verificationToken", ctrlWrapper(ctrl.verify));
+router.get("verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
 
 router.post(
   "verify",
   validation(schemas.verifyEmail),
-  ctrlWrapper(ctrl.resendVerification)
+  ctrlWrapper(ctrl.resendVerifyEmail)
 );
 
 router.post(
