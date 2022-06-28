@@ -1,67 +1,138 @@
-let contacts = [
-  {
-    id: "1",
-    name: "Rosie Simpson",
-    email: "test@mail.com",
-    phone: "4591256",
-  },
-  {
-    id: "2",
-    name: "Hermione Kline",
-    email: "test@mail.com",
-    phone: "4438912",
-  },
-  {
-    id: "3",
-    name: "Eden Clements",
-    email: "test@mail.com",
-    phone: "6451779",
-  },
-  {
-    id: "4",
-    name: "Annie Copeland",
-    email: "test@mail.com",
-    phone: "2279126",
-  },
-];
+const fs = require("fs/promises");
+const path = require("path");
+const contactsPath = path.resolve("./models", "contacts.json");
 
-const listContacts = (req, res) => {
-  console.log(res);
-  res.json({ contacts, status: "Success" });
-};
+// let contacts = [
+//   {
+//     id: "1",
+//     name: "Rosie Simpson",
+//     email: "test@mail.com",
+//     phone: "4591256",
+//   },
+//   {
+//     id: "2",
+//     name: "Hermione Kline",
+//     email: "test@mail.com",
+//     phone: "4438912",
+//   },
+//   {
+//     id: "3",
+//     name: "Eden Clements",
+//     email: "test@mail.com",
+//     phone: "6451779",
+//   },
+//   {
+//     id: "4",
+//     name: "Annie Copeland",
+//     email: "test@mail.com",
+//     phone: "2279126",
+//   },
+// ];
 
-const getById = (req, res) => {
-  const contact = contacts.find((item) => item.id === req.params.contactId);
-  res.json({ contact, status: "Success" });
-
-  if (!contact) {
-    res.status(400).json({
-      status: `Failure, we didn't find the contact width id=${req.params.contactId}`,
-    });
+const listContacts = async (req, res) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+    res.json({ contacts, status: "Success" });
+  } catch (err) {
+    console.log(err.message);
   }
 };
 
-const addContact = (req, res) => {
-  const { name, email, phone } = req.body;
-  contacts.push({ id: new Date().getTime().toString(), name, email, phone });
-  res.json({ status: "Success" });
-};
+const getById = async (req, res) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
 
-const removeContact = (req, res) => {
-  contacts = contacts.filter((contact) => req.params.contactId !== contact.id);
-  res.json({ status: "Success" });
-};
+    const contacts = JSON.parse(data);
 
-const updateContact = (req, res) => {
-  const { name, email, phone } = req.body;
-  contacts.forEach((contact) => {
-    if (Number(contact.id) === Number(req.params.contactId)) {
-      contact.name = name;
-      contact.email = email;
-      contact.phone = phone;
+    const contact = contacts.find((item) => item.id === req.params.contactId);
+    res.json({ contact, status: "Success" });
+
+    if (!contact) {
+      res.status(400).json({
+        status: `Failure, we didn't find the contact width id=${req.params.contactId}`,
+      });
     }
-  });
-  res.json({ status: "Success" });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const addContact = async (req, res) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+
+    const { name, email, phone } = req.body;
+    contacts.push({ id: new Date().getTime().toString(), name, email, phone });
+
+    const newContacts = JSON.stringify(contacts, null, " ");
+
+    const write = await fs.writeFile(
+      contactsPath,
+      newContacts,
+      "utf8",
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    res.json({ status: "Success" });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const removeContact = async (req, res) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const newContacts = JSON.stringify(
+      contacts.filter((contact) => req.params.contactId !== contact.id),
+      null,
+      " "
+    );
+
+    const write = await fs.writeFile(
+      contactsPath,
+      newContacts,
+      "utf8",
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    res.json({ status: "Success" });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const updateContact = async (req, res) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const { name, email, phone } = req.body;
+    contacts.forEach((contact) => {
+      if (Number(contact.id) === Number(req.params.contactId)) {
+        contact.name = name;
+        contact.email = email;
+        contact.phone = phone;
+      }
+    });
+
+    const newContacts = JSON.stringify(contacts, null, " ");
+
+    const write = await fs.writeFile(
+      contactsPath,
+      newContacts,
+      "utf8",
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    res.json({ status: "Success" });
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 module.exports = {
