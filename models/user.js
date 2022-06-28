@@ -6,7 +6,7 @@ const sub = ["starter", "pro", "business"];
 const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 const userSchema = Schema({
-   email: {
+   email:  {
       type: String,
       required: [true, 'Email is required'],
       unique: true,
@@ -26,6 +26,10 @@ const userSchema = Schema({
       type: String,
       default: '',
    },
+   avatarURL: {
+      type: String,
+      required:true
+   }
 }, { versionKey: false, timestamps: true });
 
 const registerUser = Joi.object({
