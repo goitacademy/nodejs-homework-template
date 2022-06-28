@@ -1,6 +1,7 @@
 const {Schema, model} = require('mongoose')
 const Joi = require('joi')
 const bcrypt = require('bcryptjs')
+const { subscriptionType } = require('./constants')
 
 const userSchema = Schema({
   password: {
@@ -15,17 +16,13 @@ const userSchema = Schema({
   },
   subscription: {
     type: String,
-    enum: ["starter", "pro", "business"],
+    enum: subscriptionType,
     default: "starter"
   },
   token: {
     type: String,
     default: null,
   },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  }
 }, { versionKey: false, timestamps: true })
 
 userSchema.methods.setPassword = function(password){
@@ -65,4 +62,14 @@ const updateContactStatusJoiSchema = Joi.object().keys({
   favorite: Joi.boolean().required()
 })
 
-module.exports = { User, joiRegisterSchema, joiLoginSchema, updateContactStatusJoiSchema }
+const updateSubscriptionJoiSchema = Joi.object().keys({
+  subscription: Joi.string().valid(...subscriptionType).required()
+})
+
+module.exports = {
+  User,
+  joiRegisterSchema,
+  joiLoginSchema,
+  updateContactStatusJoiSchema,
+  updateSubscriptionJoiSchema
+}

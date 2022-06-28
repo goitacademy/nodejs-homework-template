@@ -1,4 +1,6 @@
 
 const codeRegexp = /^[0-9]+$/
 
-module.exports = { codeRegexp }
+const subscriptionType = ["starter", "pro", "business"]
+
+module.exports = { codeRegexp, subscriptionType }

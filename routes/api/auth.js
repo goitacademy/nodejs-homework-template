@@ -1,20 +1,18 @@
 const express = require('express')
-const router = express.Router()
-const {register, login} = require('../../src/controllers/auth')
-const { validation } = require('../../src/middlewares/validationMiddleware')
-
+const {auth: ctrl} = require('../../src/controllers')
+const {auth, validation} = require('../../src/middlewares')
 const {
   joiRegisterSchema,
   joiLoginSchema,
 } = require('../../models/authSchema')
 
-router.post('/signup', validation(joiRegisterSchema), register)
+const router = express.Router()
 
-router.post('/login', validation(joiLoginSchema), login)
+router.post('/signup', validation(joiRegisterSchema), ctrl.register)
 
-// router.get('/users/logout', validation(updateContactStatusJoiSchema), updateStatus)
+router.post('/login', validation(joiLoginSchema), ctrl.login)
 
-// router.get('/users/current', deleteContact)
+router.get('/logout', auth, ctrl.logout)
 
 // router.patch('/users', validation(updateContactStatusJoiSchema), updateStatus)
 
