@@ -1,4 +1,5 @@
 
+
 const validation = (schema) => {
 	return (req, res, next) => {
     
@@ -16,4 +17,6 @@ const validation = (schema) => {
 	}
 }
 
-module.exports = validation
+module.exports = {
+		validation
+  }

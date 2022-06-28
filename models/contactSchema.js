@@ -5,7 +5,7 @@ const {codeRegexp} = require('./constants')
 const contactSchema = Schema({
   name: {
     type: String,
-    required: [true, 'Name is required'],
+    required: true,
   },
   email: {
     type: String,
@@ -20,12 +20,8 @@ const contactSchema = Schema({
   favorite: {
     type: Boolean,
     default: false,
-  },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
   }
-}, { versionKey: false, timestamps: true })
+})
 
 const Contact = model('contact', contactSchema)
 

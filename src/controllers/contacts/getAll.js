@@ -1,13 +1,10 @@
-const { Contact } = require('../../../models')
+const { Contact } = require('../../../models/contactSchema')
 
 const getList = async (req, res) => {
-  const {page = 1, limit = 20, favorite} = req.query
-  const skip = (page - 1)* limit
-
-  const queryObject = favorite ? { favorite: favorite } : {}
-
-  const data = await Contact.find(queryObject, '', {skip, limit: Number(limit)})
+  const data = await Contact.find({})
   return res.json({ status: 'success', code: 200, contacts: data })
 }
 
-module.exports = getList
+module.exports = {
+  getList
+}

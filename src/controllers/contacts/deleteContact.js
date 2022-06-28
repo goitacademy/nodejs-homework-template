@@ -1,4 +1,4 @@
-const { Contact } = require('../../../models')
+const { Contact } = require('../../../models/contactSchema')
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params
@@ -13,4 +13,6 @@ const deleteContact = async (req, res) => {
     })    
 }
 
-module.exports = deleteContact
+module.exports = {
+  deleteContact
+}
