@@ -3,7 +3,7 @@ const { User } = require("../../models");
 const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
-  const { email, password, subscription } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw new Conflict("Email in use");
@@ -12,8 +12,8 @@ const signup = async (req, res) => {
   const result = await User.create({
     email,
     password: hashPassword,
-    subscription,
   });
+  const { subscription } = result;
   res.status(201).json({
     status: "success",
     code: 201,
