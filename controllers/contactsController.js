@@ -2,33 +2,6 @@ const fs = require("fs/promises");
 const path = require("path");
 const contactsPath = path.resolve("./models", "contacts.json");
 
-// let contacts = [
-//   {
-//     id: "1",
-//     name: "Rosie Simpson",
-//     email: "test@mail.com",
-//     phone: "4591256",
-//   },
-//   {
-//     id: "2",
-//     name: "Hermione Kline",
-//     email: "test@mail.com",
-//     phone: "4438912",
-//   },
-//   {
-//     id: "3",
-//     name: "Eden Clements",
-//     email: "test@mail.com",
-//     phone: "6451779",
-//   },
-//   {
-//     id: "4",
-//     name: "Annie Copeland",
-//     email: "test@mail.com",
-//     phone: "2279126",
-//   },
-// ];
-
 const listContacts = async (req, res) => {
   try {
     const data = await fs.readFile(contactsPath, "utf-8");
