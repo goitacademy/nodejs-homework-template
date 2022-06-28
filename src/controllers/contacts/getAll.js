@@ -1,8 +1,7 @@
 const { Contact } = require('../../../models')
 
 const getList = async (req, res) => {
-  const {page, limit} = req.query
-  const data = await Contact.find({}, '', {skip: page, limit: limit})
+  const data = await Contact.find({})
   return res.json({ status: 'success', code: 200, contacts: data })
 }
 
