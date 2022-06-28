@@ -10,7 +10,7 @@ const { validation } = require('../../middlewares')
 const { joiSchema, joiSchemaFavoriteStatus } = require('../../models/schema')
 const  ctrlWrapper  = require('../../helpers/ctrlWrapper');
 
-// const {joiSchemaFavoriteStatus} = require('../../models/schema')
+
 
 router.get('/', ctrlWrapper(ctrl.listContacts))
 

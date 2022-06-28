@@ -4,7 +4,6 @@ const validation = (schema,text) => {
         if (error) {
             error.status = 400;
             error.message = text;
-        //    return res.status(400).json({"message": "missing required name field" });
             next(error);
             
         }
