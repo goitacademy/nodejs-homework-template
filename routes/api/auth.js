@@ -14,7 +14,19 @@ router.post(
   ctrlWrapper(ctrl.register)
 );
 
-router.post("/login", validation(schemas.authUser), ctrlWrapper(ctrl.login));
+router.get("verify/:verificationToken", ctrlWrapper(ctrl.verify));
+
+router.post(
+  "verify",
+  validation(schemas.verifyEmail),
+  ctrlWrapper(ctrl.resendVerification)
+);
+
+router.post(
+  "/login",
+  validation(schemas.authUser, "missing required field"),
+  ctrlWrapper(ctrl.login)
+);
 
 router.get("/current", isAuth, ctrlWrapper(ctrl.getCurrent));
 

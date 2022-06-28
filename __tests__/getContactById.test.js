@@ -28,6 +28,8 @@ describe("get contact by id test", () => {
     expect(result.name).toBeDefined();
     expect(result.favorite).toBeDefined();
     expect(result.owner).toBeDefined();
-    expect(result.status).toEqual(200);
+    expect(result.status).toBe(200);
   });
 });
+
+// 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
