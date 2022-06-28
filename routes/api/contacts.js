@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const contacts = require("../../models/contacts.js");
+const contacts = require("../../models/contacts");
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const data = await contacts.listContacts();
+  res.json({data, code: 200 })
 });
 
 router.get('/:id', async (req, res, next) => {
-  res.json({ message: 'template message' })
 })
 
 router.post('/', async (req, res, next) => {
