@@ -3,15 +3,14 @@ const bcrypt = require("bcryptjs");
 
 const { User } = require("../../models");
 
-// signup
-const register = async (req, res) => {
+const signup = async (req, res) => {
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw new Conflict(`User with ${email} already exist`);
   }
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const result = await User.create({ email, password: hashPassword });
+  await User.create({ email, password: hashPassword });
   res.status(201).json({
     status: "succes",
     code: 201,
@@ -24,5 +23,4 @@ const register = async (req, res) => {
   });
 };
 
-// module.exports = signup;
-module.exports = register;
+module.exports = signup;

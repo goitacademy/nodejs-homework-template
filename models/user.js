@@ -27,13 +27,23 @@ const userSchema = Schema(
 
 const joiRegisterSchema = Joi.object({
   password: Joi.string().required().min(6),
-  email: Joi.string().required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "uk", "org"] },
+  }),
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
 const joiLoginSchema = Joi.object({
   password: Joi.string().required().min(6),
-  email: Joi.string().required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "uk", "org"] },
+  }),
+});
+
+const joiSubscribtionSchema = Joi.object({
+  subscription: Joi.string().required().valid("starter", "pro", "business"),
 });
 
 const User = model("user", userSchema);
@@ -42,4 +52,5 @@ module.exports = {
   User,
   joiRegisterSchema,
   joiLoginSchema,
+  joiSubscribtionSchema,
 };
