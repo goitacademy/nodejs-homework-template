@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {contacts: ctrl} = require('../../src/controllers')
-const {validation, auth} = require('../../src/middlewares')
+const { validation, auth } = require('../../src/middlewares')
 
 const {
   addContactJoiSchema,
