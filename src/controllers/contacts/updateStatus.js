@@ -19,4 +19,6 @@ const updateStatus = async (req, res) => {
     })
     .catch(err => res.status(400).json({ message: err.message, code: 400, status: 'falure' }))}
 
-module.exports = updateStatus
+module.exports = {
+  updateStatus
+}

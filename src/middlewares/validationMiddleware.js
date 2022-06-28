@@ -16,4 +16,6 @@ const validation = (schema) => {
 	}
 }
 
-module.exports = validation
+module.exports = {
+		validation
+  }

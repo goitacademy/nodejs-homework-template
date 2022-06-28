@@ -1,16 +1,16 @@
 const express = require('express')
-const {auth: ctrl} = require('../../src/controllers')
-const {validation} = require('../../src/middlewares')
+const router = express.Router()
+const {register, login} = require('../../src/controllers/auth')
+const { validation } = require('../../src/middlewares/validationMiddleware')
+
 const {
   joiRegisterSchema,
   joiLoginSchema,
 } = require('../../models/authSchema')
 
-const router = express.Router()
+router.post('/signup', validation(joiRegisterSchema), register)
 
-router.post('/signup', validation(joiRegisterSchema), ctrl.register)
-
-router.post('/login', validation(joiLoginSchema), ctrl.login)
+router.post('/login', validation(joiLoginSchema), login)
 
 // router.get('/users/logout', validation(updateContactStatusJoiSchema), updateStatus)
 

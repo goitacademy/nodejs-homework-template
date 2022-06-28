@@ -13,4 +13,6 @@ const addContact = async (req, res, next) => {
       .catch(err => res.status(400).json({ message: err.message, code: 400, status: 'falure' }))
 }
 
-module.exports = addContact
+module.exports = {
+  addContact
+}
