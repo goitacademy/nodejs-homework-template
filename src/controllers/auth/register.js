@@ -8,8 +8,8 @@ const register = async (req, res) => {
   const user = await User.findOne({email})
 
     if(user) {
-      res.status(409).json({ message: 'Email in use', code: 409, status: 'falure' })
-      throw new Conflict()
+      res.status(400).json({ message: `User with ${email} already exist`, code: 400, status: 'falure' })
+      throw new Conflict(`User with ${email} already exist`)
     }
 
     else if(!password || password > 6) {

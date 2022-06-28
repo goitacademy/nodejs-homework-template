@@ -10,7 +10,7 @@ const login = async (req, res) => {
         
     if(!user || !user.comparePassword(password)) {
       res.status(400).json({ message: 'Email or password is wrong', code: 400, status: 'falure' })
-      throw new Unauthorized()
+      throw new Unauthorized('Email or password is wrong')
     }
     else {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1h'})
