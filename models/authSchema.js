@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const userSchema = Schema({
   password: {
     type: String,
-    min: [6, 'Password must has min 6 symbol'],
+    minlength: 6,
     required: [true, 'Password is required'],
   },
   email: {
@@ -28,10 +28,6 @@ const userSchema = Schema({
   }
 }, { versionKey: false, timestamps: true })
 
-userSchema.methods.setPassword = function(password){
-  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-}
-
 userSchema.methods.comparePassword = function(password){
   return bcrypt.compareSync(password, this.password)
 }
@@ -41,7 +37,8 @@ const User = model('user', userSchema)
 const joiRegisterSchema = Joi.object({
   name: Joi.string()
     .min(3)
-    .max(100),
+    .max(100)
+    .required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
