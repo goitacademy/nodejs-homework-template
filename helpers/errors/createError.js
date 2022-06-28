@@ -77,8 +77,8 @@ const statusCode = {
 
 const createError = (status, message = statusCode[status]) => {
   const error = new Error(message);
-  error.status = 404;
-  throw error;
+  error.status = status;
+  return error;
 };
 
-module.exports = createError;
+module.exports = { createError };
