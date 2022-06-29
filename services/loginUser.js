@@ -8,13 +8,16 @@ const { SECRET_KEY } = process.env;
 
 const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
-  if (!user) {
-    throw createError(401, `User with email=${email} not found`);
+
+  if (!user || !user.verify) {
+    throw createError(401, "Email is wrong or not verify");
   }
+
   const passCompare = bcrypt.compare(password, user.password);
   if (!passCompare) {
-    throw createError(401, "Password wrong");
+    throw createError(401, " password is wrong");
   }
+
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
   await User.findByIdAndUpdate(user._id, { token });
