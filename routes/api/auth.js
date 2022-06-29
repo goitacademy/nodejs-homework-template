@@ -14,6 +14,4 @@ router.post('/login', validation(joiLoginSchema), ctrl.login)
 
 router.get('/logout', auth, ctrl.logout)
 
-// router.patch('/users', validation(updateContactStatusJoiSchema), updateStatus)
-
 module.exports = router
