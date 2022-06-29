@@ -12,7 +12,7 @@ const register = async (req, res) => {
       throw new Conflict()
     }
 
-    else if(!password || password > 6) {
+    else if(!password || password.length < 6) {
       res.status(400).json({ message: 'Password must has min 6 symbol' })
     }
 
