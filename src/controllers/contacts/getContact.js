@@ -1,4 +1,4 @@
-const { Contact } = require('../../../models/contactSchema')
+const { Contact } = require('../../../models')
 
 const getContact = async (req, res, next) => {
   const { contactId } = req.params
@@ -8,6 +8,4 @@ const getContact = async (req, res, next) => {
     .catch(_ => res.status(404).json({ message: `Contact with id=${contactId} not found`, code: 404, status: 'falure' }))
 }
 
-module.exports = {
-  getContact
-}
+module.exports = getContact

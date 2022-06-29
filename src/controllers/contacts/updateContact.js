@@ -1,4 +1,4 @@
-const { Contact } = require('../../../models/contactSchema')
+const { Contact } = require('../../../models')
 
 const updateContact = async (req, res) => {
   const { body, params } = req
@@ -18,6 +18,4 @@ const updateContact = async (req, res) => {
     })
     .catch(err => res.status(400).json({ message: err.message, code: 400, status: 'falure' }))}
 
-module.exports = {
-  updateContact
-}
+module.exports = updateContact
