@@ -13,8 +13,9 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.17.1",
+    "http-errors": "^2.0.0",
     "morgan": "^1.10.0",
-    "nanoid": "^4.0.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",
