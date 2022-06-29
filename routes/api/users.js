@@ -7,6 +7,8 @@ const router = express.Router()
 
 router.get('/current', auth, ctrl.getCurrent)
 
+router.get('/all', auth, ctrl.getUsers)
+
 router.patch('/', auth, validation(updateContactStatusJoiSchema), ctrl.updateSubscription)
 
 module.exports = router
