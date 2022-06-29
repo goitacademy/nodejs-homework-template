@@ -7,6 +7,7 @@ const getContactById = async (req, res) => {
   if (!result) {
     throw createError(404);
   }
+  console.log("~ res", res);
   res.json(result);
 };
 
