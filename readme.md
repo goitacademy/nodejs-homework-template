@@ -133,6 +133,19 @@ The data is stored using MongoDB.
   }
 ```
 
+# Verify user `GET` /api/users/verify/`:verificationToken`
+
+- Parameters: `verificationToken`,
+
+- Media type: application/json
+- Response example value:
+
+```javascript
+  {
+  "message": "verification successful"
+  }
+```
+
 ### Scripts:
 
 - `npm start` &mdash; start server in "production" mode;
