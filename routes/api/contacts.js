@@ -1,5 +1,6 @@
 const express = require('express');
 const createError = require("http-errors");
+const joi = require('joi');
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
@@ -34,11 +35,29 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const data = await contacts.addContact(name, email, phone);
-    if (!data.name || !data.email || !data.phone) {
+    const schema = joi.object({
+      name: joi.string()
+        .min(2)
+        .max(30)
+        .required(),
+      email: joi.string()
+        .min(5)
+        .max(50)
+        .required(),
+      phone: joi.string()
+        .min(8)
+        .max(16)
+        .required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      console.log(validationResult.error)
       return res.json({ message: "missing required name field", status: 400 });
     }
+
+    const { name, email, phone } = req.body;
+    const data = await contacts.addContact(name, email, phone);
     res.json({ data, status: 201 });
   }
   catch (err) {
@@ -62,6 +81,7 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
+
 router.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -70,7 +90,6 @@ router.put('/:id', async (req, res, next) => {
       return res.json({ message: "missing fields", status: 400 });
     }
     const data = await contacts.updateContact(id, name, email, phone);
-    console.log("DATA", data)
     if (!data) {
       const error = createError(404, "Not found");
       throw error;
@@ -80,7 +99,7 @@ router.put('/:id', async (req, res, next) => {
   catch (err) {
     next(err);
   }
-})
+});
 
 module.exports = router;
 

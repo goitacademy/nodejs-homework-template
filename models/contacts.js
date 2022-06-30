@@ -62,22 +62,19 @@ const addContact = async ( name, email, phone ) => {
   }
 };
 
+
 const updateContact = async (id, name, email, phone) => {
   const contacts = await listContacts();
+  let found = null;
   contacts.forEach(el => {
     if (el.id === id.toString()) {
-      el.id = id
+      found = el
       el.name = name 
       el.email = email
       el.phone = phone
     }
   })
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, '\t'));
-  const found = contacts.find(el => el.id === id.toString());
-  console.log("FOUND", found)
-  if (!found) {
-    return found === null;
-  }
   return found;
 };
 
