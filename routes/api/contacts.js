@@ -62,9 +62,24 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      return res.json({ message: "missing fields", status: 400 });
+    }
+    const data = await contacts.updateContact(id, name, email, phone);
+    console.log("DATA", data)
+    if (!data) {
+      const error = createError(404, "Not found");
+      throw error;
+    }
+    res.json({ data, status: 200 });
+  }
+  catch (err) {
+    next(err);
+  }
 })
 
 module.exports = router;
