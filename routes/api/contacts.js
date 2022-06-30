@@ -1,6 +1,7 @@
 const express = require('express');
-const Contacts = require('../../models/contacts');
-const { schema } = require('../../validator');
+const { validator } = require('../../middlewares');
+const { joiSchema } = require('../../models/contact');
+const { schema } = r
 
 const router = express.Router();
 
