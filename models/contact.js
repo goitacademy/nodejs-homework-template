@@ -17,6 +17,7 @@ const joiSchema = Joi.object({
             tlds: { allow: ["com", "net"] },
         })
         .required(),
+        favorite: Joi.boolean(),
 });
 
 const contactSchema = new Schema(
@@ -35,6 +36,11 @@ const contactSchema = new Schema(
         type: Boolean,
         default: false,
     },
+    owner: {
+        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "user",
+    }
   
     }
   );

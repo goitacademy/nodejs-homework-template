@@ -1,5 +1,5 @@
-const validator = (schema) => {
-    return (req, res. next) => {
+const validation = (schema) => {
+    return (req, res, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
             res.status(400).json(error);
@@ -8,4 +8,4 @@ const validator = (schema) => {
         next();
     };
 };
- module.exports = validator;
+ module.exports = validation;
