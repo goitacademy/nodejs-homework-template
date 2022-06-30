@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
   "/signup",
-  validation(schemas.authUser),
+  validation(schemas.authUser, "missing required fields"),
   ctrlWrapper(ctrl.register)
 );
 
@@ -24,7 +24,7 @@ router.post(
 
 router.post(
   "/login",
-  validation(schemas.authUser, "missing required field"),
+  validation(schemas.authUser, "missing required fields"),
   ctrlWrapper(ctrl.login)
 );
 
