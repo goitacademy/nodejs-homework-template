@@ -55,7 +55,9 @@ const updateStatusContact = async (req, res) => {
       });
     }
     await updateStatusContactDB(contactId, { favorite });
-    res.json({ status: "Success" });
+    const contact = await getByIdDB(contactId);
+
+    res.json({ status: "success", code: 200, payload: { contact } });
   } catch {
     res.status(404).json({
       status: " Not found ",
