@@ -1,8 +1,11 @@
 const multer = require('multer')
+const path = require('path')
+
+const tempDir = path.join(process.env.INIT_CWD, 'tmp')
 
 const multerConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/Volumes/Storage/nodejs-homework-rest-api/tmp')
+    cb(null, tempDir)
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname)
