@@ -1,46 +1,36 @@
 const { Contact } = require("../db/contactModel");
 
 const listContactsDB = async () => {
-  try {
-    const contacts = await Contact.find({});
+  const contacts = await Contact.find({});
 
-    return contacts;
-  } catch (err) {
-    console.log(err.message);
-  }
+  return contacts;
 };
 
 const getByIdDB = async (contactId) => {
-  const contact = Contact.findOne({ _id: contactId });
+  const contact = await Contact.findOne({ _id: contactId });
+  console.log(contact);
   return contact;
 };
 
 const addContactDB = async ({ name, email, phone }) => {
-  try {
-    const contact = new Contact({ name, email, phone });
-    await contact.save();
-  } catch (err) {
-    console.log(err.message);
-  }
+  const contact = new Contact({ name, email, phone });
+  await contact.save();
 };
 
 const removeContactDB = async (contactId) => {
-  try {
-    await Contact.findByIdAndRemove({ _id: contactId });
-  } catch (err) {
-    console.log(err.message);
-  }
+  await Contact.findByIdAndRemove({ _id: contactId });
 };
 
-const updateContactDB = async ({ name, email, phone, contactId }) => {
-  try {
-    await Contact.findByIdAndUpdate(
-      { _id: contactId },
-      { set: { name, email, phone } }
-    );
-  } catch (err) {
-    console.log(err.message);
-  }
+const updateContactDB = async (contactId, { name, email, phone }) => {
+  console.log(contactId);
+  await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { $set: { name, email, phone } }
+  );
+};
+
+const updateStatusContactDB = async (contactId, { favorite }) => {
+  await Contact.findByIdAndUpdate({ _id: contactId }, { $set: { favorite } });
 };
 
 module.exports = {
@@ -49,4 +39,5 @@ module.exports = {
   addContactDB,
   removeContactDB,
   updateContactDB,
+  updateStatusContactDB,
 };

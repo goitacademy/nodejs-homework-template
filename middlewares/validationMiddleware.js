@@ -1,11 +1,11 @@
 const Joi = require("joi");
 
 module.exports = {
-  addContactValidation: (req, res, net) => {
+  addContactValidation: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(10).required(),
+      name: Joi.string().min(3).max(15).required(),
       email: Joi.string().email(),
-      phone: Joi.number().required(),
+      phone: Joi.string().min(3).max(15).required(),
     });
     const valid = schema.validate(req.body);
 
@@ -14,6 +14,6 @@ module.exports = {
         status: valid.error,
       });
     }
-    net();
+    next();
   },
 };
