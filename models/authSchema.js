@@ -1,6 +1,7 @@
 const {Schema, model} = require('mongoose')
 const Joi = require('joi')
 const bcrypt = require('bcryptjs')
+
 const { subscriptionType } = require('./constants')
 
 const userSchema = Schema({
@@ -14,7 +15,10 @@ const userSchema = Schema({
     required: [true, 'Email is required'],
     unique: true,
   },
-  avatarURL: String,
+  avatarURL: {
+    type: String,
+    required: true
+  },
   subscription: {
     type: String,
     enum: subscriptionType,
