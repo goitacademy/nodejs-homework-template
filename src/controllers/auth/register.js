@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
 
 const register = async (req, res) => {
-  const { name, email, password, avatarURL } = req.body
+  const { name, email, password, avatar } = req.body
  
   const user = await User.findOne({email})
 
@@ -23,7 +23,7 @@ const register = async (req, res) => {
       const newUser = {
         name,
         email,
-        avatarURL: avatarURL || defaultUrl,
+        avatarURL: avatar || defaultUrl,
         password: hashPassword,
       }
 

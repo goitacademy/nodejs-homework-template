@@ -10,7 +10,7 @@ router.get('/current', auth, ctrl.getCurrent)
 
 router.get('/all', auth, ctrl.getUsers)
 
-router.patch('/avatars', auth, upload.single('image'), ctrl.uploadAvatar)
+router.patch('/avatars', auth, upload.single('avatar'), ctrl.uploadAvatar)
 
 router.patch('/', auth, validation(updateContactStatusJoiSchema), ctrl.updateSubscription)
 
