@@ -1,9 +1,10 @@
 const {Schema, model} = require("mongoose")
+const Joi = require("joi")
 
-
-const authSchema = Schema({
+const userSchema = Schema({
   password: {
     type: String,
+    minlength: 6,
     required: [true, 'Password is required'],
   },
   email: {
@@ -20,11 +21,21 @@ const authSchema = Schema({
     type: String,
     default: null,
   },
-}) 
+}, {versionKey: false, timestamps: true})
+
+const register = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().required()
+})
+
+const userJoiSchema = {
+  register
+}
 
 
-const Auth = model("auth", authSchema)
+const User = model("user", userSchema)
 
 module.exports = {
-    Auth
+    User,
+    userJoiSchema
 }

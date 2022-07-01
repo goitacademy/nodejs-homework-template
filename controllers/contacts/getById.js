@@ -1,4 +1,4 @@
-const {Contact} = require("../../models")
+const {Contact} = require("../../models/contact")
 
 const getById = async (req, res) => {
     const {id} = req.params

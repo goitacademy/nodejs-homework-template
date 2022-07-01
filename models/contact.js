@@ -17,17 +17,17 @@ const contactSchema = Schema({
         type: Boolean,
         default: false,
     },
-}) 
+},  {versionKey: false, timestamps: true}) 
 
 const add = Joi.object({
-    name: Joi.string().required,
-    email: Joi.string().required,
-    phone: Joi.string().required,
-    favorite: Joi.bool()
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    phone: Joi.string().required(),
+    favorite: Joi.boolean()
 })
 
 const updateFavorite = Joi.object({
-    favorite: Joi.bool().required
+    favorite: Joi.bool().required()
 })
 
 const joiSchema = {
