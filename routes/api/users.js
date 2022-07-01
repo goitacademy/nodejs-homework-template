@@ -7,9 +7,15 @@ const {
   joiSignupSchema,
   joiLoginSchema,
   joiSubscriptionSchema,
+
 } = require("../../models/user");
 router.post("/signin", validation(joiSignupSchema), controllers.signin);
-router.post("/login", validation(joiLoginSchema), controllers.login);
+router.post(
+  "/login",
+  validation(joiLoginSchema),
+
+  controllers.login
+);
 router.get("/current", auth, controllers.currentUser);
 router.post("/logout", auth, controllers.logout);
 router.patch(
@@ -24,7 +30,11 @@ router.patch(
   upload.single("avatar"),
   controllers.updateAvatar
 );
-router.get("/verify/:verificationToken", controllers.verifyEmail);
+router.get(
+  "/verify/:verificationToken",
+
+  controllers.verify
+);
 router.post("/verify", controllers.resendEmail);
 
 module.exports = router;

@@ -58,6 +58,7 @@ const joiSubscriptionSchema = Joi.object({
     .default("starter"),
 });
 
+
 const User = model("user", userSchema);
 
 module.exports = {

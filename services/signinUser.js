@@ -8,7 +8,7 @@ const { v4 } = require("uuid");
 const signinUser = async (userData) => {
   const user = await User.findOne({ email: userData.email });
   if (user) {
-    throw createError(409, `User  alredy exist`);
+    throw createError(409, `User  already exist`);
   }
   const verificationToken = v4();
   const password = userData.password;
@@ -21,5 +21,7 @@ const signinUser = async (userData) => {
     avatarURL,
     verificationToken,
   });
+  
+  
 };
 module.exports = signinUser;

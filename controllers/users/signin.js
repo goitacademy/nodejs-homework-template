@@ -8,7 +8,7 @@ const signin = async (req, res, next) => {
     const mail = {
       to: email,
       subject: " Verify your email",
-      html: `<a target="_blank" href="http://localhost:3000/api/v1/users/verify/${verificationToken}">Verify email</a>`,
+      html: `<a target="_blank" href="http://localhost:3000/api/v1/users/verify/${verificationToken}">href="http://localhost:3000/api/v1/users/verify/${verificationToken}"</a>`,
     };
     await sendEmail(mail);
     return res.status(201).json({
