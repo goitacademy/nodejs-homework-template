@@ -5,61 +5,39 @@ const { v4 } = require('uuid');
 
 
 const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
-  }
-  catch (err) {
-    console.error(err);
-  }
+  const data = await fs.readFile(contactsPath);
+  return JSON.parse(data);
 };
 
 
 const getContactById = async (id) => {
-  try {
-    const contacts = await listContacts();
-    const found = contacts.find(el => el.id === id.toString());
-    if (!found) {
-      return found === null;
-    }
-    return found;
+  const contacts = await listContacts();
+  const found = contacts.find(el => el.id === id.toString());
+  if (!found) {
+    return found === null;
   }
-  catch (err) {
-    console.error(err);
-  }
+  return found;
 };
 
 
 const removeContact = async (id) => {
-  try {
-    const contacts = await listContacts();
-    const found = contacts.filter(elem => elem.id !== id.toString());
-    if (found.length === contacts.length) {
-        return found === null;
-    }
-    await fs.writeFile(contactsPath, JSON.stringify(found, null, '\t'));
-    return found;
+  const contacts = await listContacts();
+  const found = contacts.filter(elem => elem.id !== id.toString());
+  if (found.length === contacts.length) {
+    return found === null;
   }
-  catch (err) {
-    console.error(err);
-  }
+  await fs.writeFile(contactsPath, JSON.stringify(found, null, '\t'));
+  return found;
 };
 
 
 const addContact = async ( name, email, phone ) => {
-  try {
-    const contacts = await listContacts();
-    const data = { id: v4(), name, email, phone };
-    if (!data.name || !data.email || !data.phone) {
-      return data;
-    }
-    contacts.push(data);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, '\t'));
-    return data;
-  }
-  catch (err) {
-    console.error(err);
-  }
+  const contacts = await listContacts();
+  const data = { id: v4(), name, email, phone };
+  
+  contacts.push(data);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, '\t'));
+  return data;
 };
 
 
