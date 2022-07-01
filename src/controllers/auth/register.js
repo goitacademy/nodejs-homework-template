@@ -1,10 +1,11 @@
 const { User } = require('../../../models')
 const { Conflict } = require('http-errors')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body
-
+  const { name, email, password, avatar } = req.body
+ 
   const user = await User.findOne({email})
 
     if(user) {
@@ -17,14 +18,22 @@ const register = async (req, res) => {
     }
 
     else {
+      const defaultUrl = gravatar.url(email)
       const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-      await User.create({name, email, password: hashPassword})
-        .then(_ => res.status(201).json({
+      const newUser = {
+        name,
+        email,
+        avatarURL: avatar || defaultUrl,
+        password: hashPassword,
+      }
+
+      await User.create(newUser)
+        .then(({email, avatarURL, subscription, createdAt}) => res.status(201).json({
               message: 'contact create', 
               code: 201,
               status: 'success',
               data: {
-                user: { email, name }
+                user: { email, avatarURL, subscription, createdAt }
               }
             }))
         .catch(err => res.status(400).json({ message: err.message, code: 400, status: 'falure' }))  

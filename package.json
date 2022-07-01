@@ -15,11 +15,15 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.16.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.8",
     "morgan": "1.10.0",
-    "random-key": "^0.3.2"
+    "multer": "^1.4.5-lts.1",
+    "random-key": "^0.3.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -29,5 +33,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "main": "index.js"
 }
