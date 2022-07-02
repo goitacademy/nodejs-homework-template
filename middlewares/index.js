@@ -1,4 +1,8 @@
-const validation = require('./validation');
-const userAuthorization = require('./userAuthorization');
+const validationWraperSchema = require('./validationWraperSchema');
+const validateQuery = require('./validateQuery');
 const userUpload = require('./userUpload');
-module.exports = { validation, userAuthorization, userUpload };
+const guard = require('./guard');
+const limiter = require('./rate-limit');
+const validateId = require('./validateId');
+const roleAccess = require('./roleAccess');
+module.exports = { validationWraperSchema, userUpload, guard, validateId, roleAccess, limiter, validateQuery };
