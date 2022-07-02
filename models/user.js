@@ -1,16 +1,19 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
 const Joi = require('joi');
+const gravatar = require('gravatar');
 const emailRegexp =
   /^[-!#$%&'*+/=?^_`{|}~A-Za-z0-9]+(?:\.[-!#$%&'*+/=?^_`{|}~A-Za-z0-9]+)*@([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]/;
 const nameRegexp = /^[a-zA-Z. ']+$/;
 const bcrypt = require('bcryptjs');
+const { Role } = require('../libs');
 
-const usersSchema = Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, 'Set name for contact'],
-      unique: true,
+      default: 'Guest',
       match: nameRegexp,
     },
     password: {
@@ -21,7 +24,10 @@ const usersSchema = Schema(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
+      validate(value) {
+        return emailRegexp.test(String(value).trim().toLowerCase());
+      },
+      unique: [true],
     },
     subscription: {
       type: String,
@@ -34,18 +40,47 @@ const usersSchema = Schema(
     },
     avatarURL: {
       type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: '250' }, true);
+      },
       required: true,
     },
+    idAvatarCloud: {
+      type: String,
+      default: null,
+    },
+    role: {
+      type: String,
+      enum: {
+        values: Object.values(Role),
+        message: 'Role is not allowed',
+      },
+      default: Role.USER,
+    },
   },
-  { versionKey: false, timestamps: true },
+  {
+    versionKey: false,
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret._id;
+        return ret;
+      },
+    },
+    toObject: { virtuals: true },
+  },
 );
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
+});
 
-usersSchema.methods.setPassword = function (password) {
-  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-};
-
-usersSchema.methods.comparePassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
+userSchema.methods.isValidPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
 const joiUserLoginSchema = Joi.object({
@@ -53,7 +88,7 @@ const joiUserLoginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
 const joiUserSignUpSchema = Joi.object({
-  name: Joi.string().pattern(nameRegexp).min(3).max(30).required(),
+  name: Joi.string().pattern(nameRegexp).min(3).max(30).optional(),
   password: Joi.string().min(6).required(),
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string().valid('starter', 'pro', 'business'),
@@ -62,7 +97,8 @@ const joiUserSignUpSchema = Joi.object({
 const joiUserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
-const User = model('user', usersSchema);
+
+const User = model('user', userSchema);
 
 module.exports = {
   User,
