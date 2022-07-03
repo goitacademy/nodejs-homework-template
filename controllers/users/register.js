@@ -24,7 +24,7 @@ const register = async (req, res) => {
         html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Підтвердити пошту</a>`,
     }
     await sendEmail(mail);
-    const result = await User.create({ email, password: hushPassword, avatarURL,  });
+    const result = await User.create({ email, password: hushPassword, avatarURL,  verificationToken});
     
     res.status(201).json({ user: result });
 }
