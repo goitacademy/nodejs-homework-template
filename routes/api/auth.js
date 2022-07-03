@@ -1,6 +1,11 @@
 const express = require("express");
 
-const { authWrapper, validation, ctrlWrapper } = require("../../middlewares");
+const {
+  authWrapper,
+  upload,
+  validation,
+  ctrlWrapper,
+} = require("../../middlewares");
 const { auth: ctrl } = require("../../controllers");
 const { joiRegisterSchema, joiLoginSchema } = require("../../models/user.js");
 
@@ -15,5 +20,12 @@ router.post(
 router.post("/login", validation(joiLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/current", authWrapper, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", authWrapper, ctrlWrapper(ctrl.logout));
+
+router.patch(
+  "/avatars",
+  authWrapper,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
+);
 
 module.exports = router;
