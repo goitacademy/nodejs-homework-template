@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node -r dotenv/config bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config bin/server.js",
-    "test": "jest",
+    "test": "jest ",
+    "test:coverage": "jest --coverage ",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },

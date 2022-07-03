@@ -8,34 +8,40 @@ const options = {
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 
-const db = connect(uri, options);
+const connectDB = async () => {
+  try {
+    connect(uri, options);
+    connection.on('connected', () => {
+      console.log({
+        type: 'info',
+        msg: 'connected',
+        service: 'mongoDB',
+      });
+    });
+    connection.on('err', err => {
+      console.log({
+        type: 'error',
+        msg: err.message,
+        service: 'mongoDB',
+      });
+    });
+    connection.on('disconnected', () => {
+      console.log({
+        type: 'info',
+        msg: 'disconnected',
+        service: 'mongoDB',
+      });
+    });
+    process.on('SIGINT', async () => {
+      connection.close();
+      console.log('Connection mongoDB closed');
+      process.exit(1);
+    });
+  } catch (error) {
+    console.log(error.message);
 
-connection.on('connected', () => {
-  console.log({
-    type: 'info',
-    msg: 'connected',
-    service: 'mongoDB',
-  });
-});
-connection.on('err', err => {
-  console.log({
-    type: 'error',
-    msg: err.message,
-    service: 'mongoDB',
-  });
-});
-connection.on('disconnected', () => {
-  console.log({
-    type: 'info',
-    msg: 'disconnected',
-    service: 'mongoDB',
-  });
-});
+    process.exit(1);
+  }
+};
 
-process.on('SIGINT', async () => {
-  connection.close();
-  console.log('Connection mongoDB closed');
-  process.exit(1);
-});
-
-module.exports = db;
+module.exports = connectDB;

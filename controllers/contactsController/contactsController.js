@@ -1,7 +1,7 @@
 const { repositoryContacts } = require('../../repository');
 const { NotFound, Conflict } = require('http-errors');
 const { HttpStatusCode } = require('../../libs');
-const { ContactsService } = require('../../service/contacts');
+const { contactsService } = require('../../service/contacts');
 
 class ContactsController {
   async getContactsList(req, res, next) {
@@ -44,7 +44,7 @@ class ContactsController {
     try {
       const { id: userId } = req.user;
       const { email } = req.body;
-      const isContactExist = await ContactsService.isUserExist(userId, email);
+      const isContactExist = await contactsService.isUserExist(userId, email);
       if (isContactExist) {
         throw new Conflict(`Email ${email} is already exist`);
       }
