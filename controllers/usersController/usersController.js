@@ -1,9 +1,7 @@
-const { Conflict } = require('http-errors');
-const { AuthService } = require('../../service/auth');
-const { Unauthorized } = require('http-errors');
+const { Conflict, Unauthorized, NotFound } = require('http-errors');
+const { authService } = require('../../service/auth');
 const { HttpStatusCode } = require('../../libs');
 const { repositoryContacts, repositoryUsers } = require('../../repository');
-const { NotFound } = require('http-errors');
 const { AvatarStorage, CloudinaryStorage } = require('../../service/file-storage');
 // const { AvatarStorage, LocalStorage } = require('../../service/file-storage');
 
@@ -11,13 +9,13 @@ class UsersController {
   async signupUser(req, res, next) {
     try {
       const { email } = req.body;
-      const isUserExist = await AuthService.isUserExist(email);
+      const isUserExist = await authService.isUserExist(email);
 
       if (isUserExist) {
         throw new Conflict(`Email ${email} is already exist`);
       }
 
-      const newUser = await AuthService.createUser(req.body);
+      const newUser = await authService.createUser(req.body);
 
       return res.status(HttpStatusCode.CREATED).json({
         status: 'success',
@@ -33,16 +31,16 @@ class UsersController {
     try {
       const { email, password } = req.body;
 
-      const authentificationUser = await AuthService.getUser(email, password);
+      const authentificationUser = await authService.getUser(email, password);
 
       if (!authentificationUser) {
         throw new Unauthorized(`Email or password is wrong`);
       }
 
-      const token = AuthService.getToken(authentificationUser);
-      await AuthService.setToken(authentificationUser.id, token);
+      const token = authService.getToken(authentificationUser);
+      await authService.setToken(authentificationUser.id, token);
 
-      return res.json({
+      return res.status(HttpStatusCode.OK).json({
         status: 'success',
         code: HttpStatusCode.OK,
         data: {
@@ -56,7 +54,7 @@ class UsersController {
 
   async logoutUser(req, res, next) {
     try {
-      await AuthService.setToken(req.user.id, null);
+      await authService.setToken(req.user.id, null);
       res.status(HttpStatusCode.NO_CONTENT).json({
         status: 'success',
         code: HttpStatusCode.NO_CONTENT,
