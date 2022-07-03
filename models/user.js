@@ -42,8 +42,8 @@ const joiRegisterSchema = Joi.object({
   subscription: Joi.string().min(3),
   token: Joi.string(),
   avatarURL: Joi.string(),
-  // verify: Joi.bool(),
-  // verificationToken: Joi.string()
+  verify: Joi.bool(),
+  verificationToken: Joi.string()
 });
 
 const joiLoginSchema = Joi.object({
