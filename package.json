@@ -22,7 +22,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
     "morgan": "1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.6",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",
