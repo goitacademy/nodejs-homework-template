@@ -5,6 +5,7 @@ const { checkAuth, validation, ctrlWrapper } = require('../../middlewares');
 const { users: ctrl } = require('../../controllers');
 const { joiSchemaSubscription, joiSchema } = require('../../models/user');
 
+
 const router = express.Router();
 
 router.post('/register', validation(joiSchema), ctrl.register);
@@ -16,6 +17,8 @@ router.patch(
     checkAuth,
     validation(joiSchemaSubscription),
     ctrlWrapper(ctrl.updateSubscription)
+);
+router.patch("/avatars", checkAuth, ctrlWrapper(ctrl.changeAvatar)
 );
 
 module.exports = router;
