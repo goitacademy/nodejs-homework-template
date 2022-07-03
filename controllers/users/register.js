@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar'); // пакет створює аватарти взалежності від імейлу
 const { User } = require('../../models');
 const { v4 } = require("uuid");
-const {sendEmail} = require('../../helpers')
+const {sendMail} = require('../../helpers')
 const register = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -24,7 +24,7 @@ const register = async (req, res) => {
         subject: 'Підтвердження пошти',
         html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Підтвердити пошту</a>`,
     }
-    await sendEmail(mail);
+    await sendMail(mail);
     
     
     res.status(201).json({ user: result });
