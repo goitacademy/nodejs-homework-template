@@ -1,0 +1,9 @@
+const register = require('./register');
+const login = require('./login');
+const getCurrent = require('./getCurrent');
+const logout = require('./logout');
+const putchSubscription = require('./putchSubscription');
+const updateAvatar = require('./updateAvatar');
+const verifyEmail = require('./verifyEmail');
+const resendEmail = require("./resendEmail");
+module.exports = { resendEmail, register, login, getCurrent, logout, putchSubscription, updateAvatar, verifyEmail };
