@@ -1,8 +1,10 @@
-const { Conflict, Unauthorized, NotFound } = require('http-errors');
+const { Conflict, Unauthorized, NotFound, UnprocessableEntity, BadRequest } = require('http-errors');
 const { authService } = require('../../service/auth');
 const { HttpStatusCode } = require('../../libs');
 const { repositoryContacts, repositoryUsers } = require('../../repository');
 const { AvatarStorage, CloudinaryStorage } = require('../../service/file-storage');
+const { EmailService, SenderSendgrid } = require('../../service/email');
+// const { EmailService, SenderNodemailer } = require('../../service/email');
 // const { AvatarStorage, LocalStorage } = require('../../service/file-storage');
 
 class UsersController {
@@ -16,11 +18,17 @@ class UsersController {
       }
 
       const newUser = await authService.createUser(req.body);
-
+      // const emailService = new EmailService(process.env.NODE_ENV, new SenderNodemailer());
+      const emailService = new EmailService(process.env.NODE_ENV, new SenderSendgrid());
+      const isSend = await emailService.sendVerifyEmail(email, newUser.name, newUser.verificationTokenEmail);
+      delete newUser.verificationTokenEmail;
       return res.status(HttpStatusCode.CREATED).json({
         status: 'success',
         code: HttpStatusCode.CREATED,
-        data: newUser,
+        data: {
+          ...newUser,
+          isSendEmailVerify: isSend,
+        },
       });
     } catch (error) {
       next(error);
@@ -118,22 +126,70 @@ class UsersController {
       const { _id, name, email, createdAt, updatedAt } = req.user;
       const { subscription } = req.body;
       const result = await repositoryUsers.findByIdAndUpdate(_id, subscription);
-      if (!result) {
-        throw new NotFound(`subscription with id=${_id} not found!`);
-      }
-      res.json({
-        status: 'success',
-        code: HttpStatusCode.OK,
-        data: {
-          user: {
-            name,
-            email,
-            subscription,
-            createdAt,
-            updatedAt,
+      if (result) {
+        return res.json({
+          status: 'success',
+          code: HttpStatusCode.OK,
+          data: {
+            user: {
+              name,
+              email,
+              subscription,
+              createdAt,
+              updatedAt,
+            },
           },
-        },
-      });
+        });
+      }
+
+      throw new NotFound(`subscription with id=${_id} not found!`);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async verificationUser(req, res, next) {
+    try {
+      const verifyToken = req.params.token;
+      const userFromToken = await repositoryUsers.findByVerifyToken(verifyToken);
+      if (userFromToken) {
+        await repositoryUsers.updateVerify(userFromToken.id, true);
+        return res
+          .status(HttpStatusCode.OK)
+          .json({ status: 'success', code: HttpStatusCode.OK, data: { message: 'Verification successful' } });
+      }
+      throw new BadRequest('User not found');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async repeatEmailForVerificationUser(req, res, next) {
+    try {
+      const { email } = req.body;
+      const user = await repositoryUsers.findByEmail(email);
+
+      if (user) {
+        const { email, name, verificationTokenEmail } = user;
+        const emailService = new EmailService(process.env.NODE_ENV, new SenderSendgrid());
+        // const emailService = new EmailService(process.env.NODE_ENV, new SenderNodemailer());
+
+        const isSend = await emailService.sendVerifyEmail(email, name, verificationTokenEmail);
+
+        if (isSend && verificationTokenEmail !== null) {
+          return res.status(HttpStatusCode.OK).json({
+            status: 'success',
+            code: HttpStatusCode.OK,
+            data: {
+              name,
+              email,
+              isSendEmailVerify: isSend,
+            },
+          });
+        }
+        throw new UnprocessableEntity('Unprocessable Entity could not be processed');
+      }
+      throw new BadRequest('Verification has already been passed');
     } catch (error) {
       next(error);
     }

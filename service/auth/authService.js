@@ -9,14 +9,14 @@ class AuthService {
   }
 
   async createUser(body) {
-    const { id, name, email, role, avatarURL } = await repositoryUsers.create(body);
-    return { id, name, email, role, avatarURL };
+    const { id, name, email, role, avatarURL, verificationTokenEmail } = await repositoryUsers.create(body);
+    return { id, name, email, role, avatarURL, verificationTokenEmail };
   }
 
   async getUser(email, password) {
     const user = await repositoryUsers.findByEmail(email);
     const isValidPassword = await user?.isValidPassword(password);
-    if (!isValidPassword) {
+    if (!isValidPassword || !user?.isVerification) {
       return null;
     }
     return user;

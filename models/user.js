@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 const Joi = require('joi');
+const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const { randomUUID } = require('crypto');
 const emailRegexp =
   /^[-!#$%&'*+/=?^_`{|}~A-Za-z0-9]+(?:\.[-!#$%&'*+/=?^_`{|}~A-Za-z0-9]+)*@([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]/;
 const nameRegexp = /^[a-zA-Z. ']+$/;
-const bcrypt = require('bcryptjs');
 const { Role } = require('../libs');
-
 const userSchema = new Schema(
   {
     name: {
@@ -48,6 +48,15 @@ const userSchema = new Schema(
     idAvatarCloud: {
       type: String,
       default: null,
+    },
+    isVerification: {
+      type: Boolean,
+      default: false,
+    },
+    verificationTokenEmail: {
+      type: String,
+      required: [true, 'Verify token is required'],
+      default: randomUUID(),
     },
     role: {
       type: String,
@@ -93,6 +102,9 @@ const joiUserSignUpSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
+const joiUserVerifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
 
 const joiUserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business'),
@@ -105,4 +117,5 @@ module.exports = {
   joiUserLoginSchema,
   joiUserSignUpSchema,
   joiUserSubscriptionSchema,
+  joiUserVerifyEmailSchema,
 };
