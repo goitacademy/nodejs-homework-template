@@ -13,15 +13,15 @@ const {
 } = require("../../controllers");
 
 router.get("/", authenticate, getAllContact);
-router.get("/:contactId", isValidId, getContactById);
-router.post("/", addContact);
-router.put("/:contactId", isValidId, updateContactById);
+router.get("/:contactId", authenticate, isValidId, getContactById);
+router.post("/", authenticate, addContact);
+router.put("/:contactId", authenticate, isValidId, updateContactById);
 router.patch(
   "/:contactId/favorite",
-
+  authenticate,
   isValidId,
   updateFavoriteContact
 );
-router.delete("/:contactId", isValidId, removeContact);
+router.delete("/:contactId", authenticate, isValidId, removeContact);
 
 module.exports = router;

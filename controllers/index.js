@@ -6,7 +6,7 @@ const updateFavoriteContact = require("./contacts/updateFavoriteContact");
 const removeContact = require("./contacts/removeContact");
 
 const login = require("./auth/login");
-const getCurrent = require("./auth/current");
+const getCurrent = require("./auth/getCurrent");
 const logout = require("./auth/logout");
 const signup = require("./auth/signup");
 

@@ -1,5 +1,5 @@
 const { createError, postContactJoiSchema } = require("../../helpers");
-const Contact = require("../../models/contactSchema");
+const { Contact } = require("../../models/contactSchema");
 
 const addContact = async (req, res, next) => {
   try {
@@ -7,7 +7,8 @@ const addContact = async (req, res, next) => {
     if (error) {
       throw createError(400, "JoiError. Missing required field");
     }
-    const contact = await Contact.create(req.body);
+    const { _id } = req.user;
+    const contact = await Contact.create({ ...req.body, owner: _id });
     if (!contact) {
       throw createError(404);
     }

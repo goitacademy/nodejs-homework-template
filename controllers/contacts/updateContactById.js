@@ -1,5 +1,5 @@
 const { createError, updateContactJoiSchema } = require("../../helpers");
-const Contact = require("../../models/contactSchema");
+const { Contact } = require("../../models/contactSchema");
 
 const updateContactById = async (req, res, next) => {
   try {

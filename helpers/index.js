@@ -1,4 +1,4 @@
-const createError = require("./errors/createError");
+const { createError } = require("./errors/createError");
 const isValidId = require("./validate/mongoose/isValidId");
 const {
   postContactJoiSchema,

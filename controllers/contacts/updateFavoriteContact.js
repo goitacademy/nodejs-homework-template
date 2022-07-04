@@ -1,5 +1,5 @@
 const { createError, favoriteContactJoiSchema } = require("../../helpers");
-const Contact = require("../../models/contactSchema");
+const { Contact } = require("../../models/contactSchema");
 
 const updateFavoriteContact = async (req, res, next) => {
   try {
