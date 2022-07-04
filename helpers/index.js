@@ -4,6 +4,7 @@ const {
   postContactJoiSchema,
   updateContactJoiSchema,
   favoriteContactJoiSchema,
+  userJoiSchema,
 } = require("./validate/joi");
 const authenticate = require("./auth/authenticate");
 
@@ -12,6 +13,7 @@ module.exports = {
   postContactJoiSchema,
   updateContactJoiSchema,
   favoriteContactJoiSchema,
+  userJoiSchema,
   isValidId,
   authenticate,
 };
