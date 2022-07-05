@@ -1,15 +1,19 @@
 const { createError } = require("./errors/createError");
-const isValidId = require("./validate/isValidId");
+const isValidId = require("./validate/mongoose/isValidId");
 const {
-  postJoiSchema,
-  updateJoiSchema,
-  favoriteJoiSchema,
-} = require(".//validate/joiSchemas");
+  postContactJoiSchema,
+  updateContactJoiSchema,
+  favoriteContactJoiSchema,
+  userJoiSchema,
+} = require("./validate/joi");
+const authenticate = require("./auth/authenticate");
 
 module.exports = {
   createError,
-  postJoiSchema,
-  updateJoiSchema,
-  favoriteJoiSchema,
+  postContactJoiSchema,
+  updateContactJoiSchema,
+  favoriteContactJoiSchema,
+  userJoiSchema,
   isValidId,
+  authenticate,
 };
