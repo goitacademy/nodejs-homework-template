@@ -1,4 +1,4 @@
-const { Conflict, Unauthorized, NotFound, UnprocessableEntity, BadRequest } = require('http-errors');
+const { Conflict, Unauthorized, NotFound, BadRequest, ServiceUnavailable } = require('http-errors');
 const { authService } = require('../../service/auth');
 const { HttpStatusCode } = require('../../libs');
 const { repositoryContacts, repositoryUsers } = require('../../repository');
@@ -187,7 +187,7 @@ class UsersController {
             },
           });
         }
-        throw new UnprocessableEntity('Unprocessable Entity could not be processed');
+        throw new ServiceUnavailable('Service Unavailable');
       }
       throw new BadRequest('Verification has already been passed');
     } catch (error) {
