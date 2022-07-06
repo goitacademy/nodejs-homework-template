@@ -1,6 +1,11 @@
+// 1iCsK9vHbr0FX2hy
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv");
+
+const dotenv = require("dotenv");
+dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -17,7 +22,6 @@ app.use("/api/contacts", contactsRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
-
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server Error" } = err;
   res.status(status).json({ message });
