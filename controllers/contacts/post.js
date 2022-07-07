@@ -1,5 +1,6 @@
 const Joi = require('joi')
-const actions = require('../../models/contacts')
+// const actions = require('../../models/contacts')
+const Contact = require('../../models/newContacts')
 
 const postSchema = Joi.object({
   name: Joi.string().max(50).required(),
@@ -14,7 +15,7 @@ const post = async (req, res, next) => {
       error.status = 400
       throw new Error(error.message)
     }
-      const result = await actions.addContact(req.body)
+      const result = await Contact.create(req.body)
       res.json(result)
   } catch (error) {
     next(error)

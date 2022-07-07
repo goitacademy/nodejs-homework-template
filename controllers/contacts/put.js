@@ -1,5 +1,6 @@
 const Joi = require('joi')
-const actions = require('../../models/contacts')
+// const actions = require('../../models/contacts')
+const Contact = require('../../models/newContacts') 
 const createError = require('../../helpers/error')
 
 const putSchema = Joi.object({
@@ -19,7 +20,7 @@ const put = async (req, res, next) => {
     if (!name && !email && !phone) {
       throw createError(400, 'Missing Fields')
     }
-    const result = await actions.updateContact(req.params.contactId, req.body)
+    const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {new: true})
     if (result === null) { // если контакта с таким id нет
       throw createError(404)
     }
