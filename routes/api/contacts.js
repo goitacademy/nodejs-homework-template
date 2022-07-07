@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 const { ctrlWrapper } = require("../../helpers");
-const { validation, isValidId } = require("../../middlewares");
+const { validation, isValidId, isAuthorized } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", isAuthorized, ctrlWrapper(ctrl.getAll));
 
 router.get("/:id", isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(schemas.add), ctrlWrapper(ctrl.add));
+router.post("/", isAuthorized, validation(schemas.add), ctrlWrapper(ctrl.add));
 
 router.put(
   "/:id",
