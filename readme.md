@@ -1,31 +1,26 @@
-## GoIT Node.js Course Template Homework
+## CONTACTS API 
+Our resource allows you to create and store information about a person (name, е-mail address, phone number) in the contact book, using the[ Mongo database](https://cloud.mongodb.com/v2/62b196f45bfd3b47555aa300#metrics/replicaSet/62b1992510e61d3eefb643c1/explorer/db-contacts/contacts/find)
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+### Available methods
+* ```GET /contacts``` &mdash; method to get a list of all contacts
+* ```GET /contacts/{contactId}``` &mdash; method to get the right contact by id
+* ```POST /contacts``` &mdash; method for adding a new contact to the list
+* ```PUT /contacts/{contactId}``` &mdash; method for finding a contact by id and changing it 
+* ```PATCH /contacts/{contactID}/favorite``` &mdash; method for updating the status of a favorite contact by id
+* ```DELETE /contacts/{contactId}``` &mdash; method to remove a contact from the list by id
 
-Додайте ментора до колаборації
+### Contacts
 
-Для кожної домашньої роботи створюйте свою гілку.
+They're identified by their ids, which are unique integers, and live under ```/api/contacts/<contactId>```.
+All items have some of the following properties:
+field|description
+:---: |:----------
+**id**|```string```  the contact's unique id.[^1]
+**name**|```string``` contact name must contain only a-z, A-Z and 0-9 (***required field***)
+**email**|```string``` must be a valid contact email address such as nick@mail.com
+**phone**|```string``` the phone number should look like this *+38(044)555-55-55*
+**favorite**|```boolean``` property can be either *true* - added to favorites, or *false* - not added
+**createdAt**|```string``` date and time when the contact was created[^1] 
+**updatedAt**|```string``` date and time when the contact was updated[^1]
+[^1]:generated automatically by the database
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
-
-Кожна нова гілка для др повинна робитися з master
-
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
-
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
