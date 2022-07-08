@@ -5,6 +5,7 @@ const {
   controllerWrapper,
   validation,
   authenticate,
+  upload,
 } = require("../../helpers");
 
 const router = express.Router();
@@ -30,6 +31,13 @@ router.patch(
   authenticate,
   validation(schemas.joiSubscriptionSchema),
   controllerWrapper(controllers.updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  controllerWrapper(controllers.updateAvatar)
 );
 
 module.exports = router;
