@@ -3,7 +3,8 @@ const messages = {
     401: "Not Authorize",
     403: "Fobidden",
     404: "Not Found",
-    409: "Conflict"
+    409: "Conflict",
+    500: "asdasdasd"
 }
 
 const createError = (status, message = messages[status]) => {
@@ -12,4 +13,4 @@ const createError = (status, message = messages[status]) => {
     return error
 }
 
-module.exports = createError
+module.exports = createError 
