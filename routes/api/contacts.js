@@ -1,5 +1,5 @@
 const express = require('express')
-const {validation, ctrlWrapper} = require('../../middleware')
+const {validation, ctrlWrapper, authenticate} = require('../../middleware')
 
 const {joiSchema} = require('../../models/contact')
 
@@ -7,11 +7,11 @@ const {contacts: ctrl} = require("../../controllers")
 
 const router = express.Router()
 
-router.get('/', ctrlWrapper(ctrl.getAll))
+router.get('/', authenticate, ctrlWrapper(ctrl.getAll))
 
 router.get('/:id', ctrlWrapper(ctrl.getById))
 
-router.post('/', validation(joiSchema.add) , ctrlWrapper(ctrl.add))
+router.post('/', authenticate, validation(joiSchema.add) , ctrlWrapper(ctrl.add))
 
 router.delete('/:id', ctrlWrapper(ctrl.deleteContact))
 

@@ -29,8 +29,14 @@ const register = Joi.object({
   token: Joi.string().default(null)
 })
 
+const login = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().required()
+})
+
 const schemas = {
-  register
+  register,
+  login
 }
 
 
