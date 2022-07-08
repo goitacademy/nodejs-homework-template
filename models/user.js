@@ -5,12 +5,11 @@ const userSchema = Schema({
   password: {
     type: String,
     minlength: 6,
-    required: [true, 'Password is required'],
+    required: true,
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
-    unique: true,
+    required: true
   },
   subscription: {
     type: String,
@@ -24,7 +23,8 @@ const userSchema = Schema({
 }, {versionKey: false, timestamps: true})
 
 const register = Joi.object({
-  password: Joi.string().min(6).required(),
+  password: Joi.string().required(),
+
   email: Joi.string().required()
 })
 

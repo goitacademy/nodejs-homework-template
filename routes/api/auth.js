@@ -1,10 +1,12 @@
 const express = require('express')
-const {ctrlWrapper, validation} = require("../../middleware")
-const {userJoiSchema} = require('../../models/auth')
-const ctrl = require('../../controllers/auth')
 const router = express.Router()
 
+const {ctrlWrapper, validation} = require("../../middleware")
 
-router.post('/register', validation(userJoiSchema.register) , ctrlWrapper(ctrl.register))
+const {userJoiSchema} = require('../../models/user')
+const ctrl= require('../../controllers/auth')
+
+
+router.post("/register", ctrlWrapper(ctrl.register))
 
 module.exports = router
