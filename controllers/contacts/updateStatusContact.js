@@ -4,7 +4,6 @@ const { createError } = require("../../helpers");
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
-  console.log(favorite);
 
   if (favorite === undefined) {
     throw createError(400, "missing field favorite");
