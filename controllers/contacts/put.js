@@ -6,7 +6,8 @@ const createError = require('../../helpers/error')
 const putSchema = Joi.object({
   name: Joi.string().max(50),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ru'] } }),
-  phone: Joi.string().pattern(/^[0-9+()-_ ]*$/).max(20)
+  phone: Joi.string().pattern(/^[0-9+()-_ ]*$/).max(20),
+  favorite: Joi.boolean()
 })
 
 const put = async (req, res, next) => {
@@ -16,8 +17,8 @@ const put = async (req, res, next) => {
       error.status = 400
       throw new Error(error.message)
     }
-    const {name, email, phone} = req.body
-    if (!name && !email && !phone) {
+    const {name, email, phone, favorite} = req.body
+    if (!name && !email && !phone && favorite === undefined) {
       throw createError(400, 'Missing Fields')
     }
     const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {new: true})
