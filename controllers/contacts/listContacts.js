@@ -7,7 +7,7 @@ const listContacts = async (req, res) => {
   const result = await Contact.find({ owner: _id }, "", {
     skip,
     limit: Number(limit),
-  });
+  }).populate("owner", "email subscription");
   res.json({
     status: "success",
     code: 200,
