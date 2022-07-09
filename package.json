@@ -9,9 +9,11 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bson-objectid": "^2.0.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.6.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {

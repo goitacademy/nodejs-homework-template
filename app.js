@@ -1,25 +1,34 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require("./routes/api/contacts");
 
-const app = express()
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+// настройки моргана
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+// мидлвары
+// морган - логирует в консоле действия на сервере
+app.use(logger(formatsLogger));
 
-app.use('/api/contacts', contactsRouter)
+app.use(cors());
+// мидлвар который переделывает тело post запроса с json на обьект. если не добавлен будем получать undefined
+app.use(express.json());
 
+// что делать если есть запрос на маршрут /api/contacts
+app.use("/api/contacts", contactsRouter);
+
+// что делать если запрос на не существующий маршрут
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+});
 
+// обрабатывает все ошибки сервера(и прокинутые через next в catch)
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+module.exports = app;
