@@ -1,19 +1,43 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const listContacts = async () => {}
+const contactShema = Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+});
 
-const getContactById = async (contactId) => {}
+const ubdateContact = Joi.object({
+  name: Joi.string().alphanum().min(3).max(20).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "ua"] },
+  }),
+  phone: Joi.string().length(14),
+});
 
-const removeContact = async (contactId) => {}
+const updateFavorite = Joi.object({ favorite: Joi.bool().required() });
 
-const addContact = async (body) => {}
+const schemas = {
+  ubdateContact,
+  updateFavorite,
+};
 
-const updateContact = async (contactId, body) => {}
+const Contact = model("contact", contactShema);
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = { schemas, Contact };
