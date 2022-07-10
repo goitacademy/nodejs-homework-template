@@ -34,6 +34,7 @@ const login = async (req, res, next) => {
       user: {
         email: result.email,
         subscription: result.subscription,
+        avatarURL: result.avatarURL,
       },
     });
   } catch (error) {
