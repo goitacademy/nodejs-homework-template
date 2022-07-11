@@ -4,12 +4,13 @@ const path = require("path");
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const avatars = async (req, res) => {
-  const { path: tmpUpload, originalname } = req.file;
+  const { path: tempDir, originalname } = req.file;
   const resultUpload = path.join(avatarsDir, originalname);
   try {
-    await fs.rename(tmpUpload, resultUpload);
+    await fs.rename(tempDir, resultUpload);
+    res.status(201);
   } catch (error) {
-    await fs.unlink(tmpUpload);
+    await fs.unlink(tempDir);
   }
 };
 

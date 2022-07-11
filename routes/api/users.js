@@ -11,9 +11,6 @@ router.post("/login", validation(userLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 router.get("/current", auth, ctrlWrapper(ctrl.getCurrentUser));
 router.post("/avatars", upload.single("avatar"), ctrlWrapper(ctrl.avatars));
-// router.get("/avatars", async (req, res) => {
-//   res.json();
-// });
 router.patch(
   "/avatars",
   auth,
