@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { isValidId } = require("../../helpers");
-const { authenticate, upload } = require("../../helpers");
+const { authenticate } = require("../../helpers");
 
 const {
   addContact,
@@ -14,7 +14,7 @@ const {
 
 router.get("/", authenticate, getAllContact);
 router.get("/:contactId", authenticate, isValidId, getContactById);
-router.post("/", authenticate, upload.single("avatar"), addContact);
+router.post("/", authenticate, addContact);
 router.put("/:contactId", authenticate, isValidId, updateContactById);
 router.patch(
   "/:contactId/favorite",

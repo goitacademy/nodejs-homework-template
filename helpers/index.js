@@ -7,7 +7,7 @@ const {
   userJoiSchema,
 } = require("./validate/joi");
 const authenticate = require("./auth/authenticate");
-const { upload } = require("./filesControllers/upload");
+const upload = require("./filesControllers/upload");
 
 module.exports = {
   createError,

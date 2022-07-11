@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authenticate } = require("../../helpers");
+const { authenticate, upload } = require("../../helpers");
 
 const {
   signup,
@@ -18,6 +18,11 @@ router.get("/users/current", authenticate, getCurrent);
 
 router.post("/users/logout", authenticate, logout);
 
-router.patch("/users/avatars", authenticate, updateAvatar);
+router.patch(
+  "/users/avatars",
+  authenticate,
+  upload.single("avatar"),
+  updateAvatar
+);
 
 module.exports = router;
