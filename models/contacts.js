@@ -19,16 +19,16 @@ const getContactById = (id) => {
 
 const removeContact = (id) => {
   return listContacts()
-    .then(contacts => contacts.filter(contact => contact.id !== id))
-    .then(contacts => JSON.stringify(contacts, undefined, 2))
-    .then(getContactById(id).then(contact => {
-      if (contact) {
-        return contact
+    .then(contacts => {
+      const targetContact = contacts.find(contact => contact.id === id);
+      if (!targetContact) {
+        return undefined;
+      } else {
+        contacts.splice(contacts.indexOf(targetContact), 1);
+        const json = JSON.stringify(contacts, undefined, 2);
+        return fs.writeFile(contactsPath, json).then(() => targetContact);
       }
-      return contact
-    }))
-    .then(json => fs.writeFile(contactsPath, json))
-
+    });
 };
 
 
@@ -36,11 +36,25 @@ const addContact = ({ name, email, phone }) => {
   const getContactWithBiggestId = (contacts) => contacts.sort((a, b) => b.id - a.id)[0];
   const makeId = (contacts) => (parseInt(getContactWithBiggestId(contacts).id) + 1).toString();
   return listContacts()
-    .then(contacts => [...contacts, { id: makeId(contacts), name, email, phone }])
-    .then(contacts => JSON.stringify(contacts, undefined, 2))
-    .then(json => {
-      fs.writeFile(contactsPath, json)
-      return { name, email, phone }
+    .then(contacts => {
+      const newContact = { id: makeId(contacts), name, email, phone };
+      const json = JSON.stringify([...contacts, newContact], undefined, 2);
+      return fs.writeFile(contactsPath, json).then(() => newContact);
+    });
+};
+
+
+const updateContact = (id, body) => {
+  return listContacts()
+    .then(contacts => {
+      const targetContact = contacts.find(contact => contact.id === id);
+      if (!targetContact) {
+        return undefined;
+      } else {
+        Object.assign(targetContact, body);
+        const json = JSON.stringify(contacts, undefined, 2);
+        return fs.writeFile(contactsPath, json).then(() => targetContact);
+      }
     });
 };
 
@@ -49,5 +63,6 @@ module.exports = {
   listContacts,
   getContactById,
   removeContact,
+  updateContact,
   addContact,
 };
