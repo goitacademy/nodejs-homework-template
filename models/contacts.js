@@ -21,7 +21,14 @@ const removeContact = (id) => {
   return listContacts()
     .then(contacts => contacts.filter(contact => contact.id !== id))
     .then(contacts => JSON.stringify(contacts, undefined, 2))
-    .then(json => fs.writeFile(contactsPath, json));
+    .then(getContactById(id).then(contact => {
+      if (contact) {
+        return contact
+      }
+      return contact
+    }))
+    .then(json => fs.writeFile(contactsPath, json))
+
 };
 
 
