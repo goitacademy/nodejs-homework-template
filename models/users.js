@@ -20,7 +20,12 @@ const usersSchema = Schema({
   token: {
     type: String,
     default: null,
+   
   },
+  avatarURL: {
+    type: String,
+    required: [true, 'Avatar is required'],
+  }
 }, { versionKey: false, timestamps: true })
 
 const User = model("user", usersSchema)
@@ -29,7 +34,8 @@ const joiUserSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().required(),
     subscription: Joi.string().valid("starter", "pro", "business"),
-    token:Joi.string(),
+  token: Joi.string(),
+    avatarURL:Joi.string()
 }) 
 
 

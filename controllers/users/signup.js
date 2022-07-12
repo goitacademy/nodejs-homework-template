@@ -1,5 +1,8 @@
 const { User } = require('../../models/users');
 const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
+// const jimp = require('jimp')
+// const resizeAvatar = require('../../helpers/resizeAvatar')
 
 const signup = async(req, res) => {
     const { email, password} = req.body;
@@ -8,22 +11,25 @@ const signup = async(req, res) => {
         return res.status(409).json({
             status: "conflict",
             code:409,
-// Content-Type: application/json,
-data: {
-  message: "Email in use"
-}
+            data: {
+              message: "Email in use"
+              }
         })
     }
-    const hashPassword = bcrypt.hashSync(password,bcrypt.genSaltSync(10))
-    const result= await User.create({ email, password:hashPassword});
+  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const avatarURL = gravatar.url(email)
+  // const avatarURL = await resizeAvatar(avatar)
+
+    const result= await User.create({ email, password:hashPassword,avatarURL});
     res.status(201).json({
         status: "created",
         code:201,
 
         data: {
-  user: {
-   email,
-   subscription:user.subscription
+    user: {
+    email,
+    subscription: result.subscription,
+    avatarURL
   }
 }
 })
