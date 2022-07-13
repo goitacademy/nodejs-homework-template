@@ -33,12 +33,6 @@ const updateContact = async (contactId, { name, email, phone }) => {
   return contacts[idx];
 };
 
-// Отримує параметр id
-// Отримує body в json-форматі з оновленням будь-яких полів name, email и phone
-// Якщо body немає, повертає json з ключем {"message": "missing fields"} і статусом 400
-// Якщо з body все добре, викликає функцію updateContact(contactId, body). (Напиши її) для поновлення контакту в файлі contacts.json
-// За результатом роботи функції повертає оновлений об'єкт контакту і статусом 200. В іншому випадку, повертає json з ключем "message": "Not found" і статусом 404
-
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
   const newList = contacts.filter((item) => item.id !== contactId);
