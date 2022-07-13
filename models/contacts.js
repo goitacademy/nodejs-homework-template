@@ -30,7 +30,7 @@ const removeContact = async (id) => {
   return removeContact;
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async ({name, email, phone}) => {
   const contacts = await listContacts();
   const newContact = {id:v4(), name, email, phone};
   contacts.push(newContact);
@@ -38,7 +38,7 @@ const addContact = async (name, email, phone) => {
   return newContact;
 }
 
-const updateContact = async (id, name, email, phone) => {
+const updateContact = async (id, {name, email, phone}) => {
   const contacts = await listContacts();
   const index = contacts.findIndex(contact => contact.id === `${id}`);
   if(index === -1){
