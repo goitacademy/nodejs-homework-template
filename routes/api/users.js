@@ -7,6 +7,7 @@ const { userSignupSchema, userLoginSchema } = require("../../models/user");
 const router = express.Router();
 
 router.post("/signup", validation(userSignupSchema), ctrlWrapper(ctrl.signup));
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
 router.post("/login", validation(userLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 router.get("/current", auth, ctrlWrapper(ctrl.getCurrentUser));
