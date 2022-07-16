@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "name": "Cropp",
+    "email": "wer@gmail.com",
+    "phone": "+380665498877"
+  },
+  {
+    "id": "2",
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "3",
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038"
+  },
+  {
+    "id": "5",
+    "name": "Cyrus Jackson",
+    "email": "nibh@semsempererat.com",
+    "phone": "(501) 472-5218"
+  },
+  {
+    "id": "6",
+    "name": "Abbot Franks",
+    "email": "scelerisque@magnis.org",
+    "phone": "(186) 568-3720"
+  },
+  {
+    "id": "7",
+    "name": "Reuben Henry",
+    "email": "pharetra.ut@dictum.co.uk",
+    "phone": "(715) 598-5792"
+  },
+  {
+    "id": "8",
+    "name": "Simon Morton",
+    "email": "dui.Fusce.diam@Donec.com",
+    "phone": "(233) 738-2360"
+  },
+  {
+    "id": "9",
+    "name": "Thomas Lucas",
+    "email": "nec@Nulla.com",
+    "phone": "(704) 398-7993"
+  },
+  {
+    "name": "Arsen",
+    "phone": "0632535535",
+    "email": "arsentim2611@gmail.com",
+    "id": "81497108-105b-4eca-9eb2-5aed928d0a86"
+  },
+  {
+    "id": "4671b85b-7020-4c63-b05e-f656bbe54f70",
+    "name": "Frank",
+    "email": "frank@gmail.com",
+    "phone": "0984087817"
+  },
+  {
+    "id": "e2fdfa50-be89-44c5-8401-ca0f0ffc7c29",
+    "name": "Tim",
+    "email": "tim@gmail.com",
+    "phone": "+380687894525"
+  },
+  {
+    "id": "d4e27c98-f4bd-4840-b1fa-dc33a3bcb86a",
+    "name": "Sofa",
+    "phone": "+380687894525",
+    "email": "sofa@gmail.com"
+  },
+  {
+    "id": "75d327b8-5a4d-444c-953c-5ab6a0b90a49",
+    "name": "HELPME",
+    "email": "sparow@gmail.com",
+    "phone": "0674587899"
+  },
+  {
+    "id": "9784bcdb-a566-4ed2-ab0e-34162266f3fc",
+    "name": "Liza",
+    "email": "liza.ann@gmail.com",
+    "phone": "+380632535537"
+  },
+  {
+    "id": "e702c862-06b8-4b92-a785-4f7ffb91dc3f",
+    "name": "Deskot",
+    "email": "Deskot.ann@gmail.com",
+    "phone": "+380637115537"
+  },
+  {
+    "id": "6ef2b7ce-4570-4cd7-b15c-edc63724c4cd",
+    "name": "Deskot",
+    "email": "Deskot.ann@gmail.com",
+    "phone": "+380667894511"
+  }
+]

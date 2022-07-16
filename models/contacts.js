@@ -1,19 +1,47 @@
-// const fs = require('fs/promises')
+const DB = require('../db/db');
+const db = new DB('contacts.json');
+const { randomUUID } = require('crypto');
 
-const listContacts = async () => {}
+class Contacts {
+  async listContacts() {
+    return await db.read();
+  }
 
-const getContactById = async (contactId) => {}
+  async getContactById(contactId) {
+    const contacts = await db.read();
+    const [contact] = contacts.filter(({ id }) => id === contactId);
+    return contact;
+  }
 
-const removeContact = async (contactId) => {}
+  async addContact(body) {
+    const contacts = await db.read();
+    const contact = { id: randomUUID(), ...body };
+    contacts.push(contact);
+    await db.write(contacts);
+    return contact;
+  }
 
-const addContact = async (body) => {}
+  async removeContact(contactId) {
+    const contacts = await db.read();
+    const index = await contacts.findIndex(({ id }) => id === contactId);
+    if (index >= 0) {
+      const [contact] = contacts.splice(index, 1);
+      await db.write(contacts);
+      return contact;
+    }
+    return null;
+  }
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  async updateContact(body, contactId) {
+    const contacts = await db.read();
+    const index = await contacts.findIndex(({ id }) => id === contactId);
+    if (index >= 0) {
+      contacts[index] = { ...contacts[index], ...body };
+      await db.write(contacts);
+      return contacts[index];
+    }
+    return null;
+  }
 }
+
+module.exports = Contacts;
