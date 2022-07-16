@@ -46,6 +46,7 @@ const updateContact = async (contactId, body) => {
     return null
 }
 
+
 module.exports = {
   listContacts,
   getContactById,
