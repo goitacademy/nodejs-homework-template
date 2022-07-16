@@ -8,21 +8,35 @@ const {
   addContactController,
   removeContactController,
   updateContactController,
+  updateStatusContactController,
 } = require('../../controllers/contactController');
 
 const {
   createContactSchema,
   changeContactSchema,
+  patchContactSchema,
 } = require('../../middlewares/validationMiddleware');
 
-router.get('/', getContactsController);
+const { catchErrors } = require('../../middlewares/catchErrors');
 
-router.get('/:contactId', getContactByIdController);
+router.get('/', catchErrors(getContactsController));
 
-router.post('/', createContactSchema, addContactController);
+router.get('/:contactId', catchErrors(getContactByIdController));
 
-router.delete('/:contactId', removeContactController);
+router.post('/', createContactSchema, catchErrors(addContactController));
 
-router.put('/:contactId', changeContactSchema, updateContactController);
+router.delete('/:contactId', catchErrors(removeContactController));
+
+router.put(
+  '/:contactId',
+  changeContactSchema,
+  catchErrors(updateContactController)
+);
+
+router.patch(
+  '/:contactId/favorite',
+  patchContactSchema,
+  catchErrors(updateStatusContactController)
+);
 
 module.exports = router;
