@@ -1,81 +1,65 @@
-const express = require('express')
-const Joi = require("joi");
-const {
+const fs = require('fs/promises')
+const path = require('path');
+
+const contactsPath = path.join(__dirname, './contacts.json')
+
+const listContacts = async () => {
+  const data = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(data)
+  return contacts;
+}
+
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.find(item => item.id === contactId);
+  if(!contact){
+      return null;
+  }
+  return contact;
+}
+
+const removeContact = async (contactId) => {
+  const contact = await getContactById(contactId);
+  if(!contact){
+    return null;
+  }
+  const contacts = await listContacts();
+  const updateContacts = contacts.filter(item => item.id !== String(contactId));
+  await fs.writeFile(contactsPath, JSON.stringify(updateContacts, null, 2));
+  return contact;
+}
+
+const addContact = async (body) => {
+  const contacts = await listContacts();
+  const lastID = Number(contacts[contacts.length - 1].id)
+  const newContact = {
+      id: String(lastID + 1),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+  }
+  const updateContacts = [...contacts, ...newContact]
+  await fs.writeFile(contactsPath, JSON.stringify(updateContacts, null, 2))
+  return newContact;
+}
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contact = contacts.find(item => item.id === contactId);
+  if(!contact) {
+    return null;
+  }
+  contact.name = body.name;
+  contact.email = body.email;
+  contact.phone = body.phone;
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+  return contact;
+}
+
+module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
-const { createError } = require("../../helpers");
-const router = express.Router()
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required()
-});
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const {contactId} = req.params;
-    const result = await getContactById(contactId);
-    if(!result){
-        throw createError(404);
-    }
-    res.json(result);
-} catch (error) {
-   next(error);
 }
-});
-
-router.post("/", async (req, res, next) => {
-  try {
-    const {error} = schema.validate(req.body);
-    if(error){ 
-        throw createError(400, error.message);
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-} catch (error) {
-    next(error);
-}
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const {contactId} = req.params;
-    const result = await removeContact(contactId);
-    if(!result){
-        createError(404);
-    }
-    res.json({
-        message: "contact deleted"
-    })
-} catch (error) {
-    next(error);
-}
-});
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const {error} = schema.validate(req.body);
-    if(error){ 
-        throw createError(400, error.message);
-    }
-    const {contactId} = req.params;
-    const result = await updateContact(contactId, req.body);
-    if(!result){
-        throw createError(404);
-    }
-    res.json(result);
-} catch (error) {
-    next(error);
-}
-});
-module.exports = router;
