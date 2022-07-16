@@ -1,8 +1,23 @@
-const express = require('express')
-
-const router = express.Router()
+const express = require('express');
+const Joi = require('joi');
 const contacts = require('../../models/contacts');
 const createError = require('../../helpers/createError');
+
+const router = express.Router();
+
+const contactShema = Joi.object({
+  name: Joi.string()
+        .min(2)
+        .max(30)
+        .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+  phone: Joi.string()
+        .min(6)
+        .max(12)
+        .required(),
+})
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -29,8 +44,13 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-
-    res.json({ message: 'template message' })
+    const { error } = contactShema.validate(req.body);
+    if (error) { 
+      throw createError(400, error.message);
+    }
+    const result = await contacts.addContact(req.body);
+    console.log(result);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
