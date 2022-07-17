@@ -38,12 +38,7 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-const userSignupSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
-
-const userLoginSchema = Joi.object({
+const userAuthSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
@@ -52,6 +47,5 @@ const User = model("user", userSchema);
 
 module.exports = {
   User,
-  userSignupSchema,
-  userLoginSchema,
+  userAuthSchema,
 };
