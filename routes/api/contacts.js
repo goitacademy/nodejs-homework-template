@@ -33,7 +33,6 @@ router.post('/', async (req, res, next) => {
     const { error } = contactSchema.validate(req.body);
     if (error) {
       throw createError(400, 'missing required name field');
-      // throw createError(400, error.message);
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
