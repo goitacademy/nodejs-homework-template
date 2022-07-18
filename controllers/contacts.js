@@ -2,7 +2,7 @@
 const {Contact} = require("../models")
 
 const listContacts = async (req, res) => {
-  const contacts = await Contact.find({})
+  const contacts = await Contact.find()
   res.json({
     status: 200,
     data:  contacts 
@@ -23,13 +23,13 @@ const getContactById = async (req,res) => {
     }
 
 
-// const addContact = async (req, res)=>{
-//   const result = await Contact.create(req.body)
-//   res.status(201).json({
-//     code: 201,
-//     data: {result}
-//   })
-// }
+const addContact = async (req, res)=>{
+  const result = await Contact.create(req.body)
+  res.status(201).json({
+    code: 201,
+    data: {result}
+  })
+}
 
 
 
@@ -73,7 +73,7 @@ module.exports = {
   listContacts,
   getContactById,
   removeContact,
-  // addContact,
+  addContact,
   updateContact,
   updateFav
 }
