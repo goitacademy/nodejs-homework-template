@@ -1,4 +1,5 @@
-const { createError, favoriteContactJoiSchema } = require("../../helpers");
+const { createError } = require("../../helpers");
+const { favoriteContactJoiSchema } = require("../../middlewares");
 const { Contact } = require("../../models/contactSchema");
 
 const updateFavoriteContact = async (req, res, next) => {

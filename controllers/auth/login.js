@@ -1,11 +1,13 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../models/userSchema");
-const { createError, userJoiSchema } = require("../../helpers");
-const { SECRET_KEY } = process.env;
+const { createError } = require("../../helpers");
+const { userJoiSchema } = require("../../middlewares");
+const { JWT_SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { error } = userJoiSchema.validate(req.body);
     if (error) {
       throw createError(400, "JoiError. Missing required field");
@@ -18,7 +20,12 @@ const login = async (req, res, next) => {
       throw createError(401, "Email or password is wrong");
     }
 
-    if (!bcrypt.compare(password, user.password)) {
+    if (!user.verify) {
+      throw createError(401, "Email not verify");
+    }
+
+    const compareResult = bcrypt.compare(password, user.password);
+    if (!compareResult) {
       throw createError(401, "Email or password is wrong");
     }
 
@@ -26,7 +33,7 @@ const login = async (req, res, next) => {
       id: user._id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
     const result = await User.findByIdAndUpdate(user._id, { token });
 
     res.json({

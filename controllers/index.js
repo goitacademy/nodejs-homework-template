@@ -10,6 +10,8 @@ const getCurrent = require("./auth/getCurrent");
 const logout = require("./auth/logout");
 const signup = require("./auth/signup");
 const updateAvatar = require("./auth/updateAvatar");
+const verifyEmail = require("./auth/verifyEmail");
+const resendVerifyEmail = require("./auth/resendVerifyEmail");
 
 module.exports = {
   addContact,
@@ -23,4 +25,6 @@ module.exports = {
   getCurrent,
   logout,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 };

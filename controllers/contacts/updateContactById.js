@@ -1,4 +1,5 @@
-const { createError, updateContactJoiSchema } = require("../../helpers");
+const { createError } = require("../../helpers");
+const { updateContactJoiSchema } = require("../../middlewares");
 const { Contact } = require("../../models/contactSchema");
 
 const updateContactById = async (req, res, next) => {

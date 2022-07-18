@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isValidId } = require("../../helpers");
-const { authenticate } = require("../../helpers");
+const { authenticate, isValidId } = require("../../middlewares");
 
 const {
   addContact,

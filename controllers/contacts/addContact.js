@@ -1,4 +1,5 @@
-const { createError, postContactJoiSchema } = require("../../helpers");
+const { createError } = require("../../helpers");
+const { postContactJoiSchema } = require("../../middlewares");
 const { Contact } = require("../../models/contactSchema");
 
 const addContact = async (req, res, next) => {
