@@ -2,6 +2,8 @@ const express = require('express');
 
 const contacts = require('../../models/contacts');
 
+const { createError } = require('../../helpers');
+
 const router = express.Router();
 
 router.get('/', async (_req, res, next) => {
@@ -36,11 +38,7 @@ router.get('/:contactId', async (req, res, next) => {
         },
       });
     } else {
-      return res.status(404).json({
-        status: 'Error',
-        code: 404,
-        message: 'Not Found',
-      });
+      throw createError(404);
     }
   } catch (error) {
     next(error);
