@@ -48,7 +48,28 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const result = contacts.addContact(req.body);
+
+    if (!result) {
+      return res.json({
+        status: 'Success',
+        code: 201,
+        message: 'Request successful. Contact created',
+        data: {
+          result,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'Error',
+        code: 404,
+        message: 'Missing required name field',
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
