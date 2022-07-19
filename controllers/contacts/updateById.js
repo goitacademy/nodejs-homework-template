@@ -1,23 +1,22 @@
-const {contactAddSchema} = require("../../schemas")
+const {joiSchema} = require("../../models")
 const createError = require("../../helpers");
-const contacts = require("../../models/contacts");
+const {Contact} = require('../../models/contact')
 
 
 const updateById = async (req, res, next) => {
-    try {
-      const {error} = contactAddSchema.validate(req.body);
+      const {error} = joiSchema.validate(req.body);
       if(error){
         throw createError(400, "missing fields")
       }
       const {contactId} = req.params;
-      const result = await contacts.updateContact(contactId, req.body);
+      const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
       if(!result){
         throw createError(404, "Not Found");
       }
-      res.json(result)
-    } catch (error) {
-      next(error)
-    }
+      res.json({
+        status: "success",
+        code: 200,
+        data: {result}})
     
   }
 
