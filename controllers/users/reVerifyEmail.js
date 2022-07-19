@@ -1,6 +1,7 @@
 const { createError } = require("../../helpers");
 const { User } = require("../../models");
 const { sendEmail } = require("../../helpers");
+const { LOCAL_HOST, PORT = 3000 } = process.env;
 
 const reSendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -14,7 +15,7 @@ const reSendVerifyEmail = async (req, res) => {
   const mail = {
     to: email,
     subject: "Підтвердження email",
-    html: `<a target="_blank" href="http://localhost:3000/users/verify/${user.verificationToken}">Підтвердіть email</a>`,
+    html: `<a target="_blank" href="${LOCAL_HOST}:${PORT}/users/verify/${user.verificationToken}">Підтвердіть email</a>`,
   };
   await sendEmail(mail);
 
