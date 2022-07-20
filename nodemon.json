@@ -1,3 +1,14 @@
 {
-  "ignore": ["node_modules", "models/contacts.json"]
+  "watch": [
+    "src"
+  ],
+  "ext": "ts,json",
+  "ignore": [
+    "src/**/*.spec.ts",
+    "./**/*.log",
+    "node_modules",
+    "try",
+    "models/contacts.json"
+  ],
+  "exec": "npx ts-node "
 }

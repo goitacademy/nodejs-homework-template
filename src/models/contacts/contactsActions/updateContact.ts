@@ -1,16 +1,20 @@
+"use strict"
+
+import { IContactAdd, IContactGet } from "../../../Interfaces/contactIterfaces";
+
 const listContacts = require('./listContacts');
 const updateContacts = require('./helpers/updateContactList');
 
-const updateContact = async (id, { name, email, phone }) => {
+export const updateContact = async (id: string, { name, email, phone }: IContactAdd) => {
 
-    const contacts = await listContacts();
+    const contacts: IContactGet[] | null = await listContacts();
 
     // empty Data Base
     if (!contacts) {
         return null;
     }
 
-    const idx = contacts.findIndex(item => item.id === id);
+    const idx: number = contacts.findIndex(item => item.id === id);
 
     //no contact with searched id in the Data Base
     if (idx === -1) {
@@ -18,13 +22,14 @@ const updateContact = async (id, { name, email, phone }) => {
     }
 
     contacts[idx] = {
+        ...contacts[idx],
         name,
         email,
-        phone
+        phone,
+
     }
 
     await updateContacts(contacts);
     return contacts[idx];
 }
 
-module.exports = updateContact;
