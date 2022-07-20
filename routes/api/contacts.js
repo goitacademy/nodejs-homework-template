@@ -1,81 +1,19 @@
 const express = require('express');
 
-const contacts = require('../../models/contacts');
+const controllers = require('../../controllers/contacts');
 
-const { createError } = require('../../helpers');
+const { wrapper } = require('../../helpers');
 
 const router = express.Router();
 
-router.get('/', async (_req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
+router.get('/', wrapper(controllers.getAllContacts));
 
-    return res.json({
-      status: 'Success',
-      code: 200,
-      message: 'Contacts found',
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/:id', wrapper(controllers.getContactById));
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+router.post('/', wrapper(controllers.addContact));
 
-    if (result) {
-      return res.json({
-        status: 'Success',
-        code: 200,
-        message: 'Contact found',
-        data: {
-          result,
-        },
-      });
-    } else {
-      throw createError(404);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete('/:id', wrapper(controllers.removeContact));
 
-router.post('/', async (req, res, next) => {
-  try {
-    const result = contacts.addContact(req.body);
-
-    if (!result) {
-      return res.json({
-        status: 'Success',
-        code: 201,
-        message: 'Request successful. Contact created',
-        data: {
-          result,
-        },
-      });
-    } else {
-      return res.status(404).json({
-        status: 'Error',
-        code: 404,
-        message: 'Missing required name field',
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-});
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-});
+router.put('/:id', wrapper(controllers.updateContact));
 
 module.exports = router;
