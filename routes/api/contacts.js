@@ -5,6 +5,7 @@ const { createError } = require("../../helpers");
 const { Contact } = require("../../models/contact");
 
 const {
+  autentificate,
   validation,
   validationFavorite,
   isVaidId,
@@ -13,9 +14,13 @@ const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", autentificate, async (req, res, next) => {
   try {
-    const result = await Contact.find({}, "-createdAt -updatedAt");
+    const { _id: owner } = req.user;
+    const result = await Contact.find(
+      { owner },
+      "-createdAt -updatedAt"
+    ).populate("owner", "email,name");
     res.json(result);
   } catch (error) {
     next(error);
@@ -36,14 +41,20 @@ router.get("/:contactId", isVaidId, async (req, res, next) => {
   }
 });
 
-router.post("/", validation(schemas.add), async (req, res, next) => {
-  try {
-    const result = await Contact.create(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
+router.post(
+  "/",
+  autentificate,
+  validation(schemas.add),
+  async (req, res, next) => {
+    try {
+      const { _id: owner } = req.user;
+      const result = await Contact.create({ ...req.body, owner });
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.delete("/:contactId", isVaidId, async (req, res, next) => {
   try {
