@@ -7,13 +7,17 @@ const listContacts = async (req, res) => {
   res.json({ status: "success", code: 200, payload: { result } });
 };
 
-const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
-  res.status(201).json({
-    status: "success",
-    code: 201,
-    data: { result },
-  });
+const addContact = async (req, res, next) => {
+  try {
+    const result = await Contact.create(req.body);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { result },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getContactById = async (req, res, next) => {
@@ -62,11 +66,13 @@ const removeContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res) => {
   const { params, body } = req;
-  const { id } = params;
+  const { contactId } = params;
   if (!body) {
     res.status(400).json({ message: "missing field favorite" });
   }
-  const result = await Contact.findByIdAndUpdate(id, body, { new: true });
+  const result = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
   if (!result) {
     throw createError(404);
   }
