@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./src/server.js",
+    "start": "cross-env NODE_ENV=production node ./dist/server.js",
+    "build": "npx tsc",
     "start:dev": "cross-env NODE_ENV=development nodemon src/server.ts",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"

@@ -1,4 +1,5 @@
 "use strict";
+
 import express,
 {
   Request,
@@ -7,13 +8,9 @@ import express,
 } from "express";
 
 import logger from 'morgan';
-// const logger = require('morgan')
 import cors from 'cors';
-// const cors = require('cors')
 import { serverLogger } from './helpers/server-logger';
-// const serverLogger = require('./helpers/server-logger');
 import contactsRouter from './routes/api';
-// const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
 
@@ -26,7 +23,6 @@ app.use(serverLogger);
 
 app.use('/api/contacts', contactsRouter)
 
-
 app.use((req: Request, res: Response) => {
   res.status(404).json({ message: 'Not found' })
 })
@@ -36,4 +32,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(status).json({ message })
 })
 
-module.exports = app
+export default app;

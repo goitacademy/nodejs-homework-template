@@ -3,9 +3,16 @@
 import { InterfaceFrom } from "types-joi";
 import Joi from "types-joi";
 
+
 export const contactAddShema = Joi.object({
     name: Joi.string().required(),
-    email: Joi.string().required(),
+    /*     a valid email address string
+        must have two domain parts e.g. example.com
+        TLD must be .com or .net
+     */
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .required(),
     phone: Joi.string().required(),
 })
 

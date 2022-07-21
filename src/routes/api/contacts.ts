@@ -1,27 +1,32 @@
 "use strict"
+
 import express, {
     Response,
     Request,
     NextFunction,
 } from 'express';
 
-import { validateContactAdd } from './helpers/validateContactAdd';
-import contactsDBModel from '../../models/contacts';
-import { createError } from '../../helpers/createError';
-
-// const contactsActions = require('../../models/contacts/Interfaces/contactIterface');
-
-// const createError = require('../../helpers/createError');
+import actions from './actions';
+import verifyAction from './helpers/verifyAction';
 
 const router = express.Router();
 
-// router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const result = await 
-//     } catch (error) {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    await verifyAction(req, res, next, actions.getContacts);
+})
 
-//     }
-// })
-validateContactAdd({ name: "qwrertr", email: "fggdgd", phone: "34765877" });
+router.get('/:contactId', async (req: Request, res: Response, next: NextFunction) => {
+    await verifyAction(req, res, next, actions.getContactById);
+})
+router.post("/", async (req, res, next) => {
+    await verifyAction(req, res, next, actions.postContact);
+})
+
+router.delete('/:contactId', async (req, res, next) => {
+    await verifyAction(req, res, next, actions.deleteContactById);
+})
+router.put('/:contactId', async (req, res, next) => {
+    await verifyAction(req, res, next, actions.putContactById);
+})
 
 export default router;

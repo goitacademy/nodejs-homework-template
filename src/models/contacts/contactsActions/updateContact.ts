@@ -1,9 +1,8 @@
 "use strict"
 
 import { IContactAdd, IContactGet } from "../../../Interfaces/contactIterfaces";
-
-const listContacts = require('./listContacts');
-const updateContacts = require('./helpers/updateContactList');
+import { listContacts } from './listContacts';
+import { updateContactList } from "./helpers/updateContactList";
 
 export const updateContact = async (id: string, { name, email, phone }: IContactAdd) => {
 
@@ -29,7 +28,7 @@ export const updateContact = async (id: string, { name, email, phone }: IContact
 
     }
 
-    await updateContacts(contacts);
+    await updateContactList(contacts);
     return contacts[idx];
 }
 

@@ -1,5 +1,7 @@
-const app = require('./app')
+import app from './app';
 
-app.listen(5000, () => {
-  console.log("Server running. Use our API on port: 3000")
+const port: number = 9991;
+
+app.listen(9991, () => {
+  console.log(`Server running. Use our API on port: ${port}`)
 })
