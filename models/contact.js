@@ -8,6 +8,7 @@ const contactSchema = Schema({
   },
   email: {
     type: String,
+    unique: true,
   },
   phone: {
     type: String,
@@ -17,6 +18,7 @@ const contactSchema = Schema({
     default: false,
   },
 });
+const Contact = model("contact", contactSchema);
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
@@ -32,8 +34,6 @@ const schemas = {
   contactAddSchema,
   updateFavorite,
 };
-
-const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
