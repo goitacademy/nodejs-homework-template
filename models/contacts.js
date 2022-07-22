@@ -17,7 +17,6 @@ const constactsSchema = new Schema ({
     },
   }, {versionKey: false})
 
-
   const Contacts = model('contacts', constactsSchema)
   
   module.exports = Contacts
