@@ -1,8 +1,23 @@
-const crypto = require('crypto')
-const DB = require('./db')
-const db = new DB('./contacts.json')
+const {Schema, model} = require('mongoose')
 
+const constactsSchema = new Schema ({
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  }, {versionKey: false})
 
+<<<<<<< Updated upstream
 const listContacts = async () => {
     return await db.read()
 }
@@ -54,3 +69,8 @@ module.exports = {
   addContact,
   updateContact,
 }
+=======
+  const Contacts = model('contacts', constactsSchema)
+  
+  module.exports = Contacts
+>>>>>>> Stashed changes
