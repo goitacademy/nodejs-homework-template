@@ -17,6 +17,9 @@ const putContactById = async (req: Request, res: Response) => {
     }
     const { contactId } = req.params;
     const result: IContactGet | null = await contactsDBModel.contactsActions.updateContact(contactId, body);
+    if (!result) {
+        throw createError("404");
+    }
     res.json(result);
 }
 

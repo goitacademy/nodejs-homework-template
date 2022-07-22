@@ -14,6 +14,9 @@ const putContactById = async (req, res) => {
     }
     const { contactId } = req.params;
     const result = await contacts_1.default.contactsActions.updateContact(contactId, body);
+    if (!result) {
+        throw (0, createError_1.createError)("404");
+    }
     res.json(result);
 };
 exports.default = putContactById;
