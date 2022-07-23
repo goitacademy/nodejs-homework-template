@@ -4,7 +4,7 @@ const {createError} = require('../../helpers');
 const updateFavorite = async (req, res, next) => {
         const {error}=schemas.updateFavorite.validate(req.body);
         if(error){
-          throw createError(400, "missing fields");
+          throw createError(400, "missing field favorite");
         }
         const {contactId}=req.params;
         const result=await Contact.findByIdAndUpdate(contactId, req.body, {new:true});
