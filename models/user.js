@@ -23,6 +23,9 @@ const userSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: "user",
   },
+  avatarURL: {
+    type: String,
+  },
 });
 
 const User = model("user", userSchema);
