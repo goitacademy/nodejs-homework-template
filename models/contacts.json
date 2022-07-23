@@ -30,12 +30,6 @@
     "phone": "(501) 472-5218"
   },
   {
-    "id": "6",
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
     "id": "7",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
@@ -55,8 +49,20 @@
   },
   {
     "id": "10",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
+    "name": "Hermione Granger",
+    "email": "muggle-rules@hogwarts.com",
+    "phone": "(098) 123-45-67"
+  },
+  {
+    "id": "5bb7de30-20f5-4338-9ffb-4eeecfd49396",
+    "name": "Harry Potter",
+    "email": "the-boy-who-lived@hogwarts.com",
+    "phone": "(044) 777-77-77"
+  },
+  {
+    "id": "64463e4f-de41-4366-a12c-4a9b4c98ddea",
+    "name": "Ronald Weasley",
+    "email": "redhead-potter-friend@hogwarts.com",
+    "phone": "(101) 010-10-10"
   }
 ]
