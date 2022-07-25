@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ctrlWrapper, validation } = require("../../middlewares");
 const { auth: ctrl } = require("../../controllers");
-const { joiRegisterSchema } = require("../../models/user");
+const { joiRegisterSchema, joiLoginSchema } = require("../../models/user");
 
 router.post(
   "/register",
@@ -10,4 +10,5 @@ router.post(
   ctrlWrapper(ctrl.register)
 );
 
+router.post("/login", validation(joiLoginSchema), ctrlWrapper(ctrl.login));
 module.exports = router;
