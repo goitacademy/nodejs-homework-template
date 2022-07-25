@@ -2,8 +2,8 @@ const { basedir } = global;
 const { Contact, schemas } = require(`${basedir}/models/contact`);
 const { createError } = require(`${basedir}/utils`);
 
-const updateById = async (req, res) => {
-  const { error } = schemas.contactUdpFavSchema.validate(req.body);
+const updateStatusContact = async (req, res) => {
+  const { error } = schemas.contactUpdateStatusSchema.validate(req.body);
   if (error) {
     throw createError(400, error.message);
   }
@@ -15,4 +15,4 @@ const updateById = async (req, res) => {
   res.json(result);
 };
 
-module.exports = updateById;
+module.exports = updateStatusContact;

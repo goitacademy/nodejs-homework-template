@@ -1,17 +1,19 @@
 const express = require("express");
+const { basedir } = global;
 const router = express.Router();
-const ctrl = require("../../controllers/contacts");
+const ctrl = require(`${basedir}/controllers/contacts`);
+const ctrlWrapper = require(`${basedir}/utils/ctrlWrapper`);
 
-router.get("/", ctrl.getAll);
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:id", ctrl.getById);
+router.get("/:id", ctrlWrapper(ctrl.getById));
 
-router.post("/", ctrl.addContact);
+router.post("/", ctrlWrapper(ctrl.addContact));
 
-router.put("/:id", ctrl.updateById);
+router.put("/:id", ctrlWrapper(ctrl.updateById));
 
-router.patch("/:id/favorite", ctrl.updateByIdFav);
+router.patch("/:id/favorite", ctrlWrapper(ctrl.updateStatusContact));
 
-router.delete("/:id", ctrl.removeById);
+router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
