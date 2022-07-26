@@ -1,80 +1,22 @@
 const express = require('express');
-const Joi = require('joi')
 const router = express.Router();
 
-const contacts = require('../../models/contacts');
-const createErr = require("../../helpers")
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),  
-  phone: Joi.string().required()
-})
+const { basedir } = global;
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error)
-  }
-});
+const ctrl = require(`${basedir}/controllers/contacts`);
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    const {id} = req.params
-    const result = await contacts.getContactById(id);
-    if (!result) {
-      throw createErr(404)
-    }
-    res.json(result);
-  } catch (error) {
-     next(error) 
-  }
-});
+const { ctrlWrapper } = require(`${basedir}/helpers/`);
 
-router.post('/', async (req, res, next) => {
-  try {
-   const {error} = contactAddSchema.validate(req.body)
-   if (error) {
-    throw createErr(400,"missing required name field")
-   }
-    const result = await contacts.addContact(req.body)
-    res.status(201).json(result)
-  } catch (error) {
-    next(error)
-  }
-});
+router.get('/', ctrlWrapper(ctrl.getAll));
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const {id} = req.params
-    const result  = await contacts.removeContact(id)
-    if (!result) {
-      throw createErr(404)
-    }
-    res.json({
-      message: "Contact deleted"
-    })
-  } catch (error) {
-    next(error)
-  }
-});
+router.get('/:id', ctrlWrapper(ctrl.getByid));
 
-router.put('/:id', async (req, res, next) => {
-  try {
-    const {error} = contactAddSchema.validate(req.body)
-    if (error) {
-     throw createErr(400,"missing fields")
-    }
-    const {id} = req.params
-    const result = await contacts.updateContact(id,req.body)
-    if (!result) {
-       throw createErr(404)
-    }
-    res.json(result)
-  } catch (error) {
-    next(error)
-  }
-});
+router.patch('/:id/favorite', ctrlWrapper(ctrl.updateFavorite));
+
+router.post('/', ctrlWrapper(ctrl.add));
+
+router.delete('/:id', ctrlWrapper(ctrl.removeById));
+
+router.put('/:id', ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
