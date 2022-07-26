@@ -1,3 +1,5 @@
 node_modules/
 try/
 .env
+*.log
+*.lock
