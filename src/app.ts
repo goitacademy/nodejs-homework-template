@@ -20,7 +20,6 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 app.use(serverLogger);
-
 app.use('/api/contacts', contactsRouter)
 
 app.use((req: Request, res: Response) => {
