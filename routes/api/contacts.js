@@ -1,8 +1,8 @@
 const express = require("express");
-const { basedir } = global;
 const router = express.Router();
+const { basedir } = global;
 const ctrl = require(`${basedir}/controllers/contacts`);
-const ctrlWrapper = require(`${basedir}/utils/ctrlWrapper`);
+const { ctrlWrapper } = require(`${basedir}/utils`);
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 
