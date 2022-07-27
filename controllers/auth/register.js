@@ -1,5 +1,4 @@
 const { User } = require("../../models");
-// const { createError } = require("../../helpers");
 const bcrypt = require("bcryptjs");
 
 const register = async (req, res) => {
