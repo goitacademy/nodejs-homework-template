@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { ctrlWrapper, auth } = require("../../middlewares");
-const { users } = require("../../controllers");
+const { users: ctrl } = require("../../controllers");
 
-router.get("/current", auth, ctrlWrapper(users));
+router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
 
 module.exports = router;
