@@ -3,7 +3,7 @@ const { Contact, schemas } = require(`${basedir}/models/contact`);
 const { createError } = require(`${basedir}/utils`);
 
 const updateStatusContact = async (req, res) => {
-  const { error } = schemas.contactUpdateStatusSchema.validate(req.body);
+  const { error } = schemas.updateStatusContact.validate(req.body);
   if (error) {
     throw createError(400, error.message);
   }

@@ -3,7 +3,7 @@ const { Contact, schemas } = require(`${basedir}/models/contact`);
 const { createError } = require(`${basedir}/utils`);
 
 const addContact = async (req, res) => {
-  const { error } = schemas.contactAddSchema.validate(req.body);
+  const { error } = schemas.addContact.validate(req.body);
   if (error) {
     throw createError(400, error.message);
   }

@@ -33,7 +33,7 @@ const contactUpdateStatusSchema = Joi.object({
 });
 
 const schemas = {
-  add: contactAddSchema,
+  addContact: contactAddSchema,
   updateStatusContact: contactUpdateStatusSchema,
 };
 
