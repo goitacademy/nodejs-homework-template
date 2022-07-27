@@ -6,15 +6,17 @@
     "start": "cross-env NODE_ENV=production node ./dist/server.js",
     "build": "npx tsc",
     "start:dev": "cross-env NODE_ENV=development nodemon src/server.ts",
-    "lint": "eslint **/*.js",
+    "lint": "eslint ./dist/**/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.1",
     "express": "4.17.1",
     "joi": "^17.6.0",
     "moment": "^2.29.4",
+    "mongoose": "^6.4.7",
     "morgan": "1.10.0",
     "types-joi": "^2.1.0",
     "uuid": "^8.3.2"
@@ -31,6 +33,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
+    "eslint-plugin-void": "^1.0.2",
     "nodemon": "2.0.15",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"

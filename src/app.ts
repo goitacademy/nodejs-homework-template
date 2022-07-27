@@ -10,7 +10,11 @@ import express,
 import logger from 'morgan';
 import cors from 'cors';
 import { serverLogger } from './helpers/server-logger';
-import contactsRouter from './routes/api';
+import contactsRouter from './routes/api/contacts';
+
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express()
 

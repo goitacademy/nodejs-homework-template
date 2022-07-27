@@ -1,11 +1,10 @@
 "use strict"
-import contactsActions from './contactsActions';
-import contactsPath from './contactsDB';
-import { IContactsDBModel } from '../../Interfaces/contactIterfaces';
+import model from './Contact';
+import outerSchema from './outerSchema';
 
-const contactsDBModel: IContactsDBModel = {
-    contactsActions,
-    contactsPath,
+const Contact = {
+    model,
+    outerSchema
 }
 
-export default contactsDBModel;
+export default Contact;
