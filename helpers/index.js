@@ -1,2 +1,5 @@
-const createError = require("./createErrors");
-module.exports = createError;
+const createError = require("./createError");
+
+module.exports = {
+  createError,
+};

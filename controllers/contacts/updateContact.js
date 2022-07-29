@@ -1,5 +1,5 @@
-const createError = require("../helpers");
-const { Contact } = require("../models");
+const { createError } = require("../../helpers");
+const { Contact } = require("../../models");
 
 const updateContact = async (req, res, next) => {
   try {
