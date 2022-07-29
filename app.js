@@ -8,11 +8,11 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-// app.get("/", (req, res) => {
-//   res.send(
-//     "<h3>For get a list of contacts go to http://localhost:3000/api/contacts</h3>"
-//   );
-// });
+app.get("/", (req, res) => {
+  res.send(
+    "<h3>For get a list of contacts go to http://localhost:3000/api/contacts</h3>"
+  );
+});
 
 app.use(logger(formatsLogger));
 app.use(cors());
