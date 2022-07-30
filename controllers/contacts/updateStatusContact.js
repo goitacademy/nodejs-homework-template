@@ -6,15 +6,15 @@ const { schemas } = require(`${basedir}/models/contact`);
 
 const { createError } = require(`${basedir}/helpers`);
 
-const updateContact = async (req, res) => {
-    const { error } = schemas.add.validate(req.body);
+const updateStatusContact = async (req, res) => {
+    const { error } = schemas.favoriteSchema.validate(req.body);
 
     if (error) {
-        throw createError(404, 'Missing fields');
+        throw createError(404, 'Missing field favorite');
     }
 
     const { id } = req.params;
-    const result = await service.update(id, req.body);
+    const result = await service.updateStatus(id, req.body);
 
     if (!result) {
         throw createError(404);
@@ -28,6 +28,6 @@ const updateContact = async (req, res) => {
             result,
         },
     });
-};
 
-module.exports = updateContact;
+};
+module.exports = updateStatusContact;

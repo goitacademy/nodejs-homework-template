@@ -1,6 +1,9 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
+
+global.basedir = __dirname;
 
 const contactsRouter = require('./routes/api/contacts');
 
