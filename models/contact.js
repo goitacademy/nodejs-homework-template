@@ -9,7 +9,11 @@ const addShema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
   phone: Joi.string().required(),
-  favorite: Joi.boolean()
+    favorite: Joi.boolean(),
+  owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
 })
 
 const updateFavoriteShema = Joi.object({

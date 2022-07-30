@@ -1,6 +1,10 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const { User, shemas } = require('../../models/user');
 const { createError } = require('../../helpers');
+
+const { SECRET_KEY } = process.env;
 
 const signin = async (req, res) => { 
 const { error } = shemas.signup.validate(req.body);
@@ -16,7 +20,13 @@ const { error } = shemas.signup.validate(req.body);
     if (!comparePassword) { 
         throw createError(401, `Email or password is wrong`);
     }
-    const token = 'sdfsdfdfsdfd';
+
+    const payload = {
+        id: user._id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
+    await User.findByIdAndUpdate(user._id, { token });
     res.json({
         token,
     });
