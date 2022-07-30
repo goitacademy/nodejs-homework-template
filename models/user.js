@@ -13,8 +13,7 @@ const userSchema=Schema({
         match:emailRegexp,
         required:[true, 'Email is required'], 
         unique:true
-    },
-    
+    },    
     subscription:{
         type:String,
         enum:['starter', 'pro', 'business'],
@@ -24,7 +23,7 @@ const userSchema=Schema({
         type:String,
         default:null
     }
-},{versionKey:false, timestamp:true} )
+},{versionKey:false, timestamps:true})
 
 const signupSchema=Joi.object({
     email:Joi.string().pattern(emailRegexp).required(),

@@ -6,13 +6,14 @@ const updateFavorite=require('./updateFavorite');
 const removeById=require('./removeById');
 
 
+
 module.exports={
     getAll,
     getById,
     add,
     updateById,
     updateFavorite,
-    removeById
+    removeById  
 }
 
 
