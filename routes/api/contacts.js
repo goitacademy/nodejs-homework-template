@@ -1,86 +1,22 @@
 const express = require('express')
+const { basedir } = global;
 
-const contacts = require('../../models/contacts');
-const { createError } = require('../../helpers');
-const { contactSchema } = require('../../schemas');
+const ctrl = require(`${basedir}/controllers/contacts`);
+
+const { ctrlWrapper } = require(`${basedir}/helpers`);
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result)
-  } catch (error) {
-    next(error);
-  }
-})
+router.get('/', ctrlWrapper(ctrl.getAllContacts));
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+router.get('/:contactId', ctrlWrapper(ctrl.getContactById));
 
-    if (!result) {
-      throw createError(404);
-    }
+router.post('/', ctrlWrapper(ctrl.addContact));
 
-    res.json(result)
-  } catch (error) {
-    next(error);
-  }
-})
+router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
 
-router.post('/', async (req, res, next) => {
-  try {
-    // Preventing lack of necessary data
-    const { error } = contactSchema(req.body);
-    if (error) {
-      throw createError(400, "missing required name field");
-    }
+router.put('/:contactId', ctrlWrapper(ctrl.updateContactById));
 
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result)
-  } catch (error) {
-    next(error);
-  }
-})
+router.patch('/:contactId/favorite', ctrlWrapper(ctrl.updateStatusContact));
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-
-    if (!result) {
-      throw createError(404);
-    }
-
-    res.json({
-      message: "Contact deleted"
-    });
-  } catch (error) {
-    next(error);
-  }
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    // Preventing lack of necessary data
-    const { error } = contactSchema(req.body);
-    if (error) {
-      throw createError(400, "missing fields");
-    }
-
-    const { contactId } = req.params;
-    const result = await contacts.updateContactById(contactId, req.body);
-
-    if (!result) {
-      throw createError(404);
-    }
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-})
-
-module.exports = router
+module.exports = router;
