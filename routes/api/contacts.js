@@ -1,25 +1,50 @@
-const express = require('express')
+const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-const router = express.Router()
+const {
+  addContactValidation,
+  updateContactValidation,
+} = require("../../middlewares/validationMiddleware");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json({ contacts });
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json({ contact });
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", addContactValidation, async (req, res, next) => {
+  const contact = await addContact(req.body);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  return res.status(201).json({ contact });
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  const contact = await removeContact(req.params.contactId);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json({ message: "contact deleted" });
+});
+
+router.put("/:contactId", updateContactValidation, async (req, res, next) => {
+  const contact = await updateContact(req.params.contactId, req.body);
+
+  return res.status(200).json({ contact });
+});
+
+module.exports = router;
