@@ -1,100 +1,18 @@
 const express = require('express');
-const Joi = require("joi");
-const contacts = require("../../models/contacts");
+const router = express.Router();
+const ctrl = require("../../controllers/contacts"); 
+const {ctrlWrapper} = require("../../helpers");
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required().email(),
-  phone: Joi.string().required()
-})
+router.get('/', ctrlWrapper(ctrl.getListContacts));
 
-const router = express.Router()
+router.get('/:id', ctrlWrapper(ctrl.getContactById));
 
-/* весь список контактів */
+router.post('/', ctrlWrapper(ctrl.addContact));
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-      next(error);
-  }
-})
+router.delete('/:id', ctrlWrapper(ctrl.removeContact));
 
- /* контакт по id */ 
+router.put('/:id', ctrlWrapper(ctrl.updateContact));
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    const {id} = req.params;
-    const result = await contacts.getContactById(id);
-    if(!result) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
-    }
-    res.json(result);
-  } catch(error) {
-     next(error)
-  }
-    })
-
-  /* додавання контакту */ 
-
-router.post('/', async (req, res, next) => {
-  try {
-    const {error} = contactAddSchema.validate(req.body);
-    if(error) {
-      const error = new Error("Missing required name field"); 
-      error.status = 400;
-      throw error;
-    }
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  } 
-})
-
-/* видалення контакту */ 
-
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const {id} = req.params;
-    const result = await contacts.removeContact(id);
-    if(!result) {
-      const error = new Error("Not found"); 
-      error.status = 404;
-      throw error;
-    }
-    res.json({
-      message: "Contact deleted",
-    }) 
-  }  catch (error) {
-    next(error);
-  }
-})
-
-/* оновлення контакту */ 
-
-router.put('/:id', async (req, res, next) => {
-  try {
-    const {error} = contactAddSchema.validate(req.body);
-    if(error) {
-      const error = new Error("Missing fields"); 
-      error.status = 400;
-      throw error;
-    }
-    const {id} = req.params;
-    const result = await contacts.updateContact(id, req.body);
-    if(!result) {
-      const error = new Error("Not found"); 
-      error.status = 404;
-      throw error;
-    }
-    res.json(result);
-  } catch (error) {
-      next(error);
-  }
-})
+router.patch('/:id/favorite', ctrlWrapper(ctrl.updateFavorite));
 
 module.exports = router
