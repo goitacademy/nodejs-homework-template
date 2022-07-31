@@ -1,4 +1,6 @@
 "use strict"
+export { TContactAdd } from './typesTS';
+
 import model from './Contact';
 import outerSchema from './outerSchema';
 

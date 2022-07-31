@@ -4,7 +4,7 @@ import Contact from "../../models/contacts";
 
 const put = async (req: Request, res: Response) => {
     const { body } = req;
-    const { error } = Contact.outerSchema.validateAdd(body);
+    const { error } = Contact.outerSchema.validateContactAdd(body);
     if (error) {
         throw createError(400);
     }
