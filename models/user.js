@@ -1,22 +1,26 @@
 const Joi = require('joi');
 const { Schema, model } = require('mongoose');
 
-//const emailRegexp = '[a-z0-9]+@[a-z]+\.[a-z]{2,3}';
-
 const signupShema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string().default("starter"),
+  subscription: Joi.string().valueOf('starter', 'pro', 'business').default("starter"),
   token: Joi.string().default(null)
 })
-//.pattern(new RegExp(emailRegexp))
+
 const signinShema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
 })
+
+const updateSubscriptionShema = Joi.object({
+    subscription: Joi.string().valueOf('starter', 'pro', 'business').required(),
+});
+
 const shemas = {
     signup: signupShema,
-    signin: signinShema
+    signin: signinShema,
+    updateSub: updateSubscriptionShema,
 }
 
 const userSchema = new Schema({
@@ -26,7 +30,6 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        //match: emailRegexp,
         required: [true, 'Email is required'],
         unique: true,
     },

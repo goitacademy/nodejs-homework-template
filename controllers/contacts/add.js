@@ -7,7 +7,7 @@ const add = async (req, res, next) => {
       throw createError(400, error.message);
   }
   const { id: owner } = req.user;
-  const result = await Contact.create({...req.body, owner});
+  const result = await Contact.create({ ...req.body, owner });
     res.json(result);
 }
 
