@@ -1,5 +1,7 @@
-const { Contact } = require("../../models");
-const { createError } = require("../../helpers");
+const { basedir } = global;
+
+const { Contact } = require(`${basedir}/models/contact`);
+const { createError } = require(`${basedir}/helpers`);
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
