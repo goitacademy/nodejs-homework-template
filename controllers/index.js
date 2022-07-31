@@ -1,6 +1,6 @@
 const contacts = require("./contacts");
-const signup = ("./signup")
+const user= require("./users")
 module.exports = {
     contacts,
-    signup
+  user
 }

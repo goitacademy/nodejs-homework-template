@@ -2,7 +2,10 @@
 const {Contact} = require("../models")
 
 const listContacts = async (req, res) => {
-  const contacts = await Contact.find()
+  const { _id } = req.user
+  const { page = 1, limit = 20 } = req.query
+  const skip = (page-1)*limit
+  const contacts = await Contact.find({owner:_id},"",{skip,limit:Number(limit)}).populate("owner", "_id name email")
   res.json({
     status: 200,
     data:  contacts 
@@ -23,8 +26,9 @@ const getContactById = async (req,res) => {
     }
 
 
-const addContact = async (req, res)=>{
-  const result = await Contact.create(req.body)
+const addContact = async (req, res) => {
+  const {_id}= req.user
+  const result = await Contact.create({...req.body, owner:_id})
   res.status(201).json({
     code: 201,
     data: {result}
