@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require("express");
+const { basedir } = global;
+const ctrlWrapper = require(`${basedir}/helpers`);
 
-const router = express.Router()
+const controller = require(`${basedir}/controllers/contacts`);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(controller.getAll));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", ctrlWrapper(controller.getById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", ctrlWrapper(controller.add));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", ctrlWrapper(controller.remove));
 
-module.exports = router
+router.put("/:contactId", ctrlWrapper(controller.changeById));
+
+router.put("/:contactId", ctrlWrapper(controller.changeById));
+
+router.patch("/:contactId/favorite", ctrlWrapper(controller.changeFavorite));
+
+module.exports = router;
