@@ -1,6 +1,6 @@
 const express = require("express");
 const { basedir } = global;
-const ctrlWrapper = require(`${basedir}/helpers`);
+const { ctrlWrapper } = require(`${basedir}/helpers`);
 
 const controller = require(`${basedir}/controllers/contacts`);
 
