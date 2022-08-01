@@ -1,3 +1,11 @@
+// @ DELETE /api/contacts/:id
+// не отримує body
+// отримує параметр id
+// викликає функцію removeContact для работи с json-файлом contacts.json
+// якщо такий id є, повертає json формату {"message": "contact deleted"} і статусом 200
+// якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
+
+
 const { basedir } = global;
 
 const service = require(`${basedir}/services`);
