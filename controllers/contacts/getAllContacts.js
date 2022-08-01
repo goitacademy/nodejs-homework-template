@@ -1,3 +1,9 @@
+// @ GET /api/contacts
+// нічого не отримує
+// викликаємо функцію getAll для работи с json-файлом (db-contacts)
+// повертає масив усіх контактів у json-форматі зі статусом 200 (метод find({}) проп. getAll)
+
+
 const { basedir } = global;
 
 const service = require(`${basedir}/services`);
