@@ -1,7 +1,7 @@
-const {Contact, joiSchema} = require("../../models");
+const {Contact, contactUpdateFavoriteSchema } = require("../../models");
 
 const updateFavorite = async (req, res) => {
-      const {error} = joiSchema.validate(req.body);
+      const {error} = contactUpdateFavoriteSchema.validate(req.body);
       if(error) {
         const error = new Error("Missing fields"); 
         error.status = 400;

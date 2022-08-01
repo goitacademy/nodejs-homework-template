@@ -11,7 +11,6 @@ const contactSchema = Schema({
         },
         phone: {
           type: String,
-          match: /^[0-9]{9}$/
         },
         favorite: {
           type: Boolean,
@@ -22,13 +21,18 @@ const contactSchema = Schema({
 const joiSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required().email(),
-    phone: Joi.string().pattern(/^[0-9]{9}$/).required(),
+    phone: Joi.string().required(),
     favorite: Joi.boolean()
   })
+
+const contactUpdateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required() 
+}) 
 
 const Contact = model("contact", contactSchema);
 
   module.exports = {
     Contact,
-    joiSchema
+    joiSchema,
+    contactUpdateFavoriteSchema 
 }
