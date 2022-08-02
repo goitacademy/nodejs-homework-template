@@ -4,6 +4,7 @@ const messages = {
   403: 'Forbidden',
   404: 'Not found',
   409: 'Conflict',
+  500: 'Server error',
 };
 const createError = (status, message = messages[status]) => {
   const error = new Error(message);
