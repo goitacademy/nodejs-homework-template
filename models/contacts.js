@@ -1,3 +1,4 @@
+const { json } = require("express");
 const {
   getContacts,
   getContactById,
@@ -44,6 +45,9 @@ const removeContactController = async (req, res) => {
 
 const updateStatusContactController = async (req, res) => {
   const { id } = req.params;
+  if (!req.body) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
   const { favorite } = req.body;
   await updateStatusContact(id, { favorite });
 
