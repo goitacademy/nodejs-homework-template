@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 import createError from "../../helpers/createError";
 import Contact from "../../models/contacts";
+import { TRequestAddUser } from "../../helpers/userTypesTS";
 
+const updateStatusContact = async (req: TRequestAddUser, res: Response) => {
+    const { body, user } = req;
+    if (!user) {
+        throw createError({ status: 401 });
+    }
 
-const updateStatusContact = async (req: Request, res: Response) => {
-    const { body } = req;
+    if (!body) {
+        throw createError({ status: 400 });
+    }
+
     const { error } = Contact.outerSchema.validatePatchFavorite(body);
     if (error) {
         throw createError({
@@ -13,9 +21,15 @@ const updateStatusContact = async (req: Request, res: Response) => {
         });
     }
     const { contactId } = req.params;
-    console.log("before  update servise");
 
-    const result = await Contact.model.findByIdAndUpdate(contactId, body, { new: true });
+    const result = await Contact.model.findOneAndUpdate({
+        _id: contactId,
+        owner: user._id
+    },
+        body,
+        { new: true }
+    );
+
     if (!result) {
         throw createError({
             status: 404

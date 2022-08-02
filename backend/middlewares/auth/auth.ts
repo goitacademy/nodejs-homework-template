@@ -34,6 +34,7 @@ const auth = async (req: TRequest, res: Response, next: NextFunction) => {
         }
 
         req.user = user;
+
         next();
     } catch (error) {
         next(error);

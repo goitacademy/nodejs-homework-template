@@ -1,10 +1,9 @@
 import User, { TUser } from "../../models/users"
 import { Request, Response } from 'express';
 import createError from "../../helpers/createError";
+import { TRequestAddUser } from "../../helpers/userTypesTS";
 
-type TRequest = Request & { user?: TUser }
-
-const logout = async (req: TRequest, res: Response) => {
+const logout = async (req: TRequestAddUser, res: Response) => {
     const { NODE_ENV } = process.env;
     if (!req.user) {
         throw createError({

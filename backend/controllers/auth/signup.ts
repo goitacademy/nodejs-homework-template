@@ -3,10 +3,9 @@ import createError from "../../helpers/createError";
 import bscrypt from 'bcrypt';
 import User from "../../models/users";
 import { TUser } from '../../models/users';
+import { TRequestAddUser } from "../../helpers/userTypesTS";
 
-type TRequest = Request & { user?: TUser };
-
-const signup = async (req: TRequest, res: Response) => {
+const signup = async (req: TRequestAddUser, res: Response) => {
     const { NODE_ENV } = process.env;
     //to check: Is request body exist?    
     if (!req.body) {

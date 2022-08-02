@@ -3,19 +3,19 @@
 import { Router } from 'express';
 import ctrls from '../../../controllers/contacts';
 import ctrlTryCatchWrapper from '../../../helpers/ctrlTryCatchWrapper';
-
+import auth from '../../../middlewares/auth';
 const router = Router();
 
-router.get("/", ctrlTryCatchWrapper(ctrls.getAll));
+router.get("/", auth, ctrlTryCatchWrapper(ctrls.getAll));
 
-router.get('/:contactId', ctrlTryCatchWrapper(ctrls.getById));
+router.get('/:contactId', auth, ctrlTryCatchWrapper(ctrls.getById));
 
-router.post("/", ctrlTryCatchWrapper(ctrls.add));
+router.post("/", auth, ctrlTryCatchWrapper(ctrls.add));
 
-router.put('/:contactId', ctrlTryCatchWrapper(ctrls.putById));
+router.put('/:contactId', auth, ctrlTryCatchWrapper(ctrls.putById));
 
-router.delete('/:contactId', ctrlTryCatchWrapper(ctrls.removeById));
+router.delete('/:contactId', auth, ctrlTryCatchWrapper(ctrls.removeById));
 
-router.patch('/:contactId/favorite', ctrlTryCatchWrapper(ctrls.updateStatusContact));
+router.patch('/:contactId/favorite', auth, ctrlTryCatchWrapper(ctrls.updateStatusContact));
 
 export default router;

@@ -1,3 +1,1 @@
-import { TRequest } from './TRequest';
-
-export default TRequest;
+export { TRequestAddUser } from './TRequestAddUser';

@@ -6,7 +6,7 @@ const contactPatchEmailSchema = Joi.object({
 })
 
 const validatePatchEmail = (email: string) => {
-    return contactPatchEmailSchema.validate(email);
+    return contactPatchEmailSchema.required().validate(email);
 }
 
 const contactPatchPhoneSchema = Joi.object({
@@ -14,7 +14,7 @@ const contactPatchPhoneSchema = Joi.object({
 })
 
 const validatePatchPhone = (phone: number) => {
-    return contactPatchPhoneSchema.validate(phone);
+    return contactPatchPhoneSchema.required().validate(phone);
 }
 
 const contactPatchFavoriteSchema = Joi.object({
@@ -22,7 +22,7 @@ const contactPatchFavoriteSchema = Joi.object({
 })
 
 const validatePatchFavorite = (favorite: boolean) => {
-    return contactPatchFavoriteSchema.validate(favorite);
+    return contactPatchFavoriteSchema.required().validate(favorite);
 }
 
 const contactPatchNameSchema = Joi.object({
@@ -30,7 +30,7 @@ const contactPatchNameSchema = Joi.object({
 })
 
 const validatePatchName = (name: string) => {
-    return contactPatchNameSchema.validate(name);
+    return contactPatchNameSchema.required().validate(name);
 }
 
 const contactPatchOwnerSchema = Joi.object({
