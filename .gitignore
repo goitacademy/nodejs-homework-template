@@ -1,6 +1,4 @@
 node_modules/
-try/
-src/
-.env
+config/.env
 *.log
 *.lock
