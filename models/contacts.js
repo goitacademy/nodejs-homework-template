@@ -1,81 +1,60 @@
-const fs = require("fs/promises");
-const path = require("path");
+const {
+  getContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContactById,
+  updateStatusContact,
+} = require("../services/contactsService");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
-
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const contactsList = JSON.parse(data);
-
-  return contactsList;
+const getContactsController = async (req, res) => {
+  const contacts = await getContacts();
+  res.json({ contacts });
 };
 
-const getContactById = async (contactId) => {
-  const data = await fs.readFile(contactsPath);
-  const contactsList = JSON.parse(data);
-  const [contact] = contactsList.filter((item) => item.id === contactId);
+const getContactByIdController = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const contact = await getContactById(id);
 
-  return contact;
+  res.json({ contact, status: "succes" });
 };
 
-const removeContact = async (contactId) => {
-  const data = await fs.readFile(contactsPath);
-  const contactsList = JSON.parse(data);
-  const [contact] = contactsList.filter((item) => item.id === contactId);
-  const NewContactList = contactsList.filter((item) => item.id !== contactId);
-  await fs.writeFile(contactsPath, JSON.stringify(NewContactList, null, 2));
+const addContactController = async (req, res) => {
+  const { name, email, phone } = req.body;
+  await addContact({ name, email, phone });
 
-  return contact;
+  res.json({ status: "success" });
 };
 
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-  const data = await fs.readFile(contactsPath);
-  const contactsList = JSON.parse(data);
-  const newContact = {
-    id: new Date().getTime().toString(),
-    name,
-    email,
-    phone,
-  };
-  const NewContactList = [...contactsList, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(NewContactList, null, 2));
+const updateContactController = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
+  await updateContact(id, { $set: { name, email, phone } });
 
-  return newContact;
+  res.json({ status: "success" });
 };
 
-const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath);
-  const contactsList = JSON.parse(data);
-  const [contact] = contactsList.filter((item) => item.id === contactId);
-  const { name, email, phone } = body;
-  if (name) {
-    contact.name = name;
-  }
-  if (email) {
-    contact.email = email;
-  }
-  if (phone) {
-    contact.phone = phone;
-  }
+const removeContactController = async (req, res) => {
+  const { id } = req.params;
+  await removeContactById(id);
 
-  const NewContactList = contactsList.filter((item) => {
-    if (item.id !== contactId) {
-      return item;
-    }
-    if (item.id === contactId) {
-      return (item = contact);
-    }
-  });
-  await fs.writeFile(contactsPath, JSON.stringify(NewContactList, null, 2));
+  res.json({ status: "success" });
+};
 
-  return contact;
+const updateStatusContactController = async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+  await updateStatusContact(id, { favorite });
+
+  res.json({ status: "success" });
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  updateContactController,
+  removeContactController,
+  updateStatusContactController,
 };

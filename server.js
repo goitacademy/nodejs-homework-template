@@ -1,5 +1,15 @@
-const app = require('./app')
+// const { MongoClient } = require("mongodb");
+const { connectMongo } = require("./db/connection");
+const app = require("./app");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const start = async () => {
+  try {
+    await connectMongo();
+    app.listen(3000, () => {
+      console.log("Database connection successful");
+    });
+  } catch (error) {
+    return console.error(error.message), process.exit(1);
+  }
+};
+start();

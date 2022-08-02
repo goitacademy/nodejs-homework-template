@@ -1,12 +1,13 @@
 const express = require("express");
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  updateContactController,
+  removeContactController,
+  updateStatusContactController,
 } = require("../../models/contacts");
-//ss
+const { asyncWrapper } = require("../../Helpers/apiHelpers");
 const {
   addContactValidation,
   updateContactValidation,
@@ -14,37 +15,15 @@ const {
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ contacts });
-});
-
-router.get("/:contactId", async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  return res.status(200).json({ contact });
-});
-
-router.post("/", addContactValidation, async (req, res, next) => {
-  const contact = await addContact(req.body);
-
-  return res.status(201).json({ contact });
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  const contact = await removeContact(req.params.contactId);
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  return res.status(200).json({ message: "contact deleted" });
-});
-
-router.put("/:contactId", updateContactValidation, async (req, res, next) => {
-  const contact = await updateContact(req.params.contactId, req.body);
-
-  return res.status(200).json({ contact });
-});
+router.get("/", asyncWrapper(getContactsController));
+router.get("/:id", asyncWrapper(getContactByIdController));
+router.post("/", addContactValidation, asyncWrapper(addContactController));
+router.delete("/:id", asyncWrapper(removeContactController));
+router.patch("/:id/favorite", asyncWrapper(updateStatusContactController));
+router.put(
+  "/:id",
+  updateContactValidation,
+  asyncWrapper(updateContactController)
+);
 
 module.exports = router;
