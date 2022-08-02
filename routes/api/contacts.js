@@ -4,20 +4,26 @@ const { ctrlWrapper } = require(`${basedir}/helpers`);
 
 const controller = require(`${basedir}/controllers/contacts`);
 
+const { auth } = require(`${basedir}/middlewares`);
+
 const router = express.Router();
 
-router.get("/", ctrlWrapper(controller.getAll));
+router.get("/", auth,ctrlWrapper(controller.getAll));
 
-router.get("/:contactId", ctrlWrapper(controller.getById));
+router.get("/:contactId", auth, ctrlWrapper(controller.getById));
 
-router.post("/", ctrlWrapper(controller.add));
+router.post("/", auth, ctrlWrapper(controller.add));
 
-router.delete("/:contactId", ctrlWrapper(controller.remove));
+router.delete("/:contactId", auth, ctrlWrapper(controller.remove));
 
-router.put("/:contactId", ctrlWrapper(controller.changeById));
+router.put("/:contactId", auth, ctrlWrapper(controller.changeById));
 
-router.put("/:contactId", ctrlWrapper(controller.changeById));
+router.put("/:contactId", auth, ctrlWrapper(controller.changeById));
 
-router.patch("/:contactId/favorite", ctrlWrapper(controller.changeFavorite));
+router.patch(
+  "/:contactId/favorite",
+  auth,
+  ctrlWrapper(controller.changeFavorite)
+);
 
 module.exports = router;
