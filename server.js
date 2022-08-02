@@ -9,7 +9,7 @@ const start = async () => {
     await connectMongo();
     app.listen(PORT, () => {
       console.log("Database connection successful");
-      console.log(`Server started on ${PORT}`);
+      console.log(`"Server running. Use our API on port: ${PORT}`);
     });
   } catch (error) {
     return console.error(error.message), process.exit(1);
