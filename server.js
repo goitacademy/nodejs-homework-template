@@ -1,4 +1,3 @@
-// const { MongoClient } = require("mongodb");
 const { connectMongo } = require("./db/connection");
 require("dotenv").config();
 const app = require("./app");
