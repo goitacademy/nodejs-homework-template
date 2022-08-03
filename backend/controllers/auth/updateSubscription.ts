@@ -11,6 +11,10 @@ const updateSubscription = async (req: TRequestAddUser, res: Response) => {
         throw createError({ status: 401 })
     }
 
+    const { error } = User.outerSchema.validateSubscription({ subscription });
+    if (error) {
+        throw createError({ status: 400, messageProd: error.message });
+    }
     const idx = userSubscription.findIndex(item => item === subscription);
     if (idx === -1) {
         createError({ status: 400 });
@@ -21,9 +25,14 @@ const updateSubscription = async (req: TRequestAddUser, res: Response) => {
     if (!result) {
         throw createError({ status: 404 });
     }
+    console.log(result);
+
     res.json({
         status: "success",
-        user,
+        user: {
+            email: result.email,
+            subscription: result.subscription
+        },
     })
 }
 export default updateSubscription;

@@ -24,8 +24,9 @@ const subscriptionSchema = Joi.object({
     subscription: Joi.string()
         .valid(...userSubscription)
         .default('starter')
+        .error(() => new Error(`subscription supported values: ${userSubscription}`))
 })
-const validateSubscription = (subscription: string) =>
+const validateSubscription = (subscription: object) =>
     subscriptionSchema.validate(subscription);
 
 const tokenSchema = Joi.object({
