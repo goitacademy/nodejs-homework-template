@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidationError } = require("../Helpers/errors");
 
 module.exports = {
   addContactValidation: (req, res, next) => {
@@ -12,7 +13,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      res.status(400).json({ message: "missing required name field" });
+      next(new ValidationError(validationResult.error.details));
     }
     next();
   },
@@ -28,7 +29,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      res.status(400).json({ status: validationResult.error.details });
+      next(new ValidationError(validationResult.error.details));
     }
     next();
   },
