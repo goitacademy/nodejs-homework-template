@@ -4,14 +4,18 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
 
-router.get("/", ctrl.listContacts);
+const { ctrlWrap } = require("../../helpers");
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/", ctrlWrap(ctrl.listContacts));
 
-router.post("/", ctrl.addContact);
+router.get("/:contactId", ctrlWrap(ctrl.getContactById));
 
-router.delete("/:contactId", ctrl.removeContact);
+router.post("/", ctrlWrap(ctrl.addContact));
 
-router.put("/:contactId", ctrl.updateContact);
+router.delete("/:contactId", ctrlWrap(ctrl.removeContact));
+
+router.put("/:contactId", ctrlWrap(ctrl.updateContact));
+
+router.patch("/:contactId/favorite", ctrlWrap(ctrl.updateContactStatus));
 
 module.exports = router;

@@ -1,19 +1,15 @@
-const contactsOperations = require("../../models/contacts");
-const { createError } = require("../../helpers/createError");
+const { Contact } = require("../../models");
+const { createError } = require("../../helpers");
 
-const removeContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.removeContact(contactId);
-    if (!result) {
-      throw createError(404);
-    }
-    res.json({
-      message: "contact deleted",
-    });
-  } catch (error) {
-    next(error);
+const removeContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndRemove(contactId);
+  if (!result) {
+    throw createError(404);
   }
+  res.json({
+    message: "contact deleted",
+  });
 };
 
 module.exports = removeContact;
