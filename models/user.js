@@ -1,13 +1,12 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-
-const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const bcrypt = require('bcryptjs');
 
 const userSchema = Schema(
     {
         username: {
             type: String,
-            required: true,
+            unique: true,
         },
 
         password: {
@@ -17,15 +16,14 @@ const userSchema = Schema(
 
         email: {
             type: String,
-            match: emailRegex,
             required: [true, 'Email is required'],
             unique: true,
         },
 
         subscription: {
             type: String,
-            enum: ["starter", "pro", "business"],
-            default: "starter",
+            enum: ['starter', 'pro', 'business'],
+            default: 'starter',
         },
 
         token: {
@@ -36,23 +34,37 @@ const userSchema = Schema(
     { versionKey: false, timestamps: true }
 );
 
+// sign up
+
 const registerSchema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().min(6).required(),
     email: Joi.string()
-    .pattern(emailRegex)
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
     subscription: Joi.string()
     .valid('starter', 'pro', 'business')
-    .required(),
+    .default('starter'),
 });
+
+// log in
 
 const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
     email: Joi.string()
-    .pattern(emailRegex)
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
 });
+
+// hash password
+
+userSchema.methods.setPassword = function (password) {
+    this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.validPassword = function (password) {
+    return bcrypt.compareSync(password, this.password);
+};
 
 const schemas = {
     register: registerSchema,
