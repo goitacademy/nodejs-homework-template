@@ -8,7 +8,7 @@
 
 const { basedir } = global;
 
-const service = require(`${basedir}/services`);
+const service = require(`${basedir}/services/contacts`);
 
 const { schemas } = require(`${basedir}/models/contact`);
 
@@ -22,7 +22,7 @@ const updateStatusContact = async (req, res) => {
     }
 
     const { id } = req.params;
-    const result = await service.updateStatus(id, req.body);
+    const result = await service.updateStatus(id, { favorite: req.body.favorite });
 
     if (!result) {
         throw createError(404);
@@ -36,6 +36,6 @@ const updateStatusContact = async (req, res) => {
             result,
         },
     });
-
 };
+
 module.exports = updateStatusContact;
