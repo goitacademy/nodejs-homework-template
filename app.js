@@ -8,6 +8,7 @@ dotenv.config();
 global.basedir = __dirname;
 
 const contactsRouter = require('./routes/api/contacts');
+const authRouter = require('./routes/api/auth')
 
 const app = express(); // Сервер
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(logger(formatsLogger));
 
 app.use('/api/contacts', contactsRouter);
+app.use('/api/auth',authRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

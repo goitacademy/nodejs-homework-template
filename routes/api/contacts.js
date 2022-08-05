@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../../middlewares/auth")
 
 const { basedir } = global;
 
@@ -7,16 +8,16 @@ const ctrl = require(`${basedir}/controllers/contacts`);
 
 const { ctrlWrapper } = require(`${basedir}/helpers/`);
 
-router.get('/', ctrlWrapper(ctrl.getAll));
+router.get('/',auth, ctrlWrapper(ctrl.getAll));
 
-router.get('/:id', ctrlWrapper(ctrl.getByid));
+router.get('/:id',auth, ctrlWrapper(ctrl.getByid));
 
-router.patch('/:id/favorite', ctrlWrapper(ctrl.updateFavorite));
+router.patch('/:id/favorite',auth, ctrlWrapper(ctrl.updateFavorite));
 
-router.post('/', ctrlWrapper(ctrl.add));
+router.post('/', auth, ctrlWrapper(ctrl.add));
 
-router.delete('/:id', ctrlWrapper(ctrl.removeById));
+router.delete('/:id',auth, ctrlWrapper(ctrl.removeById));
 
-router.put('/:id', ctrlWrapper(ctrl.updateById));
+router.put('/:id',auth, ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
