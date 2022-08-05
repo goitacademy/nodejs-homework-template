@@ -1,18 +1,21 @@
 const express = require('express');
+
+const { auth } = require('../../middlewares');
+
 const ctrl = require('../../controllers/contacts'); // обєкт з ф-ями контроллерами
-const router = express.Router(); // обєкт з описом маршрутів
 const { ctrlWrapper } = require('../../helpers');
+const router = express.Router(); // обєкт з описом маршрутів
 
-router.get('/', ctrlWrapper(ctrl.getAll));
+router.get('/', auth, ctrlWrapper(ctrl.getAll));
 
-router.get('/:id', ctrlWrapper(ctrl.getById));
+router.get('/:id', auth, ctrlWrapper(ctrl.getById));
 
-router.post('/', ctrlWrapper(ctrl.add));
+router.post('/', auth, ctrlWrapper(ctrl.add));
 
-router.put('/:id', ctrlWrapper(ctrl.updateById));
+router.put('/:id', auth, ctrlWrapper(ctrl.updateById));
 
-router.patch('/:id/favorite', ctrlWrapper(ctrl.updateStatusContact));
+router.patch('/:id/favorite', auth, ctrlWrapper(ctrl.updateStatusContact));
 
-router.delete('/:id', ctrlWrapper(ctrl.removeById));
+router.delete('/:id', auth, ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
