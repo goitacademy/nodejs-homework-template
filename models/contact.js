@@ -17,13 +17,18 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 const addSchema = Joi.object({
-  // name: Joi.string().alphanum().min(3).max(30).required(),
   name: Joi.string().min(3).max(30).required(),
+  // name: Joi.string(),
 
   email: Joi.string().email({
     minDomainSegments: 2,

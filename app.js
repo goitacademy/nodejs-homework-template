@@ -6,10 +6,13 @@ const express = require('express');
 const logger = require('morgan'); // виводить в консоль інфо про запити
 const cors = require('cors');
 
+// global.basedir = __dirname;
+
 // require('dotenv').config();
 const dotenv = require('dotenv');
 dotenv.config();
 
+const authRouter = require('./routes/api/auth');
 const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
@@ -20,6 +23,7 @@ app.use(logger(formatsLogger)); // middleware виводить дані (зап�
 app.use(cors());
 app.use(express.json()); // перевіряє Content-Type,тіло парсить як обєкт
 
+app.use('/api/auth', authRouter);
 app.use('/api/contacts', contactsRouter); // якщо запит поч. з 'api/contacts', шукай обробників маршрутів тут contactsRouter
 
 // обробка помилок
