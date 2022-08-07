@@ -1,9 +1,10 @@
-const { Contact } = require("../../models");
-const { createError } = require("../../helpers");
-const { contactAddSchema } = require("../../models");
+const { basedir } = global;
+
+const { Contact, schemas } = require(`${basedir}/models/contact`);
+const { createError } = require(`${basedir}/helpers`);
 
 const updateContact = async (req, res) => {
-  const { error } = contactAddSchema.validate(req.body);
+  const { error } = schemas.contactAdd.validate(req.body);
   if (error) {
     throw createError(400, "missing fields");
   }
