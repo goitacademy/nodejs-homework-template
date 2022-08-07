@@ -33,7 +33,7 @@ const addContact = async ({ name, email, phone }, userId) => {
 };
 
 const updateContact = async (contactId, { name, email, phone }, userId) => {
-  await Contact.findByIdAndUpdate(
+  await Contact.findOneAndUpdate(
     { _id: contactId, owner: userId },
     { $set: { name, email, phone } }
   );
@@ -44,9 +44,9 @@ const removeContactById = async (contactId, userId) => {
 };
 
 const updateStatusContact = async (contactId, { favorite }, userId) => {
-  await Contact.findByIdAndUpdate(
+  await Contact.findOneAndUpdate(
     { _id: contactId, owner: userId },
-    { $set: { favorite } }
+    { favorite: true }
   );
 };
 
