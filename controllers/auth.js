@@ -8,7 +8,6 @@ const signupController = async (req, res) => {
 };
 const loginController = async (req, res) => {
   const { email, password } = req.body;
-  // const { _id: userId } = req.user;
 
   const token = await login(email, password);
 

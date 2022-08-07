@@ -25,8 +25,8 @@ const login = async (email, password) => {
     },
     process.env.JWT_SECRET
   );
-  // const updateUser = await User.findOne({ _id: userId });
-  // const data = await updateToken(userId, token);
+  const updateUser = await User.findOne({ _id: user._id });
+  const data = await updateToken(user._id, token);
   return token;
 };
 
