@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const { basedir } = global;
 
 const { User, schemas } = require(`${basedir}/models/user`);
+
 const { createError } = require(`${basedir}/helpers`);
 
 const signup = async (req, res) => {
