@@ -1,18 +1,34 @@
-class ValidationError extends Error {
+class restApi extends Error {
   constructor(message) {
     super(message);
     this.status = 400;
   }
 }
 
-class WrongParametersError extends Error {
+class ValidationError extends restApi {
   constructor(message) {
     super(message);
     this.status = 400;
   }
 }
 
-module.export = {
-  ValidationError,
+class WrongParametersError extends restApi {
+  constructor(message) {
+    super(message);
+    this.status = 400;
+  }
+}
+
+class NotAuthorizedError extends restApi {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
+
+module.exports = {
+  restApi,
   WrongParametersError,
+  NotAuthorizedError,
+  ValidationError,
 };

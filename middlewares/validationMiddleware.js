@@ -33,4 +33,28 @@ module.exports = {
     }
     next();
   },
+
+  patchFavouriteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favourite: Joi.boolean(),
+    }).required();
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      next(new ValidationError(validationResult.error.details));
+    }
+    next();
+  },
+
+  // patchSubscriptionValidation: (req, res, next) => {
+  //   const schema = Joi.object({
+  //     subscription: Joi.string().valid("pro", "starter", "business").required(),
+  //   }).required();
+
+  //   const validationResult = schema.validate(req.body);
+  //   if (validationResult.error) {
+  //     next(new ValidationError(validationResult.error.details));
+  //   }
+  //   next();
+  // },
 };
