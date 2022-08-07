@@ -46,15 +46,15 @@ module.exports = {
     next();
   },
 
-  // patchSubscriptionValidation: (req, res, next) => {
-  //   const schema = Joi.object({
-  //     subscription: Joi.string().valid("pro", "starter", "business").required(),
-  //   }).required();
+  patchSubscriptionValidation: (req, res, next) => {
+    const schema = Joi.object({
+      subscription: Joi.string().valid("pro", "starter", "business").required(),
+    }).required();
 
-  //   const validationResult = schema.validate(req.body);
-  //   if (validationResult.error) {
-  //     next(new ValidationError(validationResult.error.details));
-  //   }
-  //   next();
-  // },
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      next(new ValidationError(validationResult.error.details));
+    }
+    next();
+  },
 };

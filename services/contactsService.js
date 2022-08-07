@@ -1,20 +1,19 @@
 const { Contact } = require("../db/contactModel");
 
 const getContacts = async (userId, { page, limit, fav }) => {
-  if (fav !== "") {
-    return await Contact.aggregate([
-      {
-        $project: {
-          favorite: false,
-        },
-      },
-    ]);
+  if (!fav) {
+    const contacts = await Contact.find({ owner: userId })
+      .select({ __v: 0, owner: 0, _id: 0 })
+      .skip(page === 1 ? (page - 1) * limit : 0)
+      .limit(limit);
+    return contacts;
+  } else {
+    const contacts = await Contact.find({ owner: userId, favorite: fav })
+      .select({ __v: 0, owner: 0, _id: 0 })
+      .skip(page === 1 ? (page - 1) * limit : 0)
+      .limit(limit);
+    return contacts;
   }
-  const contacts = await Contact.find({ owner: userId })
-    .select({ __v: 0 })
-    .skip(page === 1 ? (page - 1) * limit : 0)
-    .limit(limit);
-  return contacts;
 };
 
 const getContactById = async (contactId, userId) => {

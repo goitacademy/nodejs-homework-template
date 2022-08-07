@@ -7,11 +7,7 @@ async function authMiddleware(req, res, next) {
     const { authorization } = req.headers;
 
     if (!authorization) {
-      next(
-        new NotAuthorizedError(
-          "Please, provide a token in request authorization header"
-        )
-      );
+      next(new NotAuthorizedError("Not authorized"));
     }
 
     const [, token] = authorization.split(" ");

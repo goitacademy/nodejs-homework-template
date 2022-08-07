@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../db/userModel");
 const { NotAuthorizedError } = require("../Helpers/errors");
-const { updateToken } = require("./userService");
+const { updateToken } = require("./usersService");
 
 const signup = async (email, password) => {
   const user = new User({ email, password });
@@ -25,6 +25,8 @@ const login = async (email, password) => {
     },
     process.env.JWT_SECRET
   );
+  // const updateUser = await User.findOne({ _id: userId });
+  // const data = await updateToken(userId, token);
   return token;
 };
 
@@ -34,9 +36,7 @@ const logout = async (userId) => {
   }
 
   const user = await User.findOne({ _id: userId });
-  console.log(user);
   const data = await updateToken(userId, null);
-  console.log(user);
   return user;
 };
 module.exports = {
