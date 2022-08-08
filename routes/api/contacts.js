@@ -4,9 +4,11 @@ const path = require("path");
 const contactsPath = path.normalize("db/contacts.json");
 
 const router = express.Router();
+const listContacts = async () =>
+  JSON.parse(await fs.readFile(contactsPath, "utf8"));
 
 router.get("/", async (req, res, next) => {
-  const data = JSON.parse(await fs.readFile(contactsPath, "utf8"));
+  const data = await listContacts();
   res.json({
     status: "success",
     code: 200,
@@ -15,7 +17,12 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message for contactsById" });
+  const data = JSON.parse(await fs.readFile(contactsPath, "utf8"));
+  res.json({
+    status: "success",
+    code: 200,
+    data,
+  });
 });
 
 router.post("/", async (req, res, next) => {
