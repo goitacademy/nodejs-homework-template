@@ -1,14 +1,16 @@
+// створює новий контакт
+
+
 const { basedir } = global;
 
 const { Contact } = require(`${basedir}/models/contact`);
 
-const add = async ({ id, body }) => {
-    try {
-        const data = await Contact.create({ ...body, owner: id });
-        return data;
-    } catch (error) {
-        console.log(error.message);
-    }
-};
+const { asyncWrapper } = require(`${basedir}/helpers`);
+
+const add = asyncWrapper(async ({ id, body }) => {
+    const data = await Contact.create({ ...body, owner: id });
+
+    return data;
+});
 
 module.exports = add;

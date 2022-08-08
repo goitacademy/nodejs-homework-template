@@ -1,22 +1,22 @@
+// знаходить контакт за id
+
+
 const { basedir } = global;
 
 const { Contact } = require(`${basedir}/models/contact`);
 
-const getById = async (id) => {
-    try {
-        const data = await Contact
-        .findById(id)
-        .populate('owner', 'email subscription');
+const { asyncWrapper } = require(`${basedir}/helpers`);
 
-        if (!data) {
-            return null;
-        }
+const getById = asyncWrapper(async ({ id }) => {
+    const data = await Contact
+    .findById(id)
+    .populate('owner', 'email subscription');
 
-        return data;
-
-    } catch (error) {
-        console.log(error.message);
+    if (!data) {
+        return null;
     }
-};
+
+    return data;
+});
 
 module.exports = getById;

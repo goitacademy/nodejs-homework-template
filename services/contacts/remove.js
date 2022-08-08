@@ -1,21 +1,21 @@
+// видаляє контакт
+
+
 const { basedir } = global;
 
 const { Contact } = require(`${basedir}/models/contact`);
 
-const remove = async (id) => {
-    try {
-        const data = await Contact.findByIdAndRemove(id);
+const { asyncWrapper } = require(`${basedir}/helpers`);
 
-        if (!data) {
-            return null;
-        }
+const remove = asyncWrapper(async ({ id }) => {
+    const data = await Contact.findByIdAndRemove(id);
 
-        return data;
-
-    } catch (error) {
-        console.log(error.message);
+    if (!data) {
+        return null;
     }
-};
+
+    return data;
+});
 
 module.exports = remove;
 
