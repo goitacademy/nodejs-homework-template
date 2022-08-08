@@ -15,10 +15,9 @@ const app = express(); // Сервер
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(cors()); // Корс запросы
-
 app.use(express.json());
-
 app.use(logger(formatsLogger));
+app.use(express.static("public"))
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/auth',authRouter)

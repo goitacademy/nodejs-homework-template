@@ -19,6 +19,9 @@ const userSchema = Schema(
       enum: ["starter", "pro", "business"],
       default: "starter"
     },
+    avatarURL:{
+      type:String
+    },
     token: {
       type: String,
       default: null,
@@ -37,9 +40,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().required()
+})
+
 const schemas = {
   register: registerSchema,
   login: loginSchema,
+  subscription: subscriptionSchema
 };
 
 const User = model('user', userSchema);
