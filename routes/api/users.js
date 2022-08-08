@@ -7,5 +7,5 @@ router.post('/signup',validation(registerSchema), controllerWrapper(user.signup)
 router.post('/login', validation(loginSchema), controllerWrapper(user.login))
 router.get('/current', auth, controllerWrapper(user.getCurrent))
 router.get('/logout', auth, controllerWrapper(user.logout))
-router.patch('/avatars',auth,upload.single("avatar"),controllerWrapper(user.updateAvatar))
+router.patch('/avatars', auth, upload.single("avatar"), controllerWrapper(user.updateAvatar))
 module.exports = router;
