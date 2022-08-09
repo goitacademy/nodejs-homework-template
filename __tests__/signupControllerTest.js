@@ -7,7 +7,10 @@ describe("Signup Controller test", () => {
     const mEmail = "bla@gmail.com";
     const mPassword = "1111111";
 
+    const user = new User({ mEmail, mPassword });
+
     const result = await signup(mEmail, mPassword);
+
     expect(result.email).toEqual(mEmail);
     expect(result.password).toEqual(mPassword);
   });
