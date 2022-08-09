@@ -12,7 +12,6 @@ const updateToken = async (userId, token) => {
 const getUser = async (userId) => {
   const user = await User.findOne({ _id: userId }).select({
     __v: 0,
-    // token: 0,
     _id: 0,
     password: 0,
   });
@@ -26,7 +25,6 @@ const updateSubscription = async (userId, sub) => {
   ).select({
     __v: 0,
     token: 0,
-    // _id: 0,
     password: 0,
   });
 
@@ -39,8 +37,18 @@ const updateSubscription = async (userId, sub) => {
   return updatedUser;
 };
 
+const updateAvatar = async (userId, avatar) => {
+  const updatedAvatar = await User.findOneAndUpdate(
+    { _id: userId },
+    { $set: { avatarURL: `/avatars/${avatar}` } },
+    { new: true }
+  );
+  return updatedAvatar;
+};
+
 module.exports = {
   updateToken,
   getUser,
+  updateAvatar,
   updateSubscription,
 };

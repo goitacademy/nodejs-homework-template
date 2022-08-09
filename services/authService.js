@@ -1,12 +1,15 @@
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const { User } = require("../db/userModel");
 const { NotAuthorizedError } = require("../Helpers/errors");
 const { updateToken } = require("./usersService");
 
 const signup = async (email, password) => {
-  const user = new User({ email, password });
+  const avatarURL = gravatar.url(email, { s: "500" });
+  const user = new User({ email, password, avatarURL });
   if (user) await user.save();
+  return user;
 };
 
 const login = async (email, password) => {
@@ -27,7 +30,7 @@ const login = async (email, password) => {
   );
   const updateUser = await User.findOne({ _id: user._id });
   const data = await updateToken(user._id, token);
-  return token;
+  return token, data;
 };
 
 const logout = async (userId) => {

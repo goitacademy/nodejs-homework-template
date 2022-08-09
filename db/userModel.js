@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const userShema = new mongoose.Schema({
   password: { type: String, required: [true, "Password is required"] },
   email: { type: String, required: [true, "Email is required"], unique: true },
+  avatarURL: { type: String },
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],

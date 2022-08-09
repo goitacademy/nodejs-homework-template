@@ -15,4 +15,7 @@ const updateSubscriptionController = async (req, res) => {
   return res.status(200).json({ changedUser, status: "success, user updated" });
 };
 
-module.exports = { getUserController, updateSubscriptionController };
+module.exports = {
+  getUserController,
+  updateSubscriptionController,
+};

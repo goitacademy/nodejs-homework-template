@@ -10,7 +10,7 @@ const {
 } = require("../../controllers/auth");
 
 router.post("/signup", asyncWrapper(signupController));
-router.post("/login", authMiddleware, asyncWrapper(loginController));
+router.post("/login", asyncWrapper(loginController));
 router.post("/logout", authMiddleware, asyncWrapper(logoutController));
 
 module.exports = router;
