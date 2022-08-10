@@ -1,3 +1,5 @@
+// обгортка для універсальної заміни try catch контролерів (controllers)
+
 const ctrlWrapper = (ctrl) => {
     const func = async (req, res, next) => {
         try {

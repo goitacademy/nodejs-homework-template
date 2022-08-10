@@ -1,3 +1,7 @@
+// контролер реєстрації користувача
+// добавити властивість avatarURL(для зберігання зображення)
+
+
 const { basedir } = global;
 
 const service = require(`${basedir}/services/auth`);
@@ -21,7 +25,7 @@ const signup = async (req, res) => {
         throw createError(409, `User with this ${email} in exists`);
     }
 
-    return res.json({
+    res.json({
         status: 'Success',
         code: 201,
         message: 'Registration success',
@@ -29,6 +33,7 @@ const signup = async (req, res) => {
             user: {
                 email: result.email,
                 subscription: result.subscription,
+                avatarURL: result.avatarURL,
             },
         },
     });

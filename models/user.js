@@ -30,11 +30,17 @@ const userSchema = Schema(
             type: String,
             default: null,
         },
+
+        avatarURL: {
+            type: String,
+            required: true,
+        },
+
     },
     { versionKey: false, timestamps: true }
 );
 
-// sign up
+/* схема валідації реєстрації користувача (sign up) */
 
 const registerSchema = Joi.object({
     username: Joi.string().required(),
@@ -47,7 +53,7 @@ const registerSchema = Joi.object({
     .default('starter'),
 });
 
-// log in
+/* схема валідації логіна користувача (log in) */
 
 const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
@@ -56,11 +62,13 @@ const loginSchema = Joi.object({
     .required(),
 });
 
-// hash password
+/* хешує і солить пароль перед збереженням до БД (hash password) */
 
 userSchema.methods.setPassword = function (password) {
     this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
+
+/* порівнює паролі користувача при вході, якщо не збігаються, повертає null */
 
 userSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.password);

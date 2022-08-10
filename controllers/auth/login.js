@@ -1,3 +1,6 @@
+// контролер входу користувача
+
+
 const { basedir } = global;
 
 const service = require(`${basedir}/services/auth`);

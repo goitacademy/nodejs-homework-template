@@ -39,6 +39,7 @@ const contactSchema = new Schema(
 );
 
 /* describe the data */
+/* схема валідації створення контакту */
 
 const addContactSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
@@ -48,6 +49,8 @@ const addContactSchema = Joi.object({
     phone: Joi.string().required(),
     favorite: Joi.boolean(),
 });
+
+/* схема валідації оновлення статусу контакту */
 
 const favoriteJoiSchema = Joi.object({
     favorite: Joi.boolean().required(),
