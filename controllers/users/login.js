@@ -14,7 +14,7 @@ const login = async (req, res) => {
     const user = await User.findOne({email});
     const passwordCompare = bcrypt.compareSync(password, user.password);
     if(!user || !passwordCompare) {
-     const error = new Error("Email or password is wrong"); 
+        const error = new Error("Email or password is wrong"); 
         error.status = 401;
         throw error;
     }
@@ -29,8 +29,7 @@ const login = async (req, res) => {
         data: {
             token
         }
-    })
-    
+    }) 
 }
 
 module.exports = login;

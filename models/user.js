@@ -19,12 +19,17 @@ const userSchema = Schema({
       token: {
         type: String,
         default: null,
+      },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+        required: true
       }
 }, {versionKey: false, timestamps: true});
 
 const userJoiSchema = Joi.object({
-    password: Joi.string().required(),
-    email: Joi.string().required(),
+    password: Joi.string().min(6).required(),
+    email: Joi.string().required().email(),
   })
     
   const User = model("user", userSchema); 

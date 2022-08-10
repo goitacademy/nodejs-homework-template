@@ -4,8 +4,8 @@ const {SECRET_KEY} = process.env;
 
 
 const users = async(req, res, next) => {
-  const {autorization = ""} = req.headers;
-  const [bearer, token] = autorization.split("");
+  const {authorization = " "} = req.headers;
+  const [bearer, token] = authorization.split(" ");
 try {
     if(bearer !== "Bearer") {
         const error = new Error("Not authorized"); 
