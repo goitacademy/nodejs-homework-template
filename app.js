@@ -12,6 +12,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
+global.basedir = __dirname;
+
 const authRouter = require('./routes/api/auth');
 const contactsRouter = require('./routes/api/contacts');
 
@@ -19,9 +21,11 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+// middlewares - app.use()
 app.use(logger(formatsLogger)); // middleware виводить дані (запити)
 app.use(cors());
 app.use(express.json()); // перевіряє Content-Type,тіло парсить як обєкт
+app.use(express.static('public')); // всі статичні файли потрібно шукати в папці 'public'
 
 app.use('/api/auth', authRouter);
 app.use('/api/contacts', contactsRouter); // якщо запит поч. з 'api/contacts', шукай обробників маршрутів тут contactsRouter
