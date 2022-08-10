@@ -129,8 +129,6 @@ router.put("/:id", async (req, res, next) => {
     res.status(404).json(data);
   }
   res.status(200).json(data);
-
-  // res.status(404).json({ message: "Not found" });
 });
 
 module.exports = router;
