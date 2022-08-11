@@ -19,8 +19,16 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ status: "error", code: status, message: message });
+  const { status = 500, message } = err;
+  let errorMessage = message;
+
+  if (status === 500) {
+    errorMessage = "Server error";
+  }
+
+  res
+    .status(status)
+    .json({ status: "error", code: status, message: errorMessage });
 });
 
 module.exports = app;

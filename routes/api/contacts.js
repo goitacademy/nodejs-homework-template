@@ -12,9 +12,8 @@ const contactSchema = Joi.object({
     })
     .required(),
   phone: Joi.string()
-    .regex(/^[0-9]{10}$/)
+    .regex(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
-
     .required(),
 });
 
@@ -26,7 +25,7 @@ router.get("/", async (req, res, next) => {
     const contacts = await contactOperations.listContacts();
     res.json({ status: "success", code: 200, contacts });
   } catch (error) {
-    next(error);
+    next(createError.InternalServerError("Server error"));
   }
 });
 
