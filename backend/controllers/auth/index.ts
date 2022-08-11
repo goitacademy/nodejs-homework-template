@@ -4,13 +4,15 @@ import getCurrent from "./getCurrent";
 import login from "./login";
 import signup from "./signup";
 import logout from './logout';
-import updateSubscription from './updateSubscription';
+import setSubscription from './setSubscription';
+import setAvatar from './setAvatar';
 const ctrls = {
     signup,
     login,
     getCurrent,
     logout,
-    updateSubscription,
+    setSubscription,
+    setAvatar,
 }
 
 export default ctrls;

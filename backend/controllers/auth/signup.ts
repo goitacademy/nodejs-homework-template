@@ -4,6 +4,8 @@ import bscrypt from 'bcrypt';
 import User from "../../models/users";
 import { TUser } from '../../models/users';
 import { TRequestAddUser } from "../../helpers/userTypesTS";
+import gravatar from 'gravatar';
+
 
 const signup = async (req: TRequestAddUser, res: Response) => {
     const { NODE_ENV } = process.env;
@@ -36,8 +38,9 @@ const signup = async (req: TRequestAddUser, res: Response) => {
     const salt = 10;
     const hashPassword = await bscrypt.hash(password, salt);
 
+    const avatarURL = gravatar.url(email);
     //to add user's data to data base
-    const result = await User.model.create({ email, password: hashPassword, subscription });
+    const result = await User.model.create({ email, password: hashPassword, subscription, avatarURL });
     if (!result) {
         throw createError({
             status: 500

@@ -1,9 +1,6 @@
 import errorMessages from './errorMessages';
+import TError from './createErrorTS';
 
-type TError = {
-    message: string | undefined,
-    status?: number | undefined
-}
 
 const createError = ({
     status,

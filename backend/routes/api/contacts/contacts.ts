@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import ctrls from '../../../controllers/contacts';
 import ctrlTryCatchWrapper from '../../../helpers/ctrlTryCatchWrapper';
-import auth from '../../../middlewares/auth';
+import { auth } from '../../../middlewares/auth';
 const router = Router();
 
 router.get("/", auth, ctrlTryCatchWrapper(ctrls.getAll));
