@@ -25,11 +25,11 @@
 // module.exports = app
 
 const express = require("express");
-require("dotenv").config();
 const router = require("./routes/router");
 
-const PORT = process.env.PORT || 3000;
+require("dotenv").config();
 
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());

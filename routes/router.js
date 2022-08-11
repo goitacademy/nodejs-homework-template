@@ -2,7 +2,13 @@ const { Router } = require("express");
 const fs = require("fs").promises;
 const path = require("path");
 const crypto = require("crypto");
+const Joi = require("joi");
 
+const contactTemplate = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 const filePath = path.resolve(__dirname, "../db/contacts.json");
 
 const router = Router();
@@ -12,49 +18,59 @@ const getContacts = async () => {
   return contacts;
 };
 
-router.get("/", async (res) => {
+router.get("/contacts", async (req, res) => {
   try {
     const contacts = await getContacts();
     res.json(contacts);
+    console.log(res.statusCode);
   } catch (error) {
     res.json({ error: error.massage });
   }
 });
 
-router.get("/:contactId", async (req, res) => {
+router.get("/contacts/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contacts = await getContacts();
-    const contact = contacts.find(
-      (contact) => String(contact.id) === contactId
-    );
+    const contact = contacts.find((contact) => contact.id === contactId);
+    if (!contact) {
+      res
+        .status(404)
+        .json({ message: `User with id ${contactId} was not found` });
+    }
     res.json(contact);
   } catch (error) {
     res.json({ error: error.massage });
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/contacts", async (req, res) => {
   try {
     const body = req.body;
-    const newContact = { id: crypto.randomUUID(), ...body };
-    const contacts = await getContacts();
-    contacts.push(newContact);
-    await fs.writeFile(filePath, JSON.stringify(contacts));
-    res.json(newContact);
+    const { error } = contactTemplate.validate(body);
+    if (error) {
+      res.status(400).json({ message: ` ${error} field` });
+    } else {
+      const newContact = { id: crypto.randomUUID(), ...body };
+      const contacts = await getContacts();
+      contacts.push(newContact);
+      await fs.writeFile(filePath, JSON.stringify(contacts));
+      res.status(201).json(newContact);
+    }
   } catch (error) {
     res.json({ error: error.massage });
   }
 });
 
-router.delete("/:contactId", async (req, res) => {
+router.delete("/contacts/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
 
     const contacts = await getContacts();
     const updatedContacts = contacts.filter(
-      (contact) => String(contact.id) !== contactId
+      (contact) => contact.id !== contactId
     );
+    console.log(updatedContacts);
 
     await fs.writeFile(filePath, JSON.stringify(updatedContacts));
     res.json({ message: `User with id ${contactId} has been deleted` });
@@ -63,21 +79,29 @@ router.delete("/:contactId", async (req, res) => {
   }
 });
 
-router.put("/:contactId", async (req, res) => {
+router.put("contacts/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
 
-    const contacts = await getContacts();
+    const { error } = contactTemplate.validate(body);
+    if (error) {
+      res.status(400).json({ message: `Missing required  ${error} field` });
+    } else {
+      const contacts = await getContacts();
+      console.log(contacts);
+      const index = contacts.findIndex((contact) => contact.id === contactId);
+      console.log(index);
+      if (index === -1) {
+        res.status(404).json({ message: "Not found" });
+      }
+      contacts[index] = { ...contacts[index], ...body };
+      console.log(contacts[index]);
 
-    const index = contacts.findIndex(
-      (contact) => String(contact.id) === contactId
-    );
-    contacts[index] = { ...contacts[index], ...body };
+      await fs.writeFile(filePath, JSON.stringify(contacts));
 
-    await fs.writeFile(filePath, JSON.stringify(contacts));
-
-    res.json(contacts[index]);
+      res.json(contacts[index]);
+    }
   } catch (error) {
     res.json({ error: error.massage });
   }
