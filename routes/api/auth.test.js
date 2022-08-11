@@ -5,6 +5,22 @@ const app = require('../../app'); // імпортуєм весь сервер
 const { User } = require('../../models/user');
 const { DB_TEST_HOST, PORT = 3000 } = process.env; // створити тестову DB в MongoDB
 
+/* приклад робочого варіанту
+const { loginController } = require(' шлях до authController');
+test('Login test', async () => {
+  const mReq = { body: { email: 'avatar@email.com', password: 'avatar' } };
+  const mRes = { status: jest.fn().mockReturnThis(), send: jest.fn() };
+  await loginController(mReq, mRes);
+  expect(mRes.status).toBeCalledWith(200);
+  expect(mRes.token).toEqual(expect.anything());
+  expect(mRes.user.email).toEqual(expect.not.stringContaining(expected));
+  expect(mRes.send.user.password).toEqual(
+    expect.not.stringContaining(expected)
+  );
+});
+*/
+
+/* 2-й варіант лекція */
 describe('test auth routes', () => {
   let server;
   beforeAll(() => (server = app.listen(PORT))); // запуск сервера перед тестами
