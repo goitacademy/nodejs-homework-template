@@ -1,6 +1,7 @@
 // const fs = require('fs/promises')
 
-const listContacts = async () => {}
+const listContacts = async () => { }
+
 
 const getContactById = async (contactId) => {}
 
