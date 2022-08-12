@@ -26,4 +26,3 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-// mongodb+srv://Denys:Huggies211284S@cluster0.hmovbru.mongodb.net/test

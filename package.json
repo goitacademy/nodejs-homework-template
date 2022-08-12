@@ -10,11 +10,7 @@
   },
   "dependencies": {
     "cors": "2.8.5",
-<<<<<<< Updated upstream
     "cross-env": "^7.0.3",
-=======
-    "cross-env": "7.0.3",
->>>>>>> Stashed changes
     "dotenv": "^16.0.1",
     "express": "4.17.1",
     "http-errors": "^2.0.0",
