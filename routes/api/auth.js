@@ -12,5 +12,4 @@ const {
 router.post("/signup", asyncWrapper(signupController));
 router.post("/login", asyncWrapper(loginController));
 router.post("/logout", authMiddleware, asyncWrapper(logoutController));
-
 module.exports = router;

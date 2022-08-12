@@ -1,5 +1,6 @@
 const { User } = require("../db/userModel");
 const { WrongParametersError } = require("../Helpers/errors");
+const sgMail = require("@sendgrid/mail");
 
 const updateToken = async (userId, token) => {
   const data = await User.findOneAndUpdate(
@@ -45,10 +46,39 @@ const updateAvatar = async (userId, avatar) => {
   );
   return updatedAvatar;
 };
+const verification = async (token) => {
+  const user = await User.findOne({ verificationToken: token });
+  if (!user) {
+    throw new WrongParametersError(`'User not found'`);
+  }
 
+  await user.updateOne({ verify: true, verificationToken: null });
+  return user;
+};
+
+const reVerifi = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new WrongParametersError(`'User not found'`);
+  }
+  if (user.verify === true) {
+    throw new WrongParametersError(`'User verify'`);
+  }
+  const msg = {
+    to: email,
+    from: "tsukotaed@gmail.com",
+    subject: "Resending your the activation link",
+    text: `Please confirm your email address GET  http://localhost:8080/api/users/verify/${user.verificationToken}`,
+    html: `Please confirm your email address GET  http://localhost:8080/api/users/verify/${user.verificationToken}`,
+  };
+  await sgMail.send(msg);
+  return user;
+};
 module.exports = {
   updateToken,
   getUser,
+  reVerifi,
+  verification,
   updateAvatar,
   updateSubscription,
 };

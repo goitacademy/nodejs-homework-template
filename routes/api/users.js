@@ -12,9 +12,16 @@ const { avatarMiddleware } = require("../../middlewares/avatarMiddleware");
 const { avatarController } = require("../../controllers/avatarController");
 const {
   getUserController,
+  verificationController,
+  verificationTokenController,
   updateSubscriptionController,
 } = require("../../controllers/users");
 
+router.post("/verify", asyncWrapper(verificationController));
+router.get(
+  "/verify/:verificationToken",
+  asyncWrapper(verificationTokenController)
+);
 router.get("/current", authMiddleware, asyncWrapper(getUserController));
 router.patch(
   "/avatars",
