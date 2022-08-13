@@ -8,7 +8,10 @@ const login = async (req, res) => {
     const {email, password} = req.body
     const user = await User.findOne({email})
     if(!user) {
-        return res.status(409).json({ status: 'error', code: 401, message: `Email wrong!`})
+        return res.status(401).json({ status: 'error', code: 401, message: `Email wrong!`})
+    }
+    if(!user.verify) {
+        return res.status(401).json({ status: 'error', code: 401, message: `Email is not verify!`})
     }
     const comparePassword = await bcrypt.compare(password, user.password)
     if(!comparePassword) {

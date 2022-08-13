@@ -2,11 +2,15 @@ const express = require('express')
 const router = express.Router()
 const {basedir} = global
 const {auth, upload} = require(`${basedir}/middlewares`)
-const {register, login, logout, currentUser, setAvatar} = require(`${basedir}/controllers/auth`)
-const {validateUser} = require('./validation')
+const {register, verifyEmail, resendVerifyEmail, login, logout, currentUser, setAvatar} = require(`${basedir}/controllers/auth`)
+const {validateUser, validateEmail} = require('./validation')
 const ctrlWrapper = require(`${basedir}/helpers/ctrlWrapper`)
 
 router.post('/register', validateUser, ctrlWrapper(register))
+
+router.get('/verify/:verificationToken', ctrlWrapper(verifyEmail))
+
+router.post('/verify', validateEmail, ctrlWrapper(resendVerifyEmail))
 
 router.post('/login', validateUser, ctrlWrapper(login))
 

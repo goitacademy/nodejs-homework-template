@@ -22,6 +22,10 @@ const authSchema = Joi.object({
     password: Joi.string().min(6).required(),
 })
 
+const emailSchema = Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+})
+
 
 const validate = async (schema, obj, res, next) => {
     try {
@@ -48,4 +52,8 @@ module.exports.validateFavorite = async (req, res, next) => {
 
 module.exports.validateUser = async (req, res, next) => {
     return await validate(authSchema, req.body, res, next)
+}
+
+module.exports.validateEmail = async (req, res, next) => {
+    return await validate(emailSchema, req.body, res, next)
 }
