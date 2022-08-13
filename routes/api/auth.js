@@ -7,7 +7,7 @@ const { ctrlWrapper } = require(`${basedir}/helpers/`);
 
 const router = express.Router();
 
-const { auth } = require(`${basedir}/middlewares`);
+const { auth ,upload} = require(`${basedir}/middlewares`);
 
 // singup
 router.post('/signup', ctrlWrapper(ctrl.register));
@@ -18,5 +18,9 @@ router.post('/login', ctrlWrapper(ctrl.login));
 router.get('/current', auth, ctrlWrapper(ctrl.getCurrent));
 
 router.get('/logout', auth, ctrlWrapper(ctrl.logout));
+
+router.patch('/users', auth, ctrlWrapper(ctrl.setSubscription));
+
+router.patch("/avatars",auth, upload.single("avatar"),ctrlWrapper(ctrl.setAvatar))
 
 module.exports = router;
