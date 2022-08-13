@@ -16,6 +16,7 @@ const start = async () => {
     });
   } catch (error) {
     console.error(`Failed to lauch application with error: ${error.message}`);
+    process.exit(1);
   }
 };
 
