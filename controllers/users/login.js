@@ -6,11 +6,11 @@ const {Unauthorized} = require('http-errors')
 const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email })
-      if (!user) {
+      if (!user || !user.verify) {
         throw new Unauthorized("Email is wrong")
       }
     const passCompare = bcrypt.compareSync(password, user.password)
-    if (!passCompare) {
+    if (!passCompare || !user.verify) {
          throw new Unauthorized("Password is wrong")
     }
     const payload = {
