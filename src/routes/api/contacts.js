@@ -5,10 +5,12 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 const {
   addContactSchema,
   putContactSchema,
+  patchFavoriteContactSchema,
 } = require("../../models/contactsSchema");
 const { validation } = require("../../middlewares/validation");
 
@@ -27,7 +29,7 @@ router.get("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -52,7 +54,7 @@ router.delete("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await removeContact(contactId);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -68,7 +70,7 @@ router.put("/:contactId", validation(putContactSchema), async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await updateContact(contactId, req.body);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -79,5 +81,25 @@ router.put("/:contactId", validation(putContactSchema), async (req, res) => {
     res.status(404).json({ message: "Not found" });
   }
 });
+
+router.patch(
+  "/:contactId/favorite",
+  validation(patchFavoriteContactSchema),
+  async (req, res) => {
+    try {
+      const { contactId } = req.params;
+      const contact = await updateStatusContact(contactId, req.body);
+      if (!contact) {
+        res
+          .status(404)
+          .json({ message: `Contact with id:${contactId} does not exist` });
+        return;
+      }
+      res.status(200).json({ contact });
+    } catch (err) {
+      res.status(404).json({ message: "Not found" });
+    }
+  }
+);
 
 module.exports = router;

@@ -9,6 +9,7 @@ const addContactSchema = Joi.object({
     .min(10)
     .max(18)
     .required(),
+  favorite: Joi.boolean().default("false"),
 });
 
 const putContactSchema = Joi.object({
@@ -22,7 +23,14 @@ const putContactSchema = Joi.object({
     .optional(),
 });
 
+const patchFavoriteContactSchema = Joi.object({
+  favorite: Joi.bool()
+    .required()
+    .messages({ "favorite.required": "missing field favorite" }),
+});
+
 module.exports = {
   addContactSchema,
   putContactSchema,
+  patchFavoriteContactSchema,
 };

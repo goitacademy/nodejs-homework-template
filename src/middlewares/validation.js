@@ -9,7 +9,7 @@ module.exports = {
         const message = validationSchema.error.details
           .map(({ message }) => message)
           .join(", ");
-        return res.status(404).json({
+        return res.status(400).json({
           message,
         });
       }
