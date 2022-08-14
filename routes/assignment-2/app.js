@@ -1,19 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const moment = require("moment");
-const fs = require("fs/promises");
 
-const app = express(); // app - web-server
-
-// Server log implementation
-app.use(async (req, res, next) => {
-  const { method, url } = req;
-  const date = moment().format("DD-MM-YYYY_hh:mm:ss");
-
-  await fs.appendFile("server.log", `\n${method} ${url} ${date}`);
-  next();
-});
+const app = express();
 
 // Connecting contacts list
 const contactsRouter = require("../api/contacts");
@@ -28,7 +17,7 @@ app.use(express.json());
 
 // We have a request which starts with '../api/contacts.js'
 // the system is going look for a handler in contactsRouter file
-app.use("../api/contacts", contactsRouter);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({
