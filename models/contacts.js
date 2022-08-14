@@ -1,9 +1,7 @@
 const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
-// const { Router } = require ("express");
-// const fs = require("fs/promises");
+
 const path = require("path");
-// const crypto = require("crypto");
 
 const contactsPath = path.resolve(__dirname, "./contacts.json");
 console.log(contactsPath);
@@ -23,14 +21,14 @@ const getContactById = async (id) => {
 };
 
 const removeContact = async (id) => {
-    const contactsList = await listContacts();
-    const idx = contactsList.findIndex(item => item.id === id);
-    if(idx === -1){
-        return null;
-    }
-    const [removeContact] = contactsList.splice(idx, 1);
-    await updateContactsList(contactsList);
-    return removeContact;
+  const contactsList = await listContacts();
+  const idx = contactsList.findIndex((item) => item.id === id);
+  if (idx === -1) {
+    return null;
+  }
+  const [removeContact] = contactsList.splice(idx, 1);
+  await updateContactsList(contactsList);
+  return removeContact;
 };
 
 const updateContactsList = async (contactsList) => {
@@ -52,22 +50,22 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async ( id, {name, email, phone} ) => {
+const updateContact = async (id, { name, email, phone }) => {
   const contactsList = await listContacts();
-    
-    const updateData = {
-        name,
-        email,
-        phone,
-      };
 
-    const idx = contactsList.findIndex(item => item.id === id);
-    if(idx === -1){
-        return null;
-    }
-    contactsList[idx] = {id, ...updateData};
-    await updateContactsList(contactsList);
-    return contactsList[idx];
+  const updateData = {
+    name,
+    email,
+    phone,
+  };
+
+  const idx = contactsList.findIndex((item) => item.id === id);
+  if (idx === -1) {
+    return null;
+  }
+  contactsList[idx] = { id, ...updateData };
+  await updateContactsList(contactsList);
+  return contactsList[idx];
 };
 
 module.exports = {
