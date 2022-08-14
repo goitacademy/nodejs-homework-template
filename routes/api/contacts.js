@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
+const auth = require("../../middlewares/auth")
 
-const router = express.Router()
+const { basedir } = global;
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require(`${basedir}/controllers/contacts`);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { ctrlWrapper } = require(`${basedir}/helpers/`);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/',auth, ctrlWrapper(ctrl.getAll));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id',auth, ctrlWrapper(ctrl.getByid));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch('/:id/favorite',auth, ctrlWrapper(ctrl.updateFavorite));
 
-module.exports = router
+router.post('/', auth, ctrlWrapper(ctrl.add));
+
+router.delete('/:id',auth, ctrlWrapper(ctrl.removeById));
+
+router.put('/:id',auth, ctrlWrapper(ctrl.updateById));
+
+module.exports = router;
