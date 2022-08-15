@@ -7,14 +7,14 @@ const { SENDGRID_API_KEY } = process.env;
 
 sgEmail.setApiKey(SENDGRID_API_KEY);
 
-const sendEmail = async (email, verificationToken) => {
-    console.log(email, verificationToken);
+const sendEmail = async (email, verifyToken) => {
+    console.log(email, verifyToken);
 
     const mail = {
         from: 'grekulkristi@gmail.com',  // Змінити на перевіреного відправника
         to: email,  // Змінити на одержувача
         subject: 'Verify email',
-        html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Please, confirm your email</a>`,
+        html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verifyToken}">Please, confirm your email</a>`,
     }
 
     await sgEmail
