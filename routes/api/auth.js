@@ -14,7 +14,7 @@ router.post('/signup', ctrlWrapper(ctrl.signup)); // роут для реєст�
 
 router.get('/verify/:verificationToken', ctrlWrapper(ctrl.verifyEmail)); // верифікація користувача
 
-router.post('/verify', ctrlWrapper(ctrl.resendEmail)); // запит повторної верифікації користувача
+router.post('/verify', ctrlWrapper(ctrl.resendVerifyEmail)); // запит повторної верифікації користувача
 
 router.post('/login', ctrlWrapper(ctrl.login)); // роут для входу користувача
 
