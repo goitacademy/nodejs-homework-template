@@ -6,6 +6,7 @@ const {
   getOneContact,
   removeOneContact,
   updateOneContact,
+  updateFavorite,
 } = require('../../controllers/contactsController');
 // Что бы не писать в каждом маршруте /api/contacts или /api/contacts/:contactId мы прописываем этот маршрут сразу в app.js при подключении раутера app.use('/api/contacts', contactsRouter). Так что "/" === /api/contacts в данном случае.
 
@@ -18,5 +19,7 @@ router.post('/', addNewContact);
 router.delete('/:contactId', removeOneContact);
 
 router.put('/:contactId', updateOneContact);
+
+router.patch('/:contactId', updateFavorite);
 
 module.exports = router;

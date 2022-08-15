@@ -4,8 +4,9 @@ const {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
-} = require('../models/contacts');
+  updateContactById,
+  updateStatusContact,
+} = require('../db/service/contacts');
 
 const schema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -16,6 +17,7 @@ const schema = Joi.object({
     .max(35),
 
   phone: Joi.string().min(5).max(15).required(),
+  favorite: Joi.boolean(),
 });
 
 const getAllContacts = async (req, res, next) => {
@@ -53,12 +55,25 @@ const updateOneContact = async (req, res, next) => {
     return res.status(400).json({ message: 'missing fields' });
   }
 
-  const updatedContact = await updateContact(req.params.contactId, req.body);
+  const updatedContact = await updateContactById(req.params.contactId, req.body);
 
   if (!updatedContact) {
     return res.status(404).json({ message: 'Not found' });
   }
   res.json(updatedContact);
+};
+
+const updateFavorite = async (req, res, next) => {
+  if (!req.body) {
+    res.status(400).json({ message: 'missing field favorite' });
+  }
+  const contact = await updateStatusContact(req.params.contactId, req.body);
+  console.log(contact);
+
+  if (!contact) {
+    return res.status(404).json({ message: 'Not found' });
+  }
+  res.json(contact);
 };
 
 module.exports = {
@@ -67,4 +82,5 @@ module.exports = {
   getOneContact,
   removeOneContact,
   updateOneContact,
+  updateFavorite,
 };
