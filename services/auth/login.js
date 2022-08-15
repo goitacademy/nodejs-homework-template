@@ -14,9 +14,9 @@ const { SECRET_KEY } = process.env;
 const login = asyncWrapper(async ({ email, password }) => {
     const user = await User.findOne({ email });
     
-    // якщо користувача немає або пароль не валідний, замість токена - null,
+    // якщо користувача немає або пароль не валідний- найде замість токена - null,
 
-    if (!user || !user.validPassword(password)) {
+    if (!user || !user.verify || !user.validPassword(password)) {
         return null;
     }
     
