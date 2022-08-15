@@ -22,7 +22,7 @@ const getContactById = async (contactId) => {
 const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
-    id: nanoid(),
+    contactId: nanoid(),
     ...body
 }
     contacts.push(newContact);

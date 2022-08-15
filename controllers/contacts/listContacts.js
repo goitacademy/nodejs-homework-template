@@ -1,11 +1,7 @@
 const contacts = require('../../models/contacts')
 
-const listContacts = async (_, res, next) => {
-    try {
+const listContacts = async (_, res) => {
       const result = await contacts.listContacts()
       res.json(result)
-    } catch (error) {
-      next(error)
-    }
   }
 module.exports = listContacts
