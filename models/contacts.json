@@ -1,21 +1,21 @@
 [
   {
     "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
+    "name": "Sergii",
+    "email": "test27@gmail.com",
+    "phone": "33333333333333"
   },
   {
     "id": "2",
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
+    "name": "Test update ok",
+    "email": "test27@gmail.com",
+    "phone": "33333333333333"
   },
   {
     "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
+    "name": "It is good",
+    "email": "test27@gmail.com",
+    "phone": "33333333333333"
   },
   {
     "id": "4",
@@ -52,11 +52,5 @@
     "name": "Thomas Lucas",
     "email": "nec@Nulla.com",
     "phone": "(704) 398-7993"
-  },
-  {
-    "id": "10",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
   }
 ]
