@@ -12,6 +12,10 @@ const router = express.Router();
 
 router.post('/signup', ctrlWrapper(ctrl.signup)); // роут для реєстрації користувача
 
+router.get('/verify/:verificationToken', ctrlWrapper(ctrl.verifyEmail)); // верифікація користувача
+
+router.post('/verify', ctrlWrapper(ctrl.resendEmail)); // запит повторної верифікації користувача
+
 router.post('/login', ctrlWrapper(ctrl.login)); // роут для входу користувача
 
 router.get('/logout', auth, ctrlWrapper(ctrl.logout)); // роут для виходу користувача
