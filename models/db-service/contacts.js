@@ -1,4 +1,4 @@
-const Contacts = require('../schemas/contactsSchema');
+const Contacts = require('../contactsSchema');
 
 const listContacts = async () => {
   try {
@@ -19,24 +19,24 @@ const getContactById = async contactId => {
 const removeContact = async contactId => {
   try {
     return Contacts.findByIdAndRemove(contactId);
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    throw new Error(err.message);
   }
 };
 
 const addContact = async ({ name, email, phone, favorite = false }) => {
   try {
     return Contacts.create({ name, email, phone, favorite });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    throw new Error(err.message);
   }
 };
 
 const updateContactById = async (contactId, { name, email, phone }) => {
   try {
     return Contacts.findByIdAndUpdate(contactId, { $set: { _id: contactId, name, email, phone } });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    throw new Error(err.message);
   }
 };
 
@@ -45,8 +45,8 @@ const updateStatusContact = async (contactId, { favorite }) => {
     return Contacts.findByIdAndUpdate(contactId, {
       $set: { _id: contactId, favorite },
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    throw new Error(err.message);
   }
 };
 

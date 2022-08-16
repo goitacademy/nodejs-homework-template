@@ -6,10 +6,10 @@ const {
   addContact,
   updateContactById,
   updateStatusContact,
-} = require('../db/service/contacts');
+} = require('../models/db-service/contacts');
 
 const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30).required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required()
@@ -68,7 +68,6 @@ const updateFavorite = async (req, res, next) => {
     res.status(400).json({ message: 'missing field favorite' });
   }
   const contact = await updateStatusContact(req.params.contactId, req.body);
-  console.log(contact);
 
   if (!contact) {
     return res.status(404).json({ message: 'Not found' });
