@@ -22,7 +22,6 @@ router.get("/contacts", async (req, res) => {
   try {
     const contacts = await getContacts();
     res.json(contacts);
-    console.log(res.statusCode);
   } catch (error) {
     res.json({ error: error.massage });
   }
@@ -70,7 +69,6 @@ router.delete("/contacts/:contactId", async (req, res) => {
     const updatedContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
-    console.log(updatedContacts);
 
     await fs.writeFile(filePath, JSON.stringify(updatedContacts));
     res.json({ message: `User with id ${contactId} has been deleted` });
@@ -89,15 +87,12 @@ router.put("contacts/:contactId", async (req, res) => {
       res.status(400).json({ message: `Missing required  ${error} field` });
     } else {
       const contacts = await getContacts();
-      console.log(contacts);
       const index = contacts.findIndex((contact) => contact.id === contactId);
-      console.log(index);
+
       if (index === -1) {
         res.status(404).json({ message: "Not found" });
       }
       contacts[index] = { ...contacts[index], ...body };
-      console.log(contacts[index]);
-
       await fs.writeFile(filePath, JSON.stringify(contacts));
 
       res.json(contacts[index]);
