@@ -37,5 +37,5 @@ const Contact = model("contact", contactSchema);
 module.exports = {
   Contact,
   joiSchema,
-  favoriteJoiSchema
-};
+  favoriteJoiSchema,
+}
