@@ -2,8 +2,7 @@ const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { Conflict } = require('http-errors');
 const { v4: uuidv4 } = require('uuid');
-const { auth: service } = require("../../service");
-const { sendEmail } = require('../../helpers');
+const { helper, auth: service } = require("../../service");
 
 
 const register = async (req, res) => {
@@ -29,7 +28,7 @@ const register = async (req, res) => {
         subject: "Email confirmation",
         html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to confirm</a>`
     };
-    await sendEmail(mail);
+    await helper.sendEmail(mail);
     res.status(201).json({
         status: "success",
         code: 201,

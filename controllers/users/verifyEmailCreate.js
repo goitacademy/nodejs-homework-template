@@ -1,7 +1,6 @@
-const { users: service } = require("../../service");
+const { helper, users: service } = require("../../service");
 const { NotFound, BadRequest } = require("http-errors");
 const { v4: uuidv4 } = require('uuid');
-const { sendEmail } = require('../../helpers');
 
 const verifyEmailCreate = async (req, res) => {
     const { email } = req.body;
@@ -21,7 +20,7 @@ const verifyEmailCreate = async (req, res) => {
         subject: "Email confirmation",
         html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to confirm</a>`
     };
-    await sendEmail(mail);
+    await helper.sendEmail(mail);
     res.json({
         message: 'Verification email sent',
     });
