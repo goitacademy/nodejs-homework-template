@@ -1,25 +1,25 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const { basedir } = global;
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require(`${basedir}/controllers/contacts`);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { ctrlWrapper } = require(`${basedir}/helpers`);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { auth } = require(`${basedir}/middlewares`);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', auth, ctrlWrapper(ctrl.getAllContacts)); // роут для списку всіх контактів
 
-module.exports = router
+router.get('/:id', auth, ctrlWrapper(ctrl.getContactById)); // роут для контакту з id
+
+router.post('/', auth, ctrlWrapper(ctrl.addContact)); // роут для створення контакту
+
+router.delete('/:id', auth, ctrlWrapper(ctrl.removeContact)); // роут для видалення контакту
+
+router.put('/:id', auth, ctrlWrapper(ctrl.updateContact)); // роут для оновлення контакту
+
+router.patch('/:id/favorite', auth, ctrlWrapper(ctrl.updateStatusContact)); // роут для статусу, favorite
+
+module.exports = router;
