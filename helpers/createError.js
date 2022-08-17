@@ -7,7 +7,6 @@ const messages = {
 };
 
 const createError = (status, message = messages[status]) => {
-const createError = ({ status, message = messages[status] }) => {
   const error = new Error(message);
   error.status = status;
   return error;
