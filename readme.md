@@ -1,3 +1,18 @@
+Roles | ADMIN | MODERATOR | EDITOR | CUSTOMER | GUEST
+--- | --- | --- | --- |--- |--- 
+get all contacts | + | + | + | + | + 
+get one contact | + | + | + | + | + 
+add contact | + | + | + | + | + 
+delete contact | + | + | + | + | + 
+update contact | + | + | + | + | - 
+update contact favorite | + | + | + | + | -
+get all customers | + | + | + | - | - 
+get one customer | + | + | + | - | - 
+add customer | + | + | - | - | - 
+update customer | + | + | + | - | -
+delete customer | + | + | - | - | - 
+
+
 ## GoIT Node.js Course Template Homework
 
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
