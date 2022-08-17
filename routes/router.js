@@ -77,7 +77,7 @@ router.delete("/contacts/:contactId", async (req, res) => {
   }
 });
 
-router.put("contacts/:contactId", async (req, res) => {
+router.put("/contacts/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
