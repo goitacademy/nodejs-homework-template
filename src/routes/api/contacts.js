@@ -5,11 +5,14 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 const {
-  addContactValidation,
-  putContactValidation,
-} = require("../../middlewares/validation");
+  addContactSchema,
+  putContactSchema,
+  patchFavoriteContactSchema,
+} = require("../../models/contactsSchema");
+const { validation } = require("../../middlewares/validation");
 
 const router = express.Router();
 
@@ -26,7 +29,7 @@ router.get("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -38,7 +41,7 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-router.post("/", addContactValidation, async (req, res) => {
+router.post("/", validation(addContactSchema), async (req, res) => {
   try {
     const contact = await addContact(req.body);
     res.status(201).json({ contact });
@@ -51,7 +54,7 @@ router.delete("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await removeContact(contactId);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -63,11 +66,11 @@ router.delete("/:contactId", async (req, res) => {
   }
 });
 
-router.put("/:contactId", putContactValidation, async (req, res) => {
+router.put("/:contactId", validation(putContactSchema), async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await updateContact(contactId, req.body);
-    if (contact.length === 0) {
+    if (!contact) {
       res
         .status(404)
         .json({ message: `Contact with id:${contactId} does not exist` });
@@ -78,5 +81,25 @@ router.put("/:contactId", putContactValidation, async (req, res) => {
     res.status(404).json({ message: "Not found" });
   }
 });
+
+router.patch(
+  "/:contactId/favorite",
+  validation(patchFavoriteContactSchema),
+  async (req, res) => {
+    try {
+      const { contactId } = req.params;
+      const contact = await updateStatusContact(contactId, req.body);
+      if (!contact) {
+        res
+          .status(404)
+          .json({ message: `Contact with id:${contactId} does not exist` });
+        return;
+      }
+      res.status(200).json({ contact });
+    } catch (err) {
+      res.status(404).json({ message: "Not found" });
+    }
+  }
+);
 
 module.exports = router;
