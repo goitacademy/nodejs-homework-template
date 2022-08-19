@@ -1,13 +1,3 @@
-// const fs = require('fs/promises')
-
-// const listContacts = async () => {}
-
-// const getContactById = async (contactId) => {}
-
-// const removeContact = async (contactId) => {}
-
-// const addContact = async (body) => {}
-
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
