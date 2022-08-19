@@ -10,7 +10,7 @@ module.exports = {
           .map(({ message }) => message)
           .join(", ");
         return res.status(400).json({
-          message,
+          message: `Validation error ${message}`,
         });
       }
 

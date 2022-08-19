@@ -13,10 +13,11 @@ const {
   patchFavoriteContactSchema,
 } = require("../../models/contactsSchema");
 const { validation } = require("../../middlewares/validation");
+const { authMW } = require("../../middlewares/authMW");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", authMW, async (req, res) => {
   try {
     const contacts = await listContacts();
     res.status(200).json({ contacts });
