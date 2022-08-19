@@ -11,5 +11,5 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
-  updateStatusFavorite,
+  updateStatusFavorite
 };

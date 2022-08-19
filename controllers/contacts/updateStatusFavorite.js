@@ -1,5 +1,8 @@
-const { Contact } = require("../../models/contacts");
-const { createError } = require("../../middlewares");
+const {basedir} = global
+
+const { Contact } = require(`${basedir}/models`);
+
+const { createError } = require(`${basedir}/helpers`);
 
 const updateStatusFavorite = async (req, res) => {
   const { contactId } = req.params;
