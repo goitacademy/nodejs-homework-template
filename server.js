@@ -1,16 +1,19 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-const { DB_HOST, PORT = 3000 } = process.env;
+require("dotenv").config();
+const { PORT = 3000 } = process.env;
+// нужно добавить поддержку dotenv!!!
+const connection = mongoose.connect(
+  "mongodb+srv://user:v4pZ48LD8GxdZLM7@cluster0.zhplhfe.mongodb.net/?retryWrites=true&w=majority",
+  { useUnifiedTopology: true, useNewUrlParser: true, dbName: "db-contacts" }
+);
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => app.listen(PORT))
-  .catch((error) => {
-    console.log(error);
-    process.exit(1);
-  });
-
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000");
-// });
-// DB_HOST
+connection
+  .then(() => {
+    app.listen(PORT, function () {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  })
+  .catch((err) =>
+    console.log(`Server not running. Error message: ${err.message}`)
+  );
