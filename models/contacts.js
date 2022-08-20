@@ -24,7 +24,9 @@ const getContactById = async (contactId) => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
-  if (parsedContacts.find(({ id }) => id === contactId) !== undefined) {
+  const foundContact =
+    parsedContacts.find(({ id }) => id === contactId) !== undefined;
+  if (foundContact) {
     const contact = parsedContacts.find((e) => e.id === contactId);
     return {
       status: "success",
@@ -46,8 +48,10 @@ const removeContact = async (contactId) => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
+  const foundContact =
+    parsedContacts.find(({ id }) => id === contactId) !== undefined;
 
-  if (parsedContacts.find(({ id }) => id === contactId) !== undefined) {
+  if (foundContact) {
     const newContacts = parsedContacts.filter(({ id }) => id !== contactId);
     fs.writeFile(
       filePath,
@@ -77,7 +81,8 @@ const addContact = async (body) => {
     return data;
   });
   const parsedContacts = JSON.parse(contacts);
-  if (Object.entries(body).length < 3) {
+  const numberRequiredFields = 3;
+  if (Object.entries(body).length < numberRequiredFields) {
     return {
       status: "error",
       code: 400,
