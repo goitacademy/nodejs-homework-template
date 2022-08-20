@@ -16,6 +16,8 @@ const signUp = async (req, res) => {
     password: hashPassword,
     avatarURL,
   });
+  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const result = await User.create({ email, password: hashPassword });
   res.status(201).json({
     status: "created",
     code: 201,
