@@ -11,25 +11,31 @@ const {
   addContactSchema,
   putContactSchema,
   patchFavoriteContactSchema,
+  paramsContactSchema,
 } = require("../../models/contactsSchema");
 const { validation } = require("../../middlewares/validation");
 const { authMW } = require("../../middlewares/authMW");
 
 const router = express.Router();
 
-router.get("/", authMW, async (req, res) => {
-  try {
-    const contacts = await listContacts();
-    res.status(200).json({ contacts });
-  } catch (err) {
-    res.status(404).json({ message: "Not found" });
+router.get(
+  "/",
+  authMW,
+  validation(paramsContactSchema, "query"),
+  async (req, res) => {
+    try {
+      const contacts = await listContacts(req.query, req.userId);
+      res.status(200).json({ contacts });
+    } catch (err) {
+      res.status(404).json({ message: "Not found" });
+    }
   }
-});
+);
 
-router.get("/:contactId", async (req, res) => {
+router.get("/:contactId", authMW, async (req, res) => {
   try {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const contact = await getContactById(contactId, req.userId);
     if (!contact) {
       res
         .status(404)
@@ -42,19 +48,19 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-router.post("/", validation(addContactSchema), async (req, res) => {
+router.post("/", authMW, validation(addContactSchema), async (req, res) => {
   try {
-    const contact = await addContact(req.body);
+    const contact = await addContact(req.body, req.userId);
     res.status(201).json({ contact });
   } catch (err) {
     res.status(404).json({ message: "Not found" });
   }
 });
 
-router.delete("/:contactId", async (req, res) => {
+router.delete("/:contactId", authMW, async (req, res) => {
   try {
     const { contactId } = req.params;
-    const contact = await removeContact(contactId);
+    const contact = await removeContact(contactId, req.userId);
     if (!contact) {
       res
         .status(404)
@@ -67,29 +73,39 @@ router.delete("/:contactId", async (req, res) => {
   }
 });
 
-router.put("/:contactId", validation(putContactSchema), async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await updateContact(contactId, req.body);
-    if (!contact) {
-      res
-        .status(404)
-        .json({ message: `Contact with id:${contactId} does not exist` });
-      return;
+router.put(
+  "/:contactId",
+  authMW,
+  validation(putContactSchema),
+  async (req, res) => {
+    try {
+      const { contactId } = req.params;
+      const contact = await updateContact(contactId, req.body, req.userId);
+      if (!contact) {
+        res
+          .status(404)
+          .json({ message: `Contact with id:${contactId} does not exist` });
+        return;
+      }
+      res.status(200).json({ contact });
+    } catch (err) {
+      res.status(404).json({ message: "Not found" });
     }
-    res.status(200).json({ contact });
-  } catch (err) {
-    res.status(404).json({ message: "Not found" });
   }
-});
+);
 
 router.patch(
   "/:contactId/favorite",
+  authMW,
   validation(patchFavoriteContactSchema),
   async (req, res) => {
     try {
       const { contactId } = req.params;
-      const contact = await updateStatusContact(contactId, req.body);
+      const contact = await updateStatusContact(
+        contactId,
+        req.body,
+        req.userId
+      );
       if (!contact) {
         res
           .status(404)

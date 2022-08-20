@@ -23,7 +23,8 @@ const usersSchema = new mongoose.Schema({
 });
 
 usersSchema.methods.setToken = function (token) {
-  return (this.token = token);
+  this.token = token;
+  return this;
 };
 
 usersSchema.pre("save", async function () {

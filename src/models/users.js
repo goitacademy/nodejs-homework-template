@@ -1,14 +1,18 @@
 const { User } = require("../db/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Conflict, Unauthorized } = require("http-errors");
 
 const addUser = async (body) => {
+  if (await User.findOne({ email: body.email })) {
+    throw new Conflict("Email in use");
+  }
   try {
     const user = new User(body);
     await user.save();
     return user;
   } catch (error) {
-    throw new Error(error);
+    throw new Conflict("Email in use");
   }
 };
 
@@ -16,10 +20,10 @@ const loginUser = async ({ email, password }) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("email alredy used");
+      throw new Unauthorized("Email or password is wrong");
     }
     if (!(await bcrypt.compare(password, user.password))) {
-      throw new Error({ message: "wrong password" });
+      throw new Unauthorized("Email or password is wrong");
     }
     const token = jwt.sign(
       {
@@ -31,7 +35,7 @@ const loginUser = async ({ email, password }) => {
     await user.save();
     return user;
   } catch (err) {
-    throw new Error(err.message);
+    throw new Unauthorized("Email or password is wrong");
   }
 };
 
@@ -40,17 +44,27 @@ const logOut = async (userId) => {
     const user = await User.findById(userId);
     await user.setToken(null);
     await user.save();
+    return user;
   } catch (err) {
-    throw new Error(err.message);
+    throw new Unauthorized("Not authorized");
   }
 };
 
 const getUser = async (userId) => {
   try {
-    const user = await User.findById(userId);
-    return user;
+    return User.findById(userId);
   } catch (err) {
-    throw new Error(err.message);
+    throw new Unauthorized("Not authorized");
+  }
+};
+
+const updateUserSubscription = async (body, userId) => {
+  try {
+    return User.findByIdAndUpdate(userId, body, {
+      new: true,
+    });
+  } catch (err) {
+    throw new Unauthorized("Not authorized");
   }
 };
 
@@ -59,4 +73,5 @@ module.exports = {
   loginUser,
   logOut,
   getUser,
+  updateUserSubscription,
 };
