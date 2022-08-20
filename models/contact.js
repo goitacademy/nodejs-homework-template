@@ -6,7 +6,7 @@ const { handleSchemaValidationErrors } = require("../helpers");
 
 const phoneRegexp = /^[\s(]*\d{3}[)\s]*\d{3}[\s-]?\d{2}[\s-]?\d{2}/;
 
-// const emailRegexp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const emailRegexp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 const contactSchema = new Schema(
   {
@@ -18,6 +18,7 @@ const contactSchema = new Schema(
       type: String,
       required: [true, "Email must be exist"],
       unique: true,
+      match: emailRegexp,
     },
     phone: {
       type: String,
@@ -37,7 +38,7 @@ contactSchema.post("save", handleSchemaValidationErrors);
 
 const contactAddJoiSchema = joi.object({
   name: joi.string().required(),
-  email: joi.string().required(),
+  email: joi.string().pattern(emailRegexp).required(),
   favorite: joi.bool(),
   phone: joi.string().pattern(phoneRegexp).required(),
 });
