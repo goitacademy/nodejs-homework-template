@@ -17,17 +17,16 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    
+
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-
   },
   { versionKey: false, timestamps: true }
 );
 
-const addSchema = Joi.object({
+const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
@@ -39,7 +38,7 @@ const updateFavoriteSchema = Joi.object({
 });
 
 const schemas = {
-  add: addSchema,
+  addContact: contactAddSchema,
   updateFavorite: updateFavoriteSchema,
 };
 
