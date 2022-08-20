@@ -1,9 +1,12 @@
 const { Schema, model } = require("mongoose");
+
 const joi = require("joi");
 
-// const { handleSchemaValidationErrors } = require("../helpers");
+const { handleSchemaValidationErrors } = require("../helpers");
 
-const phoneRegexp = /^(\d{3}) \d{3}-\d{4}$/;
+const phoneRegexp = /^[\s(]*\d{3}[)\s]*\d{3}[\s-]?\d{2}[\s-]?\d{2}/;
+
+// const emailRegexp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 const contactSchema = new Schema(
   {
@@ -30,9 +33,9 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// contactSchema.post("save", handleSchemaValidationErrors);
+contactSchema.post("save", handleSchemaValidationErrors);
 
-const contactAddJoiShema = joi.object({
+const contactAddJoiSchema = joi.object({
   name: joi.string().required(),
   email: joi.string().required(),
   favorite: joi.bool(),
@@ -43,7 +46,7 @@ const updateFavoriteSchema = joi.object({
   favorite: joi.bool().required(),
 });
 const schemas = {
-  contactAddJoiShema,
+  contactAddJoiSchema,
   updateFavoriteSchema,
 };
 

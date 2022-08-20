@@ -6,7 +6,7 @@ const { controllerWrapper } = require("../../helpers");
 
 const { validationBody, isValidId } = require("../../middlewars");
 
-const schemas = require("../../models/contact");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
@@ -16,14 +16,14 @@ router.get("/:id", isValidId, controllerWrapper(controller.getContactById));
 
 router.post(
   "/",
-  validationBody(schemas.contactAddJoiShema),
+  validationBody(schemas.contactAddJoiSchema),
   controllerWrapper(controller.addContact)
 );
 
 router.put(
   "/:id",
   isValidId,
-  validationBody(schemas.contactAddJoiShema),
+  validationBody(schemas.contactAddJoiSchema),
   controllerWrapper(controller.updateContactById)
 );
 
