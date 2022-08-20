@@ -1,25 +1,24 @@
 const express = require('express')
+const { addValidation, updateValidation } = require("../middlewares/middlewaresapi.js");
+const router = express.Router();
+const {
+  getAllContacts,
+  getOneContact,
+  addContact,
+  deletContact,
+  updateContact,
+} = require("../../controllers/contacts/contacts");
 
-const router = express.Router()
+router.get("/", getAllContacts);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", getOneContact);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// add contact
+router.post("/", addValidation, addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", deletContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", updateValidation, updateContact);
 
-module.exports = router
+module.exports = router;
