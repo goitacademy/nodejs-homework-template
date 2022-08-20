@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { isValidObjectId } = require("mongoose");
 
 const addContactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -30,7 +31,7 @@ const patchFavoriteContactSchema = Joi.object({
     .messages({ "favorite.required": "missing field favorite" }),
 });
 
-const paramsContactSchema = Joi.object({
+const queryContactSchema = Joi.object({
   favorite: Joi.bool()
     .optional()
     .messages({ favorite: "must be true or false" }),
@@ -38,9 +39,19 @@ const paramsContactSchema = Joi.object({
   limit: Joi.number().integer().min(0).optional(),
 });
 
+const paramsContactSchema = Joi.object({
+  _id: Joi.custom((value, helpers) => {
+    if (!isValidObjectId(value)) {
+      return helpers.message("Invalid mongodb id");
+    }
+    return true;
+  }),
+});
+
 module.exports = {
   addContactSchema,
   putContactSchema,
   patchFavoriteContactSchema,
   paramsContactSchema,
+  queryContactSchema,
 };
