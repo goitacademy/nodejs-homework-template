@@ -20,66 +20,98 @@ const schema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const getAllContacts = async (req, res, next) => {
-  const contacts = await listContacts();
-  res.json(contacts);
+const getAllContactsController = async (req, res, next) => {
+  try {
+    // берется из authMiddleware
+    const { _id: userId } = req.user;
+    const contacts = await listContacts(userId);
+    res.json(contacts);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
 };
 
-const addNewContact = async (req, res, next) => {
-  const validationBody = schema.validate(req.body);
-  if (validationBody.error) {
-    console.log(validationBody.error);
-    return res.status(400).json({ message: 'missing required name field' });
-  }
+const addNewContactController = async (req, res, next) => {
+  try {
+    const validationBody = schema.validate(req.body);
+    if (validationBody.error) {
+      return res.status(400).json({ message: validationBody.error.message });
+    }
 
-  const newContact = await addContact(req.body);
-  res.status(201).json(newContact);
+    // берется из authMiddleware
+    const { _id: userId } = req.user;
+
+    const newContact = await addContact(req.body, userId);
+    res.status(201).json(newContact);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
 };
 
-const getOneContact = async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  res.json(contact);
+const getOneContactController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    const contact = await getContactById(req.params.contactId, userId);
+    res.json(contact);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
 };
 
-const removeOneContact = async (req, res, next) => {
-  const removedContact = await removeContact(req.params.contactId);
-  if (removedContact.length === 0) {
-    return res.status(404).json({ message: 'Not found' });
+const removeOneContactController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    const removedContact = await removeContact(req.params.contactId, userId);
+    if (removedContact.length === 0) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res.json({ message: 'contact deleted' });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
-  res.json({ message: 'contact deleted' });
 };
 
-const updateOneContact = async (req, res, next) => {
-  const validationBody = schema.validate(req.body);
-  if (validationBody.error) {
-    return res.status(400).json({ message: 'missing fields' });
-  }
+const updateOneContactController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    const validationBody = schema.validate(req.body);
+    if (validationBody.error) {
+      return res.status(400).json({ message: 'missing fields' });
+    }
 
-  const updatedContact = await updateContactById(req.params.contactId, req.body);
+    const updatedContact = await updateContactById(req.params.contactId, req.body, userId);
 
-  if (!updatedContact) {
-    return res.status(404).json({ message: 'Not found' });
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res.json(updatedContact);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
-  res.json(updatedContact);
 };
 
-const updateFavorite = async (req, res, next) => {
-  if (!req.body) {
-    res.status(400).json({ message: 'missing field favorite' });
-  }
-  const contact = await updateStatusContact(req.params.contactId, req.body);
+const updateFavoriteController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    if (!req.body) {
+      res.status(400).json({ message: 'missing field favorite' });
+    }
+    const contact = await updateStatusContact(req.params.contactId, req.body, userId);
 
-  if (!contact) {
-    return res.status(404).json({ message: 'Not found' });
+    if (!contact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res.json(contact);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
-  res.json(contact);
 };
 
 module.exports = {
-  getAllContacts,
-  addNewContact,
-  getOneContact,
-  removeOneContact,
-  updateOneContact,
-  updateFavorite,
+  getAllContactsController,
+  addNewContactController,
+  getOneContactController,
+  removeOneContactController,
+  updateOneContactController,
+  updateFavoriteController,
 };
