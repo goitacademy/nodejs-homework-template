@@ -40,9 +40,9 @@ const queryContactSchema = Joi.object({
 });
 
 const paramsContactSchema = Joi.object({
-  _id: Joi.custom((value, helpers) => {
+  contactId: Joi.custom((value, helpers) => {
     if (!isValidObjectId(value)) {
-      return helpers.message("Invalid mongodb id");
+      return helpers.message("Invalid id");
     }
     return true;
   }),

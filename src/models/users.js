@@ -1,7 +1,7 @@
 const { User } = require("../db/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Conflict, Unauthorized } = require("http-errors");
+const { Conflict, Unauthorized, InternalServerError } = require("http-errors");
 
 const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
@@ -12,7 +12,7 @@ const addUser = async (body) => {
     await user.save();
     return user;
   } catch (error) {
-    throw new Conflict("Email in use");
+    throw new InternalServerError("Server error");
   }
 };
 
@@ -35,7 +35,7 @@ const loginUser = async ({ email, password }) => {
     await user.save();
     return user;
   } catch (err) {
-    throw new Unauthorized("Email or password is wrong");
+    throw new InternalServerError("Server error");
   }
 };
 
