@@ -8,7 +8,8 @@ const listContacts = async (query, userId) => {
       owner: userId,
     })
       .skip(skip)
-      .limit(query?.limit);
+      .limit(query?.limit)
+      .select("-__v");
     if (query?.favorite) {
       data = await Contact.find({
         favorite: query?.favorite,
@@ -22,7 +23,7 @@ const listContacts = async (query, userId) => {
 
 const getContactById = async (contactId, userId) => {
   try {
-    return Contact.findOne({ _id: contactId, owner: userId });
+    return Contact.findOne({ _id: contactId, owner: userId }).select("-__v");
   } catch (err) {
     throw new Error(err.message);
   }
@@ -40,9 +41,8 @@ const removeContact = async (contactId, userId) => {
 const addContact = async (body, userId) => {
   const newContact = { ...body, owner: userId };
   try {
-    const contact = new Contact(newContact);
-    await contact.save();
-    return contact;
+    const contact = await Contact.create(newContact);
+    return await Contact.findById(contact._id).select("-__v");
   } catch (err) {
     throw new Error(err.message);
   }
@@ -52,7 +52,7 @@ const updateContact = async (contactId, body, userId) => {
   try {
     return Contact.findOneAndUpdate({ _id: contactId, owner: userId }, body, {
       new: true,
-    });
+    }).select("-__v");
   } catch (err) {
     throw new Error(err.message);
   }
@@ -62,7 +62,7 @@ const updateStatusContact = async (contactId, body, userId) => {
   try {
     return Contact.findOneAndUpdate({ _id: contactId, owner: userId }, body, {
       new: true,
-    });
+    }).select("-__v");
   } catch (err) {
     throw new Error(err.message);
   }

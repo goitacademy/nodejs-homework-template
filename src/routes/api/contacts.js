@@ -27,7 +27,7 @@ router.get(
     try {
       const contacts = await listContacts(req.query, req.userId);
       if (contacts.length === 0) {
-        res.status(200).json({ message: "End of list" });
+        res.status(200).json({ message: "No contacts found" });
       }
       res.status(200).json({ contacts });
     } catch (err) {
