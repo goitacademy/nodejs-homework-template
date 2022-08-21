@@ -1,5 +1,7 @@
-const users = require("./users");
+const auth = require("./auth");
+const upload = require("./upload");
 
 module.exports = {
-    users
+    auth,
+    upload
 }
