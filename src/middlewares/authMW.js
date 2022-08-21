@@ -7,7 +7,6 @@ const authMW = async (req, res, next) => {
       message: "Not authorized",
     });
   }
-
   const [tokenType, token] = req.headers.authorization.split(" ");
   if (!token) {
     return res.status(401).json({
@@ -22,7 +21,6 @@ const authMW = async (req, res, next) => {
       });
     }
     req.userId = user._id;
-    console.log(user._id);
     next();
   } catch (err) {
     return res.status(401).json({
