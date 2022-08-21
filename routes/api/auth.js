@@ -9,6 +9,5 @@ router.post("/register", ctrlWrapper(ctrl.register));
 router.post("/login", ctrlWrapper(ctrl.login));
 router.post("/current", auth, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
-router.patch("/users", auth, ctrlWrapper(ctrl.updateSubscriptionUser));
 
 module.exports = router;

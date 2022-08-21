@@ -12,7 +12,7 @@ const login = async (req, res) => {
   if (error) {
     throw createError(400, error.message);
   }
-  const { email, password, subscription } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw createError(401, "Email or password is wrong");
@@ -30,7 +30,7 @@ const login = async (req, res) => {
     token,
     user: {
       email,
-      subscription,
+      subscription: user.subscription,
     },
   });
 };
