@@ -1,8 +1,7 @@
 const { Contact } = require("../models/contactsShema");
 const { createError } = require("../helpers");
 const removeById = async (req, res) => {
-  console.log("remove");
-  const { id } = req.body;
+  const { id } = req.params;
   const result = await Contact.findByIdAndRemove(id);
   if (!result) {
     throw createError(404);
