@@ -8,7 +8,7 @@ const removeContact = (id) => Contact.findByIdAndRemove(id);
 const updateContact = ({ id, name, email, phone, favorite }) =>
   Contact.findByIdAndUpdate(id, { name, email, phone, favorite });
 
-const updateStatus = (id, fields) =>
+const updateFavourite = (id, fields) =>
   Contact.findOneAndUpdate(
     {
       _id: id,
@@ -25,5 +25,5 @@ module.exports = {
   createContact,
   removeContact,
   updateContact,
-  updateStatus,
+  updateFavourite,
 };

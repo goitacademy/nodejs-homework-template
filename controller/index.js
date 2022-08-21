@@ -92,7 +92,7 @@ const updateStatus = async (req, res, next) => {
   const { id } = req.params;
   const { favorite } = req.body; // favourite can be replace with fields to patch many fields
   try {
-    const result = await service.updateStatus(id, { favorite });
+    const result = await service.updateFavourite(id, { favorite });
     if (result) {
       res.json(result);
     } else {
