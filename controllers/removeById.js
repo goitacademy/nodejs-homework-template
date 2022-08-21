@@ -7,7 +7,7 @@ const removeById = async (req, res) => {
     throw createError(404);
   }
   res.json({
-    message: "Book deleted",
+    message: "Contact deleted",
   });
 };
 
