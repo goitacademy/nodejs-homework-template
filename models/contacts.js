@@ -1,3 +1,33 @@
+const {Schema, model} = require("mongoose");
+
+const contactSchema = new Schema({
+  name:{
+    type: [String, 'name is required'],
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    match: /^(\d{3}) \d{3}-\d{4}$/,
+    unique: true,
+    required: true,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+    required: true
+  }, 
+}, {versionKey: false, timestamps: true});
+
+const Contact = model("contact", contactSchema);
+
+module.exports = Contact;
+
+// Contact.create(req.body)
+
 const fs = require("fs").promises;
 const path = require("path");
 
