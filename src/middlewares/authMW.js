@@ -23,8 +23,8 @@ const authMW = async (req, res, next) => {
     req.userId = user._id;
     next();
   } catch (err) {
-    return res.status(401).json({
-      message: "Not authorized",
+    return res.status(500).json({
+      message: err.message,
     });
   }
 };

@@ -46,7 +46,7 @@ const logOut = async (userId) => {
     await user.save();
     return user;
   } catch (err) {
-    throw new Unauthorized("Not authorized");
+    throw new InternalServerError("Server error");
   }
 };
 
@@ -54,17 +54,17 @@ const getUser = async (userId) => {
   try {
     return User.findById(userId);
   } catch (err) {
-    throw new Unauthorized("Not authorized");
+    throw new InternalServerError("Server error");
   }
 };
 
-const updateUserSubscription = async (body, userId) => {
+const updateSubscription = async (body, userId) => {
   try {
     return User.findByIdAndUpdate(userId, body, {
       new: true,
     });
   } catch (err) {
-    throw new Unauthorized("Not authorized");
+    throw new InternalServerError("Server error");
   }
 };
 
@@ -73,5 +73,5 @@ module.exports = {
   loginUser,
   logOut,
   getUser,
-  updateUserSubscription,
+  updateSubscription,
 };

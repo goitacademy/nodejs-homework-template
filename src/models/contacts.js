@@ -4,17 +4,13 @@ const listContacts = async (query, userId) => {
   let skip = Number(query?.page) * Number(query?.limit) - Number(query?.limit);
   if (skip < 0) skip = 0;
   try {
-    let data = await Contact.find({
-      owner: userId,
-    })
+    const search = query?.favorite
+      ? { owner: userId, favorite: query.favorite }
+      : { owner: userId };
+    const data = await Contact.find(search)
       .skip(skip)
       .limit(query?.limit)
       .select("-__v");
-    if (query?.favorite) {
-      data = await Contact.find({
-        favorite: query?.favorite,
-      });
-    }
     return data;
   } catch (err) {
     throw new Error(err.message);
