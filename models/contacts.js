@@ -51,15 +51,7 @@ const updateContact = async (id, { name, email, phone }) => {
   contacts[idx] = { id, name, email, phone };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[idx];
-  // const newContact = {
-  //   id: nanoid(),
-  //   name,
-  //   email,
-  //   phone
-  // };
-  // contacts.push(newContact);
-  // await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  // return newContact;
+
 }
 
 module.exports = {

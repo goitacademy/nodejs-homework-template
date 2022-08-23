@@ -20,9 +20,7 @@ router.get('/', async (req, res, next) => {
   res.json(result)
   } catch (error) {
     next(error);
-    // res.status(500).json({
-    //   message:'Server error'
-    // })
+   
   }
   
 });
@@ -35,22 +33,16 @@ router.get('/:id', async (req, res, next) => {
       throw RequestError(404, 'Not found');
 
 
-      // res.status(404).json({
-      //   message: "Not found"
-      // });
-      // return;
+     
     }
     res.json(result);
 
 
   } catch (error) {
     next(error);
-    // const { status = 500, message = 'Server error' } = error;
-    // res.status(status).json({
-    //   message,
-    // })
+  
   }
-  // res.json({ message: 'template message' })
+  
 })
 
 router.post('/', async (req, res, next) => {
@@ -66,7 +58,7 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({ message: 'template message' })
+
 })
 
 router.delete('/:id', async (req, res, next) => {
@@ -82,7 +74,7 @@ router.delete('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({ message: 'template message' })
+
 })
 
 router.put('/:id', async (req, res, next) => {
@@ -100,7 +92,7 @@ router.put('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({ message: 'template message' })
+
 })
 
 module.exports = router
