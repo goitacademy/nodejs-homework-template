@@ -32,6 +32,7 @@ const logoutUser = async (req, res, next) => {
     return res.status(204).json({
       status: "No Content",
       code: 204,
+      message: "User have been logout",
     });
   } catch (e) {
     console.error(e);

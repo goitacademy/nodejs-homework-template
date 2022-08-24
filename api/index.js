@@ -13,7 +13,7 @@ router.delete("/contacts/:id", auth, ctrlContacts.removeContactById);
 router.put("/contacts/:id", auth, ctrlContacts.updateContact);
 router.patch("/contacts/:id/favorite", auth, ctrlContacts.updateStatus);
 
-/// USERS ROUTES 
+/// USERS ROUTES
 
 router.get("/users", ctrlUsers.getAllUsers);
 router.post("/users/signup", ctrlUsers.registerUser);
@@ -21,6 +21,5 @@ router.post("/users/login", ctrlUsers.loginUser);
 router.get("/users/logout", auth, ctrlUsers.logoutUser);
 router.get("/users/current", auth, ctrlUsers.currentUser);
 router.patch("/users", auth, ctrlUsers.updateUserSub);
-
 
 module.exports = router;

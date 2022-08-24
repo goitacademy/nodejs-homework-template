@@ -14,7 +14,7 @@ const params = {
 // JWT Strategy
 passport.use(
   new Strategy(params, function (payload, done) {
-    User.find({ _id: payload._id })
+    User.find({ _id: payload.id })
       .then(([user]) => {
         if (!user || user.token === null) {
           return done(new Error("User not found"));
