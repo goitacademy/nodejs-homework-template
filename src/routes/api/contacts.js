@@ -1,5 +1,5 @@
 const express = require("express");
-
+const { errorHandler } = require("../../helpers/errorHandler");
 const {
   getUserContacts,
   getUserContactById,
@@ -24,23 +24,28 @@ router.get(
   "/",
   authMW,
   validation(queryContactSchema, "query"),
-  getUserContacts
+  errorHandler(getUserContacts)
 );
 
 router.get(
   "/:contactId",
   authMW,
   validation(paramsContactSchema, "params"),
-  getUserContactById
+  errorHandler(getUserContactById)
 );
 
-router.post("/", authMW, validation(addContactSchema), postContact);
+router.post(
+  "/",
+  authMW,
+  validation(addContactSchema),
+  errorHandler(postContact)
+);
 
 router.delete(
   "/:contactId",
   authMW,
   validation(paramsContactSchema, "params"),
-  deletContact
+  errorHandler(deletContact)
 );
 
 router.put(
@@ -48,7 +53,7 @@ router.put(
   authMW,
   validation(paramsContactSchema, "params"),
   validation(putContactSchema),
-  updateContactById
+  errorHandler(updateContactById)
 );
 
 router.patch(
@@ -56,7 +61,7 @@ router.patch(
   authMW,
   validation(paramsContactSchema, "params"),
   validation(patchFavoriteContactSchema),
-  updateContactStatusById
+  errorHandler(updateContactStatusById)
 );
 
 module.exports = router;

@@ -8,8 +8,14 @@ const {
 } = require("../models/users");
 
 async function signUpUser(req, res) {
-  const user = await addUser(req.body);
-  res.status(201).json({ email: user.email, subscription: user.subscription });
+  try {
+    const user = await addUser(req.body);
+    res
+      .status(201)
+      .json({ email: user.email, subscription: user.subscription });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
 }
 
 async function logInUser(req, res) {
