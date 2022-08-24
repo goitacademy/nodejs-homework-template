@@ -5,5 +5,5 @@ const handlerErrors = require("./handlerErrors");
 module.exports = {
     RequestErr,
     ctrlWrapper,
-    handlerErrors,
+    handlerErrors
 }
