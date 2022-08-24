@@ -14,7 +14,7 @@ async function signUpUser(req, res) {
 
 async function logInUser(req, res) {
   const user = await loginUser(req.body);
-  res.status(201).json({
+  res.status(200).json({
     token: user.token,
     user: { email: user.email, subscription: user.subscription },
   });
