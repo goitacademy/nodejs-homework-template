@@ -1,7 +1,6 @@
 const service = require("../service");
 const { userSchema } = require("../helpers/joiSchema.js");
 const jwt = require("jsonwebtoken");
-const gravatar = require("gravatar");
 
 require("dotenv").config();
 const secret = process.env.SECRET;
@@ -143,7 +142,6 @@ const loginUser = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
   const { error } = userSchema.validate({ email, password });
-  const avatarURL = gravatar.url(email);
   if (!error) {
     const user = await service.getUser(email);
     if (user) {
@@ -155,7 +153,7 @@ const registerUser = async (req, res, next) => {
       });
     }
     try {
-      const newUser = new User({ email, avatarURL });
+      const newUser = new User({ email });
       newUser.setPassword(password);
       await newUser.save();
       res.status(201).json({
