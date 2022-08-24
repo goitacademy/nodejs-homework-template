@@ -4,6 +4,7 @@ const {
   logOut,
   getUser,
   updateSubscription,
+  changeAvatar,
 } = require("../models/users");
 
 async function signUpUser(req, res) {
@@ -31,10 +32,16 @@ async function updateUserSubscription(req, res) {
   res.status(200).json({ email: user.email, subscription: user.subscription });
 }
 
+async function changeUseravatar(req, res) {
+  const user = await changeAvatar(req, req.userId);
+  res.status(200).json({ avatarURL: user.avatarURL });
+}
+
 module.exports = {
   signUpUser,
   logInUser,
   logOutUser,
   getCurrentUser,
   updateUserSubscription,
+  changeUseravatar,
 };

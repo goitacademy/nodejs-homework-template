@@ -1,14 +1,21 @@
 const { User } = require("../db/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const fs = require("fs").promises;
+const path = require("path");
+
+const avatarsPath = path.resolve("./public/avatars");
 const { Conflict, Unauthorized, InternalServerError } = require("http-errors");
+const resizeAvatar = require("../helpers/resizeAvatar");
 
 const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
     throw new Conflict("Email in use");
   }
   try {
-    const user = new User(body);
+    const avatarURL = gravatar.url(body.email);
+    const user = new User({ ...body, avatarURL });
     await user.save();
     return user;
   } catch (error) {
@@ -68,10 +75,33 @@ const updateSubscription = async (body, userId) => {
   }
 };
 
+const changeAvatar = async (req, userId) => {
+  console.log(req.file);
+  const { path: temporaryPath, originalname } = req.file;
+  const [, fileExtension] = originalname.split(".");
+  const newFileName = avatarsPath + "/" + userId + "." + fileExtension;
+
+  try {
+    await fs.copyFile(temporaryPath, newFileName);
+    resizeAvatar(newFileName);
+    await fs.unlink(temporaryPath);
+    return User.findByIdAndUpdate(
+      userId,
+      { avatarURL: newFileName },
+      {
+        new: true,
+      }
+    );
+  } catch (err) {
+    throw new InternalServerError("Server error");
+  }
+};
+
 module.exports = {
   addUser,
   loginUser,
   logOut,
   getUser,
   updateSubscription,
+  changeAvatar,
 };
