@@ -2,9 +2,15 @@ const Jimp = require("jimp");
 const {User} = require("../../models/user");
 const fs = require("fs/promises");
 const path = require("path");
+<<<<<<< Updated upstream
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
+=======
+
+const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+
+>>>>>>> Stashed changes
 const updateAvatar = async(req, res) => {
   try {
     const {_id} = req.user;

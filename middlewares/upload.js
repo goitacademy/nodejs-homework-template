@@ -4,10 +4,15 @@ const path = require("path");
 const tempDir = path.join(__dirname, "../", "temp");
 
 const multerConfig = multer.diskStorage({
+<<<<<<< Updated upstream
     destination: (req, file, cb)=> {
         cb(null, tempDir)
     },
     filename: (req, file, cb)=> {
+=======
+    destination: tempDir,
+    filename: (req, file, cb) => {
+>>>>>>> Stashed changes
         cb(null, file.originalname)
     },
     limits: {
@@ -16,7 +21,13 @@ const multerConfig = multer.diskStorage({
 });
 
 const upload = multer({
+<<<<<<< Updated upstream
     storage: multerConfig
 })
+=======
+    storage: multerConfig,
+});
 
 module.exports = upload;
+>>>>>>> Stashed changes
+
