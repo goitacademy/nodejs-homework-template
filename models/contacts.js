@@ -1,13 +1,13 @@
 const {Schema, model} = require("mongoose");
 const Joi = require("joi");
 
-const { handleErrors } = require("../helpers")
+const { handlerErrors } = require("../helpers");
 
 const phoneRegexp = /^(\d{3}) \d{3}-\d{4}$/;
                     
 const contactSchema = new Schema({
   name:{
-    type: [String, "name is required"],
+    type: String,
     required: true
   },
   email: {
@@ -27,7 +27,7 @@ const contactSchema = new Schema({
   }
 }, {versionKey: false, timestamps: true});
 
-contactSchema.post("save", handleErrors);
+contactSchema.post("save", handlerErrors);
 
 const addSchema = Joi.object({
   name: Joi.string().required(), 

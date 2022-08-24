@@ -1,7 +1,7 @@
 const {isValidObjectId} = require("mongoose");
 const { RequestErr } = require("../helpers/RequestErr");
 
-const isValidId = (req, res, next) => {
+const isValidId = (req, _, next) => {
     const {id} = req.params;
     const correctId = isValidObjectId(id);
     if(!correctId){
