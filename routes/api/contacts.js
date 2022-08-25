@@ -17,12 +17,10 @@ const contactSchema = Joi.object({
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts()
-  res.json(result)
+    res.json(result)
   } catch (error) {
     next(error);
-   
   }
-  
 });
 
 router.get('/:id', async (req, res, next) => {
@@ -31,22 +29,14 @@ router.get('/:id', async (req, res, next) => {
     const result = await contacts.getContactById(id);
     if (!result) {
       throw RequestError(404, 'Not found');
-
-
-     
     }
     res.json(result);
-
-
   } catch (error) {
     next(error);
-  
   }
-  
 })
 
 router.post('/', async (req, res, next) => {
-  
   try {
     const { error } = contactSchema.validate(req.body);
     console.log(error);
@@ -58,7 +48,6 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 })
 
 router.delete('/:id', async (req, res, next) => {
@@ -74,7 +63,6 @@ router.delete('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 })
 
 router.put('/:id', async (req, res, next) => {
@@ -92,7 +80,6 @@ router.put('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 })
 
 module.exports = router
