@@ -5,7 +5,10 @@ const {
   logOutUser,
   getCurrentUser,
   updateUserSubscription,
+  changeUseravatar,
 } = require("../../controller/usersController");
+
+const { errorHandler } = require("../../helpers/errorHandler");
 
 const {
   userValidationSchema,
@@ -13,22 +16,38 @@ const {
 } = require("../../models/usersSchema");
 const { validation } = require("../../middlewares/validation");
 const { authMW } = require("../../middlewares/authMW");
+const { upload } = require("../../helpers/uplodeAvatar");
 
 const router = express.Router();
 
-router.post("/signup", validation(userValidationSchema), signUpUser);
+router.post(
+  "/signup",
+  validation(userValidationSchema),
+  errorHandler(signUpUser)
+);
 
-router.post("/login", validation(userValidationSchema), logInUser);
+router.post(
+  "/login",
+  validation(userValidationSchema),
+  errorHandler(logInUser)
+);
 
-router.get("/logout", authMW, logOutUser);
+router.get("/logout", authMW, errorHandler(logOutUser));
 
-router.get("/current", authMW, getCurrentUser);
+router.get("/current", authMW, errorHandler(getCurrentUser));
+
+router.patch(
+  "/avatars",
+  authMW,
+  upload.single("avatar"),
+  errorHandler(changeUseravatar)
+);
 
 router.patch(
   "/",
   authMW,
   validation(userSubscriptionSchema),
-  updateUserSubscription
+  errorHandler(updateUserSubscription)
 );
 
 module.exports = router;

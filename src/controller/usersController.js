@@ -4,16 +4,23 @@ const {
   logOut,
   getUser,
   updateSubscription,
+  changeAvatar,
 } = require("../models/users");
 
 async function signUpUser(req, res) {
-  const user = await addUser(req.body);
-  res.status(201).json({ email: user.email, subscription: user.subscription });
+  try {
+    const user = await addUser(req.body);
+    res
+      .status(201)
+      .json({ email: user.email, subscription: user.subscription });
+  } catch (err) {
+    res.status(err.status).json({ message: err.message });
+  }
 }
 
 async function logInUser(req, res) {
   const user = await loginUser(req.body);
-  res.status(201).json({
+  res.status(200).json({
     token: user.token,
     user: { email: user.email, subscription: user.subscription },
   });
@@ -31,10 +38,16 @@ async function updateUserSubscription(req, res) {
   res.status(200).json({ email: user.email, subscription: user.subscription });
 }
 
+async function changeUseravatar(req, res) {
+  const user = await changeAvatar(req, req.userId);
+  res.status(200).json({ avatarURL: user.avatarURL });
+}
+
 module.exports = {
   signUpUser,
   logInUser,
   logOutUser,
   getCurrentUser,
   updateUserSubscription,
+  changeUseravatar,
 };

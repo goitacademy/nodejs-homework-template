@@ -20,6 +20,9 @@ const usersSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+  },
 });
 
 usersSchema.methods.setToken = function (token) {
