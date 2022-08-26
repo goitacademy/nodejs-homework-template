@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "nodejs-homework-template",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -24,5 +24,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kostyaget/nodejs-homework-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kostyaget/nodejs-homework-template/issues"
+  },
+  "homepage": "https://github.com/kostyaget/nodejs-homework-template#readme"
 }
