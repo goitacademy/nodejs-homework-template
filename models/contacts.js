@@ -1,87 +1,97 @@
-const fs = require("fs/promises");
+// const fs = require("fs/promises");
 const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const contactsPath = path.join(__dirname, "../models/contacts.json");
+// const { v4: uuidv4 } = require("uuid");
+// const contactsPath = path.join(__dirname, "../models/contacts.json");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config({ path: path.join(__dirname, "../.env") });
+async function main() {
+  await mongoose.connect(process.env.MONGO_URI, { dbName: "db-contacts" });
+}
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const Contact = mongoose.model("contacts", contactSchema);
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
+    const data = await Contact.find({});
 
-    const newData = JSON.parse(data);
-    return newData;
+    return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
 const getContactById = async (contactId) => {
-  const data = await fs
-    .readFile(contactsPath, "utf-8")
-    .then((data) => {
-      return JSON.parse(data).filter(
-        (contact) => contact.id === contactId.toString()
-      );
-    })
-    .catch((error) => console.error(error));
-
-  return data;
+  try {
+    const data = await Contact.findById(contactId);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const removeContact = async (contactId) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    console.log(data);
-
-    const newData = JSON.stringify(
-      JSON.parse(data).filter((contact) => contact.id !== contactId.toString())
-    );
-    await fs.writeFile(contactsPath, newData, "utf-8");
-
-    return JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+    const data = await Contact.findByIdAndRemove(contactId);
+    return data;
   } catch (error) {
-    return error;
+    console.error(error);
   }
 };
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const newData = JSON.parse(data);
-    const id = uuidv4();
-    const newContact = [...newData, { id, name, email, phone }];
-    fs.writeFile(contactsPath, JSON.stringify(newContact));
-    return newContact;
+    const data = new Contact({ ...body });
+    await data.save();
+    return data;
   } catch (error) {
-    return error;
+    console.error(error);
   }
 };
 
 const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
+  try {
+    await Contact.findByIdAndUpdate(contactId, body);
+    const data = await Contact.findById(contactId);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  const newData = JSON.parse(data);
-  const contacts = newData.map((contact) => {
-    if (contact.id === contactId.toString()) {
-      return {
-        id: contact.id,
-        name: body.name || contact.name,
-        email: body.email || contact.email,
-        phone: body.phone || contact.phone,
-      };
-    } else {
-      return contact;
-    }
-  });
-  fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-  return contacts;
+const updateStatusContact = async (contactId, body) => {
+  try {
+    await Contact.findByIdAndUpdate(contactId, body);
+    const data = await Contact.findById(contactId);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = {
+  main,
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

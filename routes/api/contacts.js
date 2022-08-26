@@ -6,6 +6,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 const router = express.Router();
 const schema = Joi.object({
@@ -13,6 +14,7 @@ const schema = Joi.object({
   phone: Joi.string()
     .length(11)
     .pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+    .rule({ message: "phone number must be in format 1-111-11-11" })
     .required(),
   email: Joi.string()
     .email({
@@ -20,6 +22,7 @@ const schema = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
+  favorite: Joi.boolean().default(false),
 });
 
 router.get("/", async (req, res) => {
@@ -32,8 +35,8 @@ router.get("/:contactId", async (req, res) => {
   const { contactId } = req.params;
 
   const dataId = await getContactById(contactId);
-
-  if (!dataId.length) {
+  console.log(dataId);
+  if (!dataId) {
     return res.status(404).json({ message: "Not found" });
   }
   return res.status(200).json(dataId);
@@ -74,6 +77,21 @@ router.put("/:contactId", async (req, res, next) => {
     const contact = await updateContact(contactId, data.value);
     res.status(200).send(contact);
   } else {
+    res.status(404).json({ message: "Not found" });
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const data = schema.validate(req.body);
+    if (!data) {
+      res.status(400).json({ message: "missing field favorite" });
+    } else {
+      const contact = await updateStatusContact(contactId, data.value);
+      res.status(200).send({ contact });
+    }
+  } catch (error) {
     res.status(404).json({ message: "Not found" });
   }
 });
