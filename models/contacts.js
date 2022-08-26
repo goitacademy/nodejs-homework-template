@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { handlerErrors } = require("../helpers");
 
-const phoneRegexp = /^(\d{3}) \d{3}-\d{4}$/;
+const phoneRegexp = /^\d{3} \d{3}-\d{4}$/;
                     
 const contactSchema = new Schema({
   name:{
