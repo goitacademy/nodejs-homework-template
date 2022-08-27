@@ -3,6 +3,14 @@ const router = express.Router();
 const ctrlContacts = require("../controller/ctrlContacts.js");
 const { auth } = require("../helpers/auth.js");
 const ctrlUsers = require("../controller/ctrlUsers.js");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: "tmp/",
+  filename: (req, file, cb) => cb(null, file.originalname),
+  limits: { fileSize: 1 * 1000000 },
+});
+const upload = multer({ storage });
 
 /// CONTACTS ROUTES
 
@@ -21,5 +29,11 @@ router.post("/users/login", ctrlUsers.loginUser);
 router.get("/users/logout", auth, ctrlUsers.logoutUser);
 router.get("/users/current", auth, ctrlUsers.currentUser);
 router.patch("/users", auth, ctrlUsers.updateUserSub);
+router.patch(
+  "/users/avatars",
+  auth,
+  upload.single("avatar"),
+  ctrlUsers.updateAvatar
+);
 
 module.exports = router;
