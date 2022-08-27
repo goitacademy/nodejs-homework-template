@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 
 const { User } = require("../../models/user");
 
-const { RequestError } = require("../../helpers/RequestError");
+const { RequestError } = require("../../helpers/");
 
 const register = async (req, res) => {
   const { email, password, subscription } = req.body;
