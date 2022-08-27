@@ -1,9 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const {
-  handleSchemaValidationErrors,
-} = require("../helpers/handleSchemaValidationErrors");
+const { handleSchemaValidationErrors } = require("../helpers/");
 
 const userSchema = new Schema(
   {
@@ -35,8 +33,15 @@ const registerSchema = Joi.object({
   repeat_password: Joi.ref("password"),
 });
 
+const loginSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().required(),
+  subscription: Joi.string().required(),
+});
+
 const schemas = {
   registerSchema,
+  loginSchema,
 };
 
 const User = model("user", userSchema);
