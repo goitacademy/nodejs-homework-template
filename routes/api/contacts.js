@@ -77,7 +77,7 @@ router.put("/:id", async (req, res, next) => {
     if (error) {
       throw createError(400, error.message);
     }
-    const result = await Contact.findByIdAndUpdate(req.params.id, req.body);
+    const result = await Contact.findByIdAndUpdate(req.params.id, req.body, {new: true});
     if (!result) {
       throw createError(404, "Not found");
     }
