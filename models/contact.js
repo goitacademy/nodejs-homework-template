@@ -38,17 +38,22 @@ const contactSchema = Schema(
 
 const Contact = model("contact", contactSchema);
 
-const joiSchema = Joi.object({
+const joiContactSchema = Joi.object({
   name: Joi.string().min(3).pattern(nameRegexp).trim().required(),
+
   email: Joi.string().email().trim().pattern(emailRegexp).required(),
+
   phone: Joi.string().min(10).pattern(phoneRegexp, "numbers").trim().required(),
+
   favorite: Joi.boolean(),
 });
 
-const favoriteJoiSchema = Joi.object({ favorite: Joi.boolean().required() });
+const favoriteJoiContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 module.exports = {
   Contact,
-  joiSchema,
-  favoriteJoiSchema,
+  joiContactSchema,
+  favoriteJoiContactSchema,
 };

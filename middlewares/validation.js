@@ -1,10 +1,10 @@
+const { BadRequest } = require("http-errors");
+
 const validation = (schema) => {
-  return (req, res, next) => {
+  return (req, _, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      error.status = 400;
-      error.message = "missing fields";
-      next(error);
+      next(new BadRequest(error.message));
     }
     next();
   };
