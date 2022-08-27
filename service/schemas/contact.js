@@ -6,22 +6,23 @@ const contact = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
-      timestamps: true,
     },
     email: {
       type: String,
-      timestamps: true,
     },
     phone: {
       type: String,
-      timestamps: true,
     },
     favorite: {
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 const Contact = mongoose.model("contact", contact);
