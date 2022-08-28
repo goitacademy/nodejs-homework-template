@@ -1,5 +1,5 @@
 const app = require("./app");
-const { main } = require("./models/contacts");
+const { main } = require("./db/connection");
 
 const start = async () => {
   try {

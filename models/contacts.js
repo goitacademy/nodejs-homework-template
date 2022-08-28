@@ -1,93 +1,90 @@
-// const fs = require("fs/promises");
-const path = require("path");
-// const { v4: uuidv4 } = require("uuid");
-// const contactsPath = path.join(__dirname, "../models/contacts.json");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-
-dotenv.config({ path: path.join(__dirname, "../.env") });
-async function main() {
-  await mongoose.connect(process.env.MONGO_URI, { dbName: "db-contacts" });
-}
-const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const Contact = mongoose.model("contacts", contactSchema);
-
-const listContacts = async () => {
+const { Contact } = require("../db/contactModel");
+const listContacts = async (req, res) => {
   try {
-    const data = await Contact.find({});
+    const data = await Contact.find();
 
-    return data;
+    res.json(data);
   } catch (error) {
     console.error(error);
   }
 };
 
-const getContactById = async (contactId) => {
-  try {
-    const data = await Contact.findById(contactId);
-    return data;
-  } catch (error) {
-    console.error(error);
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
+
+  const dataId = await Contact.findById(contactId);
+
+  if (!dataId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json(dataId);
+};
+
+const removeContact = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  if (contactId) {
+    await Contact.findByIdAndRemove(contactId);
+    res.status(200).send({ message: "contact deleted" });
+  } else {
+    res.status(404).send({ message: "Not found" });
   }
 };
 
-const removeContact = async (contactId) => {
+const addContact = async (req, res) => {
   try {
-    const data = await Contact.findByIdAndRemove(contactId);
-    return data;
+    const contact = new Contact(req.body);
+    await contact.save();
+    return res.status(201).send({ message: "Add contact" });
   } catch (error) {
-    console.error(error);
+    res
+      .status(400)
+      .json({ message: `missing required ${error.message} field` });
   }
 };
 
-const addContact = async (body) => {
-  try {
-    const data = new Contact({ ...body });
-    await data.save();
-    return data;
-  } catch (error) {
-    console.error(error);
+const updateContact = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  if (!req.body) {
+    res.status(400).json({ message: "missing fields" });
+  } else if (req.body) {
+    const { name, phone, email, favorite } = req.body;
+    await Contact.findByIdAndUpdate(contactId, {
+      name,
+      phone,
+      email,
+      favorite,
+    });
+    res.status(200).send({ message: "contact update" });
+  } else {
+    res.status(404).json({ message: "Not found" });
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateStatusContact = async (req, res) => {
   try {
-    await Contact.findByIdAndUpdate(contactId, body);
-    const data = await Contact.findById(contactId);
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
+    const { contactId } = req.params;
 
-const updateStatusContact = async (contactId, body) => {
-  try {
-    await Contact.findByIdAndUpdate(contactId, body);
-    const data = await Contact.findById(contactId);
-    return data;
+    if (!req.body) {
+      res.status(400).json({ message: "missing field favorite" });
+    } else {
+      const { name, email, phone, favorite } = req.body;
+      console.log(Contact);
+      await Contact.findByIdAndUpdate(contactId, {
+        name,
+        email,
+        phone,
+        favorite,
+      });
+      res.status(200).send({ message: "contact update" });
+    }
   } catch (error) {
-    console.error(error);
+    res.status(404).json({ message: "Not found" });
   }
 };
 
 module.exports = {
-  main,
   listContacts,
   getContactById,
   removeContact,
