@@ -1,61 +1,87 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+const { ObjectId } = require("mongodb");
+const { Contact } = require("../db/contactsModel");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
-
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const newData = JSON.parse(data);
-  return newData;
-};
-
-const getContactById = async (contactId) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const newData = JSON.parse(data);
-  return newData.filter((el) => el.id === String(contactId));
-};
-
-const removeContact = async (contactId) => {
+const listContacts = async (req, res, next) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const newData = JSON.parse(data);
-    const booleanContacts = newData.some((el) => el.id === String(contactId));
-    const newContacts = newData.filter((el) => el.id !== String(contactId));
-    fs.writeFile(contactsPath, JSON.stringify(newContacts));
-    return booleanContacts;
+    const data = await Contact.find({});
+    return res.json(data);
   } catch (error) {
-    return { message: error.message };
+    return res.status(404).json({ message: error.message });
   }
 };
 
-const addContact = async ({ name, email, phone }) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const user = JSON.parse(data);
-  const id = uuidv4();
-  const newData = [...user, { id, name, email, phone }];
-  fs.writeFile(contactsPath, JSON.stringify(newData));
-  return newData.filter((el) => el.id === id);
+const getContactById = async (req, res, next) => {
+  try {
+    const data = await Contact.findOne({
+      _id: ObjectId(String(req.params.contactId)),
+    });
+    if (data) {
+      return res.json(data);
+    } else {
+      return res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
 };
 
-const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const user = JSON.parse(data);
-  const userContacts = user.map((el) => {
-    if (el.id === String(contactId)) {
-      return {
-        id: el.id,
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-      };
+const removeContact = async (req, res, next) => {
+  try {
+    const dataId = await Contact.deleteOne({
+      _id: new ObjectId(String(req.params.contactId)),
+    });
+    if (dataId.deletedCount) {
+      return res.status(200).json({ message: "contact deleted" });
     } else {
-      return el;
+      return res.status(404).json({ message: "Not found" });
     }
-  });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 
-  fs.writeFile(contactsPath, JSON.stringify(userContacts));
-  return userContacts.filter((el) => el.id === String(contactId));
+const addContact = async (req, res, next) => {
+  try {
+    await Contact.create(req.body);
+    return res.status(201).json({ message: "add contact" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const updateContact = async (req, res, next) => {
+  const { name, email, phone, favorite } = req.body;
+  if (!req.body) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+  const dataId = await Contact.findByIdAndUpdate(
+    {
+      _id: ObjectId(String(req.params.contactId)),
+    },
+    { name, email, phone, favorite }
+  );
+
+  if (!dataId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json({ message: "contact update" });
+};
+
+const updateStatusContact = async (req, res, next) => {
+  if (!req.body) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  const { name, phone, email, favorite } = req.body;
+  const dataId = await Contact.findByIdAndUpdate(
+    {
+      _id: ObjectId(String(req.params.contactId)),
+    },
+    { name, phone, email, favorite }
+  );
+  if (!dataId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json({ message: "contact update" });
 };
 
 module.exports = {
@@ -64,4 +90,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
