@@ -1,81 +1,87 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const contactsPath = path.join(__dirname, "../models/contacts.json");
-
-const listContacts = async () => {
+const { Contact } = require("../db/contactModel");
+const listContacts = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
+    const data = await Contact.find();
 
-    const newData = JSON.parse(data);
-    return newData;
+    res.json(data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-const getContactById = async (contactId) => {
-  const data = await fs
-    .readFile(contactsPath, "utf-8")
-    .then((data) => {
-      return JSON.parse(data).filter(
-        (contact) => contact.id === contactId.toString()
-      );
-    })
-    .catch((error) => console.error(error));
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
 
-  return data;
+  const dataId = await Contact.findById(contactId);
+
+  if (!dataId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json(dataId);
 };
 
-const removeContact = async (contactId) => {
-  try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    console.log(data);
+const removeContact = async (req, res, next) => {
+  const { contactId } = req.params;
 
-    const newData = JSON.stringify(
-      JSON.parse(data).filter((contact) => contact.id !== contactId.toString())
-    );
-    await fs.writeFile(contactsPath, newData, "utf-8");
-
-    return JSON.parse(await fs.readFile(contactsPath, "utf-8"));
-  } catch (error) {
-    return error;
+  if (contactId) {
+    await Contact.findByIdAndRemove(contactId);
+    res.status(200).send({ message: "contact deleted" });
+  } else {
+    res.status(404).send({ message: "Not found" });
   }
 };
 
-const addContact = async (body) => {
-  const { name, email, phone } = body;
+const addContact = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const newData = JSON.parse(data);
-    const id = uuidv4();
-    const newContact = [...newData, { id, name, email, phone }];
-    fs.writeFile(contactsPath, JSON.stringify(newContact));
-    return newContact;
+    const contact = new Contact(req.body);
+    await contact.save();
+    return res.status(201).send({ message: "Add contact" });
   } catch (error) {
-    return error;
+    res
+      .status(400)
+      .json({ message: `missing required ${error.message} field` });
   }
 };
 
-const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
+const updateContact = async (req, res, next) => {
+  const { contactId } = req.params;
 
-  const newData = JSON.parse(data);
-  const contacts = newData.map((contact) => {
-    if (contact.id === contactId.toString()) {
-      return {
-        id: contact.id,
-        name: body.name || contact.name,
-        email: body.email || contact.email,
-        phone: body.phone || contact.phone,
-      };
+  if (!req.body) {
+    res.status(400).json({ message: "missing fields" });
+  } else if (req.body) {
+    const { name, phone, email, favorite } = req.body;
+    await Contact.findByIdAndUpdate(contactId, {
+      name,
+      phone,
+      email,
+      favorite,
+    });
+    res.status(200).send({ message: "contact update" });
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
+};
+
+const updateStatusContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+
+    if (!req.body) {
+      res.status(400).json({ message: "missing field favorite" });
     } else {
-      return contact;
+      const { name, email, phone, favorite } = req.body;
+      console.log(Contact);
+      await Contact.findByIdAndUpdate(contactId, {
+        name,
+        email,
+        phone,
+        favorite,
+      });
+      res.status(200).send({ message: "contact update" });
     }
-  });
-  fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-  return contacts;
+  } catch (error) {
+    res.status(404).json({ message: "Not found" });
+  }
 };
 
 module.exports = {
@@ -84,4 +90,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
