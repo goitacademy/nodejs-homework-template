@@ -19,6 +19,10 @@ const contactSchema = Schema(
       default: false,
       required: [true, "missing field favorite"],
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
