@@ -3,7 +3,7 @@ const {
   joiContactSchema,
   favoriteJoiContactSchema,
 } = require("./contact");
-const { User, joiUserSchema } = require("./user");
+const { User, joiUserSchema, subscriptionUserSchema } = require("./user");
 
 module.exports = {
   Contact,
@@ -11,4 +11,5 @@ module.exports = {
   favoriteJoiContactSchema,
   User,
   joiUserSchema,
+  subscriptionUserSchema,
 };

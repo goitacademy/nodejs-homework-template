@@ -4,16 +4,6 @@ const { NotFound } = require("http-errors");
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
-  if (favorite === null) {
-    res.status(400).json({
-      status: "error",
-      code: 400,
-      data: {
-        message: "missing field favorite",
-      },
-    });
-    return;
-  }
   const updatedStatusContact = await Contact.findByIdAndUpdate(
     contactId,
     { favorite },
