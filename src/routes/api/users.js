@@ -6,6 +6,7 @@ const {
   getCurrentUser,
   updateUserSubscription,
   changeUseravatar,
+  getUserByVerificationToken,
 } = require("../../controller/usersController");
 
 const { errorHandler } = require("../../helpers/errorHandler");
@@ -48,6 +49,12 @@ router.patch(
   authMW,
   validation(userSubscriptionSchema),
   errorHandler(updateUserSubscription)
+);
+
+router.get(
+  "/verify/:verificationToken",
+  // authMW,
+  errorHandler(getUserByVerificationToken)
 );
 
 module.exports = router;

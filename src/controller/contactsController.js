@@ -66,6 +66,7 @@ async function updateContactStatusById(req, res) {
   }
   res.status(200).json({ contact });
 }
+
 module.exports = {
   getUserContacts,
   getUserContactById,
