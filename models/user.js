@@ -34,14 +34,14 @@ userSchema.methods.validatePassword = function (password) {
 const registerSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string().required(),
+  // subscription: Joi.string().required(),
   repeat_password: Joi.ref("password"),
 });
 
 const loginSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string().required(),
+  // subscription: Joi.string().required(),
 });
 
 const schemas = {
