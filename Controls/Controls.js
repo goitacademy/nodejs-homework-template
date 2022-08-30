@@ -1,20 +1,24 @@
-const { ObjectId } = require("mongodb");
-const { Contact } = require("../db/contactsModel");
+const {
+  getContacts,
+  getContactsById,
+  getAddContacts,
+  getDeleteContacts,
+  getUpdateContacts,
+  getUpdateStatusContacts,
+} = require("../services/contactsServices.js");
 
-const listContacts = async (req, res, next) => {
+const listContactsControls = async (req, res, next) => {
   try {
-    const data = await Contact.find({});
+    const data = await getContacts();
     return res.json(data);
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
 };
 
-const getContactById = async (req, res, next) => {
+const getContactByIdControls = async (req, res, next) => {
   try {
-    const data = await Contact.findOne({
-      _id: ObjectId(String(req.params.contactId)),
-    });
+    const data = await getContactsById(req.params.contactId);
     if (data) {
       return res.json(data);
     } else {
@@ -25,11 +29,9 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-const removeContact = async (req, res, next) => {
+const removeContactControls = async (req, res, next) => {
   try {
-    const dataId = await Contact.deleteOne({
-      _id: new ObjectId(String(req.params.contactId)),
-    });
+    const dataId = await getDeleteContacts(req.params.contactId);
     if (dataId.deletedCount) {
       return res.status(200).json({ message: "contact deleted" });
     } else {
@@ -40,26 +42,26 @@ const removeContact = async (req, res, next) => {
   }
 };
 
-const addContact = async (req, res, next) => {
+const addContactControls = async (req, res, next) => {
   try {
-    await Contact.create(req.body);
+    await getAddContacts(req.body);
     return res.status(201).json({ message: "add contact" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const updateContact = async (req, res, next) => {
+const updateContactControls = async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
   if (!req.body) {
     return res.status(400).json({ message: "missing fields" });
   }
-  const dataId = await Contact.findByIdAndUpdate(
-    {
-      _id: ObjectId(String(req.params.contactId)),
-    },
-    { name, email, phone, favorite }
-  );
+  const dataId = getUpdateContacts(req.params.contactId, {
+    name,
+    email,
+    phone,
+    favorite,
+  });
 
   if (!dataId) {
     return res.status(404).json({ message: "Not found" });
@@ -67,17 +69,17 @@ const updateContact = async (req, res, next) => {
   return res.status(200).json({ message: "contact update" });
 };
 
-const updateStatusContact = async (req, res, next) => {
+const updateStatusContactControls = async (req, res, next) => {
   if (!req.body) {
     return res.status(400).json({ message: "missing field favorite" });
   }
   const { name, phone, email, favorite } = req.body;
-  const dataId = await Contact.findByIdAndUpdate(
-    {
-      _id: ObjectId(String(req.params.contactId)),
-    },
-    { name, phone, email, favorite }
-  );
+  const dataId = getUpdateStatusContacts(req.params.contactId, {
+    name,
+    email,
+    phone,
+    favorite,
+  });
   if (!dataId) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -85,10 +87,10 @@ const updateStatusContact = async (req, res, next) => {
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
+  listContactsControls,
+  getContactByIdControls,
+  removeContactControls,
+  addContactControls,
+  updateContactControls,
+  updateStatusContactControls,
 };

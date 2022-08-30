@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidateError } = require("../helpers/errors");
 
 module.exports = {
   validation: (req, res, next) => {
@@ -17,9 +18,7 @@ module.exports = {
     const validateBody = schema.validate(req.body);
     const { error } = validateBody;
     if (error) {
-      return res
-        .status(400)
-        .json({ message: `missing required ${error} field` });
+      next(new ValidateError(error.details));
     }
     next();
   },
