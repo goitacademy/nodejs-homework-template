@@ -29,14 +29,8 @@ const addUser = async (body) => {
     text: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
     html: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
   };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  await sgMail.send(msg);
+
   await user.save();
   return user;
 };
@@ -131,6 +125,22 @@ const findUserByVerificationToken = async (verificationToken) => {
   }
 };
 
+const resendEmail = async ({ email }) => {
+  const user = await User.findOne({ email });
+
+  if (user.verify) {
+    throw new Conflict("Verification has already been passed");
+  }
+  const msg = {
+    to: "mkundeev@gmail.com",
+    from: "mkundeev@gmail.com",
+    subject: "Sending with SendGrid is Fun",
+    text: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
+    html: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
+  };
+  await sgMail.send(msg);
+};
+
 module.exports = {
   addUser,
   loginUser,
@@ -139,4 +149,5 @@ module.exports = {
   updateSubscription,
   changeAvatar,
   findUserByVerificationToken,
+  resendEmail,
 };

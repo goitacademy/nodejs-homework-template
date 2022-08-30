@@ -6,6 +6,7 @@ const {
   updateSubscription,
   changeAvatar,
   findUserByVerificationToken,
+  resendEmail,
 } = require("../models/users");
 
 async function signUpUser(req, res) {
@@ -54,6 +55,11 @@ async function getUserByVerificationToken(req, res) {
   res.status(200).json({ message: "Verification successful" });
 }
 
+async function resendVerificationEmail(req, res) {
+  await resendEmail(req.body);
+  res.status(200).json({ message: "Verification email sent" });
+}
+
 module.exports = {
   signUpUser,
   logInUser,
@@ -62,4 +68,5 @@ module.exports = {
   updateUserSubscription,
   changeUseravatar,
   getUserByVerificationToken,
+  resendVerificationEmail,
 };
