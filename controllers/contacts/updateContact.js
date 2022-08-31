@@ -1,10 +1,15 @@
-const Contact = require("../../models/contacts");
+const { Contact } = require("../../models/Contact");
 const { createError } = require("../../helpers");
 
 const updateContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body);
+    const { name, email, phone } = req.body;
+    const owner = req.user._id;
+    const result = await Contact.findOneAndUpdate(
+      { _id: id, owner },
+      { $set: { name, email, phone } }
+    );
     if (!result) {
       throw createError(404);
     }
