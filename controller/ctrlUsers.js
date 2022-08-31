@@ -199,7 +199,8 @@ const registerUser = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
   const avatarURL = `./avatars/av_${_id}.png`;
-  Jimp.read(`tmp/${req.file.filename}`)
+  const fileNameToRead = await Jimp.read(`tmp/${req.file.filename}`);
+  fileNameToRead
     .then((avatar) => {
       return avatar
         .resize(250, 250) // resize
