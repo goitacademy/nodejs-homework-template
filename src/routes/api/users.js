@@ -6,6 +6,8 @@ const {
   getCurrentUser,
   updateUserSubscription,
   changeUseravatar,
+  getUserByVerificationToken,
+  resendVerificationEmail,
 } = require("../../controller/usersController");
 
 const { errorHandler } = require("../../helpers/errorHandler");
@@ -13,6 +15,7 @@ const { errorHandler } = require("../../helpers/errorHandler");
 const {
   userValidationSchema,
   userSubscriptionSchema,
+  userVerificationEmailSchema,
 } = require("../../models/usersSchema");
 const { validation } = require("../../middlewares/validation");
 const { authMW } = require("../../middlewares/authMW");
@@ -48,6 +51,17 @@ router.patch(
   authMW,
   validation(userSubscriptionSchema),
   errorHandler(updateUserSubscription)
+);
+
+router.get(
+  "/verify/:verificationToken",
+  errorHandler(getUserByVerificationToken)
+);
+
+router.post(
+  "/verify",
+  validation(userVerificationEmailSchema),
+  errorHandler(resendVerificationEmail)
 );
 
 module.exports = router;

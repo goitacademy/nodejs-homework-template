@@ -1,9 +1,13 @@
+require("dotenv").config();
 const { User } = require("../db/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const fs = require("fs").promises;
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const avatarsPath = path.resolve("./public/avatars");
 const { Conflict, Unauthorized, InternalServerError } = require("http-errors");
@@ -13,37 +17,44 @@ const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
     throw new Conflict("Email in use");
   }
-  try {
-    const avatarURL = gravatar.url(body.email);
-    const user = new User({ ...body, avatarURL });
-    await user.save();
-    return user;
-  } catch (error) {
-    throw new InternalServerError("Server error");
-  }
+
+  const avatarURL = gravatar.url(body.email);
+  const verificationToken = uuidv4();
+  const user = new User({ ...body, avatarURL, verificationToken });
+
+  const msg = {
+    to: "mkundeev@gmail.com",
+    from: "mkundeev@gmail.com",
+    subject: "Sending with SendGrid is Fun",
+    text: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
+    html: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
+  };
+  await sgMail.send(msg);
+
+  await user.save();
+  return user;
 };
 
 const loginUser = async ({ email, password }) => {
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      throw new Unauthorized("Email or password is wrong");
-    }
-    if (!(await bcrypt.compare(password, user.password))) {
-      throw new Unauthorized("Email or password is wrong");
-    }
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      process.env.SECRET
-    );
-    await user.setToken(token);
-    await user.save();
-    return user;
-  } catch (err) {
-    throw new InternalServerError("Server error");
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Unauthorized("Email or password is wrong");
   }
+  if (!user?.verify) {
+    throw new Unauthorized("Please verify your email");
+  }
+  if (!(await bcrypt.compare(password, user.password))) {
+    throw new Unauthorized("Email or password is wrong");
+  }
+  const token = jwt.sign(
+    {
+      _id: user._id,
+    },
+    process.env.SECRET
+  );
+  await user.setToken(token);
+  await user.save();
+  return user;
 };
 
 const logOut = async (userId) => {
@@ -99,6 +110,37 @@ const changeAvatar = async (req, userId) => {
   }
 };
 
+const findUserByVerificationToken = async (verificationToken) => {
+  try {
+    const user = User.findOneAndUpdate(
+      { verificationToken },
+      { verificationToken: null, verify: true },
+      {
+        new: true,
+      }
+    );
+    return user;
+  } catch (err) {
+    throw new InternalServerError("Server error");
+  }
+};
+
+const resendEmail = async ({ email }) => {
+  const user = await User.findOne({ email });
+
+  if (user.verify) {
+    throw new Conflict("Verification has already been passed");
+  }
+  const msg = {
+    to: "mkundeev@gmail.com",
+    from: "mkundeev@gmail.com",
+    subject: "Sending with SendGrid is Fun",
+    text: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
+    html: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
+  };
+  await sgMail.send(msg);
+};
+
 module.exports = {
   addUser,
   loginUser,
@@ -106,4 +148,6 @@ module.exports = {
   getUser,
   updateSubscription,
   changeAvatar,
+  findUserByVerificationToken,
+  resendEmail,
 };

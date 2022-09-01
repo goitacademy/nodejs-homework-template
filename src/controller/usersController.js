@@ -5,6 +5,8 @@ const {
   getUser,
   updateSubscription,
   changeAvatar,
+  findUserByVerificationToken,
+  resendEmail,
 } = require("../models/users");
 
 async function signUpUser(req, res) {
@@ -43,6 +45,21 @@ async function changeUseravatar(req, res) {
   res.status(200).json({ avatarURL: user.avatarURL });
 }
 
+async function getUserByVerificationToken(req, res) {
+  const { verificationToken } = req.params;
+  const user = await findUserByVerificationToken(verificationToken);
+  if (!user) {
+    res.status(404).json({ message: `User not found` });
+    return;
+  }
+  res.status(200).json({ message: "Verification successful" });
+}
+
+async function resendVerificationEmail(req, res) {
+  await resendEmail(req.body);
+  res.status(200).json({ message: "Verification email sent" });
+}
+
 module.exports = {
   signUpUser,
   logInUser,
@@ -50,4 +67,6 @@ module.exports = {
   getCurrentUser,
   updateUserSubscription,
   changeUseravatar,
+  getUserByVerificationToken,
+  resendVerificationEmail,
 };
