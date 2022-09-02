@@ -1,17 +1,17 @@
 const express = require("express");
 
-const ctrl = require("../../controllers");
+const ctrl = require("../../controllers/contacts");
 
 const { ctrlWrapper } = require("../../helpers");
-const { isValidId } = require("../../middlewares");
+const { isValidId, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", authenticate, ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", ctrlWrapper(ctrl.add));
+router.post("/", authenticate, ctrlWrapper(ctrl.add));
 
 router.put("/:contactId", isValidId, ctrlWrapper(ctrl.updateById));
 
