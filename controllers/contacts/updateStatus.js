@@ -12,8 +12,8 @@ const  {Contacts}  = require("../../models/contacts");
         status: "ERROR",
         code: 404,
         massage: `Contact with ID=${contactId} not found`,
-    });
-    return;
+        });
+        return;
         }
         res.json({
             status: "Success",
