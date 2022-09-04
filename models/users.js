@@ -55,7 +55,7 @@ async function loginUser(req, res) {
 }
 async function logOutUser(req, res) {
   try {
-    const user = await User.findById(req.userId);
+    const user = req.user;
     if (user) return res.status(204).json({ message: "No Content" });
   } catch {
     res.status(401).json({ message: `Not authorized` });
@@ -64,7 +64,7 @@ async function logOutUser(req, res) {
 
 async function currentUser(req, res) {
   try {
-    const user = await User.findById(req.userId);
+    const user = req.user;
     if (user)
       return res
         .status(200)
@@ -74,9 +74,24 @@ async function currentUser(req, res) {
   }
 }
 
+async function updateSubscription(req, res) {
+  const user = await User.findByIdAndUpdate(
+    { _id: req.userId },
+    { subscription: req.body.subscription },
+    { new: true }
+  );
+  if (!user) {
+    return res.status(401).json({ message: `Not authorized` });
+  }
+
+  return res
+    .status(200)
+    .json({ email: user.email, subscription: user.subscription });
+}
 module.exports = {
   signUpUser,
   loginUser,
   logOutUser,
   currentUser,
+  updateSubscription,
 };

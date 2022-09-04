@@ -3,20 +3,20 @@ const { Contact } = require("../db/contactModel");
 const listContacts = async (req, res) => {
   const { _id } = req.user;
   const owner = _id;
-  console.log(req.query);
-  // let skip =
-  //   Number(req.query?.page) * Number(req.query?.limit) -
-  //   Number(req.query?.limit);
-  // if (skip < 0) skip = 0;
-  try {
-    const search = req.query?.favorite
-      ? { owner, favorite: req.query.favorite }
-      : { owner };
-    const data = await Contact.find({ search });
-    // .skip(skip)
-    // .limit(req.query?.limit);
+  const { limit } = req.query;
 
-    res.json(data);
+  try {
+    let skip =
+      Number(req.query?.page) * Number(req.query?.limit) -
+      Number(req.query?.limit);
+    if (skip < 0) skip = 0;
+
+    const data = await Contact.find({ owner, ...req.query })
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
+      .select({ __v: 0 });
+
+    return res.json(data);
   } catch (error) {
     console.error(error);
   }

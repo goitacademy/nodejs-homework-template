@@ -63,7 +63,10 @@ const userValidation = (req, res, next) => {
 
 const userValidationSubscript = (req, res, next) => {
   const schema = Joi.object({
-    subscription: Joi.any().valid("starter", "pro", "business").optional(),
+    subscription: Joi.any()
+      .valid("starter", "pro", "business")
+      .optional()
+      .required(),
   });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
