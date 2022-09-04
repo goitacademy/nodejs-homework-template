@@ -23,7 +23,7 @@ const putContactSchema = Joi.object({
     .max(18)
     .optional(),
   favorite: Joi.boolean().optional(),
-});
+}).min(1);
 
 const patchFavoriteContactSchema = Joi.object({
   favorite: Joi.bool()
