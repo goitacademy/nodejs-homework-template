@@ -21,7 +21,10 @@
     "shortid": "^2.2.16",
     "nanoid": "^3.3.1",
     "passport": "^0.5.2",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.16.1",
+    "multer": "^1.4.4"
   },
   "devDependencies": {
     "eslint": "7.19.0",

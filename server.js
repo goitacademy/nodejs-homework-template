@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 // cors
 app.use(cors());
+app.use(express.static("public"));
 
 const routerApi = require("./api");
 app.use("/api", routerApi);

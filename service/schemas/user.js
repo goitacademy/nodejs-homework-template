@@ -22,13 +22,16 @@ const user = new Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+  },
 });
 
-user.methods.setPassword = function(password) {
+user.methods.setPassword = function (password) {
   this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6));
 };
 
-user.methods.validPassword = function(password) {
+user.methods.validPassword = function (password) {
   return bCrypt.compareSync(password, this.password);
 };
 
