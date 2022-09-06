@@ -1,4 +1,3 @@
-// const { basedir } = global;
 const { Contact } = require("../../models/contacts");
 
 const getAll = async (req, res) => {
