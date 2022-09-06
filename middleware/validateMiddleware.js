@@ -21,6 +21,7 @@ const validation = (req, res, next) => {
   }
   next();
 };
+
 const validationPatch = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30),
@@ -41,4 +42,41 @@ const validationPatch = (req, res, next) => {
   }
   next();
 };
-module.exports = { validation, validationPatch };
+
+const userValidation = (req, res, next) => {
+  const schema = Joi.object({
+    password: Joi.string().min(6).max(12).required(),
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      })
+      .required(),
+    subscription: Joi.any().valid("starter", "pro", "business").optional(),
+  });
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json({ status: validationResult.error.details });
+  }
+  next();
+};
+
+const userValidationSubscript = (req, res, next) => {
+  const schema = Joi.object({
+    subscription: Joi.any()
+      .valid("starter", "pro", "business")
+      .optional()
+      .required(),
+  });
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json({ status: validationResult.error.details });
+  }
+  next();
+};
+module.exports = {
+  validation,
+  validationPatch,
+  userValidation,
+  userValidationSubscript,
+};
