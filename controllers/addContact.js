@@ -5,8 +5,10 @@ const { addSchema } = require("../schemas/contacts");
 const addContact = async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
+
     if (error) {
-      throw RequestError(400, "missing required name field");
+      // res.status(400).json("error");
+      throw RequestError(400, error.message);
     }
 
     const result = await contacts.addContact(req.body);
