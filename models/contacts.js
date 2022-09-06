@@ -3,34 +3,26 @@ const path = require('path');
 
 const { serialize } = require('../utils/serialize');
 const { generateId } = require('../utils/generateId');
+const { errorCatcherCommon } = require('../utils/errorCatcher');
+const { wrapperFactory } = require('../utils/wrapperFactory');
 
 const contactsDataPath = path.resolve(__dirname + '/contacts.json');
 
 const listContacts = async () => {
-  try {
     const contactsRaw = await fs.readFile(contactsDataPath, 'utf8');
     const parsed = serialize.parse(contactsRaw);
 
     return parsed;
-  } catch (error) {
-      console.error(error);
-      return error;
-  }
 }
 
 const getContactById = async (contactId) => {
-  try {
     const contacts = await listContacts();
     const found = contacts.find(({ id }) => id === contactId);
   
     return found; 
-  } catch (error) {
-    return error;
-  }
 }
 
 const removeContact = async (contactId) => {
-  try {
     let deletedContact = null;
 
     const contacts = await listContacts();
@@ -47,13 +39,9 @@ const removeContact = async (contactId) => {
     await fs.writeFile(contactsDataPath, serialize.toJSON(filtered), 'utf8');
   
     return deletedContact;
-  } catch (error) {
-    return error;
-  }
 }
 
 const addContact = async (body) => {
-  try {
     const contacts = await listContacts();
     const id = generateId(contacts);
     const newContact = { id, ...body };
@@ -62,13 +50,9 @@ const addContact = async (body) => {
     await fs.writeFile(contactsDataPath, serialize.toJSON(contacts), 'utf8');
 
     return newContact;
-  } catch (error) {
-    return error;
-  }
 }
 
 const updateContact = async (contactId, body) => {
-  try {
     let updatedContact = null;
 
     const contacts = await listContacts();
@@ -84,15 +68,15 @@ const updateContact = async (contactId, body) => {
     await fs.writeFile(contactsDataPath, serialize.toJSON(withUpdatedContact), 'utf8');
   
     return updatedContact;
-  } catch (error) {
-    return error;
-  }
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  ...wrapperFactory(
+    errorCatcherCommon,
+    listContacts,
+    getContactById,
+    removeContact,
+    addContact,
+    updateContact
+  )  
 }
