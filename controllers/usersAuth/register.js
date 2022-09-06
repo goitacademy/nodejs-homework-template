@@ -2,13 +2,11 @@ const { User, schemas } = require("../../models/user");
 const bcrypt = require("bcryptjs");
 
 const register = async (req, res) => {
-  console.log(req.body);
   const { error } = schemas.register.validate(req.body);
   if (error) {
     res.status(400).json({ message: "Incorrect format of entered data" });
     return;
   }
-  console.log(req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
