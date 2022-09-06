@@ -1,5 +1,16 @@
-const app = require('./app')
+const app = require("./app");
+require("dotenv").config();
+const { connectMongo } = require("./src/bd/conection");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+async function startApp() {
+  try {
+    await connectMongo();
+    app.listen(3068, () => {
+      console.log("Server running. Use our API on port: 3068");
+    });
+  } catch (error) {
+    console.log(error.message);
+    process.exit(1);
+  }
+}
+startApp();
