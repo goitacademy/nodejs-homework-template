@@ -1,4 +1,5 @@
 const Joi = require("joi");
+
 const { ValidateError } = require("../helpers/errors");
 
 module.exports = {
@@ -6,6 +7,7 @@ module.exports = {
     const schema = Joi.object({
       name: Joi.string().min(3).max(30).required(),
       phone: Joi.string().min(10).max(22).required(),
+
       email: Joi.string()
         .email({
           minDomainSegments: 2,
@@ -14,6 +16,7 @@ module.exports = {
         .required(),
       favorite: Joi.boolean().default(false),
     });
+
 
     const validateBody = schema.validate(req.body);
     const { error } = validateBody;
@@ -43,4 +46,5 @@ module.exports = {
 
     next();
   },
+
 };

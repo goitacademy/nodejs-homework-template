@@ -1,5 +1,6 @@
 const app = require("./app");
 require("dotenv").config();
+
 const { connectMongo } = require("./src/bd/conection");
 
 async function startApp() {
@@ -10,6 +11,7 @@ async function startApp() {
     });
   } catch (error) {
     console.log(error.message);
+
     process.exit(1);
   }
 }
