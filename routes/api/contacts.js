@@ -2,6 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const createError = require("../../helpers/createError");
 const Contact = require("../../models/contacts");
+const authorize = require('../../middlewares/authorization')
 
 const router = express.Router();
 
@@ -16,9 +17,10 @@ const favoriteSchema = Joi.object({
 favorite: Joi.boolean().required()
 })
 
-router.get("/", async (req, res, next) => {
+router.get("/", authorize , async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const {_id: owner} = req.user
+    const result = await Contact.find({owner});
     if (!result) {
       throw createError(404, "Not found");
     }
@@ -28,7 +30,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", authorize, async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await Contact.findById(id);
@@ -41,13 +43,14 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", authorize , async (req, res, next) => {
   try {
+    const {_id: owner} = req.user
     const { error } = contactsSchema.validate(req.body);
     if (error) {
       throw createError(400, error.message);
     }
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({...req.body, owner});
     if (!result) {
       throw createError(404, "Not found");
     }
@@ -57,7 +60,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", authorize, async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await Contact.findByIdAndRemove(id);
@@ -70,7 +73,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", authorize, async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
 
@@ -87,7 +90,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/:id/favorite", async (req, res, next) => {
+router.patch("/:id/favorite", authorize, async (req, res, next) => {
   try {
     const { error } = favoriteSchema.validate(req.body);
 
@@ -105,3 +108,4 @@ router.patch("/:id/favorite", async (req, res, next) => {
 });
 
 module.exports = router;
+
