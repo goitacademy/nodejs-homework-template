@@ -3,13 +3,11 @@ const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 
 const register = async (req, res, next) => {
-  console.log(req.body);
   const { error } = schemas.register.validate(req.body);
   if (error) {
     res.status(400).json({ message: "Incorrect format of entered data" });
     return;
   }
-  console.log(req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
