@@ -1,18 +1,20 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-
+const gravatar = require("gravatar");
 const dotenv = require("dotenv");
 
+const avatarsPath = path.resolve("./public/avatars");
 const { User } = require("../db/userModel");
+const resizeAvatar = require("../helpers/sizeAvatar");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const signUpUser = async (req, res) => {
   try {
-    // const { email, password } = req.body;
-    // const user = new User({ email, password: await bcrypt.hash(password, 10) });
-    const user = new User(req.body);
+    const avatarURL = gravatar.url(req.body.email);
+
+    const user = new User({ ...req.body, avatarURL });
     if (await User.findOne({ email: req.body.email })) {
       res.status(409).send({ message: "Email in use" });
     }
@@ -88,10 +90,27 @@ async function updateSubscription(req, res) {
     .status(200)
     .json({ email: user.email, subscription: user.subscription });
 }
+
+async function addUserAvatar(req, res) {
+  // resizeAvatar(avatarURL);
+  console.log(req.file);
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: req.userId },
+      // { avatarURL: avatarURL },
+      { new: true }
+    );
+    return res.status(200).json({ avatarURL: user.avatarURL });
+  } catch {
+    res.status(401).json({ message: `Not authorized` });
+  }
+}
+
 module.exports = {
   signUpUser,
   loginUser,
   logOutUser,
   currentUser,
   updateSubscription,
+  addUserAvatar,
 };

@@ -39,5 +39,8 @@ const userSchema = new mongoose.Schema({
   token: {
     type: String,
   },
+  avatarURL: {
+    type: String,
+  },
 });
 module.exports = { contactSchema, userSchema };
