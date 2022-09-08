@@ -19,8 +19,8 @@ const register = async (req, res, next) => {
     const hashEmail = await gravatar.url(email);
     const result = await User.create({
       ...req.body,
-      avatarURL: hashEmail,
       password: hashPassword,
+      avatarURL,
     });
 
     res.status(201).json({
@@ -28,6 +28,7 @@ const register = async (req, res, next) => {
         name: result.name,
         email: result.email,
         subscription: result.subscription,
+        avatarURL: hashEmail,
       },
     });
   } catch (e) {
