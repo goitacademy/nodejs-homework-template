@@ -42,9 +42,9 @@
 
 @ GET /api/contacts
 
-&mdash; нічого не отримує
-&mdash; викликає функцію listContacts для роботи з json-файлом contacts.json
-&mdash; повертає масив всіх контактів в json-форматі зі статусом 200
+- нічого не отримує
+- викликає функцію listContacts для роботи з json-файлом contacts.json
+- повертає масив всіх контактів в json-форматі зі статусом 200
 
 Body: "contacts": []
 
@@ -72,10 +72,10 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 #### validation
 
-name: string,alphanum(min(3)max(30)),обов'язкове поле;
-phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+ - name: string,alphanum(min(3)max(30)),обов'язкове поле;
+ - phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
 "phone number must be in format 1-111-11-11" обов'язкове поле;
-email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+ - email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 
 #### Request
 
@@ -115,10 +115,10 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 #### validation
 
-name: string,alphanum(min(3)max(30)),обов'язкове поле;
-phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+- name: string,alphanum(min(3)max(30)),обов'язкове поле;
+- phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
 "phone number must be in format 1-111-11-11" обов'язкове поле;
-email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+- email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 
 @ PATCH / api / contacts /: contactId / favorite
 
@@ -138,11 +138,11 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 #### validation
 
-name: string,alphanum(min(3)max(30)),обов'язкове поле;
-phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+- name: string,alphanum(min(3)max(30)),обов'язкове поле;
+- phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
 "phone number must be in format 1-111-11-11" обов'язкове поле;
-email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
-favorite: boolean, default-false;
+- email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+- favorite: boolean, default-false;
 
 ### Requests
 
@@ -166,28 +166,28 @@ favorite: boolean, default-false;
 
 #### Registration request
 
-POST /users/register
-Content-Type: application/json
-RequestBody: {
-"email": "example@example.com",
-"password": "examplepassword"
-}
+    POST /users/register
+    Content-Type: application/json
+    RequestBody: {
+    "email": "example@example.com",
+    "password": "examplepassword"
+        }
 
 #### Registration success response
 
-Status: 201 Created
-Content-Type: application/json
-ResponseBody: {
-"user": {
-"email": "example@example.com",
-"subscription": "starter"
-}
-}
+    Status: 201 Created
+    Content-Type: application/json
+    ResponseBody: {
+    "user": {
+    "email": "example@example.com",
+    "subscription": "starter"
+    }
+    }
 
 #### userValidation
 
-password: string, min(6)max(12),обов'язкове поле;
-email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+- password: string, min(6)max(12),обов'язкове поле;
+- email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 
 ## User Login
 
@@ -195,28 +195,28 @@ email: string,minDomainSegments(кількість сегментів, необ�
 
 ### Request
 
-Content-Type: application/json
-RequestBody: {
-"email": "example@example.com",
-"password": "examplepassword"
-}
+    Content-Type: application/json
+    RequestBody: {
+    "email": "example@example.com",
+    "password": "examplepassword"
+    }
 
 ### Login success response
 
-Status: 200 OK
-Content-Type: application/json
-ResponseBody: {
-"token": "exampletoken",
-"user": {
-"email": "example@example.com",
-"subscription": "starter"
-}
-}
+    Status: 200 OK
+    Content-Type: application/json
+    ResponseBody: {
+    "token": "exampletoken",
+    "user": {
+    "email": "example@example.com",
+    "subscription": "starter"
+    }
+    }
 
 #### userValidation
 
-password: string, min(6)max(12),обов'язкове поле;
-email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+- password: string, min(6)max(12),обов'язкове поле;
+- email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 
 ## User Logout
 
@@ -224,12 +224,12 @@ email: string,minDomainSegments(кількість сегментів, необ�
 
 ### Request
 
-POST /users/logout
-Authorization: "Bearer {{token}}"
+    POST /users/logout
+    Authorization: "Bearer {{token}}"
 
 ### Logout success response
 
-Status: 204 No Content
+    Status: 204 No Content
 
 ## Get Current User
 
@@ -237,17 +237,16 @@ Status: 204 No Content
 
 ### Request
 
-GET /users/current
-Authorization: "Bearer {{token}}"
+    Authorization: "Bearer {{token}}"
 
 ### Current user success response
 
-Status: 200 OK
-Content-Type: application/json
-ResponseBody: {
-"email": "example@example.com",
-"subscription": "starter"
-}
+    Status: 200 OK
+    Content-Type: application/json
+    ResponseBody: {
+    "email": "example@example.com",
+    "subscription": "starter"
+    }
 
 ## Update User Subscription
 
@@ -268,7 +267,7 @@ ResponseBody: {
 
 ### userValidationSubscript
 
-subscription: valid("starter", "pro", "business"),обов'язкове поле;
+- subscription: valid("starter", "pro", "business"),обов'язкове поле;
 
 ## Update User Avatar
 
@@ -276,15 +275,15 @@ subscription: valid("starter", "pro", "business"),обов'язкове поле
 
 ### Request
 
-Content-Type: multipart/form-data
-Authorization: "Bearer {{token}}"
-RequestBody: завантажений файл
+    Content-Type: multipart/form-data
+    Authorization: "Bearer {{token}}"
+    RequestBody: завантажений файл
 
 ### Response
 
-Status: 200 OK
-Content-Type: application/json
-ResponseBody: {
-"avatarURL": "тут буде посилання на зображення"
-}
+    Status: 200 OK
+    Content-Type: application/json
+    ResponseBody: {
+    "avatarURL": "тут буде посилання на зображення"
+    }
 
