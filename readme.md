@@ -23,7 +23,7 @@
 
 ## Install Як встановити програму
 
-- `npm install` &mdash;
+- `npm install`;
 
 ### Команди:
 
@@ -42,9 +42,9 @@
 
 @ GET /api/contacts
 
-- нічого не отримує
-- викликає функцію listContacts для роботи з json-файлом contacts.json
-- повертає масив всіх контактів в json-форматі зі статусом 200
+&mdash; нічого не отримує
+&mdash; викликає функцію listContacts для роботи з json-файлом contacts.json
+&mdash; повертає масив всіх контактів в json-форматі зі статусом 200
 
 Body: "contacts": []
 
