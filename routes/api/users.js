@@ -3,7 +3,7 @@ const { users: ctrl } = require("../../controllers/index");
 
 const router = express.Router();
 
-const { validation, auth } = require("../../middlewares");
+const { validation, auth, upload } = require("../../middlewares");
 const { joiSchema, subscriptionJoiSchema } = require("../../models/users");
 
 router.post("/signup", validation(joiSchema), ctrl.signup);
@@ -15,5 +15,6 @@ router.patch(
   validation(subscriptionJoiSchema),
   ctrl.updeteSubscription
 );
+router.patch("/avatars", auth, upload.single("avatars"), ctrl.updateAvatar);
 
 module.exports = router;
