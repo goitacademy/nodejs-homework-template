@@ -9,14 +9,17 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
     "express": "4.17.1",
     "joi": "^17.6.0",
-    "mongoose": "^6.5.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.4",
     "morgan": "1.10.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -29,12 +32,9 @@
   },
   "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
   "main": ".eslintrc.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kostyaget/nodejs-homework-template.git"
-  },
+  "repository": "git+https://github.com/kostyaget/nodejs-homework-template.git",
   "keywords": [],
-  "author": "",
+  "author": "kostyaget <progogyd@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/kostyaget/nodejs-homework-template/issues"
