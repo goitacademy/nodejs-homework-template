@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidationError } = require("../helpers/errors");
 
 module.exports = {
   postValidation: (req, res, next) => {
@@ -48,6 +49,22 @@ module.exports = {
         status: validationResult.error.message,
         message: "missing field favorite",
       });
+    }
+    next();
+  },
+  authValidation: (req, res, next) => {
+    const schema = Joi.object({
+      password: Joi.string().alphanum().min(5).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net"] },
+        })
+        .required(),
+    });
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      next(new ValidationError(JSON.stringify(validationResult.error.message)));
     }
     next();
   },

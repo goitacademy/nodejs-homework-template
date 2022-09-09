@@ -1,12 +1,14 @@
 const express = require("express");
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
-} = require("../../services/contactService");
+  listContactsController,
+  getContactByIdController,
+  addContactController,
+  removeContactController,
+  updateContactController,
+  updateStatusContactController,
+} = require("../../controllers/contactController");
+
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const {
   postValidation,
@@ -16,11 +18,17 @@ const {
 
 const router = new express.Router();
 
-router.get("/", listContacts);
-router.get("/:contactId", getContactById);
-router.post("/", postValidation, addContact);
-router.delete("/:contactId", removeContact);
-router.put("/:contactId", putValidation, updateContact);
-router.patch("/:contactId/favorite", patchValidation, updateStatusContact);
+router.use(authMiddleware);
+
+router.get("/", listContactsController);
+router.get("/:contactId", getContactByIdController);
+router.post("/", postValidation, addContactController);
+router.delete("/:contactId", removeContactController);
+router.put("/:contactId", putValidation, updateContactController);
+router.patch(
+  "/:contactId/favorite",
+  patchValidation,
+  updateStatusContactController
+);
 
 module.exports = router;
