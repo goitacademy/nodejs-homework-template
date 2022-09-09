@@ -4,9 +4,7 @@ const path = require("path");
 const gravatar = require("gravatar");
 const dotenv = require("dotenv");
 
-const avatarsPath = path.resolve("./public/avatars");
 const { User } = require("../db/userModel");
-const resizeAvatar = require("../helpers/sizeAvatar");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -91,15 +89,14 @@ async function updateSubscription(req, res) {
     .json({ email: user.email, subscription: user.subscription });
 }
 
-async function addUserAvatar(req, res) {
-  // resizeAvatar(avatarURL);
-  console.log(req.file);
+async function addUserAvatar(req, res, next) {
   try {
     const user = await User.findByIdAndUpdate(
       { _id: req.userId },
-      // { avatarURL: avatarURL },
+      { avatarURL: req.file.path },
       { new: true }
     );
+
     return res.status(200).json({ avatarURL: user.avatarURL });
   } catch {
     res.status(401).json({ message: `Not authorized` });

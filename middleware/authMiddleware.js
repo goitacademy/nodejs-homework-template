@@ -7,7 +7,7 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const authMiddleware = async (req, res, next) => {
   const [tokenType, token] = req.headers.authorization.split(" ");
-  console.log(req.file);
+
   if (!token) {
     next(
       res.status(401).json({
