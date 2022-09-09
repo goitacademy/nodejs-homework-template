@@ -1,32 +1,33 @@
 const express = require("express");
-// const { response } = require("../../../app");
-// const { updateContact } = require("../../../models/contacts");
-// const contactsFunctions = require("../../../models/contacts");
 const validationFunctions = require("../../middlewares/validateMiddlewar");
 const contactsServices = require("../../services/contactsService");
+const { authMiddlewar } = require("../../middlewares/authMiddlewar");
 
 const router = express.Router();
 
-router.get("/", contactsServices.listContacts);
+router.get("/", authMiddlewar, contactsServices.listContacts);
 
-router.get("/:contactId", contactsServices.getContactById);
+router.get("/:contactId", authMiddlewar, contactsServices.getContactById);
 
 router.post(
   "/",
+  authMiddlewar,
   validationFunctions.postContactsValidation,
   contactsServices.addContact
 );
 
-router.delete("/:contactId", contactsServices.removeContact);
+router.delete("/:contactId", authMiddlewar, contactsServices.removeContact);
 
 router.put(
   "/:contactId",
+  authMiddlewar,
   validationFunctions.putContactsValidation,
   contactsServices.updateContact
 );
 
 router.patch(
   "/:contactId/favorite",
+  authMiddlewar,
   validationFunctions.patchContactsValidation,
   contactsServices.updateStatusContact
 );
