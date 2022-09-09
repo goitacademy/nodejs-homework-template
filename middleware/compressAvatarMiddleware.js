@@ -7,7 +7,7 @@ const avatarsPath = path.resolve("./public/avatars");
 
 const compressAvatarMiddleware = async (req, res, next) => {
   if (!req?.file?.path) {
-    return res.status(401).json({ message: `NO` });
+    return res.status(401).json({ message: `Not authorized` });
   }
   const tmpPath = req.file.path;
   const newPath = join(avatarsPath, req.file.filename);
