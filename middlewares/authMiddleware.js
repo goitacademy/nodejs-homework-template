@@ -3,19 +3,18 @@ const jwt = require("jsonwebtoken");
 // const { NotAuthorizedError } = require("../helpers/errors");
 
 const authMiddleware = (req, res, next) => {
-  const { authorization, contentType } = req.headers;
-  if (!authorization) {
-    return res.status(401).json({ message: "Not authorized" });
-  }
-
-  const [bearer, token] = authorization.split(" ");
-
-  if (bearer !== "Bearer") {
-    return res.status(401).json({ message: "Invalid header title" });
+  const { authorization, contentType, "x-token": token } = req.headers;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "error", description: "Not successful, unknown error" });
   }
 
   if (!token) {
-    return res.status(401).json({ message: "Token is required" });
+    return res.status(401).json({
+      message: "unauthorized",
+      description: "Not successful, invalid token",
+    });
   }
 
   const user = jwt.decode(token, process.env.JWT_SECRET);

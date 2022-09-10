@@ -2,10 +2,11 @@ FROM node
 
 WORKDIR /server
 
-COPY . .
-
+COPY package*.json ./
 RUN npm install
+
+COPY . .
 
 EXPOSE 8080
 
-CMD ["node", "server"]
+CMD ["npm", "run", "start:dev"]
