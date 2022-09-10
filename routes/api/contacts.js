@@ -1,68 +1,35 @@
 const express = require("express");
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
+  getAllContactsController,
+  getContactByIdController,
+  addContactController,
+  deleteContactController,
+  updateContactController,
+} = require("../../controllers/contactControllers");
 const {
   addContactValidateMiddleware,
   updateContactValidateMiddleware,
 } = require("../../middlewares/validationMiddleware");
+const { controllerWrapper } = require("../../helpers/apiHelpers");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json(contacts);
-});
+router.get("/", controllerWrapper(getAllContactsController));
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    const contact = await getContactById(id);
+router.get("/:contactId", controllerWrapper(getContactByIdController));
 
-    res.status(200).json(contact);
-  } catch (error) {
-    res.status(error.status).json({ message: error.message });
-  }
-});
+router.post(
+  "/",
+  addContactValidateMiddleware,
+  controllerWrapper(addContactController)
+);
 
-router.post("/", addContactValidateMiddleware, async (req, res, next) => {
-  try {
-    const newContact = await addContact(req.body);
-
-    res.status(200).json(newContact);
-  } catch (error) {
-    res.status(error.status).json({ message: error.message });
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    await removeContact(id);
-
-    res.status(200).json({ message: "contact deleted" });
-  } catch (error) {
-    res.status(error.status).json({ message: error.message });
-  }
-});
+router.delete("/:contactId", controllerWrapper(deleteContactController));
 
 router.put(
   "/:contactId",
   updateContactValidateMiddleware,
-  async (req, res, next) => {
-    try {
-      const id = req.params.contactId;
-      const updatedContact = await updateContact(id, req.body);
-
-      res.status(200).json(updatedContact);
-    } catch (error) {
-      res.status(error.status).json({ message: error.message });
-    }
-  }
+  controllerWrapper(updateContactController)
 );
 
 module.exports = router;
