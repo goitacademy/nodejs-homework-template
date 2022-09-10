@@ -1,59 +1,79 @@
 const Joi = require("joi");
-const { ValidationError } = require("../Helpers/errors");
 
 module.exports = {
-  addContactValidation: (req, res, next) => {
+  userMiddleare: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(10).required(),
-      email: Joi.string().email().required(),
-      phone: Joi.string()
-        .pattern(/^[0-9]+$/)
-        .required(),
+      username: Joi.string().alphanum().min(3).max(32).required(),
+      password: Joi.string().alphanum().min(3).max(32).required(),
     });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      next(new ValidationError(validationResult.error.details));
+      return res.status(404).json({
+        message: "error",
+        description: "Not successful, unknown error",
+      });
     }
     next();
   },
 
-  updateContactValidation: (req, res, next) => {
+  depositMiddleare: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(10).required(),
-      email: Joi.string().email().required(),
-      phone: Joi.string()
-        .pattern(/^[0-9]+$/)
-        .required(),
+      username: Joi.string().alphanum().min(3).max(32).required(),
+      amount: Joi.number().integer().required(),
     });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      next(new ValidationError(validationResult.error.details));
+      return res.status(404).json({
+        message: "error",
+        description: "Not successful, unknown error",
+      });
     }
     next();
   },
-
-  patchFavouriteValidation: (req, res, next) => {
+  rollbackMiddleare: (req, res, next) => {
     const schema = Joi.object({
-      favourite: Joi.boolean(),
-    }).required();
+      deposit_id: Joi.string().alphanum().required(),
+    });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      next(new ValidationError(validationResult.error.details));
+      return res.status(404).json({
+        message: "error",
+        description: "Not successful, unknown error",
+      });
     }
     next();
   },
-
-  patchSubscriptionValidation: (req, res, next) => {
+  createGameMiddleare: (req, res, next) => {
     const schema = Joi.object({
-      subscription: Joi.string().valid("pro", "starter", "business").required(),
-    }).required();
+      name: Joi.string().alphanum().required(),
+      title: Joi.string().required(),
+      price: Joi.number().integer().required(),
+    });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      next(new ValidationError(validationResult.error.details));
+      return res.status(404).json({
+        message: "error",
+        description: "Not successful, unknown error",
+      });
+    }
+    next();
+  },
+  buyGameMiddleare: (req, res, next) => {
+    const schema = Joi.object({
+      game_id: Joi.string().alphanum().required(),
+      username: Joi.string().alphanum().required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(404).json({
+        message: "error",
+        description: "Not successful, unknown error",
+      });
     }
     next();
   },
