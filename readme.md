@@ -72,10 +72,12 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 #### validation
 
+
 - name: string,alphanum(min(3)max(30)),обов'язкове поле;
 - phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
   "phone number must be in format 1-111-11-11" обов'язкове поле;
 - email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
+
 
 #### Request
 
@@ -117,7 +119,9 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 - name: string,alphanum(min(3)max(30)),обов'язкове поле;
 - phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+
   "phone number must be in format 1-111-11-11" обов'язкове поле;
+
 - email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 
 @ PATCH / api / contacts /: contactId / favorite
@@ -140,7 +144,9 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
 
 - name: string,alphanum(min(3)max(30)),обов'язкове поле;
 - phone:string, length-11, pattern(/^\d{1}-\d{3}-\d{2}-\d{2}$/)
+
   "phone number must be in format 1-111-11-11" обов'язкове поле;
+
 - email: string,minDomainSegments(кількість сегментів, необхідних для домену):2, ["com", "net"] , обов'язкове поле;
 - favorite: boolean, default-false;
 
@@ -286,3 +292,4 @@ Body: "contact": { "favorite": boolean, "\_id": string, "name": string, "email":
     ResponseBody: {
     "avatarURL": "тут буде посилання на зображення"
     }
+
