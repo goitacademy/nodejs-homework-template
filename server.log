@@ -117,4 +117,3 @@ POST /api/auth/signup 12-08-2022_05:32:07
 POST /api/users/verify 12-08-2022_05:32:31
 POST /api/users/verify 12-08-2022_05:33:00
 POST /api/users/verify 12-08-2022_05:43:59
-POST /api/users/verify 12-08-2022_05:45:53
