@@ -4,8 +4,7 @@ const cors = require("cors");
 
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Kirill:12345@cluster0.qfmrgke.mongodb.net/?retryWrites=true&w=majority";
+const { DB_HOST } = process.env;
 
 mongoose.connect(DB_HOST);
 
