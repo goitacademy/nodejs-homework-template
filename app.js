@@ -1,13 +1,6 @@
-<<<<<<< Updated upstream
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-=======
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
-const mongoose = require("mongoose");
->>>>>>> Stashed changes
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -29,19 +22,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
 
-<<<<<<< Updated upstream
 module.exports = app
-=======
-  res.status(status).json({ message });
-});
-
-const DB_HOST =
-  "mongodb+srv://Kirill:12345@cluster0.qfmrgke.mongodb.net/contacts_reader?retryWrites=true&w=majority";
-
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Success"))
-  .catch((error) => console.log(error.message));
-
-module.exports = app;
->>>>>>> Stashed changes

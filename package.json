@@ -12,15 +12,7 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-<<<<<<< Updated upstream
     "morgan": "1.10.0"
-=======
-    "joi": "^17.6.0",
-    "mongoose": "^6.6.0",
-    "morgan": "1.10.0",
-    "nano-id": "^1.1.0",
-    "nanoid": "^4.0.0"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "7.19.0",
