@@ -1,0 +1,50 @@
+const Joi = require("joi");
+const { ValidationError } = require("../helpers/errors");
+
+const addContactValidateMiddleware = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    next(new ValidationError("missing required field"));
+  }
+
+  const schema = Joi.object({
+    name: Joi.string().alphanum().min(3).required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string()
+      .pattern(/^[0-9-]+$/)
+      .min(7)
+      .required(),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    next(new ValidationError(error.details[0].message));
+  }
+
+  next();
+};
+
+const updateContactValidateMiddleware = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    next(new ValidationError("missing fields"));
+  }
+
+  const schema = Joi.object({
+    name: Joi.string().alphanum().min(3),
+    email: Joi.string().email(),
+    phone: Joi.string()
+      .pattern(/^[0-9-]+$/)
+      .min(7),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    next(new ValidationError(error.details[0].message));
+  }
+
+  next();
+};
+
+module.exports = {
+  addContactValidateMiddleware,
+  updateContactValidateMiddleware,
+};
