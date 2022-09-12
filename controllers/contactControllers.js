@@ -1,47 +1,58 @@
 const {
-  getAllContacts,
+  getContacts,
   getContactById,
   addContact,
   deleteContact,
   updateContact,
-} = require("../services/contactsDAL");
+  updateStatus,
+} = require("../services");
 
-const getAllContactsController = async (req, res, next) => {
-  const contacts = await getAllContacts();
+const getContactsController = async (req, res) => {
+  const contacts = await getContacts();
+
   res.status(200).json(contacts);
 };
 
-const getContactByIdController = async (req, res, next) => {
+const getByIdController = async (req, res) => {
   const id = req.params.contactId;
   const contact = await getContactById(id);
 
-  res.status(200).json(contact);
+  res.status(200).json({ status: "success", contact });
 };
 
-const addContactController = async (req, res, next) => {
-  const newContact = await addContact(req.body);
+const addContactController = async (req, res) => {
+  await addContact(req.body);
 
-  res.status(200).json({ message: "success", newContact });
+  res.status(200).json({ status: "success" });
 };
 
-const deleteContactController = async (req, res, next) => {
+const deleteContactController = async (req, res) => {
   const id = req.params.contactId;
-  await deleteContact(id);
+  const contact = await deleteContact(id);
 
-  res.status(200).json({ message: "contact deleted" });
+  res.status(200).json({ status: "success", contact });
 };
 
-const updateContactController = async (req, res, next) => {
+const updateContactController = async (req, res) => {
   const id = req.params.contactId;
   const updatedContact = await updateContact(id, req.body);
 
-  res.status(200).json({ message: "success", updatedContact });
+  res.status(200).json({ status: "success", updatedContact });
+};
+
+const updateContactStatusController = async (req, res) => {
+  const id = req.params.contactId;
+  const { favorite } = req?.body;
+  const updatedContact = await updateStatus(id, favorite);
+
+  res.status(200).json({ status: "success", updatedContact });
 };
 
 module.exports = {
-  getAllContactsController,
-  getContactByIdController,
+  getContactsController,
+  getByIdController,
   addContactController,
   deleteContactController,
   updateContactController,
+  updateContactStatusController,
 };
