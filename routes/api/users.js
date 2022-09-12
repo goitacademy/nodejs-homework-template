@@ -26,18 +26,20 @@ const veriyEmailSchema = Joi.object({
 
 router.post("/signup", async (req, res, next) => {
   try {
+   console.log(User)
     const { error } = usersSchema.validate(req.body);
+    
     if (error) {
       throw createError(400, "Bad request");
     }
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    console.log(user)
     if (user) {
       throw createError(409, "Email already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const gravatarUrl = gravatar.url(email);
- 
     const verificationToken = nanoid.nanoid();
     
     const mail = {
@@ -163,6 +165,7 @@ router.patch(
 
 router.get("/verify/:verificationToken", async (req, res, next) => {
   try {
+    console.log("request is aceepted!!")
     const { verificationToken } = req.params; 
     const user = await User.findOne({ verificationToken });
     if (!user) {
@@ -198,7 +201,7 @@ router.post("/verify", async (req, res, next) => {
     const mail = {
       to: email,
       subject: "Email verification",
-      html: `<a target="_blank" href="http://localhost:3000/users/verify/${user.verificationToken}">Click the link co confirm your email</a>`,
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationToken}">Click the link co confirm your email</a>`,
     };
     await sendMail(mail);
     res.json({
