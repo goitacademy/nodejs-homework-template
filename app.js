@@ -1,8 +1,9 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const { unknownRouterHandler, errorHandler } = require("./helpers/apiHelpers");
-const contactsRouter = require("./routes/api/contacts");
+require("dotenv").config();
+const { unknownRouterHandler, errorHandler } = require("./helpers");
+const { contactsRouter } = require("./routes");
 
 const app = express();
 

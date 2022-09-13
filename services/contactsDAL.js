@@ -1,63 +1,70 @@
-const { randomUUID } = require("crypto");
-const { ValidationError, WrongParametersError } = require("../helpers/errors");
-const { listContacts, rewriteListContacts } = require("../models/contacts");
+const { Contact } = require("../models");
+const { WrongParametersError } = require("../helpers");
 
-const getAllContacts = async () => {
-  const contacts = await listContacts();
+const getContacts = async () => {
+  const contacts = await Contact.find();
   return contacts;
 };
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const requiredContact = contacts.find((contact) => contact.id === contactId);
-
-  if (!requiredContact) {
-    throw new WrongParametersError("Not found");
+const getContactById = async (id) => {
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new WrongParametersError(
+      `Failure, contact with id: ${id} was not found`
+    );
   }
-  return requiredContact;
+  return contact;
 };
 
 const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = { id: randomUUID(), ...body };
-  contacts.push(newContact);
-
-  await rewriteListContacts(contacts);
-  return newContact;
+  // Contact.create({req.body})  - other option
+  const contact = new Contact(body);
+  await contact.save();
 };
 
-const deleteContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-
-  if (index === -1) {
-    throw new WrongParametersError("Not found");
+const deleteContact = async (id) => {
+  const contact = await Contact.findByIdAndRemove(id);
+  if (!contact) {
+    throw new WrongParametersError(
+      `Failure, contact with id: ${id} was not found`
+    );
   }
-
-  contacts.splice(index, 1);
-  await rewriteListContacts(contacts);
+  return contact;
 };
 
-const updateContact = async (contactId, body) => {
-  if (Object.keys(body).length === 0) {
-    throw new ValidationError("missing fields");
+const updateContact = async (id, body) => {
+  const contact = await Contact.findByIdAndUpdate(id, body, {
+    returnDocument: "after",
+  });
+  if (!contact) {
+    throw new WrongParametersError(
+      `Failure, contact with id: ${id} was not found`
+    );
   }
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  return contact;
+};
 
-  if (index === -1) {
-    throw new WrongParametersError("Not found");
+const updateStatus = async (id, favorite) => {
+  const contact = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    {
+      returnDocument: "after",
+    }
+  );
+  if (!contact) {
+    throw new WrongParametersError(
+      `Failure, contact with id: ${id} was not found`
+    );
   }
-
-  contacts[index] = { ...contacts[index], ...body };
-  await rewriteListContacts(contacts);
-  return contacts[index];
+  return contact;
 };
 
 module.exports = {
-  getAllContacts,
+  getContacts,
   getContactById,
-  deleteContact,
   addContact,
+  deleteContact,
   updateContact,
+  updateStatus,
 };
