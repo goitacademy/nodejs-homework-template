@@ -21,7 +21,7 @@ const removeContact = async contactId => {
   const deletedContact = allContacts[index];
   if (index !== -1) {
     allContacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
     return deletedContact && deletedContact;
   }
 };
@@ -36,7 +36,7 @@ const addContact = async body => {
   };
   const allContacts = await listContacts();
   allContacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
   return newContact;
 };
 
@@ -48,7 +48,7 @@ const updateContact = async (contactId, body) => {
     allContacts[index].name = name;
     allContacts[index].email = email;
     allContacts[index].phone = phone;
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
     return allContacts[index];
   } else return null;
 };
