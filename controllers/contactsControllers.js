@@ -6,18 +6,27 @@ const {
     updateContact
 } = require('../models/contacts');
 
-const { errorCatcherController } = require('../utils/errorCatcher');
+const { BadRequestError } = require('../models/errors');
+const { errorHandlerController } = require('../utils/errorHandler');
 const { wrapperFactory } = require('../utils/wrapperFactory');
 
 const listContactsController = async (_, res) => {
     const contacts = await listContacts();
-    res.status(200).json({ data: contacts });
+
+    res
+        .status(200)
+        .json({ data: contacts });
 }
 
-const getContactByIdController = async (req, res) => {
-    const found = await getContactById(req.params.contactId);
+const getContactByIdController = async (req, res, next) => {
+    const { contactId } = req.params;
+    const found = await getContactById(contactId);
 
-    if(!found) return res.status(404).json({ message: 'Not found' });
+    if(!found) {
+        return next(
+            new BadRequestError(generateMessage(contactId))
+        );
+    }
 
     res.status(200).json({ data: found });
 }
@@ -25,29 +34,48 @@ const getContactByIdController = async (req, res) => {
 const addContactContoller = async (req, res) => {
     const added = await addContact(req.body);
   
-    res.status(201).json({ data: added });
+    res
+        .status(201)
+        .json({ data: added });
 }
 
-const removeContactController = async (req, res) => {
-    const removed = await removeContact(req.params.contactId);
+const removeContactController = async (req, res, next) => {
+    const { contactId } = req.params;
+    const removed = await removeContact(contactId);
 
-    if(!removed) return res.status(404).json({ message: 'Not found' });
+    if(!removed) {
+        return next(
+            new BadRequestError(generateMessage(contactId))
+        );
+    }
 
-    res.status(200).json({ message: 'contact deleted', data: removed });
+    res
+        .status(200)
+        .json({ message: 'contact deleted', data: removed });
 }
 
-const updateContactController = async (req, res) => {
-    const updated = await updateContact(req.params.contactId, req.body);
+const updateContactController = async (req, res, next) => {
+    const { contactId } = req.params;
+    const updated = await updateContact(contactId, req.body);
 
-    if(!updated) return res.status(404).json({ message: 'Not found' });
+    if(!updated) {
+        return next(
+            new BadRequestError(generateMessage(contactId))
+        );
+    }
 
-    res.status(200).json({ data: updated });
+    res
+        .status(200)
+        .json({ data: updated });
 }
 
+function generateMessage(value) {
+    return `Contact with id ${value} is not found`;
+}
 
 module.exports = {
     ...wrapperFactory(
-        errorCatcherController,
+        errorHandlerController,
         listContactsController,
         getContactByIdController,
         addContactContoller,

@@ -1,5 +1,7 @@
-const app = require('./app')
+const app = require('./app');
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
+const PORT = process.env.PORT ?? 6870;
+
+app.listen(PORT, () => {
+  console.log('\x1b[33m%s\x1b[0m', `⚡⚡⚡ Server is running on port: ${PORT} ⚡⚡⚡`)
 })

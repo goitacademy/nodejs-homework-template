@@ -3,7 +3,7 @@ const path = require('path');
 
 const { serialize } = require('../utils/serialize');
 const { generateId } = require('../utils/generateId');
-const { errorCatcherCommon } = require('../utils/errorCatcher');
+const { errorHandlerAsync } = require('../utils/errorHandler');
 const { wrapperFactory } = require('../utils/wrapperFactory');
 
 const contactsDataPath = path.resolve(__dirname + '/contacts.json');
@@ -23,7 +23,7 @@ const getContactById = async (contactId) => {
 }
 
 const removeContact = async (contactId) => {
-    let deletedContact = null;
+    let deletedContact;
 
     const contacts = await listContacts();
     const filtered = contacts.filter(contact => {
@@ -34,7 +34,7 @@ const removeContact = async (contactId) => {
       return notEqual;
     });
   
-    if(!deletedContact) return deletedContact;
+    if(!deletedContact) return null;
   
     await fs.writeFile(contactsDataPath, serialize.toJSON(filtered), 'utf8');
   
@@ -53,7 +53,7 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-    let updatedContact = null;
+    let updatedContact;
 
     const contacts = await listContacts();
     const withUpdatedContact = await contacts.map(contact => {
@@ -63,7 +63,7 @@ const updateContact = async (contactId, body) => {
         return updatedContact;
     });
   
-    if(!updatedContact) return updatedContact;
+    if(!updatedContact) return null;
   
     await fs.writeFile(contactsDataPath, serialize.toJSON(withUpdatedContact), 'utf8');
   
@@ -72,7 +72,7 @@ const updateContact = async (contactId, body) => {
 
 module.exports = {
   ...wrapperFactory(
-    errorCatcherCommon,
+    errorHandlerAsync,
     listContacts,
     getContactById,
     removeContact,
