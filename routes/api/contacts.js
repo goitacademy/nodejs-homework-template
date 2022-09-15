@@ -11,10 +11,13 @@ const {
   addContactValidateMiddleware,
   updateContactValidateMiddleware,
   validateUpdateContactStatus,
+  authMiddleware,
 } = require("../../middlewares");
 const { controllerWrapper } = require("../../helpers");
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", controllerWrapper(getContactsController));
 
@@ -35,7 +38,7 @@ router.put(
 );
 
 router.patch(
-  "/:contactId",
+  "/:contactId/favorite",
   validateUpdateContactStatus,
   controllerWrapper(updateContactStatusController)
 );
