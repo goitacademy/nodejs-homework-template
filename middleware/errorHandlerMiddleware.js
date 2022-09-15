@@ -1,8 +1,8 @@
 const { acceptFormats } = require("../constants/acceptFormats");
 const { BadRequestError, NotFoundError, ValidationError } = require("../models/errors")
 
-const errorHandlerMiddleware = (err, req, res, next) => {
-    const message = { message: err?.message};
+const errorHandlerMiddleware = (err, _, res, __) => {
+    const message = { message: err.message};
 
     if(err instanceof BadRequestError) {
         return res.status(404).json(message);
