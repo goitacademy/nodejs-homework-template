@@ -2,7 +2,13 @@ const  {Contacts}  = require("../../models/contacts");
 
 const removeById = async (req, res) => {
     const { contactId } = req.params;
-    const removedContact = await Contacts.findByIdAndRemove(contactId);
+    const { _id } = req.user;
+    
+    const removedContact = await Contacts.findByIdAndRemove({
+        owner: _id,
+        _id: contactId,
+    }).populate("owner", "_id email subscription avatarURL verify");
+    
     if (!removedContact) {
         res.status(404).json({
         status: "ERROR",

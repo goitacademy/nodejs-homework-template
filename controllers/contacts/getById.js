@@ -2,7 +2,13 @@ const {Contacts} = require("../../models/contacts");
 
 const getById = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await Contacts.findById(contactId);
+    const { _id } = req.user;
+
+    const contact = await Contacts.findOne({
+        owner: _id,
+        _id: contactId,
+    }).populate("owner", "_id email subscription avatarURL verify");
+    
     if (!contact) {
         res.status(404).json({
         status: "ERROR",

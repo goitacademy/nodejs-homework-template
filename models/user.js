@@ -6,6 +6,7 @@ const userSchema = Schema(
     password: {
       type: String,
       required: [true, 'Password is required'],
+      minLength: [6, 'Minimal password length must be 6 symbols'],
     },
     email: {
       type: String,
@@ -21,6 +22,18 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    vrify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required']
+    },
   },
   {
     versionKey: false,
@@ -33,6 +46,10 @@ const joiSingipSchema = Joi.object({
   email: Joi.string().email().required(),
   subscription: Joi.string().valid("starter", "pro", "business"),
   token: Joi.string(),
+  token: Joi.string(),
+  avatarURL: Joi.string(),
+  verify: Joi.boolean(),
+  verificationToken: Joi.string(),
 });
 
 const joiLoginSchema = Joi.object({
@@ -44,6 +61,10 @@ const joiSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro","business").required(),
 });
 
+const joiResendVerificationSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 const User = model("user", userSchema);
 
 module.exports = {
@@ -52,4 +73,5 @@ module.exports = {
   joiSingipSchema,
   joiLoginSchema,
   joiSubscriptionSchema,
+  joiResendVerificationSchema,
 };

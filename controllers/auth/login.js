@@ -20,7 +20,7 @@ const passCompare = bcrypt.compareSync(password, user.password);
     }
 
 const payload = { id: user._id };
-const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
 
 await User.findByIdAndDelete(user._id, { token });
 
@@ -33,6 +33,7 @@ res.json({
         userData: {
             email: user.email,
             subscription: user.subscription,
+            avatarURL: user.avatarURL,
         },
     },
 });
