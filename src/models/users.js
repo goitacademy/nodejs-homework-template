@@ -26,8 +26,8 @@ const addUser = async (body) => {
     to: body.email,
     from: "mkundeev@gmail.com",
     subject: "Sending with SendGrid is Fun",
-    text: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
-    html: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
+    text: `Please confirm your email POST http://localhost:4000/api/users/verify/${verificationToken}`,
+    html: `Please confirm your email POST http://localhost:4000/api/users/verify/${verificationToken}`,
   };
   await sgMail.send(msg);
 
@@ -135,8 +135,8 @@ const resendEmail = async ({ email }) => {
     to: "mkundeev@gmail.com",
     from: "mkundeev@gmail.com",
     subject: "Sending with SendGrid is Fun",
-    text: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
-    html: `Please confirm your email POST http://localhost:3000/api/users/verify/${user.verificationToken}`,
+    text: `Please confirm your email POST http://localhost:4000/api/users/verify/${user.verificationToken}`,
+    html: `Please confirm your email POST http://localhost:4000/api/users/verify/${user.verificationToken}`,
   };
   await sgMail.send(msg);
 };

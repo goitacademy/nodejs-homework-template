@@ -13,9 +13,10 @@ const {
 const { errorHandler } = require("../../helpers/errorHandler");
 
 const {
-  userValidationSchema,
   userSubscriptionSchema,
   userVerificationEmailSchema,
+  userRegistartionValidationSchema,
+  userAuthorizationValidationSchema,
 } = require("../../models/usersSchema");
 const { validation } = require("../../middlewares/validation");
 const { authMW } = require("../../middlewares/authMW");
@@ -25,13 +26,13 @@ const router = express.Router();
 
 router.post(
   "/signup",
-  validation(userValidationSchema),
+  validation(userRegistartionValidationSchema),
   errorHandler(signUpUser)
 );
 
 router.post(
   "/login",
-  validation(userValidationSchema),
+  validation(userAuthorizationValidationSchema),
   errorHandler(logInUser)
 );
 

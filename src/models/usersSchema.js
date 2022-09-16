@@ -1,6 +1,12 @@
 const Joi = require("joi");
 
-const userValidationSchema = Joi.object({
+const userRegistartionValidationSchema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  password: Joi.string().min(6).max(12).required(),
+  email: Joi.string().email().required(),
+  subscription: Joi.any().valid("starter", "pro", "business").optional(),
+});
+const userAuthorizationValidationSchema = Joi.object({
   password: Joi.string().min(6).max(12).required(),
   email: Joi.string().email().required(),
   subscription: Joi.any().valid("starter", "pro", "business").optional(),
@@ -17,7 +23,8 @@ const userVerificationEmailSchema = Joi.object({
 });
 
 module.exports = {
-  userValidationSchema,
+  userRegistartionValidationSchema,
+  userAuthorizationValidationSchema,
   userSubscriptionSchema,
   userVerificationEmailSchema,
 };

@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { boolean } = require("joi");
 
 const usersSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Name is required"],
+  },
   password: {
     type: String,
     required: [true, "Password is required"],
