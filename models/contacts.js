@@ -23,7 +23,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   const contacts = await getAllContacts();
   const contactById = contacts.find((contact) => contact.id === `${contactId}`);
-  if (!contactById) throw new Error(`Contact with ${contactId} not found`);
+  if (!contactById) return null;
   return contactById;
 };
 
@@ -32,9 +32,7 @@ const removeContact = async (contactId) => {
   const contactToRemoveIndex = contacts.findIndex(
     (contact) => contact.id === `${contactId}`
   );
-  if (contactToRemoveIndex === -1)
-    throw new Error(`Contact with ${contactId} not found`);
-
+  if (contactToRemoveIndex === -1) return null;
   const filteredContacts = contacts.filter(
     (_, index) => index !== contactToRemoveIndex
   );
@@ -55,7 +53,7 @@ const updateContact = async (contactId, body) => {
   let updatedContact = contacts.find(
     (contact) => contact.id === `${contactId}`
   );
-  if (!updatedContact) throw new Error(`Contact with ${contactId} not found`);
+  if (!updatedContact) return null;
   updatedContact = { id: contactId, body };
   const updatedContacts = JSON.stringify([...contacts, updatedContact]);
   rewriteContacts(updatedContacts);
