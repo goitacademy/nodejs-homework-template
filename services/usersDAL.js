@@ -22,7 +22,7 @@ const register = async ({ password, email, subscription }) => {
 
 const login = async (password, email) => {
   const user = await User.findOne({ email });
-  console.log(user);
+
   if (!user) {
     throw new AuthError("Email or password is wrong.");
   }
@@ -60,11 +60,11 @@ const logout = async (id) => {
     throw new AuthError("Email or password is wrong.");
   }
 
-  await User.updateOne({ _id: id }, { $set: { token: null } });
+  await User.updateOne({ _id: id }, { $unset: { token: "" } });
+  return true;
 };
 
 const updateSubscription = async (id, subscription) => {
-  console.log(subscription);
   const user = await User.updateOne({ _id: id }, { $set: { subscription } });
 
   if (!user) {

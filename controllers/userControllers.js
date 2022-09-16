@@ -14,10 +14,10 @@ const loginController = async (req, res) => {
 };
 
 const logoutController = async (req, res) => {
-  const { _id } = req.user;
-  await logout(_id);
+  const user = req.user;
+  await logout(user._id);
 
-  res.status(204);
+  res.status(204).json({});
 };
 
 const getCurrentUserController = (req, res) => {
