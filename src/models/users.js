@@ -23,7 +23,7 @@ const addUser = async (body) => {
   const user = new User({ ...body, avatarURL, verificationToken });
 
   const msg = {
-    to: "mkundeev@gmail.com",
+    to: body.email,
     from: "mkundeev@gmail.com",
     subject: "Sending with SendGrid is Fun",
     text: `Please confirm your email POST http://localhost:3000/api/users/verify/${verificationToken}`,
