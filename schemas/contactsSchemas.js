@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const addContactSchema = Joi.object({
+const addContact = Joi.object({
     name: Joi.string()
         .alphanum()
         .min(2).max(20)
@@ -14,7 +14,7 @@ const addContactSchema = Joi.object({
         .messages({ 'string.pattern.base': 'Phone must contain numbers, dash and parentheses only' })
 })
 
-const updateContactSchema = Joi.object({
+const updateContact = Joi.object({
     name: Joi.string()
         .alphanum()
         .min(2).max(20),
@@ -26,4 +26,4 @@ const updateContactSchema = Joi.object({
         .messages({ 'string.pattern.base': 'Phone must contain numbers, dash and parentheses only' })
 }).or('name', 'email', 'phone')
 
-module.exports = {addContactSchema, updateContactSchema}
+module.exports = {addContact, updateContact}
