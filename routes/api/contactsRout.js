@@ -7,9 +7,8 @@ const { listContacts } = require('../../models/contacts')
 //   // addContact,
 //   // updateContact
 
-
 router.get('/', listContacts)
-// router.get('/', async (req, res) => {res.json({ message: 'template message' })})
+// router.get('/', async (req, res) => { res.json({ message: 'get message' }) })
 
 
 // router.get('/:contactId', async (req, res, next) => {
