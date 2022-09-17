@@ -4,6 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 const {
   GetContactError,
@@ -14,7 +15,8 @@ const {
 
 const getContactsController = async (_, res) => {
   const data = await listContacts();
-  if (data === "ENOENT") {
+
+  if (!data.length) {
     throw new GetContactError("Not found");
   }
 
@@ -58,7 +60,7 @@ const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
   const data = await removeContact(contactId);
 
-  if (data.length) {
+  if (!data) {
     throw new DeleteContactError("Not found");
   }
 
@@ -78,10 +80,22 @@ const changeContactController = async (req, res) => {
   res.status(200).json({ message: data });
 };
 
+const updateStatusContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const data = await updateStatusContact(contactId, req.body);
+
+  if (data.length) {
+    throw new PutContactError("Not found");
+  }
+
+  res.status(200).json({ message: data });
+};
+
 module.exports = {
   getContactsController,
   getContactController,
   addContactToListController,
   deleteContactController,
   changeContactController,
+  updateStatusContactController,
 };
