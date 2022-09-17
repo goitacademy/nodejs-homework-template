@@ -41,21 +41,31 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
+  const { name, email, phone } = body;
   const contacts = await getAllContacts();
-  const newContact = { id: uuidv4(), body };
+  const newContact = { id: uuidv4(), name, email, phone };
   const updatedContacts = JSON.stringify([...contacts, newContact]);
   rewriteContacts(updatedContacts);
   return newContact;
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await getAllContacts();
+  const { name, email, phone } = body;
+  let contacts = await getAllContacts();
   let updatedContact = contacts.find(
     (contact) => contact.id === `${contactId}`
   );
   if (!updatedContact) return null;
-  updatedContact = { id: contactId, body };
-  const updatedContacts = JSON.stringify([...contacts, updatedContact]);
+  updatedContact = {
+    id: contactId,
+    name,
+    email,
+    phone,
+  };
+  contacts = contacts.map((contact) =>
+    contact.id !== updatedContact.id ? contact : updatedContact
+  );
+  const updatedContacts = JSON.stringify(contacts);
   rewriteContacts(updatedContacts);
   return updatedContact;
 };
