@@ -1,19 +1,25 @@
-const fs = require('fs/promises')
+const fs = require('fs').promises
 const path = require('path')
 
-const contactsPath = path.join(__dirname, 'contacts.json')
+const contactsPath = path.join(__dirname, './contacts.json')
 console.log('contacts.json', contactsPath)
+
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath)
-    const contacts = JSON.parse(data)
-    console.log(contacts[0])
-    return contacts
+    const data = await fs.readFile(contactsPath, "utf-8")
+    const allContacts = JSON.parse(data)
+    console.log('contact: ', allContacts[2])
+    if (allContacts.length !== 0) {
+      return allContacts;
+    }
+    return null
   } catch (error) {
-    console.log(error.message, 'error with listContacts')
+    console.error('ERROR listContacts:', error);
   }
+
 }
 
+console.log('listContacts', listContacts)
 // const getContactById = async (contactId) => { }
 
 // const removeContact = async (contactId) => { }
