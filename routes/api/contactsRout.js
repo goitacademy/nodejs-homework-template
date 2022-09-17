@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const { listContacts } = require('../../models/contacts')
-//   // getContactById,
+const { listContacts, getContactById } = require('../../models/contacts')
+//   // 
 //   // removeContact,
 //   // addContact,
 //   // updateContact
@@ -10,7 +10,7 @@ const { listContacts } = require('../../models/contacts')
 router.get('/', listContacts)
 // router.get('/', async (req, res) => { res.json({ message: 'get message' }) })
 
-
+router.get('/:id', getContactById)
 // router.get('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' })
 // })

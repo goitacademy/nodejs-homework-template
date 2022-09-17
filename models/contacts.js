@@ -4,10 +4,15 @@ const path = require('path')
 const contactsPath = path.join(__dirname, './contacts.json')
 console.log('contacts.json', contactsPath)
 
+const readAllContacts = async () => {
+  const data = await fs.readFile(contactsPath, "utf-8")
+  const allContacts = JSON.parse(data)
+  return allContacts
+}
+
 const listContacts = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8")
-    const allContacts = JSON.parse(data)
+    const allContacts = await readAllContacts()
     if (allContacts.length !== 0) {
       return res.status(200).json(allContacts);
     }
@@ -17,7 +22,17 @@ const listContacts = async (req, res) => {
   }
 }
 
-// const getContactById = async (contactId) => { }
+const getContactById = async (req, res) => {
+  const allContacts = await readAllContacts()
+  const { id } = req.params;
+  const result = allContacts.find((contact) => contact.id === String(id));
+  if (!result) {
+    return res
+      .status(400)
+      .json({ status: `failure, contacts with id '${id}' not found` });
+  }
+  res.json(result);
+}
 
 // const removeContact = async (contactId) => { }
 
@@ -27,7 +42,7 @@ const listContacts = async (req, res) => {
 
 module.exports = {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   // addContact,
   // updateContact,
