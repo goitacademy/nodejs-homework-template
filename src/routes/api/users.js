@@ -36,7 +36,7 @@ router.post(
   errorHandler(logInUser)
 );
 
-router.get("/logout", authMW, errorHandler(logOutUser));
+router.post("/logout", authMW, errorHandler(logOutUser));
 
 router.get("/current", authMW, errorHandler(getCurrentUser));
 

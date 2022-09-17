@@ -10,7 +10,12 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const avatarsPath = path.resolve("./public/avatars");
-const { Conflict, Unauthorized, InternalServerError } = require("http-errors");
+const {
+  Conflict,
+  Unauthorized,
+  InternalServerError,
+  NotFound,
+} = require("http-errors");
 const resizeAvatar = require("../helpers/resizeAvatar");
 
 const addUser = async (body) => {
@@ -25,7 +30,7 @@ const addUser = async (body) => {
   const msg = {
     to: body.email,
     from: "mkundeev@gmail.com",
-    subject: "Sending with SendGrid is Fun",
+    subject: "Contactsbook email verification",
     text: `Please confirm your email POST http://localhost:4000/api/users/verify/${verificationToken}`,
     html: `Please confirm your email POST http://localhost:4000/api/users/verify/${verificationToken}`,
   };
@@ -44,7 +49,7 @@ const loginUser = async ({ email, password }) => {
     throw new Unauthorized("Please verify your email");
   }
   if (!(await bcrypt.compare(password, user.password))) {
-    throw new Unauthorized("Email or password is wrong");
+    throw new Unauthorized("Wrong password");
   }
   const token = jwt.sign(
     {
@@ -52,16 +57,25 @@ const loginUser = async ({ email, password }) => {
     },
     process.env.SECRET
   );
-  await user.setToken(token);
-  await user.save();
-  return user;
+  const logedInUser = await User.findOneAndUpdate(
+    { email },
+    { token },
+    {
+      new: true,
+    }
+  );
+  return logedInUser;
 };
 
 const logOut = async (userId) => {
   try {
-    const user = await User.findById(userId);
-    await user.setToken(null);
-    await user.save();
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { token: null },
+      {
+        new: true,
+      }
+    );
     return user;
   } catch (err) {
     throw new InternalServerError("Server error");
@@ -127,14 +141,17 @@ const findUserByVerificationToken = async (verificationToken) => {
 
 const resendEmail = async ({ email }) => {
   const user = await User.findOne({ email });
+  if (!user) {
+    throw new NotFound("Wrong email");
+  }
 
-  if (user.verify) {
+  if (user?.verify) {
     throw new Conflict("Verification has already been passed");
   }
   const msg = {
-    to: "mkundeev@gmail.com",
+    to: email,
     from: "mkundeev@gmail.com",
-    subject: "Sending with SendGrid is Fun",
+    subject: "Contactsbook email verification",
     text: `Please confirm your email POST http://localhost:4000/api/users/verify/${user.verificationToken}`,
     html: `Please confirm your email POST http://localhost:4000/api/users/verify/${user.verificationToken}`,
   };

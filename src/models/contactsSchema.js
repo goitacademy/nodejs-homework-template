@@ -5,8 +5,13 @@ const addContactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
   phone: Joi.string()
-    .pattern(/(?:\d{1}\s)?\(?(\d{3})\)?-?\s?(\d{3})-?\s?(\d{4})/)
-    .rule({ message: "phone number must be in format (111) 111-1111" })
+    .pattern(
+      /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/
+    )
+    .rule({
+      message:
+        "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +",
+    })
     .min(10)
     .max(18)
     .required(),
@@ -17,8 +22,13 @@ const putContactSchema = Joi.object({
   name: Joi.string().min(3).max(30).optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string()
-    .pattern(/(?:\d{1}\s)?\(?(\d{3})\)?-?\s?(\d{3})-?\s?(\d{4})/)
-    .rule({ message: "phone number must be in format (111) 111-1111" })
+    .pattern(
+      /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/
+    )
+    .rule({
+      message:
+        "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +",
+    })
     .min(10)
     .max(18)
     .optional(),

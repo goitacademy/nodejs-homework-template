@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
   limits: {
-    fileSize: 1048576,
+    fileSize: 10048576,
   },
 });
 

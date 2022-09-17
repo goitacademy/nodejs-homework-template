@@ -9,11 +9,7 @@ const {
 
 async function getUserContacts(req, res) {
   const contacts = await listContacts(req.query, req.userId);
-  res
-    .status(200)
-    .json(
-      contacts.length === 0 ? { message: "No contacts found" } : { contacts }
-    );
+  res.status(200).json(contacts.length === 0 ? [] : contacts);
 }
 async function getUserContactById(req, res) {
   const { contactId } = req.params;

@@ -12,13 +12,12 @@ const {
 async function signUpUser(req, res) {
   try {
     const user = await addUser(req.body);
-    res
-      .status(201)
-      .json({
-        email: user.email,
-        subscription: user.subscription,
-        name: user.name,
-      });
+    res.status(201).json({
+      email: user.email,
+      subscription: user.subscription,
+      name: user.name,
+      avatarURL: user.avatarURL,
+    });
   } catch (err) {
     res.status(err.status).json({ message: err.message });
   }
@@ -26,12 +25,14 @@ async function signUpUser(req, res) {
 
 async function logInUser(req, res) {
   const user = await loginUser(req.body);
+
   res.status(200).json({
     token: user.token,
     user: {
       email: user.email,
       subscription: user.subscription,
       name: user.name,
+      avatarURL: user.avatarURL,
     },
   });
 }
@@ -41,7 +42,12 @@ async function logOutUser(req, res) {
 }
 async function getCurrentUser(req, res) {
   const user = await getUser(req.userId);
-  res.status(200).json({ email: user.email, subscription: user.subscription });
+  res.status(200).json({
+    email: user.email,
+    subscription: user.subscription,
+    name: user.name,
+    avatarURL: user.avatarURL,
+  });
 }
 async function updateUserSubscription(req, res) {
   const user = await updateSubscription(req.body, req.userId);

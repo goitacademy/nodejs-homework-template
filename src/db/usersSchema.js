@@ -37,11 +37,6 @@ const usersSchema = new mongoose.Schema({
   },
 });
 
-usersSchema.methods.setToken = function (token) {
-  this.token = token;
-  return this;
-};
-
 usersSchema.pre("save", async function () {
   if (this.isNew) {
     this.password = await bcrypt.hash(this.password, 10);

@@ -48,7 +48,7 @@ router.delete(
   errorHandler(deletContact)
 );
 
-router.put(
+router.patch(
   "/:contactId",
   authMW,
   validation(paramsContactSchema, "params"),
