@@ -6,11 +6,12 @@ router.get('/', listContacts)
 
 router.get('/:id', getContactById)
 
+// { name, email, phone } validation
 router.post('/', addContact)
 
 router.delete('/:id', removeContact)
 
-router.put('/:contactId', updateContact)
+router.put('/:id', updateContact)
 
 
 module.exports = { contactsRouter: router }
