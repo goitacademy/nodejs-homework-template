@@ -10,7 +10,7 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
-router.get("/", async (_, res) => {
+router.get("/", async (req, res) => {
   try {
     res.json({
       contacts: await listContacts(),
