@@ -40,6 +40,20 @@ class PutContactError extends ApiErrorsTemplate {
   }
 }
 
+class ConflictError extends ApiErrorsTemplate {
+  constructor(message) {
+    super(message);
+    this.status = 409;
+  }
+}
+
+class UnauthorizedError extends ApiErrorsTemplate {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+  }
+}
+
 module.exports = {
   ApiErrorsTemplate,
   ValidationError,
@@ -47,4 +61,6 @@ module.exports = {
   PostContactError,
   DeleteContactError,
   PutContactError,
+  UnauthorizedError,
+  ConflictError,
 };
