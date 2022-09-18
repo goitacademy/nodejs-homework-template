@@ -22,7 +22,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    next(new AuthError("Invalid token"));
+    next(new AuthError("Not authorized"));
   }
 };
 

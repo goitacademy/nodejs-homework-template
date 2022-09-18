@@ -18,7 +18,7 @@ class WrongParametersError extends CurrentProjectError {
     this.status = 404;
   }
 }
-class ValidateUserByEmailError extends CurrentProjectError {
+class ConflictEmailError extends CurrentProjectError {
   constructor(message) {
     super(message);
     this.status = 409;
@@ -35,6 +35,6 @@ module.exports = {
   WrongParametersError,
   ValidationError,
   CurrentProjectError,
-  ValidateUserByEmailError,
+  ConflictEmailError,
   AuthError,
 };

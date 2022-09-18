@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
-const { ValidateUserByEmailError, AuthError } = require("../helpers");
+const { ConflictEmailError, AuthError } = require("../helpers");
 
 const secret = process.env.SECRET;
 
@@ -9,9 +9,7 @@ const register = async ({ password, email, subscription }) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw new ValidateUserByEmailError(
-      `User with email ${email} already registered.`
-    );
+    throw new ConflictEmailError(`Email ${email} in use.`);
   }
 
   const newUser = new User({ password, email, subscription });

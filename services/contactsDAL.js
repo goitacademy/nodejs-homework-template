@@ -1,8 +1,16 @@
 const { Contact } = require("../models");
 const { WrongParametersError } = require("../helpers");
 
-const getContacts = async (id) => {
-  const contacts = await Contact.find({ owner: id });
+const getContacts = async (id, skip, limit, favorite) => {
+  if (favorite) {
+    const contacts = await Contact.find({ owner: id, favorite });
+    return contacts;
+  }
+
+  const contacts = await Contact.find({ owner: id })
+    .skip(skip)
+    .limit(limit)
+    .select({ __v: 0 });
   return contacts;
 };
 
@@ -67,7 +75,7 @@ const updateStatus = async (contactId, favorite, userId) => {
   );
   if (!contact) {
     throw new WrongParametersError(
-      `Failure, contact with id: ${id} was not found`
+      `Failure, contact with id: ${contactId} was not found`
     );
   }
   return contact;
