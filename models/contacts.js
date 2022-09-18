@@ -64,7 +64,22 @@ const addContact = async ({ name, email, phone }) => {
     console.log(error);
   }
 };
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const data = await fs.readFile(contactsPath, "utf8");
+  const arrayData = JSON.parse(data);
+  let updateItem = {};
+  // eslint-disable-next-line array-callback-return
+  arrayData.filter((item) => {
+    if (item.id === contactId) {
+      item.name = body.name;
+      item.email = body.email;
+      item.phone = body.phone;
+      updateItem = { ...item };
+    }
+  });
+  await fs.writeFile(contactsPath, JSON.stringify(arrayData), "utf8");
+  return updateItem;
+};
 
 module.exports = {
   listContacts,
