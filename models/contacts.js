@@ -24,12 +24,12 @@ const getContactById = async (contactId) => {
 }
 
 const removeContact = async (contactId) => {
-      try {
-        const contacts = JSON.parse(await listContacts());
-        const filteredContacts = contacts.filter(contact => contact.id !== contactId);
-        
-        await fs.writeFile(contactsPath, JSON.stringify(filteredContacts), 'utf8');
-        return filteredContacts;  
+    try {
+      const contacts = JSON.parse(await listContacts());
+      const filteredContacts = contacts.filter(contact => contact.id !== contactId);
+      
+      await fs.writeFile(contactsPath, JSON.stringify(filteredContacts), 'utf8');
+      return contacts;  
     } catch (error) {
         console.log(error);    
     }
@@ -75,6 +75,9 @@ const updateContact = async (contactId, body) => {
   }
 
 }
+
+
+updateContact('3', {name: 'Tara t'})
 
 module.exports = {
   listContacts,
