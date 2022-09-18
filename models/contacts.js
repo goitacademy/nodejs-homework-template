@@ -57,7 +57,7 @@ const addContact = async (req, res) => {
     const newContact = { id: randomUUID(), ...body }
     allContacts.push(newContact)
     await writeContact(allContacts)
-    res.status(201).json({ allContacts })
+    res.status(201).json(allContacts)
   } catch (error) {
     console.log('addContact', error.message);
   }
@@ -80,7 +80,7 @@ const updateContact = async (req, res) => {
     }
 
     await writeContact(allContacts)
-    res.status(200).json({ contact });
+    res.status(200).json(contact);
   } catch (error) {
     console.log('updateContact', error.message);
   }
