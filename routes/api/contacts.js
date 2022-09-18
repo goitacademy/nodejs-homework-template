@@ -13,7 +13,7 @@ const Schema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listcontacts();
+    const result = await contacts.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
@@ -22,8 +22,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId);
     if (result === null) {
       throw RequestError(404);
     }
@@ -48,8 +48,8 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
     if (result === null) {
       throw RequestError(404);
     }
@@ -62,8 +62,8 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = Schema.validate(req.body);
-    const { id } = req.params;
-    const result = await contacts.updateContact(id, req.body);
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
     if (error) {
       throw RequestError(400, "missing fields");
     }
