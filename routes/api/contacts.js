@@ -4,7 +4,7 @@ const {
   controllerWrapper: ctrlWrap,
 } = require("../../middlewares");
 const { contactsSchema } = require("../../schemas");
-const { contacts: ctrl } = require("../../controllers");
+const { contactsController: ctrl } = require("../../controllers");
 
 const router = express.Router();
 

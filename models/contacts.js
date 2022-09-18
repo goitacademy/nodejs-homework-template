@@ -4,31 +4,26 @@ const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.join(__dirname, "/contacts.json");
 
-const getAllContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(data);
-  return contacts;
-};
-
 const rewriteContacts = (data) =>
   fs.writeFile(contactsPath, data, (err) => {
     if (err) console.log(err);
   });
 
 const listContacts = async () => {
-  const contacts = await getAllContacts();
+  const data = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(data);
   return contacts;
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const contactById = contacts.find((contact) => contact.id === `${contactId}`);
   if (!contactById) return null;
   return contactById;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const contactToRemoveIndex = contacts.findIndex(
     (contact) => contact.id === `${contactId}`
   );
@@ -42,7 +37,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const newContact = { id: uuidv4(), name, email, phone };
   const updatedContacts = JSON.stringify([...contacts, newContact]);
   rewriteContacts(updatedContacts);
@@ -51,7 +46,7 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
-  let contacts = await getAllContacts();
+  let contacts = await listContacts();
   let updatedContact = contacts.find(
     (contact) => contact.id === `${contactId}`
   );
