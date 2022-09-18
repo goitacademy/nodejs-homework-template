@@ -45,4 +45,18 @@ module.exports = {
 
     next();
   },
+
+  updateStatusContactValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      next(new ValidationError("missing field favorite"));
+    }
+
+    next();
+  },
 };

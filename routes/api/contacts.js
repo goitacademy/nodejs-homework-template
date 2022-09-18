@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addContactValidation,
   putContactValidation,
+  updateStatusContactValidation,
 } = require("../../middlewares/validationMiddleware");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const {
@@ -10,6 +11,7 @@ const {
   addContactToListController,
   deleteContactController,
   changeContactController,
+  updateStatusContactController,
 } = require("../../controllers/contactsController");
 
 const router = express.Router();
@@ -30,6 +32,12 @@ router.put(
   "/:contactId",
   putContactValidation,
   asyncWrapper(changeContactController)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  updateStatusContactValidation,
+  asyncWrapper(updateStatusContactController)
 );
 
 module.exports = router;
