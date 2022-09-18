@@ -12,12 +12,58 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf8");
+    const dataArray = JSON.parse(data);
+    return dataArray.find(
+      (contact) => Number(contact.id) === Number(contactId)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  try {
+    let newArray = [];
+    const data = await fs.readFile(contactsPath, "utf8");
+    const dataArray = JSON.parse(data);
+    dataArray.map((contact) => {
+      if (contact.id !== contactId) {
+        newArray = [...newArray, contact];
+      }
+      return newArray;
+    });
+    if (dataArray.length === newArray.length) {
+      return null;
+    }
+    await fs.writeFile(contactsPath, JSON.stringify(newArray), "utf8");
+    const newData = await fs.readFile(contactsPath, "utf8");
+    return JSON.parse(newData);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-const addContact = async (body) => {};
-
+const addContact = async ({ name, email, phone }) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf8");
+    const arrayData = JSON.parse(data);
+    const newId = Number(arrayData[arrayData.length - 1].id);
+    const newContact = {
+      id: String(newId + 1),
+      name,
+      email,
+      phone,
+    };
+    const newArray = [...arrayData, newContact];
+    await fs.writeFile(contactsPath, JSON.stringify(newArray), "utf8");
+    return newContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const updateContact = async (contactId, body) => {};
 
 module.exports = {
