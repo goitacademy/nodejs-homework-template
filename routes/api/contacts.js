@@ -101,14 +101,13 @@ router.put('/:contactId', async (req, res, next) => {
 
   const contacts = await updateContact(req.params.contactId, req.body);
 
-  const contact = contacts.filter(contact => contact.id === req.params.contactId )
+  const contact = contacts.filter(contact => contact.id === req.params.contactId);
+
   if (contact.length === 1) {
     return res.status(200).json({ contact, message: 'Success' });
   }
   
-  return res.status(404).json({ message: 'Not found' })
-  
-  
+  return res.status(404).json({ message: 'Not found' });  
 })
 
 module.exports = router;
