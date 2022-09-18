@@ -27,7 +27,7 @@ const putContactValidation = (req, res, next) => {
     if (validationResult.error) {
         return res
             .status(400)
-            .json({ status: validationResult.error.details.message.status })
+            .json({ status: validationResult.error.message })
     }
     next()
 }
