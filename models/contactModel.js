@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema({
@@ -17,6 +18,10 @@ const contactSchema = new mongoose.Schema({
   favorite: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: ObjectId,
+    ref: "User",
   },
 });
 

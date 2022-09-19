@@ -1,43 +1,35 @@
 const express = require("express");
-const {
-  getContactsController,
-  getByIdController,
-  addContactController,
-  deleteContactController,
-  updateContactController,
-  updateContactStatusController,
-} = require("../../controllers");
+const { ctrlWrapper } = require("../../helpers");
+const { contacts: ctrl } = require("../../controllers");
 const {
   addContactValidateMiddleware,
   updateContactValidateMiddleware,
   validateUpdateContactStatus,
+  authMiddleware,
 } = require("../../middlewares");
-const { controllerWrapper } = require("../../helpers");
 
 const router = express.Router();
 
-router.get("/", controllerWrapper(getContactsController));
+router.use(authMiddleware);
 
-router.get("/:contactId", controllerWrapper(getByIdController));
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.post(
-  "/",
-  addContactValidateMiddleware,
-  controllerWrapper(addContactController)
-);
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.delete("/:contactId", controllerWrapper(deleteContactController));
+router.post("/", addContactValidateMiddleware, ctrlWrapper(ctrl.add));
+
+router.delete("/:contactId", ctrlWrapper(ctrl.deleteById));
 
 router.put(
   "/:contactId",
   updateContactValidateMiddleware,
-  controllerWrapper(updateContactController)
+  ctrlWrapper(ctrl.updateById)
 );
 
 router.patch(
-  "/:contactId",
+  "/:contactId/favorite",
   validateUpdateContactStatus,
-  controllerWrapper(updateContactStatusController)
+  ctrlWrapper(ctrl.updateStatusById)
 );
 
 module.exports = { contactsRouter: router };
