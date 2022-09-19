@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { addContactValidation, putContactValidation } = require('../../middlewares/validationMiddlewares')
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts')
+const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../controllers/contactsControllers')
 
 router.get('/', listContacts)
 

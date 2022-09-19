@@ -2,7 +2,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { randomUUID } = require('crypto')
 
-const contactsPath = path.join(__dirname, './contacts.json')
+const contactsPath = path.join(__dirname, '../db/contacts.json')
 console.log('contacts.json', contactsPath)
 
 const getAllContacts = async () => {
