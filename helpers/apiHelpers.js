@@ -1,10 +1,10 @@
 const { CurrentProjectError } = require("./errors");
 
-const controllerWrapper = (controller) => (req, res, next) => {
+const ctrlWrapper = (controller) => (req, res, next) => {
   controller(req, res).catch(next);
 };
 
-const unknownRouterHandler = (req, res) => {
+const unknownRouteHandler = (req, res) => {
   res.status(404).json({ message: "Not found" });
 };
 
@@ -15,4 +15,4 @@ const errorHandler = (error, req, res, next) => {
   res.status(500).json({ message: error.message });
 };
 
-module.exports = { controllerWrapper, unknownRouterHandler, errorHandler };
+module.exports = { ctrlWrapper, unknownRouteHandler, errorHandler };

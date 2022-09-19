@@ -1,37 +1,27 @@
 const express = require("express");
-const {
-  registerController,
-  loginController,
-  logoutController,
-  getCurrentUserController,
-  updateSubscriptionController,
-} = require("../../controllers");
+const { ctrlWrapper } = require("../../helpers");
+const { users: ctrl } = require("../../controllers");
 const {
   validateUser,
   authMiddleware,
   validateSubscription,
 } = require("../../middlewares");
-const { controllerWrapper } = require("../../helpers");
 
 const router = express.Router();
 
-router.post("/register", validateUser, controllerWrapper(registerController));
+router.post("/register", validateUser, ctrlWrapper(ctrl.register));
 
-router.post("/login", validateUser, controllerWrapper(loginController));
+router.post("/login", validateUser, ctrlWrapper(ctrl.login));
 
-router.post("/logout", authMiddleware, controllerWrapper(logoutController));
+router.post("/logout", authMiddleware, ctrlWrapper(ctrl.logout));
 
-router.get(
-  "/current",
-  authMiddleware,
-  controllerWrapper(getCurrentUserController)
-);
+router.get("/current", authMiddleware, ctrlWrapper(ctrl.getCurrent));
 
 router.patch(
   "/",
   validateSubscription,
   authMiddleware,
-  controllerWrapper(updateSubscriptionController)
+  ctrlWrapper(ctrl.updateSubscription)
 );
 
 module.exports = { userRouter: router };
