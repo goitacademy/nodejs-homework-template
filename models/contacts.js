@@ -1,22 +1,28 @@
 const { Contact } = require("../db/contactsModel");
 
-const listContacts = async () => {
-  const data = await Contact.find({});
+const listContacts = async (filter, { skip, limit }) => {
+  const data = await Contact.find({ ...filter })
+    .select({ __v: 0 })
+    .skip(skip)
+    .limit(limit);
   return data;
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (contactId, ownerId) => {
   try {
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.find({ _id: contactId, owner: ownerId });
     return contact;
   } catch (error) {
-    return error.message;
+    return error;
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, ownerId) => {
   try {
-    const contact = await Contact.findByIdAndDelete(contactId);
+    const contact = await Contact.findOneAndDelete({
+      _id: contactId,
+      owner: ownerId,
+    });
 
     return contact;
   } catch (error) {
@@ -35,29 +41,35 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, ownerId) => {
   try {
     const { name, email, phone } = body;
 
-    await Contact.findByIdAndUpdate(contactId, {
-      $set: { name, email, phone },
-    });
-    const contact = await Contact.findById(contactId);
+    await Contact.findOneAndUpdate(
+      { _id: contactId, owner: ownerId },
+      {
+        $set: { name, email, phone },
+      }
+    );
+    const contact = await Contact.find({ _id: contactId, owner: ownerId });
 
     return contact;
   } catch (error) {
-    return error.message;
+    return error;
   }
 };
 
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (contactId, body, ownerId) => {
   try {
     const { favorite } = body;
 
-    await Contact.findByIdAndUpdate(contactId, {
-      $set: { favorite },
-    });
-    const contact = await Contact.findById(contactId);
+    await Contact.findOneAndUpdate(
+      { _id: contactId, owner: ownerId },
+      {
+        $set: { favorite },
+      }
+    );
+    const contact = await Contact.find({ _id: contactId, owner: ownerId });
 
     return contact;
   } catch (error) {

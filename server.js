@@ -7,6 +7,7 @@ const start = async () => {
     await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      ignoreUndefined: true,
     });
     console.log("Database connection successful");
     app.listen(3000, () => {
