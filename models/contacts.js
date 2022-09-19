@@ -4,9 +4,10 @@ const uid = require("uid2");
 
 // find the relative path to the database file
 
-const contacts = path.normalize("./contacts.json");
+const contacts = path.normalize("./models/contacts.json");
 
 const listContacts = async () => {
+  console.log("Hello :>> ");
   try {
     const contactsList = await fs.readFile(contacts, "utf-8");
     const parsedContactsList = JSON.parse(contactsList);

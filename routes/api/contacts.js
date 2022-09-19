@@ -12,9 +12,10 @@ const {
 
 router.get("/", async (req, res) => {
   try {
+    const contactList = await listContacts();
     res.json({
-      contacts: await listContacts(),
-      message: "success",
+      contacts: contactList,
+      message: "successful",
       status: 200,
     });
   } catch (error) {
@@ -38,7 +39,7 @@ router.get("/:contactId", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { body } = req;
+    const { name, email, phone } = req.body;
 
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(30).trim().required(),
@@ -55,14 +56,17 @@ router.post("/", async (req, res) => {
         .trim()
         .required(),
     });
+    console.log("req.body :>> ", req.body);
 
-    const validationResult = schema.validate(body);
+    const validationResult = schema.validate(req.body);
+    console.log("validationResult :>> ", validationResult);
     if (validationResult.error) {
       res.status(400).json({ message: "missing required name field" });
       return;
     }
+    console.log("req.body :>> ", req.body);
 
-    const addedContact = await addContact(body);
+    const addedContact = await addContact({ name, email, phone });
     res.json({
       message: "success",
       status: 201,
