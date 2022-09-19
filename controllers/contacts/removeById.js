@@ -1,17 +1,15 @@
-// const { NotFound } = require("http-errors");
 const contactsOperations = require("../../models/contacts");
 
 const removeById = async(req, res) => {
     const { contactId } = req.params;
     const result = await contactsOperations.removeContact(contactId);
+    
     if (!result) {
-        // throw new NotFound(`Product with id=${contactId} not found`);
          const error = new Error("Not found");
             error.status = 404;
-            
             res.status(404).json({
-                message: `Product with id=${contactId} not found`
-            });
+            message: `Product with id=${contactId} not found`
+        });
         return;
     };
         res.json({
