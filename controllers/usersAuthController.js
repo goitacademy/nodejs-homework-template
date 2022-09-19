@@ -3,12 +3,14 @@ const {
   userLogin,
   userLogout,
   getCurrentUser,
-  updateSubscriptionUser,
+  updateUserSubscription,
+  updateUserAvatar,
 } = require("../models/users");
 const {
   UnauthorizedError,
   ConflictError,
   PutContactError,
+  UpdateAvatarError,
 } = require("../helpers/errors");
 
 const userSignUpController = async (req, res) => {
@@ -59,7 +61,7 @@ const userLogoutController = async (req, res) => {
 
 const updateSubscriptionController = async (req, res) => {
   const { _id } = req.user;
-  const data = await updateSubscriptionUser(_id, req.body);
+  const data = await updateUserSubscription(_id, req.body);
 
   if (!data || !data.length) {
     throw new PutContactError("Not found");
@@ -80,10 +82,26 @@ const getCurrentUserController = async (req, res) => {
   });
 };
 
+const updateAvatarController = async (req, res) => {
+  if (!req.file) {
+    throw new UpdateAvatarError("Avatar is required");
+  }
+  const { _id } = req.user;
+  const { path } = req.file;
+  const data = await updateUserAvatar(_id, path);
+
+  if (!data || !data.length) {
+    throw new PutContactError("Not found");
+  }
+
+  res.status(200).json({ data });
+};
+
 module.exports = {
   userSignUpController,
   userLoginController,
   userLogoutController,
   getCurrentUserController,
   updateSubscriptionController,
+  updateAvatarController,
 };

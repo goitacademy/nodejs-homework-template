@@ -6,6 +6,9 @@ const {
 const {
   verifyTokenMiddleware,
 } = require("../../middlewares/verifyTokenMiddleware");
+const {
+  uploadAvatarMiddleware,
+} = require("../../middlewares/uploadAvatarMiddleware");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const {
   userSignUpController,
@@ -13,6 +16,7 @@ const {
   userLogoutController,
   getCurrentUserController,
   updateSubscriptionController,
+  updateAvatarController,
 } = require("../../controllers/usersAuthController");
 
 const usersRouter = express.Router();
@@ -42,6 +46,13 @@ usersRouter.patch(
   updateUserSubscriptionValidation,
   verifyTokenMiddleware,
   asyncWrapper(updateSubscriptionController)
+);
+
+usersRouter.patch(
+  "/avatars",
+  uploadAvatarMiddleware.single("avatar"),
+  verifyTokenMiddleware,
+  asyncWrapper(updateAvatarController)
 );
 
 module.exports = usersRouter;

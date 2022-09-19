@@ -54,6 +54,13 @@ class UnauthorizedError extends ApiErrorsTemplate {
   }
 }
 
+class UpdateAvatarError extends ApiErrorsTemplate {
+  constructor(message) {
+    super(message);
+    this.status = 404;
+  }
+}
+
 module.exports = {
   ApiErrorsTemplate,
   ValidationError,
@@ -63,4 +70,5 @@ module.exports = {
   PutContactError,
   UnauthorizedError,
   ConflictError,
+  UpdateAvatarError,
 };

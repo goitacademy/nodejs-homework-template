@@ -1,6 +1,10 @@
 const { User } = require("../db/usersAuthModel");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Jimp = require("jimp");
+const fs = require("fs").promises;
+const { v4: uuidv4 } = require("uuid");
 
 const userSignUp = async (email, password) => {
   try {
@@ -64,7 +68,7 @@ const getCurrentUser = async (token) => {
   }
 };
 
-const updateSubscriptionUser = async (contactId, body) => {
+const updateUserSubscription = async (contactId, body) => {
   try {
     const { subscription } = body;
 
@@ -82,10 +86,38 @@ const updateSubscriptionUser = async (contactId, body) => {
   }
 };
 
+const updateUserAvatar = async (contactId, file) => {
+  try {
+    const newAvatarPath = path.resolve(
+      `./public/avatars/avatar-${uuidv4()}.png`
+    );
+    const avatar = await Jimp.read(`${file}`);
+    avatar.resize(250, 250);
+    avatar.write(file);
+    await fs.rename(file, newAvatarPath);
+
+    await User.findOneAndUpdate(
+      { _id: contactId },
+      {
+        $set: { avatarURL: newAvatarPath },
+      }
+    );
+    const contact = await User.find(
+      { _id: contactId },
+      { avatarURL: 1, _id: 0 }
+    );
+    return contact;
+  } catch (error) {
+    await fs.unlink(file);
+    return error.message;
+  }
+};
+
 module.exports = {
   userSignUp,
   userLogin,
   userLogout,
   getCurrentUser,
-  updateSubscriptionUser,
+  updateUserSubscription,
+  updateUserAvatar,
 };
