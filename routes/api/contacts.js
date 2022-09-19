@@ -10,12 +10,12 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   try {
     const contactList = await listContacts();
     res.json({
       contacts: contactList,
-      message: "successful",
+      message: "success",
       status: 200,
     });
   } catch (error) {
@@ -42,26 +42,38 @@ router.post("/", async (req, res) => {
     const { name, email, phone } = req.body;
 
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(30).trim().required(),
+      name: Joi.string()
+        .pattern(/^([a-zA-Z]{2,}\s?[a-zA-Z]{1,})/)
+        .min(3)
+        .max(30)
+        .trim()
+        .required(),
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ["com", "net"] },
         })
         .trim()
         .required(),
       phone: Joi.string()
-        .length(7)
         .pattern(/^[0-9]+$/)
         .trim()
         .required(),
     });
-    console.log("req.body :>> ", req.body);
+
+    if (!(name && email && phone)) {
+      res
+        .status(400)
+        .json({ message: "fields 'name', 'email' and 'phone' are required " });
+      return;
+    }
 
     const validationResult = schema.validate(req.body);
-    console.log("validationResult :>> ", validationResult);
+
     if (validationResult.error) {
-      res.status(400).json({ message: "missing required name field" });
+      res.status(400).json({
+        message:
+          "fields that you try to change do not meet the validation requirements",
+      });
       return;
     }
     console.log("req.body :>> ", req.body);
@@ -93,33 +105,46 @@ router.delete("/:contactId", async (req, res) => {
 router.put("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
-    const { body } = req;
+    const { name, email, phone } = req.body;
 
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(30).trim(),
+      name: Joi.string()
+        .pattern(/^([a-zA-Z]{2,}\s?[a-zA-Z]{1,})/)
+        .min(3)
+        .max(30)
+        .trim(),
       email: Joi.string()
         .email({
           minDomainSegments: 2,
-          tlds: { allow: ["com", "net"] },
         })
         .trim(),
       phone: Joi.string()
-        .length(7)
         .pattern(/^[0-9]+$/)
         .trim(),
     });
 
-    const validationResult = body ? schema.validate(body) : false;
-    if (validationResult.error) {
+    console.log("name :>> ", name);
+    console.log("email :>> ", email);
+    console.log("phone :>> ", phone);
+
+    if (!(name ?? email ?? phone)) {
       res.status(400).json({ message: "missing fields" });
       return;
     }
 
-    const updatedContact = await updateContact(contactId, body);
+    const validationResult = schema.validate(req.body);
 
-    res.json({
-      message: `Update completed successfully`,
-      status: 200,
+    if (validationResult.error) {
+      res.status(400).json({
+        message:
+          "fields that you try to change do not meet the validation requirements",
+      });
+      return;
+    }
+    const updatedContact = await updateContact(contactId, req.body);
+
+    res.status(200).json({
+      message: `contact ${contactId} was successfully updated`,
       contact: updatedContact,
     });
   } catch (error) {

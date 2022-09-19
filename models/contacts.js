@@ -7,7 +7,6 @@ const uid = require("uid2");
 const contacts = path.normalize("./models/contacts.json");
 
 const listContacts = async () => {
-  console.log("Hello :>> ");
   try {
     const contactsList = await fs.readFile(contacts, "utf-8");
     const parsedContactsList = JSON.parse(contactsList);
@@ -22,7 +21,10 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contactList = await listContacts();
-    return contactList.find((contact) => contact.id === contactId.toString());
+    const [targetedContact] = contactList.filter(
+      (contact) => contact.id === contactId.toString()
+    );
+    return targetedContact;
   } catch (err) {
     console.error(err);
   }
@@ -60,7 +62,31 @@ const addContact = async ({ name, email, phone }) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const list = await listContacts();
+    const [targetedContact] = list.filter(
+      (contact) => contact.id === contactId
+    );
+    const incomingUpdatesEntries = Object.entries(body);
+    const targetedContactKeys = Object.keys(targetedContact);
+
+    const updatedEl = {
+      ...targetedContact,
+    };
+
+    incomingUpdatesEntries.forEach((el) => {
+      if (targetedContactKeys.includes(el[0])) {
+        updatedEl[`${el[0]}`] = el[1];
+      }
+    });
+    const newList = JSON.stringify([...list, updatedEl]);
+    fs.writeFile(contacts, JSON.stringify(newList));
+    return updatedEl;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 module.exports = {
   listContacts,
