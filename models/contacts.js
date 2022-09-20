@@ -23,7 +23,7 @@ const listContacts = async () => {
 /**
  *
  * @param {string} contactId - ID of searched contact
- * @returns {object} searched contact
+ * @returns
  */
 const getContactById = async (contactId) => {
   try {
@@ -41,7 +41,7 @@ const getContactById = async (contactId) => {
 /**
  *
  * @param {string} contactId - ID of contact which need to be removed
- * @returns {Promise} updated contact list after removed contact
+ * @returns
  */
 
 const removeContact = async (contactId) => {
@@ -63,7 +63,7 @@ const removeContact = async (contactId) => {
 /**
  *
  * @param {object} object with required fields name, email and phone
- * @returns Promise with data of created object
+ * @returns
  */
 const addContact = async ({ name, email, phone }) => {
   try {
