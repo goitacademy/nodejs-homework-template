@@ -1,15 +1,8 @@
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact
-} = require('../models/contacts')
-const { v4: uuid } = require('uuid');
+const Contact = require('../models/contact')
 
 const getAll = async () => {
     try {
-        const data = await listContacts()
+        const data = await Contact.find()
         return data
     } catch (error) {
         console.log(error.message);
@@ -18,7 +11,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
     try {
-        const data = await getContactById(id)
+        const data = await Contact.findOne({_id: id})
         return data
     } catch (error) {
         console.log(error.message);
@@ -27,8 +20,7 @@ const getById = async (id) => {
 
 const createNew = async (contact) => {
     try {
-        const id = uuid()
-        const data = await addContact({id, ...contact})
+        const data = await Contact.create(contact)
         return data
     } catch (error) {
         console.log(error.message);
@@ -37,7 +29,7 @@ const createNew = async (contact) => {
 
 const deleteById = async (id) => {
     try {
-        const result = await removeContact(id)
+        const result = await Contact(id)
         return result
     } catch (error) {
         console.log(error.message);
@@ -46,7 +38,7 @@ const deleteById = async (id) => {
 
 const updateById = async (id, update) => {
     try {
-        const data = await updateContact(id, update)
+        const data = await Contact(id, update)
         return data
     } catch (error) {
         console.log(error.message);
