@@ -29,7 +29,7 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   const contacts = await listContacts();
-  const contact = contacts.find((el) => el.id === String(contactId));
+  const contact = contacts.find((el) => el.id === contactId);
   return contact || null;
 }
 
@@ -44,7 +44,7 @@ async function removeContact(contactId) {
   return result;
 }
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
   const newContact = { id: await idMaker(), name, email, phone };
   contacts.push(newContact);
@@ -52,7 +52,20 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contact = await getContactById(contactId);
+  const updatedContact = { ...contact, ...body };
+  const contacts = await listContacts();
+  const index = contacts.findIndex((el) => {
+    return el.id === String(contactId);
+  });
+  if (index === -1) {
+    return null;
+  }
+  contacts.splice(index, 1, updatedContact);
+  await updateContacts(contacts);
+  return updatedContact;
+};
 
 module.exports = {
   listContacts,
