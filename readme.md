@@ -1,31 +1,75 @@
-## GoIT Node.js Course Template Homework
+# REST API with Node.js.
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Implementing RESTful application on Node.js. At the current stage, we will complete express framework and configure basic routes.
 
-Додайте ментора до колаборації
+## Screenshots from the Postman app, which shows the works of typical CRUD queries of our application.
 
-Для кожної домашньої роботи створюйте свою гілку.
+# Get contact list
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+@ GET /api/contacts.
 
-Кожна нова гілка для др повинна робитися з master
+https://ibb.co/C28C5TL
+![App Screenshot](https://i.ibb.co/ZmX46k9/get-contacts.jpg)
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+# Get a contact by id
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+@ GET /api/contacts/:id
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+https://ibb.co/pxn6k5P
+![App Screenshot](https://i.ibb.co/zrNWtD5/get-contact-by-ID.jpg)
 
-### Команди:
+# Add contact
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+@ POST /api/contacts
+
+successful
+
+https://ibb.co/bg1qJNd
+![App Screenshot](https://i.ibb.co/xShPHz5/add-contact.jpg)
+
+validation error
+
+https://ibb.co/K0zvpYD
+![App Screenshot](https://i.ibb.co/Qbjw3Zk/add-contact-valid.jpg)
+
+empty fields
+
+https://ibb.co/HP0m0LG
+![App Screenshot](https://i.ibb.co/VCdXd0M/add-contact-valid-empty.jpg)
+
+# Remove contact
+
+@ DELETE /api/contacts/:id
+
+response after successful deleting
+
+https://ibb.co/mcSfrb1
+![App Screenshot](https://i.ibb.co/jrHn9bB/delete-contact.jpg)
+
+contact list after deleting contact with id 2
+
+https://ibb.co/6rgtc74
+![App Screenshot](https://i.ibb.co/bQzvjMr/delete-contact-new-List.jpg)
+
+# Update contact
+
+@ PUT /api/contacts/:id
+
+successful
+
+https://ibb.co/px2cSKS
+![App Screenshot](https://i.ibb.co/wRyVfQf/update-contact.jpg)
+
+fields validation error
+
+https://ibb.co/hgtWj7j
+![App Screenshot](https://i.ibb.co/Gdb2LxL/update-contact-valid.jpg)
+
+all fields are empty
+
+https://ibb.co/xJmpvMy
+![App Screenshot](https://i.ibb.co/NZ18hLX/update-contact-valid-empty.jpg)
+
+## Author
+
+- [@MykolaTymoshchuk](https://github.com/Nikolay-Tymoshchuk)

@@ -6,6 +6,7 @@ const uid = require("uid2");
 
 const contacts = path.normalize("./models/contacts.json");
 
+// =========================================================>GET CONTACT LIST
 const listContacts = async () => {
   try {
     const contactsList = await fs.readFile(contacts, "utf-8");
@@ -18,6 +19,12 @@ const listContacts = async () => {
   }
 };
 
+// ===========================================================>GET CONTACT BY ID
+/**
+ *
+ * @param {string} contactId - ID of searched contact
+ * @returns {object} searched contact
+ */
 const getContactById = async (contactId) => {
   try {
     const contactList = await listContacts();
@@ -29,6 +36,13 @@ const getContactById = async (contactId) => {
     console.error(err);
   }
 };
+
+// =============================================================>REMOVE CONTACT
+/**
+ *
+ * @param {string} contactId - ID of contact which need to be removed
+ * @returns {Promise} updated contact list after removed contact
+ */
 
 const removeContact = async (contactId) => {
   try {
@@ -45,8 +59,17 @@ const removeContact = async (contactId) => {
   }
 };
 
+// ================================================================>ADD CONTACT
+/**
+ *
+ * @param {object} object with required fields name, email and phone
+ * @returns Promise with data of created object
+ */
 const addContact = async ({ name, email, phone }) => {
   try {
+    console.log("name :>> ", name);
+    console.log("email :>> ", email);
+    console.log("phone :>> ", phone);
     const newContact = {
       id: uid(6),
       name,
@@ -62,6 +85,13 @@ const addContact = async ({ name, email, phone }) => {
   }
 };
 
+// ================================================================>UPDATE CONTACT
+/**
+ *
+ * @param {string} contactId  - ID of updated contact
+ * @param {object} body - object with data which will be updated in targeted contact
+ * @returns
+ */
 const updateContact = async (contactId, body) => {
   try {
     const list = await listContacts();
@@ -87,6 +117,8 @@ const updateContact = async (contactId, body) => {
     console.error(err);
   }
 };
+
+// Export functions for routes manipulations
 
 module.exports = {
   listContacts,
