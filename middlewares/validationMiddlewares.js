@@ -16,7 +16,7 @@ const addContactValidation = (req, res, next) => {
     }
     next();
 }
-const putContactValidation = (req, res, next) => {
+const patchContactValidation = (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().alphanum().min(3).max(30).optional(),
         email: Joi.string().email().min(4).max(30).optional(),
@@ -31,4 +31,4 @@ const putContactValidation = (req, res, next) => {
     }
     next()
 }
-module.exports = { addContactValidation, putContactValidation }
+module.exports = { addContactValidation, patchContactValidation }

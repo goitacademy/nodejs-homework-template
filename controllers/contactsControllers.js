@@ -1,19 +1,8 @@
-const fs = require('fs').promises
-const path = require('path')
-const { randomUUID } = require('crypto')
-
-
-
 const { Contact } = require('../models')
 
-const contactsPath = path.join(__dirname, '../db/contacts.json')
+const getAllContacts = async () => { return await Contact.find({}) }
 
-const getAllContacts = async () => {
-  // return JSON.parse(await fs.readFile(contactsPath, "utf-8"))
-  return await Contact.find({})
-}
-
-const writeContact = async (contact) => { await fs.writeFile(contactsPath, JSON.stringify(contact)) }
+const writeContact = async (contact) => { await Contact.create(contact) }
 
 const listContacts = async (req, res) => {
   try {
@@ -28,17 +17,15 @@ const listContacts = async (req, res) => {
 }
 
 const getContactById = async (req, res) => {
-  const { id } = req.params
-  const contact = await Contact.findById(id) // findOne({_id;id})
-  // if (!mongoose.Types.ObjectId.isValid(id)) return false;
-  // console.log('CONTACT ERROR', contact.options)
-
-  if (!contact) {
+  try {
+    const { id } = req.params
+    const contact = await Contact.findById(id) // findOne({_id;id})
+    return res.json(contact);
+  } catch (error) {
     return res
       .status(404)
-      .json({ message: `Contact with id '${id}' not found` });
+      .json({ message: `Contact not found. Check you id` })
   }
-  res.json(contact);
 }
 
 const removeContact = async (req, res) => {
@@ -59,33 +46,42 @@ const removeContact = async (req, res) => {
 const addContact = async (req, res) => {
   try {
     const body = req.body
-    const allContacts = await getAllContacts()
-    const newContact = { id: randomUUID(), ...body }
-    allContacts.push(newContact)
-    await writeContact(allContacts)
-    res.status(201).json(allContacts)
+    await writeContact(body)
+    res.status(201).json(body)
   } catch (error) {
     console.log('addContact', error.message);
   }
 }
 
-const updateContact = async (req, res) => {
+const updateContactFull = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
-    const allContacts = await getAllContacts()
     const { id } = req.params;
-    const contact = allContacts.find(contact => contact.id === id)
+    const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true })
+    await writeContact(contact)
+    res.status(200).json(contact)
+  } catch (error) {
+    res.status(404)
+      .json({ message: `Contacts not found. Check you id` })
+    console.log('updateContact', error.message);
+  }
+}
+
+const updateContactPartial = async (req, res) => {
+  try {
+    const { name, email, phone } = req.body
+    const { id } = req.params
+    const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true })
     if (!contact) {
       return res
         .status(404)
-        .json({ message: `Contacts with id '${id}' not found` });
+        .json({ message: `Contacts with id '${id}' not found` })
     } else {
       if (name) { contact.name = name }
       if (email) { contact.email = email }
       if (phone) { contact.phone = phone }
     }
 
-    await writeContact(allContacts)
+    await writeContact(contact)
     res.status(200).json(contact);
   } catch (error) {
     console.log('updateContact', error.message);
@@ -93,10 +89,12 @@ const updateContact = async (req, res) => {
 
 }
 
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContactFull,
+  updateContactPartial
 }
