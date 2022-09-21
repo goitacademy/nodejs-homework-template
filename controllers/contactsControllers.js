@@ -12,7 +12,7 @@ const listContacts = async (req, res) => {
     }
     return null
   } catch (error) {
-    console.error('ERROR listContacts:', error.message);
+    console.error('ERROR listContacts:', error.message)
   }
 }
 
@@ -32,14 +32,16 @@ const removeContact = async (req, res) => {
   try {
     const allContacts = await getAllContacts()
     const { id } = req.params;
-    const contact = allContacts.filter((contact) => contact.id !== String(id));
-    if (contact.length === allContacts.length) {
+    const result = await Contact.findByIdAndRemove(id)
+    if (result.length === allContacts.length) {
       return res.status(404).json({ message: `contact ${id} not found` })
     }
-    await writeContact(contact);
-    res.status(200).json({ message: `contact ${id} deleted` });
+    res.status(200).json({ message: `contact ${id} deleted` })
   } catch (error) {
-    console.log('removeContact', error.message);
+    console.log('removeContact', error.message)
+    return res
+      .status(404)
+      .json({ message: `Contact not found. Check you id` })
   }
 }
 
@@ -49,7 +51,7 @@ const addContact = async (req, res) => {
     await writeContact(body)
     res.status(201).json(body)
   } catch (error) {
-    console.log('addContact', error.message);
+    console.log('addContact', error.message)
   }
 }
 
@@ -62,13 +64,13 @@ const updateContactFull = async (req, res) => {
   } catch (error) {
     res.status(404)
       .json({ message: `Contacts not found. Check you id` })
-    console.log('updateContact', error.message);
+    console.log('updateContact', error.message)
   }
 }
 
 const updateContactPartial = async (req, res) => {
   try {
-    const { name, email, phone } = req.body
+    const { name, email, phone, favorite } = req.body
     const { id } = req.params
     const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true })
     if (!contact) {
@@ -79,16 +81,14 @@ const updateContactPartial = async (req, res) => {
       if (name) { contact.name = name }
       if (email) { contact.email = email }
       if (phone) { contact.phone = phone }
+      if (favorite) { contact.favorite = favorite }
     }
-
     await writeContact(contact)
     res.status(200).json(contact);
   } catch (error) {
-    console.log('updateContact', error.message);
+    console.log('updateContact', error.message)
   }
-
 }
-
 
 module.exports = {
   listContacts,
