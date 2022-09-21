@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuid } = require("uuid");
-const { createError } = require("../helpers");
+
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -15,7 +15,7 @@ const getContactById = async (contactId) => {
   const contact = contacts.find(({ id }) => id === contactId);
 
   if (!contact) {
-    throw createError(404, "Contact not found");
+    return null;
   }
 
   return contact;
@@ -26,7 +26,7 @@ const removeContact = async (contactId) => {
   const index = contacts.findIndex(({ id }) => id === contactId);
 
   if (index === -1) {
-    throw createError(404, "Book not found");
+    return null
   }
 
   const [result] = contacts.splice(index, 1);
@@ -54,7 +54,7 @@ const updateContact = async (contactId, name, email, phone) => {
   const index = contacts.findIndex(({ id }) => id === contactId);
 
   if (index === -1) {
-    throw createError(404, "Book not found");
+    return null
   }
 
   contacts[index].name = name;
@@ -62,6 +62,8 @@ const updateContact = async (contactId, name, email, phone) => {
   contacts[index].phone = phone;
 
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
+  return contacts[index];
 };
 
 module.exports = {
