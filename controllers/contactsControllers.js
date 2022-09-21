@@ -90,11 +90,33 @@ const updateContactPartial = async (req, res) => {
   }
 }
 
+const updateFavoriteStatus = async (req, res) => {
+  try {
+    const { favorite } = req.body
+    const { id } = req.params
+    console.log(favorite)
+    const contact = await Contact.findByIdAndUpdate(id, { favorite }, { new: true })
+    console.log(contact)
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ message: `Contacts with id '${id}' not found` })
+    } else {
+      if (favorite) { contact.favorite = favorite }
+    }
+    // await writeContact(contact)
+    res.status(200).json(contact);
+  } catch (error) {
+    console.log('updateFavoriteContact', error.message)
+  }
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContactFull,
-  updateContactPartial
+  updateContactPartial,
+  updateFavoriteStatus
 }
