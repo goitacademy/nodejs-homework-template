@@ -2,11 +2,15 @@ const fs = require('fs').promises
 const path = require('path')
 const { randomUUID } = require('crypto')
 
+
+
+const { Contact } = require('../models')
+
 const contactsPath = path.join(__dirname, '../db/contacts.json')
-console.log('contacts.json', contactsPath)
 
 const getAllContacts = async () => {
-  return JSON.parse(await fs.readFile(contactsPath, "utf-8"))
+  // return JSON.parse(await fs.readFile(contactsPath, "utf-8"))
+  return await Contact.find({})
 }
 
 const writeContact = async (contact) => { await fs.writeFile(contactsPath, JSON.stringify(contact)) }
@@ -24,15 +28,17 @@ const listContacts = async (req, res) => {
 }
 
 const getContactById = async (req, res) => {
-  const allContacts = await getAllContacts()
-  const { id } = req.params;
-  const result = allContacts.find((contact) => contact.id === String(id));
-  if (!result) {
+  const { id } = req.params
+  const contact = await Contact.findById(id) // findOne({_id;id})
+  // if (!mongoose.Types.ObjectId.isValid(id)) return false;
+  // console.log('CONTACT ERROR', contact.options)
+
+  if (!contact) {
     return res
       .status(404)
-      .json({ message: `Contacts with id '${id}' not found` });
+      .json({ message: `Contact with id '${id}' not found` });
   }
-  res.json(result);
+  res.json(contact);
 }
 
 const removeContact = async (req, res) => {
