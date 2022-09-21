@@ -1,24 +1,32 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
+const handleSchemaValidationError = require('../helpers/handleSchemaValidationError');
 
-const contactSchema = Schema({
-    name: {
-        type: String,
-        required: true
+const contactSchema = Schema(
+    {
+        name: {
+            type: String,
+            required: [true, 'Set name for contact'],
+        },
+        email: {
+            type: String,
+        },
+        phone: {
+            type: String,
+            unique: true,
+        },
+        favorite: {
+            type: Boolean,
+            default: false,
+        },
     },
-    email: {
-        type: String,
-        required: true
+    {
+        versionKey: false,
+        timestamps: true,
     },
-    phone: {
-        type: String,
-        required: true
-    },
-    favorite: {
-        type: Boolean,
-        default: false
-    }
-})
+);
 
-const Contact = model("contact", contactSchema)
+contactSchema.post('save', handleSchemaValidationError);
 
-module.exports = Contact
+const Contact = model('contact', contactSchema);
+
+module.exports = Contact;

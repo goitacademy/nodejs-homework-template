@@ -1,48 +1,40 @@
-const Contact = require('../models/contact')
+const Contact = require('../models/contact');
 
 const getAll = async () => {
-    try {
-        const data = await Contact.find()
-        return data
-    } catch (error) {
-        console.log(error.message);
-}
-}
+    const data = await Contact.find();
+    return data;
+};
 
-const getById = async (id) => {
-    try {
-        const data = await Contact.findOne({_id: id})
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const getById = async id => {
+    const data = await Contact.findOne({ _id: id });
+    return data;
+};
 
-const createNew = async (contact) => {
-    try {
-        const data = await Contact.create(contact)
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const createNew = async contact => {
+    const data = await Contact.create(contact);
+    return data;
+};
 
-const deleteById = async (id) => {
-    try {
-        const result = await Contact(id)
-        return result
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const deleteById = async id => {
+    const result = await Contact.deleteOne({ _id: id });
+    return result;
+};
 
 const updateById = async (id, update) => {
-    try {
-        const data = await Contact(id, update)
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    const data = await Contact.updateOne({ _id: id }, update);
+    return data;
+};
 
-module.exports = {getAll, getById, createNew, deleteById, updateById}
+const updateStatus = async (id, body) => {
+    const data = await Contact.updateOne({ _id: id }, { favorite: body });
+    return data;
+};
+
+module.exports = {
+    getAll,
+    getById,
+    createNew,
+    deleteById,
+    updateById,
+    updateStatus,
+};

@@ -2,28 +2,38 @@ const Joi = require('joi');
 
 const addContact = Joi.object({
     name: Joi.string()
-        .alphanum()
-        .min(2).max(20)
-        .required(),
-    email: Joi.string()
-        .email({ minDomainSegments: 2 })
-        .required(),
+        .min(2)
+        .max(20)
+        .pattern(/^[\sA-Za-z]*$/)
+        .required()
+        .messages({ 'string.pattern.base': 'Name must contain letters only' }),
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
     phone: Joi.string()
-        .min(9).max(15)
-        .pattern(/^[-\s()0-9]*$/).required()
-        .messages({ 'string.pattern.base': 'Phone must contain numbers, dash and parentheses only' })
-})
+        .min(9)
+        .max(15)
+        .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+        .required()
+        .messages({
+            'string.pattern.base':
+                'Phone number must match format (123) 456-7890',
+        }),
+});
 
 const updateContact = Joi.object({
     name: Joi.string()
-        .alphanum()
-        .min(2).max(20),
-    email: Joi.string()
-        .email({ minDomainSegments: 2 }),
+        .min(2)
+        .max(20)
+        .pattern(/^[\sA-Za-z]*$/)
+        .messages({ 'string.pattern.base': 'Name must contain letters only' }),
+    email: Joi.string().email({ minDomainSegments: 2 }),
     phone: Joi.string()
-        .min(9).max(15)
-        .pattern(/^[-\s()0-9]*$/)
-        .messages({ 'string.pattern.base': 'Phone must contain numbers, dash and parentheses only' })
-}).or('name', 'email', 'phone')
+        .min(9)
+        .max(15)
+        .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+        .messages({
+            'string.pattern.base':
+                'Phone number must match format (123) 456-7890',
+        }),
+}).or('name', 'email', 'phone');
 
-module.exports = {addContact, updateContact}
+module.exports = { addContact, updateContact };
