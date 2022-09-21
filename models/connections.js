@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
-const url = process.env.MONGO_DB_URI;
-const dbName = process.env.DB_NAME;
+const { MONGO_DB_URI, DB_NAME } = process.env;
 
 async function connectMongo() {
   try {
-    await mongoose.connect(url, { dbName });
+    await mongoose.connect(MONGO_DB_URI, { dbName: DB_NAME });
     console.log("Connected successfully to server");
   } catch (error) {
     console.error("Connection to MongoDB Atlas failed!", error);

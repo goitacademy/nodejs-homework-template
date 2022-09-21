@@ -4,7 +4,7 @@ const { users: operations } = require("../services");
 
 const secret = process.env.SECRET;
 
-const authMiddleware = async (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
     const [tokenType, token] = req.headers.authorization.split(" ");
 
@@ -30,4 +30,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = { authMiddleware };
+module.exports = auth;

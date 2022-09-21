@@ -1,27 +1,39 @@
 const express = require("express");
 const { ctrlWrapper } = require("../../helpers");
 const { users: ctrl } = require("../../controllers");
-const {
-  validateUser,
-  authMiddleware,
-  validateSubscription,
-} = require("../../middlewares");
+const { auth, validation, upload } = require("../../middlewares");
+const { userJoiSchema } = require("../../joiShemas");
 
 const router = express.Router();
 
-router.post("/register", validateUser, ctrlWrapper(ctrl.register));
+router.post(
+  "/register",
+  validation(userJoiSchema.userSchema),
+  ctrlWrapper(ctrl.register)
+);
 
-router.post("/login", validateUser, ctrlWrapper(ctrl.login));
+router.post(
+  "/login",
+  validation(userJoiSchema.userSchema),
+  ctrlWrapper(ctrl.login)
+);
 
-router.post("/logout", authMiddleware, ctrlWrapper(ctrl.logout));
+router.post("/logout", auth, ctrlWrapper(ctrl.logout));
 
-router.get("/current", authMiddleware, ctrlWrapper(ctrl.getCurrent));
+router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
 
 router.patch(
   "/",
-  validateSubscription,
-  authMiddleware,
+  validation(userJoiSchema.subscriptionSchema),
+  auth,
   ctrlWrapper(ctrl.updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
 );
 
 module.exports = { userRouter: router };

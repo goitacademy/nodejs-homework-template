@@ -70,7 +70,7 @@ PATCH/users
 -- Authorization (required);
 -- request body (required);
 {
-"favorite": Boolean,
+"subscription": Boolean,
 }
 
 -- responses:
