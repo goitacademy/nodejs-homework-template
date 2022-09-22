@@ -1,4 +1,5 @@
 const Contact = require('../models/contact');
+const RequestError = require('../helpers/RequestError');
 
 const getAll = async () => {
     const data = await Contact.find();
@@ -6,7 +7,10 @@ const getAll = async () => {
 };
 
 const getById = async id => {
-    const data = await Contact.findOne({ _id: id });
+    const data = await Contact.findById(id);
+
+    if (!data) throw RequestError(404, 'Not found');
+
     return data;
 };
 
@@ -16,17 +20,26 @@ const createNew = async contact => {
 };
 
 const deleteById = async id => {
-    const result = await Contact.deleteOne({ _id: id });
+    const result = await Contact.findByIdAndRemove(id);
+
+    if (!result) throw RequestError(404, 'Not found');
+
     return result;
 };
 
 const updateById = async (id, update) => {
-    const data = await Contact.updateOne({ _id: id }, update);
+    const data = await Contact.findByIdAndUpdate(id, update, { new: true });
+
+    if (!data) throw RequestError(404, 'Not found');
+
     return data;
 };
 
 const updateStatus = async (id, body) => {
-    const data = await Contact.updateOne({ _id: id }, { favorite: body });
+    const data = await Contact.findByIdAndUpdate(id, body, { new: true });
+
+    if (!data) throw RequestError(404, 'Not found');
+
     return data;
 };
 

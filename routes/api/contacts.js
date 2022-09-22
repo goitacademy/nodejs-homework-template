@@ -7,20 +7,22 @@ const {
     updateContact,
     updateFavorite,
 } = require('../../controllers/contacts/controller');
+
 const ctrlWrapper = require('../../helpers/ctrlWrapper');
+const isValidId = require('../../middlewares/isValidId');
 
 const router = express.Router();
 
 router.get('/', ctrlWrapper(listContacts));
 
-router.get('/:contactId', ctrlWrapper(getContactById));
+router.get('/:contactId', isValidId, ctrlWrapper(getContactById));
 
 router.post('/', ctrlWrapper(addContact));
 
-router.delete('/:contactId', ctrlWrapper(removeContact));
+router.delete('/:contactId', isValidId, ctrlWrapper(removeContact));
 
-router.put('/:contactId', ctrlWrapper(updateContact));
+router.put('/:contactId', isValidId, ctrlWrapper(updateContact));
 
-router.patch('/:contactId/favorite', ctrlWrapper(updateFavorite));
+router.patch('/:contactId/favorite', isValidId, ctrlWrapper(updateFavorite));
 
 module.exports = router;

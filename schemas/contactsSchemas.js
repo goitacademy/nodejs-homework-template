@@ -17,6 +17,7 @@ const addContact = Joi.object({
             'string.pattern.base':
                 'Phone number must match format (123) 456-7890',
         }),
+    favorite: Joi.bool().default(false),
 });
 
 const updateContact = Joi.object({
@@ -36,4 +37,10 @@ const updateContact = Joi.object({
         }),
 }).or('name', 'email', 'phone');
 
-module.exports = { addContact, updateContact };
+const updateFavorite = Joi.object({
+    favorite: Joi.bool()
+        .required()
+        .messages({ 'any.required': 'missing field favorite' }),
+});
+
+module.exports = { addContact, updateContact, updateFavorite };

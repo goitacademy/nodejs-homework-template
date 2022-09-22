@@ -12,8 +12,6 @@ const getContactById = async (req, res) => {
 
     const contact = await contactsServices.getById(contactId);
 
-    if (!contact) throw RequestError(404, 'Not found');
-
     res.json(contact);
 };
 
@@ -21,14 +19,10 @@ const addContact = async (req, res) => {
     const { error, value: contactData } = contactsSchemas.addContact.validate(
         req.body,
     );
-    const { favorite = false } = req.body;
 
     if (error) throw RequestError(400, error.details[0].message);
 
-    const newContact = await contactsServices.createNew({
-        ...contactData,
-        favorite,
-    });
+    const newContact = await contactsServices.createNew(contactData);
 
     res.status(201).json(newContact);
 };
@@ -36,9 +30,7 @@ const addContact = async (req, res) => {
 const removeContact = async (req, res) => {
     const { contactId } = req.params;
 
-    const status = await contactsServices.deleteById(contactId);
-
-    if (!status) throw RequestError(404, 'Not found');
+    await contactsServices.deleteById(contactId);
 
     res.json({ message: 'Contact deleted' });
 };
@@ -55,25 +47,23 @@ const updateContact = async (req, res) => {
         contactData,
     );
 
-    return updatedContact
-        ? res.json(updatedContact)
-        : res.status(404).json({ message: 'Not found' });
+    res.json(updatedContact);
 };
 
 const updateFavorite = async (req, res) => {
     const { contactId } = req.params;
-    const { favorite } = req.body;
-    if (!favorite)
-        return res.status(400).json({ message: 'missing field favorite' });
 
-    const updatedContact = await contactsServices.updateStatus(
+    const { error, value: favoriteUpdate } =
+        contactsSchemas.updateFavorite.validate(req.body);
+
+    if (error) throw RequestError(400, error.details[0].message);
+
+    const updatedContact = await contactsServices.updateById(
         contactId,
-        favorite,
+        favoriteUpdate,
     );
 
-    return updatedContact
-        ? res.json(updatedContact)
-        : res.status(404).json({ message: 'Not found' });
+    res.json(updatedContact);
 };
 
 module.exports = {
