@@ -1,0 +1,28 @@
+const Joi = require('joi');
+
+const contactValidation = (req, res, next) => {
+    const schema = Joi.object({
+            name: Joi.string().required(),
+            email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'it', 'ru'] } }).required(),
+            phone: Joi.string().required()
+        });
+
+        const validationResult = schema.validate(req.body);
+
+        if (validationResult.error) {
+            return res.status(400).json({
+                status: validationResult.error.details,
+                code: 400,
+                message: "missing fields"
+            });
+        }
+
+        next();
+}
+    
+module.exports = contactValidation;
+
+
+
+
+ 
