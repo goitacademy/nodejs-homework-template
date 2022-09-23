@@ -1,8 +1,8 @@
-const contactsOperations = require("../../models/contacts");
+const {Contact} = require("../../models");
 
 const getById = async(req, res) => {
     const { contactId } = req.params;
-    const result = await contactsOperations.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     // console.log("result: ", result);
     if (!result) {
          const error = new Error("Not found");
@@ -20,3 +20,4 @@ const getById = async(req, res) => {
 };
 
 module.exports = getById;
+

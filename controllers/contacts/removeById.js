@@ -1,8 +1,8 @@
-const contactsOperations = require("../../models/contacts");
+const {Contact} = require("../../models");
 
 const removeById = async(req, res) => {
     const { contactId } = req.params;
-    const result = await contactsOperations.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     
     if (!result) {
          const error = new Error("Not found");
@@ -21,3 +21,4 @@ const removeById = async(req, res) => {
 };
 
 module.exports = removeById;
+
