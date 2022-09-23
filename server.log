@@ -12,3 +12,11 @@ POST /api/contacts/ 24-09-2022_01:19:19
 POST /api/contacts/ 24-09-2022_01:23:22
 POST /api/contacts/ 24-09-2022_01:24:31
 POST /api/contacts/ 24-09-2022_01:28:05
+POST /api/contacts/ 24-09-2022_02:14:55
+POST /api/contacts/ 24-09-2022_02:15:45
+POST /api/contacts/ 24-09-2022_02:18:03
+GET /api/contacts 24-09-2022_02:24:15
+PUT /api/contacts/df91f917-ab8e-4802-a54f-2bed98f26c1d 24-09-2022_02:26:32
+GET /api/contacts 24-09-2022_02:26:40
+DELETE /api/contacts/0059b9ed-61de-4c9c-baff-c7de580b0e13 24-09-2022_02:34:02
+DELETE /api/contacts/0059b9ed-61de-4c9c-baff-c7de580b0e13 24-09-2022_02:34:40
