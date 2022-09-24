@@ -1,56 +1,53 @@
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact
-} = require('../models/contacts')
-const { v4: uuid } = require('uuid');
+const Contact = require('../models/contact');
+const RequestError = require('../helpers/RequestError');
 
 const getAll = async () => {
-    try {
-        const data = await listContacts()
-        return data
-    } catch (error) {
-        console.log(error.message);
-}
-}
+    const data = await Contact.find();
+    return data;
+};
 
-const getById = async (id) => {
-    try {
-        const data = await getContactById(id)
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const getById = async id => {
+    const data = await Contact.findById(id);
 
-const createNew = async (contact) => {
-    try {
-        const id = uuid()
-        const data = await addContact({id, ...contact})
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    if (!data) throw RequestError(404, 'Not found');
 
-const deleteById = async (id) => {
-    try {
-        const result = await removeContact(id)
-        return result
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    return data;
+};
+
+const createNew = async contact => {
+    const data = await Contact.create(contact);
+    return data;
+};
+
+const deleteById = async id => {
+    const result = await Contact.findByIdAndRemove(id);
+
+    if (!result) throw RequestError(404, 'Not found');
+
+    return result;
+};
 
 const updateById = async (id, update) => {
-    try {
-        const data = await updateContact(id, update)
-        return data
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    const data = await Contact.findByIdAndUpdate(id, update, { new: true });
 
-module.exports = {getAll, getById, createNew, deleteById, updateById}
+    if (!data) throw RequestError(404, 'Not found');
+
+    return data;
+};
+
+const updateStatus = async (id, body) => {
+    const data = await Contact.findByIdAndUpdate(id, body, { new: true });
+
+    if (!data) throw RequestError(404, 'Not found');
+
+    return data;
+};
+
+module.exports = {
+    getAll,
+    getById,
+    createNew,
+    deleteById,
+    updateById,
+    updateStatus,
+};
