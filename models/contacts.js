@@ -23,18 +23,16 @@ const getContactById = async contactId => {
 };
 const addContact = async body => {
   const contacts = await listContacts();
-  // const sameName = contacts.find(i => i.name.toLowerCase() === body.name.toLowerCase());
-  // if (sameName.name === body.name) {
-  //   const error = new Error();
-  //   error.status = 400;
-  //   error.message = 'Error: same name, contact not added!';
-  //   throw error;
-  // } else {
-  //   const newContact = { id: v4(), ...body };
-  //   contacts.push(newContact);
-  //   await updateContacts(contacts);
-  //   return newContact;
-  // }
+  const sameName = contacts.find(i => i.name.toLowerCase() === body.name.toLowerCase());
+  if (sameName) {
+    if (sameName.name === body.name) {
+      const error = new Error();
+      error.status = 400;
+      error.message = 'Error: same name, contact not added!';
+      throw error;
+    }
+    return;
+  }
   const newContact = { id: v4(), ...body };
   contacts.push(newContact);
   await updateContacts(contacts);
