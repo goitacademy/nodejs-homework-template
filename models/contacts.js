@@ -4,6 +4,7 @@ const path = require('path');
 
 const { nanoid } = require('nanoid');
 
+/** build path to our data */
 const pathContacts = path.resolve('models/contacts.json');
 
 // pathContacts

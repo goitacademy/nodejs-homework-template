@@ -2,12 +2,18 @@ const express = require('express');
 
 const router = express.Router();
 
+/**
+ * our functions which one is responsible for operations with data depending on the route
+ */
 const ctrl = require('../../controlers/contacts');
 
+/** in this wrapper  I took out try catch.  */
 const { ctrlWrapper } = require('../../helpers');
 
+/** in this function I took out validation body of request */
 const { validateBody } = require('../../middlewares');
 
+/** validation body of request */
 const schema = require('../../schema/contactSchema');
 
 router.get('/', ctrlWrapper(ctrl.getAllContacts));
