@@ -1,131 +1,17 @@
 const express = require('express');
-const createError = require('http-errors');
-const Joi = require('Joi');
 
-const contactsSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const contactsOperation = require('../../models/contacts');
+const { contacts: ctrl } = require('../../controllers');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contacts = await contactsOperation.listContacts();
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result: contacts,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/', ctrl.getAll);
 
-router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
+router.get('/:contactId', ctrl.getById);
 
-  try {
-    const result = await contactsOperation.getContactById(contactId);
-    if (!result) {
-      // ------- 1
-      // const msgError = JSON.stringify({
-      //   status: 'error',
-      //   code: 404,
-      //   message: `contact with id ${contactId} not found`,
-      // });
+router.post('/', ctrl.add);
 
-      // const error = new Error(msgError);
-      // error.status = 404;
-      // throw error;
+router.put('/:contactId', ctrl.updateById);
 
-      throw createError(404, `contact with id ${contactId} not found`);
+router.delete('/:contactId', ctrl.removeById);
 
-      // Подскажите, как в new Error передать объект как в примере ниже
-      // ====================== 2
-
-      // res.status(404).json({
-      //   status: 'error',
-      //   code: 404,
-      //   message: `contact with id ${contactId} not found`,
-      // });
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
-    // res.status(500).json({
-    //   status: 'error',
-    //   code: 500,
-    //   message: `contact with id ${contactId} not found`,
-    // });
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = contactsSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const result = await contactsOperation.addContact(req.body);
-    res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: { result },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = contactsSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const { contactId } = req.params;
-    const result = await contactsOperation.updateContact(contactId, req.body);
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { result },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperation.removeContact(contactId);
-    if (!result) {
-      throw createError(404, `contact with id ${contactId} not found`);
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      message: 'contact deleted',
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
 module.exports = router;
