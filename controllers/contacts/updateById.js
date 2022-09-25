@@ -1,15 +1,11 @@
-const {Contact} = require("../../models");
+const { Contact } = require("../../models");
+const {RequestError} = require("../../helpers");
 
 const updateById = async(req, res) => {
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) {
-        const error = new Error("Not found");
-            error.status = 404;
-            res.status(404).json({
-            message: `Product with id=${contactId} not found`
-        });
-        return;
+         throw RequestError(404, `User with ${contactId} not found !`);
     };
      res.json({
         status: "success",

@@ -1,7 +1,6 @@
-const errorHandler = require("./errorHandler.js");
-
+const RequestError = require("./RequestError.js");
 
 
 module.exports = {
-    errorHandler
+    RequestError
 };

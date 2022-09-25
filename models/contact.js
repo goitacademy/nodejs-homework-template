@@ -29,7 +29,7 @@ const joiSchema = Joi.object({
  });
 
 const favoriteJoiSchema = Joi.object({
-    favorite: Joi.boolean().required(),
+    favorite: Joi.bool().required(),
 });
 
 module.exports = {
