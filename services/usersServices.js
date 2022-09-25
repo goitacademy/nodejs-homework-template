@@ -6,9 +6,9 @@ const register = async ({ email, password }) => {
 
     if (userExists) throw RequestError(409, 'Email in use');
 
-    const newUser = new User({ email });
-    newUser.setPassword(password);
-    await newUser.save();
+    const user = new User({ email });
+    user.setPassword(password);
+    const newUser = await user.save();
 
     return {
         email: newUser.email,
