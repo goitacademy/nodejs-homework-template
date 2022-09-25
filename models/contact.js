@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, SchemaTypes, model } = require('mongoose');
 const handleSchemaValidationError = require('../helpers/handleSchemaValidationError');
 
 const contactSchema = Schema(
@@ -17,6 +17,10 @@ const contactSchema = Schema(
         favorite: {
             type: Boolean,
             default: false,
+        },
+        owner: {
+            type: SchemaTypes.ObjectId,
+            ref: 'user',
         },
     },
     {
