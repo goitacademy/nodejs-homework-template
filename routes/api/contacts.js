@@ -6,11 +6,13 @@ const Joi = require("joi");
 
 const { createError } = require("../../helpers");
 
+const { createContact } = require("../../services");
+
 const {
   listContacts,
   getContactById,
   removeContact,
-  addContact,
+  // addContact,
   updateContact,
 } = require("../../models/contacts.js");
 
@@ -43,13 +45,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { name, phone, email } = await req.body;
     const { error } = contactsSchema.validate(req.body);
 
     if (error) {
       throw createError(error.message, "missing required name field");
     }
-    const contact = await addContact(name, phone, email);
+    const contact = await createContact(req.body);
     res.status(201).json(contact);
   } catch (error) {
     next(error);
