@@ -5,6 +5,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require('../../models/contacts');
 
 const router = express.Router();
@@ -18,5 +19,7 @@ router.post('/', addContact);
 router.delete('/:id', removeContact)
 
 router.put('/:id', updateContact);
+
+router.patch('/:id/favorite', updateStatusContact);
   
 module.exports = router
