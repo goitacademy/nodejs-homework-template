@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const contactsServices = require("../../services");
+const { contactsServices } = require("../../services");
 
 const updateFavorite = async (req, res, next) => {
   const { contactId } = req.params;
