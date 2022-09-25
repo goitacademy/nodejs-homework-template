@@ -35,13 +35,13 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
-  const oneContact = contacts.find((contact) => contact.id === contactId);
+  const oneContact = contacts.find((item) => item.id === contactId);
   return oneContact || null;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  const contacts = await getAll();
-  const index = contacts.findIndex((item) => item.id === contactId);
+const updateContact = async (id, { name, email, phone }) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
