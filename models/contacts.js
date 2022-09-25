@@ -4,6 +4,8 @@ const { v4 } = require('uuid');
 
 const updateContacts = require('./UpdateContacts');
 
+const { checkFieldHandler } = require('../helpers');
+
 const contactsPath = path.join(__dirname, './contacts.json');
 
 const listContacts = async () => {
@@ -23,15 +25,18 @@ const getContactById = async contactId => {
 };
 const addContact = async body => {
   const contacts = await listContacts();
-  const sameName = contacts.find(i => i.name.toLowerCase() === body.name.toLowerCase());
-  if (sameName) {
-    if (sameName.name === body.name) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'Error: same name, contact not added!';
-      throw error;
-    }
-    return;
+  const sameName = await checkFieldHandler(body);
+
+  const result = await sameName(contacts).then(res => {
+    return res;
+  });
+  console.log('33-я строка', result);
+
+  if (result !== -1) {
+    const error = new Error();
+    error.status = 400;
+    error.message = 'Error: same name, contact not added!';
+    throw error;
   }
   const newContact = { id: v4(), ...body };
   contacts.push(newContact);
