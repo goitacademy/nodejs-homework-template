@@ -1,24 +1,30 @@
 const usersServices = require('../../services/usersServices');
 const usersSchemas = require('../../schemas/usersSchemas');
 const RequestError = require('../../helpers/RequestError');
-const bcrypt = require('bcryptjs');
 
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
-
-    const { error } = usersSchemas.registerUser.validate({ email, password });
+    const { error, value: userData } = usersSchemas.registerUser.validate(
+        req.body,
+    );
     if (error) throw RequestError(400, error.details[0].message);
 
-    const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const newUser = await usersServices.register(userData);
 
-    const newUser = await usersServices.register({
-        email,
-        password: hashedPassword,
-    });
+    res.status(201).json(newUser);
+};
 
-    res.json(newUser);
+const logInUser = async (req, res) => {
+    const { error, value: userData } = usersSchemas.registerUser.validate(
+        req.body,
+    );
+    if (error) throw RequestError(400, error.details[0].message);
+
+    const loggedInUser = await usersServices.logIn(userData);
+
+    res.json(loggedInUser);
 };
 
 module.exports = {
     registerUser,
+    logInUser,
 };
