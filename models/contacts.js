@@ -50,9 +50,9 @@ const addContact = async ({ name, email, phone }) => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
     const arrayData = JSON.parse(data);
-    const newId = Number(arrayData[arrayData.length - 1].id);
+    // const newId = Number(arrayData[arrayData.length - 1].id);
     const newContact = {
-      id: String(newId + 1),
+      // id: String(newId + 1),
       name,
       email,
       phone,
