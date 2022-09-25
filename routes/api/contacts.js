@@ -3,18 +3,22 @@ const {
   addContactValidation,
   putContactValidation,
 } = require("../../middleware/validationMiddleware");
-
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 
-router.get("/", ctrl.getAll);
+router.get("/", asyncWrapper(ctrl.getAll));
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/:contactId", asyncWrapper(ctrl.getContactById));
 
-router.post("/", addContactValidation, ctrl.addContact);
+router.post("/", addContactValidation, asyncWrapper(ctrl.addContact));
 
-router.delete("/:contactId", ctrl.deleteContact);
+router.delete("/:contactId", asyncWrapper(ctrl.deleteContact));
 
-router.put("/:contactId", putContactValidation, ctrl.changeContact);
+router.put(
+  "/:contactId",
+  putContactValidation,
+  asyncWrapper(ctrl.changeContact)
+);
 
 module.exports = router;
