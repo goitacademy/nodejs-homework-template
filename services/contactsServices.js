@@ -2,20 +2,23 @@ const Contact = require('../models/contact');
 const RequestError = require('../helpers/RequestError');
 
 const getAll = async () => {
-    const data = await Contact.find();
+    const data = await Contact.find().populate('owner', 'email subscription');
     return data;
 };
 
 const getById = async id => {
-    const data = await Contact.findById(id);
+    const data = await Contact.findById(id).populate(
+        'owner',
+        'email subscription',
+    );
 
     if (!data) throw RequestError(404, 'Not found');
 
     return data;
 };
 
-const createNew = async contact => {
-    const data = await Contact.create(contact);
+const createNew = async (contact, userId) => {
+    const data = await Contact.create({ ...contact, owner: userId });
     return data;
 };
 
@@ -28,7 +31,9 @@ const deleteById = async id => {
 };
 
 const updateById = async (id, update) => {
-    const data = await Contact.findByIdAndUpdate(id, update, { new: true });
+    const data = await Contact.findByIdAndUpdate(id, update, {
+        new: true,
+    }).populate('owner', 'email subscription');
 
     if (!data) throw RequestError(404, 'Not found');
 
@@ -36,7 +41,9 @@ const updateById = async (id, update) => {
 };
 
 const updateStatus = async (id, body) => {
-    const data = await Contact.findByIdAndUpdate(id, body, { new: true });
+    const data = await Contact.findByIdAndUpdate(id, body, {
+        new: true,
+    }).populate('owner', 'email subscription');
 
     if (!data) throw RequestError(404, 'Not found');
 

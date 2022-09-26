@@ -40,6 +40,10 @@ userSchema.methods.setToken = function (payload) {
     this.token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 };
 
+userSchema.methods.deleteToken = function () {
+    this.token = null;
+};
+
 userSchema.post('save', handleSchemaValidationError);
 
 const User = model('user', userSchema);

@@ -36,7 +36,24 @@ const logIn = async ({ email, password }) => {
     };
 };
 
+const logOut = async id => {
+    const user = await User.findById(id);
+    if (!user) throw RequestError(401, 'Not authorized');
+
+    user.deleteToken();
+    await user.save();
+};
+
+const listCurrent = async id => {
+    const user = await User.findById(id, 'email subscription');
+    if (!user) throw RequestError(401, 'Not authorized');
+
+    return user;
+};
+
 module.exports = {
     register,
     logIn,
+    logOut,
+    listCurrent,
 };

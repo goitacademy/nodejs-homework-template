@@ -24,7 +24,25 @@ const logInUser = async (req, res) => {
     res.json(loggedInUser);
 };
 
+const logOutUser = async (req, res) => {
+    const { id } = req.user;
+
+    await usersServices.logOut(id);
+
+    res.status(204).json();
+};
+
+const listCurrentUser = async (req, res) => {
+    const { id } = req.user;
+
+    const currentUser = await usersServices.listCurrent(id);
+
+    res.json(currentUser);
+};
+
 module.exports = {
     registerUser,
     logInUser,
+    logOutUser,
+    listCurrentUser,
 };
