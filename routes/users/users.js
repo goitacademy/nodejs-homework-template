@@ -4,6 +4,7 @@ const {
     logInUser,
     logOutUser,
     listCurrentUser,
+    updateUserSubscription,
 } = require('../../controllers/users/controller');
 const auth = require('../../middlewares/auth');
 
@@ -18,5 +19,7 @@ router.post('/login', ctrlWrapper(logInUser));
 router.post('/logout', auth, ctrlWrapper(logOutUser));
 
 router.get('/current', auth, ctrlWrapper(listCurrentUser));
+
+router.put('/', auth, ctrlWrapper(updateUserSubscription));
 
 module.exports = router;

@@ -5,6 +5,11 @@ const registerUser = Joi.object({
     password: Joi.string().min(6).required(),
 });
 
+const updateSubscription = Joi.object({
+    subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+});
+
 module.exports = {
     registerUser,
+    updateSubscription,
 };

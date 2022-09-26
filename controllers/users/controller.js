@@ -40,9 +40,21 @@ const listCurrentUser = async (req, res) => {
     res.json(currentUser);
 };
 
+const updateUserSubscription = async (req, res) => {
+    const { error } = usersSchemas.updateSubscription.validate(req.body);
+    if (error) throw RequestError(400, error.details[0].message);
+
+    const { id } = req.user;
+
+    const updatedUser = await usersServices.updateSubscription(id, req.body);
+
+    res.json(updatedUser);
+};
+
 module.exports = {
     registerUser,
     logInUser,
     logOutUser,
     listCurrentUser,
+    updateUserSubscription,
 };

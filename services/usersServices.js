@@ -51,9 +51,19 @@ const listCurrent = async id => {
     return user;
 };
 
+const updateSubscription = async (id, subscription) => {
+    const user = await User.findByIdAndUpdate(id, subscription, {
+        new: true,
+    });
+    if (!user) throw RequestError(401, 'Not authorized');
+
+    return user;
+};
+
 module.exports = {
     register,
     logIn,
     logOut,
     listCurrent,
+    updateSubscription,
 };
