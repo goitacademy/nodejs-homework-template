@@ -7,6 +7,7 @@ const messages = {
     408: 'Request Timeout',
     409: 'Conflict',
     429: 'Too Many Requests',
+    500: "Internal Server Error"
   }
 
   const createError = (status, message = messages[status]) => {

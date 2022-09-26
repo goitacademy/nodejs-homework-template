@@ -1,6 +1,6 @@
 const {Contact, schemas} = require('../../models/contacts');
 
-const {createError} = require('../../middleware/createError');
+const createError = require('../../middleware/createError');
 
 
 const addContact = async (req, res) => {
