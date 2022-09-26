@@ -45,7 +45,6 @@ const contactAddSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().pattern(phoneRegexp).required(),
   favorite: Joi.boolean(),
-  owner: Joi.string().required(),
 });
 
 const updFavorContactSchema = Joi.object({
