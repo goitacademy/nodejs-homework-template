@@ -28,4 +28,4 @@ router.patch(
   ctrlWrapper(ctrl.updateStatusById)
 );
 
-module.exports = { contactsRouter: router };
+module.exports = router;

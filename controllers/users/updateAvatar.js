@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 const { users: operations } = require("../../services");
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
@@ -9,6 +10,16 @@ const updateAvatar = async (req, res) => {
   const { id } = req.user;
   const imageName = `${id}_${originalname}`;
   try {
+    const resizeImg = await Jimp.read(tempUpload);
+    resizeImg
+      .autocrop()
+      .cover(
+        250,
+        250,
+        Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE
+      )
+      .writeAsync(tempUpload);
+
     const resultUpload = path.join(avatarsDir, imageName);
     await fs.rename(tempUpload, resultUpload);
 

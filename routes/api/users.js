@@ -36,4 +36,4 @@ router.patch(
   ctrlWrapper(ctrl.updateAvatar)
 );
 
-module.exports = { userRouter: router };
+module.exports = router;

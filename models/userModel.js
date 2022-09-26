@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const gravatar = require("gravatar");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -19,7 +20,12 @@ const userShema = mongoose.Schema(
       default: "starter",
     },
     token: { type: String, default: null },
-    avatarURL: { type: String, required: true },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: 250 }, true);
+      },
+    },
   },
   { versionKey: false, timestamps: true }
 );

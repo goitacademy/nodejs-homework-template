@@ -11,11 +11,22 @@ const multerConfig = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
-  limits: {
-    fileSize: 2048,
-  },
 });
 
-const upload = multer({ storage: multerConfig });
+const upload = multer({
+  storage: multerConfig,
+
+  limits: {
+    fileSize: 2000000,
+  },
+
+  fileFilter: (req, file, cb) => {
+    console.log(file);
+    if (file.mimetype.includes("image")) {
+      return cb(null, true);
+    }
+    cb(null, false);
+  },
+});
 
 module.exports = upload;
