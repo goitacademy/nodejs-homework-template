@@ -1,8 +1,19 @@
 const Contact = require('../models/contact');
 const RequestError = require('../helpers/RequestError');
 
-const getAll = async () => {
-    const data = await Contact.find().populate('owner', 'email subscription');
+const getAll = async (id, page, limit, favorite) => {
+    const searchOptions = favorite ? { owner: id, favorite } : { owner: id };
+    const paginationOptions = {
+        skip: (page - 1) * limit,
+        limit: Number(limit),
+    };
+
+    const data = await Contact.find(
+        searchOptions,
+        '',
+        paginationOptions,
+    ).populate('owner', 'email subscription');
+
     return data;
 };
 

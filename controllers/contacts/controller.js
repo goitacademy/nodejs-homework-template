@@ -3,7 +3,9 @@ const contactsSchemas = require('../../schemas/contactsSchemas');
 const RequestError = require('../../helpers/RequestError');
 
 const listContacts = async (req, res) => {
-    const contacts = await contactsServices.getAll();
+    const { id } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+    const contacts = await contactsServices.getAll(id, page, limit, favorite);
     res.json(contacts);
 };
 
