@@ -1,7 +1,7 @@
 
 const { Contact } = require("../../models/contacts");
 
-const { createError } = require("../../middleware");
+const  createError  = require("../../middleware/createError");
 
 const removeContact = async (req, res) => {
     const { contactId } = req.params;
@@ -14,4 +14,4 @@ const removeContact = async (req, res) => {
     })
 }
 
-module.exports = removeContact;
+module.exports = removeContact; 

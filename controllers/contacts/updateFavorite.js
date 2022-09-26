@@ -1,6 +1,6 @@
 const { Contact, schemas } = require('../../models/contacts')
 
-const { createError } = require('../../middleware')
+const  createError  = require('../../middleware/createError')
 
 const updateFavorite = async (req, res) => {
   const { error } = schemas.updateFavorite.validate(req.body)

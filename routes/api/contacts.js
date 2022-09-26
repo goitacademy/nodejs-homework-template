@@ -2,7 +2,7 @@ const express = require('express')
 
 const ctrl = require('../../controllers/contacts')
 
-const { ctrlWrapper } = require('../../middleware/ctrlWrapper')
+const  ctrlWrapper  = require('../../middleware/ctrlWrapper')
 
 const router = express.Router()
 

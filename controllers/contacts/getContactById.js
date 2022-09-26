@@ -1,6 +1,6 @@
 const { Contact } = require('../../models/contacts')
 
-const { createError } = require('../../middleware')
+const  createError  = require('../../middleware/createError')
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params
@@ -10,5 +10,6 @@ const getContactById = async (req, res) => {
   }
   res.json(reply)
 }
+
 
 module.exports = getContactById
