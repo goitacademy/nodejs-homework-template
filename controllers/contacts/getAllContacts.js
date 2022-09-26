@@ -1,8 +1,8 @@
 // const { listContacts } = require("../../models/contacts");
-const { getCollection } = require("../../db/connection");
+// const { getCollection } = require("../../db/connection");
 const getAll = async (req, res, next) => {
-  const { Contacts } = await getCollection();
-  const contacts = await Contacts.find({}).toArray();
+  // const { Contacts } = await getCollection();
+  // const contacts = await Contacts.find({}).toArray();
 
   res.json(contacts);
   // try {

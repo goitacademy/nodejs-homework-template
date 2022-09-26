@@ -1,15 +1,15 @@
 // const { getContactById } = require("../../models/contacts");
-const { getCollection } = require("../../db/connection");
-const ObjectId = require("mongodb").ObjectId;
+// const { getCollection } = require("../../db/connection");
+
 // const { contacts } = require("..");
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const { Contacts } = await getCollection();
+  // const { Contacts } = await getCollection();
   // const contacts = await Contacts.find({}).toArray();
 
-  const contact = await Contacts.find[{ _id: new ObjectId(contactId) }];
-  console.log(contact);
-  res.json(contact);
+  // const contact = await Contacts.find[{ _id: new ObjectId(contactId) }];
+  // console.log(contact);
+  // res.json(contact);
   // const contactById = await
   // try {
 
