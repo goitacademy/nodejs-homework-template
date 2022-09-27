@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const handleSchemaValidationError = require('../helpers/handleSchemaValidationError');
+const { handleSchemaValidationError } = require('../helpers');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;

@@ -1,5 +1,6 @@
-const contactsServices = require('../../services/contactsServices');
-const contactsSchemas = require('../../schemas/contactsSchemas');
+const { contactsServices } = require('../../services');
+const { contactsSchemas } = require('../../schemas');
+
 const RequestError = require('../../helpers/RequestError');
 
 const listContacts = async (req, res) => {

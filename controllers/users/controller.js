@@ -1,6 +1,6 @@
-const usersServices = require('../../services/usersServices');
-const usersSchemas = require('../../schemas/usersSchemas');
-const RequestError = require('../../helpers/RequestError');
+const { usersServices } = require('../../services');
+const { usersSchemas } = require('../../schemas');
+const { RequestError } = require('../../helpers');
 
 const registerUser = async (req, res) => {
     const { error, value: userData } = usersSchemas.registerUser.validate(

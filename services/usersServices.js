@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const RequestError = require('../helpers/RequestError');
+const { User } = require('../models');
+const { RequestError } = require('../helpers');
 
 const register = async ({ email, password }) => {
     const userExists = await User.findOne({ email });

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-const User = require('../models/user');
-const RequestError = require('../helpers/RequestError');
+const { User } = require('../models');
+const { RequestError } = require('../helpers');
 
 const auth = async (req, res, next) => {
     try {
@@ -19,7 +19,10 @@ const auth = async (req, res, next) => {
 
         next();
     } catch (error) {
-        if (error.message === 'invalid token') {
+        if (
+            error.message === 'invalid token' ||
+            error.message === 'jwt expired'
+        ) {
             error.status = 401;
             error.message = 'Unauthorized';
         }

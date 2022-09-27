@@ -1,34 +1,25 @@
 const express = require('express');
-const {
-    listContacts,
-    getContactById,
-    addContact,
-    removeContact,
-    updateContact,
-    updateFavorite,
-} = require('../../controllers/contacts/controller');
-
-const ctrlWrapper = require('../../helpers/ctrlWrapper');
-const isValidId = require('../../middlewares/isValidId');
-const auth = require('../../middlewares/auth');
+const { contactsController: ctrl } = require('../../controllers');
+const { ctrlWrapper } = require('../../helpers');
+const { auth, isValidId } = require('../../middlewares');
 
 const router = express.Router();
 
-router.get('/', auth, ctrlWrapper(listContacts));
+router.get('/', auth, ctrlWrapper(ctrl.listContacts));
 
-router.get('/:contactId', auth, isValidId, ctrlWrapper(getContactById));
+router.get('/:contactId', auth, isValidId, ctrlWrapper(ctrl.getContactById));
 
-router.post('/', auth, ctrlWrapper(addContact));
+router.post('/', auth, ctrlWrapper(ctrl.addContact));
 
-router.delete('/:contactId', auth, isValidId, ctrlWrapper(removeContact));
+router.delete('/:contactId', auth, isValidId, ctrlWrapper(ctrl.removeContact));
 
-router.put('/:contactId', auth, isValidId, ctrlWrapper(updateContact));
+router.put('/:contactId', auth, isValidId, ctrlWrapper(ctrl.updateContact));
 
 router.patch(
     '/:contactId/favorite',
     auth,
     isValidId,
-    ctrlWrapper(updateFavorite),
+    ctrlWrapper(ctrl.updateFavorite),
 );
 
 module.exports = router;

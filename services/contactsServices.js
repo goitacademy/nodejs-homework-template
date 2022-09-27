@@ -1,5 +1,5 @@
-const Contact = require('../models/contact');
-const RequestError = require('../helpers/RequestError');
+const { Contact } = require('../models');
+const { RequestError } = require('../helpers');
 
 const getAll = async (id, page, limit, favorite) => {
     const searchOptions = favorite ? { owner: id, favorite } : { owner: id };
