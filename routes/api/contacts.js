@@ -16,10 +16,6 @@ const contactsSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-const idSchema = Joi.string()
-  .regex(/^[0-9a-fA-F]{24}$/)
-  .required()
-  .messages({ "string.pattern.base": "Not valid ObjectID" });
 
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
