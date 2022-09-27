@@ -6,23 +6,16 @@ const changeContact = async (req, res, next) => {
   try {
     const result = await service.updateContact(contactId, body);
 
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { contact: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: "Not Found",
-      });
-    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: { contact: result },
+    });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(404).json({
+      status: "error",
+      message: `Not found contact id: ${contactId}`,
+    });
   }
 };
 module.exports = changeContact;

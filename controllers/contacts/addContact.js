@@ -4,21 +4,16 @@ const addContactById = async (req, res, next) => {
   const { body } = req;
   try {
     const result = await service.createContact(body);
-
-    if (result) {
-      res.json({
-        status: "success",
-        code: 201,
-        data: { contact: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-      });
-    }
+    res.json({
+      status: "success",
+      code: 201,
+      data: { contact: result },
+    });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(404).json({
+      status: "error",
+      message: e.message,
+    });
   }
 };
 module.exports = addContactById;

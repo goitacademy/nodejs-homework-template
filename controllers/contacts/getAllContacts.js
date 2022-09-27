@@ -11,8 +11,10 @@ const getAll = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(404).json({
+      status: "error",
+      message: e.message,
+    });
   }
 };
 module.exports = getAll;
