@@ -1,16 +1,18 @@
-// const { listContacts } = require("../../models/contacts");
-// const { getCollection } = require("../../db/connection");
-const getAll = async (req, res, next) => {
-  // const { Contacts } = await getCollection();
-  // const contacts = await Contacts.find({}).toArray();
+const { service } = require("../../service");
 
-  res.json(contacts);
-  // try {
-  //   const list = await listContacts();
-  //   res.status(200);
-  //   res.json({ contacts: JSON.parse(`${list}`) });
-  // } catch (error) {
-  //   res.status(404).json({ message: error.message });
-  // }
+const getAll = async (req, res, next) => {
+  try {
+    const results = await service.getAllContacts();
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contacts: results,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 };
 module.exports = getAll;

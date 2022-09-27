@@ -1,13 +1,24 @@
-// const { addContact } = require("../../models/contacts");
+const { service } = require("../../service");
 
 const addContactById = async (req, res, next) => {
-  // try {
-  //   const { body } = req;
-  //   const newContact = await addContact(body);
-  //   res.status(201);
-  //   res.json({ contact: newContact });
-  // } catch (error) {
-  //   res.status(400).json(error.message);
-  // }
+  const { body } = req;
+  try {
+    const result = await service.createContact(body);
+
+    if (result) {
+      res.json({
+        status: "success",
+        code: 201,
+        data: { contact: result },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 };
 module.exports = addContactById;

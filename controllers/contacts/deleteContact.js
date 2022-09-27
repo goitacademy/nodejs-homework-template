@@ -1,15 +1,26 @@
-// const { removeContact } = require("../../models/contacts");
+const { service } = require("../../service");
+
 const deleteContact = async (req, res, next) => {
-  // try {
   const { contactId } = req.params;
-  //   const contactList = await removeContact(contactId);
-  //   if (contactList === null) {
-  //     throw new Error(`Not found`);
-  //   }
-  //   res.status(200);
-  //   res.json({ message: "contact deleted" });
-  // } catch (error) {
-  //   res.status(404).json({ message: error.message });
-  // }
+  try {
+    const result = await service.removeContact(contactId);
+    if (result) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { contact: result },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact id: ${contactId}`,
+        data: "Not Found",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 };
 module.exports = deleteContact;
