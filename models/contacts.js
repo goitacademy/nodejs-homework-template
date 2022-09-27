@@ -8,19 +8,19 @@ const reWriteFile = async contacts => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 };
 
-const listContacts = async () => {
+const getAll = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 
 const getContactById = async id => {
-  const contacts = await listContacts();
+  const contacts = await getAll();
   const contactById = contacts.find(item => item.id === String(id));
   return contactById || null;
 };
 
 const removeContact = async id => {
-  const list = await listContacts();
+  const list = await getAll();
   const index = list.findIndex(item => item.id === String(id));
   if (index === -1) {
     return null;
@@ -31,7 +31,7 @@ const removeContact = async id => {
 };
 
 const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
+  const contacts = await getAll();
   const newContact = {
     id: nanoid(),
     name,
@@ -45,7 +45,7 @@ const addContact = async ({ name, email, phone }) => {
 };
 
 const updateContact = async (id, { name, email, phone }) => {
-  const contacts = await listContacts();
+  const contacts = await getAll();
   const index = contacts.findIndex(item => item.id === String(id));
   if (index === -1) {
     return null;
@@ -56,7 +56,7 @@ const updateContact = async (id, { name, email, phone }) => {
 };
 
 module.exports = {
-  listContacts,
+  getAll,
   getContactById,
   removeContact,
   addContact,
