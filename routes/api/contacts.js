@@ -16,7 +16,6 @@ const contactsSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
@@ -92,7 +91,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/id:/favorite", async (req, res, next) => {
+router.patch("/:id/favorite", async (req, res, next) => {
   try {
     const { error } = favoriteSchema.validate(req.body);
     if (error) {
@@ -105,7 +104,10 @@ router.patch("/id:/favorite", async (req, res, next) => {
     if (!contact) {
       throw createError(404, "Contact not found");
     }
-  } catch (error) {}
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
