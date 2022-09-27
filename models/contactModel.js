@@ -9,7 +9,7 @@ const contactSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
+      unique: [true, "email in use"],
       required: true,
     },
     phone: {

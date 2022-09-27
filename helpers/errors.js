@@ -1,40 +1,10 @@
-class CurrentProjectError extends Error {
-  constructor(message) {
-    super(message);
-    this.status = 404;
-  }
-}
-
-class ValidationError extends CurrentProjectError {
-  constructor(message) {
-    super(message);
-    this.status = 400;
-  }
-}
-
-class WrongParametersError extends CurrentProjectError {
-  constructor(message) {
-    super(message);
-    this.status = 404;
-  }
-}
-class ConflictEmailError extends CurrentProjectError {
-  constructor(message) {
-    super(message);
-    this.status = 409;
-  }
-}
-class AuthError extends CurrentProjectError {
-  constructor(message) {
-    super(message);
-    this.status = 401;
-  }
-}
+const RequestError = (status, message) => {
+  const error = new Error(message);
+  error.status = status;
+  console.log(error);
+  return error;
+};
 
 module.exports = {
-  WrongParametersError,
-  ValidationError,
-  CurrentProjectError,
-  ConflictEmailError,
-  AuthError,
+  RequestError,
 };

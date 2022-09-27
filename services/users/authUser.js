@@ -1,11 +1,11 @@
 const { User } = require("../../models");
-const { AuthError } = require("../../helpers");
+const { RequestError } = require("../../helpers");
 
 const authUser = async (id) => {
   const user = await User.findOne({ _id: id });
 
   if (!user) {
-    throw new AuthError("Not authorized");
+    throw RequestError(401, "Not authorized");
   }
 
   return user;

@@ -1,5 +1,3 @@
-const { CurrentProjectError } = require("./errors");
-
 const ctrlWrapper = (controller) => (req, res, next) => {
   controller(req, res).catch(next);
 };
@@ -9,10 +7,9 @@ const unknownRouteHandler = (req, res) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  if (error instanceof CurrentProjectError) {
-    res.status(error.status).json({ message: error.message });
-  }
-  res.status(500).json({ message: error.message });
+  const { status = 500, message = "Server error" } = error;
+
+  res.status(status).json({ message });
 };
 
 module.exports = { ctrlWrapper, unknownRouteHandler, errorHandler };

@@ -1,14 +1,14 @@
-const { ValidationError } = require("../helpers");
+const { RequestError } = require("../helpers");
 
 const validation = (schema) => {
   return (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
-      next(new ValidationError("missing fields"));
+      next(RequestError(400, "missing fields"));
     }
 
     const { error } = schema.validate(req.body);
     if (error) {
-      next(new ValidationError(error.details[0].message));
+      next(RequestError(400, error.details[0].message));
     }
 
     next();

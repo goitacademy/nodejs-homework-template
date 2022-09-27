@@ -1,5 +1,5 @@
 const { Contact } = require("../../models");
-const { WrongParametersError } = require("../../helpers");
+const { RequestError } = require("../../helpers");
 
 const updateStatusById = async (contactId, favorite, userId) => {
   const contact = await Contact.findOneAndUpdate(
@@ -13,7 +13,8 @@ const updateStatusById = async (contactId, favorite, userId) => {
     { returnDocument: "after" }
   );
   if (!contact) {
-    throw new WrongParametersError(
+    throw RequestError(
+      404,
       `Failure, contact with id: ${contactId} was not found`
     );
   }

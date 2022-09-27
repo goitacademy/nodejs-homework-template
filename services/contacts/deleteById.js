@@ -1,5 +1,5 @@
 const { Contact } = require("../../models");
-const { WrongParametersError } = require("../../helpers");
+const { RequestError } = require("../../helpers");
 
 const deleteById = async (contactId, userId) => {
   const contact = await Contact.findOneAndDelete({
@@ -7,7 +7,8 @@ const deleteById = async (contactId, userId) => {
     owner: userId,
   });
   if (!contact) {
-    throw new WrongParametersError(
+    throw RequestError(
+      404,
       `Failure, contact with id: ${contactId} was not found`
     );
   }
