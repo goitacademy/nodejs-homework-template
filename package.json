@@ -14,6 +14,7 @@
     "dotenv": "^16.0.2",
     "express": "4.17.1",
     "joi": "^17.6.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.1",
     "morgan": "1.10.0",
     "yargs": "^17.5.1"
