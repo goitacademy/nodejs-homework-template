@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+console.log('hello');
 
 /**
  * our functions which one is responsible for operations with data depending on the route
