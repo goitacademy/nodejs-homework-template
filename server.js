@@ -1,7 +1,7 @@
 const app = require("./app");
 const { connectMongo } = require("./models");
 
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT || 3000;
 
 async function main() {
   await connectMongo();

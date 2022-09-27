@@ -21,7 +21,6 @@ const upload = multer({
   },
 
   fileFilter: (req, file, cb) => {
-    console.log(file);
     if (file.mimetype.includes("image")) {
       return cb(null, true);
     }
