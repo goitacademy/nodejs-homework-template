@@ -11,6 +11,7 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().alphanum().min(5).max(20).required(),
+      favorite: Joi.bool(),
     });
     const validateBody = schema.validate(req.body);
     if (validateBody.error) {
@@ -28,6 +29,18 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().alphanum().min(5).max(20).required(),
+      favorite: Joi.bool(),
+    });
+    const validatePutBody = schema.validate(req.body);
+    if (validatePutBody.error) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    next();
+  },
+  changeFavorite: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.bool(),
+      require: true,
     });
     const validatePutBody = schema.validate(req.body);
     if (validatePutBody.error) {

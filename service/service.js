@@ -5,7 +5,7 @@ const getAllContacts = async () => {
 };
 
 const getContactById = (id) => {
-  return Contact.findOne({ _id: id });
+  return Contact.findById(id);
 };
 
 const createContact = (body) => {
