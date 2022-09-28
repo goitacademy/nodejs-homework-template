@@ -12,50 +12,37 @@ const { ctrlWrapper } = require('../../helpers');
 
 /** in this function I took out validation body of request */
 const { validateBody } = require('../../middlewares');
-
+const { isValidId } = require('../../middlewares');
 /** validation body of request */
-const schema = require('../../schema/contactSchema');
+const {
+  contactsAddSchema,
+  contactsUpdateSchema,
+} = require('../../models/contact');
 
 router.get('/', ctrlWrapper(ctrl.getAllContacts));
 
-router.get('/:contactId', ctrlWrapper(ctrl.getContactById));
+router.get('/:contactId', isValidId, ctrlWrapper(ctrl.getContactById));
 
 router.post(
   '/',
-  validateBody(schema.contactsAddSchema),
+  validateBody(contactsAddSchema),
   ctrlWrapper(ctrl.addContacts)
 );
 
-router.delete('/:contactId', ctrlWrapper(ctrl.deleteContact));
+router.delete('/:contactId', isValidId, ctrlWrapper(ctrl.deleteContact));
 
 router.put(
   '/:contactId',
-  validateBody(schema.contactsAddSchema),
+  isValidId,
+  validateBody(contactsAddSchema),
   ctrlWrapper(ctrl.updateContact)
 );
 
+router.patch(
+  '/:contactId/favorite',
+  isValidId,
+  validateBody(contactsUpdateSchema),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
+
 module.exports = router;
-
-// const contacts = require('../../models/contacts');
-// router.get('/:contactId', async (req, res, next) => {
-//   try {
-//     console.log(req.params);
-//     const { contactId } = req.params;
-//     const result = await contacts.getContactById(contactId);
-//     if (!result) {
-//       throw RequestError(404, 'Not found');
-//     }
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const result = await contacts.listContacts();
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
