@@ -1,9 +1,9 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const {errorHandler} = require("./helpers/");
 
 const contactsRouter = require('./routes/api/contacts');
+
 
 const app = express();
 
@@ -19,6 +19,11 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 });
 
-app.use(errorHandler);
+app.use((err, _, res, __) => {
+  const {status = 500, message = "Server error"} = err;
+  // const message = status === 500 ? "Server error" : err.message;
+  res.status(status).json({ message, })
+})
+
 
 module.exports = app;

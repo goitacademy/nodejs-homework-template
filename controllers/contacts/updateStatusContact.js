@@ -1,9 +1,11 @@
 const { Contact } = require("../../models");
 const {RequestError} = require("../../helpers");
 
-const updateById = async(req, res) => {
+const updateStatusContact = async(req, res) => {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const { favorite } = req.body;
+    const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
+    
     if (!result) {
          throw RequestError(404, `User with ${contactId} not found !`);
     };
@@ -14,5 +16,4 @@ const updateById = async(req, res) => {
     })
 };
 
-module.exports = updateById;
-
+module.exports = updateStatusContact;
