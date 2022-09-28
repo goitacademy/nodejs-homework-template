@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { RequestError } = require('../helpers');
-const contactsServices = require('../services');
+const { contactsServices } = require('../services');
 
 const schema = Joi.object({
   name: Joi.string().min(5).max(20).required(),
@@ -87,25 +87,20 @@ const updateContactController = async (req, res, next) => {
 };
 
 const updateStatusContactController = async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    const { favorite } = req.body;
+  const id = req.params.contactId;
+  const { favorite } = req.body;
 
-    if (!favorite) {
-      throw RequestError(400).message({ message: 'missing field favorite' });
-    }
-
-    const updateStatus = await contactsServices.updateContactById(id, { favorite });
-
-    console.log(updateStatus);
-    if (!updateStatus) {
-      throw RequestError(404);
-    }
-
-    return res.json({ updateStatus });
-  } catch (error) {
-    next(error);
+  if (!favorite) {
+    throw RequestError(400).message({ message: 'missing field favorite' });
   }
+
+  const updateStatus = await contactsServices.updateContactById(id, { favorite });
+
+  if (!updateStatus) {
+    throw RequestError(404);
+  }
+
+  return res.json({ updateStatus });
 };
 
 module.exports = {

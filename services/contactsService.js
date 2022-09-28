@@ -15,4 +15,10 @@ const deleteContact = async contactId => await Contact.findByIdAndDelete(contact
 const updateContactById = async (contactId, body) =>
   await Contact.findByIdAndUpdate(contactId, { ...body }, { returnDocument: 'after' });
 
-module.exports = { getContacts, getContactById, addContact, deleteContact, updateContactById };
+module.exports = {
+  getContacts,
+  getContactById,
+  addContact,
+  deleteContact,
+  updateContactById,
+};
