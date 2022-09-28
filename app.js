@@ -10,7 +10,8 @@ const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
-  .then(() => console.log("asdsads").catch((error) => console.log(error)));
+  .then(() => console.log("sadasd"))
+  .catch((error) => console.log(error));
 
 const contactsRouter = require("./routes/api/contacts");
 const app = express();
