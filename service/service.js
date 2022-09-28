@@ -19,8 +19,8 @@ const updateContact = (id, fields) => {
 const removeContact = (id) => {
   return Contact.findByIdAndRemove({ _id: id });
 };
-const updateStatus = (id, body) => {
-  return Contact.findByIdAndUpdate({ _id: id }, body, { new: true });
+const updateStatus = (id, favorite) => {
+  return Contact.findByIdAndUpdate({ _id: id }, favorite, { new: true });
 };
 
 module.exports = {

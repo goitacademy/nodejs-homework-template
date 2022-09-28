@@ -10,7 +10,7 @@ module.exports = {
           tlds: { allow: ["com", "net"] },
         })
         .required(),
-      phone: Joi.string().alphanum().min(5).max(12).required(),
+      phone: Joi.string().alphanum().min(5).max(20).required(),
     });
     const validateBody = schema.validate(req.body);
     if (validateBody.error) {
@@ -27,7 +27,7 @@ module.exports = {
           tlds: { allow: ["com", "net"] },
         })
         .required(),
-      phone: Joi.string().alphanum().min(5).max(12).required(),
+      phone: Joi.string().alphanum().min(5).max(20).required(),
     });
     const validatePutBody = schema.validate(req.body);
     if (validatePutBody.error) {
