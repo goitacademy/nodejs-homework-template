@@ -1,12 +1,13 @@
 const { service } = require("../../service");
 
 const updateStatusContact = async (req, res, next) => {
-  const { favorite } = req.params;
+  const { fav } = req.params;
   const { contactId } = req.params;
   // const { body } = req;
-  console.log(favorite);
+  console.log(fav);
   console.log(contactId);
-  const body = { favorite };
+  const body = { favorite: fav || null };
+  console.log(body);
   // const favorite = Object.keys(body).find((item) => item === "favorite");
 
   // if (Object.values(body).length !== 1 || !favorite) {
@@ -15,7 +16,7 @@ const updateStatusContact = async (req, res, next) => {
   //     message: "missing field favorite",
   //   });
   // } else {
-  if (!favorite) {
+  if (Object.values(body.favorite) === null) {
     res.json({
       status: 400,
       message: "missing field favorite",
