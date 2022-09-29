@@ -4,7 +4,11 @@ const {
   controllerWrapper: ctrlWrap,
   auth,
 } = require("../../middlewares");
-const { joiLoginSchema, joiRegisterSchema } = require("../../models/user");
+const {
+  joiLoginSchema,
+  joiRegisterSchema,
+  subscriptionSchema,
+} = require("../../models/user");
 
 const { authController: ctrl } = require("../../controllers");
 
@@ -21,5 +25,12 @@ router.post("/login", validation(joiLoginSchema), ctrlWrap(ctrl.login));
 router.get("/current", ctrlWrap(auth), ctrlWrap(ctrl.getCurrent));
 
 router.get("/logout", ctrlWrap(auth), ctrlWrap(ctrl.logout));
+
+router.patch(
+  "/:userId/subscription",
+  ctrlWrap(auth),
+  validation(subscriptionSchema),
+  ctrlWrap(ctrl.updateSubscription)
+);
 
 module.exports = router;

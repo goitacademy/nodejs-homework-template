@@ -15,6 +15,8 @@ const router = Router();
 
 router.get("/", ctrlWrap(auth), ctrlWrap(ctrl.getAll));
 
+router.get("/favorite", ctrlWrap(auth), ctrlWrap(ctrl.getFavorite));
+
 router.get("/:contactId", ctrlWrap(auth), ctrlWrap(ctrl.getById));
 
 router.post(
