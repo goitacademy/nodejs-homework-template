@@ -11,7 +11,7 @@ const getCurrent = async (req, res, next) => {
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await userModel.findById(id);
-    if (!user) throw createError(401, "Not authorized");
+    if (!user || !user.token) throw createError(401, "Not authorized");
     req.user = user;
     next();
   } catch (error) {
