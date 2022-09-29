@@ -4,27 +4,18 @@ const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
 
-  const favorite = Object.keys(body).find((item) => item === "favorite");
-
-  if (Object.values(body).length !== 1 || !favorite) {
-    res.json({
-      status: 400,
-      message: "missing field favorite",
+  const result = await service.updateStatus(contactId, body);
+  if (!result) {
+    res.status(404).json({
+      status: "error",
+      message: `Not found contact id: ${contactId}`,
     });
-  } else {
-    try {
-      const result = await service.updateStatus(contactId, body);
-      res.json({
-        status: "success",
-        code: 200,
-        data: { contact: result },
-      });
-    } catch (e) {
-      res.json({
-        status: 400,
-        message: "missing field favorite",
-      });
-    }
   }
+  res.json({
+    status: "success",
+    code: 200,
+    data: { contact: result },
+  });
 };
+
 module.exports = updateStatusContact;

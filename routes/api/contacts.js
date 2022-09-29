@@ -1,19 +1,27 @@
 const express = require("express");
-
+const { schemas } = require("../../service/schemas");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 
 router.get("/", asyncWrapper(ctrl.getAll));
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", asyncWrapper(ctrl.getById));
 
-router.post("/", asyncWrapper(ctrl.addContact));
+router.post("/", schemas.bodyValidation, asyncWrapper(ctrl.addContact));
 
-router.delete("/:contactId", ctrl.deleteContact);
+router.delete("/:contactId", asyncWrapper(ctrl.deleteContact));
 
-router.put("/:contactId", asyncWrapper(ctrl.changeContact));
+router.put(
+  "/:contactId",
+  schemas.bodyValidation,
+  asyncWrapper(ctrl.updateContact)
+);
 
-router.patch("/:contactId/favorite", ctrl.updateStatusContact);
+router.patch(
+  "/:contactId/favorite",
+  schemas.favoriteValidation,
+  asyncWrapper(ctrl.updateStatusContact)
+);
 
 module.exports = router;

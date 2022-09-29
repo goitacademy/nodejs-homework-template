@@ -10,9 +10,9 @@ const addContactById = async (req, res, next) => {
       data: { contact: result },
     });
   } catch (e) {
-    res.status(404).json({
+    res.status(400).json({
       status: "error",
-      message: e.message,
+      message: "the phone and email must be unique",
     });
   }
 };
