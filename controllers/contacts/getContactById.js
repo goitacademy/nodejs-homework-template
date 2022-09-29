@@ -9,11 +9,12 @@ const getById = async (req, res, next) => {
       status: "error",
       message: `Not found contact id: ${contactId}`,
     });
+  } else {
+    res.json({
+      status: "success",
+      code: 200,
+      data: { contact: result },
+    });
   }
-  res.json({
-    status: "success",
-    code: 200,
-    data: { contact: result },
-  });
 };
 module.exports = getById;
