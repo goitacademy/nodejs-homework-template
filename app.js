@@ -31,6 +31,12 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.kind === "ObjectId") {
+    res.status(400).json({ message: "Id has wrong format" });
+  } else next(err);
+});
+
+app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message });
 });
 
