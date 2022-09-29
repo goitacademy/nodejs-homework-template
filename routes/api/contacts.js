@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   validation,
   controllerWrapper: ctrlWrap,
+  auth,
 } = require("../../middlewares");
 const {
   joiSchema: contactsSchema,
@@ -12,7 +13,7 @@ const { contactsController: ctrl } = require("../../controllers");
 
 const router = Router();
 
-router.get("/", ctrlWrap(ctrl.getAll));
+router.get("/", ctrlWrap(auth), ctrlWrap(ctrl.getAll));
 
 router.get("/:contactId", ctrlWrap(ctrl.getById));
 

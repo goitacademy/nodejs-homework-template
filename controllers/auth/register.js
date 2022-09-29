@@ -11,8 +11,12 @@ const register = async (req, res) => {
   const result = await userModel.create({ email, password: hashPassword });
   res.status(201).json({
     status: "success",
-    data: {
-      user: result,
+    code: "201",
+    payload: {
+      user: {
+        email: result.email,
+        subscription: result.subscription,
+      },
     },
   });
 };

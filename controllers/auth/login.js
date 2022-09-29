@@ -14,10 +14,15 @@ const register = async (req, res) => {
     id: user._id,
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "2h" });
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
-    data: {
+    code: "200",
+    payload: {
       token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
     },
   });
 };
