@@ -1,6 +1,6 @@
 const assyncWrapper = controller => {
   return (req, res, next) => {
-    controller(req, res).catch(next);
+    controller(req, res, next).catch(next);
   };
 };
 
