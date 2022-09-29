@@ -28,7 +28,6 @@ router.get("/logout", ctrlWrap(auth), ctrlWrap(ctrl.logout));
 
 router.patch(
   "/:userId/subscription",
-  ctrlWrap(auth),
   validation(subscriptionSchema),
   ctrlWrap(ctrl.updateSubscription)
 );

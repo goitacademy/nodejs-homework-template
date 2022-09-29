@@ -2,7 +2,8 @@ const createError = require("http-errors");
 const { authServices } = require("../../services");
 
 const updateSubscription = async (req, res, next) => {
-  const { userId, subscription } = req.body;
+  const { userId } = req.params;
+  const { subscription } = req.body;
   const updatedUser = await authServices.updateSubscription(userId, {
     subscription,
   });
