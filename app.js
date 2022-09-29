@@ -23,7 +23,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/users/register", routers.usersApi);
+app.use("/users", routers.authApi);
 app.use("/api/contacts", routers.contactsApi);
 
 app.use((req, res) => {
