@@ -4,8 +4,6 @@ const messages = {
     403: "Forbbiden",
     404: "Not found",
     409: "Conflict",
-    500: "Interal Server Error",
-    
 }
 
 const RequestError = (status, message = messages[status]) => {
