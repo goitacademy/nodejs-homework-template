@@ -1,11 +1,11 @@
 const createError = require("http-errors");
-const contactsServices = require("../../services");
+const { contactsServices } = require("../../services");
 
 const updateFavorite = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const { favorite } = req.body;
-  if (favorite === undefined) throw createError(404, "missing field favorite");
-  const updatedContact = await contactsServices.updateFavorite(contactId, {
+  const updatedContact = await contactsServices.updateFavorite(_id, contactId, {
     favorite,
   });
   if (!updatedContact)

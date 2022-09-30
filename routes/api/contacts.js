@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   validation,
   controllerWrapper: ctrlWrap,
+  auth,
 } = require("../../middlewares");
 const {
   joiSchema: contactsSchema,
@@ -12,18 +13,31 @@ const { contactsController: ctrl } = require("../../controllers");
 
 const router = Router();
 
-router.get("/", ctrlWrap(ctrl.getAll));
+router.get("/", ctrlWrap(auth), ctrlWrap(ctrl.getAll));
 
-router.get("/:contactId", ctrlWrap(ctrl.getById));
+router.get("/favorite", ctrlWrap(auth), ctrlWrap(ctrl.getFavorite));
 
-router.post("/", validation(contactsSchema), ctrlWrap(ctrl.add));
+router.get("/:contactId", ctrlWrap(auth), ctrlWrap(ctrl.getById));
+
+router.post(
+  "/",
+  ctrlWrap(auth),
+  validation(contactsSchema),
+  ctrlWrap(ctrl.add)
+);
 
 router.delete("/:contactId", ctrlWrap(ctrl.remove));
 
-router.put("/:contactId", validation(contactsSchema), ctrlWrap(ctrl.update));
+router.put(
+  "/:contactId",
+  ctrlWrap(auth),
+  validation(contactsSchema),
+  ctrlWrap(ctrl.update)
+);
 
 router.patch(
   "/:contactId/favorite",
+  ctrlWrap(auth),
   validation(favoriteSchema),
   ctrlWrap(ctrl.updateFavorite)
 );

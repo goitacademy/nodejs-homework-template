@@ -1,8 +1,8 @@
-const { contact } = require("../models");
-const { ContactModel } = contact;
+const { ContactModel } = require("../../models/contact");
 
-const updateFavorite = async (contactId, favorite) => {
+const updateFavorite = async (userId, contactId, favorite) => {
   const data = await ContactModel.findByIdAndUpdate(contactId, favorite, {
+    owner: userId,
     new: true,
   });
   return data;
