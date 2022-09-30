@@ -15,7 +15,12 @@ const getCurrent = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    if (error.message === "invalid signature") {
+    if (
+      error.message === "invalid signature" ||
+      error.message === "jwt must be provided" ||
+      error.message === "jwt malformed" ||
+      error.message === "invalid token"
+    ) {
       error.status = 401;
       error.message = "Not authorized";
     }

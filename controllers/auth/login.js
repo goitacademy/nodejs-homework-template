@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { authServices } = require("../../services");
 const { SECRET_KEY } = process.env;
 
-const register = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await authServices.getByEmail({ email });
   const passCompare = user ? bcrypt.compareSync(password, user.password) : null;
@@ -28,4 +28,4 @@ const register = async (req, res) => {
   });
 };
 
-module.exports = register;
+module.exports = login;
