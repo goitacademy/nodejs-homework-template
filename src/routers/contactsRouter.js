@@ -7,13 +7,13 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("../models/contacts");
 
 // middleware for validations
 const {
   addContactValidation,
   updateContactValidation,
-} = require("../../middlewares/validationMiddleware");
+} = require("../middlewares/validationMiddleware");
 
 // process a request for contacts list statehood
 
