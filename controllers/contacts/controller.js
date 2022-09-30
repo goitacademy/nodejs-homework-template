@@ -1,9 +1,12 @@
-const contactsServices = require('../../services/contactsServices');
-const contactsSchemas = require('../../schemas/contactsSchemas');
+const { contactsServices } = require('../../services');
+const { contactsSchemas } = require('../../schemas');
+
 const RequestError = require('../../helpers/RequestError');
 
 const listContacts = async (req, res) => {
-    const contacts = await contactsServices.getAll();
+    const { id } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+    const contacts = await contactsServices.getAll(id, page, limit, favorite);
     res.json(contacts);
 };
 
@@ -16,13 +19,14 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+    const { id } = req.user;
     const { error, value: contactData } = contactsSchemas.addContact.validate(
         req.body,
     );
 
     if (error) throw RequestError(400, error.details[0].message);
 
-    const newContact = await contactsServices.createNew(contactData);
+    const newContact = await contactsServices.createNew(contactData, id);
 
     res.status(201).json(newContact);
 };
