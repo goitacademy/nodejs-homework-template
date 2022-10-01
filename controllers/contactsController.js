@@ -1,3 +1,4 @@
+const RequestError = require("../helpers/RequestError");
 const {
   listContacts,
   getContactById,
@@ -15,7 +16,7 @@ const getById = async (req, res) => {
   const { id } = req.params;
   const result = await getContactById(id);
   if (!result) {
-    return res.status(404).json({ message: "Not found" });
+    throw RequestError(404);
   }
   res.status(200).json({ status: "success", code: 200, data: { result } });
 };
@@ -24,7 +25,7 @@ const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await removeContact(id);
   if (!result) {
-    return res.status(404).json({ message: "Not found" });
+    throw RequestError(404);
   }
   res.status(200).json({ message: "contact deleted" });
 };
@@ -34,7 +35,7 @@ const changeContact = async (req, res) => {
 
   const result = await updateContact(id, req.body);
   if (!result) {
-    return res.status(404).json({ message: "Not found" });
+    throw RequestError(404);
   }
   res.status(201).json({
     status: "success",
