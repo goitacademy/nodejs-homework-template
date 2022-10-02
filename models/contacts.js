@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-// const { nanoid } = require('nanoid');
+const { nanoid } = require('nanoid');
 const path = require("path");
 
 const contactsPath = path.join(__dirname, "../models/contacts.json");
@@ -28,16 +28,16 @@ const removeContact = async (contactId) => {
   return res;
 }
 
-// const addContact = async (body) => {
-//   const contacts = await listContacts();
-//   const newContact = {
-//     id: nanoid(),
-//     ...body,
-//   }
-//   contacts.push(newContact);
-//   await updateContacts(contacts);
-//   return newContact;
-// }
+const addContact = async (body) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: nanoid(),
+    ...body,
+  }
+  contacts.push(newContact);
+  await updateContacts(contacts);
+  return newContact;
+}
 
 const updateContact = async (contactId, body) => {
 
@@ -51,6 +51,6 @@ module.exports = {
   listContacts,
   getContactById,
   removeContact,
-  // addContact,
+  addContact,
   updateContact,
 }

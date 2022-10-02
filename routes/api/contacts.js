@@ -2,7 +2,7 @@ const express = require('express')
 
 const operations = require("../../models/contacts");
 
-
+const { RequestError } = require('../../helpers');
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
@@ -12,16 +12,30 @@ router.get('/', async (req, res, next) => {
     console.log('req:', req.body);
   }
   catch (err) {
-    res.status(500).json({ message: err.message })
+    next(err);
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'contactID get' })
+  try {
+    const contact = await operations.getContactById(req.params.contactId);
+    if (!contact) {
+      throw RequestError(404, 'Not found');
+    }
+    res.json(contact);
+  }
+  catch (err) {
+    next(err);
+  }
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'post req' })
+  try {
+    const contact = await operations.addContact(req.body);
+    res.json(contact);
+  } catch (err) {
+    next(err);
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
