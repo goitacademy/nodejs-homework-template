@@ -11,13 +11,6 @@ const getContacts = async () => {
 
 const getContactById = async (id) => {
   const targetedContact = await Contact.findById(id);
-
-  if (!targetedContact) {
-    throw new WrongParametersError({
-      message: "Contact not fined",
-      status: 400,
-    });
-  }
   return targetedContact;
 };
 
