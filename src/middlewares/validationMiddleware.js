@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { ValidationError } = require("../helpers");
 
 const fieldsValidations = {
   addContactValidation: (req, res, next) => {
@@ -35,11 +34,10 @@ const fieldsValidations = {
     const validationResult = schema.validate(req.body);
 
     if (validationResult.error) {
-      next(
-        new ValidationError(
-          "fields that you try to change do not meet the validation requirements"
-        )
-      );
+      return res.status(400).json({
+        message:
+          "fields that you try to change do not meet the validation requirements",
+      });
     }
 
     next();
@@ -71,11 +69,10 @@ const fieldsValidations = {
     const validationResult = schema.validate(req.body);
 
     if (validationResult.error) {
-      next(
-        new ValidationError(
-          "fields that you try to change do not meet the validation requirements"
-        )
-      );
+      return res.status(400).json({
+        message:
+          "fields that you try to change do not meet the validation requirements",
+      });
     }
     next();
   },
@@ -84,11 +81,10 @@ const fieldsValidations = {
     const { favorite } = req.body;
 
     if (typeof favorite !== "boolean") {
-      next(
-        new ValidationError(
-          "Request body should have key 'favorite' with value of boolean type "
-        )
-      );
+      return res.status(400).json({
+        message:
+          "Request body should have key 'favorite' with value of boolean type ",
+      });
     }
     next();
   },

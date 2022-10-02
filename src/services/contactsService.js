@@ -1,10 +1,9 @@
-const { WrongParametersError } = require("../helpers");
 const { Contact } = require("../db");
 
 const getContacts = async () => {
   const contacts = await Contact.find({});
   if (!contacts || contacts.length < 1) {
-    throw new WrongParametersError("Your contact list is empty");
+    throw new Error("your contact list is empty");
   }
   return contacts;
 };
