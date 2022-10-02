@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { RequestError } = require('../helpers');
+const { RequestError, createNameFromEmail } = require('../helpers');
 const gravatar = require('gravatar');
 const Jimp = require('jimp');
 const path = require('path');
@@ -68,10 +68,10 @@ const updateSubscription = async (id, subscription) => {
     return user;
 };
 
-const updateAvatar = async (tempUpload, fileName, id) => {
+const updateAvatar = async (tempUpload, originalname, id, email) => {
+    const fileName = createNameFromEmail(email, originalname);
+    const resultUpload = path.join(avatarsDir, fileName);
     try {
-        const resultUpload = path.join(avatarsDir, fileName);
-
         const avatar = await Jimp.read(tempUpload);
         await avatar.resize(250, 250).write(resultUpload);
         await fs.unlink(tempUpload);

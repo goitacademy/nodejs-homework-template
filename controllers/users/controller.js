@@ -53,9 +53,14 @@ const updateUserSubscription = async (req, res) => {
 
 const updateUserAvatar = async (req, res) => {
     const { path, originalname } = req.file;
-    const { id } = req.user;
+    const { id, email } = req.user;
 
-    const newAvatar = await usersServices.updateAvatar(path, originalname, id);
+    const newAvatar = await usersServices.updateAvatar(
+        path,
+        originalname,
+        id,
+        email,
+    );
 
     res.json(newAvatar);
 };
