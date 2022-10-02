@@ -1,9 +1,9 @@
-const RequsetError = require("../../helpers/");
+const { RequsetError } = require("../../helpers/");
 const { Contact } = require("../../models/contact");
 
 const removeContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove(contactId);
+  const { id } = req.params;
+  const result = await Contact.findByIdAndRemove(id);
   if (!result) {
     throw RequsetError(404, "Not found");
   }
