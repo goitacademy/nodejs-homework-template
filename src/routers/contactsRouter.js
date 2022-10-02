@@ -16,6 +16,7 @@ const {
 const {
   addContactValidation,
   updateContactValidation,
+  updateStatusValidation,
 } = require("../middlewares");
 
 // routers paths
@@ -30,6 +31,7 @@ router.put(
 );
 router.patch(
   "/:contactId/favorite",
+  updateStatusValidation,
   asyncWrapper(changeContactStatusController)
 );
 

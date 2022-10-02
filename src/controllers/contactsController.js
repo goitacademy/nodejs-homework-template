@@ -1,18 +1,15 @@
-const { Contact } = require("../db");
-
 const {
   getContacts,
   getContactById,
   addContact,
   deleteContact,
   changeContact,
-  changeContactStatus,
 } = require("../services");
 
 // process a request for contacts list statehood
 
 const getContactsController = async (req, res) => {
-  const contacts = getContacts();
+  const contacts = await getContacts();
   res.json({ contacts });
 };
 
@@ -33,20 +30,26 @@ const getContactByIdController = async (req, res) => {
 // process a request to add a new contact to the list
 
 const addContactController = async (req, res) => {
-  const { name, email, phone, favorite } = req.body;
-  const isFavorite = favorite || false;
-  const contact = new Contact({ name, email, phone, favorite: isFavorite });
-  await contact.save();
-  res.json({ status: "success" });
+  const contact = await addContact(req.body);
+
+  res.json({
+    status: "success",
+    message: `Contact ${contact.name} was successfully added`,
+  });
 };
 
 // process a request to delete contact by ID
 
 const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
-  const isRemovalSuccessful = await Contact.findByIdAndRemove(contactId);
+
+  const contact = await deleteContact(contactId);
+  const isRemovalSuccessful = !!contact;
+
   res.json({
-    message: isRemovalSuccessful ? "contact deleted" : "Not found",
+    message: isRemovalSuccessful
+      ? `contact ${contactId} was successfully deleted`
+      : `contact ${contactId} not founded`,
     status: isRemovalSuccessful ? 200 : 404,
   });
 };
@@ -55,9 +58,8 @@ const deleteContactController = async (req, res) => {
 
 const changeContactController = async (req, res) => {
   const { contactId } = req.params;
-  // const { name, email, phone, favorite } = req.body;
 
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body);
+  const updatedContact = await changeContact(contactId, req.body);
 
   res.status(200).json({
     message: `contact ${contactId} was successfully updated`,
@@ -67,18 +69,11 @@ const changeContactController = async (req, res) => {
 
 const changeContactStatusController = async (req, res) => {
   const { contactId } = req.params;
-  const { favorite } = req.body;
-  if (!favorite) {
-    res.json({ status: 400, message: "missing field favorite" });
-    return;
-  }
-  const updateStatusContact = await Contact.findByIdAndUpdate(
-    contactId,
-    favorite
-  );
+
+  const updateStatusContact = await changeContact(contactId, req.body);
 
   res.status(200).json({
-    message: `contact ${contactId} was successfully updated`,
+    message: `Status of contact ${contactId} was successfully updated`,
     contact: updateStatusContact,
   });
 };
