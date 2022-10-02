@@ -51,10 +51,20 @@ const updateUserSubscription = async (req, res) => {
     res.json(updatedUser);
 };
 
+const updateUserAvatar = async (req, res) => {
+    const { path, originalname } = req.file;
+    const { id } = req.user;
+
+    const newAvatar = await usersServices.updateAvatar(path, originalname, id);
+
+    res.json(newAvatar);
+};
+
 module.exports = {
     registerUser,
     logInUser,
     logOutUser,
     listCurrentUser,
     updateUserSubscription,
+    updateUserAvatar,
 };

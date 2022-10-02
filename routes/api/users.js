@@ -1,6 +1,6 @@
 const express = require('express');
 const { usersController: ctrl } = require('../../controllers');
-const { auth } = require('../../middlewares');
+const { auth, upload } = require('../../middlewares');
 
 const { ctrlWrapper } = require('../../helpers');
 
@@ -15,5 +15,12 @@ router.post('/logout', auth, ctrlWrapper(ctrl.logOutUser));
 router.get('/current', auth, ctrlWrapper(ctrl.listCurrentUser));
 
 router.put('/', auth, ctrlWrapper(ctrl.updateUserSubscription));
+
+router.patch(
+    '/avatars',
+    auth,
+    upload.single('avatar'),
+    ctrlWrapper(ctrl.updateUserAvatar),
+);
 
 module.exports = router;
