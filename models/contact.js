@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const contactShema = Schema({
+const contactShema = new Schema({
     name: {
         type: String,
         required: [true, 'Set name for contact'],
@@ -15,6 +15,10 @@ const contactShema = Schema({
     favorite: {
         type: Boolean,
         default: false,
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
     },
 },{versionKey: false, timestamps: true});
 
