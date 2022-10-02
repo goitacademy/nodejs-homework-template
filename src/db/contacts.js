@@ -67,9 +67,6 @@ const removeContact = async (contactId) => {
  */
 const addContact = async ({ name, email, phone }) => {
   try {
-    console.log("name :>> ", name);
-    console.log("email :>> ", email);
-    console.log("phone :>> ", phone);
     const newContact = {
       id: uid(6),
       name,
