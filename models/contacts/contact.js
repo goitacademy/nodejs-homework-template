@@ -65,13 +65,13 @@ const addSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
-const upadateFavoriteSchema = Joi.object({
+const updateFavoriteSchema = Joi.object({
   favorite: Joi.bool().required(),
 });
 
 const schemas = {
   addSchema,
-  upadateFavoriteSchema,
+  updateFavoriteSchema,
 };
 
 const Contact = model("contact", contactSchema);
