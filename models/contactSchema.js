@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+
 const contactSchema = new Schema(
   {
     name: {
@@ -16,11 +17,16 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    }, 
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
     },
   },
   { versionKey: false, timestamps: false }
 );
 
-const ContactSchema = mongoose.model("contactSchema", contactSchema);
+const Contact = mongoose.model("contacts", contactSchema);
 
-module.exports = ContactSchema;
+module.exports = Contact;
