@@ -1,25 +1,78 @@
-const express = require('express')
+const express = require("express");
+const Joi = require("joi");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const addSchema = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().required(),
+	phone: Joi.string().required(),
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsApi = require("../../models/contacts");
+const { RequestError } = require("../../utils");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+	try {
+		const contacts = await contactsApi.listContacts();
+		res.json(contacts);
+	} catch (error) {
+		next(error);
+	}
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const contact = await contactsApi.getContactById(contactId);
+		if (!contact) {
+			throw RequestError(404);
+		}
+		res.json(contact);
+	} catch (error) {
+		next(error);
+	}
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+	try {
+		const { error } = addSchema.validate(req.body);
+		if (error) throw new Error(error);
+		const contact = await contactsApi.addContact(req.body);
+		res.status(201).json(contact);
+	} catch (error) {
+		next(error);
+	}
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const contact = await contactsApi.removeContact(contactId);
+		if (!contact) {
+			throw RequestError(404);
+		}
+		res.status(200).json(contact);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.put("/:contactId", async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const { error } = addSchema.validate(req.body);
+		if (error) {
+			throw RequestError(400);
+		}
+		const contact = await contactsApi.updateContact(contactId, req.body);
+		if (!contact) {
+			throw RequestError(404);
+		}
+		res.status(201).json(contact);
+	} catch (error) {
+		next(error);
+	}
+});
+
+module.exports = router;
