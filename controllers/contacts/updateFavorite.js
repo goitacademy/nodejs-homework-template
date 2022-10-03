@@ -1,16 +1,13 @@
 const RequestError = require('../../helpers/RequestError');
 const Contact = require('../../models/contact');
 
-const remove = async (req, res) => {
+const updateFavorite = async (req, res) => {
     const { contactId } = req.params;
-    const result = await Contact.findOneAndDelete({ _id: contactId });
-    console.log(contactId);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
     if (!result) {
         throw RequestError(404, 'Not found');
     }
-    res.json({
-        message: "contact deleted"
-    });
+    res.json(result);
 }
 
-module.exports = remove;
+module.exports = updateFavorite;
