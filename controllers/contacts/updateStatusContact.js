@@ -1,13 +1,14 @@
 const { Contact, joi } = require("../../models");
 const { RequestError } = require("../../helpers");
 
-const updateById = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
-    const { error } = joi.updateSchema.validate(req.body);
+    const { error } = joi.favoriteSchema.validate(req.body);
     if (error) {
       throw RequestError(400, error.message);
     }
     const { contactId } = req.params;
+
     const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
@@ -20,4 +21,4 @@ const updateById = async (req, res, next) => {
   }
 };
 
-module.exports = updateById;
+module.exports = updateStatusContact;
