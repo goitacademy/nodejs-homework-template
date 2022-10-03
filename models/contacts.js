@@ -23,7 +23,21 @@ const getContactById = async (contactId) => {
   return result;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const products = await listContacts();
+  const isIdForDelete = products.some((product) => product.id === contactId);
+  console.log("isIdForDelete:", isIdForDelete);
+  if (!isIdForDelete) {
+    return null;
+  }
+  const newListContacts = products.filter(
+    (contact) => contact.id !== `${contactId}`
+  );
+
+  await fs.writeFile(contactsPath, JSON.stringify(newListContacts));
+
+  return newListContacts;
+};
 
 const addContact = async (name, email, phone) => {
   const products = await listContacts();
@@ -36,7 +50,17 @@ const addContact = async (name, email, phone) => {
   return newPoduct;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, name, email, phone) => {
+  const products = await listContacts();
+  const idx = products.findIndex((product) => product.id === contactId);
+  if (idx === -1) {
+    return null;
+  }
+  products[idx] = { id: contactId, name, email, phone };
+  console.log("products[idx]:", products[idx]);
+  await fs.writeFile(contactsPath, JSON.stringify(products));
+  return products[idx];
+};
 
 module.exports = {
   listContacts,
