@@ -8,5 +8,13 @@ const removeById = require("./removeById");
 
 const updateById = require("./updateById");
 
+const updateContactFavoriteCtrl = require("./updateContactFavoriteCtrl");
 
-module.exports = { getAll, getById, add, updateById, removeById };
+module.exports = {
+  getAll,
+  getById,
+  add,
+  updateById,
+  removeById,
+  updateContactFavoriteCtrl,
+};
