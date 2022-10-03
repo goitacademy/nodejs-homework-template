@@ -1,12 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const  User  = require('../models/userSchema');
+const gravatar = require('gravatar');
+const User = require('../models/userSchema');
+
 
 const registration = async (email, password, subscription) => {
     const user = await User.findOne({ email });
     if (user) throw createError(409, `Email in use`);
-    await User.create({ email, password, subscription });
+    const avatarURL = gravatar.url(email, {protocol: 'https', s: '100', d: 'mp'});
+    await User.create({ email, password, avatarURL, subscription });
 }
 
 const login = async (email, password) => {
@@ -29,9 +32,14 @@ const logout = async (userId) => {
     await User.findOneAndUpdate({ _id: userId }, { token: null })
 }
 
+const setUserAvatar = async (userId, avatar) => {
+    await User.findOneAndUpdate({ _id: userId }, { avatarURL: avatar });
+}
+
 module.exports = {
   registration,
   login,
+  logout,
   currentUser,
-  logout
+  setUserAvatar,
 }

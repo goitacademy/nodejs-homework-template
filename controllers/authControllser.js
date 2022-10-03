@@ -1,11 +1,15 @@
 const Joi = require('joi');
 const createError = require('http-errors');
+const Jimp = require('jimp');
+const path = require('path');
+const fs = require('fs');
 
 const {
     registration,
     login,
+    logout,
     currentUser,
-    logout
+    setUserAvatar,
 } = require('../services/authService');
 
 const validateBody = (body) => {
@@ -53,6 +57,12 @@ const loginController = async (req, res) => {
   }})
 };
 
+const logoutController = async (req, res) => {
+  const { _id } = req.user;
+  await logout(_id);
+  res.status(204).json({status: "204 No Content"});
+};
+ 
 const currentUserController = async (req, res) => {
   const { _id } = req.user;
   const { email, subscription } = await currentUser(_id);
@@ -66,15 +76,30 @@ const currentUserController = async (req, res) => {
   }})
  };
 
-const logoutController = async (req, res) => {
+const avatarUserController = async (req, res) => {
+  const { base: fileName } = path.parse(req.urlTmp);
+  let avatarURL = path.resolve('./public/avatars/', fileName);
+  Jimp.read(req.urlTmp, (err, avatar) => {
+      if (err) throw err;
+      avatar
+          .resize(250, 250)
+          .write(avatarURL);
+  });
+  fs.unlinkSync(req.urlTmp);
   const { _id } = req.user;
-  await logout(_id);
-  res.status(204).json({status: "204 No Content"});
+  avatarURL = path.relative('./public', avatarURL);
+  await setUserAvatar(_id, avatarURL);
+  res.status(200).json({
+    status: "200 OK",
+    ResponseBody: {
+      avatarURL: avatarURL
+  }})
  };
 
 module.exports = {
-    registrationController,
-    loginController,
-    currentUserController,
-    logoutController
+  registrationController,
+  loginController,
+  logoutController,
+  currentUserController,
+  avatarUserController,
 }
