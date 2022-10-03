@@ -11,7 +11,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     validateSchema(signupSchema, req.body);
 
-    const { email, password } = req.body;
+    const { email } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
