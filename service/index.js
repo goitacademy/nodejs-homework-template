@@ -1,3 +1,4 @@
-const service = require("./service");
+const serviceContacts = require("./serviceContacts");
+const serviceUsers = require("./serviceUsers");
 
-module.exports = { service };
+module.exports = { serviceContacts, serviceUsers };

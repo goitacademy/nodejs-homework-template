@@ -1,8 +1,8 @@
-const { service } = require("../../service");
+const { serviceContacts } = require("../../service");
 
 const getAll = async (req, res, next) => {
   try {
-    const results = await service.getAllContacts();
+    const results = await serviceContacts.getAllContacts();
     res.json({
       status: "success",
       code: 200,

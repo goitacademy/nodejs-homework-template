@@ -1,5 +1,5 @@
 const express = require("express");
-const { schemas } = require("../../service/schemas");
+const { schemas } = require("../../service/schemasContacts");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
