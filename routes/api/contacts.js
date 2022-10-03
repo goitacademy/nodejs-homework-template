@@ -4,8 +4,11 @@ const Joi = require("joi");
 
 const router = express.Router();
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email(),
+  name: Joi.string().min(2).max(30).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "org"] },
+  }),
   phone: Joi.string().required(),
 });
 
@@ -53,7 +56,6 @@ router.delete("/:id", async (req, res, next) => {
     if (!result) {
       throw RequestError(404, "Not found");
     }
-    // res.status(204).send()
     res.json({
       message: "contact deleted",
     });
