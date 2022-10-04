@@ -4,7 +4,7 @@ const contacts = require('../../models/contacts');
 
 const router = express.Router()
 
-const { RequestError } = require('../../helpers/RequestError');
+const { RequestError } = require('../../helpers');
 
 const Joi = require('joi');
 
@@ -27,14 +27,13 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id)
-
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId)
+   
     if (!result) {
       throw RequestError(404, 'Not found')
     }
     res.json(result)
-    console.log(result);
 
   } catch (error) {
     next(error);
@@ -43,14 +42,13 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { name, email, phone } = req.params;
+    const { name, email, phone } = req.body;
     const { error } = addShema.validate({ name, email, phone })
     if (error) {
       throw RequestError(400, error.message);
     }
-    const result = await contacts.addContact({ name, email, phone })
+    const result = await contacts.addContact( name, email, phone )
     res.status(201).json(result);
-    console.log(result);
   } catch (error) {
     next(error)
   }
@@ -58,14 +56,13 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id)
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId)
 
     if (!result) {
       throw RequestError(404, 'Not found')
     }
     res.json(result)
-    console.log(result);
 
   } catch (error) {
     next(error);
@@ -74,17 +71,20 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { name, email, phone } = req.params;
+    const { contactId } = req.params;
+    console.log(contactId);
+    const { name, email, phone } = req.body;
     const { error } = addShema.validate({ name, email, phone })
     if (error) {
       throw RequestError(400, error.message);
     }
-    const result = await contacts.addContact({ name, email, phone })
+    const result = await contacts.updateById( contactId, name, email, phone )
+    console.log(result);
     if (!result) {
       throw RequestError(404, 'Not Found')
     }
     res.json(result);
-    console.log(result);
+
   } catch (error) {
     next(error)
   }
