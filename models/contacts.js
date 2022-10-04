@@ -1,9 +1,9 @@
 const fs = require("fs/promises");
 const path = require("path");
+
 const { v4 } = require("uuid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
-// console.log("__dirname:", __dirname);
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
@@ -12,7 +12,7 @@ const listContacts = async () => {
   return products;
 };
 
-const getContactById = async (contactId) => {
+const contactById = async (contactId) => {
   const products = await listContacts();
   const result = products.find((contact) => contact.id === `${contactId}`);
 
@@ -26,10 +26,11 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const products = await listContacts();
   const isIdForDelete = products.some((product) => product.id === contactId);
-  console.log("isIdForDelete:", isIdForDelete);
+
   if (!isIdForDelete) {
     return null;
   }
+
   const newListContacts = products.filter(
     (contact) => contact.id !== `${contactId}`
   );
@@ -41,7 +42,6 @@ const removeContact = async (contactId) => {
 
 const addContact = async (name, email, phone) => {
   const products = await listContacts();
-
   const newPoduct = { id: v4(), name, email, phone };
   products.push(newPoduct);
 
@@ -53,18 +53,20 @@ const addContact = async (name, email, phone) => {
 const updateContact = async (contactId, name, email, phone) => {
   const products = await listContacts();
   const idx = products.findIndex((product) => product.id === contactId);
+
   if (idx === -1) {
     return null;
   }
+
   products[idx] = { id: contactId, name, email, phone };
-  console.log("products[idx]:", products[idx]);
   await fs.writeFile(contactsPath, JSON.stringify(products));
+
   return products[idx];
 };
 
 module.exports = {
   listContacts,
-  getContactById,
+  contactById,
   removeContact,
   addContact,
   updateContact,
