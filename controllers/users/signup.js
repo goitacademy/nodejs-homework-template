@@ -3,12 +3,9 @@ const { requestError } = require("../../helpers");
 const bcrypt = require("bcrypt");
 
 const signup = async (req, res, next) => {
-  console.log("test: ");
-  console.log("req.body: ", req.body);
   try {
-    const { error } = signupSchema.validate(req.body);
-
-    console.log("error: ", error);
+    const test = signupSchema.validate(req.body);
+    const { error } = test;
     if (error) {
       throw requestError(400, error.message);
     }

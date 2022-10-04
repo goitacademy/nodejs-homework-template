@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const bcrypt = require("bcrypt");
 const { handleSchemaValidationErrors } = require("../helpers");
 
 const subscriptionList = ["starter", "pro", "business"];
@@ -33,11 +32,7 @@ const userSchema = Schema(
 
 userSchema.post("save", handleSchemaValidationErrors);
 
-userSchema.methods.validatePassword = function (password) {
-  return bcrypt.compare(password, this.password);
-};
-
-const singupSchema = Joi.object({
+const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
   repeat_password: Joi.ref("password"),
@@ -53,6 +48,6 @@ const loginSchema = Joi.object({
 const User = model("user", userSchema);
 module.exports = {
   User,
-  singupSchema,
+  signupSchema,
   loginSchema,
 };

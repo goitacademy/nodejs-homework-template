@@ -1,9 +1,9 @@
 const { Contact, contactSchemas } = require("./contacts");
-const { User, singupSchema, loginSchema } = require("./users");
+const { User, signupSchema, loginSchema } = require("./users");
 module.exports = {
   Contact,
   User,
   contactSchemas,
-  singupSchema,
+  signupSchema,
   loginSchema,
 };

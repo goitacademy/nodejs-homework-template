@@ -4,8 +4,6 @@ const { requestError } = require("../../helpers");
 const addContact = async (req, res, next) => {
   try {
     const { error } = contactSchemas.addSchema.validate(req.body);
-    console.log("error: ", error.message);
-
     if (error) {
       throw requestError(400, error.message);
     }

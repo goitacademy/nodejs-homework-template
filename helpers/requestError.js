@@ -1,4 +1,4 @@
-const RequestError = (status, message) => {
+const requestError = (status, message) => {
   console.log("message: ", message);
   console.log("status: ", status);
   const error = new Error(message);
@@ -6,4 +6,4 @@ const RequestError = (status, message) => {
   return error;
 };
 
-module.exports = RequestError;
+module.exports = requestError;
