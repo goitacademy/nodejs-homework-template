@@ -7,7 +7,7 @@ const { DB_HOST, PORT } = process.env;
 
 mongoose.connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful")
     })
     
