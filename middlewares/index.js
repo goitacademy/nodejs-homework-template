@@ -1,3 +1,9 @@
 const validateBody = require("./validateBody");
 const handleSaveErrors = require("./handleSaveErrors");
-module.exports = {validateBody,handleSaveErrors};
+const isValidId = require("./isValidId");
+
+module.exports = {
+    validateBody,
+    handleSaveErrors,
+    isValidId
+};

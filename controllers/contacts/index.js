@@ -6,7 +6,7 @@ const remove = require("./remove");
 
 module.exports = {
     // getById,
-    // getAll,
+    getAll,
     add,
     // remove,
     // update,
