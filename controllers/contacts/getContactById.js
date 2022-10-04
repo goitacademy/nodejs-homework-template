@@ -1,5 +1,5 @@
 const { Contact } = require("../../models");
-const { RequestError } = require("../../helpers");
+const { requestError } = require("../../helpers");
 
 const getContactById = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const getContactById = async (req, res, next) => {
     const contact = await Contact.findById(contactId);
     console.log("contact: ", contact);
     if (!contact) {
-      throw RequestError(404, "Not found");
+      throw requestError(404, "Not found");
     }
     res.json(contact);
   } catch (error) {
