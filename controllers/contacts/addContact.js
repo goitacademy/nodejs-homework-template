@@ -1,14 +1,13 @@
-const contactsOperations = require("../../models/contacts");
-const RequestError = require("../../helpers/requestError");
-const conctactShchema = require("../../shchemas/contacts");
+const { Contact, joi } = require("../../models");
+const { requestError } = require("../../helpers");
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = conctactShchema.validate(req.body);
+    const { error } = joi.addSchema.validate(req.body);
     if (error) {
-      throw RequestError(400, error.message);
+      throw requestError(400, error.message);
     }
-    const contacts = await contactsOperations.addContact(req.body);
+    const contacts = await Contact.create(req.body);
     res.status(201).json(contacts);
   } catch (error) {
     next(error);
