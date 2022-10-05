@@ -5,10 +5,7 @@ const postContact = async (req, res, next) => {
   try {
     const { name, phone, email } = req.body;
     if (!name || !phone || !email) {
-      throw createReject(400, {
-        message: 'Missing required name field',
-        status: 'Failure',
-      });
+      throw createReject(400, 'Missing required name field');
     }
     const result = await addContact({ name, phone, email });
     res.status(201).json({ status: 'Succsess', data: result });
