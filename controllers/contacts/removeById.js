@@ -1,5 +1,5 @@
 const { Contact } = require('../../models/contacts');
-const createError = require('../../errors');
+const { createError } = require('../../errors');
 
 const removeById = async (req, res, next) => {
   try {

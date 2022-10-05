@@ -1,4 +1,4 @@
-const createError = require('../errors');
+const { createError } = require('../errors');
 
 const validationBody = schema => {
   const func = async (req, _, next) => {
