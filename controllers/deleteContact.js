@@ -9,7 +9,7 @@ const deleteContact = async (req, res) => {
             throw RequestError(404, "Not found");
         }
         res.json({
-            message: "Book remove",
+            message: "Contact deleted",
         })
 };
 
