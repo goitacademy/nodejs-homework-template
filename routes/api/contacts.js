@@ -10,7 +10,7 @@ const {
     updateContact,
 } = require('../../models/contacts');
 
-const RequestError = require('../../helpers/RequestError');
+const { RequestError } = require('../../helpers');
 
 const router = express.Router();
 
