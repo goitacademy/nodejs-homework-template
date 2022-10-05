@@ -12,7 +12,7 @@ const updateById = async (req, res, next) => {
       new: true,
     });
     if (!contact) {
-      throw RequestError(404, "Not found");
+      throw requestError(404, "Not found");
     }
     res.json(contact);
   } catch (error) {
