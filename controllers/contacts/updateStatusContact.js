@@ -1,11 +1,11 @@
 const { Contact, contactSchemas } = require("../../models");
-const { requestError } = require("../../helpers");
+const { RequestError } = require("../../helpers");
 
 const updateStatusContact = async (req, res, next) => {
   try {
     const { error } = contactSchemas.favoriteSchema.validate(req.body);
     if (error) {
-      throw requestError(400, error.message);
+      throw RequestError(400, error.message);
     }
     const { contactId } = req.params;
 
@@ -13,7 +13,7 @@ const updateStatusContact = async (req, res, next) => {
       new: true,
     });
     if (!contact) {
-      throw requestError(404, "Not found");
+      throw RequestError(404, "Not found");
     }
     res.json(contact);
   } catch (error) {

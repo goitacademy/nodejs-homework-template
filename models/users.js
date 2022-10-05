@@ -36,18 +36,24 @@ const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
   repeat_password: Joi.ref("password"),
-  subscription: Joi.string()
-    .valueOf(...subscriptionList)
-    .required(),
+  subscription: Joi.string().valid(...subscriptionList),
 });
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
+
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required(),
+});
+
+const usersJoiSchemas = { signupSchema, loginSchema, subscriptionSchema };
 const User = model("user", userSchema);
+
 module.exports = {
   User,
-  signupSchema,
-  loginSchema,
+  usersJoiSchemas,
 };

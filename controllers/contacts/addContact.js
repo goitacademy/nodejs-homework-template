@@ -1,13 +1,14 @@
-const { Contact, contactSchemas } = require("../../models");
-const { requestError } = require("../../helpers");
+const { Contact, contactsJoiSchemas } = require("../../models");
+const { RequestError } = require("../../helpers");
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = contactSchemas.addSchema.validate(req.body);
+    const { error } = contactsJoiSchemas.addSchema.validate(req.body);
     if (error) {
-      throw requestError(400, error.message);
+      throw RequestError(400, error.message);
     }
-    const contacts = await Contact.create(req.body);
+    const { _id } = req.user;
+    const contacts = await Contact.create({ ...req.body, owner: _id });
     res.status(201).json(contacts);
   } catch (error) {
     next(error);

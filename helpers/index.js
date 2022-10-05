@@ -1,7 +1,7 @@
-const requestError = require("./requestError");
+const RequestError = require("./RequestError");
 const handleSchemaValidationErrors = require("./handleSchemaValidationErrors");
 
 module.exports = {
-  requestError,
+  RequestError,
   handleSchemaValidationErrors,
 };
