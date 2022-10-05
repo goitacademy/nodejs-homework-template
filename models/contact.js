@@ -2,6 +2,8 @@ const { Schema, model } = require('mongoose');
 
 const Joi = require('joi');
 
+const { handleSaveError } = require('../helpers');
+
 /**
  * regular expression for checking data that goes to database if we need
  */
@@ -30,19 +32,25 @@ const contactSchema = new Schema(
       default: false,
       //   required: true,
     },
+
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 // this foo it is medelware for validate
 // const handleSaveError = (error, data, next) => {
-//   //   const { name, code } = error;
-//   //  error.status = (name === "")...
+//   const { name, code } = error;
+//   error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
 //   console.log(error);
 //   console.log(data);
 //   next();
 // };
-// contactSchema.post('seve', handleSaveError);
+contactSchema.post('seve', handleSaveError);
 
 /** like type script typing data */
 const contactsAddSchema = Joi.object({

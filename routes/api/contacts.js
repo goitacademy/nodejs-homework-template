@@ -11,28 +11,40 @@ const ctrl = require('../../controlers/contacts');
 const { ctrlWrapper } = require('../../helpers');
 
 /** in this function I took out validation body of request */
-const { validateBody } = require('../../middlewares');
-const { isValidId } = require('../../middlewares');
+
+const { isValidId, authenticate, validateBody } = require('../../middlewares');
 /** validation body of request */
 const {
   contactsAddSchema,
   contactsUpdateSchema,
 } = require('../../models/contact');
 
-router.get('/', ctrlWrapper(ctrl.getAllContacts));
+router.get('/', authenticate, ctrlWrapper(ctrl.getAllContacts));
 
-router.get('/:contactId', isValidId, ctrlWrapper(ctrl.getContactById));
+router.get(
+  '/:contactId',
+  authenticate,
+  isValidId,
+  ctrlWrapper(ctrl.getContactById)
+);
 
 router.post(
   '/',
+  authenticate,
   validateBody(contactsAddSchema),
   ctrlWrapper(ctrl.addContacts)
 );
 
-router.delete('/:contactId', isValidId, ctrlWrapper(ctrl.deleteContact));
+router.delete(
+  '/:contactId',
+  authenticate,
+  isValidId,
+  ctrlWrapper(ctrl.deleteContact)
+);
 
 router.put(
   '/:contactId',
+  authenticate,
   isValidId,
   validateBody(contactsAddSchema),
   ctrlWrapper(ctrl.updateContact)
@@ -40,6 +52,7 @@ router.put(
 
 router.patch(
   '/:contactId/favorite',
+  authenticate,
   isValidId,
   validateBody(contactsUpdateSchema),
   ctrlWrapper(ctrl.updateStatusContact)
