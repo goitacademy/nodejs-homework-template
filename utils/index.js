@@ -1,5 +1,7 @@
-const createReject = require('./createReject')
+const createReject = require('./createReject');
+const rewriteJsonContacts = require('./rewriteJsonContacts');
 
 module.exports = {
-    createReject
-}
+  createReject,
+  rewriteJsonContacts,
+};
