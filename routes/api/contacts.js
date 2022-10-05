@@ -1,7 +1,6 @@
 const express = require("express");
 
 const { RequestError } = require("../../helpers/RequestError");
-// const { validateBody } = require("../../middlewares/validateBody");
 const schemas = require("../../schemas/contact");
 
 const router = express.Router();
@@ -61,7 +60,9 @@ router.put("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     res.json(result);
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
