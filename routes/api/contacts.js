@@ -14,7 +14,7 @@ const addSchema = Joi.object({
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -29,7 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
       throw RequestError(404, "Not found");
     }
     console.log(result);
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -39,7 +39,7 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw RequestError(400, error.message);
+      throw RequestError(400, "missing required name field");
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -56,8 +56,8 @@ router.delete("/:contactId", async (req, res, next) => {
     if (!result) {
       throw RequestError(404, "Not found");
     }
-    res.json({
-      message: "Delete success",
+    res.status(200).json({
+      message: "Contact deleted",
     });
   } catch (error) {
     next(error);
@@ -68,7 +68,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw RequestError(400, error.message);
+      throw RequestError(400, "missing fields");
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
