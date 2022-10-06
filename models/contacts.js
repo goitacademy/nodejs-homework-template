@@ -28,7 +28,24 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contact = await JSON.parse(data).find(
+      (contact) => contact.id.toString() === contactId.toString()
+    );
+    if (contact) {
+      const filteredData = JSON.parse(data).filter(
+        (contact) => contact.id.toString() !== contactId.toString()
+      );
+      await fs.writeFile(contactsPath, JSON.stringify(filteredData));
+      return contact;
+    }
+    return null;
+  } catch (error) {
+    return console.error(error.message);
+  }
+};
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
@@ -57,8 +74,41 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contact = await JSON.parse(data).find(
+      (contact) => contact.id.toString() === contactId.toString()
+    );
+    if (contact) {
+      const { name, email, phone } = body;
 
+      const filteredData = JSON.parse(data).filter(
+        (contact) => contact.id.toString() !== contactId.toString()
+      );
+      const updatedContact = {
+        id: contactId.toString(),
+        name,
+        email,
+        phone,
+      };
+
+      filteredData.push(updatedContact);
+      filteredData.sort((a, b) => a.id - b.id);
+      console.log(filteredData);
+      await fs.writeFile(contactsPath, JSON.stringify(filteredData));
+      return updatedContact;
+    }
+    return null;
+  } catch (error) {
+    return console.error(error.message);
+  }
+};
+updateContact(1, {
+  name: "Allen Raymond",
+  email: "nulla.ante@vestibul.co.uk",
+  phone: "(992) 914-3792",
+});
 module.exports = {
   listContacts,
   getContactById,
@@ -66,3 +116,5 @@ module.exports = {
   addContact,
   updateContact,
 };
+
+updateContact("123213");
