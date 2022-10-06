@@ -1,12 +1,10 @@
 const Joi = require('joi');
 
-const postValidation = (req, res, next) => {
+const putValidation = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    phone: Joi.string()
-      .regex(/^(?:\+38)?(0\d{9})$/)
-      .required(),
-    email: Joi.string().email().required(),
+    name: Joi.string().alphanum().min(3).max(30),
+    phone: Joi.string().regex(/^(?:\+38)?(0\d{9})$/),
+    email: Joi.string().email(),
   });
 
   schema
@@ -18,4 +16,4 @@ const postValidation = (req, res, next) => {
     });
 };
 
-module.exports = postValidation;
+module.exports = putValidation;
