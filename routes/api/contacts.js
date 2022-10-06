@@ -3,18 +3,29 @@ const { schemas } = require("../../service/schemasContacts");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
-const isValidId = require("../../middleware/isValidId");
+const { isValidId, authenticate } = require("../../middleware");
 
-router.get("/", asyncWrapper(ctrl.getAll));
+router.get("/", authenticate, asyncWrapper(ctrl.getAll));
 
-router.get("/:contactId", isValidId, asyncWrapper(ctrl.getById));
+router.get("/:contactId", authenticate, isValidId, asyncWrapper(ctrl.getById));
 
-router.post("/", schemas.bodyValidation, asyncWrapper(ctrl.addContact));
+router.post(
+  "/",
+  authenticate,
+  schemas.bodyValidation,
+  asyncWrapper(ctrl.addContact)
+);
 
-router.delete("/:contactId", isValidId, asyncWrapper(ctrl.deleteContact));
+router.delete(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  asyncWrapper(ctrl.deleteContact)
+);
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   schemas.bodyValidation,
   asyncWrapper(ctrl.updateContact)
@@ -22,6 +33,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   schemas.favoriteValidation,
   asyncWrapper(ctrl.updateStatusContact)

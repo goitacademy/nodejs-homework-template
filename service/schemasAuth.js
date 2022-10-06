@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const handleSaveErrors = require("../middleware/handleSaveErrors");
+const handleSaveErrors = require("../helpers/handleSaveErrors");
 const userSchema = new Schema(
   {
     password: {
@@ -19,6 +19,7 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: String,
+    default: "",
   },
   { versionKey: false, timestamps: true }
 );
@@ -41,6 +42,22 @@ const schemas = {
     const validateUser = schema.validate(req.body);
     if (validateUser.error) {
       return res.status(400).json({ message: `${validateUser.error}` });
+    }
+    next();
+  },
+  loginValidation: (req, res, next) => {
+    const schema = Joi.object({
+      password: Joi.string().alphanum().min(2).max(30).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net", "ua"] },
+        })
+        .required(),
+    });
+    const validateLogin = schema.validate(req.body);
+    if (validateLogin.error) {
+      return res.status(400).json({ message: `${validateLogin.error}` });
     }
     next();
   },

@@ -1,34 +1,30 @@
-const { serviceAuth } = require("../../service");
-const { User } = require("../../service/schemasAuth");
+const bcrypt = require("bcrypt");
+const { User } = require("../../service");
+// const { RequestError } = require("../../helpers/RequestError");
 
 const registerUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    // console.log("wafawfawf");
-    // throw new Error(res.status(409), "Email in use");
-  } else {
-    const newUser = User.create(name, email, password);
-    res.status(201).json({
-      name: newUser.name,
-      email: newUser.email,
+  const { email, password } = req.body;
+  const hashPassword = await bcrypt.hash(password, 10);
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      // throw RequestError(409, Email in use);
+      res.status(409).json({
+        message: "Email in use",
+      });
+    } else {
+      const newUser = await User.create({ email, password: hashPassword });
+      res.status(201).json({
+        user: {
+          email: newUser.email,
+          subscription: newUser.subscription,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
     });
   }
-
-  // try {
-  //   const newUser = await serviceAuth.addUser(name, email, password);
-  //   res.json({
-  //     status: "success",
-  //     code: 201,
-  //     data: {
-  //       user: newUser,
-  //     },
-  //   });
-  // } catch (e) {
-  //   res.status(409).json({
-  //     status: "Conflict",
-  //     message: "Email in use",
-  //   });
-  // }
 };
 module.exports = registerUser;

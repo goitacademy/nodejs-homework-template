@@ -25,8 +25,9 @@ const contact = new Schema(
     },
     favorite: { type: Boolean, default: false },
     owner: {
-      type: SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "users",
+      required: true,
     },
   },
 

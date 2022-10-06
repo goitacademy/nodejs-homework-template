@@ -1,4 +1,2 @@
-const serviceContacts = require("./serviceContacts");
-const serviceAuth = require("./serviceAuth");
-
-module.exports = { serviceContacts, serviceAuth };
+const { User, schemas } = require("./schemasAuth");
+module.exports = { User, schemas };

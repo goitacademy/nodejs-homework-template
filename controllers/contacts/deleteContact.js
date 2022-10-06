@@ -1,9 +1,9 @@
-const { serviceContacts } = require("../../service");
+const { Contact } = require("../../service/schemasContacts");
 
 const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const result = await serviceContacts.removeContact(contactId);
+  const result = await Contact.findByIdAndRemove({ _id: contactId });
   if (!result) {
     res.status(404).json({
       status: "error",
