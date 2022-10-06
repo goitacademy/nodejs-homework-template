@@ -1,11 +1,11 @@
-const { Contact, joi } = require("../../models");
-const { requestError } = require("../../helpers");
+const { Contact, contactsJoiSchemas } = require("../../models");
+const { RequestError } = require("../../helpers");
 
 const updateById = async (req, res, next) => {
   try {
-    const { error } = joi.updateSchema.validate(req.body);
+    const { error } = contactsJoiSchemas.updateSchema.validate(req.body);
     if (error) {
-      throw requestError(400, error.message);
+      throw RequestError(400, error.message);
     }
     const { contactId } = req.params;
     const contact = await Contact.findByIdAndUpdate(contactId, req.body, {

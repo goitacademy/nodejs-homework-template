@@ -1,10 +1,10 @@
 const { isValidObjectId } = require("mongoose");
-const { requestError } = require("../helpers");
+const { RequestError } = require("../helpers");
 
 const idValidation = (req, _, next) => {
   const { contactId } = req.params;
   if (!isValidObjectId(contactId)) {
-    const error = requestError(400, `${contactId} is not corrent id format`);
+    const error = RequestError(400, `${contactId} is not corrent id format`);
     next(error);
   }
   next();
