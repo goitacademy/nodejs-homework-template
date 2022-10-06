@@ -4,7 +4,7 @@ const logout = async (req, res, next) => {
   try {
     const { _id } = req.user;
     await User.findOneAndUpdate(_id, { token: null });
-    res.json({
+    res.status(204).json({
       message: 'Logout success',
     });
   } catch (error) {

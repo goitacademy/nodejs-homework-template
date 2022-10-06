@@ -1,9 +1,9 @@
 const getCurrent = async (req, res, next) => {
   try {
-    const { name, email } = req.user;
+    const { email, subscription } = req.user;
     res.json({
-      name,
       email,
+      subscription,
     });
   } catch (error) {
     next(error);
