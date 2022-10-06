@@ -17,7 +17,7 @@ const getContactById = async (contactId) => {
     const contactToFind = contacts.find((item) => item.id === contactId);
     return !contactToFind ? null : contactToFind;
   } catch (error) {
-    console.error(error.massage);
+    console.error(error.message);
   }
 };
 
@@ -34,7 +34,7 @@ const removeContact = async (contactId) => {
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return updatedContacts;
   } catch (error) {
-    console.error(error.massage);
+    console.error(error.message);
   }
 };
 
@@ -46,7 +46,7 @@ const addContact = async (body) => {
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return newContact;
   } catch (error) {
-    console.error(error.massage);
+    console.error(error.message);
   }
 };
 
