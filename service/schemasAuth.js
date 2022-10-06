@@ -1,10 +1,11 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-
-const user = new Schema(
+const handleSaveErrors = require("../middleware/handleSaveErrors");
+const userSchema = new Schema(
   {
     password: {
       type: String,
+      minlength: 6,
       required: [true, "Set password for user"],
     },
     email: {
@@ -21,30 +22,23 @@ const user = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-const User = model("users", user);
+userSchema.post("save", handleSaveErrors);
+const User = model("users", userSchema);
 
 const schemas = {
   userValidation: (req, res, next) => {
-    const schemaUser = Joi.object({
-      password: {
-        type: String,
-        required: [true, "Set password for user"],
-      },
-      email: {
-        type: String,
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net", "ua"] },
-        required: true,
-      },
-      subscription: {
-        type: String,
-        enum: ["starter", "pro", "business"],
-        default: "starter",
-      },
-      token: String,
+    const schema = Joi.object({
+      password: Joi.string().alphanum().min(2).max(30).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net", "ua"] },
+        })
+        .required(),
+      subscription: Joi.string().alphanum(),
+      token: Joi.string(),
     });
-    const validateUser = schemaUser.validate(req.body);
-    console.log(validateUser);
+    const validateUser = schema.validate(req.body);
     if (validateUser.error) {
       return res.status(400).json({ message: `${validateUser.error}` });
     }

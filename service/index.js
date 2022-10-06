@@ -1,4 +1,4 @@
 const serviceContacts = require("./serviceContacts");
-const serviceUsers = require("./serviceUsers");
+const serviceAuth = require("./serviceAuth");
 
-module.exports = { serviceContacts, serviceUsers };
+module.exports = { serviceContacts, serviceAuth };
