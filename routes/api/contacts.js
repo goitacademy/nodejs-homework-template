@@ -1,25 +1,50 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const ctrl = require("../../controllers/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { ctrlWrapper } = require("../../helpers");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validateBody } = require("../../middlewares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { addSchema } = require("../../schemas/contact");
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(ctrl.listContacts));
 
-module.exports = router
+router.get("/:id", ctrlWrapper(ctrl.getById));
+
+router.post("/", validateBody(addSchema), ctrlWrapper(ctrl.addContact));
+
+router.put("/:id", validateBody(addSchema), ctrlWrapper(ctrl.updateContact));
+
+router.delete("/:id", ctrlWrapper(ctrl.removeContact));
+
+module.exports = router;
+
+// const express = require("express");
+// const contacts = require("../../models/contacts.json");
+// const router = express.Router();
+// const contactsModel = require("../../models/contacts");
+
+// router.get("/", contactsModel.getAllTea);
+
+// router.get("/:id", (req, res) => {
+//   res.json(contacts);
+//   // res.send(contacts); // не виводить json
+// });
+// router.post("/", (req, res) => {
+//   res.json(contacts);
+//   // res.send(contacts); // не виводить json
+// });
+// router.put("/:id", (req, res) => {
+//   res.json(contacts);
+//   // res.send(contacts); // не виводить json
+// });
+
+// router.delete("/:id", (req, res) => {
+//   res.json(contacts);
+//   // res.send(contacts); // не виводить json
+// });
+
+// module.exports = router;
