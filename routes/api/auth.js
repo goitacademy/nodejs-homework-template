@@ -13,5 +13,11 @@ router.post(
 router.post("/login", schemas.loginValidation, asyncWrapper(ctrl.loginUser));
 router.get("/logout", authenticate, asyncWrapper(ctrl.logoutUser));
 router.get("/current", authenticate, asyncWrapper(ctrl.getCurrentUser));
+router.patch(
+  "/",
+  authenticate,
+  schemas.subscriptionValidation,
+  asyncWrapper(ctrl.updateSubscription)
+);
 
 module.exports = router;
