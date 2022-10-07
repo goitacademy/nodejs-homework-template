@@ -5,7 +5,8 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require("../models/contacts");
+  updateStatusContact,
+} = require("../services/contacts");
 
 const getContacts = async (_, res) => {
   const contacts = await listContacts();
@@ -14,11 +15,12 @@ const getContacts = async (_, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const result = await getContactById(id);
-  if (!result) {
+
+  const contact = await getContactById(id);
+  if (!contact) {
     throw RequestError(404);
   }
-  res.status(200).json({ status: "success", code: 200, data: { result } });
+  res.status(200).json({ status: "success", code: 200, data: { contact } });
 };
 
 const deleteContact = async (req, res) => {
@@ -47,11 +49,21 @@ const changeContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite = false } = req.body;
 
-  const newContact = await addContact(name, email, phone);
-
+  const newContact = await addContact(name, email, phone, favorite);
   res.status(201).json({ status: "success", code: 201, data: { newContact } });
+};
+
+const updateStatus = async (req, res) => {
+  const { id } = req.params;
+
+  const updateContact = await updateStatusContact(id, req.body);
+
+ if (!updateContact) {
+   return res.status(400).json({ message: "missing field favorite" });
+ }
+  res.json({ status: "success", code: 201, data: { updateContact } });
 };
 
 module.exports = {
@@ -60,4 +72,5 @@ module.exports = {
   changeContact,
   createContact,
   deleteContact,
+  updateStatus,
 };
