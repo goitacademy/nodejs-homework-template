@@ -1,7 +1,7 @@
 const { User, usersJoiSchemas } = require("../../models");
 const { RequestError } = require("../../helpers");
 
-const changeSubscription = async (req, res, next) => {
+const updateSubscription = async (req, res, next) => {
   try {
     const { error } = usersJoiSchemas.subscriptionSchema.validate(req.body);
     if (error) {
@@ -17,4 +17,4 @@ const changeSubscription = async (req, res, next) => {
   }
 };
 
-module.exports = changeSubscription;
+module.exports = updateSubscription;

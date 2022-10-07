@@ -26,6 +26,10 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -35,7 +39,7 @@ userSchema.post("save", handleSchemaValidationErrors);
 const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
-  repeat_password: Joi.ref("password"),
+  repeatPassword: Joi.ref("password"),
   subscription: Joi.string().valid(...subscriptionList),
 });
 
