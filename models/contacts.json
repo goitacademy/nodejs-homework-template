@@ -60,19 +60,9 @@
     "phone": "(748) 206-2688"
   },
   {
-    "id": "3e62d3b7-fd13-47f9-ac2a-c256900d36ed",
-    "name": {
-      "name": "Lena",
-      "email": "lena.test@com",
-      "phone": "8654322345"
-    }
-  },
-  {
-    "name": {
-      "name": "Ella",
-      "email": "lena@test.com",
-      "phone": "7654566544567"
-    },
-    "id": "b3b0a481-647d-4e6a-bd19-244dea2afb0f"
+    "id": "c956d798-d4bc-4618-9d5e-360dc78a73e5",
+    "name": "Lena",
+    "email": "liza@test.com",
+    "phone": "876543234567"
   }
 ]
