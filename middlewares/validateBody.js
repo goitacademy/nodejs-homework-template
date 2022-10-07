@@ -1,6 +1,6 @@
 const { RequestError } = require("../helpers")
 
-const messages = {
+const errMessages = {
   addContact: "missing required name field",
   updateContact: "missing fields",
   updateFavorite: "missing field favorite",
@@ -19,5 +19,5 @@ const validateBody = (schema, message) => {
 
 module.exports = {
   validateBody,
-  messages,
+  errMessages,
 };

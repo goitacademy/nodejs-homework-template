@@ -1,8 +1,8 @@
-const {validateBody, messages} = require("./validateBody")
+const {validateBody, errMessages} = require("./validateBody")
 const isValidId = require("./isValidId")
 
 module.exports = {
   validateBody,
   isValidId,
-  messages,
+  errMessages,
 }
