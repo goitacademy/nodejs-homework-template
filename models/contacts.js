@@ -1,65 +1,52 @@
-const fs = require('fs/promises');
-const path = require('path');
-const { nanoid } = require('nanoid');
+const { Schema, model } = require('mongoose');
+const { handleSaveErrors } = require('../helpers');
 
-const contactsPath = path.join(__dirname, './contacts.json');
+const Joi = require('joi');
 
-const updateContacts = async contacts =>
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+const contactsSchema = new Schema(
+    {
+        name: {
+            type: String,
+            required: [true, 'Set name for contact'],
+            minLength: [3, 'Must be at least 3 letters, your value: {VALUE}'],
+        },
+        email: {
+            type: String,
+            required: [true, 'Set email for contact'],
+        },
+        phone: {
+            type: String,
+            required: [true, 'Set phone for contact'],
+            minLength: [6, 'Must be at least 6 numbers, your value: {VALUE}'],
+        },
+        favorite: {
+            type: Boolean,
 
-const listContacts = async () => {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
+            default: false,
+        },
+    },
+
+    { versionKey: false, timestamps: true }
+);
+
+const addSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    phone: Joi.string().required(),
+    favorite: Joi.boolean(),
+});
+const updateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+    addSchema,
+    updateFavoriteSchema,
 };
 
-const getContactById = async id => {
-    const contacts = await listContacts();
-    const contactsId = String(id);
-    const result = contacts.find(el => el.id === contactsId);
-    return result || null;
-};
+// Миддлавара котоаря срабатывает на ошибке
+contactsSchema.post('save', handleSaveErrors);
 
-const removeContact = async id => {
-    const contacts = await listContacts();
-    const contactsId = String(id);
-    const index = contacts.findIndex(el => el.id === contactsId);
-    if (index === -1) {
-        return null;
-    }
-    const [result] = contacts.splice(index, 1);
-    await updateContacts(contacts);
-    return result;
-};
+const Contact = model('contact', contactsSchema);
 
-const addContact = async ({ name, email, phone }) => {
-    const contacts = await listContacts();
-    const newContact = {
-        id: nanoid(),
-        name,
-        email,
-        phone,
-    };
-    contacts.push(newContact);
-    await updateContacts(contacts);
-    return newContact;
-};
-
-const updateContact = async (id, body) => {
-    const contacts = await listContacts();
-    const contactsId = String(id);
-    const index = contacts.findIndex(el => el.id === contactsId);
-    if (index === -1) {
-        return null;
-    }
-    contacts[index] = { id, ...body };
-    await updateContacts(contacts);
-    return contacts[index];
-};
-
-module.exports = {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
-};
+module.exports = { Contact, schemas };
