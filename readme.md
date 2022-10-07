@@ -1,31 +1,31 @@
-## GoIT Node.js Course Template Homework
+# REST API with Node.js.
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Implementing RESTful application on Node.js. At the current stage, we will complete express framework and configure basic routes.
 
-Додайте ментора до колаборації
+# Get contact list
 
-Для кожної домашньої роботи створюйте свою гілку.
+@ GET /api/contacts.
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+# Get a contact by id
 
-Кожна нова гілка для др повинна робитися з master
+@ GET /api/contacts/:id
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+# Add contact
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+@ POST /api/contacts
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+# Remove contact
 
-### Команди:
+@ DELETE /api/contacts/:id
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+# Update contact
+
+@ PUT /api/contacts/:id
+
+# Update contact status
+
+@ PUT /api/contacts/:id/favorite
+
+## Author
+
+- [@MykolaTymoshchuk](https://github.com/Nikolay-Tymoshchuk)
