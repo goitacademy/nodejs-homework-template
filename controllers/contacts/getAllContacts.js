@@ -1,11 +1,13 @@
+const { bool, boolean } = require("joi");
 const { Contact } = require("../../service/schemasContacts");
 
 const getAll = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
+  console.log(favorite);
   try {
-    const results = await Contact.find({ owner }, "", {
+    const results = await Contact.find({ owner, favorite }, "", {
       skip,
       limit,
     }).populate("owner", "email");
