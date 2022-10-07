@@ -1,10 +1,10 @@
 const createError = require("http-errors");
 const { Contact } = require("../../models/contacts/contact");
 
-async function updateById(req, res) {
+async function updateStatusContact(req, res) {
   const { body } = req;
   if (!body) {
-    throw createError(400, "Missing fields");
+    throw createError(400, "Missing field favorite");
   }
   const { contactId } = req.params;
   const contact = await Contact.findByIdAndUpdate(contactId, body, {
@@ -16,4 +16,4 @@ async function updateById(req, res) {
   res.json(contact);
 }
 
-module.exports = updateById;
+module.exports = updateStatusContact;
