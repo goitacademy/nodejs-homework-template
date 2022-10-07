@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { handleSaveErrors } = require("../middlewares");
+const { handleSaveErrors } = require("../helpers");
 
 const nameRegexp = /^\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+$/;
 const phoneRegexp = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/;
@@ -28,6 +28,10 @@ const contactSchema = new Schema(
       minlength: 10,
       trim: true,
       match: phoneRegexp,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
     favorite: {
       type: Boolean,
