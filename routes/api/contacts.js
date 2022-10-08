@@ -1,22 +1,31 @@
 const express = require('express')
 const { basedir } = global
-const controllers = require(`${basedir}/controllers`)
+const controllers = require(`${basedir}/controllers/contacts`)
 const { controllersWrapper } = require(`${basedir}/helpers`)
-
+const { auth } = require(`${basedir}/middlewares`)
 const router = express.Router()
 
-router.get('/', controllersWrapper(controllers.getAllContacts))
+router.get('/', auth, controllersWrapper(controllers.getAllContacts))
 
-router.get('/:contactId', controllersWrapper(controllers.getContactById))
+router.get('/:contactId', auth, controllersWrapper(controllers.getContactById))
 
-router.post('/', controllersWrapper(controllers.addContact))
+router.post('/', auth, controllersWrapper(controllers.addContact))
 
-router.delete('/:contactId', controllersWrapper(controllers.removeContact))
+router.delete(
+  '/:contactId',
+  auth,
+  controllersWrapper(controllers.removeContact)
+)
 
-router.put('/:contactId', controllersWrapper(controllers.updateContactById))
+router.put(
+  '/:contactId',
+  auth,
+  controllersWrapper(controllers.updateContactById)
+)
 
 router.patch(
   '/:contactId/favourite',
+  auth,
   controllersWrapper(controllers.updateStatusContact)
 )
 

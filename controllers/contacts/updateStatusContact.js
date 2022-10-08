@@ -7,7 +7,7 @@ const updateStatusContact = async (req, res) => {
   if (error) {
     throw createError({
       status: 400,
-      message: 'missing field favourite or wrong data type',
+      message: error.message,
     })
   }
 
