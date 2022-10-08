@@ -1,7 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://Snizhana:VZcC6SZ0bB12isV7@cluster0.ncetjq6.mongodb.net/contacts_reader?retryWrites=true&w=majority";
+const {DB_HOST} = require('./config')
+
 mongoose.connect(DB_HOST)
   .then(() => console.log("Datanse connect success"))
   .catch(error => console.log(error.message));
