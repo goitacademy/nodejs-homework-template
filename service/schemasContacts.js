@@ -1,5 +1,6 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
 const Joi = require("joi");
+const handleSaveErrors = require("../helpers/handleSaveErrors");
 
 const contact = new Schema(
   {
@@ -33,7 +34,7 @@ const contact = new Schema(
 
   { versionKey: false, timestamps: true }
 );
-
+contact.post("save", handleSaveErrors);
 const Contact = model("contacts", contact);
 
 const schemas = {

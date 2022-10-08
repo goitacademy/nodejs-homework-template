@@ -1,4 +1,4 @@
-const getCurrentUser = async (req, res, next) => {
+const getCurrentUser = async (req, res) => {
   const { email, subscription } = req.user;
   res.status(200).json({
     email,

@@ -63,11 +63,7 @@ const schemas = {
   },
   subscriptionValidation: (req, res, next) => {
     const schema = Joi.object({
-      subscription: Joi.string()
-        .tlds:{ allow: ["starter", "pro", "business"] }
-        //  allow: ["starter", "pro", "business"]
-
-        .required(),
+      subscription: Joi.string().valid("starter", "pro", "business").required(),
     });
     const validateLogin = schema.validate(req.body);
     if (validateLogin.error) {

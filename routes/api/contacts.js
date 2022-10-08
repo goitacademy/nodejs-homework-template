@@ -1,26 +1,26 @@
 const express = require("express");
 const { schemas } = require("../../service/schemasContacts");
-const { asyncWrapper } = require("../../helpers/apiHelpers");
+const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 const { isValidId, authenticate } = require("../../middleware");
 
-router.get("/", authenticate, asyncWrapper(ctrl.getAll));
+router.get("/", authenticate, ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", authenticate, isValidId, asyncWrapper(ctrl.getById));
+router.get("/:contactId", authenticate, isValidId, ctrlWrapper(ctrl.getById));
 
 router.post(
   "/",
   authenticate,
   schemas.bodyValidation,
-  asyncWrapper(ctrl.addContact)
+  ctrlWrapper(ctrl.addContact)
 );
 
 router.delete(
   "/:contactId",
   authenticate,
   isValidId,
-  asyncWrapper(ctrl.deleteContact)
+  ctrlWrapper(ctrl.deleteContact)
 );
 
 router.put(
@@ -28,7 +28,7 @@ router.put(
   authenticate,
   isValidId,
   schemas.bodyValidation,
-  asyncWrapper(ctrl.updateContact)
+  ctrlWrapper(ctrl.updateContact)
 );
 
 router.patch(
@@ -36,7 +36,7 @@ router.patch(
   authenticate,
   isValidId,
   schemas.favoriteValidation,
-  asyncWrapper(ctrl.updateStatusContact)
+  ctrlWrapper(ctrl.updateStatusContact)
 );
 
 module.exports = router;
