@@ -13,7 +13,7 @@ const updateStatusContact = async (req, res, next) => {
       new: true,
     });
     if (!contact) {
-      throw requestError(404, "Not found");
+      throw RequestError(404, "Not found");
     }
     res.json(contact);
   } catch (error) {
