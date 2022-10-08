@@ -10,14 +10,16 @@ const login = async (req, res, next) => {
     if (error) {
       throw RequestError(400, error.message);
     }
-
     const { email, password } = req.body;
     const userOnLogin = await User.findOne({ email });
     const passCompare = bcrypt.compareSync(password, userOnLogin.password);
+
     if (!userOnLogin || !passCompare) {
       throw RequestError(401, "Email or password is wrong");
     }
-
+    if (!userOnLogin.verify) {
+      throw RequestError(401, "You are not verified email");
+    }
     const payload = {
       id: userOnLogin._id,
     };
