@@ -1,25 +1,26 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { ctrlWrapper } = require("../../helpers");
+const ctrl = require("../../controllers/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contacts = require("../../models/contacts");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// сука якщо в масиві нечайно лишня кома то це говно єбане не хочу перевіряти його, що за нах?
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// і може убрати провірку на меіл так як без ком і нет воно не пропускає за сильно для начала може
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//якогось бена коли помилка воно не прокидає потрібний стату а кидає 500 розібратись з цим говном
 
-module.exports = router
+router.get("/", ctrl.getAll);
+
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
+//ебана валідація емайла  сука поміняй це говно єбане
+router.post("/", ctrlWrapper(ctrl.add));
+
+router.delete("/:contactId", ctrlWrapper(ctrl.deleteById));
+
+router.put("/:contactId", ctrlWrapper(ctrl.updateById) );
+
+module.exports = router;
