@@ -2,6 +2,14 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
+// // Env пакет
+// const dotenv = require('dotenv');
+// // Вызываем метод config он находит файл .env и добавляет в process.env
+// dotenv.config();
+
+// если нам нужно один раз можно писать так
+require('dotenv').config();
+
 // это роуты
 const contactsRouter = require('./routes/api/contacts');
 
