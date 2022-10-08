@@ -42,14 +42,6 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// this foo it is medelware for validate
-// const handleSaveError = (error, data, next) => {
-//   const { name, code } = error;
-//   error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
-//   console.log(error);
-//   console.log(data);
-//   next();
-// };
 contactSchema.post('seve', handleSaveError);
 
 /** like type script typing data */

@@ -4,7 +4,7 @@ const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
   // console.log(req.query);
   /** for pagination (req.query get after sumbol ?) */
-  const { page = 1, limit = 10, ...query } = req.query;
+  const { page = 1, limit = 20, ...query } = req.query;
 
   const skip = (page - 1) * limit;
 

@@ -29,14 +29,6 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// this foo it is medelware for validate
-// const handleSaveError = (error, data, next) => {
-//   const { name, code } = error;
-//   error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
-//   // console.log(error);
-//   // console.log(data);
-//   next();
-// };
 userSchema.post('seve', handleSaveError);
 
 /** like type script typing data */
@@ -50,9 +42,14 @@ const loginSchema = Joi.object({
   email: Joi.string().required(),
 });
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+});
+
 const Schemas = {
   registerSchema,
   loginSchema,
+  subscriptionSchema,
 };
 /** our model */
 const User = model('user', userSchema);

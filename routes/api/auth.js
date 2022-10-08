@@ -36,10 +36,14 @@ router.get(
   // validateBody(Schemas.registerSchema),
   ctrlWrapper(ctrl.getCurrent)
 );
-router.get(
-  '/logout',
+
+router.get('/logout', authenticate, ctrlWrapper(ctrl.logout));
+
+router.patch(
+  '/',
   authenticate,
-  // validateBody(Schemas.registerSchema),
-  ctrlWrapper(ctrl.logout)
+  validateBody(Schemas.subscriptionSchema),
+  ctrlWrapper(ctrl.updateSubscription)
 );
+
 module.exports = router;
