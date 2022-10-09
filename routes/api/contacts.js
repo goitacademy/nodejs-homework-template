@@ -2,8 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
-
 const ctrl = require('../../controllers/contacts')
 
 router.get("/", ctrl.getAll);
