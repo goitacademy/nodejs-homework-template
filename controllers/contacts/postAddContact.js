@@ -1,11 +1,8 @@
-const { addContact } = require("../../models/contacts");
+const { Contact } = require("../../models");
 
 const postAddContact = async (req, res) => {
-  const result = await addContact(
-    req.body.name,
-    req.body.email,
-    req.body.phone
-  );
+  console.log("req-postAddContact", req.body);
+  const result = await Contact.create(req.body);
 
   res.status(201).json({
     status: "success",
