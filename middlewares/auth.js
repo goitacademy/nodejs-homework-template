@@ -15,18 +15,12 @@ const getCurrent = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    if (
-      error.message === "invalid signature" ||
-      error.message === "jwt must be provided" ||
-      error.message === "jwt malformed" ||
-      error.message === "invalid token"
-    ) {
-      error.status = 401;
-      error.message = "Not authorized";
-    }
     if (error.message === "jwt expired") {
       error.status = 408;
       error.message = "Time's out, please login again";
+    } else {
+      error.status = 401;
+      error.message = "Not authorized";
     }
     next(error);
   }
