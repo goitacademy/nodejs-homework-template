@@ -1,16 +1,9 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-// const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-// const { DB_HOST } = process.env;
-
-// mongoose
-//   .connect(DB_HOST)
-//   .then(() => console.log("Database connect"))
-//   .catch((error) => console.log(error.message));
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -34,4 +27,3 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 // 5sMXkEEFryeCSdJ4
-// yDi!yc5AWht#V4R
