@@ -31,12 +31,13 @@ async function removeContact(contactId) {
   return removeContact;
 }
 
-async function addContact({ name, email, phone }) {
+async function addContact({ name, email, phone, favorite }) {
   const contacts = await listContacts();
   const newContact = {
     name,
     email,
     phone,
+    favorite,
     id: nanoid(),
   };
   contacts.push(newContact);
@@ -44,13 +45,13 @@ async function addContact({ name, email, phone }) {
   return newContact;
 }
 
-async function updateContact(id, { name, email, phone }) {
+async function updateContact(id, { name, email, phone, favorite }) {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, name, email, phone };
+  contacts[index] = { id, name, email, phone, favorite };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 }
