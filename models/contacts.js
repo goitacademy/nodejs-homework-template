@@ -44,7 +44,7 @@ const updateContactById = async (contactId, body) => {
 
   contacts[idex] = { ...contacts[idex], ...body };
 
-  updateContacts(contacts);
+  await updateContacts(contacts);
 
   return contacts[idex];
 };
