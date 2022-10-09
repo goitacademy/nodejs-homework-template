@@ -1,19 +1,14 @@
-const { service } = require("../../service");
+const { Contact } = require("../../service/schemasContacts");
 
-const addContactById = async (req, res, next) => {
+const addContactById = async (req, res) => {
   const { body } = req;
-  try {
-    const result = await service.createContact(body);
-    res.json({
-      status: "success",
-      code: 201,
-      data: { contact: result },
-    });
-  } catch (e) {
-    res.status(400).json({
-      status: "error",
-      message: "the phone and email must be unique",
-    });
-  }
+  const { _id: owner } = req.user;
+
+  const result = await Contact.create({ ...body, owner });
+  res.json({
+    status: "success",
+    code: 201,
+    data: { contact: result },
+  });
 };
 module.exports = addContactById;

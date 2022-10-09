@@ -1,15 +1,15 @@
-const { service } = require("../../service");
+const { Contact } = require("../../service/schemasContacts");
+const RequestError = require("../../helpers/RequestError");
 
-const changeContact = async (req, res, next) => {
+const changeContact = async (req, res) => {
   const { contactId } = req.params;
   const { body } = req;
 
-  const result = await service.updateContact(contactId, body);
+  const result = await Contact.findByIdAndUpdate({ _id: contactId }, body, {
+    new: true,
+  });
   if (!result) {
-    res.status(404).json({
-      status: "error",
-      message: `Not found contact id: ${contactId}`,
-    });
+    throw RequestError(404, `Not found contact id: ${contactId}`);
   }
   res.json({
     status: "success",

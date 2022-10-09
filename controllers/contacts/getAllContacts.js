@@ -1,8 +1,14 @@
-const { service } = require("../../service");
+const { Contact } = require("../../service/schemasContacts");
 
-const getAll = async (req, res, next) => {
-  try {
-    const results = await service.getAllContacts();
+const getAll = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
+  if (favorite === null) {
+    const results = await Contact.find({ owner }, "", {
+      skip,
+      limit,
+    }).populate("owner", "email");
     res.json({
       status: "success",
       code: 200,
@@ -10,10 +16,17 @@ const getAll = async (req, res, next) => {
         contacts: results,
       },
     });
-  } catch (e) {
-    res.status(404).json({
-      status: "error",
-      message: e.message,
+  } else {
+    const results = await Contact.find({ owner, favorite }, "", {
+      skip,
+      limit,
+    }).populate("owner", "email");
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contacts: results,
+      },
     });
   }
 };

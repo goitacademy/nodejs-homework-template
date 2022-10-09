@@ -1,3 +1,3 @@
 const contacts = require("./contacts");
-
-module.exports = { contacts };
+const auth = require("./auth");
+module.exports = { contacts, auth };

@@ -1,5 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
 const Joi = require("joi");
+const handleSaveErrors = require("../helpers/handleSaveErrors");
 
 const contact = new Schema(
   {
@@ -24,10 +25,16 @@ const contact = new Schema(
       unique: true,
     },
     favorite: { type: Boolean, default: false },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
-
+contact.post("save", handleSaveErrors);
 const Contact = model("contacts", contact);
 
 const schemas = {
