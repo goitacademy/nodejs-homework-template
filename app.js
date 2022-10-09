@@ -3,8 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Vadim-KaR:kfEKRdLP2nwJARfR@cluster0.zy4re6j.mongodb.net/db_contacts?retryWrites=true&w=majority";
+const DB_HOST = require("./config");
 
 mongoose
   .connect(DB_HOST)
