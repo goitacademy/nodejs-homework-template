@@ -9,9 +9,9 @@ const messages  =  {
 
 
 const RequestError = (status, message = messages[status]) => {
-    const error = newError(message);
+    const error = new Error(message);
     error.status = status;
     return error
 }
 
-module.exports = RequestError
+module.exports = {RequestError}
