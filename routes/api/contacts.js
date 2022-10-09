@@ -1,9 +1,9 @@
 const express = require('express');
 const ctrl = require('../../controllers/contacts');
-const router = express.Router();
-const { ctrlWrapper } = require('../../helpers');
 const { validateBody } = require('../../middlewars');
-const { addSchema } = require('../../schemas/contacts');
+const router = express.Router();
+const { schemas } = require('../../models/contact');
+const { ctrlWrapper } = require('../../helpers');
 
 // виклик списку контактів
 router.get('/', ctrlWrapper(ctrl.listContacts));
@@ -12,7 +12,7 @@ router.get('/', ctrlWrapper(ctrl.listContacts));
 router.get('/:contactId', ctrlWrapper(ctrl.getContactById));
 
 // запис нового контакта
-router.post('/', validateBody(addSchema), ctrlWrapper(ctrl.addContact));
+router.post('/', validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
 
 // видалення контакта
 router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
@@ -20,8 +20,15 @@ router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
 // зміна контакта
 router.put(
   '/:contactId',
-  validateBody(addSchema),
+  validateBody(schemas.addSchema),
   ctrlWrapper(ctrl.updateContact)
+);
+
+// зміна окремого поля контакта
+router.patch(
+  '/:contactId/favorite',
+  validateBody(schemas.updateFavoriteSchema),
+  ctrlWrapper(ctrl.updateStatusContact)
 );
 
 module.exports = router;
