@@ -2,7 +2,7 @@ const { User, usersJoiSchemas } = require("../../models");
 const { RequestError } = require("../../helpers");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { SECRET_KEY } = process.env;
+const { JWT_SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
   try {
@@ -18,12 +18,12 @@ const login = async (req, res, next) => {
       throw RequestError(401, "Email or password is wrong");
     }
     if (!userOnLogin.verify) {
-      throw RequestError(401, "You are not verified email");
+      throw RequestError(401, "Your email is not verified ");
     }
     const payload = {
       id: userOnLogin._id,
     };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+    const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1d" });
     await User.findByIdAndUpdate(userOnLogin._id, { token });
     res.json({ token });
   } catch (error) {

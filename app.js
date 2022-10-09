@@ -4,6 +4,7 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+const authPages = require("./routes/pages/social-auth");
 const usersRouter = require("./routes/api/users");
 const contactsRouter = require("./routes/api/contacts");
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use("/api/social-auth", authPages);
 app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 

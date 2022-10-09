@@ -10,7 +10,7 @@ const sendEmail = async (data) => {
   const email = { ...data, from: "specter.ode@gmail.com" };
   try {
     await sgMail.send(email);
-    console.log("Email sent");
+    console.log("sgMail sent");
   } catch (error) {
     throw RequestError(400, error.message);
   }

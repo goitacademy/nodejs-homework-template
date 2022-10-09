@@ -6,6 +6,8 @@ const updateAvatar = require("./updateAvatar");
 const updateSubscription = require("./updateSubscription");
 const verifyEmail = require("./verifyEmail");
 const sendVerifyEmail = require("./sendVerifyEmail");
+const googleAuthLogin = require("./googleAuthLogin");
+const facebookAuthLogin = require("./facebookAuthLogin");
 
 module.exports = {
   login,
@@ -16,4 +18,6 @@ module.exports = {
   updateSubscription,
   verifyEmail,
   sendVerifyEmail,
+  googleAuthLogin,
+  facebookAuthLogin,
 };

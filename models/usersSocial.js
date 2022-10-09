@@ -5,13 +5,11 @@ const { handleSchemaValidationErrors } = require("../helpers");
 const subscriptionList = ["starter", "pro", "business"];
 const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
-const userSchema = Schema(
+const userSocialSchema = Schema(
   {
     name: {
       type: String,
-    },
-    password: {
-      type: String,
+      required: [true, "Name is required"],
     },
     email: {
       type: String,
@@ -32,31 +30,21 @@ const userSchema = Schema(
       type: String,
       required: true,
     },
-    verify: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
-      type: String,
-      required: [true, "Verify token is required"],
-    },
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post("save", handleSchemaValidationErrors);
+userSocialSchema.post("save", handleSchemaValidationErrors);
 
 const signupSchema = Joi.object({
-  name: Joi.string(),
+  displayName: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
-  repeatPassword: Joi.ref("password"),
   subscription: Joi.string().valid(...subscriptionList),
 });
 
 const loginSchema = Joi.object({
+  name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
 });
 
 const subscriptionSchema = Joi.object({
@@ -68,15 +56,15 @@ const verifyEmailSchema = Joi.object({
   email: Joi.string().required(),
 });
 
-const usersJoiSchemas = {
+const userSocialJoiSchemas = {
   signupSchema,
   loginSchema,
   subscriptionSchema,
   verifyEmailSchema,
 };
-const User = model("user", userSchema);
+const UserSocial = model("socialuser", userSocialSchema);
 
 module.exports = {
-  User,
-  usersJoiSchemas,
+  UserSocial,
+  userSocialJoiSchemas,
 };
