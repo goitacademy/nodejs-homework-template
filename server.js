@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("colors");
 const mongoose = require("mongoose");
 
 const app = require("./app");
@@ -14,12 +15,16 @@ const connection = mongoose.connect(DB_HOST, {
 
 connection
   .then(() => {
-    console.log("Database connection successful");
+    console.log("Database connection successful".bold.cyan.italic);
     app.listen(PORT, function () {
-      console.log(`Server running. Use our API on port: ${PORT}`);
+      console.log(
+        `Server running. Use our API on port: ${PORT}`.bold.cyan.italic
+      );
     });
   })
   .catch((err) => {
-    console.log(`Server not running. Error message: ${err.message}`);
+    console.log(
+      `Server not running. Error message: ${err.message}`.bold.red.italic
+    );
     process.exit(1);
   });

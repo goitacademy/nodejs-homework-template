@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+// const multer = require("multer");
+// const upload = multer({ dest: "./public/avatars" });
 const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 const { schemas } = require("../../service/schemasAuth");
 const { auth: ctrl } = require("../../controllers");
@@ -19,5 +21,10 @@ router.patch(
   schemas.subscriptionValidation,
   ctrlWrapper(ctrl.updateSubscription)
 );
-
+router.patch(
+  "/avatars",
+  authenticate,
+  schemas.avatarValidation,
+  ctrlWrapper(ctrl.updateAvatar)
+);
 module.exports = router;

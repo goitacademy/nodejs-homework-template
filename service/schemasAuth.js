@@ -18,6 +18,7 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: String,
     token: String,
     default: "",
   },
@@ -37,6 +38,7 @@ const schemas = {
         })
         .required(),
       subscription: Joi.string().alphanum(),
+      avatarURL: Joi.string(),
       token: Joi.string(),
     });
     const validateUser = schema.validate(req.body);
@@ -68,6 +70,16 @@ const schemas = {
     const validateLogin = schema.validate(req.body);
     if (validateLogin.error) {
       return res.status(400).json({ message: `${validateLogin.error}` });
+    }
+    next();
+  },
+  avatarValidation: (req, res, next) => {
+    const schema = Joi.object({
+      avatarURL: Joi.string().required(),
+    });
+    const validateAvatar = schema.validate(req.body);
+    if (validateAvatar.error) {
+      return res.status(400).json({ message: `${validateAvatar.error}` });
     }
     next();
   },
