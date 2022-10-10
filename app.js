@@ -1,11 +1,16 @@
+// yWiZ5FFqiGYOBdAn
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose'); const contactsRouter = require('./routes/api/contacts')
 
-const contactsRouter = require('./routes/api/contacts')
-
+const { DB_HOST } = require('./config');
 const app = express()
 
+mongoose.connect(DB_HOST)
+  .then(() => console.log('Database connection successful'))
+  .catch(err => console.log(err.message));
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
