@@ -1,19 +1,13 @@
-const contactsOperations = require("../../models/contacts");
-const { NotFound } = require("http-errors");
+const { Contact } = require("../../models/contact");
+const { RequestError } = require("../../helpers");
 
 const updateContactById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contactsOperations.updateContact(contactId, req.body);
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true })
   if (!result) {
-    throw new NotFound(`Contact with id=${contactId} not found`);
-  };
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      result,
-    },
-  });
+    throw RequestError(404, `Contact with id=${id} not found`);
+  }
+  res.json(result);
 };
 
 module.exports = updateContactById;
