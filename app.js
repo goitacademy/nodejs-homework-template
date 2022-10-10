@@ -1,6 +1,13 @@
+// a6WSXV5oWg15Ga8u
+// const DB_HOST =
+//   "mongodb+srv://Olga:a6WSXV5oWg15Ga8u@cluster0.692aaqi.mongodb.net/db-contacts?retryWrites=true&w=majority";
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const contactsRouter = require("./routes/api/contacts");
 
