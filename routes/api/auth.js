@@ -13,4 +13,10 @@ router.post(
   ctrlWrapper(ctrl.signup)
 );
 
+router.post(
+  "/signin",
+  validateBody(schemas.signinSchema),
+  ctrlWrapper(ctrl.signin)
+);
+
 module.exports = router;
