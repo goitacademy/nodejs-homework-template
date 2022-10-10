@@ -1,16 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-const DB_HOST = require("./config");
+dotenv.config();
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connection successful"))
-  .catch((err) => console.log(err.message));
-
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/api/contact");
 
 const app = express();
 
@@ -27,6 +22,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log("hello");
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
