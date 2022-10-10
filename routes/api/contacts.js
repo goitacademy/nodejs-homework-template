@@ -102,7 +102,6 @@ router.put('/:contactId', async (req, res, next) => {
     }
 
     const { error } = addSchema.validate(body);
-    // console.log(error.message.includes('email'));
 
     if (error) {
       throw RequestError(400, error.message);
