@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "start:dev": "nodemon app.js",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
+    "joi": "^17.6.2",
     "mongoose": "^6.6.5",
     "morgan": "1.10.0"
   },
@@ -22,6 +24,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^2.0.15"
   }
 }

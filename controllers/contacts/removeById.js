@@ -1,17 +1,9 @@
-const contacts = require("../../models/contacts");
-
-const Joi = require("joi");
-
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const {Contact} = require("../../models/contacts");
 
 const removeById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       return res.status(404).json({
         message: "Not found",
