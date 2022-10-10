@@ -8,7 +8,7 @@ const updateFavorite = async(req, res)=> {
             message: "Missing field favorite",
           });
     }
-
+    
     res.status(201).json(result)
 }
 

@@ -14,5 +14,7 @@ router.delete("/:id", ctrl.removeById);
 
 router.put("/:id", ctrl.updateById);
 
+router.patch("/:id/favorite", ctrl.updateFavorite);
+
 
 module.exports = router;
