@@ -13,6 +13,7 @@ const schema = Joi.object({
   phone: Joi.string().min(10).max(15).required(),
 })
 
+
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts()
@@ -53,14 +54,40 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  const result = await contacts.removeContact(req.params.contactId)
-  res.json(result)
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = schema.validate(req.body)
+    if (error) {
+      throw RequestError(`missing required ${error.message}field`, 400)
+    }
+
+    const result = await contacts.updateContact(contactId, req.body)
+    if (!result) {
+      throw RequestError('Not found', 404)
+    }
+    res.json(result)
+  }
+  catch (error) {
+    next(error)
+  }
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  const result = await contacts.updateContact(req.params.contactId, req.body)
-  res.json(result)
+router.delete('/:contactId', async (req, res, next) => {
+ try {
+   const { contactId } = req.params;
+   const result = await contacts.updateContact(contactId)
+   
+    if (!result) {
+      throw RequestError('Not found', 404)
+    }
+    res.json({message: "contact deleted"})
+  }
+  catch (error) {
+    next(error)
+  }
 })
+
+
 
 module.exports = router
