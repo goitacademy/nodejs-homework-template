@@ -1,3 +1,4 @@
+const gravatar = require('gravatar');
 
 const {User} = require('../../models/user')
 
@@ -9,7 +10,8 @@ if(user) {
 return res.status(409).json({ message: 'Email in use' }); 
 }
 
-const newUser = new User({email, subscription});
+const avatarURL = gravatar.url(email);
+const newUser = new User({email, subscription, avatarURL});
 newUser.setPassword(password);
 newUser.save();
 
@@ -19,6 +21,7 @@ res.status(201).json({
    data: {
       email,
       subscription: "starter",
+      avatarURL,
       
    }
 
