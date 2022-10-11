@@ -1,5 +1,8 @@
 const app = require('./app')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
+const PORT = 8080;
+
+app.listen(PORT, (error) => {
+  if (error) console.error(error.message);
+  else console.log(`http://localhost:${PORT}/\nServer running. Use our API on port: ${PORT}`)
 })
