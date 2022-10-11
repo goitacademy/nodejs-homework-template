@@ -21,8 +21,9 @@ res.status(200).json({avatarURL});
 
 } catch (error) {
 await fs.unlink(tempUpload);
-throw error.status(401).json({ message: 'Not authorized' }); 
+return error.message; 
 }
 }
 
 module.exports = updateAvatar;
+

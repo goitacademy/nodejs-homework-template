@@ -21,9 +21,13 @@ router.post('/', contactValidation, auth, ctrlWrapper(addContact))
 
 router.put('/:contactId', contactValidation, auth, ctrlWrapper(updateContact))
 
-router.patch('/:contactId/favorite', contactValidation, favoriteValidation, auth, ctrlWrapper(updateStatusContact))
+router.patch('/:contactId/favorite', favoriteValidation, auth, ctrlWrapper(updateStatusContact))
 
 router.delete('/:contactId', contactValidation, auth, ctrlWrapper(removeContact))
 
 
-module.exports = router
+module.exports = router;
+
+
+
+
