@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://Julie:bcBzY0CLKOTA156e@cluster0.4fw0vgq.mongodb.net/db-contacts";
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+const { DB_HOST } = require("./config");
+const contactsRouter = require("./routes/api/contacts");
+const { DB_HOST } = process.envg;
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database connection successful"))
   .catch((error) => console.log(error.message));
-
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
-
-const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
