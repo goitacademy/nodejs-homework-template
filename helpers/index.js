@@ -1,6 +1,6 @@
 const RequestError = require("./RequestError");
 const ctrlWrapper = require("./ctrlWrapper");
-const validateBody = require("./validateBody");
+const validateBody = require("../middelwares/validateBody");
 
 module.exports = {
   RequestError,
