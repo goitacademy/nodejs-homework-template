@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
-const url =
-  "mongodb+srv://VladyslavMas:VladosBos1@cluster0.hn5tfca.mongodb.net/db-contacts?retryWrites=true&w=majority";
-//const url = process.env.MONGO_URL;
+const urlg = process.env.MONGO_URL;
 
-const connection = mongoose.connect(url, {
+
+
+const connection = mongoose.connect(urlg, {
   useNewUrlParser: true,
 });
 
