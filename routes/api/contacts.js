@@ -5,7 +5,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("..");
 const Joi = require("joi");
 
 const router = express.Router();
