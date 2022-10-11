@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const { basedir } = global;
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require(`${basedir}/controllers/contacts`);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { ctrlWrapper } = require(`${basedir}/helpers`);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrlWrapper(ctrl.getAllContacts));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', ctrlWrapper(ctrl.getContactById));
 
-module.exports = router
+router.post('/', ctrlWrapper(ctrl.addContact));
+
+router.delete('/:id', ctrlWrapper(ctrl.removeContact));
+
+router.put('/:id', ctrlWrapper(ctrl.updateContact));
+
+router.patch('/:id', ctrlWrapper(ctrl.updateStatusContact));
+
+module.exports = router;
