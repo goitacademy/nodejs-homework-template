@@ -1,6 +1,20 @@
+// RyztYqr2r82WiWNJ
+// mongodb+srv://Taras:RyztYqr2r82WiWNJ@contactsdb.zllfexc.mongodb.net/db-contacts?retryWrites=true&w=majority
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
+const mongoose = require("mongoose");
+
+const DB_HOST = "mongodb+srv://Taras:RyztYqr2r82WiWNJ@contactsdb.zllfexc.mongodb.net/db-contacts?retryWrites=true&w=majority"
+
+mongoose.connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  .catch((error) => {
+    console.log(error.message)
+    process.exit(1)
+  });
+  
 
 const contactsRouter = require("./routes/api/contacts");
 
