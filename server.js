@@ -2,13 +2,10 @@ const app = require("./app");
 const mongoose = require("mongoose");
 
 const uriDb =
-  "mongodb+srv://MKuzich:<password>@cluster0.csbvxj0.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://MKuzich:MKuzich@cluster0.csbvxj0.mongodb.net/db-contacts";
 
 const connection = mongoose.connect(uriDb, {
   promiseLibrary: global.Promise,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
 });
 
 connection
