@@ -1,64 +1,33 @@
-const path = require('path');
-const fs = require('fs/promises');
-const { v4: uuidv4 } = require('uuid');
-const { rewriteJsonContacts } = require('../utils');
+const { Schema, model } = require('mongoose');
 
-const contactsPath = path.join(__dirname, 'contacts.json');
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+      uniq: true,
+    },
+    phone: {
+      type: String,
+      match: /^(?:\+38)?(0\d{9})$/,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const listContacts = async () => {
-  const contactList = await fs.readFile(contactsPath);
-  return JSON.parse(contactList);
-};
+contactsSchema.pre('save', (error, data, next) => {
+  const { code, name } = error;
+  error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
+  next();
+});
 
-const getContactById = async contactId => {
-  const contactList = await listContacts();
-  const result = contactList.find(({ id }) => id === contactId);
-  return result || null;
-};
+const Contacts = model('contact', contactsSchema);
 
-const removeContact = async contactId => {
-  const contactList = await listContacts();
-  const index = contactList.findIndex(({ id }) => id === contactId);
-
-  if (index === -1) {
-    return null;
-  }
-
-  const removedContact = contactList.splice(index, 1);
-  rewriteJsonContacts(contactsPath, contactList);
-  return removedContact;
-};
-
-const addContact = async data => {
-  const contact = {
-    id: uuidv4(),
-    ...data,
-  };
-
-  const contactList = await listContacts();
-  contactList.push(contact);
-  rewriteJsonContacts(contactsPath, contactList);
-  return contact;
-};
-
-const updateContact = async (contactId, data) => {
-  const contactList = await listContacts();
-  const index = contactList.findIndex(({ id }) => contactId === id);
-
-  if (index === -1) {
-    return null;
-  }
-
-  contactList[index] = { ...contactList[index], ...data };
-  rewriteJsonContacts(contactsPath, contactList);
-
-  return contactList[index];
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contacts };

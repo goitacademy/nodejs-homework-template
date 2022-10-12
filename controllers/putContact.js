@@ -1,13 +1,10 @@
-const { updateContact } = require('../models/contacts');
-const { createReject } = require('../utils');
+const { findContactAndUpdate } = require('../services');
 
 const putContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw createReject(404, 'Not found');
-    }
+    const result = await findContactAndUpdate(contactId, req.body);
+
     res.status(200).json({ status: 'Succsess', data: result });
   } catch (error) {
     next(error);

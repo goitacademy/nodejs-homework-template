@@ -5,6 +5,7 @@ const putValidation = (req, res, next) => {
     name: Joi.string().alphanum().min(3).max(30),
     phone: Joi.string().regex(/^(?:\+38)?(0\d{9})$/),
     email: Joi.string().email(),
+    favorite: Joi.bool(),
   });
 
   schema
