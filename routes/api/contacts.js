@@ -5,6 +5,8 @@ const { isValidObjectId } = require("mongoose");
 
 const Contact = require("../../models/contacts");
 
+const authenticate = require("../../middlewares/authenticate");
+
 const { RequestError } = require("../../helpers");
 
 const contactsAddSchema = Joi.object({
@@ -17,16 +19,17 @@ const contactsPatchSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   try {
-    const result = await Contact.find({});
+    const userId = req.user._id;
+    const result = await Contact.find({ owner: userId });
     res.json(result);
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", authenticate, async (req, res, next) => {
   try {
     const id = req.params.contactId;
 
@@ -47,7 +50,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", authenticate, async (req, res, next) => {
   try {
     const { error } = contactsAddSchema.validate(req.body);
 
@@ -55,14 +58,20 @@ router.post("/", async (req, res, next) => {
       throw RequestError(400, "missing required name field");
     }
 
-    const result = await Contact.create(req.body);
+    const userId = req.user._id;
+    const newContact = {
+      ...req.body,
+      owner: userId,
+    };
+
+    const result = await Contact.create(newContact);
     res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", authenticate, async (req, res, next) => {
   try {
     const id = req.params.contactId;
 
@@ -83,7 +92,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", authenticate, async (req, res, next) => {
   try {
     const { error } = contactsAddSchema.validate(req.body);
 
@@ -110,7 +119,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
   try {
     const { error } = contactsPatchSchema.validate(req.body);
 
