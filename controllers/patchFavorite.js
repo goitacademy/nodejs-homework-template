@@ -4,7 +4,13 @@ const { createReject } = require('../utils');
 const patchFavorite = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contacts.findByIdAndUpdate(contactId, req.body);
+
+    if (!req.body?.favorite) {
+      throw createReject(400, 'you can change only favorite');
+    }
+    const result = await Contacts.findByIdAndUpdate(contactId, {
+      favorite: req.body.favorite,
+    });
     if (!result) {
       throw createReject(404, 'Not found');
     }
