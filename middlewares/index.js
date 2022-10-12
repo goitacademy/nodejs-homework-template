@@ -1,5 +1,5 @@
 const validateBody = require('./validateBody');
-const hendleSaveError = require('./hendleSaveError');
 const isValidId = require('./isValidId');
+const authenticate = require('./authenticate');
 
-module.exports = { validateBody, hendleSaveError, isValidId };
+module.exports = { validateBody, isValidId, authenticate };
