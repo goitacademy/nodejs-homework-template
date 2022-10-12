@@ -16,6 +16,10 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: mongoose.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false }
 );
