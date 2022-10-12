@@ -73,16 +73,7 @@ const schemas = {
     }
     next();
   },
-  avatarValidation: (req, res, next) => {
-    const schema = Joi.object({
-      avatarURL: Joi.string().required(),
-    });
-    const validateAvatar = schema.validate(req.body);
-    if (validateAvatar.error) {
-      return res.status(400).json({ message: `${validateAvatar.error}` });
-    }
-    next();
-  },
+ 
 };
 
 module.exports = { User, schemas };
