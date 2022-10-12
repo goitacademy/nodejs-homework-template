@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "home-work-2-node-js",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,12 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "chalk": "^4.0.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
+    "joi": "^17.6.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
