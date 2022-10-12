@@ -11,6 +11,7 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().alphanum().min(5).max(12).required(),
+      favorite: Joi.boolean(),
     });
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
@@ -29,10 +30,20 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().alphanum().min(5).max(12).required(),
+      favorite: Joi.boolean(),
     });
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
       return res.status(400).json({ status: validationResult.error.details });
+    }
+    next();
+  },
+
+  favoriteValidation: (req, res, next) => {
+    const schema = Joi.object({ favorite: Joi.boolean().required() });
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({ message: "missing field favorite" });
     }
     next();
   },
