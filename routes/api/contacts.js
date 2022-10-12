@@ -6,7 +6,7 @@ const isValidId = require("../../middlewares/isValidId");
 
 router.get("/", ctrlWrapper(ctrl.listContacts));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
+router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getContactById));
 
 router.post("/", ctrlWrapper(ctrl.addContact));
 
@@ -18,6 +18,6 @@ router.patch(
   ctrlWrapper(ctrl.updateStatusContact)
 );
 
-router.delete("/:contactId", ctrlWrapper(ctrl.removeContact));
+router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.removeContact));
 
 module.exports = router;
