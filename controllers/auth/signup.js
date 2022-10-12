@@ -4,17 +4,33 @@ const { RequestError } = require("../../helpers");
 const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, subscription, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw RequestError(409, "Email in use");
   }
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   // если его еще нет то сохраняем в базе
-  const result = await User.create({ name, email, password: hashPassword });
+  const result = await User.create({
+    name,
+    email,
+    subscription,
+    password: hashPassword,
+  });
+  // res.status(201).json(
+  //   {
+  //   email: result.email,
+  //     name: result.name,
+  //   }
+  // )
   res.status(201).json({
-    email: result.email,
-    name: result.name,
+    status: "Created",
+    code: 201,
+    user: {
+      email: result.email,
+      name: result.name,
+      subscription: result.subscription,
+    },
   });
 };
 

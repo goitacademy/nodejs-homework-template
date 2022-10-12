@@ -31,7 +31,18 @@ const signup = async (req, res) => {
     id: user._id,
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-  res.json({ token });
+  // для того кто залогинился - user._id сперва записываем/обновляем поле токен в базе и потом его отправляем
+  const result = await User.findByIdAndUpdate(user._id, { token });
+  res.json({
+    status: "OK",
+    code: 200,
+    token: token,
+    user: {
+      email: result.email,
+      name: result.name,
+      subscription: result.subscription,
+    },
+  });
 };
 
 module.exports = signup;
