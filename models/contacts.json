@@ -1,15 +1,9 @@
 [
   {
-    "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
-    "id": "2",
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
+    "contactId": "2",
+    "name": "Ihor",
+    "email": "example@gmail.com",
+    "phone": "432-09-23"
   },
   {
     "id": "3",
