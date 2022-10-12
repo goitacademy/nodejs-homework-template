@@ -14,6 +14,10 @@ const usersPostSchema = Joi.object({
   subscription: Joi.string().optional(),
 });
 
+const usersPatchSchema = Joi.object({
+  subscription: Joi.valid("starter", "pro", "business"),
+});
+
 const SECRET_KEY = "1sa3fdj63op99";
 
 router.post("/register", async (req, res, next) => {
@@ -50,7 +54,7 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const { error } = usersPostSchema.validate(req.bpdy);
+    const { error } = usersPostSchema.validate(req.body);
     if (error) {
       throw RequestError(400, error.message);
     }
@@ -101,6 +105,23 @@ router.get("/current", authenticate, async (req, res, next) => {
     email,
     subscription,
   });
+});
+
+router.patch("/", authenticate, async (req, res, next) => {
+  try {
+    const { error } = usersPatchSchema.validate(req.body);
+    if (error) {
+      throw RequestError(400, "Invalid value");
+    }
+    const userId = req.user._id;
+    const result = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
