@@ -3,7 +3,7 @@ const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 const ctrlWrapper = require("../../utils/ctrlWrapper");
 const { validateBody } = require("../../middlewares");
-const schemas = require("../../schemas/contacts");
+const { schemas } = require("../../models/contact");
 
 router.get("/", ctrlWrapper(ctrl.listContacts));
 
@@ -17,6 +17,11 @@ router.put(
   "/:contactId",
   validateBody(schemas.addSchema),
   ctrlWrapper(ctrl.updateContactById)
+);
+router.patch(
+  "/:contactId/favourite",
+  validateBody(schemas.addSchema),
+  ctrlWrapper(ctrl.updateStatusContact)
 );
 
 module.exports = router;
