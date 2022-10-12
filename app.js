@@ -1,4 +1,5 @@
 // quzz7qPsVKgEXaHX
+
 /** for work with server */
 const express = require('express');
 /** log event  */
@@ -26,6 +27,8 @@ app.use(cors());
 /** this middleware recognizes content type of body */
 app.use(express.json());
 
+/** mid access to get file with extention by frontend */
+app.use(express.static('public'));
 /** here are send our routes */
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', authRouter);

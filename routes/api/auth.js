@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+/** liba for work with files */
 
 /**
  * our functions which one is responsible for operations with data depending on the route
@@ -14,11 +15,12 @@ const { ctrlWrapper } = require('../../helpers');
 const { Schemas } = require('../../models/user');
 
 /** in this function I took out validation body of request */
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, upload } = require('../../middlewares');
 
 /** register path */
 router.post(
   '/register',
+
   validateBody(Schemas.registerSchema),
   ctrlWrapper(ctrl.register)
 );
@@ -44,6 +46,16 @@ router.patch(
   authenticate,
   validateBody(Schemas.subscriptionSchema),
   ctrlWrapper(ctrl.updateSubscription)
+);
+
+/**
+ * router for change avatar
+ */
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  ctrlWrapper(ctrl.updateAvatar)
 );
 
 module.exports = router;

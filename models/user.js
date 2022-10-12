@@ -25,6 +25,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarUrl: {
+      type: String,
+      required: [true, 'Avatar is required'],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -35,6 +39,7 @@ userSchema.post('seve', handleSaveError);
 const registerSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
+  avatarUrl: Joi.string(),
 });
 
 const loginSchema = Joi.object({
