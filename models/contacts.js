@@ -12,6 +12,7 @@ const contactsSchema = new Schema(
     },
     phone: {
       type: String,
+      match: /^(?:\+38)?(0\d{9})$/,
     },
     favorite: {
       type: Boolean,
@@ -21,8 +22,9 @@ const contactsSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-contactsSchema.pre('save', next => {
-  console.log('midleweare');
+contactsSchema.pre('save', (error, data, next) => {
+  const { code, name } = error;
+  error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
   next();
 });
 

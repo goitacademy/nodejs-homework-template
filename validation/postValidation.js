@@ -7,6 +7,7 @@ const postValidation = (req, res, next) => {
       .regex(/^(?:\+38)?(0\d{9})$/)
       .required(),
     email: Joi.string().email().required(),
+    favorite: Joi.bool(),
   });
 
   schema
