@@ -8,19 +8,25 @@ const {
 } = require("../services/contactsService");
 
 const getContactsController = async (req, res) => {
-  const data = await getContacts();
-  res.json({ data });
+  const { id: owner } = req.user;
+  let { page = 1, limit = 20, favorite } = req.query;
+  limit = limit > 20 ? 20 : Number(limit);
+  const skip = (page - 1) * limit;
+  const data = await getContacts(owner, { skip, limit }, favorite);
+  res.json({ data, page });
 };
 
 const addContactController = async (req, res) => {
   const { name, email, phone } = req.body;
-  const data = await addContact({ name, email, phone });
+  const { id: owner } = req.user;
+  const data = await addContact({ name, email, phone }, owner);
   res.status(201).json(data);
 };
 
 const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const data = await getContactById(contactId);
+  const { id: owner } = req.user;
+  const data = await getContactById(contactId, owner);
   if (!data) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -29,23 +35,24 @@ const getContactByIdController = async (req, res) => {
 
 const deleteContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  await deleteContactById(contactId);
+  const { id: owner } = req.user;
+  await deleteContactById(contactId, owner);
   res.json({ message: "contact deleted" });
 };
 
 const putContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
-  await putContactById(contactId, { name, email, phone });
-  const data = await getContactById(contactId);
+  const { id: owner } = req.user;
+  const data = await putContactById(contactId, { name, email, phone }, owner);
   res.json({ data });
 };
 
 const updateStatusContactController = async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
-  await updateStatusContact(contactId, favorite);
-  const data = await getContactById(contactId);
+  const { id: owner } = req.user;
+  const data = await updateStatusContact(contactId, favorite, owner);
   res.json({ data });
 };
 
