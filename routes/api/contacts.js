@@ -5,10 +5,10 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
   res.json({ message: 'Cool msg done' })
 })
-
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const msg = 'hello'
+// router.get('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
 
 router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' })
