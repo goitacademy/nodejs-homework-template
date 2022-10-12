@@ -9,7 +9,7 @@ mongoose
     console.log("Database connection successful");
     app.listen(PORT);
   })
-  .catch((err) => {
-    console.log(err.message);
+  .catch((error) => {
+    console.log(error.message);
     process.exit(1);
   });
