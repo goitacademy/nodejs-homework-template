@@ -19,18 +19,18 @@ const updateAvatar = async (req, res) => {
   //   // .greyscale() // set greyscale
   //   // .write("lena-small-bw.jpg"); // save
   // });
-  Jimp.read(req.file.originalname)
-    .then((filename) => {
-      return filename.resize(250, 250); // resize
-      // .quality(60) // set JPEG quality
-      // .greyscale() // set greyscale
-      // .write("lena-small-bw.jpg"); // save
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  // Jimp.read(req.file.originalname)
+  //   .then((filename) => {
+  //     return filename.resize(250, 250); // resize
+  //     // .quality(60) // set JPEG quality
+  //     // .greyscale() // set greyscale
+  //     // .write("lena-small-bw.jpg"); // save
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //   });
 
-  // req.file.originalname = `${_id}.${extension}`;
+  req.file.originalname = `${_id}.${extension}`;
   console.log(req.file);
 
   // await fs.writeFile(contactsPath, JSON.stringify(newArray), "utf8");
