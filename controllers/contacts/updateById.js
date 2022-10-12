@@ -1,5 +1,5 @@
-const { RequestError } = require('../helpers');
-const { Contact, schemas } = require('../models/contact')
+const { RequestError } = require('../../helpers');
+const { Contact, schemas } = require('../../models/contact')
 
 const updateById = async (req, res, next) => {
     const { error } = schemas.addSchema.validate(req.body);

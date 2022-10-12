@@ -1,5 +1,5 @@
-const { RequestError } = require('../helpers');
-const { Contact, schemas } = require('../models/contact')
+const { RequestError } = require('../../helpers');
+const { Contact, schemas } = require('../../models/contact')
 
 const updateStatusContact = async (req, res, next) => {
     const { error } = schemas.updayeFavFieldSchema.validate(req.body);
