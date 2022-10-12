@@ -1,4 +1,4 @@
-const { addContact } = require('../models/contacts');
+const { Contacts } = require('../models/contacts');
 const { createReject } = require('../utils');
 
 const postContact = async (req, res, next) => {
@@ -7,7 +7,7 @@ const postContact = async (req, res, next) => {
     if (!name || !phone || !email) {
       throw createReject(400, 'Missing required name field');
     }
-    const result = await addContact({ name, phone, email });
+    const result = await Contacts.create({ name, phone, email });
     res.status(201).json({ status: 'Succsess', data: result });
   } catch (error) {
     next(error);

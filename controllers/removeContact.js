@@ -1,10 +1,10 @@
-const { removeContact } = require('../models/contacts');
+const { Contacts } = require('../models/contacts');
 const { createReject } = require('../utils');
 
 const delateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await Contacts.findByIdAndRemove(contactId);
     if (!result) {
       throw createReject(404, 'Not found');
     }

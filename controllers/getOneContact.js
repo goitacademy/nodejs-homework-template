@@ -1,10 +1,10 @@
-const { getContactById } = require('../models/contacts');
+const { Contacts } = require('../models/contacts');
 const { createReject } = require('../utils');
 
 const getOneContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    const result = await Contacts.findById(contactId);
     if (!result) {
       throw createReject(404, 'Not found');
     }
