@@ -3,7 +3,7 @@ require("colors");
 const mongoose = require("mongoose");
 
 const app = require("./app");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 const DB_HOST = process.env.MONGO_URL;
 
 const connection = mongoose.connect(DB_HOST, {
