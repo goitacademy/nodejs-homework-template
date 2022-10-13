@@ -14,9 +14,9 @@ router.get('/', ctrlWrapper(ctrl.listContacts))
 
 router.get('/:contactId', ctrlWrapper(ctrl.getContactById))
 
-router.post('/', validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact))
+router.post('/', ctrlWrapper(ctrl.addContact))
 
-router.put('/:contactId', validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateContactsById))
+router.put('/:contactId', ctrlWrapper(ctrl.updateContactsById))
 
 router.delete('/:contactId', ctrlWrapper(ctrl.removeContact))
 
