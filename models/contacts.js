@@ -45,15 +45,15 @@ const addContact = async ({body}) => {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts()
   const contact = contacts.find(contact => contact.id === contactId)
+  if(!contact){
+    return null
+  }
   const updatedContact = {
     ...contact,
     phone: body?.phone || contact.phone,
     name: body?.name || contact.name,
     email: body?.email || contact.email
   }
-  // const index = contacts.findIndex(
-  //   (contact) => contact.id ===String(contactId) 
-  // );
   const updatedList = contacts.map(contact => {
     if(contact.id === contactId){
       return updatedContact
