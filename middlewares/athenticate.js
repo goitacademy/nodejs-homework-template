@@ -1,9 +1,3 @@
-// ++ Извлекает заголовок Authorization из req.headers
-// ++ Разделить заголовок на 2 слова
-// ++ Если 1 слово !== "Bearer" - 401 ошибка
-// Проверяем что токен валиден. Если нет - 401 ошибка
-// Ищем в базе пользователя с таким id. Если нет - 401 ошибка
-
 const { User } = require("../models")
 const jwt = require("jsonwebtoken")
 const {RequestError} = require("../helpers")
