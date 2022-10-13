@@ -18,7 +18,10 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    avatarURL: String,
+    avatarURL: {
+      type: String,
+      required: true,
+    },
     token: String,
     default: "",
   },
@@ -73,7 +76,6 @@ const schemas = {
     }
     next();
   },
- 
 };
 
 module.exports = { User, schemas };

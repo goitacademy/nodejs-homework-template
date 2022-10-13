@@ -1,2 +1,4 @@
 node_modules/
 .env
+index.html
+frontend.html

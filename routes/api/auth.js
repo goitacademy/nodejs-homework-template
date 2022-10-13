@@ -1,11 +1,9 @@
 const express = require("express");
-// const multer = require("multer");
 const router = express.Router();
 const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 const { schemas } = require("../../service/schemasAuth");
-const { auth: ctrl } = require("../../controllers");
-const { authenticate } = require("../../middleware");
-// const upload = multer({ dest: "../../tmp" });
+const { auth: ctrl, files: ctrlFs } = require("../../controllers");
+const { authenticate, upload } = require("../../middleware");
 
 router.post(
   "/register",
@@ -21,22 +19,10 @@ router.patch(
   schemas.subscriptionValidation,
   ctrlWrapper(ctrl.updateSubscription)
 );
-// router.patch(
-//   "/avatars",
-//   authenticate,
-//   // schemas.avatarValidation,
-
-//   upload.single("avatar"),
-//   function (req, res, next) {
-//     res.status(200).json({
-//       code: 200,
-//       status: "success",
-//       avatarURL: req.file,
-//     });
-//     // console.log(req.body);
-//     // req.file is the `avatar` file
-//     // req.body will hold the text fields, if there were any
-//   }
-//   // ctrlWrapper(ctrl.updateAvatar)
-// );
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrapper(ctrlFs.updateAvatar)
+);
 module.exports = router;

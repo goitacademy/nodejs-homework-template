@@ -4,7 +4,6 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
-const filesRouter = require("./routes/api/files");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -16,7 +15,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/avatars", express.static("public/avatars"));
 app.use("/api/contacts", contactsRouter);
 app.use("/users", authRouter);
-app.use("/users", filesRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
