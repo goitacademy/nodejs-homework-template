@@ -1,12 +1,8 @@
-const { Contact, schemas } = require("../../models/contacts");
+const { Contact } = require("../../models/contacts");
 
 const { RequestError } = require("../../helpers");
 
 const put = async (req, res) => {
-  const { error } = schemas.addContactShema.validate(req.body);
-  if (error) {
-    throw RequestError(400, error.message);
-  }
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body);
   if (!result) {
