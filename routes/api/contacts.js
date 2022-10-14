@@ -1,15 +1,16 @@
 const express = require('express');
-const {validation, ctrlWrapper} = require('../../middlewares');
+
+const { userAuth, validation, ctrlWrapper } = require('../../middlewares');
 const { joiSchema } = require('../../models/contacts');
 const { contacts: controller } = require('../../controllers');
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(controller.getAll));
+router.get('/', userAuth, ctrlWrapper(controller.getAll));
 
 router.get('/:contactId', ctrlWrapper(controller.getById));
 
-router.post('/', validation(joiSchema), ctrlWrapper(controller.add));
+router.post('/', userAuth, validation(joiSchema), ctrlWrapper(controller.add));
 
 router.delete('/:contactId', ctrlWrapper(controller.removeById));
 
