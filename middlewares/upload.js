@@ -5,7 +5,7 @@ const path = require('path');
  */
 const tempDir = path.join(__dirname, '..', 'tmp');
 
-/** config multer  */
+/** config multer atn first our file go to tempDir then in public */
 const multerConfig = multer.diskStorage({
   destination: tempDir,
   filename: (req, file, cb) => {

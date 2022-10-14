@@ -27,7 +27,7 @@ app.use(cors());
 /** this middleware recognizes content type of body */
 app.use(express.json());
 
-/** mid access to get file with extention by frontend */
+/** midl access to get file from public without extention by frontend */
 app.use(express.static('public'));
 /** here are send our routes */
 app.use('/api/contacts', contactsRouter);
