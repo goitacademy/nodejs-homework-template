@@ -41,7 +41,7 @@ const addSchema = Joi.object({
   .min(3)
   .required()
   .error(
-    RequestError(400, "Invalid data, request must contain: name email phone.")
+    RequestError(400, "missing required name field")
   );
 
 module.exports = {
