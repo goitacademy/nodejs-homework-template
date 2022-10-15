@@ -8,8 +8,8 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await authServices.getByEmail({ email });
   const passCompare = user ? bcrypt.compareSync(password, user.password) : null;
-  if (!user || !passCompare)
-    throw createError(401, "Email or password is wrong");
+  if (!user || !user.verified || !passCompare)
+    throw createError(401, "Email is wrong / unverified or password is wrong");
   const payload = {
     id: user._id,
   };
