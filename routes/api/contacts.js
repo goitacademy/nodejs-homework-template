@@ -20,4 +20,6 @@ router.put('/:contactId', ctrlWrapper(ctrl.updateContactsById))
 
 router.delete('/:contactId', ctrlWrapper(ctrl.removeContact))
 
+router.patch('/:contactId/favorite', ctrlWrapper(ctrl.updateStatusContact))
+
 module.exports = router
