@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { User } = require("../../service");
-const configImg = require("../../middleware/configImg");
+const configImg = require("../../helpers/configImg");
 const RequestError = require("../../helpers/RequestError");
 
 const avatarsDir = path.join("public", "avatars");
@@ -14,14 +14,14 @@ const updateAvatar = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
     const extension = originalname.split(".").pop();
     const filename = `${_id}.${extension}`;
-    const configAvatar = {
+    const parameterAvatar = {
       tempUpload,
       filename,
       avatarsDir,
-      // width: 350,
-      // height: 350,
+      width: 250,
+      height: 250,
     };
-    configImg(configAvatar);
+    configImg(parameterAvatar);
     await fs.unlink(tempUpload);
     const avatarURL = path.join("avatars", filename);
 

@@ -1,7 +1,13 @@
 const Jimp = require("jimp");
-const RequestError = require("../helpers/RequestError");
+const RequestError = require("./RequestError");
 
-function configImg({ tempUpload, filename, avatarsDir, width=100, height=100 }) {
+function configImg({
+  tempUpload,
+  filename,
+  avatarsDir,
+  width = 100,
+  height = 100,
+}) {
   Jimp.read(tempUpload)
     .then((image) => {
       image.resize(width, height).write(`${avatarsDir}/${filename}`); // save
