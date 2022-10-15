@@ -6,10 +6,10 @@ const deleteContact = require("./delete");
 const updateFavorite = require("./updateFavorite");
 
 module.exports = {
-    getAll,
-    getById,
-    add,
-    updateById,
-    updateFavorite,
-    deleteContact,
-}
+  getAll,
+  getById,
+  add,
+  updateById,
+  updateFavorite,
+  deleteContact,
+};
