@@ -33,8 +33,8 @@ describe('tests for login/register controllers', () => {
 
   test('register returns response status 201 and response body must contain name, email and subscription type', async () => {
     const response = await request(app).post('/api/auth/register').send({
-      username: 'Jhon',
-      email: 'John1234@gmail.com',
+      username: 'Dmytro',
+      email: 'Dmytro34@gmail.com',
       password: 'qazwsx12345',
     })
     const { name, email, subscription } = response.body
