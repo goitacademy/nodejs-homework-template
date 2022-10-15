@@ -18,6 +18,7 @@ app.use(express.json())
 
 app.use('/api/auth', authRouter)
 app.use('/api/contacts', contactsRouter)
+app.use(express.static('public'))
 
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' })
