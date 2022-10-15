@@ -4,7 +4,7 @@ const { User } = require("../../service");
 const configImg = require("../../middleware/configImg");
 const RequestError = require("../../helpers/RequestError");
 
-// const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+const avatarsDir = path.join("public", "avatars");
 const updateAvatar = async (req, res) => {
   if (!req.file) {
     throw RequestError(400, "no file");
@@ -13,8 +13,15 @@ const updateAvatar = async (req, res) => {
     const { _id } = req.user;
     const { path: tempUpload, originalname } = req.file;
     const extension = originalname.split(".").pop();
-    configImg(tempUpload, _id, extension);
     const filename = `${_id}.${extension}`;
+    const configAvatar = {
+      tempUpload,
+      filename,
+      avatarsDir,
+      // width: 350,
+      // height: 350,
+    };
+    configImg(configAvatar);
     await fs.unlink(tempUpload);
     const avatarURL = path.join("avatars", filename);
 
