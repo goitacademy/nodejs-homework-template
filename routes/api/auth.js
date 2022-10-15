@@ -6,7 +6,7 @@ const ctrl = require(`${basedir}/controllers/auth`)
 
 const { controllersWrapper } = require(`${basedir}/helpers`)
 
-const { auth } = require(`${basedir}/middlewares`)
+const { auth, upload } = require(`${basedir}/middlewares`)
 
 const router = express.Router()
 
@@ -19,5 +19,12 @@ router.patch('/:userId/user', controllersWrapper(ctrl.updateUserSubscription))
 router.get('/current', auth, controllersWrapper(ctrl.getCurrent))
 
 router.get('/logout', auth, controllersWrapper(ctrl.logout))
+
+router.patch(
+  '/users/avatars',
+  auth,
+  upload.single('avatar'),
+  controllersWrapper(ctrl.setAvatar)
+)
 
 module.exports = router
