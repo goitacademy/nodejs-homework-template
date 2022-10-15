@@ -34,10 +34,6 @@ const addContact = async (body) => {
   const { name, email, phone } = body;
   const id = nanoid();
   const newContact = { id, name, email, phone };
-  // const newContact = {
-  //   id: nanoid(),
-  //   ...body,
-  // };
   contacts.push(newContact);
   await updateContacts(contacts);
   return newContact;
