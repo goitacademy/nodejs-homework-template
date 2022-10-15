@@ -10,8 +10,10 @@ router.post('/register', validateBody(schemas.registerSchema), ctrlWrapper(ctrl.
 
 router.post('/login', validateBody(schemas.loginSchema), ctrlWrapper(ctrl.login));
 
-router.get('/current', authenticate, ctrlWrapper(ctrl.getCurrrent));
+router.get('/current', authenticate, ctrlWrapper(ctrl.getCurrent));
 
 router.get('/logout', authenticate, ctrlWrapper(ctrl.logout));
+
+router.patch('/subscription', authenticate, validateBody(schemas.subscriptionSchema), ctrlWrapper(ctrl.updateSubscription));
 
 module.exports = router;
