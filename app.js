@@ -1,16 +1,11 @@
-// rU_YP5hCjhf_gXH; mongodb+srv://Iryna:rU_YP5hCjhf_gXH@cluster0.nn1itut.mongodb.net/test
-
+// rU_YP5hCjhf_gXH;
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+
 const dotenv = require("dotenv");
+// require("dotenv").config();
 dotenv.config();
-const { DB_HOST } = process.env;
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connection successful"))
-  .catch((error) => console.log(error.message));
 
 const contactsRouter = require("./routes/api/contacts");
 
