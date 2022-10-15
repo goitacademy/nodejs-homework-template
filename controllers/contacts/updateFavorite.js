@@ -1,18 +1,19 @@
 const { Contact } = require("../../models");
-const {joiSchema} =require("../../models/contact")
+const {favoriteJoiSchema} =require("../../models/contact")
 const createError = require("http-errors");
 
 
-const updateById = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
     try {
-        const { error } = joiSchema.validate(req.body);
+        const { error } = favoriteJoiSchema.validate(req.body);
         if (error) {
             error.status = 400;
-            error.message = "missing field";
+            error.message = "missing field favorite";
             throw error;
         }
         const { id } = req.params;
-        const result = await Contact.findByIdAndUpdate(id, req.body, {new:true});
+        const { favorite } = req.body;
+        const result = await Contact.findByIdAndUpdate(id, {favorite}, {new:true});
         if (!result) {
             throw createError(404, `Contact with ID: ${id} not found`);
         }
@@ -28,4 +29,4 @@ const updateById = async (req, res, next) => {
     }
 };
 
-module.exports = updateById;
+module.exports = updateFavorite;
