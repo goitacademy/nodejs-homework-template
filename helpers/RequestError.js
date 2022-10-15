@@ -6,10 +6,10 @@ const messages = {
   409: "conflict",
 };
 
-const RequsetError = (status, message = messages[status]) => {
+const RequestError = (status, message = messages[status]) => {
   const error = new Error(message);
   error.status = status;
   return error;
 };
 
-module.exports = RequsetError;
+module.exports = RequestError;
