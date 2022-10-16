@@ -18,11 +18,12 @@ const updateAvatar = async (req, res) => {
       tempUpload,
       filename,
       avatarsDir,
-      width: 250,
-      height: 250,
+      // width: 250,
+      // height: 250,
     };
     configImg(parameterAvatar);
     await fs.unlink(tempUpload);
+    console.log(filename);
     const avatarURL = path.join("avatars", filename);
 
     await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
