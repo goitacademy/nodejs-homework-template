@@ -1,25 +1,17 @@
-const express = require("express");
+const express = require('express');
 
-const ctrl = require("../../controllers/contacts");
-const { crtlWrapper } = require("../../helpers");
-const { validateBody } = require("../../middlewares");
-const { schemas } = require("../../models/contacts");
+const ctrl = require('../../controllers/contacts');
+const { ctrlWrapper } = require('../../helpers');
+const { validateBody, authenticate } = require('../../middlewares');
+const { schemas } = require('../../models/contact');
 
 const router = express.Router();
 
-router.get("/", crtlWrapper(ctrl.getAll));
-router.get("/:id", crtlWrapper(ctrl.getById));
-router.post("/", validateBody(schemas.addSchema), crtlWrapper(ctrl.add));
-router.delete("/:id", crtlWrapper(ctrl.deleteById));
-router.put(
-  "/:id",
-  validateBody(schemas.addSchema),
-  crtlWrapper(ctrl.updateById)
-);
-router.patch(
-  "/:id/favorite",
-  validateBody(schemas.updateFavoriteSchema),
-  crtlWrapper(ctrl.updateFavorite)
-);
+router.get('/', authenticate, ctrlWrapper(ctrl.getAll));
+router.get('/:id', authenticate, ctrlWrapper(ctrl.getById));
+router.post('/', authenticate, validateBody(schemas.addSchema), ctrlWrapper(ctrl.add));
+router.delete('/:id', authenticate, ctrlWrapper(ctrl.deleteById));
+router.put('/:id', authenticate, validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById));
+router.patch('/:id/favorite', authenticate, validateBody(schemas.updateFavoriteSchema), ctrlWrapper(ctrl.updateFavorite));
 
 module.exports = router;
