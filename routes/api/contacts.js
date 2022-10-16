@@ -2,21 +2,25 @@ const express = require("express");
 const {
   getAll,
   getById,
+  addItem,
   removeItem,
   updateItem,
-  addItem,
+  updateFavoriteField,
 } = require("../../controllers/controllers");
+const controllerWrapper = require("../../helpers/controllerWrapper");
 
 const router = express.Router();
 
-router.get("/", getAll);
+router.get("/", controllerWrapper(getAll));
 
-router.get("/:contactId", getById);
+router.get("/:contactId", controllerWrapper(getById));
 
-router.post("/", addItem);
+router.post("/", controllerWrapper(addItem));
 
-router.delete("/:contactId", removeItem);
+router.delete("/:contactId", controllerWrapper(removeItem));
 
-router.put("/:contactId", updateItem);
+router.put("/:contactId", controllerWrapper(updateItem));
+
+router.patch("/:contactId/favorite", controllerWrapper(updateFavoriteField));
 
 module.exports = router;

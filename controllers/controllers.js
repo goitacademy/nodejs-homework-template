@@ -1,17 +1,18 @@
-const contactsAPI = require("../models/contacts");
+const Contact = require("../models/contactsModel");
+const RequestError = require("../helpers/RequestError");
 
 const schema = require("../schemas/schemas");
 
 const getAll = async (req, res, next) => {
-  const result = await contactsAPI.listContacts();
+  const result = await Contact.find();
   res.status(200).json(result);
 };
 
 const getById = async (req, res, next) => {
   const id = req.params.contactId;
-  const result = await contactsAPI.getContactById(id);
+  const result = await Contact.findById(id);
   if (!result) {
-    return res.status(404).json({ message: "Not found" });
+    throw RequestError(400, "Not found");
   }
   res.status(200).json(result);
 };
@@ -20,33 +21,51 @@ const addItem = async (req, res, next) => {
   const newContact = req.body;
   const { error } = schema.newContact.validate(newContact);
   if (error) {
-    return res.status(400).json({ message: "missing required name field" });
+    throw RequestError(400, error.message);
   }
-  const result = await contactsAPI.addContact(newContact);
-  console.log(newContact);
+  const result = await Contact.create(newContact);
   res.status(201).json(result);
 };
 
 const removeItem = async (req, res, next) => {
   const id = req.params.contactId;
-  const result = await contactsAPI.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
-    return res.status(404).json({ message: "Not found" });
+    throw RequestError(404, "Not found");
   }
 
-  res.status(200).json({ message: "contact deleted" });
+  res.status(200).json({ message: "Contact deleted" });
 };
 
 const updateItem = async (req, res, next) => {
-  const newContact = req.body;
+  const updatedContact = req.body;
   const id = req.params.contactId;
-  const { error } = schema.updateContact.validate(newContact);
+  const { error } = schema.updateContact.validate(updatedContact);
   if (error) {
-    return res.status(400).json({ message: "missing fields" });
+    throw RequestError(400, error.message);
   }
-  const result = await contactsAPI.updateContact(id, newContact);
+  const result = await Contact.findByIdAndUpdate(id, updatedContact, {
+    new: true,
+  });
   if (!result) {
-    res.status(404).json({ message: "Not found" });
+    throw RequestError(404, "Not found");
+  }
+
+  res.status(200).json(result);
+};
+
+const updateFavoriteField = async (req, res, next) => {
+  const updatedInfo = req.body;
+  const id = req.params.contactId;
+  const { error } = schema.favoriteContact.validate(updatedInfo);
+  if (error) {
+    throw RequestError(404, "missing field favorite");
+  }
+  const result = await Contact.findByIdAndUpdate(id, updatedInfo, {
+    new: true,
+  });
+  if (!result) {
+    throw RequestError(404, "Not found");
   }
 
   res.status(200).json(result);
@@ -58,4 +77,5 @@ module.exports = {
   addItem,
   removeItem,
   updateItem,
+  updateFavoriteField,
 };
