@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const path = require("path");
+const favicon = require("serve-favicon");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -19,10 +20,13 @@ mongoose
   });
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
 
 app.use("/users", routers.authApi);
 app.use("/api/contacts", routers.contactsApi);
