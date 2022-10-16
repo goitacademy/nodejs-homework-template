@@ -17,7 +17,10 @@ const userSchema = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
-    token: String,
+    token: {
+      type: String,
+      default: null,
+    },
   },
 
   { versionKey: false, timestamps: true },
@@ -45,7 +48,7 @@ const joiLoginSchema = Joi.object({
     })
     .required(),
   //   subscription: Joi.string().required(),
-  //   token: Joi.string().required(),
+  token: Joi.string(),
 });
 
 const User = model('user', userSchema);

@@ -9,15 +9,20 @@ const auth = async (req, res, next) => {
   const { authorization = '' } = req.headers;
   const [bearer, token] = authorization.split(' ');
 
+  console.log('bearer:', bearer);
+  console.log('token:', token);
   try {
     if (bearer !== 'Bearer') {
       throw new Unauthorized('Not authorized');
     }
 
     const { id } = jwt.verify(token, SECRET_KEY);
+    console.log('id:', id);
     const user = await User.findById(id);
-
-    if (!user) {
+    console.log('user.token:', user.token);
+    console.log('user:', user);
+    // if (!user || !user.token) {
+    if (!user || !user.token) {
       throw new Unauthorized('Not authorized');
     }
 
