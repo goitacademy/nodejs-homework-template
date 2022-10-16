@@ -1,5 +1,5 @@
-const sendMail = require("./sendMail");
+const sendVerifyMail = require("./sendVerifyMail");
 
 module.exports = {
-  sendMail,
+  sendVerifyMail,
 };

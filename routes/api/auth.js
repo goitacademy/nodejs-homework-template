@@ -8,7 +8,8 @@ const {
 const {
   joiLoginSchema,
   joiRegisterSchema,
-  subscriptionSchema,
+  joiSubscriptionSchema,
+  joiVerifyEmailSchema,
 } = require("../../models/user");
 
 const { authController: ctrl } = require("../../controllers");
@@ -22,6 +23,12 @@ router.post(
 );
 
 router.post("/login", validation(joiLoginSchema), ctrlWrap(ctrl.login));
+
+router.post(
+  "/verify",
+  validation(joiVerifyEmailSchema),
+  ctrlWrap(ctrl.resendVerifyEmail)
+);
 
 router.get("/current", ctrlWrap(auth), ctrlWrap(ctrl.getCurrent));
 
@@ -38,7 +45,7 @@ router.patch(
 
 router.patch(
   "/:userId/subscription",
-  validation(subscriptionSchema),
+  validation(joiSubscriptionSchema),
   ctrlWrap(ctrl.updateSubscription)
 );
 

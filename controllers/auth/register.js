@@ -4,7 +4,7 @@ const gravatar = require("gravatar");
 const { v4: uuid } = require("uuid");
 
 const { authServices } = require("../../services");
-const { sendMail } = require("../../helpers");
+const { sendVerifyMail } = require("../../helpers");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -12,12 +12,7 @@ const register = async (req, res) => {
   if (user) throw createError(409, "email is already registered");
 
   const verificationToken = uuid();
-  const mail = {
-    to: email,
-    subject: "Email confirmation",
-    html: `<a target="_blank" href='http://localhost:3000/users/verify/${verificationToken}'>Confirm email</a>`,
-  };
-  sendMail(mail);
+  sendVerifyMail(email, verificationToken);
 
   const avatarURL = gravatar.url(email);
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));

@@ -15,11 +15,17 @@ const nodemailerConfig = {
 
 const transporter = nodemailer.createTransport(nodemailerConfig);
 
-const sendMail = (mail) => {
-  mail = { from: "excusemewhat@meta.ua", ...mail };
+const sendVerifyMail = (email, verificationToken) => {
+  const mail = {
+    to: email,
+    from: "excusemewhat@meta.ua",
+    subject: "Email confirmation",
+    html: `<a target="_blank" href='http://localhost:3000/users/verify/${verificationToken}'>Confirm email</a>`,
+  };
+
   transporter.sendMail(mail).catch((error) => {
     throw error;
   });
 };
 
-module.exports = sendMail;
+module.exports = sendVerifyMail;
