@@ -5,20 +5,16 @@ const {handleSaveErrors} = require('../helpers');
 const emailRegexp = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
 
 const userSchema = new Schema({
-        name: {
-            type: String,
-            required: true,
-        },
         email: {
             type: String,
             match: emailRegexp,
             unique: true,
-            required: true,
+            required: [true, 'Email is required'],
         },
         password: {
             type: String,
             minlength: 6,
-            required: true,
+            required: [true, 'Password is required'],
         },
         subscription: {
             type: String,
@@ -27,7 +23,7 @@ const userSchema = new Schema({
           },
         token: {
             type: String,
-            default: '',
+            default: null,
         }
 }, {versionKey: false, timestamps: true });
 
