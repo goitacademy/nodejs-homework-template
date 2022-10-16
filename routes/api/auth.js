@@ -1,11 +1,7 @@
 const express = require('express');
-// /api/users
 
 const { validation, ctrlWrapper, auth } = require('../../middlewares');
-// const { joiSchema, favoriteJoiSchema } = require("../../models/contact");
 const { auth: ctrl } = require('../../controllers');
-// const { users: ctrlUsers } = require('../../controllers');
-
 const { joiRegisterSchema, joiLoginSchema } = require('../../models/user');
 
 const router = express.Router();

@@ -35,7 +35,6 @@ const joiRegisterSchema = Joi.object({
     })
     .required(),
   subscription: Joi.string(),
-  //   token: Joi.string().required(),
   token: Joi.string(),
 });
 
@@ -47,7 +46,6 @@ const joiLoginSchema = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .required(),
-  //   subscription: Joi.string().required(),
   token: Joi.string(),
 });
 

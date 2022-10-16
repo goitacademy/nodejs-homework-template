@@ -1,8 +1,5 @@
-const { User } = require('../../models');
-
 const getCurrent = async (req, res) => {
   const { subscription, email } = req.user;
-  console.log('req.user-getCurrent:', req.user);
 
   res.json({
     status: 'success',

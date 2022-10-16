@@ -12,7 +12,6 @@ const register = async (req, res) => {
   }
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  console.log('hashPassword', hashPassword);
 
   const result = await User.create({
     subscription,
