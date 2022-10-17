@@ -1,6 +1,14 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose');
+
+const DB_HOST = "mongodb+srv://OleksandrPavlov:19Rammstein88@@hw03-mongodb.uuwarjo.mongodb.net/db-contacts?retryWrites=true&w=majority"
+
+
+mongoose.connect(DB_HOST)
+  .then(() => console.log('Database connection successful'))
+  .catch(err => console.log(err.message));
 
 const contactsRouter = require('./routes/api/contacts')
 
