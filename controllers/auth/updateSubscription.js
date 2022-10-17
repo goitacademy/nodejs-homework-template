@@ -5,10 +5,14 @@ const updateSubscription = async(req, res) => {
     const { subscription } = req.body;
     const user = await User.findByIdAndUpdate(_id, { subscription }, { runValidators: true });
     res.status(201).json({
-        user: {
-        email: user.email,
-        subscription,
-        },
+        status: 'success',
+        code: 200,
+        data: {
+          user: {
+            email: user.email,
+            subscription: subscription
+          }
+        }
     })
 };
 
