@@ -5,6 +5,5 @@ const handleSaveErrors = require('./handleSaveErrors');
 module.exports = {
     RequestError,
     controllerWrapper,
-
     handleSaveErrors,
 };
