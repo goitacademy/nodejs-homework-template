@@ -6,17 +6,19 @@ const  ctrlWrapper  = require('../../middleware/ctrlWrapper')
 
 const router = express.Router()
 
+const user = require('../../models/users')
+
 router.get('/', ctrlWrapper(ctrl.listContacts))
 
-router.get('/:contactId', ctrlWrapper(ctrl.getContactById))
+router.get('/:id', user, ctrlWrapper(ctrl.getContactById))
 
-router.post('/', ctrlWrapper(ctrl.addContact))
+router.post('/', user, ctrlWrapper(ctrl.addContact))
 
-router.delete('/:contactId', ctrlWrapper(ctrl.removeContact))
+router.delete('/:id', user, ctrlWrapper(ctrl.removeContact))
 
-router.put('/:contactId', ctrlWrapper(ctrl.updateContact))
+router.put('/:id', user, ctrlWrapper(ctrl.updateContact))
 
-router.patch('/:contactId/favorite', ctrlWrapper(ctrl.updateFavorite))
+router.patch('/:id/favorite', user, ctrlWrapper(ctrl.updateFavorite))
 
 module.exports = router;
 

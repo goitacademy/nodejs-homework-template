@@ -16,20 +16,3 @@ mongoose.connect(DB_HOST)
     process.exit(1)
   })
   
-
-  
-/*const mongoose = require("mongoose");
-const DB_HOST = "mongodb+srv://serg:gogogo@cluster0.nz0mya6.mongodb.net/db-contacts?retryWrites=true&w=majority"
-const PORT = 3000
-
-
-
-mongoose.connect(DB_HOST)
-  .then(() => 
-      console.log('Database connection successful')
-    ,
-  )
-  .catch(error => {console.log(error)
-    process.exit(1)
-  })
-*/

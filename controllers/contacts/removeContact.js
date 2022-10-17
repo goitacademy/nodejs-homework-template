@@ -4,8 +4,8 @@ const { Contact } = require("../../models/contacts");
 const  createError  = require("../../middleware/createError");
 
 const removeContact = async (req, res) => {
-    const { contactId } = req.params;
-    const reply = await Contact.findByIdAndRemove(contactId);
+    const { id } = req.params;
+    const reply = await Contact.findByIdAndRemove(id);
     if (!reply) {
         throw createError(404)
     }
