@@ -14,24 +14,36 @@ const updateAvatar = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
     const extension = originalname.split(".").pop();
     const filename = `${_id}.${extension}`;
-    const parameterAvatar = {
-      tempUpload,
-      filename,
-      avatarsDir,
-      // width: 250,
-      // height: 250,
-    };
-    configImg(parameterAvatar);
-    await fs.unlink(tempUpload);
-    console.log(filename);
-    const avatarURL = path.join("avatars", filename);
+    if (
+      extension === "jpeg" ||
+      extension === "png" ||
+      extension === "bmp" ||
+      extension === "tiff" ||
+      extension === "gif" ||
+      extension === "jpg" ||
+      extension === "JPG"
+    ) {
+      const parameterAvatar = {
+        tempUpload,
+        filename,
+        avatarsDir,
+        quality: 60,
+        // width: 250,
+        // height: 250,
+      };
+      configImg(parameterAvatar);
+      await fs.unlink(tempUpload);
+      const avatarURL = path.join("avatars", filename);
 
-    await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
-    res.status(200).json({
-      code: 200,
-      status: "success",
-      avatarURL,
-    });
+      await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
+      res.status(200).json({
+        code: 200,
+        status: "success",
+        avatarURL,
+      });
+    } else {
+      throw RequestError(400, "Error format file");
+    }
   } catch (error) {
     await fs.unlink(req.file.path);
     throw error;

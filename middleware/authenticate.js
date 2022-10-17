@@ -12,7 +12,11 @@ const authenticate = async (req, res, next) => {
     } else {
       try {
         const { id } = jwt.verify(token, SECRET_KEY);
+        const { email } = jwt.verify(token, SECRET_KEY);
         const user = await User.findById(id);
+        const us = await User.find({ email: email });
+        console.log(user);
+        console.log(us);
         if (!user || !user.token) {
           throw RequestError(401, "Not authorized");
         } else {

@@ -7,14 +7,18 @@ function configImg({
   avatarsDir,
   width = 100,
   height = 100,
+  quality,
 }) {
   Jimp.read(tempUpload)
     .then((image) => {
-      image.resize(width, height).write(`${avatarsDir}/${filename}`); // save
+      image
+        .resize(width, height)
+        .write(`${avatarsDir}/${filename}`)
+        .quality(quality); // save
       // Do stuff with the image.
     })
     .catch((err) => {
-      throw RequestError(400, `${err}`);
+      throw RequestError(400, "Filed format file");
       // Handle an exception.
     });
 }

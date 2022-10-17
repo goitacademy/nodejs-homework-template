@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
 const { User } = require("../../service");
 const RequestError = require("../../helpers/RequestError");
 
@@ -11,6 +13,10 @@ const registerUser = async (req, res) => {
   if (user) {
     throw RequestError(409, "Email in use");
   } else {
+    const payload = {
+       email,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
     const secureUrl = gravatar.url(
       email,
       { s: "100", r: "x", d: "retro" },
@@ -21,6 +27,7 @@ const registerUser = async (req, res) => {
       password: hashPassword,
       subscription,
       avatarURL: secureUrl,
+      token,
     });
     res.status(201).json({
       code: 201,
@@ -29,6 +36,7 @@ const registerUser = async (req, res) => {
         email: newUser.email,
         subscription: newUser.subscription,
         avatarURL: newUser.avatarURL,
+        token: newUser.token,
       },
     });
   }
