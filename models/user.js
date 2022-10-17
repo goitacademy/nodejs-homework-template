@@ -3,6 +3,7 @@ const joi = require("joi");
 const { handleSaveErrors } = require("../helpers");
 
 const emailRegexp = /^(.+)@(.+){2,}\.(.+){2,}$/;
+const subscriptionArray = ["starter", "pro", "business"];
 
 const userShema = new Schema(
   {
@@ -19,7 +20,7 @@ const userShema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionArray,
       default: "starter",
     },
     token: {
@@ -35,6 +36,7 @@ userShema.post("save", handleSaveErrors);
 const registerShema = joi.object({
   email: joi.string().pattern(emailRegexp).required(),
   password: joi.string().min(6).required(),
+  subscription: joi.string().valid(...subscriptionArray),
 });
 
 const schemas = {
