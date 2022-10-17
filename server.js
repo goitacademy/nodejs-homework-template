@@ -9,3 +9,5 @@ app.listen(PORT, (error) => {
   }
   console.log(`Server running. Use our API on port: ${PORT}`);
 });
+
+// Test homework - 03
