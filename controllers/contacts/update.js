@@ -1,5 +1,6 @@
 const createError = require("http-errors");
-const { Contact, schemas } = require("../../models/contact");
+const { Contact} = require("../../models/contact");
+const { schemas } = require("../../schemas/schemas");
 
 const update = async (req, res, next) => {
   try {
