@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../service");
+require("dotenv").config();
 const { SECRET_KEY } = process.env;
 const RequestError = require("../../helpers/RequestError");
 
@@ -16,7 +17,7 @@ const loginUser = async (req, res) => {
       throw RequestError(401, "Email or password is wrong");
     } else {
       const payload = {
-        id: user._id,
+        email: user.email,
       };
       const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
       await User.findByIdAndUpdate(user._id, { token });
