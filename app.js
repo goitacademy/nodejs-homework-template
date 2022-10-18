@@ -2,11 +2,14 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const { DB_HOST } = process.env;
 
 mongoose
-  .connect(
-    "mongodb+srv://ihorshark:ia8xNREoTiDZ49pg@cluster0.j6n14cw.mongodb.net/contacts_reader?retryWrites=true&w=majority"
-  )
+  .connect(DB_HOST)
   .then(() => console.log("Connect successful"))
   .catch(error => console.log(error.message));
 
