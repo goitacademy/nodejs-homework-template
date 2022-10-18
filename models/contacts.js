@@ -21,8 +21,13 @@ const contactsSchema = new Schema(
         },
         favorite: {
             type: Boolean,
-
             default: false,
+        },
+
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
         },
     },
 
@@ -44,7 +49,6 @@ const schemas = {
     updateFavoriteSchema,
 };
 
-// Миддлавара котоаря срабатывает на ошибке
 contactsSchema.post('save', handleSaveErrors);
 
 const Contact = model('contact', contactsSchema);
