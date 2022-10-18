@@ -7,7 +7,7 @@ const getById = async (req, res) => {
   if (!result) {
     throw RequestError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 module.exports = getById;
