@@ -5,4 +5,4 @@ const listContacts = async (req, res) => {
   res.json(result);
 };
 
-module.exports = listContacts;
+module.exports = { listContacts };
