@@ -8,7 +8,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { DB_HOST } = process.env;
-console.log(process.env.DB_HOST);
 
 const app = express();
 
