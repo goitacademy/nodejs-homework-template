@@ -1,26 +1,28 @@
 const express = require('express')
-// const { response } = require('../../app')
 const Joi = require('joi');
 const { response } = require('../../app');
 
 const router = express.Router()
 
-const contactsOps = require('../../models/contacts')
+const {Contact} = require('../../models/contact')
 
-const joiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
+// const joiSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// })
+
+const { joiSchema } = require('../../models/contact')
+const { favJoiSchema } = require('../../models/contact')
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await contactsOps.listContacts()
+    const result = await Contact.find({});
     res.json({
       status: 'success',
       code: 200,
       data: {
-        result :contacts,
+        result
       },})
   } catch (error) {
     next(error);
@@ -30,7 +32,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const {contactId} = req.params;
-    const result = await contactsOps.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       const error = new Error(`Contact with id=${contactId} not found`);
       error.status = 404;
@@ -56,8 +58,7 @@ router.post('/', async (req, res, next) => {
       err.status = 400;
       throw err;
     }
-    const { name, email, phone } = req.body;
-    const result = await contactsOps.addContact(name, email, phone);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -73,7 +74,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const {contactId} = req.params;
-    const result = await contactsOps.removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       const error = new Error(`Contact with id=${contactId} not found`);
       error.status = 404;
@@ -100,7 +101,30 @@ router.put('/:contactId', async (req, res, next) => {
       throw err;
     }
     const { contactId } = req.params;
-    const result = await contactsOps.updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        result
+      },
+    })
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const { error } = favJoiSchema.validate(req.body);
+    if (error) {
+      const err = new Error(error.message);
+      err.status = 400;
+      throw err;
+    }
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const result = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true });
     res.json({
       status: 'success',
       code: 200,
