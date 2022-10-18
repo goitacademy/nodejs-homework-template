@@ -14,4 +14,4 @@ const RequestError = (status, message = messages[status]) => {
     return error
 }
 
-module.exports = {RequestError}
+module.exports = RequestError;

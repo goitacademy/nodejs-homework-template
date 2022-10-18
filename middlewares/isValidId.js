@@ -1,4 +1,4 @@
-const {RequestError} = require('../RequestError');
+const {RequestError} = require('../heplers');
 const {isValidObjectId} = require("mongoose")
 
 const isValidId = ( req, res, next) => {
@@ -11,4 +11,4 @@ const isValidId = ( req, res, next) => {
     next()
 }
 
-module.exports = {isValidId}
+module.exports = isValidId
