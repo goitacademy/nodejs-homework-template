@@ -17,7 +17,7 @@ router.post(
 );
 router.post(
   "/login",
-  validateBody(schemas.registerShema),
+  validateBody(schemas.loginShema),
   ctrlWrapper(ctrl.login)
 );
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
