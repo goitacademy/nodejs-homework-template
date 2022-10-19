@@ -1,19 +1,17 @@
-const contactsOperations = require('../../models/contacts');
 const { RequestError } = require('../../helpers');
+// const { isValidObjectId } = require('mongoose');
+const { Contact } = require('../../models/contact');
 
 const getById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.getContactById(contactId);
+  const { contactId } = req.params;
 
-    if (!result) {
-      throw RequestError(404, 'Not found');
-    }
+  const result = await Contact.findById(contactId);
 
-    res.json(result);
-  } catch (error) {
-    next(error);
+  if (!result) {
+    throw RequestError(404, 'Not found');
   }
+
+  res.json(result);
 };
 
 module.exports = getById;
