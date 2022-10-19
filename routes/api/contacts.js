@@ -1,19 +1,19 @@
 const express = require("express");
+const ctrl = require("../../controllers/contacts");
+const { authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
-const ctrl = require("../../controllers/contacts");
+router.get("/", authenticate, ctrl.getAll);
 
-router.get("/", ctrl.getAll);
+router.get("/:contactId", authenticate, ctrl.getById);
 
-router.get("/:contactId", ctrl.getById);
+router.delete("/:contactId", authenticate, ctrl.deleteById);
 
-router.delete("/:contactId", ctrl.deleteById);
+router.put("/:contactId", authenticate, ctrl.putById);
 
-router.put("/:contactId", ctrl.putById);
+router.patch("/:contactId/favorite", authenticate, ctrl.patchFavoriteById);
 
-router.patch("/:contactId/favorite", ctrl.patchFavoriteById);
-
-router.post("/", ctrl.add);
+router.post("/", authenticate, ctrl.add);
 
 module.exports = router;
