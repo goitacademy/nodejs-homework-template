@@ -1,5 +1,5 @@
-const { Contacts } = require('../models/contacts');
-const { createReject } = require('../utils');
+const { Contacts } = require('../../models/contacts');
+const { createReject } = require('../../utils');
 
 const findContactById = async contactId => {
   const result = await Contacts.findById(contactId);

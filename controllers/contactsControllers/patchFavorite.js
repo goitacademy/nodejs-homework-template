@@ -1,4 +1,6 @@
-const { findContactAndPatchfavorite } = require('../services');
+const {
+  findContactAndPatchfavorite,
+} = require('../../services/contactsServices');
 
 const patchFavorite = async (req, res, next) => {
   try {

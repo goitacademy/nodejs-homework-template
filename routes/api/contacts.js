@@ -1,5 +1,5 @@
 const express = require('express');
-const ctrl = require('../../controllers');
+const ctrl = require('../../controllers/contactsControllers');
 const { postValidation, putValidation } = require('../../validation');
 
 const router = express.Router();

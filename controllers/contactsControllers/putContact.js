@@ -1,4 +1,4 @@
-const { findContactAndUpdate } = require('../services');
+const { findContactAndUpdate } = require('../../services/contactsServices');
 
 const putContact = async (req, res, next) => {
   try {

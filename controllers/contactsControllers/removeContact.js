@@ -1,4 +1,4 @@
-const findContactAndRemove = require('../services');
+const findContactAndRemove = require('../../services/contactsServices');
 
 const delateContact = async (req, res, next) => {
   try {
