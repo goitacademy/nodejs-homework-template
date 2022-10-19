@@ -3,9 +3,7 @@ const chalk = require("chalk");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const password = "4GiySuWAY9BNh1CW";
-const DB_HOST = `mongodb+srv://Andrey:${password}@cluster0.g15sl8d.mongodb.net/db-contacts?retryWrites=true&w=majority`;
-
+const DB_HOST = process.env.DB_HOST;
 const PORT = process.env.PORT || 3000;
 
 mongoose
