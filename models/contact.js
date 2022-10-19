@@ -29,13 +29,13 @@ contactSchema.post("save", handleSaveErrors);
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string(),
   phone: Joi.string().required(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.bool().required(),
+  favorite: Joi.boolean().required(),
 });
 
 const schemas = {
