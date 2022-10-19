@@ -29,6 +29,11 @@ const addSchema = Joi.object({
   }),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 });
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
