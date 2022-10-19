@@ -1,3 +1,5 @@
+
+
 const express = require('express')
 
 const { basedir } = global
@@ -11,6 +13,10 @@ const { auth, upload } = require(`${basedir}/middlewares`)
 const router = express.Router()
 
 router.post('/register', controllersWrapper(ctrl.register))
+
+router.get('/verify/:verificationToken', controllersWrapper(ctrl.verifyEmail))
+
+router.post('/verify', controllersWrapper(ctrl.resendVerifyEmail))
 
 router.post('/login', controllersWrapper(ctrl.login))
 
