@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { hendleSave } = require("../helpers");
 const Joi = require("joi");
+const { required } = require("joi");
 
 const contactSchma = new Schema(
   {
@@ -22,7 +23,7 @@ const contactSchma = new Schema(
   { versionKey: false, timestamps: true }
 );
 const addSchema = Joi.object({
-  name: Joi.string(),
+  name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
