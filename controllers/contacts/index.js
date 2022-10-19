@@ -1,4 +1,4 @@
-// const getAll = require('./getAll')
+const getAll = require('./getAll')
 // const getById = require('./getById')
 const add = require('./add')
 // const putById = require('./putById')
@@ -7,4 +7,5 @@ const add = require('./add')
 
 module.exports = {
     add,
+    getAll,
 }

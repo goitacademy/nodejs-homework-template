@@ -1,11 +1,11 @@
-const Contact = require('../../models/contact')
+const {Contact, schemas} = require('../../models/contact')
 const RequestError = require('../../helpers/RequestError')
-const Schema = require('../../schemas/contacts')
+
 
 
 const add = async (req, res, next) => {
   try {
-    const { error } = Schema.validate(req.body)
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       throw RequestError(`missing required ${error.message}field`, 400)
     }
