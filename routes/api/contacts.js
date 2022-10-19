@@ -1,11 +1,15 @@
 const express = require("express");
 const Contact = require("../../models/contact");
 const contactsSchema = require("../../models/contact");
+const {auth} = require("../../middlewares")
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const data = await Contact.find();
+router.get("/", auth, async (req, res, next) => {
+  const { _id } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const data = await Contact.find({ owner: _id }, "", {skip, limit: +limit}).populate("owner", "_id email subscription");
   res.json({
     status: "success",
     code: 200,
@@ -39,14 +43,15 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { error } = contactsSchema.validate(req.body);
     if (error) {
       error.status = 400;
       throw error;
     }
-    const newContact = await Contact.create(req.body);
+    const newContact = await Contact.create({ ...req.body, owner: _id });
     res.status(201).json({
       status: "success",
       code: 201,
