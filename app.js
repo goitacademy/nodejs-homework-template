@@ -1,25 +1,47 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// quzz7qPsVKgEXaHX
 
-const contactsRouter = require('./routes/api/contacts')
+/** for work with server */
+const express = require('express');
+/** log event  */
+const logger = require('morgan');
+/** it helps us  */
+const cors = require('cors');
+/** library to work with env. files */
+require('dotenv').config();
 
-const app = express()
+/** init express */
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+/** starting brake point for work with contacts */
+const contactsRouter = require('./routes/api/contacts');
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+/** starting brake point for work with users */
+const authRouter = require('./routes/api/auth');
+/** виводить в консоль статус операції (200 і можливо ще якась інфо) */
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+app.use(logger(formatsLogger));
 
-app.use('/api/contacts', contactsRouter)
+/** this middleware helps solve problems related to cors */
+app.use(cors());
 
+/** this middleware recognizes content type of body */
+app.use(express.json());
+
+/** midl access to get file from public without extention by frontend */
+app.use(express.static('public'));
+/** here are send our routes */
+app.use('/api/contacts', contactsRouter);
+app.use('/api/users', authRouter);
+
+/** if front-end require for what is not */
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: 'Not found' });
+});
 
+/** if something went wrong */
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = 'Server error' } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+module.exports = app;
