@@ -10,6 +10,8 @@ const updateSubscription = async (req, res) => {
     { new: true }
   );
   res.status(201).json({
+    code: 201,
+    status: "success",
     user: {
       email: newSubscription.email,
       subscription: newSubscription.subscription,

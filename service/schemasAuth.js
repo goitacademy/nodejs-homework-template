@@ -18,8 +18,11 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: {
+      type: String,
+      // required: true,
+    },
     token: String,
-    default: "",
   },
   { versionKey: false, timestamps: true }
 );
@@ -37,6 +40,7 @@ const schemas = {
         })
         .required(),
       subscription: Joi.string().alphanum(),
+      avatarURL: Joi.string(),
       token: Joi.string(),
     });
     const validateUser = schema.validate(req.body);
