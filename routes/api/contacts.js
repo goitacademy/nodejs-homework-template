@@ -1,25 +1,41 @@
 const express = require('express')
 
-const router = express.Router()
+const Joi = require('joi')
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactValidation = (req, res, next) => {
+    const schema = Joi.object({
+            name: Joi.string().required(),
+            email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+            phone: Joi.string().required()
+        });
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+        const validationResult = schema.validate(req.body);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+        if (validationResult.error) {
+            return res.status(400).json({
+                status: validationResult.error.details,
+                code: 400,
+                message: "U've got an empty row!"
+            });
+        }
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+        next();
+}
+    
+module.exports = contactValidation;
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
+
+const { listContacts, getContactById, addContact, updateContact, removeContact } = require('../../models/contacts');
+
+router.get('/', listContacts);
+router.get('/:contactId', getContactById);
+router.post('/', contactValidation, addContact);
+router.delete('/:contactId', removeContact);
+router.put('/:contactId', contactValidation, updateContact);
 
 module.exports = router
+
+
+
+
