@@ -1,5 +1,5 @@
 const {Contact, schemas} = require('../../models/contact')
-const RequestError = require('../../helpers/RequestError')
+const { RequestError } = require('../../helpers')
 
 
 
