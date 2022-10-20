@@ -1,6 +1,6 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/contacts");
+const { contacts: ctrl } = require("../../controllers");
 
 const { ctrlWrapper } = require("../../helpers");
 
