@@ -3,7 +3,6 @@ const { Contact } = require('../../models/contacts');
 
 const updateFavorite = async (req, res, next) => {
     const { id } = req.params;
-    console.log('id', id);
 
     const result = await Contact.findByIdAndUpdate(id, req.body, {
         new: true,

@@ -26,6 +26,10 @@ const userSchema = new Schema(
             type: String,
             default: null,
         },
+        avatarURL: {
+            type: String,
+            required: true,
+        },
     },
     { versionKey: false, timestamps: true }
 );
@@ -46,10 +50,16 @@ const updateSubscriptionSchema = Joi.object({
         .required(),
 });
 
+// Назвать аватар или автатар url
+const updateAvatar = Joi.object({
+    avatar: Joi.string().required,
+});
+
 const schemas = {
     registerSchema,
     loginSchema,
     updateSubscriptionSchema,
+    updateAvatar,
 };
 
 userSchema.post('save', handleSaveErrors);
