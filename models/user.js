@@ -32,13 +32,13 @@ const registerJoiSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
   subscription: Joi.string().valid("starter", "pro", "business"),
-  //   token: Joi.string()
+  
 });
 
 const loginJoiSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  //   token: Joi.string()
+  
 });
 
 module.exports = { User, registerJoiSchema, loginJoiSchema };
