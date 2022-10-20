@@ -6,13 +6,17 @@ const controller = require("../../controllers/contacts/index");
 
 const { controllerWrapper } = require("../../helpers");
 
-const { validateBody } = require("../../middlewares");
+const { validateBody, isValidId } = require("../../middlewares");
 
-const schemas = require("../../schemas/contacts");
+const { schemas } = require("../../models/contacts");
 
 router.get("/", controllerWrapper(controller.getAll));
 
-router.get("/:contactId", controllerWrapper(controller.getContactById));
+router.get(
+  "/:contactId",
+  isValidId,
+  controllerWrapper(controller.getContactById),
+);
 
 router.post(
   "/",
@@ -20,12 +24,24 @@ router.post(
   controllerWrapper(controller.addContact),
 );
 
-router.delete("/:contactId", controllerWrapper(controller.removeContact));
+router.delete(
+  "/:contactId",
+  isValidId,
+  controllerWrapper(controller.removeContact),
+);
 
 router.put(
   "/:contactId",
+  isValidId,
   validateBody(schemas.addSchema),
   controllerWrapper(controller.updateById),
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  controllerWrapper(controller.updateStatusContact),
 );
 
 module.exports = router;
