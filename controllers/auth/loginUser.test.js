@@ -32,7 +32,7 @@ describe("test login user", () => {
       email: "alex@gmail.com",
       password: hashPassword,
     };
-    const user = await User.create(newUser);
+    await User.create(newUser);
     const loginUser = {
       email: "alex@gmail.com",
       password: "alex2222",
@@ -48,7 +48,7 @@ describe("test login user", () => {
       email: "alex@gmail.com",
       password: hashPassword,
     };
-    const user = await User.create(newUser);
+    await User.create(newUser);
     const loginUser = {
       email: "alex@gmail.com",
       password: "alex2222",
@@ -76,13 +76,14 @@ describe("test login user", () => {
     // eslint-disable-next-line no-undef
     expect(body.token).toBe(token);
   });
+  // eslint-disable-next-line no-undef
   it("test is body object", async () => {
     const hashPassword = await bcrypt.hash("alex2222", 10);
     const newUser = {
       email: "alex@gmail.com",
       password: hashPassword,
     };
-    const user = await User.create(newUser);
+    await User.create(newUser);
     const loginUser = {
       email: "alex@gmail.com",
       password: "alex2222",
@@ -95,13 +96,14 @@ describe("test login user", () => {
       subscription: "starter",
     });
   });
+  // eslint-disable-next-line no-undef
   it("test is email string", async () => {
     const hashPassword = await bcrypt.hash("alex2222", 10);
     const newUser = {
       email: "alex@gmail.com",
       password: hashPassword,
     };
-    const user = await User.create(newUser);
+    await User.create(newUser);
     const loginUser = {
       email: "alex@gmail.com",
       password: "alex2222",
@@ -112,13 +114,14 @@ describe("test login user", () => {
     // eslint-disable-next-line no-undef
     expect.stringContaining(resEmail);
   });
+  // eslint-disable-next-line no-undef
   it("test is  subscription string", async () => {
     const hashPassword = await bcrypt.hash("alex2222", 10);
     const newUser = {
       email: "alex@gmail.com",
       password: hashPassword,
     };
-    const user = await User.create(newUser);
+    await User.create(newUser);
     const loginUser = {
       email: "alex@gmail.com",
       password: "alex2222",

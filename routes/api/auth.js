@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
+const { ctrlWrapper } = require("../../helpers");
 const { schemas } = require("../../service/schemasAuth");
 const { auth: ctrl, files: ctrlFs } = require("../../controllers");
 const { authenticate, upload } = require("../../middleware");
@@ -25,4 +25,10 @@ router.patch(
   upload.single("avatar"),
   ctrlWrapper(ctrlFs.updateAvatar)
 );
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verify));
+// router.post(
+//   "/verify",
+//   validateBody(schemas.verifyEmailSchema),
+//   ctrlWrapper(ctrl.resendVerify)
+// );
 module.exports = router;

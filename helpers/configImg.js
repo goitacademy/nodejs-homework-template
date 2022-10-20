@@ -17,7 +17,7 @@ function configImg({
         .quality(quality); // save
       // Do stuff with the image.
     })
-    .catch((err) => {
+    .catch(() => {
       throw RequestError(400, "Filed format file");
       // Handle an exception.
     });

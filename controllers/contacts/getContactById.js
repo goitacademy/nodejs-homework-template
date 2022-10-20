@@ -1,5 +1,5 @@
 const { Contact } = require("../../service/schemasContacts");
-const RequestError = require("../../helpers/RequestError");
+const RequestError = require("../../helpers");
 
 const getById = async (req, res) => {
   const { contactId } = req.params;

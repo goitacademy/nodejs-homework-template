@@ -2,7 +2,7 @@ const { Contact } = require("../../service/schemasContacts");
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const RequestError = require("../../helpers/RequestError");
+  const RequestError = require("../../helpers");
 
   const result = await Contact.findByIdAndRemove({ _id: contactId });
   if (!result) {
