@@ -2,6 +2,10 @@ const { NotFound } = require("http-errors");
 
 const contactsOperations = require("../../models/contacts");
 
+const { NotFound } = require("http-errors");
+
+const contactsOperations = require("../../models/contact");
+
 const updateById = async (req, res) => {
   const { id } = req.params;
   const result = await contactsOperations.updateContact(id, req.body);
