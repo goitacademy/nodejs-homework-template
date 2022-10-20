@@ -4,9 +4,33 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/users");
+const gravatar = require("gravatar");
+const multer = require("multer");
+const path = require("path");
+const { nanoid } = require("nanoid");
+const fs = require("fs/promises");
 
 const { RequestError } = require("../../helpers");
 const authenticate = require("../../middlewares/authenticate");
+
+// Multer Configuration
+
+const tmpDir = path.join(__dirname, "../..", "tmp");
+const publicDir = path.join(__dirname, "../..", "public");
+
+const multerConfig = multer.diskStorage({
+  destination: tmpDir,
+  filename: (req, file, cb) => {
+    const fileExt = file.originalname.split(".").pop();
+    const newName = nanoid();
+    const newFile = newName + "." + fileExt;
+    cb(null, newFile);
+  },
+});
+
+const upload = multer({
+  storage: multerConfig,
+});
 
 const usersPostSchema = Joi.object({
   password: Joi.string().required(),
@@ -36,15 +60,19 @@ router.post("/register", async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const avatarURL = gravatar.url(email);
+
     const result = await User.create({
       password: hashedPassword,
       email,
+      avatarURL,
     });
 
     res.status(201).json({
       user: {
         email: result.email,
         subscription: result.subscription,
+        avatarURL: result.avatarURL,
       },
     });
   } catch (error) {
@@ -77,6 +105,7 @@ router.post("/login", async (req, res, next) => {
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
+    console.log(token);
     await User.findOneAndUpdate(user._id, { token });
 
     res.json({
@@ -123,5 +152,34 @@ router.patch("/", authenticate, async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const oldPath = req.file.path;
+      const newFileName = `${req.user._id}.${req.file.filename}`;
+      const newPath = path.join(publicDir, "avatars", newFileName);
+
+      await fs.rename(oldPath, newPath);
+
+      const result = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          avatarURL: path.join("avatars", newFileName),
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        avatarURL: result.avatarURL,
+      });
+    } catch (error) {
+      next(RequestError(401, "Not authorized"));
+    }
+  }
+);
 
 module.exports = router;

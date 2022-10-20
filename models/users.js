@@ -16,6 +16,7 @@ const userSchema = new Schema({
     default: "starter",
   },
   token: String,
+  avatarURL: String,
 });
 
 const User = model("user", userSchema);
