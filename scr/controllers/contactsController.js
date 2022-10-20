@@ -33,7 +33,6 @@ const getContactByIdController = async (req, res) => {
   res.json({ data });
 };
 
-
 const deleteContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const { id: owner } = req.user;
@@ -56,7 +55,6 @@ const updateStatusContactController = async (req, res) => {
   const data = await updateStatusContact(contactId, favorite, owner);
   res.json({ data });
 };
-
 
 module.exports = {
   getContactsController,

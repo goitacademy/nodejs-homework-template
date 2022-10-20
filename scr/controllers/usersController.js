@@ -32,9 +32,14 @@ const logoutController = async (req, res) => {
 };
 
 const currentController = async (req, res) => {
+  const { id, email, subscription } = req.user;
+  res.json({ user: { id, email, subscription } });
+};
+
+const uploadUserAvatarController = async (req, res) => {
   const { id } = req.user;
-  const user = await currentUser(id);
-  res.json({ user });
+  const avatarURL = await uploadUserAvatar(id, req.file);
+  res.json({ avatarURL });
 };
 
 module.exports = {
@@ -43,4 +48,5 @@ module.exports = {
   logoutController,
   currentController,
   subscriptionController,
+  uploadUserAvatarController,
 };
