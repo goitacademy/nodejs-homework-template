@@ -10,12 +10,13 @@ const loginUser = async ({ email, password }) => {
     throw createReject(401, 'Email or password is wrong');
   }
 
-  if (user.password && !(await bcryptjs.compare(password, user.password))) {
+  if (!(await bcryptjs.compare(password, user.password))) {
     console.log('second err');
     throw createReject(401, 'Email or password is wrong');
   }
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  await User.findByIdAndUpdate(user._id, { token });
   return { token, user };
 };
 
