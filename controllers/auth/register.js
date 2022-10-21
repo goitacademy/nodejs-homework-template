@@ -30,7 +30,7 @@ const register = async (req, res) => {
 
     const mail = {
         to: email,
-        from: 'gnaticoleg@meta.ua',
+        from: 'gnaticoleg@ukr.net',
         subject: 'Потверждение email',
         html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Нажмите для потверждения</a>`,
     };

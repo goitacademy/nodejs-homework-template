@@ -1,14 +1,14 @@
 const nodemailer = require('nodemailer');
 
-const { META_KEY } = process.env;
+const { META_KEY, USER, UKR_KEY, USER_UKR_NET } = process.env;
 
 const nodemailerConfig = {
-    host: 'smtp.meta.ua',
-    port: 465,
+    host: 'smtp.ukr.net',
+    port: 2525,
     secure: true,
     auth: {
-        user: 'gnaticoleg@meta.ua',
-        pass: META_KEY,
+        user: USER_UKR_NET,
+        pass: UKR_KEY,
     },
 };
 
