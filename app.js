@@ -2,16 +2,6 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
-
-const password = "123456";
-
-const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-console.log(hashPassword);
-const result1 = bcrypt.compareSync(password, hashPassword);
-const result2 = bcrypt.compareSync("passwort", hashPassword);
-console.log(result1);
-console.log(result2);
 
 const dotenv = require("dotenv");
 // require("dotenv").config();
@@ -36,7 +26,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500 } = err;
+  res.status(status).json({ message: err.message });
 });
 
 module.exports = app;
