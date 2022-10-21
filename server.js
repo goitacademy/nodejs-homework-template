@@ -15,3 +15,5 @@ mongoose
     console.log(`Database connection was failed. ${error.message}`);
     process.exit(1);
   });
+
+// Working server database
