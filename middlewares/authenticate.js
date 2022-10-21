@@ -1,4 +1,4 @@
-const User = require("../models/users");
+const { User } = require("../models/users");
 const jwt = require("jsonwebtoken");
 const { RequestError } = require("../helpers");
 
@@ -9,7 +9,7 @@ const authenticate = async (req, res, next) => {
     const { authorization = "" } = req.headers;
     const [bearer, token] = authorization.split(" ");
 
-    if (bearer !== "Bearer") {
+    if (bearer !== "Bearer" || !token) {
       throw RequestError(401, "Not authorized");
     }
 
