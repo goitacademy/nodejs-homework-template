@@ -35,17 +35,6 @@ const login = async (req, res) => {
     code: 200,
     data: { token },
   });
-  // console.log(token);
-  // const decodeToken = jwt.decode(token);
-  // console.log(decodeToken);
-  // try {
-  //   const result = jwt.verify(token, SECRET_KEY);
-  //   console.log("result", result);
-  //   const result2 = jwt.verify(`${token}22`, SECRET_KEY);
-  //   console.log("result2", result2);
-  // } catch (error) {
-  //   console.log(error.message);
-  // }
 };
 
 module.exports = login;
