@@ -7,6 +7,7 @@ const signUpUser = async ({ email, password }) => {
   if (user) {
     throw createReject(409, 'Email in use');
   }
+
   const result = await User.create({
     email,
     password: await bcryptjs.hash(password, 10),
