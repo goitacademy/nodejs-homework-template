@@ -68,7 +68,7 @@ router.put("/:id", async (req, res, next) => {
     if (!result) {
       throw RequestError(404, "Not found");
     }
-    res.status(200).json(result);
+    res.status(200).json({ message: "missing fields" });
   } catch (error) {
     next(error);
   }
