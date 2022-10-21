@@ -9,6 +9,7 @@ const multer = require("multer");
 const path = require("path");
 const { nanoid } = require("nanoid");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const { RequestError } = require("../../helpers");
 const authenticate = require("../../middlewares/authenticate");
@@ -20,10 +21,11 @@ const publicDir = path.join(__dirname, "../..", "public");
 
 const multerConfig = multer.diskStorage({
   destination: tmpDir,
+
   filename: (req, file, cb) => {
     const fileExt = file.originalname.split(".").pop();
     const newName = nanoid();
-    const newFile = newName + "." + fileExt;
+    const newFile = `${newName}.${fileExt}`;
     cb(null, newFile);
   },
 });
@@ -158,10 +160,13 @@ router.patch(
   authenticate,
   upload.single("avatar"),
   async (req, res, next) => {
+    const oldPath = req.file.path;
+    const newFileName = `${req.user._id}.${req.file.filename}`;
+    const newPath = path.join(publicDir, "avatars", newFileName);
+
     try {
-      const oldPath = req.file.path;
-      const newFileName = `${req.user._id}.${req.file.filename}`;
-      const newPath = path.join(publicDir, "avatars", newFileName);
+      const img = await Jimp.read(oldPath);
+      img.resize(250, 250);
 
       await fs.rename(oldPath, newPath);
 
@@ -177,6 +182,7 @@ router.patch(
         avatarURL: result.avatarURL,
       });
     } catch (error) {
+      await fs.unlink(oldPath);
       next(RequestError(401, "Not authorized"));
     }
   }
