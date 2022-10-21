@@ -30,6 +30,14 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
+        verify: {
+            type: Boolean,
+            default: false,
+        },
+        verificationToken: {
+            type: String,
+            required: [true, 'Verify token is required'],
+        },
     },
     { versionKey: false, timestamps: true }
 );
@@ -50,9 +58,12 @@ const updateSubscriptionSchema = Joi.object({
         .required(),
 });
 
-// Назвать аватар или автатар url
 const updateAvatar = Joi.object({
     avatar: Joi.string().required,
+});
+
+const sendVerifyEmail = Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
 });
 
 const schemas = {
@@ -60,6 +71,7 @@ const schemas = {
     loginSchema,
     updateSubscriptionSchema,
     updateAvatar,
+    sendVerifyEmail,
 };
 
 userSchema.post('save', handleSaveErrors);
