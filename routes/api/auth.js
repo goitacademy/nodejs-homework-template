@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { validateBody, authenticate } = require('../../middleware');
+const {
+    validateBody,
+    authenticate,
+    multerUpload,
+} = require('../../middleware');
 const { controllerWrapper } = require('../../helpers');
 const { schemas } = require('../../models/user');
 
@@ -27,5 +31,16 @@ router.patch(
     authenticate,
     validateBody(schemas.updateSubscriptionSchema),
     controllerWrapper(controll.updateSubscription)
+);
+
+// Обновление аватара
+
+router.patch(
+    '/avatars',
+    multerUpload.single('avatar'),
+
+    authenticate,
+    validateBody(schemas.updateAvatar),
+    controllerWrapper(controll.updateAvatar)
 );
 module.exports = router;
