@@ -1,10 +1,10 @@
-const service = require("../../service/service");
+const Contact = require("../../model/contacts");
 
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    const searchedContact = await service.getContactById(contactId);
+    const searchedContact = await Contact.findById(contactId);
 
     if (searchedContact) {
       res.json({
