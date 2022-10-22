@@ -6,10 +6,6 @@ const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
-    },
     password: {
       type: String,
       required: [true, "Set password for user"],
@@ -39,7 +35,6 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 const joiRegisterSchema = Joi.object({
-  name: Joi.string().required(),
   password: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string(),
