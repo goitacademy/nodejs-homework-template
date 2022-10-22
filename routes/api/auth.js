@@ -12,13 +12,13 @@ const router = express.Router();
 
 router.post(
   "/register",
-  validateBody(schemas.authSchemas),
+  validateBody(schemas.registerSchemas),
   ctrlWrapper(ctrl.register)
 );
 
 router.post(
   "/login",
-  validateBody(schemas.authSchemas),
+  validateBody(schemas.loginSchemas),
   ctrlWrapper(ctrl.login)
 );
 
@@ -26,7 +26,7 @@ router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
 router.patch(
-  "/",
+  "/subscription.",
   authenticate,
   validateBody(schemas.subscription),
   ctrlWrapper(ctrl.subscription)
