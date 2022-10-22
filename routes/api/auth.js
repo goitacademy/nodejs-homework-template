@@ -33,8 +33,6 @@ router.patch(
     controllerWrapper(controll.updateSubscription)
 );
 
-// Обновление аватара
-
 router.patch(
     '/avatars',
     multerUpload.single('avatar'),
@@ -43,4 +41,16 @@ router.patch(
     validateBody(schemas.updateAvatar),
     controllerWrapper(controll.updateAvatar)
 );
+
+router.get(
+    '/verify/:verificationToken',
+    controllerWrapper(controll.verifyEmail)
+);
+
+router.post(
+    '/verify',
+    validateBody(schemas.sendVerifyEmail),
+    controllerWrapper(controll.sendVerifyEmail)
+);
+
 module.exports = router;
