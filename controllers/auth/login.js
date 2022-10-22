@@ -16,15 +16,6 @@ const login = async (req, res) => {
   if (!comparePassword) {
     throw new Unauthorized(`Password wrong!`);
   }
-  // res.status(201).json({
-  //   status: "success",
-  //   code: 201,
-  //   data: {
-  //     user: {
-  //       email,
-  //     },
-  //   },
-  // });
 
   const payload = {
     id: user._id,
