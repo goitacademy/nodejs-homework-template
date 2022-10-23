@@ -18,7 +18,7 @@ const contactsSchema = new Schema({
     },
   })
 
-const Contact = model('contact', contactsSchema)
+const Contact = model('contacts', contactsSchema)
 
 const validateSchema = Joi.object({
     name: Joi.string()
