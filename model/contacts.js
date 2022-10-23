@@ -12,7 +12,7 @@ const contact = new Schema(
     email: {
       type: String,
       minlength: 2,
-      maxlength: 15,
+      maxlength: 30,
       unique: true,
       required: [true, "Email is required"],
     },

@@ -10,8 +10,10 @@ const subscriptionStatus = async (req, res) => {
     { new: true }
   );
   res.status(201).json({
-    email: updatedSubscription.email,
-    subscription: updatedSubscription.subscription,
+    user: {
+      email: updatedSubscription.email,
+      subscription: updatedSubscription.subscription,
+    },
   });
 };
 

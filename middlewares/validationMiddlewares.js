@@ -81,4 +81,14 @@ module.exports = {
     }
     next();
   },
+  subscriptionValidation: (req, res, next) => {
+    const schema = Joi.object({
+      subscription: Joi.string().valid("starter", "pro", "business").required(),
+    });
+    const validateLogin = schema.validate(req.body);
+    if (validateLogin.error) {
+      return res.status(400).json({ message: `${validateLogin.error}` });
+    }
+    next();
+  },
 };
