@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { Schema, model } = require("mongoose");
-
+const { handleSaveErrors } = require("../middleware");
 const contactSchema = new Schema(
   {
     name: {
@@ -23,18 +23,16 @@ const contactSchema = new Schema(
 
 const Contact = model("contact", contactSchema);
 
-const handleSaveErrors = (error, data, next) => {
-  const { name, code } = error;
-  error.status = name === "MongoServerError" && code === 11000 ? 409 : 400;
-  next();
-};
 contactSchema.post("save", handleSaveErrors);
 
 const contactsSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean,
+  favorite: Joi.boolean(),
 });
-const schemas = { contactsSchema };
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+const schemas = { contactsSchema, updateFavoriteSchema };
 module.exports = { schemas, Contact };
