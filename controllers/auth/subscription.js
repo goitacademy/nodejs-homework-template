@@ -1,5 +1,4 @@
 const { User } = require('../../models/user');
-const getCurrent = require('./getCurrent');
 
 const subscription = async (req, res) => {
   const { _id } = req.user;
