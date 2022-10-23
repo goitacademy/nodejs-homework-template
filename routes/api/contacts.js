@@ -6,7 +6,7 @@ const  ctrlWrapper  = require('../../middleware/ctrlWrapper')
 
 const router = express.Router()
 
-const user = require('../../models/users')
+const user = require('../../middleware/user')
 
 router.get('/', ctrlWrapper(ctrl.listContacts))
 
