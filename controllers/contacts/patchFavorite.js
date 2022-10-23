@@ -1,10 +1,15 @@
 const { Contact } = require("../../models");
 
-const updateContact = async (req, res) => {
+const patchFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const { favorite } = req.body;
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    {
+      new: true,
+    }
+  );
   if (!result) {
     const error = new Error(`Product with ${contactId} not found`);
     error.status = 404;
@@ -20,4 +25,4 @@ const updateContact = async (req, res) => {
   });
 };
 
-module.exports = updateContact;
+module.exports = patchFavorite;

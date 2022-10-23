@@ -1,8 +1,9 @@
-const contactsOperation = require("../../models/contacts");
+const { Contact } = require("../../models");
 
-const getId = async (req, res, next) => {
+const getId = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsOperation.getContactById(contactId);
+  const result = await Contact.findById(contactId); //  findOne({ _id: contactId });
+
   if (!result) {
     const error = new Error(`Product with ${contactId} not found`);
     error.status = 404;
