@@ -8,12 +8,16 @@ const resendVerify = async (req, res) => {
   if (!user) {
     throw RequestError(400, "Email not found");
   }
-
-  const mail = createVerifyEmail(email, user.verificationToken);
-  await sendEmail(mail);
+  if (user.verify) {
+    throw RequestError(400, "Verification has already been passed");
+  }
+  // const mail = createVerifyEmail(email, user.verificationToken);
+  // await sendEmail(mail);
 
   res.json({
-    message: "Verify email resend",
+    code: 200,
+    status: "success",
+    message: "Verification email sent",
   });
 };
 

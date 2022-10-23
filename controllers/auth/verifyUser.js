@@ -1,5 +1,6 @@
 const { User } = require("../../service/schemasAuth");
-
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
 const { RequestError } = require("../../helpers");
 
 const verify = async (req, res) => {
@@ -8,14 +9,19 @@ const verify = async (req, res) => {
   if (!user) {
     throw RequestError(404, "User not found");
   }
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
   await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: "",
+    token,
   });
   res.json({
     code: 200,
     status: "success",
-    message: "Email verify success",
+    message: "Verification successful",
   });
 };
 

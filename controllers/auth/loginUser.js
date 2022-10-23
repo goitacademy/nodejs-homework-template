@@ -3,14 +3,18 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../../service");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
-const RequestError = require("../../helpers");
+const { RequestError } = require("../../helpers");
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+
   if (!user) {
     throw RequestError(401, "Email not found");
+  }
+  if (!user.verify) {
+    throw RequestError(401, "Not verification ");
   } else {
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {

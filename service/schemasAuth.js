@@ -89,7 +89,7 @@ const schemas = {
     });
     const verifyEmail = schema.validate(req.body);
     if (verifyEmail.error) {
-      return res.status(400).json({ message: `${verifyEmail.error}` });
+      return res.status(400).json({ message: "missing required field email" });
     }
     next();
   },

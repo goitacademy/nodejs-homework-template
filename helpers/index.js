@@ -3,7 +3,7 @@ const ctrlWrapper = require("./ctrlWrapper");
 const handleSaveErrors = require("./handleSaveErrors");
 const RequestError = require("./RequestError");
 const sendEmail = require("./sendEmail");
-// const verify = require("./verifyUser");
+const createVerifyEmail = require("./createVerifyEmail");
 
 module.exports = {
   configImg,
@@ -11,5 +11,5 @@ module.exports = {
   handleSaveErrors,
   RequestError,
   sendEmail,
-  //   verify,
+  createVerifyEmail,
 };

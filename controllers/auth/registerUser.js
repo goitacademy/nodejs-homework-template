@@ -1,9 +1,6 @@
-// import { nanoid } from "nanoid";
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
-// const jwt = require("jsonwebtoken");
-// const { SECRET_KEY } = process.env;
 const { User } = require("../../service");
 const { RequestError, sendEmail, createVerifyEmail } = require("../../helpers");
 
@@ -15,10 +12,6 @@ const registerUser = async (req, res) => {
   if (user) {
     throw RequestError(409, "Email in use");
   } else {
-    // const payload = {
-    //    email,
-    // };
-    // const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
     const secureUrl = gravatar.url(
       email,
       { s: "100", r: "x", d: "retro" },
@@ -31,10 +24,9 @@ const registerUser = async (req, res) => {
       subscription,
       avatarURL: secureUrl,
       verificationToken,
-      // token,
     });
-    const mail = createVerifyEmail(email, verificationToken);
-    await sendEmail(mail);
+    // const mail = createVerifyEmail(email, verificationToken);
+    // await sendEmail(mail);
     res.status(201).json({
       code: 201,
       status: "success",
@@ -42,7 +34,6 @@ const registerUser = async (req, res) => {
         email: newUser.email,
         subscription: newUser.subscription,
         avatarURL: newUser.avatarURL,
-        // token: newUser.token,
       },
     });
   }
