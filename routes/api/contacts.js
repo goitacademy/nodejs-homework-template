@@ -68,7 +68,7 @@ router.put("/:contactId", async (req, res, next) => {
 
     case "bad-request":
       res.status(400).json({
-        message: "Missing required name field",
+        message: "Missing fields",
       });
       break;
 
