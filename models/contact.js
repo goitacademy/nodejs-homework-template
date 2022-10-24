@@ -36,6 +36,7 @@ const joiSchema = Joi.object({
 const favoriteJoiSchema = Joi.object({
   favorite: Joi.bool().valid(true, false).required(),
 });
+
 module.exports = {
   Contact,
   joiSchema,
