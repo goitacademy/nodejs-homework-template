@@ -1,13 +1,13 @@
-const service = require("../../service/contacts");
+const { contacts: contactsOperations } = require("../../service");
 
-const getById = async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await service.getContactById(contactId);
-  if (contact) {
-    res.status(200).json({ status: "success", data: contact });
-  } else {
-    next();
-  }
+const getById = async (req, res) => {
+  const { _id: userId } = req.user;
+  const contactId = req.params.contactId;
+
+  const contact = await contactsOperations.getContactById(contactId, userId);
+
+  res.status(200).json({ status: "success", contact });
 };
+
 
 module.exports = getById;

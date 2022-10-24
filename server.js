@@ -1,5 +1,5 @@
 const app = require("./app");
-const { connection } = require("./db/connection");
+const { connection } = require("./models/connection");
 
 require("dotenv").config();
 

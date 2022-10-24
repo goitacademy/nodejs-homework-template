@@ -1,9 +1,11 @@
-const service = require("../../service/contacts");
+const { contacts: contactsOperations } = require("../../service");
 
 const add = async (req, res) => {
-  const { name, email, phone } = req.body;
-  const contact = await service.addContact({ name, email, phone });
-  res.status(201).json({ status: "success", data: contact });
+  const { _id: userId } = req.user;
+
+  await contactsOperations.addContact(req.body, userId);
+
+  res.status(200).json({ status: "success" });
 };
 
 module.exports = add;

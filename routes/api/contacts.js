@@ -1,21 +1,33 @@
 const express = require("express");
-const { schemaValidation } = require("../../middlewares/validationMiddleware");
-const handleCatchErrors = require("../../middlewares/errorHandler");
-
+const { ctrlWrapper } = require("../../helpers");
+const { validation, auth } = require("../../middlewares");
+const { contactJoiSchema } = require("../../schemas");
 const { contacts: ctrl } = require("../../controllers");
+
 
 const router = express.Router();
 
-router.get("/", handleCatchErrors(ctrl.getAll));
+router.use(auth);
 
-router.get("/:contactId", handleCatchErrors(ctrl.getById));
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.post("/", schemaValidation, ctrl.add);
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.delete("/:contactId", ctrl.removeById);
+router.post("/", validation(contactJoiSchema.contact), ctrlWrapper(ctrl.add));
 
-router.put("/:contactId", schemaValidation, ctrl.updateById);
+router.delete("/:contactId", ctrlWrapper(ctrl.removeById));
 
-router.patch("/:contactId/favorite", ctrl.updateStatus);
+router.put(
+  "/:contactId",
+  validation(contactJoiSchema.contact),
+  ctrlWrapper(ctrl.updateById)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validation(contactJoiSchema.status),
+  ctrlWrapper(ctrl.updateStatusById)
+);
+
 
 module.exports = router;

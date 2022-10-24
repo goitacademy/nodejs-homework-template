@@ -1,15 +1,9 @@
 const Joi = require("joi");
 
-
 module.exports = {
   schemaValidation: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().min(3).max(30).alphanum().required(),
-
-      phone: Joi.string()
-        .pattern(/^[0-9-]+$/)
-        .max(12)
-        .required(),
+      password: Joi.string().alphanum().min(5).required(),
 
       email: Joi.string().email({
         minDomainSegments: 2,

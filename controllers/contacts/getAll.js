@@ -1,8 +1,20 @@
-const service = require("../../service/contacts");
+const { contacts: contactsOperations } = require("../../service");
 
-const getAllContacts = async (req, res, next) => {
-  const contacts = await service.getAllContacts();
-  res.status(200).json({ status: "success", code: 200, data: contacts });
+const getAll = async (req, res) => {
+  const { _id: userId } = req.user;
+  let { page = 1, limit = 10, favorite } = req.query;
+
+  const skip = (parseInt(page) - 1) * limit;
+  limit = parseInt(limit) > 20 ? 20 : limit;
+
+  const contacts = await contactsOperations.getAllContacts(
+    userId,
+    skip,
+    limit,
+    favorite
+  );
+
+  res.status(200).json({ contacts, page, limit });
 };
 
-module.exports = getAllContacts;
+module.exports = getAll;
