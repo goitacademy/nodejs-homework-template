@@ -1,5 +1,5 @@
 const {Contact} = require('../../models/contact')
-const {RequestError} = require('../../helpers')
+const { RequestError } = require('../../helpers/Errors')
 
 const delById = async (req, res, next) => {
  try {

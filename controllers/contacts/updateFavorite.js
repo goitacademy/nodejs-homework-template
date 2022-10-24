@@ -1,5 +1,5 @@
 const {Contact, schemas} = require('../../models/contact')
-const { RequestError } = require('../../helpers')
+const { RequestError } = require('../../helpers/Errors')
 
 const updateFavorite = async (req, res, next) => {
     try {
