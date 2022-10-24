@@ -16,11 +16,11 @@ const contactsSchema = new Schema({
       type: Boolean,
       default: false,
     },
-  })
+  }, {versionKey: false, timestamps: true})
 
 const Contact = model('contacts', contactsSchema)
 
-const validateSchema = Joi.object({
+const validateAddSchema = Joi.object({
     name: Joi.string()
     .alphanum()
     .required(),
@@ -28,11 +28,12 @@ const validateSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
     phone: Joi.string()
-    .required()
+    .required(),
+    favorite: Joi.boolean()
   })
 
 const schemas = {
-    validateSchema
+  validateAddSchema
 }
 
 module.exports = {
