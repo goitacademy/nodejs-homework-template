@@ -12,8 +12,6 @@ const router = express.Router();
 
 router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
-router.get("/?favorite=true", auth, ctrlWrapper(ctrl.favorite));
-
 router.get("/:id", isValidId, ctrlWrapper(ctrl.getById));
 
 router.post("/", auth, validateBody(schemas.joiSchema), ctrlWrapper(ctrl.add));
