@@ -6,7 +6,7 @@ const {
   removeItem,
   updateItem,
   updateFavoriteField,
-} = require("../../controllers/controllers");
+} = require("../../controllers/contacts");
 const controllerWrapper = require("../../helpers/controllerWrapper");
 
 const router = express.Router();
