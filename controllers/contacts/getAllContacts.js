@@ -9,7 +9,6 @@ const getAllContacts = async (req, res, next) => {
         skip,
         limit,
     }).populate('owner', 'email');
-    // populate добавляет доп. инфу
 
     res.json({ result, page, limit });
 };
