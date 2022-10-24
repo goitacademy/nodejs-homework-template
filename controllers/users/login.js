@@ -28,7 +28,7 @@ const login = async (req, res) => {
 
     const playload = {id: user._id}
 
-    const token = jwt.sign(playload, SECRET_KEY, {expiresIn: "72h"})
+    const token = jwt.sign(playload, SECRET_KEY, {expiresIn: "24h"})
     
     await User.findByIdAndUpdate(user._id, {token})
     
