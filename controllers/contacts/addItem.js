@@ -1,9 +1,9 @@
-const Contact = require("../../models/contactsModel");
+const Contact = require("../../models/contacts");
 const RequestError = require("../../helpers/RequestError");
 
 const schema = require("../../schemas/schemas");
 
-const addItem = async (req, res, next) => {
+const addItem = async (req, res) => {
   const newContact = req.body;
   const { error } = schema.newContact.validate(newContact);
   if (error) {
