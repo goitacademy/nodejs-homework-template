@@ -25,8 +25,8 @@ const registerUser = async (req, res) => {
       avatarURL: secureUrl,
       verificationToken,
     });
-    // const mail = createVerifyEmail(email, verificationToken);
-    // await sendEmail(mail);
+    const mail = createVerifyEmail(email, verificationToken);
+    await sendEmail(mail);
     res.status(201).json({
       code: 201,
       status: "success",
