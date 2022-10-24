@@ -2,6 +2,7 @@ const path = require("path");
 const { nanoid } = require("nanoid");
 
 const { loadFile, saveFile } = require("../utils/jsonFiles");
+const { validationForUpdatingContact } = require("../utils/validation");
 const contactsPath = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
@@ -54,7 +55,8 @@ const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
     const index = contacts.findIndex(({ id }) => id === contactId);
-    if (index === -1) return;
+    if (index === -1) return "not-found";
+    if (validationForUpdatingContact(body).error) return "bad-request";
 
     contacts[index] = { ...contacts[index], ...body };
     await saveFile(contactsPath, contacts);
