@@ -9,14 +9,11 @@ const { SECRET_KEY } = process.env;
 const authenticate = async (req, res, next) => {
     try {
         const { authorization = '' } = req.headers;
-        // Разделяем отдельно на токен и слово Bearer
+
         const [bearer, token] = authorization.split(' ');
         if (bearer !== 'Bearer') {
             throw RequestError(401);
         }
-
-        // Проверем мы ли выдавали токен
-        // и зашифрован ли он с помощью нашего ключа
 
         const { id } = jwt.verify(token, SECRET_KEY);
 

@@ -8,7 +8,7 @@ const { sendEmail } = require('../../helpers');
 const register = async (req, res) => {
     const { email, password } = req.body;
 
-    const { BASE_URL } = process.env;
+    const { BASE_URL, USER_UKR_NET } = process.env;
 
     const user = await User.findOne({ email });
 
@@ -30,7 +30,7 @@ const register = async (req, res) => {
 
     const mail = {
         to: email,
-        from: 'gnaticoleg@ukr.net',
+        from: USER_UKR_NET,
         subject: 'Потверждение email',
         html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Нажмите для потверждения</a>`,
     };
