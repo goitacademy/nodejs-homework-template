@@ -1,13 +1,21 @@
-const contactsOperations = require("../../models/contacts");
+const { NotFound } = require("http-errors");
+const { Contact } = require("../../models");
 
 const removeById = async (req, res) => {
-  const removedContact = await contactsOperations.removeContact(
-    req.params.contactId
-  );
-  if (removedContact.length === 0) {
-    return res.status(404).json({ message: "Не знайдено" });
+  const { id } = req.params;
+  const result = await Contact.findByIdAndRemove(id);
+  if (!result) {
+    throw new NotFound(`Контакт з таким id=${id} в базі не знайдено!`);
   }
-  res.json({ message: "Контакт видалено" });
+
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Контакт видалено",
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = removeById;

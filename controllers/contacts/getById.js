@@ -1,8 +1,19 @@
-const contactsOperations = require("../../models/contacts");
-
+const { NotFound } = require("http-errors");
+const { Contact } = require("../../models");
 const getById = async (req, res) => {
-  const contact = await contactsOperations.getContactById(req.params.contactId);
-  res.json(contact);
+  const { id } = req.params;
+  const result = await Contact.findById(id);
+  if (!result) {
+    throw new NotFound(`Контакт з таким id=${id} в базі не знайдено!`);
+  }
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result: result,
+    },
+  });
 };
 
 module.exports = getById;
