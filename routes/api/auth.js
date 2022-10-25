@@ -1,5 +1,10 @@
 const express = require("express");
-const { validateBody, authenticate, upload } = require("../../middlewares");
+const {
+  validateBody,
+  authenticate,
+  upload,
+  resize,
+} = require("../../middlewares");
 const { ctrlWrapper } = require("../../helpers");
 const ctrl = require("../../controllers/auth");
 const { schemas } = require("../../models/user");
@@ -18,11 +23,11 @@ router.post(
 );
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
-router.get(
+router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
+  resize,
   ctrlWrapper(ctrl.updateAvatar)
 );
-
 module.exports = router;
