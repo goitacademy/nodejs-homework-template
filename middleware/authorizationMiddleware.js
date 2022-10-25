@@ -6,7 +6,7 @@ const authorizationMiddleware = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     const [bearer, token] = authorization.split(' ');
-    if (bearer !== 'Bearer') {
+    if (bearer !== 'Bearer' || !token) {
       throw createReject(401, 'Not authorized');
     }
 
