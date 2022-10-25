@@ -11,8 +11,6 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-/* TODO: add status to requests */
-
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -47,6 +45,10 @@ router.post("/", async (req, res, next) => {
     }
 
     const result = await contacts.addContact(req.body);
+    if (!result) {
+      throw RequestError(404, "Error occured");
+    }
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -76,7 +78,15 @@ router.put("/:contactId", async (req, res, next) => {
     if (error) {
       throw RequestError(400, "Missing fields");
     }
-    res.json({ message: "template message" });
+    const { contactId } = req.params;
+    const body = req.body;
+    const result = await contacts.updateContact(contactId, body);
+    if (!result) {
+      throw RequestError(404, "Not found");
+    }
+    res.json({
+      message: "Contact updated",
+    });
   } catch (error) {
     next(error);
   }
