@@ -16,13 +16,12 @@ router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 
 router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
 
-router.delete(
+router.delete("/:contactId", ctrlWrapper(ctrl.removeContact));
+
+router.put(
   "/:contactId",
   validateBody(schemas.addSchema),
-  ctrlWrapper(ctrl.removeContact)
+  ctrlWrapper(ctrl.updateContact)
 );
 
-router.put("/:contactId", ctrlWrapper(ctrl.updateContact));
-
 module.exports = router;
-ctrlWrapper();
