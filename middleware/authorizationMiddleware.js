@@ -16,7 +16,6 @@ const authorizationMiddleware = async (req, res, next) => {
     if (!user) {
       throw createReject(401, 'Not authorized');
     }
-    console.log(user);
     req.user = user;
 
     next();

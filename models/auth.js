@@ -21,12 +21,6 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userSchema.pre('save', (error, data, next) => {
-  const { code, name } = error;
-  error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
-  next();
-});
-
 const User = model('user', userSchema);
 
 module.exports = { User };
