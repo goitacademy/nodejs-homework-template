@@ -5,7 +5,6 @@ const getContactsList = async (req, res, next) => {
     const { _id: owner } = req.user;
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
-    console.log(skip);
 
     const result = await Contacts.find({ owner }, '', {
       skip,
