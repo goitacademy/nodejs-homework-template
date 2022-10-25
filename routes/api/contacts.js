@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const controller = require("../../controllers/contacts/index");
+const controller = require("../../controllers/contacts");
 
 const { controllerWrapper } = require("../../helpers");
 
