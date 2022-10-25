@@ -1,5 +1,5 @@
-const { Contacts } = require('../models/contacts');
-const { createReject } = require('../utils');
+const { Contacts } = require('../../models/contacts');
+const { createReject } = require('../../utils');
 
 const findContactAndPatchfavorite = async (contactId, body) => {
   if (body?.favorite === undefined) {

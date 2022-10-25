@@ -18,15 +18,14 @@ const contactsSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
-
-contactsSchema.pre('save', (error, data, next) => {
-  const { code, name } = error;
-  error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
-  next();
-});
 
 const Contacts = model('contact', contactsSchema);
 
