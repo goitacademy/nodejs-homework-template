@@ -3,6 +3,7 @@ const { validation, ctrlWrapper } = require('../../middlewares/index');
 const { joiSchema, statusJoiSchema } = require('../../models/contacts');
 const { contactsCtrl: ctrl } = require('../../controllers');
 
+
 const validationMiddleware = validation(joiSchema);
 const statusValidationMiddleware = validation(statusJoiSchema);
 
@@ -16,3 +17,4 @@ router.put('/:contactId', validationMiddleware, ctrlWrapper(ctrl.updateContact))
 router.patch('/:contactId/favorite', statusValidationMiddleware, ctrlWrapper(ctrl.updateStatusContact))
 
 module.exports = router;
+
