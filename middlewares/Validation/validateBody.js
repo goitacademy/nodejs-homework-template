@@ -1,16 +1,15 @@
 
-const {RequestError} = require("../../helpers/Errors");
+const { RequestError } = require("../../helpers/Errors");
 
-const validateBody = schema => {
-    const func = async(req, res, next)=> {
-        const {error} = schema.validate(req.body);
-        if(error) {
-            next(RequestError(400, error.message))
+
+const validateBody = (schema) => {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.body);
+        if (error) {
+            throw RequestError(error.message, 400)
         }
-        next()
+        next();
     }
-
-    return func;
 }
 
-module.exports = validateBody
+module.exports = validateBody;
