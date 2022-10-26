@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const Joi = require('joi')
 
 const { handleSaveErrors } = require('../helpers/Errors');
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const userSchema = new Schema({
     name: {
@@ -39,6 +39,7 @@ const userSchema = new Schema({
 
 
 userSchema.post("save", handleSaveErrors);
+const User = model('user', userSchema);
 
 const registerSchema = Joi.object({
     name: Joi.string().min(3).max(30).required().messages({
@@ -50,12 +51,8 @@ const registerSchema = Joi.object({
         'string.empty': 'Email is required',
         'any.required': 'Email is required',
     }),
-    password: Joi.string().min(6).required().messages({
-        'string.min': 'Password should have a minimum length of {#limit}',
-        'string.empty': 'Password is required',
-        'any.required': 'Password is required',
-    }),
-    subscription: Joi.string().optional(),
+    password: Joi.string().min(6).required().messages(),
+    subscription: Joi.string().optional()
 })
 
 const loginSchema = Joi.object({
@@ -71,8 +68,6 @@ const loginSchema = Joi.object({
     }),
 })
 
-const Users = model('user', userSchema);
-
 
 
 const schemas = {
@@ -81,6 +76,6 @@ const schemas = {
 }
 
 module.exports = {
-    Users,
+    User,
     schemas,
 }
