@@ -1,103 +1,39 @@
-let contacts = require('../models/contacts.json');
-const { v4 } = require('uuid');
+const { Schema, model } = require('mongoose');
+const Joi = require('joi');
 
-const listContacts = async (req, res, next) => {
-  return res.json({
-    status: "success",
-    code: 200,
-    result: contacts,
-  })
-}
+const contactSchema = Schema({
+    name: {
+      type: String,
+      required: [true, 'Set contact name'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+}, { versionKey: false, timestamps: true });
 
-const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = contacts.find(contact => contact.id === contactId);
-  if (contact) {
-        return res.json({
-            status: "success",
-            code: 200,
-            result: contact,
-            })
-  } else {
-        return res.status(404).json({
-            status: "error",
-            code: 404,
-            message: "Not found",
-            }) 
-  }
-}
-
-const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
+const Contact = model("contact", contactSchema);
   
-  if (contactId) {
-    contacts = contacts.filter(contact => contact.id !== contactId);
-    return res.json({
-            status: "success",
-            code: 200,
-            message: "Contact deleted",
-            })
-  } else {
-    return res.json({
-            status: "error",
-            code: 404,
-            message: "Not found",
-            })
-  }
-  
-}
+const joiSchema = Joi.object({
+            name: Joi.string().required(),
+            email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] }}),
+            phone: Joi.string(),
+            favorite: Joi.bool(),
+});
 
-const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const newContact = {
-        name,
-        email,
-        phone,
-        id: v4(),
-        }
+const statusJoiSchema = Joi.object({
+            favorite: Joi.bool().required(),
+})
 
-  contacts.push(newContact);
-  
-  return  res.json({
-            status: "success",
-            code: 201,
-            result: newContact,
-          })
-}
-
-const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const { name, email, phone } = req.body;
-
-  if (contactId) {
-          contacts.forEach(contact => {
-      if (contact.id === contactId) {
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
-      
-        return res.status(200).json({
-                status: "success",
-                code: 200,
-                data: {
-                  contact,
-                },
-              })
-  } else {
-        return res.json({
-            status: "error",
-            code: 404,
-            message: "Not found",
-            })
-      }
-    })
-  }
-}
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  joiSchema,
+  statusJoiSchema,
+  Contact,
 }

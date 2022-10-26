@@ -1,41 +1,20 @@
-const express = require('express')
-
-const Joi = require('joi')
-
-const contactValidation = (req, res, next) => {
-    const schema = Joi.object({
-            name: Joi.string().required(),
-            email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-            phone: Joi.string().required()
-        });
-
-        const validationResult = schema.validate(req.body);
-
-        if (validationResult.error) {
-            return res.status(400).json({
-                status: validationResult.error.details,
-                code: 400,
-                message: "U've got an empty row!"
-            });
-        }
-
-        next();
-}
-    
-module.exports = contactValidation;
-
-const router = express.Router();
-
-const { listContacts, getContactById, addContact, updateContact, removeContact } = require('../../models/contacts');
-
-router.get('/', listContacts);
-router.get('/:contactId', getContactById);
-router.post('/', contactValidation, addContact);
-router.delete('/:contactId', removeContact);
-router.put('/:contactId', contactValidation, updateContact);
-
-module.exports = router
+const express = require('express');
+const { validation, ctrlWrapper } = require('../../middlewares/index');
+const { joiSchema, statusJoiSchema } = require('../../models/contacts');
+const { contactsCtrl: ctrl } = require('../../controllers');
 
 
+const validationMiddleware = validation(joiSchema);
+const statusValidationMiddleware = validation(statusJoiSchema);
 
+const router = express.Router()
+
+router.get('/', ctrlWrapper(ctrl.listContacts));
+router.get('/:contactId', ctrlWrapper(ctrl.getContactById));
+router.post('/', validationMiddleware, ctrlWrapper(ctrl.addContact));
+router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
+router.put('/:contactId', validationMiddleware, ctrlWrapper(ctrl.updateContact));
+router.patch('/:contactId/favorite', statusValidationMiddleware, ctrlWrapper(ctrl.updateStatusContact))
+
+module.exports = router;
 
