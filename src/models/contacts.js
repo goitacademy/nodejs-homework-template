@@ -1,6 +1,5 @@
 // const fs = require('fs/promises')
 let contacts = require('./contacts.json');
-const Joi = require('joi');
 
 const listContacts = async (req, res) => {
   res.json({ contacts, status: 'success', status_code: 200 });
@@ -38,25 +37,6 @@ const removeContact = async (req, res) => {
 };
 
 const addContact = (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string()
-      .pattern(/^\w+(?:\s+\w+)*$/)
-      .min(3)
-      .max(40)
-      .required(),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
-    }),
-    phone: Joi.string().alphanum().min(3).max(30).required(),
-  });
-
-  const validation = schema.validate(req.body);
-
-  if (validation.error) {
-    return res.status(400).json({ message: validation.error.details });
-  }
-
   const { name, email, phone } = req.body;
   const contactToPost = {
     id: new Date().getTime().toString(),
@@ -71,25 +51,6 @@ const addContact = (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string()
-      .pattern(/^\w+(?:\s+\w+)*$/)
-      .min(3)
-      .max(40)
-      .required(),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
-    }),
-    phone: Joi.string().alphanum().min(3).max(30).required(),
-  });
-
-  const validation = schema.validate(req.body);
-
-  if (validation.error) {
-    return res.status(400).json({ message: validation.error.details });
-  }
-
   const { contactId } = req.params;
   const contactToUpdate = contacts.find(contact => contact.id === contactId);
   const { name, email, phone } = req.body;

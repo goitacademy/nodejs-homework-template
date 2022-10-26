@@ -1,5 +1,8 @@
 const express = require('express');
-// const contacts = require('../../models/contacts.json');
+const {
+  addContactValidation,
+  updateContactValidation,
+} = require('../../src/middlewares/validationMiddleware');
 const {
   listContacts,
   getContactById,
@@ -10,20 +13,14 @@ const {
 
 const router = express.Router();
 
-// router.get('/', async (req, res, next) => {
-//   listContacts(res);
-//   // console.log('Contacts ', res.json(contacts));
-//   // res.json({ message: 'template message' });
-// });
-
 router.get('/', listContacts);
 
 router.get('/:contactId', getContactById);
 
-router.post('/', addContact);
+router.post('/', addContactValidation, addContact);
 
 router.delete('/:contactId', removeContact);
 
-router.put('/:contactId', updateContact);
+router.put('/:contactId', updateContactValidation, updateContact);
 
 module.exports = router;
