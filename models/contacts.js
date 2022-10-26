@@ -36,6 +36,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
+
   const id = uuidv4();
   const contact = { id: id, name: name, email: email, phone: phone };
   const db = await getDb();
@@ -47,10 +48,22 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
   const contact = { id: contactId, name: name, email: email, phone: phone };
+  // let contact = {};
   const db = await getDb();
   const updateDb = db.map((it) => {
     if (it.id === contactId) {
-      console.log("it:", it);
+      // if (name) {
+      //   it.name = name;
+      // }
+      // if (email) {
+      //   it.email = email;
+      // }
+      // if (phone) {
+      //   it.phone = phone;
+      // }
+      // contact = it;
+      // return it;
+      // console.log("it:", it);
       return contact;
     }
     return it;
