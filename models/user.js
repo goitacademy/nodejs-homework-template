@@ -4,6 +4,7 @@ const joi = require("joi");
 const { handleSaveErrors } = require("../helpers");
 const Joi = require("joi");
 const emailRegexp = /^[a-z0-9]+@[a-z]+\.[a-z/]{2,3}$/;
+const subscription = ["starter", "pro", "business"];
 const userSchema = new Schema(
   {
     password: {
@@ -15,7 +16,11 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
-
+    subscription: {
+      type: String,
+      enum: subscription,
+      default: "starter",
+    },
     token: {
       type: String,
       default: null,
@@ -36,7 +41,7 @@ const registerSchema = Joi.object({
     .min(6)
     .required()
     .messages({ "any.required": "Missing field password" }),
-  //   subscription: Joi.string(),
+  subscription: Joi.string(),
 });
 const loginSchema = Joi.object({
   email: Joi.string()
@@ -48,9 +53,16 @@ const loginSchema = Joi.object({
     .required()
     .messages({ "any.required": "Missing field password" }),
 });
+const subscrSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscription)
+    .required()
+    .messages({ "any.required": "Missing field subscription" }),
+});
 const schemas = {
   registerSchema,
   loginSchema,
+  subscrSchema,
 };
 
 const User = model("user", userSchema);

@@ -4,16 +4,10 @@ const cors = require("cors");
 
 require("dotenv").config();
 
-// const contacts = require("./models/contacts.json");
-
 const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
 
-const app = express(); //веб сервер
-
-// app.get("/api/contacts", (req, res) => {
-//   res.json(contacts);
-// });
+const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
