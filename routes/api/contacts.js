@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { ctrlWrapper } = require("../../helpers");
 const ctrl = require("../../controllers/contacts");
 const { validateBody, authenticate } = require("../../middlewares");
@@ -32,5 +33,6 @@ router.patch(
   validateBody(schemas.updateFavoriteSchema),
   ctrlWrapper(ctrl.updateFavorite)
 );
+
 
 module.exports = router;

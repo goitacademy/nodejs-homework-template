@@ -1,3 +1,4 @@
+
 const { Contact } = require("../../models/contact");
 const { RequestError } = require("../../helpers");
 
@@ -9,6 +10,7 @@ const removeById = async (req, res) => {
   }
   res.json({
     message: "Delete success",
+
   });
 };
 

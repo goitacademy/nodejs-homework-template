@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 
+
 const path = require("path");
 const { nanoid } = require("nanoid");
 const { json } = require("express");
@@ -25,10 +26,12 @@ const addContact = async (data) => {
     id: nanoid(),
     ...data,
   };
+
   contacts.push(newContact);
   await updateContacts(contacts);
   return newContact;
 };
+
 const removeContact = async (id) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
@@ -40,20 +43,24 @@ const removeContact = async (id) => {
   return result;
 };
 const updateById = async (id, body) => {
+
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
+
   contacts[index] = { id, ...body };
   await updateContacts(contacts);
   return contacts[index];
+
 };
 
 module.exports = {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+removeContact,
   updateById,
+
 };

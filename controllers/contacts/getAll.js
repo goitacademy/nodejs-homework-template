@@ -1,3 +1,4 @@
+
 const { Contact } = require("../../models/contact");
 
 const getAll = async (req, res) => {
@@ -10,4 +11,5 @@ const getAll = async (req, res) => {
   }).populate("owner", "name email");
   res.json(result);
 };
+
 module.exports = getAll;
