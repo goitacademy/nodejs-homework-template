@@ -2,6 +2,29 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs/promises");
+
+const tempDir = path.join(__dirname, "temp");
+const contactsDir = path.join(__dirname, "public", "avatars");
+console.log(tempDir);
+console.log(contactsDir);
+const multerConfig = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, tempDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+  limits: {
+    fileSize: 2048,
+  },
+});
+
+const upload = multer({
+  storage: multerConfig,
+});
 
 const dotenv = require("dotenv");
 // require("dotenv").config();
@@ -12,6 +35,15 @@ const userRouter = require("./routes/api/users");
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
+
+app.post(
+  "/api/avatars",
+  upload.single("image", async (req, res) => {
+    const { path: tempUpload, originalname } = req.file;
+    const resultUpload = path.join(contactsDir, originalname);
+    await fs.rename(tempUpload, resultUpload);
+  })
+);
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
