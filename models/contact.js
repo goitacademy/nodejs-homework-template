@@ -43,9 +43,16 @@ const validateAddSchema = Joi.object({
     }),
     favorite: Joi.boolean()
   })
-
+const validateFavoritePatchSchema = Joi.object({
+  favorite: Joi.boolean()
+  .required().messages({
+    'string.base': `"favorite" should be a type of 'string'`,
+    'any.required': `missing field "favorite"`
+  })
+})
 const schemas = {
-  validateAddSchema
+  validateAddSchema,
+  validateFavoritePatchSchema
 }
 
 module.exports = {
