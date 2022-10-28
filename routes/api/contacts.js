@@ -6,8 +6,8 @@ import {
   getContactById,
   updateContact,
 } from '../../models/contacts.js';
-import { schemas } from '../../validators/schemas.js';
-import { validate } from '../../validators/validator.js';
+import { schemas } from '../../middlewares/schemas.js';
+import { validate } from '../../middlewares/validator.js';
 
 const router = Router();
 
