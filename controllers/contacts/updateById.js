@@ -3,7 +3,6 @@ const {RequestError} = require("../../helpers")
 const contacts = require("../../models/contacts")
 
 const updateById = async (req, res, next) => {
-  try {
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw RequestError(400, "missing fields")
@@ -14,9 +13,6 @@ const updateById = async (req, res, next) => {
       throw RequestError(404, "Not found")
     }
     res.json(result)
-  } catch (error) {
-    next(error)
-  }
 }
 
 module.exports = updateById;

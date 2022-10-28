@@ -2,7 +2,6 @@ const contacts = require("../../models/contacts")
 const {RequestError} = require("../../helpers")
 
 const removeById = async (req, res, next) => {
-  try {
     const { id } = req.params;
     const result = await contacts.removeContact(id);
     if (!result) {
@@ -11,9 +10,6 @@ const removeById = async (req, res, next) => {
     res.json({
       message: "contact deleted"
     })
-  } catch (error) {
-    next(error)
-  }
 }
 
 module.exports = removeById;
