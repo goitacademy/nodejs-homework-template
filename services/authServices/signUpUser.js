@@ -9,15 +9,19 @@ const signUpUser = async ({ email, password }) => {
     throw createReject(409, 'Email in use');
   }
 
-  const avatarURL = gravatar.url(email);
+  const avatarUrl = gravatar.url(email);
 
   const result = await User.create({
     email,
     password: await bcryptjs.hash(password, 10),
-    avatarURL,
+    avatarUrl,
   });
 
-  return { email: result.email, subscription: result.subscription, avatarURL };
+  return {
+    email: result.email,
+    subscription: result.subscription,
+    avatarUrl,
+  };
 };
 
 module.exports = signUpUser;
