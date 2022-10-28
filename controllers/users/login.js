@@ -18,6 +18,9 @@ const login = async (req, res) => {
   if (!passwordCompare) {
     throw RequestError(401, "Email or password is wrong");
   }
+  if (!user.verify) {
+    throw RequestError(401, "Email is not verified");
+  }
   const payload = {
     id: user._id,
   };
