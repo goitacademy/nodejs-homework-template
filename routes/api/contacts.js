@@ -1,83 +1,17 @@
 const express = require("express");
-
-const actions = require("../../models/contacts.js");
-const { validationForAddingContact } = require("../../utils/validation");
-
 const router = express.Router();
+const contactController = require("../../controllers/contacts");
 
-router.get("/", async (req, res, next) => {
-  const contacts = await actions.listContacts();
-  res.status(200).json({
-    data: { contacts },
-  });
-});
+router.get("/", contactController.get);
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await actions.getContactById(contactId);
-  if (contact) {
-    return res.status(200).json({
-      data: { contact },
-    });
-  }
+router.get("/:contactId", contactController.getOne);
 
-  res.status(404).json({
-    message: "Not found",
-  });
-});
+router.post("/", contactController.post);
 
-router.post("/", async (req, res, next) => {
-  console.log(validationForAddingContact(req.body));
-  if (validationForAddingContact(req.body).error) {
-    return res.status(400).json({
-      message: "Missing required name field",
-    });
-  }
+// router.delete("/:contactId", contactController.deleteOne);
 
-  const contact = await actions.addContact(req.body);
-  res.status(201).json({
-    data: { contact },
-  });
-});
+// router.put("/:contactId", contactController.putOne);
 
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await actions.removeContact(contactId);
-
-  if (contact) {
-    return res.status(200).json({
-      message: "Contact deleted",
-    });
-  }
-
-  res.status(404).json({
-    message: "Not found",
-  });
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await actions.updateContact(contactId, req.body);
-
-  switch (contact) {
-    case "not-found":
-      res.status(404).json({
-        message: "Not found",
-      });
-      break;
-
-    case "bad-request":
-      res.status(400).json({
-        message: "Missing fields",
-      });
-      break;
-
-    default:
-      res.status(200).json({
-        data: { contact },
-      });
-      break;
-  }
-});
+// router.patch("/:contactId", contactController.patchFavorite);
 
 module.exports = router;

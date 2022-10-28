@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const schemaAddingContact = Joi.object({
+const schemaCreatingContact = Joi.object({
   name: Joi.string()
     .trim()
     .pattern(/^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$/)
@@ -18,6 +18,7 @@ const schemaAddingContact = Joi.object({
     .pattern(
       /^(\+{0,})(\d{0,})([(]{1}\d{1,3}[)]{0,}){0,}(\s?\d+|\+\d{2,3}\s{1}\d+|\d+){1}[\s|-]?\d+([\s|-]?\d+){1,2}(\s){0,}$/
     ),
+  favorite: Joi.boolean().optional(),
 });
 
 const schemaUpdatingContact = Joi.object({
@@ -40,13 +41,19 @@ const schemaUpdatingContact = Joi.object({
       /^(\+{0,})(\d{0,})([(]{1}\d{1,3}[)]{0,}){0,}(\s?\d+|\+\d{2,3}\s{1}\d+|\d+){1}[\s|-]?\d+([\s|-]?\d+){1,2}(\s){0,}$/
     )
     .optional(),
+  favorite: Joi.boolean().optional(),
 }).min(1);
 
-const validationForAddingContact = (obj) => schemaAddingContact.validate(obj);
-const validationForUpdatingContact = (obj) =>
-  schemaUpdatingContact.validate(obj);
+const schemaUpdatingContactStatus = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const validateContactCreation = (obj) => schemaCreatingContact.validate(obj);
+const validateUpdatingContact = (obj) => schemaUpdatingContact.validate(obj);
+const validateUpdatingContactStatus = (obj) => schemaUpdatingContactStatus.validate(obj);
 
 module.exports = {
-  validationForAddingContact,
-  validationForUpdatingContact,
+  validateContactCreation,
+  validateUpdatingContact,
+  validateUpdatingContactStatus,
 };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const contact = new Schema(
+const contacts = new Schema(
   {
     name: {
       type: String,
@@ -26,6 +26,6 @@ const contact = new Schema(
   }
 );
 
-const Contact = model("contacts", contact);
+const Contact = model("contact", contacts);
 
 module.exports = Contact;
