@@ -1,14 +1,80 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+const uniqID = () => Math.random().toString(36).slice(2);
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "./contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contacts = JSON.parse(data);
+    return contacts;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const contactById = contacts.find(({ id }) => id === contactId);
+    return contactById;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const changedCollection = contacts.filter(({ id }) => id !== contactId);
+    updateFile(changedCollection);
+    return contacts.find(({ id }) => id === contactId);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {
+  try {
+    const newContact = {
+      id: uniqID(),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
+    const contacts = await listContacts();
+    const changedCollection = [...contacts, newContact];
+    updateFile(changedCollection);
+    return newContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const contactToChange = contacts.find(({ id }) => id === contactId);
+    const newPropsOfContact = {
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
+    const changedContact = { ...contactToChange, ...newPropsOfContact };
+    return changedContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateFile = async (instance) => {
+  try {
+    fs.writeFile(contactsPath, JSON.stringify(instance, null, 2));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +82,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
