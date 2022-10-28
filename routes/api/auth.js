@@ -6,6 +6,7 @@ const {
   validateBody,
   ctrlWrapper,
   authenticate,
+  upload,
 } = require('../../middlewares');
 const { contactsControllers: ctrl } = require('../../controllers');
 const { schemas } = require('../../models/user');
@@ -20,6 +21,12 @@ router.post(
   '/login',
   validateBody(schemas.loginSchema),
   ctrlWrapper(ctrl.login)
+);
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  ctrlWrapper(ctrl.updateAvatar)
 );
 
 router.get('/current', authenticate, ctrlWrapper(ctrl.getCurrent));

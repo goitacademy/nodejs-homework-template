@@ -4,7 +4,13 @@ const add = require('./add');
 const updateById = require('./updateById');
 const removeById = require('./removeById');
 const updateFavorite = require('./updateFavorite');
-const { register, login, getCurrent, logout } = require('../auth');
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+  updateAvatar,
+} = require('../auth');
 
 module.exports = {
   getAll,
@@ -17,4 +23,5 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  updateAvatar,
 };
