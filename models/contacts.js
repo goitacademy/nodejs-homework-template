@@ -62,7 +62,14 @@ const updateContact = async (contactId, body) => {
       phone: body.phone,
     };
     const changedContact = { ...contactToChange, ...newPropsOfContact };
-    return changedContact;
+    const changedCollection = contacts.map((item) => {
+      if (item.id === contactId) {
+        return (item = changedContact);
+      }
+      return item;
+    });
+    updateFile(changedCollection);
+    return contactToChange ? changedContact : contactToChange;
   } catch (error) {
     console.log(error);
   }
