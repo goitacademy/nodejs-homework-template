@@ -1,25 +1,63 @@
-const express = require('express')
+import { Router } from 'express';
+import {
+  listContacts,
+  addContact,
+  removeContact,
+  getContactById,
+  updateContact,
+} from '../../models/contacts.js';
+import { schemas } from '../../middlewares/schemas.js';
+import { validate } from '../../middlewares/validator.js';
 
-const router = express.Router()
+const router = Router();
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const contacts = await listContacts();
+  if (contacts) {
+    res.json({ contacts });
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const foundContact = await getContactById(req.params.contactId);
+  if (foundContact) {
+    res.json(foundContact);
+  } else {
+    res.status(404).json({ message: 'Not found' });
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', validate(schemas.updateContact), async (req, res, next) => {
+  const newContact = await addContact(req.body);
+  if (newContact) {
+    res.status(201).json(newContact);
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const result = await removeContact(req.params.contactId);
+  if (result) {
+    res.json({ message: 'contact deleted' });
+  } else if (result === false) {
+    res.status(404).json({ message: 'Not found' });
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', validate(schemas.updateContact), async (req, res, next) => {
+  const updatedContact = await updateContact(req.params.contactId, req.body);
+  if (updatedContact) {
+    res.json(updatedContact);
+  } else if (updatedContact === false) {
+    res.status(404).json({ message: 'Not found' });
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-module.exports = router
+export default router;
