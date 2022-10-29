@@ -6,15 +6,15 @@ const contactSchema = require("../../schemas/contacts");
 const ctrl = require("../../controllers/contacts");
 const isValidId = require("../../middlewares/isValidId");
 const updateFavoriteSchema = require("../../schemas/favorite");
+const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
+router.use(authMiddleware);
+
 router.get("/", ctrlWrapper(ctrl.getAll));
-
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
-
 router.post("/", validateBody(contactSchema), ctrlWrapper(ctrl.add));
-
 router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.removeById));
 
 router.put(
