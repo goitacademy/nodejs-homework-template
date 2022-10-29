@@ -1,5 +1,7 @@
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 const handleSaveErrors = require("../helpers/handleSaveErrors");
+const emailRegexp = require("./emailRegexp");
 
 const contactSchema = new Schema(
   {
@@ -9,16 +11,20 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/,
+      match: emailRegexp,
     },
     phone: {
       type: String,
-      unique: true,
       required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      require: true,
     },
   },
   { versionKey: false, timestamps: true }
@@ -26,6 +32,22 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleSaveErrors);
 
+const addSchema = Joi.object({
+  name: Joi.string().min(2).alphanum().required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  phone: Joi.number().integer().required(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  addSchema,
+  updateFavoriteSchema,
+};
+
 const Contact = model("contact", contactSchema);
 
-module.exports = {  Contact };
+module.exports = { schemas, Contact };
