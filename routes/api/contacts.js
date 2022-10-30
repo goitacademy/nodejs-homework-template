@@ -17,7 +17,6 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({message: "template message get"});
 });
 
 router.get("/:contactId", async (req, res, next) => {
@@ -42,7 +41,6 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-  // res.json({message: "template message/:contactId get"});
 });
 
 router.post("/", validate.createContact, async (req, res, next) => {
@@ -59,7 +57,6 @@ router.post("/", validate.createContact, async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-  // res.json({message: "template message/"});
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -84,7 +81,6 @@ router.delete("/:contactId", async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-  // res.json({message: "template message/:contactId del"});
 });
 
 router.put("/:contactId", validate.updateContact, async (req, res, next) => {
@@ -119,7 +115,6 @@ router.put("/:contactId", validate.updateContact, async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-  // res.json({message: "template message/:contactId put"});
 });
 
 module.exports = router;
