@@ -43,15 +43,16 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const db = await listContacts();
-  const idx = db.findIndex((item) => item.id === contactId);
-  console.log(idx);
-  if (idx === -1) {
+
+  const oldContact = db.find((item) => item.id === contactId);
+  if (!oldContact) {
     return null;
   }
 
-  db[idx] = { id: nanoid(), ...body };
+  Object.assign(oldContact, body);
+
   fs.writeFile(contactsPath, JSON.stringify(db));
-  return db[idx];
+  return oldContact;
 };
 
 module.exports = {

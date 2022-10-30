@@ -17,24 +17,22 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const contactsDB = await listContacts();
 
-  res
-    .status(200)
-    .json({ status: "success", message: { contacts: contactsDB } });
+  res.status(200).json(contactsDB);
 });
 
 router.get("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  const data = await getContactById(contactId);
-  if (!data) {
+  const contactsDB = await getContactById(contactId);
+  if (!contactsDB) {
     return res.status(400).json({ message: "Not found" });
   }
-  res.status(200).json({ status: "success", message: { contact: data } });
+  res.status(200).json(contactsDB);
 });
 
 router.post("/", addPostValidation, async (req, res) => {
   const body = req.body;
-  const data = await addContact(body);
-  res.status(201).json({ status: "success", message: { contact: data } });
+  const contactsDB = await addContact(body);
+  res.status(200).json(contactsDB);
 });
 
 router.delete("/:contactId", async (req, res) => {
@@ -46,7 +44,7 @@ router.delete("/:contactId", async (req, res) => {
     return res.status(400).json({ message: "Not found" });
   }
 
-  res.status(200).json({ status: "success", message: "contact deleted" });
+  res.status(200).json({ message: "contact deleted" });
 });
 
 router.put("/:contactId", updatePostValidation, async (req, res) => {
@@ -58,7 +56,7 @@ router.put("/:contactId", updatePostValidation, async (req, res) => {
   if (!data) {
     return res.status(400).json({ message: "Not found" });
   }
-  res.status(200).json({ status: "success", message: "contact update" });
+  res.status(200).json({ message: "contact update" });
 });
 
 module.exports = router;
