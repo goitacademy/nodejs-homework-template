@@ -4,6 +4,8 @@ const router = express.Router();
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890", 6);
 
+const Joi = require("joi");
+
 const {
   listContacts,
   getContactById,
@@ -28,7 +30,23 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  console.log("post here");
+  const schema = Joi.object({
+    name: Joi.string().min(1).max(60).required(),
+    email: Joi.string().email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    }),
+    phone: Joi.string(),
+  });
+
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    console.log(validationResult.error);
+    return res.status(400).json({
+      message: validationResult.error.details,
+    });
+  }
+
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -62,7 +80,23 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  console.log(req.body);
+  const schema = Joi.object({
+    name: Joi.string().min(1).max(60),
+    email: Joi.string().email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    }),
+    phone: Joi.string(),
+  });
+
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    console.log(validationResult.error);
+    return res.status(400).json({
+      message: validationResult.error.details,
+    });
+  }
+
   if (!req.body) {
     return res.status(400).json({ message: "missing fields" });
   }

@@ -67,15 +67,12 @@ const updateContact = async (contactId, body) => {
     if (!contact) {
       return null;
     }
-    // console.log(contact);
+
     const { name, email, phone } = body;
 
     contact.name = name || contact.name;
     contact.email = email || contact.email;
     contact.phone = phone || contact.phone;
-
-    // console.log(contact);
-    // console.log(contacts);
 
     await fs.writeFile(contactPath, JSON.stringify(contacts), "utf8");
 
