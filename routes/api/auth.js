@@ -8,9 +8,10 @@ const {
   userValidation,
   loginValidation,
   subscriptionValidation,
+  uploadAvatar,
 } = require("../../middlewares/validationMiddlewares");
 const ctrl = require("../../controllers/auth");
-const { authenticate } = require("../../middlewares");
+const { authenticate, upload } = require("../../middlewares");
 
 // SIGN UP
 router.post("/signup", userValidation, asyncWrapper(ctrl.register));
@@ -31,5 +32,10 @@ router.patch(
   subscriptionValidation,
   asyncWrapper(ctrl.subscriptionStatus)
 );
+
+router.post("/avatars", upload.single("avatar"), ctrl.uploadAvatar);
+
+// AVATARS UPDATE
+// router.patch("/avatars", authenticate, upload.single("avatar"));
 
 module.exports = router;
