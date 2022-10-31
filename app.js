@@ -17,6 +17,7 @@ const contactsRouter = require('./routes/api/contacts');
 
 /** starting brake point for work with users */
 const authRouter = require('./routes/api/auth');
+
 /** виводить в консоль статус операції (200 і можливо ще якась інфо) */
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));
