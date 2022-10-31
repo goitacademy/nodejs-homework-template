@@ -5,9 +5,13 @@ const {BASE_URL} = process.env;
 const resendEmail = async(req, res) => {
     const {email} = req.body;
     const user = User.findOne({email});
-        if(!user || user.verify){
-            throw RequestError(404)
+        if(!user){
+            throw RequestError(404, 'Not found')
         }
+
+        if (user.verify) {
+            throw RequestError(400, "Verification has already been passed");
+          }
     
         const mail = {
             to: email,
@@ -17,9 +21,9 @@ const resendEmail = async(req, res) => {
         }
     await sendEmail(mail)
     
-    res.json({
-        message: 'Email send successfully',
-    })
+    res.status(200).json({
+        message: "Verification email sent",
+      });
 };
 
 module.exports = resendEmail;
