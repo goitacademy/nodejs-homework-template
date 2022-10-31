@@ -8,7 +8,7 @@ const ctrlWrapper = require("../../helpers/ctrlWrapper");
 
 router.get("/", authentic, ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
+router.get("/:contactId", authentic, isValidId, ctrlWrapper(ctrl.getById));
 
 router.post(
   "/",
@@ -17,10 +17,11 @@ router.post(
   ctrlWrapper(ctrl.add)
 );
 
-router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
+router.delete("/:contactId", authentic, isValidId, ctrlWrapper(ctrl.remove));
 
 router.put(
   "/:contactId",
+  authentic,
   isValidId,
   validation(schemas.addSchema),
   ctrlWrapper(ctrl.update)
@@ -28,6 +29,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  authentic,
   isValidId,
   validation(schemas.updateFavoriteSchema),
   ctrlWrapper(ctrl.updateFavorite)
