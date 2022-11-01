@@ -1,25 +1,59 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts.js");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const validationBody = require("../../middleware/validationBody.js");
+const {
+  schemaPostContact,
+  schemaPutContact,
+} = require("../../schema/schema.js");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json({ data: contacts });
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+  if (contact === null) {
+    return next();
+  }
+  res.status(200).json({ data: contact });
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validationBody(schemaPostContact), async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  const newContact = await addContact(name, email, phone);
+  res.status(201).json({ data: newContact });
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const deletedContact = await removeContact(contactId);
+  if (deletedContact === null) {
+    return next();
+  }
+  res.status(200).json({ message: "contact deleted" });
+});
+
+router.put(
+  "/:contactId",
+  validationBody(schemaPutContact),
+  async (req, res, next) => {
+    const { name, email, phone } = req.body;
+    const { contactId } = req.params;
+    const updatedContact = await updateContact(contactId, { name, email, phone });
+    res.status(200).json({ data: updatedContact });
+  }
+);
+
+module.exports = router;
