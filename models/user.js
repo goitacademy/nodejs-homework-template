@@ -52,4 +52,9 @@ const loginJoiSchema = Joi.object({
   
 });
 
-module.exports = { User, registerJoiSchema, loginJoiSchema };
+const verifyLoginJoiSchema = Joi.object({
+  email: Joi.string().required(),
+  
+});
+
+module.exports = { User, registerJoiSchema, loginJoiSchema, verifyLoginJoiSchema };
