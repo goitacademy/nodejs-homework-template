@@ -18,6 +18,7 @@ const getContactById = async (Id) => {
 const removeContact = async (Id) => {
   const contacts = await listContacts();
   const index = contacts.findIndex(({index}) => index.toString() === Id);
+
   if (index === -1) return null;
   const update = contacts.splice(index, 1);
 
@@ -34,6 +35,7 @@ const addContact = async (body) => {
     email,
     phone,
   };
+
   contacts.push(add);
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf8");
@@ -43,6 +45,7 @@ const addContact = async (body) => {
 const updateContact = async (Id, body) => {
   const contacts = await listContacts();
   const index = contacts.findIndex(({id}) => id.toString() === Id);
+
   if (index === -1) return null;
   contacts[index] = {...contacts[index], ...body};
 
