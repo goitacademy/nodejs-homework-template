@@ -1,5 +1,3 @@
-const e = require("express");
-
 const messages = {
   400: "Bad request",
   404: "Not found",
