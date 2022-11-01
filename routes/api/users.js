@@ -6,7 +6,7 @@ const { ctrlWrapper } = require('../../helpers')
 
 const { schemas } = require('../../models/user')
 
-const ctrl = require('../../controllers/auth')
+const ctrl = require('../../controllers/user')
 
 const router = express.Router()
 

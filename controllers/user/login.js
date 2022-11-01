@@ -8,7 +8,7 @@ const { RequestError } = require('../../helpers')
 const { SECRET_KEY } = process.env
 
 const login = async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, subscription } = req.body
   const user = await User.findOne({ email })
   if (!user) {
     throw RequestError(401, 'Email or password wrong')
@@ -22,8 +22,13 @@ const login = async (req, res) => {
   }
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' })
   await User.findByIdAndUpdate(user._id, { token })
+
   res.json({
     token,
+    user: {
+      email,
+      subscription,
+    },
   })
 }
 
