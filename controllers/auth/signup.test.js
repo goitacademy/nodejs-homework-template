@@ -34,7 +34,7 @@ describe("test signup user", () => {
 
     const loginUser = {
       email: "irina@gmail.com",
-      password: "alex2222",
+      password: "irina2002",
     };
 
     const response = await request(app).post("/auth/signup").send(loginUser);
