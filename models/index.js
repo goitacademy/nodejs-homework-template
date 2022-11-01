@@ -1,3 +1,7 @@
-const Product = require('./product');
+const { Contact } = require("./contact");
+const { User } = require("./user");
 
-module.exports = {Product};
+module.exports = {
+  Contact,
+  User,
+};
