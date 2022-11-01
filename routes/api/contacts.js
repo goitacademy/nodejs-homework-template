@@ -14,9 +14,9 @@ router.get('/:id', ctrlWrapper(ctrl.getById));
 
 router.post('/', validateBody(schemas.addSchema), ctrlWrapper(ctrl.add));
 
-router.delete('/:id', validateBody(schemas.addSchema), ctrlWrapper(ctrl.removeById));
+router.delete('/:id', ctrlWrapper(ctrl.removeById));
 
-router.put('/:id', ctrlWrapper(ctrl.updateById));
+router.put('/:id', validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById));
 
 
 module.exports = router;
