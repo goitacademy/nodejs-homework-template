@@ -17,7 +17,6 @@ app.use("/api/contacts", contactsRouter);
 app.use((req, res) => {
   res.status(404).json({status: "Error", code: 404, message: "Not found!!!"});
 });
-
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
