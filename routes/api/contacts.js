@@ -9,7 +9,7 @@ router.get("/", async (req, res, next) => {
     return res.json({
       status: "Success",
       code: 200,
-      message: "Contacts found",
+      message: "Contacts found!",
       data: {
         contacts,
       },
@@ -26,7 +26,7 @@ router.get("/:contactId", async (req, res, next) => {
       return res.json({
         status: "Success",
         code: 200,
-        message: "Contact found",
+        message: "Contact found!",
         data: {
           contact,
         },
@@ -35,7 +35,7 @@ router.get("/:contactId", async (req, res, next) => {
       return res.status(404).json({
         status: "Error",
         code: 404,
-        message: "Not Found",
+        message: "Not Found!",
       });
     }
   } catch (e) {
@@ -49,7 +49,7 @@ router.post("/", validate.createContact, async (req, res, next) => {
     return res.status(201).json({
       status: "Success",
       code: 201,
-      message: "Contact successfully created",
+      message: "Contact successfully created!",
       data: {
         contact,
       },
@@ -66,7 +66,7 @@ router.delete("/:contactId", async (req, res, next) => {
       return res.json({
         status: "Success",
         code: 200,
-        message: "Contact deleted",
+        message: "Contact deleted!",
         data: {
           contact,
         },
@@ -75,7 +75,7 @@ router.delete("/:contactId", async (req, res, next) => {
       return res.status(404).json({
         status: "Error",
         code: 404,
-        message: "Not Found",
+        message: "Not Found!",
       });
     }
   } catch (e) {
@@ -89,7 +89,7 @@ router.put("/:contactId", validate.updateContact, async (req, res, next) => {
       return res.status(400).json({
         status: "Error",
         code: 400,
-        message: "Bad request",
+        message: "Bad request!",
       });
     }
     const contact = await Contacts.updateContact(
@@ -100,7 +100,7 @@ router.put("/:contactId", validate.updateContact, async (req, res, next) => {
       return res.json({
         status: "Success",
         code: 200,
-        message: "Contact updated successfully",
+        message: "Contact updated successfully!",
         data: {
           contact,
         },
@@ -109,7 +109,7 @@ router.put("/:contactId", validate.updateContact, async (req, res, next) => {
       return res.status(404).json({
         status: "Error",
         code: 404,
-        message: "Not Found",
+        message: "Not Found!",
       });
     }
   } catch (e) {
