@@ -3,8 +3,6 @@ const Joi = require('joi')
 
 const { handleSaveErrors } = require('../helpers')
 
-const isbnRegexp = /^\d{3}-\d-\d{3}-\d{5}-\d$/
-
 const contactSchema = new Schema(
   {
     name: {
@@ -20,6 +18,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
     },
   },
   { versionKey: false, timestamps: true },
