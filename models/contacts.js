@@ -28,7 +28,7 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
     const changedCollection = contacts.filter(({ id }) => id !== contactId);
-    updateFile(changedCollection);
+    await updateFile(changedCollection);
     return contacts.find(({ id }) => id === contactId);
   } catch (error) {
     console.log(error.message);
@@ -45,7 +45,7 @@ const addContact = async (body) => {
     };
     const contacts = await listContacts();
     const changedCollection = [...contacts, newContact];
-    updateFile(changedCollection);
+    await updateFile(changedCollection);
     return newContact;
   } catch (error) {
     console.log(error);
@@ -68,7 +68,7 @@ const updateContact = async (contactId, body) => {
       }
       return item;
     });
-    updateFile(changedCollection);
+    await updateFile(changedCollection);
     return contactToChange ? changedContact : contactToChange;
   } catch (error) {
     console.log(error);
@@ -77,7 +77,7 @@ const updateContact = async (contactId, body) => {
 
 const updateFile = async (instance) => {
   try {
-    fs.writeFile(contactsPath, JSON.stringify(instance, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(instance, null, 2));
   } catch (error) {
     console.log(error);
   }
