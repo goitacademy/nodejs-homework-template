@@ -7,7 +7,6 @@ const dotenv = require("dotenv")
 const contactsRouter = require('./routes/api/contacts')
 
 dotenv.config()
-// const {DB_HOST} = require("./config")
 const { DB_HOST } = process.env;
 
 mongoose.connect(DB_HOST)
