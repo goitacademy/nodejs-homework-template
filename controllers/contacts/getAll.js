@@ -6,9 +6,6 @@ const getAll = async (req, res, next) => {
   const { page = 1, limit = 20, ...filter  } = req.query
   const skip = (page - 1) * limit
   
-
-
-
   try {
     const result = await Contact.find(
       { owner, ...filter },
