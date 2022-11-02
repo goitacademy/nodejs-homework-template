@@ -10,10 +10,11 @@ const {
   subscriptionValidation,
 } = require("../../middlewares/validationMiddlewares");
 const ctrl = require("../../controllers/auth");
-const { authenticate } = require("../../middlewares");
+const { files: filesCtrl } = require("../../controllers");
+const { authenticate, upload } = require("../../middlewares");
 
 // SIGN UP
-router.post("/signup", userValidation, asyncWrapper(ctrl.register));
+router.post("/signup", userValidation, asyncWrapper(ctrl.signup));
 
 // SIGN IN
 router.post("/login", loginValidation, asyncWrapper(ctrl.login));
@@ -30,6 +31,14 @@ router.patch(
   authenticate,
   subscriptionValidation,
   asyncWrapper(ctrl.subscriptionStatus)
+);
+
+// AVATARS UPDATE
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  asyncWrapper(filesCtrl.updateAvatar)
 );
 
 module.exports = router;
