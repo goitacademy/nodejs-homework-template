@@ -9,7 +9,9 @@ const verifyEmail = async (req, res) => {
     console.log('not found');
     throw NotFound;
   }
+
   await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
+
   res.json({
     message: 'Verification successful',
   });

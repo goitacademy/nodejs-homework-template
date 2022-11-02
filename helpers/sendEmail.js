@@ -1,4 +1,5 @@
 const sgMail = require('@sendgrid/mail');
+
 require('dotenv').config();
 
 const { SENDGRID_API_KEY } = process.env;
@@ -14,17 +15,8 @@ const sendEmail = async data => {
     return true;
   } catch (error) {
     console.log('error-sgMail:', error);
-    // throw error;
+    throw error;
   }
 };
-
-// sgMail
-//   .send(email)
-//   .then(() => {
-//     console.log('Email sent');
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   });
 
 module.exports = sendEmail;
