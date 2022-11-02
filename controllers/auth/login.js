@@ -11,18 +11,19 @@ const login = async (req, res) => {
 
   const user = await User.findOne({ email });
 
+  console.log('user-login:', user);
   const { subscription } = user;
   const passComparePassword = bcrypt.compareSync(password, user.password);
 
-  if (!user || !passComparePassword) {
-    throw new Unauthorized('Email or password is wrong');
+  if (!user || !passComparePassword || !user.verify) {
+    throw new Unauthorized('Email or password is wrong or not verify email');
   }
 
   const payload = {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
