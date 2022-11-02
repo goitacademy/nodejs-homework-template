@@ -9,14 +9,16 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "cfonts": "^3.1.1",
+    "chalk": "^4.1.2",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
     "joi": "^17.6.4",
+    "mongoose": "^6.7.1",
     "morgan": "1.10.0",
     "shortid": "^2.2.16"
-
   },
   "devDependencies": {
     "eslint": "7.19.0",
