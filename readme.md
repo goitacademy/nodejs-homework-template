@@ -1,27 +1,55 @@
-## GoIT Node.js Course Template Homework
+# GoIT Node.js Homework
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+This is a homework project on Node.js for GOIT.
+The project contains a REST API for working with a collection of contacts. [Postman](https://www.getpostman.com/) was used to work with the REST API.
 
-Додайте ментора до колаборації
+## API Reference
 
-Для кожної домашньої роботи створюйте свою гілку.
+#### Get all contacts
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+```http
+  GET /api/contacts
+```
 
-Кожна нова гілка для др повинна робитися з master
+#### Get contact
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+```http
+  GET /api/contacts/${id}
+```
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| `id`      | `string` | **Required**. Id of contact to fetch |
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+#### Add contact
+
+```http
+  POST /api/contacts
+```
+
+| Parameter | Type   | Description                          |
+| :-------- | :----- | :----------------------------------- |
+| `body`    | `JSON` | **Required**. Body of contact to add |
+
+#### Delete contact
+
+```http
+  DELETE /api/contacts/${id}
+```
+
+| Parameter | Type     | Description                           |
+| :-------- | :------- | :------------------------------------ |
+| `id`      | `string` | **Required**. Id of contact to delete |
+
+#### Change contact
+
+```http
+  PUT /api/contacts/${id}
+```
+
+| Parameter | Type     | Description                           |
+| :-------- | :------- | :------------------------------------ |
+| `id`      | `string` | **Required**. Id of contact to change |
 
 ### Команди:
 
