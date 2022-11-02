@@ -4,7 +4,7 @@ const Joi = require("joi")
 const contacts = require("../../models/contacts")
 const {RequestError} = require("../../helpers")
 
-const router = express.Router()
+const router = express.Router();
 
 const contactsAddSchema = Joi.object({
   name: Joi.string().required(),
