@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const { User } = require('../../models/user')
 const { RequestError } = require('../../helpers/Errors')
 
+const {JWT_SECRET} = process.env
+
 
 const login = async (req, res, next) => {
     try {
@@ -15,17 +17,21 @@ const login = async (req, res, next) => {
         if (!isPasswordValid)
         { throw RequestError('Email or password is wrong', 401) }
 
-        const token = jwt.sign({
+        const payload = {
             id: user._id,
             createdAt: user.createdAt,
-        }, process.env.JWT_SECRET)
+        }
+
+
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' })
 
         res.status(200).json({
             token,
             user: {
                 email: user.email,
-                subscription: user.subscription
+                subscription: user.subscription,
             }
+            
         })
 
         
