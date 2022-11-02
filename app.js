@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config() // для внесення інформаціїї з env в конфіг системи
 
 const contactsRouter = require('./routes/api/contacts')
 

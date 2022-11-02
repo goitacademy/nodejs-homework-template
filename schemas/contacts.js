@@ -19,6 +19,8 @@ const addSchema = Joi.object({
                 /^(\+?\d+)?\s*(\(\d+\))?[\s-]*([\d-]*)$/
             )
             .required(),
+    favorite: Joi.boolean()
+            .optional(),
 })
 
 module.exports = {
