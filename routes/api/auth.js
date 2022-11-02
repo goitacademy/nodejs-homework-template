@@ -8,6 +8,7 @@ const {
   userValidation,
   loginValidation,
   subscriptionValidation,
+  verifyEmailSchema,
 } = require("../../middlewares/validationMiddlewares");
 const ctrl = require("../../controllers/auth");
 const { files: filesCtrl } = require("../../controllers");
@@ -40,5 +41,12 @@ router.patch(
   upload.single("avatar"),
   asyncWrapper(filesCtrl.updateAvatar)
 );
+
+//VERIFICATION
+
+router.get("/verify/:verificationToken", asyncWrapper(ctrl.verify));
+
+//VERIFY
+router.post("/verify", verifyEmailSchema, asyncWrapper(ctrl.resendVerify));
 
 module.exports = router;

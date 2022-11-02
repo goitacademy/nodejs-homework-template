@@ -91,4 +91,12 @@ module.exports = {
     }
     next();
   },
+  verifyEmailSchema: (req, res, next) => {
+    const schema = Joi.object({ email: Joi.string().required() });
+    const verifyEmail = schema.validate(req.body);
+    if (verifyEmail.error) {
+      return res.status(400).json({ message: "missing required field email" });
+    }
+    next();
+  },
 };
