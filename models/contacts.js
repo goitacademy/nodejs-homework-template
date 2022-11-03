@@ -33,7 +33,12 @@ const getContactById = async (contactId) => {
   try {
     const data = await listContacts();
     const findContact = data.find(({ id }) => id === contactId);
-    return findContact;
+
+    if (!findContact) {
+      return false;
+    } else {
+      return findContact;
+    }
   } catch (error) {
     return error;
   }
@@ -57,7 +62,8 @@ const addContact = async (body) => {
       ...body,
     };
     data.push(newContact);
-    return await writeFile(data);
+    await writeFile(data);
+    return newContact;
   } catch (error) {
     return error;
   }
