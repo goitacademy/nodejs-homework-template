@@ -20,7 +20,10 @@ const schemaPutContact = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
     phone: Joi.number()
         .integer(),
-        })
+})
+        
+
+        
 
 module.exports = {
     schemaPostContact,

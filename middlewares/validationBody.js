@@ -1,14 +1,7 @@
 const validationBody = (schema) => {
   return async (req, res, next) => {
-    const { name, email, phone } = req.body;
     try {
-      if (name === undefined && email === undefined && phone === undefined) {
-        const error = new Error("missing fields");
-        error.status = 400;
-        throw error;
-      }
-
-      await schema.validateAsync({ name, email, phone });
+      await schema.validateAsync(req.body);
       next();
     } catch (error) {
       error.status = 400;
@@ -16,5 +9,6 @@ const validationBody = (schema) => {
     }
   };
 };
+
 
 module.exports = { validationBody };
