@@ -15,6 +15,7 @@
     "dotenv": "^16.0.3",
     "express": "4.17.1",
     "gravatar": "^1.8.2",
+    "jimp": "^0.16.2",
     "joi": "^17.6.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.5",
