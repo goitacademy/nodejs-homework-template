@@ -10,6 +10,8 @@ const { schemas } = require("../../models/user");
 
 const router = express.Router();
 
+// main rout -> http://localhost:3000/api/auth
+
 router.post(
   "/register",
   validateBody(schemas.registerSchema),
@@ -21,8 +23,6 @@ router.post(
   validateBody(schemas.loginSchema),
   controllerWrapper(controller.login),
 );
-
-router.get("/current", authenticate, controllerWrapper(controller.getCurrent));
 
 router.get("/logout", authenticate, controllerWrapper(controller.logout));
 

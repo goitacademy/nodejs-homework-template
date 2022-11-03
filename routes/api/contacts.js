@@ -10,6 +10,8 @@ const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const { schemas } = require("../../models/contact");
 
+// main rout -> http://localhost:3000/api/contacts
+
 router.get("/", authenticate, controllerWrapper(controller.getAll));
 
 router.get(

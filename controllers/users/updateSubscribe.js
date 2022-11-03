@@ -8,8 +8,6 @@ const updateSubscribe = async (req, res) => {
 
   const { subscription } = req.body;
 
-  console.log(req.body.subscription);
-
   const result = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   });
