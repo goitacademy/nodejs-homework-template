@@ -6,57 +6,24 @@ const {
 } = require("../../middleware/validation");
 
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
+  get,
+  getById,
+  remove,
+  create,
+  update,
+  updateStatusContact,
+} = require("../../controller/index");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const contactsDB = await listContacts();
+router.get("/", get);
 
-  res.status(200).json(contactsDB);
-});
+router.get("/:contactId", getById);
 
-router.get("/:contactId", async (req, res) => {
-  const { contactId } = req.params;
-  const contactsDB = await getContactById(contactId);
-  if (!contactsDB) {
-    return res.status(400).json({ message: "Not found" });
-  }
-  res.status(200).json(contactsDB);
-});
+router.post("/", addPostValidation, create);
 
-router.post("/", addPostValidation, async (req, res) => {
-  const body = req.body;
-  const contactsDB = await addContact(body);
-  res.status(200).json(contactsDB);
-});
+router.delete("/:contactId", remove);
 
-router.delete("/:contactId", async (req, res) => {
-  const { contactId } = req.params;
-
-  const data = await removeContact(contactId);
-
-  if (!data) {
-    return res.status(400).json({ message: "Not found" });
-  }
-
-  res.status(200).json({ message: "contact deleted" });
-});
-
-router.put("/:contactId", updatePostValidation, async (req, res) => {
-  const { contactId } = req.params;
-  const body = req.body;
-
-  const data = await updateContact(contactId, body);
-
-  if (!data) {
-    return res.status(400).json({ message: "Not found" });
-  }
-  res.status(200).json({ message: "contact update" });
-});
+router.put("/:contactId", updatePostValidation, update);
+router.patch("/:contactId/favorite", updateStatusContact);
 
 module.exports = router;

@@ -1,58 +1,23 @@
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
-const path = require("path");
-
-const contactsPath = path.join(__dirname, "contacts.json");
+const { User } = require("./contacts.model");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  return JSON.parse(data);
+  return User.find();
 };
 
 const getContactById = async (contactId) => {
-  const data = await fs.readFile(contactsPath);
-  const db = JSON.parse(data);
-  const getById = db.find((item) => item.id === contactId.toString());
-  if (!getById) {
-    return null;
-  }
-
-  return getById;
+  return User.findById(contactId);
 };
 
 const removeContact = async (contactId) => {
-  const db = await listContacts();
-  const contacts = db.findIndex((item) => item.id === contactId.toString());
-
-  if (contacts === -1) {
-    return null;
-  }
-  const removeContact = db.splice(contacts, 1);
-
-  fs.writeFile(contactsPath, JSON.stringify(db));
-  return removeContact;
+  return User.findByIdAndRemove({ _id: contactId });
 };
 
 const addContact = async (body) => {
-  const db = await listContacts();
-  const item = { id: nanoid(), ...body };
-  db.push(item);
-  fs.writeFile(contactsPath, JSON.stringify(db));
-  return item;
+  return User.create(body);
 };
 
 const updateContact = async (contactId, body) => {
-  const db = await listContacts();
-
-  const oldContact = db.find((item) => item.id === contactId);
-  if (!oldContact) {
-    return null;
-  }
-
-  Object.assign(oldContact, body);
-
-  fs.writeFile(contactsPath, JSON.stringify(db));
-  return oldContact;
+  return User.findByIdAndUpdate({ _id: contactId }, body, { new: true });
 };
 
 module.exports = {
