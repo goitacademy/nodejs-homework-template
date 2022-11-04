@@ -36,7 +36,7 @@ router.get('/:contactId', async (req, res) => {
   if (contact) {
     res.status(200).json(contact);
   } else {
-    res.status(400).json({ error: `No contact with id ${id}` });
+    res.status(400).json({ message: 'Not found' });
   }
 });
 
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(404).send({ message: validationResult.error.details });
+    return res.status(400).send({ message: 'missing required name field' });
   } else {
     const contact = await addContact(req.body);
     res.status(201).send(contact);
@@ -55,9 +55,9 @@ router.delete('/:contactId', async (req, res) => {
   const id = req.params.contactId;
   const contact = await removeContact(id);
   if (contact) {
-    res.status(201).send('created');
+    res.status(200).send({ message: 'contact deleted' });
   } else {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(404).json({ message: 'Not found' });
   }
 });
 
@@ -65,7 +65,7 @@ router.put('/:contactId', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(400).send({ message: validationResult.error.details });
+    return res.status(400).send({ message: 'missing fields' });
   }
 
   const id = req.params.contactId;
