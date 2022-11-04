@@ -9,7 +9,9 @@ const  schemaPostContact = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         .required(),
     phone: Joi.number()
-        .integer(),
+        .integer()
+        .required(),
+    
 })
 
 const schemaPutContact = Joi.object({
@@ -20,7 +22,7 @@ const schemaPutContact = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
     phone: Joi.number()
         .integer(),
-})
+}).min(1)
         
 
         
