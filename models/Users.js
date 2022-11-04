@@ -25,6 +25,7 @@ const userSchema = new Schema(
       ref: "user",
       required: true,
     },
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true }
 );
