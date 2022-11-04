@@ -4,9 +4,7 @@ const validationBody = (schema) => {
       await schema.validateAsync(req.body);
       next();
     } catch (error) {
-      if (error.details[0].type === "object.min") {
-        error.message = "missing fields";
-      }
+      error.message = "missing fields";
       error.status = 400;
       next(error);
     }
