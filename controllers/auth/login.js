@@ -10,7 +10,7 @@ const { RequestError } = require('../../helpers');
 const login = async (req, res) => {
   const { password, email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) {
+  if (!user || !user.verify) {
     throw RequestError(401, 'Email or password wrong');
   }
   const hasPassword = await bcrypt.compare(password, user.password);

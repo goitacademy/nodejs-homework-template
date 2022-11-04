@@ -36,3 +36,32 @@ module.exports = app;
 // "dui.in@egetlacus.ca"
 // phone
 // "(294) 840-6685"
+
+// const nodemailer = require('nodemailer');
+// require('dotenv').config();
+
+// const { META_PASSWORD } = process.env;
+
+// const nodemailerConfig = {
+//   host: 'smtp.meta.ua',
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: '',
+//     pass: META_PASSWORD,
+//   },
+// };
+
+// const transport = nodemailer.createTransport(nodemailerConfig);
+
+// const email = {
+//   to: '',
+//   from: '',
+//   subject: '',
+//   html: ``,
+// };
+
+// transport
+//   .sendMail(mail)
+//   .then(() => console.log('Email send success'))
+//   .catch((e) => console.log(e.message));
