@@ -99,15 +99,12 @@ const updateStatusContact = async (req, res, next) => {
   try {
     const result = await service.updateContact(contactId, { favorite });
     if (result) {
-      res.status(201).json({
+      res.status(200).json({
         contact: result,
       });
     } else {
       res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found task id: ${contactId}`,
-        data: "Not Found",
+        message: `Not found`,
       });
     }
   } catch (e) {
