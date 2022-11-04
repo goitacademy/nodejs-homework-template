@@ -1,18 +1,23 @@
-const { Contact } = require("../../models/contact");
-const { RequestError } = require("../../helpers");
+const { Contact } = require('../../models/contact');
+const { requestError } = require('../../helpers');
 
 const removeById = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove({ _id: contactId });
+
+  const result = await Contact.findOneAndRemove({
+    contactId,
+    owner: _id,
+  });
 
   if (!result) {
-    throw RequestError(404, `Contact with id=${contactId} not found`);
+    throw requestError(404, `Contact with id=${contactId} not found`);
   }
 
   res.json({
-    status: "success",
+    status: 'success',
     code: 200,
-    message: "contact deleted",
+    message: 'contact deleted',
     data: { result },
   });
 };
