@@ -1,13 +1,7 @@
-const signup = require('./signup')
-const login = require('./login')
-const current = require('./getCurrent')
-const logout = require('./logout')
-const updateSubscription = require('./updateSubscription.js')
+const contacts = require('./contactsController')
+const users = require('./users')
 
 module.exports = {
-  signup,
-  login,
-  current,
-  logout,
-  updateSubscription,
+  contacts,
+  users,
 }
