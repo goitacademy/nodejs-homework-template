@@ -9,9 +9,6 @@ const schemaForCreateOrUpdateContact = Joi.object({
     .trim()
     .email({
       minDomainSegments: 2,
-      tlds: {
-        allow: ["com", "net", "pl", "eu", "fm", "to", "se"],
-      },
     })
     .required(),
   phone: Joi.string()
@@ -28,7 +25,7 @@ const schemaForUpdateContactStatus = Joi.object({
 });
 
 const validation = (schema, req, res, next) => {
-  const error = schema.validate(req.body).error;
+  const { error } = schema.validate(req.body);
   if (error) {
     const [{ message }] = error.details;
     return res.status(400).json({

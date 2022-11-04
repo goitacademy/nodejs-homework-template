@@ -1,8 +1,8 @@
-const service = require("../service/index");
+const contactsService = require("../services/contacts");
 
 const get = async (req, res, next) => {
   try {
-    const contacts = await service.getAllContacts();
+    const contacts = await contactsService.getAllContacts();
     res.status(200).json(contacts);
   } catch (err) {
     next(err);
@@ -12,7 +12,7 @@ const get = async (req, res, next) => {
 const getOne = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await service.getSingleContact(contactId);
+    const contact = await contactsService.getSingleContact(contactId);
     if (contact) {
       return res.status(200).json(contact);
     }
@@ -27,7 +27,7 @@ const getOne = async (req, res, next) => {
 
 const post = async (req, res, next) => {
   try {
-    const contact = await service.createContact(req.body);
+    const contact = await contactsService.createContact(req.body);
     res.status(201).json({
       message: "Contact was created",
       data: contact,
@@ -40,7 +40,7 @@ const post = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await service.deleteContact(contactId);
+    const contact = await contactsService.deleteContact(contactId);
 
     if (contact) {
       return res.status(200).json({
@@ -59,7 +59,7 @@ const deleteOne = async (req, res, next) => {
 const putOne = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await service.updateContact(contactId, req.body);
+    const contact = await contactsService.updateContact(contactId, req.body);
 
     if (contact) {
       return res.status(200).json({
@@ -80,7 +80,7 @@ const patchFavorite = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
   try {
-    const contact = await service.updateContact(contactId, { favorite });
+    const contact = await contactsService.updateContact(contactId, { favorite });
 
     if (contact) {
       if (favorite) {
