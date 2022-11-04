@@ -41,24 +41,15 @@ const addContact = async (name, email, phone) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const contactIdToString = contactId.toString();
+  // if (Object.keys(body).length === 0) {
+  //   return null;
+  // }
   const contacts = await listContacts();
-  const contactIdFromArr = contacts.findIndex(
-    ({ id }) => id === contactIdToString
-  );
+  const contactIdFromArr = contacts.findIndex(({ id }) => id === contactId);
   if (contactIdFromArr === -1) {
     return null;
   }
-  const { name, email, phone } = body;
-  if (name) {
-    contacts[contactIdFromArr].name = name;
-  }
-  if (email) {
-    contacts[contactIdFromArr].email = email;
-  }
-  if (phone) {
-    contacts[contactIdFromArr].phone = phone;
-  }
+  contacts[contactIdFromArr] = { ...contacts[contactIdFromArr], ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   const updatedContact = contacts[contactIdFromArr];
   return updatedContact;
