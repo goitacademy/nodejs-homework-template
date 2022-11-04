@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addContactSchema,
   changeContactSchema,
+  changeContactStatusSchema,
 } = require("./middleware/schemes/validationschemes");
 
 const {
@@ -30,6 +31,10 @@ router.put(
   putChangeContactCtrl
 );
 
-router.patch("/:contactId/favorite", patchFavoriteContactCtrl);
+router.patch(
+  "/:contactId/favorite",
+  validation(changeContactStatusSchema),
+  patchFavoriteContactCtrl
+);
 
 module.exports = router;

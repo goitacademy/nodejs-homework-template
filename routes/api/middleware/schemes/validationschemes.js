@@ -21,4 +21,12 @@ const changeContactSchema = Joi.object({
   phone: Joi.string().min(10).max(14),
 });
 
-module.exports = { addContactSchema, changeContactSchema };
+const changeContactStatusSchema = Joi.object({
+  favorite: Joi.boolean(),
+});
+
+module.exports = {
+  addContactSchema,
+  changeContactSchema,
+  changeContactStatusSchema,
+};

@@ -48,8 +48,9 @@ const removeContact = async (contactId) => {
 
 const updateStatus = async (contactId, body) => {
   try {
-    await Contact.findByIdAndUpdate(contactId, body);
-    const data = await Contact.findById(contactId);
+    const data = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
     return data;
   } catch (error) {
     console.log(error);
