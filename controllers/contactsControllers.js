@@ -8,7 +8,8 @@ const {
 } = require('../services/contactsService')
 
 const {RequestError} = require("../helpers");
-const {addSchema} = require("../schemas/contacts");
+// const {addSchema} = require("../schemas/contacts");
+const {schemas} = require("../models/contact")
 
 const getContactsController = async (req, res) => {
     const result = await getAllContacts();
@@ -22,7 +23,7 @@ const getContactByIdNewController = async (req, res) => {
 }
 
 const addNewContactController = async (req, res) => {
-    const {error} = addSchema.validate(req.body);
+    const {error} = schemas.addSchema.validate(req.body);
         if(error) {
             throw RequestError(400, error.message)
         }
@@ -31,7 +32,7 @@ const addNewContactController = async (req, res) => {
 }
 
 const editContactController = async (req, res) => {
-    const {error} = addSchema.validate(req.body);
+    const {error} = schemas.addSchema.validate(req.body);
         if(error) {
             throw RequestError(400, error.message)
         }
@@ -47,6 +48,10 @@ const deleteContactController = async (req, res) => {
 }
 
 const updateFavoriteByIdController = async (req, res) => {
+    const {error} = schemas.updateFavoriteSchema.validate(req.body);
+        if(error) {
+            throw RequestError(400, error.message)
+        }
     const {contactId} = req.params;
     const result = await updateFavoriteById(contactId, req.body);
     res.status(200).json(result);
