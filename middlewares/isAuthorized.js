@@ -1,12 +1,13 @@
 const {makeError} = require('../helpers')
 const jwt = require('jsonwebtoken')
 const {User} = require('../models/user')
+require('dotenv').config()
 
 const {SECRET_KEY} = process.env
 
 const isAuthorized = async(req,res,next) => {
-    const bearerToken = req.quary
-    const [bearer, token] = bearerToken
+    const {authorization = ''} = req.headers
+    const [bearer, token] = authorization.split(' ')
     if(bearer !== 'Bearer' || !token){
         next(makeError(401))
     }
@@ -14,7 +15,8 @@ const isAuthorized = async(req,res,next) => {
     if(!result){
         next(makeError(401))
     }
-    const user = User.findById(result.id)
+    const user = await User.findById(result.id)
+    console.log(user);
     req.user = user
     next()
 }

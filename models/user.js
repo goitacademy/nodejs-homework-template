@@ -19,7 +19,9 @@ const usersSchema = new Schema({
           enum: subscriptionArray,
           default: "starter"
         },
-        token: String
+        token: {
+          type: String
+        }
       
     }, {versionKey: false, timestamps: true})
     usersSchema.post("save", onSaveErrors);

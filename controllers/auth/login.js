@@ -19,8 +19,8 @@ const login = async(req,res,next) => {
     if(!passResult){
         next(makeError(401, 'Пароль або пошта невірні'))
     }
-    const token = await jwt.sign({id: result._id}, SECRET_KEY, {expiresIn: '23h'})
-    await User.findByIdAndUpdate(result._id, token)
+    const token = jwt.sign({id: result._id}, SECRET_KEY, {expiresIn: '23h'})
+    await User.findByIdAndUpdate(result._id, {token})
     res.json({token, user: {
         email: result.email,
         subscription: result.subscription
