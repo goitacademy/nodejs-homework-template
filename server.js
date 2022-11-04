@@ -1,5 +1,13 @@
-const app = require('./app')
+const app = require("./app");
+const { dbConnection } = require("./db/db-connection");
+const PORT = process.env.PORT;
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const start = async () => {
+  await dbConnection();
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port: ${PORT}`);
+  });
+};
+
+start();

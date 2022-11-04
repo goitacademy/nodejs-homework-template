@@ -1,32 +1,33 @@
 const {
+  getContacts,
+  getContactById,
   addContact,
   updateContact,
-  listContacts,
-  getContactById,
   removeContact,
-} = require("../models/contacts");
+  updateStatus,
+} = require("../service/contacts");
 
-const getContacts = async (req, res) => {
-  const data = await listContacts();
+const getContactsCtrl = async (req, res) => {
+  const data = await getContacts();
   res.status(200).json({ message: data });
 };
 
-const getContactByID = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const data = await getContactById(contactId);
+const getContactByIDCtrl = async (req, res) => {
+  const { contactId } = req.params;
+  const data = await getContactById(contactId);
+  if (data) {
     res.status(200).json({ message: data });
-  } catch (error) {
+  } else {
     res.status(404).json({ message: "Not found" });
   }
 };
 
-const postAddContact = async (req, res) => {
+const postAddContactCtrl = async (req, res) => {
   const data = await addContact(req.body);
   res.status(201).json({ message: data });
 };
 
-const putChangeContact = async (req, res) => {
+const putChangeContactCtrl = async (req, res) => {
   const { contactId } = req.params;
   const data = await updateContact(contactId, req.body);
   if (data) {
@@ -36,24 +37,34 @@ const putChangeContact = async (req, res) => {
   }
 };
 
-const deleteContact = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const data = await removeContact(contactId);
-    if (data) {
-      res.status(200).json({ message: "contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    console.log(error.message);
+const deleteContactCtrl = async (req, res) => {
+  const { contactId } = req.params;
+  const data = await removeContact(contactId);
+  if (data) {
+    res.status(200).json({ message: "contact deleted" });
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
+};
+
+const patchFavoriteContactCtrl = async (req, res) => {
+  const { contactId } = req.params;
+  if (!contactId) {
+    res.status(400).json({ message: "missing field favorite" });
+  }
+  const data = await updateStatus(contactId, req.body);
+  if (data) {
+    res.status(200).json({ message: data });
+  } else {
+    res.status(404).json({ message: "Not found" });
   }
 };
 
 module.exports = {
-  postAddContact,
-  putChangeContact,
-  getContacts,
-  getContactByID,
-  deleteContact,
+  postAddContactCtrl,
+  putChangeContactCtrl,
+  getContactsCtrl,
+  getContactByIDCtrl,
+  deleteContactCtrl,
+  patchFavoriteContactCtrl,
 };
