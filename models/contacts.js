@@ -30,6 +30,7 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
+  
   try {
     const data = await listContacts();
     const findContact = data.find(({ id }) => id === contactId);
