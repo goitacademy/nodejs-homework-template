@@ -5,6 +5,7 @@ const {schemas} = require('../../models/contact')
 const {validateBody, isValidId, isAuthorized} = require('../../middlewares')
 const {add, getAll, getById, updateById, removeById, updateStatusContact} = require('../../controllers/contacts')
 
+
 router.get('/',isAuthorized,ctrlWrapper(getAll))
 router.get('/:contactId',isValidId, ctrlWrapper(getById))
 router.post('/',isAuthorized,validateBody(schemas.validateAddSchema),ctrlWrapper(add))

@@ -8,7 +8,7 @@ const register = async (req, res, next) => {
   const result = await User.find({ email });
   
   if (result) {
-    next(makeError(409));
+    next(makeError(409, 'Email in use'));
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   await User.create({ email, password: hashedPassword, subscription });
