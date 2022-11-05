@@ -1,10 +1,7 @@
 
-
 const mongoose = require('mongoose');
-const HOST_DB = "mongodb+srv://user21:8h8HBvPqwaMy1dCa@cluster0.zob5egp.mongodb.net/db-contacts";
-const PORT = 3000;
 const app = require('./app');
-
+const { HOST_DB, PORT = 3000 } = process.env;
 
 async function main() {
   try {
