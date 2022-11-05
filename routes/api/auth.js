@@ -3,7 +3,6 @@ const { cntrlWrapper } = require("../../helpers");
 const { validateBody, authenticate, upload } = require("../../middlewares");
 const { schemas } = require("../../models/Users");
 const ctrl = require("../../controlers/auth");
-const { updateById } = require("../../controlers/contacts");
 
 const router = express.Router();
 router.post(
