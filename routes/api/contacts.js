@@ -1,5 +1,12 @@
 const express = require('express')
 const methods = require('../../models/contacts')
+<<<<<<< Updated upstream
+=======
+const validation = require('../../validation/validation')
+const {
+  validate
+} = require('../../validation/validationMiddleware')
+>>>>>>> Stashed changes
 
 const router = express.Router()
 
@@ -26,7 +33,11 @@ router.get('/:contactId', async (req, res, next) => {
   })
 })
 
+<<<<<<< Updated upstream
 router.post('/', async (req, res, next) => {
+=======
+router.post('/', validate(validation.contact), async (req, res, next) => {
+>>>>>>> Stashed changes
   const body = req.body
   const contacts = await methods.addContact(body)
   res.json({ 
@@ -50,7 +61,11 @@ router.delete('/:contactId', async (req, res, next) => {
   })
 })
 
+<<<<<<< Updated upstream
 router.put('/:contactId', async (req, res, next) => {
+=======
+router.put('/:contactId', validate(validation.contact), async (req, res, next) => {
+>>>>>>> Stashed changes
   const { contactId } = req.params
   const contacts = await methods.updateContact(contactId, req.body)
   res.json({ 
