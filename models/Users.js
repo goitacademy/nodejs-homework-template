@@ -20,7 +20,7 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { type: String },
-    
+
   },
   { versionKey: false, timestamps: true }
 );
