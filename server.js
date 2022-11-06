@@ -17,7 +17,11 @@ app.use("/api", indexRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({
-    message: "Use api on routes: /api/contacts",
+    message: `Use api on routes:
+      /api/signup - registration user { name, email, password }
+      /api/login - login user { email, password }
+      /api/logout - logout user { id }
+      /current - get current user { token }`,
     data: "Not found",
   });
 });
@@ -29,9 +33,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-const { PORT = 3000, DB_HOST: dbURI } = process.env;
+const { PORT = 3000, DB_HOST: DB_URI } = process.env;
 
-const connection = mongoose.connect(dbURI, {
+const connection = mongoose.connect(DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
