@@ -89,9 +89,7 @@ const updateStatusContact = async (req, res, next) => {
   try {
     const result = await service.updateContact(contactId, { favorite });
     if (result) {
-      res.status(200).json({
-        contact: result,
-      });
+      res.status(200).json(result);
     } else {
       res.status(404).json({
         message: `Not found`,
