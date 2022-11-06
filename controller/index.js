@@ -2,9 +2,7 @@ const service = require("../models/contacts");
 const get = async (req, res, next) => {
   try {
     const results = await service.listContacts();
-    res.status(200).json({
-      contacts: results,
-    });
+    res.status(200).json(results);
   } catch (e) {
     console.error(e);
     next(e);
@@ -16,9 +14,7 @@ const getById = async (req, res, next) => {
   try {
     const result = await service.getContactById(contactId);
     if (result) {
-      res.status(200).json({
-        contact: result,
-      });
+      res.status(200).json(result);
     } else {
       res.status(404).json({
         status: "error",
@@ -38,9 +34,7 @@ const create = async (req, res, next) => {
   try {
     const result = await service.addContact(body);
 
-    res.status(201).json({
-      contact: result,
-    });
+    res.status(201).json(result);
   } catch (e) {
     console.error(e);
     next(e);
@@ -53,9 +47,7 @@ const update = async (req, res, next) => {
   try {
     const result = await service.updateContact(contactId, body);
     if (result) {
-      res.status(200).json({
-        contact: result,
-      });
+      res.status(200).json(result);
     } else {
       res.status(404).json({
         status: "error",
@@ -76,9 +68,7 @@ const remove = async (req, res, next) => {
   try {
     const result = await service.removeContact(contactId);
     if (result) {
-      res.status(200).json({
-        task: result,
-      });
+      res.status(200).json(result);
     } else {
       res.status(404).json({
         status: "error",
