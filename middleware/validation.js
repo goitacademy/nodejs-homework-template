@@ -7,10 +7,8 @@ const addPostValidation = (req, res, next) => {
       minDomainSegments: 2,
       tlds: { allow: ["com", "net"] },
     }),
-    phone: Joi.string()
-      .length(7)
-      .pattern(/^[0-9]+$/)
-      .required(),
+    phone: Joi.string(),
+    favorite: Joi.boolean(),
   });
   const validationRes = schema.validate(req.body);
   if (validationRes.error) {
@@ -29,9 +27,8 @@ const updatePostValidation = (req, res, next) => {
       minDomainSegments: 2,
       tlds: { allow: ["com", "net"] },
     }),
-    phone: Joi.string()
-      .length(7)
-      .pattern(/^[0-9]+$/),
+    phone: Joi.string(),
+    favorite: Joi.boolean(),
   });
   const validationRes = schema.validate(req.body);
   if (validationRes.error) {
