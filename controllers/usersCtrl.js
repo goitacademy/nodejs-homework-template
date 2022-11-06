@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const SECRET = process.env.SECRET_KEY;
 const usersService = require("../services/users");
 
 const registerUser = async (req, res, next) => {
@@ -31,12 +32,8 @@ const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await usersService.findUserByEmail(email);
-    if (!user) {
-      return res.status(401).json({ message: "Email or password is wrong" });
-    }
-
     const isPasswordCorrect = await user.validatePassword(password);
-    if (!isPasswordCorrect) {
+    if (!user || !isPasswordCorrect) {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
 
@@ -47,7 +44,6 @@ const loginUser = async (req, res, next) => {
       subscription: user.subscription,
     };
 
-    const SECRET = process.env.SECRET_KEY;
     const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
     await usersService.updateUserToken(user._id, token);
 
@@ -74,11 +70,30 @@ const logoutUser = async (req, res, next) => {
   }
 };
 
-const authenticateUser = async (req, res, next) => {};
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const { email, subscription, token: currentToken } = req.user;
+    const { authorization } = req.headers;
+    const [bearer, queryToken] = authorization.split(" ");
+
+    if (bearer !== "Bearer" || queryToken !== currentToken) {
+      return res.status(401).json({
+        message: "Not authorized",
+      })
+    }
+
+    res.status(200).json({
+      email,
+      subscription,
+    })
+  } catch (err) {
+    next(err)
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  authenticateUser,
+  getCurrentUser,
 };
