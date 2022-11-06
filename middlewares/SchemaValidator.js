@@ -6,7 +6,7 @@ const validateSchema = schema => async (req, res, next) => {
     console.log(error);
     return res
       .status(400)
-      .json({ status: 'error', code: 400, message: error.message });
+      .json({message: error.message });
   }
 };
 

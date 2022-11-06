@@ -7,8 +7,7 @@ const contactsPath = path.resolve('models/contacts.json');
 const parsedContacts = async () => {
   try {
     const contactsList = await fs.readFile(contactsPath, 'utf-8');
-    const contactsData = JSON.parse(contactsList);
-    return contactsData;
+     return JSON.parse(contactsList);
   } catch (error) {
     return error.message;
   }
