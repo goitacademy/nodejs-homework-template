@@ -4,7 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../models/contacts.js");
+} = require("../models");
 
 const getContacts = async (req, res, next) => {
   const contacts = await listContacts();
@@ -13,11 +13,11 @@ const getContacts = async (req, res, next) => {
 const getContactByID = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
-  if (contact === -1) {
-    const error = new Error("Not found");
-    error.status = 404;
-    return next(error);
-  }
+  // if (contact === -1) {
+  //   const error = new Error("Not found");
+  //   error.status = 404;
+  //   return next(error);
+  // }
   res.status(200).json({ data: contact });
 };
 const postContact = async (req, res, next) => {
