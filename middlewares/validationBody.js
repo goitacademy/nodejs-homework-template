@@ -5,6 +5,7 @@ const validationBody = (schema) => {
       next();
     } catch (error) {
       error.status = 400
+  
       if (error.details[0].type === "any.required") {
         error.message = `missing required ${error.details[0].path} field`
       }
@@ -15,6 +16,6 @@ const validationBody = (schema) => {
     }
   };
 };
-
+ 
 
 module.exports = { validationBody };
