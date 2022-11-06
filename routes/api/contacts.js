@@ -33,7 +33,9 @@ router.get('/:contactId', async (req, res, next) => {
       return res.status(200).json(contact);
     }
     return res.status(404).json({ message: 'Not found' });
-  } catch (err) {return err.message}
+  } catch (err) {
+    return err.message;
+  }
 });
 
 router.post(
@@ -41,13 +43,8 @@ router.post(
   validateSchema(schemaCreateContact),
   async (req, res, next) => {
     try {
-      if (req.body.name && req.body.email && req.body.phone) {
-        const newContact = await addContact(req.body);
-        return res.status(201).json(newContact);
-      }
-      return res.status(400).json({
-        message: 'Missing required name field',
-      });
+      const newContact = await addContact(req.body);
+      return res.status(201).json(newContact);
     } catch (err) {
       return err.message;
     }
@@ -73,19 +70,11 @@ router.put(
   validateSchema(schemaUpdateContact),
   async (req, res, next) => {
     try {
-      if (!req.body.name && !req.body.email && !req.body.phone) {
-        return res.status(400).json({
-          message: 'Missing required name field',
-        });
-      }
       const updatedContact = await updateContact(
         req.params.contactId,
         req.body
       );
-      if (updatedContact) {
-        return res.status(201).json(updatedContact);
-      }
-      return res.status(404).json({ message: 'Not found' });
+      return res.status(201).json(updatedContact);
     } catch (err) {
       return err.message;
     }

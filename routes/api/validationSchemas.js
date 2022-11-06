@@ -24,13 +24,13 @@ const schemaCreateContact = Joi.object({
 });
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().min(3).max(30).messages({
+  name: Joi.string().min(3).max(30).required().messages({
     'any.required': 'Name is required',
     'string.empty': 'No empty field',
     'string.min': 'Name is 3 symbols min lenght',
     'string.max': 'Name is 30 symbols max lenght',
   }),
-  email: Joi.string().email().messages({
+  email: Joi.string().email().required().messages({
     'any.required': 'Email is required',
     'string.empty': 'No empty fields',
     'string.email': 'Enter vaild email',
@@ -38,6 +38,7 @@ const schemaUpdateContact = Joi.object({
 
   phone: Joi.string()
     .pattern(/^((8|\+7)[- ]?)?(\(?\d{3}\)?[- ]?)?[\d\- ]{7,10}$/)
+    .required()
     .messages({
       'any.required': 'Phone is required',
       'string.empty': 'No empty fields',
