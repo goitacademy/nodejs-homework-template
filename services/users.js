@@ -11,7 +11,7 @@ const createNewUser = async (body) => {
   return newUser;
 };
 
-const updateUserToken = async (id, token = null) => User.findByIdAndUpdate(id, { token });
+const updateUserToken = async (id, token = null) => await User.findByIdAndUpdate(id, { token });
 
 module.exports = {
   findUserByEmail,

@@ -65,8 +65,8 @@ const loginUser = async (req, res, next) => {
 };
 
 const logoutUser = async (req, res, next) => {
-  const { _id: id } = req.user;
   try {
+    const { _id: id} = req.user;
     await usersService.updateUserToken(id);
     res.status(204).end();
   } catch (err) {
