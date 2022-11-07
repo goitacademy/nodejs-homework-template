@@ -62,7 +62,7 @@ const loginUser = async (req, res, next) => {
 
 const logoutUser = async (req, res, next) => {
   try {
-    const { _id: id} = req.user;
+    const { _id: id } = req.user;
     await usersService.updateUserToken(id);
     res.status(204).end();
   } catch (err) {
@@ -79,15 +79,33 @@ const getCurrentUser = async (req, res, next) => {
     if (bearer !== "Bearer" || queryToken !== currentToken) {
       return res.status(401).json({
         message: "Not authorized",
-      })
+      });
     }
 
     res.status(200).json({
       email,
       subscription,
-    })
+    });
   } catch (err) {
-    next(err)
+    next(err);
+  }
+};
+
+const subscribeUser = async (req, res, next) => {
+  try {
+    const { id, email } = req.user;
+    const { subscription } = req.body;
+    await usersService.updateUserSubscription(id, subscription);
+
+    res.status(200).json({
+      message: "Subscription has been updated",
+      user: {
+        email,
+        subscription,
+      },
+    });
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -96,4 +114,5 @@ module.exports = {
   loginUser,
   logoutUser,
   getCurrentUser,
+  subscribeUser,
 };

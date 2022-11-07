@@ -33,6 +33,10 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const validation = (schema, req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
@@ -47,8 +51,11 @@ const validation = (schema, req, res, next) => {
 const userRegistration = (req, res, next) =>
   validation(registrationSchema, req, res, next);
 const userLogin = (req, res, next) => validation(loginSchema, req, res, next);
+const userSubscription = (req, res, next) =>
+  validation(subscriptionSchema, req, res, next);
 
 module.exports = {
   userRegistration,
   userLogin,
+  userSubscription,
 };

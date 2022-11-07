@@ -30,9 +30,14 @@ const authenticateUser = async (token) => {
   }
 };
 
+const updateUserSubscription = async (id, subscription) => {
+  await User.findByIdAndUpdate(id, { subscription });
+};
+
 module.exports = {
   findUserByEmail,
   createNewUser,
   updateUserToken,
   authenticateUser,
+  updateUserSubscription,
 };
