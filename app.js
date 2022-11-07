@@ -1,5 +1,5 @@
 const express = require('express');
-const {contactsRouter} = require('./routes/contacts.route');
+const {contactsRouter} = require('./routes/contactsRoute');
 const cors = require('cors');
 const morgan = require('morgan');
 require("dotenv").config();

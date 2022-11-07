@@ -1,4 +1,4 @@
-const {Contact} = require("../models/contacts.models")
+const {Contact} = require("../Validations/Shema")
 
 async function getAll(req, res, next) {
     try {
