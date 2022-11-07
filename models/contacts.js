@@ -1,57 +1,71 @@
-const fs = require('fs/promises')
-const path = require('path');
-const uuid = require('react-uuid');
-const dbPath = path.join(__dirname, '/contacts.json')
+const { Types } = require('mongoose')
 
-const listContacts = async () => {
-  const nonParsedData = await fs.readFile(dbPath, 'utf-8')
-  const parsedData = JSON.parse(nonParsedData)
-  return parsedData;
+const { Contact } = require('../routes/api/schemas')
+const { schemaPost, schemaPut } = require('../routes/api/schemas')
+
+async function listContacts(req, res, next) {
+  const data = await Contact.find()
+  return res.json({ data: data });
 }
 
-const getContactById = async (contactId) => {
-  const data = await listContacts()
-  return data.find(element => element.id === contactId.toString())
+async function getContactById(req, res, next) {
+  const { id } = req.params;
+  const contact = await Contact.findById(id)
+  return res.json({ contactToFind: contact })
 }
 
-const removeContact = async (contactId) => {
-  const list = await listContacts()
-  const res = list.filter(i => i.id !== contactId.toString())
-  if (list && list.length === res.length) {
-    return false
+async function removeContact(req, res, next) {
+  const { id } = req.params
+  await Contact.findByIdAndDelete(id)
+  return res.json({ message: `${id} deleted` })
+}
+
+async function addContact(req, res, next) {
+  const { body } = req
+  const val = schemaPost.validate(body)
+  const { error, value } = val;
+  if (error) {
+    throw new Error(error)
+  } else {
+    await Contact.create(value);
+    return res.json({ message: 'added successful' })
   }
-  else {
-    await fs.writeFile(dbPath, JSON.stringify(res))
-    return true
+
+}
+
+async function updateContact(req, res, next) {
+  const { body } = req
+  const { id } = req.params
+  const val = schemaPut.validate(body)
+  const { error, value } = val
+  if (error) {
+    throw new Error(error)
+  } else {
+    const updatedContact = await Contact.findByIdAndUpdate(id, value, { new: true });
+    return res.json({ message: `${updatedContact} updated successful` });
   }
 }
 
-const addContact = async (body) => {
-  try {
-    const { name, email, phone } = body
-    if (!body || !email || !phone) return null
-    else {
-      const result = { id: uuid(), name, email, phone }
-      const list = await listContacts()
-      list.push(result)
-      await fs.writeFile(dbPath, JSON.stringify(list))
-      return list
-    }
-  } catch (error) {
-    console.error(error.message)
+async function updateFavorite(req, res, next) {
+  const { id } = req.params;
+  console.log('Types.ObjectId(id)', Types.ObjectId(id))
+  if (req.body.favorite === undefined) {
+    res.status(400).json({ "message": "missing field favorite" })
+  } else {
+
+    const x = await updateStatusContact(id, req.body)
+    console.log('x', x)
+    if (!x) return res.status(400).json({ message: "not found" })
+    else return res.json({ "message": x })
   }
 }
 
-const updateContact = async (contactId, body) => {
-  const { name, email, phone } = body;
-  const list = await listContacts();
-  const item = list.find(i => i.id === contactId);
-  if (!item) return;
-  if (name) item.name = name;
-  if (email) item.email = email;
-  if (phone) item.phone = phone;
-  await fs.writeFile(dbPath, JSON.stringify(list));
-  return item;
+async function updateStatusContact(id, body) {
+  const { favorite } = body
+  const contact = await Contact.findById(id)
+  const { name, email, phone } = contact;
+  await Contact.findByIdAndUpdate(id, { name, email, phone, favorite }, { new: true })
+  return { id, name, email, favorite }
 }
 
 module.exports = {
@@ -60,5 +74,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite
 }
 
