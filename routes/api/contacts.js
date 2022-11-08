@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 // const Contacts = require("../../models/db");
+const Contacts = require("../../models/mongoDb");
 // const Contacts = require("../../models/contactsDb");
-const Contacts = require("../../models/contacts");
+// const Contacts = require("../../models/contacts");
 const validate = require("../../services/validation");
 
 router.get("/", async (req, res, next) => {
