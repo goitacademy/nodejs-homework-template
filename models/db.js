@@ -4,7 +4,7 @@ const {HOST_DB} = process.env;
 console.log("process:", process.env.HOST_DB);
 const db = mongoose.connect(HOST_DB, {
   useNewUrlParser: true,
-  // useCreateIndex: true,
+  // usecreateindex: true,
   useUnifiedTopology: true,
   // useFindAndModify: false,
 });
