@@ -2,12 +2,12 @@ const { Contact } = require('../../models/contact');
 const { requestError } = require('../../helpers');
 
 const getById = async (req, res, next) => {
-  const { _id } = req.user;
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
 
   const result = await Contact.findOne({
-    contactId,
-    owner: _id,
+    _id: contactId,
+    owner,
   });
 
   if (!result) {

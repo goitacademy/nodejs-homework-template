@@ -2,13 +2,13 @@ const { Contact } = require('../../models/contact');
 const { requestError } = require('../../helpers');
 
 const updateById = async (req, res, next) => {
-  const { _id } = req.user;
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
 
   const result = await Contact.findOneAndUpdate(
     {
-      contactId,
-      owner: _id,
+      _id: contactId,
+      owner,
     },
     req.body,
     {
