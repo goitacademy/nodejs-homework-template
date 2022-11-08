@@ -29,29 +29,31 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email: enteredEmail, password: enteredPassword } = req.body;
 
-    const user = await usersService.findUserByEmail(email);
-    const isPasswordCorrect = await user.validatePassword(password);
+    const user = await usersService.findUserByEmail(enteredEmail);
+    const isPasswordCorrect = await user.validatePassword(enteredPassword);
     if (!user || !isPasswordCorrect) {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
 
+    const { _id: userId, name, email, subscription } = user;
+
     const payload = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      subscription: user.subscription,
+      id: userId,
+      name,
+      email,
+      subscription,
     };
 
     const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
-    await usersService.updateUserToken(user._id, token);
+    await usersService.updateUserToken(userId, token);
 
     res.status(200).json({
       token,
       user: {
-        email: user.email,
-        subscription: user.subscription,
+        email,
+        subscription,
       },
       message: "User logged in successfully",
     });
