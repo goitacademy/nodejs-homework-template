@@ -10,7 +10,6 @@ const listContacts = async (req, res, next) => {
   return res.status(200).json({ status: "success", result });
  } catch (arror) {
   console.error("внешний блок catch", arror.message);
-  // throw arror;
  }
 };
 
