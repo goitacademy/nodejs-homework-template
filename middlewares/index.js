@@ -4,6 +4,7 @@ const handleSchemaValidationErrors = require("./handleSchemaValidationErrors");
 const isValidId = require("./isValidId");
 const RequestError = require("./RequestError");
 const auth = require("./auth");
+const upload = require("./upload");
 
 module.exports = {
   validation,
@@ -12,4 +13,5 @@ module.exports = {
   isValidId,
   RequestError,
   auth,
+  upload,
 };
