@@ -32,12 +32,12 @@ router.delete("/:contactId", tryCatchWrapper(deleteContact));
 
 router.put(
   "/:contactId",
-  validationBody(schemaPutContact),
+  tryCatchWrapper(validationBody(schemaPutContact)),
   tryCatchWrapper(putContact)
 );
 router.patch(
   "/:contactId/favorite",
-  validationBody(schemaPatchContact),
+  tryCatchWrapper(validationBody(schemaPatchContact)),
   tryCatchWrapper(putContact)
 );
 
