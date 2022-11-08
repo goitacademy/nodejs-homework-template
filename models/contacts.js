@@ -3,11 +3,11 @@ const path = require("path");
 const contactsPath = path.join(__dirname, "../models/contacts.json");
 const { nanoid } = require("nanoid");
 const Joi = require("joi");
-const { status } = require("../helpers/status");
+const { status, readDB, writeFileDB } = require("../helpers/status");
 
 const listContacts = async (req, res, next) => {
  try {
-  const result = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+  const result = await readDB();
   return status(res, 200, { status: "success" }, result);
  } catch (arror) {
   console.error("внешний блок catch", arror.message);
@@ -16,7 +16,7 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
  try {
-  const result = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+  const result = await readDB();
   const [contact] = result.filter((item) => item.id === req.params.contactId);
   if (contact) {
    return status(res, 200, { status: "success" }, contact);
@@ -30,12 +30,13 @@ const getContactById = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
  try {
-  const result = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+  const result = await readDB();
   const resultFilter = result.filter(
    (item) => item.id !== req.params.contactId
   );
   if (resultFilter) {
    const newResuit = [...resultFilter];
+
    await fs.writeFile(contactsPath, JSON.stringify(newResuit), "utf-8");
    return status(res, 200, { message: "contact deleted" });
   } else {
@@ -75,11 +76,11 @@ const addContact = async (req, res, next) => {
     phone,
    };
 
-   const result = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+   const result = await readDB();
    const newResuit = [...result, contact];
    await fs.writeFile(contactsPath, JSON.stringify(newResuit), "utf-8");
-   const result2 = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
-   return status(res, 201, { status: "success" }, result2);
+   const newResult = await readDB();
+   return status(res, 201, { status: "success" }, newResult);
   }
  } catch (error) {
   console.error(error);
@@ -88,7 +89,7 @@ const addContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
  try {
-  const result = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
+  const result = await readDB();
   const schema = Joi.object({
    name: Joi.string().alphanum().min(3).max(10).required(),
 
