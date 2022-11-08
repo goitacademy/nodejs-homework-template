@@ -1,5 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const contactsRouter = express.Router();
+
+const { getAllController } = require("../../controllers/contacts.controller");
+const { tryCatchWrapper } = require("../../helpers");
 
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890", 6);
@@ -7,19 +10,16 @@ const nanoid = customAlphabet("1234567890", 6);
 const Joi = require("joi");
 
 const {
-  listContacts,
+  // listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
 } = require("../../models/contacts");
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  return res.status(200).json(contacts);
-});
+contactsRouter.get("/", tryCatchWrapper(getAllController));
 
-router.get("/:contactId", async (req, res, next) => {
+contactsRouter.get("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
   if (contact) {
@@ -29,7 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+contactsRouter.post("/", async (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(1).max(60).required(),
     email: Joi.string().email({
@@ -68,7 +68,7 @@ router.post("/", async (req, res, next) => {
   return res.status(201).json(resultSendNewContact);
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+contactsRouter.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const resultRemoveContact = await removeContact(contactId);
 
@@ -79,7 +79,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+contactsRouter.put("/:contactId", async (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(1).max(60),
     email: Joi.string().email({
@@ -111,4 +111,4 @@ router.put("/:contactId", async (req, res, next) => {
   return res.status(200).json(resultUpdateContact);
 });
 
-module.exports = router;
+module.exports = contactsRouter;
