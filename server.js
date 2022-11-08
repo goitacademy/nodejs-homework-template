@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 
 const app = require("./app");
 const db = require("./models/db");
@@ -14,4 +14,4 @@ db.then(() => {
   process.exit(1);
 });
 
-console.log("process:", process.env.PORT);
+// console.log("process:", process.env.PORT);
