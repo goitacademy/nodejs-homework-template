@@ -17,6 +17,11 @@ const errorHandler = (error, req, res, next) => {
       message: error.message,
     });
   }
+  if (error.name === "ValidationError") {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
   res.status(500).json({ message: "Server Internal Error" });
 };
 
