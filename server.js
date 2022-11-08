@@ -1,5 +1,3 @@
-// require("dotenv").config();
-
 const app = require("./app");
 const db = require("./models/db");
 
@@ -13,5 +11,3 @@ db.then(() => {
   console.log(`Server not running. Error message: ${err.message}`);
   process.exit(1);
 });
-
-// console.log("process:", process.env.PORT);
