@@ -2,6 +2,7 @@ const { Conflict } = require("http-errors");
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
+const sendEmail = require("../../sendgrid/helpers");
 
 const register = async (req, res) => {
   const { email, password, subscription = "starter" } = req.body;
@@ -10,6 +11,7 @@ const register = async (req, res) => {
   if (user) {
     throw new Conflict(`Email ${email} in use`);
   }
+  const verificationToken = uuidv4();
   const avatarURL = gravatar.url(email);
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -18,7 +20,16 @@ const register = async (req, res) => {
     email,
     password: hashPassword,
     avatarURL,
+    verificationToken,
   });
+
+  const mail = {
+    to: email,
+    subject: "Email verification",
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Please verify your email</a>`,
+  };
+
+  await sendEmail(mail);
 
   res.status(201).json({
     status: "Created",
@@ -28,6 +39,7 @@ const register = async (req, res) => {
         email,
         subscription,
         avatarURL,
+        verificationToken,
       },
     },
   });
