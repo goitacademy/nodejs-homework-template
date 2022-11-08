@@ -43,7 +43,9 @@ router.post('/', async (req, res, next) => {
     email,
     phone,
   });
+
   if (error) {
+    console.log("res : ", error, value);
     return res.status(400).json({ message: "missing name field"})
   }
   const newContact = {
@@ -75,6 +77,7 @@ router.put("/:contactId", async (req, res, next) => {
   });
 
   if (error) {
+    console.log("res : ", error, value);
     return res.status(400).json({ message: "error fields"})
   }
 
