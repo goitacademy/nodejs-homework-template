@@ -6,7 +6,7 @@ const getContactById = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await Contact.findById(id, { owner }).populate(
     "owner",
-    "_id email"
+    "_id name email"
   );
   if (!result) {
     throw RequestError(404, `Contact with id=${id} not found`);
