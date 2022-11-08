@@ -12,6 +12,10 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (res, req) => {
+  res.send("Database of contact");
+});
+
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
