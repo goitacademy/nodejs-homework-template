@@ -20,10 +20,19 @@ const updateContactById = (id, fields) => {
   return Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
 };
 
+const updateStatusContactById = (id, favorite) => {
+  return Contact.findByIdAndUpdate(
+    { _id: id },
+    { $set: { favorite: favorite } },
+    { new: true }
+  );
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
   createContact,
   removeContactById,
   updateContactById,
+  updateStatusContactById,
 };
