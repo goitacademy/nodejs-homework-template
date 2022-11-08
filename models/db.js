@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const {HOST_DB} = process.env;
-console.log("process:", process.env.HOST_DB);
-const db = mongoose.connect(HOST_DB, {
+const uriDb = process.env.HOST_DB;
+
+const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
-  // usecreateindex: true,
+  // useCreateIndex: true,
   useUnifiedTopology: true,
   // useFindAndModify: false,
 });
-console.log("Database: ", db);
+
 mongoose.connection.on("connected", () => {
   console.log("Database connection successful");
 });
