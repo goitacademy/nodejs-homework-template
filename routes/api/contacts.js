@@ -1,94 +1,26 @@
 const express = require("express");
+const { tryCatchWrapper } = require("../../helpers/helpers");
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
-const { requestBodyValidation } = require("../../validation");
+  updateStatusContact,
+} = require("../../controllers/contacts.controller");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const data = await listContacts();
-    res.status(200).json({ data });
-  } catch (err) {
-    res.status(500).json({ message: "Server error!" });
-  }
-});
+router.get("/", tryCatchWrapper(listContacts));
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    const data = await getContactById(id);
+router.get("/:contactId", tryCatchWrapper(getContactById));
 
-    if (!data) {
-      res.status(404).json({ message: "Not found" });
-    }
-    res.status(200).json({ data });
-  } catch (err) {
-    res.status(500).json({ message: "Server error!" });
-  }
-});
+router.post("/", tryCatchWrapper(addContact));
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { value, error } = requestBodyValidation(req.body);
+router.delete("/:contactId", tryCatchWrapper(removeContact));
 
-    if (error) {
-      res.status(400).json({ message: `Validation error: ${error.message}` });
-    }
+router.put("/:contactId", tryCatchWrapper(updateContact));
 
-    const data = await addContact(value);
-
-    if (!data) {
-      res.status(400).json({
-        message: `A contact with name '${value.name}' is already exists!`,
-      });
-    }
-
-    res.status(201).json({ data });
-  } catch (err) {
-    res.status(500).json({ message: `Server error! ${err.message}` });
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    const data = await removeContact(id);
-
-    if (!data) {
-      res.status(404).json({ message: `Contact with ID '${id}' not found!` });
-    }
-
-    res.status(200).json({ data });
-  } catch (err) {
-    res.status(500).json({ message: "Server error!" });
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const id = req.params.contactId;
-    const { value, error } = requestBodyValidation(req.body);
-
-    if (error) {
-      res.status(400).json({ message: `Validation error: ${error.message}` });
-    }
-
-    const data = await updateContact(id, value);
-
-    if (!data) {
-      res.status(404).json({ message: `A contact with ID '${id}' not found!` });
-    }
-
-    res.status(200).json({ data });
-  } catch (err) {
-    res.status(500).json({ message: `Server error! ${err.message}` });
-  }
-});
+router.patch("/:contactId/favorite", tryCatchWrapper(updateStatusContact));
 
 module.exports = router;
