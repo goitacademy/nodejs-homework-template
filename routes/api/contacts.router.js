@@ -10,16 +10,35 @@ const {
   postContact,
   deleteContact,
   putContact,
-} = require("../../controllers/controllers");
+} = require("../../controllers/contacts.controllers");
+const validationBody = require("../../middleware/validationBody");
+const {
+  schemaPostContact,
+  schemaPutContact,
+  schemaPatchContact,
+} = require("../../schemas.joi/schema.joi");
 
-router.get("/", getContacts);
+router.get("/", tryCatchWrapper(getContacts));
 
 router.get("/:contactId", tryCatchWrapper(getContactByID));
 
-router.post("/", postContact);
+router.post(
+  "/",
+  tryCatchWrapper(validationBody(schemaPostContact)),
+  tryCatchWrapper(postContact)
+);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", tryCatchWrapper(deleteContact));
 
-router.put("/:contactId", putContact);
+router.put(
+  "/:contactId",
+  validationBody(schemaPutContact),
+  tryCatchWrapper(putContact)
+);
+router.patch(
+  "/:contactId/favorite",
+  validationBody(schemaPatchContact),
+  tryCatchWrapper(putContact)
+);
 
 module.exports = router;

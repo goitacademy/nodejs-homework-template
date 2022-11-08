@@ -19,6 +19,9 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.status && err.message) {
+    return res.status(err.status).json({ message: err.message });
+  }
   if (err.name === "CastError") {
     return res.status(400).json({ message: err.message });
   }
