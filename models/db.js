@@ -4,9 +4,7 @@ const uriDb = process.env.HOST_DB;
 
 const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
-  // useCreateIndex: true,
   useUnifiedTopology: true,
-  // useFindAndModify: false,
 });
 
 mongoose.connection.on("connected", () => {
