@@ -30,10 +30,10 @@ const removeContact = async (contactId) => {
 };
 
 // function add contact;
-const addContact = async (body) => {
+const addContact = async (name, email, phone) => {
   const data = await fs.readFile(contactsPath, "utf8");
   const parseData = JSON.parse(data);
-  const newContact = { body, id: String(Date.now()) };
+  const newContact = { name, email, phone, id: String(Date.now()) };
   parseData.push(newContact);
   fs.writeFile(contactsPath, JSON.stringify(parseData));
   return newContact;

@@ -1,6 +1,7 @@
 const Joi = require("joi");
 
 module.exports = {
+  // function validate add contact
   addContactValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(30).required(),
@@ -16,6 +17,7 @@ module.exports = {
     }
     next();
   },
+  // function validate changes contact
   putContactValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(30).optional(),

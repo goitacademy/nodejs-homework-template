@@ -8,7 +8,7 @@ const {
 } = require("../../models/contacts");
 
 const {
-  addContantactValidation,
+  addContactValidation,
   putContactValidation,
 } = require("../../middlewares/validationMiddlevare");
 
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     const contacts = await listContacts();
     res.status(200).json({ message: "success", code: 200, contacts });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -33,11 +33,11 @@ router.get("/:contactId", async (req, res) => {
     }
     res.status(200).json({ message: "success", contact });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-router.post("/", addContantactValidation, async (req, res) => {
+router.post("/", addContactValidation, async (req, res) => {
   try {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
@@ -47,7 +47,7 @@ router.post("/", addContantactValidation, async (req, res) => {
     const contact = await addContact(name, email, phone);
     res.status(201).json({ message: "contact added", contact });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -61,7 +61,7 @@ router.delete("/:contactId", async (req, res) => {
     }
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -73,11 +73,14 @@ router.put("/:contactId", putContactValidation, async (req, res, next) => {
       req.status(400).json({ message: "missing fields" });
       return;
     }
+    if (!updateContact) {
+      res.status(400).json({ message: "Not found" });
+    }
     res
       .status(200)
       .json({ message: "contact updated", contact: updatedContact });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
