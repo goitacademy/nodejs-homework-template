@@ -27,9 +27,19 @@ const requestBodyValidation = (body) => {
           "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +. Examples of valid phone number format: +XX(XXX)XXX-XX-XX, (XXX)XXX-XX-XX, XXX-XX-XX.",
       })
       .required(),
+
+    favorite: Joi.boolean(),
   });
 
   return schema.validate(body);
 };
 
-module.exports = { requestBodyValidation };
+const contactStatusValidation = (body) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+
+  return schema.validate(body);
+};
+
+module.exports = { requestBodyValidation, contactStatusValidation };
