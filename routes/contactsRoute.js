@@ -1,9 +1,9 @@
 const express = require('express');
 const contactsControlers = require('../controlers/contactsControlers');
-
-
+const { autchMiddleware } = require('../middleweras/autchMiddlewares');
 const contactsRouter = express.Router();
 
+contactsRouter.use(autchMiddleware)
 contactsRouter.get('/', contactsControlers.getAll);
 contactsRouter.get('/:id', contactsControlers.findOneById);
 contactsRouter.post('/', contactsControlers.create);

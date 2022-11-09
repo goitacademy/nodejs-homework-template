@@ -1,12 +1,17 @@
 const {Schema,model} = require('mongoose')
 const contactSchema = new Schema(
-    {
+  {
+    owner: {
+      type: Schema.ObjectId,
+      ref: 'users',
+    },
     name: {
       type: String,
       required: [true, 'Set name for contact'],
     },
     email: {
       type: String,
+      unique: true,
     },
     phone: {
       type: String,
