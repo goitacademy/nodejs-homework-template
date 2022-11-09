@@ -37,7 +37,7 @@ router.put(
 );
 router.patch(
   "/:contactId/favorite",
-  tryCatchWrapper(validationBody(schemaPatchContact)),
+  validationBody(schemaPatchContact),
   tryCatchWrapper(putContact)
 );
 
