@@ -3,7 +3,7 @@ const path = require("path");
 const contactsPath = path.join(__dirname, "../models/contacts.json");
 const { nanoid } = require("nanoid");
 const Joi = require("joi");
-const { status, readDB, writeFileDB } = require("../helpers/status");
+const { status, readDB } = require("../helpers/status");
 
 const listContacts = async (req, res, next) => {
  try {
