@@ -1,8 +1,15 @@
 const { Contact } = require("../../model/contacts");
 
-const update = (async (req, res) => {
+const updateStatusContact = async (req, res) => {
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body);
+    const { favorite } = req.body;
+    const result = await Contact.findByIdAndUpdate(id, { favorite });
+    if (favorite === undefined) {
+        return res.status(400).json({
+            code: 400,
+            "message": "missing field favorite"
+        })
+    };
     if (result) {
         return res.json({
             status: 'success',
@@ -10,15 +17,15 @@ const update = (async (req, res) => {
             data: {
                 result
             }
-        })
+        });
     } else {
         return res.status(404).json({
             status: 'error',
             code: 404,
             data: 'Not Found'
         })
-    }
+    };
 
-});
+};
 
-module.exports = update;
+module.exports = updateStatusContact;
