@@ -5,8 +5,7 @@ const contactPath = path.resolve("./models/contacts.json");
 
 async function getDb() {
   const dbRaw = await fs.readFile(contactPath);
-  const db = JSON.parse(dbRaw);
-  return db;
+  return JSON.parse(dbRaw);
 }
 
 const listContacts = async () => {
