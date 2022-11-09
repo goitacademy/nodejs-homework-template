@@ -53,7 +53,7 @@ const updateContact = async (req, res, next) => {
     { new: true }
   );
   if (newContact) {
-    return res.status(201).json(newContact);
+    return res.status(200).json(newContact);
   }
   return next(createNotFoundHttpError(id));
 };
