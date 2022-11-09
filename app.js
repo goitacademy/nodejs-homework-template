@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./routes/api/contacts.router");
+const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
@@ -19,8 +19,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.name === "CastError" || err.name === "ValidationError") {
-    return res.status(400).json({ message: err.message });
+  if (err.message && err.status) {
+    return res.status(err.status).json({ message: err.message });
   }
   res.status(500).json({ message: "Internal Server Error" });
 });

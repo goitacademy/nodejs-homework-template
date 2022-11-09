@@ -24,7 +24,7 @@ router.get("/:contactId", tryCatchWrapper(getContactByID));
 
 router.post(
   "/",
-  tryCatchWrapper(validationBody(schemaPostContact)),
+  validationBody(schemaPostContact),
   tryCatchWrapper(postContact)
 );
 
@@ -32,7 +32,7 @@ router.delete("/:contactId", tryCatchWrapper(deleteContact));
 
 router.put(
   "/:contactId",
-  tryCatchWrapper(validationBody(schemaPutContact)),
+  validationBody(schemaPutContact),
   tryCatchWrapper(putContact)
 );
 router.patch(
