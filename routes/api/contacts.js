@@ -7,7 +7,7 @@ const {
 	updateContact,
 } = require("../../models/contacts");
 
-const { validation } = require("../../middlewares/validation");
+const { validation, validationPUT } = require("../../middlewares/validation");
 
 const router = express.Router();
 
@@ -62,8 +62,23 @@ router.delete("/:contactId", async (req, res, next) => {
 	}
 });
 
-router.put("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
+router.put("/:contactId", validationPUT, async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const { email, name, phone } = req.body;
+		if (name || email || phone) {
+			const changeContacts = await updateContact(contactId, req.body);
+			if (changeContacts) {
+				return res.status(200).json({ message: changeContacts });
+			} else {
+				return res.status(404).json({ message: "Not found" });
+			}
+		} else {
+			return res.status(400).json({ message: "missing fields" });
+		}
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 module.exports = router;
