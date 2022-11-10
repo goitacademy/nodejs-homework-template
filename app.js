@@ -1,14 +1,27 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
 const contactsRouter = require('./routes/api/contacts');
+const morgan = require('morgan');
 
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use(logger(formatsLogger));
+//* logger console.log;
+// app.use(logger(formatsLogger));
+
+//* logger file /public/server.log
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname.split('routes')[0], './public/server.log'),
+  { flags: 'a' }
+);
+app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use(cors());
 app.use(express.json());
 
