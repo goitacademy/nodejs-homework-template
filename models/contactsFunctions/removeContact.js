@@ -1,6 +1,5 @@
-const fs = require("fs/promises");
 const listContacts = require("./listContacts");
-const contactsPath = require("./contactsPath");
+const updateContacts = require("./updateContacts");
 
 async function removeContact(contactId) {
   const contacts = await listContacts();
@@ -11,7 +10,7 @@ async function removeContact(contactId) {
   }
 
   const [removeContact] = contacts.splice(idx, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  await updateContacts(contacts);
 
   return removeContact;
 }
