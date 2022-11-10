@@ -1,9 +1,14 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const multer  = require('multer')
 const dotenv = require('dotenv');
 
 dotenv.config();
+
+const multerConfig = multer.diskStorage({
+})
+
 
 
 const contactsRouter = require('./routes/api/contacts')

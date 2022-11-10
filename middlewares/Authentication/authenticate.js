@@ -9,7 +9,7 @@ const {JWT_SECRET} = process.env
 const authenticate = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
-        const [bearer, token] = authorization.split(' ')
+        const [bearer, token] = authorization.split(' ');
         if (bearer !== 'Bearer')
         { throw RequestError('Not authorized', 401) }
         const payload = jwt.verify(token, JWT_SECRET)
