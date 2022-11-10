@@ -15,7 +15,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 //* logger console.log;
 // app.use(logger(formatsLogger));
 
-//* logger file /public/server.log
+//* logger-file /public/server.log
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname.split('routes')[0], './public/server.log'),
   { flags: 'a' }
