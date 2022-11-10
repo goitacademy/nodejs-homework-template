@@ -4,7 +4,7 @@ const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 const { validation, isValidId, authentic } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
-const ctrlWrapper = require("../../helpers/ctrlWrapper");
+const {ctrlWrapper} = require("../../helpers");
 
 router.get("/", authentic, ctrlWrapper(ctrl.getAll));
 

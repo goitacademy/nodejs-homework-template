@@ -4,7 +4,7 @@ const router = express.Router();
 const { users: ctrl } = require("../../controllers");
 const { validation, authentic, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user");
-const ctrlWrapper = require("../../helpers/ctrlWrapper");
+const {ctrlWrapper} = require("../../helpers");
 
 router.get("/current", authentic, ctrlWrapper(ctrl.getCurrent));
 
