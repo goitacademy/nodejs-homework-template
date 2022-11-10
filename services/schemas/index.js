@@ -24,19 +24,6 @@ const contactSchema = new Schema(
         message: (props) => `${props.value} is not a valid phone number!`,
       },
     },
-    subscription: {
-      type: String,
-      default: "free",
-      enum: ["free", "pro", "premium"],
-    },
-    password: {
-      type: String,
-      default: "password",
-    },
-    token: {
-      type: String,
-      default: "",
-    },
   },
   {versionKey: false}
 );
