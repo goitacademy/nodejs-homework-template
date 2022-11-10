@@ -4,6 +4,7 @@ import {
   createContact,
   deleteContactById,
   updateContactById,
+  updateFavoriteById
 } from "../services/contacts.js";
 
 export const getContacts = async (req, res, next) => {
@@ -76,7 +77,7 @@ export const updateStatusByID = async (req, res) => {
     if (!body.hasOwnProperty('favorite')) {
       return res.status(400).json({ message: "missing field favorite" });
     }
-    const contact = await updateContactById(contactId, body);
+    const contact = await updateFavoriteById(contactId, body.favorite);
     if (contact) {
       res.status(200).json({ data: contact });
     } else {

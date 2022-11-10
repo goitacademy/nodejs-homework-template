@@ -20,6 +20,6 @@ export const updateContactById = (id, body) =>{
     return Contact.findByIdAndUpdate(id, body, {new:true, runValidators: true})
 }
 
-export const updateStatusById = (id, body) =>{
-    return Contact.findOneAndUpdate(id, body, {new:true, runValidators: true})
+export const updateFavoriteById = (id, favorite) =>{
+    return Contact.findByIdAndUpdate(id, {favorite}, {new:true, runValidators: true})
 }

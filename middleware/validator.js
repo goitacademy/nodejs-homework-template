@@ -8,7 +8,7 @@ export const schema = Joi.object({
       /^\+?(\d{10,12}|(38|)(\s?(\(\d{3}\)\s?|\d{3}\s)(\d{7}|\d{3}(\s|-)\d{2}(\s|-)?\d{2})))$/
     )
     .required(),
-    favourite: Joi.boolean(),
+    favorite: Joi.boolean(),
 });
 
 export function validateData(schema) {
