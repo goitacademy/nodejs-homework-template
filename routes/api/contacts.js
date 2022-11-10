@@ -7,7 +7,7 @@ const {
 	updateContact,
 } = require("../../models/contacts");
 
-const { validation, validationPUT } = require("../../middlewares/validation");
+const { validation, validationPUT } = require("../../middlware/validation");
 
 const router = express.Router();
 
