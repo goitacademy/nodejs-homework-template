@@ -73,9 +73,11 @@ router.put("/:contactId", putContactValidation, async (req, res, next) => {
       req.status(400).json({ message: "missing fields" });
       return;
     }
+
     if (!updateContact) {
       res.status(400).json({ message: "Not found" });
     }
+
     res
       .status(200)
       .json({ message: "contact updated", contact: updatedContact });
