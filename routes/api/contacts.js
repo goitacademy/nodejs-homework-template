@@ -29,10 +29,8 @@ router.post('/contacts', async (req, res, next) => {
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required(),
   })
-  // const schema = Joi.string().min(3)
 
   const { error, value } = schema1.validate(req.body)
-  console.log(value)
   const { name, email, phone } = value
   if (error) {
     return res.status(400).json({ message: 'value less hen 3 ' })
