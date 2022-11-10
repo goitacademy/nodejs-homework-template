@@ -8,7 +8,12 @@ const listContacts = async () => {
 	return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+	const data = await fs.readFile(contactsDB);
+	const parsed = JSON.parse(data);
+	const [getById] = parsed.filter((it) => it.id === contactId);
+	return getById;
+};
 
 const removeContact = async (contactId) => {};
 
