@@ -11,6 +11,12 @@ const contactsScheme = Joi.object({
   phone: Joi.string().required(),
 });
 
+const updateContactScheme = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+}).min(1);
+
 router.get("/", async (__, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -82,7 +88,7 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = contactsScheme.validate(req.body);
+    const { error } = updateContactScheme.validate(req.body);
 
     if (error) {
       throw createError(
