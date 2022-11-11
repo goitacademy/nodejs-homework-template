@@ -2,7 +2,9 @@
 
 const listContacts = async () => {}
 
-const getContactById = async (contactId) => {}
+const getContactById = async (contactId) => {
+  console.log("123")
+}
 
 const removeContact = async (contactId) => {}
 
