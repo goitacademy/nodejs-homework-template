@@ -1,5 +1,5 @@
 const express = require("express");
-
+const { createError } = require("../../helpers");
 const contacts = require("../../models/contacts");
 
 const router = express.Router();
@@ -9,10 +9,7 @@ router.get("/", async (req, res, next) => {
     const result = await contacts.listContacts();
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message:
-        "Server error :( Our work squirrels are doing their best to fix the issue...",
-    });
+    next(error);
   }
 });
 
@@ -22,15 +19,15 @@ router.get("/:id", async (req, res, next) => {
     const result = await contacts.getContactById(id);
 
     if (!result) {
-      console.log("error");
+      throw createError(
+        404,
+        "User not found :( Check the correctness of requested ID..."
+      );
     }
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message:
-        "Server error :( Our work squirrels are doing their best to fix the issue...",
-    });
+    next(error);
   }
 });
 
