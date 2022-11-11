@@ -37,7 +37,13 @@ async function removeContact(id) {
 
 async function addContact({ name, email, phone }) {
   const allContacts = await listContacts();
-  const id = await ObjectID();
+  const existedContact = await allContacts.filter(
+    (contact) => contact.name === name
+  );
+  if (existedContact) {
+    return null;
+  }
+  const id = ObjectID();
   const newContact = {
     id,
     name,

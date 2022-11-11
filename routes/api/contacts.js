@@ -48,7 +48,13 @@ router.post("/", async (req, res, next) => {
         "Some fields are missing or has not a proper type :( Please ensure that all of the necessary data with necessary type for update are provided..."
       );
     }
-    const result = contacts.addContact(req.body);
+    const result = await contacts.addContact(req.body);
+    if (!result) {
+      throw createError(
+        404,
+        `User with name ${req.body.name} is already exists in your contacts list :( Unable to add ${req.body.name} as a new user...`
+      );
+    }
     res.status(201).json(result);
   } catch (error) {
     next(error);
