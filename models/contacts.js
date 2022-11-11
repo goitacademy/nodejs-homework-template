@@ -53,10 +53,9 @@ async function updateFavorite(req, res, next) {
     res.status(400).json({ "message": "missing field favorite" })
   } else {
 
-    const x = await updateStatusContact(id, req.body)
-    console.log('x', x)
-    if (!x) return res.status(400).json({ message: "not found" })
-    else return res.json({ "message": x })
+    const contact = await updateStatusContact(id, req.body)
+    if (!contact) return res.status(400).json({ message: "not found" })
+    else return res.json({ "message": contact})
   }
 }
 
