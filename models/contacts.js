@@ -1,5 +1,3 @@
-const { Types } = require('mongoose')
-
 const { Contact } = require('../routes/api/schemas')
 const { schemaPost, schemaPut } = require('../routes/api/schemas')
 
@@ -48,7 +46,6 @@ async function updateContact(req, res, next) {
 
 async function updateFavorite(req, res, next) {
   const { id } = req.params;
-  console.log('Types.ObjectId(id)', Types.ObjectId(id))
   if (req.body.favorite === undefined) {
     res.status(400).json({ "message": "missing field favorite" })
   } else {
