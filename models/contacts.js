@@ -13,19 +13,19 @@ async function listContacts() {
   return JSON.parse(result);
 }
 
-async function getContactById(contactId) {
+async function getContactById(id) {
   const allContacts = await listContacts();
-  const result = await allContacts.find((contact) => contact.id === contactId);
+  const result = await allContacts.find((contact) => contact.id === id);
   if (!result) {
     return null;
   }
   return result;
 }
 
-async function removeContact(contactId) {
+async function removeContact(id) {
   const allContacts = await listContacts();
   const resultContacts = await allContacts.filter(
-    (contact) => contact.id !== contactId
+    (contact) => contact.id !== id
   );
   if (resultContacts.length === allContacts.length) {
     return null;
@@ -35,7 +35,7 @@ async function removeContact(contactId) {
   return newListOfContacts;
 }
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const allContacts = await listContacts();
   const id = await ObjectID();
   const newContact = {
@@ -44,9 +44,26 @@ async function addContact(name, email, phone) {
     email,
     phone,
   };
-  await allContacts.push(newContact);
-  await updateContacts(allContacts);
+  const totalContacts = [...allContacts, newContact];
+  await updateContacts(totalContacts);
   return newContact;
+}
+
+async function updateContactById(id, data) {
+  const allContacts = await listContacts();
+  const untouchedContacts = await allContacts.filter(
+    (contact) => contact.id !== id
+  );
+  if (untouchedContacts.length === allContacts.length) {
+    return null;
+  }
+  let contactToUpdate = await allContacts.filter(
+    (contact) => contact.id === id
+  );
+  contactToUpdate = { ...data, id };
+  const totalContacts = [...untouchedContacts, contactToUpdate];
+  await updateContacts(totalContacts);
+  return totalContacts;
 }
 
 module.exports = {
@@ -54,4 +71,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
+  updateContactById,
 };

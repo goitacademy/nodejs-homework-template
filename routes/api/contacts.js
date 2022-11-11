@@ -1,10 +1,17 @@
 const express = require("express");
+const Joi = require("joi");
 const { createError } = require("../../helpers");
 const contacts = require("../../models/contacts");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+const contactsScheme = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
+router.get("/", async (__, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.json(result);
@@ -25,22 +32,72 @@ router.get("/:id", async (req, res, next) => {
       );
     }
 
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactsScheme.validate(req.body);
+
+    if (error) {
+      throw createError(
+        400,
+        "Some fields are missing or has not a proper type :( Please ensure that all of the necessary data with necessary type for update are provided..."
+      );
+    }
+    const result = contacts.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/:id", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) {
+      throw createError(
+        404,
+        "User not found :( Check the correctness of requested ID..."
+      );
+    }
+    res.json({
+      message: `Contact with ID ${id} has been successfully deleted!`,
+      newListOfContacts: result,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/:id", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactsScheme.validate(req.body);
+
+    if (error) {
+      throw createError(
+        400,
+        "Some fields are missing or has not a proper type :( Please ensure that all of the necessary data with necessary type for update are provided..."
+      );
+    }
+    const { id } = req.params;
+    const result = await contacts.updateContactById(id, req.body);
+
+    if (!result) {
+      throw createError(
+        404,
+        "User not found :( Check the correctness of requested ID..."
+      );
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
