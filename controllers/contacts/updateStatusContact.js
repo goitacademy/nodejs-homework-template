@@ -8,7 +8,7 @@ const updateStatusContact = async (req, res) => {
         return res.status(400).json({
             code: 400,
             "message": "missing field favorite"
-        })
+        });
     };
     if (result) {
         return res.json({

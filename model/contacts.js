@@ -23,6 +23,4 @@ const contactsSchema = Schema(
 
 const Contact = model("contact", contactsSchema);
 
-module.exports = {
-    Contact,
-};
+module.exports = Contact;
