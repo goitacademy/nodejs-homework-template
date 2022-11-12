@@ -18,18 +18,18 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await fs.readFile(path.join(__dirname, 'contacts.json'))
-  const parsedContacts = JSON.parse(contacts)
-  parsedContacts = parsedContacts.splice(parsedContacts.findIndex(contact => contact.id === contactId), 1)
-  await fs.writeFile(path.join(__dirname, 'contacts.json'), parsedContacts)
-  return parsedContacts
+  const newContacts = JSON.parse(contacts).filter(contact => contact.id !== contactId)
+  await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(newContacts))
+  return newContacts
 }
 
-const addContact = async (body) => {
+const addContact = async (name, email, phone) => {
   const contacts = await fs.readFile(path.join(__dirname, 'contacts.json'))
   const parsedContacts = JSON.parse(contacts)
   const id = getMaxId(parsedContacts).toString()
-  parsedContacts.push({id: id, name: body.name, email: body.email, phone: body.phone})
-  await fs.writeFile(path.join(__dirname, 'contacts.json'), parsedContacts)
+  parsedContacts.push({id: id, name: name, email: email, phone: phone})
+  await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(parsedContacts))
+  //console.log("+")
   return parsedContacts
 }
 
@@ -37,7 +37,7 @@ const updateContact = async (contactId, body) => {
   const contacts = await fs.readFile(path.join(__dirname, 'contacts.json'))
   const parsedContacts = JSON.parse(contacts)
   parsedContacts[parsedContacts.findIndex(contact => contact.id === contactId)] = {id: contactId, name: body.name, email: body.email, phone: body.phone}
-  await fs.writeFile(path.join(__dirname, 'contacts.json'), parsedContacts)
+  await fs.writeFile(path.join(__dirname, 'contacts.json'), JSON.stringify(parsedContacts))
   return parsedContacts
 }
 

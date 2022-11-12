@@ -9,5 +9,8 @@ exports.contact = Joi.object()
     email: Joi.string()
         .email(),
     phone: Joi.string()
-        .min(14)
+        .min(10)
+        .max(12)
+        .pattern(/^[0-9]+$/)
+        .required()
   });
