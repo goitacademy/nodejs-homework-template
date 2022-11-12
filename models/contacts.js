@@ -5,7 +5,6 @@ const contactsDB = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
 	const data = await fs.readFile(contactsDB);
-	console.log(JSON.parse(data));
 	return JSON.parse(data);
 };
 
@@ -17,12 +16,15 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
 	const data = await listContacts();
-	const response = data.filter((item) => item.id !== contactId);
-	if (data && response.length === data.length) {
-		return false;
-	}
-	await fs.writeFile(contactsDB, JSON.stringify(response));
-	return true;
+	let removedContact;
+	const updatedContacts = data.filter((item) => {
+		if (item.id === contactId) {
+			removedContact = item;
+		}
+		return item.id !== contactId;
+	});
+	await fs.writeFile(contactsDB, JSON.stringify(updatedContacts));
+	return removedContact;
 };
 
 const addContact = async (body) => {
@@ -37,10 +39,14 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
 	const data = await listContacts();
-	const contact = data.find((it) => it.id === contactId);
-	if (!contact) return;
-	Object.assign(contact, body);
-	fs.writeFile(contactsDB, JSON.stringify(data));
+	const contact = data.map((elem) => {
+		if (elem.id === contactId) {
+			return { ...elem, ...body };
+		} else {
+			return elem;
+		}
+	});
+	await fs.writeFile(contactsDB, JSON.stringify(data));
 	return contact;
 };
 
