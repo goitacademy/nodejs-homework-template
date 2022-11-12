@@ -3,6 +3,10 @@ const tryCatchWrapper = (callback) => {
     try {
       await callback(req, res, next);
     } catch (error) {
+      if (error.name === "MongoServerError") {
+        error.status = 400;
+        return next(error);
+      }
       error.status = 404;
       next(error);
     }
