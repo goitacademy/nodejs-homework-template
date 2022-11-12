@@ -3,7 +3,7 @@ const { Contact } = require("../../model/contacts");
 const updateStatusContact = async (req, res) => {
     const { id } = req.params;
     const { favorite } = req.body;
-    const result = await Contact.findByIdAndUpdate(id, { favorite });
+    const result = await Contact.findByIdAndUpdate(id, { favorite }, { new: true });
     if (favorite === undefined) {
         return res.status(400).json({
             code: 400,
