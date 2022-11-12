@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cors = require('cors');
 
 const contactsRouter = require('./routes/api/contacts');
@@ -10,7 +10,13 @@ const morgan = require('morgan');
 
 const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+// **************************************************
+//! Connect to DB
+const { connectToDB } = require('./models/contacts/db');
+connectToDB();
+// **************************************************
+
+// const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 //* logger console.log;
 // app.use(logger(formatsLogger));
