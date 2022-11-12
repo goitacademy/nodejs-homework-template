@@ -12,7 +12,7 @@ const readDB = async ()=>{
 
 
 const writeFileDB = async (newResuit)=>{
-    return  JSON.parse(await fs.writeFile(contactsPath, JSON.stringify(newResuit), "utf-8"));
+    return   fs.writeFile(contactsPath, JSON.stringify(newResuit), "utf-8");
 }
 
 module.exports = {
