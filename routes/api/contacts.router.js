@@ -9,7 +9,7 @@ const {
   updateContactController,
   updateStatusContactController,
 } = require("../../controllers/contacts.controller");
-const { tryCatchWrapper } = require("../../helpers");
+const { tryCatchWrapper } = require("../../helpers/wrappers");
 
 contactsRouter.get("/", tryCatchWrapper(getAllController));
 

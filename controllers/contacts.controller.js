@@ -16,7 +16,7 @@ const {
   removeContactById,
   updateContactById,
   updateStatusContactById,
-} = require("../service");
+} = require("../service/contactsService");
 
 async function getAllController(req, res, next) {
   const contacts = await getAllContacts();
