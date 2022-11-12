@@ -1,3 +1,10 @@
+const mongoose = require("mongoose");
+const { DB_HOST } = require("./config");
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connect"))
+  .catch((error) => console.log(error.messahe));
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
