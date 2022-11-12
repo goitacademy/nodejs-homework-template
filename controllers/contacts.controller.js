@@ -45,18 +45,25 @@ async function createContactController(req, res, next) {
     });
   }
 
-  if (!name || !email || !phone) {
+  if (!name) {
     return res.status(400).json({
       message: `missing required name field`,
+    });
+  }
+  if (!email) {
+    return res.status(400).json({
+      message: `missing required email field`,
+    });
+  }
+  if (!phone) {
+    return res.status(400).json({
+      message: `missing required phone field`,
     });
   }
 
   try {
     const result = await createContact({ name, email, phone, favorite });
-
     res.status(201).json({
-      status: "success",
-      code: 201,
       data: { contact: result },
     });
   } catch (e) {
