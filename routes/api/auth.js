@@ -85,13 +85,12 @@ router.get("/users/logout", authorize, async (req, res, next) => {
   }
 });
 
-router.get("/users/current", authorize, async (req, res, next) => {
+router.get("/users/current", authorize, (req, res, next) => {
   try {
-    const { _id } = req.user;
-    const user = await User.findById(_id);
+    const { email, subscription } = req.user;
     res.status(200).json({
-      email: user.email,
-      subscription: user.subscription,
+      email,
+      subscription,
     });
   } catch (error) {
     next(error);
