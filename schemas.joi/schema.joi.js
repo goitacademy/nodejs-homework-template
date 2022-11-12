@@ -4,11 +4,17 @@ const schemaPostContact = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   phone: Joi.string().required(),
+  favorite: Joi.bool(),
 });
 
 const schemaPutContact = Joi.object({
-  name: Joi.string().alphanum(),
+  name: Joi.string(),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string(),
 }).min(1);
-module.exports = { schemaPostContact, schemaPutContact };
+
+const schemaPatchContact = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
+module.exports = { schemaPostContact, schemaPutContact, schemaPatchContact };
