@@ -1,13 +1,9 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 require("dotenv").config();
+
 const uriDb = process.env.HOST_DB;
-
-const db = mongoose.connect(uriDb, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
+const db = mongoose.connect(uriDb);
 const PORT = process.env.PORT || 3333;
 
 db.then(() => {
