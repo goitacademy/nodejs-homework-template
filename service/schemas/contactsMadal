@@ -16,10 +16,14 @@ const contactsSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  date: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
+  updateAt: { type: Date },
 });
 
-const Contact = mongoose.model('contacts', contactsSchema);
+const Contact = mongoose.model(
+  'contacts',
+  contactsSchema
+);
 
 module.exports = {
   Contact,
