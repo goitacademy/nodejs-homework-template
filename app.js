@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/api");
 
 const app = express();
 
@@ -19,7 +19,15 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({message: err.message});
+  res
+    .status(500)
+    // .json({message: err.message})
+    .json({
+      status: "fail",
+      code: 500,
+      message: err.message,
+      data: "Internal Server Error",
+    });
 });
 
 module.exports = app;
