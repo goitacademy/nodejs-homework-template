@@ -1,5 +1,5 @@
 const Contacts = require("../services");
-// const Contacts = require("../services/schemas/schema");
+
 const getAllContact = async (_req, res, next) => {
   try {
     const contacts = await Contacts.getAll();
