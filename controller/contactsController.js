@@ -1,7 +1,8 @@
-const service = require("../models/contacts");
+const service = require("../services/contactsServices");
 const get = async (req, res, next) => {
   try {
-    const results = await service.listContacts();
+    const { _id } = req.user;
+    const results = await service.listContacts(_id);
     res.status(200).json(results);
   } catch (e) {
     console.error(e);
@@ -10,9 +11,10 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   try {
-    const result = await service.getContactById(contactId);
+    const result = await service.getContactById(contactId, _id);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -30,9 +32,10 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
+  const { _id } = req.user;
   const body = req.body;
   try {
-    const result = await service.addContact(body);
+    const result = await service.addContact(body, _id);
 
     res.status(201).json(result);
   } catch (e) {
@@ -42,6 +45,7 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const body = req.body;
   try {
@@ -63,10 +67,11 @@ const update = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
 
   try {
-    const result = await service.removeContact(contactId);
+    const result = await service.removeContact(contactId,_id);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -83,6 +88,7 @@ const remove = async (req, res, next) => {
   }
 };
 const updateStatusContact = async (req, res, next) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const { favorite = false } = req.body;
 
