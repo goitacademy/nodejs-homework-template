@@ -1,5 +1,12 @@
 const app = require("./app");
-const db = require("./models/db");
+const mongoose = require("mongoose");
+require("dotenv").config();
+const uriDb = process.env.HOST_DB;
+
+const db = mongoose.connect(uriDb, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const PORT = process.env.PORT || 3333;
 
