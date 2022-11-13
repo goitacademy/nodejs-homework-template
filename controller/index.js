@@ -13,7 +13,7 @@ const getAllContact = async (_req, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-  const contact = await Contacts.getContactById(req.params.contactId);
+  const contact = await Contacts.getById(req.params.contactId);
 
   res.json({
     status: "success",
@@ -26,7 +26,7 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const contact = await Contacts.addContact(req.body);
+  const contact = await Contacts.add(req.body);
   res.status(201).json({
     status: "success",
     code: 201,
@@ -38,7 +38,7 @@ const addContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  const contact = await Contacts.updateContact(req.params.contactId, req.body);
+  const contact = await Contacts.update(req.params.contactId, req.body);
 
   res.json({
     status: "success",
@@ -51,7 +51,7 @@ const updateContact = async (req, res, next) => {
 };
 
 const removeContact = async (req, res, next) => {
-  const contact = await Contacts.removeContact(req.params.contactId);
+  const contact = await Contacts.remove(req.params.contactId);
 
   res.json({
     status: "success",
