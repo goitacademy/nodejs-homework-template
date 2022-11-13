@@ -49,7 +49,7 @@ const update = async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
   try {
-    const result = await service.updateContact(contactId, body);
+    const result = await service.updateContact(contactId, body, _id);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -71,7 +71,7 @@ const remove = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const result = await service.removeContact(contactId,_id);
+    const result = await service.removeContact(contactId, _id);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -93,7 +93,7 @@ const updateStatusContact = async (req, res, next) => {
   const { favorite = false } = req.body;
 
   try {
-    const result = await service.updateContact(contactId, { favorite });
+    const result = await service.updateContact(contactId, { favorite }, _id);
     if (result) {
       res.status(200).json(result);
     } else {

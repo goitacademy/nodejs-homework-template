@@ -16,7 +16,7 @@ const addContact = async (body, UserId) => {
   return User.create({ ...body, owner: UserId });
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, userId) => {
   return User.findOneAndUpdate({ _id: contactId }, body, { new: true });
 };
 

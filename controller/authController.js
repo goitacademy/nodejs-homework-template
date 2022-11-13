@@ -1,5 +1,4 @@
 const { registration, login } = require("../services/authServices");
-const { Conflict } = require("http-errors");
 
 const registerController = async (req, res, next) => {
   const { email, password } = req.body;
