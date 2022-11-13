@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const { registration, login } = require("../service/authService");
+const { registration, login, logout } = require("../service/authService");
 
 // const { ValidationError } = require("../helpers/errors");
 
@@ -33,30 +33,17 @@ async function loginController(req, res, next) {
 
   const loginResult = await login(email, password);
   return res.json(loginResult);
-  // const user = await User.findOne({ email });
-  // if (!user) {
-  //   throw new Unauthorized("User does not exists");
-  // }
-  // const isPasswordTheSame = await bcrypt.compare(password, user.password);
-  // if (!isPasswordTheSame) {
-  //   throw new Unauthorized("wrong password");
-  // }
+}
 
-  // const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-  //   expiresIn: "15m",
-  // });
-
-  // user.token = token;
-  // await User.findByIdAndUpdate(user._id, user);
-
-  // return res.json({
-  //   data: {
-  //     token,
-  //   },
-  // });
+async function logoutController(req, res, next) {
+  // const { _id } = req.user;
+  // console.log(req.user);
+  const logoutResult = await logout(req.user);
+  return res.status(204).json(logoutResult);
 }
 
 module.exports = {
   registrationController,
   loginController,
+  logoutController,
 };
