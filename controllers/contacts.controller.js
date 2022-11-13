@@ -19,8 +19,10 @@ const {
 } = require("../service/contactsService");
 
 async function getAllController(req, res, next) {
-  console.log(req.user);
-  const contacts = await getAllContacts();
+  // console.log(req.user);
+  const { limit, page, favorite } = req.query;
+  const owner = req.user._id;
+  const contacts = await getAllContacts({ owner, limit, page, favorite });
   return res.json(contacts);
 }
 
@@ -36,7 +38,7 @@ async function getContactByIdController(req, res, next) {
 }
 
 async function createContactController(req, res, next) {
-  const { name, email, phone, favorite } = req.body;
+  // const { name, email, phone, favorite } = req.body;
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
@@ -47,7 +49,7 @@ async function createContactController(req, res, next) {
   }
 
   try {
-    const result = await createContact({ name, email, phone, favorite });
+    const result = await createContact(req.body, req.user._id);
     res.status(201).json({
       data: { contact: result },
     });
