@@ -27,10 +27,10 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-module.exports.validCreateContact = (req, res, next) => {
+module.exports.validCreate = (req, res, next) => {
   return validate(schemaCreate, req.body, next);
 };
 
-module.exports.validUpdateContact = (req, res, next) => {
+module.exports.validUpdate = (req, res, next) => {
   return validate(schemaUpdate, req.body, next);
 };
