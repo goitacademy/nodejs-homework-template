@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
 	try {
 		const contacts = await listContacts();
-		res.status(200).json({ message: "success", contacts });
+		res.status(200).json({ contacts });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -29,7 +29,7 @@ router.get("/:contactId", async (req, res) => {
 			res.status(404).json({ message: "Not found" });
 			return;
 		}
-		res.status(200).json({ message: "success", contact });
+		res.status(200).json({ contact });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
@@ -38,7 +38,7 @@ router.get("/:contactId", async (req, res) => {
 router.post("/", validation, async (req, res) => {
 	try {
 		const contact = await addContact(req.body);
-		res.status(201).json({ message: "success", contact });
+		res.status(201).json({ contact });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
