@@ -1,19 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const contactsController = require("../../controller");
-const {
-  validUpdateContact,
-  validCreateContact,
-} = require("../../middleWare/validation");
+const controller = require("../../controller");
+const {wrapper} = require("../../helpers/tryCatch");
+const {validCreate, validUpdate} = require("../../middleWare/validation");
 
-router.get("/", contactsController.getAllContact);
-router.post("/", validCreateContact, contactsController.addContact);
-router.get("/:contactId", contactsController.getContactById);
-router.delete("/:contactId", contactsController.removeContact);
-router.patch(
-  "/:contactId",
-  validUpdateContact,
-  contactsController.updateContact
-);
+router.get("/", wrapper(controller.getAllContact));
+router.post("/", validCreate, wrapper(controller.addContact));
+router.get("/:contactId", wrapper(controller.getContactById));
+router.delete("/:contactId", wrapper(controller.removeContact));
+router.patch("/:contactId", validUpdate, wrapper(controller.updateContact));
 
 module.exports = router;
