@@ -1,9 +1,9 @@
-const Contacts = require("../models/contacts");
-
-const listContacts = async (_req, res, next) => {
+const Contacts = require("../services");
+// const Contacts = require("../services/schemas/schema");
+const getAllContact = async (req, res, next) => {
   try {
-    const contacts = await Contacts.listContacts();
-    return res.json({
+    const contacts = await Contacts.getAll();
+    res.json({
       status: "success",
       code: 200,
       message: "Contacts found",
@@ -58,33 +58,7 @@ const addContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Bad request. Enter what to change",
-      });
-    }
-    const contact = await Contacts.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        message: "Contact updated",
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not Found",
-      });
-    }
+    await Contacts.updateContact(req.params.contactId, req.body);
   } catch (e) {
     next(e);
   }
@@ -115,7 +89,7 @@ const removeContact = async (req, res, next) => {
 };
 
 module.exports = {
-  listContacts,
+  getAllContact,
   getContactById,
   addContact,
   updateContact,
