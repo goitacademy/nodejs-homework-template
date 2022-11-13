@@ -8,13 +8,16 @@ const {
 } = require("../services/contactsService");
 
 const listContactsController = async (req, res) => {
-  const contacts = await getListContacts();
+  const { user } = req;
+  const contacts = await getListContacts(user.id);
   res.json(contacts);
 };
 
 const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const { user } = req;
+
+  const contact = await getContactById({ contactId, userId: user.id });
   if (contact) {
     res.json(contact);
     return;
@@ -24,7 +27,9 @@ const getContactByIdController = async (req, res) => {
 
 const removeContactController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await removeContact(contactId);
+  const { user } = req;
+
+  const contact = await removeContact({ contactId, userId: user.id });
   if (contact) {
     res.json({
       message: "contact deleted",
@@ -36,13 +41,17 @@ const removeContactController = async (req, res) => {
 };
 
 const addContactController = async (req, res) => {
-  const contact = await addContact(req.body);
+  const { user } = req;
+
+  const contact = await addContact({ body: req.body, userId: user.id });
   res.status(201).json(contact);
 };
 
 const updateContactController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await updateContact(contactId, req.body);
+  const { user } = req;
+
+  const contact = await updateContact({ contactId, userId: user.id }, req.body);
   if (contact) {
     res.json(contact);
     return;
@@ -52,7 +61,12 @@ const updateContactController = async (req, res) => {
 
 const updateStatusContactController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await updateStatusContact(contactId, req.body);
+  const { user } = req;
+
+  const contact = await updateStatusContact(
+    { contactId, userId: user.id },
+    req.body
+  );
   if (contact) {
     res.json(contact);
     return;
