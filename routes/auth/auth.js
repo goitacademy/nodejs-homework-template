@@ -10,5 +10,10 @@ authRouter.post(
   validationBody(schemaReg),
   tryCatchWrapper(userRegistration)
 );
+authRouter.post(
+  "/users/login",
+  validationBody(schemaReg),
+  tryCatchWrapper(userRegistration)
+);
 
 module.exports = authRouter;

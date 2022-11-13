@@ -1,9 +1,21 @@
-const User = require("../models/schemas/users");
+const { addUser } = require("../models");
+const bcrypt = require("bcrypt");
 
 const userRegistration = async (req, res, next) => {
-  const user = await User.create(req.body);
-  console.log(user);
-  res.status(200).json({ data: "success" });
+  const password = req.body.password;
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(password, salt);
+  req.body.password = hashedPassword;
+  const user = await addUser(req.body);
+  res.status(201).json({
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
 };
 
-module.exports = { userRegistration };
+const userLogin = async (req, res, next) => {
+  const { email, password } = req.body;
+};
+module.exports = { userRegistration, userLogin };
