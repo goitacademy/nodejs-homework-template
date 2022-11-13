@@ -1,11 +1,12 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-// const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
 const User = require("../models/user.model");
 const {
   RegistrationConflictError,
-  // NotAuthorizedError,
+  NotAuthorizedError,
 } = require("../helpers/errors");
 
 const registration = async (email, password, subscription = "starter") => {
@@ -21,11 +22,12 @@ const registration = async (email, password, subscription = "starter") => {
   try {
     await user.save();
   } catch (error) {
+    console.log(error.message);
     if (error.message.includes("duplicate key error collection")) {
       throw new RegistrationConflictError("Email in use");
     }
 
-    throw error;
+    throw RegistrationConflictError;
   }
   return {
     user: {
@@ -35,7 +37,32 @@ const registration = async (email, password, subscription = "starter") => {
   };
 };
 
-const login = async () => {};
+const login = async (email, password) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new NotAuthorizedError("Email or password is wrong");
+  }
+
+  const isPasswordTheSame = await bcrypt.compare(password, user.password);
+  if (!isPasswordTheSame) {
+    throw new NotAuthorizedError("Email or password is wrong");
+  }
+
+  const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+    expiresIn: "15m",
+  });
+
+  user.token = token;
+  await User.findByIdAndUpdate(user._id, user);
+  return {
+    token: user.token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  };
+};
 
 module.exports = {
   registration,

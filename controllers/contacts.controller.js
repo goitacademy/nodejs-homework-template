@@ -19,6 +19,7 @@ const {
 } = require("../service/contactsService");
 
 async function getAllController(req, res, next) {
+  console.log(req.user);
   const contacts = await getAllContacts();
   return res.json(contacts);
 }
