@@ -29,20 +29,19 @@ const validationPUT = (req, res, next) => {
 		name: Joi.string()
 			.pattern(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/)
 			.min(3)
-			.max(20),
-		email: Joi.string().email({
-			minDomainSegments: 2,
-			tlds: { allow: ["com", "net"] },
-		}),
-		phone: customJoi.string().phoneNumber().min(7).max(20),
+			.max(20)
+			.optional(),
+		email: Joi.string()
+			.email({
+				minDomainSegments: 2,
+				tlds: { allow: ["com", "net"] },
+			})
+			.optional(),
+		phone: customJoi.string().phoneNumber().min(7).max(20).optional(),
 	});
 	const result = schema.validate(req.body);
-	const isEmpty = result.error?.message.includes("empty");
-	if (isEmpty) {
-		return res.status(400).json({ message: "missing fields" });
-	}
 	if (result.error) {
-		return res.status(400).json({ message: result.error.details });
+		return res.status(400).json({ message: result.error.message });
 	}
 
 	next();

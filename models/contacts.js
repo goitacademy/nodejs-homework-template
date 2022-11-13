@@ -34,7 +34,7 @@ const addContact = async (body) => {
 	const newContact = { name, email, phone, id: uuid() };
 	data.push(newContact);
 	await fs.writeFile(contactsDB, JSON.stringify(data));
-	return data;
+	return newContact;
 };
 
 const updateContact = async (contactId, body) => {
