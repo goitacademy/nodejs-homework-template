@@ -5,6 +5,7 @@ const {
   registrationController,
   loginController,
   logoutController,
+  currentController,
 } = require("../../controllers/auth.controller");
 
 const { tryCatchWrapper } = require("../../helpers/wrappers");
@@ -17,6 +18,11 @@ authRouter.post(
   "/logout",
   tryCatchWrapper(auth),
   tryCatchWrapper(logoutController)
+);
+authRouter.get(
+  "/current",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(currentController)
 );
 
 module.exports = authRouter;

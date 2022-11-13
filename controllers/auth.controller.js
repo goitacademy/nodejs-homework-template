@@ -2,8 +2,6 @@ const Joi = require("joi");
 
 const { registration, login, logout } = require("../service/authService");
 
-// const { ValidationError } = require("../helpers/errors");
-
 const schema = Joi.object({
   password: Joi.string().min(1).max(60).required(),
   email: Joi.string().email({
@@ -24,26 +22,30 @@ async function registrationController(req, res, next) {
     });
   }
 
-  const user = await registration(email, password, subscription);
-  return res.status(201).json(user);
+  const registeredUser = await registration(email, password, subscription);
+  return res.status(201).json(registeredUser);
 }
 
 async function loginController(req, res, next) {
   const { email, password } = req.body;
-
   const loginResult = await login(email, password);
   return res.json(loginResult);
 }
 
 async function logoutController(req, res, next) {
-  // const { _id } = req.user;
-  // console.log(req.user);
   const logoutResult = await logout(req.user);
   return res.status(204).json(logoutResult);
+}
+
+async function currentController(req, res, next) {
+  const { email, subscription } = req.user;
+  const currentUser = { email, subscription };
+  return res.status(200).json(currentUser);
 }
 
 module.exports = {
   registrationController,
   loginController,
   logoutController,
+  currentController,
 };
