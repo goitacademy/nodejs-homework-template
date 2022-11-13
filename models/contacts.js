@@ -46,7 +46,7 @@ const updateContact = async (contactId, body) => {
 			return elem;
 		}
 	});
-	await fs.writeFile(contactsDB, JSON.stringify(data));
+	await fs.writeFile(contactsDB, JSON.stringify(contact));
 	return contact;
 };
 
