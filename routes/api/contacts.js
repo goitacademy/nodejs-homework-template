@@ -59,14 +59,9 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", validationPUT, async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
-		// Если body нет, возвращает json с ключом {"message": "missing fields"} и статусом 400
-		if (Object.keys(req.body).length === 0) {
-			res.status(400).json({ message: "missing field" });
-			return;
-		}
-		const changeContacts = await updateContact(contactId, req.body);
-		if (changeContacts) {
-			return res.status(200).json({ message: changeContacts });
+		const changedContact = await updateContact(contactId, req.body);
+		if (changedContact) {
+			return res.status(200).json({ changedContact });
 		} else {
 			return res.status(404).json({ message: "Not found" });
 		}

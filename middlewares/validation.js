@@ -7,17 +7,20 @@ const validation = (req, res, next) => {
 			.pattern(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/)
 			.min(3)
 			.max(20)
-			.required(),
+			.required()
+			.messages({ "any.required": `missing required name field` }),
 		email: Joi.string()
 			.email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-			.required(),
-		phone: customJoi.string().phoneNumber().min(7).max(20),
+			.required()
+			.messages({ "any.required": `missing required email field` }),
+		phone: customJoi
+			.string()
+			.phoneNumber()
+			.min(7)
+			.max(20)
+			.messages({ "any.required": `missing required phone field` }),
 	});
 	const result = schema.validate(req.body);
-	const isRequire = result.error?.message.includes("required");
-	if (isRequire) {
-		return res.status(400).json({ message: "missing required name field" });
-	}
 	if (result.error) {
 		return res.status(400).json({ message: result.error.message });
 	}
@@ -38,7 +41,9 @@ const validationPUT = (req, res, next) => {
 			})
 			.optional(),
 		phone: customJoi.string().phoneNumber().min(7).max(20).optional(),
-	});
+	})
+		.length(3)
+		.messages({ "object.length": `missing field` });
 	const result = schema.validate(req.body);
 	if (result.error) {
 		return res.status(400).json({ message: result.error.message });

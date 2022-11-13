@@ -39,15 +39,16 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
 	const data = await listContacts();
-	const contact = data.map((elem) => {
+	const contacts = data.map((elem) => {
 		if (elem.id === contactId) {
 			return { ...elem, ...body };
 		} else {
 			return elem;
 		}
 	});
-	await fs.writeFile(contactsDB, JSON.stringify(contact));
-	return contact;
+	const changedContact = contacts.find((elem) => elem.id === contactId);
+	await fs.writeFile(contactsDB, JSON.stringify(contacts));
+	return changedContact;
 };
 
 module.exports = {
