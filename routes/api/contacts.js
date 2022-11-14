@@ -12,12 +12,14 @@ const { validation, validationPUT } = require("../../middlewares/validation");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-	try {
-		const contacts = await listContacts();
-		res.status(200).json({ contacts });
-	} catch (err) {
-		res.status(500).json({ error: err.message });
-	}
+	// try {
+	// 	const contacts = await listContacts();
+	// 	res.status(200).json({ contacts });
+	// } catch (err) {
+	// 	res.status(500).json({ error: err.message });
+	// }
+	const contacts = await listContacts();
+	res.json({ contacts });
 });
 
 router.get("/:contactId", async (req, res) => {
