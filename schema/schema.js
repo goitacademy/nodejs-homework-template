@@ -9,6 +9,7 @@ const schemaPOST = Joi.object({
     })
     .required(),
   phone: Joi.number().required(),
+  favorite: Joi.boolean(),
 });
 
 const schemaPUT = Joi.object({
@@ -18,6 +19,7 @@ const schemaPUT = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.number(),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
