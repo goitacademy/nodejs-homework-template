@@ -9,20 +9,43 @@ const {
   updateContactController,
   updateStatusContactController,
 } = require("../../controllers/contacts.controller");
-const { tryCatchWrapper } = require("../../helpers");
+const { tryCatchWrapper } = require("../../helpers/wrappers");
 
-contactsRouter.get("/", tryCatchWrapper(getAllController));
+const { auth } = require("../../middlewares/authMiddleware");
 
-contactsRouter.get("/:contactId", tryCatchWrapper(getContactByIdController));
+contactsRouter.get(
+  "/",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(getAllController)
+);
 
-contactsRouter.post("/", tryCatchWrapper(createContactController));
+contactsRouter.get(
+  "/:contactId",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(getContactByIdController)
+);
 
-contactsRouter.delete("/:contactId", tryCatchWrapper(removeContactController));
+contactsRouter.post(
+  "/",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(createContactController)
+);
 
-contactsRouter.put("/:contactId", tryCatchWrapper(updateContactController));
+contactsRouter.delete(
+  "/:contactId",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(removeContactController)
+);
+
+contactsRouter.put(
+  "/:contactId",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(updateContactController)
+);
 
 contactsRouter.patch(
   "/:contactId/favorite",
+  tryCatchWrapper(auth),
   tryCatchWrapper(updateStatusContactController)
 );
 
