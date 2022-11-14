@@ -19,12 +19,6 @@ const contactSchema = new Schema({
     maxlength: 18,
     required: [true, "Set phone for contact"],
     unique: true,
-    // validate: {
-    //   validator: function (v) {
-    //     return /\(\d{3}\)\s\d{3}-\d{4}/.test(v);
-    //   },
-    //   message: (props) => `${props.value} is not a valid phone number!`,
-    // },
   },
   favorite: {
     type: Boolean,
