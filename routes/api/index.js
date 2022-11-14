@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../../controller");
 const {wrapper} = require("../../helpers/tryCatch");
-// const {validCreate, validUpdate} = require("../../middleWare/validation");
 
 router.get("/", wrapper(controller.getAllContact));
 router.post("/", wrapper(controller.addContact));
