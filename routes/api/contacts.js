@@ -1,15 +1,18 @@
 const { Router } = require('express');
 
-const Joi = require('joi');
-const nameRegExp = /^[a-zA-Z][a-zA-Z\s]*$/;
-const phoneRegExp = /^\(\d{3}\)\s?\d{3}-\d{4}/;
-
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact } = require('../../models/contacts');
+
+const validationBody = require('../../middlewares/validationBody');
+
+const {
+    schemaPostContact,
+    schemaPutContact
+} = require('../../schemes/schemes');
 
 const router = Router()
 
@@ -39,30 +42,9 @@ router.get('/:id', async (req, res, next) => {
   };
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validationBody(schemaPostContact), async (req, res, next) => {
   try {
     const { body } = req;
-    const { name, email, phone } = body;
-
-    const schema = Joi.object({
-      name: Joi.string()
-        .pattern(nameRegExp).min(3).max(30)
-        .required(),
-      email: Joi.string()
-        .email({ minDomainSegments: 2 })
-        .required(),
-      phone: Joi.string()
-        .pattern(phoneRegExp)
-        .required()
-    });
-
-    await schema.validateAsync(body);
-
-    if (!name || !email || !phone) {
-      const err = new Error('missing required name field');
-      err.status = 400;
-      throw err;
-    };
 
     await addContact(body);
     res.status(201).json(body);
@@ -88,28 +70,11 @@ router.delete('/:id', async (req, res, next) => {
   };
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', validationBody(schemaPutContact), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const { name, email, phone } = body;
 
-    const schema = Joi.object({
-      name: Joi.string()
-        .pattern(nameRegExp).min(3).max(30),
-      email: Joi.string()
-        .email({ minDomainSegments: 2 }),
-      phone: Joi.string()
-        .pattern(phoneRegExp),
-    });
-
-    await schema.validateAsync(body);
-    
-    if (!name && !email && !phone) {
-      const err = new Error('missing fields');
-      err.status = 400;
-      throw err;
-    };
     const contact = await updateContact(id, body);
 
     if (!contact) {
