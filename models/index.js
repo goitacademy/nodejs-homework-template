@@ -4,7 +4,7 @@ const {Schema, model} = mongoose;
 const contactSchema = new Schema({
   name: {
     type: String,
-    // minlength: 3,
+
     maxlength: 30,
     required: [true, "Set name for contact"],
     unique: true,
