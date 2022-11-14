@@ -18,30 +18,10 @@ app.use("/", (req, res) => {
   res.status(404).json({message: "Not found!"});
 });
 
-app.use((err, req, res, next) => {
-  console.error(`app error: ${err.message}, ${err.name}`);
+app.use((err, _, res, __) => {
+  const {status = 500, message = "Internal Server Error"} = err;
 
-  /// /// /// /// ///
-  /// так мы делали на занятии
-  if (err.name === "ValidationError" || err.name === "CastError") {
-    return res.status(400).json({
-      message: err.message,
-    });
-  }
-
-  if (err.status) {
-    return res.status(err.status).json({
-      message: err.message,
-    });
-  }
-  ///
-  /// /// /// /// ///
-
-  res.status(500).json({
-    status: "fail",
-    code: 500,
-    data: "Internal Server Error",
-  });
+  res.status(status).json(message);
 });
 
 module.exports = app;
