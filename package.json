@@ -8,6 +8,7 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "author": "Maksym Holovachuk <mgolovachuk@gmail.com>",
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",

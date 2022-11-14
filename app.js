@@ -5,16 +5,12 @@ const express = require('express');
 // const logger = require('morgan');
 const cors = require('cors');
 
+require('dotenv').config();
+
 const contactsRouter = require('./routes/api/contacts');
 const morgan = require('morgan');
 
 const app = express();
-
-// **************************************************
-//! Connect to DB
-const { connectToDB } = require('./models/contacts/db');
-connectToDB();
-// **************************************************
 
 // const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
