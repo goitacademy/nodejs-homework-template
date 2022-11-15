@@ -5,7 +5,6 @@ const contactSchema = new Schema({
   name: {
     type: String,
 
-    maxlength: 30,
     required: [true, "Set name for contact"],
     unique: true,
   },
@@ -16,7 +15,7 @@ const contactSchema = new Schema({
   },
   phone: {
     type: String,
-    maxlength: 18,
+
     required: [true, "Set phone for contact"],
     unique: true,
   },
