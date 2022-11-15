@@ -1,6 +1,9 @@
 const app = require("./app");
-const db = require("./models/db");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
+const uriDb = process.env.HOST_DB;
+const db = mongoose.connect(uriDb);
 const PORT = process.env.PORT || 3333;
 
 db.then(() => {

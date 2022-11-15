@@ -1,121 +1,70 @@
-const Contacts = require("../models/contacts");
+const Contacts = require("../services");
 
-const listContacts = async (_req, res, next) => {
-  try {
-    const contacts = await Contacts.listContacts();
-    return res.json({
-      status: "success",
-      code: 200,
-      message: "Contacts found",
-      data: {
-        contacts,
-      },
-    });
-  } catch (e) {
-    next(e);
-  }
+const getAllContact = async (_req, res, next) => {
+  const contacts = await Contacts.getAll();
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Contacts found",
+    data: {
+      contacts,
+    },
+  });
 };
 
 const getContactById = async (req, res, next) => {
-  try {
-    const contact = await Contacts.getContactById(req.params.contactId);
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        message: "Contact found",
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+  const contact = await Contacts.getById(req.params.contactId);
+
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Contact found",
+    data: {
+      contact,
+    },
+  });
 };
 
 const addContact = async (req, res, next) => {
-  try {
-    const contact = await Contacts.addContact(req.body);
-    return res.status(201).json({
-      status: "success",
-      code: 201,
-      message: "Contact created",
-      data: {
-        contact,
-      },
-    });
-  } catch (e) {
-    next(e);
-  }
+  const contact = await Contacts.add(req.body);
+  res.status(201).json({
+    status: "success",
+    code: 201,
+    message: "Contact created",
+    data: {
+      contact,
+    },
+  });
 };
 
 const updateContact = async (req, res, next) => {
-  try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Bad request. Enter what to change",
-      });
-    }
-    const contact = await Contacts.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        message: "Contact updated",
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+  const contact = await Contacts.update(req.params.contactId, req.body);
+
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Contact updated",
+    data: {
+      contact,
+    },
+  });
 };
 
 const removeContact = async (req, res, next) => {
-  try {
-    const contact = await Contacts.removeContact(req.params.contactId);
-    if (contact) {
-      return res.json({
-        status: "success",
-        code: 200,
-        message: "Contact deleted",
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+  const contact = await Contacts.remove(req.params.contactId);
+
+  res.json({
+    status: "success",
+    code: 204,
+    message: "Contact deleted",
+    data: {
+      contact,
+    },
+  });
 };
 
 module.exports = {
-  listContacts,
+  getAllContact,
   getContactById,
   addContact,
   updateContact,
