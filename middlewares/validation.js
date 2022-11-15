@@ -18,8 +18,9 @@ const validation = (req, res, next) => {
 			.phoneNumber()
 			.min(7)
 			.max(20)
+			.required()
 			.messages({ "any.required": `missing required phone field` }),
-		favorite: Joi.boolean().required(),
+		favorite: Joi.boolean().optional(),
 	});
 	const result = schema.validate(req.body);
 	if (result.error) {

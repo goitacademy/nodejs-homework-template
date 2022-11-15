@@ -23,16 +23,22 @@ const addContact = async (body) => {
 	return newContact;
 };
 
-const updateContact = async (contactId, body) => {
-	await Contacts.findByIdAndUpdate(contactId, {
-		$set: body,
-	});
+const updateContact = async (contactId, body) => {	
+	await Contacts.findByIdAndUpdate(
+		contactId,
+		{ $set: body },
+		{ runValidators: true }
+	);
 	const changedContact = await Contacts.findById(contactId);
 	return changedContact;
 };
 
-const updateStatusContact = async (contactId, favorite) => {
-	await Contacts.findByIdAndUpdate(contactId, { $set: favorite });
+const updateStatusContact = async (contactId, body) => {
+	await Contacts.findByIdAndUpdate(
+		contactId,
+		{ $set: body },
+		{ runValidators: true }
+	);
 	const changedContact = await Contacts.findById(contactId);
 	return changedContact;
 };
