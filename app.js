@@ -20,7 +20,6 @@ app.use("/", (req, res) => {
 
 app.use((err, _, res, __) => {
   const {status = 500, message = "Internal Server Error"} = err;
-
   res.status(status).json(message);
 });
 
