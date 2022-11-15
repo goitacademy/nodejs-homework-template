@@ -22,7 +22,7 @@ const schemaPut = Joi.object({
 });
 
 const schemaPatch = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {schemaPost, schemaPut, schemaPatch};
