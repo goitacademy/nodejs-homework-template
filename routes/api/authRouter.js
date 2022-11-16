@@ -20,7 +20,7 @@ const {authMiddleware} = require("../../middleware/auth");
 const {wrapper} = require("../../helpers/tryCatch");
 
 router.post(
-  "/registration",
+  "/singup",
   validatorBody(schemaPostUser),
   wrapper(singUpController)
 );
