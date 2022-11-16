@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { NotFound, BadRequest } = require('http-errors');
+const { NotFound } = require('http-errors');
 const { Contact } = require("../../model");
 
 const updateFavorite = async (req, res) => {

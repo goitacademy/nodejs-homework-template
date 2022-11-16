@@ -14,4 +14,4 @@ router.delete('/:contactId', ctrlWrapper(ctrl.removeById));
 router.put('/:id', validation(joiSchema), ctrlWrapper(ctrl.updateById));
 router.patch('/:id/favorite', validation(favoriteJoiSchema), ctrlWrapper(ctrl.updateFavorite));
 
-module.exports = router
+module.exports = router;
