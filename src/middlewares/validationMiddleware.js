@@ -8,6 +8,7 @@ module.exports = {
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
       phone: Joi.string().min(5).max(15).required(),
+      favorite: Joi.boolean(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -23,6 +24,7 @@ module.exports = {
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .optional(),
       phone: Joi.string().min(5).max(15).optional(),
+      favorite: Joi.boolean(),
     }).min(1);
 
     const validationResult = schema.validate(req.body);
