@@ -1,5 +1,5 @@
 const express = require('express');
-const contactsControlers = require('../../controlers/contactsControlers');
+const contactsControlers = require('../../models/contactsControlers');
 const { userMiddlewares } = require('../../middleweras/userMiddlewares');
 const { tryCatchWrapper } = require("../../helpers/index");
 
