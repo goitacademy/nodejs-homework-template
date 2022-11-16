@@ -2,10 +2,13 @@ const express = require("express");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 
 const User = require("../../models/user");
 const { RequestError } = require("../../assistant");
-const { authorize } = require("../../middlewares");
+const { authorize, upload } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -35,10 +38,12 @@ router.post("/users/signup", async (req, res, next) => {
       throw RequestError(409, "This email is already in use");
     }
     const hashPassword = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
     const result = await User.create({
       email,
       password: hashPassword,
       subscription,
+      avatarURL,
     });
     res.status(201).json({
       email: result.email,
@@ -96,5 +101,30 @@ router.get("/users/current", authorize, (req, res, next) => {
     next(error);
   }
 });
+
+const avatarsDir = path.join(__dirname, "../../public/avatars");
+
+router.patch(
+  "/users/avatars",
+  authorize,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const { path: tempDir, originalname } = req.file;
+      console.log(tempDir);
+      const [extention] = originalname.split(".").reverse();
+      const newAvatar = `${_id}.${extention}`;
+      const uploadDir = path.join(avatarsDir, newAvatar);
+      console.log(uploadDir);
+      await fs.rename(tempDir, uploadDir);
+      const avatarURL = path.join("avatars", newAvatar);
+      await User.findByIdAndUpdate(req.user._id, { avatarURL });
+      res.json({ avatarURL });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
