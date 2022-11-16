@@ -1,6 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const {HOST_DB, PORT} = require("./config");
+
 const db = mongoose.connect(HOST_DB);
 
 db.then(() => {
