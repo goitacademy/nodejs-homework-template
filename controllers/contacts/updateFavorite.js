@@ -1,9 +1,11 @@
+const Joi = require('joi');
 const { NotFound } = require('http-errors');
 const { Contact } = require("../../model");
 
-const getById = async (req, res) => {
-      const { contactId } = req.params;
-      const result = await Contact.findById(contactId);
+const updateFavorite = async (req, res) => {
+      const { id } = req.params; 
+      const { favorite } = req.body;
+      const result = await Contact.findByIdAndUpdate(id, {favorite}, {new: true});
       if(!result) {
         throw new NotFound("Not found");
       }
@@ -16,4 +18,4 @@ const getById = async (req, res) => {
       }); 
   }
 
-  module.exports = getById;
+  module.exports = updateFavorite;

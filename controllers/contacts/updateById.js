@@ -1,9 +1,9 @@
 const Joi = require('joi');
-const contactOperation = require("../../models/contacts");
+const { Contact } = require("../../model");
 
 const updateById = async (req, res) => {
       const { id } = req.params; 
-      const result = await contactOperation.updateContact(id, req.body);
+      const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
       if(!result) {
         throw new NotFound("Not found");
       }
