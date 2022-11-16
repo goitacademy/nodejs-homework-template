@@ -63,7 +63,7 @@ const currentUserController = (req, res, next) => {
   });
 };
 
-const changeSubController = async (req, res, next) => {
+const subscriptionController = async (req, res, next) => {
   const {subscription} = req.body;
   const {_id} = req.user;
 
@@ -79,5 +79,5 @@ module.exports = {
   singInController,
   singOutController,
   currentUserController,
-  changeSubController,
+  subscriptionController,
 };
