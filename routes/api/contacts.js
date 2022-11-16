@@ -24,24 +24,23 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    }),
+    name: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required(),
     phone: Joi.string().required(),
   });
-  const body = req.body;
-  if (!schema.validate(body)) {
-    return res.status(400).json({ message: "missing required name field" });
+  
+  const {error, value} =schema.validate(req.body)
+  if (error) {
+        return res.status(400).json({ message: "missing required name field" });
   }
-  const contact = await addContact(body);
+  if(value){
+  const contact = await addContact(req.body);
   if (!contact) {
     return res.status(404).json({ message: "Not found" });
   } else {
     return res.status(201).json({ message: "template message", data: contact });
   }
-});
+}});
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
@@ -54,17 +53,28 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const body = req.body;
-  const contactId = req.params;
-  if (!body) {
-    return res.status(400).json({ message: "missing fields" });
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+  });
+  
+  const {error, value} =schema.validate(req.body)
+  if (error) {
+        return res.status(400).json({ message: "missing required name field" });
   }
+  if(value){
+  const body = req.body;
+  const {contactId} = req.params; 
+  // if(!body) {
+  //   return res.status(404).json({ "message": "missing fields"});
+  // }
   const contact = await updateContact(contactId, body);
   if (!contact) {
     return res.status(404).json({ message: "Not found" });
   } else {
     return res.status(201).json({ message: "template message", data: contact });
-  }
+  }}
 });
 
 module.exports = router;
