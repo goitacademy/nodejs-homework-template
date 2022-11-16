@@ -6,7 +6,7 @@ const {
   singInController,
   singOutController,
   currentUserController,
-  changeSubController,
+  subscriptionController,
 } = require("../../controller/auth");
 
 const {
@@ -35,7 +35,7 @@ router.patch(
   "/subscription",
   authMiddleware,
   validatorBody(schemaPatchUser),
-  wrapper(changeSubController)
+  wrapper(subscriptionController)
 );
 
 module.exports = router;
