@@ -1,13 +1,6 @@
 const {customError} = require("../helpers/error");
 const {User} = require("../models/user");
-const {
-  // registrationUser,
-  singUp,
-  // loginUser,
-  singIn,
-  // changeUserSubscription,
-  changeSub,
-} = require("../services/authServ");
+const {singUp, singIn, changeSub} = require("../services/authServ");
 
 const singUpController = async (req, res) => {
   const {email, password, subscription} = req.body;
