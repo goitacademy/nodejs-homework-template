@@ -1,7 +1,7 @@
 const express = require("express");
-const userControlers = require("../controlers/userControlers");
-const { tryCatchWrapper } = require("../helpers/index");
-const { userMiddlewares } = require("../middleweras/userMiddlewares");
+const userControlers = require("../../controlers/userControlers");
+const { tryCatchWrapper } = require("../../helpers/index");
+const { userMiddlewares } = require("../../middleweras/userMiddlewares");
 
 const userRouter = express.Router();
 
