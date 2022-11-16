@@ -13,19 +13,8 @@ const add = async (body) => {
 };
 
 const update = async (Id, body) => {
-  return await Contact.findByIdAndUpdate(
-    {_id: Id},
-    {...body},
-    {new: true}
-  );
+  return await Contact.findByIdAndUpdate({_id: Id}, {...body}, {new: true});
 };
-// const updateStatus = async (Id, body) => {
-//   return await Contact.findByIdAndUpdate(
-//     {_id: Id},
-//     {...body},
-//     {new: true}
-//   );
-// };
 
 const remove = async (contactId) => {
   return await Contact.findByIdAndRemove({_id: contactId});
