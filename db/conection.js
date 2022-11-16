@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const {MONGO_URL} = require("../helpers/envImport")
 
 const connectMongo = async () => {
 	try {
-		await mongoose.connect(process.env.MONGO_URL, {
+		await mongoose.connect(MONGO_URL, {
 			useNewUrlParser: true,
 		});
 		console.log("Database connection successful");

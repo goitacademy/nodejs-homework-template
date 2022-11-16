@@ -1,19 +1,12 @@
-const {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContact,
-	updateStatusContact,
-} = require("../models/contacts");
+const { Contacts } = require("../models/contactSchema");
 
 const listContactsController = async (req, res) => {
-	const contacts = await listContacts();
-	res.json({ contacts });
+	const contact = await Contacts.find({});
+	res.json({ contact });
 };
 const getContactByIdController = async (req, res) => {
 	const { contactId } = req.params;
-	const contact = await getContactById(contactId);
+	const contact = await Contacts.findById(contactId);
 
 	if (!contact) {
 		res.status(404).json({ message: "Not found" });
@@ -23,22 +16,25 @@ const getContactByIdController = async (req, res) => {
 };
 const removeContactController = async (req, res) => {
 	const { contactId } = req.params;
-	const deletedContact = await removeContact(contactId);
+	const deletedContact = await Contacts.findByIdAndRemove(contactId);
 	deletedContact
 		? res.json({ message: "contact deleted" })
 		: res.status(404).json({ message: "Not found" });
 };
 
 const addContactController = async (req, res) => {
-	if ("favorite" in req.body === false) {
-		req.body.favorite = false;
-	}
-	const contact = await addContact(req.body);
-	res.json({ contact });
+	const contact = new Contacts(req.body);
+	const newContact = await contact.save();
+	res.json({ newContact });
 };
 const updateContactController = async (req, res) => {
 	const { contactId } = req.params;
-	const changedContact = await updateContact(contactId, req.body);
+	await Contacts.findByIdAndUpdate(
+		contactId,
+		{ $set: req.body },
+		{ new: true }
+	);
+	const changedContact = await Contacts.findById(contactId);
 	if (changedContact) {
 		return res.json({ changedContact });
 	} else {
@@ -47,7 +43,10 @@ const updateContactController = async (req, res) => {
 };
 const updateStatusContactController = async (req, res) => {
 	const { contactId } = req.params;
-	const updatedContact = await updateStatusContact(contactId, req.body);
+	const { favorite } = req.body;
+
+	await Contacts.findByIdAndUpdate(contactId, { favorite }, { new: true });
+	const updatedContact = await Contacts.findById(contactId);
 	if (updatedContact) {
 		return res.json({ updatedContact });
 	} else {
