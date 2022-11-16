@@ -1,10 +1,9 @@
 const express = require("express");
 const { contactsRouter } = require("./routes/contactsRoute");
 const { userRouter } = require("./routes/userRouter");
-
 const cors = require("cors");
 const morgan = require("morgan");
-
+require("dotenv").config();
 const app = express();
 
 app.use(morgan("dev"));
@@ -26,6 +25,13 @@ app.use((err, req, res, next) => {
 module.exports = {
   app,
 };
+
+
+
+
+
+
+
 
 
 
