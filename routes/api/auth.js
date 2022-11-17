@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const jimp = require("jimp");
 
 const User = require("../../models/user");
 const { RequestError } = require("../../assistant");
@@ -111,17 +112,28 @@ router.patch(
   async (req, res, next) => {
     try {
       const { _id } = req.user;
-      const { path: tempDir, originalname } = req.file;
-      console.log(tempDir);
+      const { path: tmpDir, originalname } = req.file;
+      // console.log(tmpDir);
       const [extention] = originalname.split(".").reverse();
       const newAvatar = `${_id}.${extention}`;
+
       const uploadDir = path.join(avatarsDir, newAvatar);
-      console.log(uploadDir);
-      await fs.rename(tempDir, uploadDir);
+
+      jimp
+        .read(tmpDir)
+        .then((image) => image.resize(250, 250).write(uploadDir))
+        .catch((error) => console.log(error));
+
+      fs.unlink(tmpDir);
+
+      // console.log(uploadDir);
+      await fs.rename(tmpDir, uploadDir);
       const avatarURL = path.join("avatars", newAvatar);
       await User.findByIdAndUpdate(req.user._id, { avatarURL });
       res.json({ avatarURL });
     } catch (error) {
+      // fs.unlink(tmpDir);
+      // throw error;
       next(error);
     }
   }
