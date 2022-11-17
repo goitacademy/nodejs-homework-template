@@ -1,7 +1,8 @@
 const express = require('express')
-const router = express.Router()
+const contactsRouter = express.Router()
+const {auth} = require('../../models/auth')
 
-const controller = require('../../models/contacts')
+const controller= require('../../models/contacts')
 
 function tryCatchWrapper(endpointFn) {
   return async (req, res, next) => {
@@ -13,18 +14,18 @@ function tryCatchWrapper(endpointFn) {
   };
 }
 
-router.get('/', tryCatchWrapper(controller.listContacts))
+contactsRouter.get('/', tryCatchWrapper(auth), tryCatchWrapper(controller.listContacts))
 
-router.delete('/:id', tryCatchWrapper(controller.removeContact))
+contactsRouter.delete('/:id', tryCatchWrapper(auth), tryCatchWrapper(controller.removeContact))
 
-router.post('/', tryCatchWrapper(controller.addContact))
+contactsRouter.post('/', tryCatchWrapper(auth), tryCatchWrapper(controller.addContact))
 
-router.get('/:id', tryCatchWrapper(controller.getContactById))
+contactsRouter.get('/:id', tryCatchWrapper(auth), tryCatchWrapper(controller.getContactById))
 
-router.put('/:id', tryCatchWrapper(controller.updateContact))
+contactsRouter.put('/:id', tryCatchWrapper(auth), tryCatchWrapper(controller.updateContact))
 // PATCH /api/contacts/:contactId/favorite
-router.patch('/favorite/:id', tryCatchWrapper(controller.updateFavorite))
-  
+contactsRouter.patch('/favorite/:id', tryCatchWrapper(auth), tryCatchWrapper(controller.updateFavorite))
 
-module.exports = router
+
+module.exports = { contactsRouter, tryCatchWrapper }
 
