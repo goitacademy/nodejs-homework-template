@@ -1,4 +1,3 @@
-const { find } = require("./schemas/contacts");
 const Contact = require("./schemas/contacts");
 const User = require("./schemas/users");
 
