@@ -12,10 +12,18 @@ const getContacts = async (req, res, next) => {
 };
 const getContactByID = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await getContactById(
-    contactId
-  ); /* выбросит ошибку если contactId не найден и управление перейдет в catch tryCatchWrapper, где запишется error.status = 404 */
-  res.status(200).json({ data: contact });
+  try {
+    const contact = await getContactById(
+      contactId
+    ); /* выбросит ошибку если contactId не валиден, вернеи null, если валидный contactId не найден */
+    if (!contact) {
+      throw new Error("contact's id is not found");
+    }
+    res.status(200).json({ data: contact });
+  } catch (error) {
+    error.status = 404;
+    throw error;
+  }
 };
 const postContact = async (req, res, next) => {
   const newContact = await addContact(req.body);
@@ -23,18 +31,34 @@ const postContact = async (req, res, next) => {
 };
 const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
-  await removeContact(
-    contactId
-  ); /* выбросит ошибку если contactId не найден и управление перейдет в catch tryCatchWrapper, где запишется error.status = 404 */
-  res.status(200).json({ message: "contact deleted" });
+  try {
+    const contact = await removeContact(
+      contactId
+    ); /* выбросит ошибку если contactId не валиден, вернеи null, если валидный contactId не найден */
+    if (!contact) {
+      throw new Error("contact's id is not found");
+    }
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    error.status = 404;
+    throw error;
+  }
 };
 const putContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const updatedContact = await updateContact(
-    contactId,
-    req.body
-  ); /* выбросит ошибку если contactId не найден и управление перейдет в catch tryCatchWrapper, где запишется error.status = 404 */
-  res.status(200).json({ data: updatedContact });
+  try {
+    const updatedContact = await updateContact(
+      contactId,
+      req.body
+    ); /* выбросит ошибку если contactId не валиден, вернеи null, если валидный contactId не найден */
+    if (!updatedContact) {
+      throw new Error("contact's id is not found");
+    }
+    res.status(200).json({ data: updatedContact });
+  } catch (error) {
+    error.status = 404;
+    throw error;
+  }
 };
 
 module.exports = {

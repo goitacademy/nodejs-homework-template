@@ -2,18 +2,25 @@ const express = require("express");
 const authRouter = express.Router();
 const tryCatchWrapper = require("../../helpers");
 const validationBody = require("../../middleware/validationBody");
-const schemaReg = require("../../schemas.joi/schema.joi.auth");
-const { userRegistration } = require("../../controllers/auth.controllers");
+const { schemaReg } = require("../../schemas.joi/schema.joi.auth");
+const {
+  userRegistration,
+  userLogin,
+  userLogout,
+} = require("../../controllers/auth.controllers");
+const validationToken = require("../../middleware/validationToken");
 
 authRouter.post(
-  "/users/signup",
+  "/signup",
   validationBody(schemaReg),
   tryCatchWrapper(userRegistration)
 );
 authRouter.post(
-  "/users/login",
+  "/login",
   validationBody(schemaReg),
-  tryCatchWrapper(userRegistration)
+  tryCatchWrapper(userLogin)
 );
+authRouter.post("/current", validationToken, tryCatchWrapper(userLogin));
+authRouter.post("/logout", validationToken, tryCatchWrapper(userLogout));
 
 module.exports = authRouter;

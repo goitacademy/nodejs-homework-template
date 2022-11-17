@@ -5,4 +5,4 @@ const schemaReg = Joi.object({
   password: Joi.string().required(),
 });
 
-module.exports = schemaReg;
+module.exports = { schemaReg };
