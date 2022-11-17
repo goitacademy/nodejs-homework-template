@@ -48,12 +48,6 @@ const getUserById = async (id) => {
   const user = await User.findById(id);
   return user;
 };
-// ---------
-const getUsers = async () => {
-  const users = await User.find();
-  console.log(users);
-};
-getUsers();
 
 module.exports = {
   listContacts,
