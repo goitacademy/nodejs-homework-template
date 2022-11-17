@@ -1,5 +1,9 @@
 const Joi = require('joi');
+<<<<<<< Updated upstream
 const { Schema, model, SchemaTypes } = require('mongoose');
+=======
+const { Schema, model,SchemaTypes } = require('mongoose');
+>>>>>>> Stashed changes
 const myCustomJoi = Joi.extend(require('joi-phone-number'));
 
 const schemaPut = Joi.object({

@@ -10,12 +10,14 @@
     "dev": "npx nodemon app.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "joi": "^17.6.4",
     "joi-phone-number": "^5.1.1",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "1.10.0",
     "react-uuid": "^2.0.0"
   },
@@ -27,5 +29,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "^2.0.20"
-  }
+  },
+  "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vera957/nodejs-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vera957/nodejs-2/issues"
+  },
+  "homepage": "https://github.com/Vera957/nodejs-2#readme"
 }

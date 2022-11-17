@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const { userVerifyJoi, User } = require('../routes/api/user.schema')
 const { createToken } = require('./jwt/jwt')
 const bcrypt = require("bcrypt");
@@ -92,3 +93,61 @@ module.exports = {
     logoutUser,
     currentUser,
 }
+=======
+// const Joi = require('joi');
+const { User } = require('../routes/api/schemasUser')
+const { userDataValidatorJoi } = require('../routes/api/schemasUser')
+const { createToken } = require('./jwt/jwt')
+const bcrypt = require("bcrypt");
+
+async function connectSuccsessfull(req, res, next) {
+    const data = await User.find()
+    return res.json({'connected to user, data': data})
+}
+
+
+async function signUp(req, res, next) {
+    console.log('signUp start')
+    const {body} = req
+    console.log('body signUp', body)
+    const dataCheck = await userDataValidatorJoi(body)
+    const { value, error } = dataCheck
+    // console.log('value, error', value, error)
+    if (error) {
+        throw new Error(error)
+    } else {
+        const { password, email } = value
+        // const uniqueEmail = await User.find({ email })
+        // if (!uniqueEmail) return res.status(409).json({ "message": "Email in use" })
+        const token = await createToken(value)
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+        await User.create({
+            hashedPassword,
+            email,
+            token,
+        })
+        return res.status(201).json({
+            "user": {
+                "email": email,
+                "subscription": "starter"
+            }
+        })
+    }
+/*
+
+Если почта уже используется кем-то другим, вернуть Ошибку Conflict.
+В противном случае вернуть Успешный ответ. */
+
+}
+
+
+
+
+
+module.exports = {
+    signUp,
+    connectSuccsessfull,
+}
+
+>>>>>>> Stashed changes

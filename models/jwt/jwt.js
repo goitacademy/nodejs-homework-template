@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const jwt = require("jsonwebtoken")
 
 const { JWT_SECRET } = process.env
@@ -26,12 +27,27 @@ async function createToken(id) {
         
     } */
 async function checkToken(token) {
+=======
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = process.env
+
+async function createToken(data) {
+    const token = jwt.sign(data, JWT_SECRET, {
+        expiresIn: "10h",
+    });
+    console.log("token:", token);
+    return token;
+}
+
+async function verifyToken(token) {
+>>>>>>> Stashed changes
     try {
         const verifiedToken = jwt.verify(token, JWT_SECRET);
         console.log("verifiedToken:", verifiedToken);
     } catch (error) {
         console.error(error);
     }
+<<<<<<< Updated upstream
    }
 
 
@@ -64,4 +80,21 @@ main(); */
 module.exports = {
     createToken,
     checkToken,
+=======
+}
+
+async function checkTermOfToken(token) {
+    try {
+        const verifiedToken = jwt.verify(token, JWT_SECRET);
+        console.log("verifiedToken:", verifiedToken);
+    } catch (error) {
+        console.error("EXPIRED_TOKEN_ERROR: ", error.name, error.message);
+    }
+}
+
+module.exports = {
+    createToken,
+    verifyToken,
+    checkTermOfToken,
+>>>>>>> Stashed changes
 }
