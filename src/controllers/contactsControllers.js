@@ -28,7 +28,9 @@ const addContactControler = async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
   await addContact({ name, email, phone, favorite });
   res.json({
-    message: `you add contact name: ${name},email: ${email}, phone: ${phone}`,
+    message: `you add contact name: ${name},email: ${email}, phone: ${phone}, favorit: ${
+      !favorite ? "false" : "true"
+    }`,
   });
 };
 
