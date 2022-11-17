@@ -76,3 +76,5 @@ module.exports = {
   getCurrentUser,
   updateUserSubscription,
 };
+
+const b = 1;
