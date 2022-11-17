@@ -1,25 +1,36 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
+// const modelMiddleware = require("/nodejs-homework-template-vm/middlewears/models");
+const {
+  addContactValidation,
+  putContactVlidation,
+  patchContactVlidation,
+} = require("/nodejs-homework-template-vm/middlewears/validationMiddleware");
+const {
+  getContacts,
+  addContacts,
+  getContactsById,
+  putContacts,
+  removeContacts,
+  putContactsFav,
+} = require("/nodejs-homework-template-vm/contrillers/contactController");
+const {
+  asyncWrapper,
+} = require("/nodejs-homework-template-vm/helpers/apiHelpers");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", asyncWrapper(getContacts));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", asyncWrapper(getContactsById));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", addContactValidation, asyncWrapper(addContacts));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", asyncWrapper(removeContacts));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+router.put("/:contactId", putContactVlidation, asyncWrapper(putContacts));
+router.patch(
+  "/:contactId/favorite",
+  patchContactVlidation,
+  asyncWrapper(putContactsFav)
+);
+module.exports = router;
