@@ -7,6 +7,7 @@ const {
   userRegistration,
   userLogin,
   userLogout,
+  userCurrent,
 } = require("../../controllers/auth.controllers");
 const validationToken = require("../../middleware/validationToken");
 
@@ -20,7 +21,7 @@ authRouter.post(
   validationBody(schemaReg),
   tryCatchWrapper(userLogin)
 );
-authRouter.post("/current", validationToken, tryCatchWrapper(userLogin));
+authRouter.post("/current", validationToken, tryCatchWrapper(userCurrent));
 authRouter.post("/logout", validationToken, tryCatchWrapper(userLogout));
 
 module.exports = authRouter;
