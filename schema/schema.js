@@ -22,7 +22,12 @@ const schemaPUT = Joi.object({
   favorite: Joi.boolean(),
 });
 
+const schemaPATCH = Joi.object({
+  favorite: Joi.boolean().required().label("missing field favorite"),
+});
+
 module.exports = {
   schemaPUT,
   schemaPOST,
+  schemaPATCH,
 };

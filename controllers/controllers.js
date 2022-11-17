@@ -25,7 +25,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   const body = req.body;
   const newContact = await addContact(body);
-  res.json({ newContact });
+  res.status(201).json({ newContact });
 };
 
 const deleteById = async (req, res, next) => {

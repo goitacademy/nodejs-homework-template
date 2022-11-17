@@ -9,19 +9,19 @@ const {
   updateStatusById,
 } = require("../../controllers/controllers");
 const validationBody = require("../../middleware/validationBody");
-const schema = require("../../schema/schema");
+const { schemaPUT, schemaPOST, schemaPATCH } = require("../../schema/schema");
 
 const router = express.Router();
 
 router.get("/", tryCatchWrapper(getAll));
 router.get("/:id", tryCatchWrapper(getById));
 router.delete("/:id", tryCatchWrapper(deleteById));
-router.patch("/:id/favorite", tryCatchWrapper(updateStatusById));
-router.post("/", validationBody(schema.schemaPOST), tryCatchWrapper(create));
-router.put(
-  "/:id",
-  validationBody(schema.schemaPUT),
-  tryCatchWrapper(updateById)
+router.patch(
+  "/:id/favorite",
+  validationBody(schemaPATCH),
+  tryCatchWrapper(updateStatusById)
 );
+router.post("/", validationBody(schemaPOST), tryCatchWrapper(create));
+router.put("/:id", validationBody(schemaPUT), tryCatchWrapper(updateById));
 
 module.exports = router;

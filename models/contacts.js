@@ -7,18 +7,13 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   console.log(contactId);
-  const contactToShow = Contact.findById(contactId);
+  const contactToShow = await Contact.findById(contactId);
   return contactToShow;
 };
 
 const removeContact = async (contactId) => {
-  const contactToRemove = Contact.findById(contactId);
-  if (contactToRemove) {
-    await Contact.findByIdAndDelete(contactId);
-    return true;
-  } else {
-    return null;
-  }
+  const removedContact = await Contact.findByIdAndDelete(contactId);
+  return removedContact;
 };
 
 const addContact = async (body) => {
@@ -34,7 +29,7 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const updatedContact = Contact.findByIdAndUpdate(contactId, body, {
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
     new: true,
   });
   return updatedContact;
@@ -43,7 +38,7 @@ const updateContact = async (contactId, body) => {
 const updateStatusContact = async (contactId, body) => {
   console.log(contactId);
   console.log(body);
-  const updatedStatus = Contact.findByIdAndUpdate(contactId, body, {
+  const updatedStatus = await Contact.findByIdAndUpdate(contactId, body, {
     new: true,
   });
   return updatedStatus;
