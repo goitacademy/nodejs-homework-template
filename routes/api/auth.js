@@ -103,7 +103,7 @@ router.get("/users/current", authorize, (req, res, next) => {
   }
 });
 
-const avatarsDir = path.join(__dirname, "../../public/avatars");
+const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 router.patch(
   "/users/avatars",
@@ -112,28 +112,25 @@ router.patch(
   async (req, res, next) => {
     try {
       const { _id } = req.user;
-      const { path: tmpDir, originalname } = req.file;
-      // console.log(tmpDir);
-      const [extention] = originalname.split(".").reverse();
-      const newAvatar = `${_id}.${extention}`;
+      const { path: tmpUpload } = req.file;
+      const extention = tmpUpload.split(".").pop();
 
-      const uploadDir = path.join(avatarsDir, newAvatar);
+      const newAvatar = `${String(_id)}.${extention}`;
 
-      jimp
-        .read(tmpDir)
-        .then((image) => image.resize(250, 250).write(uploadDir))
-        .catch((error) => console.log(error));
-
-      fs.unlink(tmpDir);
-
-      // console.log(uploadDir);
-      await fs.rename(tmpDir, uploadDir);
       const avatarURL = path.join("avatars", newAvatar);
-      await User.findByIdAndUpdate(req.user._id, { avatarURL });
-      res.json({ avatarURL });
+      const resultUpload = path.join(avatarsDir, newAvatar);
+
+      (await jimp.read(tmpUpload)).resize(250, 250).writeAsync(tmpUpload);
+
+      await fs.rename(tmpUpload, resultUpload);
+
+      const result = await User.findByIdAndUpdate(
+        _id,
+        { avatarURL },
+        { returnDocument: "after" }
+      );
+      res.status(200).json({ avatarURL: result.avatarURL });
     } catch (error) {
-      // fs.unlink(tmpDir);
-      // throw error;
       next(error);
     }
   }
