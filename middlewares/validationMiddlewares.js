@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const methods = require("../models/contacts");
 
 const addPostValidation = async (req, res, next) => {
   const schema = Joi.object({
@@ -22,6 +23,8 @@ const addPostValidation = async (req, res, next) => {
 };
 
 const putUpdateValidation = async (req, res, next) => {
+  const db = await methods.updateContact(req.params.contactId, req.body);
+
   const schema = Joi.object({
     name: Joi.string().alphanum().min(2).max(30).optional(),
     email: Joi.string()
@@ -34,12 +37,12 @@ const putUpdateValidation = async (req, res, next) => {
   })
     .required()
     .min(1);
-
   const validationResult = schema.validate(req.body);
-  if (validationResult.error) {
+  if (validationResult.error || !db) {
     res.status(404).json({
       status: "error",
       message: "Not found",
+      m: Boolean(db),
     });
   }
 
