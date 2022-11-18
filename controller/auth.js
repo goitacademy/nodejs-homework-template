@@ -24,7 +24,7 @@ const singInController = async (req, res) => {
   const {email, password} = req.body;
 
   const currentUser = await singIn(email, password);
-
+  // console.log("currentUser", currentUser);
   if (!currentUser)
     throw customError({status: 401, message: "Email or password is wrong"});
 
@@ -39,7 +39,20 @@ const singInController = async (req, res) => {
   });
 };
 
-const singOutController = async (req, res) => {
+// const singOutController = async (req, res) => {
+//   res.json({
+//     status: "success",
+//     code: 204,
+//     data: {
+//       message: "No Content",
+//     },
+//   });
+// };
+
+const singOutController = async (req, res, _next) => {
+  const id = String(req.user._id);
+  await User.updateToken(id, null);
+  // return res.status(204).json({});
   res.json({
     status: "success",
     code: 204,
@@ -52,11 +65,15 @@ const singOutController = async (req, res) => {
 const currentUserController = (req, res, next) => {
   const {subscription} = req.user;
   const {email} = req.body;
-  console.log("email", email);
+  const id = String(req.user._id);
+  console.log("id", id);
+  const user = User.findById(id);
+  console.log("user", user);
   res.json({
     status: "success",
     code: 200,
     data: {
+      user,
       email,
       subscription,
     },
