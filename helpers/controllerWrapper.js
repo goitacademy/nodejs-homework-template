@@ -3,6 +3,9 @@ const ctrlWrapper = controller => {
         try {
             await controller(req,res,next)
         } catch (error) {
+            console.log('-----------------------------------------------------');
+            console.log(error);
+            console.log('-----------------------------------------------------');
             next(error)
         }
     }
