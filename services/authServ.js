@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {User} = require("../models/user");
 const {SECRET} = require("../config");
+const {Unauthorized} = require("http-errors");
 
 const singUp = async (email, password, subscription) => {
   const user = new User(
@@ -44,6 +45,22 @@ const singIn = async (email, password) => {
   return user;
 };
 
+const singOut = async ({userId}) => {
+  const user = await User.findOne({_id: userId});
+
+  user.token = null;
+  await user.save();
+};
+
+const getCurrentUser = async ({userId}) => {
+  const user = await User.findOne({_id: userId});
+  // chack user!
+  if (!user) throw new Unauthorized("Not authorized");
+  const {email, subscription} = user;
+  return {email, subscription};
+  // send JWT
+};
+
 const changeSub = async (subscription, _id) => {
   const results = await User.findByIdAndUpdate(
     {_id},
@@ -59,5 +76,7 @@ const changeSub = async (subscription, _id) => {
 module.exports = {
   singUp,
   singIn,
+  singOut,
+  getCurrentUser,
   changeSub,
 };
