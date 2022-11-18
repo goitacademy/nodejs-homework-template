@@ -1,5 +1,5 @@
 const { User } = require("../models/userModel");
-const { Conflict } = require("http-errors");
+const { Unauthorized } = require("http-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -10,8 +10,8 @@ const registration = async (email, password) => {
 const login = async (email, password) => {
   const user = await User.findOne({ email });
 
-  if (!(await bcrypt.compare(password, user.password))) {
-    throw new Conflict("wrong password");
+  if (!user || (await !bcrypt.compare(password, user.password))) {
+    throw new Unauthorized("Email or password is wrong");
   }
   const token = jwt.sign(
     {
@@ -20,7 +20,8 @@ const login = async (email, password) => {
     },
     process.env.JWT_SECRET
   );
-
+  user.token = token;
+  await User.findByIdAndUpdate(user._id, user);
   return token;
 };
 module.exports = {

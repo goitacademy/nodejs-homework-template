@@ -2,7 +2,9 @@ const service = require("../services/contactsServices");
 const get = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const results = await service.listContacts(_id);
+    const filterOptions = { owner: _id };
+
+    const results = await service.listContacts(filterOptions);
     res.status(200).json(results);
   } catch (e) {
     console.error(e);
@@ -13,8 +15,10 @@ const get = async (req, res, next) => {
 const getById = async (req, res, next) => {
   const { _id } = req.user;
   const { contactId } = req.params;
+  const filterOptions = { _id: contactId, owner: _id };
+
   try {
-    const result = await service.getContactById(contactId, _id);
+    const result = await service.getContactById(filterOptions);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -32,10 +36,12 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { _id } = req.user;
   const body = req.body;
+  const { _id } = req.user;
+  const filterOptions = { ...body, owner: _id };
+
   try {
-    const result = await service.addContact(body, _id);
+    const result = await service.addContact(filterOptions);
 
     res.status(201).json(result);
   } catch (e) {
@@ -45,11 +51,15 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const { _id } = req.user;
   const { contactId } = req.params;
+  const { _id } = req.user;
   const body = req.body;
+  const filterOptions = { owner: _id, _id: contactId };
+  const update = { ...body };
+
   try {
-    const result = await service.updateContact(contactId, body, _id);
+    const result = await service.updateContact(filterOptions, update);
+
     if (result) {
       res.status(200).json(result);
     } else {
@@ -67,11 +77,11 @@ const update = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { _id } = req.user;
   const { contactId } = req.params;
-
+  const { _id } = req.user;
+  const filterOptions = { _id: contactId, owner: _id };
   try {
-    const result = await service.removeContact(contactId, _id);
+    const result = await service.removeContact(filterOptions);
     if (result) {
       res.status(200).json(result);
     } else {
@@ -88,12 +98,13 @@ const remove = async (req, res, next) => {
   }
 };
 const updateStatusContact = async (req, res, next) => {
-  const { _id } = req.user;
   const { contactId } = req.params;
+  const { _id } = req.user;
   const { favorite = false } = req.body;
+  const filterOptions = { _id: contactId, owner: _id };
 
   try {
-    const result = await service.updateContact(contactId, { favorite }, _id);
+    const result = await service.updateContact(filterOptions, { favorite });
     if (result) {
       res.status(200).json(result);
     } else {

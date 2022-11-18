@@ -1,23 +1,23 @@
 const { User } = require("../models/contacts.model");
 
-const listContacts = async (Userid) => {
-  return User.find({ owner: Userid });
+const listContacts = async (filterOptions) => {
+  return User.find(filterOptions);
 };
 
-const getContactById = async (contactId, userId) => {
-  return User.findOne({ _id: contactId, owner: userId });
+const getContactById = async (filter) => {
+  return User.findOne(filter);
 };
 
-const removeContact = async (contactId, userId) => {
-  return User.findOneAndRemove({ _id: contactId, owner: userId });
+const removeContact = async (filter) => {
+  return User.findOneAndRemove(filter);
 };
 
-const addContact = async (body, UserId) => {
-  return User.create({ ...body, owner: UserId });
+const addContact = async (filter) => {
+  return User.create(filter);
 };
 
-const updateContact = async (contactId, body, userId) => {
-  return User.findOneAndUpdate({ _id: contactId }, body, { new: true });
+const updateContact = async (filter, update) => {
+  return User.findOneAndUpdate(filter, update, { new: true });
 };
 
 module.exports = {
