@@ -52,7 +52,7 @@ const singOutController = async (req, res) => {
 const currentUserController = (req, res, next) => {
   const {subscription} = req.user;
   const {email} = req.body;
-
+  console.log("email", email);
   res.json({
     status: "success",
     code: 200,
