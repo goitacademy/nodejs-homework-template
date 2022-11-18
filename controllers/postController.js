@@ -49,12 +49,7 @@ const deleteContactById = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
   const db = await methods.updateContact(req.params.contactId, req.body);
-  if (!db) {
-    res.status(404).json({
-      status: "error",
-      message: "Not found",
-    });
-  }
+
   res.json({
     status: "success",
     updateContact: db,

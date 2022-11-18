@@ -31,7 +31,9 @@ const putUpdateValidation = async (req, res, next) => {
       })
       .optional(),
     phone: Joi.string().alphanum().min(3).max(30).optional(),
-  });
+  })
+    .required()
+    .min(1);
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
