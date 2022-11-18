@@ -5,21 +5,26 @@ const {
   removeContactById,
   addOneContact,
   updateContactById,
+  updateContactStatus
 } = require('../../controllers/contactsControllers');
 
-const { addContactSchema, updateContactSchema } = require("../../schemes/validationschemes");
+const { tryCatchWrapper } = require("../../helpers/helpers");
+
+const { addContactSchema, updateContactSchema, updateStatusSchema } = require("../../schemes/validationschemes");
 const { validation } = require("../../middlewares/validationBody");
 
 const router = express.Router();
 
-router.get('/', contactsList);
+router.get('/', tryCatchWrapper(contactsList));
 
-router.get('/:contactId', getOneContactById);
+router.get('/:contactId', tryCatchWrapper(getOneContactById));
 
-router.post('/', validation(addContactSchema), addOneContact);
+router.post('/', validation(addContactSchema), tryCatchWrapper(addOneContact));
 
-router.delete('/:contactId', removeContactById);
+router.delete('/:contactId', tryCatchWrapper(removeContactById));
 
-router.put('/:contactId', validation(updateContactSchema), updateContactById);
+router.put('/:contactId', validation(updateContactSchema), tryCatchWrapper(updateContactById));
+
+router.put('/:contactId/favorite', validation(updateStatusSchema), tryCatchWrapper(updateContactStatus));
 
 module.exports = router;

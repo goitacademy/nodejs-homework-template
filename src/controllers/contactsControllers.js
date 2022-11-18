@@ -1,35 +1,30 @@
-const {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
-} = require('../models/contacts');
+const { Contact } = require("../models/contact");
 
 const contactsList = async (req, res, next) => {
-    const data = await listContacts();
+    const contacts = await Contact.find();
 
-    return res.status(200).json(data);
+    return res.status(200).json(contacts);
 };
 
 const getOneContactById = async (req, res, next) => {
     const { contactId } = req.params;
 
-    const contact = await getContactById(contactId);
+    const contact = await Contact.findById(contactId);
     if (!contact) {
-        return res.status(404).json({ "message": "Not found" });;
+        return res.status(404).json({ "message": "Not found" });
     }
     return res.status(200).json(contact);
 };
 
 const addOneContact = async (req, res, next) => {
-    const newContact = await addContact(req.body);
+    const { name, email, phone, favorite } = req.body
+    const newContact = await Contact.create({ name, email, phone, favorite });
     return res.status(201).json({ newContact });
 }
 
 const removeContactById = async (req, res, next) => {
     const { contactId } = req.params;
-    const removedContact = await removeContact(contactId);
+    const removedContact = await Contact.findByIdAndDelete(contactId);
 
     if (!removedContact) {
         return res.status(404).json({ "message": "Not found" });
@@ -40,7 +35,7 @@ const removeContactById = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
     const { contactId } = req.params;
-    const changedContact = await updateContact(contactId, req.body);
+    const changedContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
 
     if (!changedContact) {
         return res.status(404).json({ "message": "not found" });
@@ -49,10 +44,24 @@ const updateContactById = async (req, res, next) => {
     return res.status(200).json(changedContact);
 };
 
+const updateContactStatus = async (req, res, next) => {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+
+    const changedStatus = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
+
+    if (!changedStatus) {
+        res.status(404).json({ "message": "not found" });
+    }
+
+    return res.status(200).json(changedStatus);
+}
+
 module.exports = {
     contactsList,
     getOneContactById,
     removeContactById,
     addOneContact,
-    updateContactById
+    updateContactById,
+    updateContactStatus
 }
