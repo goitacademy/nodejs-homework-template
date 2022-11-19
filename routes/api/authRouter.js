@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const {
   singUpCtrl,
   singInCtrl,
@@ -8,10 +7,11 @@ const {
   subscriptCtrl,
 } = require("../../controller/auth");
 
-const {schemaPost, schemaPatch} = require("../../schema/userValidation");
-const {validatorBody} = require("../../middleware/validBody");
 const {check} = require("../../middleWare/auth");
 const {wrapper} = require("../../helpers/tryCatch");
+const {schemaPost, schemaPatch} = require("../../schema/userValidation");
+const {validatorBody} = require("../../middleware/validBody");
+const router = express.Router();
 
 router.get("/current", check, wrapper(currentUserCtrl));
 router.patch("/", check, subscriptCtrl);
