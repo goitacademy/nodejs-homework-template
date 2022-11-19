@@ -1,3 +1,8 @@
+function NotFoundHttpError() {
+  const err = new Error("Not Found");
+  err.status = 404;
+  return err;
+}
 const customError = ({status, message}) => {
   const error = new Error(message);
   error.status = status;
@@ -7,10 +12,5 @@ const customError = ({status, message}) => {
 
 module.exports = {
   customError,
+  NotFoundHttpError,
 };
-
-// function NotFoundHttpError() {
-//   const err = new Error("Not Found");
-//   err.status = 404;
-//   return err;
-// }
