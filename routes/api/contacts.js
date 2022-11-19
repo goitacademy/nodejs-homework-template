@@ -47,7 +47,6 @@ router.get('/:contactId', async (req, res, next) => {
       //   message: `Contact wiht id:'${contactId}' not found`
       // })
       // return
-
     }
 
     res.status(200).json({
