@@ -45,8 +45,8 @@ router.get("/", async (req, res, next) => {
 
 
 
-
-//! 2. Получение ОДНОГО ПОЛЬЗОВАТЕЛЯ по id
+//------------------------------------------------------------
+//? 2. Получение ОДНОГО ПОЛЬЗОВАТЕЛЯ по id
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await contactsOperations.getContactById(contactId)
