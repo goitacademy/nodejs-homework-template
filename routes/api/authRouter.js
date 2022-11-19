@@ -1,41 +1,31 @@
 const express = require("express");
 const router = express.Router();
-
 const {
-  singUpController,
-  singInController,
-  singOutController,
-  currentUserController,
-  subscriptionController,
+  singUpCtrl,
+  singInCtrl,
+  singOutCtrl,
+  currentUserCtrl,
+  subscriptCtrl,
 } = require("../../controller/auth");
 
-const {
-  schemaPostUser,
-  schemaPatchUser,
-} = require("../../schema/userValidation");
-
+const {schemaPost, schemaPatch} = require("../../schema/userValidation");
 const {validatorBody} = require("../../middleware/validBody");
-
-const {authMiddleware} = require("../../middleware/auth");
+const authen = require("../../middleware/auth");
 const {wrapper} = require("../../helpers/tryCatch");
 
-router.post(
-  "/singup",
-  validatorBody(schemaPostUser),
-  wrapper(singUpController)
-);
+router.post("/singup", validatorBody(schemaPost), wrapper(singUpCtrl));
 
-router.post("/login", validatorBody(schemaPostUser), wrapper(singInController));
+router.post("/login", validatorBody(schemaPost), wrapper(singInCtrl));
 
-router.get("/logout", authMiddleware, wrapper(singOutController));
+router.get("/logout", authen, wrapper(singOutCtrl));
 
-router.get("/current", authMiddleware, wrapper(currentUserController));
+router.get("/current", authen, wrapper(currentUserCtrl));
 
 router.patch(
   "/subscription",
-  authMiddleware,
-  validatorBody(schemaPatchUser),
-  wrapper(subscriptionController)
+  authen,
+  validatorBody(schemaPatch),
+  wrapper(subscriptCtrl)
 );
 
 module.exports = router;
