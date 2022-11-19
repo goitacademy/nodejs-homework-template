@@ -44,12 +44,10 @@ lineBreak();
 
 
 
-
-
-
-
-
-
+const userPath = path.join(__dirname, "/../models/contacts.json");
+lineBreak();
+console.log("userPath:".bgBlue.yellow, userPath.blue);
+lineBreak();
 // TODO: _________________________________________________________________________________________
 
 
