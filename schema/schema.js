@@ -26,8 +26,14 @@ const schemaPATCH = Joi.object({
   favorite: Joi.boolean().required().label("missing field favorite"),
 });
 
+const schemaAUTH = Joi.object({
+  email: Joi.string().required().label("Missing email"),
+  password: Joi.string().required().label("Missing password"),
+});
+
 module.exports = {
   schemaPUT,
   schemaPOST,
   schemaPATCH,
+  schemaAUTH,
 };

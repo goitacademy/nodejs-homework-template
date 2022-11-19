@@ -4,7 +4,7 @@ dotenv.config();
 
 const app = require("./app");
 
-const { HOST_DB } = process.env;
+const { HOST_DB, PORT } = process.env;
 
 async function main() {
   try {
@@ -15,7 +15,7 @@ async function main() {
     await mongoose.connect(HOST_DB);
     console.log("Database connection successful");
 
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Server running. Use our API on port: 3000");
     });
   } catch (err) {
