@@ -1,8 +1,8 @@
 const {customError} = require("../helpers/error");
 const {User} = require("../models/user");
-const {singUp, singIn, changeSub} = require("../services/authServ");
+const {singUp, singIn, singOut, changeSub} = require("../services/authServ");
 
-const singUpController = async (req, res) => {
+const singUpCtrl = async (req, res) => {
   const {email, password, subscription} = req.body;
   const user = await User.findOne({email});
   if (user) throw customError({status: 409, message: "Email in use"});
@@ -20,7 +20,7 @@ const singUpController = async (req, res) => {
   });
 };
 
-const singInController = async (req, res) => {
+const singInCtrl = async (req, res) => {
   const {email, password} = req.body;
 
   const currentUser = await singIn(email, password);
@@ -38,19 +38,25 @@ const singInController = async (req, res) => {
   });
 };
 
-const singOutController = async (req, res, _next) => {
-  const id = String(req.user._id);
-  await User.updateToken(id, null);
-  res.json({
-    status: "success",
-    code: 204,
-    data: {
-      message: "No Content",
-    },
-  });
+// const logout = async (req, res, next) => {
+//   const response = await singOut(req);
+//   return res.status(204).json();
+// };
+
+const singOutCtrl = async (req, res, next) => {
+  // console.log("req:", req);
+  const response = await singOut(req);
+  return res.status(204).json(response);
+  // res.json({
+  //   status: "success",
+  //   code: 204,
+  //   data: {
+  //     message: "No Content",
+  //   },
+  // });
 };
 
-const currentUserController = (req, res, next) => {
+const currentUserCtrl = (req, res, next) => {
   // const {subscription} = req.user;
   // const {email} = req.body;
   const id = String(req.user._id);
@@ -64,7 +70,7 @@ const currentUserController = (req, res, next) => {
   });
 };
 
-const subscriptionController = async (req, res, next) => {
+const subscriptCtrl = async (req, res, next) => {
   const {subscription} = req.body;
   const {_id} = req.user;
 
@@ -76,11 +82,11 @@ const subscriptionController = async (req, res, next) => {
 };
 
 module.exports = {
-  singUpController,
-  singInController,
-  singOutController,
-  currentUserController,
-  subscriptionController,
+  singUpCtrl,
+  singInCtrl,
+  singOutCtrl,
+  currentUserCtrl,
+  subscriptCtrl,
 };
 
 // const singOutController = async (req, res) => {
