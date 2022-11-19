@@ -5,6 +5,7 @@ const contactsOperations = require("../../models/contacts")
 
 
 //------------------------------------------------------------
+//? 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
 router.get('/', async (req, res, next) => {
   const contacts = await contactsOperations.listContacts()
 
@@ -20,6 +21,32 @@ router.get('/', async (req, res, next) => {
   })
 })
 
+//! 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
+router.get("/", async (req, res, next) => {
+  try {
+    console.log("START-->GET/All".green); //!
+    const users = await getUsersList();
+    console.log("END-->GET/All".green); //!
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        result: users
+      }
+    });
+
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+});
+
+
+
+
+
+
+//! 2. Получение ОДНОГО ПОЛЬЗОВАТЕЛЯ по id
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await contactsOperations.getContactById(contactId)
