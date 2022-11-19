@@ -43,13 +43,14 @@ const singIn = async (email, password) => {
 const singOut = async (id) => {
   const user = await User.findById(id);
   if (!user) {
-    throw new Unauthorized("Not authorized");
+    throw new Unauthorized("Not authorized!!");
   }
   await User.findByIdAndUpdate(id, {token: null});
 };
 
 const currentUser = async (Id) => {
   const user = await User.findOne({Id});
+  console.log("Id", Id);
   if (!user) {
     throw new Unauthorized("Not authorized!");
   }
