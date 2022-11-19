@@ -8,14 +8,7 @@ const auth = async (req, res, next) => {
     try {
       const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(verifiedToken._id);
-      if (!user) {
-        next(new Unauthorized("No user with such id"));
-      }
-      console.log(user.token);
-      if (!user.token) {
-        next(new Unauthorized("Not authorized"));
-      }
-      if (!verifiedToken) {
+      if (!user || !user.token || !verifiedToken) {
         next(new Unauthorized("Not authorized"));
       }
       req.user = user;
