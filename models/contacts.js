@@ -111,6 +111,7 @@ async function getContactById(contactId) {
     console.log(`КОНТАКТ №_${contactId}:`.yellow); //!+++
     console.table(contactsParseByIdArr); //!+++
     lineBreak();
+    return contactsParseByIdArr;
 
   } catch (error) {
     console.error(error.message.red);

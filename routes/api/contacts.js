@@ -7,14 +7,30 @@ const contactsOperations = require("../../models/contacts")
 //------------------------------------------------------------
 router.get('/', async (req, res, next) => {
   const contacts = await contactsOperations.listContacts()
-  res.json(contacts)
   // res.json({ message: 'template message' })
+  // res.json(contacts)
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    data: {
+      result: contacts
+    }
+  })
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await contactsOperations.getContactById()
-  res.json(contact)
+  const { contactId } = req.params;
+  const contact = await contactsOperations.getContactById(contactId)
+  console.log("contact:", contact);
   // res.json({ message: 'template message' })
+  // res.json(contact)
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    data: {
+      result: contact
+    }
+  })
 })
 
 router.post('/', async (req, res, next) => {
