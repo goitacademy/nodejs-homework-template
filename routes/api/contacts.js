@@ -11,22 +11,22 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const contact = await contactsOperations.getContactById
+  const contact = await contactsOperations.getContactById()
   res.json({ message: 'template message' })
 })
 
 router.post('/', async (req, res, next) => {
-  const contact = await contactsOperations.addContact
+  const contact = await contactsOperations.addContact()
   res.json({ message: 'template message' })
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const contact = await contactsOperations.removeContact
+  const contact = await contactsOperations.removeContact()
   res.json({ message: 'template message' })
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  const contact = await contactsOperations.updateContact
+  const contact = await contactsOperations.updateContact()
   res.json({ message: 'template message' })
 })
 
