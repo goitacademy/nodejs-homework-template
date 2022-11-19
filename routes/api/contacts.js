@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const createError = require('http-errors')
+const { NotFound } = require('http-errors')
 
 const contactsOperations = require("../../models/contacts")
 
@@ -34,8 +35,10 @@ router.get('/:contactId', async (req, res, next) => {
     const contact = await contactsOperations.getContactById(contactId)
 
     if (!contact) {
+      //! 4 - вариант
+      throw new NotFound(`Contact wiht id:'${contactId}' not found`)
       //! 3 - вариант
-      throw createError(404, `Contact wiht id:'${contactId}' not found`)
+      // throw createError(404, `Contact wiht id:'${contactId}' not found`)
       //! 2 - вариант
       // const error = new Error(`Contact wiht id:'${contactId}' not found`)
       // error.status = 404
