@@ -5,30 +5,10 @@ const contactsOperations = require("../../models/contacts")
 
 
 //------------------------------------------------------------
-//? 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
-router.get('/', async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts()
-
-  // res.json({ message: 'template message' })
-  // res.json(contacts)
-
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    data: {
-      result: contacts
-    }
-  })
-})
-
 //! 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts()
-
-    console.log("START-->GET/All".green); //!
-    const users = await getUsersList();
-    console.log("END-->GET/All".green); //!
 
     res.status(200).json({
       status: "success",

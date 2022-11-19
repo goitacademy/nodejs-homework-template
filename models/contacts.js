@@ -43,7 +43,6 @@ lineBreak();
 
 
 
-
 // const userPath = path.join(__dirname, "/../models/contacts.json");
 // lineBreak();
 // console.log("userPath:".bgBlue.yellow, userPath.blue);
@@ -53,7 +52,7 @@ lineBreak();
 
 
 //!* ------------------------------------------------ ВСПОМОГАТЕЛЬНЫЕ ФУНЦИИ-ВЫЗЫВАЛКИ_new ------------------------------------------------
-//todo   ------  1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ------
+//todo   ----------------------------  1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ----------------------------
 const getUsersList = async (showListAllUsers = 1) => {
   const users = JSON.parse(await fs.readFile(contactsPath, 'utf8'));
 
@@ -69,7 +68,7 @@ const getUsersList = async (showListAllUsers = 1) => {
 };
 
 
-//todo   ------  2. Создание НОВОГО списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ------
+//todo   ----------------------------  2. Создание НОВОГО списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ----------------------------
 const writeUsers = async (users) => {
   await fs.writeFile(contactsPath, JSON.stringify(users), 'utf8');
 
@@ -110,30 +109,6 @@ const writeUsers = async (users) => {
 
 
 // ----------------------------------------------------------------------------------
-// //? 1: Получаем ВСЕ КОНТАКТЫ (АСИНХРОННЫЙ вариант-2)
-// async function listContacts() {
-//   try {
-//     //! Получаем и КОНСОЛИМ значение файла contacts.json ==> СТРОКА (ВСЕ КОНТАКТЫ)
-//     const data = await fs.readFile(contactsPath, 'utf8');
-//     console.log("contacts.json:\n".yellow, data.blue); //!
-//     console.log("typeof (contacts.json):".yellow, (typeof data).red); //!
-//     lineBreak();
-
-//     //!!! ПАРСИМ и КОНСОЛИМ значение файла contacts.json ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ)
-//     const contactsParse = JSON.parse(data);
-//     // console.log("СПИСОК КОНТАКТОВ:".yellow, contactsParse); //!+++
-//     console.log("СПИСОК КОНТАКТОВ:".yellow); //!+++
-//     console.table(contactsParse); //!+++
-//     console.log("typeof (СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParse).red); //!
-//     lineBreak();
-//     return contactsParse;
-
-//   } catch (error) {
-//     console.error(error.message.red);
-//     lineBreak();
-//   };
-// };
-
 //! 1: Получаем ВСЕ КОНТАКТЫ 
 async function listContacts() {
   try {

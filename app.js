@@ -19,10 +19,12 @@ app.use(express.json())
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
+  console.log('Middleware - Такой маршрут не найден...'.bgYellow.black)
   res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
+
   res.status(500).json({ message: err.message })
 })
 
