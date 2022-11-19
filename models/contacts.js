@@ -132,22 +132,15 @@ async function getContactById(contactId) {
     const contacts = await getUsersList();
     const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
 
+    //! ===========================console============================
     if (!contact) {
-      //! ===========================console============================
       console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
       lineBreak();
       console.log("END-->GET/:id".blue); //!
-      //! ==============================================================
       return contact;
-      // return res.status(404).json({
-      //   status: "error",
-      //   code: 404,
-      //   message: `User wiht id:'${contactId}' not found`
-      // });
     };
 
-    //! ===========================console============================
-    console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!+++
+    console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!
     console.table([contact]); //!+++
     console.log("END-->GET/:id".blue); //!
     //! ==============================================================
