@@ -67,6 +67,7 @@ const currentUserCtrl = async (req, res, next) => {
   const Id = req.user._id;
   // const response = await currentUser(Id);
   // return res.status(204).json(response);
+  console.log("Id:", Id);
   await currentUser(Id);
 
   // const {subscription} = req.user;
