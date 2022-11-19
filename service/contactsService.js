@@ -1,11 +1,14 @@
 const Contact = require("../models/contact.model");
 
 const getAllContacts = async ({ owner, limit, page, favorite }) => {
-  console.log(owner);
-  console.log(":", limit, page);
-  console.log("favorite:", favorite);
+  // console.log(owner);
+  // console.log(":", limit, page);
+  // console.log("favorite:", favorite);
+  const fav = favorite || [false, true];
+  // console.log("fav," + fav);
   const skip = (page - 1) * limit;
-  return Contact.find({ owner, favorite }).skip(skip).limit(limit);
+  return Contact.find({ owner, favorite: fav }).skip(skip).limit(limit);
+  // return Contact.find({ owner, favorite }).skip(skip).limit(limit);
 };
 
 const getContactById = (id) => {
