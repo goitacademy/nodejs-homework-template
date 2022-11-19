@@ -52,7 +52,7 @@ const singOut = async ({userId}) => {
   await user.save();
 };
 
-const getCurrentUser = async ({userId}) => {
+const currentUser = async ({userId}) => {
   const user = await User.findOne({_id: userId});
   // chack user!
   if (!user) throw new Unauthorized("Not authorized");
@@ -77,6 +77,6 @@ module.exports = {
   singUp,
   singIn,
   singOut,
-  getCurrentUser,
+  currentUser,
   changeSub,
 };
