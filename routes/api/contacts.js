@@ -19,12 +19,10 @@ router.get("/", async (req, res, next) => {
     })
 
   } catch (e) {
-    res.status(500).json({ error: e.message })
+    next(e)
+    // res.status(500).json({ error: e.message })
   }
 })
-
-
-
 
 
 //------------------------------------------------------------
@@ -38,7 +36,7 @@ router.get('/:contactId', async (req, res, next) => {
       return res.status(404).json({
         status: "error",
         code: 404,
-        message: `User wiht id:'${contactId}' not found`
+        message: `Contact wiht id:'${contactId}' not found`
       })
     }
 
@@ -51,7 +49,8 @@ router.get('/:contactId', async (req, res, next) => {
     })
 
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    next(e)
+    // res.status(500).json({ error: e.message })
   }
 })
 
