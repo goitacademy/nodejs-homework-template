@@ -2,12 +2,14 @@ const {Unauthorized} = require("http-errors");
 const jwt = require("jsonwebtoken");
 const {User} = require("../models/user");
 const {SECRET} = require("../config");
-// require("dotenv").config();
+require("dotenv").config();
 
 // const SECRET = process.env.SECRET;
 
 const check = async (req, res, next) => {
-  console.log("req", req);
+  // const {user} = req;
+  // console.log("user", req.user);
+
   try {
     const {authorization = 0} = req.headers;
 
