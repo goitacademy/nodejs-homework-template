@@ -3,11 +3,11 @@ const {schemaPost, schemaPut, schemaPatch} = require("../../schema/validation");
 const controller = require("../../controller");
 const {validatorBody} = require("../../middleWare/validBody");
 const {wrapper} = require("../../helpers/tryCatch");
-const {check} = require("../../middleWare/auth");
+const {checkToken} = require("../../middleWare/auth");
 
 const router = express.Router();
 
-router.use(check);
+router.use(checkToken);
 
 router.get("/", wrapper(controller.getAllContact));
 
