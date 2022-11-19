@@ -1,11 +1,6 @@
 const {customError} = require("../helpers/error");
 const {User} = require("../models/user");
 const {
-  // singUpServ,
-  // singInServ,
-  // singOutServ,
-  // currentUserServ,
-  // subscriptServ,
   singUp,
   singIn,
   singOut,
@@ -15,10 +10,7 @@ const {
 
 const singUpCtrl = async (req, res) => {
   const {email, password, subscription} = req.body;
-  // const data = await singUpServ(email, password, subscription);
-  // res.status(201).json({user: data});
   await singUp(email, password, subscription);
-
   res.json({
     status: "success",
     code: 201,
@@ -50,8 +42,7 @@ const singInCtrl = async (req, res) => {
 
 const singOutCtrl = async (req, res, next) => {
   const Id = req.user._id;
-  // const response=await singOutServ(Id);
-  // return res.status(204).json(response);
+  console.log("Id", Id);
   await singOut(Id);
 
   res.json({
@@ -65,22 +56,17 @@ const singOutCtrl = async (req, res, next) => {
 
 const currentUserCtrl = async (req, res, next) => {
   const Id = req.user._id;
-  // const response = await currentUser(Id);
-  // return res.status(204).json(response);
   console.log("Id:", Id);
   await currentUser(Id);
 
-  // const {subscription} = req.user;
-  // const {email} = req.body;
-
   const id = String(req.user._id);
-  const user = User.findById(id);
+  User.findById(id);
   res.json({
+    // token: user.token,
+    // email: user.email,
     status: "success",
     code: 200,
-    data: {
-      user: {email: user.email, subscription: user.subscription},
-    },
+    // data: {email, subscription},
   });
 };
 
@@ -102,13 +88,3 @@ module.exports = {
   currentUserCtrl,
   subscriptCtrl,
 };
-
-// const singOutController = async (req, res) => {
-//   res.json({
-//     status: "success",
-//     code: 204,
-//     data: {
-//       message: "No Content",
-//     },
-//   });
-// };
