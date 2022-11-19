@@ -148,8 +148,6 @@ async function getContactById(contactId) {
 
 
 
-
-
 // ----------------------------------------------------------------------------------
 //? 3: Удаляем ОДИН КОНТАКТ (АСИНХРОННЫЙ вариант-2)
 async function removeContact(contactId) {
