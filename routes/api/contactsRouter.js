@@ -12,9 +12,11 @@ const {
   create,
   update,
   updateStatusContact,
-} = require("../../controller/index");
-const router = express.Router();
+} = require("../../controller/contactsController");
+const { auth } = require("../../middleware/authMiddleware");
 
+const router = express.Router();
+router.use(auth);
 router.get("/", get);
 
 router.get("/:contactId", getById);
