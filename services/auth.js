@@ -1,4 +1,3 @@
-// const {customError} = require("../helpers/error");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const {Conflict, Unauthorized} = require("http-errors");
@@ -42,22 +41,26 @@ const singIn = async (email, password) => {
 
 const singOut = async (id) => {
   const user = await User.findById(id);
+
   if (!user) {
     throw new Unauthorized("Not authorized!!");
   }
   await User.findByIdAndUpdate(id, {token: null});
+  console.log("user.token2", user.token);
 };
 
 const currentUser = async (Id) => {
   const user = await User.findOne({Id});
-  console.log("Id", Id);
+
   if (!user) {
     throw new Unauthorized("Not authorized!");
   }
+
   return {
-    token: user.token,
     Id,
+
     user: {
+      token: user.token,
       email: user.email,
       subscription: user.subscription,
     },
@@ -77,26 +80,9 @@ const changeSub = async (subscription, _id) => {
 };
 
 module.exports = {
-  // singUpServ,
-  // singInServ,
-  // singOutServ,
-  // currentUserServ,
-  // subscriptServ,
   singUp,
   singIn,
   singOut,
   currentUser,
   changeSub,
 };
-
-// const singOutController = async (req, res) => {
-//   res.json({
-//     status: "success",
-//     code: 204,
-//     data: {
-//       message: "No Content",
-//     },
-//   });
-// };
-
-// return await User.create({email, password: await bcrypt.hash(password, 10), subscription});
