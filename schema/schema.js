@@ -9,6 +9,7 @@ const schemaPOST = Joi.object({
     })
     .required(),
   phone: Joi.number().required(),
+  favorite: Joi.boolean(),
 });
 
 const schemaPUT = Joi.object({
@@ -18,9 +19,15 @@ const schemaPUT = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.number(),
+  favorite: Joi.boolean(),
+});
+
+const schemaPATCH = Joi.object({
+  favorite: Joi.boolean().required().label("missing field favorite"),
 });
 
 module.exports = {
   schemaPUT,
   schemaPOST,
+  schemaPATCH,
 };
