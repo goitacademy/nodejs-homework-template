@@ -5,11 +5,9 @@ const {
   deleteContactById,
   getContactsById,
   updateContactById,
-} = require("../../controllers/postController");
-const {
-  addPostValidation,
-  putUpdateValidation,
-} = require("../../middlewares/validationMiddlewares");
+} = require("../../controllers/controller");
+const { validation } = require("../../middlewares/validationBody");
+const { addPostSchema, updatePutSchema } = require("../../schemas/schema");
 
 const router = express.Router();
 
@@ -17,10 +15,10 @@ router.get("/", getContactList);
 
 router.get("/:contactId", getContactsById);
 
-router.post("/", addPostValidation, addContactById);
+router.post("/", validation(addPostSchema), addContactById);
 
 router.delete("/:contactId", deleteContactById);
 
-router.put("/:contactId", putUpdateValidation, updateContactById);
+router.put("/:contactId", validation(updatePutSchema), updateContactById);
 
 module.exports = router;
