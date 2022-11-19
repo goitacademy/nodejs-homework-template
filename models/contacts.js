@@ -35,7 +35,7 @@ const { lineBreak } = require("../service");
 
 //------------------------------------------------------------------------------------------------
 // TODO: ------------------------ Определяем путь к файлу  contacts.json ------------------------
-const contactsPath = path.join(__dirname, "/../models/contacts2.json");
+const contactsPath = path.join(__dirname, "/../models/contacts.json");
 lineBreak();
 // console.log("contactsPath:".red, contactsPath.green); //!
 console.log("contactsPath:".bgBlue.yellow, contactsPath.blue); //!
@@ -111,23 +111,16 @@ const writeUsers = async (users) => {
 // ----------------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 async function listContacts() {
-  // try {
   console.log("START-->GET/All".green); //!
   const contacts = await getUsersList();
   console.log("END-->GET/All".green); //!
   return contacts;
-
-  // } catch (error) {
-  //   console.error(error.message.red);
-  //   lineBreak();
-  // };
 };
 
 
 // ----------------------------------------------------------------------------------
 //! 2. Получение ОДНОГО КОНТАКТА по id
 async function getContactById(contactId) {
-  // try {
   console.log("START-->GET/:id".blue); //!
   const contacts = await getUsersList();
   const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
@@ -146,11 +139,6 @@ async function getContactById(contactId) {
   //! ==============================================================
 
   return contact;
-
-  // } catch (error) {
-  //   console.error(error.message.red);
-  //   lineBreak();
-  // };
 };
 
 
