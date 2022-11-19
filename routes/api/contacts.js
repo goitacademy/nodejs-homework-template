@@ -1,19 +1,17 @@
 const express = require("express");
 const contactsModels = require("../../models/contacts");
+// const { Contact } = require("../../schemas/contactSchema");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json(await contactsModels.listContacts());
+  const results = await contactsModels.listContacts();
+  res.status(200).json(results);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await contactsModels.getContactById(req.params.contactId);
-  if (!contact) {
-    res.status(404).json({ message: "Not found" });
-    return;
-  }
-  res.json(contact);
+  const results = await contactsModels.getContactById(req.params.contactId);
+  res.status(200).json(results);
 });
 router.post("/", async (req, res, next) => {
   const addedContactStatus = await contactsModels.addContact(req.body);
