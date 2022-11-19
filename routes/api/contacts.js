@@ -5,7 +5,7 @@ const contactsOperations = require("../../models/contacts")
 
 
 //------------------------------------------------------------
-//! 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
+//! 1. Получение списка ВСЕХ КОНТАКТОВ
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts()
@@ -16,34 +16,57 @@ router.get("/", async (req, res, next) => {
       data: {
         result: contacts
       }
-    });
+    })
 
   } catch (e) {
     res.status(500).json({ error: e.message })
   }
-});
+})
 
 
 
 
 
 //------------------------------------------------------------
-//? 2. Получение ОДНОГО ПОЛЬЗОВАТЕЛЯ по id
+//! 2. Получение ОДНОГО КОНТАКТА по id
 router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contactsOperations.getContactById(contactId)
+  try {
+    const { contactId } = req.params;
+    const contact = await contactsOperations.getContactById(contactId)
 
-  // res.json({ message: 'template message' })
-  // res.json(contact)
-
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    data: {
-      result: contact
+    if (!contact) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `User wiht id:'${contactId}' not found`
+      })
     }
-  })
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        result: contact
+      }
+    })
+
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.post('/', async (req, res, next) => {
   const contact = await contactsOperations.addContact()

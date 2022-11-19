@@ -109,13 +109,13 @@ const writeUsers = async (users) => {
 
 
 // ----------------------------------------------------------------------------------
-//! 1: Получаем ВСЕ КОНТАКТЫ 
+//! 1. Получение списка ВСЕХ КОНТАКТОВ
 async function listContacts() {
   try {
     console.log("START-->GET/All".green); //!
-    const users = await getUsersList();
+    const contacts = await getUsersList();
     console.log("END-->GET/All".green); //!
-    return users;
+    return contacts;
 
   } catch (error) {
     console.error(error.message.red);
@@ -125,30 +125,48 @@ async function listContacts() {
 
 
 // ----------------------------------------------------------------------------------
-//? 2: Получаем ОДИН КОНТАКТ (АСИНХРОННЫЙ вариант-2)
+//! 2. Получение ОДНОГО КОНТАКТА по id
 async function getContactById(contactId) {
   try {
-    //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
-    const contactsParse = await listContacts();
+    console.log("START-->GET/:id".blue); //!
+    const contacts = await getUsersList();
+    const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
 
-    //!!! ДОСТАЕМ и КОНСОЛИМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ c ОДНИМ ОБЪЕКТОМ
-    const contactsParseByIdArr = contactsParse.filter(contact => String(contact.id) === String(contactId)); //* - это МАССИВ с одним ОБЪЕКТОМ
-    if (contactsParseByIdArr.length === 0) {
-      console.log("Нет контакта с таким ID:".yellow, contactId.red); //!+++
+    if (!contact) {
+      //! ===========================console============================
+      console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
       lineBreak();
-      return;
+      console.log("END-->GET/:id".blue); //!
+      //! ==============================================================
+      return contact;
+      // return res.status(404).json({
+      //   status: "error",
+      //   code: 404,
+      //   message: `User wiht id:'${contactId}' not found`
+      // });
     };
 
-    console.log(`КОНТАКТ №_${contactId}:`.yellow); //!+++
-    console.table(contactsParseByIdArr); //!+++
-    lineBreak();
-    return contactsParseByIdArr;
+    //! ===========================console============================
+    console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!+++
+    console.table([contact]); //!+++
+    console.log("END-->GET/:id".blue); //!
+    //! ==============================================================
+
+    return contact;
 
   } catch (error) {
     console.error(error.message.red);
     lineBreak();
   };
 };
+
+
+
+
+
+
+
+
 
 
 // ----------------------------------------------------------------------------------
