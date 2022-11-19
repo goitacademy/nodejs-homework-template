@@ -1,6 +1,12 @@
 const {customError} = require("../helpers/error");
 const {User} = require("../models/user");
-const {singUp, singIn, singOut, changeSub} = require("../services/authServ");
+const {
+  singUp,
+  singIn,
+  singOut,
+  currentUser,
+  changeSub,
+} = require("../services/authServ");
 
 const singUpCtrl = async (req, res) => {
   const {email, password, subscription} = req.body;
@@ -56,18 +62,20 @@ const singOutCtrl = async (req, res, next) => {
   // });
 };
 
-const currentUserCtrl = (req, res, next) => {
+const currentUserCtrl = async (req, res, next) => {
+  const response = await currentUser(req);
+  return res.status(204).json(response);
   // const {subscription} = req.user;
   // const {email} = req.body;
-  const id = String(req.user._id);
-  const user = User.findById(id);
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      user: {email: user.email, subscription: user.subscription},
-    },
-  });
+  // const id = String(req.user._id);
+  // const user = User.findById(id);
+  // res.json({
+  //   status: "success",
+  //   code: 200,
+  //   data: {
+  //     user: {email: user.email, subscription: user.subscription},
+  //   },
+  // });
 };
 
 const subscriptCtrl = async (req, res, next) => {
