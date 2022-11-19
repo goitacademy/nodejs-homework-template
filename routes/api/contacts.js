@@ -24,6 +24,8 @@ router.get('/', async (req, res, next) => {
 //! 1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
 router.get("/", async (req, res, next) => {
   try {
+    const contacts = await contactsOperations.listContacts()
+
     console.log("START-->GET/All".green); //!
     const users = await getUsersList();
     console.log("END-->GET/All".green); //!
@@ -32,7 +34,7 @@ router.get("/", async (req, res, next) => {
       status: "success",
       code: 200,
       data: {
-        result: users
+        result: contacts
       }
     });
 
