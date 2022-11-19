@@ -1,26 +1,30 @@
 const {customError} = require("../helpers/error");
 const {User} = require("../models/user");
 const {
+  // singUpServ,
+  // singInServ,
+  // singOutServ,
+  // currentUserServ,
+  // subscriptServ,
   singUp,
   singIn,
   singOut,
   currentUser,
   changeSub,
-} = require("../services/authServ");
+} = require("../services/auth");
 
 const singUpCtrl = async (req, res) => {
   const {email, password, subscription} = req.body;
-  const user = await User.findOne({email});
-  if (user) throw customError({status: 409, message: "Email in use"});
-
+  // const data = await singUpServ(email, password, subscription);
+  // res.status(201).json({user: data});
   await singUp(email, password, subscription);
 
   res.json({
     status: "success",
     code: 201,
     data: {
-      email,
-      subscription,
+      email: email,
+      subscription: subscription,
       message: "Registration successful",
     },
   });
@@ -38,44 +42,45 @@ const singInCtrl = async (req, res) => {
     code: 200,
     token: currentUser.token,
     data: {
-      email,
-      subscription: "starter",
+      email: currentUser.email,
+      subscription: currentUser.currentUser,
     },
   });
 };
 
-// const logout = async (req, res, next) => {
-//   const response = await singOut(req);
-//   return res.status(204).json();
-// };
-
 const singOutCtrl = async (req, res, next) => {
-  // console.log("req:", req);
-  const response = await singOut(req);
-  return res.status(204).json(response);
-  // res.json({
-  //   status: "success",
-  //   code: 204,
-  //   data: {
-  //     message: "No Content",
-  //   },
-  // });
+  const Id = req.user._id;
+  // const response=await singOutServ(Id);
+  // return res.status(204).json(response);
+  await singOut(Id);
+
+  res.json({
+    status: "success",
+    code: 204,
+    data: {
+      message: "No Content",
+    },
+  });
 };
 
 const currentUserCtrl = async (req, res, next) => {
-  const response = await currentUser(req);
-  return res.status(204).json(response);
+  const Id = req.user._id;
+  // const response = await currentUser(Id);
+  // return res.status(204).json(response);
+  await currentUser(Id);
+
   // const {subscription} = req.user;
   // const {email} = req.body;
-  // const id = String(req.user._id);
-  // const user = User.findById(id);
-  // res.json({
-  //   status: "success",
-  //   code: 200,
-  //   data: {
-  //     user: {email: user.email, subscription: user.subscription},
-  //   },
-  // });
+
+  const id = String(req.user._id);
+  const user = User.findById(id);
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      user: {email: user.email, subscription: user.subscription},
+    },
+  });
 };
 
 const subscriptCtrl = async (req, res, next) => {
