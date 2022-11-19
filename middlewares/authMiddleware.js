@@ -11,6 +11,12 @@ const auth = async (req, res, next) => {
     try {
       const verifiedToken = jwt.verify(token, JWT_SECRET);
       const user = await User.findById(verifiedToken._id);
+      if (!user) {
+        next(new NotAuthorizedError("No user with such id"));
+      }
+      if (!user.token) {
+        next(new NotAuthorizedError("token is invalid"));
+      }
       req.user = user;
       return next();
     } catch (error) {
