@@ -23,7 +23,6 @@ const loginController = async (req, res, next) => {
     const token = await login(email, password);
     res.json({ token, user: { email, subscription: userSub } });
   } catch (e) {
-    console.log(e);
     next(e);
   }
 };

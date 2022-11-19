@@ -7,7 +7,7 @@ const {
 } = require("../../controller/authController");
 const { auth } = require("../../middleware/authMiddleware");
 const router = express.Router();
-router.post("/register", registerController);
+router.post("/signup", registerController);
 router.post("/login", loginController);
 router.get("/current", auth, getCurrent);
 router.get("/logout", auth, logout);
