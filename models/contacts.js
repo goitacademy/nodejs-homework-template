@@ -44,10 +44,10 @@ lineBreak();
 
 
 
-const userPath = path.join(__dirname, "/../models/contacts.json");
-lineBreak();
-console.log("userPath:".bgBlue.yellow, userPath.blue);
-lineBreak();
+// const userPath = path.join(__dirname, "/../models/contacts.json");
+// lineBreak();
+// console.log("userPath:".bgBlue.yellow, userPath.blue);
+// lineBreak();
 // TODO: _________________________________________________________________________________________
 
 
@@ -55,9 +55,9 @@ lineBreak();
 //!* ------------------------------------------------ ВСПОМОГАТЕЛЬНЫЕ ФУНЦИИ-ВЫЗЫВАЛКИ_new ------------------------------------------------
 //todo   ------  1. Получение списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ------
 const getUsersList = async (showListAllUsers = 1) => {
-  const users = JSON.parse(await fs.readFile(userPath, 'utf8'));
+  const users = JSON.parse(await fs.readFile(contactsPath, 'utf8'));
 
-  //! ==============================================================
+  //! ===========================console============================
   if (showListAllUsers === 1) {
     console.log("СПИСОК ВСЕХ ПОЛЬЗОВАТЕЛЕЙ:".bgGreen.black)
   };
@@ -71,9 +71,9 @@ const getUsersList = async (showListAllUsers = 1) => {
 
 //todo   ------  2. Создание НОВОГО списка ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ------
 const writeUsers = async (users) => {
-  await fs.writeFile(userPath, JSON.stringify(users), 'utf8');
+  await fs.writeFile(contactsPath, JSON.stringify(users), 'utf8');
 
-  //! ==============================================================
+  //! ===========================console============================
   if (users.length !== 0) {
     console.log("СПИСОК НОВЫХ ПОЛЬЗОВАТЕЛЕЙ:".bgCyan.red); //!+++
     await getUsersList(0)
@@ -81,7 +81,7 @@ const writeUsers = async (users) => {
   //! ==============================================================
 
   return users;
-  // return await fs.writeFile(userPath, JSON.stringify(users));
+  // return await fs.writeFile(contactsPath, JSON.stringify(users));
 };
 //* ____________________________________________________________________________________________________________________
 
