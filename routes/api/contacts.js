@@ -87,7 +87,7 @@ router.post("/", async (req, res, next) => {
     //! ==============================================================
 
     //! ++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++
-    const schema = Joi.object({
+    const contactSchema = Joi.object({
       name: Joi.string()
         // .alphanum()
         .min(3)
@@ -105,7 +105,7 @@ router.post("/", async (req, res, next) => {
         .required(),
     });
 
-    const validationResult = schema.validate(req.body);
+    const validationResult = contactSchema.validate(req.body);
 
     if (validationResult.error) {
       //! ===========================console============================
@@ -115,7 +115,12 @@ router.post("/", async (req, res, next) => {
       lineBreak();
       console.log("END-->POST".yellow); //!
       //! ==============================================================
+      //! 1 - вариант
       // return res.status(400).json({ "message": "missing required name field" });
+      //! 2 - вариант
+      // validationResult.error.status = 400
+      // throw validationResult.error
+      //! 3 - вариант
       return res.status(400).json({ status: validationResult.error.details });
     }
     //! ___________________ ВАЛИДАЦИЯ Joi ___________________
