@@ -242,9 +242,68 @@ async function updatePutContact(contactId, body) {
 };
 
 
+// ----------------------------------------------------------------------------------
+//! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
+async function updatePatchContact(contactId, body) {
+  //! ===========================console============================
+  console.log("START-->PATCH/:id".rainbow); //!
+  lineBreak();
+  //! ==============================================================
 
 
+  // const id = req.params.id; //1
+  const { id } = req.params; //2
 
+  const body = req.body; //! в index1.js ==> app.use(express.json());
+  const { name, email, phone } = body;
+  console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
+  console.log("");
+  if (name) console.log("name:".bgYellow.black, name.yellow); //!
+  if (email) console.log("email:".bgYellow.black, email.yellow); //!
+  if (phone) console.log("phone:".bgYellow.black, phone.yellow); //!
+  lineBreak();
+  console.log("Обновляем ТОЛЬКО ЭТИ поля:".bgGreen.red, body);
+  lineBreak();
+
+  const users = await getUsersList();
+  const index = users.findIndex(user => String(user.id) === id);
+
+  if (index === -1) {
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
+    lineBreak();
+    console.log("END-->PATCH/:id".rainbow); //!
+    //! Обработка ошибки:
+    //! 4 - вариант 
+    throw new NotFound(`User wiht id:'${id}' not found`);
+    //! 3 - вариант 
+    // throw createError(404, `User wiht id:'${id}' not found`);
+    //! 2 - вариант 
+    // const error = new Error(`User wiht id:'${id}' not found`);
+    // error.status = 404;
+    // throw error;
+    //! 1 - вариант 
+    // return res.status(404).json({
+    //     status: "error",
+    //     code: 404,
+    //     message: `User wiht id:'${id}' not found`
+    // });
+  };
+
+  const user = { ...users[index], ...body };
+  users.splice(index, 1, user);
+  // console.log("users_ПОСЛЕ:", users); //!
+
+  console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${id}:`.rainbow); //!
+  console.table([user]); //!
+
+  await writeUsers(users);
+
+  console.log("END-->PATCH/:id".rainbow); //!
+
+  res.status(200).json(user)
+
+
+};
 
 
 
@@ -297,7 +356,7 @@ module.exports = {
   getContactById,
   addContact,
   updatePutContact,
-  // updatePatchContact,
+  updatePatchContact,
   removeContact,
   // removeAllContacts
 };
