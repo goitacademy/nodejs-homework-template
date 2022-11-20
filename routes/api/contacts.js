@@ -9,7 +9,28 @@ const contactsOperations = require("../../models/contacts")
 const { lineBreak } = require("../../service");
 
 
-//------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//! ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
+const contactSchemaPostPut = Joi.object({
+  name: Joi.string()
+    // .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
+    .required(),
+  phone: Joi.string()
+    // .alphanum()
+    .min(5)
+    .max(14)
+    .required(),
+});
+
+//! _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
+
+
+//-----------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 router.get("/", async (req, res, next) => {
   try {
@@ -30,7 +51,7 @@ router.get("/", async (req, res, next) => {
 })
 
 
-//------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //! 2. Получение ОДНОГО КОНТАКТА по id
 router.get('/:contactId', async (req, res, next) => {
   try {
@@ -69,15 +90,8 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-//------------------------------------------------------------
-// //? 3. Создание НОВОГО КОНТАКТА
-// router.post('/', async (req, res, next) => {
-//   const contact = await contactsOperations.addContact()
-//   res.json({ message: 'template message' })
-// })
 
-
-
+//-----------------------------------------------------------------------------
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
 router.post("/", async (req, res, next) => {
   try {
@@ -86,26 +100,8 @@ router.post("/", async (req, res, next) => {
     lineBreak();
     //! ==============================================================
 
-    //! ++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++
-    const contactSchema = Joi.object({
-      name: Joi.string()
-        // .alphanum()
-        .min(3)
-        .max(30)
-        .required(),
-
-      email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
-        .required(),
-
-      phone: Joi.string()
-        // .alphanum()
-        .min(5)
-        .max(14)
-        .required(),
-    });
-
-    const validationResult = contactSchema.validate(req.body);
+    //! +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
+    const validationResult = contactSchemaPostPut.validate(req.body);
 
     if (validationResult.error) {
       //! ===========================console============================
@@ -123,7 +119,7 @@ router.post("/", async (req, res, next) => {
       //! 3 - вариант
       return res.status(400).json({ status: validationResult.error.details });
     }
-    //! ___________________ ВАЛИДАЦИЯ Joi ___________________
+    //! __________________________ ВАЛИДАЦИЯ Joi __________________________
 
     const contact = await contactsOperations.addContact(req.body)
 
