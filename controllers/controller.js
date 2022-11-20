@@ -1,5 +1,5 @@
 const methods = require("../models/contacts");
-const createHttpError = require("http-errors");
+const { NotFound } = require("http-errors");
 
 const getContactList = async (req, res, next) => {
   const contacts = await methods.listContacts();
@@ -19,7 +19,7 @@ const getContactsById = async (req, res, next) => {
 
     const result = await methods.getContactById(contactId).catch((_) => null);
     if (!result) {
-      throw new createHttpError[404]("Not found");
+      throw new NotFound();
     }
     res.json({
       status: "success",
@@ -32,7 +32,7 @@ const getContactsById = async (req, res, next) => {
 };
 
 const addContactById = async (req, res, next) => {
-  const result = await methods.addContact(req.body);
+  const result = await methods.addContact(req.body, { new: true });
 
   return res.status(201).json({
     status: "success",
@@ -47,12 +47,12 @@ const deleteContactById = async (req, res, next) => {
 
     const result = await methods.removeContact(contactId).catch((_) => null);
     if (!result) {
-      throw new createHttpError[404]("Not found");
+      throw new NotFound();
     }
     res.json({
       status: "success",
       code: 200,
-      message: `contact with id - ${req.params.contactId} deleted`,
+      message: `contact with id - ${contactId} deleted`,
       data: { result },
     });
   } catch (error) {
@@ -62,8 +62,12 @@ const deleteContactById = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await methods.updateContact(contactId, req.body);
-
+  const result = await methods
+    .updateContact(contactId, req.body)
+    .catch((_) => null);
+  if (!result) {
+    throw new NotFound();
+  }
   res.json({
     status: "success",
     code: 200,
@@ -73,8 +77,12 @@ const updateContactById = async (req, res, next) => {
 
 const updateStatusContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await methods.updateStatusContact(contactId, req.body);
-
+  const result = await methods
+    .updateStatusContact(contactId, req.body)
+    .catch((_) => null);
+  if (!result) {
+    throw new NotFound();
+  }
   res.json({
     status: "success",
     code: 200,
