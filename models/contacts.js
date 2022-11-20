@@ -143,6 +143,7 @@ async function getContactById(contactId) {
   };
   console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!
   console.table([contact]); //!
+  lineBreak();
   console.log("END-->GET/:id".blue); //!
   //! ==============================================================
 
@@ -175,6 +176,7 @@ async function addContact(body) {
   //! ===========================console============================
   console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contact.id}:`.bgYellow.blue); //!
   console.table([contact]); //!
+  lineBreak();
   //! ==============================================================
 
   contacts.push(contact);
@@ -190,15 +192,15 @@ async function addContact(body) {
 //! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
 async function updatePutContact(contactId, body) {
   //! ===========================console============================
-  console.log("START-->PUT/:id".rainbow); //!
-  lineBreak();
+  // console.log("START-->PUT/:id".rainbow); //!
+  // lineBreak();
   //! ==============================================================
 
   const contacts = await getUsersList();
   const index = contacts.findIndex(contact => String(contact.id) === contactId);
 
   if (index === -1) {
-    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
     console.log("END-->PUT/:id".rainbow); //!
     const contact = null
@@ -219,15 +221,16 @@ async function updatePutContact(contactId, body) {
   //! Проверка contactId на чило/строка
   let contact = null;
   if (isNaN(Number(contactId))) {
-    // console.log("id:", id); 
-    contact = { contactId, ...body }
+    // console.log("contactId:", contactId); //!
+    contact = { id: contactId, ...body }
   } else {
-    contact = { contactId: Number(contactId), ...body };
+    contact = { id: Number(contactId), ...body };
   }
 
   //! ===========================console============================
   console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.rainbow); //!
   console.table([contact]); //!
+  lineBreak();
   //! ==============================================================
 
   contacts.splice(index, 1, contact);

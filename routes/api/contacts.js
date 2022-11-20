@@ -140,13 +140,6 @@ router.post("/", async (req, res, next) => {
 
 
 //-----------------------------------------------------------------------------
-
-// router.put('/:contactId', async (req, res, next) => {
-//   const contact = await contactsOperations.updatePutContact()
-//   res.json({ message: 'template message' })
-// })
-
-
 //! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
 router.put('/:contactId', async (req, res, next) => {
   try {
@@ -154,7 +147,6 @@ router.put('/:contactId', async (req, res, next) => {
     console.log("START-->PUT/:id".rainbow); //!
     lineBreak();
     //! ==============================================================
-
 
     //! +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
     const validationResult = contactSchemaPostPut.validate(req.body);
@@ -180,65 +172,18 @@ router.put('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await contactsOperations.updatePutContact(contactId, req.body)
 
-
-    // const id = req.params.id; //1
-    const { id } = req.params; //2
-
-    const body = req.body; //! в index1.js ==> app.use(express.json());
-    const { name, email, phone } = body;
-    console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
-    console.log("");
-    console.log("name:".bgYellow.black, name.yellow); //!
-    console.log("email:".bgYellow.black, email.yellow); //!
-    console.log("phone:".bgYellow.black, phone.yellow); //!
-    lineBreak();
-
-    const users = await getUsersList();
-    const index = users.findIndex(user => String(user.id) === id);
-
-    if (index === -1) {
-      console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
-      lineBreak();
-      console.log("END-->PUT/:id".rainbow); //!
-      //! Обработка ошибки:
-      //! 4 - вариант 
-      throw new NotFound(`User wiht id:'${id}' not found`);
-      //! 3 - вариант 
-      // throw createError(404, `User wiht id:'${id}' not found`);
-      //! 2 - вариант 
-      // const error = new Error(`User wiht id:'${id}' not found`);
-      // error.status = 404;
-      // throw error;
-      //! 1 - вариант 
-      // return res.status(404).json({
-      //     status: "error",
-      //     code: 404,
-      //     message: `User wiht id:'${id}' not found`
-      // });
-    };
-
-    //?-1  как правильно?
-    // const user = { ...users[index], ...body }; 
-    //?-2  как правильно?
-    let user = null;
-    if (isNaN(Number(id))) {
-      // console.log("id:", id); 
-      user = { id, ...body }
-    } else {
-      user = { id: Number(id), ...body };
+    if (!contact) {
+      //! 4 - вариант
+      throw new NotFound(`Contact wiht id:'${contactId}' not found`)
     }
 
-    users.splice(index, 1, user);
-    // console.log("users_ПОСЛЕ:", users); //!
-
-    console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${id}:`.rainbow); //!
-    console.table([user]); //!
-
-    await writeUsers(users);
-
-    console.log("END-->PUT/:id".rainbow); //!
-
-    res.status(200).json(user)
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        result: contact
+      }
+    })
 
   } catch (e) {
     next(e);
