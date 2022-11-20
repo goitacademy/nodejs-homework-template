@@ -46,11 +46,7 @@ const updatePatchContact = async (req, res, next) => {
             lineBreak();
             console.log("END-->PATCH/:id".rainbow); //!
             //! ==============================================================
-            //! 1 - вариант
-            // return res.status(400).json({ "message": "missing required name field" });
-            //! 2 - вариант
-            // validationResult.error.status = 400
-            // throw validationResult.error
+
             //! 3 - вариант
             return res.status(400).json({ status: validationResult.error.details });
         }
@@ -74,7 +70,6 @@ const updatePatchContact = async (req, res, next) => {
 
     } catch (e) {
         next(e);
-        // res.status(500).json({ error: e.message });
     }
 }
 
