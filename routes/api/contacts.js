@@ -30,6 +30,7 @@ const contactSchemaPostPut = Joi.object({
 });
 
 
+
 //--------------------------------------------------------------------
 const contactSchemaPutch = Joi.object({
   name: Joi.string()
@@ -51,6 +52,7 @@ const contactSchemaPutch = Joi.object({
 //* _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
 
 
+
 //-----------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 router.get("/", async (req, res, next) => {
@@ -70,6 +72,7 @@ router.get("/", async (req, res, next) => {
     // res.status(500).json({ error: e.message })
   }
 })
+
 
 
 //-----------------------------------------------------------------------------
@@ -110,6 +113,7 @@ router.get('/:contactId', async (req, res, next) => {
     // res.status(500).json({ error: e.message })
   }
 })
+
 
 
 //-----------------------------------------------------------------------------
@@ -157,6 +161,7 @@ router.post("/", async (req, res, next) => {
     // res.status(500).json({ error: e.message });
   }
 });
+
 
 
 //-----------------------------------------------------------------------------
@@ -210,6 +215,7 @@ router.put('/:contactId', async (req, res, next) => {
     // res.status(500).json({ error: e.message });
   }
 });
+
 
 
 //-----------------------------------------------------------------------------
@@ -266,11 +272,6 @@ router.patch("/:contactId", async (req, res, next) => {
 
 
 
-// router.delete('/:contactId', async (req, res, next) => {
-//   const contact = await contactsOperations.removeContact()
-//   res.json({ message: 'template message' })
-// })
-
 //-----------------------------------------------------------------------------
 //! 5. Удаление ОДНОГО КОНТАКТА по id
 router.delete('/:contactId', async (req, res, next) => {
@@ -299,6 +300,27 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 
+
+//-----------------------------------------------------------------------------
+//! 6. Удаление ВСЕХ КОНТАКТОВ
+router.delete("/", async (req, res, next) => {
+  try {
+    const contacts = await contactsOperations.removeAllContacts()
+
+    res.status(200).json({
+      status: "success",
+      code: 204,
+      message: "ALL Users were remove...",
+      data: {
+        result: contacts
+      }
+    });
+
+  } catch (e) {
+    next(e);
+    // res.status(500).json({ error: e.message });
+  }
+});
 
 
 module.exports = router

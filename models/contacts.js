@@ -314,11 +314,28 @@ async function removeContact(contactId) {
 
 
 
+// ----------------------------------------------------------------------------------
+//! 6. Удаление ВСЕХ КОНТАКТОВ
+async function removeAllContacts(contactId) {
+  //! ===========================console============================
+  console.log("START-->DELETE/All".bgRed.yellow); //!
+  lineBreak();
+  console.log("ВСЕ ПОЛЬЗОВАТЕЛИ УДАЛЕНЫ...".bgRed.white); //!
+  //! ==============================================================
+
+  const contacts = await writeUsers([]);
+
+  //! ===========================console============================
+  lineBreak();
+  console.log("END-->DELETE/All".bgRed.yellow); //!
+  //! ==============================================================
+
+  return contacts
+};
+// ________________________________________________________________________________________________________
 
 
-//! ________________________________________________________________________________________________________
-
-//! Экспорт функций
+//! Экспорт ВСЕХ функций:
 module.exports = {
   listContacts,
   getContactById,
@@ -326,5 +343,5 @@ module.exports = {
   updatePutContact,
   updatePatchContact,
   removeContact,
-  // removeAllContacts
+  removeAllContacts
 };
