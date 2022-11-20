@@ -5,11 +5,12 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
-const jimp = require("jimp");
+const Jimp = require("jimp");
 
 const User = require("../../models/user");
 const { RequestError } = require("../../assistant");
 const { authorize, upload } = require("../../middlewares");
+const { rename } = require("fs");
 
 const router = express.Router();
 
@@ -120,8 +121,10 @@ router.patch(
       const avatarURL = path.join("avatars", newAvatar);
       const resultUpload = path.join(avatarsDir, newAvatar);
 
-      (await jimp.read(tmpUpload)).resize(250, 250).writeAsync(tmpUpload);
+      (await Jimp.read(tmpUpload)).resize(250, 250).writeAsync(tmpUpload);
 
+      console.log(rename(resultUpload));
+      console.log(rename(tmpUpload));
       await fs.rename(tmpUpload, resultUpload);
 
       const result = await User.findByIdAndUpdate(
