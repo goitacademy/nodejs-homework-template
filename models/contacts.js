@@ -134,13 +134,17 @@ async function getContactById(contactId) {
   const contacts = await getUsersList();
   const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
 
-  //! ===========================console============================
+
   if (!contact) {
+    //! ===========================console============================
     console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
     console.log("END-->GET/:id".blue); //!
-    return contact;
+    //! ==============================================================
+    return null;
   };
+
+  //! ===========================console============================
   console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!
   console.table([contact]); //!
   lineBreak();
@@ -304,41 +308,79 @@ async function updatePatchContact(contactId, body) {
 
 
 // ----------------------------------------------------------------------------------
-//? 4: Удаляем ОДИН КОНТАКТ (АСИНХРОННЫЙ вариант-2)
+// //? 4: Удаляем ОДИН КОНТАКТ (АСИНХРОННЫЙ вариант-2)
+// async function removeContact(contactId) {
+//   try {
+//     //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
+//     const contactsParse = await listContacts();
+
+//     //!!! ДОСТАЕМ и КОНСОЛИМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ c ОДНИМ ОБЪЕКТОМ
+//     const contactsParseByIdArr = contactsParse.filter(contact => String(contact.id) === String(contactId)); //* - это МАССИВ с одним ОБЪЕКТОМ
+//     if (contactsParseByIdArr.length === 0) {
+//       console.log("Нет контакта с таким ID:".yellow, contactId.red); //!+++
+//       lineBreak();
+//       return;
+//     };
+
+//     console.log(`Этот КОНТАКТ №_${contactId} будет удален:`.yellow); //!+++
+//     console.table(contactsParseByIdArr); //!+++
+//     lineBreak();
+
+//     //!!! УДАЛЯЕМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ ОБЪЕКТОВ
+//     const contactsParseNew = contactsParse.filter(contact => String(contact.id) !== String(contactId));
+//     console.log("НОВЫЙ СПИСОК КОНТАКТОВ:".yellow); //!+++
+//     console.table(contactsParseNew); //!+++
+//     console.log("typeof (НОВЫЙ СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParse).red); //!
+//     lineBreak();
+
+//     //! Вызываем ф-цию creatingNewJSONfile()  ==>
+//     //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
+//     //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
+//     await creatingNewJSONfile(contactsParseNew);
+
+//   } catch (error) {
+//     console.error(error.message.red);
+//     lineBreak();
+//   };
+// };
+
+// ----------------------------------------------------------------------------------
+//! 5. Удаление ОДНОГО КОНТАКТА по id
 async function removeContact(contactId) {
-  try {
-    //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
-    const contactsParse = await listContacts();
+  //! ===========================console============================
+  console.log("START-->DELETE/:id".red); //!
+  lineBreak();
+  //! ==============================================================
 
-    //!!! ДОСТАЕМ и КОНСОЛИМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ c ОДНИМ ОБЪЕКТОМ
-    const contactsParseByIdArr = contactsParse.filter(contact => String(contact.id) === String(contactId)); //* - это МАССИВ с одним ОБЪЕКТОМ
-    if (contactsParseByIdArr.length === 0) {
-      console.log("Нет контакта с таким ID:".yellow, contactId.red); //!+++
-      lineBreak();
-      return;
-    };
+  const contacts = await getUsersList();
+  const [deletedContact] = contacts.filter(contact => String(contact.id) === contactId); //* - это ОБЪЕКТ c удаленным Contact
+  const filteredContacts = contacts.filter(contact => String(contact.id) !== contactId); //* - это МАССИВ ОБЪЕКТОB НОВЫХ Contacts
 
-    console.log(`Этот КОНТАКТ №_${contactId} будет удален:`.yellow); //!+++
-    console.table(contactsParseByIdArr); //!+++
+  if (filteredContacts.length === contacts.length) {
+    //! ===========================console============================
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
-
-    //!!! УДАЛЯЕМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ ОБЪЕКТОВ
-    const contactsParseNew = contactsParse.filter(contact => String(contact.id) !== String(contactId));
-    console.log("НОВЫЙ СПИСОК КОНТАКТОВ:".yellow); //!+++
-    console.table(contactsParseNew); //!+++
-    console.log("typeof (НОВЫЙ СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParse).red); //!
-    lineBreak();
-
-    //! Вызываем ф-цию creatingNewJSONfile()  ==>
-    //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-    //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
-    await creatingNewJSONfile(contactsParseNew);
-
-  } catch (error) {
-    console.error(error.message.red);
-    lineBreak();
+    console.log("END-->GET/:id".blue); //!
+    //! ==============================================================
+    return null;
   };
+
+  //! ===========================console============================
+  console.log(`Этот ПОЛЬЗОВАТЕЛЬ с ID: ${contactId} УДАЛЕН:`.bgRed.yellow); //!
+  console.table([deletedContact]); //!
+  lineBreak();
+  //! ==============================================================
+
+  await writeUsers(filteredContacts);
+
+  console.log("END-->DELETE/:id".red); //!
+
+  return deletedContact;
 };
+
+
+
+
 
 //! ________________________________________________________________________________________________________
 
