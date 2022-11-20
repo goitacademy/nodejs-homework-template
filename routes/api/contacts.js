@@ -79,11 +79,9 @@ router.get('/:contactId', async (req, res, next) => {
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
 router.post("/", async (req, res, next) => {
   try {
-
-    const contact = await contactsOperations.addContact(req.body)
-
     console.log("START-->POST".yellow); //!
     lineBreak();
+
     //! ++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++
     const schema = Joi.object({
       name: Joi.string()
@@ -114,6 +112,10 @@ router.post("/", async (req, res, next) => {
     }
     //! ___________________ ВАЛИДАЦИЯ Joi ___________________
 
+
+    const contact = await contactsOperations.addContact(req.body)
+
+
     // const body = req.body; //! в index1.js ==> app.use(express.json());
     // const { name, email, phone } = body;
     // console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
@@ -123,22 +125,22 @@ router.post("/", async (req, res, next) => {
     // console.log("phone:".bgYellow.black, phone.yellow); //!
     // lineBreak();
 
-    const users = await getUsersList();
-    const user = { id: randomUUID().slice(-12), ...body };
-    console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${user.id}:`.bgYellow.blue); //!
-    console.table([user]); //!
+    // const users = await getUsersList();
+    // const user = { id: randomUUID().slice(-12), ...body };
+    // console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${user.id}:`.bgYellow.blue); //!
+    // console.table([user]); //!
 
-    users.push(user);
-    await writeUsers(users);
-    // console.log("users_ПОСЛЕ:", users); //!
+    // users.push(user);
+    // await writeUsers(users);
+    // // console.log("users_ПОСЛЕ:", users); //!
 
-    console.log("END-->POST".yellow); //!
+    // console.log("END-->POST".yellow); //!
 
     res.status(201).json({
       status: "success",
       code: 201,
       data: {
-        result: user
+        result: contact
       }
     });
 
