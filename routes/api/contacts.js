@@ -2,11 +2,16 @@ const express = require('express')
 const router = express.Router()
 // const createError = require('http-errors')
 const { NotFound } = require('http-errors')
-const Joi = require('joi')
+// const Joi = require('joi')
 
 // const contactsOperations = require("../../models/contacts")
 
+const { validation } = require("../../middlewares")
+const { contactSchema } = require("../../schemas")
 const { contacts: ctrl } = require("../../controllers")
+
+const validateMiddlewarePostPut = validation(contactSchema.contactSchemaPostPut)
+const validateMiddlewarePatch = validation(contactSchema.contactSchemaPatch)
 
 // const { lineBreak } = require("../../service");
 
@@ -32,7 +37,7 @@ const { contacts: ctrl } = require("../../controllers")
 // });
 
 //--------------------------------------------------------------------
-// const contactSchemaPutch = Joi.object({
+// const contactSchemaPatch = Joi.object({
 //   name: Joi.string()
 //     // .alphanum()
 //     .min(3)
@@ -62,15 +67,15 @@ router.get('/:contactId', ctrl.getContactById)
 
 
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
-router.post("/", ctrl.addContact);
+router.post("/", validateMiddlewarePostPut, ctrl.addContact);
 
 
 //! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
-router.put('/:contactId', ctrl.updatePutContact);
+router.put('/:contactId', validateMiddlewarePostPut, ctrl.updatePutContact);
 
 
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
-router.patch("/:contactId", ctrl.updatePatchContact);
+router.patch("/:contactId", validateMiddlewarePatch, ctrl.updatePatchContact);
 
 
 //! 5. Удаление ОДНОГО КОНТАКТА по id

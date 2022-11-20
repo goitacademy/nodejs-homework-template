@@ -7,23 +7,23 @@ const { lineBreak } = require("../../service");
 
 //-----------------------------------------------------------------------------
 //* ++++++++++++++++++++++ Схема ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
-const contactSchemaPostPut = Joi.object({
-    name: Joi.string()
-        // .alphanum()
-        .min(3)
-        .max(30)
-        .required(),
+// const contactSchemaPostPut = Joi.object({
+//     name: Joi.string()
+//         // .alphanum()
+//         .min(3)
+//         .max(30)
+//         .required(),
 
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
-        .required(),
+//     email: Joi.string()
+//         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
+//         .required(),
 
-    phone: Joi.string()
-        // .alphanum()
-        .min(5)
-        .max(14)
-        .required(),
-});
+//     phone: Joi.string()
+//         // .alphanum()
+//         .min(5)
+//         .max(14)
+//         .required(),
+// });
 //* _______________________ Схема ВАЛИДАЦИИ Joi _______________________
 
 
@@ -36,19 +36,19 @@ const addContact = async (req, res, next) => {
         //! ==============================================================
 
         //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
-        const validationResult = contactSchemaPostPut.validate(req.body);
+        // const validationResult = contactSchemaPostPut.validate(req.body);
 
-        if (validationResult.error) {
-            //! ===========================console============================
-            console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
-            console.log("");
-            console.log(validationResult.error);
-            lineBreak();
-            console.log("END-->POST".yellow); //!
-            //! ==============================================================
-            //! 3 - вариант
-            return res.status(400).json({ status: validationResult.error.details });
-        }
+        // if (validationResult.error) {
+        //     //! ===========================console============================
+        //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
+        //     console.log("");
+        //     console.log(validationResult.error);
+        //     lineBreak();
+        //     console.log("END-->POST".yellow); //!
+        //     //! ==============================================================
+        //     //! 3 - вариант
+        //     return res.status(400).json({ status: validationResult.error.details });
+        // }
         //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
         const contact = await contactsOperations.addContact(req.body)

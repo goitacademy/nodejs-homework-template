@@ -7,23 +7,23 @@ const { lineBreak } = require("../../service");
 
 //-----------------------------------------------------------------------------
 //* ++++++++++++++++++++++ Схема ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
-const contactSchemaPutch = Joi.object({
-    name: Joi.string()
-        // .alphanum()
-        .min(3)
-        .max(30)
-        .optional(),
+// const contactSchemaPatch = Joi.object({
+//     name: Joi.string()
+//         // .alphanum()
+//         .min(3)
+//         .max(30)
+//         .optional(),
 
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
-        .optional(),
+//     email: Joi.string()
+//         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
+//         .optional(),
 
-    phone: Joi.string()
-        // .alphanum()
-        .min(5)
-        .max(14)
-        .optional(),
-});
+//     phone: Joi.string()
+//         // .alphanum()
+//         .min(5)
+//         .max(14)
+//         .optional(),
+// });
 //* _______________________ Схема ВАЛИДАЦИИ Joi _______________________
 
 
@@ -36,20 +36,20 @@ const updatePatchContact = async (req, res, next) => {
         //! ==============================================================
 
         //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
-        const validationResult = contactSchemaPutch.validate(req.body);
+        // const validationResult = contactSchemaPatch.validate(req.body);
 
-        if (validationResult.error) {
-            //! ===========================console============================
-            console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
-            console.log("");
-            console.log(validationResult.error);
-            lineBreak();
-            console.log("END-->PATCH/:id".rainbow); //!
-            //! ==============================================================
+        // if (validationResult.error) {
+        //     //! ===========================console============================
+        //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
+        //     console.log("");
+        //     console.log(validationResult.error);
+        //     lineBreak();
+        //     console.log("END-->PATCH/:id".rainbow); //!
+        //     //! ==============================================================
 
-            //! 3 - вариант
-            return res.status(400).json({ status: validationResult.error.details });
-        }
+        //     //! 3 - вариант
+        //     return res.status(400).json({ status: validationResult.error.details });
+        // }
         //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
         const { contactId } = req.params;
