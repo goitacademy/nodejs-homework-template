@@ -6,6 +6,8 @@ const Joi = require('joi')
 
 const contactsOperations = require("../../models/contacts")
 
+const { lineBreak } = require("../../service");
+
 
 //------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
@@ -79,8 +81,10 @@ router.get('/:contactId', async (req, res, next) => {
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
 router.post("/", async (req, res, next) => {
   try {
+    //! ===========================console============================
     console.log("START-->POST".yellow); //!
     lineBreak();
+    //! ==============================================================
 
     //! ++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++
     const schema = Joi.object({
@@ -102,39 +106,21 @@ router.post("/", async (req, res, next) => {
     });
 
     const validationResult = schema.validate(req.body);
+
     if (validationResult.error) {
+      //! ===========================console============================
       console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
       console.log("");
       console.log(validationResult.error);
       lineBreak();
       console.log("END-->POST".yellow); //!
+      //! ==============================================================
+      // return res.status(400).json({ "message": "missing required name field" });
       return res.status(400).json({ status: validationResult.error.details });
     }
     //! ___________________ ВАЛИДАЦИЯ Joi ___________________
 
-
     const contact = await contactsOperations.addContact(req.body)
-
-
-    // const body = req.body; //! в index1.js ==> app.use(express.json());
-    // const { name, email, phone } = body;
-    // console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
-    // console.log("");
-    // console.log("name:".bgYellow.black, name.yellow); //!
-    // console.log("email:".bgYellow.black, email.yellow); //!
-    // console.log("phone:".bgYellow.black, phone.yellow); //!
-    // lineBreak();
-
-    // const users = await getUsersList();
-    // const user = { id: randomUUID().slice(-12), ...body };
-    // console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${user.id}:`.bgYellow.blue); //!
-    // console.table([user]); //!
-
-    // users.push(user);
-    // await writeUsers(users);
-    // // console.log("users_ПОСЛЕ:", users); //!
-
-    // console.log("END-->POST".yellow); //!
 
     res.status(201).json({
       status: "success",

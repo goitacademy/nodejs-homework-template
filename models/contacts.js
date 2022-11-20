@@ -114,8 +114,11 @@ const writeUsers = async (contacts) => {
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 async function listContacts() {
   console.log("START-->GET/All".green); //!
+
   const contacts = await getUsersList();
+
   console.log("END-->GET/All".green); //!
+
   return contacts;
 };
 
@@ -124,6 +127,7 @@ async function listContacts() {
 //! 2. Получение ОДНОГО КОНТАКТА по id
 async function getContactById(contactId) {
   console.log("START-->GET/:id".blue); //!
+
   const contacts = await getUsersList();
   const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
 
@@ -134,7 +138,6 @@ async function getContactById(contactId) {
     console.log("END-->GET/:id".blue); //!
     return contact;
   };
-
   console.log(`ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.bgBlue.yellow); //!
   console.table([contact]); //!
   console.log("END-->GET/:id".blue); //!
@@ -144,58 +147,14 @@ async function getContactById(contactId) {
 };
 
 
-
 // ----------------------------------------------------------------------------------
-// //? 3: Добавляем КОНТАКТ (АСИНХРОННЫЙ вариант-2)
-// async function addContact(name, email, phone) {
-//   try {
-//     //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
-//     const contactsParse = await listContacts();
-
-//     //! Создаем НОВЫЙ КОНТАКТ ==> newContact
-//     const newContact = {
-//       // id: Date.now(),
-//       // id: v4(),
-//       id: uniqid(),
-//       name,
-//       email,
-//       phone
-//     };
-//     // console.log("НОВЫЙ КОНТАКТ:".yellow, newContact); //!+++
-
-//     //!!! КОНСОЛИМ НОВЫЙ КОНТАКТ как МАССИВ из одного элемента  ==> МАССИВ c ОДНИМ ОБЪЕКТОМ
-//     const newContactArr = [newContact];
-//     console.log(`НОВЫЙ КОНТАКТ №_${newContact.id}:`.yellow); //!+++
-//     console.table(newContactArr); //!+++
-//     lineBreak();
-
-//     //!!! Добавляем в МАССИВ ОБЪЕКТОВ НОВЫЙ КОНТАКТ(newContact) ==> НОВЫЙ МАССИВ ОБЪЕКТОВ
-//     const contactsParseNew = [...contactsParse, newContact];
-
-//     console.log("НОВЫЙ СПИСОК КОНТАКТОВ:".yellow); //!+++
-//     console.table(contactsParseNew); //!+++ 1-й вариант
-//     console.log("typeof (НОВЫЙ СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParseNew).red);
-//     lineBreak();
-
-//     //! Вызываем ф-цию creatingNewJSONfile()  ==>
-//     //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-//     //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
-//     await creatingNewJSONfile(contactsParseNew);
-
-//   } catch (error) {
-//     console.error(error.message.red);
-//     lineBreak();
-//   };
-// };
-
 //! 3. Создание НОВОГО КОНТАКТА
-// async function addContact({ name, email, phone }) {
 async function addContact(body) {
-
+  //! ===========================console============================
   // console.log("START-->POST".yellow); //!
   // lineBreak();
+  //! ==============================================================
 
-  // const body = req.body; //! в index1.js ==> app.use(express.json());
   const { name, email, phone } = body;
 
   //! ===========================console============================
@@ -209,53 +168,18 @@ async function addContact(body) {
 
   const contacts = await getUsersList();
   const contact = { id: randomUUID().slice(-12), ...body };
-  console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${user.id}:`.bgYellow.blue); //!
-  console.table([user]); //!
+
+  //! ===========================console============================
+  console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contact.id}:`.bgYellow.blue); //!
+  console.table([contact]); //!
+  //! ==============================================================
 
   contacts.push(contact);
   await writeUsers(contacts);
-  // console.log("users_ПОСЛЕ:", users); //!
 
   console.log("END-->POST".yellow); //!
 
-
-
-
-
-
-  // //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
-  // const contactsParse = await listContacts();
-
-  // //! Создаем НОВЫЙ КОНТАКТ ==> newContact
-  // const newContact = {
-  //   // id: Date.now(),
-  //   // id: v4(),
-  //   id: uniqid(),
-  //   name,
-  //   email,
-  //   phone
-  // };
-  // // console.log("НОВЫЙ КОНТАКТ:".yellow, newContact); //!+++
-
-  // //!!! КОНСОЛИМ НОВЫЙ КОНТАКТ как МАССИВ из одного элемента  ==> МАССИВ c ОДНИМ ОБЪЕКТОМ
-  // const newContactArr = [newContact];
-  // console.log(`НОВЫЙ КОНТАКТ №_${newContact.id}:`.yellow); //!+++
-  // console.table(newContactArr); //!+++
-  // lineBreak();
-
-  // //!!! Добавляем в МАССИВ ОБЪЕКТОВ НОВЫЙ КОНТАКТ(newContact) ==> НОВЫЙ МАССИВ ОБЪЕКТОВ
-  // const contactsParseNew = [...contactsParse, newContact];
-
-  // console.log("НОВЫЙ СПИСОК КОНТАКТОВ:".yellow); //!+++
-  // console.table(contactsParseNew); //!+++ 1-й вариант
-  // console.log("typeof (НОВЫЙ СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParseNew).red);
-  // lineBreak();
-
-  // //! Вызываем ф-цию creatingNewJSONfile()  ==>
-  // //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-  // //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
-  // await creatingNewJSONfile(contactsParseNew);
-
+  return contact;
 };
 
 
