@@ -199,15 +199,14 @@ async function updatePutContact(contactId, body) {
   const contacts = await getUsersList();
   const index = contacts.findIndex(contact => String(contact.id) === contactId);
 
-  //! ===========================console============================
   if (index === -1) {
+    //! ===========================console============================
     console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
     console.log("END-->PUT/:id".rainbow); //!
-    const contact = null
-    return contact;
+    //! ==============================================================
+    return null;
   };
-  //! ==============================================================
 
   const { name, email, phone } = body;
 
@@ -252,22 +251,21 @@ async function updatePutContact(contactId, body) {
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
 async function updatePatchContact(contactId, body) {
   //! ===========================console============================
-  console.log("START-->PATCH/:id".rainbow); //!
-  lineBreak();
+  // console.log("START-->PATCH/:id".rainbow); //!
+  // lineBreak();
   //! ==============================================================
 
   const contacts = await getUsersList();
   const index = contacts.findIndex(contact => String(contact.id) === contactId);
 
-  //! ===========================console============================
   if (index === -1) {
+    //! ===========================console============================
     console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
     lineBreak();
     console.log("END-->PATCH/:id".rainbow); //!
-    const contact = null
-    return contact;
+    //! ==============================================================
+    return null;
   };
-  //! ==============================================================
 
   const { name, email, phone } = body;
 
@@ -282,6 +280,7 @@ async function updatePatchContact(contactId, body) {
   lineBreak();
   //! ==============================================================
 
+  //! Обновляем данные КОНТАКТА (2 - вариант)
   const contact = { ...contacts[index], ...body };
 
   //! ===========================console============================
