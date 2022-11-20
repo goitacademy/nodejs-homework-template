@@ -7,13 +7,13 @@ const mongoose = require('mongoose');
 //   .connect(DB_HOST)
 //   .then(() => console.log('Database connect success'))
 //   .catch(error => console.log(error.message));
+const { DB_HOST, PORT = 3000 } = process.env;
 
 const connectToDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_HOST);
-    console.log('Database Mongo DB connect success');
-    app.listen(3000, () => {
-      console.log('Server running. Use our API on port: 3000');
+    await mongoose.connect(DB_HOST);
+    app.listen(PORT || 3000, () => {
+      console.log('Database MongoDB/contacts connection successful');
     });
   } catch (error) {
     console.log(error.message);
