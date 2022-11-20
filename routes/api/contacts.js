@@ -53,62 +53,32 @@ const { contacts: ctrl } = require("../../controllers")
 
 
 
-//-----------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 router.get("/", ctrl.getAllContacts)
 
 
-
-//-----------------------------------------------------------------------------
 //! 2. Получение ОДНОГО КОНТАКТА по id
 router.get('/:contactId', ctrl.getContactById)
 
 
-
-//-----------------------------------------------------------------------------
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
 router.post("/", ctrl.addContact);
 
 
-
-//-----------------------------------------------------------------------------
 //! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
 router.put('/:contactId', ctrl.updatePutContact);
 
 
-
-//-----------------------------------------------------------------------------
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
 router.patch("/:contactId", ctrl.updatePatchContact);
 
 
-
-//-----------------------------------------------------------------------------
 //! 5. Удаление ОДНОГО КОНТАКТА по id
 router.delete('/:contactId', ctrl.removeContact);
 
 
-
-//-----------------------------------------------------------------------------
 //! 6. Удаление ВСЕХ КОНТАКТОВ
-router.delete("/", async (req, res, next) => {
-  try {
-    const contacts = await contactsOperations.removeAllContacts()
-
-    res.status(200).json({
-      status: "success",
-      code: 204,
-      message: "ALL Users were remove...",
-      data: {
-        result: contacts
-      }
-    });
-
-  } catch (e) {
-    next(e);
-    // res.status(500).json({ error: e.message });
-  }
-});
+router.delete("/", ctrl.removeAllContacts);
 
 
 module.exports = router
