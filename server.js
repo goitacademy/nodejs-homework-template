@@ -6,10 +6,11 @@ const { DB_HOST, PORT } = process.env;
 
 mongoose
   .connect(DB_HOST)
-  .then(async () => {
-    console.log("App is listening");
-    app.listen(PORT);
-  })
+  .then(() =>
+    app.listen(PORT, () =>
+      console.log(`The server is listening on port: ${PORT}`)
+    )
+  )
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
