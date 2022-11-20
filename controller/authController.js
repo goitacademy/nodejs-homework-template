@@ -1,6 +1,9 @@
 const { registration, login } = require("../services/authServices");
 const createError = require("http-errors");
 const { User } = require("../models/userModel");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs/promises");
 const registerController = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -48,4 +51,34 @@ const logout = async (req, res, next) => {
     next(e);
   }
 };
-module.exports = { registerController, loginController, getCurrent, logout };
+const avatarUpdate = async (req, res, next) => {
+  const storeImage = path.join(process.cwd(), "public/avatars");
+  const { _id } = req.user;
+  try {
+    const { file, user } = req;
+    await Jimp.read(file.path)
+      .then((avatarResize) => {
+        return avatarResize
+          .resize(250, 250) // resize
+          .write(file.path); // save
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    const newPath = path.join(storeImage, file.filename);
+    await fs.rename(file.path, newPath);
+    user.avatarURL = path.join("avatars", file.filename);
+
+    await User.findOneAndUpdate(_id, user, { new: true });
+    res.send({ avatarURL: user.avatarURL });
+  } catch (e) {
+    next(e);
+  }
+};
+module.exports = {
+  registerController,
+  loginController,
+  getCurrent,
+  logout,
+  avatarUpdate,
+};
