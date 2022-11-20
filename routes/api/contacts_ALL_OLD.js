@@ -6,8 +6,6 @@ const Joi = require('joi')
 
 const contactsOperations = require("../../models/contacts")
 
-const { contacts: ctrl } = require("../../controllers")
-
 const { lineBreak } = require("../../service");
 
 
@@ -30,6 +28,7 @@ const contactSchemaPostPut = Joi.object({
     .max(14)
     .required(),
 });
+
 
 
 //--------------------------------------------------------------------
@@ -56,7 +55,23 @@ const contactSchemaPutch = Joi.object({
 
 //-----------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
-router.get("/", ctrl.getAllContacts)
+router.get("/", async (req, res, next) => {
+  try {
+    const contacts = await contactsOperations.listContacts()
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        result: contacts
+      }
+    })
+
+  } catch (e) {
+    next(e)
+    // res.status(500).json({ error: e.message })
+  }
+})
 
 
 
