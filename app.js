@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts.router");
 const authRouter = require("./routes/api/auth.router");
+const avatarsRouter = require("./routes/api/avatars.router");
 
 // const { CustomError } = require("./helpers/errors");
 const errorHandler = require("./helpers/errorHandler");
@@ -18,8 +19,9 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", authRouter);
-app.use("/api/avatars", authRouter);
-
+// TODO load avatars
+app.use("/api/avatars", avatarsRouter);
+app.use("/avatars", express.static("./public/avatars"));
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });

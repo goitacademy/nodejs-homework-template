@@ -1,54 +1,21 @@
 const express = require("express");
 const avatarsRouter = express.Router();
 
-const {
-  downloadController,
-  uploadController,
-} = require("../../controllers/avatars.controller");
-const { tryCatchWrapper } = require("../../helpers/wrappers");
-
+const uploadAvatarMiddleware = require("../../middlewares/uploadAvatarMiddleware");
 const { auth } = require("../../middlewares/authMiddleware");
 
-// contactsRouter.get(
-//   "/",
-//   tryCatchWrapper(auth),
-//   tryCatchWrapper(getAllController)
-// );
+const {
+  // downloadController,
+  uploadController,
+} = require("../../controllers/avatars.controller");
 
-avatarsRouter.get(
-  "/:filename",
-  tryCatchWrapper(auth),
-  tryCatchWrapper(downloadController)
-);
+const { tryCatchWrapper } = require("../../helpers/wrappers");
 
 avatarsRouter.post(
   "/",
   tryCatchWrapper(auth),
+  uploadAvatarMiddleware.single("avatar"),
   tryCatchWrapper(uploadController)
 );
-
-// contactsRouter.post(
-//   "/",
-//   tryCatchWrapper(auth),
-//   tryCatchWrapper(createContactController)
-// );
-
-// contactsRouter.delete(
-//   "/:contactId",
-//   tryCatchWrapper(auth),
-//   tryCatchWrapper(removeContactController)
-// );
-
-// contactsRouter.put(
-//   "/:contactId",
-//   tryCatchWrapper(auth),
-//   tryCatchWrapper(updateContactController)
-// );
-
-// contactsRouter.patch(
-//   "/:contactId/favorite",
-//   tryCatchWrapper(auth),
-//   tryCatchWrapper(updateStatusContactController)
-// );
 
 module.exports = avatarsRouter;

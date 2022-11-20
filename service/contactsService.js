@@ -16,7 +16,7 @@ const getContactById = (id) => {
 };
 
 const createContact = ({ name, email, phone, favorite }, userId) => {
-  console.log({ name, email, phone, favorite, userId });
+  // console.log({ name, email, phone, favorite, userId });
   return Contact.create({ name, email, phone, favorite, owner: userId });
 };
 

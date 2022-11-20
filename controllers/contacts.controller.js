@@ -64,7 +64,7 @@ async function removeContactController(req, res, next) {
 
   try {
     const result = await removeContactById(contactId);
-    console.log(result);
+    // console.log(result);
     if (result) {
       return res.json({
         status: "success",
@@ -107,13 +107,13 @@ async function updateContactController(req, res, next) {
 
 async function updateStatusContactController(req, res, next) {
   const { contactId } = req.params;
-  console.log(contactId);
+  // console.log(contactId);
   if (!req.body) {
     return res.status(400).json({ message: "missing field favorite" });
   }
 
   const { favorite } = req.body;
-  console.log(favorite);
+  // console.log(favorite);
   const resultUpdateStatusContact = await updateStatusContactById(
     contactId,
     favorite
