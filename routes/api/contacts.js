@@ -6,7 +6,7 @@ const { NotFound } = require('http-errors')
 
 // const contactsOperations = require("../../models/contacts")
 
-const { validation } = require("../../middlewares")
+const { validation, ctrlWrapper } = require("../../middlewares")
 const { contactSchema } = require("../../schemas")
 const { contacts: ctrl } = require("../../controllers")
 
@@ -59,31 +59,31 @@ const validateMiddlewarePatch = validation(contactSchema.contactSchemaPatch)
 
 
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
-router.get("/", ctrl.getAllContacts)
+router.get("/", ctrlWrapper(ctrl.getAllContacts))
 
 
 //! 2. Получение ОДНОГО КОНТАКТА по id
-router.get('/:contactId', ctrl.getContactById)
+router.get('/:contactId', ctrlWrapper(ctrl.getContactById))
 
 
 //! 3. Создание НОВОГО ПОЛЬЗОВАТЕЛЯ
-router.post("/", validateMiddlewarePostPut, ctrl.addContact);
+router.post("/", validateMiddlewarePostPut, ctrlWrapper(ctrl.addContact));
 
 
 //! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
-router.put('/:contactId', validateMiddlewarePostPut, ctrl.updatePutContact);
+router.put('/:contactId', validateMiddlewarePostPut, ctrlWrapper(ctrl.updatePutContact));
 
 
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
-router.patch("/:contactId", validateMiddlewarePatch, ctrl.updatePatchContact);
+router.patch("/:contactId", validateMiddlewarePatch, ctrlWrapper(ctrl.updatePatchContact));
 
 
 //! 5. Удаление ОДНОГО КОНТАКТА по id
-router.delete('/:contactId', ctrl.removeContact);
+router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
 
 
 //! 6. Удаление ВСЕХ КОНТАКТОВ
-router.delete("/", ctrl.removeAllContacts);
+router.delete("/", ctrlWrapper(ctrl.removeAllContacts));
 
 
 module.exports = router

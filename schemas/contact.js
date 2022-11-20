@@ -2,12 +2,6 @@ const Joi = require('joi')
 
 
 
-
-
-
-
-
-
 //* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
 const contactSchemaPostPut = Joi.object({
     name: Joi.string()
