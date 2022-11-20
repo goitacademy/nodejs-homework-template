@@ -239,7 +239,7 @@ async function updatePatchContact(contactId, body) {
 
   if (index === -1) {
     //! ===========================console============================
-    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
     console.log("END-->PATCH/:id".rainbow); //!
     //! ==============================================================
