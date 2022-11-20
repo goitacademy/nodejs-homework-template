@@ -27,10 +27,10 @@ const contactSchemaPostPut = Joi.object({
 
 
 
-const addContact = async (req, res, next) => {
+const updatePutContact = async (req, res, next) => {
     try {
         //! ===========================console============================
-        console.log("START-->POST".yellow); //!
+        console.log("START-->PUT/:id".rainbow); //!
         lineBreak();
         //! ==============================================================
 
@@ -43,26 +43,37 @@ const addContact = async (req, res, next) => {
             console.log("");
             console.log(validationResult.error);
             lineBreak();
-            console.log("END-->POST".yellow); //!
+            console.log("END-->PUT/:id".rainbow); //!
             //! ==============================================================
+            //! 1 - вариант
+            // return res.status(400).json({ "message": "missing required name field" });
+            //! 2 - вариант
+            // validationResult.error.status = 400
+            // throw validationResult.error
             //! 3 - вариант
             return res.status(400).json({ status: validationResult.error.details });
         }
         //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
-        const contact = await contactsOperations.addContact(req.body)
+        const { contactId } = req.params;
+        const contact = await contactsOperations.updatePutContact(contactId, req.body)
 
-        res.status(201).json({
+        if (!contact) {
+            //! 4 - вариант
+            throw new NotFound(`Contact wiht id:'${contactId}' not found`)
+        }
+
+        res.status(200).json({
             status: "success",
-            code: 201,
+            code: 200,
             data: {
                 result: contact
             }
-        });
+        })
 
     } catch (e) {
         next(e);
     }
 }
 
-module.exports = addContact
+module.exports = updatePutContact
