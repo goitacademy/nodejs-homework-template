@@ -25,7 +25,7 @@ module.exports = {
 
     const validationResalt = schema.validate(req.body);
     if (validationResalt.error) {
-      next(new ValidationError(validationResalt.error.details));
+      next(new ValidationError(JSON.stringify(validationResalt.error.details)));
     }
     next();
   },
