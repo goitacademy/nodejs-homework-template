@@ -199,6 +199,7 @@ async function updatePutContact(contactId, body) {
   const contacts = await getUsersList();
   const index = contacts.findIndex(contact => String(contact.id) === contactId);
 
+  //! ===========================console============================
   if (index === -1) {
     console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, contactId.red); //!
     lineBreak();
@@ -206,6 +207,7 @@ async function updatePutContact(contactId, body) {
     const contact = null
     return contact;
   };
+  //! ==============================================================
 
   const { name, email, phone } = body;
 
@@ -218,7 +220,8 @@ async function updatePutContact(contactId, body) {
   lineBreak();
   //! ==============================================================
 
-  //! Проверка contactId на чило/строка
+  //! Обновляем данные КОНТАКТА (1 - вариант)
+  //? Проверка contactId на число/строка
   let contact = null;
   if (isNaN(Number(contactId))) {
     // console.log("contactId:", contactId); //!
@@ -226,6 +229,9 @@ async function updatePutContact(contactId, body) {
   } else {
     contact = { id: Number(contactId), ...body };
   }
+
+  //! Обновляем данные КОНТАКТА (2 - вариант)
+  // const contact = { ...contacts[index], ...body };
 
   //! ===========================console============================
   console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.rainbow); //!
@@ -250,12 +256,22 @@ async function updatePatchContact(contactId, body) {
   lineBreak();
   //! ==============================================================
 
+  const contacts = await getUsersList();
+  const index = contacts.findIndex(contact => String(contact.id) === contactId);
 
-  // const id = req.params.id; //1
-  const { id } = req.params; //2
+  //! ===========================console============================
+  if (index === -1) {
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
+    lineBreak();
+    console.log("END-->PATCH/:id".rainbow); //!
+    const contact = null
+    return contact;
+  };
+  //! ==============================================================
 
-  const body = req.body; //! в index1.js ==> app.use(express.json());
   const { name, email, phone } = body;
+
+  //! ===========================console============================
   console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
   console.log("");
   if (name) console.log("name:".bgYellow.black, name.yellow); //!
@@ -264,45 +280,22 @@ async function updatePatchContact(contactId, body) {
   lineBreak();
   console.log("Обновляем ТОЛЬКО ЭТИ поля:".bgGreen.red, body);
   lineBreak();
+  //! ==============================================================
 
-  const users = await getUsersList();
-  const index = users.findIndex(user => String(user.id) === id);
+  const contact = { ...contacts[index], ...body };
 
-  if (index === -1) {
-    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
-    lineBreak();
-    console.log("END-->PATCH/:id".rainbow); //!
-    //! Обработка ошибки:
-    //! 4 - вариант 
-    throw new NotFound(`User wiht id:'${id}' not found`);
-    //! 3 - вариант 
-    // throw createError(404, `User wiht id:'${id}' not found`);
-    //! 2 - вариант 
-    // const error = new Error(`User wiht id:'${id}' not found`);
-    // error.status = 404;
-    // throw error;
-    //! 1 - вариант 
-    // return res.status(404).json({
-    //     status: "error",
-    //     code: 404,
-    //     message: `User wiht id:'${id}' not found`
-    // });
-  };
+  //! ===========================console============================
+  console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.rainbow); //!
+  console.table([contact]); //!
+  lineBreak();
+  //! ==============================================================
 
-  const user = { ...users[index], ...body };
-  users.splice(index, 1, user);
-  // console.log("users_ПОСЛЕ:", users); //!
-
-  console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${id}:`.rainbow); //!
-  console.table([user]); //!
-
-  await writeUsers(users);
+  contacts.splice(index, 1, contact);
+  await writeUsers(contacts);
 
   console.log("END-->PATCH/:id".rainbow); //!
 
-  res.status(200).json(user)
-
-
+  return contact;
 };
 
 
