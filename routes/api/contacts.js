@@ -7,6 +7,11 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
+const {
+  postValidationSchema,
+  updateValidationSchema,
+} = require("../../middleware/validationContacts");
+
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -33,10 +38,14 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const contactBody = req.body;
-  const response = await addContact(contactBody);
-  return res.json({ response, status: "201" });
+router.post("/", postValidationSchema, async (req, res) => {
+  try {
+    const contactBody = req.body;
+    const response = await addContact(contactBody);
+    return res.json({ response });
+  } catch (error) {
+    res.status(400).json({ status: error.message });
+  }
 });
 
 router.delete("/:contactId", async (req, res) => {
@@ -50,15 +59,19 @@ router.delete("/:contactId", async (req, res) => {
     }
     return res.json({ response });
   } catch (error) {
-    res.status(400).json({ status: error.message });
+    res.status(500).json({ status: error.message });
   }
 });
 
-router.put("/:contactId", async (req, res) => {
-  const { contactId } = req.params;
-  const contactBody = req.body;
-  const response = await updateContact(contactId, contactBody);
-  return res.json({ response, status: "202" });
+router.put("/:contactId", updateValidationSchema, async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const contactBody = req.body;
+    const response = await updateContact(contactId, contactBody);
+    return res.json({ response });
+  } catch (error) {
+    res.status(500).json({ status: error.message });
+  }
 });
 
 module.exports = router;

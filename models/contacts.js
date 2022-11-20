@@ -1,5 +1,7 @@
 const fs = require("fs/promises");
 const path = require("node:path");
+const { v4: uuidv4 } = require("uuid");
+// import { nanoid } from 'nanoid'
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 // const contactsList = fs.readFile();
@@ -46,9 +48,40 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {};
+const addContact = async ({ name, email, phone }) => {
+  try {
+    const contacts = await getContactsList();
+    const newContact = {
+      id: uuidv4(),
+      name,
+      email,
+      phone,
+    };
+    const filteredData = [newContact, ...contacts];
+    await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
+    return { status: "200" };
+  } catch (error) {
+    return error;
+  }
+};
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, { name, email, phone }) => {
+  console.log(name);
+  try {
+    const contacts = await getContactsList();
+    contacts.forEach((item) => {
+      if (item.id === contactId) {
+        item.name = name ?? item.name;
+        item.email = email ?? item.email;
+        item.phone = phone ?? item.phone;
+      }
+    });
+    await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
+    return { status: "200" };
+  } catch (error) {
+    return error;
+  }
+};
 
 module.exports = {
   listContacts,
