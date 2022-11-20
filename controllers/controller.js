@@ -38,9 +38,6 @@ const getContactsById = async (req, res, next) => {
 const addContactById = async (req, res, next) => {
   try {
     const result = await methods.addContact(req.body);
-    if (!result) {
-      throw new NotFound("missing required name field");
-    }
     return res.status(201).json({
       status: "success",
       code: 201,
@@ -75,7 +72,7 @@ const updateContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await methods.updateContact(contactId, req.body);
     if (!result) {
-      throw new NotFound("missing fields");
+      throw new NotFound();
     }
     res.json({
       status: "success",

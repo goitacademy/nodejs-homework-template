@@ -38,12 +38,9 @@ const addContact = async ({ name, email, phone }) => {
     email,
     phone,
   };
-  if (name && email && phone) {
-    db.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(db));
-    return newContact;
-  }
-  return null;
+  db.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(db));
+  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
