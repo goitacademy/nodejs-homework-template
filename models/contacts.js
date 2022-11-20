@@ -25,12 +25,12 @@ const fs = require("fs/promises");
 const path = require('path');
 require('colors');
 
-const Joi = require('joi');
-// import { nanoid } from 'nanoid';
-// const nanoid = require('nanoid');
+const { randomUUID } = require("crypto"); //! +++
 const { v4 } = require('uuid');
 const uniqid = require('uniqid');
-const { randomUUID } = require("crypto"); //! +++
+
+const Joi = require('joi');
+
 
 const { lineBreak } = require("../service");
 
@@ -42,13 +42,6 @@ lineBreak();
 // console.log("contactsPath:".red, contactsPath.green); //!
 console.log("contactsPath:".bgBlue.yellow, contactsPath.blue); //!
 lineBreak();
-
-
-
-// const userPath = path.join(__dirname, "/../models/contacts.json");
-// lineBreak();
-// console.log("userPath:".bgBlue.yellow, userPath.blue);
-// lineBreak();
 // TODO: _________________________________________________________________________________________
 
 
@@ -87,33 +80,14 @@ const writeUsers = async (contacts) => {
 //* ____________________________________________________________________________________________________________________
 
 
-//todo ------------------------------------------------ ВСПОМОГАТЕЛЬНЫЕ ФУНЦИИ-ВЫЗЫВАЛКИ_OLD ------------------------------------------------
-// //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-// //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
-// async function creatingNewJSONfile(contactsParseNew) {
-//   //!  Преобразовываем НОВЫЙ  МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-//   const contactsParseNewStringifyNewJSON = JSON.stringify(contactsParseNew);
-//   console.log("НОВЫЙ JSON:\n".yellow, contactsParseNewStringifyNewJSON.gray); //!
-//   console.log("typeof (НОВЫЙ JSON):".yellow, (typeof contactsParseNewStringifyNewJSON).red); //!
-//   lineBreak();
-
-//   //!  Записываем НОВЫЙ JSON в файл contacts.json и получаем  ==> НОВЫЙ contacts.json
-//   await fs.writeFile(contactsPath, contactsParseNewStringifyNewJSON, 'utf8'); //? - Записываем НОВЫЙ JSON в файл contacts.json
-//   const contactsNEWjson = await fs.readFile(contactsPath, 'utf8'); //? - Читаем файл contacts.json
-//   console.log("НОВЫЙ contacts.json:\n".yellow, contactsNEWjson.blue); //!
-//   console.log("typeof (НОВЫЙ contacts.json):".yellow, (typeof contactsNEWjson).red); //!
-//   lineBreak();
-// };
-//todo _________________________________________________________________________________________________________________
-
-
-
-
 
 // ----------------------------------------------------------------------------------
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 async function listContacts() {
+  //! ===========================console============================
   console.log("START-->GET/All".green); //!
+  lineBreak();
+  //! ==============================================================
 
   const contacts = await getUsersList();
 
@@ -121,6 +95,7 @@ async function listContacts() {
 
   return contacts;
 };
+
 
 
 // ----------------------------------------------------------------------------------
@@ -155,6 +130,7 @@ async function getContactById(contactId) {
 };
 
 
+
 // ----------------------------------------------------------------------------------
 //! 3. Создание НОВОГО КОНТАКТА
 async function addContact(body) {
@@ -163,6 +139,8 @@ async function addContact(body) {
   // lineBreak();
   //! ==============================================================
 
+  const contacts = await getUsersList();
+  const contact = { id: randomUUID().slice(-12), ...body };
   const { name, email, phone } = body;
 
   //! ===========================console============================
@@ -172,12 +150,7 @@ async function addContact(body) {
   console.log("email:".bgYellow.black, email.yellow); //!
   console.log("phone:".bgYellow.black, phone.yellow); //!
   lineBreak();
-  //! ==============================================================
 
-  const contacts = await getUsersList();
-  const contact = { id: randomUUID().slice(-12), ...body };
-
-  //! ===========================console============================
   console.log(`НОВЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contact.id}:`.bgYellow.blue); //!
   console.table([contact]); //!
   lineBreak();
@@ -190,6 +163,7 @@ async function addContact(body) {
 
   return contact;
 };
+
 
 
 // ----------------------------------------------------------------------------------
@@ -251,6 +225,7 @@ async function updatePutContact(contactId, body) {
 };
 
 
+
 // ----------------------------------------------------------------------------------
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
 async function updatePatchContact(contactId, body) {
@@ -302,47 +277,6 @@ async function updatePatchContact(contactId, body) {
 };
 
 
-
-
-
-
-
-// ----------------------------------------------------------------------------------
-// //? 4: Удаляем ОДИН КОНТАКТ (АСИНХРОННЫЙ вариант-2)
-// async function removeContact(contactId) {
-//   try {
-//     //! Вызываем ф-цию listContacts()  ==> МАССИВ ОБЪЕКТОВ (ВСЕ КОНТАКТЫ) + все КОНСОЛИ
-//     const contactsParse = await listContacts();
-
-//     //!!! ДОСТАЕМ и КОНСОЛИМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ c ОДНИМ ОБЪЕКТОМ
-//     const contactsParseByIdArr = contactsParse.filter(contact => String(contact.id) === String(contactId)); //* - это МАССИВ с одним ОБЪЕКТОМ
-//     if (contactsParseByIdArr.length === 0) {
-//       console.log("Нет контакта с таким ID:".yellow, contactId.red); //!+++
-//       lineBreak();
-//       return;
-//     };
-
-//     console.log(`Этот КОНТАКТ №_${contactId} будет удален:`.yellow); //!+++
-//     console.table(contactsParseByIdArr); //!+++
-//     lineBreak();
-
-//     //!!! УДАЛЯЕМ только один элемент МАССИВА (по id = contactId) и получаем  ==> НОВЫЙ МАССИВ ОБЪЕКТОВ
-//     const contactsParseNew = contactsParse.filter(contact => String(contact.id) !== String(contactId));
-//     console.log("НОВЫЙ СПИСОК КОНТАКТОВ:".yellow); //!+++
-//     console.table(contactsParseNew); //!+++
-//     console.log("typeof (НОВЫЙ СПИСОК КОНТАКТОВ):".yellow, (typeof contactsParse).red); //!
-//     lineBreak();
-
-//     //! Вызываем ф-цию creatingNewJSONfile()  ==>
-//     //!  Преобразовываем НОВЫЙ МАССИВ ОБЪЕКТОВ в JSON и получаем  ==> НОВЫЙ JSON
-//     //!  Записываем НОВЫЙ JSON в файл и получаем  ==> НОВЫЙ JSON - файл
-//     await creatingNewJSONfile(contactsParseNew);
-
-//   } catch (error) {
-//     console.error(error.message.red);
-//     lineBreak();
-//   };
-// };
 
 // ----------------------------------------------------------------------------------
 //! 5. Удаление ОДНОГО КОНТАКТА по id
