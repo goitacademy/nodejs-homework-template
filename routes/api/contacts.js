@@ -29,7 +29,7 @@ router.get("/:contactId", async (req, res) => {
     const response = await getContactById(contactId);
     if (response.length === 0) {
       return res
-        .status(400)
+        .status(404)
         .json({ status: `Contact with id ${contactId} was not found` });
     }
     return res.json({ response, status: "200" });
@@ -52,9 +52,9 @@ router.delete("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const response = await removeContact(contactId);
-    if (response.status === "400") {
+    if (response.status === "404") {
       return res
-        .status(400)
+        .status(404)
         .json({ status: `Contact with id ${contactId} was not found` });
     }
     return res.json({ response });

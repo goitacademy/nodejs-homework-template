@@ -39,7 +39,7 @@ const removeContact = async (contactId) => {
     const contacts = await getContactsList();
     const filteredData = contacts.filter((item) => item.id !== contactId);
     if (filteredData.length === contacts.length) {
-      return { status: "400" };
+      return { status: "404" };
     }
     await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
     return { status: "200" };
@@ -59,7 +59,7 @@ const addContact = async ({ name, email, phone }) => {
     };
     const filteredData = [newContact, ...contacts];
     await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
-    return { status: "200" };
+    return { status: "201" };
   } catch (error) {
     return error;
   }
