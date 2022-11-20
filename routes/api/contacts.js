@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const functions = require('../../models/contacts.js')
+const { contactValidation } = require('../../validation/contact.validation.js')
 
 router.get('/', async (_, res) => {
   functions.listContacts()
@@ -19,14 +20,19 @@ router.get('/:contactId', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  functions.addContact(req.body)
-    .then(contact => {
-      if (contact) {
-        res.status(201).json(contact)
-      } else {
-        res.status(400).json({ message: 'missing required name field' })
-      }
-    })
+  const { error } = contactValidation(req.body)
+  if (error) {
+    res.status(400).json({ message: 'invalid data' })
+  } else {
+    functions.addContact(req.body)
+      .then(contact => {
+        if (contact) {
+          res.status(201).json(contact)
+        } else {
+          res.status(400).json({ message: 'missing required name field' })
+        }
+      })
+  }
 })
 
 router.delete('/:contactId', async (req, res) => {
@@ -41,17 +47,22 @@ router.delete('/:contactId', async (req, res) => {
 })
 
 router.put('/:contactId', async (req, res) => {
-  if (Object.keys(req.body).length) {
-    functions.updateContact(req.params.contactId, req.body)
-      .then(contact => {
-        if (contact) {
-        res.json(contact)
-        } else {
-        res.status(404).json({ message: 'Not found' })
-        }
-      })
-  } else {
-    res.status(400).json({ message: 'missing fields' })
+  const { error } = contactValidation(req.body)
+  if (error) {
+    res.status(400).json({ message: 'invalid data' })
+  } else { 
+    if (Object.keys(req.body).length) {
+      functions.updateContact(req.params.contactId, req.body)
+        .then(contact => {
+          if (contact) {
+          res.json(contact)
+          } else {
+          res.status(404).json({ message: 'Not found' })
+          }
+        })
+    } else {
+      res.status(400).json({ message: 'missing fields' })
+    }
   }
 })
 
