@@ -1,20 +1,19 @@
 const app = require("./app");
-const MongoClient = require("mongodb").MongoClient;
+const { connectMongo } = require("./src/db/connection");
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT;
-
-const start = async () => {
-  const client = await MongoClient.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiendTopology: true,
-  });
-  const db = client.db();
-  const Contacts = db.colection("contacts");
-  const contacts = await Contacts.find({}).toArray();
-  console.log(contacts);
-  app.listen(PORT, () => {
+const runApp = async () => {
+  try {
+    await connectMongo();
+    console.log("Connection successful");
+  } catch (error) {
+    console.error(`Failed to run app with message ${error.message}`);
+    process.exit(1);
+  }
+  app.listen(PORT, (error) => {
+    if (error) console.error(error.message);
     console.log("Server running. Use our API on port: 3000");
   });
 };
 
-start();
+runApp();
