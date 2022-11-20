@@ -126,7 +126,10 @@ async function listContacts() {
 // ----------------------------------------------------------------------------------
 //! 2. Получение ОДНОГО КОНТАКТА по id
 async function getContactById(contactId) {
+  //! ===========================console============================
   console.log("START-->GET/:id".blue); //!
+  lineBreak();
+  //! ==============================================================
 
   const contacts = await getUsersList();
   const [contact] = contacts.filter(contact => String(contact.id) === contactId); //* - это УЖЕ ОБЪЕКТ
@@ -183,6 +186,65 @@ async function addContact(body) {
 };
 
 
+// ----------------------------------------------------------------------------------
+//! 4-1. PUT-Обновление ОДНОГО КОНТАКТА по id
+async function updatePutContact(contactId, body) {
+  //! ===========================console============================
+  console.log("START-->PUT/:id".rainbow); //!
+  lineBreak();
+  //! ==============================================================
+
+  const contacts = await getUsersList();
+  const index = contacts.findIndex(contact => String(contact.id) === contactId);
+
+  if (index === -1) {
+    console.log("Нет ПОЛЬЗОВАТЕЛЯ с таким ID:".yellow, id.red); //!
+    lineBreak();
+    console.log("END-->PUT/:id".rainbow); //!
+    const contact = null
+    return contact;
+  };
+
+  const { name, email, phone } = body;
+
+  //! ===========================console============================
+  console.log("Эти поля прошли ВАЛИДАЦИЮ:".bgYellow.black);
+  console.log("");
+  console.log("name:".bgYellow.black, name.yellow); //!
+  console.log("email:".bgYellow.black, email.yellow); //!
+  console.log("phone:".bgYellow.black, phone.yellow); //!
+  lineBreak();
+  //! ==============================================================
+
+  //! Проверка contactId на чило/строка
+  let contact = null;
+  if (isNaN(Number(contactId))) {
+    // console.log("id:", id); 
+    contact = { contactId, ...body }
+  } else {
+    contact = { contactId: Number(contactId), ...body };
+  }
+
+  //! ===========================console============================
+  console.log(`ОБНОВЛЕННЫЙ ПОЛЬЗОВАТЕЛЬ с ID: ${contactId}:`.rainbow); //!
+  console.table([contact]); //!
+  //! ==============================================================
+
+  contacts.splice(index, 1, contact);
+  await writeUsers(contacts);
+
+  console.log("END-->PUT/:id".rainbow); //!
+
+  return contact;
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -231,8 +293,8 @@ module.exports = {
   listContacts,
   getContactById,
   addContact,
+  updatePutContact,
+  // updatePatchContact,
   removeContact,
-  // updateContact,
-  // patchContact,
   // removeAllContacts
 };
