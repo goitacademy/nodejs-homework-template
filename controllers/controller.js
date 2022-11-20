@@ -73,12 +73,8 @@ const updateContactById = async (req, res, next) => {
 
 const updateStatusContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await methods
-    .updateStatusContact(contactId, req.body)
-    .catch((_) => null);
-  if (!result) {
-    throw new createHttpError[400]("missing fields favorite");
-  }
+  const result = await methods.updateStatusContact(contactId, req.body);
+
   res.json({
     status: "success",
     code: 200,

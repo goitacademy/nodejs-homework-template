@@ -26,7 +26,10 @@ const updatePutSchema = Joi.object({
   .required()
   .min(1);
 
+const updateStatusSchema = Joi.object({ favorite: Joi.boolean().required() });
+
 module.exports = {
   addPostSchema,
   updatePutSchema,
+  updateStatusSchema,
 };

@@ -5,12 +5,15 @@ const {
   deleteContactById,
   getContactsById,
   updateContactById,
+  updateStatusContactById,
 } = require("../../controllers/controller");
 const asyncWrapper = require("../../helpers/apiHelpers");
+const { validation } = require("../../middlewares/validationMiddlewares");
 const {
-  addPostValidation,
-  putUpdateValidation,
-} = require("../../middlewares/validationMiddlewares");
+  addPostSchema,
+  updatePutSchema,
+  updateStatusSchema,
+} = require("../../schemas/schema");
 
 const router = express.Router();
 
@@ -18,12 +21,20 @@ router.get("/", asyncWrapper(getContactList));
 
 router.get("/:contactId", asyncWrapper(getContactsById));
 
-router.post("/", addPostValidation, asyncWrapper(addContactById));
+router.post("/", validation(addPostSchema), asyncWrapper(addContactById));
 
 router.delete("/:contactId", asyncWrapper(deleteContactById));
 
-router.put("/:contactId", putUpdateValidation, asyncWrapper(updateContactById));
+router.put(
+  "/:contactId",
+  validation(updatePutSchema),
+  asyncWrapper(updateContactById)
+);
 
-router.patch("/:contactId/favorite");
+router.patch(
+  "/:contactId/favorite",
+  validation(updateStatusSchema),
+  asyncWrapper(updateStatusContactById)
+);
 
 module.exports = router;
