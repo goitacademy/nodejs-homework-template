@@ -10,7 +10,7 @@ const { lineBreak } = require("../../service");
 
 
 //-----------------------------------------------------------------------------
-//! ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
+//* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
 const contactSchemaPostPut = Joi.object({
   name: Joi.string()
     // .alphanum()
@@ -27,7 +27,7 @@ const contactSchemaPostPut = Joi.object({
     .required(),
 });
 
-//! _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
+//* _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
 
 
 //-----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ router.post("/", async (req, res, next) => {
     lineBreak();
     //! ==============================================================
 
-    //! +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
+    //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
     const validationResult = contactSchemaPostPut.validate(req.body);
 
     if (validationResult.error) {
@@ -119,7 +119,7 @@ router.post("/", async (req, res, next) => {
       //! 3 - вариант
       return res.status(400).json({ status: validationResult.error.details });
     }
-    //! __________________________ ВАЛИДАЦИЯ Joi __________________________
+    //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
     const contact = await contactsOperations.addContact(req.body)
 
@@ -148,7 +148,7 @@ router.put('/:contactId', async (req, res, next) => {
     lineBreak();
     //! ==============================================================
 
-    //! +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
+    //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
     const validationResult = contactSchemaPostPut.validate(req.body);
 
     if (validationResult.error) {
@@ -167,7 +167,7 @@ router.put('/:contactId', async (req, res, next) => {
       //! 3 - вариант
       return res.status(400).json({ status: validationResult.error.details });
     }
-    //! __________________________ ВАЛИДАЦИЯ Joi __________________________
+    //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
     const { contactId } = req.params;
     const contact = await contactsOperations.updatePutContact(contactId, req.body)
