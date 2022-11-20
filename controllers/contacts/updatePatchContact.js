@@ -29,48 +29,48 @@ const { lineBreak } = require("../../service");
 
 
 const updatePatchContact = async (req, res, next) => {
-    try {
-        //! ===========================console============================
-        console.log("START-->PATCH/:id".rainbow); //!
-        lineBreak();
-        //! ==============================================================
+    // try {
+    //! ===========================console============================
+    console.log("START-->PATCH/:id".rainbow); //!
+    lineBreak();
+    //! ==============================================================
 
-        //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
-        // const validationResult = contactSchemaPatch.validate(req.body);
+    //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
+    // const validationResult = contactSchemaPatch.validate(req.body);
 
-        // if (validationResult.error) {
-        //     //! ===========================console============================
-        //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
-        //     console.log("");
-        //     console.log(validationResult.error);
-        //     lineBreak();
-        //     console.log("END-->PATCH/:id".rainbow); //!
-        //     //! ==============================================================
+    // if (validationResult.error) {
+    //     //! ===========================console============================
+    //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
+    //     console.log("");
+    //     console.log(validationResult.error);
+    //     lineBreak();
+    //     console.log("END-->PATCH/:id".rainbow); //!
+    //     //! ==============================================================
 
-        //     //! 3 - вариант
-        //     return res.status(400).json({ status: validationResult.error.details });
-        // }
-        //* __________________________ ВАЛИДАЦИЯ Joi __________________________
+    //     //! 3 - вариант
+    //     return res.status(400).json({ status: validationResult.error.details });
+    // }
+    //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
-        const { contactId } = req.params;
-        const contact = await contactsOperations.updatePatchContact(contactId, req.body)
+    const { contactId } = req.params;
+    const contact = await contactsOperations.updatePatchContact(contactId, req.body)
 
-        if (!contact) {
-            //! 4 - вариант
-            throw new NotFound(`Contact wiht id:'${contactId}' not found`)
-        }
-
-        res.status(200).json({
-            status: "success",
-            code: 200,
-            data: {
-                result: contact
-            }
-        })
-
-    } catch (e) {
-        next(e);
+    if (!contact) {
+        //! 4 - вариант
+        throw new NotFound(`Contact wiht id:'${contactId}' not found`)
     }
+
+    res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+            result: contact
+        }
+    })
+
+    // } catch (e) {
+    //     next(e);
+    // }
 }
 
 module.exports = updatePatchContact

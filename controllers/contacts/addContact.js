@@ -29,41 +29,41 @@ const { lineBreak } = require("../../service");
 
 
 const addContact = async (req, res, next) => {
-    try {
-        //! ===========================console============================
-        console.log("START-->POST".yellow); //!
-        lineBreak();
-        //! ==============================================================
+    // try {
+    //! ===========================console============================
+    console.log("START-->POST".yellow); //!
+    lineBreak();
+    //! ==============================================================
 
-        //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
-        // const validationResult = contactSchemaPostPut.validate(req.body);
+    //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
+    // const validationResult = contactSchemaPostPut.validate(req.body);
 
-        // if (validationResult.error) {
-        //     //! ===========================console============================
-        //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
-        //     console.log("");
-        //     console.log(validationResult.error);
-        //     lineBreak();
-        //     console.log("END-->POST".yellow); //!
-        //     //! ==============================================================
-        //     //! 3 - вариант
-        //     return res.status(400).json({ status: validationResult.error.details });
-        // }
-        //* __________________________ ВАЛИДАЦИЯ Joi __________________________
+    // if (validationResult.error) {
+    //     //! ===========================console============================
+    //     console.log("Ошибка ВАЛИДАЦИИ:".bgRed.black);
+    //     console.log("");
+    //     console.log(validationResult.error);
+    //     lineBreak();
+    //     console.log("END-->POST".yellow); //!
+    //     //! ==============================================================
+    //     //! 3 - вариант
+    //     return res.status(400).json({ status: validationResult.error.details });
+    // }
+    //* __________________________ ВАЛИДАЦИЯ Joi __________________________
 
-        const contact = await contactsOperations.addContact(req.body)
+    const contact = await contactsOperations.addContact(req.body)
 
-        res.status(201).json({
-            status: "success",
-            code: 201,
-            data: {
-                result: contact
-            }
-        });
+    res.status(201).json({
+        status: "success",
+        code: 201,
+        data: {
+            result: contact
+        }
+    });
 
-    } catch (e) {
-        next(e);
-    }
+    // } catch (e) {
+    //     next(e);
+    // }
 }
 
 module.exports = addContact
