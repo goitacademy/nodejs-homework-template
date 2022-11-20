@@ -29,8 +29,6 @@ const contactSchemaPostPut = Joi.object({
     .required(),
 });
 
-
-
 //--------------------------------------------------------------------
 const contactSchemaPutch = Joi.object({
   name: Joi.string()
