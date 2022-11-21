@@ -1,30 +1,41 @@
 const jwt = require("jsonwebtoken");
-const { NotAuthorizedError } = require("../helpers");
-const { User } = require("../models/userModel");
-
-const { JWT_SECRET } = process.env;
+const { User } = require("../db/userModel");
+const { NotAuthorizedError } = require("../helpers/errors");
 
 const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  const [, token] = authHeader.split(" ");
-  if (!token) {
-    return next(NotAuthorizedError());
+  const { authorization } = req.headers;
+  if (!authorization) {
+    next(new NotAuthorizedError("Please, provide token"));
   }
-  try {
-    const verifiedToken = jwt.decode(token, JWT_SECRET);
-    console.log("token is valid", verifiedToken);
 
-    const user = await User.findById(verifiedToken._id);
-    if (token !== user.token) {
-      return next(NotAuthorizedError());
+  const [, token] = authorization.split(" ");
+  if (!token) {
+    next(new NotAuthorizedError("Please, provide token"));
+  }
+
+  try {
+    const user = jwt.decode(token, process.env.JWT_SECRET);
+
+    if (!user) {
+      next(new NotAuthorizedError("Invalid token"));
+    }
+
+    const chosenUser = await User.findById(user._id);
+
+    if (!chosenUser) {
+      next(new NotAuthorizedError("Not authorized"));
+    }
+
+    if (chosenUser.token && chosenUser.token !== token) {
+      next(new NotAuthorizedError("Not authorized"));
     }
 
     req.token = token;
     req.user = user;
-    return next();
+    user.token = token;
+    next();
   } catch (error) {
-    console.error(error.message);
+    next(new NotAuthorizedError("Invalid token"));
   }
 };
 

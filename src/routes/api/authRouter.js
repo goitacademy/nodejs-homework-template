@@ -1,23 +1,35 @@
 const express = require("express");
-const authRouter = express.Router();
-const { tryCatchWrapper } = require("../../helpers");
 const {
-  register,
-  login,
-  logout,
-  getCurrentUser,
-  updateUserSubscription,
-} = require("../../controllers/authController");
+  registrationController,
+  loginController,
+  logoutController,
+  currentUserController,
+  updateSubscriptionController,
+  uploadImageController,
+} = require("../../controllers/authControllers");
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 const { authMiddleware } = require("../../middlewares/authMiddleware");
+const { uploadMiddleware } = require("../../middlewares/uploadMiddleware");
+const {
+  registerUserValidation,
+  loginUserValidation,
+} = require("../../middlewares/userValidationMiddleware");
 
-authRouter.post("/register", tryCatchWrapper(register));
-authRouter.post("/login", tryCatchWrapper(login));
-authRouter.post("/logout", authMiddleware, tryCatchWrapper(logout));
-authRouter.get("/current", authMiddleware, tryCatchWrapper(getCurrentUser));
-authRouter.patch(
-  "/subscription",
-  authMiddleware,
-  tryCatchWrapper(updateUserSubscription)
+const router = express.Router();
+
+router.post(
+  "/register",
+  registerUserValidation,
+  asyncWrapper(registrationController)
+);
+router.post("/login", loginUserValidation, asyncWrapper(loginController));
+router.post("/logout", authMiddleware, asyncWrapper(logoutController));
+router.get("/current", authMiddleware, asyncWrapper(currentUserController));
+router.patch("/", authMiddleware, asyncWrapper(updateSubscriptionController));
+router.patch(
+  "/avatars",
+  [authMiddleware, uploadMiddleware.single("avatar")],
+  asyncWrapper(uploadImageController)
 );
 
-module.exports = authRouter;
+module.exports = router;
