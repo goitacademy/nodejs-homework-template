@@ -37,3 +37,5 @@ module.exports = app
 //AZJ5FeGmL*Ug9R-      пароль MongoDB
 
 //mongodb+srv://Sasha:AZJ5FeGmL*Ug9R-@cluster0.texgxkt.mongodb.net/test
+//mongodb+srv://Sasha:AZJ5FeGmL*Ug9R-@cluster0.texgxkt.mongodb.net/db_contacts
+//mongodb+srv://Sasha:AZJ5FeGmL*Ug9R-@cluster0.texgxkt.mongodb.net/db_contacts?retryWrites=true&w=majority
