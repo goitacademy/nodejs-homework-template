@@ -30,6 +30,7 @@ userSchema.methods.comparePassword = function(password){
 const joiSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(), 
+  subscription: Joi.string(),
 });
 
 const User = model("user", userSchema);
