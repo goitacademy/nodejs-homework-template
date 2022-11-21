@@ -1,6 +1,4 @@
-const Contact = require('../../models/contact');
-// const { addContact } = require('../../models/contacts/contacts');
-// const { HTTPError } = require('../../helpers');
+const { Contact } = require('../../models/contact');
 
 const add = async (req, res, next) => {
   const data = req.body;
