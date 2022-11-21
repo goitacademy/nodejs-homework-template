@@ -6,26 +6,24 @@ const service = require("../service/index");
 
 // const { Contact } = require("../schemas/contactSchema");
 
-const listContacts = async () => {
-  const results = service.getAllContacts();
-  return results;
+const listContacts = async (res) => {
+  const results = await service.getAllContacts();
+  res.status(200).json(results);
 };
 
-// listContacts();
-
-const getContactById = async (contactId) => {
-  const results = service.getContactById(contactId);
-  return results;
-  // try {
-  //   const data = await fs.readFile(`${contactsPath}`);
-  //   const contacts = JSON.parse(data);
-  //   return contacts.find((contact) => contact.id === contactId.toString());
-  // } catch (err) {
-  //   console.log(err.message);
-  // }
+const getContactById = async (contactId, res) => {
+  const results = await service.getContactById(contactId);
+  res.status(200).json(results);
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, res) => {
+  try {
+    const results = await service.removeContact(contactId);
+    if (!results) res.status(404).json({ message: "Not found" });
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
   // return listContacts()
   //   .then((data) => {
   //     const contactsListWithoutRemovedContact = data.filter(
@@ -43,7 +41,14 @@ const removeContact = async (contactId) => {
   //   .catch((err) => console.log(err.message));
 };
 
-const addContact = async (body) => {
+const addContact = async (req, res) => {
+  try {
+    const results = await service.createContact(req.body);
+    res.status(201).json(results);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+
   // const schema = Joi.object({
   //   name: Joi.string().alphanum().min(3).max(20).required(),
   //   email: Joi.string()
@@ -82,6 +87,13 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
+  try {
+    const results = await service.updateContact(contactId);
+    if (!results) res.status(404).json({ message: "Not found" });
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
   // const schema = Joi.object({
   //   name: Joi.string().alphanum().min(3).max(20),
   //   email: Joi.string().email({
