@@ -29,7 +29,7 @@ router.delete("/:contactId", (req, res, next) =>
 
 router.put(
   "/:contactId",
-  async (req, res, next) =>
+  (req, res, next) =>
     contactsModels.updateContact(req.params.contactId, req.body, res)
   // {
   //   const { name, email, phone } = req.body;

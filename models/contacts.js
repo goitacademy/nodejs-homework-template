@@ -86,10 +86,10 @@ const addContact = async (req, res) => {
   //   .catch((err) => console.log(err.message));
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, res) => {
   try {
-    const results = await service.updateContact(contactId);
-    if (!results) res.status(404).json({ message: "Not found" });
+    const results = await service.updateContact(contactId, body);
+    // if (!results) res.status(404).json({ message: "Not found" });
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
