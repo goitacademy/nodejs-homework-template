@@ -13,10 +13,14 @@ const updateContact = async (id, fields) =>
 const removeContact = async (id) =>
   await Contact.findByIdAndRemove({ _id: id });
 
+const updateStatusContact = async (id, fields) =>
+  await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+
 module.exports = {
   getAllContacts,
   getContactById,
   createContact,
   updateContact,
   removeContact,
+  updateStatusContact,
 };
