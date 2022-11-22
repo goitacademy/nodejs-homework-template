@@ -1,11 +1,27 @@
+const { WrongParametersError } = require("../helpers/errors");
+
 const validateSchema = (schema) => async (req, res, next) => {
   try {
     await schema.validateAsync(req.body);
     next();
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ message: error.message });
+    next(new WrongParametersError(error.message));
   }
 };
 
-module.exports = { validateSchema };
+const validateParams = (schema) => {
+  return async (req, res, next) => {
+    try {
+      await schema.validateAsync(req.params);
+      next();
+    } catch (error) {
+      console.log(error);
+      next(
+        new WrongParametersError("Error , Id doesn't match to database pattern")
+      );
+    }
+  };
+};
+
+module.exports = { validateSchema, validateParams };

@@ -1,77 +1,58 @@
 const contactsDB = require("../service/contacts");
+const { NotFoundError } = require("../helpers/errors");
 
-const getContactsList = async (req, res, next) => {
-  try {
-    const contacts = await contactsDB.getContacts();
-    return res.status(200).json(contacts);
-  } catch (err) {
-    next(err);
+const getContactsList = async (req, res) => {
+  console.log(req.user);
+  const owner = req.user._id;
+  const contacts = await contactsDB.getContacts(owner);
+  return res.status(200).json(contacts);
+};
+
+const getById = async (req, res) => {
+  const { contactId: id } = req.params;
+  const owner = req.user._id;
+  const contact = await contactsDB.getContactById(id, owner);
+  if (contact) {
+    return res.status(200).json(contact);
   }
 };
 
-const getById = async (req, res, next) => {
-  try {
-    const contact = await contactsDB.getContactById(req.params.contactId);
-    if (contact) {
-      return res.status(200).json(contact);
-    }
-    return res.status(404).json({ message: "Not found" });
-  } catch (err) {
-    next(err);
-  }
+const create = async (req, res) => {
+  const owner = req.user._id;
+  const newContact = await contactsDB.createContact(req.body, owner);
+  return res.status(201).json(newContact);
 };
 
-const create = async (req, res, next) => {
-  try {
-    const newContact = await contactsDB.createContact(req.body);
-    return res.status(201).json(newContact);
-  } catch (err) {
-    next(err);
+const removeContact = async (req, res) => {
+  const { contactId: id } = req.params;
+  const owner = req.user._id;
+  const deletedContact = await contactsDB.removeContact(id, owner);
+  if (deletedContact) {
+    return res.status(200).json({
+      message: "Contact deleted",
+    });
   }
+  throw new NotFoundError("Contact not found");
 };
 
-const removeContact = async (req, res, next) => {
-  try {
-    const deletedContact = await contactsDB.removeContact(req.params.contactId);
-    if (deletedContact) {
-      return res.status(200).json({
-        message: "Contact deleted",
-      });
-    }
-    return res.status(404).json({ message: "Not found" });
-  } catch (err) {
-    next(err);
-  }
+const updateContact = async (req, res) => {
+  const { contactId: id } = req.params;
+  const owner = req.user._id;
+
+  const updatedContact = await contactsDB.updateContact(id, req.body, owner);
+  return res.status(201).json(updatedContact);
 };
 
-const updateContact = async (req, res, next) => {
-  try {
-    const updatedContact = await contactsDB.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    return res.status(201).json(updatedContact);
-  } catch (err) {
-    next(err);
+const updateStatus = async (req, res) => {
+  const { contactId: id } = req.params;
+  const owner = req.user._id;
+  const updatedStatus = await contactsDB.updateContact(id, req.body, owner, {
+    new: true,
+  });
+  if (req.body) {
+    return res.status(201).json(updatedStatus);
   }
-};
-
-const updateStatus = async (req, res, next) => {
-  try {
-    const updatedStatus = await contactsDB.updateContact(
-      req.params.contactId,
-      req.body,
-      {
-        new: true,
-      }
-    );
-    if (req.body) {
-      return res.status(201).json(updatedStatus);
-    }
-    return res.status(404).json({ message: "Not found" });
-  } catch (err) {
-    next(err);
-  }
+  throw new NotFoundError("Contact not found");
 };
 
 module.exports = {
