@@ -15,40 +15,50 @@ async function getContactsList() {
   }
 }
 
-const listContacts = async () => {
+const listContacts = async (_, res) => {
   try {
-    const contacts = await getContactsList();
-    return contacts;
+    const response = await getContactsList();
+    return res.json({ response, status: "200" });
   } catch (error) {
     return error;
   }
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
   try {
     const contacts = await getContactsList();
     const contactById = contacts.filter((item) => item.id === contactId);
-    return contactById;
+    if (contactById.length === 0) {
+      return res
+        .status(404)
+        .json({ status: `Contact with id ${contactId} was not found` });
+    }
+    return res.json({ response: contactById, status: "200" });
   } catch (error) {
-    return error;
+    res.status(400).json({ status: error.message });
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (req, res) => {
+  const { contactId } = req.params;
   try {
     const contacts = await getContactsList();
     const filteredData = contacts.filter((item) => item.id !== contactId);
     if (filteredData.length === contacts.length) {
-      return { status: "404" };
+      return res
+        .status(404)
+        .json({ status: `Contact with id ${contactId} was not found` });
     }
     await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
-    return { status: "200" };
+    return res.json({ status: "200" });
   } catch (error) {
-    return error;
+    res.status(500).json({ status: error.message });
   }
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (req, res) => {
+  const { name, email, phone } = req.body;
   try {
     const contacts = await getContactsList();
     const newContact = {
@@ -59,14 +69,15 @@ const addContact = async ({ name, email, phone }) => {
     };
     const filteredData = [newContact, ...contacts];
     await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
-    return { status: "201" };
+    return res.json({ status: "201" });
   } catch (error) {
-    return error;
+    res.status(400).json({ status: error.message });
   }
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  console.log(name);
+const updateContact = async (req, res) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
   try {
     const contacts = await getContactsList();
     contacts.forEach((item) => {
@@ -77,9 +88,9 @@ const updateContact = async (contactId, { name, email, phone }) => {
       }
     });
     await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
-    return { status: "200" };
+    return res.json({ status: "200" });
   } catch (error) {
-    return error;
+    res.status(500).json({ status: error.message });
   }
 };
 
