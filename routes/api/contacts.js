@@ -5,14 +5,19 @@ const { idValidation, auth } = require("../../middlewares");
 
 router.get("/", auth, ctrl.listContacts);
 
-router.get("/:contactId", idValidation, ctrl.getContactById);
+router.get("/:contactId", auth, idValidation, ctrl.getContactById);
 
 router.post("/", auth, ctrl.addContact);
 
-router.delete("/:contactId", idValidation, ctrl.removeContact);
+router.delete("/:contactId", auth, idValidation, ctrl.removeContact);
 
-router.put("/:contactId", idValidation, ctrl.updateById);
+router.put("/:contactId", auth, idValidation, ctrl.updateById);
 
-router.patch("/:contactId/favorite", idValidation, ctrl.updateStatusContact);
+router.patch(
+  "/:contactId/favorite",
+  auth,
+  idValidation,
+  ctrl.updateStatusContact
+);
 
 module.exports = router;
