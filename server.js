@@ -1,11 +1,8 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const PORT = 3000;
-
-const uriDb =
-  "mongodb+srv://contactsMongoUser:tx4RDAxQGQghO2AL@cluster0.nowoij3.mongodb.net/db-contacts?retryWrites=true&w=majority";
-
-const connection = mongoose.connect(uriDb);
+require("dotenv").config();
+const PORT = process.env.PORT || 3000;
+const connection = mongoose.connect(process.env.URLOFDB);
 
 connection
   .then(() => {
