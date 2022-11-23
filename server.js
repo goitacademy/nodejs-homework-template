@@ -16,4 +16,4 @@ mongoose
     process.exit(1);
   });
 
-/// "hello world"
+// "hello heroku"
