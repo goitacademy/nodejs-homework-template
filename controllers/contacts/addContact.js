@@ -1,5 +1,4 @@
-// const { NotFound } = require('http-errors')
-const Joi = require('joi')
+// const Joi = require('joi')
 
 const contactsOperations = require("../../models/contacts")
 const { lineBreak } = require("../../service");
@@ -27,13 +26,12 @@ const { lineBreak } = require("../../service");
 //* _______________________ Схема ВАЛИДАЦИИ Joi _______________________
 
 
-
 const addContact = async (req, res, next) => {
-    // try {
     //! ===========================console============================
     console.log("START-->POST".yellow); //!
     lineBreak();
     //! ==============================================================
+
 
     //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
     // const validationResult = contactSchemaPostPut.validate(req.body);
@@ -56,14 +54,8 @@ const addContact = async (req, res, next) => {
     res.status(201).json({
         status: "success",
         code: 201,
-        data: {
-            result: contact
-        }
+        data: { contact }
     });
-
-    // } catch (e) {
-    //     next(e);
-    // }
 }
 
 module.exports = addContact

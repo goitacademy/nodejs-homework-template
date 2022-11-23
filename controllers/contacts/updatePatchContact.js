@@ -1,5 +1,5 @@
 const { NotFound } = require('http-errors')
-const Joi = require('joi')
+// const Joi = require('joi')
 
 const contactsOperations = require("../../models/contacts")
 const { lineBreak } = require("../../service");
@@ -29,11 +29,11 @@ const { lineBreak } = require("../../service");
 
 
 const updatePatchContact = async (req, res, next) => {
-    // try {
     //! ===========================console============================
     console.log("START-->PATCH/:id".rainbow); //!
     lineBreak();
     //! ==============================================================
+
 
     //* +++++++++++++++++++++++ ВАЛИДАЦИЯ Joi +++++++++++++++++++++++++++++
     // const validationResult = contactSchemaPatch.validate(req.body);
@@ -56,21 +56,14 @@ const updatePatchContact = async (req, res, next) => {
     const contact = await contactsOperations.updatePatchContact(contactId, req.body)
 
     if (!contact) {
-        //! 4 - вариант
         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
     }
 
     res.status(200).json({
         status: "success",
         code: 200,
-        data: {
-            result: contact
-        }
+        data: { contact }
     })
-
-    // } catch (e) {
-    //     next(e);
-    // }
 }
 
 module.exports = updatePatchContact
