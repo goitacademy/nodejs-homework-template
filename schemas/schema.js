@@ -9,6 +9,7 @@ const addPostSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().alphanum().min(3).max(30).required(),
+
   favorite: Joi.boolean().optional(),
 });
 
@@ -21,6 +22,7 @@ const updatePutSchema = Joi.object({
     })
     .optional(),
   phone: Joi.string().alphanum().min(3).max(30).optional(),
+
   favorite: Joi.boolean().optional(),
 })
   .required()

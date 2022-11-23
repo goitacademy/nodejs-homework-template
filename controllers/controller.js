@@ -11,6 +11,7 @@ const getContactList = async (req, res, next) => {
       contacts,
     },
   });
+
 };
 
 const getContactsById = async (req, res, next) => {
@@ -32,6 +33,7 @@ const getContactsById = async (req, res, next) => {
 };
 
 const addContactById = async (req, res, next) => {
+
   const result = await methods.addContact(req.body, { new: true });
 
   return res.status(201).json({
@@ -45,13 +47,16 @@ const deleteContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
+
     const result = await methods.removeContact(contactId).catch((_) => null);
     if (!result) {
       throw new NotFound();
+
     }
     res.json({
       status: "success",
       code: 200,
+
       message: `contact with id - ${contactId} deleted`,
       data: { result },
     });
@@ -61,6 +66,7 @@ const deleteContactById = async (req, res, next) => {
 };
 
 const updateContactById = async (req, res, next) => {
+
   const { contactId } = req.params;
   const result = await methods
     .updateContact(contactId, req.body)
@@ -88,6 +94,7 @@ const updateStatusContactById = async (req, res, next) => {
     code: 200,
     data: { result },
   });
+
 };
 module.exports = {
   getContactList,
@@ -95,5 +102,6 @@ module.exports = {
   addContactById,
   deleteContactById,
   updateContactById,
+
   updateStatusContactById,
 };

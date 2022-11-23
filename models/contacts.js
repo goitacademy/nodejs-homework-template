@@ -37,6 +37,7 @@ const updateStatusContact = async (contactId, body) => {
     new: true,
   });
   return update;
+
 };
 
 module.exports = {
