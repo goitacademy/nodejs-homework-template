@@ -27,6 +27,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleSchemaValidationErrors);
+contactSchema.post("findOneAndUpdate", handleSchemaValidationErrors);
 
 const Contact = model("contact", contactSchema);
 

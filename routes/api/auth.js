@@ -12,7 +12,7 @@ router.get("/users/current", authenticate, controllerlWrapper(authControllers.cu
 router.patch(
   "/users",
   authenticate,
-  validationBody(userSchema.updateUserSubscriptionSchema),
+
   controllerlWrapper(authControllers.updateUserSubscription)
 );
 

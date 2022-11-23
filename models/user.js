@@ -30,6 +30,7 @@ const userSchema = new Schema(
 );
 
 userSchema.post("save", handleSchemaValidationErrors);
+userSchema.post("findOneAndUpdate", handleSchemaValidationErrors);
 
 const User = model("user", userSchema);
 
