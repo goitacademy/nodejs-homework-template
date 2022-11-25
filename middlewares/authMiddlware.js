@@ -15,10 +15,10 @@ const authMiddleware = async (req, res, next) => {
       req.token = token;
       req.user = user;
 
-      const userCheck = await User.findOne({ _id: user.id });
+      const userCheck = await User.findOne({ _id: user.id ,token});
       if (!userCheck) {
         next(new NotAutorizedError("Not authorized"));
-      }
+      } 
       next();
     } catch (err) {
       next(new NotAutorizedError("Not authorized"));
