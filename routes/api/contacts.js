@@ -22,4 +22,8 @@ router.patch("/:contactId/favorite", (req, res, next) =>
   contactsModels.updateStatusContact(req.params.contactId, req.body, res)
 );
 
+router.post("/users/register", async (req, res, next) =>
+  // contactsModels.addContact(req, res)
+);
+
 module.exports = router;

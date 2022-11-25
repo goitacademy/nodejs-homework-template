@@ -1,4 +1,4 @@
-const service = require("../service/index");
+const service = require("../services/contactsService");
 const getValidation = require("../middlewares/validationMiddlewares");
 
 const listContacts = async (res) => {
