@@ -8,7 +8,6 @@ const { validateSchema } = require("../../middlewares/SchemaValidator");
 const { authMiddleware } = require("../../middlewares/authMiddlware");
 const { asyncWrapper } = require("../../helpers/apiHelper");
 const router = express.Router();
-router.use(authMiddleware);
 
 router.post(
   "/signup",
@@ -17,12 +16,16 @@ router.post(
 );
 
 router.post(
-  "/signin",
+  "/login",
   validateSchema(schemaPasswordValidation),
   asyncWrapper(auth.singinController)
 );
 
-router.post("/logout", asyncWrapper(auth.logoutController));
+router.post("/logout", authMiddleware, asyncWrapper(auth.logoutController));
 
-router.get("/current", asyncWrapper(auth.currentUserController));
+router.get(
+  "/current",
+  authMiddleware,
+  asyncWrapper(auth.currentUserController)
+);
 module.exports = router;

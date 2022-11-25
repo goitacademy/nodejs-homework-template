@@ -1,31 +1,29 @@
-
 class NodeHwError extends Error {
-    constructor(message) {
-        super(message);
-        this.status = 400;
-    }
+  constructor(message) {
+    super(message);
+    this.status = 400;
+  }
 }
-
 
 class ValidationError extends NodeHwError {
   constructor(message) {
     super(message);
     this.status = 400;
   }
-};
+}
 class NotFoundError extends NodeHwError {
   constructor(message) {
     super(message);
     this.status = 404;
   }
-};
+}
 
 class WrongParametersError extends NodeHwError {
   constructor(message) {
     super(message);
     this.status = 400;
   }
-};
+}
 
 class NotAutorizedError extends NodeHwError {
   constructor(message) {
@@ -40,7 +38,6 @@ class InUseError extends NodeHwError {
     this.status = 409;
   }
 }
-
 
 module.exports = {
   NodeHwError,

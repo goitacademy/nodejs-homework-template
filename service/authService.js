@@ -18,11 +18,18 @@ const signin = async (email, password) => {
   }
   const token = jwt.sign(
     {
-      _id: user._id,
+      id: user._id,
+      email: user.email,
+      subscription: user.subscription,
     },
     process.env.JWT_SECRET
   );
-  return token;
+  const updatedUser = await User.findByIdAndUpdate(
+    user._id,
+    { $set: { token } },
+    { new: true }
+  );
+  return updatedUser;
 };
 
 const logout = async (id) => {
