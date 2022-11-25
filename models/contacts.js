@@ -1,36 +1,10 @@
-// todo --> START ++++++++++++++++++++++++++++++++++++++++++++++++
-// // const fs = require('fs/promises')
-
-// const listContacts = async () => {}
-
-// const getContactById = async (contactId) => {}
-
-// const removeContact = async (contactId) => {}
-
-// const addContact = async (body) => {}
-
-// const updateContact = async (contactId, body) => {}
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// }
-// todo _____________________________________________________________
-
-
 const fs = require("fs/promises");
 const path = require('path');
 require('colors');
 
 const { randomUUID } = require("crypto"); //! +++
-const { v4 } = require('uuid');
-const uniqid = require('uniqid');
-
-const Joi = require('joi');
-
+// const { v4 } = require('uuid');
+// const uniqid = require('uniqid');
 
 const { lineBreak } = require("../service");
 
@@ -201,7 +175,6 @@ async function updatePutContact(contactId, body) {
   //? Проверка contactId на число/строка
   let contact = null;
   if (isNaN(Number(contactId))) {
-    // console.log("contactId:", contactId); //!
     contact = { id: contactId, ...body }
   } else {
     contact = { id: Number(contactId), ...body };
