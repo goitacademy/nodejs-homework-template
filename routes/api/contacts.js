@@ -2,25 +2,17 @@ const express = require("express");
 
 const router = express.Router();
 const { tryCatch, validation } = require("../../middlewares");
+const { contactSchema } = require("../../schemas");
+const { contacts: ctrl } = require("../../controllers");
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/", tryCatch(ctrl.getAll));
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:id", tryCatch(ctrl.getById));
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", validation(contactSchema), tryCatch(ctrl.add));
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:id", tryCatch(ctrl.dell));
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:id", validation(contactSchema), tryCatch(ctrl.updateById));
 
 module.exports = router;
