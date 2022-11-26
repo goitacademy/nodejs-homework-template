@@ -7,7 +7,7 @@ const writeFile = async (data) => {
   try {
     await fs.writeFile(contactsPath, JSON.stringify(data), "utf8");
   } catch (err) {
-    console.message(er.message);
+   console.log(err.message)
   }
 };
 
@@ -16,16 +16,16 @@ export const listContacts = async () => {
     const data = await fs.readFile(contactsPath, 'utf8');
     return JSON.parse(data)
   } catch (err) {
-    console.message(er.message);
+  console.log(err.message)
   };
 };
 
 export const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    return contacts.find(({ id }) => id === contactId);
+    return contacts.filter(({ id }) => id === contactId);
   } catch(err){
-    console.merssage(err.message)
+  console.log(err.message)
   }
 };
 
@@ -39,47 +39,39 @@ export const removeContact = async (contactId) => {
     writeFile(removeAnyContact);
     return true;
   } catch(err){
-    console.merssage(err.message)
+console.log(err.message)
   }
 };
 
 export const addContact = async ({name, email, phone}) => {
   try {
-           const contacts = await listContacts();
-        const newContacts = {
+    const contacts = await listContacts();
+        const newContact = {
             id: nanoid(),
             name,
             email,
             phone,
-        };
-        contacts.push(newContacts);
+    };
+      contacts.push(newContact);
         await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-        return newContacts;
+        return newContact;
   } catch (err) {
-    console.merssage(err.message)
+ console.log(err.message)
   }
 };
 
-export const updateContact = async (contactId, body) => {
+export const updateContact = async (id, { name, email, phone }) => {
   try {
     const contacts = await listContacts();
-    const contactIndexUpd = contacts.findIndex(({ id }) => id === contactId);
-    if (contactIndexUpd !==-1) {
-      contacts[contactIndexUpd] = { id: contactId,...body};
+    const result = contacts.findIndex(({ contact }) => contact.id === id);
+    if (result !==-1) {
+      contacts[result] = { id,  name, email, phone };
       await writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf8");
-      return contacts[contactIndexUpd];
+      return contacts[result];
     } else {
-      return false;
+      return null;
     }
   } catch(err){
-    console.merssage(err.message)
+console.log(err.message)
   }
 };
-
-// export default {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// }
