@@ -1,11 +1,14 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+// const mongoose = require('mongoose');
+const cookieParser  =  require ( 'cookie-parser' )
 
+require('dotenv').config();
 const router = require("./routes/api/contacts");
 
 const app = express();
-
+app.use(cookieParser())
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));

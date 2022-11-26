@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("node:path");
 const { v4: uuidv4 } = require("uuid");
+
 const contactsPath = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
@@ -77,10 +78,15 @@ const updateContact = async (contactId, body) => {
   return contacts;
 };
 
+const updateStatusContact = async (contactId, body)=>{
+
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 };
