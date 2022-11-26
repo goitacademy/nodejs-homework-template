@@ -1,32 +1,53 @@
 const express = require("express");
-const { validateSchema } = require("../../middlewares/SchemaValidator");
+const {
+  validateSchema,
+  validateParams,
+} = require("../../middlewares/SchemaValidator");
 const contact = require("../../controller/contacts");
 const {
   schemaCreateContact,
   schemaUpdateContact,
   updateFavoriteSchema,
+  schemaMongoId,
 } = require("../../service/schema/validationSchemas");
-
 const router = express.Router();
+const { authMiddleware } = require("../../middlewares/authMiddlware");
+const { asyncWrapper } = require("../../helpers/apiHelper.js");
 
-router.get("/", contact.getContactsList);
+router.use(authMiddleware);
 
-router.get("/:contactId", contact.getById);
+router.get("/", asyncWrapper(contact.getContactsList));
 
-router.post("/", validateSchema(schemaCreateContact), contact.create);
+router.get(
+  "/:contactId",
+  validateParams(schemaMongoId),
+  asyncWrapper(contact.getById)
+);
 
-router.delete("/:contactId", contact.removeContact);
+router.post(
+  "/",
+  validateSchema(schemaCreateContact),
+  asyncWrapper(contact.create)
+);
+
+router.delete(
+  "/:contactId",
+  validateParams(schemaMongoId),
+  asyncWrapper(contact.removeContact)
+);
 
 router.put(
   "/:contactId",
   validateSchema(schemaUpdateContact),
-  contact.updateContact
+  validateParams(schemaMongoId),
+  asyncWrapper(contact.updateContact)
 );
 
 router.patch(
   "/:contactId/favorite",
   validateSchema(updateFavoriteSchema),
-  contact.updateStatus
+  validateParams(schemaMongoId),
+  asyncWrapper(contact.updateStatus)
 );
 
 module.exports = router;
