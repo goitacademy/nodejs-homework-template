@@ -29,12 +29,10 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server ERROR" } = err;
   //! ===========================console============================
   console.log("!!! ОШИБКА !!!:".bgRed.white)
-  // console.error(err.message)
   console.error(err.message.red)
   console.log("");
   //! ==============================================================
   res.status(status).json({ message: err.message })
-  // res.status(status).json(err.message)
 })
 
 

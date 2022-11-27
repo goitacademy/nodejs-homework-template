@@ -2,11 +2,18 @@ const express = require('express')
 const router = express.Router()
 
 const { validation, ctrlWrapper } = require("../../middlewares")
-const { contactSchema } = require("../../schemas")
+
+const {
+    contactJoiSchemaPostPut,
+    contactJoiSchemaPatch,
+    contactJoiSchemaPatchFavorite
+} = require("../../models/contact.js");
+const validateMiddlewarePostPut = validation(contactJoiSchemaPostPut);
+const validateMiddlewarePatch = validation(contactJoiSchemaPatch);
+const validateMiddlewarePatchFavorite = validation(contactJoiSchemaPatchFavorite);
+
 const { contacts: ctrl } = require("../../controllers")
 
-const validateMiddlewarePostPut = validation(contactSchema.contactSchemaPostPut)
-const validateMiddlewarePatch = validation(contactSchema.contactSchemaPatch)
 
 
 //-----------------------------------------------------------------------------
@@ -28,6 +35,11 @@ router.put('/:contactId', validateMiddlewarePostPut, ctrlWrapper(ctrl.updatePutC
 
 //! 4-2. PATCH-Обновление ОДНОГО КОНТАКТА по id
 router.patch("/:contactId", validateMiddlewarePatch, ctrlWrapper(ctrl.updatePatchContact));
+
+
+//! 4-3. PATCH-Обновление поле статуса favorite по id
+// router.patch("/:contactId/favorite", ctrlWrapper(ctrl.updatePatchContactFavorite));
+router.patch("/:contactId/favorite", validateMiddlewarePatchFavorite, ctrlWrapper(ctrl.updatePatchContactFavorite));
 
 
 //! 5. Удаление ОДНОГО КОНТАКТА по id
