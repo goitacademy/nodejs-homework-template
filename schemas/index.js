@@ -1,5 +1,5 @@
-const contactSchema = require("./contact.js")
+// const contactSchema = require("./contact.js")
 
-module.exports = {
-    contactSchema
-}
+// module.exports = {
+//     contactSchema
+// }
