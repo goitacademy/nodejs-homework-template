@@ -1,9 +1,9 @@
-// wkRA3SfYf2SVSbGp
-
-const DB_HOST =
-  "mongodb+srv://exmahinator:wkRA3SfYf2SVSbGp@cluster0.loyyuch.mongodb.net/db_contacts?retryWrites=true&w=majority";
-
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const { DB_HOST } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database connect is successful!"))
