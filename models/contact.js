@@ -1,6 +1,7 @@
-//? +++++++++++++++++++  mongoose +++++++++++++++++++
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+
+const { handleSchemaValidationErrors } = require("../helpers");
 
 
 //-----------------------------------------------------------------------------
@@ -21,6 +22,9 @@ const contactSchema = Schema({
     },
 }, { versionKey: false, timestamps: true });
 
+
+//! Правильный код ошибки contactSchema
+contactSchema.post("save", handleSchemaValidationErrors)
 
 //* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
 const contactJoiSchemaPostPut = Joi.object({
@@ -86,4 +90,3 @@ module.exports = {
     contactJoiSchemaPatchFavorite
 };
 
-//? _____________________  mongoose _____________________
