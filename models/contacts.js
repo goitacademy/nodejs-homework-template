@@ -10,13 +10,13 @@ const { lineBreak } = require("../service");
 
 
 //------------------------------------------------------------------------------------------------
-// TODO: ------------------------ Определяем путь к файлу  contacts.json ------------------------
+//  TODO: ------------------------ Определяем путь к файлу  contacts.json ------------------------
 const contactsPath = path.join(__dirname, "/../models/contacts.json");
 lineBreak();
 // console.log("contactsPath:".red, contactsPath.green); //!
 console.log("contactsPath:".bgBlue.yellow, contactsPath.blue); //!
 lineBreak();
-// TODO: _________________________________________________________________________________________
+//  TODO: _________________________________________________________________________________________
 
 
 
