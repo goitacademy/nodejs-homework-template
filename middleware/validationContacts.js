@@ -4,9 +4,8 @@ function validationResult(schema, response, request, next) {
   const validationRes = schema.validate(request.body);
 
   if (validationRes.error) {
-    return response
-      .status(400)
-      .json({ message: "missing required name field" });
+    console.log(validationRes.error);
+    return response.status(400).json({ message: validationRes.error.message });
   }
   next();
 }

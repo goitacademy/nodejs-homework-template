@@ -28,8 +28,8 @@ const getContactById = async (req, res) => {
   const { contactId } = req.params;
   try {
     const contacts = await getContactsList();
-    const contactById = contacts.filter((item) => item.id === contactId);
-    if (contactById.length === 0) {
+    const contactById = contacts.find((item) => item.id === contactId);
+    if (!contactById) {
       return res
         .status(404)
         .json({ status: `Contact with id ${contactId} was not found` });
@@ -69,7 +69,7 @@ const addContact = async (req, res) => {
     };
     const filteredData = [newContact, ...contacts];
     await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
-    return res.json({ status: "201" });
+    return res.json({ data: newContact, status: "201" });
   } catch (error) {
     res.status(400).json({ status: error.message });
   }
@@ -87,8 +87,9 @@ const updateContact = async (req, res) => {
         item.phone = phone ?? item.phone;
       }
     });
+    const updatedContact = contacts.find((item) => item.id === contactId);
     await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
-    return res.json({ status: "200" });
+    return res.json({ data: updatedContact, status: "200" });
   } catch (error) {
     res.status(500).json({ status: error.message });
   }
