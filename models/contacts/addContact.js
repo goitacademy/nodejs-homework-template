@@ -1,14 +1,13 @@
 const listContacts = require("./listContacts");
 const fs = require("fs").promises;
-const path = require("path");
+const filePath = require("./filePath");
 const { v4 } = require("uuid");
-const contactPath = path.resolve("./models/contacts.json");
 
 const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts();
   const newContact = { id: v4(), name, email, phone };
   const newContacts = [...contacts, newContact];
-  await fs.writeFile(contactPath, JSON.stringify(newContacts));
+  await fs.writeFile(filePath, JSON.stringify(newContacts));
   console.table(
     `New contact: ${name}, email: ${email}, phone: ${phone} was created!`
   );
