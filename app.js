@@ -1,5 +1,14 @@
 // wkRA3SfYf2SVSbGp
 
+const DB_HOST =
+  "mongodb+srv://exmahinator:wkRA3SfYf2SVSbGp@cluster0.loyyuch.mongodb.net/db_contacts?retryWrites=true&w=majority";
+
+const mongoose = require("mongoose");
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connect is successful!"))
+  .catch((error) => console.log(error.message));
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
