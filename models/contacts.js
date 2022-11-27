@@ -56,6 +56,16 @@ const addContact = async ({ name, email, phone }) => {
   try {
     const allContacts = await listContacts();
 
+    const indexOfUserByName = allContacts.findIndex((i) => i.name === name);
+    if (indexOfUserByName !== -1)
+      return `User with name ${name} is already in database`;
+    const indexOfUserByMail = allContacts.findIndex((i) => i.email === email);
+    if (indexOfUserByMail !== -1)
+      return `User with email ${email} is already in database`;
+    const indexOfUserByPhone = allContacts.findIndex((i) => i.phone === phone);
+    if (indexOfUserByPhone !== -1)
+      return `User with phone number ${phone} is already in database`;
+
     const newContact = {
       id: shortid.generate(),
       name,
@@ -66,7 +76,7 @@ const addContact = async ({ name, email, phone }) => {
 
     await rewriteContacts(allContacts);
 
-    return console.log(newContact, " ADDED!");
+    return newContact;
   } catch (error) {
     console.log(error.red);
   }
@@ -82,7 +92,7 @@ const updateContact = async (contactId, body) => {
       return null;
     }
 
-    allContacts[idx] = body;
+    allContacts[idx] = { id: contactId, ...body };
 
     await rewriteContacts(allContacts);
 
