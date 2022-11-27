@@ -1,17 +1,19 @@
+//? +++++++++++++++++++  mongoose +++++++++++++++++++
 const { NotFound, BadRequest } = require('http-errors');
 const { Contact } = require("../../models");
 
 
 //-----------------------------------------------------------------------------
-const updatePatchContact = async (req, res, next) => {
+const updatePatchContactFavorite = async (req, res, next) => {
     const { contactId } = req.params;
+    const { favorite } = req.body
 
     //! Проверка условия "Если body нет" 
-    if (!Object.keys(req.body).length) {
-        throw new BadRequest(`missing all fields`)
+    if (!(favorite === false || favorite === true)) {
+        throw new BadRequest("missing field favorite")
     }
 
-    const contact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    const contact = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
 
     if (!contact) {
         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
@@ -24,4 +26,9 @@ const updatePatchContact = async (req, res, next) => {
     })
 };
 
-module.exports = updatePatchContact;
+module.exports = updatePatchContactFavorite;
+//? _____________________  mongoose _____________________
+
+
+
+

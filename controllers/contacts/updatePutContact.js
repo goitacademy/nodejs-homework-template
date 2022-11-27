@@ -1,18 +1,11 @@
 const { NotFound } = require('http-errors')
-
-const contactsOperations = require("../../models/contacts")
-const { lineBreak } = require("../../service");
+const { Contact } = require("../../models");
 
 
 //-----------------------------------------------------------------------------
 const updatePutContact = async (req, res, next) => {
-    //! ===========================console============================
-    console.log("START-->PUT/:id".rainbow); //!
-    lineBreak();
-    //! ==============================================================
-
     const { contactId } = req.params;
-    const contact = await contactsOperations.updatePutContact(contactId, req.body)
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
 
     if (!contact) {
         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
@@ -23,6 +16,6 @@ const updatePutContact = async (req, res, next) => {
         code: 200,
         data: { contact }
     })
-}
+};
 
-module.exports = updatePutContact
+module.exports = updatePutContact;
