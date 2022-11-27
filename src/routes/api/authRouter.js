@@ -6,6 +6,8 @@ const {
   currentUserController,
   updateSubscriptionController,
   uploadImageController,
+  getUserByVerificationController,
+  verifyUserController,
 } = require("../../controllers/authControllers");
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 const { authMiddleware } = require("../../middlewares/authMiddleware");
@@ -31,5 +33,11 @@ router.patch(
   [authMiddleware, uploadMiddleware.single("avatar")],
   asyncWrapper(uploadImageController)
 );
+
+router.get(
+  "/verify/:verificationToken",
+  asyncWrapper(getUserByVerificationController)
+);
+router.post("/verify", asyncWrapper(verifyUserController));
 
 module.exports = router;
