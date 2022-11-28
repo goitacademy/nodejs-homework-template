@@ -1,5 +1,6 @@
 const express = require("express");
 const contactsModels = require("../../models/contacts");
+const usersModels = require("../../models/users");
 
 const router = express.Router();
 
@@ -23,7 +24,11 @@ router.patch("/:contactId/favorite", (req, res, next) =>
 );
 
 router.post("/users/register", async (req, res, next) =>
-  // contactsModels.addContact(req, res)
+  usersModels.addUser(req, res)
+);
+
+router.get("/users/login", async (req, res, next) =>
+  usersModels.getUser(req, res)
 );
 
 module.exports = router;

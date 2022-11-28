@@ -70,8 +70,29 @@ const updateContactValid = (body) => {
   return bodyIsValid;
 };
 
+const userValid = (body) => {
+  const { email, password } = body;
+
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      })
+      .required(),
+    password: Joi.string().min(4).required(),
+  });
+
+  const bodyIsValid = schema.validate({
+    email: email,
+    password: password,
+  });
+  return bodyIsValid;
+};
+
 module.exports = {
   updateStatusValid,
   addContactValid,
   updateContactValid,
+  userValid,
 };
