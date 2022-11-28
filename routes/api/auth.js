@@ -6,9 +6,10 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const jimp = require("jimp");
+const { nanoid } = require("nanoid");
 
 const User = require("../../models/user");
-const { RequestError } = require("../../assistant");
+const { RequestError, sendMail } = require("../../assistant");
 const { authorize, upload } = require("../../middlewares");
 
 const router = express.Router();
@@ -21,6 +22,10 @@ const userRegisterSchema = Joi.object({
 
 const userLoginSchema = Joi.object({
   password: Joi.string().min(6).required(),
+  email: Joi.string().required(),
+});
+
+const verifyEmailSchema = Joi.object({
   email: Joi.string().required(),
 });
 
@@ -38,17 +43,74 @@ router.post("/users/signup", async (req, res, next) => {
     if (user) {
       throw RequestError(409, "This email is already in use");
     }
+
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
+    const verificationToken = nanoid();
     const result = await User.create({
       email,
       password: hashPassword,
       subscription,
       avatarURL,
+      verificationToken,
     });
+
+    const mail = {
+      to: email,
+      subject: "Site registration confirmation",
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/:${verificationToken}">Verify Email</a>`,
+    };
+
+    await sendMail(mail);
     res.status(201).json({
       email: result.email,
       subscription: result.subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/users/verify/:verificationToken", async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+      throw RequestError(404, "Not Found");
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      verificationToken: "",
+      verify: true,
+    });
+    res.json({ message: "Verification successful" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/users/verify", async (req, res, next) => {
+  try {
+    const { error } = verifyEmailSchema.validate(req.body);
+    if (error) {
+      throw RequestError(400, "Missing required field email");
+    }
+
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw RequestError(400, "Verification has already been passed");
+    }
+
+    const mail = {
+      to: email,
+      subject: "Site registration confirmation",
+      html: `<a target="_blank" href="http://localhost:3000/api/users/:${user.verificationToken}">Verify Email</a>`,
+    };
+
+    await sendMail(mail);
+    res.json({
+      message: "Verification email sent",
     });
   } catch (error) {
     next(error);
@@ -64,7 +126,11 @@ router.post("/users/login", async (req, res, next) => {
 
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!user || !passwordCompare) {
+      throw RequestError(401, "Email or password is wrong");
+    }
     if (!user || !passwordCompare) {
       throw RequestError(401, "Email or password is wrong");
     }
