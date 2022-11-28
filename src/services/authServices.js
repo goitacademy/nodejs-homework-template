@@ -3,17 +3,41 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
 const path = require("path");
-const { NotAuthorizedError } = require("../helpers/errors");
+const sgMail = require("@sendgrid/mail");
+const { v4: uuidv4 } = require("uuid");
+const {
+  NotAuthorizedError,
+  WrongParametersForContactByIdError,
+  WrongParametersError,
+} = require("../helpers/errors");
 const { User } = require("../db/userModel");
+
+const emailToSendFrom = process.env.EMAIL;
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const PORT = process.env.PORT;
 
 const registration = async (email, password) => {
   const avatarURL = gravatar.url(email, { s: "100", r: "x", d: "retro" }, true);
+  const verificationToken = uuidv4();
   const user = new User({
     email,
     password: await bcrypt.hash(password, 10),
     avatarURL,
+    verificationToken,
   });
+
   await user.save();
+
+  const msg = {
+    to: email,
+    from: emailToSendFrom,
+    subject: "Registration verification",
+    text: `Please confirm Your email address at localhost:${PORT}/api/users/verify/${verificationToken}`,
+    html: `<strong>Please confirm Your email address at localhost:${PORT}/api/users/verify/${verificationToken} </strong>`,
+  };
+
+  sgMail.send(msg);
 };
 
 const login = async (email, password) => {
@@ -21,6 +45,10 @@ const login = async (email, password) => {
 
   if (!user) {
     throw new NotAuthorizedError("Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw new NotAuthorizedError("Email not verified");
   }
 
   if (!(await bcrypt.compare(password, user.password))) {
@@ -62,6 +90,45 @@ const changeAvatar = async (filePath, name, id) => {
   }
 };
 
+const getVerification = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+
+  if (!user) {
+    throw new WrongParametersForContactByIdError("User not found");
+  }
+  const verifiedUser = await User.findOneAndUpdate(
+    { verificationToken },
+    {
+      verificationToken: null,
+      verify: true,
+    }
+  );
+
+  return verifiedUser;
+};
+
+const verifyUser = async (email) => {
+  if (!email) {
+    throw new WrongParametersError("Missing required field email");
+  }
+
+  const verifiedUser = await User.findOne({ email });
+
+  if (!verifiedUser.verificationToken) {
+    throw new WrongParametersError("Verification has already been passed");
+  }
+
+  const msg = {
+    to: email,
+    from: emailToSendFrom,
+    subject: "Registration verification",
+    text: `Please confirm Your email address at localhost:${PORT}/api/users/verify/${verifiedUser.verificationToken}`,
+    html: `<strong>Please confirm Your email address at localhost:${PORT}/api/users/verify/${verifiedUser.verificationToken} </strong>`,
+  };
+
+  sgMail.send(msg);
+};
+
 module.exports = {
   registration,
   login,
@@ -69,4 +136,6 @@ module.exports = {
   currentUser,
   changeSubscription,
   changeAvatar,
+  getVerification,
+  verifyUser,
 };
