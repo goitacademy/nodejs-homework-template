@@ -5,8 +5,6 @@ const signup = require("./signup");
 
 const app = express();
 
-// app.post("/api/signup", signup);
-
 const userid = new mongoose.Types.ObjectId().toString();
 const userPayload = {
     _id: userid,
@@ -14,9 +12,6 @@ const userPayload = {
     password: "123212",
 }
 
-//ответ должен иметь статус-код 200
-//в ответе должен возвращаться токен
-//в ответе должен возвращаться объект user с 2 полями email и subscription, имеющие тип данных String
 
 describe("test signup controller", ()=> {
     beforeAll(()=> app.listen(3000));
