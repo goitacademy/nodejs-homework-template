@@ -1,6 +1,6 @@
 const { Contact } = require("../schemas/contactSchema");
 
-const getAllContacts = async () => await Contact.find();
+const getAllContacts = async (userId) => await Contact.find({ _id: userId }); // Not id, need owner, check video
 
 const getContactById = async (id) => await Contact.findOne({ _id: id });
 

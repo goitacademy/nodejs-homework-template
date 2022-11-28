@@ -1,10 +1,13 @@
 const express = require("express");
 const contactsModels = require("../../models/contacts");
 const usersModels = require("../../models/users");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => contactsModels.listContacts(res));
+router.get("/", authMiddleware, async (req, res, next) =>
+  contactsModels.listContacts(req, res)
+);
 
 router.get("/:contactId", async (req, res, next) =>
   contactsModels.getContactById(req.params.contactId, res)

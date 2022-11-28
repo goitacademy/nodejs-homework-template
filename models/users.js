@@ -58,6 +58,7 @@ const getUser = async (req, res) => {
   }
 
   const token = jwt.sign({ _id }, process.env.JWT_SECRET);
+  service.setToken(email, token);
   res.status(200).json({
     token,
     user: {

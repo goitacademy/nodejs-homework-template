@@ -1,9 +1,10 @@
 const service = require("../services/contactsService");
 const getValidation = require("../middlewares/validationMiddlewares");
 
-const listContacts = async (res) => {
+const listContacts = async (req, res) => {
+  const userId = req.user._id;
   try {
-    const results = await service.getAllContacts();
+    const results = await service.getAllContacts(userId);
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
