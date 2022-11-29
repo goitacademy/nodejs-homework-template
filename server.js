@@ -1,9 +1,8 @@
 const app = require('./app');
-require('dotenv').config();
 
-const PORT = process.env.PORT || 8081;
+const PORT = 3005;
 
 app.listen(PORT, (err) => {
-  if(err) console.error('Error at aserver launch:', err) 
+  if(err) console.error('Error at a server launch:', err) 
   console.log(`Server running. Use our API on port: ${PORT}`)
 })
