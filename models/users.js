@@ -73,4 +73,10 @@ const logOut = (req, res) =>
     .deleteToken(req.user._id)
     .then(res.status(204).json("Logout success"));
 
-module.exports = { addUser, getUser, logOut };
+const getCurrentUser = async (req, res) => {
+  const results = await service.getUserById(req.user._id);
+  const { email, subscription } = results;
+  res.json({ email, subscription });
+};
+
+module.exports = { addUser, getUser, logOut, getCurrentUser };
