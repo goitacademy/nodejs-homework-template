@@ -44,4 +44,8 @@ router.get("/users/current", authMiddleware, async (req, res, next) =>
   usersModels.getCurrentUser(req, res)
 );
 
+router.patch("/users", authMiddleware, async (req, res, next) =>
+  usersModels.setKindOfSubscription(req, res)
+);
+
 module.exports = router;

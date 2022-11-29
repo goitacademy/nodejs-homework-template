@@ -17,10 +17,21 @@ const setToken = async (email, token) =>
 const deleteToken = async (id) =>
   await User.findOneAndUpdate({ _id: id }, { token: null });
 
+const updateSubscription = async ({ subscription }, { _id }) => {
+  return await User.findOneAndUpdate(
+    { _id },
+    { subscription },
+    {
+      new: true,
+    }
+  );
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   setToken,
   getUserById,
   deleteToken,
+  updateSubscription,
 };

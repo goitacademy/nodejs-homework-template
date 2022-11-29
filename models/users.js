@@ -79,4 +79,25 @@ const getCurrentUser = async (req, res) => {
   res.json({ email, subscription });
 };
 
-module.exports = { addUser, getUser, logOut, getCurrentUser };
+const setKindOfSubscription = async (req, res) => {
+  if (
+    req.body.subscription === "starter" ||
+    req.body.subscription === "pro" ||
+    req.body.subscription === "business"
+  ) {
+    const results = await service.updateSubscription(req.body, req.user);
+    const { email, subscription } = results;
+    res.json({ email, subscription });
+    return;
+  }
+
+  res.status(400).json({ message: "Invalid value of subscription!" });
+};
+
+module.exports = {
+  addUser,
+  getUser,
+  logOut,
+  getCurrentUser,
+  setKindOfSubscription,
+};
