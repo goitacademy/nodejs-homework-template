@@ -90,9 +90,24 @@ const userValid = (body) => {
   return bodyIsValid;
 };
 
+const getFavoriteContactsValid = (body) => {
+  const { favorite } = body;
+
+  const schema = Joi.object({
+    favorite: Joi.boolean(),
+  });
+
+  const bodyIsValid = schema.validate({
+    favorite: favorite,
+  });
+
+  return bodyIsValid;
+};
+
 module.exports = {
   updateStatusValid,
   addContactValid,
   updateContactValid,
   userValid,
+  getFavoriteContactsValid,
 };

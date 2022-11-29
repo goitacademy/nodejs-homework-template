@@ -1,6 +1,6 @@
 const { Contact } = require("../schemas/contactSchema");
 
-const getAllContacts = async (userId) => await Contact.find({ owner: userId }); // Not id, need owner, check video
+const getAllContacts = async (userId) => await Contact.find({ owner: userId });
 
 const getContactById = async ({ contactId }, { _id }) =>
   await Contact.findOne({ _id: contactId, owner: _id });
@@ -21,6 +21,9 @@ const updateStatusContact = async ({ contactId }, fields, { _id }) =>
     new: true,
   });
 
+const getContactsByFavorite = async ({ _id }, { favorite }) =>
+  await Contact.find({ owner: _id, favorite });
+
 module.exports = {
   getAllContacts,
   getContactById,
@@ -28,4 +31,5 @@ module.exports = {
   updateContact,
   removeContact,
   updateStatusContact,
+  getContactsByFavorite,
 };

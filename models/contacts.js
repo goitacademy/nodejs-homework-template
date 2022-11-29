@@ -2,6 +2,22 @@ const service = require("../services/contactsService");
 const getValidation = require("../middlewares/validationMiddlewares");
 
 const listContacts = async (req, res) => {
+  const queryHasFavorite = getValidation.getFavoriteContactsValid(req.query);
+
+  if (queryHasFavorite.error) {
+    res.status(400).json({ message: queryHasFavorite.error.message });
+    return;
+  }
+
+  if (
+    queryHasFavorite.value.favorite === false ||
+    queryHasFavorite.value.favorite
+  ) {
+    const results = await service.getContactsByFavorite(req.user, req.query);
+    res.json(results);
+    return;
+  }
+
   const userId = req.user._id;
   try {
     const results = await service.getAllContacts(userId);
