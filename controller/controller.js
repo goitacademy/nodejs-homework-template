@@ -19,7 +19,6 @@ const listContacts = async (req, res, next) => {
     }
   };
 
-
 const getContactById=async (req, res, next) => {
     const { contactId } = req.params;
    
