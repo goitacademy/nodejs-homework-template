@@ -3,7 +3,7 @@ const {
   validateSchema,
   validateParams,
 } = require("../../middlewares/SchemaValidator");
-const contact = require("../../controller/contacts");
+const contact = require("../../controller/contactsController");
 const {
   schemaCreateContact,
   schemaUpdateContact,
