@@ -54,15 +54,7 @@
         "phone": "(704) 398-7993"
     },
     {
-        "id": "b4b59cf6-ac13-4817-abeb-fcd9b7508e07",
-        "name": "Bob",
-        "email": "wsx@wsx.com",
-        "phone": "0987654321"
-    },
-    {
         "id": "c5dbb02f-0ee3-4f6d-bf5a-8aa4c9b3889f",
-        "name": "John",
-        "email": "qaz@qaz.com",
-        "phone": "0987654321"
+        "name": "Ben"
     }
 ]
