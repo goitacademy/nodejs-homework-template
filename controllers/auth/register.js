@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { userSchema } = require("../../models");
 const { RequestError } = require("../../helpers");
+const gravatar = require("gravatar");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -9,7 +10,8 @@ const register = async (req, res) => {
     throw RequestError(409, "Email already exist");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const registerUser = await userSchema.User.create({ email, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const registerUser = await userSchema.User.create({ email, password: hashPassword, avatarURL });
   res.status(201).json({
     user: {
       email: registerUser.email,
