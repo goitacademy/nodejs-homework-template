@@ -1,15 +1,27 @@
 const express = require('express');
-const productsOperations = require("../../models/contacts");
+const contactsOperations = require("../../models/contacts");
 
 const router = express.Router();
 
+
 router.get('/', async (req, res, next) => {
-  const contacts = await productsOperations.listContacts();
-  res.json(contacts);
-})
+  try {
+    const contacts = await contactsOperations.listContacts();
+    res.status(200).json({ contacts });
+  } catch(error) {
+    next(error);
+  }
+  });
+
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { contactId } = req.params;
+    const result = await contactsOperations.getContactById(contactId);
+    res.status(200).json({ result });
+  } catch(error) {
+    
+  }
 })
 
 router.post('/', async (req, res, next) => {
