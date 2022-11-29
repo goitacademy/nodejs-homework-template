@@ -1,3 +1,7 @@
-const schema = require("./contact");
+const contactSchema = require("./contact");
+const userSchema = require("./user");
 
-module.exports = schema;
+module.exports = {
+  contactSchema,
+  userSchema
+};

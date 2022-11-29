@@ -5,8 +5,6 @@ const { RequestError } = require("../helpers");
 const isValidId = (req, _, next) => {
   const { contactId } = req.params;
   const isCorrectId = isValidObjectId(contactId);
-  console.log(req.params);
-  console.log(contactId);
   if (!isCorrectId) {
     const error = RequestError(400, `${contactId} is not corrent id format`);
     next(error);
