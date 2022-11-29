@@ -15,21 +15,18 @@ app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
-  const code = req.code;
-  const message = req.message;
   res.status(404).json({
     status: "error",
-    code: code || 404,
-    message: message || "Use api on routes: /api/contacts",
+    code: 404,
+    message: "Use api on routes: /api/contacts",
   });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({
+  res.status(err.status).json({
     status: "fail",
-    code: 500,
+    code: err.status,
     message: err.message,
-    data: "Internal Server Error",
   });
 });
 
