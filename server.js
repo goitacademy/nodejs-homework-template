@@ -41,7 +41,7 @@ app.use((err, _, res, __) => {
   });
 });
 
-mongoose.Promise = global.Promise
+// mongoose.Promise = global.Promise
 const connection =  mongoose.connect(uriDb, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

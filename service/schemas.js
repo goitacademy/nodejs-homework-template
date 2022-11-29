@@ -12,9 +12,7 @@ const contacts = new Schema( {
     },
     email: {
        type: String,
-       unique: true,
-     
-      
+       unique: true, 
     },
     phone: {
        type: String,

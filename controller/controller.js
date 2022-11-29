@@ -58,7 +58,6 @@ const addContact=async (req, res, next) => {
     
     const {error, value} =schema.validate(req.body)
     if (error) {
-      console.log(req.body)
           return res.status(400).json({ message: "missing required name field" });
     }
     if(value){
