@@ -188,6 +188,7 @@ router.patch(
 
       (await Jimp.read(tmpUpload)).resize(250, 250).writeAsync(tmpUpload);
 
+      console.log(tmpUpload, resultUpload);
       await fs.rename(tmpUpload, resultUpload);
 
       const result = await User.findByIdAndUpdate(
