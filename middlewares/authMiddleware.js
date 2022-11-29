@@ -8,6 +8,11 @@ const unAuthorizedError = (res) => {
 };
 
 const authMiddleware = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    unAuthorizedError(res);
+    return;
+  }
+
   const [, token] = req.headers.authorization.split(" ");
   if (!token) {
     unAuthorizedError(res);
@@ -21,6 +26,12 @@ const authMiddleware = async (req, res, next) => {
       unAuthorizedError(res);
       return;
     }
+
+    if (checkUserById.token !== token) {
+      unAuthorizedError(res);
+      return;
+    }
+
     req.token = token;
     req.user = user;
     next();

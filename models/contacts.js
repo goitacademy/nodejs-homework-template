@@ -11,19 +11,30 @@ const listContacts = async (req, res) => {
   }
 };
 
-const getContactById = async (contactId, res) => {
+const getContactById = async (req, res) => {
   try {
-    const results = await service.getContactById(contactId);
+    const results = await service.getContactById(req.params, req.user);
+    if (!results) {
+      res.status(404).json({
+        message: `Contact with id: '${req.params.contactId}' not found`,
+      });
+      return;
+    }
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-const removeContact = async (contactId, res) => {
+const removeContact = async (req, res) => {
   try {
-    const results = await service.removeContact(contactId);
-    if (!results) res.status(404).json({ message: "Not found" });
+    const results = await service.removeContact(req.params, req.user);
+    if (!results) {
+      res.status(404).json({
+        message: `Contact with id: '${req.params.contactId}' not found`,
+      });
+      return;
+    }
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -39,15 +50,15 @@ const addContact = async (req, res) => {
   }
 
   try {
-    const results = await service.createContact(req.body);
+    const results = await service.createContact(req.body, req.user);
     res.status(201).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-const updateContact = async (contactId, body, res) => {
-  const bodyIsValid = getValidation.updateContactValid(body);
+const updateContact = async (req, res) => {
+  const bodyIsValid = getValidation.updateContactValid(req.body);
 
   if (bodyIsValid.error) {
     res.status(400).json({ message: bodyIsValid.error.message });
@@ -55,15 +66,21 @@ const updateContact = async (contactId, body, res) => {
   }
 
   try {
-    const results = await service.updateContact(contactId, body);
+    const results = await service.updateContact(req.params, req.body, req.user);
+    if (!results) {
+      res.status(404).json({
+        message: `Contact with id: '${req.params.contactId}' not found`,
+      });
+      return;
+    }
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-const updateStatusContact = async (contactId, body, res) => {
-  const bodyIsValid = getValidation.updateStatusValid(body);
+const updateStatusContact = async (req, res) => {
+  const bodyIsValid = getValidation.updateStatusValid(req.body);
 
   if (bodyIsValid.error) {
     res.status(400).json({ message: bodyIsValid.error.message });
@@ -71,7 +88,17 @@ const updateStatusContact = async (contactId, body, res) => {
   }
 
   try {
-    const results = await service.updateStatusContact(contactId, body);
+    const results = await service.updateStatusContact(
+      req.params,
+      req.body,
+      req.user
+    );
+    if (!results) {
+      res.status(404).json({
+        message: `Contact with id: '${req.params.contactId}' not found`,
+      });
+      return;
+    }
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });

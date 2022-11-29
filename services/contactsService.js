@@ -1,20 +1,25 @@
 const { Contact } = require("../schemas/contactSchema");
 
-const getAllContacts = async (userId) => await Contact.find({ _id: userId }); // Not id, need owner, check video
+const getAllContacts = async (userId) => await Contact.find({ owner: userId }); // Not id, need owner, check video
 
-const getContactById = async (id) => await Contact.findOne({ _id: id });
+const getContactById = async ({ contactId }, { _id }) =>
+  await Contact.findOne({ _id: contactId, owner: _id });
 
-const createContact = async ({ name, email, phone, favorite }) =>
-  await Contact.create({ name, email, phone, favorite });
+const createContact = async ({ name, email, phone, favorite }, { _id }) =>
+  await Contact.create({ name, email, phone, favorite, owner: _id });
 
-const updateContact = async (id, fields) =>
-  await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateContact = async ({ contactId }, fields, { _id }) =>
+  await Contact.findOneAndUpdate({ _id: contactId, owner: _id }, fields, {
+    new: true,
+  });
 
-const removeContact = async (id) =>
-  await Contact.findByIdAndRemove({ _id: id });
+const removeContact = async ({ contactId }, { _id }) =>
+  await Contact.findOneAndRemove({ _id: contactId, owner: _id });
 
-const updateStatusContact = async (id, fields) =>
-  await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateStatusContact = async ({ contactId }, fields, { _id }) =>
+  await Contact.findOneAndUpdate({ _id: contactId, owner: _id }, fields, {
+    new: true,
+  });
 
 module.exports = {
   getAllContacts,
