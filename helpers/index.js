@@ -1,3 +1,4 @@
-const { createError } = require("./errorHandler");
+const createError = require("./errorHandler");
+const controllerWrapper = require("./controllerWrapper");
 
-module.exports = createError;
+module.exports = { createError, controllerWrapper };

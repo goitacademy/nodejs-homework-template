@@ -14,6 +14,4 @@ function createError({ status, message = messages[status] }) {
   return error;
 }
 
-module.exports = {
-  createError,
-};
+module.exports = createError;
