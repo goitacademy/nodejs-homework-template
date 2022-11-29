@@ -19,8 +19,10 @@ const listContacts = async (req, res) => {
   }
 
   const userId = req.user._id;
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
   try {
-    const results = await service.getAllContacts(userId);
+    const results = await service.getAllContacts(userId, { skip, limit });
     res.status(200).json(results);
   } catch (err) {
     res.status(400).json({ message: err.message });
