@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const { createError } = require("../../helpers");
-const contacts = require("../../models/contacts");
+const Book = require("../../models/contact");
 
 const router = express.Router();
 
@@ -9,17 +9,23 @@ const contactsScheme = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const updateContactScheme = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
+  favorite: Joi.boolean(),
 }).min(1);
+
+const updateContactFav = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 router.get("/", async (__, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Book.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -29,13 +35,10 @@ router.get("/", async (__, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await Book.findById(id);
 
     if (!result) {
-      throw createError(
-        404,
-        "User not found :( Check the correctness of requested ID..."
-      );
+      throw createError(404, "Please ensure that requested ID is correct...");
     }
 
     res.status(200).json(result);
@@ -54,7 +57,7 @@ router.post("/", async (req, res, next) => {
         "Some fields are missing or has not a proper type :( Please ensure that all of the necessary data with necessary type for update are provided..."
       );
     }
-    const result = await contacts.addContact(req.body);
+    const result = await Book.create(req.body);
     if (!result) {
       throw createError(
         404,
@@ -70,7 +73,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const result = await Book.findByIdAndRemove(id);
     if (!result) {
       throw createError(
         404,
@@ -79,7 +82,7 @@ router.delete("/:id", async (req, res, next) => {
     }
     res.json({
       message: `Contact with ID ${id} has been successfully deleted!`,
-      newListOfContacts: result,
+      deletedContact: result,
     });
   } catch (error) {
     next(error);
@@ -97,12 +100,35 @@ router.put("/:id", async (req, res, next) => {
       );
     }
     const { id } = req.params;
-    const result = await contacts.updateContactById(id, req.body);
+    const result = await Book.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!result) {
       throw createError(
         404,
-        "User not found :( Check the correctness of requested ID..."
+        "User not found :( Please ensure that requested ID is correct..."
+      );
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:id/favorite", async (req, res, next) => {
+  try {
+    const { error } = updateContactFav.validate(req.body);
+
+    if (error) {
+      throw createError(400, "OMG! Missing field favorite :(");
+    }
+    const { id } = req.params;
+    const result = await Book.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!result) {
+      throw createError(
+        404,
+        "User not found :( Please ensure that requested ID is correct..."
       );
     }
 
