@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const { createError } = require("../../helpers");
-const Book = require("../../models/contact");
+const Contact = require("../../models/contact");
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const updateContactFav = Joi.object({
 
 router.get("/", async (__, res, next) => {
   try {
-    const result = await Book.find();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -35,7 +35,7 @@ router.get("/", async (__, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Book.findById(id);
+    const result = await Contact.findById(id);
 
     if (!result) {
       throw createError(404, "Please ensure that requested ID is correct...");
@@ -57,7 +57,7 @@ router.post("/", async (req, res, next) => {
         "Some fields are missing or has not a proper type :( Please ensure that all of the necessary data with necessary type for update are provided..."
       );
     }
-    const result = await Book.create(req.body);
+    const result = await Contact.create(req.body);
     if (!result) {
       throw createError(
         404,
@@ -73,7 +73,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Book.findByIdAndRemove(id);
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       throw createError(
         404,
@@ -100,7 +100,7 @@ router.put("/:id", async (req, res, next) => {
       );
     }
     const { id } = req.params;
-    const result = await Book.findByIdAndUpdate(id, req.body, { new: true });
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!result) {
       throw createError(
@@ -123,7 +123,7 @@ router.patch("/:id/favorite", async (req, res, next) => {
       throw createError(400, "OMG! Missing field favorite :(");
     }
     const { id } = req.params;
-    const result = await Book.findByIdAndUpdate(id, req.body, { new: true });
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!result) {
       throw createError(
