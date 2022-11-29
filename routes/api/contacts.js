@@ -5,47 +5,30 @@ const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", authMiddleware, async (req, res, next) =>
-  contactsModels.listContacts(req, res)
+router.get("/", authMiddleware, contactsModels.listContacts);
+
+router.get("/:contactId", authMiddleware, contactsModels.getContactById);
+
+router.post("/", authMiddleware, contactsModels.addContact);
+
+router.delete("/:contactId", authMiddleware, contactsModels.removeContact);
+
+router.put("/:contactId", authMiddleware, contactsModels.updateContact);
+
+router.patch(
+  "/:contactId/favorite",
+  authMiddleware,
+  contactsModels.updateStatusContact
 );
 
-router.get("/:contactId", authMiddleware, async (req, res, next) =>
-  contactsModels.getContactById(req, res)
-);
-router.post("/", authMiddleware, async (req, res, next) =>
-  contactsModels.addContact(req, res)
-);
+router.post("/users/register", usersModels.addUser);
 
-router.delete("/:contactId", authMiddleware, (req, res, next) =>
-  contactsModels.removeContact(req, res)
-);
+router.get("/users/login", usersModels.getUser);
 
-router.put("/:contactId", authMiddleware, (req, res, next) =>
-  contactsModels.updateContact(req, res)
-);
+router.post("/users/logout", authMiddleware, usersModels.logOut);
 
-router.patch("/:contactId/favorite", authMiddleware, (req, res, next) =>
-  contactsModels.updateStatusContact(req, res)
-);
+router.get("/users/current", authMiddleware, usersModels.getCurrentUser);
 
-router.post("/users/register", async (req, res, next) =>
-  usersModels.addUser(req, res)
-);
-
-router.get("/users/login", async (req, res, next) =>
-  usersModels.getUser(req, res)
-);
-
-router.post("/users/logout", authMiddleware, async (req, res, next) =>
-  usersModels.logOut(req, res)
-);
-
-router.get("/users/current", authMiddleware, async (req, res, next) =>
-  usersModels.getCurrentUser(req, res)
-);
-
-router.patch("/users", authMiddleware, async (req, res, next) =>
-  usersModels.setKindOfSubscription(req, res)
-);
+router.patch("/users", authMiddleware, usersModels.setKindOfSubscription);
 
 module.exports = router;
