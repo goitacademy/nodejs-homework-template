@@ -1,8 +1,8 @@
 const express = require('express');
-const contactsOperations = require("../../models/contacts");
+const {NotFound}=require("http-errors")
 
 const router = express.Router();
-
+const contactsOperations = require("../../models/contacts");
 
 router.get('/', async (req, res, next) => {
   try {
@@ -18,6 +18,9 @@ router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contactsOperations.getContactById(contactId);
+      if (!result) {
+      throw new NotFound(`Contact with id=${contactId} not found`);
+    }
     res.status(200).json({ result });
   } catch(error) {
     
