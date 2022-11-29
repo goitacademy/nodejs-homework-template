@@ -18,7 +18,7 @@ const listContacts = async (req, res, next) => {
       next(e);
     }
   };
-// console.log(listContacts())
+
 const getContactById=async (req, res, next) => {
     const { contactId } = req.params;
    
