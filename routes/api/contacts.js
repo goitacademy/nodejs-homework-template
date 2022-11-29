@@ -36,4 +36,8 @@ router.get("/users/login", async (req, res, next) =>
   usersModels.getUser(req, res)
 );
 
+router.post("/users/logout", authMiddleware, async (req, res, next) =>
+  usersModels.logOut(req, res)
+);
+
 module.exports = router;

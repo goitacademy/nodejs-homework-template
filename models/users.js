@@ -68,4 +68,9 @@ const getUser = async (req, res) => {
   });
 };
 
-module.exports = { addUser, getUser };
+const logOut = (req, res) =>
+  service
+    .deleteToken(req.user._id)
+    .then(res.status(204).json("Logout success"));
+
+module.exports = { addUser, getUser, logOut };

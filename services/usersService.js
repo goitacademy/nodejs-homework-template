@@ -14,4 +14,13 @@ const createUser = async ({ password, email, subscription }) =>
 const setToken = async (email, token) =>
   await User.findOneAndUpdate({ email }, { token });
 
-module.exports = { createUser, getUserByEmail, setToken, getUserById };
+const deleteToken = async (id) =>
+  await User.findOneAndUpdate({ _id: id }, { token: null });
+
+module.exports = {
+  createUser,
+  getUserByEmail,
+  setToken,
+  getUserById,
+  deleteToken,
+};
