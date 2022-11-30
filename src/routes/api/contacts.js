@@ -1,66 +1,25 @@
 const express = require('express');
-const { listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact
-} = require('../../models/contacts');
-
-
 const router = express.Router();
 const { addContactValidation, putContactValidation } = require('../../middlewares/validationMiddlware');
+const {getAllContacts,
+    getOneContactById,
+    postContact,
+    deleteContact,
+    putContact} = require('../../controllers/contactsController')
 
-// GET all contacts
-router.get('/', async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ contacts, status: 200 });
-})
+    // GET all contacts
+router.get('/', getAllContacts)
 
 // GET contact by ID
-router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  
-  if (!contact) {
-    res.status(404).json({ "message": "Not found", status: 404 });
-    return;
-  }
-  
-  res.status(200).json({ contact, status: 200 });
-})
+router.get('/:contactId', getOneContactById)
 
 // POST - add new contact
-router.post('/', addContactValidation, async (req, res, next) => {  
-  const newContact = await addContact(req.body);
-  res.status(201).json({ newContact, status: 201 });
-})
+router.post('/', addContactValidation, postContact)
 
 // DELETE - remove contact by ID
-router.delete('/:contactId', async (req, res, next) => {
-  const contact = await removeContact(req.params.contactId);
-  
-  if (!contact) {
-    res.status(404).json({ "message": "Not found", status: 404 });
-    return;
-  }
-  
-  res.status(200).json({ "message": "contact deleted", status: 200 });
-})
+router.delete('/:contactId', deleteContact)
 
 // PUT - update contact by ID /remove contact + add contact with new body and the same ID 
-router.put('/:contactId', putContactValidation, async (req, res, next) => {
-    const { name, email, phone } = req.body;
-  
-  if (!name && !email && !phone) {
-    res.status(400).json({ "message": "missing fields", status: 400 });
-    return;
-  }
-
-  const updatedContact = await updateContact(req.params.contactId, req.body);
-  if(!updatedContact) {
-    res.status(404).json({ "message": "Not found" });
-    return;
-  }
-  res.status(200).json({ updatedContact, message: 'successfully updated' });
-})
+router.put('/:contactId', putContactValidation, putContact)
 
 module.exports = router
