@@ -55,7 +55,23 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+      const { error } = contactSchema.validate(req.body);
+    if (error) {
+      res.status(400).json(` Missing  fields`)
+      throw error;
+    }
+    const { contactId } = req.params;
+    const result = await contactsOperations.updateContactById(contactId, req.body);
+    if (!result) {
+      res.status(404).json(` Not found`)
+    }
+    res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
 })
 
 module.exports = router;
+
+
