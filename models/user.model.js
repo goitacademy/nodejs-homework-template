@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { Schema, model } = require("mongoose");
+const gravatar = require("gravatar");
 
 const userSchema = new Schema(
   {
@@ -20,6 +21,13 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: [true, "Аvatar file is required"],
+      default: function () {
+        return gravatar.url(this.email, { s: "250", d: "mm" }, true);
+      },
     },
   },
   { versionKey: false, timestamps: true }

@@ -3,6 +3,7 @@ const {
   createValidationError,
   createConflictError,
   createAuthError,
+  createCustomError,
 } = require("./errorHelpers");
 
 module.exports = {
@@ -10,4 +11,5 @@ module.exports = {
   createValidationError,
   createConflictError,
   createAuthError,
+  createCustomError,
 };
