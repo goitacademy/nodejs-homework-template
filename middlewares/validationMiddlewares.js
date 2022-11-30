@@ -70,8 +70,44 @@ const updateContactValid = (body) => {
   return bodyIsValid;
 };
 
+const userValid = (body) => {
+  const { email, password } = body;
+
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      })
+      .required(),
+    password: Joi.string().min(4).required(),
+  });
+
+  const bodyIsValid = schema.validate({
+    email: email,
+    password: password,
+  });
+  return bodyIsValid;
+};
+
+const getFavoriteContactsValid = (body) => {
+  const { favorite } = body;
+
+  const schema = Joi.object({
+    favorite: Joi.boolean(),
+  });
+
+  const bodyIsValid = schema.validate({
+    favorite: favorite,
+  });
+
+  return bodyIsValid;
+};
+
 module.exports = {
   updateStatusValid,
   addContactValid,
   updateContactValid,
+  userValid,
+  getFavoriteContactsValid,
 };

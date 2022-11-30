@@ -1,25 +1,34 @@
 const express = require("express");
 const contactsModels = require("../../models/contacts");
+const usersModels = require("../../models/users");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => contactsModels.listContacts(res));
+router.get("/", authMiddleware, contactsModels.listContacts);
 
-router.get("/:contactId", async (req, res, next) =>
-  contactsModels.getContactById(req.params.contactId, res)
-);
-router.post("/", async (req, res, next) => contactsModels.addContact(req, res));
+router.get("/:contactId", authMiddleware, contactsModels.getContactById);
 
-router.delete("/:contactId", (req, res, next) =>
-  contactsModels.removeContact(req.params.contactId, res)
+router.post("/", authMiddleware, contactsModels.addContact);
+
+router.delete("/:contactId", authMiddleware, contactsModels.removeContact);
+
+router.put("/:contactId", authMiddleware, contactsModels.updateContact);
+
+router.patch(
+  "/:contactId/favorite",
+  authMiddleware,
+  contactsModels.updateStatusContact
 );
 
-router.put("/:contactId", (req, res, next) =>
-  contactsModels.updateContact(req.params.contactId, req.body, res)
-);
+router.post("/users/register", usersModels.addUser);
 
-router.patch("/:contactId/favorite", (req, res, next) =>
-  contactsModels.updateStatusContact(req.params.contactId, req.body, res)
-);
+router.get("/users/login", usersModels.getUser);
+
+router.post("/users/logout", authMiddleware, usersModels.logOut);
+
+router.get("/users/current", authMiddleware, usersModels.getCurrentUser);
+
+router.patch("/users", authMiddleware, usersModels.setKindOfSubscription);
 
 module.exports = router;
