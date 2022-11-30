@@ -7,6 +7,7 @@ const cors = require('cors');
 
 require('dotenv').config();
 
+const authRouter = require('./routes/api/auth');
 const contactsRouter = require('./routes/api/contacts');
 const morgan = require('morgan');
 
@@ -27,6 +28,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/users/', authRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
