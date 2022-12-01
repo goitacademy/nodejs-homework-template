@@ -1,6 +1,6 @@
-const express = require('express')
+const express = require("express");
 const controllers = require("../../controllers/contacts");
-const router = express.Router()
+const router = express.Router();
 const { validationBody, isValidId } = require("../../middlewares");
 const { joiSchema, joiChangeFavorite } = require("../../models/contact");
 
@@ -26,4 +26,4 @@ router.patch(
   controllers.updateFavoriteById
 );
 
-module.exports = router
+module.exports = router;
