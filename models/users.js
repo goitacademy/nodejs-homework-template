@@ -32,6 +32,11 @@ const userSchema = new Schema({
         default: null,
       },
 
+      avatarURL:{
+        type: String,
+        required: true,
+      },
+
 }, {versionKey: false, timestamps:true})
 
 userSchema.post("save", handleSaveErrors);
