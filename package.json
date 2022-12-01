@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
     "dotenv": "^16.0.2",
     "express": "4.17.1",
     "http-errors": "^2.0.0",
@@ -20,6 +19,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
