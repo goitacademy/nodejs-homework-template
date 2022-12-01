@@ -7,9 +7,13 @@ const updateContactById = async (id, data) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...data};
+  
+  const elementForUpdate = { ...contacts[index], ...data };
+
+  contacts[index] = elementForUpdate;
+  
   await updateContacts(contacts);
-  return contacts[index];
+  return contacts[index] ;
 }
 
 module.exports = updateContactById;
