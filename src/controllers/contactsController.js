@@ -10,7 +10,7 @@ const getAllContacts = async (req, res, next) => {
     res.status(200).json({contacts, status: 200});
 };
 
-const getOneContactById = async (req, res, next) => {
+const getContact = async (req, res, next) => {
     const contact = await getContactById(req.params.contactId);
 
     if (!contact) {
@@ -38,12 +38,6 @@ const deleteContact = async (req, res, next) => {
 };
 
 const putContact = async (req, res, next) => {
-    // const {name, email, phone} = req.body;
-
-    // if (!name && !email && !phone) {
-    //     res.status(400).json({'message': 'missing fields', 'status': 400});
-    //     return;
-    // }
 
     const updatedContact = await updateContact(req.params.contactId, req.body);
     if (!updatedContact) {
@@ -55,7 +49,7 @@ const putContact = async (req, res, next) => {
 
 module.exports = {
     getAllContacts,
-    getOneContactById,
+    getContact,
     postContact,
     deleteContact,
     putContact,
