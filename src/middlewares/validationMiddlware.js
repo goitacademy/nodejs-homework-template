@@ -4,16 +4,14 @@ module.exports = {
     addContactValidation: (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string()
-            .min(2)
-            .max(20)
+            .regex(/^[a-zA-Z]{2,30}$/)
             .required(),
 
         email: Joi.string()
             .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
             .required(),
         phone: Joi.string()
-            .min(10)
-            .max(15)
+            .regex(/^[0-9]{10,15}$/)
             .required(),
     });
 
@@ -39,16 +37,15 @@ module.exports = {
 
         const schema = Joi.object({
             name: Joi.string()
-                .min(2)
-                .max(20)
+                .regex(/^[a-zA-Z]{2,30}$/)
                 .optional(),
+            
 
             email: Joi.string()
                 .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
                 .optional(),
             phone: Joi.string()
-                .min(10)
-                .max(15)
+                .regex(/^[0-9]{10,15}$/)
                 .optional(),
         });
 
