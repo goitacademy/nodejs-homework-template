@@ -52,9 +52,16 @@ const loginSchema = Joi.object({
     .messages({ 'string.min': 'Password length must be at least 6 characters long' }),
 });
 
+const updateSubscription = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionStatus)
+    .error(new Error('Subscription must be one of [starter, pro, business]')),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  updateSubscription,
 };
 
 const User = model('user', userSchema);
