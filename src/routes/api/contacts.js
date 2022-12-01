@@ -22,7 +22,7 @@ router.post('/', addContactValidation, postContact);
 router.delete('/:contactId', deleteContact);
 
 // PUT - update contact by ID
-// (remove contact + add contact with new body and the same ID)
+// (remove old contact + add new contact = {...oldContact, ...req.body})
 router.put('/:contactId', putContactValidation, putContact);
 
 module.exports = router;

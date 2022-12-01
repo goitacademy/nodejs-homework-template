@@ -4,7 +4,7 @@ module.exports = {
     addContactValidation: (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string()
-            .regex(/^[a-zA-Z]{2,30}$/)
+            .regex(/^[a-z A-Z]{2,30}$/)
             .required(),
 
         email: Joi.string()
@@ -37,7 +37,7 @@ module.exports = {
 
         const schema = Joi.object({
             name: Joi.string()
-                .regex(/^[a-zA-Z]{2,30}$/)
+                .regex(/^[a-z A-Z]{2,30}$/)
                 .optional(),
             
 
