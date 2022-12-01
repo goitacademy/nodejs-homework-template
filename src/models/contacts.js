@@ -55,13 +55,12 @@ const updateContact = async (contactId, body) => {
         return null;
         };
         
-        const updatedContact = { ...contacts[contactIndex], ...body }
+        const updatedContact = { ...contacts[contactIndex], ...body };
         
-        const newContactList = contacts.filter((contact) =>
-                contact.id !== contactId.toString());
-        newContactList.push(updatedContact)
-        await fs.writeFile(contactsPath, JSON.stringify(newContactList, null, 4)); 
-        return updatedContact; //
+        contacts[contactIndex] = updatedContact;
+
+        await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4)); 
+        return updatedContact;
 };
 
 module.exports = {
