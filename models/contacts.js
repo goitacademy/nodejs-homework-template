@@ -1,63 +1,51 @@
-const fs = require("fs/promises");
-const path = require("node:path");
-const { v4: uuidv4 } = require("uuid");
+// const fs = require("fs/promises");
+// const path = require("node:path");
+// const { v4: uuidv4 } = require("uuid");
 // import { nanoid } from 'nanoid'
+const Contact = require("../services/schema");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+// const contactsPath = path.join(__dirname, "./contacts.json");
 // const contactsList = fs.readFile();
 
-async function getContactsList() {
+const listContacts = async (_, res, next) => {
   try {
-    const contacts = await fs.readFile(contactsPath, "utf8");
-    return JSON.parse(contacts);
+    const contacts = await Contact.find();
+    return res.json({ data: contacts, status: 200 });
   } catch (error) {
-    console.error("there was an error:", error.message);
-  }
-}
-
-const listContacts = async (_, res) => {
-  try {
-    const response = await getContactsList();
-    return res.json({ response, status: "200" });
-  } catch (error) {
-    return error;
+    next(error);
   }
 };
 
-const getContactById = async (req, res) => {
-  const { contactId } = req.params;
+const getContactById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const contacts = await getContactsList();
-    const contactById = contacts.find((item) => item.id === contactId);
-    if (!contactById) {
-      return res
-        .status(404)
-        .json({ status: `Contact with id ${contactId} was not found` });
+    const contactById = Contact.findById({ _id: id });
+    if (contactById) {
+      return res.json({ data: contactById, status: 200 });
+    } else {
+      return res.status(404).json({
+        data: `Contact with id ${id}, was not found`,
+        status: 404,
+      });
     }
-    return res.json({ response: contactById, status: "200" });
   } catch (error) {
-    res.status(400).json({ status: error.message });
+    console.log(error);
+    next(error);
   }
 };
 
-const removeContact = async (req, res) => {
-  const { contactId } = req.params;
+const removeContact = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const contacts = await getContactsList();
-    const filteredData = contacts.filter((item) => item.id !== contactId);
-    if (filteredData.length === contacts.length) {
-      return res
-        .status(404)
-        .json({ status: `Contact with id ${contactId} was not found` });
-    }
-    await fs.writeFile(contactsPath, JSON.stringify(filteredData), "utf8");
-    return res.json({ status: "200" });
+    const responce = await Contact.findOneAndRemove({ _id: id });
+    return res.json({ data: responce, status: 200 });
   } catch (error) {
-    res.status(500).json({ status: error.message });
+    console.log(error);
+    next(error);
   }
 };
 
-const addContact = async (req, res) => {
+const addContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
     const contacts = await getContactsList();

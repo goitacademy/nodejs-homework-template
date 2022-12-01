@@ -1,6 +1,8 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -21,4 +23,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-module.exports = app;
+const connection = mongoose.connect(process.env.DB_HOST, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+module.exports = { app, connection };
