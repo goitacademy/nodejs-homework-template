@@ -23,10 +23,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status).json({
+  res.status(err.status || 500).json({
     status: "fail",
-    code: err.status,
-    message: err.message,
+    code: err.status || 500,
+    message: err.message || "Network error",
   });
 });
 

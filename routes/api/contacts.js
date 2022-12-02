@@ -6,8 +6,13 @@ const {
   update,
   getAll,
   getById,
+  updateStatusContact,
 } = require("../../controllers/contacts");
-const { addContactSchema, editContactSchema } = require("../../schemas");
+const {
+  addContactSchema,
+  editContactSchema,
+  updateFavoriveContact,
+} = require("../../schemas");
 const { controllerWrapper } = require("../../helpers");
 const validate = require("../../middleware");
 
@@ -25,6 +30,12 @@ router.put(
   "/:contactId",
   validate(editContactSchema),
   controllerWrapper(update)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validate(updateFavoriveContact),
+  controllerWrapper(updateStatusContact)
 );
 
 module.exports = router;

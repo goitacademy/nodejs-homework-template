@@ -11,14 +11,12 @@ const addContactSchema = Joi.object({
     .min(7)
     .max(15)
     .pattern(/^\d+$/)
-    .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
-    .required(),
+    .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
 
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-    })
-    .required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+  }),
+  favorite: Joi.boolean(),
 });
 
 const editContactSchema = Joi.object({
@@ -35,9 +33,15 @@ const editContactSchema = Joi.object({
   email: Joi.string().email({
     minDomainSegments: 2,
   }),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriveContact = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   addContactSchema,
   editContactSchema,
+  updateFavoriveContact,
 };

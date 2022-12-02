@@ -1,9 +1,17 @@
 const { createError } = require("../../helpers");
-const { removeContact } = require("../../models/contacts");
+const Contact = require("../../models/contacts");
+const mongoose = require("mongoose");
 
 async function remove(req, res) {
   const { contactId } = req.params;
-  const contactDeleted = await removeContact(contactId);
+
+  if (!mongoose.Types.ObjectId.isValid(contactId))
+    throw createError({
+      status: 422,
+      message: "Not valid Id, please provide correct contact id",
+    });
+
+  const contactDeleted = await Contact.findByIdAndRemove(contactId);
 
   if (!contactDeleted) {
     throw createError({ status: 404, message: "Not Found" });
@@ -12,7 +20,7 @@ async function remove(req, res) {
   res.json({
     status: "success",
     code: 200,
-    message: "contact deleted",
+    message: `contact ${contactId} deleted`,
     data: contactDeleted,
   });
 }
