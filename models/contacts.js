@@ -30,10 +30,11 @@ const removeContact = async contactId => {
 
 const addContact = async body => {
   const contacts = await listContacts();
-  const newContact = { ...body, id: nanoid() };
+  const id = nanoid();
+  const newContact = { ...body, id };
   contacts.push(newContact);
   await fs.writeFile(contactParh, JSON.stringify(contacts));
-  const addedContact = getContactById(body.id);
+  const addedContact = await getContactById(id);
   return addedContact;
 };
 

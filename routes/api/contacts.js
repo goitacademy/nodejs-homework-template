@@ -3,9 +3,10 @@ const router = express.Router();
 const { contacts: ctrl } = require('../../controlers');
 
 const {
-  contactsAddSchema: schemaAdd,
-  contactsUpdateSchema: schemaUpdate,
-} = require('../../schemas');
+  contactsAddSchema,
+  contactsUpdateSchema,
+} = require('../../schemas/schema');
+
 const {
   contactValidation: validation,
   controlerWrapper,
@@ -15,13 +16,13 @@ router.get('/', controlerWrapper(ctrl.getAll));
 
 router.get('/:contactId', controlerWrapper(ctrl.getById));
 
-router.post('/', validation(schemaAdd), controlerWrapper(ctrl.add));
+router.post('/', validation(contactsAddSchema), controlerWrapper(ctrl.add));
 
 router.delete('/:contactId', controlerWrapper(ctrl.removeById));
 
 router.put(
   '/:contactId',
-  validation(schemaUpdate),
+  validation(contactsUpdateSchema),
   controlerWrapper(ctrl.updateById)
 );
 
