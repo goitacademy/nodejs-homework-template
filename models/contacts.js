@@ -17,14 +17,15 @@ const listContacts = async (_, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
+  console.log(req.params);
   try {
-    const contactById = await Contact.findById({ _id: id });
+    const contactById = await Contact.findById({ _id: contactId });
     if (contactById) {
       return res.json({ data: contactById, status: 200 });
     } else {
       return res.status(404).json({
-        data: `Contact with id ${id}, was not found`,
+        data: `Contact with id ${contactId}, was not found`,
         status: 404,
       });
     }
@@ -35,14 +36,14 @@ const getContactById = async (req, res, next) => {
 };
 
 const removeContact = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const responce = await Contact.findOneAndRemove({ _id: id });
+    const responce = await Contact.findOneAndRemove({ _id: contactId });
     if (responce) {
       return res.json({ data: responce, status: 200 });
     } else {
       return res.status(404).json({
-        data: `Contact with id ${id}, was not found`,
+        data: `Contact with id ${contactId}, was not found`,
         status: 404,
       });
     }
@@ -64,18 +65,40 @@ const addContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const { name, email, phone } = req.body;
   try {
     const responce = await Contact.findOneAndUpdate(
-      { _id: id },
+      { _id: contactId },
       { name, email, phone }
     );
     if (responce) {
       return res.json({ data: responce, status: 200 });
     } else {
       return res.status(404).json({
-        data: `Contact with id ${id}, was not found`,
+        data: `Contact with id ${contactId}, was not found`,
+        status: 404,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite = false } = req.body;
+  try {
+    const responce = await Contact.findOneAndUpdate(
+      { _id: contactId },
+      { favorite }
+    );
+    if (responce) {
+      return res.json({ data: responce, status: 200 });
+    } else {
+      return res.status(404).json({
+        data: `Contact with id ${contactId}, was not found`,
         status: 404,
       });
     }
@@ -91,4 +114,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
