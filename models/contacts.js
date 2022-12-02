@@ -1,9 +1,9 @@
 const fs = require("fs/promises");
 
-const uuid = require("uuid");
+
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "routes", "api", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
   const dataString = await fs.readFile(contactsPath, "utf-8");
@@ -14,7 +14,12 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   const allContacts = await listContacts(contactsPath);
   const contact = allContacts.find((contact) => contact.id === contactId);
-  return contact ?? null;
+  if (contact === -1) {
+    return null;
+  } else {
+    console.log(contact)
+    return contact;
+  }
 };
 
 const removeContact = async (contactId) => {
@@ -32,11 +37,10 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  body.id(uuid.v4());
   const allContacts = await listContacts(contactsPath);
   allContacts.push(body);
   await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-  return allContacts;
+  return body;
 };
 
 const updateContact = async (contactId, body) => {
@@ -49,7 +53,7 @@ const updateContact = async (contactId, body) => {
     allContacts[contactIndex].email = body.email;
     allContacts[contactIndex].phone = body.phone;
     await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-    return allContacts;
+    return allContacts[contactIndex];
   } else {
     return null;
   }
