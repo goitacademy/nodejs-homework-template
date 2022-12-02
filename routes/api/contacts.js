@@ -8,9 +8,9 @@ const postContactSchema = Joi.object({
 });
 
 const putContactSchema = Joi.object({
-  name: Joi.string().options(),
-  email: Joi.string().options(),
-  phone: Joi.string().options(),
+  name: Joi.string().optional(),
+  email: Joi.string().optional(),
+  phone: Joi.string().optional(),
 });
 
 const contactsOperations = require("../../models/contacts");
