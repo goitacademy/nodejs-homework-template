@@ -1,11 +1,11 @@
-// const Book = require("../../models/books");
+const Contact = require("../../models/Contacts");
 
-// async function add(req, res) {
-//   const { title, author, favorite, genre, isbn } = req.body;
+async function add(req, res) {
+  const { name, email, phone, favorite } = req.body;
 
-//   const result = await Book.create({ title, author, favorite, genre, isbn });
+  const result = await Contact.create({ name, email, phone, favorite });
 
-//   res.status(201).json(result);
-// }
+  res.status(201).json(result);
+}
 
-// module.exports = add;
+module.exports = add;
