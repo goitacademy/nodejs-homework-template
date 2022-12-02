@@ -6,7 +6,7 @@ const getById = async (req, res, next) => {
         const { contactId } = req.params;
         const result = await contactsOperations.getContactById(contactId);
         if (!result) {
-            throw createError(404, `UPS! Contact with id=${contactId} not found`);
+            throw createError(404, `UPS...Contact with id=${contactId} not found`);
         }
         res.json({
             status: "success",

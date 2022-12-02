@@ -1,9 +1,10 @@
 const app = require('./app')
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ;
 
 app.listen(PORT, () => {
-  console.log("Server running. Use our API on port: 3000")
+  console.log("Server running!!! Use our API on port: 3000")
 })
 .on("error", function (err) {
     process.once("SIGUSR2", function () {
@@ -14,4 +15,6 @@ app.listen(PORT, () => {
       process.kill(process.pid, "SIGINT");
     });
   });
+
+
 
