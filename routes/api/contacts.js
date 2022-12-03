@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { contactValidation } = require("../../middlewares");
+const { contactValidation, ctrlWrapper } = require("../../middlewares");
 
 const { postContactSchema, putContactSchema } = require("../../schemas");
 
@@ -8,16 +8,20 @@ const { contacts: ctrl } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", ctrl.listContacts);
+router.get("/", ctrlWrapper(ctrl.listContacts));
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 
-router.post("/", contactValidation(postContactSchema), ctrl.addContact);
+router.post(
+  "/",
+  contactValidation(postContactSchema),
+  ctrlWrapper(ctrl.addContact)
+);
 
 router.put(
   "/:contactId",
   contactValidation(putContactSchema),
-  ctrl.updateContactById
+  ctrlWrapper(ctrl.updateContactById)
 );
 
 router.delete("/:contactId", ctrl.removeContact);
