@@ -61,8 +61,14 @@
   },
   {
     "id": "137bc93c-dfe5-453b-9c9a-e6c8399b32ce",
-    "name": "POPY",
-    "email": "Popy@mail.com",
+    "name": "Polly",
+    "email": "Polly@mail.com",
     "phone": "(095)-9999-000"
+  },
+  {
+    "id": "a93678f8-7f90-4f52-afa1-c6e7bcc05b10",
+    "name": "Molly",
+    "email": "molly@mail.com",
+    "phone": "(095)-999-0000"
   }
 ]
