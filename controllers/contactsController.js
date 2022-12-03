@@ -1,11 +1,12 @@
-
+const express = require('express');
+const router = new express.Router();
 const {listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact} = require('../../src/models/contacts');
+  updateContact} = require('../models/contacts');
 
-const getAll = async (req, res, next) => {
+const getAll = router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
   res.json({
     status: 'success',
@@ -13,11 +14,9 @@ const getAll = async (req, res, next) => {
     data: contacts,
 
   });
-};
+});
 
-
-
-const getById =  async (req, res) => {
+const getById = router.get('/:contactId', async (req, res) => {
   const {contactId} = req.params;
   const contact = await getContactById(contactId);
 
@@ -34,19 +33,19 @@ const getById =  async (req, res) => {
     code: 200,
     data: contact,
   });
-};
+});
 
 
-const addById = async (req, res) => {
+const addById = router.post('/', async (req, res) => {
   const newContact = await addContact(req.body);
   res.status(201).json({
     status: 'success',
     code: 201,
     data: newContact,
   });
-};
+});
 
-const deleteById =  async (req, res) => {
+const deleteById = router.delete('/:contactId', async (req, res) => {
   const {contactId} = req.params;
   const data = await removeContact(contactId);
 
@@ -64,10 +63,10 @@ const deleteById =  async (req, res) => {
     message: 'contact deleted',
     data,
   });
-};
+});
 
 
-const updateById =  async (req, res) => {
+const updateById = router.put('/:contactId', async (req, res) => {
   const {contactId} = req.params;
   const data = await updateContact(contactId, req.body);
 
@@ -92,7 +91,7 @@ const updateById =  async (req, res) => {
     code: 200,
     data,
   });
-};
+});
 
 
 module.exports = {
