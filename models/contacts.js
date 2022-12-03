@@ -49,6 +49,7 @@ const removeContact = async (contactId) => {
 	}
 };
 
+
 const updateContact = async (contactId, body) => {
 	try {
 		const contacts = await listContacts();
