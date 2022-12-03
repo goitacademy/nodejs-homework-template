@@ -1,11 +1,4 @@
-// const fs = require("fs/promises");
-// const path = require("node:path");
-// const { v4: uuidv4 } = require("uuid");
-// import { nanoid } from 'nanoid'
 const Contact = require("../services/schema");
-
-// const contactsPath = path.join(__dirname, "./contacts.json");
-// const contactsList = fs.readFile();
 
 const listContacts = async (_, res, next) => {
   try {
@@ -18,7 +11,6 @@ const listContacts = async (_, res, next) => {
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  console.log(req.params);
   try {
     const contactById = await Contact.findById({ _id: contactId });
     if (contactById) {
