@@ -9,9 +9,7 @@ const updateContactSchema = Joi.object({
     name: Joi.string().pattern(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/).min(3).max(30).allow(""),
     email: Joi.string().email().allow(""),
     phone: Joi.string().min(6).max(14).pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/).allow(""),
-})  .min(1)
-  .max(3);
-
+})
 
 
 
