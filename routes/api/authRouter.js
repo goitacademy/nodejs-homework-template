@@ -1,5 +1,4 @@
 const express = require("express");
-
 const auth = require("../../controller/authController");
 const {
   schemaPasswordValidation,
@@ -7,6 +6,7 @@ const {
 const { validateSchema } = require("../../middlewares/SchemaValidator");
 const { authMiddleware } = require("../../middlewares/authMiddlware");
 const { asyncWrapper } = require("../../helpers/apiHelper");
+const { upload } = require("../../helpers/fileUpload");
 const router = express.Router();
 
 router.post(
@@ -28,4 +28,13 @@ router.get(
   authMiddleware,
   asyncWrapper(auth.currentUserController)
 );
+
+router.patch(
+  "/avatars",
+  authMiddleware,
+  upload.single("avatar"),
+  asyncWrapper(auth.updateAvatar)
+);
+
+router.use("/download", express.static('/public/avatars'));
 module.exports = router;

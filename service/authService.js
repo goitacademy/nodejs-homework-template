@@ -1,10 +1,17 @@
 const User = require("./schema/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const selectAvatar = "avatar -_id";
+const { avatarRenameAndSave, avatarDelete } = require("../helpers/avatarSaver");
 const { NotAutorizedError } = require("../helpers/errors");
 
-const signup = async (email, password) => {
-  const user = new User({ email, password: await bcrypt.hash(password, 10) });
+const signup = async (email, password, avatar) => {
+  const user = new User({
+    email,
+    password: await bcrypt.hash(password, 10),
+    avatar: gravatar.profile_url(email),
+  });
   await user.save();
 };
 
@@ -21,6 +28,7 @@ const signin = async (email, password) => {
       id: user._id,
       email: user.email,
       subscription: user.subscription,
+      avatar: user.avatar,
     },
     process.env.JWT_SECRET
   );
@@ -40,6 +48,26 @@ const logout = async (id) => {
   await User.findByIdAndUpdate({ _id: id }, { token: null });
 };
 
+const updateUserAvatar = async ({ id, token, avatarPath }) => {
+  const oldAvatarURL = await User.findOne({ _id: id, token }, selectAvatar);
+  if (oldAvatarURL.avatar) {
+    await avatarDelete(oldAvatarURL.avatar);
+  }
+
+  const avatarURL = await avatarRenameAndSave(avatarPath);
+  const updatedCurrentUserAvatar = await User.findOneAndUpdate(
+    { _id: id, token },
+    { $set: { avatarURL } },
+    {
+      new: true,
+      projection: selectAvatar,
+    }
+  );
+  if (!updatedCurrentUserAvatar) {
+    throw new NotAutorizedError("Not authorized");
+  }
+  return updatedCurrentUserAvatar;
+};
 const currentUser = async (id) => {
   const user = await User.findById({ _id: id });
   if (!user) {
@@ -52,4 +80,5 @@ module.exports = {
   signin,
   logout,
   currentUser,
+  updateUserAvatar,
 };

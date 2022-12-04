@@ -1,4 +1,4 @@
-const contactsDB = require("../service/contacts");
+const contactsDB = require("../service/contactsService");
 const { NotFoundError } = require("../helpers/errors");
 
 const getContactsList = async (req, res) => {

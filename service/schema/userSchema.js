@@ -12,7 +12,9 @@ const usersSchema = new Schema({
     type: String,
     required: [true, "Password is required"],
   },
-
+  avatar: {
+   type:String,
+ },
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
