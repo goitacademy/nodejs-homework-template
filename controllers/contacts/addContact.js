@@ -5,7 +5,7 @@ const addContact = async (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
 
   if (error) {
-    throw BadRequest("missing required name field");
+    throw BadRequest(error.message);
   }
   const result = await contactOperation.addContact(req.body);
   res.status(201).json({

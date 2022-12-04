@@ -4,7 +4,7 @@ const { contactSchema } = require("../../schemas/contacts");
 const updateContact = async (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
   if (error) {
-    throw BadRequest("missing fields");
+    throw BadRequest(error.message);
   }
 
   const { contactId } = req.params;
