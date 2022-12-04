@@ -44,14 +44,14 @@ const addContact = async ({ name, email, phone }) => {
 
 const updateContact = async (contactId, { name, email, phone }) => {
   const contacts = await listContacts();
-  const id = contacts.findIndex((item) => item.id === contactId);
-  if (id === -1) {
+  const idx = contacts.findIndex((item) => item.id === contactId);
+  if (idx === -1) {
     return null;
   }
 
-  contacts[id] = { id: contactId, name, email, phone };
+  contacts[idx] = { id: contactId, name, email, phone };
   await updateContacts(contacts);
-  return contacts[id];
+  return contacts[idx];
 };
 
 module.exports = {
