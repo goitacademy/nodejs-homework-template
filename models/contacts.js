@@ -8,7 +8,7 @@ const updateContacts = async (contacts) => {
 };
 
 const listContacts = async () => {
-  const contacts = await JSON.parse(await fs.readFile(contactsPath));
+  const contacts = await JSON.parse(fs.readFile(contactsPath));
   return contacts;
 };
 
