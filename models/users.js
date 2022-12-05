@@ -53,6 +53,7 @@ const login = async (req, res, next) => {
       },
     },
   });
+  await User.findOneAndUpdate({ email }, { token });
 };
 
 const getCurrentUserInfo = async (req, res, next) => {
@@ -67,12 +68,13 @@ const getCurrentUserInfo = async (req, res, next) => {
 };
 
 const logOut = async (req, res, next) => {
-  //   res.setHeader("Authorization", "");
-  //   try {
-  //     return res.status(204).json({ status: "204 No Connect" });
-  //   } catch (error) {
-  //     next(error);
-  //   }
+  const { email } = req.user;
+  try {
+    await User.findOneAndUpdate({ email }, { token: null });
+    return res.status(204).json({ status: "204 No Connect" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
