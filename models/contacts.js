@@ -21,8 +21,10 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const data = await listContacts();
+  const deleted = data.find(({ id }) => id === contactId.toString());
   const newData = data.filter(({ id }) => id !== contactId.toString());
   await writeNewData(newData);
+  return deleted;
 };
 
 const addContact = async (body) => {
