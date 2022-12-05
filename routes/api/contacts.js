@@ -7,7 +7,7 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../models/contacts");
-
+const auth = require("../../middleware/auth");
 const {
   postValidationSchema,
   updateValidationSchema,
@@ -15,16 +15,16 @@ const {
 
 const router = express.Router();
 
-router.get("/", listContacts);
+router.get("/", auth, listContacts);
 
-router.get("/:contactId", getContactById);
+router.get("/:contactId", auth, getContactById);
 
-router.post("/", postValidationSchema, addContact);
+router.post("/", auth, postValidationSchema, addContact);
 
-router.delete("/:contactId", removeContact);
+router.delete("/:contactId", auth, removeContact);
 
-router.put("/:contactId", updateValidationSchema, updateContact);
+router.put("/:contactId", auth, updateValidationSchema, updateContact);
 
-router.patch("/:contactId/favorite", updateStatusContact);
+router.patch("/:contactId/favorite", auth, updateStatusContact);
 
 module.exports = router;

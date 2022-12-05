@@ -30,7 +30,6 @@ const registration = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(user);
 
   if (!user || !isValidPassword(password, user.password)) {
     return res.status(401).json({
@@ -56,7 +55,29 @@ const login = async (req, res, next) => {
   });
 };
 
+const getCurrentUserInfo = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  try {
+    return res
+      .status(200)
+      .json({ data: { email, subscription }, status: "200 OK" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const logOut = async (req, res, next) => {
+  //   res.setHeader("Authorization", "");
+  //   try {
+  //     return res.status(204).json({ status: "204 No Connect" });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+};
+
 module.exports = {
   registration,
   login,
+  getCurrentUserInfo,
+  logOut,
 };
