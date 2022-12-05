@@ -1,4 +1,4 @@
-const { contactsApi } = require("../models");
+const { contactsApi } = require("../../models");
 
 const getAll = async (_, res) => {
     const data = await contactsApi.get();

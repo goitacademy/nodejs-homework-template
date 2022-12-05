@@ -12,4 +12,4 @@ const patchSchema = Joi.object({
 })
 
 
-module.export = {schemaOfContacts, patchSchema};
+module.exports = {schemaOfContacts, patchSchema};

@@ -1,5 +1,5 @@
-const {nanoid} = require("nanoid"); 
-const fs = require("fs/prmises"); 
+const { nanoid } = require("nanoid");
+const fs = require("fs/promises"); 
 const dbContactsPath = require("./dbPath");
 const get = require("./get");
 
