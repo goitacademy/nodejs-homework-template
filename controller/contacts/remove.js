@@ -9,7 +9,7 @@ const remove = async (req, res) => {
         throw RequestError(404, `id:${contactId} not found`);
     }
 
-    res.status(200).json({ status: "success", code: 200, message: "contact deleted" });
+    res.status(200).json({ status: "success", message: "contact deleted" });
 };
 
 module.exports = remove;
