@@ -32,29 +32,30 @@ const removeContact = async (contactId) => {
   try {
     const allContacts = await listContacts();
     const index = allContacts.findIndex(contact => contact.id === id);
+    console.log(index)
     const deletedContact = allContacts[index];
     if (index !== -1) {
       allContacts.splice(index, 1);
       await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+      return deletedContact
     }
-    return deletedContact || null;
+    return null;
   }
   catch (err) {
     console.error('Error:', err);
   }    
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   const newContact = {
     id: nanoid(),
-    name,
-    email,
-    phone
+    ...body
   }
   try {
     const allContacts = await listContacts();
     allContacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+    return newContact;
   }
   catch (err) {
     console.error('Error:', err);
