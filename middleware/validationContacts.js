@@ -38,4 +38,18 @@ function updateValidationSchema(req, res, next) {
   validationResult(schema, res, req, next);
 }
 
-module.exports = { postValidationSchema, updateValidationSchema };
+function userRegDataValidationSchema(req, res, next) {
+  const schema = Joi.object({
+    password: Joi.string().min(3).max(15).required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+  });
+  validationResult(schema, res, req, next);
+}
+
+module.exports = {
+  postValidationSchema,
+  updateValidationSchema,
+  userRegDataValidationSchema,
+};
