@@ -1,14 +1,15 @@
 const express = require("express");
-const operations = require("../../models/contacts");
+const { listContacts } = require("../../models/contacts");
 // import listContacts from ("../../models/contacts");
 
 // http://localhost:3000/api/contacts
+//  npx nodemon server.js
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await operations.listContacts();
+    const result = await listContacts();
     res.json({
       status: "succsses",
       code: 200,
@@ -17,7 +18,6 @@ router.get("/", async (req, res, next) => {
       },
       message: "200 succsses",
     });
-    console.log(result);
   } catch (error) {
     console.error(next.error);
   }
