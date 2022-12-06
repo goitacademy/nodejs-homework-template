@@ -2,8 +2,17 @@ const Contact = require("../services/schema");
 
 const listContacts = async (req, res, next) => {
   const { _id } = req.user;
+  const { favorite = null, page = 0, limit = 5 } = req.query;
+  console.log(favorite);
   try {
-    const contacts = await Contact.find({ owner: _id });
+    const contacts =
+      favorite === null
+        ? await Contact.find({ owner: _id }, { __v: 0 })
+            .skip(page * limit)
+            .limit(limit)
+        : await Contact.find({ owner: _id, favorite }, { __v: 0 })
+            .skip(page * limit)
+            .limit(limit);
     return res.json({ data: contacts, status: 200 });
   } catch (error) {
     next(error);
