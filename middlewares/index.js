@@ -1,5 +1,5 @@
-const validateContact = require('./validateContact');
+const validateContact = require("./validateContact");
 
 module.exports = {
-    validateContact,
+  validateContact,
 };
