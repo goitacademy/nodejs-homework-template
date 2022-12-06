@@ -1,7 +1,7 @@
 const Contact = require("../../models/Contacts");
 const { createError } = require("../../helpers");
 
-async function updateFavoriteById(req, res) {
+async function updateStatusContact(req, res) {
   const { id } = req.params;
   const { favorite } = req.body;
 
@@ -20,4 +20,4 @@ async function updateFavoriteById(req, res) {
   res.status(200).json(result);
 }
 
-module.exports = updateFavoriteById;
+module.exports = updateStatusContact;
