@@ -4,6 +4,8 @@ const path = require('path');
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
+const updateContactList = async (contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts));
+
 const listContacts = async () => {
   try {
     const contactsString = await fs.readFile(contactsPath, 'utf8');
@@ -32,14 +34,12 @@ const removeContact = async (contactId) => {
   try {
     const allContacts = await listContacts();
     const index = allContacts.findIndex(contact => contact.id === id);
-    console.log(index)
     const deletedContact = allContacts[index];
     if (index !== -1) {
       allContacts.splice(index, 1);
-      await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-      return deletedContact
+      updateContactList(allContacts);
     }
-    return null;
+    return deletedContact || null;
   }
   catch (err) {
     console.error('Error:', err);
@@ -54,7 +54,7 @@ const addContact = async (body) => {
   try {
     const allContacts = await listContacts();
     allContacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+    updateContactList(allContacts);
     return newContact;
   }
   catch (err) {
@@ -69,7 +69,7 @@ const updateContact = async (contactId, body) => {
     const index = allContacts.findIndex(contact => contact.id === id);
     if (index !== -1) {
       allContacts[index] = { id, ...body };
-      await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+      updateContactList(allContacts);
     }
     return allContacts[index] || null
   }
