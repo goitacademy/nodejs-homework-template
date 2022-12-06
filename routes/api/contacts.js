@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controllers = require('../../controllers')
-const ctrlWrapper = require('../../helpers/ctrlWrapper')
+const {ctrlWrapper} = require('../../helpers')
 const validateBody = require('../../middlewares/validateBody')
 const schemas = require('../../schemas')
 
