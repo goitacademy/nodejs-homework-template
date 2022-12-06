@@ -14,7 +14,6 @@ const registrationUser = async (email, password) => {
 
 const loginUser = async (email, password) => {
   const user = await User.findOne({ email });
-  console.log(user);
   if (!user) {
     throw new NotAutorizedError(`no user whis email:${email} found`);
   }
