@@ -3,16 +3,14 @@ const Contact = require("../services/schema");
 const listContacts = async (req, res, next) => {
   const { _id } = req.user;
   const { favorite = null, page = 0, limit = 5 } = req.query;
-  console.log(favorite);
+  let options = { owner: _id };
+  if (favorite) {
+    options = { ...options, favorite };
+  }
   try {
-    const contacts =
-      favorite === null
-        ? await Contact.find({ owner: _id }, { __v: 0 })
-            .skip(page * limit)
-            .limit(limit)
-        : await Contact.find({ owner: _id, favorite }, { __v: 0 })
-            .skip(page * limit)
-            .limit(limit);
+    const contacts = await Contact.find(options, { __v: 0 })
+      .skip(page * limit)
+      .limit(limit);
     return res.json({ data: contacts, status: 200 });
   } catch (error) {
     next(error);

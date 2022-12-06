@@ -19,9 +19,7 @@ const registration = async (req, res, next) => {
   try {
     const incryptedPassword = incryptPassword(password);
     await User.create({ password: incryptedPassword, email });
-    return res
-      .status(201)
-      .json({ data: { password, email }, status: "201 Created" });
+    return res.status(201).json({ data: { email }, status: "201 Created" });
   } catch (error) {
     next(error);
   }
@@ -31,12 +29,18 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user || !isValidPassword(password, user.password)) {
+  if (!isValidPassword(password, user.password)) {
     return res.status(401).json({
       message: "Email or password is wrong",
       status: "401 Unauthorized",
     });
+  } else if (!user) {
+    return res.status(404).json({
+      message: "User was not found",
+      status: "404 Not Found",
+    });
   }
+
   const payload = {
     id: user.id,
     email: user.email,
