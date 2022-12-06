@@ -3,27 +3,27 @@ const express = require("express");
 const {
   contacts: {
     getContacts,
-    findContactById,
+    getContactById,
     addNewContact,
     deleteContact,
-    updContact,
+    updateContact,
   },
 } = require("../../controllers");
 
 const { validation, ctrllWrapper } = require("../../middlewares");
-const { productSchema } = require("../../schemas");
+const { contactSchema } = require("../../schemas");
 
-const validateMiddleWate = validation(productSchema);
+const validateMiddleWate = validation(contactSchema);
 const router = express.Router();
 
 router.get("/", ctrllWrapper(getContacts));
 
-router.get("/:id", ctrllWrapper(findContactById));
+router.get("/:id", ctrllWrapper(getContactById));
 
 router.post("/", validateMiddleWate, ctrllWrapper(addNewContact));
 
 router.delete("/:id", ctrllWrapper(deleteContact));
 
-router.put("/:id", validateMiddleWate, ctrllWrapper(updContact));
+router.put("/:id", validateMiddleWate, ctrllWrapper(updateContact));
 
 module.exports = router;

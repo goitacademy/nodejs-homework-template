@@ -1,6 +1,6 @@
 const { updateContact } = require("../../models/contacts");
 
-const updContact = async (req, res, next) => {
+const updatedContact = async (req, res, next) => {
   const { id } = req.params;
   const result = await updateContact(id, req.body);
   res.json({
@@ -12,4 +12,4 @@ const updContact = async (req, res, next) => {
   });
 };
 
-module.exports = updContact;
+module.exports = updatedContact;
