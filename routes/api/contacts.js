@@ -1,5 +1,5 @@
 const express = require("express");
-const { listContacts } = require("../../models/contacts");
+const { listContacts, getContactById } = require("../../models/contacts");
 // import listContacts from ("../../models/contacts");
 
 // http://localhost:3000/api/contacts
@@ -24,7 +24,19 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const result = await getContactById();
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+      message: `contact with id: ${result.id}`,
+    });
+  } catch (error) {
+    this.console.error(next.error);
+  }
 });
 
 router.post("/", async (req, res, next) => {

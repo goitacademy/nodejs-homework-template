@@ -9,7 +9,18 @@ const listContacts = async () => {
   return result;
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const [result] = await contacts.filter(
+      (item) => Number(item.id) === contactId
+    );
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const removeContact = async (contactId) => {};
 
