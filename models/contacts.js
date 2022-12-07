@@ -57,7 +57,41 @@ const addContact = async (req, res) => {
 }
 
 const updateContact = async (req, res) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
 
+    let newItem = null;
+    const id = req.params.id;
+    const { name, email, phone } = req.body;
+    const data = await getListContact();
+    const isId = data.find((item) => item.id === id);
+
+    if (!isId) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    await data.forEach((item) => {
+      if (item.id === id) {
+        if (name) {
+          item.name = name;
+        }
+        if (email) {
+          item.email = email;
+        }
+        if (phone) {
+          item.phone = phone;
+        }
+        newItem = item;
+      }
+    });
+
+    await fs.writeFile(contactsPath, JSON.stringify(data), "utf8");
+    res.status(200).json(newItem);
+  } catch (error) {
+    res.json(error);
+  }
 }
 
 module.exports = {
