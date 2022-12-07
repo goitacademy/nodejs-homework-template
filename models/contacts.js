@@ -11,9 +11,7 @@ console.log(pathToFile)
 
 const listContacts = async () => {
   const data = await fs.readFile(pathToFile);
-  console.log(data);
   const contacts = JSON.parse(data);
-  console.log(data);
     return contacts
 }
 
@@ -45,13 +43,13 @@ const addContact = async (body) => {
     return newContact;
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   const contacts = await listContacts();  
-    const idContact = contacts.findIndex(item => item.id === contactId);
+    const idContact = contacts.findIndex(item => item.id === id);
     if (idContact === -1) {
         return null
     }
-    contacts[idContact] = { ...body, contactId}
+    contacts[idContact] = { ...body, id}
     await updateContacts(contacts);
     return contacts[idContact];
 }
