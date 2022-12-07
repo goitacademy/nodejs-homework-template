@@ -1,5 +1,5 @@
-const createError = require("./createError");
+const RequestError = require('./RequestError');
 
 module.exports = {
-  createError,
-};
+    RequestError
+}
