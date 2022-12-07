@@ -44,10 +44,13 @@ const addScheme = joi.object({
 
 router.post('/', async (req, res, next) => {
   try {
-    const {err} = addScheme.validate(req.body)
-    if (err) { HttpError(400, err.message)}
-    const result = await contacts.add(res.body)
-console.log(result)
+    const { err } = addScheme.validate(req.body)
+    
+    if (err) {
+      throw HttpError(400, err.message)
+    }
+    
+    const result = await contacts.add(req.body)
     res.status(201).json(result)
   } catch (err) {
     next(err)

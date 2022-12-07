@@ -30,10 +30,11 @@ const getById = async (id) => {
     return result || null
 }
 
-const add = async ({ name, email, phone }) => {
+const add = async ({ name, phone }) => {
+    console.log("name, phone")
     const newContact = {
         id: nanoId,
-        name, email, phone
+        name, phone
     }
     const contacts = await getAll()
     contacts.push(newContact)
