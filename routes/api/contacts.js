@@ -8,16 +8,19 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts")
- // Валидатор написать
-// 1
+ 
+ const {
+  addContactValidation,
+} = require("../../midlewares/validationMidleware");
+
 router.get('/', listContacts)
-// 2
+
 router.get('/:Id', getContactById)
-// 3
-router.post('/', removeContact)
-// 4
-router.delete('/:Id', addContact)
-// 5
+
+router.post('/', addContactValidation, addContact)
+
+router.delete('/:Id', removeContact)
+
 router.put('/:Id', updateContact)
 
 module.exports = router

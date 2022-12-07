@@ -1,9 +1,10 @@
 const fs = require('fs/promises');
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+
 const contactsPath = path.join("__dirname", "../models/contacts.json");
 
-async function getListContact() {
+const getListContact = async () => {
   const dataJson = await fs.readFile(contactsPath, "utf8");
   const data = JSON.parse(dataJson);
   return data;
@@ -33,11 +34,11 @@ const getContactById = async (req, res) => {
   }
 }
 // 3
-const removeContact = async (contactId) => {}
+const removeContact = async (req, res) => {}
 
-const addContact = async (body) => {}
+const addContact = async (req, res) => {}
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (req, res) => {}
 
 module.exports = {
   listContacts,
