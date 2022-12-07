@@ -1,8 +1,11 @@
 const express = require('express')
+const joi = require("joi")
 
 const contacts = require("../../models/index.js")
 
 const router = express.Router()
+
+const { HttpError } = require("../../helpers/HttpErrors")
 
 router.get('/', async (req, res, next) => {
   try {
@@ -10,34 +13,45 @@ router.get('/', async (req, res, next) => {
     console.log(allContacts)
     res.json(allContacts)
   } catch (err) {
-    res.status(500).json({
-      message: "Server error"
-    })
-    res.send(err.message)
+    next(err)
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const {contactId} = req.params
+    const { contactId } = req.params
     const result = await contacts.getById(contactId)
 
     if (!result) {
-      const err = new Error("Not found")
-      err.status = 404
-      
-      throw err
+      throw HttpError(404, "Not found")
+      // const err = new Error("Not found")
+      // err.status = 404
+      // throw err
     }
-
-    return result
+    console.log(result)
+    res.json(result)
   } catch (err) {
-    const {status = 500, message = "Server error" } = err
-    res.status(status).json({message})
+    next(err)
   }
   res.json({ message: 'contactID-get template message' })
 })
 
+
+const addScheme = joi.object({
+  name: joi.string().required(),
+  phone: joi.number().required()
+})
+
 router.post('/', async (req, res, next) => {
+  try {
+    const {err} = addScheme.validate(req.body)
+    if (err) { HttpError(400, err.message)}
+    const result = await contacts.add(res.body)
+console.log(result)
+    res.status(201).json(result)
+  } catch (err) {
+    next(err)
+  }
   res.json({ message: 'template message' })
 })
 
