@@ -34,11 +34,31 @@ const getContactById = async (req, res) => {
   }
 }
 // 3
-const removeContact = async (req, res) => {}
+const removeContact = async (req, res) => {
 
-const addContact = async (req, res) => {}
+}
 
-const updateContact = async (req, res) => {}
+const addContact = async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    const data = await getListContact();
+    const contact = {
+      id: uuidv4(),
+      name,
+      email,
+      phone,
+    };
+    data.push(contact);
+    await fs.writeFile(contactsPath, JSON.stringify(data), "utf8");
+    res.status(201).json(contact);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
+const updateContact = async (req, res) => {
+
+}
 
 module.exports = {
   listContacts,
