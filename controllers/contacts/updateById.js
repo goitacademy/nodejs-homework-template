@@ -6,6 +6,7 @@ const updateById = async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
+
   if (result === null) {
     throw NotFound(`Contact with id = ${contactId} not found`);
   }
