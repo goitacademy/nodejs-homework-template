@@ -12,6 +12,22 @@ module.exports = {
         .length(10)
         .pattern(/^[0-9]+$/)
         .required(),
+      favorite: Joi.boolean(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return res.json({
+        message: validationResult.error.details,
+        code: 404,
+      });
+    }
+
+    next();
+  },
+  favoriteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
     });
 
     const validationResult = schema.validate(req.body);

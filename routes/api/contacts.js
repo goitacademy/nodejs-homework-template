@@ -1,16 +1,18 @@
 const express = require("express");
+
+const dotenv = require("dotenv");
+dotenv.config();
+
+const Contact = require("../../models/contact");
+
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
-const { contactValidation } = require("../../middlewares/validation");
+  contactValidation,
+  favoriteValidation,
+} = require("../../middlewares/validation");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const contacts = await listContacts();
+  const contacts = await Contact.find();
   res.json({
     status: "success",
     code: 200,
@@ -22,7 +24,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (contact) {
     return res.json({
       status: "success",
@@ -40,7 +42,7 @@ router.get("/:contactId", async (req, res) => {
 
 router.post("/", contactValidation, async (req, res, next) => {
   const { name, email, phone } = req.body;
-  const contact = await addContact({ name, email, phone });
+  const contact = await Contact.create(req.body);
   if (!name || !email || !phone) {
     return res.json({
       status: `missing required field`,
@@ -62,7 +64,7 @@ router.post("/", contactValidation, async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  const contacts = await removeContact(contactId);
+  const contacts = await Contact.findByIdAndRemove(contactId);
   if (!contacts) {
     return res.json({
       message: "Not found",
@@ -85,7 +87,9 @@ router.put("/:contactId", contactValidation, async (req, res, next) => {
       code: 400,
     });
   }
-  const contact = await updateContact(contactId, { name, email, phone });
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
 
   if (!contact) {
     return res.json({
@@ -99,5 +103,28 @@ router.put("/:contactId", contactValidation, async (req, res, next) => {
     data: { contact },
   });
 });
+router.patch(
+  "/:contactId/favorite",
+  favoriteValidation,
+  async (req, res, next) => {
+    const { contactId } = req.params;
+
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
+    if (!req.body) {
+      return res.json({
+        message: "missing field favorite",
+        code: 400,
+      });
+    }
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { contact },
+    });
+  }
+);
 
 module.exports = router;
