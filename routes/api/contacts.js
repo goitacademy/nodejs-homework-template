@@ -11,7 +11,7 @@ const {
  
  const {
   addContactValidation,
-} = require("../../midlewares/validationMidleware");
+} = require("../../middlewares/validationMidleware");
 
 router.get('/', listContacts)
 

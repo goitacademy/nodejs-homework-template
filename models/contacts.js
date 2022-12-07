@@ -35,7 +35,19 @@ const getContactById = async (req, res) => {
 }
 // 3
 const removeContact = async (req, res) => {
-
+  try {
+    const id = req.params.id;
+    const data = await getListContact();
+    const findId = await data.find((data) => data.id === id);
+    if (!findId) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    const filter = await data.filter((data) => data.id !== id);
+    await fs.writeFile(contactsPath, JSON.stringify(filter), "utf8");
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    res.send(error);
+  }
 }
 
 const addContact = async (req, res) => {
