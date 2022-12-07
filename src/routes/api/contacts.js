@@ -2,27 +2,30 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 const { addContactValidation,
-  putContactValidation } = require('../../middlewares/validationMiddlware');
-const {getAllContacts,
-  getContact,
-  postContact,
-  deleteContact,
-  putContact} = require('../../controllers/contactsController');
+  putContactValidation, patchContactValidation } = require('../../middlewares/validationMiddlware');
+const {getAllContactsController,
+  getContactController,
+  postContactController,
+  deleteContactController,
+  putContactController,
+  patchContactController,
+} = require('../../controllers/contactsController');
 
 // GET all contacts
-router.get('/', getAllContacts);
+router.get('/', getAllContactsController);
 
 // GET contact by ID
-router.get('/:contactId', getContact);
+router.get('/:contactId', getContactController);
 
 // POST - add new contact
-router.post('/', addContactValidation, postContact);
+router.post('/', addContactValidation, postContactController);
 
 // DELETE - remove contact by ID
-router.delete('/:contactId', deleteContact);
+router.delete('/:contactId', deleteContactController);
 
 // PUT - update contact by ID
-// (remove old contact + add new contact = {...oldContact, ...req.body})
-router.put('/:contactId', putContactValidation, putContact);
+router.put('/:contactId', putContactValidation, putContactController);
 
+// PATCH - update contact field 'favorite' by contact ID
+router.patch('/:contactId/favorite', patchContactValidation, patchContactController) 
 module.exports = router;
