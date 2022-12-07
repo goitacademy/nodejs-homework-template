@@ -35,7 +35,7 @@ router.get("/:contactId", async (req, res) => {
     });
   }
   return res.json({
-    status: "Not found",
+    status: "Not found!",
     code: 404,
   });
 });
