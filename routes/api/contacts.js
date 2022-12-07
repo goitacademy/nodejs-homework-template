@@ -1,5 +1,10 @@
 const express = require("express");
-const { listContacts, getContactById } = require("../../models/contacts");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+} = require("../../models/contacts");
 // import listContacts from ("../../models/contacts");
 
 // http://localhost:3000/api/contacts
@@ -40,11 +45,34 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const body = req.body;
+
+  const result = await addContact(body);
+
+  try {
+    res.json({
+      status: "success",
+      code: 201,
+      body: {
+        result,
+      },
+      message: "template message",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const result = await removeContact();
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+    message: "template message",
+  });
 });
 
 router.put("/:contactId", async (req, res, next) => {
