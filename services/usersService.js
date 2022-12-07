@@ -4,11 +4,12 @@ const getUserByEmail = async (email) => await User.findOne({ email });
 
 const getUserById = async (id) => await User.findOne({ _id: id });
 
-const createUser = async ({ password, email, subscription }) =>
+const createUser = async ({ password, email, subscription, avatarURL }) =>
   await User.create({
     password,
     email,
     subscription,
+    avatarURL,
   });
 
 const setToken = async (email, token) =>

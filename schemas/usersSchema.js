@@ -17,6 +17,7 @@ const user = new Schema({
     default: "starter",
   },
   token: String,
+  avatarURL: String,
 });
 
 user.pre("save", async function () {

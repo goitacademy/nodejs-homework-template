@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const getValidation = require("../middlewares/validationMiddlewares");
 const service = require("../services/usersService");
+const gravatar = require("gravatar");
 
 const addUser = async (req, res) => {
   const bodyIsValid = await getValidation.userValid(req.body);
@@ -19,6 +20,10 @@ const addUser = async (req, res) => {
     });
     return;
   }
+
+  const { email } = req.body;
+  const avatarURL = gravatar.url(email);
+  req.body.avatarURL = avatarURL;
 
   try {
     const results = await service.createUser(req.body);
