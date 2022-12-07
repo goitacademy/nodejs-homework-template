@@ -78,14 +78,14 @@ router.put('/:contactId', async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const {contactId} = req.params
+    const { contactId } = req.params
     const result = await contacts.removeById(contactId)
 
     if (!result) {
       throw HttpError(404, "Not found")
     }
 
-    res.status(200).json({message: "contact deleted"})
+    res.status(200).json({ message: "contact deleted" })
   } catch (err) {
     next(err)
   }
