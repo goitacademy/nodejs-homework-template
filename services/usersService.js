@@ -28,6 +28,16 @@ const updateSubscription = async ({ subscription }, { _id }) => {
   );
 };
 
+const updateAvatar = async (avatarURL, { _id }) => {
+  return await User.findOneAndUpdate(
+    { _id },
+    { avatarURL },
+    {
+      new: true,
+    }
+  );
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
@@ -35,4 +45,5 @@ module.exports = {
   getUserById,
   deleteToken,
   updateSubscription,
+  updateAvatar,
 };
