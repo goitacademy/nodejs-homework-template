@@ -24,9 +24,6 @@ router.get('/:contactId', async (req, res, next) => {
 
     if (!result) {
       throw HttpError(404, "Not found")
-      // const err = new Error("Not found")
-      // err.status = 404
-      // throw err
     }
     console.log(result)
     res.json(result)
@@ -39,31 +36,60 @@ router.get('/:contactId', async (req, res, next) => {
 
 const addScheme = joi.object({
   name: joi.string().required(),
-  phone: joi.number().required()
+  email: joi.string().required(),
+  phone: joi.number().required(),
 })
 
 router.post('/', async (req, res, next) => {
   try {
-    const { err } = addScheme.validate(req.body)
-    
-    if (err) {
-      throw HttpError(400, err.message)
+    const { error } = addScheme.validate(req.body)
+
+    if (error) {
+      throw HttpError(400, error.message)
     }
-    
+
     const result = await contacts.add(req.body)
     res.status(201).json(result)
   } catch (err) {
     next(err)
   }
-  res.json({ message: 'template message' })
-})
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { error } = addScheme.validate(req.body)
+    if (error) {
+      throw HttpError(400, error.message)
+    }
+
+    const { contactId } = req.params
+
+    const result = await contacts.updateById(contactId, req.body)
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+
+    res.json(result)
+  } catch (err) {
+    next()
+  }
 })
+
+router.delete('/:contactId', async (req, res, next) => {
+  try {
+    const {contactId} = req.params
+    const result = await contacts.removeById(contactId)
+
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+
+    res.status(200).json({message: "contact deleted"})
+  } catch (err) {
+    next(err)
+  }
+})
+
 
 module.exports = router
