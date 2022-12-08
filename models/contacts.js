@@ -10,28 +10,26 @@ const listContacts = async () => {
   return result;
 };
 
-async function getContactById(contactId) {
+const getContactById = async (contactId) => {
   try {
     const allContacts = await listContacts();
-    const [findContact] = await allContacts.filter(
-      (item) => Number(item.id) === contactId
-    );
-    console.log(findContact);
+    const [findContact] = allContacts.filter((item) => item.id === contactId);
     return findContact;
   } catch (error) {
     console.log(error);
   }
-}
-
+};
 const removeContact = async (contactId) => {
-  const array = [];
-  const allContacts = await listContacts();
-  array.push(allContacts);
-  const findContact = await array.filter(
-    (item) => Number(item.id) !== contactId
-  );
-  await fs.writeFile(contactsPath, JSON.stringify(findContact));
-  return findContact;
+  try {
+    const allContacts = await listContacts();
+    const removedList = allContacts.filter(
+      (contact) => contact.id !== contactId
+    );
+    await fs.writeFile(contactsPath, JSON.stringify(removedList));
+    console.table(removedList);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const addContact = async (body) => {
@@ -42,7 +40,22 @@ const addContact = async (body) => {
   return contact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const [contactList] = await listContacts();
+  contactList.forEach((el) => {
+    if (el.id === contactId) {
+      contactList.id = contactId;
+      contactList.name = body.name;
+      contactList.phone = body.phone;
+      contactList.email = body.email;
+    }
+  });
+
+  // getContact = [...body];
+  // const updatedList = [...getContact, ...body];
+  await fs.writeFile(contactsPath, JSON.stringify(contactList));
+  return contactList;
+};
 
 module.exports = {
   listContacts,

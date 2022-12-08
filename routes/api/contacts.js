@@ -4,6 +4,7 @@ const {
   getContactById,
   addContact,
   removeContact,
+  updateContact,
 } = require("../../models/contacts");
 // import listContacts from ("../../models/contacts");
 
@@ -29,15 +30,16 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
   try {
-    const result = await getContactById();
+    const result = await getContactById(contactId);
     res.json({
       status: "success",
       code: 200,
       data: {
         result,
       },
-      message: `contact with id: ${result.id}`,
+      message: `contact with id: ${result}`,
     });
   } catch (error) {
     this.console.error(next.error);
@@ -64,7 +66,8 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  const result = await removeContact();
+  const { contactId } = req.params;
+  const result = await removeContact(contactId);
   res.json({
     status: "success",
     code: 200,
@@ -76,7 +79,18 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactID } = req.params;
+  const { body } = req.params;
+
+  const result = await updateContact(contactID, body);
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+    message: "template message",
+  });
 });
 
 module.exports = router;
