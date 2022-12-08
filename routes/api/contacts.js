@@ -4,7 +4,7 @@ const ctrl = require("../../controllers/contactsControllers");
 
 const { ctrlWrappers } = require("../../helpers");
 
-const { validateBody } = require("../../middlewares");
+const { validateBody, validateId } = require("../../middlewares");
 
 const schemas = require("../../schemas/contacts")
 
@@ -18,6 +18,6 @@ router.post('/', validateBody(schemas.addShema), ctrlWrappers(ctrl.addContact));
 
 router.delete('/:id', ctrlWrappers(ctrl.removeContact))
 
-router.put('/:id', validateBody(schemas.addShema), ctrlWrappers(ctrl.updateContact))
+router.put('/:id', validateId, validateBody(schemas.addShema), ctrlWrappers(ctrl.updateContact))
 
 module.exports = router
