@@ -18,7 +18,7 @@ const setAvatarULR = (req, res) => {
     const avatarURL = `/avatars/${req.body.avatar}`;
 
     try {
-      updateAvatar(avatarURL, req.body);
+      updateAvatar(avatarURL, req.user);
     } catch (err) {
       res.json(err);
     }
