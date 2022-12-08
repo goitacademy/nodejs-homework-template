@@ -12,9 +12,11 @@ const updateById = async (req, res, next) => {
     const { contactId } = req.params
 
     const result = await Contact.updateOne({_id: contactId}, req.body)
-    if (!result) {
+    if (result.modifiedCount === 0) {
       throw HttpError(404, "Not found")
     }
+console.log("res", result)
+    const updatedContact = await Contact.findOne({_id: contactId})
 //что вернуть??? сейчас:
 // const result = {
 //   acknowledged: true,
@@ -23,7 +25,7 @@ const updateById = async (req, res, next) => {
 //   upsertedCount: 0,
 //   matchedCount: 1
 // }
-    res.json(result)
+    res.json(updatedContact)
   } catch (err) {
     next()
   }
