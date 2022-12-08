@@ -1,143 +1,97 @@
 const express = require("express");
-const { uid } = require("uid");
-const Joi = require("joi");
-
 const router = express.Router();
-
-let contacts = [];
+const { addContactValidation } = require("../../middlewares/validation");
+const contacts = require("../../models/contacts.json");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  res.json({ contacts, status: "success" });
+  listContacts();
+  res.status(200).json({ contacts });
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const [contact] = contacts.filter(
-    (contact) => contact.id === req.params.contactId
-  );
-
-  if (!contact) {
-    res
-      .status(400)
-      .json({
-        status: `failure, there is no contact with ${req.params.contactId} found!`,
-      });
+  if (!req.params.contactId) {
+    return res.status(404).json({
+      message: "Not found",
+    });
   }
 
-  res.json({ contact, status: "success" });
+  getContactById(req.params.contactId);
+
+  res.status(200).json(getContactById(req.params.contactId));
 });
 
-router.post("/", async (req, res, next) => {
-  const { name, number } = req.body;
+router.post("/", addContactValidation, async (req, res, next) => {
+  const { name, email, phone } = req.body;
 
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    number: Joi.string().number().min(7).max(20).required(),
-  });
-
-  const validationResult = schema.validate(req.body);
-  if (validationResult.error) {
-    res.status(400).json({ status: validationResult.error.details });
+  if (!name) {
+    res.status(400).json({ message: `missing required ${name} field` });
+  } else if (!email) {
+    res.status(400).json({ message: `missing required ${email} field` });
+  } else if (!phone) {
+    res.status(400).json({ message: `missing required ${phone} field` });
   }
 
-  contacts.push({ id: uid(4), name, number });
-  res.json({ status: "success" });
+  addContact({ name, email, phone });
+
+  res.status(201).json(addContact({ name, email, phone }));
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  contacts = contacts.filter((contact) => contact.id !== req.params.contactId);
-  res.json({ status: "success" });
+  if (!req.params.contactId) {
+    return res.status(404).json({
+      message: "Not found",
+    });
+  }
+
+  removeContact(req.params.contactId);
+
+  res.status(200).json({ message: "the contact was deleted" });
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  const { name, number } = req.body;
+router.put("/:contactId", addContactValidation, async (req, res, next) => {
+  const { name, email, phone } = req.body;
 
-   const schema = Joi.object({
-     name: Joi.string().alphanum().min(3).max(30).required(),
-     number: Joi.string().number().min(7).max(20).required(),
-   });
+  if (!req.body) {
+    res.status(400).json({ message: "missing fields" });
+  }
 
-   const validationResult = schema.validate(req.body);
-   if (validationResult.error) {
-     res.status(400).json({ status: validationResult.error.details });
-   }
+  if (!name) {
+    res.status(400).json({ message: `missing required ${name} field` });
+  } else if (!email) {
+    res.status(400).json({ message: `missing required ${email} field` });
+  } else if (!phone) {
+    res.status(400).json({ message: `missing required ${phone} field` });
+  }
 
-  contacts.forEach((contact) => {
-    if (contact.id === req.params.contactId) {
-      contact.name = name;
-      contact.number = number;
-    }
-  });
+  updateContact(req.params.contactId, req.body);
 
-  // const index = contacts.findIndex(
-  //   (contact) => contact.id === req.params.contactId
-  // );
-  // const { name, number } = req.body;
-  // const changedContact = { id: uid(4), name, number };
-  // contacts.splice(index, 1, changedContact);
+  if (!updateContact(req.params.contactId, req.body)) {
+    res.status(404).json({ message: "Not found" });
+  }
 
-  res.json({ contacts, status: "success" });
+  res.status(200).json(updateContact(req.params.contactId, req.body));
 });
 
-router.patch("/:contactId", async (req, res, next) => {
-  const { name, number } = req.body;
+// router.patch("/:contactId", patchContactValidation, async (req, res, next) => {
+//   const { name, number } = req.body;
 
-   const schema = Joi.object({
-     name: Joi.string().alphanum().min(3).max(30).optional(),
-     number: Joi.string().number().min(7).max(20).optional(),
-   });
+//   contacts.forEach((contact) => {
+//     if (name) {
+//       contact.name = name;
+//     }
+//     if (number) {
+//       contact.number = number;
+//     }
+//   });
 
-   const validationResult = schema.validate(req.body);
-   if (validationResult.error) {
-     res.status(400).json({ status: validationResult.error.details });
-   }
-
-  contacts.forEach((contact) => {
-    if (name) {
-      contact.name = name;
-    }
-    if (number) {
-      contact.number = number;
-    }
-  });
-
-  res.json({ contacts, status: "success" });
-});
+//   res.json({ contacts, status: "success" });
+// });
 
 module.exports = router;
-
-//--------------------------------------------
-
-// const schema = Joi.object({
-//   username: Joi.string().alphanum().min(3).max(30).required(),
-
-//   password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
-
-//   repeat_password: Joi.ref("password"),
-
-//   access_token: [Joi.string(), Joi.number()],
-
-//   birth_year: Joi.number().integer().min(1900).max(2013),
-
-//   email: Joi.string().email({
-//     minDomainSegments: 2,
-//     tlds: { allow: ["com", "net"] },
-//   }),
-// })
-//   .with("username", "birth_year")
-//   .xor("password", "access_token")
-//   .with("password", "repeat_password");
-
-// schema.validate({ username: "abc", birth_year: 1994 });
-// // -> { value: { username: 'abc', birth_year: 1994 } }
-
-// schema.validate({});
-// // -> { value: {}, error: '"username" is required' }
-
-// // Also -
-
-// try {
-//   const value = await schema.validateAsync({
-//     username: "abc",
-//     birth_year: 1994,
-//   });
-// } catch (err) {}
