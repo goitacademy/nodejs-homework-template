@@ -1,5 +1,4 @@
 const express = require('express')
-const router = express.Router()
 
 const {
   contacts: {
@@ -15,6 +14,7 @@ const { validation, ctrlWrapper } = require("../../middlewares");
 const { contactSchema } = require("../../schemas");
 
 const validateMiddleWate = validation(contactSchema);
+const router = express.Router()
 
 router.get('/', ctrlWrapper(getContacts));
 

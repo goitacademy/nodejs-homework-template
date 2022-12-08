@@ -3,24 +3,25 @@ const path = require("path");
 const { v4 } = require("uuid");
 
 const contactsPath = path.join("__dirname", "./contacts.json");
-// 1
+console.log(contactsPath)
+
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   const contacts = JSON.parse(data);
   return contacts;
 }
-// 2
+
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
   return contacts.find((contact) => contact.id === contactId);
 };
-// 3
+
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
   const findContact = contacts.find((contact) => contact.id === contactId);
   if (findContact) {
     const newContactList = contacts.filter(
-      (contact) => contact.id === contactId
+      (contact) => contact.id !== contactId
     );
     await fs.writeFile(contactsPath, JSON.stringify(newContactList));
     return findContact;
