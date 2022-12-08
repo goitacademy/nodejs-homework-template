@@ -19,6 +19,7 @@ const getContactById = async (contactId) => {
     console.log(error);
   }
 };
+
 const removeContact = async (contactId) => {
   try {
     const allContacts = await listContacts();
@@ -35,26 +36,28 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contact = { ...body, id: shortid() };
   const contactList = await listContacts();
+
   contactList.push(contact);
   await fs.writeFile(contactsPath, JSON.stringify(contactList));
   return contact;
 };
 
 const updateContact = async (contactId, body) => {
-  const [contactList] = await listContacts();
-  contactList.forEach((el) => {
+  const contactList = await listContacts();
+  const updatedContact = contactList.find((el) => {
     if (el.id === contactId) {
-      contactList.id = contactId;
-      contactList.name = body.name;
-      contactList.phone = body.phone;
-      contactList.email = body.email;
+      contactList.push({
+        id: contactId,
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+      });
     }
+    return updatedContact;
   });
 
-  // getContact = [...body];
-  // const updatedList = [...getContact, ...body];
   await fs.writeFile(contactsPath, JSON.stringify(contactList));
-  return contactList;
+  return updatedContact;
 };
 
 module.exports = {

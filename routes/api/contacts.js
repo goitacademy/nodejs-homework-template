@@ -6,6 +6,10 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts");
+
+const { validate } = require("../../schema/schema");
+const validation = require("../../schema/midleware");
+
 // import listContacts from ("../../models/contacts");
 
 // http://localhost:3000/api/contacts
@@ -46,7 +50,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validate(validation.contact), async (req, res, next) => {
   const body = req.body;
 
   const result = await addContact(body);
@@ -79,10 +83,10 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { contactID } = req.params;
+  const { contactId } = req.params;
   const { body } = req.params;
 
-  const result = await updateContact(contactID, body);
+  const result = await updateContact(contactId, body);
   res.json({
     status: "success",
     code: 200,
