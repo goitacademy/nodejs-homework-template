@@ -1,12 +1,12 @@
 const Contact = require('./contactShema')
 
 const listContacts = async () => {
-        const contactList = await Contact.find();
+        const contactList = await Contact.find({}, '-createdAt -updatedAt');
         return contactList;
 };
 
 const getContactById = async (contactId) => {
-        const contact = await Contact.findById(contactId)
+        const contact = await Contact.findById(contactId, '-createdAt -updatedAt')
         return contact;
 };
 
@@ -27,7 +27,7 @@ const updateContact = async (contactId, body) => {
 
 const updateContactFavorite = async (contactId, body) => {
         const { favorite } = body;
-        const updatedContact = await Contact.findByIdAndUpdate(contactId, {$set: {favorite}})
+        const updatedContact = await Contact.findByIdAndUpdate(contactId, {$set: {favorite}}, { new: true })
         return updatedContact;
 }; 
 
