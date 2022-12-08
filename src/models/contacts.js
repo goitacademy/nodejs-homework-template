@@ -1,28 +1,4 @@
-// const fs = require('fs/promises');
-const { default: mongoose } = require('mongoose');
-// const path = require('path');
-// const {v4: uuidv4} = require('uuid');
-
-// const contactsPath = path.join(__dirname, './contacts.json');
-
-const contactsSchema = new mongoose.Schema({
-        name: {
-                type: String,
-                required: [true, 'Set name for contact'],
-        },
-        email: {
-                type: String,
-        },
-        phone: {
-                type: String,
-        },
-        favorite: {
-                type: Boolean,
-                default: false,
-        },
-});
-
-const contacts = mongoose.model('contacts', contactsSchema)
+const contacts = require('./contactShema')
 
 const listContacts = async () => {
         const contactList = await contacts.find();
@@ -39,7 +15,6 @@ const removeContact = async (contactId) => {
         return contact;
 };
 
-
 const addContact = async (body) => {
         const {name, email, phone} = body;
         const newContact = await contacts.create({ name, email, phone });
@@ -47,7 +22,7 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-        const updatedContact = await contacts.findByIdAndUpdate(contactId, {$set: {...body}})
+        const updatedContact = await contacts.findByIdAndUpdate(contactId, {$set: {...body}}, { new: true })
         return updatedContact;
 };
 
