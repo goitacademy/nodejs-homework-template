@@ -7,7 +7,12 @@ const readFile = async () => JSON.parse(await fs.readFile(contactsPath, 'utf-8')
 
 const writeFile = async (data) => await fs.writeFile(contactsPath, JSON.stringify(data, null, '\t'));
 
-const formatToStructure = async ({ id, name, email, phone }) => ({ id, name, email, phone });
+const normalize = async ({ id, name, email, phone }) => ({
+  id,
+  name,
+  email,
+  phone,
+});
 
 /**
  * Retrieving all contacts from a data array.
@@ -58,7 +63,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
   const contact = { ...contacts[index], ...body };
-  contacts[index] = await formatToStructure(contact);
+  contacts[index] = await normalize(contact);
 
   await writeFile(contacts);
   return contacts[index];
