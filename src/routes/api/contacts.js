@@ -10,22 +10,23 @@ const {getAllContactsController,
   putContactController,
   patchContactController,
 } = require('../../controllers/contactsController');
+const controllerCheck = require('../../utils/controllerCheck') 
 
 // GET all contacts
-router.get('/', getAllContactsController);
+router.get('/', controllerCheck(getAllContactsController));
 
 // GET contact by ID
-router.get('/:contactId', getContactController);
+router.get('/:contactId', controllerCheck(getContactController));
 
 // POST - add new contact
-router.post('/', addContactValidation, postContactController);
+router.post('/', addContactValidation, controllerCheck(postContactController));
 
 // DELETE - remove contact by ID
-router.delete('/:contactId', deleteContactController);
+router.delete('/:contactId', controllerCheck(deleteContactController));
 
 // PUT - update contact by ID
-router.put('/:contactId', putContactValidation, putContactController);
+router.put('/:contactId', putContactValidation, controllerCheck(putContactController));
 
 // PATCH - update contact field 'favorite' by contact ID
-router.patch('/:contactId/favorite', patchContactValidation, patchContactController) 
+router.patch('/:contactId/favorite', patchContactValidation, controllerCheck(patchContactController) ) 
 module.exports = router;
