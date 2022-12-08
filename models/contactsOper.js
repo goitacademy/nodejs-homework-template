@@ -1,17 +1,13 @@
-const fs = require("fs/promises")
-const path = require("path")
 const { nanoid } = require("nanoid")
 
-const contactsPath = path.join(__dirname, "contacts.json")
-console.log(contactsPath)
-const updateContacts = async (contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-
-
+const contacts = require("./contactsOper")
+// const Contact = require("../../models/contactModel")
 
 const getAll = async () => {
-    const data = await fs.readFile(contactsPath);
+    const result = await contacts.find()
 
-    return JSON.parse(data)
+    console.log("data", result)
+    return result
 }
 
 async function listContacts() {
@@ -21,11 +17,10 @@ async function listContacts() {
     console.table(contactsList)
     return contactsList
 }
-
+ 
 const getById = async (id) => {
     const contacts = await getAll()
     const result = contacts.find(item => item.id === id)
-
 
     return result || null
 }
@@ -37,7 +32,6 @@ const add = async ({ name, email, phone }) => {
     }
     const contacts = await getAll()
     contacts.push(newContact)
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
 
     return newContact
 }
@@ -50,7 +44,6 @@ const updateById = async (id, data) => {
 
     contacts[index] = { id, ...data }
     console.log(contacts[index])
-    await updateContacts(contacts)
     return contacts[index]
 }
 
@@ -62,16 +55,15 @@ const removeById = async (id) => {
 
     const result = contacts.splice(index, 1)
     console.log("result", result)
-    await updateContacts(contacts)
 
     return result
 }
 
-module.exports = {
-    getAll,
-    listContacts,
-    getById,
-    add,
-    updateById,
-    removeById,
-}
+// module.exports = {
+//     getAll,
+//     listContacts,
+//     getById,
+//     add,
+//     updateById,
+//     removeById,
+// }
