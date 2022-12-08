@@ -28,5 +28,5 @@ router.delete('/:contactId', isValidId, controllerCheck(deleteContactController)
 router.put('/:contactId', isValidId, putContactValidation, controllerCheck(putContactController));
 
 // PATCH - update contact field 'favorite' by contact ID
-router.patch('/:contactId/favorite', patchContactValidation, controllerCheck(patchContactController) ) 
+router.patch('/:contactId/favorite', isValidId, patchContactValidation, controllerCheck(patchContactController) ) 
 module.exports = router;
