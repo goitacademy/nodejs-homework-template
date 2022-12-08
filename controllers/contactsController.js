@@ -1,88 +1,162 @@
 /* eslint-disable linebreak-style */
-const {v4: genereteId} = require('uuid');
 const {
-  listContacts,
+  getContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-} = require('../models/contacts');
+} = require('../services.js/contactsServices');
 
-const listContactsController = async (req, res, next) => {
+const getContactsController = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
-    res.status(200).json({contacts});
+    const result = await getContacts();
+    res.status(200).json({
+      status: 'success',
+      code: 200,
+      data: {
+        contacts: result,
+      },
+    });
   } catch (error) {
     console.error(error);
+    next(error);
   }
 };
 
 const getContactByIdController = async (req, res, next) => {
   try {
     const {contactId} = req.params;
-    const searchedContact = await getContactById(contactId);
+    const result = await getContactById(contactId);
 
-    if (!searchedContact) {
-      return res.status(404).json({message: 'Not found'});
-    }
-
-    res.status(200).json(searchedContact);
+    if (result) {
+      res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact: result,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: 'fail',
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: 'Not found',
+      },
+      );
+    };
   } catch (error) {
     console.error(error);
-  }
+    next(error);
+  };
 };
 
 const addContactController = async (req, res, next) => {
   try {
-    const {name, phone, email} = req.body;
-    const result = await addContact({id: genereteId(), name, phone, email});
-    res.status(201).json(result);
+    const {body} = req;
+    const result = await addContact(body);
+    res.status(201).json({
+      status: 'success',
+      code: 201,
+      data: {
+        newContact: result,
+      },
+    });
   } catch (error) {
     console.error(error);
-  }
+    next(error);
+  };
 };
 
 const removeContactController = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
     const {contactId} = req.params;
-
-    const contactToDelete = contacts.find((contact) =>
-      contact.id === contactId);
-    if (!contactToDelete) {
-      return res.status(400).json({message: 'not found'});
-    }
-
-    await removeContact(contactId);
-    res.status(200).json({message: 'contact deleted'});
+    const result = await removeContact(contactId);
+    if (result) {
+      res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          deleted: result,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: 'fail',
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: 'Not found',
+      },
+      );
+    };
   } catch (error) {
     console.error(error);
-  }
+    next(error);
+  };
 };
 
 const updateContactController = async (req, res, next) => {
   try {
     const {contactId} = req.params;
     const {body} = req;
-    const contacts = await listContacts();
-
-    const contactToUpdate = contacts.find((contact) =>
-      contact.id === contactId);
-    if (!contactToUpdate) {
-      return res.status(400).json({message: 'not found'});
-    }
-
     const result = await updateContact(contactId, body);
-    res.status(200).json(result);
+    if (result) {
+      res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          updated: result,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: 'fail',
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: 'Not found',
+      },
+      );
+    };
   } catch (error) {
     console.error(error);
-  }
+    next(error);
+  };
+};
+
+const updateContactStatusController = async (req, res, next) => {
+  try {
+    const {contactId} = req.params;
+    const {favorite} = req.body;
+
+    const result = await updateContact(contactId, {favorite});
+    if (result) {
+      res.status(200).json({
+        status: 'success',
+        code: 200,
+        data: {
+          updated: result,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: 'fail',
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: 'Not found',
+      },
+      );
+    };
+  } catch (error) {
+    console.error(error);
+    next(error);
+  };
 };
 
 module.exports = {
   getContactByIdController,
-  listContactsController,
+  getContactsController,
   removeContactController,
   addContactController,
   updateContactController,
+  updateContactStatusController,
 };
