@@ -1,5 +1,9 @@
-const HttpError = require('./HttpError');
+const checkNull = require("./checkNull");
+const ctrlWrapper = require("./ctrlWrapper");
+const setApiErrorStatus = require("./setApiErrorStatus");
 
 module.exports = {
-  HttpError,
-}
+  checkNull,
+  ctrlWrapper,
+  setApiErrorStatus,
+};

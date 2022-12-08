@@ -1,7 +1,3 @@
-const contacts = require('./contacts');
-const contactSchema = require('./contactSchema');
+const contacts = require("./contacts");
 
-module.exports = {
-    contacts,
-    contactSchema,
-};
+module.exports = contacts;
