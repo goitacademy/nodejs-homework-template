@@ -1,8 +1,7 @@
 const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
-const { addContactValidation,
-  putContactValidation, patchContactValidation } = require('../../middlewares/validationMiddlware');
+const { addContactValidation, putContactValidation, patchContactValidation } = require('../../middlewares/validationMiddlware');
 const {getAllContactsController,
   getContactController,
   postContactController,

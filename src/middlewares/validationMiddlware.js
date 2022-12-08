@@ -6,13 +6,13 @@ module.exports = {
         name: Joi.string()
             .regex(/^[a-z A-Z]{2,30}$/)
             .required(),
-
         email: Joi.string()
             .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
             .required(),
         phone: Joi.string()
             .regex(/^[0-9]{10,15}$/)
             .required(),
+        favorite: Joi.boolean()
     });
 
     const validationResult = schema.validate(req.body);
@@ -39,14 +39,14 @@ module.exports = {
             name: Joi.string()
                 .regex(/^[a-z A-Z]{2,30}$/)
                 .optional(),
-            
-
             email: Joi.string()
                 .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
                 .optional(),
             phone: Joi.string()
                 .regex(/^[0-9]{10,15}$/)
                 .optional(),
+            favorite: Joi.boolean()
+                .optional()
         });
 
     const validationResult = schema.validate(req.body);
