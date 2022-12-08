@@ -5,4 +5,4 @@ const addShema = Joi.object({
   email: Joi.string().email().required(),
   phone: Joi.string().required()
 })
-module.exports = addShema
+module.exports = { addShema }

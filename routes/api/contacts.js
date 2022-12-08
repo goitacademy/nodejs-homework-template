@@ -1,18 +1,23 @@
 const express = require('express');
 // const { json } = require('express');
-const ctrl = require("../../controllers/contacts");
+const ctrl = require("../../controllers/contactsControllers");
 
+const { ctrlWrappers } = require("../../helpers");
+
+const { validateBody } = require("../../middlewares");
+
+const schemas = require("../../schemas/contacts")
 
 const router = express.Router();
 
-router.get('/', ctrl.listContacts);
+router.get('/', ctrlWrappers(ctrl.listContacts));
 
-router.get('/:id', ctrl.getContactById);
+router.get('/:id', ctrlWrappers(ctrl.getContactById));
 
-router.post('/', ctrl.addContact);
+router.post('/', validateBody(schemas.addShema), ctrlWrappers(ctrl.addContact));
 
-router.delete('/:id', ctrl.removeContact)
+router.delete('/:id', ctrlWrappers(ctrl.removeContact))
 
-router.put('/:id', ctrl.updateContact)
+router.put('/:id', validateBody(schemas.addShema), ctrlWrappers(ctrl.updateContact))
 
 module.exports = router
