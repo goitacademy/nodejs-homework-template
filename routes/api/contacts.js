@@ -12,7 +12,7 @@ const {
 
 router.get("/", async (req, res, next) => {
   listContacts();
-  res.status(200).json({ contacts });
+  res.status(200).json(contacts);
 });
 
 router.get("/:contactId", async (req, res, next) => {
