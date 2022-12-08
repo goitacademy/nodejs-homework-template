@@ -1,28 +1,21 @@
 const express = require("express");
-
 const router = express.Router();
-const { tryCatch, validation } = require("../../middlewares");
-// const { joiSchema, joiFavoriteSchema } = require("../../models/contact");
-const { joiContacts } = require("../../schemas");
+
 const { contacts: ctrl } = require("../../controllers");
+const { tryCatch, validation, auth } = require("../../middlewares");
+const {
+  joiContacts: { contact, favorite },
+} = require("../../schemas");
 
-router.get("/", tryCatch(ctrl.getAll));
-
-router.get("/:id", tryCatch(ctrl.getById));
-
-router.post("/", validation(joiContacts.contactSchema), tryCatch(ctrl.add));
-
-router.delete("/:id", tryCatch(ctrl.dell));
-
-router.put(
-  "/:id",
-  validation(joiContacts.contactSchema),
-  tryCatch(ctrl.updateById)
-);
-
+router.get("/", auth, tryCatch(ctrl.getAll));
+router.get("/:id", auth, tryCatch(ctrl.getById));
+router.post("/", auth, validation(contact), tryCatch(ctrl.add));
+router.delete("/:id", auth, tryCatch(ctrl.dell));
+router.put("/:id", auth, validation(contact), tryCatch(ctrl.updateById));
 router.patch(
   "/:id/favorite",
-  validation(joiContacts.favoriteSchema),
+  auth,
+  validation(favorite),
   tryCatch(ctrl.updateFavorite)
 );
 

@@ -1,3 +1,5 @@
 const tryCatch = require("./tryCatch");
 const validation = require("./validation");
-module.exports = { tryCatch, validation };
+const auth = require("./auth");
+
+module.exports = { tryCatch, validation, auth };

@@ -1,2 +1,4 @@
 const joiContacts = require("./contacts");
-module.exports = { joiContacts };
+const joiUsers = require("./users");
+
+module.exports = { joiContacts, joiUsers };

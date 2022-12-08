@@ -1,4 +1,4 @@
-const contactSchema = require("./contactSchema");
-const favoriteSchema = require("./favoriteSchema.");
+const contact = require("./contact");
+const favorite = require("./favorite.");
 
-module.exports = { contactSchema, favoriteSchema };
+module.exports = { contact, favorite };
