@@ -19,6 +19,12 @@ const addShema = Joi.object({
   phone: Joi.string().required(),
 });
 
+const patchShema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await listContacts();
@@ -76,6 +82,23 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addShema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await updateContact(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, "Not Found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = patchShema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
