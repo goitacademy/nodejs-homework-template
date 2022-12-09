@@ -1,19 +1,21 @@
 const express = require('express')
 const ctrl = require("../../controllers")
 const {ctrlWrapper} = require("../../helpers")
-const {validateBody} = require("../../middlewares")
-const {addSchema} = require("../../schemas/contacts")
+const {validateBody, isValidId} = require("../../middlewares")
+const {schemas} = require("../../models/contact")
 
 const router = express.Router()
 
 router.get('/', ctrlWrapper(ctrl.getAll))
 
-router.get('/:id', ctrlWrapper(ctrl.getById))
+router.get('/:id', isValidId, ctrlWrapper(ctrl.getById))
 
-router.post('/', validateBody(addSchema), ctrlWrapper(ctrl.add))
+router.post('/', validateBody(schemas.addSchema), ctrlWrapper(ctrl.add))
 
-router.put('/:id', validateBody(addSchema), ctrlWrapper(ctrl.updateById))
+router.put('/:id', isValidId, validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById))
 
-router.delete('/:id', ctrlWrapper(ctrl.remove))
+router.patch('/:id/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrlWrapper(ctrl.updateFavorite))
+
+router.delete('/:id', isValidId, ctrlWrapper(ctrl.remove))
 
 module.exports = router
