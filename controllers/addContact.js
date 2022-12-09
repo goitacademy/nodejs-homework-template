@@ -1,19 +1,8 @@
-const { addContact } = require('../models/contacts')
-const { addSchema } = require("../schemas/contacts")
-const { HttpError } = require("../helpers")
+const { Contact } = require("../models/contact")
 
 const add = async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body)
-    if (error) {
-      throw HttpError(400, error.message)
-    }
-    const result = await addContact(req.body)
-    res.status(201).json(result)    
-  }
-  catch (error) {
-    next(error)
-  }
+  const result = await Contact.create(req.body)
+  res.status(201).json(result)    
 }
   
 module.exports = add

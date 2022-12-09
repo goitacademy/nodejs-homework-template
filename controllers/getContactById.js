@@ -1,18 +1,13 @@
-const { getContactById } = require('../models/contacts')
+const { Contact } = require("../models/contact")
 const { HttpError } = require("../helpers")
 
 const getById = async (req, res, next) => {
-  try {
-    const { id } = req.params
-    const result = await getContactById(id)
-    if (!result) {
-      throw HttpError(400, error.message)
-    }
-    res.json(result)
+  const { id } = req.params
+  const result = await Contact.findById({ _id: id })
+  if (!result) {
+    throw HttpError(400, error.message)
   }
-  catch (error) {
-    next(error)
-  }  
+  res.json(result)  
 }
 
 module.exports = getById
