@@ -13,13 +13,30 @@ const listContacts = async () => {
   return JSON.parse(result);
 };
 
-// const listContacts = async () => {};
+const getContactById = async (contactId) => {
+  const allContacts = await listContacts();
+  const result = await allContacts.find(
+    (el) => Number(el.id) === Number(contactId)
+  );
+  if (!result) {
+    return null;
+  }
+  return result;
+};
 
-const getContactById = async (contactId) => {};
-
-const removeContact = async (contactId) => {};
-
-const addContact = async (body) => {};
+// const removeContact =
+const addContact = async ({ name, email, phone }) => {
+  const allContacts = await listContacts();
+  const newContact = {
+    name,
+    email,
+    phone,
+    id: id(),
+  };
+  allContacts.push(newContact);
+  await updateContacts(allContacts);
+  return newContact;
+};
 
 const updateContact = async (contactId, body) => {};
 
