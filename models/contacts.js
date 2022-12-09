@@ -2,30 +2,34 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
-const updateContacts = async (contacts) => {
+const contactsPath = path.join(__dirname, "contacts.json");
+
+const updContacts = async (contacts) =>
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-};
 
 const listContacts = async () => {
-  const contacts = JSON.parse(fs.readFile(contactsPath));
-  return contacts;
+  const data = await fs.readFile(contactsPath);
+
+  return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const contacts = await listContacts();
-  const result = contacts.find(({ id }) => id === contactId);
-  return result || null;
+
+  return contacts.find((item) => item.id === id);
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
+  const index = contacts.findIndex((item) => item.id === id);
+
   if (index === -1) {
     return null;
   }
-  const [result] = await contacts.splice(index, 1);
-  await updateContacts(contacts);
+
+  const [result] = contacts.splice(index, 1);
+  await updContacts(contacts);
+
   return result;
 };
 
@@ -37,21 +41,25 @@ const addContact = async ({ name, email, phone }) => {
     email,
     phone,
   };
+
   contacts.push(newContact);
-  await updateContacts(contacts);
+  await updContacts(contacts);
+
   return newContact;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
+const updateContact = async (id, data) => {
   const contacts = await listContacts();
-  const idx = contacts.findIndex((item) => item.id === contactId);
-  if (idx === -1) {
+  const index = contacts.findIndex((item) => item.id === id);
+
+  if (index === -1) {
     return null;
   }
 
-  contacts[idx] = { id: contactId, name, email, phone };
-  await updateContacts(contacts);
-  return contacts[idx];
+  contacts[index] = { id, ...data };
+  await updContacts(contacts);
+
+  return contacts[index];
 };
 
 module.exports = {
