@@ -2,7 +2,8 @@ const Contact = require("../models/contacts.model");
 const { requestError } = require("../helpers/api.helpers");
 
 const getContactController = async (req, res, next) => {
-  const contacts = await Contact.find({});
+  const { _id } = req.user;
+  const contacts = await Contact.find({ owner: _id });
   res.status(200).json({ contacts });
 };
 
@@ -18,7 +19,8 @@ const getContactByIdController = async (req, res, next) => {
 };
 
 const addContactController = async (req, res, next) => {
-  const nemContact = await Contact.create(req.body);
+  const { _id } = req.user;
+  const nemContact = await Contact.create({ ...req.body, owner: _id });
   res.status(201).json({ nemContact });
 };
 

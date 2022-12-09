@@ -1,5 +1,7 @@
 const Joi = require("joi");
 
+// contact
+
 const schemaPostContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string()
@@ -23,8 +25,19 @@ const schemaFavoriteContact = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+// auth
+
+const schemaAuth = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
+
 module.exports = {
   schemaPostContact,
   schemaPutContact,
   schemaFavoriteContact,
+  schemaAuth,
 };

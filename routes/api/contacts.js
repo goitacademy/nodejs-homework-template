@@ -8,9 +8,10 @@ const {
   updateContactController,
   deleteContactController,
   updateFavoriteController,
-} = require("../../controllers/controller");
+} = require("../../controllers/contact.controller");
 
 const { validationBody } = require("../../middlewares/validationBody.js");
+const validationToken = require("../../middlewares/validationToken.js");
 const {
   schemaPostContact,
   schemaPutContact,
@@ -19,12 +20,13 @@ const {
 
 const { asyncWrapper } = require("../../helpers/api.helpers");
 
-router.get("/", asyncWrapper(getContactController));
+router.get("/", validationToken, asyncWrapper(getContactController));
 
 router.get("/:contactId", asyncWrapper(getContactByIdController));
 
 router.post(
   "/",
+  validationToken,
   validationBody(schemaPostContact),
   asyncWrapper(addContactController)
 );

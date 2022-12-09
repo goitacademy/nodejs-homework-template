@@ -1,5 +1,3 @@
-const { requestError } = require("../helpers/api.helpers");
-
 const validationBody = (schema) => {
   return async (req, res, next) => {
     try {
