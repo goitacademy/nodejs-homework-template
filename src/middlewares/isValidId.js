@@ -1,6 +1,6 @@
 const {isObjectIdOrHexString} = require("mongoose");
 
-const RequestError = require("../utils/RequestErorrs");
+const {RequestError} = require("../utils");
 
 const isValidId = (req, res, next) => {
     const { contactId } = req.params;

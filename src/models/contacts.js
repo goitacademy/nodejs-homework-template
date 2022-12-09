@@ -25,8 +25,7 @@ const updateContact = async (contactId, body) => {
         return updatedContact;
 };
 
-const updateContactFavorite = async (contactId, body) => {
-        const { favorite } = body;
+const updateContactFavorite = async (contactId, favorite) => {
         const updatedContact = await Contact.findByIdAndUpdate(contactId, {$set: {favorite}}, { new: true })
         return updatedContact;
 }; 
