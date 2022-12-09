@@ -4,7 +4,7 @@ const {HttpError} = require('../../helpers')
 const Joi = require("joi");
 const router = express.Router()
 
-const addSchema = Joi.object({
+const schema = Joi.object({
   name: Joi.string().required,
   email: Joi.string().required,
   phone: Joi.string().required,
@@ -36,8 +36,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = addSchema.validate({ name: 'doren', email: 'adoren@gmail.net', phone: '(044) 454-1111' })
-    console.log(req.body)
+    const { error } = schema.validate(req.body)
+    console.log(error)
     if (error) {
       throw HttpError(400, "Missing required field")
     }
