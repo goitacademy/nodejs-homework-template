@@ -4,11 +4,11 @@ const {HttpError} = require('../../helpers')
 const Joi = require("joi");
 const router = express.Router()
 
-const schema = Joi.object({
-  name: Joi.string().required,
-  email: Joi.string().required,
-  phone: Joi.string().required,
-})
+const validatingSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -36,8 +36,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body)
-    console.log(error)
+    const { error } = validatingSchema.validate(req.body)
     if (error) {
       throw HttpError(400, "Missing required field")
     }
@@ -49,11 +48,35 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { contactId } = req.params
+    const result = await contacts.removeContact(contactId)
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+    res.json({
+      message: "Contact deleted"
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { error } = validatingSchema.validate(req.body)
+    if (error) {
+      throw HttpError(400, "Missing required field")
+    }
+    const { contactId } = req.params
+    const result = await contacts.updateContact(contactId, req.body)
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+    res.json(result)
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router
