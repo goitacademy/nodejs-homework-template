@@ -22,9 +22,9 @@ router.get("/:contactId", async (req, res, next) => {
     });
   }
 
-  getContactById(req.params.contactId);
+  const contactById = await getContactById(req.params.contactId);
 
-  res.status(200).json(getContactById(req.params.contactId));
+  res.status(200).json(contactById);
 });
 
 router.post("/", addContactValidation, async (req, res, next) => {
@@ -38,9 +38,9 @@ router.post("/", addContactValidation, async (req, res, next) => {
     res.status(400).json({ message: `missing required ${phone} field` });
   }
 
-  addContact({ name, email, phone });
+  const newContact = await addContact({ name, email, phone });
 
-  res.status(201).json(addContact({ name, email, phone }));
+  res.status(201).json(newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -50,9 +50,9 @@ router.delete("/:contactId", async (req, res, next) => {
     });
   }
 
-  removeContact(req.params.contactId);
+  await removeContact(req.params.contactId);
 
-  res.status(200).json({ message: "the contact was deleted" });
+  res.status(200).json({ message: "The contact was deleted." });
 });
 
 router.put("/:contactId", addContactValidation, async (req, res, next) => {
@@ -70,13 +70,13 @@ router.put("/:contactId", addContactValidation, async (req, res, next) => {
     res.status(400).json({ message: `missing required ${phone} field` });
   }
 
-  updateContact(req.params.contactId, req.body);
+  const updatedContact = await updateContact(req.params.contactId, req.body);
 
-  if (!updateContact(req.params.contactId, req.body)) {
+  if (!updatedContact) {
     res.status(404).json({ message: "Not found" });
   }
 
-  res.status(200).json(updateContact(req.params.contactId, req.body));
+  res.status(200).json(updatedContact);
 });
 
 // router.patch("/:contactId", patchContactValidation, async (req, res, next) => {
