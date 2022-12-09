@@ -1,14 +1,27 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+const id = require("bson-objectid");
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "./contacts.json");
 
-const getContactById = async (contactId) => {}
+async function updateContacts(contacts) {
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+}
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  const result = await fs.readFile(contactsPath);
+  return JSON.parse(result);
+};
 
-const addContact = async (body) => {}
+// const listContacts = async () => {};
 
-const updateContact = async (contactId, body) => {}
+const getContactById = async (contactId) => {};
+
+const removeContact = async (contactId) => {};
+
+const addContact = async (body) => {};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +29,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
