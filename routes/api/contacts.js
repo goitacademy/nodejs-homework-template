@@ -11,8 +11,8 @@ const {
 } = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  listContacts();
-  res.status(200).json(contacts);
+  const contactList = await listContacts();
+  res.status(200).json(contactList);
 });
 
 router.get("/:contactId", async (req, res, next) => {
