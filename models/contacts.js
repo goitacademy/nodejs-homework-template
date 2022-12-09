@@ -1,8 +1,15 @@
 const fs = require("fs/promises");
-const path = require("path");
 const shortid = require("shortid");
+const mongoose = require("mongoose");
+/* const contactsPath = path.join(__dirname, "./contacts.json"); */
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+const DB_HOST =
+  "mongodb+srv://Dima:6Nyi4RYySnnlCh3Y@cluster0.irriwpv.mongodb.net/db-contacts?retryWrites=true&w=majority";
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  .catch((error) => console.log(error.message));
 
 const updateFile = async (instance) => {
   try {
