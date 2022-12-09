@@ -14,6 +14,7 @@ const { validation, ctrlWrapper } = require("../../middlewares");
 const { contactSchema } = require("../../schemas");
 
 const validateMiddleWate = validation(contactSchema);
+
 const router = express.Router()
 
 router.get('/', ctrlWrapper(getContacts));
