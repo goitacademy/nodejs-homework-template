@@ -10,7 +10,7 @@ const auth = async (req, res, next) => {
   // делаем деструктуризацию на сплитную строку
 
   try {
-    if (bearer === "Bearer ") {
+    if (bearer !== "Bearer" || !token) {
       throw createError(401, "Not authorized");
     }
     const { id } = jwt.verify(token, SECRET_KEY);
