@@ -44,20 +44,14 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contactList = await listContacts();
-  const updatedContact = contactList.find((el) => {
-    if (el.id === contactId) {
-      contactList.push({
-        id: contactId,
-        name: body.name,
-        phone: body.phone,
-        email: body.email,
-      });
-    }
-    return updatedContact;
-  });
+  const idx = contactList.findIndex((item) => item.id === contactId);
+  if (idx === -1) {
+    return null;
+  }
 
+  contactList[idx] = { ...body, contactId };
   await fs.writeFile(contactsPath, JSON.stringify(contactList));
-  return updatedContact;
+  return contactList[idx];
 };
 
 module.exports = {

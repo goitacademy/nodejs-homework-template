@@ -29,7 +29,7 @@ router.get("/", async (req, res, next) => {
       message: "200 succsses",
     });
   } catch (error) {
-    console.error(next.error);
+    next(error);
   }
 });
 
@@ -46,7 +46,7 @@ router.get("/:contactId", async (req, res, next) => {
       message: `contact with id: ${result}`,
     });
   } catch (error) {
-    this.console.error(next.error);
+    next(error);
   }
 });
 
@@ -65,36 +65,44 @@ router.post("/", validate(validation.contact), async (req, res, next) => {
       message: "template message",
     });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      result,
-    },
-    message: "template message",
-  });
+  try {
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+      message: "template message",
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req.params;
 
-  const result = await updateContact(contactId, body);
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      result,
-    },
-    message: "template message",
-  });
+  try {
+    const result = await updateContact(contactId, body);
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+      message: "template message",
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
