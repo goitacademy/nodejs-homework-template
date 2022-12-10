@@ -10,7 +10,6 @@ const {
     updateContactFavorite,
   },
 } = require("../../controllers");
-
 const { validation, ctrllWrapper } = require("../../middlewares");
 const {
   createContactSchema,
