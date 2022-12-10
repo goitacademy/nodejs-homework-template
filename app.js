@@ -5,6 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
+const filesRouter = require("./routes/api/avatar");
 
 const app = express();
 const DB_HOST = process.env.DB_HOST;
@@ -15,6 +16,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 require("./config/passport-config");
+app.use("/api/files", filesRouter);
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
 
