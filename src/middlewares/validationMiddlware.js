@@ -6,23 +6,20 @@ module.exports = {
         name: Joi.string()
             .regex(/^[a-z A-Z]{2,30}$/)
             .required(),
-
         email: Joi.string()
             .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
             .required(),
         phone: Joi.string()
             .regex(/^[0-9]{10,15}$/)
             .required(),
+        favorite: Joi.boolean()
     });
 
     const validationResult = schema.validate(req.body);
 
     if (validationResult.error) {
         return res.status(400)
-            .json({
-                'message': validationResult.error.details[0].message,
-                'status': 400,
-            });
+            .json({ message: validationResult.error.message });
     }
 
     next();
@@ -31,7 +28,7 @@ module.exports = {
     putContactValidation: (req, res, next) => {
 
         if (Object.keys(req.body).length === 0) {
-            res.status(400).json({'message': 'missing fields', 'status': 400});
+            res.status(400).json({message: 'missing fields'});
             return;
         }
 
@@ -39,14 +36,31 @@ module.exports = {
             name: Joi.string()
                 .regex(/^[a-z A-Z]{2,30}$/)
                 .optional(),
-            
-
             email: Joi.string()
                 .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
                 .optional(),
             phone: Joi.string()
                 .regex(/^[0-9]{10,15}$/)
                 .optional(),
+            favorite: Joi.boolean()
+                .optional()
+        });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+        return res.status(400)
+            .json({ message: validationResult.error.message});
+    }
+
+    next();
+    },
+
+        updateContactFavoriteValidation: (req, res, next) => {
+
+        const schema = Joi.object({
+            favorite: Joi.boolean()
+                .required()
         });
 
     const validationResult = schema.validate(req.body);
@@ -54,8 +68,7 @@ module.exports = {
     if (validationResult.error) {
         return res.status(400)
             .json({
-            'message': validationResult.error.details[0].message,
-            'status': 400,
+            message: validationResult.error.message,
         });
     }
 
