@@ -46,7 +46,7 @@ const putContactController = async (req, res, next) => {
     res.status(200).json({updatedContact, message: 'successfully updated'});
 };
 
-const patchContactController = async (req, res, next) => {
+const updateContactFavoriteController = async (req, res, next) => {
     const { favorite } = req.body;
     if (favorite === null || favorite === undefined) {
         throw RequestError(400, "missing field favorite");
@@ -63,5 +63,5 @@ module.exports = {
     postContactController,
     deleteContactController,
     putContactController,
-    patchContactController
+    updateContactFavoriteController
 };

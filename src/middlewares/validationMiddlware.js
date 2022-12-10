@@ -20,8 +20,7 @@ module.exports = {
     if (validationResult.error) {
         return res.status(400)
             .json({
-                'message': validationResult.error.details[0].message,
-                'status': 400,
+                'message': validationResult.error.message
             });
     }
 
@@ -31,7 +30,7 @@ module.exports = {
     putContactValidation: (req, res, next) => {
 
         if (Object.keys(req.body).length === 0) {
-            res.status(400).json({'message': 'missing fields', 'status': 400});
+            res.status(400).json({'message': 'missing fields'});
             return;
         }
 
@@ -53,10 +52,7 @@ module.exports = {
 
     if (validationResult.error) {
         return res.status(400)
-            .json({
-            'message': validationResult.error.details[0].message,
-            'status': 400,
-        });
+            .json({ message: validationResult.error.message});
     }
 
     next();
@@ -74,8 +70,7 @@ module.exports = {
     if (validationResult.error) {
         return res.status(400)
             .json({
-            'message': validationResult.error.details[0].message,
-            'status': 400,
+            message: validationResult.error.message,
         });
     }
 

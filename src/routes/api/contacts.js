@@ -7,7 +7,7 @@ const {getAllContactsController,
   postContactController,
   deleteContactController,
   putContactController,
-  patchContactController,
+  updateContactFavoriteController,
 } = require('../../controllers');
 const {controllerCheck} = require('../../utils'); 
 
@@ -27,5 +27,5 @@ router.delete('/:contactId', isValidId, controllerCheck(deleteContactController)
 router.put('/:contactId', isValidId, putContactValidation, controllerCheck(putContactController));
 
 // PATCH - update contact field 'favorite' by contact ID
-router.patch('/:contactId/favorite', isValidId, patchContactValidation, controllerCheck(patchContactController) ) 
+router.patch('/:contactId/favorite', isValidId, patchContactValidation, controllerCheck(updateContactFavoriteController) ) 
 module.exports = router;
