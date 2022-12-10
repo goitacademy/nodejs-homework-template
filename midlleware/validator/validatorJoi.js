@@ -12,6 +12,8 @@ const schema = Joi.object({
         Joi.string()
         .alphanum()
         .required(),
+    favorite:
+        Joi.boolean(),
     })
 
 
