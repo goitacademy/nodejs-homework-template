@@ -1,12 +1,12 @@
 const isValidId = require('./isValidId');
 const { addContactValidation,
     putContactValidation,
-patchContactValidation} = require('./validationMiddlware');
+updateContactFavoriteValidation} = require('./validationMiddlware');
 
 
 module.exports = {
     isValidId,
     addContactValidation,
     putContactValidation,
-    patchContactValidation,
+    updateContactFavoriteValidation,
 }
