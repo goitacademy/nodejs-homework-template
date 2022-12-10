@@ -10,9 +10,6 @@ const {
 const { validate } = require("../../schema/schema");
 const validation = require("../../schema/midleware");
 
-// http://localhost:3000/api/contacts
-//  npx nodemon server.js
-
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -32,16 +29,16 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const result = await getContactById(id);
+    const result = await getContactById(contactId);
     res.json({
       status: "success",
       code: 200,
       data: {
         result,
       },
-      message: `contact with id: ${result}`,
+      message: `contact with id: ${result.id}`,
     });
   } catch (error) {
     next(error);
@@ -60,7 +57,7 @@ router.post("/", validate(validation.contact), async (req, res, next) => {
       body: {
         result,
       },
-      message: "template message",
+      message: "Сontact added",
     });
   } catch (error) {
     next(error);
@@ -77,7 +74,7 @@ router.delete("/:contactId", async (req, res, next) => {
       data: {
         result,
       },
-      message: "template message",
+      message: "contact deleted",
     });
   } catch (error) {
     next(error);
@@ -98,7 +95,7 @@ router.put(
         data: {
           result,
         },
-        message: "template message",
+        message: "Contact updated",
       });
     } catch (error) {
       next(error);
