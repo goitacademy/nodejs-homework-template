@@ -19,9 +19,7 @@ module.exports = {
 
     if (validationResult.error) {
         return res.status(400)
-            .json({
-                'message': validationResult.error.message
-            });
+            .json({ message: validationResult.error.message });
     }
 
     next();
@@ -30,7 +28,7 @@ module.exports = {
     putContactValidation: (req, res, next) => {
 
         if (Object.keys(req.body).length === 0) {
-            res.status(400).json({'message': 'missing fields'});
+            res.status(400).json({message: 'missing fields'});
             return;
         }
 
