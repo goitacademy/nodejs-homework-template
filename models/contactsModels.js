@@ -35,7 +35,7 @@ const updateContactById = async (contactId, data) => {
 };
 
 const deleteContact = async (contactId) => {
-  const id = String(contactId)
+  const id = String(contactId);
   const contacts = await getAllContacts();
   const index = contacts.findIndex((item) => item.id === id);
 
