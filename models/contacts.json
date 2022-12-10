@@ -42,12 +42,6 @@
     "phone": "(715) 598-5792"
   },
   {
-    "id": "8",
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
-  },
-  {
     "id": "9",
     "name": "Thomas Lucas",
     "email": "nec@Nulla.com",
@@ -60,9 +54,9 @@
     "phone": "(748) 206-2688"
   },
   {
-    "name": "Valeria Stetsiuk",
+    "contactId": "wMWqMcLM2pBRxoXa2cLtH",
+    "name": "Valeria",
     "email": "Valeria.j@scelerisquescelerisquedui.net",
-    "phone": "(380) 121-5711",
-    "id": "wMWqMcLM2pBRxoXa2cLtH"
+    "phone": "(380) 121-5711"
   }
 ]
