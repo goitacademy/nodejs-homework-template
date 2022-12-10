@@ -1,116 +1,22 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
+const { validateBody } = require("../../middlewares");
 
-const { HttpError } = require("../../helpers");
+const schemas = require("../../schemas/contacts");
+
+const ctrl = require("../../controllers/contacts");
 
 const express = require("express");
-const Joi = require("joi");
-
 const router = express.Router();
 
-const addShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+router.get("/", ctrl.getAll);
 
-const patchShema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-});
+router.get("/:contactId", ctrl.getById);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    res.json(contacts);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/",validateBody(schemas.addShema) ,ctrl.add);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contactById = await getContactById(contactId);
+router.delete("/:contactId", ctrl.deleteById);
 
-    if (!contactById) {
-      throw HttpError(404, "Not Found");
-    }
+router.put("/:contactId",validateBody(schemas.addShema), ctrl.updateById);
 
-    res.json(contactById);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addShema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await removeContact(contactId);
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-    res.json({
-      message: "Delete success",
-    });
-    // or
-    // res.status(204).send();
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addShema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = patchShema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch("/:contactId",validateBody(schemas.patchShema), ctrl.patchById);
 
 module.exports = router;
