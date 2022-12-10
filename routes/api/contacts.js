@@ -34,9 +34,9 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
   try {
-    const result = await getContactById(contactId);
+    const result = await getContactById(id);
     res.json({
       status: "success",
       code: 200,
@@ -86,23 +86,26 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const { body } = req.params;
+router.put(
+  "/:contactId",
+  validate(validation.contact),
+  async (req, res, next) => {
+    const { contactId } = req.params;
 
-  try {
-    const result = await updateContact(contactId, body);
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result,
-      },
-      message: "template message",
-    });
-  } catch (error) {
-    next(error);
+    try {
+      const result = await updateContact(contactId, req.body);
+      res.json({
+        status: "success",
+        code: 200,
+        data: {
+          result,
+        },
+        message: "template message",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;
