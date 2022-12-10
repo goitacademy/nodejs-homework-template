@@ -10,8 +10,6 @@ const {
 const { validate } = require("../../schema/schema");
 const validation = require("../../schema/midleware");
 
-// import listContacts from ("../../models/contacts");
-
 // http://localhost:3000/api/contacts
 //  npx nodemon server.js
 
