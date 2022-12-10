@@ -4,8 +4,7 @@ const { v4 } = require("uuid");
 const addNewContact = async (req, res) => {
   const { body } = req;
   const id = v4();
-  body.id = id;
-  const newContact = await addContact(body);
+  const newContact = await addContact({ ...body, id });
   res.status(200).json({ status: "success", data: newContact });
 };
 
