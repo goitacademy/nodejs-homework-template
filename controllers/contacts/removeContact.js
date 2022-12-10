@@ -1,5 +1,5 @@
-const { Contact } = require("../models/contact")
-const { HttpError } = require("../helpers")
+const { Contact } = require("../../models/contact")
+const { HttpError } = require("../../helpers")
 
 const remove = async (req, res, next) => {
   const { id } = req.params

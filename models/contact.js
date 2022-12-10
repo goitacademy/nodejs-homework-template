@@ -30,8 +30,8 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleSchemaValidationErrors)
 
 const addSchema = Joi.object({
-  name: Joi.string().trim().required(),
-  email: Joi.string().email().required(),
+  name: Joi.string().required(),
+  email: Joi.string().email(),
   phone: Joi.string().required(),
   favorite: Joi.boolean()
 })
