@@ -9,7 +9,7 @@ const addSchema = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "uk", "org", "ca"] },
+      tlds: { allow: ["com", "net", "uk", "org", "ca", "ua"] },
     })
     .required(),
   phone: Joi.string().min(5).max(25).required(),
