@@ -8,22 +8,20 @@ const checkContactData = (req, res, next) => {
       .required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
-  })
+  });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    return res.status(400).json({status: validationResult.error.details})
+    return res.status(400).json({status: validationResult.error.details});
   }
   next();
-}
+};
 
-const addContact = checkContactData
+const addContact = checkContactData;
 
-const updateContact = checkContactData
-
-
+const updateContact = checkContactData;
 
 
 module.exports = {
   addContact,
   updateContact
-}
+};
