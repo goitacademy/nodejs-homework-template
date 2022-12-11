@@ -1,8 +1,9 @@
-const fs = require("fs").promises;
+// const fs = require("fs").promises;
+const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join(__dirname, "/contacts.json");
 console.log(contactsPath);
 
 // общий параметр обновления списка
@@ -11,7 +12,7 @@ const updateContactsList = async (contacts) =>
 
 // функция формирования всего списка контактов
 async function listContacts() {
-  const data = await fs.readFile(contactsPath);
+  const data = await fs.readFile(contactsPath, "utf8");
   return JSON.parse(data);
 }
 

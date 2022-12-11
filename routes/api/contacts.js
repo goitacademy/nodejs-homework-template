@@ -1,35 +1,15 @@
 const express = require("express");
-const Joi = require("joi");
-
-const contacts = require("../../models/contacts");
-const { HttpError } = require("../../helpers/index");
-
 const router = express.Router();
+const ctrl = require("../../controllers/contacts");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+router.get("/", ctrl.getAllContacts);
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:contactId", ctrl.getById);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", ctrl.postContact);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", ctrl.removeById);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", ctrl.updateById);
 
 module.exports = router;
