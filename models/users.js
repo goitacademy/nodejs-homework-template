@@ -36,7 +36,6 @@ const avatarPatchController = async (req, res, next) => {
     // Очистка папки public/avatar перед заменой аватара
     await fs.readdir(upatePath, (err, files) => {
       if (err) throw err;
-
       for (const file of files) {
         fs.unlink(path.join(upatePath, file), (err) => {
           if (err) throw next(err);
