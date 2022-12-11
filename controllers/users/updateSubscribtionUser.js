@@ -6,8 +6,6 @@ async function updateSubscribtionUser(req, res) {
   const { _id } = req.user;
   const { subscription } = req.body;
 
-  console.log("id:  ", id, "  _id: ", _id, "  subscr:  ", subscription);
-
   const result = await User.findByIdAndUpdate(
     { _id: id, owner: _id },
     {
