@@ -1,10 +1,11 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { nanoid } = require("nanoid");
+const { all } = require("../routes/api/contacts");
 
 const contactsPath = path.join(__dirname, "../models/contacts.json");
 
-async function updateContact(contact) {
+async function updateContacts(contact) {
     await fs.writeFile(contactsPath, JSON.stringify(contact, null, 2));
 }
 
@@ -30,7 +31,7 @@ async function removeContact(id) {
     }
 
     const [removeContact] = allContacts.splice(deleteId, 1);
-    updateContact(allContacts);
+    updateContacts(allContacts);
     return removeContact;
 }
 
@@ -44,8 +45,19 @@ async function addContact(name, email, phone) {
     };
 
     allContacts.push(newContact);
-    updateContact(allContacts);
+    updateContacts(allContacts);
     return newContact;
+}
+
+const updateContact = async(id, body) => {
+    const allContacts = await listContacts();
+    const result = allContacts.findIndex(item => item.id === id);
+    if (result === -1) {
+        return null;
+    }
+    allContacts[result] = { id, ...body };
+    updateContacts(allContacts);
+    return allContacts(result)
 }
 
 module.exports = {
@@ -54,5 +66,4 @@ module.exports = {
     removeContact,
     addContact,
     updateContact
-
 }
