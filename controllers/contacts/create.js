@@ -7,7 +7,7 @@ const {
 // const { contactSchema } = require("../../helpers");
 
 async function createContact(req, res, next) {
-  try {
+
     // const { error } = contactSchema.validate(req.body);
 
     // if (error) {
@@ -23,8 +23,6 @@ async function createContact(req, res, next) {
       data: result,
       message: CONTACT_ADDED,
     });
-  } catch (error) {
-    next(error);
-  }
+
 }
 module.exports = createContact;

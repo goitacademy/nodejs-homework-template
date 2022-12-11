@@ -7,30 +7,26 @@ const {
 // const { contactSchema } = require("../../helpers");
 
 async function updateById(req, res, next) {
-  try {
-    const {
-      params: { contactId },
-      body,
-    } = req;
+  const {
+    params: { contactId },
+    body,
+  } = req;
 
-    // const { error } = contactSchema.validate(req.body);
+  // const { error } = contactSchema.validate(req.body);
 
-    // if (error) {
-    //   throw createError({ status: 404, message: error.message });
-    // }
+  // if (error) {
+  //   throw createError({ status: 404, message: error.message });
+  // }
 
-    const updatedContact = await updateContact(contactId, body);
+  const updatedContact = await updateContact(contactId, body);
 
-    if (!updatedContact) {
-      throw createError({ status: 400, message: NOT_CONTACT_FOR_UPDATING });
-    }
-
-    res.status(201).json({
-      updatedContact: updatedContact,
-      message: CONTACT_UPDATED,
-    });
-  } catch (error) {
-    next(error);
+  if (!updatedContact) {
+    throw createError({ status: 400, message: NOT_CONTACT_FOR_UPDATING });
   }
+
+  res.status(201).json({
+    updatedContact: updatedContact,
+    message: CONTACT_UPDATED,
+  });
 }
 module.exports = updateById;

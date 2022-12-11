@@ -6,18 +6,14 @@ const {
 } = require("./contactsConstants");
 
 async function deleteById(req, res, next) {
-  try {
-    const { contactId } = req.params;
+  const { contactId } = req.params;
 
-    const result = await removeContact(contactId);
+  const result = await removeContact(contactId);
 
-    if (!result) {
-      throw createError({ status: 400, message: NOT_CONTACT_FOR_DELETING });
-    }
-
-    res.status(200).json({ id: result, message: CONTACT_DELETED });
-  } catch (error) {
-    next(error);
+  if (!result) {
+    throw createError({ status: 400, message: NOT_CONTACT_FOR_DELETING });
   }
+
+  res.status(200).json({ id: result, message: CONTACT_DELETED });
 }
 module.exports = deleteById;

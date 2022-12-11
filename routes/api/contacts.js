@@ -8,14 +8,24 @@ const { validateBody } = require("../../middlewares");
 
 const { newContactSchema } = require("../../schemas");
 
-router.get("/", contacts.getAll);
+const { controllerWrapper } = require("../../helpers");
 
-router.get("/:contactId", contacts.getById);
+router.get("/", controllerWrapper(contacts.getAll));
 
-router.post("/", validateBody(newContactSchema), contacts.create);
+router.get("/:contactId", controllerWrapper(contacts.getById));
 
-router.delete("/:contactId", contacts.deleteById);
+router.post(
+  "/",
+  validateBody(newContactSchema),
+  controllerWrapper(contacts.create)
+);
 
-router.put("/:contactId", validateBody(newContactSchema), contacts.updateById);
+router.delete("/:contactId", controllerWrapper(contacts.deleteById));
+
+router.put(
+  "/:contactId",
+  validateBody(newContactSchema),
+  controllerWrapper(contacts.updateById)
+);
 
 module.exports = router;
