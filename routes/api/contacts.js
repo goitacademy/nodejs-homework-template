@@ -65,9 +65,6 @@ router.delete("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
 
 router.put("/:contactId", async (req, res, next) => {
   try {
