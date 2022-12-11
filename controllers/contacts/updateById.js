@@ -3,10 +3,11 @@ const { createError } = require("../../helpers");
 
 async function updateById(req, res) {
   const { id } = req.params;
+  const { _id } = req.user;
   const { name, email, phone, favorite } = req.body;
 
   const result = await Contact.findByIdAndUpdate(
-    id,
+    { _id: id, owner: _id },
     {
       name,
       email,

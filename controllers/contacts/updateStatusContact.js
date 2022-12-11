@@ -3,10 +3,11 @@ const { createError } = require("../../helpers");
 
 async function updateStatusContact(req, res) {
   const { id } = req.params;
+  const { _id } = req.user;
   const { favorite } = req.body;
 
   const result = await Contact.findByIdAndUpdate(
-    id,
+    { _id: id, owner: _id },
     {
       favorite,
     },

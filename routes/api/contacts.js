@@ -7,26 +7,41 @@ const middlewares = require("../../middlewares");
 const schemas = require("../../schemas");
 const router = express.Router();
 
-router.get("/", controllerWrapper(controllers.getAll));
+router.get(
+  "/",
+  middlewares.authenticate,
+  controllerWrapper(controllers.getAll)
+);
 
-router.get("/:id", controllerWrapper(controllers.getById));
+router.get(
+  "/:id",
+  middlewares.authenticate,
+  controllerWrapper(controllers.getById)
+);
 
 router.post(
   "/",
+  middlewares.authenticate,
   middlewares.validateBody(schemas.contact.addContactsSchema),
   controllerWrapper(controllers.add)
 );
 
-router.delete("/:id", controllerWrapper(controllers.removeById));
+router.delete(
+  "/:id",
+  middlewares.authenticate,
+  controllerWrapper(controllers.removeById)
+);
 
 router.put(
   "/:id",
+  middlewares.authenticate,
   middlewares.validateBody(schemas.contact.addContactsSchema),
   controllerWrapper(controllers.updateById)
 );
 
 router.patch(
   "/:id/favorite",
+  middlewares.authenticate,
   middlewares.validateBody(schemas.contact.updateStatusContactSchema),
   controllerWrapper(controllers.updateStatusContact)
 );
