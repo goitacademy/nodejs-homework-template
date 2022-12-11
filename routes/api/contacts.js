@@ -1,6 +1,5 @@
 const express = require('express')
 
-
 const { ctrlWrapper, isValiId } = require("../../helpers");
 
 const validateBody = require("../../middlewares");
@@ -22,6 +21,3 @@ router.delete('/:contactId', isValiId, ctrl.removeContact);
 router.put('/:contactId', isValiId, validateBody(addSchema), ctrl.updateContact);
 
 router.patch('/:contactId/favorite', isValiId, validateBody(updateFavoriteSchema), ctrlWrapper(ctrl.updateStatusContact));
-
-
-module.exports = router
