@@ -3,13 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts.js");
-// const mongoose = require("mongoose");
-// const DB_HOST =
-//   "mongodb+srv://1Anka1:Adaeternum02@cluster0.ndp8ljy.mongodb.net/db-contacts?retryWrites=true&w=majority";
-// mongoose
-//   .connect(DB_HOST)
-//   .then(() => console.log("Database connection successful"))
-//   .catch((error) => console.log(error.message));
+require("dotenv").config();
 
 const app = express();
 
