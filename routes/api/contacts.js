@@ -1,25 +1,37 @@
 const express = require('express')
 
 const router = express.Router()
+// const { NotFound } = require('http-errors');
+// const Joi = require('joi');
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require('../../controllers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrlWrapper = require('../../helpers/ctrlWrapper')
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const {
+//   listContacts,
+  // getContactById,
+  // removeContact,
+  // addContact,
+  // updateContact,
+// } = require('../../models');
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const contactsAction = require('../../models/index');
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const joiShema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// });
 
-module.exports = router
+router.get('/', ctrlWrapper(ctrl.getAll));
+
+router.get('/:contactId', ctrlWrapper(ctrl.getById));
+
+router.post('/', ctrlWrapper(ctrl.add));
+
+router.delete('/:contactId', ctrlWrapper(ctrl.removeById));
+
+router.put('/:contactId', ctrlWrapper(ctrl.updateById));
+
+module.exports = router;
