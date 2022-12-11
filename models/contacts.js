@@ -1,7 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { nanoid } = require("nanoid");
-const { all } = require("../routes/api/contacts");
 
 const contactsPath = path.join(__dirname, "../models/contacts.json");
 
@@ -17,7 +16,7 @@ async function listContacts() {
 
 async function getContactById(id) {
     const allContacts = await listContacts();
-    const contactById = allContacts.find(contact => contact.id === `${ id }`);
+    const contactById = allContacts.find(contact => contact.id === `${id}`);
 
     return contactById || null;
 }
@@ -41,7 +40,7 @@ async function addContact(name, email, phone) {
         id: nanoid(),
         name,
         email,
-        phone
+        phone,
     };
 
     allContacts.push(newContact);
@@ -49,7 +48,7 @@ async function addContact(name, email, phone) {
     return newContact;
 }
 
-const updateContact = async(id, body) => {
+const updateContact = async (id, body) => {
     const allContacts = await listContacts();
     const result = allContacts.findIndex(item => item.id === id);
     if (result === -1) {
@@ -57,7 +56,7 @@ const updateContact = async(id, body) => {
     }
     allContacts[result] = { id, ...body };
     updateContacts(allContacts);
-    return allContacts(result)
+    return allContacts[result]
 }
 
 module.exports = {
