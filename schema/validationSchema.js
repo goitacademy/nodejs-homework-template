@@ -35,9 +35,17 @@ const schemaAuth = Joi.object({
   }),
 });
 
+const schemaEmail = Joi.object({
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
+
 module.exports = {
   schemaPostContact,
   schemaPutContact,
   schemaFavoriteContact,
   schemaAuth,
+  schemaEmail,
 };

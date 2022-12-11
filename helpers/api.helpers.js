@@ -1,8 +1,13 @@
+require("dotenv").config();
+const { SENDGRID_API_KEY, EMAIL_FROM } = process.env;
+const sgMail = require("@sendgrid/mail");
+
 const asyncWrapper = (controller) => {
   return async (req, res, next) => {
     try {
       await controller(req, res, next);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };
@@ -31,8 +36,21 @@ const requestError = (status, message) => {
   return error;
 };
 
+sgMail.setApiKey(SENDGRID_API_KEY);
+
+const sendEmail = async (data) => {
+  const email = { ...data, from: EMAIL_FROM };
+  try {
+    await sgMail.send(email);
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   asyncWrapper,
   errorHandler,
   requestError,
+  sendEmail,
 };

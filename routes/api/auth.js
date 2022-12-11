@@ -7,12 +7,14 @@ const {
   getCurrent,
   logout,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/auth.controller");
 
 const { validationBody } = require("../../middlewares/validationBody.js");
 const validationToken = require("../../middlewares/validationToken.js");
 const upload = require("../../middlewares/upload.js");
-const { schemaAuth } = require("../../schema/validationSchema");
+const { schemaAuth, schemaEmail } = require("../../schema/validationSchema");
 
 const { asyncWrapper } = require("../../helpers/api.helpers");
 
@@ -25,6 +27,12 @@ router.patch(
   validationToken,
   upload.single("avatar"),
   asyncWrapper(updateAvatar)
+);
+router.get("/verify/:verificationToken", asyncWrapper(verifyEmail));
+router.post(
+  "/verify",
+  validationBody(schemaEmail),
+  asyncWrapper(resendVerifyEmail)
 );
 
 module.exports = router;
