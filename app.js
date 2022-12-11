@@ -1,12 +1,20 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 const contactsRouter = require('./routes/api/contacts')
-
 const app = express()
-
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
+mongoose.connect(process.env.'mongodb+srv://admin:admin@cluster0.ycpznoi.mongodb.net/?retryWrites=true&w=majority')
+  .then(() => console.log("Database connection successful"))
+  .catch(err => {
+    console.log(err.message);
+    process.exit(1);
+  })
+
+mongoose.Promise = global.Promise
 
 app.use(logger(formatsLogger))
 app.use(cors())
