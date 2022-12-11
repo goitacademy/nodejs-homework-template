@@ -6,9 +6,9 @@ const Joi = require("joi");
 const { HttpError } = require("../../helpers");
 
 const contactsSchema = Joi.object({
-  name: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.string().required()
+  phone: Joi.string().required(),
+  name: Joi.string().required(),
 });
 
 
@@ -37,6 +37,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
+    console.log(req.body)
     if (error) {
       throw HttpError(400, error.message)
     }
