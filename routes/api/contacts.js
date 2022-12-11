@@ -1,15 +1,10 @@
 const express = require("express");
-const Joi = require("joi");
 
 const router = express.Router();
 const contactsOperations = require("../../models/contacts");
-
+const { contactsShema } = require("../../shemas");
 const { HttpError } = require("../../helpers");
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().min(5).max(12).required(),
-});
+
 
 router.get("/", async (req, res, next) => {
   try {
@@ -48,7 +43,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = contactsShema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -87,7 +82,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = contactsShema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
