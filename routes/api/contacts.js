@@ -6,14 +6,8 @@ const contacts = require("../../models/contacts");
 
 const { HttpError } = require('../../helpers');
 const { nanoid } = require('nanoid')
-
-const Joi = require('joi');
-
-const schema = Joi.object({
-  name: Joi.string().pattern(/^[abc]+$/).trim().required(),
-  email: Joi.string().email().trim().required(),
-  phone: Joi.string().pattern(/^[abc]+$/).trim().required(),
-});
+const { schema, schemaParams } = require('../../schemas/contacts')
+const { validateBody, validateParams } = require('../../meddlewares')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -25,7 +19,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', validateParams(schemaParams), async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
@@ -41,12 +35,8 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateBody(schema), async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      throw HttpError(400, "missing required name field");
-    }
     const body = {
       id: nanoid(),
       ...req.body
@@ -60,7 +50,9 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', 
+  validateParams(schemaParams),
+  async (req, res, next) => {
     try {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
@@ -76,15 +68,11 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId',
+  validateParams(schemaParams), validateBody(schema),
+  async (req, res, next) => {
   try {
-
-    const { error } = schema.validate(req.body);
-    if (error) {
-      throw HttpError(400, "missing required name field");
-    }
-        const { contactId } = req.params;
-
+    const { contactId } = req.params;
 
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
