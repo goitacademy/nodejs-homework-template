@@ -16,7 +16,7 @@ const authSchema = new Schema({
     default: "starter",
   },
   token: String,
-});
+}, { versionKey: false, timestamps: true });
 
 const User = model("user", authSchema);
 

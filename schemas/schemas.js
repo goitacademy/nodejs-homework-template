@@ -18,8 +18,21 @@ const favoriteContact = Joi.object({
   favorite: Joi.string().required(),
 });
 
+const register = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
+const login = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
 module.exports = {
   newContact,
   updateContact,
   favoriteContact,
+  register,
+  login,
 };
