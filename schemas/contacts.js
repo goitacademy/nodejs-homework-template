@@ -6,7 +6,11 @@ const schema = Joi.object({
   phone: Joi.string().trim().required(),
 });
 
-const schemaParams = Joi.string().max(25).required();
+const schemaParams =
+  Joi.object({
+    contactId: Joi.string().max(25).required(),
+    });
+
 
 module.exports = {
   schema,
