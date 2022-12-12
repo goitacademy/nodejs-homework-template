@@ -3,8 +3,8 @@ const HttpError = require("../../helpers");
 
 const getById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId);
 
     if (!result) {
       throw HttpError(404, "Not found");
@@ -17,5 +17,3 @@ const getById = async (req, res, next) => {
 };
 
 module.exports = getById;
-
-
