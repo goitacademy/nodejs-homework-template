@@ -1,25 +1,27 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { getContact } = require("../../controllers/getContact");
+const { getById } = require("../../controllers/getById");
+const { add } = require("../../controllers/addContact");
+const { deleteContact } = require("../../controllers/deleteContact");
+const { update } = require("../../controllers/updateContact");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// http://localhost:3000/api/contacts
+//  npx nodemon server.js
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validate } = require("../../schema/schema");
+const validation = require("../../schema/midleware");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", getById);
 
-module.exports = router
+router.post("/", validate(validation.contact), add);
+
+router.delete("/:contactId", deleteContact);
+
+router.put("/:contactId", validate(validation.contact), update);
+
+module.exports = router;
