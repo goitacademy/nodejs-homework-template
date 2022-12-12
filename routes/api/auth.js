@@ -3,9 +3,14 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const User = require("../../models/users");
-const authorize = require("../../middlewares");
+
+const { authorize, upload } = require("../../middlewares");
 
 const { createError } = require("../../helpers");
 const router = express.Router();
@@ -41,10 +46,12 @@ router.post("/register", async (req, res, next) => {
       throw createError(409, "Email in use");
     }
     const hashPassword = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
     const result = await User.create({
       email,
       password: hashPassword,
       subscription,
+      avatarURL,
     });
     res.status(201).json({
       email: result.email,
@@ -95,10 +102,11 @@ router.get("/logout", authorize, async (req, res, next) => {
 
 router.get("/current", authorize, async (req, res, next) => {
   try {
-    const { email, subscription } = req.user;
+    const { email, subscription, avatarURL } = req.user;
     res.json({
       email,
       subscription,
+      avatarURL,
     });
   } catch (error) {
     next(error);
@@ -127,5 +135,42 @@ router.patch("/subscription", authorize, async (req, res, next) => {
     next(error);
   }
 });
+
+const avatarDir = path.join(__dirname, "../../", "public", "avatars");
+
+router.patch(
+  "/avatars",
+  authorize,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const { path: tmpDir, originalname } = req.file;
+      const [extention] = originalname.split(".").reverse();
+      const newAvatarName = `${_id}.${extention}`;
+      const uploadDir = path.join(avatarDir, newAvatarName);
+      try {
+        Jimp.read(tmpDir, (err, image) => {
+          if (err) createError(400);
+          image.resize(250, 250).quality(60).write(uploadDir);
+        });
+      } catch (error) {
+        return next(createError(400, "Something went wrong!"));
+      }
+
+      await fs.rename(tmpDir, uploadDir);
+      const avatarURL = path.join("avatars", newAvatarName);
+
+      await User.findByIdAndUpdate(_id, { avatarURL });
+      res.json({
+        avatarURL,
+      });
+    } catch (error) {
+      await fs.unlink(req.file.path);
+      console.log(error.message);
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

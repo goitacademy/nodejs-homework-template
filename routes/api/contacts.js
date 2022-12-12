@@ -4,7 +4,7 @@ const Joi = require("joi");
 const dotenv = require("dotenv");
 dotenv.config();
 const { createError } = require("../../helpers");
-const authorize = require("../../middlewares");
+const { authorize } = require("../../middlewares");
 
 const Contact = require("../../models/contact");
 
