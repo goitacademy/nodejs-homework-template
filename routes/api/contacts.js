@@ -4,10 +4,6 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
 
-const contacts = require("../../models/contacts");
-
-const { createError } = require("../../helpers/createError");
-
 // После добавления контроллера стало так:
 
 router.get("/", ctrl.getAll);
@@ -16,17 +12,7 @@ router.get("/:contactId", ctrl.getById);
 
 router.post("/", ctrl.add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contacts.removeContact(req.params.contactId);
-    if (!result) {
-      throw createError(404, "Contact not found");
-    }
-    res.status(204);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", ctrl.removeById);
 
 router.put("/:contactId", ctrl.updateById);
 
