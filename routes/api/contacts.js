@@ -14,14 +14,14 @@ const contactSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+// router.get("/", async (req, res, next) => {
+//   try {
+//     const result = await contacts.listContacts();
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 router.get("/:contactId", async (req, res, next) => {
   try {
