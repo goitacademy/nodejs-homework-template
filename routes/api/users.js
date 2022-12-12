@@ -5,12 +5,16 @@ const {
   getCurrentUserInfo,
   logOut,
   avatarPatchController,
-  upload,
 } = require("../../models/users");
 const auth = require("../../middleware/auth");
+const path = require("path");
 const {
   userRegDataValidationSchema,
 } = require("../../middleware/validationContacts");
+const uploadFile = require("../../services/multer/multerService");
+
+const destinationPath = path.resolve("./tmp");
+const upload = uploadFile(destinationPath);
 
 const router = express.Router();
 
