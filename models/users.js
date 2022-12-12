@@ -15,17 +15,6 @@ const {
 const upatePath = path.resolve("./public/avatars");
 const destinationPath = path.resolve("./tmp");
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, destinationPath);
-//   },
-//   filename: (req, file, cb) => {
-//     const [fileName, ext] = file.originalname.split(".");
-//     cb(null, `${fileName}.${ext}`);
-//   },
-// });
-// const upload = multer({ storage: storage });
-
 const avatarPatchController = async (req, res, next) => {
   // console.log(req);
   const tmpFile = path.join(destinationPath, req.file.originalname);
