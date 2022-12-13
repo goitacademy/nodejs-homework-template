@@ -3,15 +3,15 @@ const Joi = require("joi");
 
 const { HttpError } = require("../../helpers");
 
-const contacts = require("../../models/contacts");
+const contacts = require("../../controllers/contacts");
 const router = express.Router();
 
 const addSchema = Joi.object({
   name: Joi.string().min(1).max(17).required(),
   email: Joi.string()
     .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "org", "uk", "ca"] },
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "org", "uk", "ca", "ua"] },
     })
     .required(),
   phone: Joi.string().min(6).max(17).required(),
@@ -19,7 +19,7 @@ const addSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await contacts.getAll();
     res.status(200).json(result);
   } catch (error) {
     next(error);

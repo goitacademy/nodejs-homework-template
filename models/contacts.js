@@ -83,3 +83,5 @@ module.exports = {
   addContact,
   updateContact,
 };
+
+// delete
