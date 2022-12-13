@@ -84,7 +84,33 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { error } = productSchema.validate(req.body);
+    if (error) {
+      throw new BadRequest(error.message);
+    }
+
+    const { contactId } = req.params;
+
+    const updatedContact = await contactsOperations.updateContact(
+      contactId,
+      req.body
+    );
+
+    if (!updatedContact) {
+      throw new NotFound(`Contact with id=${contactId} not found`);
+    }
+
+    res.json({
+      status: 'success',
+      cose: 200,
+      data: {
+        updatedContact,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

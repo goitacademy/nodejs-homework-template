@@ -74,23 +74,27 @@ async function addContact(name, email, phone) {
   return contactForAdd;
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, newContact) => {
   const contactsList = await getContacts();
 
-  const newContacts = contactsList.map(item => {
-    if (item.id === contactId) {
-      return body;
-    } else {
-      return item;
-    }
-  });
+  const indexContactById = contactsList.findIndex(
+    item => item.id === contactId
+  );
+
+  if (indexContactById === -1) {
+    return null;
+  }
+
+  const updatedContact = { id: contactId, ...newContact };
+
+  contactsList[indexContactById] = updatedContact;
 
   await fs.writeFile(
     contactsPath,
-    JSON.stringify(newContacts, null, 2),
+    JSON.stringify(contactsList, null, 2),
     'utf-8'
   );
-  console.log(`We successfully updated contact!`.bgGreen);
+  return updatedContact;
 };
 
 module.exports = {
