@@ -22,28 +22,13 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await contacts.getById(id);
     if (!result) {
       throw HttpError(404, "Not found");
-      // const error = new Error("Not found");
-      // error.status = 404;
-      // throw error;
-
-      // return res.status(404).json({
-      //   message: "Not found"
-      // })
     }
     res.json(result);
   } catch (error) {
     next(error);
-
-    // const { status = 500, message = "Server error" } = error;
-    // res.status(status).json({
-    //   message,
-    // })
-    // res.status(404).json({
-    //   message: "Server error"
-    // })
   }
 });
 
@@ -67,9 +52,7 @@ router.delete("/:id", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    // res.status(204).json({
-    //   message: "Delete success"
-    // })
+    
     res.json({
       message: "Delete success",
     });
@@ -85,7 +68,7 @@ router.put("/:id", async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    const result = await contacts.updateById(id, req.body);
+    const result = await contacts.updateContact(id, req.body);
     if (!result) {
       throw HttpError(404, "NotFound");
     }

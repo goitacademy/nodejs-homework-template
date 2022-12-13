@@ -9,7 +9,7 @@ async function listContacts() {
   return JSON.parse(contacts);
 }
 
-async function getContactById(id) {
+async function getById(id) {
   const contacts = await listContacts();
   const contact = contacts.find((contact) => contact.id === id);
   if (!contact) {
@@ -31,7 +31,7 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-async function updateById(id) {
+async function updateContact(id) {
   const contacts = await listContacts();
   const idx = contacts.findIndex((item) => item.id === id);
   if (idx === -1) {
@@ -55,8 +55,8 @@ async function removeContact(id) {
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
-  updateById,
+  updateContact,
 };
