@@ -1,7 +1,8 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { nanoid } = require("nanoid");
 
-const contactsPath = path.resolve("models/contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 // GET ALL
 const listContacts = async (req, res, next) => {
@@ -56,7 +57,7 @@ const addContact = async (req, res, next) => {
     }
 
     const contacts = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
-    const id = newId(contacts);
+    const id = nanoid();
     const contact = { id, name, email, phone };
 
     contacts.push(contact);
@@ -122,15 +123,3 @@ module.exports = {
   addContact,
   updateContact,
 };
-
-function newId(list) {
-  let newId = Number(list[0].id);
-
-  for (let i = 1; i < list.length; i += 1) {
-    if (Number(list[i].id) > newId) {
-      newId = Number(list[i].id);
-    }
-  }
-
-  return String(newId + 1);
-}
