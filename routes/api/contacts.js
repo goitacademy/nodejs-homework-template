@@ -1,14 +1,9 @@
 const express = require("express");
-const Joi = require("joi");
 const contacts = require("../../models/contacts.js");
 const { HttpError } = require("../../helpers");
 const router = express.Router();
+const schemas = require("../../schemas/contacts");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -34,7 +29,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -47,7 +42,7 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -70,9 +65,6 @@ router.delete("/:id", async (req, res, next) => {
       throw HttpError(404, "Not found");
     }
     res.status(204).json({ message: "Delete success" });
-    // res.json({
-    //   message: "Delete success!",
-    // });
   } catch (error) {
     next(error);
   }

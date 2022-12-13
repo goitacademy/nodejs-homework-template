@@ -29,15 +29,4 @@ app.use(async (err, req, res, next) => {
   next();
 });
 
-// app.get("/", (request, response) => {
-//   console.log(request.url);
-//   console.log(request.method);
-//   response.json([]);
-// });
-// app.get("/api/contacts", (request, response) => {
-//   // console.log(request.url);
-//   // console.log(request.method);
-//   response.json(contacts);
-// });
-
 module.exports = app;
