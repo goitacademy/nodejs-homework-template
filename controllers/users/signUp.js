@@ -3,6 +3,7 @@ const createError = require("http-errors");
 const gravatar = require("gravatar");
 
 const signUp = async (req, res) => {
+  console.log(`111`);
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
