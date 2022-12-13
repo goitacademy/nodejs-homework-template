@@ -20,6 +20,6 @@ router.delete('/:id', ctrlWrappers(ctrl.removeContact));
 
 router.put('/:id', validateBody(schemas.addSchema), ctrlWrappers(ctrl.updateContact));
 
-router.patch('/:id/favorite', validateId(), validateBody(schemas.favoriteSChema), ctrlWrappers(ctrl.updateFieldFavorite))
+router.patch('/:id/favorite', validateId(schemas.idSchema), validateBody(schemas.favoriteSChema), ctrlWrappers(ctrl.updateFieldFavorite))
 
 module.exports = router

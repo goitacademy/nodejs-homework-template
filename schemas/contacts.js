@@ -7,8 +7,11 @@ const addSchema = Joi.object({
     favorite:Joi.boolean().required()
 
 })
+const idSchema = Joi.object({
+    id:Joi.string()
+})
 
 const favoriteSChema = Joi.object({
     favorite:Joi.boolean().required() 
 })
-module.exports = { addSchema, favoriteSChema }
+module.exports = { addSchema, favoriteSChema, idSchema }

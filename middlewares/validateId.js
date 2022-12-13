@@ -2,21 +2,16 @@ const { HttpError } = require("../helpers");
 const Contact = require("../models/contacts");
 
 
-const validateId = () => {
-    const func =
-         (req, res, next) => {
-            const { id } = req.params;
-            console.log(id)
-            const result = Contact.findById( id );
-            // console.log(`Result!!!!!!${result }`)
-    if (result === null) {
-       next(HttpError(404, `Can't find contact with id:${id}`));
+const validateId = shema => {
+    const func = (req, res, next) => {
+        console.log(req.params)
+        const { error} = shema.validate(req.params);
+        if (error) {
+      next(HttpError(400, error.message));
+        }
+        next()
     }
-    
-    next()
-   }
-return func
-
+    return func
 }
 
 module.exports = validateId
