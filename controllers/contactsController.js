@@ -34,8 +34,7 @@ const removeContactController = async (req, res) => {
 const updateContactController = async (req, res) => {
     const {contactId} = req.params
     const { name, email, phone, favorite } = req.body
-    const updatedContact = await Contact.findByIdAndUpdate(String(contactId), {$set: { name, email, phone, favorite } }, { new: true });
-    
+    const updatedContact = await Contact.findByIdAndUpdate(String(contactId), { name, email, phone, favorite }, { new: true });
     if (updatedContact) {
         return res.status(200).json({ data: updatedContact }); 
         // WORKING LIKE A PATCH METHOD !!!!!!!!
@@ -49,8 +48,8 @@ const updateStatusContactController = async (req, res) => {
     const updatedContact = await Contact.findByIdAndUpdate(String(contactId), { $set: { favorite } }, { new: true })
     if (updatedContact) {
         return res.status(200).json({ data: updatedContact });
-        }
-        return res.status(404).json({ message: "Not found" });
+    }
+    return res.status(404).json({ message: "Not found" });
 }
 
 
