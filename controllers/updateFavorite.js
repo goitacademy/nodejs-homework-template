@@ -8,9 +8,7 @@ const updateFavorite = async (req, res, next) => {
     const result = await Contacts.findByIdAndUpdate(
       contactId,
       { favorite },
-      {
-        new: true,
-      }
+      { new: true }
     );
     res.json({
       status: "success",
