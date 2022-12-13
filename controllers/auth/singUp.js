@@ -1,6 +1,5 @@
 const { User } = require("../../models/user");
 const { RequestError } = require("../../helpers");
-const bcrypt = require("bcryptjs");
 
 const singUp = async (req, res) => {
   const { email, password } = req.body;
@@ -8,11 +7,9 @@ const singUp = async (req, res) => {
   if (user) {
     throw RequestError(409, "Email in use");
   }
-  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const result = await User.create({
-    email,
-    password: hashPassword,
-  });
+  const newUser = new User({ email, password });
+  newUser.setPassword(password);
+  newUser.save();
   res.status(201).json({
     status: "success",
     code: 201,

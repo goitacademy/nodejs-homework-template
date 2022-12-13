@@ -26,9 +26,10 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// userSchema.methods.setPassword = function (password) {
-//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-// };
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+};
+
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
@@ -38,14 +39,14 @@ const joiUserSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
-// const joiLoginSchema = Joi.object({
-//   password: Joi.string(),
-//   email: Joi.string(),
-// });
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 
 const User = model("user", userSchema);
 
 module.exports = {
   User,
   joiUserSchema,
+  updateSubscriptionSchema,
 };
