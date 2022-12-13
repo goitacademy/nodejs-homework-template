@@ -8,4 +8,4 @@ const ctrlWrapper = (ctrl) => {
   };
   return func;
 };
-module.export = ctrlWrapper;
+module.exports = ctrlWrapper;

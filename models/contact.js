@@ -6,7 +6,7 @@ const contactShema = new Shema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -15,6 +15,10 @@ const contactShema = new Shema(
     phone: {
       type: String,
       required: true,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }
@@ -25,10 +29,16 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().min(5).max(12).required(),
+  favorite: Joi.boolean(),
 });
+
+const updateFavoriteShema = Joi.object({
+    favorite: Joi.boolean().required(),
+})
 
 const schemas = {
   addSchema,
+  updateFavoriteShema,
 };
 
 const Contact = model("contact", contactShema);
@@ -52,4 +62,4 @@ const model = (collectionName, shema) => {
 }
 */
 
-module.exports = { Contact, schemas };
+module.exports = { Contact, schemas, };
