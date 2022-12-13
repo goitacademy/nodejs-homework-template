@@ -1,9 +1,9 @@
-const { contactsApi } = require("../../models");
+const { Contact } = require("../../models");
 const { RequestError } = require("../../helpers");
 
 const remove = async (req, res) => {
     const { contactId } = req.params;
-    const data = await contactsApi.remove(contactId);
+    const data = await Contact.findByIdAndDelete(contactId);
 
     if (!data) {
         throw RequestError(404, `id:${contactId} not found`);

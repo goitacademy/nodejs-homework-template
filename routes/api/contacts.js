@@ -1,23 +1,25 @@
-const express = require('express')
+const express = require("express");
+const { validation, ctrlWrapper, isValidId } = require("../../middlewares");
+const { schemas } = require("../../models");
+const { contacts: ctrl } = require("../../controller");
 
-const router = express.Router()
-const {validation, ctrlWrapper} = require("../../middlewares");
-const {schemaOfContacts, patchSchema } = require("../../schemas");
-const {contacts : ctrl} = require("../../controller");
+const router = express.Router();
 
+router.get("/", ctrlWrapper(ctrl.getAll));
 
+router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
+router.post("/", validation(schemas.contactsSchema), ctrlWrapper(ctrl.add));
 
-router.get('/', ctrlWrapper(ctrl.getAll));
+router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
 
-router.get('/:contactId',ctrlWrapper(ctrl.getById))
+router.put("/:contactId", isValidId, validation(schemas.contactsSchema), ctrlWrapper(ctrl.update));
 
-router.post('/', validation(schemaOfContacts), ctrlWrapper(ctrl.add))
+router.patch(
+    "/:contactId/favorite",
+    isValidId,
+    validation(schemas.favoriteSchema),
+    ctrlWrapper(ctrl.patch)
+);
 
-router.delete('/:contactId', ctrlWrapper(ctrl.remove))
-
-router.put('/:contactId', validation(schemaOfContacts), ctrlWrapper(ctrl.update))
-
-router.patch("/:contactId", validation(patchSchema), ctrlWrapper(ctrl.patch))
-
-module.exports = router
+module.exports = router;
