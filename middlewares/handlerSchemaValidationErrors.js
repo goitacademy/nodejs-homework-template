@@ -1,0 +1,7 @@
+function handleSchemaValidationErrors(error, data, next) {
+  const { name, code } = error;
+  error.status = name === "MongoServerError" && code === 1100 ? 409 : 400;
+  next();
+}
+
+module.exports = handleSchemaValidationErrors;

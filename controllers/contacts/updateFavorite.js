@@ -2,7 +2,7 @@ const { BadRequest } = require("http-errors");
 
 const { Contact } = require("../../models/contact");
 
-async function updateContact(req, res) {
+async function updateFavorite(req, res) {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -19,4 +19,4 @@ async function updateContact(req, res) {
   });
 }
 
-module.exports = updateContact;
+module.exports = updateFavorite;
