@@ -8,7 +8,7 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.number().required(),
-})
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -34,7 +34,7 @@ router.get("/:id", async (req, res, next) => {
       // })
     }
     res.json(result);
-  } catch(error) {
+  } catch (error) {
     next(error);
 
     // const { status = 500, message = "Server error" } = error;
@@ -55,28 +55,25 @@ router.post("/", async (req, res, next) => {
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     next(error);
   }
 });
-
 
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await books.removeById(id);
     if (!result) {
-      throw HttpError(404, "Not found")
+      throw HttpError(404, "Not found");
     }
     // res.status(204).json({
     //   message: "Delete success"
     // })
     res.json({
-      message: "Delete success"
-    })
-  }
-  catch (error) {
+      message: "Delete success",
+    });
+  } catch (error) {
     next(error);
   }
 });
@@ -90,12 +87,11 @@ router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     const result = await contacts.updateById(id, req.body);
     if (!result) {
-      throw HttpError(404, "NotFound")
+      throw HttpError(404, "NotFound");
     }
-    res.json(result)
-  }
-  catch (error) {
-    next(error)
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
 });
 
