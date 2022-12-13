@@ -19,7 +19,6 @@ const addContactController = async (req, res ) => {
     const newContact = new Contact(req.body);
     await newContact.save();
     return res.status(201).json({ data: newContact });
-    // add default favorite key - false!!!!!!!!!!!!!!!!!!!
 }
 
 const removeContactController = async (req, res) => {
@@ -37,7 +36,6 @@ const updateContactController = async (req, res) => {
     const updatedContact = await Contact.findByIdAndUpdate(String(contactId), { name, email, phone, favorite }, { new: true });
     if (updatedContact) {
         return res.status(200).json({ data: updatedContact }); 
-        // WORKING LIKE A PATCH METHOD !!!!!!!!
     }
     return res.status(404).json({ message: "Not found" });
 }
@@ -51,7 +49,6 @@ const updateStatusContactController = async (req, res) => {
     }
     return res.status(404).json({ message: "Not found" });
 }
-
 
 module.exports = {
     getContactsController,
