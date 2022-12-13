@@ -3,12 +3,13 @@ require('dotenv').config();
 const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 const contactsRouter = require('./routes/api/contacts');
 
-const {PORT = 3000} = process.env;
+const {PORT = 3000, DB_HOST} = process.env;
 
 mongoose.set('strictQuery', true);
-const DB_HOST = 'mongodb+srv://user:qwerty_123@cluster0.amig90u.mongodb.net/db-contacts?retryWrites=true&w=majority';
+
 const app = express();
 
 (async () => {
@@ -31,8 +32,9 @@ const app = express();
     res.status(404).json({message: 'Not found'});
   });
 
-  app.use((err, req, res) => {
-    res.status(500).json({message: err.message});
+  app.use((err, req, res, next) => {
+    const {status = 500, message = 'Server error'} = err;
+    res.status(status).json({message});
   });
 
   app.listen(PORT, () => {

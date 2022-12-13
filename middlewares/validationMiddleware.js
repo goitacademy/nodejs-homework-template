@@ -8,6 +8,7 @@ const checkContactData = (req, res, next) => {
       .required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
+    favorite: Joi.bool().required(),
   });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
