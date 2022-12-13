@@ -7,8 +7,6 @@ const { logIn } = require("./index");
 require("dotenv").config();
 const { DB_HOST, PORT = 3000 } = process.env;
 
-app.get("/api/users/login", logIn);
-
 describe("logIn controller test", () => {
   let server;
 
