@@ -47,7 +47,7 @@ const updateContact = async (contactId, body) => {
     console.log(error.message);
   }
 };
-const updateContactList = async (contactId, body) => {
+const updateStatusContact = async (contactId, body) => {
   try {
     const data = await ContactModel.findByIdAndUpdate(contactId, body, {
       new: true,
@@ -64,5 +64,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateContactList,
+  updateStatusContact,
 };

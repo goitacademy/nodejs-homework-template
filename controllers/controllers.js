@@ -4,15 +4,15 @@ const {
   listContacts,
   getContactById,
   removeContact,
-  updateContactList,
+  updateStatusContact,
 } = require("../models/contacts");
 
-const getContacts = async (req, res) => {
+const getContactsController = async (req, res) => {
   const data = await listContacts();
   res.status(200).json({ message: data });
 };
 
-const getContactByID = async (req, res) => {
+const getContactByIdController = async (req, res) => {
   try {
     const { contactId } = req.params;
     const data = await getContactById(contactId);
@@ -22,12 +22,12 @@ const getContactByID = async (req, res) => {
   }
 };
 
-const postAddContact = async (req, res) => {
+const postAddContactController = async (req, res) => {
   const data = await addContact(req.body);
   res.status(201).json({ message: data });
 };
 
-const putChangeContact = async (req, res) => {
+const putChangeContactController = async (req, res) => {
   const { contactId } = req.params;
   const data = await updateContact(contactId, req.body);
   if (data) {
@@ -37,7 +37,7 @@ const putChangeContact = async (req, res) => {
   }
 };
 
-const deleteContact = async (req, res) => {
+const deleteContactController = async (req, res) => {
   try {
     const { contactId } = req.params;
     const data = await removeContact(contactId);
@@ -51,12 +51,12 @@ const deleteContact = async (req, res) => {
   }
 };
 
-const patchFavoriteContact = async (req, res) => {
+const patchFavoriteContactController = async (req, res) => {
   const { contactId } = req.params;
   if (!contactId) {
     res.status(400).json({ message: "Missing field favorite" });
   }
-  const data = await updateContactList(contactId, req.body);
+  const data = await updateStatusContact(contactId, req.body);
   if (data) {
     res.status(200).json({ message: data });
   } else {
@@ -65,10 +65,10 @@ const patchFavoriteContact = async (req, res) => {
 };
 
 module.exports = {
-  getContacts,
-  getContactByID,
-  postAddContact,
-  putChangeContact,
-  deleteContact,
-  patchFavoriteContact,
+  getContactsController,
+  getContactByIdController,
+  postAddContactController,
+  putChangeContactController,
+  deleteContactController,
+  patchFavoriteContactController,
 };
