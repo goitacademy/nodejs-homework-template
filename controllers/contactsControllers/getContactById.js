@@ -1,14 +1,13 @@
-const contacts = require("../../models/contacts");
+const Contact = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
-const { validateId } = require("../../middlewares");
 
 
 const getContactById = async (req, res, next) => {
    
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await Contact.findById(id);
     if (!result) {
-     next(HttpError(404, "Not found"));
+     next(HttpError(404, `Product with id ${id} not found`));
     }
     res.json(result)
  
