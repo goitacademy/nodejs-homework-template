@@ -4,6 +4,7 @@ const {
   listContacts,
   getContactById,
   removeContact,
+  updateContactList,
 } = require("../models/contacts");
 
 const getContacts = async (req, res) => {
@@ -49,10 +50,25 @@ const deleteContact = async (req, res) => {
     console.log(error.message);
   }
 };
+
+const patchFavoriteContact = async (req, res) => {
+  const { contactId } = req.params;
+  if (!contactId) {
+    res.status(400).json({ message: "Missing field favorite" });
+  }
+  const data = await updateContactList(contactId, req.body);
+  if (data) {
+    res.status(200).json({ message: data });
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
+};
+
 module.exports = {
   getContacts,
   getContactByID,
   postAddContact,
   putChangeContact,
   deleteContact,
+  patchFavoriteContact,
 };
