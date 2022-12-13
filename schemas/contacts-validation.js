@@ -9,12 +9,14 @@ const schemaAdd = Joi.object({
     })
     .required(),
   phone: Joi.string().min(7).required(),
+  favorite: Joi.boolean(),
 });
 
 const schemaUpdate = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-}).or('name', 'email', 'phone');
+  favorite: Joi.boolean(),
+}).or('name', 'email', 'phone', 'favorite');
 
 module.exports = { schemaAdd, schemaUpdate };

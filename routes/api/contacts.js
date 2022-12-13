@@ -3,12 +3,13 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  listContacts,
+  getAllContacts,
+  createContact,
   getContactById,
-  removeContact,
-  addContact,
+  deleteContact,
   updateContact,
-} = require('../.././models/contacts');
+  updateStatusContact,
+} = require('../.././services/index');
 
 const {
   schemaAdd,
@@ -17,7 +18,7 @@ const {
 
 router.get('/', async (req, res, next) => {
   try {
-    const contactsList = await listContacts();
+    const contactsList = await getAllContacts();
 
     res.json(contactsList);
   } catch (error) {
@@ -31,28 +32,27 @@ router.get('/:id', async (req, res, next) => {
 
     res.json(contactById);
   } catch (error) {
-    res.status(404).json({ message: 'Not found' });
+    res.status(404).json({ message: 'Contact not found' });
   }
 });
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
   const { error } = schemaAdd.validate(req.body);
 
   if (error) {
     res.status(400).json({ message: 'missing required name field' });
   }
 
-  const newContact = await addContact(name, email, phone);
+  const newContact = await createContact(req.body);
 
   res.status(201).json(newContact);
 });
 
 router.delete('/:id', async function (req, res, next) {
   try {
-    await removeContact(req.params.id);
+    await deleteContact(req.params.id);
 
-    res.json({ message: 'contact deleted' });
+    res.status(203).json({ message: 'contact deleted' });
   } catch (error) {
     res.status(404).json({ message: 'Not found' });
   }
@@ -60,7 +60,7 @@ router.delete('/:id', async function (req, res, next) {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, favorite } = req.body;
 
     const { error } = schemaUpdate.validate(req.body);
 
@@ -72,9 +72,30 @@ router.put('/:id', async (req, res, next) => {
       name,
       email,
       phone,
+      favorite,
     );
 
     res.json(updatedContact);
+  } catch (error) {
+    res.status(404).json({ message: 'Not found' });
+  }
+});
+
+router.patch('/:id/favorite', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { favorite = false } = req.body;
+    const { error } = schemaUpdate.validate(req.body);
+
+    if (error) {
+      res.status(400).json({ message: 'missing field favorite' });
+    }
+
+    const updatedFavoriteStatusInContact = await updateStatusContact(id, {
+      favorite,
+    });
+
+    res.status(200).json(updatedFavoriteStatusInContact);
   } catch (error) {
     res.status(404).json({ message: 'Not found' });
   }
