@@ -4,6 +4,10 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
 
+// const { validateBody } = require("../../middlewares/validateBody");
+
+// const schemas = require("../../schemas/contactSchema");
+
 // После добавления контроллера стало так:
 
 router.get("/", ctrl.getAll);
