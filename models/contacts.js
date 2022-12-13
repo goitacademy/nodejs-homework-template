@@ -38,7 +38,7 @@ async function updateContact(id) {
     return null;
   }
   contacts[idx] = { id, ...contacts };
-  await updateContacts(contacts);
+  await updateContact(contacts);
   return contacts[idx];
 }
 

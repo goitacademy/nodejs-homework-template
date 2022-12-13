@@ -48,7 +48,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await books.removeById(id);
+    const result = await contacts.removeById(id);
     if (!result) {
       throw HttpError(404, "Not found");
     }
