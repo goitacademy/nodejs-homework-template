@@ -1,69 +1,25 @@
-const express = require('express')
-const router = express.Router()
-const functions = require('../../models/contacts.js')
-const { contactValidation } = require('../../validation/contact.validation.js')
+const express = require('express');
+const {
+  getContactsController,
+  getContactByIDController,
+  postContactController,
+  deleteContactController,
+  putContactController,
+  updateStatusContactController,
+} = require('../../controllers/contacts');
 
-router.get('/', async (_, res) => {
-  functions.listContacts()
-    .then(contacts => res.json(contacts))
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res) => {
-  functions.getContactById(req.params.contactId)
-    .then(contact => {
-      if (contact) {
-        res.json(contact)
-      } else {
-        res.status(404).json({ message: 'Not found' })
-      }
-    })
-})
+router.get('/', getContactsController);
 
-router.post('/', async (req, res) => {
-  const { error } = contactValidation(req.body)
-  if (error) {
-    res.status(400).json({ message: 'invalid data' })
-  } else {
-    functions.addContact(req.body)
-      .then(contact => {
-        if (contact) {
-          res.status(201).json(contact)
-        } else {
-          res.status(400).json({ message: 'missing required name field' })
-        }
-      })
-  }
-})
+router.get('/:contactId', getContactByIDController);
 
-router.delete('/:contactId', async (req, res) => {
-  functions.removeContact(req.params.contactId)
-    .then(resp => {
-      if (resp) {
-        res.json({ message: 'contact deleted' })
-      } else {
-        res.status(404).json({ message: 'Not found' })
-      }
-    })
-})
+router.post('/', postContactController);
 
-router.put('/:contactId', async (req, res) => {
-  const { error } = contactValidation(req.body)
-  if (error) {
-    res.status(400).json({ message: 'invalid data' })
-  } else { 
-    if (Object.keys(req.body).length) {
-      functions.updateContact(req.params.contactId, req.body)
-        .then(contact => {
-          if (contact) {
-          res.json(contact)
-          } else {
-          res.status(404).json({ message: 'Not found' })
-          }
-        })
-    } else {
-      res.status(400).json({ message: 'missing fields' })
-    }
-  }
-})
+router.delete('/:contactId', deleteContactController);
 
-module.exports = router
+router.put('/:contactId', putContactController);
+
+router.patch('/:contactId/favorite', updateStatusContactController);
+
+module.exports = router;

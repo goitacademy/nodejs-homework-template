@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi');
 
 const contactValidation = (data) => {
   
@@ -6,9 +6,9 @@ const contactValidation = (data) => {
     email: Joi.string().min(2).max(50).required().email(),
     name: Joi.string().min(2).max(50).required(),
     phone: Joi.string().min(2).max(50).required()
-  })
+  });
 
-  return schema.validate(data)
-}
+  return schema.validate(data);
+};
 
-module.exports = { contactValidation }
+module.exports = { contactValidation };
