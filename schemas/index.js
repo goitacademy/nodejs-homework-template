@@ -1,6 +1,11 @@
-const { addContactScheme, putContactScheme } = require("./contact");
+const {
+  addContactScheme,
+  putContactScheme,
+  contactIdScheme,
+} = require("./contact");
 
 module.exports = {
   addContactScheme,
   putContactScheme,
+  contactIdScheme,
 };

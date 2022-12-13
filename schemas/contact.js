@@ -17,4 +17,8 @@ const putContactScheme = Joi.object({
   phone: Joi.string(),
 });
 
-module.exports = { addContactScheme, putContactScheme };
+const contactIdScheme = Joi.object({
+  contactId: Joi.string().alphanum().min(3).required(),
+});
+
+module.exports = { addContactScheme, putContactScheme, contactIdScheme };
