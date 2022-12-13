@@ -7,7 +7,7 @@ const dell = async (req, res) => {
 
   const result = await Contact.findOneAndRemove({ _id: id, owner: _id });
   if (!result) {
-    throw createError(404, `Product with id ${id} not found`);
+    throw createError(415, `Unsupported Media`);
   }
 
   res.status(201).json({

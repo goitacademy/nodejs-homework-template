@@ -18,7 +18,7 @@ const updateSubscription = async (req, res) => {
   res.status(200).json({
     status: "succes",
     code: 200,
-    result,
+    subscription,
   });
 };
 
