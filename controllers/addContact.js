@@ -1,9 +1,11 @@
 const { Contacts } = require("../models/contacts");
 
 const add = async (req, res, next) => {
-  const body = req.body;
+  if (req.body.favorite) {
+    await Contacts.create(req.body, (req.body.favorite = false));
+  }
 
-  const result = await Contacts.create(body);
+  const result = await Contacts.create(req.body);
 
   try {
     res.json({

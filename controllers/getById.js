@@ -2,9 +2,9 @@
 const { Contacts } = require("../models/contacts");
 
 const getById = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const result = await Contacts.findById(id);
+    const result = await Contacts.findById(contactId);
     res.json({
       status: "success",
       code: 200,

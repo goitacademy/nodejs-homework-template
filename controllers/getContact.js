@@ -8,7 +8,7 @@ const getContact = async (req, res, next) => {
       status: "succsses",
       code: 200,
       data: {
-        result,
+        result: result,
       },
       message: "200 succsses",
     });
