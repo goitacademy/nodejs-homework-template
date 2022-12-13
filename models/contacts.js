@@ -1,7 +1,7 @@
-import { promises as fs } from "fs";
-import { join } from "path";
+const path = require("path");
+const fs = require("fs/promises");
 
-const contactsPath = join(__dirname, "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 console.log("contactsPath", contactsPath);
 
 const listContacts = async () => {
@@ -101,7 +101,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-export default {
+module.exports = {
   listContacts,
   getContactById,
   removeContact,
