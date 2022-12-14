@@ -11,8 +11,10 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
     "joi": "^17.7.0",
+    "mongoose": "^6.8.0",
     "morgan": "1.10.0",
     "nanoid": "^3.3.4"
   },
@@ -24,5 +26,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuliia-andriitsova/nodejs-homework-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuliia-andriitsova/nodejs-homework-rest-api/issues"
+  },
+  "homepage": "https://github.com/yuliia-andriitsova/nodejs-homework-rest-api#readme"
 }
