@@ -1,4 +1,3 @@
-// const { getContactById } = require("../models/contacts");
 const { Contacts } = require("../models/contacts");
 
 const getById = async (req, res, next) => {

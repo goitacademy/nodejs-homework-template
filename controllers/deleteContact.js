@@ -1,4 +1,4 @@
-// const { removeContact } = require("../models/contacts");
+
 const { Contacts } = require("../models/contacts");
 
 const deleteContact = async (req, res, next) => {

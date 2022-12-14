@@ -7,9 +7,6 @@ const { deleteContact } = require("../../controllers/deleteContact");
 const { update } = require("../../controllers/updateContact");
 const { updateFavorite } = require("../../controllers/updateFavorite");
 
-// http://localhost:3000/api/contacts
-//  npx nodemon server.js
-
 const { validate } = require("../../schema/schema");
 const { contact, favoriteJoySchema } = require("../../schema/midleware");
 
