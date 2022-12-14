@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "db/contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const replaceFile = async (contacts) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -87,9 +87,9 @@ const addContact = async ({ name, email, phone }) => {
   }
 };
 
-const updateContactById = async (contactId, data) => {
+const updateContactById = async (id, data) => {
   try {
-    const idContact = String(contactId);
+    const idContact = String(id);
     const contacts = await listContacts();
     const indexContact = contacts.findIndex(
       (contact) => contact.id === idContact
@@ -102,7 +102,7 @@ const updateContactById = async (contactId, data) => {
     const indexPhone = contacts[indexContact].phone;
 
     contacts[indexContact] = {
-      id: nanoid(),
+      id,
       name: data.name ?? indexName,
       email: data.email ?? indexEmail,
       phone: String(data.phone ?? indexPhone),
