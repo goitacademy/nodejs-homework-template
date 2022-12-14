@@ -1,9 +1,18 @@
 const express = require("express");
 
 const uuid = require("uuid");
+const Joi = require("joi");
 
 const router = express.Router();
 const contacts = require("../../models/contacts");
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+
+  email: Joi.string().required(),
+
+  phone: Joi.string().required(),
+});
 
 router.get("/", async (req, res, next) => {
   const all = await contacts.listContacts();
@@ -21,13 +30,13 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  if (name && email && phone) {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    res.status(400).json({ message: "missing required name field" });
+  } else {
     const contactWithId = await { id: uuid.v4(), ...req.body };
     const postedContact = await contacts.addContact(contactWithId);
     res.status(201).json(postedContact);
-  } else {
-    res.status(400).json({ message: "missing required name field" });
   }
 });
 
@@ -42,15 +51,18 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  if (!req.body) {
+  const { error } = schema.validate(req.body);
+  if (error) {
     res.status(400).json({ message: "missing fields" });
-  } else {
+  }
+  else {
     const { contactId } = req.params;
     const updatedContact = await contacts.updateContact(contactId, req.body);
     if (!updatedContact) {
       res.status(404).json({ message: "Not found" });
+    } else {
+      res.json(updatedContact);
     }
-    else { res.json(updatedContact) };
   }
 });
 
