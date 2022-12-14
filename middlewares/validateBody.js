@@ -1,4 +1,3 @@
-// const contactSchema = require("../schemas/contactSchema");
 const { createError } = require("../helpers/createError");
 
 const validateBody = (schema) => {
