@@ -104,7 +104,7 @@ const registrationVerification = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email, verify: true });
 
   if (!isValidPassword(password, user.password)) {
     return res.status(401).json({
@@ -115,6 +115,11 @@ const login = async (req, res, next) => {
     return res.status(404).json({
       message: "User was not found",
       status: "404 Not Found",
+    });
+  } else if (!user.verify) {
+    return res.status(401).json({
+      message: "User was not verifyed",
+      status: "401 Not Verifyed",
     });
   }
 
