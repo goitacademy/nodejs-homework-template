@@ -4,6 +4,7 @@ const {
   login,
   getCurrentUserInfo,
   logOut,
+  registrationVerification,
   avatarPatchController,
 } = require("../../models/users");
 const auth = require("../../middleware/auth");
@@ -22,7 +23,7 @@ router.post("/signup", userRegDataValidationSchema, registration);
 
 router.patch("/avatars", auth, upload.single("avatar"), avatarPatchController);
 
-router.get("verify/:verificationToken");
+router.get("verify/:verificationToken", registrationVerification);
 
 router.post("/login", userRegDataValidationSchema, login);
 

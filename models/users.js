@@ -83,6 +83,25 @@ const registration = async (req, res, next) => {
   }
 };
 
+const registrationVerification = async (req, res, next) => {
+  const { verifyCode } = req.params;
+  const user = await User.findOne({ verificationToken: verifyCode });
+  if (!user) {
+    return res.status(404).json({ status: "404 Not Found" });
+  }
+  if (user.verify) {
+    return res.status(404).json({ status: "404 Link already exposed" });
+  }
+  try {
+    user.verify = true;
+    user.verificationToken = null;
+    await user.save();
+    return res.status(200).json({ message: "user successfully verifyed" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -144,5 +163,6 @@ module.exports = {
   registration,
   login,
   getCurrentUserInfo,
+  registrationVerification,
   logOut,
 };
