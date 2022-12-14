@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const sgMail = require("@sendgrid/mail");
 const fs = require("fs");
 const gravatar = require("gravatar");
+const { v4: uuidv4 } = require("uuid");
 const Jimp = require("jimp");
 const User = require("../services/userSchema");
 require("dotenv").config();
@@ -44,21 +46,38 @@ const avatarPatchController = async (req, res, next) => {
 
 const registration = async (req, res, next) => {
   const { password, email } = req.body;
-  const avatarUrl = gravatar.url(email, { protocol: "https" });
   const user = await User.findOne({ email });
+  // Есть ли юзер в БД
   if (user) {
     return res
       .status(409)
       .json({ message: "Email in use", status: "409 Conflict" });
   }
+  // Оказалось что он есть и мы можем создать для него токен, аватар и письмо с подтвердением
+  const avatarUrl = gravatar.url(email, { protocol: "https" });
+  const verifyCode = uuidv4();
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: email,
+    from: "vladdanya08@gmail.com",
+    subject: "Verifying mail",
+    text: `Please, follow the forward link and verify your account localhost:3030/api/users/verify/${verifyCode}`,
+    html: `<strong>Please, follow the forward <a href="localhost:3030/api/users/verify/${verifyCode}">link</a> and verify your account</strong>`,
+  };
   try {
     const incryptedPassword = incryptPassword(password);
     await User.create({
       password: incryptedPassword,
       email,
       avatarURL: avatarUrl,
+      verificationToken: verifyCode,
     });
-    return res.status(201).json({ data: { email }, status: "201 Created" });
+    await sgMail.send(msg);
+    return res.status(201).json({
+      data: { email },
+      status: "201 Created",
+      message: "Check your email and verify account !",
+    });
   } catch (error) {
     next(error);
   }
