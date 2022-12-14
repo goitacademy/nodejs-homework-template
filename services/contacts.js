@@ -1,4 +1,4 @@
-const { Contact } = require('../schemas/contacts');
+const { Contact } = require('../sсhemas/contacts');
 
 const getAll = ({ filter, exact = false, showDeleted = false }) => {
   const findFields = {};
