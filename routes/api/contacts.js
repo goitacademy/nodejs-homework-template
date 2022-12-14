@@ -9,13 +9,17 @@ router.get('/', ctrlWrapper(contacts.getAll));
 
 router.get('/:contactId', ctrlWrapper(contacts.getById));
 
-router.post('/', validation(contactSchema), ctrlWrapper(contacts.add));
+router.post(
+  '/',
+  validation(contactSchema.addContactSchema),
+  ctrlWrapper(contacts.add)
+);
 
 router.delete('/:contactId', ctrlWrapper(contacts.removeById));
 
 router.put(
   '/:contactId',
-  validation(contactSchema),
+  validation(contactSchema.updateContactSchema),
   ctrlWrapper(contacts.updateById)
 );
 
