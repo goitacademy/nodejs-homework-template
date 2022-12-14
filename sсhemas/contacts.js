@@ -17,7 +17,7 @@ const contact = new Schema({
   },
 });
 
-contact.index({name: 1})
+contact.index({ name: 1 });
 
 const Contact = model('contact', contact);
 
