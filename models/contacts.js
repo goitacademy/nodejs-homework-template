@@ -53,7 +53,7 @@ async function removeContact(contactId) {
 }
 
 // Add contact
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const contactsList = await getContacts();
 
   const contactForAdd = {
