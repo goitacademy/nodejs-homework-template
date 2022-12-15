@@ -16,6 +16,5 @@ const contactsSchema = Schema({
     default: false,
   },
 });
-
 const contacts = model("contacts", contactsSchema);
 module.exports = contacts;
