@@ -47,7 +47,6 @@ const updateContact = async (contactId, body) => {
   const contacts = await getContacts();
   const parsedContacts = JSON.parse(contacts);
   let updatedContact;
-  console.table(parsedContacts);
 
   const updatedContacts = parsedContacts.map((contact) => {
     if (contact.id === contactId) {
