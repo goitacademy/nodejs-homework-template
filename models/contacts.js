@@ -1,3 +1,24 @@
+//
+const { Schema, model } = require("mongoose");
+
+const contactSchema = Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+const Contact = model("contact", contactSchema);
+
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
@@ -49,6 +70,7 @@ const updateContact = async (contactId, body) => {
 };
 
 module.exports = {
+  Contact,
   listContacts,
   getContactById,
   removeContact,

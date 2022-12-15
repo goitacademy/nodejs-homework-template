@@ -2,14 +2,15 @@ const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
+const contacts = require("../../controllers/contacts"); // ctrl
+
 const { httpError } = require("../../helpers");
 const addSchema = Joi.object({
   name: Joi.string().min(5).max(20).required(),
   email: Joi.string()
     .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "uk", "org", "ca"] },
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "uk", "org", "ca", "ua"] },
     })
     .required(),
   phone: Joi.string().min(5).max(25).required(),
@@ -17,7 +18,7 @@ const addSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await contacts.getAll();
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -27,7 +28,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await contacts.getById(contactId);
     if (!result) {
       throw httpError(404, "Not found");
     }
