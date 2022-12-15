@@ -2,88 +2,25 @@ const express = require('express')
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
+const ctrl = require('../../controllers/contacts')
 
-const { HttpError } = require('../../helpers');
-const { nanoid } = require('nanoid')
-const { schema, schemaParams } = require('../../schemas/contacts')
-const { validateBody, validateParams } = require('../../meddlewares')
+const { ctrlWrapper } = require('../../helpers')
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
+const { schemas } = require('../../models/contact')
 
-  } catch (error) {
-      res.status(500).json({ message: 'Server error' })
-  }
-})
+const { validateBody, isValidId } = require('../../meddlewares')
 
-router.get('/:contactId', validateParams(schemaParams), async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+router.get('/', ctrlWrapper(ctrl.getAll))
 
-    if (!result) {
-      throw HttpError(404, 'Not found');
-    }
+router.get('/:contactId', isValidId, ctrlWrapper(ctrl.getById))
 
-    res.json(result);
+router.post('/', validateBody(schemas.schemaBody), ctrlWrapper(ctrl.add))
 
-  } catch (error) {
-    next(error);
-  }
-})
+router.delete('/:contactId', isValidId, ctrlWrapper(ctrl.removeById))
 
-router.post('/', validateBody(schema), async (req, res, next) => {
-  try {
-    const body = {
-      id: nanoid(),
-      ...req.body
-    }
-    
-    const result = await contacts.addContact(body);
-    res.status(201).json(result);
+router.put('/:contactId', isValidId, validateBody(schemas.schemaBody), ctrlWrapper(ctrl.updateById))
 
-  } catch (error) {
-    next(error);
-  }
-})
+router.patch('/:contactId/favorite', isValidId, validateBody(schemas.schemaUpdateFavorite), ctrlWrapper(ctrl.updateStatusContact ))
 
-router.delete('/:contactId', 
-  validateParams(schemaParams),
-  async (req, res, next) => {
-    try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-
-    if (!result) {
-      throw HttpError(404, 'Not found');
-    }
-
-    res.json({ message: "contact deleted" });
-
-  } catch (error) {
-    next(error);
-  }
-})
-
-router.put('/:contactId',
-  validateParams(schemaParams), validateBody(schema),
-  async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-
-    const result = await contacts.updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, 'Not found');
-    }
-
-    res.json(result);
-
-  } catch (error) {
-    next(error);
-  }
-})
 
 module.exports = router
