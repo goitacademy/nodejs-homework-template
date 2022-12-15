@@ -1,4 +1,4 @@
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
 const add = async (req, res, next) => {
   if (req.body.favorite) {
@@ -21,4 +21,4 @@ const add = async (req, res, next) => {
   }
 };
 
-module.exports = { add };
+module.exports = add;

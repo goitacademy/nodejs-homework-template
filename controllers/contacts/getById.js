@@ -1,4 +1,4 @@
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
@@ -17,4 +17,4 @@ const getById = async (req, res, next) => {
   }
 };
 
-module.exports = { getById };
+module.exports = getById;

@@ -1,5 +1,4 @@
-
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
 const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
@@ -18,4 +17,4 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-module.exports = { deleteContact };
+module.exports = deleteContact;
