@@ -1,6 +1,15 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// const DB_HOST = "mongodb+srv://Natali:7WKMdskWh0ud0ypj@cluster0.z065a32.mongodb.net/contacts_reader?retryWrites=true&w=majority"
+
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+
+
+require("dotenv").config();
+// const { DB_HOST } = process.env;
+// mongoose.connect(DB_HOST)
+//   .then(() => console.log("Database connection successful"))
+//   .catch(error => console.log(error.message));
 
 const contactsRouter = require('./routes/api/contacts')
 

@@ -1,16 +1,17 @@
 const { HttpError } = require("../helpers");
-const contacts = require("../models/contacts");
+const Contact = require("../models/contacts");
 
 
-const validateId = async (req, res, next) => {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
-    if (result === null) {
-       next(HttpError(404, "Not found"));
+const validateId = shema => {
+    const func = (req, res, next) => {
+        console.log(req.params)
+        const { error} = shema.validate(req.params);
+        if (error) {
+      next(HttpError(400, error.message));
+        }
+        next()
     }
-    
-    next()
-
+    return func
 }
 
 module.exports = validateId
