@@ -1,7 +1,7 @@
-const validateContact = require("./validateContact");
+const validation = require("./validation");
 const isValidId = require("./isValidId");
 
 module.exports = {
-  validateContact,
+  validation,
   isValidId,
 };
