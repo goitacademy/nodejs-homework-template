@@ -7,7 +7,7 @@ const {
   logout,
   current,
   subscription,
-} = require('../../controller');
+} = require('../../controller/users');
 
 const router = express.Router();
 

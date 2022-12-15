@@ -6,7 +6,7 @@ const {
   remove,
   update,
   favorite,
-} = require('../../controller');
+} = require('../../controller/contacts');
 const {
   contactPutSchema,
   contactPostSchema,
