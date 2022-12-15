@@ -8,12 +8,12 @@ const {
 const {
   controlWrapper,
   validation,
-  validationId,
+  validationParams,
 } = require("../../middlewares");
 
 const validationMiddlewareAdd = validation(addContactScheme);
 const validationMiddlewarePut = validation(putContactScheme);
-const validationMiddlewareContactId = validationId(contactIdScheme);
+const validationMiddlewareContactId = validationParams(contactIdScheme);
 
 const { contacts: control } = require("../../controllers");
 

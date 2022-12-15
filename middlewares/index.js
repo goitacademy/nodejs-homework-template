@@ -1,9 +1,9 @@
 const controlWrapper = require("./controlWrapper");
 const validation = require("./validation");
-const validationId = require("./validationId");
+const validationParams = require("./validationParams");
 
 module.exports = {
   controlWrapper,
   validation,
-  validationId,
+  validationParams,
 };
