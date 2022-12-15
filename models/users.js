@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const sgMail = require("@sendgrid/mail");
+const sendMailService = require("../services/sendMail/sendMail");
 const fs = require("fs");
 const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
@@ -18,7 +18,6 @@ const upatePath = path.resolve("./public/avatars");
 const destinationPath = path.resolve("./tmp");
 
 const avatarPatchController = async (req, res, next) => {
-  // console.log(req);
   const tmpFile = path.join(destinationPath, req.file.originalname);
   try {
     // Чтение файла из tmp
@@ -56,15 +55,10 @@ const registration = async (req, res, next) => {
   // Оказалось что он есть и мы можем создать для него токен, аватар и письмо с подтвердением
   const avatarUrl = gravatar.url(email, { protocol: "https" });
   const verifyCode = uuidv4();
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const msg = {
-    to: email,
-    from: "vladdanya08@gmail.com",
-    subject: "Verifying mail",
-    text: `Please, follow the forward link and verify your account localhost:3030/api/users/verify/${verifyCode}`,
-    html: `<strong>Please, follow the forward <a href="localhost:3030/api/users/verify/${verifyCode}">link</a> and verify your account</strong>`,
-  };
+  const mailText = `Please, follow the forward link and verify your account, or make GET fetch on localhost:3030/api/users/verify/${verifyCode}`;
+  const mailSubject = "Verifying mail";
   try {
+    await sendMailService(mailSubject, mailText, email);
     const incryptedPassword = incryptPassword(password);
     await User.create({
       password: incryptedPassword,
@@ -72,7 +66,6 @@ const registration = async (req, res, next) => {
       avatarURL: avatarUrl,
       verificationToken: verifyCode,
     });
-    await sgMail.send(msg);
     return res.status(201).json({
       data: { email },
       status: "201 Created",
@@ -84,19 +77,48 @@ const registration = async (req, res, next) => {
 };
 
 const registrationVerification = async (req, res, next) => {
-  const { verifyCode } = req.params;
-  const user = await User.findOne({ verificationToken: verifyCode });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
   if (!user) {
     return res.status(404).json({ status: "404 Not Found" });
   }
-  if (user.verify) {
-    return res.status(404).json({ status: "404 Link already exposed" });
-  }
   try {
     user.verify = true;
-    user.verificationToken = null;
+    user.verificationToken = "0";
     await user.save();
-    return res.status(200).json({ message: "user successfully verifyed" });
+    return res
+      .status(200)
+      .json({ status: "200 OK", message: "user successfully verifyed" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const forcedVerification = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "missing required field email" });
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      message: "User was not found",
+      status: "404 Not Found",
+    });
+  } else if (user.verify) {
+    return res.status(400).json({
+      message: "Verification has already been passed",
+      status: "400 Bad Request",
+    });
+  }
+  const mailText = `Please, follow the forward link and verify your account, or make GET fetch on localhost:3030/api/users/verify/${user.verificationToken}`;
+  const mailSubject = "Verifying mail";
+  try {
+    await sendMailService(mailSubject, mailText, email);
+    return res.status(200).json({
+      status: "200 OK",
+      message: "Check your email and verify account !",
+    });
   } catch (error) {
     next(error);
   }
@@ -104,22 +126,22 @@ const registrationVerification = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email, verify: true });
+  const user = await User.findOne({ email });
 
-  if (!isValidPassword(password, user.password)) {
+  if (!user.verify) {
     return res.status(401).json({
-      message: "Email or password is wrong",
-      status: "401 Unauthorized",
+      message: "User was not verifyed",
+      status: "401 Not Verifyed",
     });
   } else if (!user) {
     return res.status(404).json({
       message: "User was not found",
       status: "404 Not Found",
     });
-  } else if (!user.verify) {
+  } else if (!isValidPassword(password, user.password)) {
     return res.status(401).json({
-      message: "User was not verifyed",
-      status: "401 Not Verifyed",
+      message: "Email or password is wrong",
+      status: "401 Unauthorized",
     });
   }
 
@@ -169,5 +191,6 @@ module.exports = {
   login,
   getCurrentUserInfo,
   registrationVerification,
+  forcedVerification,
   logOut,
 };
