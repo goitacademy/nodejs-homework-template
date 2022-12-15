@@ -9,6 +9,8 @@ const {
 
 const Contact = require('./contactShema');
 
+const User = require('./userSchema');
+
 
 module.exports = {
     listContacts,
@@ -18,5 +20,6 @@ module.exports = {
     updateContact,
     updateContactFavorite,
     Contact,
+    User,
 }
 

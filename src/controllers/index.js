@@ -6,6 +6,7 @@ const {
     putContactController,
     updateContactFavoriteController } = require('./contactsController')
     
+const {registerController } = require('./authController');
 
 module.exports = {
     getAllContactsController,
@@ -14,4 +15,5 @@ module.exports = {
     deleteContactController,
     putContactController,
     updateContactFavoriteController,
+    registerController,
 }
