@@ -22,8 +22,32 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsOperations.getContactById(id);
+    if (!result) {
+      res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Product with id=${id} not found'
+      });
+      return;
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      result: {
+        result
+      },
+    })
+  } catch (error) {
+      res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error'
+      })
+  }
 })
 
 router.post('/', async (req, res, next) => {
