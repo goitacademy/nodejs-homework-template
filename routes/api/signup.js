@@ -6,6 +6,6 @@ const { joyRegisterSchema } = require("../../models/users");
 
 const router = express.Router();
 
-router.post("./signup", validate(joyRegisterSchema), ctrl.register);
+router.post("/", validate(joyRegisterSchema), ctrl.register);
 
 module.exports = router;
