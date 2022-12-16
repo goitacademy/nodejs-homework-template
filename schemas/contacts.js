@@ -5,8 +5,11 @@ const addSchema = Joi.object({
     email: Joi.string().required(),
     phone: Joi.string().required(),
 })
-
+const updateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+})
 module.exports = {
     addSchema,
+    updateFavoriteSchema,
 }
 
