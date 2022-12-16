@@ -1,12 +1,8 @@
-async function addContact(name, email, phone) {
-  const contacts = await listContacts();
-  const newContact = {
-    id: v4(),
-    name,
-    email,
-    phone,
-  };
-  contacts.push(newContact);
-  fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return newContact;
+const Contact = require("../../models/contact")
+
+const add = async (req, res) => {
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);
 }
+
+module.exports = add;

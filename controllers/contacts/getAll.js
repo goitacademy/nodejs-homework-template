@@ -1,6 +1,9 @@
 
+const Contact = require("../../models/contact")
 
-async function listContacts() {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+const getAll = async (req, res, next) => {
+    const result = await Contact.find();
+    res.json(result)
 }
+
+module.exports = getAll;

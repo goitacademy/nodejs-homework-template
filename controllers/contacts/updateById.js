@@ -1,10 +1,13 @@
-async function updateContact(id) {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex((item) => item.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  contacts[idx] = { id, ...contacts };
-  await updateContact(contacts);
-  return contacts[idx];
+const Contact = require("../../models/contact");
+
+const HttpError = require("../../helpers");
+
+const updateById = async (req, res) => {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, );
+    if (!result) {
+        throw HttpError(404,"Not found")
+    }
+    res.json(result)
 }
+module.exports = updateById;
