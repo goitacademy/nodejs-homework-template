@@ -1,7 +1,12 @@
 const jwt = require("jsonwebtoken");
 const sendMailService = require("../services/sendMail/sendMail");
 const fs = require("fs");
+const {
+  notFoundErrorTemplate,
+  badRequestTemplate,
+} = require("../constants/responseTemplates/errorTemplates");
 const gravatar = require("gravatar");
+const verificationEmailTemplate = require("../constants/emailTemplates/verificationEmailTemplate");
 const { v4: uuidv4 } = require("uuid");
 const Jimp = require("jimp");
 const User = require("../services/userSchema");
@@ -13,6 +18,9 @@ const {
   isValidPassword,
   incryptPassword,
 } = require("../middleware/validatePassword");
+const {
+  successTemplate,
+} = require("../constants/responseTemplates/successTemplate");
 
 const upatePath = path.resolve("./public/avatars");
 const destinationPath = path.resolve("./tmp");
@@ -33,7 +41,7 @@ const avatarPatchController = async (req, res, next) => {
     });
     // Замена аватара
     newAvatar.resize(250, 250).write(`${upatePath}/${req.file.originalname}`);
-    return res.status(200).json({ test: "200 OK" });
+    return successTemplate(res, "Avatar successfully updated");
   } catch (error) {
     next(error);
   } finally {
@@ -55,8 +63,8 @@ const registration = async (req, res, next) => {
   // Оказалось что он есть и мы можем создать для него токен, аватар и письмо с подтвердением
   const avatarUrl = gravatar.url(email, { protocol: "https" });
   const verifyCode = uuidv4();
-  const mailText = `Please, follow the forward link and verify your account, or make GET fetch on localhost:3030/api/users/verify/${verifyCode}`;
-  const mailSubject = "Verifying mail";
+  const { mailSubject, mailText } = verificationEmailTemplate(verifyCode);
+  console.log(mailSubject, mailText);
   try {
     await sendMailService(mailSubject, mailText, email);
     const incryptedPassword = incryptPassword(password);
@@ -80,15 +88,13 @@ const registrationVerification = async (req, res, next) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
   if (!user) {
-    return res.status(404).json({ status: "404 Not Found" });
+    return notFoundErrorTemplate(res);
   }
   try {
     user.verify = true;
     user.verificationToken = "0";
     await user.save();
-    return res
-      .status(200)
-      .json({ status: "200 OK", message: "user successfully verifyed" });
+    return successTemplate(res, "User successfully verifyed");
   } catch (error) {
     next(error);
   }
@@ -97,28 +103,21 @@ const registrationVerification = async (req, res, next) => {
 const forcedVerification = async (req, res, next) => {
   const { email } = req.body;
   if (!email) {
-    return res.status(400).json({ message: "missing required field email" });
+    return badRequestTemplate(res, "missing required field email");
   }
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(404).json({
-      message: "User was not found",
-      status: "404 Not Found",
-    });
-  } else if (user.verify) {
-    return res.status(400).json({
-      message: "Verification has already been passed",
-      status: "400 Bad Request",
-    });
+    return notFoundErrorTemplate(res);
   }
-  const mailText = `Please, follow the forward link and verify your account, or make GET fetch on localhost:3030/api/users/verify/${user.verificationToken}`;
-  const mailSubject = "Verifying mail";
+  if (user.verify) {
+    return badRequestTemplate(res, "Verification has already been passed");
+  }
+  const { mailSubject, mailText } = verificationEmailTemplate(
+    user.verificationToken
+  );
   try {
     await sendMailService(mailSubject, mailText, email);
-    return res.status(200).json({
-      status: "200 OK",
-      message: "Check your email and verify account !",
-    });
+    return successTemplate(res, "Check your email and verify account !");
   } catch (error) {
     next(error);
   }
@@ -133,12 +132,11 @@ const login = async (req, res, next) => {
       message: "User was not verifyed",
       status: "401 Not Verifyed",
     });
-  } else if (!user) {
-    return res.status(404).json({
-      message: "User was not found",
-      status: "404 Not Found",
-    });
-  } else if (!isValidPassword(password, user.password)) {
+  }
+  if (!user) {
+    return notFoundErrorTemplate(res);
+  }
+  if (!isValidPassword(password, user.password)) {
     return res.status(401).json({
       message: "Email or password is wrong",
       status: "401 Unauthorized",
@@ -167,9 +165,7 @@ const login = async (req, res, next) => {
 const getCurrentUserInfo = async (req, res, next) => {
   const { email, subscription } = req.user;
   try {
-    return res
-      .status(200)
-      .json({ data: { email, subscription }, status: "200 OK" });
+    return successTemplate(res, "Success", { data: { email, subscription } });
   } catch (error) {
     next(error);
   }

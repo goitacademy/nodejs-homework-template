@@ -1,3 +1,9 @@
+const {
+  notFoundErrorTemplate,
+} = require("../constants/responseTemplates/errorTemplates");
+const {
+  successTemplate,
+} = require("../constants/responseTemplates/successTemplate");
 const Contact = require("../services/schema");
 
 const listContacts = async (req, res, next) => {
@@ -11,7 +17,7 @@ const listContacts = async (req, res, next) => {
     const contacts = await Contact.find(options, { __v: 0 })
       .skip(page * limit)
       .limit(limit);
-    return res.json({ data: contacts, status: 200 });
+    return successTemplate(res, "Success", { data: contacts });
   } catch (error) {
     next(error);
   }
@@ -23,12 +29,11 @@ const getContactById = async (req, res, next) => {
   try {
     const contactById = await Contact.findById({ _id: contactId, owner: _id });
     if (contactById) {
-      return res.json({ data: contactById, status: 200 });
-    } else {
-      return res.status(404).json({
-        data: `Contact with id ${contactId}, was not found`,
-        status: 404,
+      return successTemplate(res, "Success", {
+        data: contactById,
       });
+    } else {
+      return notFoundErrorTemplate(res);
     }
   } catch (error) {
     console.log(error);
@@ -45,12 +50,9 @@ const removeContact = async (req, res, next) => {
       owner: _id,
     });
     if (responce) {
-      return res.json({ data: responce, status: 200 });
+      return successTemplate(res, "Success", { data: responce });
     } else {
-      return res.status(404).json({
-        data: `Contact with id ${contactId}, was not found`,
-        status: 404,
-      });
+      return notFoundErrorTemplate(res);
     }
   } catch (error) {
     console.log(error);
@@ -80,12 +82,9 @@ const updateContact = async (req, res, next) => {
       { name, email, phone }
     );
     if (responce) {
-      return res.json({ data: responce, status: 200 });
+      return successTemplate(res, "Success", { data: responce });
     } else {
-      return res.status(404).json({
-        data: `Contact with id ${contactId}, was not found`,
-        status: 404,
-      });
+      return notFoundErrorTemplate(res);
     }
   } catch (error) {
     console.log(error);
@@ -103,12 +102,9 @@ const updateStatusContact = async (req, res, next) => {
       { favorite }
     );
     if (responce) {
-      return res.json({ data: responce, status: 200 });
+      return successTemplate(res, "Success", { data: responce });
     } else {
-      return res.status(404).json({
-        data: `Contact with id ${contactId}, was not found`,
-        status: 404,
-      });
+      return notFoundErrorTemplate(res);
     }
   } catch (error) {
     console.log(error);
