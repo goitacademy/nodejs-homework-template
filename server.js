@@ -7,7 +7,10 @@ const MONGO_URL = process.env.MONGO_URL;
 
 const start = async () => {
   try {
-    await mongoose.connect(MONGO_URL).then(() => console.log('start'));
+    await mongoose.set('strictQuery', false);
+    await mongoose
+      .connect(MONGO_URL, { useNewUrlParser: true })
+      .then(() => console.log('start'));
     console.log('Database connection successful');
   } catch (e) {
     console.error(e);
