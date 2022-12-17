@@ -29,55 +29,42 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex((item) => item.id === `${contactId}`);
-    if (index === -1) {
-      return null;
-    }
-    const [resault] = contacts.splice(index, 1);
-    await updateContacts(contacts);
-
-    return resault;
-  } catch (err) {
-    console.error("Error:", err);
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === `${contactId}`);
+  if (index === -1) {
+    return null;
   }
+  const [resault] = contacts.splice(index, 1);
+  await updateContacts(contacts);
+
+  return resault;
 };
 
-const addContact = async ({name, email, phone}) => {
-  try {
-    const contacts = await listContacts();
-    const newContact = {
-      id: nanoid(),
-      name,
-      email,
-      phone,
-    };
+const addContact = async ({ name, email, phone }) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: nanoid(),
+    name,
+    email,
+    phone,
+  };
 
-    contacts.push(newContact);
-    await updateContacts(contacts);
+  contacts.push(newContact);
+  await updateContacts(contacts);
 
-    return newContact;
-  } catch (err) {
-    console.error("Error:", err);
-  }
+  return newContact;
 };
 
 const updateContact = async (contactId, data) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === contactId);
-    if (index === -1) {
-        return null;
-    }
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
 
-    contacts[index] = {id: `${contactId}`, ...data};
-    await updateContacts(contacts);
-    return contacts[index];
-  }
-  catch (err) {
-    console.error("Error:", err);
-  }
+  contacts[index] = { id: `${contactId}`, ...data };
+  await updateContacts(contacts);
+  return contacts[index];
 };
 
 module.exports = {
