@@ -17,4 +17,6 @@ router.delete('/:contactId', ctrlWrapper(contactsCtrl.removeContactById));
 
 router.put('/:contactId', validateMiddleware, ctrlWrapper(contactsCtrl.updateContactById));
 
+router.patch('/:contactId/favorite', ctrlWrapper(contactsCtrl.updateStatusContact));
+
 module.exports = router;
