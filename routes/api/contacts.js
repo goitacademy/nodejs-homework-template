@@ -1,5 +1,21 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
+
+const contactsSchema = Joi.object({
+  name: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+  
+  email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+
+  phone: Joi.number() 
+    .max(12)  
+    .required(),
+})
 
 const contactsOperations = require("../../models/contacts");
 
@@ -14,11 +30,7 @@ router.get('/', async (req, res, next) => {
       },
   })
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error'
-      })
+    next(error);
   }
 })
 
@@ -27,12 +39,9 @@ router.get('/:id', async (req, res, next) => {
     const { id } = req.params;
     const result = await contactsOperations.getContactById(id);
     if (!result) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: 'Product with id=${id} not found'
-      });
-      return;
+      const error = new Error(`Product with id=${id} not found`);
+      error.status = 404;
+      throw error;     
     }
     res.json({
       status: 'success',
@@ -42,16 +51,29 @@ router.get('/:id', async (req, res, next) => {
       },
     })
   } catch (error) {
-      res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error'
-      })
+    next(error);      
   }
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;  
+    }
+    const result = await contactsOperations.addContact(req.body);
+    res.status(201).json({
+      status: 'success',
+      code: 201,
+      result: {
+        result
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
+  
 })
 
 router.delete('/:contactId', async (req, res, next) => {

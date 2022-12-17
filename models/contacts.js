@@ -8,9 +8,7 @@ const listContacts = async () => {
   const result = await fs.readFile(contactsPath);
     return JSON.parse(result);
 }
-    
-    
-
+ 
 const getContactById = async (id) => {
     const contactId = String(id);
     const contacts = await listContacts();
@@ -32,7 +30,8 @@ const removeContact = async (id) => {
   //   return result;
 }
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (body) => {
+    const { name, email, phone } = body;
     const contacts = await listContacts();
     const newContacts = {
         id: uuidv4(),
