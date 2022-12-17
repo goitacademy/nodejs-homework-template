@@ -20,7 +20,7 @@ router.get("/:contactId", async (req, res, next) => {
 
   return contact
     ? res.status(200).json(contact)
-    : res.status(404).json({ message: "Not found" });
+    : res.status(404).json({ message: "Not found contact" });
 });
 
 router.post("/", async (req, res, next) => {
@@ -40,7 +40,7 @@ router.delete("/:contactId", async (req, res, next) => {
   const isDeleted = await removeContact(contactId);
   return isDeleted
     ? res.status(200).json({ message: "Contact deleted" })
-    : res.status(404).json({ message: "Not found" });
+    : res.status(404).json({ message: "Not found contact" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
@@ -52,7 +52,7 @@ router.put("/:contactId", async (req, res, next) => {
 
     return data
       ? res.status(200).json(data)
-      : res.status(404).json({ message: "Not found" });
+      : res.status(404).json({ message: "Not found contact" });
   } catch (error) {
     return res.status(400).json(error.message);
   }
