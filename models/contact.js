@@ -1,9 +1,12 @@
 
 const { Schema, model } = require("mongoose");
+const {handleMongooseError} = require("../helpers")
+
 
 const contactSchema = new Schema(  {
     name: {
-      type: String,
+        type: String,
+        unique: true,
       required: [true, 'Set name for contact'],
     },
     email: {
@@ -18,8 +21,9 @@ const contactSchema = new Schema(  {
     },
   },{versionKey: false, timestamps: true})
 
-const Contact = model("contact", contactSchema)
+contactSchema.post("save", handleMongooseError)
 
+const Contact = model("contact", contactSchema)
 
 module.exports = Contact;
 
