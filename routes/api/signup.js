@@ -8,4 +8,6 @@ const router = express.Router();
 
 router.post("/", validate(joyRegisterSchema), ctrl.register);
 
+router.post("/", validate(joyRegisterSchema));
+
 module.exports = router;
