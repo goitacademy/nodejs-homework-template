@@ -2,7 +2,7 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 const { userRegisterValidation, userLoginValidation, auth } = require('../../middlewares');
-const { registerController, loginController, currentUserController,
+const { registerController, loginController, currentUserController, logoutUserController
 } = require('../../controllers');
 const {controllerCheck} = require('../../utils'); 
 
@@ -13,5 +13,8 @@ router.post('/login', userLoginValidation, controllerCheck(loginController))
 
 // get current user
 router.get('/current', auth, controllerCheck(currentUserController));
+
+// POST logout
+router.post('/logout', auth, controllerCheck(logoutUserController))
 
 module.exports = router;

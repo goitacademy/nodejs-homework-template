@@ -11,6 +11,7 @@ const {
     registerController,
     loginController,
     currentUserController,
+    logoutUserController,
 } = require('./authController');
 
 module.exports = {
@@ -23,4 +24,5 @@ module.exports = {
     registerController,
     loginController,
     currentUserController,
+    logoutUserController,
 }

@@ -4,7 +4,7 @@ const {handlerError} = require('../utils')
 const contactsSchema = new Schema({
         name: {
             type: String,
-            require: true,
+            required: true,
             unique: true,
         },
         email: {
@@ -19,6 +19,11 @@ const contactsSchema = new Schema({
             type: Boolean,
             default: false,
         },
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+        }
 }, {
     versionKey: false,
     timestamps: true,

@@ -1,7 +1,7 @@
 const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
-const { addContactValidation, putContactValidation, updateContactFavoriteValidation, isValidId } = require('../../middlewares');
+const { addContactValidation, putContactValidation, updateContactFavoriteValidation, isValidId, auth } = require('../../middlewares');
 const {getAllContactsController,
   getContactController,
   postContactController,
@@ -12,13 +12,13 @@ const {getAllContactsController,
 const {controllerCheck} = require('../../utils'); 
 
 // GET all contacts
-router.get('/', controllerCheck(getAllContactsController));
+router.get('/', auth, controllerCheck(getAllContactsController));
 
 // GET contact by ID
 router.get('/:contactId', isValidId, controllerCheck(getContactController));
 
 // POST - add new contact
-router.post('/', addContactValidation, controllerCheck(postContactController));
+router.post('/', auth, addContactValidation, controllerCheck(postContactController));
 
 // DELETE - remove contact by ID
 router.delete('/:contactId', isValidId, controllerCheck(deleteContactController));

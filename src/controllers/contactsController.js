@@ -8,7 +8,11 @@ const {listContacts,
 const {RequestError} = require('../utils');
 
 const getAllContactsController = async (req, res, next) => {
-    const contacts = await listContacts();
+    const { _id } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    console.log(typeof limit);
+    const contacts = await listContacts({owner: _id}, skip, limit);
     res.status(200).json({contacts});
 };
 
@@ -23,7 +27,8 @@ const getContactController = async (req, res, next) => {
 };
 
 const postContactController = async (req, res, next) => {
-    const newContact = await addContact(req.body);
+    const { _id } = req.user;
+    const newContact = await addContact({...req.body, owner: _id});
     res.status(201).json({newContact});
 };
 

@@ -1,7 +1,9 @@
 const Contact = require('./contactShema')
 
-const listContacts = async () => {
-        const contactList = await Contact.find({}, '-createdAt -updatedAt');
+const listContacts = async (owner, skip, limit) => {
+        console.log(typeof limit);
+        const contactList = await Contact.find({ ...owner }, '-createdAt -updatedAt', {skip, limit: Number(limit)}).populate('owner', '_id email');
+        console.log(typeof limit);
         return contactList;
 };
 
