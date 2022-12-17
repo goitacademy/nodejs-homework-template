@@ -34,11 +34,7 @@ const loginController = async (req, res, next) => {
         throw RequestError(401, "Email or password is wrong");
     }
 
-console.log("user => ", user )
-
     const checkedpassword = bcrypt.compare(password, user.password);
-
-console.log("checkedpassword => ", checkedpassword )
 
     if (!checkedpassword) {
         throw RequestError(401, "Email or password is wrong");
@@ -57,5 +53,10 @@ console.log("checkedpassword => ", checkedpassword )
     res.status(200).json({ token, user: {email, subscription: user.subscription }});
 };
 
+const currentUserController = async (req, res, next) => {
+    const { email, subscription } = req.user;
+    res.status(200).json({ email, subscription });
+}
 
-module.exports = {registerController, loginController};
+
+module.exports = {registerController, loginController, currentUserController};

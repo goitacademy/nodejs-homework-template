@@ -9,7 +9,8 @@ const {
     
 const {
     registerController,
-    loginController
+    loginController,
+    currentUserController,
 } = require('./authController');
 
 module.exports = {
@@ -21,4 +22,5 @@ module.exports = {
     updateContactFavoriteController,
     registerController,
     loginController,
+    currentUserController,
 }
