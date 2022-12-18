@@ -1,17 +1,17 @@
 const { createError } = require("../../helpers");
-const { updateContact } = require("../../models/contacts");
+const { updateFavoriteContact } = require("../../models/contacts");
 const {
   NOT_CONTACT_FOR_UPDATING,
   CONTACT_UPDATED,
 } = require("./contactsConstants");
 
-async function updateById(req, res, next) {
+async function updateFavoriteById(req, res, next) {
   const {
     params: { contactId },
     body,
   } = req;
 
-  const updatedContact = await updateContact(contactId, body);
+  const updatedContact = await updateFavoriteContact(contactId, body);
 
   if (!updatedContact) {
     throw createError({ status: 400, message: NOT_CONTACT_FOR_UPDATING });
@@ -22,4 +22,4 @@ async function updateById(req, res, next) {
     message: CONTACT_UPDATED,
   });
 }
-module.exports = updateById;
+module.exports = updateFavoriteById;

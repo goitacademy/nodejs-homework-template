@@ -7,16 +7,22 @@ const {
 // const { contactSchema } = require("../../helpers");
 
 async function createContact(req, res, next) {
-  console.log(req.body);
 
-  const result = await addContact(req.body);
+    // const { error } = contactSchema.validate(req.body);
 
-  if (result === "exist") {
-    throw createError({ status: 400, message: CONTACT_ALLREADY_EXIST });
-  }
-  res.status(201).json({
-    data: result,
-    message: CONTACT_ADDED,
-  });
+    // if (error) {
+    //   throw createError({ status: 404, message: error.message });
+    // }
+
+    const result = await addContact(req.body);
+
+    if (result === "exist") {
+      throw createError({ status: 400, message: CONTACT_ALLREADY_EXIST });
+    }
+    res.status(201).json({
+      data: result,
+      message: CONTACT_ADDED,
+    });
+
 }
 module.exports = createContact;
