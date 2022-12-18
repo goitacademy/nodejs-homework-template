@@ -9,6 +9,10 @@ const getUserByEmail = async (email) => {
   return UserModel.findOne({ email: email });
 };
 
+const getUserById = async (id) => {
+  return UserModel.findOne({ _id: id });
+};
+
 const updateUserById = async ({ id, body }) => {
   return UpdateUserModel.findByIdAndUpdate({ _id: id }, body, {
     new: true,
@@ -18,5 +22,6 @@ const updateUserById = async ({ id, body }) => {
 module.exports = {
   register,
   getUserByEmail,
+  getUserById,
   updateUserById,
 };

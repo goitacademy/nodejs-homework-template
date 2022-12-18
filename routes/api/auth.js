@@ -4,7 +4,7 @@ const router = express.Router();
 
 const auth = require("../../controllers/auth");
 
-const { validateBody } = require("../../middlewares");
+const { validateBody, authenticate } = require("../../middlewares");
 
 const { controllerWrapper } = require("../../helpers");
 
@@ -23,11 +23,21 @@ router.post(
 router.post(
   "/login",
   validateBody(loginUserSchema),
-  controllerWrapper(auth.loginUser)
+  controllerWrapper(auth.logInUser)
 );
 
 router.post(
+  "/logout",
+  authenticate(),
+  validateBody(updateUserSchema),
+  controllerWrapper(auth.logOutUser)
+);
+
+router.get("/current", authenticate(), controllerWrapper(auth.logOutUser));
+
+router.post(
   "/updatePassword/:userId",
+  authenticate(),
   validateBody(updateUserSchema),
   controllerWrapper(auth.updateUserPassword)
 );

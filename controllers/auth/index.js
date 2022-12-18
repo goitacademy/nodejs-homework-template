@@ -1,11 +1,14 @@
-const loginUser = require("./loginUser");
+const logInUser = require("./logInUser");
+
+const logOutUser = require("./logOutUser");
 
 const registerUser = require("./registerUser");
 
 const updateUserPassword = require("./updateUserPassword");
 
 module.exports = {
-  loginUser,
+  logInUser,
+  logOutUser,
   registerUser,
   updateUserPassword,
 };

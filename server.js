@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 // ! MONGO_DB_PASSWORD = testerovych
 // ! MONGO_DB_PROJECT=cluster0.m4clvz
 // ! MONGO_DB_NAME = contacts_store
-// ! MONGO_DB_COLLECTION = contacts
+// ! JWT_SECRET_KEY = 123456789123456789
 require("dotenv").config();
 
 const getMongoDbUri = () => {
