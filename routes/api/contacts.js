@@ -15,7 +15,7 @@ router.get("/", controllerWrapper(contacts.getAll));
 router.get("/:contactId", controllerWrapper(contacts.getById));
 
 router.post(
-  "/",
+  "/create",
   validateBody(newContactSchema),
   controllerWrapper(contacts.create)
 );

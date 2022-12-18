@@ -6,4 +6,6 @@ const newContactSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-module.exports = { newContactSchema };
+module.exports = {
+  newContactSchema,
+};
