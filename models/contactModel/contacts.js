@@ -23,7 +23,6 @@ const updateContact = async (contactId, body) => {
 };
 
 const updateFavoriteContact = async (contactId, body) => {
-  console.log(body, "model");
   return ContactModel.findByIdAndUpdate({ _id: contactId }, body, {
     new: true,
   });

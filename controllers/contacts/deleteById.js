@@ -1,5 +1,5 @@
 const { createError } = require("../../helpers");
-const { removeContact } = require("../../models/contacts");
+const { removeContact } = require("../../models/contactModel/contacts");
 const {
   NOT_CONTACT_FOR_DELETING,
   CONTACT_DELETED,

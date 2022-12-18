@@ -1,5 +1,5 @@
 const { createError } = require("../../helpers");
-const { updateFavoriteContact } = require("../../models/contacts");
+const { updateFavoriteContact } = require("../../models/contactModel/contacts");
 const {
   NOT_CONTACT_FOR_UPDATING,
   CONTACT_UPDATED,

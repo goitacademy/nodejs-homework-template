@@ -1,5 +1,5 @@
 const { createError } = require("../../helpers");
-const { listContacts } = require("../../models/contacts");
+const { listContacts } = require("../../models/contactModel/contacts");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 

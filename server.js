@@ -21,7 +21,7 @@ const getMongoDbUri = () => {
   return uri;
 };
 
-async function start() {
+async function connectToDb() {
   try {
     mongoose.set("strictQuery", true);
     mongoose.connect(getMongoDbUri(), {
@@ -31,13 +31,21 @@ async function start() {
       useUnifiedTopology: true,
     });
     console.log("<<< === connected to db === >>>");
+  } catch (error) {
+    console.log("<<< === connected to db FAILED === >>>");
+    console.log(error);
+  }
+}
 
+async function start() {
+  try {
+    connectToDb();
     app.listen(3000, () => {
       console.log(
         "Server running. Use our API on port: 3000",
         ",",
         "Wellkome",
-        "http://localhost:3000/api/contacts/"
+        "http://localhost:3000/api/"
       );
     });
   } catch (error) {

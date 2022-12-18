@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/auth");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
@@ -19,7 +21,12 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  if (err.status) {
+    res.status(err.status).json({ status: err.status, message: err.message });
+    return;
+  }
+
+  res.status(500).json({ status: 500, code: err.code, message: err.message });
 });
 
 module.exports = app;
