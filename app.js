@@ -1,14 +1,15 @@
 const express = require('express');
-const logger = require('morgan');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const logger = require("morgan");
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+require("dotenv").config();
 
-const contactsRouter = require('./routes/api/contacts');
+const { contactsRouter } = require("./routes");
 
 const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' });

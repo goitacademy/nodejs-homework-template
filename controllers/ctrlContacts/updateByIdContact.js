@@ -1,5 +1,5 @@
-const contacts = require("../../models/contacts");
-const { checkNull } = require("../../helpers");
+const { contactsService } = require("../../services");
+const { isValidNoNull } = require("../../helpers");
 
 const updateByIdContact = async (req, res) => {
   const {
@@ -7,11 +7,9 @@ const updateByIdContact = async (req, res) => {
     params: { contactId },
   } = req;
 
-  const result = await contacts.updateContact(contactId, body);
+  const result = await contactsService.updateContact(contactId, body);
 
-  checkNull(result);
-
-  res.status(201).json(result);
+  res.status(201).json(isValidNoNull(result));
 };
 
 module.exports = updateByIdContact;

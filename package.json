@@ -3,25 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "joi": "^17.7.0",
+    "joi-objectid": "^4.0.2",
+    "mongoose": "^5.12.13",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "nodemon": "^2.0.20",
-    "npx": "^3.0.0"
+    "nodemon": "^2.0.20"
   }
 }

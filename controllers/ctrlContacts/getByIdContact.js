@@ -1,12 +1,12 @@
-const contacts = require("../../models/contacts");
-const { checkNull } = require("../../helpers");
+const { contactsService } = require("../../services");
+const { isValidNoNull } = require("../../helpers");
 
 const getByIdContact = async (req, res) => {
   const { contactId } = req.params;
 
-  const result = await contacts.getById(contactId);
+  const result = await contactsService.getOneContact(contactId);
 
-  res.json(checkNull(result));
+  res.json(isValidNoNull(result));
 };
 
 module.exports = getByIdContact;
