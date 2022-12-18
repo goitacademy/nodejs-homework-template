@@ -10,9 +10,9 @@ const {
 router.post("/signup", validation(signUp), tryCatch(ctrl.signUp));
 router.post("/login", validation(logIn), tryCatch(ctrl.logIn));
 router.get("/logout", auth, tryCatch(ctrl.logOut));
-router.get("verify/:verificationToken", tryCatch(ctrl.verifyEmail));
+router.get("/verify/:verificationToken", tryCatch(ctrl.verifyEmail));
 router.post(
-  "verify",
+  "/verify",
   validation(joiReverifyEmailSchema),
   tryCatch(ctrl.reverifyEmail)
 );

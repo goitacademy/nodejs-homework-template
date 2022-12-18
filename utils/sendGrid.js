@@ -11,8 +11,8 @@ const sendEmail = async (data) => {
   /* data объект в котором:
   { to: "email", subject: "тема", from: "solik098@gmail.com", html: "<p>Текст<p/>",}
    */
-
-  const email = { ...data, subject: "Email verification" };
+  console.log(data);
+  const email = { ...data };
 
   try {
     sgMail.send(email);
