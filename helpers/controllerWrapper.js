@@ -11,4 +11,4 @@ const controllerWrapper = ctrl => {
     return func;
 }
 
-module.exports = controllerWrapper
+module.exports = controllerWrapper;
