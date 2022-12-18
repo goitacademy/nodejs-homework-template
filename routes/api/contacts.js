@@ -21,14 +21,13 @@ router.put(
   validateBody(schemas.putSchema),
   cntrlWrapper(cntrl.update)
 );
-router.patch("/:id/favorite", cntrl.updateFavorite);
 
-// router.patch(
-//   "/:id/favorite",
-//   isValidId,
-//   validateBody(schemas.updateFavoriteSchemas),
-//   cntrlWrapper(cntrl.updateFavorite)
-// );
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchemas),
+  cntrlWrapper(cntrl.updateFavorite)
+);
 
 module.exports = router;
 //npm run start:dev
