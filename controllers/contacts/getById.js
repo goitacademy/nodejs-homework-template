@@ -5,12 +5,14 @@ const { CONTACT_NOT_FOUND } = require("./contactsConstants");
 async function getbyId(req, res, next) {
   const { contactId } = req.params;
 
-  const result = await getContactById(contactId);
+  const contact = await getContactById(contactId);
 
-  if (!result) {
+  if (!contact) {
     throw createError({ status: 404, message: CONTACT_NOT_FOUND });
   }
 
-  res.json(result);
+  res
+    .status(200)
+    .json({ status: 200, data: contact, message: CONTACT_NOT_FOUND });
 }
 module.exports = getbyId;

@@ -14,6 +14,6 @@ async function deleteById(req, res, next) {
     throw createError({ status: 400, message: NOT_CONTACT_FOR_DELETING });
   }
 
-  res.status(200).json({ id: result, message: CONTACT_DELETED });
+  res.status(200).json({ status: 200, id: result, message: CONTACT_DELETED });
 }
 module.exports = deleteById;

@@ -30,16 +30,17 @@ async function connectToDb() {
       // useCreateIndex: true,
       useUnifiedTopology: true,
     });
-    console.log("<<< === connected to db === >>>");
+    return "<<< === connected to db === >>>";
   } catch (error) {
-    console.log("<<< === connected to db FAILED === >>>");
     console.log(error);
+    return "<<< === connected to db FAILED === >>>";
   }
 }
 
 async function start() {
   try {
-    connectToDb();
+    const dbConnectionResponse = await connectToDb();
+    console.log(dbConnectionResponse);
     app.listen(3000, () => {
       console.log(
         "Server running. Use our API on port: 3000",

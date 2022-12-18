@@ -1,8 +1,11 @@
-const login = require("./login");
+const loginUser = require("./loginUser");
 
-const registerUser = require("./register");
+const registerUser = require("./registerUser");
+
+const updateUserPassword = require("./updateUserPassword");
 
 module.exports = {
-  login,
+  loginUser,
   registerUser,
+  updateUserPassword,
 };

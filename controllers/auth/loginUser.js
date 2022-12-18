@@ -4,17 +4,23 @@ const { WRONG_CREDENTIALS, LOGIN_SUCCESSFULL } = require("./authConstants");
 
 const { getUserByEmail } = require("../../models/authModel/auth");
 
+const bcrypt = require("bcryptjs");
+
 async function loginUser(req, res, nest) {
   const { email, password } = req.body;
 
-  const result = await getUserByEmail(email);
+  const user = await getUserByEmail(email);
 
-  if (!result) {
+  if (!user) {
     throw createError({ status: 400, message: WRONG_CREDENTIALS });
   }
-  if (password !== result.passwordHash) {
+
+  const isPasswordsEqual = await bcrypt.compare(password, user.passwordHash);
+
+  if (!isPasswordsEqual) {
     throw createError({ status: 400, message: WRONG_CREDENTIALS });
   }
+
   res.status(201).json({
     status: 404,
     data: "token",

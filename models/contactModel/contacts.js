@@ -8,6 +8,10 @@ const getContactById = async (contactId) => {
   return ContactModel.findOne({ _id: contactId });
 };
 
+const getContactByPhone = async (phone) => {
+  return ContactModel.findOne({ phone: phone });
+};
+
 const removeContact = async (contactId) => {
   return ContactModel.findByIdAndRemove({ _id: contactId });
 };
@@ -31,6 +35,7 @@ const updateFavoriteContact = async (contactId, body) => {
 module.exports = {
   listContacts,
   getContactById,
+  getContactByPhone,
   removeContact,
   addContact,
   updateContact,

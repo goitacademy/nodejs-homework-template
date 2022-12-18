@@ -8,7 +8,11 @@ const { validateBody } = require("../../middlewares");
 
 const { controllerWrapper } = require("../../helpers");
 
-const { registerUserSchema, loginUserSchema } = require("../../schemas");
+const {
+  registerUserSchema,
+  loginUserSchema,
+  updateUserSchema,
+} = require("../../schemas");
 
 router.post(
   "/register",
@@ -19,7 +23,13 @@ router.post(
 router.post(
   "/login",
   validateBody(loginUserSchema),
-  controllerWrapper(auth.login)
+  controllerWrapper(auth.loginUser)
+);
+
+router.post(
+  "/updatePassword/:userId",
+  validateBody(updateUserSchema),
+  controllerWrapper(auth.updateUserPassword)
 );
 
 module.exports = router;

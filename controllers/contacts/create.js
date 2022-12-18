@@ -1,5 +1,8 @@
 const { createError } = require("../../helpers");
-const { addContact } = require("../../models/contactModel/contacts");
+const {
+  addContact,
+  getContactByPhone,
+} = require("../../models/contactModel/contacts");
 const {
   CONTACT_ALLREADY_EXIST,
   CONTACT_ADDED,
@@ -7,13 +10,18 @@ const {
 // const { contactSchema } = require("../../helpers");
 
 async function createContact(req, res, next) {
-  const result = await addContact(req.body);
+  const { phone } = req.body;
 
-  console.log(result);
-  if (result === "exist") {
+  const foundContact = await getContactByPhone(phone);
+
+  if (foundContact) {
     throw createError({ status: 400, message: CONTACT_ALLREADY_EXIST });
   }
+
+  const result = await addContact(req.body);
+
   res.status(201).json({
+    status: 201,
     data: result,
     message: CONTACT_ADDED,
   });

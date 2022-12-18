@@ -1,14 +1,22 @@
-const UserModel = require("./UserModel");
+const UserModel = require("./UpdateUserModel");
+const UpdateUserModel = require("./UpdateUserModel");
 
 const register = async (user) => {
-  // console.log(UserModel.create(user));
   return UserModel.create(user);
 };
 
 const getUserByEmail = async (email) => {
   return UserModel.findOne({ email: email });
 };
+
+const updateUserById = async ({ id, body }) => {
+  return UpdateUserModel.findByIdAndUpdate({ _id: id }, body, {
+    new: true,
+  });
+};
+
 module.exports = {
   register,
   getUserByEmail,
+  updateUserById,
 };

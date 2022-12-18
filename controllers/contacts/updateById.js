@@ -18,6 +18,7 @@ async function updateById(req, res, next) {
   }
 
   res.status(200).json({
+    status: 200,
     updatedContact: updatedContact,
     message: CONTACT_UPDATED,
   });
