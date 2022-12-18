@@ -1,26 +1,9 @@
-const contacts = require("../../models/contacts");
-const HttpError = require("../../helpers");
-
-const Joi = require("joi");
-
-const postSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const { Contact } = require("../../models/contact");
 
 const add = async (req, res, next) => {
-  try {
-    const { error } = postSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
 
-  res.json({ message: "template message" });
+  // res.json({ message: "template message" });
 };
 module.exports = add;
