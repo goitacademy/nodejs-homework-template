@@ -4,16 +4,16 @@
 
 **Використовуйте наступні запити для перегляду та редагування облікових записів в базі даних:**
 
-- Отримати список всіх контактів: `GET /api/contacts/`
-- Отримати дані контакту:`GET /api/contacts/:id/`
-- Додати новий контакт: `POST /api/contacts/`
-- Оновити контакт: `PUT /api/contacts/:id/`
-- Видалити контакт: `DELETE /api/contacts/:id/`
-- Оновити статус контакту: `PATCH /api/contacts/:id/favorite/`
+- [Отримати список всіх контактів:](#getContacts) `GET /api/contacts/`
+- [Отримати дані контакту:](#getContact) `GET /api/contacts/:id/`
+- [Додати новий контакт:](#addContact) `POST /api/contacts/`
+- [Оновити контакт:](updateContact) `PUT /api/contacts/:id/`
+- [Видалити контакт:](deleteContact) `DELETE /api/contacts/:id/`
+- [Оновити статус контакту:](updateStatusContact) `PATCH /api/contacts/:id/favorite/`
 
 ---
 
-## Отримати список всіх контактів
+<a name="getContacts"><h2>Отримати список всіх контактів</h2></a>
 
 **URL:** `/api/contacts/`
 
@@ -44,8 +44,7 @@
 ```
 
 ---
-
-## [Отримати дані контакту](#GET_/api/contacts/:id)
+<a name="getContact"><h2>Отримати дані контакту</h2></a>
 
 **URL:** `/api/contacts/:id/`
 
@@ -80,8 +79,7 @@
 ```
 
 ---
-
-## Додати новий контакт
+<a name="addContact"><h2>Додати новий контакт</h2></a>
 
 **URL:** `/api/contacts/`
 
@@ -134,7 +132,7 @@
    "message": "\"email\" is required"
 ```
 ---
-## Оновити дані контакту
+<a name="updateContact"><h2>Оновити дані контакту</h2></a>
 
 **URL:** `/api/contacts/:id/`
 
@@ -219,7 +217,7 @@
 
 ---
 
-## Видалити контакт
+<a name="deleteContact"><h2>Видалити контакт</h2></a>
 
 **URL:** `/api/contacts/:id/`
 
@@ -253,7 +251,7 @@
 
 ---
 
-## Оновити статус контакту
+<a name="updateStatusContact"><h2>Оновити статус контакту</h2></a>
 
 **URL:** `/api/contacts/:id/favorite`
 
