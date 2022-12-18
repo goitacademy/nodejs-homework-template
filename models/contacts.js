@@ -1,5 +1,5 @@
 // const uniqid = require("uniqid");
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
 const fs = require("fs/promises");
 const path = require("path");
 

@@ -1,16 +1,10 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contact");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 
 const getAll = async (req, res) => {
-  const contacts = await listContacts();
+  const contacts = await Contact.find();
   res.json(contacts);
 };
 
@@ -26,7 +20,7 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => { 
-  const result = await addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
