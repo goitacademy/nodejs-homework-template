@@ -4,7 +4,8 @@ const router = express.Router()
 
 const contacts = require('../../models/contacts');
 
-const { HttpError } = require('../../helpers')
+const { HttpError } = require('../../helpers');
+
 // Joi схема
 const addSchema = Joi.object({
     name: Joi.string().required(),
