@@ -12,9 +12,7 @@ const contactsSchema = Joi.object({
   email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
 
-  phone: Joi.number() 
-    .max(12)  
-    .required(),
+  phone: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
 })
 
 const contactsOperations = require("../../models/contacts");
@@ -80,8 +78,25 @@ router.delete('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:id', async (req, res, next) => {
+  try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;  
+    }
+    const { id } = req.params;
+    const result = await contactsOperations.updateById(id, req.body);
+    res.json({
+      status: 'success',
+      code: 200,
+      result: {
+        result
+      }
+    })
+  } catch (error) {
+    next(error);
+  }
 })
 
 module.exports = router
