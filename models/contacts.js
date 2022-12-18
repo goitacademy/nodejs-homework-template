@@ -47,17 +47,20 @@ const phonePatern =
 
 const schema = Joi.object({
   name: Joi.string()
-    .pattern(new RegExp(namePatern)),
+    .pattern(new RegExp(namePatern))
+    .allow(''),
   email: Joi.string()
-    .email(),
+    .email()
+    .allow(''),
   phone: Joi.string()
-    .pattern(new RegExp(phonePatern)),
+    .pattern(new RegExp(phonePatern))
+    .allow(''),
 })
 
 const addContact = async ({ name, email, phone }) => {
   try {
-    const validatedValues = await schema.validate({ name, email, phone })
-    console.log(validatedValues)
+    const validatedValues = schema.validate({ name, email, phone })
+    if (validatedValues.error) return { valid: null }
     const oldList = await listContacts();
     const newContact = {
       id: uniqid(),
@@ -76,19 +79,21 @@ const addContact = async ({ name, email, phone }) => {
 
 const updateContact = async (contactId, { name = '', email = '', phone = '' }) => {
   try {
-    await schema.validate({ name, email, phone })
+    const validatedValues = schema.validate({ name, email, phone })
+    if (validatedValues.error) return { valid: null }
     const contactList = await listContacts();
-    const contactToUpdate = await getContactById(contactId);
     const index = contactList.findIndex(contact => contact.id === contactId)
     if (index === -1) {
       return null
     }
+    const contactToUpdate = await getContactById(contactId);
+
     if (name !== '') contactToUpdate.name = name;
     if (email !== '') contactToUpdate.email = email;
     if (phone !== '') contactToUpdate.phone = phone;
 
-    const newList = contactList.splice(index, 1, contactToUpdate)
-    await fs.writeFile(contactList, JSON.stringify(newList, null, 2));
+    contactList.splice(index, 1, contactToUpdate)
+    await fs.writeFile(contactPath, JSON.stringify(contactList, null, 2));
 
     return contactToUpdate;
   } catch (err) {

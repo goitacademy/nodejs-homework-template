@@ -19,14 +19,16 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body
-  console.log(req.body)
   if (name === undefined || email === undefined || phone === undefined) {
     res.status(400).json({ message: 'Missing required field', code: 400 })
     return
   }
   const newContact = await contactFuncs.addContact({ email, name, phone })
-
-  res.status(201).json({ message: 'Contact added', code: 201, data: newContact })
+  if (newContact.valid === null) {
+    res.status(400).json({ message: 'Unvalid field', code: 400 })
+  } else {
+    res.status(201).json({ message: 'Contact added', code: 201, data: newContact })
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
@@ -40,7 +42,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   const { contactId } = req.params
-  if (req.body === {}) {
+  if (Object.keys(req.body).length === 0) {
     res.status(400).json({ message: 'Missing fields', code: 400 })
     return
   }
@@ -49,6 +51,8 @@ router.put('/:contactId', async (req, res, next) => {
 
   if (updatedContact === null) {
     res.status(404).json({ message: 'Not found', code: 404 })
+  } else if (updatedContact.valid === null) {
+    res.status(400).json({ message: 'Unvalid field', code: 400 })
   } else { res.json({ message: 'Contact updated', code: 200, data: updatedContact }) }
 })
 
