@@ -2,6 +2,7 @@ const express = require("express");
 // midleware, кот выводит сообщение о том какой запрос куда был
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
