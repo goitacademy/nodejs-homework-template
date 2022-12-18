@@ -7,9 +7,9 @@
 - [Отримати список всіх контактів:](#getContacts) `GET /api/contacts/`
 - [Отримати дані контакту:](#getContact) `GET /api/contacts/:id/`
 - [Додати новий контакт:](#addContact) `POST /api/contacts/`
-- [Оновити контакт:](updateContact) `PUT /api/contacts/:id/`
-- [Видалити контакт:](deleteContact) `DELETE /api/contacts/:id/`
-- [Оновити статус контакту:](updateStatusContact) `PATCH /api/contacts/:id/favorite/`
+- [Оновити контакт:](#updateContact) `PUT /api/contacts/:id/`
+- [Видалити контакт:](#deleteContact) `DELETE /api/contacts/:id/`
+- [Оновити статус контакту:](#updateStatusContact) `PATCH /api/contacts/:id/favorite/`
 
 ---
 
