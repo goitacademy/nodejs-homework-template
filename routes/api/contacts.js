@@ -1,11 +1,9 @@
 const express = require("express");
-
+const { NotFound } = require("http-errors");
 const router = express.Router();
 const contacts = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
-  // res.json({ message: "template message get" });
-
   try {
     const contactsList = await contacts.listContacts();
     res.status(200).json(contactsList);
@@ -15,7 +13,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const id = req.params.contactId;
     const oneContact = await contacts.getContactById(id);
@@ -31,7 +28,6 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const body = req.body;
     const newContact = await contacts.addContact(body);
@@ -42,20 +38,30 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
+    const id = req.params.contactId;
     const deleteContact = await contacts.removeContact(id);
-    res.json(deleteContact);
+    if (!deleteContact) {
+      throw new NotFound("Not found");
+    }
+    res.status(200).json({
+      message: `Contact deleted`,
+    });
   } catch (error) {
     next(error);
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
-    const updContact = await contacts.addContact({ name, email, phone });
-    res.json(updContact);
+    const body = req.body;
+    const id = req.params.contactId;
+
+    const updContact = await contacts.updateContact(id, body);
+    if (!updContact) {
+      throw new NotFound();
+    }
+    res.status(200).json(updContact);
   } catch (error) {
     next(error);
   }

@@ -1,22 +1,3 @@
-// // const fs = require('fs/promises')
-
-// const listContacts = async () => {}
-
-// const getContactById = async (contactId) => {}
-
-// const removeContact = async (contactId) => {}
-
-// const addContact = async (body) => {}
-
-// const updateContact = async (contactId, body) => {}
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// }
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -47,13 +28,11 @@ const removeContact = async (contactId) => {
   return result;
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
-    name,
-    email,
-    phone,
+    ...body,
   };
   contacts.push(newContact);
 
