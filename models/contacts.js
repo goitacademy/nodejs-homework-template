@@ -12,7 +12,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   const id = String(contactId);
   const allContacts = await listContacts();
-  const contact = allContacts.filter((contact) => contact.id === id);
+  const contact = allContacts.find((contact) => contact.id === id);
   return contact || null;
 };
 
@@ -40,9 +40,20 @@ const addContact = async (body) => {
   const allContacts = await listContacts();
   allContacts.push(newContact);
   await fs.writeFile(contactPath, JSON.stringify(allContacts));
+  return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const id = String(contactId);
+  const allContacts = await listContacts();
+  const idx = allContacts.findIndex((contact) => contact.id === id);
+  if (idx === -1) {
+    return null;
+  }
+  allContacts[idx] = { ...body, id };
+  await fs.writeFile(contactPath, JSON.stringify(allContacts));
+  return allContacts[idx];
+};
 
 module.exports = {
   listContacts,
