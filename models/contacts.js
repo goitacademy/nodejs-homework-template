@@ -13,11 +13,12 @@ const listContacts = async () => {
     console.log(error);
   }
 };
+// listContacts();
 
 const getContactById = async (contactId) => {
   try {
     const data = JSON.parse(await fs.readFile(contactsPath, "utf8"));
-    const contactById = data.fiiter((contact) => contact.id === contactId);
+    const contactById = data.filter((contact) => contact.id === contactId);
     if (!contactId) {
       return { message: "Not found" };
     }
@@ -28,6 +29,7 @@ const getContactById = async (contactId) => {
     console.log(error);
   }
 };
+// getContactById('1');
 
 const addContact = async ({ name, email, phone }) => {
   try {

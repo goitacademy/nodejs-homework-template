@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { addContactValidation } = require("../../middlewares/validation");
-const contacts = require("../../models/contacts.json");
+// const contacts = require("../../models/contacts.json");
 const {
   listContacts,
   getContactById,
