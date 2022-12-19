@@ -1,10 +1,16 @@
 const fs = require('fs/promises');
 const path = require('path');
+const mongoose = require('mongoose');
 const {nanoid}  = require("nanoid");
-
 const contactsPath = path.resolve("./models/contacts.json"); 
 
-const updateContacts = async(contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+const DB_HOST = "mongodb+srv://Elijah:rdNGUSmMoRLs6mWH@cluster0.neigeis.mongodb.net/db-contacts?retryWrites=true";
+
+mongoose.connect(DB_HOST)
+  .then(() => console.log("database connect success"))
+  .catch((error) => console.log(error.message));
+
+const updateContacts = async (contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
 async function listContacts() {
   try {
@@ -47,7 +53,7 @@ async function addContact({name, email, phone}) {
       email,
       phone,
     }
-    contacts.push(newContact)
+    contacts.push(newContact);
     await updateContacts(contacts);
   } catch (error) {
     console.log(error)
