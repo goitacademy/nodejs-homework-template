@@ -1,4 +1,4 @@
-const controlers = require("../../controlers/controlers");
+const controlers = require("../../controlers/contacts/controlers");
 const express = require("express");
 const router = express.Router();
 
@@ -19,6 +19,9 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   controlers.putById(req, res, next);
+});
+router.patch("/:contactId", async (req, res, next) => {
+  controlers.updateStatusContact(req, res, next);
 });
 
 module.exports = router;

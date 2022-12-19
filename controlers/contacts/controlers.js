@@ -1,5 +1,5 @@
-const server = require("../models/contacts");
-const schema = require("../schemas/schemas");
+const server = require("../../models/contacts");
+const schema = require("../../schemas/schemas");
 
 const getList = async (req, res, next) => {
   try {
@@ -26,12 +26,8 @@ const getListById = async (req, res, next) => {
 
 const postContact = async (req, res, next) => {
   try {
-    const validationResult = schema.schemaPost.validate(req.body);
-    if (validationResult.error) {
-      return res.status(400).json({ message: "missing required name field" });
-    }
-    const { name, email, phone } = req.body;
-    await server.addContact(name, email, phone);
+    const { name, email, phone, favorite = false } = req.body;
+    await server.addContact(name, email, phone, favorite);
     res.json({ status: "success" });
   } catch (error) {
     next(error);
@@ -66,8 +62,20 @@ const putById = async (req, res, next) => {
       return res.status(400).json({ message: "missing fields" });
     }
     const contact = await server.updateContact(contactId, req.body);
-    console.log(req.body);
 
+    res.json({ contact, message: "success" });
+  } catch (error) {
+    next(error);
+  }
+};
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    if (Object.keys(req.body).length === 0) {
+      console.log("bye");
+      return res.status(400).json({ message: "missing fields" });
+    }
+    const contact = await server.updateContact(contactId, req.body);
     res.json({ contact, message: "success" });
   } catch (error) {
     next(error);
@@ -79,4 +87,5 @@ module.exports = {
   postContact,
   deleteById,
   putById,
+  updateStatusContact,
 };
