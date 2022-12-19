@@ -5,6 +5,7 @@ const router = express.Router()
 const contacts = require('../../models/contacts');
 
 const { HttpError } = require('../../helpers');
+const { validateBody } = require('../../middlewares');
 
 // Joi схема
 const addSchema = Joi.object({
@@ -38,26 +39,17 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 // добавить контакт
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+router.post('/', validateBody(addSchema),async (req, res, next) => {
+  try {   
       const result = await contacts.addContact(req.body);
       res.status(201).json(result);
   } catch (error) {
       next(error)
- }
-  
+ }  
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+router.put('/:contactId', validateBody(addSchema),async (req, res, next) => {
+  try {    
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
