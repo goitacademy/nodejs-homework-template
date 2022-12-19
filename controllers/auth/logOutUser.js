@@ -2,14 +2,14 @@ const { createError } = require("../../helpers");
 
 const { WRONG_CREDENTIALS, LOGOUT_SUCCESSFULL } = require("./authConstants");
 
-const { getUserById, updateUserById } = require("../../models/authModel/auth");
+const { getUserById } = require("../../models/authModel/auth");
 
 const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET_KEY } = process.env;
 
 async function logOutUser(req, res, nest) {
-  const { email, password, _id, token } = req.body;
+  const { _id, token } = req.body;
 
   const user = await getUserById(_id);
 
@@ -19,7 +19,6 @@ async function logOutUser(req, res, nest) {
 
   const isJwtEqual = jwt.verify(token, JWT_SECRET_KEY);
 
-  console.log(isJwtEqual);
   // if (!isJwtEqual) {
   //   throw createError({ status: 400, message: WRONG_CREDENTIALS });
   // }

@@ -11,6 +11,7 @@ const {
 
 async function createContact(req, res, next) {
   const { phone } = req.body;
+  const { id } = req.user;
 
   const foundContact = await getContactByPhone(phone);
 
@@ -18,7 +19,7 @@ async function createContact(req, res, next) {
     throw createError({ status: 400, message: CONTACT_ALLREADY_EXIST });
   }
 
-  const result = await addContact(req.body);
+  const result = await addContact({ ...req.body, owner: id });
 
   res.status(201).json({
     status: 201,

@@ -1,5 +1,8 @@
 const { createError } = require("../../helpers");
-const { updateFavoriteContact } = require("../../models/contactModel/contacts");
+const {
+  updateFavoriteContact,
+  getContactById,
+} = require("../../models/contactModel/contacts");
 const {
   NOT_CONTACT_FOR_UPDATING,
   CONTACT_UPDATED,
@@ -11,7 +14,16 @@ async function updateFavoriteById(req, res, next) {
     body,
   } = req;
 
-  const updatedContact = await updateFavoriteContact(contactId, body);
+  const contact = await getContactById(contactId);
+
+  if (!contact) {
+    throw createError({ status: 400, message: NOT_CONTACT_FOR_UPDATING });
+  }
+
+  const updatedContact = await updateFavoriteContact(
+    contactId,
+    !contact.favorite
+  );
 
   if (!updatedContact) {
     throw createError({ status: 400, message: NOT_CONTACT_FOR_UPDATING });

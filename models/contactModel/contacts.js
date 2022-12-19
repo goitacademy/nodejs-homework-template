@@ -1,7 +1,8 @@
 const ContactModel = require("./contactModel");
 
-const listContacts = async () => {
-  return ContactModel.find();
+const listContacts = async ({ owner }) => {
+  console.log(owner, "model");
+  return ContactModel.find({ owner });
 };
 
 const getContactById = async (contactId) => {
@@ -26,10 +27,14 @@ const updateContact = async (contactId, body) => {
   });
 };
 
-const updateFavoriteContact = async (contactId, body) => {
-  return ContactModel.findByIdAndUpdate({ _id: contactId }, body, {
-    new: true,
-  });
+const updateFavoriteContact = async (contactId, favorite) => {
+  return ContactModel.findByIdAndUpdate(
+    { _id: contactId },
+    { favorite },
+    {
+      new: true,
+    }
+  );
 };
 
 module.exports = {

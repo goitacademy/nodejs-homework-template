@@ -28,16 +28,16 @@ router.post(
 
 router.post(
   "/logout",
-  authenticate(),
+  authenticate,
   validateBody(updateUserSchema),
   controllerWrapper(auth.logOutUser)
 );
 
-router.get("/current", authenticate(), controllerWrapper(auth.logOutUser));
+router.get("/current", authenticate, controllerWrapper(auth.currentUser));
 
 router.post(
   "/updatePassword/:userId",
-  authenticate(),
+  authenticate,
   validateBody(updateUserSchema),
   controllerWrapper(auth.updateUserPassword)
 );

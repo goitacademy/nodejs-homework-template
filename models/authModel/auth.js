@@ -1,5 +1,4 @@
-const UserModel = require("./UpdateUserModel");
-const UpdateUserModel = require("./UpdateUserModel");
+const UserModel = require("./UserModel");
 
 const register = async (user) => {
   return UserModel.create(user);
@@ -14,7 +13,7 @@ const getUserById = async (id) => {
 };
 
 const updateUserById = async ({ id, body }) => {
-  return UpdateUserModel.findByIdAndUpdate({ _id: id }, body, {
+  return UserModel.findByIdAndUpdate({ _id: id }, body, {
     new: true,
   });
 };

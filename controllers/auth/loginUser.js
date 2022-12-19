@@ -34,7 +34,7 @@ async function logInUser(req, res, nest) {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1d" });
 
   await updateUserById({ id: user._id, body: { token } });
 

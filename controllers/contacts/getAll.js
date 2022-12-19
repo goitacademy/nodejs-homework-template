@@ -4,7 +4,11 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 async function getAll(req, res, next) {
-  const contacts = await listContacts();
+  const { id } = req.user;
+
+  console.log(id, "controller");
+
+  const contacts = await listContacts({ owner: id });
 
   if (!contacts) {
     throw createError({ status: 404 });
