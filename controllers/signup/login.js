@@ -2,7 +2,7 @@ const { Unauthorized } = require("http-errors");
 const { User } = require("../../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = process.env;
+// const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -22,7 +22,7 @@ const login = async (req, res) => {
 
   // разобраться с ключем --------------
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, "dfherehdh4tsdgd4", { expiresIn: "1h" });
   res.json({
     status: "log in success",
     code: 200,

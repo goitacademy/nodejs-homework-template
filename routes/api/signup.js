@@ -11,6 +11,6 @@ router.post("/signup", validate(joyRegisterSchema), ctrl.register);
 
 router.post("/login", validate(joyRegisterSchema), ctrl.login);
 
-router.get("./current", auth, ctrl.getCurrent);
+router.get("/current", auth, ctrl.getCurrent);
 
 module.exports = router;
