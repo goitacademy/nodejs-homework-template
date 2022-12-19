@@ -2,7 +2,6 @@ const fs = require('fs/promises');
 const path = require('path');
 
 const contactsPath = path.join(__dirname, 'contacts.json');
-console.log(contactsPath);
 
 const listContacts = async () => {
   try {
@@ -12,13 +11,12 @@ const listContacts = async () => {
   } catch (error) {
     console.log(error);
   }
-
 }
 
 const getContactById = async (contactId) => {
     try {
       const contacts = await listContacts();
-      const selectedContact = contacts.find(contact => contact.id === contactId);
+      const [selectedContact] = contacts.filter(contact => contact.id === contactId);
       return selectedContact || null;
     } catch (error) {
       console.log(error);
@@ -33,8 +31,7 @@ const removeContact = async (contactId) => {
       if (deletedContactIndex === -1) {
         return null;
       }
-
-      const deletedContact = contacts.splise(deletedContactIndex, 1);
+      const deletedContact = contacts.splice(deletedContactIndex, 1);
 
       await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
@@ -59,7 +56,18 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    console.log('boo');
+    const contacts = await listContacts();
+    contacts.forEach(contact => {
+      if (contact.id === contactId) {
+        contact.name = body.name;
+        contact.email = body.email;
+        contact.phone = body.phone;
+      }
+    });
+   
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return body;
+
   } catch (error) {
     console.log(error);
   }
