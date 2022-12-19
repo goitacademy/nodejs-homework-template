@@ -1,10 +1,14 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// !hxG2_ix_LsKLnB
 
-const contactsRouter = require('./routes/api/contacts')
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
 
-const app = express()
+
+
+const contactsRouter = require('./routes/api/contacts');
+
+const app = express(); 
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
