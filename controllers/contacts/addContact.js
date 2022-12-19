@@ -1,11 +1,15 @@
 const { Contacts } = require("../../models/contacts");
 
 const add = async (req, res, next) => {
+  const { _id } = req.user;
   if (req.body.favorite) {
-    await Contacts.create(req.body, (req.body.favorite = false));
+    await Contacts.create(
+      { ...req.body, owner: _id },
+      (req.body.favorite = false)
+    );
   }
 
-  const result = await Contacts.create(req.body);
+  const result = await Contacts.create({ ...req.body, owner: _id });
 
   try {
     res.json({
