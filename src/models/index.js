@@ -4,7 +4,7 @@ const {
     removeContact,
     addContact,
     updateContact,
-    updateContactFavorite
+    updateContactFavorite,
 } = require('./contacts');
 
 const Contact = require('./contactShema');

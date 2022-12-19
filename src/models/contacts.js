@@ -1,9 +1,13 @@
 const Contact = require('./contactShema')
 
-const listContacts = async (owner, skip, limit) => {
-        console.log(typeof limit);
-        const contactList = await Contact.find({ ...owner }, '-createdAt -updatedAt', {skip, limit: Number(limit)}).populate('owner', '_id email');
-        console.log(typeof limit);
+const listContacts = async (owner, skip, limit, favorite) => {
+
+        if (!favorite) {
+                const contactList = await Contact.find({ ...owner}, '-createdAt -updatedAt', {skip, limit: Number(limit)}).populate('owner', '_id email');
+                return contactList;
+        }
+
+        const contactList = await Contact.find({ ...owner, favorite}, '-createdAt -updatedAt', {skip, limit: Number(limit)}).populate('owner', '_id email');
         return contactList;
 };
 
@@ -32,11 +36,12 @@ const updateContactFavorite = async (contactId, favorite) => {
         return updatedContact;
 }; 
 
+
 module.exports = {
         listContacts,
         getContactById,
         removeContact,
         addContact,
         updateContact,
-        updateContactFavorite
+        updateContactFavorite,
 };

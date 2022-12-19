@@ -2,7 +2,7 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 const { userRegisterValidation, userLoginValidation, auth } = require('../../middlewares');
-const { registerController, loginController, currentUserController, logoutUserController
+const { registerController, loginController, currentUserController, logoutUserController, updateUserSubscriptionController
 } = require('../../controllers');
 const {controllerCheck} = require('../../utils'); 
 
@@ -11,10 +11,14 @@ router.post('/register', userRegisterValidation, controllerCheck(registerControl
 // login
 router.post('/login', userLoginValidation, controllerCheck(loginController))
 
-// get current user
+// GET current user
 router.get('/current', auth, controllerCheck(currentUserController));
 
 // POST logout
 router.post('/logout', auth, controllerCheck(logoutUserController))
+
+// PATCH update subscription field on User
+router.patch('/', auth, controllerCheck(updateUserSubscriptionController) ) 
+
 
 module.exports = router;

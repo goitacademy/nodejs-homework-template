@@ -9,10 +9,9 @@ const {RequestError} = require('../utils');
 
 const getAllContactsController = async (req, res, next) => {
     const { _id } = req.user;
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, favorite } = req.query;
     const skip = (page - 1) * limit;
-    console.log(typeof limit);
-    const contacts = await listContacts({owner: _id}, skip, limit);
+    const contacts = await listContacts({owner: _id}, skip, limit, favorite);
     res.status(200).json({contacts});
 };
 
@@ -68,5 +67,5 @@ module.exports = {
     postContactController,
     deleteContactController,
     putContactController,
-    updateContactFavoriteController
+    updateContactFavoriteController,
 };

@@ -28,4 +28,6 @@ router.put('/:contactId', isValidId, putContactValidation, controllerCheck(putCo
 
 // PATCH - update contact field 'favorite' by contact ID
 router.patch('/:contactId/favorite', isValidId, updateContactFavoriteValidation, controllerCheck(updateContactFavoriteController) ) 
+
+
 module.exports = router;

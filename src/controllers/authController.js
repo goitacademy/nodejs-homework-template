@@ -60,8 +60,15 @@ const currentUserController = async (req, res, next) => {
 
 const logoutUserController = async (req, res, next) => {
     const { _id } = req.user;
-    await User.findByIdAndUpdate(_id, { token: null }) 
-    res.status(204).json()
+    await User.findByIdAndUpdate(_id, { token: null }); 
+    res.status(204).json();
 }
 
-module.exports = {registerController, loginController, currentUserController, logoutUserController};
+const updateUserSubscriptionController = async (req, res, next) => {
+    console.log(req.body);
+    const { subscription } = req.body;
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { subscription });
+    res.status(200).json({_id, subscription});
+}
+module.exports = {registerController, loginController, currentUserController, logoutUserController, updateUserSubscriptionController};
