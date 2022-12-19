@@ -3,6 +3,11 @@ const { NotFound } = require("http-errors");
 const router = express.Router();
 const contacts = require("../../models/contacts.js");
 
+const {
+  addContactSchema,
+  updContactSchema,
+} = require("../../middlewares/validateBody");
+
 router.get("/", async (req, res, next) => {
   try {
     const contactsList = await contacts.listContacts();
@@ -15,6 +20,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const id = req.params.contactId;
+
     const oneContact = await contacts.getContactById(id);
     if (!oneContact) {
       const message = new Error("Not found");
@@ -30,6 +36,15 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const body = req.body;
+
+    const { error } = addContactSchema.validate(body);
+
+    if (error) {
+      error.status = 400;
+      // error.message = `missing required name field`;
+      throw error;
+    }
+
     const newContact = await contacts.addContact(body);
     res.status(201).json(newContact);
   } catch (error) {
@@ -56,6 +71,13 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const body = req.body;
     const id = req.params.contactId;
+    const { error } = updContactSchema.validate(body);
+
+    if (error) {
+      return res.status(400).json({
+        message: error.details[0].message,
+      });
+    }
 
     const updContact = await contacts.updateContact(id, body);
     if (!updContact) {
