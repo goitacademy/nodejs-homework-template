@@ -26,12 +26,7 @@ router.post(
   controllerWrapper(auth.logInUser)
 );
 
-router.post(
-  "/logout",
-  authenticate,
-  validateBody(updateUserSchema),
-  controllerWrapper(auth.logOutUser)
-);
+router.post("/logout", authenticate, controllerWrapper(auth.logOutUser));
 
 router.get("/current", authenticate, controllerWrapper(auth.currentUser));
 

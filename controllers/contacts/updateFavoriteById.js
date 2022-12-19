@@ -9,10 +9,7 @@ const {
 } = require("./contactsConstants");
 
 async function updateFavoriteById(req, res, next) {
-  const {
-    params: { contactId },
-    body,
-  } = req;
+  const { contactId } = req.params;
 
   const contact = await getContactById(contactId);
 

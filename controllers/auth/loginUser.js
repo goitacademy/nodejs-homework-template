@@ -40,7 +40,10 @@ async function logInUser(req, res, nest) {
 
   res.status(200).json({
     status: 200,
-    data: { token: token },
+    data: {
+      token: token,
+      user: { email: user.email, subscription: user.subscription },
+    },
     message: LOGIN_SUCCESSFULL,
   });
 }

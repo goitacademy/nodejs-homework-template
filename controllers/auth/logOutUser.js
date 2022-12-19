@@ -2,36 +2,49 @@ const { createError } = require("../../helpers");
 
 const { WRONG_CREDENTIALS, LOGOUT_SUCCESSFULL } = require("./authConstants");
 
-const { getUserById } = require("../../models/authModel/auth");
+const { getUserById, updateUserById } = require("../../models/authModel/auth");
 
 const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET_KEY } = process.env;
 
-async function logOutUser(req, res, nest) {
-  const { _id, token } = req.body;
+async function logOutUser(req, res, next) {
+  try {
+    const { authorization } = req.headers;
 
-  const user = await getUserById(_id);
+    const [bearer, token] = authorization.split(" ");
 
-  if (!user) {
-    throw createError({ status: 400, message: WRONG_CREDENTIALS });
-  }
+    if (bearer !== "Bearer") {
+      throw createError({
+        status: 401,
+        code: 401.01,
+        message: "Unauthorized",
+      });
+    }
 
-  const isJwtEqual = jwt.verify(token, JWT_SECRET_KEY);
+    const tokenInfo = jwt.verify(token, JWT_SECRET_KEY);
 
-  // if (!isJwtEqual) {
-  //   throw createError({ status: 400, message: WRONG_CREDENTIALS });
-  // }
+    if (!tokenInfo) {
+      throw createError({ status: 400, message: WRONG_CREDENTIALS });
+    }
 
-  // await updateUserById({ id: user._id, body: { token: "" } });
+    const user = await getUserById(tokenInfo.id);
 
-  if (isJwtEqual) {
-    res.status(200).json({
-      status: 200,
+    if (!user) {
+      throw createError({ status: 400, message: WRONG_CREDENTIALS });
+    }
+
+    await updateUserById({ id: tokenInfo.id, body: { token: "" } });
+
+    res.status(204).json({
+      status: 204,
       message: LOGOUT_SUCCESSFULL,
     });
+  } catch (error) {
+    if (!error.status) {
+      console.log(error, "logout controller");
+    }
   }
-  res.send();
 }
 
 module.exports = logOutUser;
