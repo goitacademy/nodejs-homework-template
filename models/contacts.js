@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs").promises;
-// const nanoid = require("nanoid");
-// const Joi = require("joi");
+const {nanoid} = require("nanoid");
 
 const contactsPath = path.resolve("./models/contacts.json");
 
@@ -27,35 +26,10 @@ const removeContact = async (contactId) => {
   return result;
 };
 
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-  if (!name || !email || !phone) return null;
-  console.log(name, email, phone);
-
-    // const schema = Joi.object({
-  //   name: Joi.string().alpha().min(3).max(30).required(),
-  //   email: Joi.string()
-  //     .email({
-  //       minDomainSegments: 2,
-  //       tlds: {
-  //         allow: ["com", "net"],
-  //       }.required(),
-  //     })
-  //     .required(),
-  //   phone: Joi.string()
-  //     .regex(/^[0-9]{10}$/)
-  //     .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
-  //     .required(),
-  // }).with("name", "email", "phone");
-  // const validationResult = schema.validate(body);
-  //  if (!validationResult ) return 0;
-
-  const contacts = JSON.parse(await fs.readFile(contactsPath));
-  const newId = 11
-  // const newId = nanoid();
-  // const newId = parseInt(contacts[contacts.length - 1].id) + 1;
+const addContact = async ({ name, email, phone }) => {
+  const contacts = await listContacts();
   const newContact = {
-    id: newId.toString(),
+    id: nanoid(),
     name,
     email,
     phone,
@@ -65,7 +39,18 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(
+    (contact) => contact.id === contactId.toString()
+  );
+  if (index === -1) return null;
+
+  contacts[index] = { contactId, ...body };
+  console.log(contacts[index]);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
 
 module.exports = {
   listContacts,
