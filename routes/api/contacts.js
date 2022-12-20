@@ -1,25 +1,21 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { schema } = require("../../schemas");
+const { validation, ctrlWrapper } = require("../../middlewares");
+const { contacts: ctrl } = require("../../controllers");
+const validateMiddlewarePut = validation(schema.putSchema);
+const validateMiddlewarePost = validation(schema.postSchema);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validateMiddlewarePost, ctrlWrapper(ctrl.postContact));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", ctrlWrapper(ctrl.deleteContact));
 
-module.exports = router
+router.put("/:contactId", validateMiddlewarePut, ctrlWrapper(ctrl.putContact));
+
+module.exports = router;
