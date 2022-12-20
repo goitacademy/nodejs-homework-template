@@ -15,7 +15,7 @@ const contactsSchema = new Schema({
             type: String,
             unique: true,
         },
-        favorite: {
+        favourite: {
             type: Boolean,
             default: false,
         },

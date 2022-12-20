@@ -4,7 +4,7 @@ const {
     postContactController,
     deleteContactController,
     putContactController,
-    updateContactFavoriteController,
+    updateContactFavouriteController,
     } = require('./contactsController')
     
 const {
@@ -21,7 +21,7 @@ module.exports = {
     postContactController,
     deleteContactController,
     putContactController,
-    updateContactFavoriteController,
+    updateContactFavouriteController,
     registerController,
     loginController,
     currentUserController,

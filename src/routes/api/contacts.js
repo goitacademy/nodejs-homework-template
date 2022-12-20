@@ -1,13 +1,13 @@
 const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
-const { addContactValidation, putContactValidation, updateContactFavoriteValidation, isValidId, auth } = require('../../middlewares');
+const { addContactValidation, putContactValidation, updateContactFavouriteValidation, isValidId, auth } = require('../../middlewares');
 const {getAllContactsController,
   getContactController,
   postContactController,
   deleteContactController,
   putContactController,
-  updateContactFavoriteController,
+  updateContactFavouriteController,
 } = require('../../controllers');
 const {controllerCheck} = require('../../utils'); 
 
@@ -26,8 +26,8 @@ router.delete('/:contactId', isValidId, controllerCheck(deleteContactController)
 // PUT - update contact by ID
 router.put('/:contactId', isValidId, putContactValidation, controllerCheck(putContactController));
 
-// PATCH - update contact field 'favorite' by contact ID
-router.patch('/:contactId/favorite', isValidId, updateContactFavoriteValidation, controllerCheck(updateContactFavoriteController) ) 
+// PATCH - update contact field 'favourite' by contact ID
+router.patch('/:contactId/favourite', isValidId, updateContactFavouriteValidation, controllerCheck(updateContactFavouriteController) ) 
 
 
 module.exports = router;

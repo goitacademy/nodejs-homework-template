@@ -12,7 +12,7 @@ module.exports = {
         phone: Joi.string()
             .regex(/^[0-9]{10,15}$/)
             .required(),
-        favorite: Joi.boolean()
+        favourite: Joi.boolean()
     });
 
     const validationResult = schema.validate(req.body);
@@ -42,7 +42,7 @@ module.exports = {
             phone: Joi.string()
                 .regex(/^[0-9]{10,15}$/)
                 .optional(),
-            favorite: Joi.boolean()
+            favourite: Joi.boolean()
                 .optional()
         });
 
@@ -56,10 +56,10 @@ module.exports = {
     next();
     },
 
-        updateContactFavoriteValidation: (req, res, next) => {
+        updateContactFavouriteValidation: (req, res, next) => {
 
         const schema = Joi.object({
-            favorite: Joi.boolean()
+            favourite: Joi.boolean()
                 .required()
         });
 
