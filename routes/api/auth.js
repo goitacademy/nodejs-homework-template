@@ -3,6 +3,7 @@ const {
   validationConstructor,
   controllerWrapper,
   isValidId,
+  isAuth,
 } = require("../../middlewares");
 const { auth } = require("../../controllers");
 const { signupJoiSchema, loginJoiSchema } = require("../../models/user");
@@ -18,4 +19,6 @@ router.post(
   validationConstructor(loginJoiSchema),
   controllerWrapper(auth.login)
 );
+router.get("/logout", isAuth, controllerWrapper(auth.logout));
+
 module.exports = router;

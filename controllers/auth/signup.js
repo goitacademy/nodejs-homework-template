@@ -6,7 +6,7 @@ const signup = async (req, res) => {
   const { email, password, subscription } = req.body;
   const dublicateUser = await User.findOne({ email });
   if (dublicateUser) {
-    throw new Conflict(`User with ${email} already exist`);
+    throw new Conflict("Email  in use");
   }
   const newUser = new User({ subscription, email });
   newUser.setPassword(password);
