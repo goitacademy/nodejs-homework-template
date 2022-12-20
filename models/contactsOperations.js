@@ -17,7 +17,6 @@ const getContactById = async (contactId) => {
   if (contact === -1) {
     return null;
   } else {
-    console.log(contact)
     return contact;
   }
 };
