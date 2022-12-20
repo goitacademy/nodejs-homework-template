@@ -3,7 +3,7 @@ const { addContactValidation,
     putContactValidation,
     updateContactFavouriteValidation,
     userRegisterValidation,
-userLoginValidation, } = require('./validationMiddlware');
+userLoginValidation, updateContactSubscriptionValidation} = require('./validationMiddlware');
 const auth = require('./auth');
 
 module.exports = {
@@ -14,4 +14,5 @@ module.exports = {
     userRegisterValidation,
     userLoginValidation,
     auth,
+    updateContactSubscriptionValidation
 }

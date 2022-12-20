@@ -56,7 +56,7 @@ module.exports = {
     next();
     },
 
-        updateContactFavouriteValidation: (req, res, next) => {
+    updateContactFavouriteValidation: (req, res, next) => {
 
         const schema = Joi.object({
             favourite: Joi.boolean()
@@ -113,6 +113,26 @@ module.exports = {
     if (validationResult.error) {
         return res.status(400)
             .json({ message: validationResult.error.message });
+    }
+
+    next();
+    },
+
+    updateContactSubscriptionValidation: (req, res, next) => {
+
+        const schema = Joi.object({
+            subscription: Joi.string()
+                .valid('start','pro', 'business')
+                .required()
+        });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+        return res.status(400)
+            .json({
+            message: validationResult.error.message,
+        });
     }
 
     next();
