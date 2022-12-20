@@ -9,8 +9,10 @@ const contactsSchema = Joi.object({
         .max(30)
         .required(),
   
-  email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+  email: Joi.string().email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net'] }
+  }),
 
   phone: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
 })
@@ -74,8 +76,23 @@ router.post('/', async (req, res, next) => {
   
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsOperations.removeContact(id);
+    if (!result) {
+      throw new NotFound(`Product with id=${id} not found`);
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      result: {
+        result
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.put('/:id', async (req, res, next) => {
@@ -87,6 +104,11 @@ router.put('/:id', async (req, res, next) => {
     }
     const { id } = req.params;
     const result = await contactsOperations.updateById(id, req.body);
+    if (!result) {
+      const error = new Error(`Product with id=${id} not found`);
+      error.status = 404;
+      throw error;     
+    }
     res.json({
       status: 'success',
       code: 200,
