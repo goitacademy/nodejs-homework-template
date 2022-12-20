@@ -5,6 +5,7 @@ const registerUserSchema = Joi.object({
   password: Joi.string().min(8).required(),
   email: Joi.string().pattern(mailRegEx).required(),
   subscription: Joi.string().valid("starter", "pro", "business"),
+  avatarURL: Joi.string,
 });
 const updateUserSchema = Joi.object({
   password: Joi.string().min(8).required(),

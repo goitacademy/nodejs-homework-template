@@ -33,5 +33,11 @@ router.patch(
   middlewares.validateBody(schemas.user.updateUserSchema),
   controllerWrapper(controllers.updateSubscribtionUser)
 );
+router.patch(
+  "/avatars",
+  middlewares.authenticate,
+  middlewares.upload.single("avatar"),
+  controllerWrapper(controllers.updateUserAvatar)
+);
 
 module.exports = router;
