@@ -29,7 +29,12 @@
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
-npm i nodemon --devDependencies
-npm i nodemon --save-dev
+npm i nodemon --devDependencies установка nodemon
+npm i nodemon --save-dev 
 npx nodemon contacts.js
 npx nodemon server.js
+$ npm install --global yarn -install yarn
+$ yarn - start yarn
+$ yarn add express -install express
+$ yarn start:dev - запуск додатка
+yarn add cors - пакет для разрешения крос доменных запрсов (запросы с одного сайта на другой)
