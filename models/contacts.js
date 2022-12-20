@@ -28,7 +28,6 @@ async function getContactById(contactId) {
   if (!contactById) {
     return null;
   }
-
   return contactById;
 }
 
