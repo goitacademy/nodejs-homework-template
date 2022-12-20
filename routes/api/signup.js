@@ -13,4 +13,6 @@ router.post("/login", validate(joyRegisterSchema), ctrl.login);
 
 router.get("/current", auth, ctrl.getCurrent);
 
+router.post("/logout", auth, ctrl.logout);
+
 module.exports = router;

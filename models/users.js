@@ -21,6 +21,10 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    logout: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );
