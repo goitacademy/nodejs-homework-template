@@ -1,12 +1,10 @@
-const path = require("path");
-
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = path.join(__dirname, "../../models/contacts.js");
+} = require("../models/contacts");
 
 const getContacts = async (req, res, next) => {
   try {
