@@ -4,7 +4,7 @@ const router = express.Router();
 const Joi = require("joi");
 const contacts = require("../../models/contacts");
 
-function createContactSchema(req, res, next) {
+function contactSchema(req, res, next) {
   const schema = Joi.object({
     name: Joi.string().required(),
     phone: Joi.string().required(),
@@ -53,7 +53,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", createContactSchema, async (req, res, next) => {
+router.post("/", contactSchema, async (req, res, next) => {
   const { name, email, phone } = req.body;
   await contacts
     .addContact({ name, email, phone })
@@ -77,7 +77,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", createContactSchema, async (req, res, next) => {
+router.put("/:contactId", contactSchema, async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
   contacts
