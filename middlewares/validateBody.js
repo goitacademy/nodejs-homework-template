@@ -1,12 +1,11 @@
-const { BadRequest } = require('http-errors');
-// const { joiSchema } = require('../schemas/contacts');
+const { HttpError } = require('../helpers');
 
 const validateBody = schema => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     console.log(error);
     if (error) {
-      next( new BadRequest('message: missing fields'));
+      next(HttpError(400, error.message));
     }
     next();
   };
