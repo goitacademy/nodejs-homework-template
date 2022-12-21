@@ -60,9 +60,15 @@
     "phone": "(748) 206-2688"
   },
   {
-    "id": "2c7ea9e6-f021-4b99-874c-7b3df4fe9b63",
-    "name": "Mango",
-    "email": "mango@test.com",
-    "phone": "0774562123"
+    "id": "57afc6a5-3c37-4de6-a2e0-33b32e4c959a",
+    "name": "Fox",
+    "email": "foxred@test.com",
+    "phone": "9774562123"
+  },
+  {
+    "id": "6bc33361-6a12-485c-b20c-8c179d6681a1",
+    "name": "Chaim",
+    "email": "dui@test.com",
+    "phone": "1234568956"
   }
 ]
