@@ -1,77 +1,123 @@
 const express = require("express");
 const Joi = require("joi");
-const {
-  listContacts,
-  addContact,
-  getContactById,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+const Contact = require("../../models/contacts");
+
+const { createError } = require("../../helpers");
+
 const router = express.Router();
 
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+  phone: Joi.string()
+    .pattern(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+    )
+    .message("Phone number must be min 6 numbers length")
+    .required(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 router.get("/", async (req, res, next) => {
-  const data = await listContacts();
-  return res.status(200).json(data);
+  try {
+    const result = await Contact.find({}, "name email phone");
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contactId = req.params.contactId;
-  const contact = await getContactById(contactId);
-
-  return contact
-    ? res.status(200).json(contact)
-    : res.status(404).json({ message: "Not found contact" });
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findById(contactId);
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
   try {
-    const userRequest = await req.body;
-    const value = await schemaCreate.validateAsync(userRequest);
-    const data = await addContact(value);
-
-    return res.status(201).json(data);
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    if (req.body.favorite === undefined) {
+      req.body.favorite = false;
+    }
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);
   } catch (error) {
-    return res.status(400).json(error.message);
+    next(error);
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  const contactId = req.params.contactId;
-  const isDeleted = await removeContact(contactId);
-  return isDeleted
-    ? res.status(200).json({ message: "Contact deleted" })
-    : res.status(404).json({ message: "Not found contact" });
+  try {
+    const { contactId } = req.params;
+
+    const result = await Contact.findByIdAndRemove(contactId);
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    console.log("error", error);
+    next(error);
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const contactId = req.params.contactId;
-  const userRequest = await req.body;
   try {
-    const value = await schemaUpdate.validateAsync(userRequest);
-    const data = await updateContact(contactId, value);
-
-    return data
-      ? res.status(200).json(data)
-      : res.status(404).json({ message: "Not found contact" });
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json(result);
   } catch (error) {
-    return res.status(400).json(error.message);
+    next(error);
   }
 });
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const schemaUpdate = Joi.object({
-  name: Joi.string().alphanum(),
-  email: Joi.string().email(),
-  phone: Joi.string()
-    .pattern(phoneRegExp)
-    .message("Phone number must be min 6 numbers length"),
-}).min(1);
-
-const schemaCreate = Joi.object({
-  name: Joi.string().required().alphanum(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().pattern(phoneRegExp).required(),
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
