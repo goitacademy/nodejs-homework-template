@@ -9,7 +9,6 @@ const getUserByEmail = async (email) => {
 };
 
 const getUserById = async (id) => {
-  console.log(id, "auth model");
   return UserModel.findById(id);
 };
 

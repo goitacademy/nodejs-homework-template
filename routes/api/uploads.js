@@ -1,17 +1,18 @@
 const express = require("express");
 
 const router = express.Router();
-const { authenticate, upload } = require("../../middlewares");
-const uploadAvatar = require("../../controllers/uploadFiles");
+const { validateBody, authenticate, upload } = require("../../middlewares");
+const uploadFiles = require("../../controllers/uploadFiles");
+
+const { updateContactSchema } = require("../../schemas");
 const { controllerWrapper } = require("../../helpers");
 
 router.post(
   "/avatar",
   authenticate,
   upload.single("avatar"),
-  // upload.any(),
-  // validateBody(),
-  controllerWrapper(uploadAvatar.uploadAvatar)
+  validateBody(updateContactSchema),
+  controllerWrapper(uploadFiles.uploadAvatar)
 );
 
 module.exports = router;

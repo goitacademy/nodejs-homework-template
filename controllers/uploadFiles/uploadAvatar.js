@@ -1,7 +1,7 @@
 const { createError } = require("../../helpers");
 const path = require("path");
 const fs = require("fs").promises;
-
+const { updateUserById } = require("../../models/authModel/auth");
 const {
   UPLOAD_SUCCESS,
   UPLOAD_FAILED,
@@ -13,6 +13,7 @@ async function uploadAvatar(req, res, next) {
       headers,
       body,
       file,
+      user,
       file: { filename, originalname },
     } = req;
 
@@ -35,12 +36,21 @@ async function uploadAvatar(req, res, next) {
 
     const avatar = path.join("avatars", originalname);
 
+    const avatarURL = `http://${headers.host}/${avatar}`;
+
+    const updadatedUserData = await updateUserById({
+      id: user.id,
+      body: { avatarURL },
+    });
+
+    console.log(updadatedUserData);
+
     res.status(201).json({
       status: 201,
       data: {
-        title: body.title,
+        title: body.avatarName,
         avatar,
-        url: `http://${headers.host}/${avatar}`,
+        url: updadatedUserData.avatarURL,
       },
       message: UPLOAD_SUCCESS,
     });

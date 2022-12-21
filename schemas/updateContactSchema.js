@@ -6,6 +6,7 @@ const updateContactSchema = Joi.object({
   phone: Joi.string(),
   owner: Joi.string(),
   favorite: Joi.boolean(),
+  avatarName: Joi.string(),
 });
 
 module.exports = {

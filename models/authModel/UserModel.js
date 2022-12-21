@@ -24,6 +24,10 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: {
+      type: String,
+      default: "",
+    },
     token: {
       type: String,
       default: "",
@@ -32,6 +36,6 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const NewUserModel = mongoose.model("user", userSchema);
+const UserModel = mongoose.model("user", userSchema);
 
-module.exports = NewUserModel;
+module.exports = UserModel;
