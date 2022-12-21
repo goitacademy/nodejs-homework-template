@@ -1,6 +1,6 @@
 const { validateBody } = require("../../middlewares");
 
-const schemas = require("../../schemas/contacts");
+const {schemas} = require("../../models/contact");
 
 const ctrl = require("../../controllers/contacts");
 
@@ -17,6 +17,6 @@ router.delete("/:contactId", ctrl.deleteById);
 
 router.put("/:contactId",validateBody(schemas.addShema), ctrl.updateById);
 
-router.patch("/:contactId",validateBody(schemas.patchShema), ctrl.patchById);
+router.patch("/:contactId/favorite",validateBody(schemas.updateFavoriteShema), ctrl.updateFavorite);
 
 module.exports = router;
