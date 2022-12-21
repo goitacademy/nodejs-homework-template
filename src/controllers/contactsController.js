@@ -52,14 +52,14 @@ const getContactId = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await removeContact(id);
+    const { contactId } = req.params;
+    const result = await removeContact(contactId);
 
     if (!result) {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Contact whith id=${id} not found `,
+        message: `Contact whith id=${contactId} not found `,
       });
       return;
     }
@@ -67,7 +67,7 @@ const deleteContact = async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      message: `Contact whith id=${id} deleted `,
+      message: `Contact whith id=${contactId} deleted `,
     });
   } catch (error) {
     next(error);
