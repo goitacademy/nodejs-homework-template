@@ -1,5 +1,19 @@
 const app = require('./app')
+const mongoose = require('mongoose');
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
+const uriDb = process.env.DB_HOST;
+
+mongoose.connect(uriDb)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log('Database connection successful');
+    });
+  })
+  .catch(err => {
+    console.log(`Server not running. Error message: ${err.message}`);
+      process.exit(1);
+    }
+  );
