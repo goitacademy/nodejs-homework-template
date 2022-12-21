@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import contactsRouter from './routes/api/contacts.js';
 
+//важлива послідовність
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
