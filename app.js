@@ -1,6 +1,6 @@
 // Node - js - 29
 
-// mongodb+srv://Danyil:Node-js-29@cluster0.aruln3x.mongodb.net/test
+// mongodb+srv://Danyil:Node-js-29@cluster0.aruln3x.mongodb.net/db-contacts?retryWrites=true&w=majority
 
 const express = require("express");
 const logger = require("morgan");
