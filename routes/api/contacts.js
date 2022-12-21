@@ -1,18 +1,12 @@
-import express from 'express';
-import { Router } from 'express';
+import express, { Router } from 'express';
 
-// import {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,} from '../../models/contacts.js';
 import {
   getAllContacts,
   getIdOfContact,
   postNewContact,
   deleteContactById,
-  changeContact
+  changeContact,
+  changeContactByPatch
 } from '../../controllers/contactsControllers.js'
 
 const router = Router();
@@ -30,7 +24,10 @@ router.post('/', postNewContact);
 router.delete('/:contactId', deleteContactById);
 
 /// PUT by contactId
-router.put('/:contactId',changeContact);
+router.put('/:contactId', changeContact);
+
+//Patch
+router.patch('/:contactId/favourite', changeContactByPatch)
 
 
 export default router;
