@@ -23,7 +23,9 @@
   },
   {
     "contactId": "7",
-    "name": "Aboba"
+    "name": "Aboba",
+    "phone": "4564543456",
+    "email": "ddhfc@gmail.com"
   },
   {
     "id": "9",
@@ -33,9 +35,9 @@
   },
   {
     "id": "Nuga5it598XGRsPInYWkf",
-    "name": "Jhon Smith",
-    "email": "df@gmail.com",
-    "phone": "334-567-444"
+    "name": "Aboba",
+    "phone": "4564543456",
+    "email": "ddhfc@gmail.com"
   },
   {
     "id": "nuJmB1dotL6DIw0YAhJYX",

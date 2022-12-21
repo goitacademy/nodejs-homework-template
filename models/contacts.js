@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs").promises;
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const contactsPath = path.resolve("./models/contacts.json");
 
@@ -46,7 +46,7 @@ const updateContact = async (contactId, body) => {
   );
   if (index === -1) return null;
 
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { id: contactId, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
