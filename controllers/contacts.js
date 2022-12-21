@@ -1,5 +1,6 @@
 const contacts = require("../models/contacts");
 const { HttpError } = require("../HttpError");
+const { validateBody } = require("../middlewares/Validator");
 
 const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
@@ -27,13 +28,23 @@ const getContact = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-  const result = await contacts.addContact(req.body);
+  const { value, error } = validateBody(req.body);
+  if (error) {
+    throw HttpError(400);
+  }
+
+  const result = await contacts.addContact(value);
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res, next) => {
+  const { value, error } = validateBody(req.body);
+  if (error) {
+    throw HttpError(400);
+  }
+
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
+  const result = await contacts.updateContact(contactId, value);
   if (!result) {
     throw HttpError(404);
   }

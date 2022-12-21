@@ -1,15 +1,25 @@
-const {HttpError} = require("../HttpError")
+const Joi = require("joi");
 
-const validateBody = schema => {
-    const func = (req, res, next)=> {
-        const {error} = schema.validate(req.body);
-        if(error) {
-            next(HttpError(400, error.message))
-        }
-        next()
-    }
+const validateBody = (body) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(30).required(),
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: {
+          allow: ["com", "net"],
+        },
+      })
+      .required(),
+    phone: Joi.string()
+      .regex(/^[0-9]{10}$/)
+      .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
+      .required(),
+  });
 
-    return func;
-}
+  return schema.validate(body);
+};
 
-module.exports = validateBody;
+module.exports = {
+  validateBody,
+};
