@@ -10,12 +10,13 @@ const schema = Joi.object({
     })
     .required(),
   phone: Joi.string().pattern(new RegExp(pattern)).required(),
+  favorite: Joi.string().required(),
 });
 
 const addContactValidation = (req, res, next) => {
   const { body } = req;
-  const { name, email, phone } = body;
-  if (!name || !email || !phone) {
+  const { name, email, phone, favorite } = body;
+  if (!name || !email || !phone || !favorite) {
     return res.status(400).json({ message: "missing required name field" });
   }
   const validationResult = schema.validate(body);
@@ -34,12 +35,13 @@ const schemaPatch = Joi.object({
     })
     .optional(),
   phone: Joi.string().pattern(new RegExp(pattern)).optional(),
+  favorite: Joi.string().optional(),
 });
 
 const changeContactValidation = (req, res, next) => {
   const { body } = req;
-  const { name, email, phone } = body;
-  if (!name && !email && !phone) {
+  const { name, email, phone, favorite } = body;
+  if (!name && !email && !phone && !favorite) {
     return res.status(400).json({ message: "missing fields" });
   }
   const validationResult = schemaPatch.validate(body);

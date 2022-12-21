@@ -3,6 +3,7 @@ const {
   addContactValidation,
   changeContactValidation,
 } = require("../../middlewares/validationMiddleWare");
+const modelsMiddleware = require("../../middlewares/models");
 
 const {
   getContactsList,
@@ -12,19 +13,25 @@ const {
   contactUpdate,
   changeContact,
 } = require("../../controllers/postControllerl");
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 
 const router = express.Router();
+router.use(modelsMiddleware);
 
-router.get("/", getContactsList);
+router.get("/", asyncWrapper(getContactsList));
 
-router.get("/:contactId", contactById);
+router.get("/:contactId", asyncWrapper(contactById));
 
-router.post("/", addContactValidation, addNewContact);
+router.post("/", addContactValidation, asyncWrapper(addNewContact));
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", asyncWrapper(deleteContact));
 
-router.put("/:contactId", addContactValidation, contactUpdate);
+router.put("/:contactId", addContactValidation, asyncWrapper(contactUpdate));
 
-router.patch("/:contactId", changeContactValidation, changeContact);
+router.patch(
+  "/:contactId",
+  changeContactValidation,
+  asyncWrapper(changeContact)
+);
 
 module.exports = router;
