@@ -19,15 +19,14 @@ const getContacts = async (_, res, next) => {
 
 const getContactId = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Contact.findById(id);
-    // Contact.findOne({_id: id}); - пошук по одному критерію
+    const { contactId } = req.params;
+    const result = await Contact.findById(contactId);
 
     if (!result) {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Contact with id=${id} not found`,
+        message: `Contact with id=${contactId} not found`,
       });
       return;
     }
@@ -35,7 +34,7 @@ const getContactId = async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      message: `Contact with id=${id} found`,
+      message: `Contact with id=${contactId} found`,
       data: {
         result,
       },
@@ -47,14 +46,14 @@ const getContactId = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndRemove(id);
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndRemove(contactId);
 
     if (!result) {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Contact whith id=${id} not found `,
+        message: `Contact whith id=${contactId} not found `,
       });
       return;
     }
@@ -62,7 +61,7 @@ const deleteContact = async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      message: `Contact whith id=${id} deleted `,
+      message: `Contact whith id=${contactId} deleted `,
     });
   } catch (error) {
     next(error);
@@ -88,8 +87,10 @@ const postContact = async (req, res, next) => {
 
 const putContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
 
     if (!result) {
       res.status(404).json({
@@ -114,8 +115,10 @@ const putContact = async (req, res, next) => {
 
 const patchContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
 
     if (!result) {
       res.status(404).json({
