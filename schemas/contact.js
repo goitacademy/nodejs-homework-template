@@ -57,7 +57,20 @@ const updateContactSchema = Joi.object({
     'object.missing': `missing fields`,
   });
 
+const updateContactStatusSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    'string.base': `"favorite" should be a type of boolean`,
+    'string.empty': `"favorite" must contain value`,
+    'any.required': `missing field favorite`,
+  }),
+})
+  .required()
+  .messages({
+    'any.required': `missing field favorite`,
+  });
+
 module.exports = {
   addContactSchema,
   updateContactSchema,
+  updateContactStatusSchema,
 };
