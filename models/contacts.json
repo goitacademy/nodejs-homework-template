@@ -53,10 +53,6 @@
     "email": "nec@Nulla.com",
     "phone": "(704) 398-7993"
   },
-  {
-    "id": "10",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
-  }
+  { "id": "10", "name": "olya", "email": "olya@wp.pl", "phone": "5555558" },
+  { "id": "11", "name": "Stasqq", "email": "stas@op.pl", "phone": "5555558" }
 ]

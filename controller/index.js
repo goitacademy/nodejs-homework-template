@@ -5,7 +5,10 @@ const {
   removeContact,
   updateContact,
 } = require('../models/contacts');
-const { addContactSchema, updateContactSchema } = require('../utils/schemas');
+const {
+  addContactSchema,
+  updateContactSchema,
+} = require('../service/schemas/task');
 
 const listContactsController = async (req, res, next) => {
   const data = await listContacts();
