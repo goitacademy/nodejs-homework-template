@@ -1,9 +1,11 @@
-const Contact = require("../../models/schema");
+const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
 
 const patchContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+  console.log(contactId);
+  console.log(favorite);
 
   const data = await Contact.findByIdAndUpdate(
     contactId,

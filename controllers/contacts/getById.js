@@ -1,8 +1,11 @@
-const Contact = require("../../models/schema");
+const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const currentContact = await Contact.findById(contactId);
+  const currentContact = await Contact.findById(
+    contactId,
+    "-createdAt -updatedAt"
+  );
   if (!currentContact) {
     throw NotFound(`Contact with id=${contactId} not found`);
   }

@@ -1,4 +1,4 @@
-const Contact = require("../../models/schema");
+const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
 
 const putContact = async (req, res, next) => {
