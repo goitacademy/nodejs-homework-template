@@ -19,7 +19,9 @@ const favoriteContact = Joi.object({
 });
 
 const register = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string()
+    .pattern(/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/)
+    .required(),
   password: Joi.string().required(),
   subscription: Joi.string().valid("starter", "pro", "business"),
 });

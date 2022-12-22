@@ -10,17 +10,22 @@ const {
   updateFavoriteField,
 } = require("../../controllers/contacts");
 const controllerWrapper = require("../../helpers/controllerWrapper");
+const { authenticate } = require("../../middlewars");
 
-router.get("/", controllerWrapper(getAll));
+router.get("/", authenticate, controllerWrapper(getAll));
 
-router.get("/:contactId", controllerWrapper(getById));
+router.get("/:contactId", authenticate, controllerWrapper(getById));
 
-router.post("/", controllerWrapper(addItem));
+router.post("/", authenticate, controllerWrapper(addItem));
 
-router.delete("/:contactId", controllerWrapper(removeItem));
+router.delete("/:contactId", authenticate, controllerWrapper(removeItem));
 
-router.put("/:contactId", controllerWrapper(updateItem));
+router.put("/:contactId", authenticate, controllerWrapper(updateItem));
 
-router.patch("/:contactId/favorite", controllerWrapper(updateFavoriteField));
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  controllerWrapper(updateFavoriteField)
+);
 
 module.exports = router;
