@@ -2,6 +2,8 @@ const express = require('express');
 const createError = require('http-errors');
 const Joi = require("joi");
 
+const {products: ctrl}=require('../../controllers')
+
 const contactSchema = Joi.object({
   name: Joi.required(),
   email: Joi.required(),
@@ -12,41 +14,9 @@ const contactsOperations = require("../../models/contacts")
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contacts = await contactsOperations.listContacts()
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result: contacts
-      }
-    });
-  } catch (error) {
-    next(error)
-  }
-  
-});
+router.get('/', ctrl.getAll);
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.getContactById(contactId);
-    if (!result) {
-      throw createError(404, `Contact with id=${contactId} not found`)
-      }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-  
-})
+router.get('/:contactId', ctrl.getById)
 
 router.post('/', async (req, res, next) => {
   try {
