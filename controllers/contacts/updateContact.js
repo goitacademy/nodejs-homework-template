@@ -1,4 +1,4 @@
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
 const update = async (req, res, next) => {
   const { contactId } = req.params;
@@ -20,4 +20,4 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = { update };
+module.exports = update;

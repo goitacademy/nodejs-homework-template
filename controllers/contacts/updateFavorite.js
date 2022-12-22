@@ -1,4 +1,4 @@
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
 const updateFavorite = async (req, res, next) => {
   const { contactId } = req.params;
@@ -23,4 +23,4 @@ const updateFavorite = async (req, res, next) => {
   }
 };
 
-module.exports = { updateFavorite };
+module.exports = updateFavorite;
