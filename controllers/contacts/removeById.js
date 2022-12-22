@@ -3,7 +3,6 @@ const constacts = require("../../models/contacts")
 const HttpError  = require("../../helpers");
 
 const removeById = async (req, res, next) => {
-  try {
     const { id } = req.params;
     const result = await constacts.removeContact(id);
 
@@ -19,10 +18,6 @@ const removeById = async (req, res, next) => {
     // res.json({
     //   message: "Delete success"
     // })
-  }
-  catch (error) {
-    next(error);
-  }
 }
 
 module.exports = removeById;

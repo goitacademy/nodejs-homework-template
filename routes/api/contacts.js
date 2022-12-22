@@ -2,16 +2,35 @@ const express = require('express')
 
 const ctrl = require("../../controllers/contacts")
 
+const {ctrlWrapper} = require("../../helpers")
+
+const { validateBody } = require("../../middlewares")
+
+const schemas = require("../../schemas/contacts")
+
 const router = express.Router()
 
-router.get('/', ctrl.getAll)
+// const getAllCtrl = ctrlWrapper(ctrl.getAll)
+// /*
+// const getAllCtrl async (req, res, next) => {
+//         try {
+//             await ctrl.getAll(req, res, next)
+//         }
+//         catch (error) {
+//             next(error);
+//         }
+//     }
+// */
+// router.get("/", getAllCtrl)
 
-router.get("/:id", ctrl.getById)
+router.get('/', ctrlWrapper(ctrl.getAll))
 
-router.post("/", ctrl.add)
+router.get("/:id", ctrlWrapper(ctrl.getById))
 
-router.put("/:id", ctrl.updateById)
+router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.add))
 
-router.delete("/:id", ctrl.removeById)
+router.put("/:id", validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById))
+
+router.delete("/:id", ctrlWrapper(ctrl.removeById))
 
 module.exports = router
