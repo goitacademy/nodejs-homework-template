@@ -1,7 +1,7 @@
 const contactsOperations = require("../../models/contacts");
 const createError = require('http-errors');
 
-const updateById = async (req, res, next) => {
+const deleteById = async (req, res, next) => {
     try {
         const id = req.params.contactId;
         const result = await contactsOperations.removeContact(id);
@@ -21,4 +21,4 @@ const updateById = async (req, res, next) => {
     }
 };
 
-module.exports = updateById;
+module.exports = deleteById;
