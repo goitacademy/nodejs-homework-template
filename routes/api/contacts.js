@@ -2,24 +2,25 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const getAllContacts = require("../../controllers/contacts/getAllContacts");
+const getById = require("../../controllers/contacts/getById");
+const addContact = require("../../controllers/contacts/add");
+const updateById = require("../../controllers/contacts/updateById");
+const deleteContact = require("../../controllers/contacts/delete");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  GET ALL  =====================
+router.get("/", getAllContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  GET BY ID  =====================
+router.get("/:contactId", getById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  ADD CONTACT  ==================
+router.post("/", addContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  UPDATE CONTACT BY ID ==================
+router.put("/:contactId", updateById);
 
-module.exports = router
+// =====================  DELETE CONTACT BY ID ==================
+router.delete("/:contactId", deleteContact);
+
+module.exports = router;
