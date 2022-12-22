@@ -1,108 +1,17 @@
 const express = require('express')
 
-const Joi = require("joi")
-
-const constacts = require("../../models/contacts")
-
-const { HttpError} = require("../../helpers");
+const ctrl = require("../../controllers/contacts")
 
 const router = express.Router()
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
+router.get('/', ctrl.getAll)
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await constacts.listContacts();
+router.get("/:id", ctrl.getById)
 
-    res.json(result);
-  }
-  catch (error) {
-    next(error);
-  }
+router.post("/", ctrl.add)
 
-})
+router.put("/:id", ctrl.updateById)
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await constacts.getContactById(id);
-
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-
-    res.json(result);
-  }
-  catch (error) {
-    next(error);
-
-  }
-})
-
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    
-    console.log(req.body);
-
-    if (error) {
-      throw HttpError(400, "missing required name field");
-    }
-    const result = await constacts.addContact(req.body);
-
-    res.status(201).json(result)
-  }
-  catch (error) {
-    next(error);
-  }
-})
-
-router.put("/:id", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-
-    if (error) {
-      throw HttpError(400, "missing fields");
-    }
-    const { id } = req.params;
-    const result = await constacts.updateContactId(id, req.body);
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-
-    res.json(result);
-  }
-  catch (error) {
-    next(error);
-  }
-    
-})
-
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await constacts.removeContact(id);
-
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-
-    res.status(200).json({
-      message: "contact deleted"
-    })
-
-    // 204 - статус тіло не відправляє
-    // res.json({
-    //   message: "Delete success"
-    // })
-  }
-  catch (error) {
-    next(error);
-  }
-})
+router.delete("/:id", ctrl.removeById)
 
 module.exports = router

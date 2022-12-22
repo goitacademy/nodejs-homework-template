@@ -76,3 +76,4 @@ module.exports = {
   updateContactId,
   removeContact
 }
+
