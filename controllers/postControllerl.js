@@ -9,17 +9,19 @@
 
 // const { getCollections } = require("../db/connections.js");
 const ObjectId = require("mongodb").ObjectId;
+const { Contact } = require("../db/PostModel");
+
 const getContactsList = async (req, res, next) => {
   // const contactsList = await listContacts();
   // const { Contacts } = req.db;
-  const contactsList = await req.db.Contacts.find({}).toArray();
+  const contactsList = await Contact.find({});
   res.json({ message: contactsList });
 };
 
 const contactById = async (req, res, next) => {
   const id = req.params.contactId;
   // const contactById = await getContactById(id);
-  const contactById = await req.db.Contacts.findOne({ _id: ObjectId(id) });
+  const contactById = await Contact.findById(id);
   if (contactById === null) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -30,20 +32,15 @@ const addNewContact = async (req, res, next) => {
     body: { name, email, phone, favorite },
   } = req;
   // const contactAdd = await addContact(body);
-  const contactAdd = await req.db.Contacts.insert({
-    name,
-    email,
-    phone,
-    favorite,
-  });
-  res.status(201).json({ message: contactAdd });
+
+  const contact = new Contact({ name, email, phone, favorite });
+  await contact.save();
+  res.status(201).json({ message: contact });
 };
 const deleteContact = async (req, res, next) => {
   const id = req.params.contactId;
   // const contactRemovedById = await removeContact(id);
-  const contactRemovedById = await req.db.Contacts.deleteOne({
-    _id: ObjectId(id),
-  });
+  const contactRemovedById = await Contact.findByIdAndRemove(id);
   if (contactRemovedById === null) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -55,10 +52,9 @@ const contactUpdate = async (req, res, next) => {
   } = req;
   const id = req.params.contactId;
   // const contactUpdated = await updateContact(contactId, body);
-  const contactUpdated = await req.db.Contacts.updateOne(
-    { _id: ObjectId(id) },
-    { $set: { name, email, phone, favorite } }
-  );
+  const contactUpdated = await Contact.findByIdAndUpdate(id, {
+    $set: { name, email, phone, favorite },
+  });
   if (contactUpdated === null) {
     return res.status(404).json({ message: "Not found" });
   }

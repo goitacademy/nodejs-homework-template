@@ -3,7 +3,6 @@ const {
   addContactValidation,
   changeContactValidation,
 } = require("../../middlewares/validationMiddleWare");
-const modelsMiddleware = require("../../middlewares/models");
 
 const {
   getContactsList,
@@ -16,7 +15,6 @@ const {
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
 const router = express.Router();
-router.use(modelsMiddleware);
 
 router.get("/", asyncWrapper(getContactsList));
 
