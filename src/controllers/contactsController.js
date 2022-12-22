@@ -1,14 +1,8 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contact");
 
-const getContacts = async (req, res, next) => {
+const getContacts = async (_, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await Contact.find({}, "-createdAt, -updatedAt");
 
     res.json({
       status: "success",
@@ -25,14 +19,14 @@ const getContacts = async (req, res, next) => {
 
 const getContactId = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await getContactById(id);
+    const { contactId } = req.params;
+    const result = await Contact.findById(contactId);
 
     if (!result) {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Contact with id=${id} not found`,
+        message: `Contact with id=${contactId} not found`,
       });
       return;
     }
@@ -40,7 +34,7 @@ const getContactId = async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      message: `Contact with id=${id} found`,
+      message: `Contact with id=${contactId} found`,
       data: {
         result,
       },
@@ -53,7 +47,7 @@ const getContactId = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
 
     if (!result) {
       res.status(404).json({
@@ -76,7 +70,7 @@ const deleteContact = async (req, res, next) => {
 
 const postContact = async (req, res, next) => {
   try {
-    const result = await addContact(req.body);
+    const result = await Contact.create(req.body);
 
     res.status(201).json({
       status: "success",
@@ -94,7 +88,38 @@ const postContact = async (req, res, next) => {
 const putContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
+    if (!result) {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Contact not found",
+      });
+      return;
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "Update contact",
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const patchContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
     if (!result) {
       res.status(404).json({
         status: "error",
@@ -122,4 +147,5 @@ module.exports = {
   deleteContact,
   postContact,
   putContact,
+  patchContact,
 };
