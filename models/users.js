@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { string } = require("joi");
 
 const userSchema = Schema(
   {
@@ -24,6 +25,10 @@ const userSchema = Schema(
     logout: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      require: true,
     },
   },
   { versionKey: false, timestamps: true }
