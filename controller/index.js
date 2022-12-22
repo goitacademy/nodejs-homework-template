@@ -1,23 +1,27 @@
 const {
-  listContacts,
+  getAllContacts,
   getContactById,
-  addContact,
-  removeContact,
+  createContact,
   updateContact,
-} = require('../models/contacts');
+  removeContact,
+  updateContactStatus,
+} = require('../service');
+
 const {
   addContactSchema,
   updateContactSchema,
-} = require('../service/schemas/task');
+  updateContactStatusSchema,
+} = require('../utils/validation');
 
 const listContactsController = async (req, res, next) => {
-  const data = await listContacts();
+  const data = await getAllContacts();
   res.json(data);
 };
 
 const getContactController = async (req, res, next) => {
   const data = await getContactById(req.params.contactId);
-  if (data.length === 0) {
+  console.log(data);
+  if (!data) {
     res.status(404).json({ message: 'Not found' });
     return;
   }
@@ -26,11 +30,12 @@ const getContactController = async (req, res, next) => {
 
 const deleteContactController = async (req, res, next) => {
   const data = await removeContact(req.params.contactId);
-  if (data) {
-    res.json({ message: 'contact deleted' });
+  if (!data) {
+    res.status(404).json({ message: 'Not found' });
+
     return;
   }
-  res.status(404).json({ message: 'Not found' });
+  res.json({ message: 'contact deleted' });
 };
 
 const updateContactController = async (req, res, next) => {
@@ -44,11 +49,11 @@ const updateContactController = async (req, res, next) => {
   }
 
   const updatedContact = await updateContact(req.params.contactId, req.body);
-  if (updatedContact) {
-    res.json(updatedContact);
+  if (!updatedContact) {
+    res.status(404).json({ message: 'Not found' });
     return;
   }
-  res.status(404).json({ message: 'Not found' });
+  res.json(updatedContact);
 };
 
 const addContactController = async (req, res, next) => {
@@ -60,7 +65,25 @@ const addContactController = async (req, res, next) => {
     });
     return;
   }
-  const data = await addContact(req.body);
+  const data = await createContact(req.body);
+  res.status(201).json(data);
+};
+
+const updateContactStatusController = async (req, res, next) => {
+  const { error } = await updateContactStatusSchema.validate(req.body);
+  if (error) {
+    console.log(error);
+    res.status(400).json({
+      message: 'missing field favorite',
+    });
+    return;
+  }
+
+  const data = await updateContactStatus(req.params.contactId, req.body);
+  if (!data) {
+    res.status(404).json({ message: 'Not found' });
+    return;
+  }
   res.status(201).json(data);
 };
 
@@ -70,4 +93,5 @@ module.exports = {
   getContactController,
   deleteContactController,
   updateContactController,
+  updateContactStatusController,
 };
