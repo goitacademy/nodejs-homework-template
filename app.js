@@ -5,6 +5,13 @@ const contactsRouter = require("./routes/api/contacts");
 // chrome inspect             node --?inspect gile_name
 const app = express();
 
+
+// , {
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+//   useUnifiedTopology: true,
+// }
+
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
