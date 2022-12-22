@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const handleSchemaValidationErrors = require("../helpers/handlerSchemaValidation");
+
 const contactSchema = new Schema(
   {
     name: {
