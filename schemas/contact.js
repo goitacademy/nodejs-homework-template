@@ -21,6 +21,9 @@ const addContactSchema = Joi.object({
       'string.pattern.base': `"phone" must be contain 10 numbers and look like (095) 837-0388`,
       'any.required': `"phone" is a required field`,
     }),
+  favorite: Joi.boolean().messages({
+    'string.base': `"favorite" should be a type of boolean`,
+  }),
 })
   .required()
   .messages({
@@ -44,8 +47,12 @@ const updateContactSchema = Joi.object({
       'string.empty': `"phone" must contain value`,
       'string.pattern.base': `"phone" must be contain 10 numbers and look like (095) 837-0388`,
     }),
+  favorite: Joi.boolean().messages({
+    'string.base': `"favorite" should be a type of boolean`,
+    'string.empty': `"favorite" must contain value`,
+  }),
 })
-  .or('name', 'email', 'phone')
+  .or('name', 'email', 'phone', 'favorite')
   .messages({
     'object.missing': `missing fields`,
   });
