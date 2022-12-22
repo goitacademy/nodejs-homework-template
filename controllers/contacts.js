@@ -1,4 +1,5 @@
-const contacts = require("../models/contacts");
+// const contacts = require("../models/contacts");
+const contacts = require('../service/index')
 const { HttpError } = require("../HttpError");
 const { validateBody } = require("../middlewares/Validator");
 
@@ -7,6 +8,7 @@ const ctrlWrapper = (ctrl) => {
     try {
       await ctrl(req, res, next);
     } catch (error) {
+      console.log(error.message);
       next(error);
     }
   };
@@ -33,7 +35,7 @@ const postContact = async (req, res, next) => {
     throw HttpError(400);
   }
 
-  const result = await contacts.addContact(value);
+  const result = await contacts.createContact(value);
   res.status(201).json(result);
 };
 
