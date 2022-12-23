@@ -1,6 +1,6 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const { isEmail } = require("validator");
-const mongooseTypePhone = require("mongoose-type-phone");
+// const mongooseTypePhone = require("mongoose-type-phone");, SchemaTypes
 
 const contact = new Schema(
   {
@@ -8,6 +8,7 @@ const contact = new Schema(
       type: String,
       minlength: 2,
       maxlength: 70,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -18,20 +19,22 @@ const contact = new Schema(
       validator: isEmail,
     },
     phone: {
-      type: SchemaTypes.Phone,
-      trim: true,
-      allowedNumberTypes: [
-        mongooseTypePhone.PhoneNumberType.MOBILE,
-        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-      ],
-      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL, // can be omitted to keep raw input
-      allowBlank: false,
-      required: true,
-      parseOnGet: false,
+      type: String,
+      required: "Phone number is required",
+      // type: SchemaTypes.Phone,
+      // trim: true,
+      // allowedNumberTypes: [
+      //   mongooseTypePhone.PhoneNumberType.MOBILE,
+      //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      // ],
+      // phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL, // can be omitted to keep raw input
+      // allowBlank: false,
+      // required: true,
+      // parseOnGet: false,
     },
     favorite: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }

@@ -1,7 +1,5 @@
-// const contacts = require("../models/contacts");
 const contacts = require('../service/index')
 const { HttpError } = require("../HttpError");
-const { validateBody } = require("../middlewares/Validator");
 
 const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
@@ -30,27 +28,29 @@ const getContact = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-  const { value, error } = validateBody(req.body);
-  if (error) {
-    throw HttpError(400);
-  }
-
-  const result = await contacts.createContact(value);
+  const result = await contacts.createContact(req.body);
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res, next) => {
-  const { value, error } = validateBody(req.body);
-  if (error) {
-    throw HttpError(400);
-  }
-
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, value);
+  const result = await contacts.updateContact(contactId, req.body);
   if (!result) {
     throw HttpError(404);
   }
-  res.json(result);
+  res.status(200).json(result);
+};
+
+const toggleContactFavorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  if (!req.body.favorite) {
+    return res.json({"message": "missing field favorite", status: 400})
+  }
+  const result = await contacts.updateStatusContact(contactId, req.body.favorite);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.status(200).json(result);
 };
 
 const deleteContact = async (req, res, next) => {
@@ -69,4 +69,5 @@ module.exports = {
   postContact: ctrlWrapper(postContact),
   updateContact: ctrlWrapper(updateContact),
   deleteContact: ctrlWrapper(deleteContact),
+  toggleContactFavorite: ctrlWrapper(toggleContactFavorite),
 };
