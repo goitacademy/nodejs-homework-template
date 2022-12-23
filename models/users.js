@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { string } = require("joi");
 
 const userSchema = Schema(
   {
