@@ -1,8 +1,6 @@
 const express = require('express');
 const contacts = require('../../models/contacts');
 
-const { nanoid } = require('nanoid');
-
 const Joi = require('joi');
 const contactCreateSchema = Joi.object({
   name: Joi.string()
@@ -12,7 +10,8 @@ const contactCreateSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
   phone: Joi.string()
     .required()
-    .min(1)
+    .min(1),
+  favorite: Joi.boolean()
 });
 
 const contactUpdateSchema = Joi.object({
@@ -21,7 +20,6 @@ const contactUpdateSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
   phone: Joi.string()
-    .required()
 });
 
 
@@ -55,7 +53,7 @@ router.get('/:contactId', async (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const {name, email, phone} = req.body;
+  const {name, email, phone, favorite} = req.body;
 
 const validationResult = contactCreateSchema.validate(req.body);
 if (validationResult.error) {
@@ -63,10 +61,10 @@ if (validationResult.error) {
 }
 
   const newContact = {
-      id: nanoid(),
       name, 
       email,
       phone,
+      favorite
   };
   contacts.addContact(newContact);
   res.json({
@@ -117,5 +115,26 @@ router.put('/:contactId', async (req, res, next) => {
     }
    })
 })
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const {favorite: body} = req.body;
+  const  {contactId} = req.params;
+  if (!body) {
+    res.json({message: "missing field favorite"})
+  }
+  const contactStatUpd = await contacts.updateStatusContact(contactId, body)
+  console.log(contactStatUpd);
+  if (!contactStatUpd) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  res.json({ 
+    status: 'success',
+    code: 200,
+    data: {
+      contactStatUpd
+    }
+   })
+})
+
 
 module.exports = router
