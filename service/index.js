@@ -17,7 +17,7 @@ const updateContact = (id, body) => {
 };
 
 const updateStatusContact = (id, favorite) => {
-    return Contacts.update({ _id: id }, { $set: { favorite: !favorite } });
+    return Contacts.updateOne({ _id: id }, { $set: { favorite: !favorite } });
 };
 
 const removeContact = (id) => {

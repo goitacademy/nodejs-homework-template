@@ -1,4 +1,4 @@
-const contacts = require('../service/index')
+const contacts = require("../service/index");
 const { HttpError } = require("../HttpError");
 
 const ctrlWrapper = (ctrl) => {
@@ -43,10 +43,11 @@ const updateContact = async (req, res, next) => {
 
 const toggleContactFavorite = async (req, res, next) => {
   const { contactId } = req.params;
-  if (!req.body.favorite) {
-    return res.json({"message": "missing field favorite", status: 400})
+  const { favorite } = req.body;
+  if (!req.body) {
+    return res.json({ message: "missing field favorite", status: 400 });
   }
-  const result = await contacts.updateStatusContact(contactId, req.body.favorite);
+  const result = await contacts.updateStatusContact(contactId, favorite);
   if (!result) {
     throw HttpError(404);
   }
