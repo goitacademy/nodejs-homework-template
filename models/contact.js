@@ -33,8 +33,13 @@ const reqBodySchema = Joi.object({
     phone: Joi.string().pattern(Regexp).min(7).max(15).required(),
 });
 
+const updateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+});
+
 const schemas = {
     reqBodySchema,
+    updateFavoriteSchema,
 };
 
 const Contact = model("contact", contactSchema);
