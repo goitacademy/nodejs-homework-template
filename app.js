@@ -8,7 +8,7 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; // проверка в каком режиме запущен сервер
 
-app.use(logger(formatsLogger));// middleware которая логирует запрос (в консоль)
+app.use(logger(formatsLogger));// middleware которая логирует запрос(в консоль)
 app.use(cors());
 app.use(express.json());// middleware проверяет есть ли тело запроса
 
