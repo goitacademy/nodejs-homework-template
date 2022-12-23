@@ -3,7 +3,8 @@ const Joi = require("joi")
 
 const { handleMongooseError } = require("../helpers")
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const emailRegexp = /^\w+([-]?\w+)*@\w+([-]?\w+)*(\w{2,3})+$/
+
 
 const userSchema = new Schema({
     name: {
@@ -12,7 +13,7 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        match: emailRegexp,
+        match: emailRegexp, 
         unique: true,
         required: true,
     },
@@ -20,9 +21,12 @@ const userSchema = new Schema({
         type: String,
         minlength: 6,
         required: true,
+    },
+    token: {
+        type: String,
     }
-}, {versionKey: false, timestamps: true}
-)
+}, { versionKey: false, timestamps: true})
+
 userSchema.post("save", handleMongooseError)
 
 const registrerSchema = Joi.object({
@@ -45,5 +49,4 @@ const User = model("user", userSchema);
 module.exports = {
     User,
     schemas,
-
 }
