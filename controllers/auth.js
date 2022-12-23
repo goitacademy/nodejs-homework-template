@@ -1,7 +1,11 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config(); // чому у Богдана SECRET_KEY дістається без цієї строки (в мідлварі авторізації аналогічно)
 
 const { HttpError, ctrlWrapper } = require("../helpers/index");
+
+const { SECRET_KEY } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -32,12 +36,35 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  const token = "74392479832.4lj3re09.sf.ms";
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "13h" });
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.json({
     token,
   });
 };
+
+const getCurrent = (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: null });
+  res.json({ message: "Logout success" });
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };
