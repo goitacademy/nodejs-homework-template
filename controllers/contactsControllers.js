@@ -4,7 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("../models/contacts");
 
 const getContacts = async (req, res, next) => {
   res.json(await listContacts());
