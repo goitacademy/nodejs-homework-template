@@ -8,17 +8,17 @@ const {
 } = require('../../middlewares/walidationMiddleware')
 
 const {
-  getPosts,
-  getPostsById,
-  addPosts,
-  deletePosts,
-  updatePostsById
-} = require('../../controllers/postsController')
+  getContacts,
+  getContactsById,
+  addContact,
+  deleteContact,
+  updateContactById
+} = require('../../controllers/contactsController')
 
-router.get('/', getPosts)
-router.get('/:contactId', getPostsById)
-router.post('/', postValidation, addPosts)
-router.delete('/:contactId', deletePosts)
-router.put('/:contactId', putValidation, updatePostsById)
+router.get('/', getContacts)
+router.get('/:contactId', getContactsById)
+router.post('/', postValidation, addContact)
+router.delete('/:contactId', deleteContact)
+router.put('/:contactId', putValidation, updateContactById)
 
-module.exports = router
+module.exports = router;
