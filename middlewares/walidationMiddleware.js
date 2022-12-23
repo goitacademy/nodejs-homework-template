@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-module.export = {
+module.exports = {
     postValidation: (req, res, next) => {
         const schema = Joi.object({
             name: Joi.string()
