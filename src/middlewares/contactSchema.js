@@ -1,16 +1,16 @@
 const Joi = require("joi");
 
 const contact = {
-  name: Joi.string().min(3).required(),
-  phone: Joi.string().required(),
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
+  phone: Joi.string().required(),
   favorite: Joi.boolean().required(),
 };
 
 const createContactSchema = Joi.object({
   name: contact.name,
-  phone: contact.phone,
   email: contact.email,
+  phone: contact.phone,
   favorite: contact.favorite,
 });
 
