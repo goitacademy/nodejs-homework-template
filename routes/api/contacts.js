@@ -4,9 +4,9 @@ const { validation, paramValidation } = require('../../middalwares/validation');
 const { contactSchema, schemaId } = require('../../schemasValidation/schemasValidation');
 
 const validateMiddalware = validation(contactSchema);
-// const validateMiddalwareId = paramValidation(schemaId);
+const validateMiddalwareId = paramValidation(schemaId);
 
-const {getAll, getOneContact, addContact, deleteContact } = require('../../controllers/contactProcessing');
+const {getAll, getOneContact, addContact, deleteContact, updateContacts } = require('../../controllers/contactProcessing');
 
 const router = express.Router()
 
@@ -18,9 +18,7 @@ router.post('/', validateMiddalware, addContact);
 
 router.delete('/:contactId', deleteContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', validateMiddalwareId, updateContacts)
 
 module.exports = router
 

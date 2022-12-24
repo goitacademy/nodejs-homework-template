@@ -4,15 +4,13 @@ const validation = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      error.status = 400;
-      next(error);
-      return;
+      throw createError(400, "missing required name field");
     }
     next();
   };
 };
 
-const paramiterValidation = (schema) => {
+const paramValidation = (schema) => {
 
   return (req, res, next) => {
 
@@ -28,5 +26,5 @@ const paramiterValidation = (schema) => {
 
 module.exports = {
   validation,
-  paramiterValidation
+  paramValidation,
 }
