@@ -5,11 +5,9 @@ const { HttpError, ctrlWrapper } = require("../helpers/index");
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 20, favorite } = req.query; // pagination. 3й аргумент find, це skip-кількість об'єктів що треба пропустити з початку колекції; limit-скільки забрати
-  let isFavorite;
-  favorite ? (isFavorite = ["true"]) : (isFavorite = ["true", "false"]);
   const skip = (page - 1) * limit;
   const result = await Contact.find(
-    { owner, favorite: isFavorite },
+    favorite ? { owner, favorite } : { owner },
     "-createdAt -updatedAt",
     {
       skip,
