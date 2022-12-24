@@ -2,7 +2,8 @@
 const express = require('express')
 
 
-
+const { validateBody } = require("../../middelwares");
+const schemas = require("../../schemas/contact")
 
 const ctrl = require("../../controllers/contacts")
 
@@ -16,7 +17,7 @@ router.get('/', ctrl.getAll)
 
 router.get('/:contactId', ctrl.getById)
 
-router.post('/', ctrl.add)
+router.post('/', validateBody(schemas.addSchema), ctrl.add)
 
 router.delete("/:contactId", ctrl.deleteById);
 
