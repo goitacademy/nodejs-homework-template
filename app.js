@@ -5,6 +5,11 @@ import cors from 'cors';
 import contactsRouter from './routes/api/contacts.js';
 import usersRouter from './routes/api/users.js';
 
+import * as path from 'path';
+import * as url from 'url';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 //важлива послідовність
 const app = express();
 
@@ -16,6 +21,7 @@ app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
+app.use("/api/avatars", express.static(path.join(__dirname, "public/avatars")));
 
 
 app.use((req, res) => {

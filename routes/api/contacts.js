@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-
+import authMiddleware from '../../middlewares/authMiddleware.js';
 import {
   getAllContacts,
   getIdOfContact,
@@ -11,6 +11,7 @@ import {
 
 const router = Router();
 
+router.use(authMiddleware);
 //GET "api/posts"
 router.get('/', getAllContacts);
 
