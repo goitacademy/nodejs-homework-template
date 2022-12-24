@@ -8,8 +8,7 @@ const connectMongo = async () => {
     .then(() => console.log("Database connection successful!"))
     .catch((error) => {
       console.log("Error:", error.message);
-      // process.exit(1);
-      // process.exitCode = 1;
+      process.exit(1);
     });
 };
 
