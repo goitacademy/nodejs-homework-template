@@ -4,12 +4,22 @@ const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query; // pagination. 3й аргумент find, це skip-кількість об'єктів що треба пропустити з початку колекції; limit-скільки забрати
+  const { page = 1, limit = 20, favorite } = req.query; // pagination. 3й аргумент find, це skip-кількість об'єктів що треба пропустити з початку колекції; limit-скільки забрати
+  let isFavorite;
+  favorite ? (isFavorite = ["true"]) : (isFavorite = ["true", "false"]);
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "email subscription"); // populate-особливий метод монгуса, який означає поширення запиту, він бере ID, який записаний в поле owner, через модель йде в базу даних, яка записана в ref, знаходить там об'єкт з відповідним ID і підставляє його замість owner. Якщо не треба передавати всю інформацію користувача, то другим аргументом через пробіл можна передати ті поля які треба, як в даному випадку, це "email та subscription"
+  const result = await Contact.find(
+    { owner, favorite: isFavorite },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    }
+  ).populate("owner", "email subscription"); // populate-особливий метод монгуса, який означає поширення запиту, він бере ID, який записаний в поле owner, через модель йде в базу даних по колекцію, яка записана в ref, знаходить там об'єкт з відповідним ID і підставляє увесь його зміст замість owner. Якщо не треба передавати всю інформацію користувача, то другим аргументом через пробіл можна передати ті поля які треба, як в даному випадку, це "email та subscription"
+
+  // if (favorite) {
+  //   result = result.filter((contact) => contact.favorite === true);
+  // }
   res.json(result);
 };
 

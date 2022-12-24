@@ -10,5 +10,11 @@ router.post("/users/signup", validateBody(schemas.signupSchema), ctrl.signup);
 router.post("/users/login", validateBody(schemas.loginSchema), ctrl.login);
 router.get("/users/current", authenticate, ctrl.getCurrent);
 router.get("/users/logout", authenticate, ctrl.logout);
+router.patch(
+  "/users",
+  authenticate,
+  validateBody(schemas.updateSubscriptionSchema),
+  ctrl.updateSubscription
+);
 
 module.exports = router;
