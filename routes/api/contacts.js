@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require("joi");
 
 const { listContacts, addContact, getContactById, removeContact, updateContact } = require('../../models/contacts');
+const { HttpError } = require("../../helpers")
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -28,11 +29,7 @@ router.get('/:contactId', async (req, res, next) => {
     const id = req.params.contactId;
     const result = await getContactById(id);
     if (!result) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found"
-      })
+      throw HttpError(404, "Not found")
     }
     res.json({ 
       status: "success",
@@ -49,11 +46,7 @@ router.post('/', async (req, res, next) => {
     const {body} = req;
     const {error} = addSchema.validate(body);
     if (error) {
-      return res.status(400).json({
-        status: "error",
-        code: 404,
-        message: error.message,
-      }) 
+      throw HttpError(404, "Not found")
     }
     const result = await addContact(body);
     res.json({ 
@@ -71,11 +64,7 @@ router.delete('/:contactId', async (req, res, next) => {
     const id = req.params.contactId;
     const result = await removeContact(id);
     if (!result) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found"
-      })
+      throw HttpError(404, "Not found")
     }
     res.json({ 
       status: "success",
@@ -96,17 +85,13 @@ router.put('/:contactId', async (req, res, next) => {
     if (error) {
       return res.status(400).json({
         status: "error",
-        code: 404,
+        code: 400,
         message: error.message,
       }) 
     }
     const result = await updateContact(id, body);
     if (!result) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found"
-      })
+      throw HttpError(404, "Not found")
     }
     res.json({ 
       status: "success",
