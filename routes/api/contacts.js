@@ -1,25 +1,33 @@
-const express = require('express')
+import express, { Router } from 'express';
 
-const router = express.Router()
+import {
+  getAllContacts,
+  getIdOfContact,
+  postNewContact,
+  deleteContactById,
+  changeContact,
+  changeContactByPatch
+} from '../../controllers/contactsControllers.js'
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//GET "api/posts"
+router.get('/', getAllContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//GET "api/posts/1"
+router.get('/:contactId', getIdOfContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//POST "/api/contacts => [newPost, ...posts]"
+router.post('/', postNewContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// DELETE by contactId
+router.delete('/:contactId', deleteContactById);
 
-module.exports = router
+/// PUT by contactId
+router.put('/:contactId', changeContact);
+
+//Patch
+router.patch('/:contactId/favourite', changeContactByPatch)
+
+
+export default router;
