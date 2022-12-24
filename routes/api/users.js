@@ -7,8 +7,11 @@ import {
     logout,
     getCurrentUser,
     updateStatus,
-    updAvatar
+    updAvatar,
+        verification,
+    verifyUserAgain
 } from "../../controllers/usersControllers.js";
+import verificationMiddleware from '../../middlewares/verificationMiddleware.js';
 import userMiddleware from '../../middlewares/userMiddleware.js';
 import updStatusMiddleware from '../../middlewares/updStatusMiddleware.js';
 import authMiddleware from '../../middlewares/authMiddleware.js';
@@ -27,6 +30,12 @@ const upload = multer({ storage: storage });
 const router = Router();
 
 router.post('/register', userMiddleware, register);
+//for email
+router.get('/verify/:verificationToken', verification);
+router.post(
+    '/verify', verificationMiddleware, verifyUserAgain);
+
+
 router.post('/login', userMiddleware, login);
 
 router.use(authMiddleware);

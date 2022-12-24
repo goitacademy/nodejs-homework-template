@@ -15,6 +15,19 @@ export const registerUser = async (email, password) => {
     return await User.create(newUser);
 };
 
+//verify
+export const verifyUser = async (email, verificationToken) => {
+        const user = await User.findOne({ email, verificationToken });
+    if (!user) {
+        return false;
+    }
+    return await User.findOneAndUpdate(
+        { email },
+        { verificationToken: null, verify: true },
+        { new: true }
+    );
+};
+
 export const loginUser = async (email, token) => {
     const user = await User.findOneAndUpdate(
         { email },

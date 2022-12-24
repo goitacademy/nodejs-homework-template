@@ -5,26 +5,32 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as url from 'url';
 import Jimp from 'jimp';
-
+import { nanoid } from 'nanoid';
 import {
   registerUser,
   loginUser,
   logoutUser,
-  updateUser,
+    updateUser,
+  verifyUser
 } from "../models/services/users.js";
 import createError from '../utilites/createErrorHandler.js';
+import createEmailSend from '../utilites/createEmailSend.js'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+let verificationToken = '';
 
 export const register = async (req, res, next) => {
+    verificationToken = nanoid();
+
     const { email, password } = req.body;
 
     try {
-        const user = await registerUser(email, password);
+        const user = await registerUser(email, password, verificationToken);
 
         if (!user) {
             throw createError(409, 'Email in use');
         }
+        await createEmailSend(email, verificationToken);
         res.status(201).json({
             user: { email: user.email, subscription: user.subscription, avatarURL: user.avatarURL },
         });
@@ -32,6 +38,38 @@ export const register = async (req, res, next) => {
         next(err);
     }
 };
+
+//verify
+export const verification = async (req, res, next) => {
+    const { email } = req.body;
+
+    const { verificationToken } = req.params;
+        const user = await verification(email, verificationToken);
+
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        res.json({
+            message: 'Verification successful',
+        });
+};
+
+export const verifyUserAgain = async (req, res, next) => {
+    const { email } = req.body;
+
+        const user = await User.findOne({ email, verify: true });
+
+        if (user) {
+            throw createError(400, 'Verification has already been passed');
+        }
+        await createEmailSend(email, verificationToken);
+
+        res.json({
+            message: 'Verification email sent',
+        });
+    
+};
+//
 
 export const login = async (req, res, next) => {
     const { email, password } = req.body;
