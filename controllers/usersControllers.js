@@ -1,7 +1,11 @@
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/schemas/userModel.js';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import * as url from 'url';
+import Jimp from 'jimp';
+
 import {
   registerUser,
   loginUser,
@@ -9,6 +13,8 @@ import {
   updateUser,
 } from "../models/services/users.js";
 import createError from '../utilites/createErrorHandler.js';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export const register = async (req, res, next) => {
     const { email, password } = req.body;
@@ -101,6 +107,31 @@ export const updateStatus = async (req, res, next) => {
             },
         });
     } catch (err) {
+        next(err);
+    }
+};
+
+export const updAvatar = async (req, res, next) => {
+    const userId = req.user._id;
+    const { originalname, path: tempPath } = req.file;
+    const newName = `${userId + '-' + originalname}`;
+    const newPath = path.join(__dirname, '../public/avatars', newName);
+    const avatarURL = `http://localhost:${process.env.DB_PORT}/api/avatars/${newName}`;
+
+    try {
+        const img = await Jimp.read(tempPath);
+        img.resize(255, 255);
+        img.write(tempPath);
+
+        await fs.rename(tempPath, newPath);
+
+        await User.findOneAndUpdate({ email: req.user.email }, { avatarURL });
+
+        res.json({
+            avatarURL: avatarURL,
+        });
+    } catch (err) {
+        await fs.unlink(tempPath);
         next(err);
     }
 };
