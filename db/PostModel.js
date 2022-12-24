@@ -36,4 +36,7 @@ const contactShema = new mongoose.Schema({
   //   crearesAt: { type: Date, defualt: Date.now() },
 });
 const Contact = mongoose.model("Contact", contactShema);
+// const err = Contact.validateSync();
+
+// err instanceof mongoose.Error.ValidationError;
 module.exports = { Contact };

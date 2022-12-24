@@ -3,7 +3,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const moment = require("moment");
 const fs = require("fs").promises;
-// const MongoClient = require("mongodb").MongoClient;
+//  const MongoClient = require("mongodb").MongoClient;
+const { errorHandler } = require("./helpers/apiHelpers");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -23,9 +24,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
-app.use((error, req, res, next) => {
-  res.status(500).json({ message: error.message });
-});
+app.use(errorHandler);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
