@@ -29,7 +29,7 @@ router.get('/:contactId', async (req, res) => {
 router.post('/', addContactValidation, async (req, res, next) => {
   try {
     const newContact = await addContact(req.body)
-    res.json({ newContact })
+    res.status(201).json({ newContact })
   } catch (error) {
     console.log(error)
   }
