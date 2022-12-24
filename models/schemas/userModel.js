@@ -20,14 +20,14 @@ const usersSchema = new Schema({
     token: String,
 });
 
-user.methods.setPassword = async function (password) {
+usersSchema.methods.setPassword = async function (password) {
   this.password = await bcrypt.hash(
       password,
       parseInt(process.env.BCRYPT_SALT)
   );
 };
 
-user.methods.checkPassword = async function (password) {
+usersSchema.methods.checkPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
