@@ -26,7 +26,7 @@ export const register = async (req, res, next) => {
             throw createError(409, 'Email in use');
         }
         res.status(201).json({
-            user: { email: user.email, subscription: user.subscription },
+            user: { email: user.email, subscription: user.subscription, avatarURL: user.avatarURL },
         });
     } catch (err) {
         next(err);
@@ -92,6 +92,7 @@ export const getCurrentUser = async (req, res, next) => {
         user: {
             email: req.user.email,
             subscription: req.user.subscription,
+            avatarURL: req.user.avatarURL,
         },
     });
 };
