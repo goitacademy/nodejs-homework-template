@@ -8,24 +8,20 @@ const changeContactsData = async (newList) => {
   await fs.writeFile(contactsPath, JSON.stringify(newList, null, 2))
 }
 
-const getAll = async() =>  {
-  const res = await fs.readFile(contactsPath, 'utf8')
-  return JSON.parse(res)
-}
-
-const listContacts = async () => {
+const getContacts = async () => {
   try {
-    return await getAll()
+    const contactList = await fs.readFile(contactsPath, 'utf8')
+    return JSON.parse(contactList)
   } catch (error) {
     console.log(error)
   }
 }
 
 const getContactById = async (contactId) => {
-  console.log('contactId', contactId)
   try {
-    const contactList = await getAll()
-    const [contact] = contactList.filter(el => el.id === contactId)
+    const data = await fs.readFile(contactsPath, 'utf8')
+    const contactList = JSON.parse(data)
+    const contact = contactList.find(contact => contact.id === contactId)
     return contact
   } catch (error) {
     console.log(error)
@@ -34,12 +30,13 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const contactList = await getAll()
+    const data = await fs.readFile(contactsPath, 'utf8')
+    const contactList = JSON.parse(data)
     const deleteContactIdx = contactList.findIndex(contact => contact.id === contactId)
     if (deleteContactIdx === -1) {
       return null
     }
-    contactList.splice(String(deleteContactIdx), 1)
+    contactList.splice(deleteContactIdx, 1)
     changeContactsData(contactList)
     return
   } catch (error) {
@@ -53,7 +50,8 @@ const addContact = async (body) => {
     ...body
   }
   try {
-    const contactList = await getAll()
+    const data = await fs.readFile(contactsPath, 'utf8')
+    const contactList = JSON.parse(data)
     contactList.push(newContact)
     changeContactsData(contactList)
     return newContact
@@ -63,10 +61,10 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-  console.log('body:', body)
   try {
-    const contactList = await getAll()
-    const [updatedContact] = contactList.filter(contact => contact.id === contactId)
+    const data = await fs.readFile(contactsPath, 'utf8')
+    const contactList = JSON.parse(data)
+    const updatedContact = contactList.find(contact => contact.id === contactId)
     if (!updatedContact) {
       return null
     }
@@ -81,7 +79,7 @@ const updateContact = async (contactId, body) => {
 }
 
 module.exports = {
-  listContacts,
+  getContacts,
   getContactById,
   removeContact,
   addContact,

@@ -17,17 +17,17 @@ const contactFormValidation = Joi.object({
 module.exports = {
     addContactValidation: (req, res, next) => {
         const schema = contactFormValidation;
-        const validationResult = schema.validate(req.body);
-        if (validationResult.error) {
-            return res.status(400).json({status: validationResult.error.details[0].message})
+        const {error} = schema.validate(req.body);
+        if (error) {
+            return res.status(400).json({status: error.details[0].message})
         }
 
         next()
     },
     changeContactValidation: (req, res, next) => {
         const schema = contactFormValidation;
-        const validationResult = schema.validate(req.body);
-        if (validationResult.error) {
+        const {error} = schema.validate(req.body);
+        if (error) {
             return res.status(400).json({status: 400,  "message": "missing fields" })
         }
 
