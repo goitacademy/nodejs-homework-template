@@ -2,8 +2,9 @@ const express = require('express')
 const { getContactById, listContacts, addContact, removeContact, updateContact } = require('../../models/contacts')
 
 const router = express.Router()
+const { addContactValidation, changeContactValidation } = require('../middlewares/validation')
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (_, res, next) => {
   try {
     const contactList = await listContacts()
     res.json({ contactList, status: 200 })
@@ -16,25 +17,19 @@ router.get('/:contactId', async (req, res) => {
   const {contactId} = req.params;
   try {
     const contact = await getContactById(contactId)
-    // console.log(contact)
     if (!contact) {
       return res.json({ message: "Not found", status: 404})
     }
-    res.json({ contact: contact, status: 200 })
+    res.json({ contact, status: 200 })
   } catch (error) {
     console.log(error)
   }
 })
 
-router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
+router.post('/', addContactValidation, async (req, res, next) => {
   try {
-    if (!name || !email || !phone) {
-    return res.json({"message": "missing required ... field", status: 400})
-  } else {
-    const newContactList = await addContact(req.body)
-    res.json({ contactList: newContactList, status: 200 })
-  }
+    const newContact = await addContact(req.body)
+    res.json({ newContact, status: 200 })
   } catch (error) {
     console.log(error)
   }
@@ -43,8 +38,8 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const newContactList = await removeContact(contactId)
-    if (newContactList === null) {
+    const data = await removeContact(contactId)
+    if (data === null) {
       res.json({ "message": "Not found", status: 404})
     }
     res.json({ "message": "contact deleted", status: 200})
@@ -53,13 +48,13 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', changeContactValidation, async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    if (!req.body) {
-      return res.json({ "message": "missing fields", status: 400})
-    }
     const updatedContact = await updateContact(contactId, req.body)
+    if (updatedContact === null) {
+      return res.json({ "message": "Not found", status: 404})
+    }
     res.json({ updatedContact, status: 200})
   } catch (error) {
     console.log(error)
