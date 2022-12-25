@@ -2,8 +2,13 @@
 // rIIvlmrEdOJQinDK
 
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
 
-const DB_HOST = "mongodb+srv://Yevgen:rIIvlmrEdOJQinDK@cluster0.a346oin.mongodb.net/?retryWrites=true&w=majority";
+dotenv.config()
+
+
+
+const {DB_HOST} = process.env
 
 mongoose.set("strictQuery", true)
 
