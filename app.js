@@ -1,9 +1,10 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts.js");
-require("dotenv").config();
+const userRouter = require("./routes/api/user.js");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/user", userRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
