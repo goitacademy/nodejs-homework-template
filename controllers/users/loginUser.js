@@ -24,7 +24,10 @@ async function loginUser(req, res) {
 
   await User.updateOne({ _id: user._id }, { token });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: { email: user.email, subscription: user.subscription },
+  });
 }
 
 module.exports = loginUser;

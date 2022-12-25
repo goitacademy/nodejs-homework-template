@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
+const multer = require("multer");
 
 const app = express();
 

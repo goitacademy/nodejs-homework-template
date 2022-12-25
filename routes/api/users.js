@@ -28,16 +28,16 @@ router.get(
   controllerWrapper(controllers.logoutUser)
 );
 router.patch(
-  "/:id",
-  middlewares.authenticate,
-  middlewares.validateBody(schemas.user.updateUserSchema),
-  controllerWrapper(controllers.updateSubscribtionUser)
-);
-router.patch(
   "/avatars",
   middlewares.authenticate,
   middlewares.upload.single("avatar"),
   controllerWrapper(controllers.updateUserAvatar)
+);
+router.patch(
+  "/:id",
+  middlewares.authenticate,
+  middlewares.validateBody(schemas.user.updateUserSchema),
+  controllerWrapper(controllers.updateSubscribtionUser)
 );
 
 module.exports = router;

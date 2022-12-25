@@ -13,8 +13,8 @@ const pathUsersAvatars = path.join(
 
 async function updateUserAvatar(req, res) {
   const { _id } = req.user;
-  const { path: pathToTemp, originalName } = req.file;
-  const extension = path.extname(originalName);
+  const { path: pathToTemp, originalname } = req.file;
+  const extension = path.extname(originalname);
   const avatarFileName = `${_id}${extension}`;
 
   const targetAvatarPath = path.join(pathUsersAvatars, avatarFileName);
