@@ -1,9 +1,8 @@
 const {Contact} = require("../../models/contact");
 
-const getContactById = async (req, res) => {
+const updateFavorite = async (req, res, next) => {
   const { id } = req.params;
-  // const result = await Contact.findOne({ _id: id }); // search by any credential
-  const result = await Contact.findById(id); // search by id only
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!result) {
     const error = new Error(`Contact with id=${id} not found`);
     error.status = 404;
@@ -18,4 +17,4 @@ const getContactById = async (req, res) => {
   });
 };
 
-module.exports = getContactById;
+module.exports = updateFavorite;
