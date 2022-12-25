@@ -1,10 +1,10 @@
 const Contacts = require("../../models/contact");
 const { HttpError } = require("../../helpers/HttpError");
-const addSchema = require('../../Schemes/schameJoi');
+const { patchSchema } = require('../../Schemes/schameJoi');
 
-const putContact = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = patchSchema.validate(req.body);
 
     if (error) {
       throw HttpError(400, "Missing fields");
@@ -24,4 +24,4 @@ const putContact = async (req, res, next) => {
   }
 }
 
-module.exports = putContact;
+module.exports = updateStatusContact ;
