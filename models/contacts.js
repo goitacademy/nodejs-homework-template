@@ -32,12 +32,10 @@ const removeContact = async (contactId) => {
   try {
     const data = await fs.readFile(contactsPath, 'utf8')
     const contactList = JSON.parse(data)
-    const deleteContactIdx = contactList.findIndex(contact => contact.id === contactId)
-    if (deleteContactIdx === -1) {
-      return null
-    }
-    contactList.splice(deleteContactIdx, 1)
-    changeContactsData(contactList)
+    const contactDelete = await getContactById(contactId)
+    if (!contactDelete) return null
+    const newContactList = contactList.filter(contact => contact.id !== contactDelete.id)
+    changeContactsData(newContactList)
     return
   } catch (error) {
     console.log(error)
@@ -65,9 +63,7 @@ const updateContact = async (contactId, body) => {
     const data = await fs.readFile(contactsPath, 'utf8')
     const contactList = JSON.parse(data)
     const updatedContact = contactList.find(contact => contact.id === contactId)
-    if (!updatedContact) {
-      return null
-    }
+    if (!updatedContact) return null
     updatedContact.name = body.name
     updatedContact.email = body.email
     updatedContact.phone = body.phone

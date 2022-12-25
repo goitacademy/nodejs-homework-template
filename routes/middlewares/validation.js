@@ -1,35 +1,17 @@
-const Joi = require('joi')
-
-const contactFormValidation = Joi.object({
-    name: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
-        .required(),
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .required(),
-    phone: Joi.string()
-        .pattern(/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/)
-        .required()
-})
+const { contactFormValidation } = require('../../utils/validation/contactFormValidation')
 
 module.exports = {
     addContactValidation: (req, res, next) => {
-        const schema = contactFormValidation;
-        const {error} = schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({status: error.details[0].message})
-        }
+        const schema = contactFormValidation
+        const {error} = schema.validate(req.body)
+        if (error) return res.status(400).json({"message": error.details[0].message})
 
         next()
     },
     changeContactValidation: (req, res, next) => {
-        const schema = contactFormValidation;
-        const {error} = schema.validate(req.body);
-        if (error) {
-            return res.status(400).json({"message": "missing fields" })
-        }
+        const schema = contactFormValidation
+        const {error} = schema.validate(req.body)
+        if (error) return res.status(400).json({"message": "missing fields" })
 
         next()
     } 
