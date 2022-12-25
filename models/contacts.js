@@ -20,6 +20,7 @@ const contactSchema = Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: "user",
+    require: true,
   },
 });
 contactSchema.post("save", handleMongooseError);
