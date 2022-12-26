@@ -27,7 +27,7 @@ router.get('/', ctrlWrapper(ctrl.getAll))
 
 router.get("/:id", ctrlWrapper(ctrl.getById))
 
-router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.add))
+router.post("/", ctrlWrapper(ctrl.add))
 
 router.put("/:id", validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById))
 
