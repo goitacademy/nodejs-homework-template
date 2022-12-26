@@ -38,3 +38,5 @@ $ yarn - start yarn
 $ yarn add express -install express
 $ yarn start:dev - запуск додатка
 yarn add cors - пакет для разрешения крос доменных запрсов (запросы с одного сайта на другой)
+1R433zjq0Ee6evVw
+mongodb+srv://Dmytro:1R433zjq0Ee6evVw@cluster0.igrmbda.mongodb.net/test
