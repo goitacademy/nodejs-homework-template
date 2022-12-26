@@ -2,13 +2,14 @@
 const createError = require("http-errors");
 
 const { Contact } = require("../../models");
-const updateById = async (req, res, next) => {
-  const { body } = req;
-
+const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await Contact.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
+  const { favorite } = req.body;
+  const contact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
   if (!contact) {
     throw createError(
       404,
@@ -22,4 +23,4 @@ const updateById = async (req, res, next) => {
   });
 };
 
-module.exports = updateById;
+module.exports = updateStatus;

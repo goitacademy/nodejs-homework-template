@@ -9,6 +9,7 @@ const contactSchema = Joi.object({
   phone: Joi.string()
     .regex(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/)
     .required(),
+  favorite: Joi.bool(),
 });
 
 module.exports = contactSchema;
