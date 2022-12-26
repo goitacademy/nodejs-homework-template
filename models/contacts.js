@@ -7,7 +7,8 @@ const contactsPath = path.join(__dirname, "/contacts.json");
 
 const updateContact = async (contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-async function listContacts () {
+async function listContacts() {
+  // показати всі контакти
   const data = await fs.readFile(contactsPath);
 
   return JSON.parse(data)
