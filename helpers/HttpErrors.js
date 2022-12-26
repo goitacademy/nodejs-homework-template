@@ -1,3 +1,0 @@
-// const HttpErrors = (status, message) => {
-
-//  }
