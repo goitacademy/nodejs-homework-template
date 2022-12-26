@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 //   console.log("Server running. Use our API on port: 3000");
 // });
 
-const { DB_HOST } = require("./config");
+const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 
