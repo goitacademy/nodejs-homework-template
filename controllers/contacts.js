@@ -1,4 +1,6 @@
-const contacts = require("../models/contacts");
+// const contacts = require("../models/contacts");
+const { Contact } = require("../models/contact");
+
 const { NotFound } = require("http-errors");
 const {
   addContactSchema,
@@ -34,7 +36,7 @@ const add = async (req, res) => {
     });
   }
 
-  const newContact = await contacts.addContact(body);
+  const newContact = await Contact.create(body);
   res.status(201).json(newContact);
 };
 
@@ -68,9 +70,9 @@ const updateById = async (req, res) => {
 };
 
 module.exports = {
-  getAll: ctrlWrapper(getAll),
-  getById: ctrlWrapper(getById),
+  // getAll: ctrlWrapper(getAll),
+  // getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
-  deleteById: ctrlWrapper(deleteById),
-  updateById: ctrlWrapper(updateById),
+  // deleteById: ctrlWrapper(deleteById),
+  // updateById: ctrlWrapper(updateById),
 };
