@@ -1,0 +1,30 @@
+const createError = require('http-errors')
+
+const validation = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      throw createError(400, "missing required name field");
+    }
+    next();
+  };
+};
+
+const paramValidation = (schema) => {
+
+  return (req, res, next) => {
+
+    const { error } = schema.validate(String (req.params.contactId));
+    if (error) {
+      throw createError(400, "Bad id")
+    }
+    next();
+  };
+};
+
+
+
+module.exports = {
+  validation,
+  paramValidation,
+}
