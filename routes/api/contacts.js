@@ -40,20 +40,70 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const result = await contacts.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contacts.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contacts.findByIdAndRemove(contactId);
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch("/:id/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw createError(400, "missing field favorite");
+    }
+    const result = await contacts.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
