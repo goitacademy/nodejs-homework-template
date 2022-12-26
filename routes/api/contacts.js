@@ -1,4 +1,6 @@
 const express = require("express");
+const router = express.Router();
+
 const {
   getAll,
   getById,
@@ -8,8 +10,6 @@ const {
   updateFavoriteField,
 } = require("../../controllers/contacts");
 const controllerWrapper = require("../../helpers/controllerWrapper");
-
-const router = express.Router();
 
 router.get("/", controllerWrapper(getAll));
 
@@ -21,6 +21,10 @@ router.delete("/:contactId", controllerWrapper(removeItem));
 
 router.put("/:contactId", controllerWrapper(updateItem));
 
-router.patch("/:contactId/favorite", controllerWrapper(updateFavoriteField));
+router.patch(
+  "/:contactId/favorite",
+
+  controllerWrapper(updateFavoriteField)
+);
 
 module.exports = router;
