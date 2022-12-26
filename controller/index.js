@@ -95,13 +95,13 @@ const updateFavorite = async (req, res, next) => {
       res.json({
         status: "success",
         code: 200,
-        data: { task: result },
+        data: { contact: result },
       });
     } else {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found task id: ${id}`,
+        message: `Not found contact id: ${id}`,
         data: "Not Found",
       });
     }
