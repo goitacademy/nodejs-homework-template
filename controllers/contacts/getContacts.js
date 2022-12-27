@@ -5,10 +5,9 @@ const getContacts = async (req, res, next) => {
     const result = await Contacts.find();
 
     res.json(result);
-
   } catch (error) {
     next(error);
-  }  
-}
+  }
+};
 
 module.exports = getContacts;

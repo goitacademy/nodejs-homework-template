@@ -7,10 +7,12 @@ const addSchema = Joi.object({
 });
 
 const patchSchema = Joi.object({
-    favorite: Joi.boolean().required()
-})
+  favorite: Joi.boolean().required(),
+});
 
-module.exports = {
-    addSchema,
-    patchSchema
+const schemas = {
+  addSchema,
+  patchSchema,
 };
+
+module.exports = schemas;

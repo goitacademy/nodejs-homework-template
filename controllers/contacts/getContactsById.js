@@ -7,14 +7,13 @@ const getContactsById = async (req, res, next) => {
     const result = await Contacts.findById(contactId);
 
     if (!result) {
-      throw HttpError(404, "Not found");  
-    };
+      throw HttpError(404, "Not found");
+    }
 
     res.json(result);
-
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports = getContactsById;
