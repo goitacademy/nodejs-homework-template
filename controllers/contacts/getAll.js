@@ -1,7 +1,7 @@
 const contactsOperation = require('../../model/db')
 
-const getAll = async (req, res, next) => {
-    try {
+const getAll = async (req, res) => {
+    
         const contacts = await contactsOperation.getAll();
         res.json({
             status: "success",
@@ -10,9 +10,7 @@ const getAll = async (req, res, next) => {
                 result: contacts
             }
         });
-    } catch (error) {
-        next(error)
-    }
+    
     
 };
 

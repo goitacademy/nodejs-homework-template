@@ -1,8 +1,8 @@
 const contactsOperation = require('../../model/db');
 const { NotFound } = require('http-errors');
 
-const getById = async (req, res, next) => {
-    try {
+const getById = async (req, res) => {
+    
         const { id } = req.params;
         const result = await contactsOperation.getById(id);
         if (!result) {
@@ -15,9 +15,7 @@ const getById = async (req, res, next) => {
                 result
             }
         })
-    } catch (error) {
-        next(error)
-    }
+   
 };
 
 module.exports = getById;

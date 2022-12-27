@@ -1,19 +1,10 @@
 const contactsOperation = require('../../model/db');
 
-const Joi = require('joi');
-const contactsSchema = Joi.object({
-    name: Joi.required(),
-    email: Joi.required(),
-    phone: Joi.required(),
-})
 
-const add = async (req, res, next) => {
-    try {
-        const { error } = contactsSchema.validate(req.body);
-        if (error) {
-            error.status = 400;
-            throw error;
-        }
+
+const add = async (req, res) => {
+    
+        
         const result = await contactsOperation.add(req.body);
         res.status(201).json({
             status: 'success',
@@ -22,9 +13,7 @@ const add = async (req, res, next) => {
                 result
             }
         })
-    } catch (error) {
-        next(error)
-    }
+   
 };
 
 module.exports = add;

@@ -1,19 +1,10 @@
 const contactsOperation = require('../../model/db');
 const { NotFound } = require('http-errors');
-const Joi = require('joi');
-const contactsSchema = Joi.object({
-    name: Joi.required(),
-    email: Joi.required(),
-    phone: Joi.required(),
-})
 
-const updateById = async (req, res, next) => {
-    try {
-        const { error } = contactsSchema.validate(req.body);
-        if (error) {
-            error.status = 400;
-            throw error;
-        }
+
+const updateById = async (req, res) => {
+    
+       
         const { id } = req.params;
         const result = await contactsOperation.updateById(id, req.body);
         if (!result) {
@@ -26,9 +17,7 @@ const updateById = async (req, res, next) => {
                 result
             }
         })
-    } catch (error) {
-        next(error)
-    }
+    
 };
 
 module.exports = updateById;

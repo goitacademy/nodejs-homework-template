@@ -2,8 +2,8 @@
 const contactsOperation = require('../../model/db');
 const { NotFound } = require('http-errors');
 
-const remuveById = async (req, res, next) => {
-    try {
+const remuveById = async (req, res) => {
+   
         const { id } = req.params;
         const result = await contactsOperation.remuveById(id);
         if (!result) {
@@ -17,9 +17,7 @@ const remuveById = async (req, res, next) => {
                 result
             }
         })
-    } catch (error) {
-        next(error)
-    }
+    
 };
 
 module.exports = remuveById;
