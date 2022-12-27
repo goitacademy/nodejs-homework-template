@@ -1,8 +1,9 @@
-const { Shema, model } = require("mongoose");
 const Joi = require("Joi");
-const handleMongooseError = require("../helpers");
+const { Schema, model } = require("mongoose");
 
-const contactShema = new Shema(
+const { handleMongooseError } = require("../helpers");
+
+const contactShema = new Schema(
   {
     name: {
       type: String,
@@ -20,6 +21,11 @@ const contactShema = new Shema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      require: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -33,8 +39,8 @@ const addSchema = Joi.object({
 });
 
 const updateFavoriteShema = Joi.object({
-    favorite: Joi.boolean().required(),
-})
+  favorite: Joi.boolean().required(),
+});
 
 const schemas = {
   addSchema,
@@ -62,4 +68,4 @@ const model = (collectionName, shema) => {
 }
 */
 
-module.exports = { Contact, schemas, };
+module.exports = { Contact, schemas };
