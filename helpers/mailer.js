@@ -17,10 +17,10 @@ const config = {
 const transporter = nodemailer.createTransport(config);
 
 async function sendEmail(emailOptions) {
+  if (!emailOptions) {
+    return;
+  }
   try {
-    if (!emailOptions) {
-      return;
-    }
     const res = transporter.sendMail(emailOptions);
 
     return res;

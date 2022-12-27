@@ -36,7 +36,7 @@ async function registerUser(req, res, next) {
     from: "testerovych@meta.ua",
     to: "goodcat1994@gmail.com",
     subject: "Nodemailer test",
-    text: ` "Привіт. Ми тестуємо надсилання листів!", Посилання для підтвердження реєстрації: http://localhost:3000/api//users/verify/${verificationToken}`,
+    text: ` "Привіт. Ми тестуємо надсилання листів!", Посилання для підтвердження реєстрації: http://localhost:3000/api/users/verify/${verificationToken}`,
     html: "<strong>Привіт. Ми тестуємо надсилання листів!</strong>",
   };
 
