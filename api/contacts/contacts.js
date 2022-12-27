@@ -6,7 +6,7 @@ const {
   deleteContactController,
   updateContactController,
   updateContactStatusController,
-} = require('../controller');
+} = require('../../controllers');
 
 const router = express.Router();
 
