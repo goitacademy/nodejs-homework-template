@@ -11,8 +11,8 @@ const schemas = require("../../schemas/users")
 const router = express.Router();
 
 
-router.get('/current', auth, ctrlWrappers(ctrlUsers.getCurrent));
+router.get('/current', ctrlWrappers(ctrlUsers.getCurrent));
 
-router.patch('/:_id/subscription', auth, validateBody(schemas.SubscriptionSchema), ctrlWrappers(ctrlUsers.update))
+router.patch('/:_id/subscription', validateBody(schemas.SubscriptionSchema), ctrlWrappers(ctrlUsers.update))
 
 module.exports = router
