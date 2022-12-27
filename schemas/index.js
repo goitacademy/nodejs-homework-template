@@ -3,6 +3,7 @@ const { updateContactSchema } = require("./updateContactSchema");
 const { registerUserSchema } = require("./registerUserSchema");
 const { loginUserSchema } = require("./loginUserSchema");
 const { updateUserSchema } = require("./updateUserSchema");
+const { verifyUserSchema } = require("./verifyUserSchema");
 
 module.exports = {
   registerUserSchema,
@@ -10,4 +11,5 @@ module.exports = {
   updateUserSchema,
   newContactSchema,
   updateContactSchema,
+  verifyUserSchema,
 };

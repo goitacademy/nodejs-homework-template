@@ -37,4 +37,9 @@ router.post(
   controllerWrapper(auth.updateUserPassword)
 );
 
+router.get(
+  "/verify/:verificationToken",
+  controllerWrapper(auth.verifyUserViaEmail)
+);
+
 module.exports = router;

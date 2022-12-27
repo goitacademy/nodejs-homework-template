@@ -12,6 +12,10 @@ const getUserById = async (id) => {
   return UserModel.findById(id);
 };
 
+const getUserByVerifyToken = async (verificationToken) => {
+  return UserModel.findOne({ verificationToken });
+};
+
 const updateUserById = async ({ id, body }) => {
   return UserModel.findByIdAndUpdate({ _id: id }, body, {
     new: true,
@@ -23,4 +27,5 @@ module.exports = {
   getUserByEmail,
   getUserById,
   updateUserById,
+  getUserByVerifyToken,
 };
