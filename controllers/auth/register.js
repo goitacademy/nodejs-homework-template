@@ -1,20 +1,25 @@
-const bcrypt = require("bcrypt")
-const { User } = require("../../models/user")
-const { HttpError } = require("../../helpers") 
+const bcrypt = require("bcrypt");
+const { User } = require("../../models/user");
+const { HttpError } = require("../../helpers");
 
+//Створюємо контролер реєстрації
 const register = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-        throw HttpError(409, "Email in use")
-    }
+  const { email, password } = req.body;
+  // Преревіряємо чи є в базі даний користувач
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, "Email in use");
+  }
 
-    const hashPassword = await bcrypt.hash(password, 10)
-    const newUser = await User.create({...req.body, password: hashPassword});
+  const hashPassword = await bcrypt.hash(password, 10);
 
-    res.status(201).json({
-        name: newUser.name,
-        email: newUser.email,
-    })
-}
+  //Реєструємо нового користувача
+
+  const newUser = await User.create({ ...req.body, password: hashPassword });
+  // Передача на фронт енд
+  res.status(201).json({
+    subscription: newUser.subscription,
+    email: newUser.email,
+  });
+}; 
 module.exports = register;

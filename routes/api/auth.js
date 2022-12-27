@@ -10,7 +10,7 @@ const { schemas } = require("../../models/user")
 // Створити роутер
 const router = express.Router();
 
-// signup
+// Маршрут для реєстрації - signup
 router.post("/register", validateBody(schemas.registrerSchema), ctrlWrapper(ctrl.register));
 
 // signin
