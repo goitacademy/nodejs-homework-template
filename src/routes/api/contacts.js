@@ -5,14 +5,18 @@ const {
   ctrlWrapper,
   isValidId,
   validateSchema,
+  auth,
+} = require("../../middlewares");
+const {
   createContactSchema,
   updateContactFavoriteSchema,
-} = require("../../middlewares");
+} = require("../../models/contact");
 
-router.get("/", ctrlWrapper(ctrl.getContacts));
+router.get("/", auth, ctrlWrapper(ctrl.getContacts));
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getContactId));
 router.post(
   "/",
+  auth,
   validateSchema(createContactSchema),
   ctrlWrapper(ctrl.postContact)
 );

@@ -1,4 +1,5 @@
 const Contact = require("../../models/contact");
+const { NotFound } = require("http-errors");
 
 const patchContact = async (req, res) => {
   const { contactId } = req.params;
@@ -7,12 +8,7 @@ const patchContact = async (req, res) => {
   });
 
   if (!result) {
-    res.status(404).json({
-      status: "error",
-      code: 404,
-      message: "Contact not found",
-    });
-    return;
+    throw new NotFound("Contact not found");
   }
   res.json({
     status: "success",
