@@ -1,6 +1,6 @@
 //! MAIN
-const contacts = require("./contacts")
+const contactsControllers = require("./contactsControllers")
 
 module.exports = {
-    contacts,
+    contactsControllers,
 }

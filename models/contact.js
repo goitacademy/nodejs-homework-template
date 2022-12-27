@@ -26,8 +26,9 @@ const contactSchema = Schema({
 //! Правильный код ошибки contactSchema
 contactSchema.post("save", handleSchemaValidationErrors)
 
+
 //* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
-const contactJoiSchemaPostPut = Joi.object({
+const contactJoiSchemaPut = Joi.object({
     name: Joi.string()
         // .alphanum()
         .min(3)
@@ -85,7 +86,7 @@ const Contact = model("contact", contactSchema); //! DB_HOST
 
 module.exports = {
     Contact,
-    contactJoiSchemaPostPut,
+    contactJoiSchemaPut,
     contactJoiSchemaPatch,
     contactJoiSchemaPatchFavorite
 };
