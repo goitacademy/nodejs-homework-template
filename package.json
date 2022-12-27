@@ -9,10 +9,14 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
     "joi": "^17.7.0",
+    "joi-objectid": "^4.0.2",
+    "mongoose": "^6.8.1",
     "morgan": "1.10.0",
     "shortid": "^2.2.16"
   },
