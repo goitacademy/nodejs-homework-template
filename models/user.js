@@ -1,5 +1,6 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const handleSchemaValidationErrors = require("../helpers/handleSchemaValidationErrors")
 
 const userSchema = new Schema(
   {
@@ -21,20 +22,16 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: "user",
-    },
   },
   { versionKey: false, timestamps: true }
 );
+userSchema.post("save", handleSchemaValidationErrors);
 
 const User = model("user", userSchema);
 
 const joiSignupSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string(),
 });
 
 const joiLoginSchema = Joi.object({
