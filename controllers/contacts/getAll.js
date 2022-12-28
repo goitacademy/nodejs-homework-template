@@ -1,17 +1,13 @@
-const contactsAction = require('../../models/index');
+const { Contact } = require('../../models/contact');
 
-const { NotFound } = require('http-errors');
-
-const getAll = async (req, res, next) => {
-  // try {
-    const contacts = await contactsAction.listContacts();
-    if (!contacts) {
-      throw new NotFound();
-    }
-    res.json(contacts);
-  // } catch (err) {
-  //   next(err);
-  // }
+const getAll = async (req, res) => {
+  const { _id: owner } = req.user;
+  // console.log(req.query);
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit })
+    .populate("owner", "name email");
+  res.json(result);
 };
 
 module.exports = getAll;

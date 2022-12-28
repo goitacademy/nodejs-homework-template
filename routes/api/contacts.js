@@ -1,45 +1,47 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
-// const { NotFound } = require('http-errors');
-// const Joi = require('joi');
+const router = express.Router();
 
 const ctrl = require('../../controllers/contacts');
 
-const ctrlWrapper = require('../../helpers/ctrlWrapper');
+const { ctrlWrapper } = require('../../helpers');
 
-const { validateBody } = require('../../middlewares');
+const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
-const schemas = require('../../schemas/contacts');
+const { schemas } = require('../../models/contact');
 
-// const {
-//   listContacts,
-  // getContactById,
-  // removeContact,
-  // addContact,
-  // updateContact,
-// } = require('../../models');
+router.get('/', authenticate, ctrlWrapper(ctrl.getAll));
 
-// const contactsAction = require('../../models/index');
+router.get('/:contactId', authenticate, isValidId, ctrlWrapper(ctrl.getById));
 
-// const joiSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
+router.post(
+  '/',
+  authenticate,
+  validateBody(schemas.addSchema),
+  ctrlWrapper(ctrl.add)
+);
 
-router.get('/', ctrlWrapper(ctrl.getAll));
-
-router.get('/:contactId', ctrlWrapper(ctrl.getById));
-
-router.post('/', validateBody(schemas.joiSchema), ctrlWrapper(ctrl.add));
-
-router.delete('/:contactId', ctrlWrapper(ctrl.removeById));
+router.delete(
+  '/:contactId',
+  authenticate,
+  isValidId,
+  ctrlWrapper(ctrl.removeById)
+);
 
 router.put(
   '/:contactId',
-  validateBody(schemas.joiSchema),
+  authenticate,
+  isValidId,
+  validateBody(schemas.addSchema),
   ctrlWrapper(ctrl.updateById)
+);
+
+router.patch(
+  '/:contactId/favorite',
+  authenticate,
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrlWrapper(ctrl.updateFavorite)
 );
 
 module.exports = router;
