@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("node:path");
 // const { nanoid } = require("nanoid");
 
-const contactsPath = path.resolve("./contacts.json");
+const contactsPath = path.resolve("./models/contacts.json");
 
 async function readDb() {
   const dbRaw = await fs.readFile(contactsPath, { encoding: "utf8" });

@@ -16,13 +16,13 @@ const {
 router.get("/", async (req, res, next) => {
   // res.json({ message: "template message" });
   try {
-    const contactsData = await listContacts();
-    console.log("contact ", contacts);
+    const contacts = await listContacts();
+
     return res.json({
       status: "success",
       code: 200,
       data: {
-        contactsData,
+        contacts,
       },
     });
   } catch (error) {
