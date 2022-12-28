@@ -14,7 +14,6 @@ const {
 } = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const contacts = await listContacts();
 
@@ -31,7 +30,26 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const contact = await getContactById(req.params.contactId);
+
+    if (!contact) {
+      return res.json({
+        status: "error",
+        code: 404,
+        message: `Not found contact with id- ${contactId}`,
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        contact,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
