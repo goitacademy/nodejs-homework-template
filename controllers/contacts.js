@@ -4,9 +4,10 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite = false } = req.query;
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find({ owner }, "",{ skip, limit }).populate(
+  const query = !favorite ? { owner } : { owner, favorite: true };
+  const contacts = await Contact.find(query, "", { skip, limit }).populate(
     "owner",
     "name email"
   );
@@ -56,7 +57,6 @@ const updateById = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  console.log(req.body);
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "missing field favorite");
   }

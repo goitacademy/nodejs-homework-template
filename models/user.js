@@ -9,10 +9,23 @@ const emailRegexp =
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, mutch: emailRegexp, unique: true, requered: true },
-    password: { type: String, minlength: 6, required: true },
-    token: { type: String },
+    email: {
+      type: String,
+      mutch: emailRegexp,
+      unique: true,
+      requered: [true, "Email is required"],
+    },
+    password: {
+      type: String,
+      minlength: 6,
+      required: [true, "Password is required"],
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: { type: String, default: null },
   },
   { versionKey: false, timestamps: true }
 );
@@ -20,7 +33,6 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
@@ -30,9 +42,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  subscriptionSchema,
 };
 
 const User = model("user", userSchema);

@@ -20,8 +20,8 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    name: newUser.name,
     email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
@@ -45,22 +45,42 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
 const getCurrent = (req, res) => {
   const { name, email } = req.user;
   res.json({
-    name,
     email,
+    subscription,
   });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+  const user = await User.findByIdAndUpdate(_id, { token: null });
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
   res.json({
     message: "Logout success",
+  });
+  // or res.status(204);
+};
+
+const subscriptionChange = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(_id, { subscription });
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+  res.json({
+    message: `Subscription successfully changed on ${subscription}`,
   });
 };
 
@@ -69,4 +89,5 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: getCurrent,
   logout: ctrlWrapper(logout),
+  subscriptionChange: ctrlWrapper(subscriptionChange),
 };
