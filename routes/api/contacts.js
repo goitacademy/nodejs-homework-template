@@ -1,77 +1,41 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  addContact,
-  updateContact,
-  listContacts,
-  getContactById,
-  removeContact,
-} = require("../../models/contacts");
-
-const { validation } = require("./middleware/validation");
+const { validation } = require("../../middleware/validation");
 
 const {
   addContactValidation,
   changeContactValidation,
-} = require("./middleware/validationContact");
+  changeContactFavorite,
+} = require("../../middleware/schemas/validationContact");
 
-const getContacts = async (req, res) => {
-  const data = await listContacts();
-  res.status(200).json({ message: data });
-};
+const {
+  getContactsController,
+  getContactByIdController,
+  postAddContactController,
+  deleteContactController,
+  putChangeContactController,
+  patchFavoriteContactController,
+} = require("../../controllers/controllers");
 
-const getContactByID = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const data = await getContactById(contactId);
-    res.status(200).json({ message: data });
-  } catch (error) {
-    res.status(404).json({ message: "Not found" });
-  }
-};
+router.get("/", getContactsController);
 
-const postAddContact = async (req, res) => {
-  const data = await addContact(req.body);
-  res.status(201).json({ message: data });
-};
+router.get("/:contactId", getContactByIdController);
 
-const putChangeContact = async (req, res) => {
-  const { contactId } = req.params;
-  const data = await updateContact(contactId, req.body);
-  if (data) {
-    res.status(201).json({ message: data });
-  } else {
-    res.status(404).json({ message: "Not found" });
-  }
-};
+router.post("/", validation(addContactValidation), postAddContactController);
 
-const deleteContact = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const data = await removeContact(contactId);
-    if (data) {
-      res.status(200).json({ message: "contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-router.get("/", getContacts);
-
-router.get("/:contactId", getContactByID);
-
-router.post("/", validation(addContactValidation), postAddContact);
-
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", deleteContactController);
 
 router.put(
   "/:contactId",
   validation(changeContactValidation),
-  putChangeContact
+  putChangeContactController
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validation(changeContactFavorite),
+  patchFavoriteContactController
 );
 
 module.exports = router;

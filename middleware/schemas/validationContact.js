@@ -20,4 +20,12 @@ const changeContactValidation = Joi.object({
   phone: Joi.string().min(10).max(14),
 });
 
-module.exports = { addContactValidation, changeContactValidation };
+const changeContactFavorite = Joi.object({
+  favorite: Joi.boolean(),
+});
+
+module.exports = {
+  addContactValidation,
+  changeContactValidation,
+  changeContactFavorite,
+};
