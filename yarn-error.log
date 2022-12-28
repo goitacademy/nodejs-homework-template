@@ -1,5 +1,5 @@
 Arguments: 
-  D:\Загружені\node.exe C:\Users\10\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add uuad
+  D:\Загружені\node.exe C:\Users\10\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add htpp-errors
 
 PATH: 
   C:\Users\10\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\10\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;D:\Загружені;C:\Users\10\AppData\Local\Microsoft\WindowsApps;C:\Users\10\AppData\Local\GitHubDesktop\bin;D:\Загружені\Microsoft VS Code\bin;C:\ProgramData\User\GitHubDesktop\bin;C:\Users\10\AppData\Roaming\npm;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/uuad: Not found
+  Error: https://registry.yarnpkg.com/htpp-errors: Not found
       at Request.params.callback [as _callback] (C:\Users\10\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66145:18)
       at Request.self.callback (C:\Users\10\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140890:22)
       at Request.emit (node:events:527:28)
@@ -41,7 +41,8 @@ npm manifest:
       "cors": "2.8.5",
       "cross-env": "7.0.3",
       "express": "4.17.1",
-      "morgan": "1.10.0"
+      "morgan": "1.10.0",
+      "uuid": "^9.0.0"
     },
     "devDependencies": {
       "eslint": "7.19.0",
@@ -2202,6 +2203,11 @@ Lockfile:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
     integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+  
+  uuid@^9.0.0:
+    version "9.0.0"
+    resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+    integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
   
   v8-compile-cache@^2.0.3:
     version "2.3.0"
