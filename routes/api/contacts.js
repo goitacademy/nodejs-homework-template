@@ -1,5 +1,7 @@
 const express = require("express");
 
+const { validation, ctrllWrapper } = require("../../middlewares");
+
 const {
   contacts: {
     getContacts,
@@ -10,7 +12,7 @@ const {
     updateContactFavorite,
   },
 } = require("../../controllers");
-const { validation, ctrllWrapper } = require("../../middlewares");
+
 const {
   createContactSchema,
   updateContactSchema,
