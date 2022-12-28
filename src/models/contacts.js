@@ -36,7 +36,7 @@ const addContact = async ({ name, email, phone }) => {
     id: nanoid(),
     name,
     email,
-    phone,
+    phone: phone.toString(),
   };
   contactsList.push(newContact);
 
