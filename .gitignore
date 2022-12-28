@@ -1,2 +1,12 @@
 node_modules/
 .env
+
+#VS code
+.vs-code/
+.idea/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
