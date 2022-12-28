@@ -64,6 +64,7 @@
 
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
 const contactSchema = new Schema(
   {
@@ -87,6 +88,8 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.post("save", handleMongooseError);
+
 const schemaJoi = Joi.object({
   name: Joi.string().min(1).max(25).required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
@@ -99,13 +102,13 @@ const schemaJoi = Joi.object({
       "string.pattern.base": `Phone number can contain from 3 to 15 digits.`,
     })
     .required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.bool(),
 });
 
-const favoriteSchemaJoi = Joi.object({
+const updatefavoriteSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemaJoi, favoriteSchemaJoi };
+module.exports = { Contact, schemaJoi, updatefavoriteSchema };

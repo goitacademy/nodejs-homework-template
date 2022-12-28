@@ -1,7 +1,5 @@
-// const contacts = require("../models/contacts");
 const { Contact } = require("../models/contact");
 
-const { NotFound } = require("http-errors");
 const {
   addContactSchema,
   updContactSchema,
@@ -10,18 +8,17 @@ const {
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 
 const getAll = async (req, res) => {
-  const contactsList = await contacts.listContacts();
+  const contactsList = await Contact.find();
   res.status(200).json(contactsList);
 };
 
 const getById = async (req, res) => {
   const id = req.params.contactId;
 
-  const oneContact = await contacts.getContactById(id);
+  const oneContact = await Contact.findById(id);
   if (!oneContact) {
-    const message = new Error("Not found");
-    message.status = 404;
-    throw message;
+    res.status(404).json({ message: "Not found" });
+    return;
   }
   res.status(200).json(oneContact);
 };
@@ -42,9 +39,10 @@ const add = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const id = req.params.contactId;
-  const deleteContact = await contacts.removeContact(id);
+  const deleteContact = await Contact.findByIdAndRemove({ _id: id });
   if (!deleteContact) {
-    throw new NotFound("Not found");
+    res.status(404).json({ message: "Not found" });
+    return;
   }
   res.status(200).json({
     message: `Contact deleted`,
@@ -62,17 +60,41 @@ const updateById = async (req, res) => {
     });
   }
 
-  const updContact = await contacts.updateContact(id, body);
+  const updContact = await Contact.findByIdAndUpdate({ _id: id }, body, {
+    new: true,
+  });
   if (!updContact) {
-    throw new NotFound();
+    res.status(404).json({ message: "Not found" });
+    return;
+  }
+  res.status(200).json(updContact);
+};
+
+const updateFavorite = async (req, res) => {
+  const body = req.body;
+  const id = req.params.contactId;
+  const { error } = updContactSchema.validate(body);
+
+  if (error) {
+    return res.status(400).json({
+      message: error.details[0].message,
+    });
+  }
+
+  const updContact = await Contact.findByIdAndUpdate({ _id: id }, body, {
+    new: true,
+  });
+  if (!updContact) {
+    res.status(404).json({ message: "Not found" });
   }
   res.status(200).json(updContact);
 };
 
 module.exports = {
-  // getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
-  // deleteById: ctrlWrapper(deleteById),
-  // updateById: ctrlWrapper(updateById),
+  deleteById: ctrlWrapper(deleteById),
+  updateById: ctrlWrapper(updateById),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
