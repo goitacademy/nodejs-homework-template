@@ -5,5 +5,6 @@ const contactSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   phone: Joi.string().min(10).max(13).required(),
+  favorite: Joi.boolean(),
 });
 module.exports = contactSchema;
