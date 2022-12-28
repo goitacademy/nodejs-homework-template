@@ -13,7 +13,7 @@ router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
 
 router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateContact));
 
-router.patch('/:contactId/favorite', validation(updateFavoriteSchema), ctrlWrapper(ctrl.updateFavorite))
+router.patch('/:contactId/favorite', validation(updateFavoriteSchema), ctrlWrapper(ctrl.updateStatusContact))
 
 router.delete("/:contactId", ctrlWrapper(ctrl.removeContact));
 
