@@ -26,7 +26,7 @@ const getContactById = async (contactId) => {
   try {
     const data = await readDb();
 
-    return data.find((item) => Number(item.id) === Number(contactId));
+    return data.find((item) => Number(item.id) == Number(contactId));
   } catch (error) {
     console.error(error);
   }
@@ -36,11 +36,12 @@ const removeContact = async (contactId) => {
   try {
     const data = await readDb();
 
-    const updateContact = data.filter(
-      (item) => Number(item.id) !== Number(contactId)
-    );
-    await writeDB(updateContact);
-    console.log(`Kонтакт deleted, id = ${contactId}`);
+    const result = data.filter((item) => Number(item.id) !== Number(contactId));
+    if (!result) {
+      return null;
+    }
+    await writeDB(result);
+    return result;
   } catch (error) {
     console.error(error);
   }
