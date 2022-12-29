@@ -36,12 +36,17 @@ const removeContact = async (contactId) => {
   try {
     const data = await readDb();
 
-    const result = data.filter((item) => Number(item.id) !== Number(contactId));
-    if (!result) {
-      return null;
+    // const result = data.filter((item) => Number(item.id) !== Number(contactId));
+    const index = data.findIndex(
+      (item) => Number(item.id) === Number(contactId)
+    );
+    if (index !== -1) {
+      const removed = data.splice(index, 1);
+      await writeDB(removed);
+      return removed;
     }
-    await writeDB(result);
-    return result;
+
+    return null;
   } catch (error) {
     console.error(error);
   }
