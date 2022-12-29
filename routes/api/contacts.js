@@ -1,20 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-const contactsOperations = require("../../models/contacts");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
+
 const { validation } = require("../../middlewares");
 const { contactSchema } = require("../../shema");
 
 router.get("/", async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts();
+  const contacts = await listContacts();
   res.json({ contacts });
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const result = await contactsOperations.getContactById(req.params.contactId);
+  const result = await getContactById(req.params.contactId);
   if (!result) {
     res.status(404).json({
-      message: `Product with id=${contactId} not found`,
+      message: "Not found",
     });
     return result;
   }
@@ -28,7 +35,7 @@ router.post("/", validation(contactSchema), async (req, res, next) => {
       error.status = 400;
       throw error;
     }
-    const result = await contactsOperations.addContact(req.body, res);
+    const result = await addContact(req.body, res);
     res.status(201).json({ result });
   } catch (error) {
     next(error);
@@ -38,7 +45,7 @@ router.post("/", validation(contactSchema), async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsOperations.removeContact(contactId);
+    const result = await removeContact(contactId);
     if (!result) {
       res.status(404).json({
         message: `Product with id=${contactId} not found`,
@@ -58,7 +65,7 @@ router.put("/:contactId", validation(contactSchema), async (req, res, next) => {
       throw error;
     }
     const { contactId } = req.params;
-    const result = await contactsOperations.updateContact(contactId, req.body);
+    const result = await updateContact(contactId, req.body);
     if (!result) {
       res.status(404).json({
         message: `Product with id=${contactId} not found`,
