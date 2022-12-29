@@ -7,15 +7,18 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+  updateStatusContact,
+} = require("../../models/function");
 
 const schema = Joi.object({
   name: Joi.string().required(),
   phone: Joi.string().required(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }).required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
 });
 
 const schemaUpdate = Joi.object({
@@ -25,8 +28,11 @@ const schemaUpdate = Joi.object({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net"] },
   }),
-
 }).min(1);
+
+const schemaPatch = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const router = express.Router();
 
@@ -47,7 +53,7 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const { name, phone, email } = req.body;
   const { error } = schema.validate(req.body);
-  
+
   if (!!error) {
     return res.status(400).json({ message: "missing field" });
   }
@@ -72,8 +78,22 @@ router.put("/:contactId", async (req, res, next) => {
   if (!!error) {
     return res.status(400).json({ message: "missing field" });
   }
-  const data = await updateContact(contactId, req.body)
-  
+  const data = await updateContact(contactId, req.body);
+
+  if (!data) {
+    return res.status(404).json({ message: "not found" });
+  }
+  res.json(data);
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { error } = schemaPatch.validate(req.body);
+  if (!!error) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  const data = await updateStatusContact(contactId, req.body);
+
   if (!data) {
     return res.status(404).json({ message: "not found" });
   }
