@@ -1,7 +1,9 @@
-const schemas = require('./add-patch-schema');
-const shemasLoginRegister = require('./login-register-schema');
+const {addSchema, patchSchema} = require('./add-patch-schema');
+const {registerSchema, loginSchema} = require('./login-register-schema');
 
 module.exports = {
-    schemas,
-    shemasLoginRegister
+    addSchema,
+    patchSchema,
+    registerSchema,
+    loginSchema
 }

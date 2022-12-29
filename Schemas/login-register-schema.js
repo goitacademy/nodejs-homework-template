@@ -11,9 +11,7 @@ const loginSchema = Joi.object({
     password: Joi.string().required(),
 })
 
-const shemasLoginRegister = {
+module.exports = {
     registerSchema,
     loginSchema
-}
-
-module.exports = shemasLoginRegister;
+};

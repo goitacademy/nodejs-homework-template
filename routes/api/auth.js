@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { validateBody } = require('../../middlewares/index');
-const { shemasLoginRegister } = require('../../Schemas/index');
+
+const { validateBody, authenticate } = require('../../middlewares/index');
+const { registerSchema, loginSchema } = require('../../Schemas/index');
 const controller = require('../../controllers/auth/index');
 
-router.post("/register", validateBody(shemasLoginRegister.registerSchema), controller.register);
+router.post("/register", validateBody(registerSchema), controller.register);
 
-router.post("/login", validateBody(shemasLoginRegister.loginSchema), controller.login);
+router.post("/login", validateBody(loginSchema), controller.login);
+
+router.get("/current", authenticate, controller.current);
+
+router.post("/logout", authenticate, controller.logout);
 
 module.exports = router;
