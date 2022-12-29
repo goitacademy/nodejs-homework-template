@@ -36,13 +36,12 @@ const removeContact = async (contactId) => {
   try {
     const data = await readDb();
 
-    // const result = data.filter((item) => Number(item.id) !== Number(contactId));
     const index = data.findIndex(
       (item) => Number(item.id) === Number(contactId)
     );
     if (index !== -1) {
       const removed = data.splice(index, 1);
-      await writeDB(removed);
+      await writeDB(data);
       return removed;
     }
 
@@ -65,9 +64,9 @@ const addContact = async (body) => {
       email: body.email,
       phone: body.phone,
     };
-    const updateContact = [...data, newContact];
-    await writeDB(updateContact);
-    console.log(`Kонтакт записан, id = ${newContact.id}`);
+    const updateContacts = [...data, newContact];
+    await writeDB(updateContacts);
+
     return readDb();
   } catch (error) {
     console.error(error);
@@ -77,6 +76,7 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     const data = await readDb();
+
     const result = data.find((item) => item.id === contactId);
     if (result) {
       Object.assign(result, body);

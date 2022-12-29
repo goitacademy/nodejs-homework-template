@@ -11,6 +11,7 @@ const {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 } = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
@@ -60,7 +61,7 @@ router.post("/", async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       code: 201,
-      message: `Contact with id- ${contact.id} has been added`,
+      message: `Contact has been added`,
       data: {
         contact,
       },
@@ -91,7 +92,23 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const contact = await updateContact(req.params.contactId, req.body);
+
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ status: "error", code: 404, message: "Not found" });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: { contact },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
