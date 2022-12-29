@@ -37,7 +37,7 @@ router.get("/:contactId", async (req, res, next) => {
       return res.json({
         status: "error",
         code: 404,
-        message: `Not found contact with id- ${contactId}`,
+        message: `Not found contact with id- ${req.params.contactId}`,
       });
     }
     return res.status(200).json({
