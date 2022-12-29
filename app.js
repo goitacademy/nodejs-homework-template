@@ -2,20 +2,22 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
+require('dotenv').config()
+
 const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; // проверка в каком режиме запущен сервер
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; 
 
-app.use(logger(formatsLogger));// middleware которая логирует запрос(в консоль)
+app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json());// middleware проверяет есть ли тело запроса
+app.use(express.json());
 
-app.use('/api/contacts', contactsRouter);// создаем группу маршрутов
+app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' }) // обрабатывает ситуацию,когда запрос пошел по адресу, которого нету
+  res.status(404).json({ message: 'Not found' }) 
 })
 
 app.use((err, req, res, next) => {
@@ -24,3 +26,5 @@ app.use((err, req, res, next) => {
 })
 
 module.exports = app;
+
+// rUbpxcCJbi2KwJIK
