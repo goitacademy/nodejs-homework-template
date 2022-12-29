@@ -16,6 +16,7 @@ const addContactSchema = Joi.object({
       "string.pattern.base": `Phone number can contain from 3 to 15 digits.`,
     })
     .required(),
+  favorite: Joi.bool(),
 })
   .required()
   .min(3)
@@ -32,6 +33,7 @@ const updContactSchema = Joi.object({
     .messages({
       "string.pattern.base": `Phone number can contain from 3 to 15 digits.`,
     }),
+  favorite: Joi.bool(),
 })
   .required()
   .min(1)
