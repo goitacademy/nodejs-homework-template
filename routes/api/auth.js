@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controllers = require("../../controllers/users");
 const { userSchemas } = require("../../schemas");
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 
 router.post(
   "/users/register",
@@ -28,6 +28,13 @@ router.patch(
     "Invalid type of subscription"
   ),
   controllers.updateSubscription
+);
+
+router.patch(
+  "/users/avatars",
+  authenticate,
+  upload.single("avatar"),
+  controllers.updateAvatar
 );
 
 module.exports = router;
