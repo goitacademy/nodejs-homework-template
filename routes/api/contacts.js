@@ -6,13 +6,9 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts.js");
-const Joi = require("joi");
-
-const contactSchema = Joi.object({
-  name: Joi.string().min(1).required(),
-  email: Joi.string().required(),
-  phone: Joi.number().integer().required(),
-});
+const {
+  contactSchema,
+} = require("../../utils/validation/postContactValidationSchema.js");
 
 const router = express.Router();
 

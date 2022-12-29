@@ -10,20 +10,18 @@ const getContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await getContacts();
-  const [contactById] = contacts.filter(
+  const contactById = contacts.find(
     (contact) => contact.id === contactId.toString()
   );
-  if (!contactById) {
-    return;
-  }
   return contactById;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await getContacts().then((contacts) =>
-    contacts.filter((contact) => contact.id !== contactId.toString())
+  const contacts = await getContacts();
+  const remainingContacts = contacts.filter(
+    (contact) => contact.id !== contactId.toString()
   );
-  await fs.writeFile(contactPath, JSON.stringify(contacts));
+  await fs.writeFile(contactPath, JSON.stringify(remainingContacts));
 };
 
 const addContact = async (body) => {
@@ -42,14 +40,15 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await getContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
+  const contact = contacts.find((item) => item.id === contactId);
+  contact.name = body.name;
+  contact.email = body.email;
+  contact.phone = body.phone;
+  if (!contact) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
-
   await fs.writeFile(contactPath, JSON.stringify(contacts));
-  return contacts[index];
+  return contact;
 };
 
 module.exports = {
