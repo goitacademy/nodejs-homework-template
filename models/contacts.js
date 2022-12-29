@@ -14,81 +14,55 @@ const keepContacts = async contacts => {
 };
 
 const listContacts = async () => {
-  try {
-    const contactList = await getContacts();
-    return { data: JSON.stringify(contactList), status: 'success' };
-  } catch (error) {
-    return { data: undefined, status: error.message };
-  }
+  const contactList = await getContacts();
+  return contactList || null;
 };
 
 const getContactById = async contactId => {
-  try {
-    const contactList = await getContacts();
-    const contact = contactList.find(({ id }) => id === contactId);
-
-    return { data: JSON.stringify(contact), status: 'success' };
-  } catch (error) {
-    return { data: undefined, status: error.message };
-  }
+  const contactList = await getContacts();
+  const contact = contactList.find(({ id }) => id === contactId);
+  return contact || null;
 };
 
 const addContact = async contactData => {
-  try {
-    const newContact = { ...contactData, id: uid(6) };
-    const contactList = await getContacts();
-    contactList.push(newContact);
-    await keepContacts(contactList);
-
-    return { data: JSON.stringify(newContact), status: 'success' };
-  } catch (error) {
-    return { data: undefined, status: error.message };
-  }
+  const newContact = { ...contactData, id: uid(6) };
+  const contactList = await getContacts();
+  contactList.push(newContact);
+  await keepContacts(contactList);
+  return newContact || null;
 };
 
 const updateContact = async contactToUpdate => {
   const { contactId, name, phone, email } = contactToUpdate;
 
-  try {
-    const contactList = await getContacts();
-    const contact = contactList.find(({ id }) => id === contactId);
+  const contactList = await getContacts();
+  const contact = contactList.find(({ id }) => id === contactId);
 
-    if (!contact) throw new Error('Not found');
+  if (!contact) return null;
 
-    contactList.forEach(contact => {
-      if (contact.id === contactId) {
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
-      }
-    });
+  contactList.forEach(contact => {
+    if (contact.id === contactId) {
+      contact.name = name;
+      contact.email = email;
+      contact.phone = phone;
+    }
+  });
 
-    await keepContacts(contactList);
-
-    return {
-      data: JSON.stringify(contactToUpdate),
-      status: 'success',
-    };
-  } catch (error) {
-    return { data: undefined, status: error.message };
-  }
+  await keepContacts(contactList);
+  return contactToUpdate;
 };
 
 const removeContact = async contactId => {
-  try {
-    const contactList = await getContacts();
-    const contact = contactList.find(({ id }) => id === contactId);
+  const contactList = await getContacts();
+  const contact = contactList.find(({ id }) => id === contactId);
 
-    if (!contact) throw new Error('Not found');
+  if (!contact) return null;
 
-    const updatedContactList = contactList.filter(({ id }) => id !== contactId);
+  const updatedContactList = contactList.filter(({ id }) => id !== contactId);
 
-    await keepContacts(updatedContactList);
+  await keepContacts(updatedContactList);
 
-    return { data: JSON.stringify(contact), status: 'success' };
-  } catch (error) {
-    return { data: undefined, status: error.message };
-  }
+  return contact;
 };
 
 export default {
