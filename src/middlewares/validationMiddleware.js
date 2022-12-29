@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const {httpError} = require('../helpers');
 
 const addContactValidation = (req, res, next) => {
   const schema = Joi.object({
@@ -10,10 +11,10 @@ const addContactValidation = (req, res, next) => {
     phone: Joi.number().greater(5).integer().positive(),
   });
 
-  const validationResult = schema.validate(req.body);
+  const {error} = schema.validate(req.body);
 
-  if (validationResult.error) {
-    return res.status(400).json({status: validationResult.error.details});
+  if (error) {
+    return next(httpError(400, error.message));
   }
 
   next();

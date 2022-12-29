@@ -19,12 +19,11 @@ app.use((_, res, __) => {
     status: 'error',
     code: 404,
     message: 'Not found',
-    data: 'Not found',
   });
 });
 
 app.use((err, _, res, __) => {
-  console.log(err.stack);
+  console.log('API Error:', err.message);
   res.status(500).json({
     status: 'fail',
     code: 500,

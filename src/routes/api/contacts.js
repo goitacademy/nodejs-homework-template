@@ -5,6 +5,8 @@ const {
   putContactValidation,
 } = require('../../middlewares/validationMiddleware');
 
+const {tryCatchWrapper} = require('../../helpers');
+
 const {
   getContacts,
   getContactById,
@@ -15,14 +17,14 @@ const {
 
 const router = new express.Router();
 
-router.get('/', getContacts);
+router.get('/', tryCatchWrapper(getContacts));
 
-router.get('/:id', getContactById);
+router.get('/:id', tryCatchWrapper(getContactById));
 
-router.post('/', addContactValidation, postContact);
+router.post('/', addContactValidation, tryCatchWrapper(postContact));
 
-router.delete('/:id', deleteContact);
+router.delete('/:id', tryCatchWrapper(deleteContact));
 
-router.put('/:id', putContactValidation, putContact);
+router.put('/:id', putContactValidation, tryCatchWrapper(putContact));
 
 module.exports = router;

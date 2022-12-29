@@ -6,9 +6,8 @@ const {
   updateContact,
 } = require('../models/contacts');
 
-const getContacts = async (req, res, next) => {
+const getContacts = async (req, res) => {
   const contacts = await listContacts();
-  console.log(contacts);
   res.json({
     status: 'success',
     code: 200,
@@ -16,7 +15,7 @@ const getContacts = async (req, res, next) => {
   });
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const {id} = req.params;
   const contact = await getById(id);
 
@@ -33,35 +32,35 @@ const getContactById = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-  const contacts = await addContact(req.body);
+  await addContact(req.body);
   res.status(201).json({
-    status: 'success',
+    status: 'contact added successfully',
     code: 201,
-    data: contacts,
   });
 };
 
 const putContact = async (req, res) => {
   const {id} = req.params;
 
-  const contacts = await updateContact(id, req.body);
-  console.log(contacts);
+  await updateContact(id, req.body);
 
-  res.json({
-    status: 'success',
+  res.status(200).json({
+    status: 'contact update',
     code: 200,
-    data: contacts,
   });
 };
 
 const deleteContact = async (req, res, next) => {
   const {id} = req.params;
-  const contact = await removeContact(id);
+  console.log(id);
+  const contact = await getById(id);
 
   if (!contact) {
     res.status(400).json({message: 'Not found'});
     return;
   }
+
+  await removeContact(id);
 
   res.status(200).json({message: 'contact deleted'});
 };
