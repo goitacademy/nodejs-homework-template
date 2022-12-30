@@ -60,15 +60,9 @@
     "phone": "(748) 206-2688"
   },
   {
-    "id": "1d8ce5e2-0bb7-48f6-a2de-088330e31452",
-    "name": "gosha",
-    "email": "vasja@gmail.com",
-    "phone": "545-43-12"
-  },
-  {
     "id": "23e8b37c-df8b-4a72-bf94-42aa66c4e6a4",
-    "name": "rita",
-    "email": "rita@mail.com",
+    "name": "boris",
+    "email": "turbo@mail.com",
     "phone": "067-322-11-12"
   }
 ]
