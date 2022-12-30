@@ -49,6 +49,9 @@ const contactJoiSchemaPut = Joi.object({
         .max(14)
         .required(),
 
+    owner: Joi.string(),
+    // .required(),
+
     favorite: Joi.bool()
         .optional(),
 });

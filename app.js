@@ -4,22 +4,20 @@ const cors = require('cors')
 require("dotenv").config()
 require("colors");
 
-const contactsRouter = require('./routes/api/contactsRouter')
+const authRouter = require('./routes/api/authRouter.js');
+const contactsRouter = require('./routes/api/contactsRouter');
+
 
 //---------------------------routes-------------------------------
-//! auth
-
-//! POST --> http://localhost:3000/api/users/signup
-//! POST --> http://localhost:3000/api/users/login
-
-//  POST --> http://localhost:3000/api/auth/registration
-//  POST --> http://localhost:3000/api/auth/login
+//! ------------------ auth -----------------------
+// POST --> http://localhost:3000/api/users/signup
+// POST --> http://localhost:3000/api/users/login
 
 //  Headers --> Authorization -->
 //  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FiNGQzOTFiMmMxNDJjOGY2OTM1YjIiLCJlbWFpbCI6IjU1NUB1a3IubmV0IiwiY3JlYXRlZEF0IjoiMjAyMi0xMi0yN1QxOTo1MzoyOS42MjJaIiwiaWF0IjoxNjcyMzM4ODk2fQ.OF7nTx66ljHbC90VfIGsXGxwLK3ulHIrF104g55g7bA
 
 
-//* contacts
+//* ------------------ contacts ------------------
 //  http://localhost:3000/api/contacts
 //  http://localhost:3000/api/contacts/id
 //  http://localhost:3000/api/contacts/id/favorite
@@ -39,6 +37,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/api/users', authRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {

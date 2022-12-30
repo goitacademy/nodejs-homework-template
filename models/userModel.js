@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-// const { handleSchemaValidationErrors } = require("../helpers");
+const { handleSchemaValidationErrors } = require("../helpers");
 
 const bcrypt = require("bcrypt");
 
@@ -38,7 +38,7 @@ userSchema.pre("save", async function () {
 
 
 //! Правильный код ошибки contactSchema
-// userSchema.post("save", handleSchemaValidationErrors)
+userSchema.post("save", handleSchemaValidationErrors)
 
 
 //* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++

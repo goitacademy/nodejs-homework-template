@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { validation, controllerWrapper, isValidId, } = require("../../middlewares")
+const { validation, controllerWrapper, isValidId, authMiddleware } = require("../../middlewares")
 
 const {
     contactJoiSchemaPut,
@@ -17,6 +17,9 @@ const { contactsControllers: ctrl } = require("../../controllers")
 
 
 //-----------------------------------------------------------------------------
+//! 0. authMiddleware
+router.use(authMiddleware);
+
 //! 1. Получение списка ВСЕХ КОНТАКТОВ
 router.get("/", controllerWrapper(ctrl.getAllContacts))
 
