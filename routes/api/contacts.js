@@ -1,4 +1,5 @@
 const express = require("express");
+const schema = require("../../utils/validation/validation");
 const {
   listContacts,
   getContactById,
@@ -6,44 +7,20 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts");
-const Joi = require("joi");
-
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-
-  phone: Joi.string().min(9).max(14).required(),
-
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "uk"] },
-    })
-    .required(),
-})
-  .with("name", "phone")
-  .with("email", "phone");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  let contactsList = null;
-  await listContacts()
-    .then((result) => {
-      contactsList = result;
-    })
-    .catch((e) => console.error(e));
+  let contactsList = await listContacts();
   res.json(contactsList);
 });
 
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    let contact = null;
-    await getContactById(contactId).then((result) => {
-      contact = result;
-    });
+    let contact = await getContactById(contactId);
     if (!contact) {
-      throw Error;
+      throw new Error(errorMessage);
     }
     res.status(200).json(contact);
   } catch (error) {
@@ -52,7 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   try {
     const data = schema.validate(req.body);
     if (data.error) {
@@ -69,11 +46,8 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    let contacts = null;
-    await removeContact(contactId).then((result) => {
-      contacts = result;
-    });
-    if (!contacts) throw Error;
+    let contacts = await removeContact(contactId);
+    if (!contacts) throw new Error(errorMessage);
     res.status(204).json(contacts);
   } catch (error) {
     res.status(404);
@@ -81,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", async (req, res) => {
   try {
     const data = schema.validate(req.body);
 
