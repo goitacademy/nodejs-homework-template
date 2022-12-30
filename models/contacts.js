@@ -21,7 +21,7 @@ const listContacts = async () => {
 const getContactById = async contactId => {
   const contactList = await getContacts();
   const contact = contactList.find(({ id }) => id === contactId);
-  return contact || null;
+  return contact;
 };
 
 const addContact = async contactData => {
@@ -29,24 +29,18 @@ const addContact = async contactData => {
   const contactList = await getContacts();
   contactList.push(newContact);
   await keepContacts(contactList);
-  return newContact || null;
+  return newContact;
 };
 
 const updateContact = async contactToUpdate => {
-  const { contactId, name, phone, email } = contactToUpdate;
+  const { id } = contactToUpdate;
 
   const contactList = await getContacts();
-  const contact = contactList.find(({ id }) => id === contactId);
+  const contactIdx = contactList.findIndex(contact => contact.id === id);
 
-  if (!contact) return null;
+  if (contactIdx === -1) return null;
 
-  contactList.forEach(contact => {
-    if (contact.id === contactId) {
-      contact.name = name;
-      contact.email = email;
-      contact.phone = phone;
-    }
-  });
+  contactList[contactIdx] = { ...contactList[contactIdx], ...contactToUpdate };
 
   await keepContacts(contactList);
   return contactToUpdate;
@@ -54,15 +48,13 @@ const updateContact = async contactToUpdate => {
 
 const removeContact = async contactId => {
   const contactList = await getContacts();
-  const contact = contactList.find(({ id }) => id === contactId);
-
-  if (!contact) return null;
-
   const updatedContactList = contactList.filter(({ id }) => id !== contactId);
+
+  if (contactList.length === updatedContactList.length) return null;
 
   await keepContacts(updatedContactList);
 
-  return contact;
+  return contactId;
 };
 
 export default {

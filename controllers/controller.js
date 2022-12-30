@@ -47,7 +47,7 @@ const changeContact = async (req, res) => {
   } = req;
 
   const updatedContact = await updateContact({
-    contactId,
+    id: contactId,
     ...body,
   });
 
@@ -61,9 +61,9 @@ const changeContact = async (req, res) => {
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
 
-  const contact = await removeContact(contactId);
+  const deletedId = await removeContact(contactId);
 
-  if (!contact) {
+  if (!deletedId) {
     return res.status(404).json({ message: 'Not found' });
   }
 
