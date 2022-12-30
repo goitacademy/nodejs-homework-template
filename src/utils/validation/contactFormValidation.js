@@ -2,7 +2,6 @@ const Joi = require('joi')
 
 const contactFormValidation = Joi.object({
     name: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
@@ -11,9 +10,16 @@ const contactFormValidation = Joi.object({
         .required(),
     phone: Joi.string()
         .pattern(/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/)
-        .required()
+        .message({"string.pattern.base": "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"})
+        .required(),
+    favorite: Joi.boolean()
+})
+
+const updateStatusValidation = Joi.object({
+    favorite: Joi.boolean().required()
 })
 
 module.exports = {
-    contactFormValidation
+    contactFormValidation,
+    updateStatusValidation
 }

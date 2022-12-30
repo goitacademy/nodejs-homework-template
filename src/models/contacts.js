@@ -59,7 +59,6 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-  try {
     const data = await fs.readFile(contactsPath, 'utf8')
     const contactList = JSON.parse(data)
     const updatedContact = contactList.find(contact => contact.id === contactId)
@@ -69,15 +68,14 @@ const updateContact = async (contactId, body) => {
     updatedContact.phone = body.phone
     changeContactsData(contactList)
     return updatedContact
-  } catch (error) {
-    console.log(error)
-  }
 }
+
+
 
 module.exports = {
   getContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContact
 }
