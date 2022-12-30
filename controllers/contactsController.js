@@ -1,5 +1,5 @@
 const { Contact } = require("../models");
-
+require("dotenv").config();
     const getAll = async (req, res) => {
         const data = await Contact.find({});
         res.json({data});
