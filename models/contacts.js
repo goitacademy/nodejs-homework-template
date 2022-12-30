@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("node:path");
-// const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const contactsPath = path.resolve("./models/contacts.json");
 
@@ -55,9 +55,9 @@ const addContact = async (name, email, phone) => {
   try {
     const data = await readDb();
 
-    const lastContactId = data.slice(-1).find((el) => el).id;
-    // const id = nanoid();
-    const id = JSON.stringify(Number(lastContactId) + 1);
+    // const lastContactId = data.slice(-1).find((el) => el).id;
+    const id = nanoid();
+    // const id = JSON.stringify(Number(lastContactId) + 1);
     const newContact = {
       id: id,
       name,
