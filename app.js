@@ -33,9 +33,4 @@ app.use((err, req, res, next) => {
   });
 })
 
-// app.post('/api/contacts', (res, req) => {
-//   console.log(req.body);
-//   res.json({ javascript: 'object', body: req.body });
-// })
-
 module.exports = app

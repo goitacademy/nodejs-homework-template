@@ -1,10 +1,12 @@
 const express = require('express');
-const { listContacts,
+const {
+  listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact 
-} = require('../../models/contacts')
+} = require('../../models/contacts');
+const { createId } = require('../../service/id');
 
 const router = express.Router();
 
@@ -16,7 +18,7 @@ router.get('/', async (req, res, next) => {
     data: {
       contacts
     }
-   })
+  });
 })
 
 router.get('/:contactId', async (req, res, next) => {
@@ -31,16 +33,13 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { name, phone, email } = req.body;
-  const min = Math.ceil(1);
-  const max = Math.floor(100);
   const contact = {
-    id: Math.floor(Math.random() * (max - min)) + min,
+    id: createId(),
     name,
     email,
     phone
-  }
+  };
   const newContact = await addContact(contact);
-
   res.status(201).json({
     status: 'success',
     code: 201,
