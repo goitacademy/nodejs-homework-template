@@ -2,7 +2,6 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-const Joi = require("joi");
 
 const router = express.Router();
 
@@ -13,6 +12,11 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
+
+const {
+  validationCreateContact,
+  validationUpdateContact,
+} = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -56,7 +60,13 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const contact = await addContact(req.body);
+    const { name, email, phone } = req.body;
+    // if (!name || !email || !phone) {
+    //   res.status(400).json({
+    //     message: "missing required name field",
+    //   });
+    // }
+    const contact = await addContact({ name, email, phone });
 
     return res.status(201).json({
       status: "success",

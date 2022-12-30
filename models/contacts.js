@@ -51,23 +51,24 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {
+const addContact = async (name, email, phone) => {
   try {
     const data = await readDb();
 
     const lastContactId = data.slice(-1).find((el) => el).id;
     // const id = nanoid();
+    const id = JSON.stringify(Number(lastContactId) + 1);
     const newContact = {
-      id: JSON.stringify(Number(lastContactId) + 1),
-      // id: id,
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
+      id: id,
+      name,
+      email,
+      phone,
     };
-    const updateContacts = [...data, newContact];
-    await writeDB(updateContacts);
+    // const updateContacts = [...data, newContact];
+    data.push(newContact);
+    await writeDB(data);
 
-    return readDb();
+    return newContact;
   } catch (error) {
     console.error(error);
   }
