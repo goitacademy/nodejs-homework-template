@@ -22,6 +22,7 @@ const contactsRouter = require('./routes/api/contactsRouter');
 //  http://localhost:3000/api/contacts/id
 //  http://localhost:3000/api/contacts/id/favorite
 //* http://localhost:3000/api/contacts?skip=0&limit=4
+//? http://localhost:3000/api/contacts?skip=1&limit=1
 
 //  http://localhost:3000/api/contacts?skip=0&limit=2&favorite=true
 //  http://localhost:3000/api/contacts?skip=0&limit=2&sortField=favorite

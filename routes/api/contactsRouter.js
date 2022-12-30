@@ -3,17 +3,17 @@ const router = express.Router()
 
 const { validation, controllerWrapper, isValidId, authMiddleware } = require("../../middlewares")
 
+const { contactsControllers: ctrl } = require("../../controllers")
+
 const {
     contactJoiSchemaPut,
     contactJoiSchemaPatch,
     contactJoiSchemaPatchFavorite
 } = require("../../models/contactModel.js");
+
 const validateMiddlewarePut = validation(contactJoiSchemaPut);
 const validateMiddlewarePatch = validation(contactJoiSchemaPatch);
 const validateMiddlewarePatchFavorite = validation(contactJoiSchemaPatchFavorite);
-
-const { contactsControllers: ctrl } = require("../../controllers")
-
 
 
 //-----------------------------------------------------------------------------

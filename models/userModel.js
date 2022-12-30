@@ -7,14 +7,14 @@ const bcrypt = require("bcrypt");
 
 //-----------------------------------------------------------------------------
 const userSchema = Schema({
-    password: {
-        type: String,
-        required: [true, 'Password is required'],
-    },
     email: {
         type: String,
         required: [true, 'Email is required'],
         unique: true,
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
     },
     subscription: {
         type: String,
@@ -42,54 +42,28 @@ userSchema.post("save", handleSchemaValidationErrors)
 
 
 //* ++++++++++++++++++++++ Схемы ВАЛИДАЦИИ Joi +++++++++++++++++++++++++
-// const contactJoiSchemaPostPut = Joi.object({
-//     name: Joi.string()
-//         // .alphanum()
-//         .min(3)
-//         .max(30)
-//         .required(),
+const subscriptionList = ["starter", "pro", "business"];
 
-//     email: Joi.string()
-//         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
-//         .required(),
-
-//     phone: Joi.string()
-//         // .alphanum()
-//         .min(5)
-//         .max(14)
-//         .required(),
-
-//     favorite: Joi.bool()
-//         .optional(),
-// });
-
+const registerJoiSchema = Joi.object({
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
+        .required(),
+    password: Joi.string()
+        .min(3)
+        .required(),
+    subscription: Joi.string()
+        .valueOf(...subscriptionList)
+        .optional(),
+});
 //--------------------------------------------------------------------
-// const contactJoiSchemaPatch = Joi.object({
-//     name: Joi.string()
-//         // .alphanum()
-//         .min(3)
-//         .max(30)
-//         .optional(),
-
-//     email: Joi.string()
-//         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
-//         .optional(),
-
-//     phone: Joi.string()
-//         // .alphanum()
-//         .min(5)
-//         .max(14)
-//         .optional(),
-
-//     favorite: Joi.bool()
-//         .optional(),
-// });
-
-//--------------------------------------------------------------------
-// const contactJoiSchemaPatchFavorite = Joi.object({
-//     favorite: Joi.bool()
-//         .required(),
-// });
+const loginJoiSchema = Joi.object({
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'org',] } })
+        .required(),
+    password: Joi.string()
+        .min(3)
+        .required(),
+});
 //* _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
 
 
@@ -100,8 +74,7 @@ const User = model("user", userSchema); //! DB_HOST
 
 module.exports = {
     User,
-    // contactJoiSchemaPostPut,
-    // contactJoiSchemaPatch,
-    // contactJoiSchemaPatchFavorite
+    registerJoiSchema,
+    loginJoiSchema
 };
 

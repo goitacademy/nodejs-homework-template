@@ -3,18 +3,27 @@ const router = express.Router()
 
 const { validation, controllerWrapper } = require("../../middlewares")
 
-// const { contacts: ctrl } = require("../../controllers")
+const {
+    registrationController,
+    loginController
+} = require("../../controllers/authController.js")
 
-const { registrationController, loginController } = require("../../controllers/authController.js")
+const {
+    registerJoiSchema,
+    loginJoiSchema
+} = require("../../models/userModel.js");
+
+const validateMiddlewareRegister = validation(registerJoiSchema);
+const validateMiddlewarelogin = validation(loginJoiSchema);
 
 
 //-----------------------------------------------------------------------------
 //! 1. Регистрация
-router.post("/signup", controllerWrapper(registrationController))
+router.post("/signup", validateMiddlewareRegister, controllerWrapper(registrationController))
 
 
 //! 2. Login
-router.post('/login', controllerWrapper(loginController))
+router.post('/login', validateMiddlewarelogin, controllerWrapper(loginController))
 
 
 

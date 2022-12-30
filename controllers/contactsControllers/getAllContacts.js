@@ -21,8 +21,8 @@ const getAllContacts = async (req, res, next) => {
 
     //? ============================ Пагинация ================================
     let {
-        skip = 1,
-        limit = 2
+        skip = 0,
+        limit = 5
     } = req.query;
 
     // skip = parseInt(skip); //! работает и без этого
