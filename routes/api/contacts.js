@@ -58,7 +58,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validationCreateContact, async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     // if (!name || !email || !phone) {
@@ -101,7 +101,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", validationUpdateContact, async (req, res, next) => {
   try {
     const contact = await updateContact(req.params.contactId, req.body);
 
