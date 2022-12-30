@@ -3,7 +3,8 @@ const Joi = require("joi");
 
 const { handleSchemaValidationErrors } = require("../helpers");
 
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt"); //! Абсолютно идентичен с bcryptjs
+const bcrypt = require("bcryptjs");
 
 //-----------------------------------------------------------------------------
 const userSchema = Schema({
@@ -28,13 +29,19 @@ const userSchema = Schema({
 }, { versionKey: false, timestamps: true });
 
 
-//!  await bcrypt.hash(password, 10)
-userSchema.pre("save", async function () {
-    if (this.isNew) {
-        this.password = await bcrypt.hash(this.password, 10)
-    };
-    // TODO: if user changed his password
-});
+//!  Хеширование и засока password с помошью bcryptjs (или bcrypt) - 1 вариант
+// userSchema.pre("save", async function () {
+//     if (this.isNew) {
+//         this.password = await bcrypt.hash(this.password, 10)
+//     };
+//     // TODO: if user changed his password
+// });
+
+//!  Хеширование и засока password с помошью bcryptjs (или bcrypt) - 3 вариант (самый сложный)
+userSchema.methods.setPassword = function (password) {
+    this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+}
+
 
 
 //! Правильный код ошибки contactSchema
