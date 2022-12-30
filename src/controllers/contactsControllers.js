@@ -18,11 +18,10 @@ const getContactsController = async (_, res, next) => {
 const getContactByIdController = async (req,res) => {
     const { contactId } = req.params;
     const contact = await getContactById(contactId)
-    console.log(contact)
     // const contact = await Contact.findById(contactId)
-    if (!contact) return res.sendStatus(404) // 
-    res.json({ contact })
-    // res.json(contact)
+    // if (!contact) return res.sendStatus(404) 
+
+    res.json(contact)
 }
   
 const removeContactController = async (req, res) => {
@@ -33,10 +32,7 @@ const removeContactController = async (req, res) => {
 }
 
 const addContactController = async (req, res, next) => {
-    // const { name, email, phone, favorite } = req.body;
     const contact = await addContact(req.body)
-    // const contact = new Contact({name, email, phone, favorite})
-    // await contact.save()
     res.status(201).json(contact)
 }
 

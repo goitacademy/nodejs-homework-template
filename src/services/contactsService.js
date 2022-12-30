@@ -1,5 +1,4 @@
 const { Contact } = require('../db/contactModel')
-// const { WrongContactIdError } = require('../helpers/errors')
 
 const getContacts = async () => {
     const contacts = await Contact.find({})
@@ -11,7 +10,6 @@ const getContactById = async (id) => {
     if (!contact) {
         // return res.sendStatus(404)
         return null
-        // throw new WrongContactIdError()
     }
     return contact
 }
@@ -26,8 +24,8 @@ const removeContact = async (id) => {
     if (!contact) {
         // return res.status(404)
         return null
-        // throw new WrongContactIdError()
     }
+    return contact
 }
 const updateContact = async (id, body) => {
     const contactUpdate = await Contact.findByIdAndUpdate(
