@@ -20,4 +20,6 @@ router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
 router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
+router.patch("/:id/updSubscription", authenticate, validateBody(schemas.updSubscrSchema), ctrlWrapper(ctrl.updSubscription));
+
 module.exports = router;
