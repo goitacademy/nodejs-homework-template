@@ -8,12 +8,12 @@ const start = async () => {
   try {
     await connectMongo();
   
-    app.listen(PORT, (err) => {
-      if(err) return console.log('Error at server launch:', err.message)
-      console.log('Server running. Use our API on port: 3000')
+    app.listen(PORT, () => {
+      console.log('Database connection successful')
     })
   } catch (error) {
     console.error(`Failed to launch application with error: ${error.message}`)
+    process.exit(1);
   }
 }
 
