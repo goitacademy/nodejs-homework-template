@@ -1,5 +1,4 @@
 const { Contact } = require("../../models/contact");
-
 const createError = require("http-errors");
 
 const updateFavorite = async (req, res, next) => {
@@ -7,11 +6,10 @@ const updateFavorite = async (req, res, next) => {
 
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
-    runValidators: true,
   });
+
   if (!result) {
-    console.log(123);
-    throw createError(404, `Contact with id = ${contactId} not found`);
+    throw createError(404, `contact with id ${contactId} not found`);
   }
   res.json({
     status: "success",
