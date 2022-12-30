@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -19,6 +20,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(req);
   // eslint-disable-next-line no-unused-vars
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message: err.message });
