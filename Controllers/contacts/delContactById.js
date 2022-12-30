@@ -7,11 +7,8 @@ const delContactById = async (req, res) => {
   if (!contact) {
     throw new NotFound(`Contact with id:${id} not found`);
   }
-  return res.json({
-    status: 'success',
-    code: 200,
+  return res.status(200).json({
     message: 'Contact deleted',
-    data: { contact },
   });
 };
 

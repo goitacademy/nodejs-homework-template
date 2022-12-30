@@ -34,7 +34,7 @@ const removeContact = async id => {
       path.join(__dirname, 'contacts.json'),
       JSON.stringify(contactList, null, 2),
     );
-    console.table(result);
+    console.table(contactList);
     return contactList;
   }
   return null;
