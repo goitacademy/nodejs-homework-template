@@ -3,10 +3,12 @@ const router = express.Router()
 
 const { validation, controllerWrapper } = require("../../middlewares")
 
-const {
-    registrationController,
-    loginController
-} = require("../../controllers/authController.js")
+// const {
+//     registrationController,
+//     loginController
+// } = require("../../controllers/authControllers/registrController.js")
+
+const { authControllers: ctrl } = require("../../controllers")
 
 const {
     registerJoiSchema,
@@ -19,11 +21,11 @@ const validateMiddlewarelogin = validation(loginJoiSchema);
 
 //-----------------------------------------------------------------------------
 //! 1. Регистрация
-router.post("/signup", validateMiddlewareRegister, controllerWrapper(registrationController))
+router.post("/signup", validateMiddlewareRegister, controllerWrapper(ctrl.registrController))
 
 
 //! 2. Login
-router.post('/login', validateMiddlewarelogin, controllerWrapper(loginController))
+router.post('/login', validateMiddlewarelogin, controllerWrapper(ctrl.loginController))
 
 
 

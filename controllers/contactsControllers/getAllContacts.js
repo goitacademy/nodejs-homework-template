@@ -9,6 +9,7 @@ const { lineBreak } = require("../../services");
 const getAllContacts = async (req, res, next) => {
     // const contacts = await Contact.find({});
 
+
     const { _id: user_id } = req.user //?
     //* =============================console===================================
     console.log("getAllContacts-->req.user:".bgYellow.red); //?
@@ -18,6 +19,7 @@ const getAllContacts = async (req, res, next) => {
     console.log("getAllContacts-->user_id:".bgYellow.blue, user_id.bgGreen.blue); //?
     console.log("");
     //* =======================================================================
+
 
     //? ============================ Пагинация ================================
     let {
@@ -63,7 +65,7 @@ const getAllContacts = async (req, res, next) => {
     console.log(contacts); //!!!!!
 
     //? Aggregation
-    console.log("------------------------- СПИСОК ВСЕХ USERS и их КОНТАКТОВ: --------------------------".bgCyan.black);
+    console.log("\n------------------------- СПИСОК ВСЕХ USERS и их КОНТАКТОВ: --------------------------".bgCyan.black);
     console.log("");
     for (let i = 0; i < users.length; i++) {
         const id = String(users[i]._id)

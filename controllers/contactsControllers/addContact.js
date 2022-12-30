@@ -14,7 +14,7 @@ const addContact = async (req, res, next) => {
     console.table(req.user); //?
     console.table([req.user]);
 
-    console.log("addContact-->user_id:".bgYellow.blue, user_id); //?
+    console.log("addContact-->user_id:".bgYellow.blue, user_id.bgGreen.blue); //?
     console.log("");
     //* =======================================================================
 

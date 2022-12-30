@@ -1,16 +1,13 @@
-const { User } = require("../models/userModel.js");
+const { User } = require("../../models/userModel.js");
 const { Conflict } = require("http-errors");
 
-// const bcrypt = require("bcrypt")
 const bcrypt = require("bcryptjs")
-
-// const jwt = require('jsonwebtoken');
-
 
 // const { lineBreak } = require("../services")
 
+
 //-----------------------------------------------------------------------------
-const registrationController = async (req, res) => {
+const registrController = async (req, res) => {
     const { email, password } = req.body;
     const userMailCheck = await User.findOne({ email });
 
@@ -49,10 +46,9 @@ const registrationController = async (req, res) => {
 };
 
 
-module.exports = {
-    registrationController,
-    // loginController
-}
+module.exports = registrController;
+
+
 
 
 

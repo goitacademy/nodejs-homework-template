@@ -1,26 +1,34 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
-    // if (req.headers.authorization.tokenType) {
-    const [tokenType, token] = req.headers["authorization"].split(" "); //* Bearer
-    console.log("tokenType:".bgGreen.black, tokenType); //!
-    console.log("token:".bgGreen.black, token); //!
-    console.log("");
-    // }
+const { Unauthorized } = require("http-errors");
 
-    if (!token) {
-        throw Error(`Please, provide a token`)
-    }
+const { JWT_SECRET } = process.env;
+
+//-----------------------------------------------------------------------------
+const authMiddleware = (req, res, next) => {
     try {
-        const user = jwt.decode(token, process.env.JWT_SECRET);
+        const [tokenType, token] = req.headers["authorization"].split(" "); //* Bearer
+        console.log(""); //!
+        console.log("tokenType:".bgGreen.black, tokenType); //!
+        console.log("token:".bgGreen.black, token); //!
+        console.log(""); //!
+        //! Проверка наличия токена
+        if (!token) {
+            throw new Unauthorized("Not authorized. No token");
+        }
+        const user = jwt.decode(token, JWT_SECRET);
+        //! Проверка валидности токена
+        if (!user) {
+            console.log("authMiddleware-->user:".bgGreen.magenta, user); //!
+            throw new Unauthorized("Not authorized. Invalid token");
+        }
         req.token = token;
         req.user = user;
         next();
     } catch (error) {
-        console.log("Invalid token");
+        console.log(error.message);
         next(error);
     }
-
 }
 
 module.exports = authMiddleware

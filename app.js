@@ -18,7 +18,7 @@ const contactsRouter = require('./routes/api/contactsRouter');
 
 
 //* ------------------ contacts ------------------
-//  http://localhost:3000/api/contacts
+//! http://localhost:3000/api/contacts
 //  http://localhost:3000/api/contacts/id
 //  http://localhost:3000/api/contacts/id/favorite
 //* http://localhost:3000/api/contacts?skip=0&limit=4
@@ -44,7 +44,7 @@ app.use('/api/contacts', contactsRouter)
 app.use((req, res) => {
   console.log("!!! ОШИБКА !!!:".bgRed.white) //!
   console.log('Такой маршрут не найден...'.bgYellow.red) //!
-  res.status(404).json({ message: 'Not found' })
+  res.status(404).json({ message: 'Route not found' })
 })
 
 
