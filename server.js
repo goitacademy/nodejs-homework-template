@@ -5,17 +5,6 @@ require('dotenv').config();
 
 const {PORT, DB_HOST} = process.env;
 
-// main().then(
-//   console.log("Database connection successful")
-// ).catch(err => console.log(err));
-
-// async function main() {
-//   await mongoose.connect(DB_HOST);
-
-// }
-
-// app.listen(PORT, ()=> {})
-
 mongoose.connect(DB_HOST).then(() => {
   console.log("Database connection successful")
   app.listen(PORT)
