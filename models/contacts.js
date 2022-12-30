@@ -31,7 +31,7 @@ const removeContact = async (contactId) => {
     );
     return newContactList;
   } catch (error) {
-    return res.status(500).json({ message: "Internal Error" });
+    next(error);
   }
 };
 
@@ -55,7 +55,7 @@ const updateContact = async (contactId, body, res) => {
     await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
     return contacts[index];
   } catch (error) {
-    return res.status(500).json({ message: "Internal Error" });
+    next(error);
   }
 };
 
