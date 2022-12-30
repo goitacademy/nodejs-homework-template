@@ -4,7 +4,30 @@ const cors = require('cors')
 require("dotenv").config()
 require("colors");
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require('./routes/api/contactsRouter')
+
+//---------------------------routes-------------------------------
+//! auth
+
+//! POST --> http://localhost:3000/api/users/signup
+//! POST --> http://localhost:3000/api/users/login
+
+//  POST --> http://localhost:3000/api/auth/registration
+//  POST --> http://localhost:3000/api/auth/login
+
+//  Headers --> Authorization -->
+//  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FiNGQzOTFiMmMxNDJjOGY2OTM1YjIiLCJlbWFpbCI6IjU1NUB1a3IubmV0IiwiY3JlYXRlZEF0IjoiMjAyMi0xMi0yN1QxOTo1MzoyOS42MjJaIiwiaWF0IjoxNjcyMzM4ODk2fQ.OF7nTx66ljHbC90VfIGsXGxwLK3ulHIrF104g55g7bA
+
+
+//* contacts
+//  http://localhost:3000/api/contacts
+//  http://localhost:3000/api/contacts/id
+//  http://localhost:3000/api/contacts/id/favorite
+//* http://localhost:3000/api/contacts?skip=0&limit=4
+
+//  http://localhost:3000/api/contacts?skip=0&limit=2&favorite=true
+//  http://localhost:3000/api/contacts?skip=0&limit=2&sortField=favorite
+//  http://localhost:3000/api/contacts?skip=0&limit=2&sortField=favorite&sortOrder=DESC
 
 
 //----------------------------------------------------------------

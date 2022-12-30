@@ -7,7 +7,7 @@ const {
     contactJoiSchemaPut,
     contactJoiSchemaPatch,
     contactJoiSchemaPatchFavorite
-} = require("../../models/contact.js");
+} = require("../../models/contactModel.js");
 const validateMiddlewarePut = validation(contactJoiSchemaPut);
 const validateMiddlewarePatch = validation(contactJoiSchemaPatch);
 const validateMiddlewarePatchFavorite = validation(contactJoiSchemaPatchFavorite);
