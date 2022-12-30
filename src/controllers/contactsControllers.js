@@ -1,4 +1,4 @@
-const { Contact } = require('../db/contactModel')
+// const { Contact } = require('../db/contactModel')
 const {
     getContacts,
     getContactById,
@@ -18,8 +18,9 @@ const getContactsController = async (_, res, next) => {
 const getContactByIdController = async (req,res) => {
     const { contactId } = req.params;
     const contact = await getContactById(contactId)
+    console.log(contact)
     // const contact = await Contact.findById(contactId)
-    // if (!contact) return res.sendStatus(404) // 
+    if (!contact) return res.sendStatus(404) // 
     res.json({ contact })
     // res.json(contact)
 }
