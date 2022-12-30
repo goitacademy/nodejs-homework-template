@@ -1,5 +1,8 @@
-const express = require("express");
-const { listContacts, getContactById } = require("../models/contacts");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+} = require("../models/contacts");
 const { createError } = require("../helpers/index");
 
 const getContacts = async (req, res) => {
@@ -9,9 +12,8 @@ const getContacts = async (req, res) => {
 
 const getContact = async (req, res, next) => {
   const { contactId } = req.params;
-  console.log("id in controllers", contactId);
+
   const contact = await getContactById(contactId);
-  console.log("contact in controllers", contact);
 
   if (!contact) {
     return next(createError(404, "Not found"));
@@ -19,4 +21,9 @@ const getContact = async (req, res, next) => {
   return res.json(contact);
 };
 
-module.exports = { getContacts, getContact };
+const createContact = async (req, res, next) => {
+  const newContact = await addContact(req.body);
+  res.status(201).json(newContact);
+};
+
+module.exports = { getContacts, getContact, createContact };
