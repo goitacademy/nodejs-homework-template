@@ -6,7 +6,7 @@ require("colors");
 
 const authRouter = require('./routes/api/authRouter.js');
 const contactsRouter = require('./routes/api/contactsRouter');
-const usersRouter = require('./routes/api/usersRouter');
+// const usersRouter = require('./routes/api/usersRouter');
 
 
 //---------------------------routes-------------------------------
@@ -41,7 +41,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/users/current', usersRouter)
+// app.use('/api/users/current', usersRouter)
 app.use('/api/users', authRouter)
 app.use('/api/contacts', contactsRouter)
 

@@ -68,7 +68,7 @@ const getAllContacts = async (req, res, next) => {
     console.log("\n------------------------- СПИСОК ВСЕХ USERS и их КОНТАКТОВ: --------------------------".bgCyan.black);
     console.log("");
     for (let i = 0; i < users.length; i++) {
-        const id = String(users[i].id)
+        const id = String(users[i]._id)
         // console.log("id:", id); //!
         console.log("");
         console.log("СПИСОК ВСЕХ КОНТАКТОВ USER с id:".bgGreen.black, id.bgRed.black)
