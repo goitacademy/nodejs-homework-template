@@ -58,11 +58,5 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  },
-  {
-    "name": "Jack",
-    "email": "qweqwe@gas.com",
-    "phone": "999000111",
-    "id": "1672502624639"
   }
 ]
