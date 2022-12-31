@@ -4,7 +4,10 @@ const { Unauthorized } = require("http-errors");
 
 //-----------------------------------------------------------------------------
 const getCurrentController = async (req, res) => {
-    console.table([req.user]); //!
+    console.log(""); //!
+    // console.table([req.user]); //!
+    console.log("getCurrentController-->req.user:".bgBlue.yellow, req.user); //!
+    console.log("getCurrentController-->req.user._id:".bgBlue.yellow, req.user._id);
     const { id: user_id } = req.user
     console.log("getCurrentController-->user_id:".bgBlue.yellow, user_id.red); //!
     const user = await User.findOne({ _id: user_id });

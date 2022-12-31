@@ -37,16 +37,18 @@ const authMiddleware = async (req, res, next) => {
         if (!token) {
             throw new Unauthorized("Not authorized. No token");
         }
+        //! Объект user c payload = { id: user._id, email: user.email, } ==> loginController (1-вариант)
         let user = jwt.decode(token, JWT_SECRET);
         //! Проверка валидности токена
         if (!user) {
             console.log("authMiddleware-->user:".bgGreen.magenta, user); //!
             throw new Unauthorized("Not authorized. Invalid token");
         }
+        //! Весь объект user (2-вариант)
         const { id } = jwt.verify(token, JWT_SECRET);
         user = await User.findById(id);
         req.user = user;
-        // req.token = token;
+        // req.token = token; //! только для (1-вариант)
         next();
     } catch (error) {
         console.log(error.message);
