@@ -24,15 +24,15 @@ router.post('/login', validateMiddlewarelogin, controllerWrapper(ctrl.loginContr
 
 
 //! 3-1. Проверка токена
-router.use(authMiddleware); //! 1-вариант
+// router.use(authMiddleware); //! 1-вариант
 
 //! 3-2. Logout
-router.get('/logout', controllerWrapper(ctrl.logoutController)) //! 1-вариант
+router.get('/logout', authMiddleware, controllerWrapper(ctrl.logoutController)) //! 1-вариант
 // router.get('/logout', authMiddleware, controllerWrapper(ctrl.logoutController)) //! 2-вариант
 
 
 //! 4. Текущий пользователь - получить данные юзера по токену
-router.get('/current', controllerWrapper(ctrl.getCurrentController)) //! 1-вариант
+router.get('/current', authMiddleware, controllerWrapper(ctrl.getCurrentController)) //! 1-вариант
 // router.get('/logout', authMiddleware, controllerWrapper(ctrl.getCurrentController)) //! 2-вариант
 
 
