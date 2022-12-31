@@ -1,12 +1,6 @@
 const { User } = require("../../models/userModel.js");
 const { Unauthorized } = require("http-errors");
 
-const bcrypt = require("bcryptjs")
-
-const jwt = require('jsonwebtoken');
-
-const { JWT_SECRET } = process.env;
-
 
 //-----------------------------------------------------------------------------
 const getCurrentController = async (req, res) => {
