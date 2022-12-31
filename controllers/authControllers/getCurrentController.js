@@ -23,7 +23,7 @@ const getCurrentController = async (req, res) => {
     const { email, subscription } = user;
 
     res.status(200).json({
-        status: "No getCurrentController",
+        status: "success",
         code: 200,
         user: {
             email,

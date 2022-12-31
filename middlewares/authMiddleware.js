@@ -41,12 +41,13 @@ const authMiddleware = async (req, res, next) => {
         let user = jwt.decode(token, JWT_SECRET);
         //! Проверка валидности токена
         if (!user) {
-            console.log("authMiddleware-->user:".bgGreen.magenta, user); //!
+            console.log("authMiddleware-->user(jwt):".bgYellow.magenta, user); //!
             throw new Unauthorized("Not authorized. Invalid token");
         }
         //! Весь объект user (2-вариант)
         const { id } = jwt.verify(token, JWT_SECRET);
         user = await User.findById(id);
+        // console.log("authMiddleware-->user(User.findById):".bgYellow.blue, user); //!
         req.user = user;
         // req.token = token; //! только для (1-вариант)
         next();
@@ -60,6 +61,8 @@ const authMiddleware = async (req, res, next) => {
 }
 
 module.exports = authMiddleware
+
+
 
 
 //todo --> OLD из лекций Кирилла Ежова
