@@ -12,7 +12,9 @@ const getContacts = async () => {
 const getContactById = async (id) => {
     try {
         const contact = await Contact.findById(id)
-        if (!contact) return null;
+        if (!contact) {
+            return null
+        };
         return contact
     } catch (error) {
         console.log(error)
@@ -31,7 +33,9 @@ const addContact = async ({name, email, phone, favorite}) => {
 const removeContact = async (id) => {
     try {
         const contact = await Contact.findByIdAndRemove(id)
-        if (!contact) return null
+        if (!contact) {
+            return null
+        }
         return contact
     } catch (error) {
         console.log(error)

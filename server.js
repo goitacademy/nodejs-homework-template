@@ -1,10 +1,10 @@
-require('dotenv').config()
-const app = require('./src/app')
-const { connectMongo } = require('./src/db/connection')
+require('dotenv').config();
+const app = require('./src/app');
+const { connectMongo } = require('./src/db/connection');
 
-const PORT = 3000
+const PORT = 3000;
 
-const start = async () => {
+(async function () {
   try {
     await connectMongo();
   
@@ -15,6 +15,4 @@ const start = async () => {
     console.error(`Failed to launch application with error: ${error.message}`)
     process.exit(1);
   }
-}
-
-start()
+})();
