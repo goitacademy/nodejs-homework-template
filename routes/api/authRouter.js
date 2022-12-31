@@ -3,11 +3,6 @@ const router = express.Router()
 
 const { validation, controllerWrapper, authMiddleware } = require("../../middlewares")
 
-// const {
-//     registrationController,
-//     loginController
-// } = require("../../controllers/authControllers/registrController.js")
-
 const { authControllers: ctrl } = require("../../controllers")
 
 const {
@@ -32,7 +27,8 @@ router.post('/login', validateMiddlewarelogin, controllerWrapper(ctrl.loginContr
 router.use(authMiddleware);
 
 //! 3-2. Logout
-router.get('/logout', controllerWrapper(ctrl.logoutController))
+router.get('/logout', controllerWrapper(ctrl.logoutController)) //! 1-вариант
+// router.get('/logout', authMiddleware, controllerWrapper(ctrl.logoutController)) //! 2-вариант
 
 
 

@@ -6,14 +6,14 @@ const { Unauthorized } = require("http-errors");
 //-----------------------------------------------------------------------------
 const logoutController = async (req, res) => {
     console.table([req.user]);
-    const { id: user_id } = req.user //?
+    const { id: user_id } = req.user
     console.log("logoutController-->user_id:".bgBlue.yellow, user_id.red);
     let user = await User.findOne({ _id: user_id });
     // const user = await User.findOne({ _id: "63af43c0e58a51e95a2c9ffe" }); //! Проверка на ОШИБКУ Unauthorized 
     console.log("");
     console.log("nlogoutController-->user:".bgBlue.white, user);
 
-    //! ОШИБКА Unauthorized - если такого user
+    //! ОШИБКА Unauthorized - если нет такого user
     if (!user) {
         throw new Unauthorized("Not authorized");
     }
@@ -25,6 +25,7 @@ const logoutController = async (req, res) => {
     //! Обновляем поле "token" в MongoDB --> db-contacts.users
     user = await User.findByIdAndUpdate(user._id, { token: "" }, { new: true });
     console.log("logoutController-->user.token_ПОСЛЕ:".bgBlue.red, user.token);
+    console.log("");
 
     res.status(200).json({
         status: "No Content",
