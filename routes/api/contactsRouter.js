@@ -17,7 +17,7 @@ const validateMiddlewarePatchFavorite = validation(contactJoiSchemaPatchFavorite
 
 
 //-----------------------------------------------------------------------------
-//! 0. authMiddleware
+//! 0. Проверка токена
 router.use(authMiddleware);
 
 //! 1. Получение списка ВСЕХ КОНТАКТОВ

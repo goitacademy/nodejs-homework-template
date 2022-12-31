@@ -12,6 +12,7 @@ const contactsRouter = require('./routes/api/contactsRouter');
 //! ------------------ auth -----------------------
 // POST --> http://localhost:3000/api/users/signup
 // POST --> http://localhost:3000/api/users/login
+// GET  --> http://localhost:3000/api/users/logout
 
 //  Headers --> Authorization -->
 //  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FiNGQzOTFiMmMxNDJjOGY2OTM1YjIiLCJlbWFpbCI6IjU1NUB1a3IubmV0IiwiY3JlYXRlZEF0IjoiMjAyMi0xMi0yN1QxOTo1MzoyOS42MjJaIiwiaWF0IjoxNjcyMzM4ODk2fQ.OF7nTx66ljHbC90VfIGsXGxwLK3ulHIrF104g55g7bA

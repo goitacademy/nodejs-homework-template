@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { validation, controllerWrapper } = require("../../middlewares")
+const { validation, controllerWrapper, authMiddleware } = require("../../middlewares")
 
 // const {
 //     registrationController,
@@ -26,6 +26,13 @@ router.post("/signup", validateMiddlewareRegister, controllerWrapper(ctrl.regist
 
 //! 2. Login
 router.post('/login', validateMiddlewarelogin, controllerWrapper(ctrl.loginController))
+
+
+//! 3-1. Проверка токена
+router.use(authMiddleware);
+
+//! 3-2. Logout
+router.get('/logout', controllerWrapper(ctrl.logoutController))
 
 
 

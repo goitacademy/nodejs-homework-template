@@ -30,7 +30,7 @@ const loginController = async (req, res) => {
     }
 
     //! Создаем ТОКЕН
-    const payload = { _id: user._id, email: user.email, };
+    const payload = { id: user._id, email: user.email, };
 
     const token = jwt.sign(payload, JWT_SECRET);
     // const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" }); //! Временный - 1 час
@@ -43,7 +43,7 @@ const loginController = async (req, res) => {
     console.log("token:".red, token.green); //!
     console.log("");
 
-    res.json({
+    res.status(200).json({
         status: "success",
         code: 200,
         data: {
@@ -57,46 +57,4 @@ const loginController = async (req, res) => {
 };
 
 
-
-
-
-
-
 module.exports = loginController
-
-
-
-
-
-//todo ------------- OLD --> WORK --------------
-// const { registration, login } = require("../services/authService.js")
-
-
-// const registrationController = async (req, res) => {
-//     const { email, password } = req.body;
-//     await registration(email, password);
-
-//     // res.json({ status: "success" });
-//     res.status(200).json({
-//         status: "success",
-//         code: 200,
-//         user: {
-//             email,
-//             subscription: "starter"
-//         }
-//     });
-// };
-
-
-// const loginController = async (req, res) => {
-//     const { email, password } = req.body;
-//     const token = await login(email, password);
-
-//     res.json({ status: "success", token });
-// };
-
-
-// module.exports = {
-//     registrationController,
-//     loginController
-// }

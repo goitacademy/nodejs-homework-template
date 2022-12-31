@@ -10,7 +10,7 @@ const getAllContacts = async (req, res, next) => {
     // const contacts = await Contact.find({});
 
 
-    const { _id: user_id } = req.user //?
+    const { id: user_id } = req.user //?
     //* =============================console===================================
     console.log("getAllContacts-->req.user:".bgYellow.red); //?
     console.table(req.user); //?
@@ -61,17 +61,17 @@ const getAllContacts = async (req, res, next) => {
     //! ===========================console============================
     console.log("START-->GET/All".green); //!
     lineBreak();
-    console.log("СОРТИРОВАННЫЙ СПИСОК ВСЕХ КОНТАКТОВ USER с _id:".bgGreen.black, user_id.bgGreen.blue)
+    console.log("СОРТИРОВАННЫЙ СПИСОК ВСЕХ КОНТАКТОВ USER с id:".bgGreen.black, user_id.bgGreen.blue)
     console.log(contacts); //!!!!!
 
     //? Aggregation
     console.log("\n------------------------- СПИСОК ВСЕХ USERS и их КОНТАКТОВ: --------------------------".bgCyan.black);
     console.log("");
     for (let i = 0; i < users.length; i++) {
-        const id = String(users[i]._id)
+        const id = String(users[i].id)
         // console.log("id:", id); //!
         console.log("");
-        console.log("СПИСОК ВСЕХ КОНТАКТОВ USER с _id:".bgGreen.black, id.bgRed.black)
+        console.log("СПИСОК ВСЕХ КОНТАКТОВ USER с id:".bgGreen.black, id.bgRed.black)
         console.log(users[i]); //!!!!!
         // if (users[i].userContacts.length) {
         //     console.log("СПИСОК ВСЕХ КОНТАКТОВ:".bgMagenta.black)
