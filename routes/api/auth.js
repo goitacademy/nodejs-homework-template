@@ -13,4 +13,6 @@ router.get("/current", authenticate, controller.current);
 
 router.post("/logout", authenticate, controller.logout);
 
+router.patch("/", authenticate, controller.subscription);
+
 module.exports = router;
