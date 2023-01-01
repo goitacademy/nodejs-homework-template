@@ -14,6 +14,7 @@ const getContactById = async (id) => {
   return contact;
 };
 const addContact = async ({ name, email, phone, favorite }) => {
+  console.log(name);
   const contact = new Contact({ name, email, phone, favorite });
   await contact.save();
 };
@@ -23,7 +24,7 @@ const removeContact = async (id) => {
     throw new WrongParamsError(`Contact with id ${id} can't be found`);
   }
 };
-const updateContact = async () => {
+const updateContact = async (id, { name, email, phone, favorite }) => {
   await Contact.findByIdAndUpdate(id, {
     $set: { name, email, phone, favorite },
   });
