@@ -5,9 +5,15 @@ const { Unauthorized } = require("http-errors");
 
 //-----------------------------------------------------------------------------
 const logoutController = async (req, res) => {
-    console.table([req.user]);
+    // console.table([req.user]);
+    console.log(req.user);
+
     const { id: user_id } = req.user
     console.log("logoutController-->user_id:".bgBlue.yellow, user_id.red);
+
+
+    // await User.findByIdAndUpdate({_id: user_id, token: null });  //! сразу удаляем
+
     let user = await User.findOne({ _id: user_id });
     // const user = await User.findOne({ _id: "63af43c0e58a51e95a2c9ffe" }); //! Проверка на ОШИБКУ Unauthorized 
     console.log("");

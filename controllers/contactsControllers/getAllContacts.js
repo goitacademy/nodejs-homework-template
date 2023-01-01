@@ -1,4 +1,5 @@
 //? +++++++++++++++++++  mongoose +++++++++++++++++++
+const { number } = require("joi");
 const { Contact } = require("../../models");
 const { User } = require("../../models");
 
@@ -26,8 +27,11 @@ const getAllContacts = async (req, res, next) => {
     //? ============================ Пагинация ================================
     let {
         skip = 0,
+        page = 1,
         limit = 5
     } = req.query;
+
+    // const skip = (page - 1)*limit //! формула расчета skip
 
     // skip = parseInt(skip); //! работает и без этого
     // limit = parseInt(limit); //! работает и без этого
@@ -37,12 +41,12 @@ const getAllContacts = async (req, res, next) => {
 
     // const contacts = await Contact.find({ owner: user_id }); //*
     //? Пагинация
-    const contacts = await Contact.find({ owner: user_id, skip, limit })
+    const contacts = await Contact.find({ owner: user_id, skip, limit: Number(limit) })
         .select({ createdAt: 0 })   //! не показывать поле "createdAt"
         .skip(skip)   //! с какого элемента массива (объекта) начать показ
         .limit(limit)   //! сколько элементов массива (объекта) показать
         .sort("name") //! сортировка по полю "name"
-    // .sort({ "favorite": true }) //! сортировка по полю "name"
+        .populate("owner", "_id email subscription updatedAt")
 
 
     //? ========================== Aggregation ================================
