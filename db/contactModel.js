@@ -3,21 +3,16 @@ const mongoose = require("mongoose");
 const contactShema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Set name for contact"],
   },
   email: {
     type: String,
-    required: true,
-    unique: true,
   },
   phone: {
     type: String,
-    required: true,
-    unique: true,
   },
   favorite: {
     type: Boolean,
-    required: true,
     default: false,
   },
 });
