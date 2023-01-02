@@ -11,7 +11,7 @@ const getAllContacts = async (req, res, next) => {
     // const contacts = await Contact.find({});
 
 
-    const { id: user_id } = req.user //?
+    const { id: userId } = req.user //?
     //* =============================console===================================
     console.log("");
     console.log("getAllContacts-->req.user:".bgYellow.red);
@@ -19,7 +19,7 @@ const getAllContacts = async (req, res, next) => {
     // console.table([req.user]);
     console.log(req.user);
 
-    console.log("getAllContacts-->user_id:".bgYellow.blue, user_id.bgGreen.blue);
+    console.log("getAllContacts-->userId:".bgYellow.blue, userId.bgGreen.blue);
     console.log("");
     //* =======================================================================
 
@@ -39,9 +39,9 @@ const getAllContacts = async (req, res, next) => {
     //? =======================================================================
 
 
-    // const contacts = await Contact.find({ owner: user_id }); //*
+    // const contacts = await Contact.find({ owner: userId }); //*
     //? Пагинация
-    const contacts = await Contact.find({ owner: user_id, skip, limit: Number(limit) })
+    const contacts = await Contact.find({ owner: userId, skip, limit: Number(limit) })
         .select({ createdAt: 0 })   //! не показывать поле "createdAt"
         .skip(skip)   //! с какого элемента массива (объекта) начать показ
         .limit(limit)   //! сколько элементов массива (объекта) показать
@@ -67,7 +67,7 @@ const getAllContacts = async (req, res, next) => {
     //! ===========================console============================
     console.log("START-->GET/All".green); //!
     lineBreak();
-    console.log("СОРТИРОВАННЫЙ СПИСОК ВСЕХ КОНТАКТОВ USER с id:".bgGreen.black, user_id.bgGreen.blue)
+    console.log("СОРТИРОВАННЫЙ СПИСОК ВСЕХ КОНТАКТОВ USER с id:".bgGreen.black, userId.bgGreen.blue)
     console.log(contacts); //!!!!!
 
     //? Aggregation
@@ -104,28 +104,3 @@ const getAllContacts = async (req, res, next) => {
 };
 
 module.exports = getAllContacts;
-
-
-
-
-
-
-
-
-
-//todo ---------- OLD ------------------------
-// const { Contact } = require("../../models");
-
-
-// //-----------------------------------------------------------------------------
-// const getAllContacts = async (req, res, next) => {
-//     const contacts = await Contact.find({});
-
-//     res.status(200).json({
-//         status: "success",
-//         code: 200,
-//         data: { contacts }
-//     });
-// };
-
-// module.exports = getAllContacts;

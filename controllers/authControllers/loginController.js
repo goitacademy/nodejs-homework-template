@@ -44,7 +44,7 @@ const loginController = async (req, res) => {
     console.log("");
 
     res.status(200).json({
-        status: "success",
+        // status: "success",
         code: 200,
         data: {
             token,

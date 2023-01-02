@@ -8,14 +8,18 @@ const logoutController = async (req, res) => {
     // console.table([req.user]);
     console.log(req.user);
 
-    const { id: user_id } = req.user
-    console.log("logoutController-->user_id:".bgBlue.yellow, user_id.red);
+    const { id: userId } = req.user
+    console.log("logoutController-->userId:".bgBlue.yellow, userId.red);
 
 
-    // await User.findByIdAndUpdate({_id: user_id, token: null });  //! сразу удаляем
+    // await User.findByIdAndUpdate({_id: userId, token: null });  //! сразу удаляем
 
-    let user = await User.findOne({ _id: user_id });
+    // let user = await User.findOne({ _id: userId }); //! 1-вариант
     // const user = await User.findOne({ _id: "63af43c0e58a51e95a2c9ffe" }); //! Проверка на ОШИБКУ Unauthorized 
+
+    let user = await User.findById({ _id: userId }); //! 2-вариант
+    // const user = await User.findById({ _id: "63af43c0e58a51e95a2c9ffe" }); //! Проверка на ОШИБКУ Unauthorized
+
     console.log("");
     console.log("nlogoutController-->user:".bgBlue.white, user);
 
@@ -33,15 +37,14 @@ const logoutController = async (req, res) => {
     console.log("logoutController-->user.token_ПОСЛЕ:".bgBlue.red, user.token);
     console.log("");
 
-    res.status(200).json({
-        status: "No Content",
-        code: 204,
-        user
-    })
+    res.status(204).json()
+
+    // res.status(200).json({
+    //     status: "No Content",
+    //     code: 204,
+    //     user
+    // })
 };
 
 
 module.exports = logoutController
-
-
-

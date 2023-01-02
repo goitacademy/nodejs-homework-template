@@ -7,19 +7,19 @@ const { lineBreak } = require("../../services");
 const removeAllContacts = async (req, res, next) => {
     // const contacts = await Contact.deleteMany({});
 
-    const { id: user_id } = req.user //?
+    const { id: userId } = req.user //?
     //* =============================console===================================
     console.log("removeAllContacts-->req.user:".bgYellow.red); //?
     // console.table(req.user); //?
     // console.table([req.user]);
     console.log(req.user);
 
-    console.log("removeAllContacts-->user_id:".bgYellow.blue, user_id); //?
+    console.log("removeAllContacts-->userId:".bgYellow.blue, userId); //?
     console.log("");
     //* =======================================================================
 
 
-    const contacts = await Contact.deleteMany({ owner: user_id });
+    const contacts = await Contact.deleteMany({ owner: userId });
 
     //! ===========================console============================
     console.log("START-->DELETE/All".bgRed.yellow); //!
@@ -40,28 +40,3 @@ const removeAllContacts = async (req, res, next) => {
 };
 
 module.exports = removeAllContacts;
-
-
-
-
-
-
-
-
-//todo ------------- OLD --------------------
-// const { Contact } = require("../../models");
-
-
-// //-----------------------------------------------------------------------------
-// const removeAllContacts = async (req, res, next) => {
-//     const contacts = await Contact.deleteMany({});
-
-//     res.status(200).json({
-//         status: "success",
-//         code: 204,
-//         message: "ALL Users were remove...",
-//         data: { contacts }
-//     });
-// };
-
-// module.exports = removeAllContacts;

@@ -9,14 +9,14 @@ const removeContact = async (req, res, next) => {
     const { contactId } = req.params;
     // const contact = await Contact.findByIdAndRemove(contactId);
 
-    const { id: user_id } = req.user //?
+    const { id: userId } = req.user //?
     //* =============================console===================================
     console.log("removeContactById-->req.user:".bgYellow.red); //?
     // console.table(req.user); //?
     // console.table([req.user]);
     console.log(req.user);
 
-    console.log("removeContactById-->user_id:".bgYellow.blue, user_id); //?
+    console.log("removeContactById-->userId:".bgYellow.blue, userId); //?
     console.log("");
     //* =======================================================================
 
@@ -27,7 +27,7 @@ const removeContact = async (req, res, next) => {
     //! ==============================================================
 
 
-    const contact = await Contact.findOneAndRemove({ _id: contactId, owner: user_id });
+    const contact = await Contact.findOneAndRemove({ _id: contactId, owner: userId });
 
 
     if (!contact) {
@@ -58,34 +58,3 @@ const removeContact = async (req, res, next) => {
 };
 
 module.exports = removeContact;
-
-
-
-
-
-
-
-
-//todo ------------- OLD ----------------------
-// const { NotFound } = require('http-errors')
-// const { Contact } = require("../../models");
-
-
-// //-----------------------------------------------------------------------------
-// const removeContact = async (req, res, next) => {
-//     const { contactId } = req.params;
-//     const contact = await Contact.findByIdAndRemove(contactId);
-
-//     if (!contact) {
-//         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
-//     }
-
-//     res.status(200).json({
-//         status: "success",
-//         code: 204,
-//         message: `User wiht id:'${contactId}'was remove:`,
-//         data: { contact }
-//     });
-// };
-
-// module.exports = removeContact;

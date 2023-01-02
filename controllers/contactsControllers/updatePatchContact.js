@@ -15,14 +15,14 @@ const updatePatchContact = async (req, res, next) => {
 
     // const contact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
 
-    const { id: user_id } = req.user //?
+    const { id: userId } = req.user //?
     //* =============================console===================================
     console.log("updatePatchContact-->req.user:".bgYellow.red); //?
     // console.table(req.user); //?
     // console.table([req.user]);
     console.log(req.user);
 
-    console.log("updatePatchContact-->user_id:".bgYellow.blue, user_id); //?
+    console.log("updatePatchContact-->userId:".bgYellow.blue, userId); //?
     console.log("");
     //* =======================================================================
 
@@ -33,7 +33,7 @@ const updatePatchContact = async (req, res, next) => {
     //! ==============================================================
 
 
-    const contact = await Contact.findOneAndUpdate({ _id: contactId, owner: user_id }, req.body, { new: true });
+    const contact = await Contact.findOneAndUpdate({ _id: contactId, owner: userId }, req.body, { new: true });
 
 
     if (!contact) {
@@ -61,34 +61,3 @@ const updatePatchContact = async (req, res, next) => {
 };
 
 module.exports = updatePatchContact;
-
-
-
-//todo -------------- OLD ---------------
-// const { NotFound, BadRequest } = require('http-errors');
-// const { Contact } = require("../../models");
-
-
-// //-----------------------------------------------------------------------------
-// const updatePatchContact = async (req, res, next) => {
-//     const { contactId } = req.params;
-
-//     //! Проверка условия "Если body нет"
-//     if (!Object.keys(req.body).length) {
-//         throw new BadRequest(`missing all fields`)
-//     }
-
-//     const contact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
-
-//     if (!contact) {
-//         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
-//     }
-
-//     res.status(200).json({
-//         status: "success",
-//         code: 200,
-//         data: { contact }
-//     })
-// };
-
-// module.exports = updatePatchContact;

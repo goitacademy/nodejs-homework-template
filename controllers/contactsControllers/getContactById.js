@@ -10,14 +10,14 @@ const getContactById = async (req, res, next) => {
     // const contact = await Contact.findOne({ _id: contactId }); //! 1-ый вариант
     // const contact = await Contact.findById(contactId); //! 2-ой вариант
 
-    const { id: user_id } = req.user //?
+    const { id: userId } = req.user //?
     //* =============================console===================================
     console.log("getContactById-->req.user:".bgYellow.red); //?
     // console.table(req.user); //?
     // console.table([req.user]);
     console.log(req.user);
 
-    console.log("getContactById-->user_id:".bgYellow.blue, user_id); //?
+    console.log("getContactById-->userId:".bgYellow.blue, userId); //?
     console.log("");
     //* =======================================================================
 
@@ -28,7 +28,7 @@ const getContactById = async (req, res, next) => {
     //! ==============================================================
 
 
-    const contact = await Contact.findOne({ _id: contactId, owner: user_id }); //! 1-ый вариант
+    const contact = await Contact.findOne({ _id: contactId, owner: userId }); //! 1-ый вариант
 
 
     if (!contact) {
@@ -59,29 +59,3 @@ const getContactById = async (req, res, next) => {
 };
 
 module.exports = getContactById;
-
-
-
-// todo ------------ OLD -----------------------
-// const { NotFound } = require('http-errors')
-// const { Contact } = require("../../models");
-
-
-// //-----------------------------------------------------------------------------
-// const getContactById = async (req, res, next) => {
-//     const { contactId } = req.params;
-//     // const contact = await Contact.findOne({ _id: contactId });
-//     const contact = await Contact.findById(contactId);
-
-//     if (!contact) {
-//         throw new NotFound(`Contact wiht id:'${contactId}' not found`)
-//     }
-
-//     res.status(200).json({
-//         status: "success",
-//         code: 200,
-//         data: { contact }
-//     })
-// };
-
-// module.exports = getContactById;

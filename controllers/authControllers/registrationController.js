@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs")
 
 
 //-----------------------------------------------------------------------------
-const registrController = async (req, res) => {
+const registrationController = async (req, res) => {
     const { email, password } = req.body;
     const userMailCheck = await User.findOne({ email });
 
@@ -27,14 +27,14 @@ const registrController = async (req, res) => {
     //? 3-вариант (самый сложный)
     //!  Хеширование и засока password с помошью bcryptjs (или bcrypt) используется в userSchema
     const newUser = new User({ email });
-    newUser.setPassword(password);
-    newUser.save();
+    await newUser.setPassword(password);
+    await newUser.save();
     //! _______________________ Хеширование и засолка password _________________________
 
     console.log("\nnewUser:".green, newUser); //!
 
     res.status(201).json({
-        status: "success",
+        // status: "success",
         code: 201,
         user: {
             email,
@@ -44,6 +44,6 @@ const registrController = async (req, res) => {
 };
 
 
-module.exports = registrController;
+module.exports = registrationController;
 
 

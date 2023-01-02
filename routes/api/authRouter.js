@@ -16,7 +16,7 @@ const validateMiddlewarelogin = validation(loginJoiSchema);
 
 //-----------------------------------------------------------------------------
 //! 1. Регистрация
-router.post("/signup", validateMiddlewareRegister, controllerWrapper(ctrl.registrController))
+router.post("/signup", validateMiddlewareRegister, controllerWrapper(ctrl.registrationController))
 
 
 //! 2. Login
