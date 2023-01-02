@@ -24,6 +24,6 @@ router.patch(
   ctrl.updateStatusContact
 );
 
-router.delete("/:contactId", validateParams, ctrl.removeContact);
+router.delete("/:contactId", validateParams, checkJwt, ctrl.removeContact);
 
 module.exports = router;
