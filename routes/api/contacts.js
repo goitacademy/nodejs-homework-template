@@ -28,7 +28,7 @@ router.get("/:contactId", async (req, res, next) => {
       error.status = 404;
       throw error;
     }
-    res.status(200).json(contactById);
+    res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
