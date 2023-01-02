@@ -1,6 +1,6 @@
-const { HttpError } = require("../helpers/httpError");
+const HttpError = require("../helpers/httpError");
 
-const { updateFavoriteSchema } = require("../schemas/contacts");
+const { updateFavoriteSchema } = require("../schemas");
 
 const validateUpdateBody = (req, res, next) => {
   const newContact = req.body;
