@@ -33,7 +33,7 @@ const removeContact = async (id) => {
 
 const addContact = async (body) => {
   const id = nanoid();
-  // const body = { name, email, phone };
+  // const { name, email, phone } = body;
   const newContact = { id, body };
   const contacts = await readContacts();
   contacts.push(newContact);
