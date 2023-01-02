@@ -15,6 +15,13 @@ router.post(
   validateBody(schemas.registerSchema),
   ctrl.register
 );
+router.get("/users/verify/:verificationToken", ctrl.verify);
+router.post(
+  "/users/verify",
+  validateBody(schemas.verifyEmailSchema),
+  ctrl.resendVerifyEmail
+);
+
 router.post("/users/login", validateBody(schemas.loginSchema), ctrl.login);
 router.get("/users/current", authenticate, ctrl.getCurrent);
 router.get("/users/logout", authenticate, ctrl.logout);
@@ -25,4 +32,5 @@ router.patch(
   resize,
   ctrl.updateAvatar
 );
+
 module.exports = router;
