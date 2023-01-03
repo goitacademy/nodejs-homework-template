@@ -14,6 +14,7 @@ module.exports = {
                 .min(5)
                 .max(15)
                 .required(),
+            favorite: Joi.boolean(),
         })
 
         const validationResult = schema.validate(req.body);

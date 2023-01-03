@@ -1,5 +1,28 @@
+
 const app = require('./app')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const { PORT = 3000 } = process.env;
+
+const { connectMongo } = require('./src/db/connection');
+
+const start = async () => {
+  try {
+    await connectMongo()
+      .catch(error => {
+        console.log(error);
+        process.exit(1);
+      })
+
+    app.listen(PORT, (error) => {
+      if (error) {
+        console.error('Error at server Launch:', error)
+      };
+      console.log("Database connection successful")
+    })
+  } catch (error) {
+    console.error(`Failed to launch application with error ${error.message}`);
+  }
+}
+
+start();
+
