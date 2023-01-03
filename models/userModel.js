@@ -76,6 +76,12 @@ const loginJoiSchema = Joi.object({
         .min(3)
         .required(),
 });
+//--------------------------------------------------------------------
+const changeSubscriptionJoiSchema = Joi.object({
+    subscription: Joi.string()
+        .valueOf(...subscriptionList)
+        .required(),
+});
 //* _______________________ Схемы ВАЛИДАЦИИ Joi _______________________
 
 
@@ -87,6 +93,7 @@ const User = model("user", userSchema); //! DB_HOST
 module.exports = {
     User,
     registerJoiSchema,
-    loginJoiSchema
+    loginJoiSchema,
+    changeSubscriptionJoiSchema
 };
 

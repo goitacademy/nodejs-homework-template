@@ -26,12 +26,17 @@ const getAllContacts = async (req, res, next) => {
 
     //? ============================ Пагинация ================================
     let {
-        skip = 0,
+        // skip = 0,
         page = 1,
-        limit = 5
+        limit = 15,
+        favorite,
+        // favorite = false
+        // favorite = (false || true)
     } = req.query;
 
-    // const skip = (page - 1)*limit //! формула расчета skip
+    console.log("favorite:".bgGreen.black, favorite)
+
+    const skip = (page - 1) * limit //! формула расчета skip
 
     // skip = parseInt(skip); //! работает и без этого
     // limit = parseInt(limit); //! работает и без этого
@@ -46,6 +51,17 @@ const getAllContacts = async (req, res, next) => {
         .skip(skip)   //! с какого элемента массива (объекта) начать показ
         .limit(limit)   //! сколько элементов массива (объекта) показать
         .sort("name") //! сортировка по полю "name"
+        //* Доп. задание-2: Сделать фильтрацию контактов по полю избранного (GET /contacts?favorite=true)
+        .find({ favorite }) //! отдельный поиск по полю "favorite = true"
+        //! ВЫКЛЮЧИТЬ для корректной работы маршрута: GET --> http://localhost:3000/api/contacts?favorite=true(false)
+        .find().exists('favorite', true)
+
+        // .find({ favorite }).exists('favorite', true)
+
+        // .find(function (favorite) {
+        //     if (favorite = undefined) return;
+        //     return { favorite }
+        // })
         .populate("owner", "_id email subscription updatedAt")
 
 
@@ -95,7 +111,7 @@ const getAllContacts = async (req, res, next) => {
         status: "success",
         code: 200,
         //? Пагинация
-        skip,
+        page,
         limit,
         contacts,
         //? Aggregation
