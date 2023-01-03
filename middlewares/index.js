@@ -4,6 +4,7 @@ const validateUpdateBody = require("./validateUpdateBody");
 const checkJwt = require("./checkJwt");
 const checkLogin = require("./checkLogin");
 const checkRegister = require("./checkRegister");
+const upLoad = require("./upLoad");
 
 module.exports = {
   validateParams,
@@ -12,4 +13,5 @@ module.exports = {
   checkJwt,
   checkLogin,
   checkRegister,
+  upLoad,
 };

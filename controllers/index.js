@@ -12,6 +12,7 @@ const {
   logIn,
   logOut,
   current,
+  avatar,
 } = require("../controllers/authorization");
 
 module.exports = {
@@ -25,4 +26,5 @@ module.exports = {
   logIn,
   logOut,
   current,
+  avatar,
 };
