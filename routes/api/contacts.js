@@ -6,7 +6,8 @@ const {
   addContactValidation,
   putContactVlidation,
   patchContactVlidation,
-} = require("/nodejs-homework-template-vm/middlewears/validationMiddleware");
+} = require("../../middlewears/validationMiddleware");
+const { isValidId } = require("../../middlewears/validationI");
 const {
   getContacts,
   addContacts,
@@ -18,16 +19,23 @@ const {
 const {
   asyncWrapper,
 } = require("/nodejs-homework-template-vm/helpers/apiHelpers");
-
+const { authMiddleware } = require("../../middlewears/authMiddleware");
+router.use(authMiddleware);
 router.get("/", asyncWrapper(getContacts));
 
-router.get("/:contactId", asyncWrapper(getContactsById));
+router.get("/:contactId", isValidId, asyncWrapper(getContactsById));
 
 router.post("/", addContactValidation, asyncWrapper(addContacts));
 
-router.delete("/:contactId", asyncWrapper(removeContacts));
+router.delete("/:contactId", isValidId, asyncWrapper(removeContacts));
 
-router.put("/:contactId", putContactVlidation, asyncWrapper(putContacts));
+router.put(
+  "/:contactId",
+
+  putContactVlidation,
+  isValidId,
+  asyncWrapper(putContacts)
+);
 router.patch(
   "/:contactId/favorite",
   patchContactVlidation,

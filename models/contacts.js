@@ -1,9 +1,9 @@
-const fs = require("fs").promises;
-const path = require("path");
-const contactsPath = path.resolve("./models/contacts.json");
-
-const listContacts = async () => {
-  const data = await Contacts.find({}).toArray();
+// const fs = require("fs").promises;
+// const path = require("path");
+// const contactsPath = path.resolve("./models/contacts.json");
+const { Contact } = require("../db/contactModel");
+const listContacts = async (owner) => {
+  const data = await Contact.find({ owner });
 
   return data;
 };
