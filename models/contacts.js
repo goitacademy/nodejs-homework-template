@@ -45,11 +45,23 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+// const updateContact = async (contactId, body, res) => {
+//   // const { name, email, phone } = body;
+//   const contacts = await readContacts();
+//   const updateContacts = contacts.find((contact) => contact.id === contactId);
+//   await writeContacts(updateContacts, body);
+// };
+
+const updateContact = async (contactId, body, res) => {
   // const { name, email, phone } = body;
   const contacts = await readContacts();
-  const updateContacts = contacts.find((contact) => contact.id === contactId);
-  await writeContacts(updateContacts, body);
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return false;
+  }
+  contacts.splice(index, 1, { id: contactId, ...body });
+  await writeContacts(contacts);
+  return contacts[index];
 };
 
 module.exports = {
