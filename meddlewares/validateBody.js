@@ -14,7 +14,11 @@ const validateBody = schema => {
         if (error  && isFavorite && keys.length === 1) {
             next(HttpError(400, "missing field favorite"));
         } else 
-        if (error) {
+            if (error && ((schema = 'registerSchema') || (schema = 'loginSchema'))) {
+                next(HttpError(400, "Bad Request"));
+                res.status(400).json('Помилка від Joi або іншої бібліотеки валідації');
+        } else 
+            if (error) {
             next(HttpError(400, error.message));
         }
         next()
