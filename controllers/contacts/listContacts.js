@@ -7,6 +7,7 @@ const listContacts = async (req, res, next) => {
       { owner },
       "-createdAt -updatedAt"
     ).populate("owner", "email");
+
     res.json(result);
   } catch (error) {
     next(error);
