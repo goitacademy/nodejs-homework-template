@@ -11,7 +11,7 @@ const readContacts = async () => {
 };
 
 const writeContacts = async (contacts) => {
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 };
 
 const listContacts = async () => {
@@ -19,29 +19,36 @@ const listContacts = async () => {
   return contacts;
 };
 
-const getContactById = async (id) => {
+const getContactById = async (contactId, res) => {
   const contacts = await readContacts();
-  const contactById = contacts.find((contact) => contact.id == id);
+  const contactById = contacts.find((contact) => contact.id == contactId);
   return contactById;
 };
 
-const removeContact = async (id) => {
+const removeContact = async (contactId) => {
   const contacts = await readContacts();
-  const removeContacts = contacts.filter((contact) => contact.id !== id);
-  await writeContacts(removeContacts);
+  const result = contacts.filter((contact) => contact.id !== contactId);
+  if (contacts.length === result) {
+    return false;
+  }
+  await writeContacts(result);
+  return true;
 };
 
 const addContact = async (body) => {
   const id = nanoid();
   // const { name, email, phone } = body;
-  const newContact = { id, body };
   const contacts = await readContacts();
+  const newContact = { id, ...body };
   contacts.push(newContact);
+  await writeContacts(contacts);
+  return newContact;
 };
 
-const updateContact = async (id, body) => {
+const updateContact = async (contactId, body) => {
+  // const { name, email, phone } = body;
   const contacts = await readContacts();
-  const updateContacts = contacts.find((contact) => contact.id === id);
+  const updateContacts = contacts.find((contact) => contact.id === contactId);
   await writeContacts(updateContacts, body);
 };
 

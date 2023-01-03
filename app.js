@@ -2,10 +2,10 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-// const contactsRouter = require("./routes/api/contacts");
-const { router } = require("./routes/api/contacts");
+const { contactsRouter } = require("./routes/api/contacts");
+// const { router } = require("./routes/api/contacts");
 const { tryCatchWrapper } = require("./helpers/index");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 
 const app = express();
 
@@ -34,9 +34,9 @@ app.get(
   })
 );
 
-// app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactsRouter);
 
-app.use("/api/contacts", router);
+// app.use("/api/contacts", router);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
