@@ -1,24 +1,9 @@
-// const Joi = require("joi");
+const { Contact } = require("../../models/contacts");
 
-const { nanoid } = require("nanoid");
-const { addContact } = require("../../models/contacts");
+const addPost = async (req, res) => {
+  const contacts = await Contact.create(req.body);
 
-const addPost = async (req, res, next) => {
-  try {
-    const { name, email, phone } = req.body;
-
-    const newContact = {
-      id: nanoid(),
-      name,
-      email,
-      phone,
-    };
-    const contacts = await addContact(newContact);
-
-    res.status(201).json({ data: { contact: contacts } });
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({ data: { contact: contacts } });
 };
 
 module.exports = addPost;
