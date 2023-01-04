@@ -6,7 +6,8 @@ const fs = require("fs").promises;
 //  const MongoClient = require("mongodb").MongoClient;
 const { errorHandler } = require("./helpers/apiHelpers");
 
-const contactsRouter = require("./routes/api/contacts");
+const contactRouter = require("./routes/api/contactsRoutes");
+const authRouter = require("./routes/api/authRoutes");
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactRouter);
+app.use("/api/users", authRouter);
 app.use(errorHandler);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

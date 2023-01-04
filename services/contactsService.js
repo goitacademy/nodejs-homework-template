@@ -1,26 +1,38 @@
-const { Contact } = require("../db/PostModel");
+const { Contact } = require("../db/ContactModel");
 const { WrongParametersError } = require("../helpers/errors");
 
-const getContactsList = async () => {
-  const contactsList = await Contact.find({});
+const getContactsList = async (params, pagination) => {
+  // console.log("pagination", pagination);
+  // console.log("params", params);
+  const contactsList = await Contact.find(params, "", pagination).populate(
+    "owner",
+    "name email"
+  );
+  // const contactsList = await Contact.find({}, "-name -phone");
+  // const contactsList = await Contact.find({}, "name phone");
   return contactsList;
 };
 
-const contactById = async (id) => {
-  const contact = await Contact.findById(id);
+const contactById = async (id, owner) => {
+  // const contact = await Contact.findOne({ _id: id }, "name phone");
+  const contact = await Contact.findById(id, owner).populate(
+    "owner",
+    "name email"
+  );
   if (contact === null) {
     throw new WrongParametersError(`Contact with id:${id} not found`);
     // return res.status(404).json({ message: "Not found" });
   }
   return contact;
 };
-const addNewContact = async ({ name, email, phone, favorite }) => {
-  const contact = new Contact({ name, email, phone, favorite });
+const addNewContact = async ({ name, email, phone, favorite, owner }) => {
+  console.log("OWNER", owner);
+  const contact = new Contact({ name, email, phone, favorite, owner });
   const result = await contact.save();
   return result;
 };
-const deleteContact = async (id) => {
-  const contactRemovedById = await Contact.findByIdAndRemove(id);
+const deleteContact = async (id, owner) => {
+  const contactRemovedById = await Contact.findByIdAndRemove(id, owner);
   if (contactRemovedById === null) {
     // return res.status(404).json({ message: "Not found" });
     throw new WrongParametersError(`Contact with id:${id} not found`);
@@ -28,9 +40,13 @@ const deleteContact = async (id) => {
   return contactRemovedById;
 };
 const contactUpdate = async (id, { name, email, phone, favorite }) => {
-  const contactUpdated = await Contact.findByIdAndUpdate(id, {
-    $set: { name, email, phone, favorite },
-  });
+  const contactUpdated = await Contact.findByIdAndUpdate(
+    id,
+    {
+      $set: { name, email, phone, favorite },
+    },
+    { new: true }
+  );
   if (contactUpdated === null) {
     //   return res.status(404).json({ message: "Not found" });
     throw new WrongParametersError(`Contact with id:${id} not found`);
@@ -39,12 +55,17 @@ const contactUpdate = async (id, { name, email, phone, favorite }) => {
 };
 const changeContact = async (id, body) => {
   // const bodyKeys = Object.keys(body);
+  const { name, email, phone, favorite } = body;
   if (body === {}) {
     throw new WrongParametersError(`"missing fields"`);
   }
-  const contactUpdated = await Contact.findByIdAndUpdate(id, {
-    $set: { ...body },
-  });
+  const contactUpdated = await Contact.findByIdAndUpdate(
+    id,
+    {
+      $set: { name, email, phone, favorite },
+    },
+    { new: true }
+  );
   if (contactUpdated === null) {
     //   return res.status(404).json({ message: "Not found" });
     throw new WrongParametersError(`Contact with id:${id} not found`);
@@ -58,9 +79,13 @@ const updateStatusContact = async (id, body) => {
   }
   const { favorite } = body;
 
-  const contactUpdated = await Contact.findByIdAndUpdate(id, {
-    $set: { favorite },
-  });
+  const contactUpdated = await Contact.findByIdAndUpdate(
+    id,
+    {
+      $set: { favorite },
+    },
+    { new: true }
+  );
   if (contactUpdated === null) {
     //   return res.status(404).json({ message: "Not found" });
     throw new WrongParametersError(`Contact with id:${id} not found`);
