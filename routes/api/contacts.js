@@ -21,24 +21,41 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await getContactById(id);
-  if (contact) {
-    return res.status(200).json(contact);
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+  if (!contact) {
+    return next(HttpError(404, "Not found"));
   }
-  return next(HttpError(404, "Not found"));
+  return res.status(200).json(contact);
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const newContact = await addContact(req.body);
+  if (!newContact) {
+    return next(HttpError(404, "Not found"));
+  }
+  return res.status(201).json(newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const contactToDelete = await getContactById(contactId);
+  if (!contactToDelete) {
+    return next(HttpError(404, "Not found"));
+  }
+  await removeContact(contactId);
+  return res.status(200).json(contactToDelete);
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const contactToUpdate = await getContactById(contactId);
+  if (!contactToUpdate) {
+    return next(HttpError(404, "Not found"));
+  }
+  const updatedContact = await updateContact(contactId, req.body);
+  console.log(updateContact);
+  return res.status(200).json(updatedContact);
 });
 
 module.exports = router;
