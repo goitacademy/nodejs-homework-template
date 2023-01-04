@@ -14,7 +14,6 @@ module.exports = {
                 .min(5)
                 .max(15)
                 .required(),
-            favorite: Joi.boolean(),
         })
 
         const validationResult = schema.validate(req.body);
@@ -37,6 +36,20 @@ module.exports = {
             phone: Joi.string()
                 .min(5)
                 .max(15)
+                .required(),
+        })
+
+        const validationResult = schema.validate(req.body);
+        if (validationResult.error) {
+            return res.status(400).json({ message: "missing fields" })
+        }
+
+        next();
+    },
+
+    patchValidation: (req, res, next) => {
+        const schema = Joi.object({
+            favorite: Joi.boolean()
                 .required(),
         })
 

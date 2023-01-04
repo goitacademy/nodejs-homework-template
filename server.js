@@ -1,4 +1,3 @@
-
 const app = require('./app')
 
 const { PORT = 3000 } = process.env;
@@ -25,4 +24,3 @@ const start = async () => {
 }
 
 start();
-

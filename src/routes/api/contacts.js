@@ -4,7 +4,8 @@ const router = express.Router()
 
 const {
   postValidation,
-  putValidation
+  putValidation,
+  patchValidation
 } = require('../../middlewares/walidationMiddleware')
 
 const {
@@ -12,7 +13,8 @@ const {
   getContactsById,
   addContact,
   deleteContact,
-  updateContactById
+  updateContactById,
+  updateFavorite
 } = require('../../controllers/contactsController')
 
 router.get('/', getContacts)
@@ -20,5 +22,6 @@ router.get('/:contactId', getContactsById)
 router.post('/', postValidation, addContact)
 router.delete('/:contactId', deleteContact)
 router.put('/:contactId', putValidation, updateContactById)
+router.patch('/:contactId/favorite', patchValidation, updateFavorite)
 
 module.exports = router;
