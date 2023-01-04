@@ -20,12 +20,8 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  // const name = req.params.name;
-  // const email = req.params.email;
-  // const phone = req.params.phone;
-  // const body = { name, email, phone };
   const body = req.body;
-  console.log(body);
+  console.log("post", body);
   if (body) {
     const contact = await addContact(body);
     res.status(201).json(contact);
@@ -36,14 +32,20 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
+  console.log("delete", id);
   if (id) {
-    await removeContact(id);
-    console.log("contact removed");
+    const ok = await removeContact(id);
+    if (ok) {
+      res.json({ message: "contact deleted" });
+    }
   }
-  res.json({ message: "template message4" });
+  res.status(404).json({ message: "Not found" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
+  const id = req.params.contactId;
+  const body = req.body;
+  console.log("put", id, body);
   // updateContact(id, body);
   res.json({ message: "template message5" });
 });
