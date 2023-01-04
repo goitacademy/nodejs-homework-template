@@ -9,13 +9,21 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "joi": "^17.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^4.12.1",
+    "mongoose": "^6.8.1",
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "7.19.0",
+    "eslint": "^7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
