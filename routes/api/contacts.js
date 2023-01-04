@@ -44,17 +44,19 @@ router.delete("/:contactId", async (req, res, next) => {
     return next(HttpError(404, "Not found"));
   }
   await removeContact(contactId);
-  return res.status(200).json(contactToDelete);
+  return res.status(200).json({ message: "contact deleted" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
+  if (req.body.length === 0) {
+    return next(HttpError(4004, "Missing fields"));
+  }
   const { contactId } = req.params;
   const contactToUpdate = await getContactById(contactId);
   if (!contactToUpdate) {
     return next(HttpError(404, "Not found"));
   }
   const updatedContact = await updateContact(contactId, req.body);
-  console.log(updateContact);
   return res.status(200).json(updatedContact);
 });
 
