@@ -19,9 +19,7 @@ router.post('/logout', authenticate, ctrlWrapper(ctrl.logout))
 
 router.get('/current', authenticate, ctrlWrapper(ctrl.getCurrent))
 
-router.patch('/', authenticate,
-    // validateBody(schemas.subscriptionSchema),
-    ctrlWrapper(ctrl.updateSubscription))
+router.patch('/', authenticate, validateBody(schemas.subscriptionSchema), ctrlWrapper(ctrl.updateSubscription))
 
 
 module.exports = router
