@@ -22,7 +22,6 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
-  console.log("post", body);
   if (body) {
     const contact = await addContact(body);
     res.status(201).json(contact);
@@ -33,7 +32,6 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
-  console.log("delete", id);
   if (id) {
     const ok = await removeContact(id);
     if (ok) {
@@ -47,9 +45,11 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const body = req.body;
-  console.log("put", id, body);
+  if (Object.keys(body).length == 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
   const contact = await updateContact(id, body);
-  console.log("contact", contact);
   if (contact) {
     res.status(200).json(contact);
     return;

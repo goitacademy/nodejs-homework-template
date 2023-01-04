@@ -38,7 +38,6 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await readContacts();
   const contact = contacts.find((item) => item.id === contactId);
-  console.log("test", contact);
   if (contact) {
     const updatedContacts = contacts.filter(
       (contact) => contact.id !== contactId
