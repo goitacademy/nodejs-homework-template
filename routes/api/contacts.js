@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 const {
   listContacts,
@@ -8,12 +7,7 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
-
-function HttpError(status, message) {
-  const err = new Error(message);
-  err.status = status;
-  return err;
-}
+const { HttpError } = require("../../helpers/helpers");
 
 router.get("/", async (req, res, next) => {
   const { limit } = req.query;
