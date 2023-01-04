@@ -20,7 +20,7 @@ router.put(
 router.patch(
   '/:id/favorite',
   validation(favoriteJoiSchema),
-  controllerWrapper(ctrl.updateFavorite),
+  controllerWrapper(ctrl.updateStatusContact),
 );
 
 router.delete('/:id', controllerWrapper(ctrl.delContactById));
