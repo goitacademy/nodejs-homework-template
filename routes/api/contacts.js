@@ -16,7 +16,8 @@ function HttpError(status, message) {
 }
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
+  const { limit } = req.query;
+  const contacts = await listContacts({ limit });
   return res.status(200).json(contacts);
 });
 

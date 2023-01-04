@@ -24,10 +24,10 @@ async function writeContacts(value) {
   }
 }
 
-const listContacts = async () => {
+const listContacts = async ({ limit = 0 }) => {
   try {
     const contacts = await readContacts();
-    return contacts;
+    return contacts.slice(-limit);
   } catch (error) {
     console.log(error);
   }
