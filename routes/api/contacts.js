@@ -1,18 +1,27 @@
 const express = require('express');
 
-const {products: ctrl}=require('../../controllers')
+
+const { validation, ctrlWrapper} = require("../../middlewares");
+const { joiSchema, favoriteSchema } = require("../../models/contact")
 
 
-const router = express.Router()
+const { contacts: ctrl } = require('../../controllers');
 
-router.get('/', ctrl.getAll);
 
-router.get('/:contactId', ctrl.getById)
 
-router.post('/', ctrl.add)
 
-router.delete('/:contactId', ctrl.deleteById)
+const router = express.Router();
 
-router.put('/:contactId', ctrl.changeById)
+router.get("/", ctrlWrapper(ctrl.getAll));
+
+router.get("/:id", ctrlWrapper(ctrl.getById));
+
+router.post("/", validation(joiSchema), ctrlWrapper(ctrl.add));
+
+router.patch("/:id/favorite", validation(favoriteSchema), ctrlWrapper(ctrl.updateFavorite));
+
+router.put("/:id", validation(joiSchema), ctrlWrapper(ctrl.updateById));
+
+router.delete("/:id", ctrlWrapper(ctrl.remuveById))
 
 module.exports = router;
