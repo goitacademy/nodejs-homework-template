@@ -1,9 +1,5 @@
 // const { MongoClient } = require("mongodb");
 const mongoose = require("mongoose");
-const collections = {};
-const getCollection = () => {
-  return collections;
-};
 const connectMongo = async () => {
   return await mongoose.connect(process.env.URL, {
     useNewUrlParser: true,
@@ -16,5 +12,4 @@ const connectMongo = async () => {
 };
 module.exports = {
   connectMongo,
-  getCollection,
 };

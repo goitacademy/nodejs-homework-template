@@ -8,7 +8,7 @@ const start = async () => {
   try {
     await connectMongo();
     console.log("Database connection successful");
-  } catch {
+  } catch (error) {
     console.log(error);
     process.exit(1);
   }
