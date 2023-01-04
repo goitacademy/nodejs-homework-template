@@ -60,10 +60,17 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await readContacts();
-  const updatedContact = contacts.find((item) => item.id === contactId);
-  let updatedContacts = contacts.filter((contact) => contact.id !== contactId);
-  updatedContacts.push({ ...updatedContact, ...body });
-  await writeContacts(updatedContacts);
+  const contact = contacts.find((item) => item.id === contactId);
+  if (contact) {
+    const updatedContacts = contacts.filter(
+      (contact) => contact.id !== contactId
+    );
+    const updatedContact = { ...contact, ...body };
+    updatedContacts.push(updatedContact);
+    await writeContacts(updatedContacts);
+    return updatedContact;
+  }
+  return null;
 };
 
 module.exports = {
