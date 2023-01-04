@@ -1,0 +1,39 @@
+const {
+    registration,
+    login
+} = require('../services/authService')
+
+const registrationController = async (req, res) => {
+    const newUser = await registration(req.body)
+    if (!newUser) {
+        return res.status(409).json({"message": "Email in use"})
+    }
+
+    const { email, subscription } = newUser
+    
+    res.status(201).json({
+        "user": {
+            email,
+            subscription
+        }
+    })
+}
+
+const loginController = async (req, res) => {
+    const user = await login(req.body)
+    if (!user) {
+        return res.status(401).json({"message": "Email or password is wrong"})
+    }
+
+    const { token, user: { email, subscription } } = user 
+
+    res.json({
+        token,
+        "user": {email, subscription}
+    })
+}
+  
+module.exports = {
+    registrationController,
+    loginController
+}
