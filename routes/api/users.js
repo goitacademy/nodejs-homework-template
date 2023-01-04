@@ -2,7 +2,7 @@ const express = require('express');
 
 const { ctrlWrappers } = require("../../helpers");
 
-const { validateBody, validateId, auth } = require("../../middlewares");
+const { validateBody, validateId, upload } = require("../../middlewares");
 
 const ctrlUsers = require('../../controllers/usersControllers');
 
@@ -15,4 +15,5 @@ router.get('/current', ctrlWrappers(ctrlUsers.getCurrent));
 
 router.patch('/:_id/subscription', validateBody(schemas.SubscriptionSchema), ctrlWrappers(ctrlUsers.update))
 
+router.patch('/avatars', upload.single("avatar"), ctrlWrappers(ctrlUsers.updateAvatar))
 module.exports = router
