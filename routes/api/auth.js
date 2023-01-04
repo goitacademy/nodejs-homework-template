@@ -2,11 +2,15 @@ const express = require('express');
 const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const Jimp = require('jimp');
+const path = require("path");
+const fs = require("fs/promises");
 
 const { createError, createHashPass } = require('../../helpers')
 
 const User = require('../../models/user');
-const { authorize } = require('../../middlewares')
+const { authorize, upload } = require('../../middlewares')
 
 const registerUserSchema = Joi.object({
     name: Joi.string().required(),
@@ -35,11 +39,13 @@ router.post('/register', async (req, res, next) => {
             throw createError(409, 'Email in use')
         }
         
-        const hashPassword = await createHashPass(password)
+        const hashPassword = await createHashPass(password);
+        const avatarURL = await gravatar.url(email);
         const newUser = await User.create({ email, name, password: hashPassword })
         res.status(201).json({
             email: newUser.email,
             name: newUser.name,
+            avatarURL,
         })
     } catch (e) {
         next(e)
@@ -102,6 +108,34 @@ router.get('/current', authorize, async (req, res, next) => {
         })
     } catch (e) {
         next(e)
+    }
+});
+
+router.patch('/avatars', authorize, upload, async (req, res, next) => {
+    try {
+        const { _id } = req.user;
+        const { path: tempDir, originalName } = req.file;
+        const [extension] = originalName.split('.').reverse();
+        const newName = `${_id}.${extension}`;
+
+        const uploadDir = path.join(
+            __dirname,
+            '../../',
+            'public',
+            'avatars',
+            newName
+        );
+
+        const image = await Jimp.read(tempDir);
+        await image.resize(250, 250).write(tempDir);
+
+        await fs.rename(tempDir, uploadDir);
+        const avatarURL = path.join('/avatars', newName);
+        await User.findByIdAndUpdate(_id, { avatarURL });
+        res.status(201).json(avatarURL);
+    } catch (e) {
+        await fs.unlink(req.file.path);
+        next(e);
     }
 })
 
