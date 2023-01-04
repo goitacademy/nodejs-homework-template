@@ -2,10 +2,9 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const { contactsRouter } = require("./routes/api/contacts");
-// const { router } = require("./routes/api/contacts");
-const { tryCatchWrapper } = require("./helpers/index");
-// const morgan = require("morgan");
+const contactsRouter = require("./routes/api/contacts");
+// const { contactsRouter } = require("./routes/api/contacts");
+// const { tryCatchWrapper } = require("./helpers/index");
 
 const app = express();
 
@@ -15,24 +14,24 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/error/", (req, res) => {
-  throw new Error("Something bed happened!");
-});
+// app.get("/api/error/", (req, res) => {
+//   throw new Error("Something bed happened!");
+// });
 
-app.get("/api/error2/", async (req, res, next) => {
-  try {
-    throw new Error("Something bad happened in async function!");
-  } catch (error) {
-    next(error);
-  }
-});
+// app.get("/api/error2/", async (req, res, next) => {
+//   try {
+//     throw new Error("Something bad happened in async function!");
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-app.get(
-  "/api/error3",
-  tryCatchWrapper(async (req, res, next) => {
-    throw new Error("Something bad happened in async function!!");
-  })
-);
+// app.get(
+//   "/api/error3",
+//   tryCatchWrapper(async (req, res, next) => {
+//     throw new Error("Something bad happened in async function!!");
+//   })
+// );
 
 app.use("/api/contacts", contactsRouter);
 

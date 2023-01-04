@@ -10,6 +10,11 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
+const {
+  validateAddContact,
+  validateUpdateContact,
+} = require("../../middlewares/validation");
+
 router.get("/", async (req, res, next) => {
   return res.status(200).json(await listContacts());
 });
@@ -24,9 +29,17 @@ router.get("/", async (req, res, next) => {
 //   }
 // });
 
-router.get("/:id", async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await getContactById(id);
+// router.get("/:id", async (req, res, next) => {
+//   const { id } = req.params;
+//   const contact = await getContactById(id);
+//   if (!contact) {
+//     return res.status(404).json({ message: "Not found" });
+//   }
+//   res.status(200).json(contact);
+// });
+
+router.get("/:contactId", async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId);
   if (!contact) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -43,12 +56,20 @@ router.get("/:id", async (req, res, next) => {
 //   }
 // });
 
-router.post("/", async (req, res, next) => {
-  // const { name, email, phone } = req.body;
+// router.post("/", async (req, res, next) => {
+//   // const { name, email, phone } = req.body;
+//   const result = await addContact(req.body, res);
+//   // if (!result) {
+//   //   return res.status(400).json({ message: "missing required name field" });
+//   // }
+//   res.status(201).json(result);
+// });
+
+//TODO: method POST not validate
+
+router.post("/", validateAddContact, async (req, res, next) => {
   const result = await addContact(req.body, res);
-  // if (!result) {
-  //   return res.status(400).json({ message: "missing required name field" });
-  // }
+
   res.status(201).json(result);
 });
 
@@ -62,9 +83,19 @@ router.post("/", async (req, res, next) => {
 //   }
 // });
 
-router.delete("/:id", async (req, res, next) => {
-  const { id } = req.params;
-  const result = await removeContact(id);
+// router.delete("/:id", async (req, res, next) => {
+//   const { id } = req.params;
+//   const result = await removeContact(id);
+//   if (!result) {
+//     return res.status(404).json({ message: "Not found" });
+//   }
+//   res.status(200).json({ message: "contact deleted" });
+// });
+
+//TODO: method DELETE not validate
+
+router.delete("/:contactId", async (req, res, next) => {
+  const result = await removeContact(req.params.contactId, res);
   if (!result) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -84,15 +115,25 @@ router.delete("/:id", async (req, res, next) => {
 //   }
 // });
 
-router.put("/:id", async (req, res, next) => {
-  // const { name, email, phone } = req.body;
-  const { id } = req.params;
-  const result = await updateContact(id, req.body, res);
+// router.put("/:id", async (req, res, next) => {
+//   // const { name, email, phone } = req.body;
+//   const { id } = req.params;
+//   const result = await updateContact(id, req.body, res);
+//   if (!result) {
+//     return res.status(404).json({ message: "Not found" });
+//   }
+//   res.status(200).json(result);
+// });
+
+//TODO: method POST not validate
+
+router.put("/:contactId", validateUpdateContact, async (req, res, next) => {
+  const result = await updateContact(req.params.contactId, req.body, res);
   if (!result) {
     return res.status(404).json({ message: "Not found" });
   }
-  res.status(200).json(result);
+  res.json(result);
 });
 
-// module.exports = router;
-module.exports = { contactsRouter: router };
+module.exports = router;
+// module.exports = { contactsRouter: router };
