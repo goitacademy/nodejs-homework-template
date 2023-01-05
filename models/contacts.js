@@ -1,9 +1,8 @@
 const { Schema, model } = require("mongoose");
-const fs = require("fs/promises");
-const path = require("path");
+
 const Joi = require("joi");
 
-const { handlerSchemaValidatonErrors } = require("../middlewares/");
+const handlerSchemaValidatonErrors = require("../middlewares/handlerSchemaValidatonErrors");
 
 ///contacts schema
 const emailReg =
@@ -33,13 +32,19 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
 
 const joiSchema = Joi.object({
   name: Joi.string().min(3).required(),
-  email: Joi.string().min(8).required().email(),
+  email: Joi.string().min(8).required().pattern(emailReg),
   phone: Joi.string().min(14).max(14).required().pattern(phoneReg),
   favorite: Joi.bool(),
 });

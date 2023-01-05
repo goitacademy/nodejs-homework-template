@@ -10,14 +10,14 @@ const {
   isValideId,
   validationFavorite,
 } = require("../../middlewares");
-
+const auth = require("../../middlewares/auth");
 const { contacts: ctrl } = require("../../controllers");
 
-router.get("/", ctrlWrapper(ctrl.getContacts));
+router.get("/", auth, ctrlWrapper(ctrl.getContacts));
 
 router.get("/:contactId", isValideId, ctrlWrapper(ctrl.getByid));
 //
-router.post("/", validation(joiSchema), ctrlWrapper(ctrl.addPost));
+router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.addPost));
 
 router.delete("/:contactId", isValideId, ctrlWrapper(ctrl.remove));
 
