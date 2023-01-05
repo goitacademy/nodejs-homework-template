@@ -1,5 +1,5 @@
 const express = require("express");
-const { addContactValidate } = require('./../../utils/validator.js');
+const { addContactValidate } = require("./../../utils/validator.js");
 const {
   listContacts,
   getContactById,
@@ -27,7 +27,8 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const { name, email, phone } = req.body;
   const { error } = addContactValidate(req.body);
-  if (error) return res.status(400).json({ message: `${error.details[0].message}` });
+  if (error)
+    return res.status(400).json({ message: `${error.details[0].message}` });
   if (!name || !email || !phone) {
     return res.status(400).json({ message: "missing required name field" });
   }
@@ -49,4 +50,3 @@ router.put("/:contactId", async (req, res, next) => {
 });
 
 module.exports = router;
-
