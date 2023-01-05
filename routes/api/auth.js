@@ -1,11 +1,15 @@
-// const express = require("express");
-// const { ctrlWrapper, validation } = require("../../middlewares");
-// const { authSchema } = require("../../schema");
+const express = require("express");
+const { ctrlWrapper, validation } = require("../../middlewares");
+const { authRegisterSchema } = require("../../schema");
 
-// const { auth: ctrl } = require("../../contlollers");
+const { auth: ctrl } = require("../../contlollers");
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post("/register", validation(authSchema), ctrlWrapper(ctrl.register));
+router.post(
+  "/register",
+  validation(authRegisterSchema),
+  ctrlWrapper(ctrl.register)
+);
 
-// module.exports = router;
+module.exports = router;
