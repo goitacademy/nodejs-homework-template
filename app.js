@@ -12,11 +12,6 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.get('/api/contacts', (req, res) => { 
-  res.status(200).json({listContacts})
-})
-
-
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
