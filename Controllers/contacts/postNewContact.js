@@ -9,9 +9,7 @@ const postNewContact = async (req, res) => {
       message: 'missing required name field',
     });
   }
-  return res
-    .status(201)
-    .json({ status: 'success', code: 201, data: { newContact } });
+  return res.status(201).json(newContact);
 };
 
 module.exports = postNewContact;

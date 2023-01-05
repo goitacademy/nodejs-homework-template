@@ -3,7 +3,11 @@ const router = express.Router();
 const { contacts: ctrl } = require('../../Controllers');
 
 const { validation, controllerWrapper } = require('../../Middlewares');
-const { joiSchema, favoriteJoiSchema } = require('../../models/contact');
+const {
+  joiSchema,
+  joiPutSchema,
+  favoriteJoiSchema,
+} = require('../../Schema/joiContactSchema');
 
 router.get('/', controllerWrapper(ctrl.getAllContacts));
 
@@ -13,7 +17,7 @@ router.post('/', validation(joiSchema), controllerWrapper(ctrl.postNewContact));
 
 router.put(
   '/:id',
-  validation(joiSchema),
+  validation(joiPutSchema),
   controllerWrapper(ctrl.putContactById),
 );
 
