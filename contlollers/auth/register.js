@@ -10,10 +10,16 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({ name, email, password: hashPassword });
+
   res.status(201).json({
     status: "success",
     code: 201,
-    data: { email: newUser.email, name: newUser.name },
+    data: {
+      user: {
+        email: newUser.email,
+        name: newUser.name,
+      },
+    },
   });
 };
 

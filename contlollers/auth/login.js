@@ -12,13 +12,16 @@ const login = async (req, res) => {
     throw new Unauthorized(`Email ${email} not found`);
   }
   const passCompare = bcrypt.compareSync(password, user.password);
+
   if (!passCompare) {
     throw new Unauthorized("Email or password is wrong");
   }
   const payload = {
     id: user._id,
   };
+
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  console.log(token);
   res.json({
     token,
     name: user.name,
