@@ -29,16 +29,16 @@ router.post("/", async (req, res, next) => {
   const { error } = addContactValidate(req.body);
   if (error)
     return res.status(400).json({ message: `${error.details[0].message}` });
-  if (!name || !email || !phone) {
+  if (!name || !email || !phone)
     return res.status(400).json({ message: "missing required name field" });
-  }
+
   const contacts = await listContacts();
   const lastId =
     Math.max(...contacts.map((contact) => parseInt(contact.id, 10))) + 1;
   const newContact = { id: lastId.toString(), name, email, phone };
   contacts.push(newContact);
   await addContact(contacts);
-  res.status(201).json(newContact);
+  res.status(201).send(newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
