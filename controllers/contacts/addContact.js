@@ -6,7 +6,8 @@ const addContact = async (req, res) => {
       const request = { ...req.body, favorite: false };
       req.body = request;
     }
-    const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json({
       status: "success",
       code: 201,

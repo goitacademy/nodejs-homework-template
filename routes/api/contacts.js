@@ -1,22 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { validation } = require('../../middlewares');
+const { validation, ctrlWrapper, authenticate } = require('../../middlewares');
 const { contactsSchema } = require('../../schemas');
-const { ctrlWrapper } = require('../../middlewares');
 const { contactsCtrl } = require('../../controllers');
 
 const validateMiddleware = validation(contactsSchema);
 
-router.get('/', ctrlWrapper(contactsCtrl.getAllContacts));
+router.get('/', authenticate, ctrlWrapper(contactsCtrl.getAllContacts));
 
-router.get('/:contactId', ctrlWrapper(contactsCtrl.getContactById));
+router.get('/:contactId', authenticate, ctrlWrapper(contactsCtrl.getContactById));
 
-router.post('/', validateMiddleware, ctrlWrapper(contactsCtrl.addContact));
+router.post('/', authenticate, validateMiddleware, ctrlWrapper(contactsCtrl.addContact));
 
-router.delete('/:contactId', ctrlWrapper(contactsCtrl.removeContactById));
+router.delete('/:contactId', authenticate, ctrlWrapper(contactsCtrl.removeContactById));
 
-router.put('/:contactId', validateMiddleware, ctrlWrapper(contactsCtrl.updateContactById));
+router.put('/:contactId', authenticate,  validateMiddleware, ctrlWrapper(contactsCtrl.updateContactById));
 
-router.patch('/:contactId/favorite', ctrlWrapper(contactsCtrl.updateStatusContact));
+router.patch('/:contactId/favorite', authenticate, ctrlWrapper(contactsCtrl.updateStatusContact));
 
 module.exports = router;
