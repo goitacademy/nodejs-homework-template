@@ -4,6 +4,7 @@ const {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
 } = require("./../../models/contacts.js");
 
 const router = express.Router();
@@ -27,8 +28,7 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const { name, email, phone } = req.body;
   const { error } = addContactValidate(req.body);
-  if (error)
-    return res.status(400).json({ message: `${error.details[0].message}` });
+  if (error) return res.status(400).json({ message: error.details[0].message });
   if (!name || !email || !phone)
     return res.status(400).json({ message: "missing required name field" });
 
@@ -42,7 +42,13 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+  if (!contact) res.status(404).json({ message: "Not found" });
+  if (contact) {
+    await removeContact(contactId);
+    return res.status(200).json({ message: "contact deleted" });
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
