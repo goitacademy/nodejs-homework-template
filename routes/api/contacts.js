@@ -25,19 +25,12 @@ router.post("/", async (req, res, next) => {
   const body = req.body;
 
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string().alphanum().min(3).max(15).required(),
+    name: Joi.string().min(3).max(50).required(),
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+    phone: Joi.string().min(7).max(15).required(),
   });
   const validationResult = schema.validate(body);
-
   if (validationResult.error) {
-    console.log("post valid err", validationResult.error);
     res.status(400).json({ message: "missing required name field" });
     return;
   }
@@ -70,17 +63,16 @@ router.put("/:contactId", async (req, res, next) => {
     return;
   }
 
-  // const schema = Joi.object({
-  //   name: Joi.string().alphanum().min(3).max(30).optional(),
-  //   email: Joi.string()
-  //     .email({
-  //       minDomainSegments: 2,
-  //       tlds: { allow: ["com", "net"] },
-  //     })
-  //     .optional(),
-  //   phone: Joi.string().alphanum().min(3).max(15).optional(),
-  // });
-  // const validationResult = schema.validate(body);
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(50).optional(),
+    email: Joi.string().email({ minDomainSegments: 2 }).optional(),
+    phone: Joi.string().min(7).max(15).optional(),
+  });
+  const validationResult = schema.validate(body);
+  if (validationResult.error) {
+    res.status(400).json({ message: "invalid value content" });
+    return;
+  }
 
   const contact = await updateContact(id, body);
   if (contact) {
