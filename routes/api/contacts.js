@@ -18,7 +18,11 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const contact = await getContactById(id);
-  res.json(contact);
+  if (contact) {
+    res.status(200).json(contact);
+    return;
+  }
+  res.status(404).json({ message: "Not found" });
 });
 
 router.post("/", async (req, res, next) => {
@@ -35,12 +39,8 @@ router.post("/", async (req, res, next) => {
     return;
   }
 
-  if (body) {
-    const contact = await addContact(body);
-    res.status(201).json(contact);
-  } else {
-    res.status(400).json({ message: "missing required name field" });
-  }
+  const contact = await addContact(body);
+  res.status(201).json(contact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
