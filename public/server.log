@@ -865,3 +865,19 @@
  GET /api/contacts/?favorite=true&page=1&limit=4 05:01:2023_01:37:06
  GET /api/contacts/?page=1&limit=4 05:01:2023_01:37:17
  GET /api/contacts/?favorite=true&page=1&limit=4 05:01:2023_01:37:22
+ PATCH /api/contacts 05:01:2023_03:29:52
+ PATCH /api/contacts 05:01:2023_03:34:40
+ POST /api/contacts/current 05:01:2023_03:35:08
+ POST /api/contacts/current 05:01:2023_03:35:09
+ POST /api/users/login 05:01:2023_03:35:42
+ POST /api/contacts/current 05:01:2023_03:36:08
+ POST /api/users/current 05:01:2023_03:36:57
+ PATCH /api/users 05:01:2023_03:37:23
+ POST /api/users/logout 05:01:2023_03:38:17
+ POST /api/users/login 05:01:2023_03:38:48
+ POST /api/contacts 05:01:2023_03:39:22
+ GET /api/contacts 05:01:2023_03:39:29
+ PATCH /api/users 05:01:2023_03:39:46
+ PATCH /api/users 05:01:2023_03:41:30
+ PATCH /api/users 05:01:2023_03:42:11
+ PATCH /api/users 05:01:2023_03:42:28

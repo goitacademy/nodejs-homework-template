@@ -5,7 +5,7 @@ const Joi = require("Joi");
 const emailRegexp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const subscription = ["starter", "pro", "business"];
+const subscriptionList = ["starter", "pro", "business"];
 const userShema = new mongoose.Schema(
   {
     name: { type: String, require: true },
@@ -21,7 +21,7 @@ const userShema = new mongoose.Schema(
     },
     subscription: {
       type: String,
-      enum: subscription,
+      enum: subscriptionList,
       default: "starter",
     },
     token: {
@@ -39,6 +39,11 @@ const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   //   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
+  subscription: Joi.object({
+    subscription: Joi.string()
+      .valid(...subscriptionList)
+      .optional(),
+  }),
 });
 
 const loginSchema = Joi.object({
@@ -47,9 +52,15 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const subscriptionUpdateSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required(),
+});
 const schemas = {
   registerSchema,
   loginSchema,
+  subscriptionUpdateSchema,
 };
 
 module.exports = {
