@@ -43,13 +43,8 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const { name, email, phone } = body;
-    const contacts = await fetchContacts();
-    const lastId =
-      Math.max(...contacts.map((contact) => parseInt(contact.id, 10))) + 1;
-    const newContact = { id: lastId.toString(), name, email, phone };
-    contacts.push(newContact);
-    await pushContacts();
+    if (!body) return;
+    await pushContacts(body);
   } catch (err) {
     console.log(err.message);
   }
