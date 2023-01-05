@@ -1,6 +1,6 @@
 const express = require("express");
 const { ctrlWrapper, validation } = require("../../middlewares");
-const { authRegisterSchema } = require("../../schema");
+const { authRegisterSchema, authLoginSchema } = require("../../schema");
 
 const { auth: ctrl } = require("../../contlollers");
 
@@ -11,5 +11,7 @@ router.post(
   validation(authRegisterSchema),
   ctrlWrapper(ctrl.register)
 );
+
+router.post("/login", validation(authLoginSchema), ctrlWrapper(ctrl.login));
 
 module.exports = router;
