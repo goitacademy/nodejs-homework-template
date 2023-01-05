@@ -42,3 +42,4 @@
     1R433zjq0Ee6evVw
     mongodb+srv://Dmytro:1R433zjq0Ee6evVw@cluster0.igrmbda.mongodb.net/test
     yarn add jsonwebtoken
+    npm install bcryptjs
