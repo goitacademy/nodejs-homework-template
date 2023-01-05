@@ -5,8 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 async function readDb() {
   const data = await fs.readFile(contactsPath, 'utf8');
-  const db = JSON.parse(data);
-  return db;
+  return JSON.parse(data);
 }
 
 const writeDb = async (contacts) => {
