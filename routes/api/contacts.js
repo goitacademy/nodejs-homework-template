@@ -52,7 +52,23 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { name, email, phone } = req.body;
+  const { contactId } = req.params;
+  if (!name && !email && !phone) res.status(400).json({ message: "missing fields" });
+  const contact = await getContactById(contactId);
+  if (!contact) res.status(404).json({ message: "Not found" });
+  if (contact) {
+    const contacts = await listContacts();
+    const updatedContact = {
+      ...contact,
+      name: name ? name : contact.name ,
+      email: email ? email : contact.email,
+      phone: phone ? phone : contact.phone,
+    };
+    const indexOfContact = contacts.findIndex(contact => contact.id === contactId);
+    contacts.splice(indexOfContact, 1, updatedContact);
+    res.status(200).send(updatedContact);
+  }
 });
 
 module.exports = router;

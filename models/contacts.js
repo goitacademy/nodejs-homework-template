@@ -50,7 +50,17 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, email, phone } = body;
+    const contacts = await listContacts();
+    const contact = contacts.find((contact) => contact.id === contactId);
+    
+   } catch (err) {
+    console.log(err.message);
+  }
+
+};
 
 module.exports = {
   listContacts,
