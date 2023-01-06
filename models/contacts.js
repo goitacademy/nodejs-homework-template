@@ -14,11 +14,7 @@ async function writeContacts(contactArr) {
 }
 
 const getContactsList = async () => {
-  try {
-    return await readContacts(contactsPath);
-  } catch (error) {
-    console.log(error);
-  }
+  return await readContacts(contactsPath);
 };
 
 const getContactById = async (contactId) => {

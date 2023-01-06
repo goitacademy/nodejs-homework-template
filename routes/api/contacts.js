@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
 
     res.status(200).json(contactsList);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
