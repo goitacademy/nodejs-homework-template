@@ -1,5 +1,7 @@
 const { Contact } = require("../../models");
 
+const { HttpError } = require("../../helpers");
+
 const updateContactByFavorite = async (req, res) => {
   const { contactId } = req.params;
 
@@ -8,15 +10,13 @@ const updateContactByFavorite = async (req, res) => {
   });
 
   if (!contact) {
-    const error = new Error(`Contact with id=${contactId} not found`);
-    error.status = 404;
-    throw error;
+    throw HttpError(404, `Contact with id=${contactId} not found`);
   }
 
-  if (!req.body.favorite) {
-    const error = new Error(`Missing field favorite`);
-    error.status = 400;
-    throw error;
+  const { favorite } = req.body;
+
+  if (!favorite) {
+    throw HttpError(400, "Missing field favorite");
   }
 
   res.json({

@@ -1,5 +1,7 @@
-const ctrlWrapper = require("./ctrlWrapper");
+const validateSchema = require("./validateSchema");
+const authenticate = require("./authenticate");
 
 module.exports = {
-  ctrlWrapper,
+  validateSchema,
+  authenticate,
 };
