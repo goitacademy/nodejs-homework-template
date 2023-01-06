@@ -29,12 +29,14 @@
 
 // module.exports = app;
 
-const DB_HOST =
-  "mongodb+srv://Viktoriya:1111@cluster0.nszzwat.mongodb.net/db-contacts?retryWrites=true&w=majority";
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const { DB_HOST } = process.env;
 mongoose
   .connect(DB_HOST)
-  .then(() => console.log("bjkhbkjh"))
+  .then(() => console.log("Database connection successful"))
   .catch((err) => {
     console.log(err.message);
     process.exit(1);
