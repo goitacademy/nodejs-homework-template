@@ -21,6 +21,28 @@ const listContacts = async () => {
   }
 };
 
+const generateNewContact = async (body) => {
+  try {
+    const { name, email, phone } = body;
+    const contacts = await listContacts();
+    const lastId =
+      Math.max(...contacts.map((contact) => parseInt(contact.id, 10))) + 1;
+    return { id: lastId.toString(), name, email, phone };
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const getUpdatedContact = async (contact, body) => {
+  const { name, email, phone } = body;
+  return {
+    ...contact,
+    name: name ? name : contact.name,
+    email: email ? email : contact.email,
+    phone: phone ? phone : contact.phone,
+  };
+};
+
 const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
@@ -44,7 +66,10 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     if (!body) return;
-    await pushContacts(body);
+    const contacts = await listContacts();
+    const newContact = await generateNewContact(body);
+    await contacts.push(newContact);
+    await pushContacts(contacts);
   } catch (err) {
     console.log(err.message);
   }
@@ -52,14 +77,15 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const { name, email, phone } = body;
     const contacts = await listContacts();
-    const contact = contacts.find((contact) => contact.id === contactId);
-    
-   } catch (err) {
+    const contact = await getContactById(contactId);
+    const updatedContact = await getUpdatedContact(contact, body);
+    const indexOfContact = contacts.findIndex(contact => contact.id === contactId);
+    await contacts.splice(indexOfContact, 1, updatedContact);
+    await pushContacts(contacts);
+  } catch (err) {
     console.log(err.message);
   }
-
 };
 
 module.exports = {
@@ -68,6 +94,8 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  generateNewContact,
+  getUpdatedContact,
 };
 
 // addContact({name: "ggggg", email: "ggg@ggg.com", phone: "444444"})

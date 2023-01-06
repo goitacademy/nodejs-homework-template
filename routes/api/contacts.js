@@ -5,6 +5,9 @@ const {
   getContactById,
   addContact,
   removeContact,
+  generateNewContact,
+  getUpdatedContact,
+  updateContact
 } = require("./../../models/contacts.js");
 
 const router = express.Router();
@@ -30,14 +33,9 @@ router.post("/", async (req, res, next) => {
   const { error } = addContactValidate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
   if (!name || !email || !phone)
-    return res.status(400).json({ message: "missing required name field" });
-
-  const contacts = await listContacts();
-  const lastId =
-    Math.max(...contacts.map((contact) => parseInt(contact.id, 10))) + 1;
-  const newContact = { id: lastId.toString(), name, email, phone };
-  contacts.push(newContact);
-  await addContact(contacts);
+    return res.status(400).json({ message: "missing required name field" });  
+  const newContact = await generateNewContact(req.body);
+  await addContact(req.body);
   res.status(201).send(newContact);
 });
 
@@ -58,15 +56,8 @@ router.put("/:contactId", async (req, res, next) => {
   const contact = await getContactById(contactId);
   if (!contact) res.status(404).json({ message: "Not found" });
   if (contact) {
-    const contacts = await listContacts();
-    const updatedContact = {
-      ...contact,
-      name: name ? name : contact.name ,
-      email: email ? email : contact.email,
-      phone: phone ? phone : contact.phone,
-    };
-    const indexOfContact = contacts.findIndex(contact => contact.id === contactId);
-    contacts.splice(indexOfContact, 1, updatedContact);
+    const updatedContact = await getUpdatedContact(contact, req.body);
+    await updateContact(contactId, req.body);
     res.status(200).send(updatedContact);
   }
 });
