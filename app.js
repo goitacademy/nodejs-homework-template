@@ -11,7 +11,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 // middlewares
 app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // tell express to work with JSON in body
 
 // routes
 app.use("/api/contacts", contactsRouter);
