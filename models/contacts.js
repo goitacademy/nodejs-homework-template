@@ -53,7 +53,7 @@ const addContact = async (body) => {
       id,
       ...body
     }
-    const updateContact = [...results, body]
+    const updateContact = [...results, newContact]
     await fs.writeFile(contactPath, JSON.stringify(updateContact), "utf-8")
     return newContact
   } catch (error) {

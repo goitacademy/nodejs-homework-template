@@ -31,15 +31,17 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res) => {
-  try {
-    const contact = await addContact(req.body)
-    return res.status(201).json({ contact })
-  } catch (error) {
-    console.log(message.error);
-  }
+router.post('/', async (req, res, next) => {
+  const { error } = schema.validate(req.body)
   if (error) { 
-    return res.status(404).json({message: "missing required name field"})
+    return res.status(400).json({message: "bad request"})
+  }
+
+  try {
+    const data = await addContact(req.body)
+    return res.status(200).json(data)
+  } catch (error) {
+    next(error);
   }
 })
 
