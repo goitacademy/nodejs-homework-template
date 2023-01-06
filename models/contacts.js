@@ -49,22 +49,6 @@ const getContactById = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const schema = Joi.object({
-      name: Joi.string().min(2).max(30).required(),
-      phone: Joi.string().trim().length(10).pattern(/^\d+$/).required(),
-      email: Joi.string()
-        .email({
-          minDomainSegments: 2,
-          tlds: { allow: false },
-        })
-        .min(3)
-        .required(),
-    });
-    const { error } = schema.validate(body);
-    if (error) {
-      console.log(error.message);
-      return HttpError(400, error.message);
-    }
     const contacts = await readContacts();
     const id = nanoid();
     const contactToAdd = {
