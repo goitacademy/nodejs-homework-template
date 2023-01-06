@@ -56,7 +56,9 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const newContacts = contacts.filter((contact) => contact.id !== contactId);
+    const newContacts = await contacts.filter(
+      (contact) => contact.id !== contactId
+    );
     await pushContacts(newContacts);
   } catch (err) {
     console.log(err.message);
@@ -80,7 +82,9 @@ const updateContact = async (contactId, body) => {
     const contacts = await listContacts();
     const contact = await getContactById(contactId);
     const updatedContact = await getUpdatedContact(contact, body);
-    const indexOfContact = contacts.findIndex(contact => contact.id === contactId);
+    const indexOfContact = await contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
     await contacts.splice(indexOfContact, 1, updatedContact);
     await pushContacts(contacts);
   } catch (err) {

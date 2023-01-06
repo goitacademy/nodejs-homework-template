@@ -1,15 +1,15 @@
-const joi = require('joi');
+const joi = require("joi");
 
-const addContactSchema = joi.object({
-    name: joi.string().required(),
-    email: joi.string().email().required(),
-    phone: joi.string().required()
-})
+const contactSchema = joi.object({
+  name: joi.string(),
+  email: joi.string().email(),
+  phone: joi.string(),
+});
 
 const validator = (schema) => (body) => {
-    return schema.validate(body, { abortEarly: false });
-}
+  return schema.validate(body, { abortEarly: false });
+};
 
-const addContactValidate = validator(addContactSchema);
+const contactValidate = validator(contactSchema);
 
-module.exports = { addContactValidate };
+module.exports = { contactValidate };
