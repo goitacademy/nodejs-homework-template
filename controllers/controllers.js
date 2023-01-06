@@ -1,14 +1,15 @@
 const db = require("../models/contacts");
 const schemas = require("../schemas/schemas");
+const { Contact } = require("../db/contactModel");
 
 async function getListContacts(req, res, next) {
-  const contacts = await db.listContacts();
+  const contacts = await Contact.find({});
   res.json({ data: contacts });
 }
 
 async function getContactsById(req, res, next) {
   const { contactId } = req.params;
-  const contact = await db.getContactById(contactId);
+  const contact = await Contact.find({ _id: contactId });
   if (!contact) {
     return res.status(404).json({ message: "not found" });
   }
@@ -22,8 +23,10 @@ async function addNewContact(req, res, next) {
       return res.status(400).json({ status: validationResult.error });
     }
     const newContact = req.body;
-    newContact.id = Date.now().toString();
-    await db.addContact(newContact);
+    const { name, email, phone } = newContact;
+    const contact = new Contact({ name, email, phone });
+    await contact.save();
+    // await db.addContact(newContact);
     res.status(201).json(newContact);
   } catch (error) {
     return res.status(400).json({ status: "error" });
@@ -31,13 +34,14 @@ async function addNewContact(req, res, next) {
 }
 
 async function deleteContactById(req, res, next) {
-  const { contactId } = req.params;
-  const contact = await db.getContactById(contactId);
-  if (!contact) {
-    return res.status(404).json({ message: "not found" });
+  try {
+    const { contactId } = req.params;
+    const contact = await Contact.remove({ _id: contactId });
+    console.log(contact);
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    res.status(400).json({ message: "error" });
   }
-  await db.removeContact(contactId);
-  res.status(200).json({ message: "contact deleted" });
 }
 
 async function changeContactById(req, res, next) {
@@ -47,12 +51,23 @@ async function changeContactById(req, res, next) {
       return res.status(400).json({ status: validationResult.error });
     }
     const { contactId } = req.params;
-    const findContact = await db.getContactById(contactId);
-    if (findContact === null) {
-      return res.status(400).json({ msg: `Contact ${contactId} is not found` });
-    }
-    await db.updateContact(contactId, req.body);
+    await Contact.updateOne({ _id: contactId }, req.body);
     res.json(req.body);
+  } catch (error) {
+    return res.status(400).json({ status: "error" });
+  }
+}
+
+async function updateStatusContact(req, res, next) {
+  try {
+    const isValidData = schemas.patch.validate(req.body);
+    if (isValidData.error) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+    const { contactId } = req.params;
+    await Contact.updateOne({ _id: contactId }, req.body);
+    const contact = await Contact.find({ _id: contactId });
+    res.status(200).json({ contact });
   } catch (error) {
     return res.status(400).json({ status: "error" });
   }
@@ -64,4 +79,5 @@ module.exports = {
   addNewContact,
   deleteContactById,
   changeContactById,
+  updateStatusContact,
 };
