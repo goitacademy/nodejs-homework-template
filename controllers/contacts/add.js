@@ -1,10 +1,10 @@
 const { Contact } = require("../../models/contact");
 
-const { addContactSchema } = require("../../middlewares/validateBody");
+const { schemaJoi } = require("../../models/contact");
 
 const add = async (req, res) => {
   const body = req.body;
-  const { error } = addContactSchema.validate(body);
+  const { error } = schemaJoi.validate(body);
 
   if (error) {
     return res.status(400).json({
