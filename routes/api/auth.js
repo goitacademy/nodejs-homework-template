@@ -4,7 +4,7 @@ const express = require("express");
 const ctrl = require("../../controllers/auth"); 
 
 const { ctrlWrapper } = require("../../helpers");
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user")
 
 // Створити роутер
@@ -20,5 +20,7 @@ router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent))
 
 router.post("/logout", authenticate, ctrlWrapper(ctrl.logout))
 
+//Заміна аватарки
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
 // Експортувати роутер
 module.exports = router;
