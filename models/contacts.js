@@ -1,5 +1,4 @@
 const { nanoid } = require("nanoid");
-const Joi = require("joi");
 const fs = require("fs/promises");
 const path = require("path");
 const contactsPath = path.resolve("./models/contacts.json");

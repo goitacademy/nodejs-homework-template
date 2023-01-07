@@ -9,7 +9,7 @@ const contactSchema = Joi.object({
   phone: Joi.string()
     .trim()
     .pattern(
-      /^[\+]?3?[\s]?8?[\s]?\(?0\d{2}?\)?[\s]?\d{3}[\s|-]?\d{2}[\s|-]?\d{2}$/
+      /^[+]?3?[\s]?8?[\s]?\(?0\d{2}?\)?[\s]?\d{3}[\s|-]?\d{2}[\s|-]?\d{2}$/
     )
     .required()
     .messages({ "any.required": "missing required phone field" }),
