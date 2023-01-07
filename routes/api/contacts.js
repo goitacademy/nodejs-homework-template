@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 
 const {
@@ -9,6 +8,11 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts");
+
+const {
+  addContactSchema,
+  updateContactSchema,
+} = require("../../validations/contact");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -36,15 +40,17 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, email, phone } = req.body;
+  const { value, error } = addContactSchema.validate(req.body);
 
-  if (!name || !email || !phone) {
-    res.status(400).json({ message: "missing required name field" });
-    return;
+  if (error) {
+    return res.status(400).json({
+      message: `Missing required ${error.details[0].path[0]} field or invalid format of ${error.details[0].path[0]} `,
+    });
+    // return res.status(400).json({ message: error?.details[0].message });
   }
 
   try {
-    const newContact = await addContact({ name, email, phone });
+    const newContact = await addContact(value);
 
     res.status(201).json(newContact);
   } catch (error) {
@@ -72,15 +78,19 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  const body = req.body;
+  // const body = req.body;
 
-  console.log("body from router: ", body);
-  if (!body) {
-    return res.status(400).json({ message: "missing fields" });
+  const { value, error } = updateContactSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      message: `Invalid format of ${error.details[0].path[0]}`,
+    });
+    // return res.status(400).json({ message: error?.details[0].message });
   }
 
   try {
-    const updatedContact = await updateContact(contactId, body);
+    const updatedContact = await updateContact(contactId, value);
 
     res.status(200).json(updatedContact);
   } catch (error) {
