@@ -57,7 +57,7 @@ const updateContact = async (id, body) => {
     allContacts[result] = { id, ...body };
     updateContacts(allContacts);
     return allContacts[result]
-}
+};
 
 module.exports = {
     listContacts,
@@ -65,4 +65,4 @@ module.exports = {
     removeContact,
     addContact,
     updateContact
-}
+};
