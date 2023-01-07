@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 
 const listContacts = async () => {
   const contacts = await fs.readFile("models/contacts.json", "utf-8");
-  return contacts;
+  return JSON.parse(contacts);
 };
 
 const getContactById = async (contactId) => {

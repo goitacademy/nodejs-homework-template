@@ -38,7 +38,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   const contacts = await listContacts();
-  res.set("Content-Type", "application/json").send(contacts);
+  res.json({ contacts });
 });
 
 router.get("/:contactId", async (req, res, next) => {
