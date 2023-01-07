@@ -1,5 +1,4 @@
 const express = require("express");
-const contactsRouter = express.Router();
 const {
   getContacts,
   getContact,
@@ -13,6 +12,8 @@ const {
 } = require("../../schemas/contacts");
 const { validateBody } = require("../../middlewares/index");
 const { tryCatchWrapper } = require("../../helpers");
+
+const contactsRouter = express.Router();
 
 contactsRouter.get("/", tryCatchWrapper(getContacts));
 contactsRouter.get("/:contactId", tryCatchWrapper(getContact));
