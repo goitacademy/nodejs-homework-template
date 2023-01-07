@@ -9,13 +9,7 @@ const updateById = async (req, res) => {
         throw new NotFound('Contact not found')
       }
 
-    return res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result,
-      },
-    });
+    return res.json(result);
 };
 
 module.exports = updateById;

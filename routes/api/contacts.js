@@ -1,7 +1,9 @@
 const express = require('express');
 const {contacts: ctrl} = require("../../controllers")
-const { validation, ctrlWrapper } = require("../../middlewares");
-const { contactSchema } = require("../../schemas");
+const { validation, controllerWrapper } = require("../../middlewares");
+const contactSchema  = require("../../schemas/contactSchema");
+
+const { getAll, getContactById, add, deleteById, updateById } = ctrl;
 
 
 const validateMiddleware = validation(contactSchema);
@@ -9,14 +11,18 @@ const validateMiddleware = validation(contactSchema);
 const router = express.Router()
 
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", controllerWrapper(getAll));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
+router.get("/:contactId", controllerWrapper(getContactById));
 
-router.post("/", validateMiddleware, ctrlWrapper(ctrl.add));
+router.post("/", validateMiddleware, controllerWrapper(add));
 
-router.delete("/:contactId", ctrlWrapper(ctrl.deleteById));
+router.delete("/:contactId", controllerWrapper(deleteById));
 
-router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateById));
+router.put(
+  "/:contactId",
+  validateMiddleware,
+  controllerWrapper(updateById)
+);
 
-module.exports = router
+module.exports = router;
