@@ -7,25 +7,26 @@ const {
   deleteContact,
   editContact,
 } = require("../../controllers/contact.controller");
-const { validateBody } = require("../../middleWares/validateBody");
 const {
-  contactSchema,
+  validateBody,
   checkIfBodyExists,
-} = require("../../schema/validateSchema");
+} = require("../../middleWares/checkBodyRequest");
+const { contactSchema } = require("../../schema/validateSchema");
+const { tryCatcher } = require("../../helpers/helpers");
 
-router.get("/", getListOfContacts);
+router.get("/", tryCatcher(getListOfContacts));
 
-router.get("/:contactId", getContact);
+router.get("/:contactId", tryCatcher(getContact));
 
-router.post("/", validateBody(contactSchema), createContact);
+router.post("/", validateBody(contactSchema), tryCatcher(createContact));
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", tryCatcher(deleteContact));
 
 router.put(
   "/:contactId",
   checkIfBodyExists(),
   validateBody(contactSchema),
-  editContact
+  tryCatcher(editContact)
 );
 
 module.exports = router;

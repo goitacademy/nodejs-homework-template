@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { HttpError } = require("../helpers/helpers");
 
 const contactSchema = Joi.object({
   name: Joi.string()
@@ -24,17 +23,6 @@ const contactSchema = Joi.object({
     .messages({ "any.required": "missing required email field" }),
 });
 
-function checkIfBodyExists() {
-  return (req, res, next) => {
-    const updatedFieldsOfContact = Object.values(req.body);
-    if (!req.body || updatedFieldsOfContact.length === 0) {
-      return next(HttpError(400, "missing fields"));
-    }
-    return next();
-  };
-}
-
 module.exports = {
   contactSchema,
-  checkIfBodyExists,
 };

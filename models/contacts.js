@@ -2,7 +2,6 @@ const { nanoid } = require("nanoid");
 const Joi = require("joi");
 const fs = require("fs/promises");
 const path = require("path");
-const { HttpError } = require("../helpers/helpers");
 const contactsPath = path.resolve("./models/contacts.json");
 
 async function readContacts() {
