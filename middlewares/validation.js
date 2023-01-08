@@ -1,6 +1,6 @@
-const createError = require('http-errors')
+const createError = require("http-errors");
 
-const validation = schema => {
+const validation = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -12,21 +12,17 @@ const validation = schema => {
   };
 };
 
-const paramValidation = schema => {
-
+const paramValidation = (schema) => {
   return (req, res, next) => {
-
-    const { error } = schema.validate(String (req.params.contactId));
+    const { error } = schema.validate(req.params);
     if (error) {
-      throw createError(400, "Bad id")
+      throw createError(400, "Bad id");
     }
     next();
   };
 };
 
-
-
 module.exports = {
   validation,
-  paramValidation
-}
+  paramValidation,
+};
