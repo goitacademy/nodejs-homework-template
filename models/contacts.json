@@ -42,6 +42,12 @@
     "phone": "(715) 598-5792"
   },
   {
+    "id": "8",
+    "name": "Simon Morton",
+    "email": "dui.Fusce.diam@Donec.com",
+    "phone": "(233) 738-2360"
+  },
+  {
     "id": "9",
     "name": "Thomas Lucas",
     "email": "nec@Nulla.com",
@@ -52,17 +58,5 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
-  },
-  {
-    "id": "471834c3-b624-4333-81ee-4dbc3aa8bfb2",
-    "name": "Indiana Jones",
-    "email": "testowy@gmail.com",
-    "phone": "+48 258-626-548"
-  },
-  {
-    "id": "923ba17d-7594-4716-803c-3ea0f18c4e6d",
-    "name": "Indianin Jones",
-    "email": "testowy@gmail.com",
-    "phone": "258-626-548"
   }
 ]

@@ -78,7 +78,7 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put("/:contactId", updatingContact, async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await updatingContact(contactId, req.body);
+    const contact = await updateContact(contactId, req.body);
     if (contact) {
       return res.json({
         status: "success",

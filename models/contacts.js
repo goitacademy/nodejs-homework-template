@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { v4 } from 'uuid';
 const contactsPath = path.resolve("./models/contacts.json");
-console.log(contactsPath);
+
 
 
 const listContacts = async () => {
@@ -66,7 +66,6 @@ const updateContact = async (contactId, body) => {
     console.log(error.message);
   }
 };
-
 export {
   listContacts,
   getContactById,
