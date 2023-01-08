@@ -1,6 +1,6 @@
-const server = require("../../models/contacts");
+const server = require("../../services/contacts");
 
-const deleteById = async (req, res, next) => {
+const deleteById = async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await server.getContactById(contactId);
@@ -12,7 +12,7 @@ const deleteById = async (req, res, next) => {
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 

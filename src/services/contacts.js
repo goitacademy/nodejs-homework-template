@@ -1,10 +1,13 @@
-const { Contact } = require("../db/postModel");
+const { Contact } = require("../models/contactModel");
 
-const listContacts = async () => {
+const listContacts = async (userId) => {
   try {
-    const data = await Contact.find({});
+    // console.log(userId);
+    const data = await Contact.find({ userId });
+    console.log(data);
     return data;
   } catch (err) {
+    // console.log("first");
     console.error(err);
   }
 };

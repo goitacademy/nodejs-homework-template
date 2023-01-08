@@ -1,6 +1,6 @@
-const server = require("../../models/contacts");
+const server = require("../../services/contacts");
 
-const getListById = async (req, res, next) => {
+const getListById = async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await server.getContactById(contactId);
@@ -11,7 +11,7 @@ const getListById = async (req, res, next) => {
     }
     res.json({ contact, message: "success" });
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 module.exports = {

@@ -1,5 +1,5 @@
 const getList = require("./getList");
-const getListById = require("./getListById");
+const getListById = require("./getContactById");
 const postContact = require("./postContact");
 const deleteById = require("./deleteById");
 const putById = require("./putById");

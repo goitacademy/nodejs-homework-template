@@ -1,7 +1,6 @@
-const server = require("../../models/contacts");
+const server = require("../../services/contacts");
 
-
-const updateStatusContact = async (req, res, next) => {
+const updateStatusContact = async (req, res) => {
   try {
     const { contactId } = req.params;
     if (Object.keys(req.body).length === 0) {
@@ -11,7 +10,7 @@ const updateStatusContact = async (req, res, next) => {
     const contact = await server.updateContact(contactId, req.body);
     res.json({ contact, message: "success" });
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 module.exports = {

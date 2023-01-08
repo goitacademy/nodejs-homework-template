@@ -1,11 +1,15 @@
-const server = require("../../models/contacts");
+const server = require("../../services/contacts");
 
-const getList = async (req, res, next) => {
+const getList = async (req, res) => {
   try {
-    const list = await server.listContacts();
+    const { _id } = req.user;
+    // console.log(_id);
+    const list = await server.listContacts(_id);
+    console.log("list", list);
     res.json(list);
+    // console.log("first");
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 module.exports = {

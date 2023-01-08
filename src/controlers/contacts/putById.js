@@ -1,6 +1,6 @@
-const server = require("../../models/contacts");
+const server = require("../../services/contacts");
 const schema = require("../../schemas/schemas");
-const putById = async (req, res, next) => {
+const putById = async (req, res) => {
   try {
     const validationResult = schema.schemaPut.validate(req.body);
     if (validationResult.error) {
@@ -15,7 +15,7 @@ const putById = async (req, res, next) => {
 
     res.json({ contact, message: "success" });
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 module.exports = {
