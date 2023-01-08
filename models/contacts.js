@@ -10,11 +10,11 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await fs.readFile(contactsPath);
-  const contact = JSON.parse(contacts).filter(
+  const contact = JSON.parse(contacts).find(
     (contact) => contact.id === contactId
   );
 
-  if (contact.length !== 0) {
+  if (contact) {
     return contact;
   } else {
     return false;
@@ -27,11 +27,11 @@ const removeContact = async (contactId) => {
   const updatedContacts = contacts.filter(
     (contact) => contact.id !== contactId
   );
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
 
   if (contacts.length === updatedContacts.length) {
     return false;
   } else {
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
     return true;
   }
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const Joi = require("joi");
+const { postSchema, putSchema } = require("../../schemas/contacts");
 const {
   listContacts,
   getContactById,
@@ -25,21 +25,10 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string()
-      .pattern(/^\(\d\d\d\) \d\d\d-\d\d\d\d$/)
-      .required(),
-  });
-
-  if (schema.validate(req.body).error) {
-    res.status(400).json({ message: schema.validate(req.body).error.message });
+  if (postSchema.validate(req.body).error) {
+    res
+      .status(400)
+      .json({ message: postSchema.validate(req.body).error.message });
   } else {
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
@@ -56,21 +45,10 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).optional(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .optional(),
-    phone: Joi.string()
-      .pattern(/^\(\d\d\d\) \d\d\d-\d\d\d\d$/)
-      .optional(),
-  });
-
-  if (schema.validate(req.body).error) {
-    res.status(400).json({ message: schema.validate(req.body).error.message });
+  if (putSchema.validate(req.body).error) {
+    res
+      .status(400)
+      .json({ message: putSchema.validate(req.body).error.message });
   } else if (req.body.name || req.body.email || req.body.phone) {
     const updatedContact = await updateContact(req.params.contactId, req.body);
     res.status(200).json(updatedContact);
