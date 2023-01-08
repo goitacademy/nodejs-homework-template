@@ -78,7 +78,6 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  // const body = req.body;
 
   const { value, error } = updateContactSchema.validate(req.body);
 
@@ -92,11 +91,10 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const updatedContact = await updateContact(contactId, value);
 
-    res.status(200).json(updatedContact);
+    return res.status(200).json(updatedContact);
   } catch (error) {
     console.log(error);
   }
-  res.json({ message: "template message" });
 });
 
 module.exports = router;
