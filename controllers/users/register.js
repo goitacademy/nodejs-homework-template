@@ -1,26 +1,28 @@
-const bcrypt = require("bcrypt");
-
+const { Conflict } = require("http-errors");
 const { User } = require("../../models");
-const { HttpError } = require("../../helpers");
 
-const register = async (req, res) => {
-  const { email, password } = req.body;
-
+const signup = async (req, res) => {
+  const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw HttpError(409, "Email in use");
+    throw new Conflict("Email in use");
   }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = new User({ email, subscription });
+  newUser.setPassword(password);
+  newUser.save();
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
-
-  res.status(201).json({
-    user: {
-      email: newUser.email,
-      subscription: newUser.subscription,
+  res.json({
+    status: "success",
+    code: 201,
+    message: "user created",
+    data: {
+      user: {
+        email,
+        subscription: newUser.subscription,
+      },
     },
   });
 };
 
-module.exports = register;
+module.exports = signup;

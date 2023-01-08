@@ -1,19 +1,20 @@
-/* eslint-disable no-undef */
 const { Contact } = require("../../models");
 
-const updateFavorite = async (req, res) => {
+const updateContactFavorite = async (req, res, next) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
   const result = await Contact.findByIdAndUpdate(
-    req.params.contactId,
-    req.body,
-    {
-      new: true,
-    }
+    id,
+    { favorite },
+    { new: true }
   );
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-
-  res.json(result);
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
 };
 
-module.exports = updateFavorite;
+module.exports = updateContactFavorite;

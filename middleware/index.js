@@ -1,9 +1,9 @@
-const isValidId = require("./isValidId.js");
-const validateBody = require("./validateBody");
-const authenticate = require("./authenticate");
+const validation = require("./validation");
+const ctrlWrapper = require("./ctrlWrapper");
+const authentication = require("./authentication");
 
 module.exports = {
-  isValidId,
-  validateBody,
-  authenticate,
+  validation,
+  ctrlWrapper,
+  authentication,
 };
