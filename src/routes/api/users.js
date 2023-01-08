@@ -1,14 +1,19 @@
 const express = require('express')
 const router = express.Router()
 
-const {userValidation} = require('../middlewares/userValidation')
-const { registrationController,
-    loginController } = require('../../controllers/authControllers')
+const { userValidation } = require('../middlewares/userValidation')
+const { authMiddleware } = require('../middlewares/authMiddleware')
+const {
+    registrationController,
+    loginController,
+    logoutController
+} = require('../../controllers/authControllers')
 
 const { asyncWrapper } = require('../../helpers/apiHelpers')
 
 router.post('/register', userValidation, asyncWrapper(registrationController))
-router.post('/login', userValidation, asyncWrapper(loginController))
+router.get('/login', userValidation, asyncWrapper(loginController))
+router.post('/logout', authMiddleware, asyncWrapper(logoutController))
 
 
-module.exports = {authRouter: router}
+module.exports = router

@@ -1,10 +1,12 @@
 const {
     registration,
-    login
+    login,
+    logout
 } = require('../services/authService')
 
 const registrationController = async (req, res) => {
     const newUser = await registration(req.body)
+
     if (!newUser) {
         return res.status(409).json({"message": "Email in use"})
     }
@@ -28,12 +30,23 @@ const loginController = async (req, res) => {
     const { token, user: { email, subscription } } = user 
 
     res.json({
-        token,
+        token, 
         "user": {email, subscription}
     })
+}
+
+const logoutController = async (req, res) => {
+    const user = await logout(req.user._id)
+    
+    if (!user) {
+        return res.status(401).json({"message": "Not authorized"})
+    }
+
+    res.sendStatus(204)
 }
   
 module.exports = {
     registrationController,
-    loginController
+    loginController,
+    logoutController
 }

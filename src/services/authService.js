@@ -6,6 +6,7 @@ const registration = async ({email, password}) => {
     try {
         const user = new User({ email, password })
         await user.save();
+        console.log("user: ", user)
         return user
     } catch (error) {
         console.log(error.message)
@@ -31,7 +32,23 @@ const login = async ({email, password}) => {
         const token = jwt.sign({
             _id: user._id,
         }, process.env.JWT_SECRET)
+        await User.findOneAndUpdate(user._id, { $set: {token: token} },)
+
         return {token, user}
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const logout = async (id) => {
+    try {
+        const user = await User.findByIdAndUpdate(id, {$set: {token: null}})
+    
+        if (!user) {
+            return null
+        }
+
+        return user
     } catch (error) {
         console.log(error)
     }
@@ -39,5 +56,6 @@ const login = async ({email, password}) => {
 
 module.exports = {
     registration,
-    login
+    login,
+    logout
 }
