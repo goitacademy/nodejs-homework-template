@@ -4,7 +4,7 @@ const listContacts = async (userId) => {
   try {
     // console.log(userId);
     const data = await Contact.find({ userId });
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err) {
     // console.log("first");

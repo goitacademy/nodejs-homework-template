@@ -16,7 +16,7 @@ const authMiddleware = (req, res, next) => {
 
     req.token = token;
     req.user = user;
-    // console.log(user);
+    console.log(user);
     next();
   } catch (err) {
     next(
