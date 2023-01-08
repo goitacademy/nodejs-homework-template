@@ -1,6 +1,7 @@
 const express = require("express");
 const contacts = require("../../models/contacts");
-const { postSchema, putSchema } = require("../../validation/validation");
+// const { postSchema, putSchema } = require("../../validation/validationІSchemas");
+const { postValidation, putValidation }=require('../../middleware/validationMiddlware')
 
 const router = express.Router();
 
@@ -31,14 +32,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  console.log(req.body);
-  const validationResult = postSchema.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.details });
-  }
-  next();
-});
+router.post("/", postValidation);
 
 router.post("/", async (req, res, next) => {
   try {
@@ -62,13 +56,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  const validationResult = putSchema.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.details });
-  }
-  next();
-});
+router.put("/:contactId", putValidation);
 
 router.put("/:contactId", async (req, res, next) => {
   try {
