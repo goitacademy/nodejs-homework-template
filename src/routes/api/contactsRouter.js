@@ -5,8 +5,7 @@ const {
   addContactController,
   removeContactController,
   updateContactController,
-  // updateStatusContactController,
-} = require("../../controllers/contacts.controller");
+} = require("../../controllers/contacts");
 const { tryCatchWrapper } = require("../../helpers/index");
 const {
   validateId,
@@ -17,7 +16,7 @@ const {
   addContactSchema,
   putContactSchema,
   updateStatusSchema,
-} = require("../../schemas/validationSchemas");
+} = require("../../schemas/Joi");
 
 const router = express.Router();
 

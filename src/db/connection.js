@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-// mongoose.Promise = global.Promise;
 
 const mongoConnect = async () => {
   mongoose.set("strictQuery", false);
