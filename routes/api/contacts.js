@@ -1,14 +1,8 @@
+const schema = require ('../../schemas/validate.js')
 const express = require('express')
-const Joi = require ("joi")
 const { listContacts, getContactById, removeContact, addContact, updateContact} = require ("../../models/contacts.js")
 
 const router = express.Router()
-
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-  phone: Joi.string().pattern(new RegExp('/^[0-9()]+$/'))
-})
 
 router.get('/', async (req, res, next) => {
   try {
