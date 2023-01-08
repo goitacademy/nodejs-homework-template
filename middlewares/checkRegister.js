@@ -1,4 +1,4 @@
-const HttpError = require("../helpers/httpError");
+const { HttpError } = require("../helpers");
 
 const { registerSchema } = require("../schemas");
 

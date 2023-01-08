@@ -1,4 +1,4 @@
-const HttpError = require("../../helpers/httpError");
+const { HttpError } = require("../../helpers");
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -12,7 +12,9 @@ const logIn = async (req, res, next) => {
     if (!candidate || !bcrypt.compareSync(password, candidate.password)) {
       throw HttpError(401, "Email or password is wrong");
     }
-
+    if (!candidate.verify) {
+      throw HttpError(401, "Email not verify");
+    }
     const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
     const token = jwt.sign(

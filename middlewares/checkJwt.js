@@ -1,8 +1,10 @@
 const { User } = require("../models");
-const HttpError = require("../helpers/httpError");
+const { HttpError } = require("../helpers");
 const jwt = require("jsonwebtoken");
+
 require("dotenv").config();
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+const { JWT_SECRET_KEY } = process.env;
 
 const checkJwt = async (req, res, next) => {
   try {

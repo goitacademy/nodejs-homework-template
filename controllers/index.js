@@ -13,6 +13,8 @@ const {
   logOut,
   current,
   avatar,
+  verify,
+  resendVerify,
 } = require("../controllers/authorization");
 
 module.exports = {
@@ -27,4 +29,6 @@ module.exports = {
   logOut,
   current,
   avatar,
+  verify,
+  resendVerify,
 };

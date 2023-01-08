@@ -10,7 +10,12 @@ const loginSchema = Joi.object({
   password: Joi.string().min(5).required(),
 });
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string().required(),
+});
+
 module.exports = {
   registerSchema,
   loginSchema,
+  verifyEmailSchema,
 };
