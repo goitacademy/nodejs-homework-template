@@ -1,5 +1,4 @@
 const { User } = require("../../models/user");
-const { HttpError } = require("../../helpers");
 const bcrypt = require("bcryptjs");
 // webtoken
 const jwt = require("jsonwebtoken");
@@ -10,12 +9,12 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, "Email or password is wrong"); // "Email invalid"
+    res.status(401).json({ message: "Email or password is wrong" }); // "Email invalid"
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password is wrong"); // "Password invalid"
+    res.status(401).json({ message: "Email or password is wrong" }); // "Password invalid"
   }
   const payload = {
     id: user._id,
