@@ -11,7 +11,9 @@ const { schemas } = require('../../models/contact')
 const { validateBody, isValidId, authenticate } = require('../../meddlewares')
 
 
-router.get('/', authenticate, ctrlWrapper(ctrl.getAll))
+router.get('/',
+    // authenticate,
+    ctrlWrapper(ctrl.getAll))
 
 router.get('/:contactId', authenticate, isValidId, ctrlWrapper(ctrl.getById))
 
