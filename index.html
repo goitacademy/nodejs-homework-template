@@ -12,7 +12,7 @@
         <input name="name" placeholder="Contact name" required />
       </div>
       <div>
-        <input name="number" placeholder="Contact number" required />
+        <input name="email" placeholder="Contact e-mail" required />
       </div>
       <div>
         <input type="file" name="photo" required multiple />
@@ -23,14 +23,10 @@
       const contactAddForm = document.getElementById("contact-add-form");
       contactAddForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        const { name, number, photo } = this.elements;
-        // console.log(name.value);
-        // console.log(number.value);
-        // console.log(photo.files);
         const data = FormData();
         data.append("name", name.value);
-        data.append("number", number.value);
-        data.append("photo", photo.files[0]);
+        data.append("email", number.value);
+        data.append("avatar", avatar.files[0]);
       });
     </script>
   </body>
