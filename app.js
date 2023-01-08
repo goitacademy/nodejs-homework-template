@@ -2,10 +2,9 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const { authenticate } = require('./meddlewares')
-
-
 require('dotenv').config()
+
+const { authenticate } = require('./meddlewares')
 
 const authRouter = require('./routes/api/users')
 const contactsRouter = require('./routes/api/contacts')
