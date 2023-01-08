@@ -54,8 +54,22 @@ const logout = async (id) => {
     }
 }
 
+const getCurrentUser = async (id) => {
+    try {
+        const user = await User.findById(id, {email: 1, subscription: 1, _id: 0 } )
+        if (!user) {
+            return null
+        }
+        return user
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+
 module.exports = {
     registration,
     login,
-    logout
+    logout,
+    getCurrentUser
 }

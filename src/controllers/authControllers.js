@@ -1,7 +1,8 @@
 const {
     registration,
     login,
-    logout
+    logout,
+    getCurrentUser
 } = require('../services/authService')
 
 const registrationController = async (req, res) => {
@@ -44,9 +45,20 @@ const logoutController = async (req, res) => {
 
     res.sendStatus(204)
 }
+
+const getCurrentController = async (req, res) => {
+    const user = await getCurrentUser(req.user._id)
+
+    if (!user) {
+        return res.status(401).json({"message": "Not authorized"})
+    }
+
+    res.json({user})
+}
   
 module.exports = {
     registrationController,
     loginController,
-    logoutController
+    logoutController,
+    getCurrentController
 }

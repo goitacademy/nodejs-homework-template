@@ -6,7 +6,8 @@ const { authMiddleware } = require('../middlewares/authMiddleware')
 const {
     registrationController,
     loginController,
-    logoutController
+    logoutController,
+    getCurrentController
 } = require('../../controllers/authControllers')
 
 const { asyncWrapper } = require('../../helpers/apiHelpers')
@@ -14,6 +15,8 @@ const { asyncWrapper } = require('../../helpers/apiHelpers')
 router.post('/register', userValidation, asyncWrapper(registrationController))
 router.get('/login', userValidation, asyncWrapper(loginController))
 router.post('/logout', authMiddleware, asyncWrapper(logoutController))
+router.get('/current', authMiddleware, asyncWrapper(getCurrentController))
+
 
 
 module.exports = router
