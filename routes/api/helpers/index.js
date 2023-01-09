@@ -1,3 +1,5 @@
-const {createError} = require("./createError");
 
-module.export = {createError};
+const createError = require("./createError");
+const createHashPassword = require("./createHashPassword")
+
+module.export = {createError, createHashPassword};
