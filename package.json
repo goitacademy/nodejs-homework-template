@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.3",
     "morgan": "1.10.0"
+
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -27,6 +28,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^2.0.20"
   }
 }
