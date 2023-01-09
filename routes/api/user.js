@@ -3,7 +3,12 @@ const express = require("express");
 const ctrl = require("../../controllers/auth");
 
 const { ctrlWrapper } = require("../../helpers");
-const { validateBody, authenticate } = require("../../middlewars");
+const {
+  validateBody,
+  authenticate,
+  resizeAvatar,
+  upload,
+} = require("../../middlewars");
 const { userRegisterSchema, userLoginSchema } = require("../../schemas/users");
 
 const router = express.Router();
@@ -16,6 +21,12 @@ router.post(
 router.post("/login", validateBody(userLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
-
+router.patch(
+  "/avatars",
+  authenticate,
+  resizeAvatar,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
+);
 
 module.exports = router;
