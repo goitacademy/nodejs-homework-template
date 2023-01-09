@@ -881,3 +881,5 @@
  PATCH /api/users 05:01:2023_03:41:30
  PATCH /api/users 05:01:2023_03:42:11
  PATCH /api/users 05:01:2023_03:42:28
+ POST /api/users/signup 05:01:2023_03:47:19
+ POST /api/users/signup 05:01:2023_03:57:26

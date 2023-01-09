@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../db/UserModel");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
-require("dotenv").config();
+// require("dotenv").config();
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
