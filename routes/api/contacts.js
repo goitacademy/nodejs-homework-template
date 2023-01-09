@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const contacts = require("../../models/contacts");
-const { createError } = require("./helpers");
+const { createError } = require("../../helpers");
 const { authorize } = require("./middlewares");
 const router = express.Router();
 const contactsSchema = Joi.object({
@@ -101,18 +101,3 @@ router.patch("/:contactId/favorite", authorize, async (req, res, next) => {
   }
 });
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

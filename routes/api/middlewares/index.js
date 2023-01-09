@@ -1,3 +1,4 @@
 const authorize = require("./autorize");
+const upload = require("./upload")
 
-module.exports = { authorize };
+module.exports = { authorize, upload };
