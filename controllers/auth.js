@@ -22,7 +22,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(User);
   if (!user) {
     throw HttpError(401, "Email or password invalid");
   }
@@ -46,7 +45,6 @@ await User.findByIdAndUpdate(user._id, {token})
 const getCurrent = async (req, res) => {
   const { email, name } = req.user;
   res.json({
-    
     email,
     name,
   })
