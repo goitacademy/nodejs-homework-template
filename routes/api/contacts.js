@@ -25,8 +25,8 @@ const contactFavoriteValidation = validation(contactFavoriteSchema);
 const router = express.Router();
 
 router.get("/", auth, ctrllWrapper(getContacts));
-router.get("/:id", ctrllWrapper(getContactById));
-router.delete("/:id", ctrllWrapper(deleteContact));
+router.get("/:id", auth, ctrllWrapper(getContactById));
+router.delete("/:id", auth, ctrllWrapper(deleteContact));
 
 router.post("/", auth, contactCreateValidation, ctrllWrapper(addNewContact));
 
