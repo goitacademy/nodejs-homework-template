@@ -29,18 +29,15 @@ password: {
 userSchema.post("save", handleMongooseError);
 
 // Joi схема на регистрацию 
-const registerSchema = Joi.object({
-    name: Joi.string().trim().required(),
+const registerSchema = Joi.object({    
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-    
+    password: Joi.string().trim().min(6).required(),    
 });
 
 // Joi схема на вход 
 const loginSchema = Joi.object({    
     email: Joi.string().email().required(),
-    password: Joi.string().min().required(),
-    
+    password: Joi.string().min(6).required(),    
 });
 
 const schemas = {
