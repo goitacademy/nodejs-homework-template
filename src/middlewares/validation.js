@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidationError } = require("../helpers/errors");
 
 const postValidation = (req, res, next) => {
   const schema = Joi.object({
@@ -9,7 +10,7 @@ const postValidation = (req, res, next) => {
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    return res.status(400).json({ message: "missing required field" });
+    next(new ValidationError(validationResult.error.details));
   }
 
   next();
@@ -25,7 +26,7 @@ const putValidation = (req, res, next) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(400).json({ message: "try changing at least one field" });
+    next(new ValidationError(validationResult.error.details));
   }
 
   next();
