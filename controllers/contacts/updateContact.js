@@ -10,6 +10,11 @@ const updateContact = async (req, res, next) => {
       new: true,
     }
   );
+
+  if (!result) {
+    throw new NotFound("Not found");
+  }
+
   res.json({
     status: "success",
     code: 200,
