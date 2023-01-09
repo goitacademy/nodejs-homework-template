@@ -1,8 +1,8 @@
-const path = require('path');
-const fs = require('fs/promises');
-const {nanoid} = require('nanoid');
+const path = require("path");
+const fs = require("fs/promises");
+const { nanoid } = require("nanoid");
 
-const contactsPath = path.resolve('src', 'models', 'contacts.json');
+const contactsPath = path.resolve("src", "models", "contacts.json");
 
 const readContactsList = async () => {
   const contactsRaw = await fs.readFile(contactsPath);
@@ -33,7 +33,7 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const {name, email, phone} = body;
+  const { name, email, phone } = body;
   const newContact = {
     id: nanoid(),
     name,
@@ -46,7 +46,7 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const {name, email, phone} = body;
+  const { name, email, phone } = body;
   const contacts = await readContactsList();
   contacts.forEach((element) => {
     if (element.id === contactId) {
