@@ -1,16 +1,17 @@
-const { Contact } = require("../../models");
+const { contactsApi } = require("../../models");
 const { RequestError } = require("../../helpers");
 
-const remove = async (req, res) => {
+const patch = async (req, res) => {
     const { contactId } = req.params;
-    const { id: userId } = req.user;
-    const data = await Contact.findOneAndDelete({ _id: contactId, owner: userId });
+    const body = req.body;
+
+    const data = await contactsApi.patch(contactId, body);
 
     if (!data) {
         throw RequestError(404, `id:${contactId} not found`);
     }
 
-    res.status(200).json({ status: "success", code: 200, message: "contact deleted" });
+    res.status(200).json({ status: "success", code: 200, data });
 };
 
-module.exports = remove;
+module.exports = patch;

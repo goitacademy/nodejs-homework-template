@@ -1,13 +1,11 @@
-const { Contact } = require("../../models");
+const { contactsApi } = require("../../models");
 const { RequestError } = require("../../helpers");
 
 const patch = async (req, res) => {
     const { contactId } = req.params;
     const body = req.body;
-    const { id: userId } = req.user;
-    const data = await Contact.findOneAndUpdate({ _id: contactId, owner: userId }, body, {
-        new: true,
-    });
+
+    const data = await contactsApi.patch(contactId, body);
 
     if (!data) {
         throw RequestError(404, `id:${contactId} not found`);

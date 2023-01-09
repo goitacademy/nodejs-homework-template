@@ -1,10 +1,9 @@
-const { Contact } = require("../../models");
+const { contactsApi } = require("../../models");
 const { RequestError } = require("../../helpers");
 
 const getById = async (req, res) => {
     const { contactId } = req.params;
-    const { id: userId } = req.user;
-    const data = await Contact.findOne({ _id: contactId, owner: userId });
+    const data = await contactsApi.getById(contactId);
     if (!data) {
         throw RequestError(404, `id:${contactId} not found`);
     }
