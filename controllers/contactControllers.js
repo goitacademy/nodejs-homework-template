@@ -51,6 +51,9 @@ const deleteContactsByIdController = async (req, res) => {
 const updateFavoriteByIdController = async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
+  if (favorite) {
+    throw new BadRequest("missing field favorite");
+  }
   const updateFavorite = await updateFavoriteById(id, favorite);
   if (!updateFavorite) {
     throw new NotFound(`Contact with id ${id} not found`);
