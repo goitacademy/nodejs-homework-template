@@ -1,70 +1,6 @@
-// const fs = require("fs/promises");
-// const path = require("path");
-
-// const { nanoid } = require("nanoid");
-
-// const contactsPath = path.join(__dirname, "../models/contacts.json");
-
-// const listContacts = async () => {
-//   const result = await fs.readFile(contactsPath, "utf-8");
-//   return JSON.parse(result);
-// };
-
-// const getContactById = async (contactId) => {
-//   const contacts = await listContacts();
-//   const result = contacts.find((item) => item.id === contactId);
-//   return result || null;
-// };
-
-// const removeContact = async (contactId) => {
-//   const contacts = await listContacts();
-//   const index = contacts.findIndex((item) => item.id === contactId);
-//   if (index === -1) {
-//     return null;
-//   }
-
-//   const [result] = contacts.splice(index, 1);
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-//   return result;
-// };
-
-// const addContact = async (body) => {
-//   const contacts = await listContacts();
-//   const newContact = {
-//     id: nanoid(),
-//     ...body,
-//   };
-//   contacts.push(newContact);
-
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-//   return newContact;
-// };
-
-// const updateContact = async (contactId, body) => {
-//   const contacts = await listContacts();
-//   const index = contacts.findIndex((item) => item.id === contactId);
-//   if (index === -1) {
-//     return null;
-//   }
-
-//   const updatedContact = { ...contacts[index], ...body };
-//   contacts.splice(index, 1, updatedContact);
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-//   return updatedContact;
-// };
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };
-
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const handleMongooseError = require("../helpers/handleMongooseError");
+const { handleMongooseError } = require("../helpers");
 
 const contactSchema = new Schema(
   {
@@ -84,16 +20,24 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 contactSchema.post("save", handleMongooseError);
 
-const schemaJoi = Joi.object({
-  name: Joi.string().min(1).max(25).required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+const addContactSchema = Joi.object({
+  name: Joi.string().label("name field").min(3).max(25).required(),
+  email: Joi.string()
+    .label("email field")
+    .email({ minDomainSegments: 2 })
+    .required(),
   phone: Joi.string()
+    .label("phone field")
     .min(3)
     .trim()
     .max(15)
@@ -103,12 +47,37 @@ const schemaJoi = Joi.object({
     })
     .required(),
   favorite: Joi.bool(),
-});
+})
+  .required()
+  .min(3)
+  .message("missing required name field");
 
-const updatefavoriteSchema = Joi.object({
+const updContactSchema = Joi.object({
+  name: Joi.string().label("name field").min(2).max(25),
+  email: Joi.string().label("email field").email({ minDomainSegments: 2 }),
+  phone: Joi.string()
+    .label("phone field")
+    .min(3)
+    .max(15)
+    .pattern(/^[0-9]+$/)
+    .messages({
+      "string.pattern.base": `Phone number can contain from 3 to 15 digits.`,
+    }),
+  favorite: Joi.bool(),
+})
+  .required()
+  .min(1)
+  .message("missing fields");
+
+const updateFavoriteSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemaJoi, updatefavoriteSchema };
+module.exports = {
+  Contact,
+  addContactSchema,
+  updContactSchema,
+  updateFavoriteSchema,
+};
