@@ -30,9 +30,10 @@ router.delete("/:id", auth, ctrllWrapper(deleteContact));
 
 router.post("/", auth, contactCreateValidation, ctrllWrapper(addNewContact));
 
-router.put("/:id", contactUpdateValidation, ctrllWrapper(updateContact));
+router.put("/:id", auth, contactUpdateValidation, ctrllWrapper(updateContact));
 router.patch(
   "/:id/favorite",
+  auth,
   contactFavoriteValidation,
   ctrllWrapper(updateContactFavorite)
 );

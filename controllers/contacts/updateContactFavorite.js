@@ -1,10 +1,11 @@
 const { Contact } = require("../../models");
 
 const updateContactFavorite = async (req, res, next) => {
-  const { id } = req.params;
+  const contactId = req.params.id;
+  const userId = req.user._id;
   const { favorite } = req.body;
-  const result = await Contact.findByIdAndUpdate(
-    id,
+  const result = await Contact.findOneAndUpdate(
+    { contactId, userId },
     { favorite },
     { new: true }
   );
