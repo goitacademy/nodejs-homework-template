@@ -13,7 +13,7 @@ async function writeDb(db) {
   await fs.writeFile(dbPath, JSON.stringify(db, null, 2));
 }
 
-const listContacts = async ({ limit = 0 }) => {
+const getContactsService = async ({ limit = 0 }) => {
   const db = await readDb();
   return db.slice(-limit);
 };
@@ -21,7 +21,6 @@ const listContacts = async ({ limit = 0 }) => {
 const getContactById = async (contactId) => {
   const db = await readDb();
   const contact = db.find((item) => item.id === contactId);
-
   return contact || null;
 };
 
@@ -51,7 +50,7 @@ const updateContact = async (contactId, body) => {
 };
 
 module.exports = {
-  listContacts,
+  getContactsService,
   getContactById,
   removeContact,
   addContact,

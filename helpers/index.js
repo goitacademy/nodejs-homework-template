@@ -3,18 +3,11 @@ function tryCatchWrapper(enpointFn) {
     try {
       await enpointFn(req, res, next);
     } catch (error) {
-      next(error);
+      res.status(error.code).json(error);
     }
   };
 }
 
-function httpError(status, message) {
-  const err = new Error(message);
-  err.status = status;
-  return err;
-}
-
 module.exports = {
   tryCatchWrapper,
-  httpError,
 };

@@ -1,34 +1,40 @@
-const { httpError } = require("../helpers");
-const db = require("../models/contacts");
+const { HttpError } = require("../httpError");
+const {
+  getContactsService,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../models/contacts");
 
-async function getContactList(req, res, next) {
+async function getContacts(req, res, next) {
   const { limit } = req.query;
-  const movie = await db.listContacts({ limit });
-  return res.status(200).json(movie);
+  const contact = await getContactsService({ limit });
+  return res.status(200).json(contact);
 }
 
-async function getContactId(req, res, next) {
+async function getContact(req, res, next) {
   const { contactId } = req.params;
-  const contact = await db.getContactById(contactId);
+  const contact = await getContactById(contactId);
   if (!contact) {
-    return next(httpError(404, "Not found"));
+    throw new HttpError("Not found", 404);
   }
   return res.status(200).json(contact);
 }
 
 async function createContact(req, res, next) {
   const body = req.body;
-  const contact = await db.addContact(body);
+  const contact = await addContact(body);
   return res.status(201).json(contact);
 }
 
 async function deleteContact(req, res, next) {
   const { contactId } = req.params;
-  const contact = await db.getContactById(contactId);
+  const contact = await getContactById(contactId);
   if (!contact) {
-    return next(httpError(404, "Not found"));
+    throw new HttpError("Not found", 404);
   }
-  await db.removeContact(contactId);
+  await removeContact(contactId);
   return res.status(200).json({ message: "contact deleted" });
 }
 
@@ -36,19 +42,19 @@ async function refreshContact(req, res, next) {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
   if (!req.body) {
-    return next(httpError(400, { message: "missing fields" }));
+    throw new HttpError("missing fields", 400);
   }
-  const contact = await db.updateContact(contactId, { name, email, phone });
+  const contact = await updateContact(contactId, { name, email, phone });
 
   if (!contact) {
-    return res.status(404).json({ message: "Not found" });
+    throw new HttpError("Not found", 404);
   }
   return res.status(200).json(contact);
 }
 
 module.exports = {
-  getContactList,
-  getContactId,
+  getContacts,
+  getContact,
   createContact,
   deleteContact,
   refreshContact,
