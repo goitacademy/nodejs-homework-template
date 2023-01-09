@@ -9,6 +9,7 @@ const {
   updateItem,
   updateFavoriteField,
 } = require("../../controllers/contacts");
+
 const controllerWrapper = require("../../helpers/controllerWrapper");
 
 router.get("/", controllerWrapper(getAll));
