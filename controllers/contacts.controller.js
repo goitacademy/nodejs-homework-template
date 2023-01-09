@@ -1,6 +1,6 @@
-const contacts = require("../models/contacts")
+const contacts = require("../models/contacts");
 const { HttpError, NotFound } = require("../helpers/message");
-const {addContactSchema} = require("../schemas/contacts-validate");
+const { addContactSchema } = require("../schemas/contacts-validate");
 
 async function getContacts(req, res) {
   const { limit } = req.query;
@@ -13,7 +13,7 @@ async function getContacts(req, res) {
 async function contactById(req, res, next) {
   const { contactId } = req.params;
 
-  const byId = await contacts.getContactById(contactId)
+  const byId = await contacts.getContactById(contactId);
 
   if (!byId) {
     return next(HttpError(404, "Not found"));
@@ -22,7 +22,7 @@ async function contactById(req, res, next) {
 }
 
 async function createContact(req, res) {
-  const { error} = addContactSchema.validate(req.body);
+  const { error } = addContactSchema.validate(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -54,7 +54,7 @@ async function changeContacts(req, res, next) {
   const { contactId } = req.params;
   const { body } = req;
 
-  const { error} = addContactSchema.validate(req.body);
+  const { error } = addContactSchema.validate(req.body);
 
   if (error) {
     return res.status(400).json({
@@ -62,10 +62,10 @@ async function changeContacts(req, res, next) {
     });
   }
 
-  const updatedContacts = await contacts.updateContact(contactId, body)
+  const updatedContacts = await contacts.updateContact(contactId, body);
 
   if (!updatedContacts) {
-   return next(HttpError(404, "Page not found"));
+    return next(HttpError(404, "Page not found"));
   }
 
   return res.status(200).json(updatedContacts);
