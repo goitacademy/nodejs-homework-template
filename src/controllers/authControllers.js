@@ -2,7 +2,8 @@ const {
     registration,
     login,
     logout,
-    getCurrentUser
+    getCurrentUser,
+    updateSubscription
 } = require('../services/authService')
 
 const registrationController = async (req, res) => {
@@ -55,10 +56,24 @@ const getCurrentController = async (req, res) => {
 
     res.json({user})
 }
+
+const updateSubscriptionController = async (req, res) => {
+    console.log(1)
+    const user = req.user._id
+    const { subscription: newSubscription } = req.body;
+    const { email, subscription } = await updateSubscription(user, newSubscription)
+    
+    if (!email) {
+        return res.status(404).json({"message": "Not found"})
+    }
+
+    res.json({email, subscription})
+}
   
 module.exports = {
     registrationController,
     loginController,
     logoutController,
-    getCurrentController
+    getCurrentController,
+    updateSubscriptionController
 }

@@ -15,17 +15,13 @@ const registration = async ({email, password}) => {
 
 const login = async ({email, password}) => {
     try {
-        const user = await User.findOne({ email })
+        const user = await User.findOne({email})
     
         if (!user) {
-            //  `no user with email '${email} found`
-            // return "wrong email"
             return null
         }
 
         if (!await bcrypt.compare(password, user.password)) {
-            // "message": "Email or password is wrong"
-            // return "wrong password"
             return null
         }
 
@@ -64,12 +60,27 @@ const getCurrentUser = async (id) => {
     } catch (error) {
         console.log(error)
     }
-    
+}
+
+const updateSubscription = async (id, subscription) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            id,
+            { $set: { subscription } },
+            { new: true, _id: 0 })
+        if (!user) {
+            return null
+        }
+        return user
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 module.exports = {
     registration,
     login,
     logout,
-    getCurrentUser
+    getCurrentUser,
+    updateSubscription
 }
