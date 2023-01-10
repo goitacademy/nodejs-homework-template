@@ -1,13 +1,9 @@
-const {
-  addContactSchema,
-  updateContactSchema,
-  updateContactStatusSchema,
-  validateId,
-} = require('./validation');
+const ctrlWrapper = require('./ctrlWrapper');
+const handleMongooseError = require('./handleMongooseError');
+const httpError = require('./httpError');
 
 module.exports = {
-  addContactSchema,
-  updateContactSchema,
-  updateContactStatusSchema,
-  validateId,
+  ctrlWrapper,
+  handleMongooseError,
+  httpError,
 };
