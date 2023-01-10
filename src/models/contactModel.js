@@ -8,9 +8,11 @@ const contactSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      required: [true, "Set email for contact"],
     },
     phone: {
       type: String,
+      required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
@@ -20,10 +22,6 @@ const contactSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    // owner: {
-    //   type: mongoose.SchemaTypes.ObjectId,
-    //   ref: "user",
-    // },
   },
 
   { versionKey: false, timestamps: true }

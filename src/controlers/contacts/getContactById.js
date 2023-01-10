@@ -3,7 +3,8 @@ const server = require("../../services/contacts");
 const getListById = async (req, res) => {
   try {
     const { contactId } = req.params;
-    const contact = await server.getContactById(contactId);
+    const { _id: userId } = req.user;
+    const contact = await server.getContactById(contactId, userId);
     if (!contact) {
       return res
         .status(400)

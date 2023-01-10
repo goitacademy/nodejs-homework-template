@@ -1,57 +1,66 @@
 const { Contact } = require("../models/contactModel");
 
 const listContacts = async (userId) => {
+  console.log(userId);
   try {
-    // console.log(userId);
     const data = await Contact.find({ userId });
-    // console.log(data);
+    console.log(data);
     return data;
   } catch (err) {
-    // console.log("first");
     console.error(err);
   }
 };
-const getContactById = async (contactId) => {
+const getContactById = async (contactId, userId) => {
   try {
-    const data = await Contact.findById(contactId);
+    console.log(contactId);
+    const data = await Contact.findById(contactId, userId);
 
     return data;
   } catch (err) {
     console.error(err);
   }
 };
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, userId) => {
   try {
-    await Contact.findByIdAndDelete(contactId);
+    await Contact.findByIdAndDelete(contactId, userId);
   } catch (err) {
     console.error(err);
   }
 };
-const addContact = async (name, email, phone, favorite = false) => {
+const addContact = async ({ name, email, phone, favorite = false }, userId) => {
   try {
-    const contact = new Contact({ name, email, phone, favorite });
+    const contact = new Contact({ name, email, phone, favorite, userId });
     await contact.save();
   } catch (err) {
-    console.error(err);
+    console.error("err", err);
+    throw err;
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, userId) => {
   try {
     const { name, email, phone, favorite = false } = body;
-    await Contact.findByIdAndUpdate(contactId, {
-      $set: { name, email, phone, favorite },
-    });
+    await Contact.findByIdAndUpdate(
+      contactId,
+      {
+        $set: { name, email, phone, favorite },
+      },
+      userId
+    );
   } catch (err) {
     console.error(err);
   }
 };
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (contactId, body, userId) => {
   try {
     const { favorite } = body;
-    await Contact.findByIdAndUpdate(contactId, {
-      $set: { favorite },
-    });
+    await Contact.findByIdAndUpdate(
+      contactId,
+      {
+        $set: { favorite },
+      },
+      userId
+    );
   } catch (err) {
     console.error(err);
   }
