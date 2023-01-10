@@ -1,5 +1,4 @@
 const { Contact } = require('../../models');
-const { httpError } = require('../../utils');
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -11,9 +10,7 @@ const getAllContacts = async (req, res) => {
     skip,
     limit,
   }).populate('owner', 'email subscription');
-  if (!result) {
-    throw httpError(404);
-  }
+
   res.json(result);
 };
 
