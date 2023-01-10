@@ -1,91 +1,96 @@
-const fs = require("fs/promises");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+  updateFavoriteStatus,
+} = require("../service/contacts");
 
-const listContacts = async () => {
-  const contacts = await fs.readFile("models/contacts.json", "utf-8");
-  return JSON.parse(contacts);
+const getContacts = async (req, res, next) => {
+  const contacts = await listContacts();
+  res.set("Content-Type", "application/json").send(contacts);
 };
 
-const getContactById = async (contactId) => {
-  const contacts = JSON.parse(
-    await fs.readFile("models/contacts.json", "utf-8")
-  );
-  const contact = contacts.find(({ id }) => Number(id) === Number(contactId));
-  return contact;
-};
+const getById = async (req, res, next) => {
+  const id = req.params.contactId;
 
-const removeContact = async (contactId) => {
-  const contacts = JSON.parse(
-    await fs.readFile("models/contacts.json", "utf-8")
-  );
-  const isContactExist = contacts.find(
-    ({ id }) => Number(id) === Number(contactId)
-  );
+  try {
+    const contact = await getContactById(id);
 
-  if (!isContactExist) {
-    return isContactExist;
+    if (!contact) {
+      res.status(404).json({ message: "Not found" }).end();
+      return;
+    }
+
+    res.json(contact);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
-
-  const newContactsList = contacts.filter(
-    ({ id }) => Number(id) !== Number(contactId)
-  );
-
-  fs.writeFile("models/contacts.json", JSON.stringify(newContactsList));
-
-  return isContactExist;
 };
 
-const addContact = async (body) => {
-  return await fs
-    .readFile("models/contacts.json", "utf-8")
-    .then((contactsRaw) => {
-      const contacts = JSON.parse(contactsRaw);
-      const id = String(contacts.length + 1);
-      const newContact = {
-        id,
-        ...body,
-      };
-      const newContactsList = JSON.stringify([...contacts, newContact]);
-
-      fs.writeFile("models/contacts.json", newContactsList);
-
-      return newContact;
-    });
-};
-
-const updateContact = async (contactId, body) => {
-  const contacts = JSON.parse(
-    await fs.readFile("models/contacts.json", "utf-8")
-  );
-  const contactToChange = contacts.find(
-    ({ id }) => Number(id) === Number(contactId)
-  );
-
-  
-  if (!contactToChange) {
-    return false;
+const createContact = async (req, res, next) => {
+  try {
+    const newContact = await addContact(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
+};
 
-  const updatedContact = {
-    id: contactToChange.id,
-    name: body.name ? body.name : contactToChange.name,
-    email: body.email ? body.email : contactToChange.email,
-    phone: body.phone ? body.phone : contactToChange.phone,
-  };
+const updateContactById = async (req, res, next) => {
+  const id = req.params.contactId;
+  const contactChanges = req.body;
 
-  const newContactsList = [
-    ...contacts.filter(({ id }) => id !== contactId),
-    updatedContact,
-  ];
+  try {
+    const updatedContact = await updateContact(id, contactChanges);
 
-  fs.writeFile("models/contacts.json", JSON.stringify(newContactsList));
+    updatedContact
+      ? res.status(200).json(updatedContact)
+      : res.status(404).json({ message: "Not found" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
-  return updatedContact;
+const deleteContactById = async (req, res, next) => {
+  const id = req.params.contactId;
+
+  try {
+    const isContactExist = await removeContact(id);
+
+    isContactExist
+      ? res.status(200).json({ message: "Contact deleted" })
+      : res.status(404).json({ message: "Not found" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const setFavorite = async (req, res, next) => {
+  const id = req.params.contactId;
+  const favStatus = req.body;
+  try {
+    const updatedContact = await updateFavoriteStatus(id, favStatus);
+
+    updatedContact
+      ? res.status(200).json(updatedContact)
+      : res.status(404).json({ message: "Not found" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  getContacts,
+  getById,
+  updateContactById,
+  createContact,
+  deleteContactById,
+  setFavorite,
 };
