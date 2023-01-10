@@ -1,17 +1,6 @@
 const contacts = require("../models/contacts");
-const { HttpError } = require("../HttpError");
+const { HttpError, ctrlWrapper } = require("../helpers")
 const { validateBody } = require("../middlewares/Validator");
-
-const ctrlWrapper = (ctrl) => {
-  const func = async (req, res, next) => {
-    try {
-      await ctrl(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
-  return func;
-};
 
 const getAllContacts = async (req, res, next) => {
   const data = await contacts.listContacts();
