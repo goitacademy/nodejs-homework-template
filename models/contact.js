@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const Joi = require('joi');
 
 const contactSchema = Schema(
   {
@@ -25,6 +24,4 @@ const Contact = model('contact', contactSchema);
 
 module.exports = {
   Contact,
-  // joiSchema,
-  // favoriteJoiSchema,
 };

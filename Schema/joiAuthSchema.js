@@ -1,0 +1,16 @@
+const Joi = require('Joi');
+
+const joiSingupSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().required(),
+  name: Joi.string().required(),
+  subscription: Joi.string(),
+  // token: Joi.string().required(),
+});
+
+const joiLoginSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().required(),
+});
+
+module.exports = { joiSingupSchema, joiLoginSchema };
