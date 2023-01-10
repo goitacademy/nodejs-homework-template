@@ -24,10 +24,17 @@ const login = async(req, res, next) => {
             id: user._id,
         }
 
-        const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+        await User.findByIdAndUpdate(user._id, { token });// добавим токен в базу 
 
-        res.json({ 
+        res.json({
+            status: "OK",
+            code: 200,
             token,
+            user: {
+                email: user.email,
+                subscription: user.subscription,
+            }
         })
     } catch (error) {
         next(error);  
