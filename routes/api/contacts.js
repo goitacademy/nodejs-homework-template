@@ -10,13 +10,13 @@ const {
 
 const { contactSchemas } = require('../../models');
 
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, validateId } = require('../../middlewares');
 
 const contactsRouter = express.Router();
 
 contactsRouter.get('/', authenticate, getAllContacts);
 
-contactsRouter.get('/:id', authenticate, getContactById);
+contactsRouter.get('/:id', authenticate, validateId, getContactById);
 
 contactsRouter.post(
   '/',
@@ -25,12 +25,13 @@ contactsRouter.post(
   addContact
 );
 
-contactsRouter.delete('/:id', authenticate, deleteContact);
+contactsRouter.delete('/:id', authenticate, validateId, deleteContact);
 
 contactsRouter.put(
   '/:id',
   authenticate,
   validateBody(contactSchemas.updateContactSchema),
+  validateId,
   updateContact
 );
 
@@ -38,6 +39,7 @@ contactsRouter.patch(
   '/:id/favorite',
   authenticate,
   validateBody(contactSchemas.updateFavoriteSchema),
+  validateId,
   updateContactFavorite
 );
 
