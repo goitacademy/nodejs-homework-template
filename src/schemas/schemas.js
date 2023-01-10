@@ -21,7 +21,16 @@ const schemaPut = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
 });
+const schemaLogin = Joi.object({
+  password: Joi.string().alphanum().min(10).max(12),
+
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
 module.exports = {
   schemaPost,
   schemaPut,
+  schemaLogin,
 };
