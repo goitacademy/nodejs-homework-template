@@ -11,6 +11,9 @@ const {
 } = require("../controllers/contactsController");
 
 const { postValidation, putValidation } = require("../middlewares/validation");
+const { authMiddleware } = require("../middlewares/authMiddleware");
+
+router.use(authMiddleware);
 
 router.get("/", asyncWrapper(getContactsController));
 router.get("/:id", asyncWrapper(getContactByIdController));
