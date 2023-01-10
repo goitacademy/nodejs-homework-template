@@ -17,10 +17,11 @@ const currentController = async (req, res, next) => {
       return err;
     }
     req.user = user;
-    // next();
+
     res.status(200).json({
       user,
     });
+    // next();
   } catch (error) {
     const err = new NotAuthorizedError(
       "Will you give me a correct token, mazafaka&&&"
