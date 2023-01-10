@@ -10,9 +10,6 @@ const {
 
 const getContactsController = async (req, res) => {
   const contacts = await getContacts();
-  if (contacts.length < 1) {
-    return res.json({ message: "There is no contacts" });
-  }
   res.json({ contacts });
 };
 

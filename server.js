@@ -4,7 +4,7 @@ const { connectMongo } = require("./db/connections");
 
 const PORT = process.env.PORT;
 
-const start = async () => {
+(async () => {
   try {
     await connectMongo();
     console.log("Database connection successful");
@@ -14,6 +14,6 @@ const start = async () => {
   } catch (error) {
     console.error(error);
   }
-};
+})()
 
-start();
+
