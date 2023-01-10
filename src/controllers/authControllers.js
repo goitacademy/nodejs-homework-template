@@ -58,7 +58,6 @@ const getCurrentController = async (req, res) => {
 }
 
 const updateSubscriptionController = async (req, res) => {
-    console.log(1)
     const user = req.user._id
     const { subscription: newSubscription } = req.body;
     const { email, subscription } = await updateSubscription(user, newSubscription)

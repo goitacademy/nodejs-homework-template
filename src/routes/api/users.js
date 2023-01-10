@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { userValidation } = require('../middlewares/userValidation')
 const { authMiddleware } = require('../middlewares/authMiddleware')
-const { subscriptionValidation } = require('../middlewares/subscriptionMiddleware')
+const { subscriptionMiddleware } = require('../middlewares/subscriptionMiddleware')
 const {
     registrationController,
     loginController,
@@ -18,7 +18,7 @@ router.post('/register', userValidation, asyncWrapper(registrationController))
 router.get('/login', userValidation, asyncWrapper(loginController))
 router.post('/logout', authMiddleware, asyncWrapper(logoutController))
 router.get('/current', authMiddleware, asyncWrapper(getCurrentController))
-router.patch('/', authMiddleware, subscriptionValidation, asyncWrapper(updateSubscriptionController))
+router.patch('/', authMiddleware, subscriptionMiddleware, asyncWrapper(updateSubscriptionController))
 
 
 module.exports = router
