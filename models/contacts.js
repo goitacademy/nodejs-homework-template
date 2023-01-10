@@ -13,39 +13,26 @@ async function writeContacts(contact) {
 }
 
 const listContacts = async () => {
-  try {
-    const contacts = await readContacts();
+  const contacts = await readContacts();
     return contacts;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 const getContactById = async contactId => {
-  try {
-    const contacts = await readContacts();
+  const contacts = await readContacts();
     const searchedContact = contacts.find(contact => contact.id === contactId);
     return searchedContact;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 const removeContact = async contactId => {
-  try {
-    const contacts = await readContacts();
+  const contacts = await readContacts();
     const searchedContact = contacts.filter(
       contact => contact.id !== contactId,
     );
     await writeContacts(searchedContact);
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 const addContact = async ({ name, email, phone }) => {
-  try {
-    const contacts = await readContacts();
+  const contacts = await readContacts();
     const newContact = {
       id: Date.now().toString(),
       name,
@@ -54,14 +41,10 @@ const addContact = async ({ name, email, phone }) => {
     };
     contacts.push(newContact);
     await writeContacts(contacts);
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 const updateContact = async (contactId, body) => {
-  try {
-    const contacts = await readContacts();
+  const contacts = await readContacts();
     let updatedContact;
     contacts.forEach(contact => {
       if (contact.id === contactId) {
@@ -73,9 +56,6 @@ const updateContact = async (contactId, body) => {
     });
     writeContacts(contacts);
     return updatedContact;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 module.exports = {
