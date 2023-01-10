@@ -6,7 +6,5 @@ const createHashPassword = async (password) => {
 
 }
 
+module.exports = createHashPassword;
 
-
-
-module.export = createHashPassword;
