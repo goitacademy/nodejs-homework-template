@@ -1,26 +1,28 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
-
-const getAllContacts = require("../../controllers/contacts/getAllContacts");
-const getById = require("../../controllers/contacts/getById");
-const addContact = require("../../controllers/contacts/add");
-const updateById = require("../../controllers/contacts/updateById");
-const deleteContact = require("../../controllers/contacts/delete");
+const { controllerContacts } = require("../../controllers");
+const { authMiddleware } = require("../../middlewares");
 
 // =====================  GET ALL  =====================
-router.get("/", getAllContacts);
+// using authMiddleware to verify that the owner(user) can get only thier contacts.
+// contacts that belong to specific user (with their id)
+router.get("/", authMiddleware, controllerContacts.getAllContacts);
 
 // =====================  GET BY ID  =====================
-router.get("/:contactId", getById);
+router.get("/:contactId", controllerContacts.getById);
 
 // =====================  ADD CONTACT  ==================
-router.post("/", addContact);
+// using authMiddleware to verify that only logged-in user can add contacts
+router.post("/", authMiddleware, controllerContacts.addContact);
 
 // =====================  UPDATE CONTACT BY ID ==================
-router.put("/:contactId", updateById);
+router.put("/:contactId", controllerContacts.updateById);
+
+// =====================  UPDATE CONTACT BY CATEGORY FAVORITE ==================
+router.patch("/:contactId/favorite", controllerContacts.updateStatusContact);
 
 // =====================  DELETE CONTACT BY ID ==================
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", controllerContacts.deleteContact);
 
 module.exports = router;
