@@ -17,7 +17,7 @@ return Contact.create(body)
 };
 
 const updateContact = async (contactId, body) => {
-return Contact.findByIdAndUpdate(contactId, body)
+return Contact.findByIdAndUpdate(contactId, body, { new: true })
 };
 
 module.exports = {

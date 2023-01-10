@@ -1,9 +1,9 @@
+const getError = require("../routes/error/error")
 const validation = (schema) => {
     return (req, res, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
-            error.status = 400;
-            next(error)
+            throw getError(400, "missing required name field");
         }
         next()
     }
