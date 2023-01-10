@@ -1,19 +1,15 @@
-const express = require('express');
 const api = require('../../models/contacts');
-const Joi = require('joi');
 
-const router = express.Router();
-
-router.get('/', async (req, res, next) => {
+const getContacts = async (req, res) => {
   try {
     const contactsList = await api.listContacts();
     res.json({ contactsList, status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
-router.get('/:contactId', async (req, res, next) => {
+const getOneContactById = async (req, res) => {
   try {
     const searchedContact = await api.getContactById(req.params.contactId);
 
@@ -25,26 +21,13 @@ router.get('/:contactId', async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
-router.post('/', async (req, res, next) => {
+const addNewContact = async (req, res) => {
   try {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
       return res.status(400).json({ message: 'missing required name field' });
-    }
-
-    const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(30).required(),
-      email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .required(),
-      phone: Joi.number().integer().min(7).max(15).required(),
-    });
-
-    const validatedResult = schema.validate(req.body);
-    if (validatedResult.error) {
-      return res.status(400).json({ message: validatedResult.error.details });
     }
 
     const newContact = await api.addContact({ name, email, phone });
@@ -52,9 +35,9 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
-router.delete('/:contactId', async (req, res, next) => {
+const deleteContact = async (req, res) => {
   try {
     const result = await api.removeContact(req.params.contactId);
     if (!result) {
@@ -64,24 +47,12 @@ router.delete('/:contactId', async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
-router.put('/:contactId', async (req, res, next) => {
+const changeOldContact = async (req, res) => {
   try {
     if (!req.body) {
       return res.status(400).json({ message: 'missing fields' });
-    }
-    const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(30).required(),
-      email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .required(),
-      phone: Joi.number().integer().min(7).max(15).required(),
-    });
-
-    const validatedResult = schema.validate(req.body);
-    if (validatedResult.error) {
-      return res.status(400).json({ message: validatedResult.error.details });
     }
 
     const updatedContact = await api.updateContact(req.params.contactId, req.body);
@@ -92,6 +63,12 @@ router.put('/:contactId', async (req, res, next) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getContacts,
+  getOneContactById,
+  addNewContact,
+  deleteContact,
+  changeOldContact,
+};
