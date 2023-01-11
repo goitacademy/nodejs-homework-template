@@ -10,7 +10,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw HttpError(409, "Email is already in use");
+    throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -18,10 +18,9 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    name: newUser.name,
-    email: newUser.email,
-    data: {
-      message: "Registration successful",
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
     },
   });
 };
@@ -40,27 +39,47 @@ const login = async (req, res) => {
     email: user.email,
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-
-  res.json({
-    token,
-    name: user.name,
-    email: user.email,
-  });
-};
-
-const list = async (req, res, next) => {
-  const { username } = req.user;
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      message: `Authorization was successful: ${username}`,
+  await User.findByIdAndUpdate(user._id, { token });
+  res.status(200).json({
+    user: {
+      email: user.email,
+      subscription: user.subscription,
     },
+    token,
   });
 };
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204);
+};
+
+const current = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.status(200).json({
+    email,
+    subscription,
+  });
+};
+
+// const list = async (req, res) => {
+//   const { username } = req.user;
+//   res.json({
+//     status: "success",
+//     code: 200,
+//     data: {
+//       message: `Authorization was successful: ${username}`,
+//     },
+//   });
+// };
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
-  list: ctrlWrapper(list),
+  logout: ctrlWrapper(logout),
+  current: ctrlWrapper(current),
+  // list: ctrlWrapper(list),
 };

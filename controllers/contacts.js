@@ -1,15 +1,20 @@
-const contacts = require("../models/contacts");
-const { HttpError, ctrlWrapper } = require("../helpers")
-const { validateBody } = require("../middlewares/Validator");
+const Contact = require("../models/contact");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAllContacts = async (req, res, next) => {
-  const data = await contacts.listContacts();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query
+  const skip = (page-1) * limit
+
+  const data = await Contact
+    .find({ owner }, "-createdAt -updatedAt", {skip, limit})
+    .populate("owner");
   res.json({ data, status: 200 });
 };
 
 const getContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const data = await contacts.getContactById(contactId);
+  const data = await Contact.findById(contactId);
   if (!data) {
     throw HttpError(404);
   }
@@ -17,23 +22,14 @@ const getContact = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-  const { value, error } = validateBody(req.body);
-  if (error) {
-    throw HttpError(400);
-  }
-
-  const result = await contacts.addContact(value);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({...req.body, owner});
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res, next) => {
-  const { value, error } = validateBody(req.body);
-  if (error) {
-    throw HttpError(400);
-  }
-
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, value);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
   if (!result) {
     throw HttpError(404);
   }
@@ -42,7 +38,7 @@ const updateContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const bool = await contacts.removeContact(contactId);
+  const bool = await Contact.findByIdAndDelete(contactId);
   if (bool === null) {
     res.json({ message: "Not found", status: 404 });
   } else {

@@ -1,23 +1,23 @@
-const { Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 // add regexp for email validation
 
-const userSchema = new Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for user"],
+      required: [true, "Set name for contact"],
     },
     password: {
       type: String,
-      required: [true, "Set password for user (examplepassword)"],
+      required: [true, "Set password for user"],
       minlength: 6,
     },
     email: {
       type: String,
-      required: [true, "Email is required (example@example.com)"],
+      required: [true, "Email is required"],
       unique: true,
     },
     subscription: {
@@ -25,35 +25,38 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: {
-      type: String
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
+    token: String,
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post("save", handleMongooseError);
+contactSchema.post("save", handleMongooseError);
 
-const registerSchema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string().required(),
   password: Joi.string().min(6).required(),
   email: Joi.string().required(),
-  subscription: Joi.any().allow('starter', 'pro', 'business') 
+  subscription: Joi.any().allow("starter", "pro", "business"),
 });
 
-const loginSchema = Joi.object({
+const updateSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
 });
 
 const schemas = {
-  registerSchema,
-  loginSchema,
+  addSchema,
+  updateSchema,
 };
 
-const User = model("user", userSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = {
-  User,
+  Contact,
   schemas,
 };
