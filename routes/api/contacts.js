@@ -1,4 +1,5 @@
-const Joi = require('joi');
+const schema = require('../../Schema/contactSchema')
+
 const {
   listContacts,
   getContactById,
@@ -11,30 +12,19 @@ const express = require('express')
 
 const router = express.Router()
 
-const schema = Joi.object({
-  name: Joi.string()
-  .alphanum()
-  .min(3)
-  .max(30)
-  .required(),
-  email: Joi.string()
-  .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-  phone: Joi.string()
-    .pattern(+[0-9])
-    .length(14),
-});
+
 
 // const validateContact = (contact) =>{
 //   const result =  schema.validate(contact)
 //   return result
 // }
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   const response = await listContacts()
   res.json({ status:200, response })
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', async (req, res) => {
   const {contactId} = req.params
   const response = await getContactById(contactId)
   response === null
@@ -42,7 +32,7 @@ router.get('/:contactId', async (req, res, next) => {
   : res.json({ status: 200, response });
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   const {name, email, phone} = req.body
   if (!name || !email || !phone)
   return res.json({ status: 400, message: "Fill in all fields please" });
@@ -54,7 +44,7 @@ router.post('/', async (req, res, next) => {
   res.json({ status: 200, response })
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params;
     const response = await removeContact(contactId);
     if (response === 0){
@@ -63,7 +53,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', async (req, res) => {
   const {contactId} = req.params
   const {error} = schema.validate(req.body)
 if (error) {
