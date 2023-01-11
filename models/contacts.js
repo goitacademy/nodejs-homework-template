@@ -3,7 +3,7 @@ const path = require("path");
 const { nanoid } = require("nanoid");
 
 
-const contactsPath = path.join(__dirname, "./db/contacts.json");
+const contactsPath = path.join(__dirname, "./contacts.json");
 
 const contactUpdate = async(contacts) => await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
