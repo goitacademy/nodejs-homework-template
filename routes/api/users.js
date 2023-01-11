@@ -20,7 +20,7 @@ router.get("/current", authenticate, ctrl.getCurrent);
 router.get("/logout", authenticate, ctrl.logout);
 
 // Avatar update
-router.post(
+router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),

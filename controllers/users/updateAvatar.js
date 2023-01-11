@@ -4,12 +4,13 @@ const { User } = require("../../models");
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
-const updateAvatar = async (res, req) => {
+const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, filename } = req.file;
-  const resultUpload = path.join(avatarsDir, filename);
+  const newFileName = `${_id}${filename}`;
+  const resultUpload = path.join(avatarsDir, newFileName);
   await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename);
+  const avatarURL = path.join("avatars", newFileName);
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.json({ avatarURL });
 };
