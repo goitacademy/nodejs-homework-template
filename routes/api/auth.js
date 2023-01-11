@@ -2,7 +2,7 @@ const express = require("express");
 
 const { ctrlWrapper } = require("../../helpers");
 
-const { validation, authentificate } = require("../../middlewares");
+const { validation, authentificate, upload } = require("../../middlewares");
 
 const { users: ctrl } = require("../../controllers");
 
@@ -20,5 +20,8 @@ router.get("/current", authentificate, ctrlWrapper(ctrl.getCurrent) )
 
 // logout
 router.post("/logout", authentificate, ctrlWrapper(ctrl.logout))
+
+// avatar
+router.patch("/avatars", authentificate, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
 
 module.exports = router;
