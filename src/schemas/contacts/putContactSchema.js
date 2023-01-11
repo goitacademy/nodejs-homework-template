@@ -6,6 +6,6 @@ const putContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^[0-9() -]+$/, "numbers")
     .optional(),
-});
+}).or("name", "email", "phone");
 
 module.exports = { putContactSchema };

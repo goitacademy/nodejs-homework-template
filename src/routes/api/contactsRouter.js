@@ -9,16 +9,19 @@ const {
 const { tryCatchWrapper } = require("../../helpers/index");
 const {
   validateId,
-  validateContactBody,
+  validateBody,
   validateFavorite,
-} = require("../../middlewares/validationMiddleware");
+  authMiddleware,
+} = require("../../middlewares");
 const {
   addContactSchema,
   putContactSchema,
   updateStatusSchema,
-} = require("../../schemas/Joi");
+} = require("../../schemas");
 
 const router = express.Router();
+
+router.use(authMiddleware());
 
 router.get("/", getContactsController);
 router.get(
@@ -28,7 +31,7 @@ router.get(
 );
 router.post(
   "/",
-  validateContactBody(addContactSchema),
+  validateBody(addContactSchema),
   tryCatchWrapper(addContactController)
 );
 router.delete(
@@ -40,7 +43,7 @@ router.delete(
 router.put(
   "/:contactId",
   validateId(),
-  validateContactBody(putContactSchema),
+  validateBody(putContactSchema),
   tryCatchWrapper(updateContactController)
 );
 router.patch(
@@ -50,4 +53,4 @@ router.patch(
   tryCatchWrapper(updateContactController)
 );
 
-module.exports = router;
+module.exports = { contactsRouter: router };
