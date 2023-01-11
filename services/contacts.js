@@ -1,6 +1,10 @@
-const Contact = require("./schema");
+const Contact = require("./contactSchema");
 
-const listContacts = async () => {
+const listContacts = async (isFavoritesRequest) => {
+  if (isFavoritesRequest) {
+    const favContacts = await Contact.find({ favorite: true });
+    return favContacts;
+  }
   const contacts = await Contact.find();
   return contacts;
 };
