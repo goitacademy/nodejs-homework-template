@@ -2,18 +2,18 @@ const { Contact }  = require('../../models/contact');
 
 const getAll = async (req, res, next) => {
   try {
-    const { _id: owner } = req.user;
+    const { _id: owner } = req.user;  // поверни мені всі книги, які я додавала
     // пагинация
-    const { page = 1, limit = 20, favorite } = req.query;
+    const { page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit;
 
-    const result = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit: Number(limit) }).populate("owner", "email subscription");
+    const result = await Contact.find({ owner, favorite: {$in: ["true"]} }, "-createdAt -updatedAt", { skip, limit: Number(limit) }).populate("owner", "email subscription");
     
-    if (req.query.favorite) {
-      const favoriteContacts = await Contact.find({ owner, favorite }, "", { skip, limit: Number(limit) }).populate("owner", "email subscription");
+    // if (req.query.favorite) {
+    //   const favoriteContacts = await Contact.find({ favorite: {$in: ["true"]}}, "", { skip, limit: Number(limit) }).populate("owner", "email subscription");
       
-      return res.json(favoriteContacts)
-    };
+    //   return res.json(favoriteContacts)
+    // };
 
     res.json(
       {
