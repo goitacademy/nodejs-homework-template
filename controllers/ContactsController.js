@@ -6,18 +6,17 @@ const {
   updateContactService,
   removeContactService,
   changeFavoriteStatusService,
-} = require("../service/contacts");
+} = require("../service/index");
 
 class ContactsController {
   add = async (req, res, next) => {
     try {
       const { name, email, phone, favorite } = req.body;
-      const contact = await createContactService({
-        name,
-        email,
-        phone,
-        favorite,
-      });
+      const userId = req.user._id;
+      const contact = await createContactService(
+        { name, email, phone, favorite },
+        userId
+      );
 
       res.status(201).json({ status: "success", contact });
     } catch (e) {
@@ -25,25 +24,29 @@ class ContactsController {
     }
   };
 
-  fetchAll = asyncHandler(async (req, res) => {
-    const contacts = await getAllContactsService();
-    if (!contacts) {
-      res.status(400);
-      throw new Error("Unable to fetch");
-    }
+  fetchAll = async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      const { page, limit, favorite } = req.query;
 
-    res.status(200).json({
-      code: 200,
-      message: "Success",
-      data: contacts,
-      quantity: contacts.length,
-    });
-  });
+      const contacts = await getAllContactsService(
+        userId,
+        page,
+        limit,
+        favorite
+      );
+
+      res.json({ status: "success", contacts });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   fetchOne = async (req, res, next) => {
     try {
       const { contactId } = req.params;
-      const contact = await getContactByIdService(contactId);
+      const userId = req.user._id;
+      const contact = await getContactByIdService(contactId, userId);
 
       if (!contact) {
         res.status(404).json({ status: "error", message: "Not found" });
@@ -59,6 +62,7 @@ class ContactsController {
   update = async (req, res, next) => {
     const { contactId } = req.params;
     const { name, email, phone, favorite } = req.body;
+    const userId = req.user._id;
 
     if (!name && !email && !phone && !favorite) {
       return res
@@ -66,12 +70,11 @@ class ContactsController {
         .json({ message: "missing fields", status: "error" });
     }
     try {
-      const contact = await updateContactService(contactId, {
-        name,
-        email,
-        phone,
-        favorite,
-      });
+      const contact = await updateContactService(
+        contactId,
+        { name, email, phone, favorite },
+        userId
+      );
 
       res.json({
         status: "success",
@@ -89,7 +92,8 @@ class ContactsController {
   remove = async (req, res, next) => {
     const { contactId } = req.params;
     try {
-      const result = await removeContactService(contactId);
+      const userId = req.user._id;
+      const result = await removeContactService(contactId, userId);
 
       if (result) {
         res.json({
@@ -111,6 +115,7 @@ class ContactsController {
   favorite = async (req, res, next) => {
     const { contactId } = req.params;
     const { favorite } = req.body;
+    const userId = req.user._id;
 
     if (favorite === undefined) {
       return res
@@ -119,7 +124,11 @@ class ContactsController {
     }
 
     try {
-      const contact = await changeFavoriteStatusService(contactId, favorite);
+      const contact = await changeFavoriteStatusService(
+        contactId,
+        favorite,
+        userId
+      );
 
       res.json({
         status: "success",
