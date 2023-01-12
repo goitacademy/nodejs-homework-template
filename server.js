@@ -16,8 +16,9 @@ async function main() {
       console.log('Server running. Use our API on port: 3000');
     });
   } catch (error) {
-    console.error('main failed', error.message);
+    console.error('main failed', error.message);  
   }
 }
+
 
 main();
