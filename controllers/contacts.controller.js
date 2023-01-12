@@ -7,6 +7,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 const { schemaRequired, schemaOptional } = require("../schemas/validation");
 
@@ -25,8 +26,8 @@ async function getContact(req, res, next) {
   res.status(404).json({ message: "Not found" });
 }
 
-async function editContact(req, res, next) {
-  const body = req.body;
+async function createContact(req, res, next) {
+  const body = { favorite: false, ...req.body };
 
   const validationResult = schemaRequired.validate(body);
   if (validationResult.error) {
@@ -50,7 +51,7 @@ async function deleteContact(req, res, next) {
   res.status(404).json({ message: "Not found" });
 }
 
-async function createContact(req, res, next) {
+async function editContact(req, res, next) {
   const id = req.params.contactId;
   const body = req.body;
   if (Object.keys(body).length === 0) {
@@ -72,10 +73,28 @@ async function createContact(req, res, next) {
   res.status(404).json({ message: "Not found" });
 }
 
+async function setFavoriteContact(req, res, next) {
+  const contactId = req.params.contactId;
+  const body = req.body;
+  if (Object.keys(body).length === 0) {
+    res.status(400).json({ message: "missing field favorite" });
+    return;
+  }
+
+  const contact = await updateStatusContact(contactId, body);
+  if (contact) {
+    res.status(200).json(contact);
+    return;
+  }
+
+  res.status(404).json({ message: "Not found" });
+}
+
 module.exports = {
   getContacts,
   getContact,
-  editContact,
-  deleteContact,
   createContact,
+  deleteContact,
+  editContact,
+  setFavoriteContact,
 };

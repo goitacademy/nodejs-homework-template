@@ -72,10 +72,26 @@ const updateContact = async (contactId, body) => {
   return null;
 };
 
+const updateStatusContact = async (contactId, body) => {
+  const contacts = await readContacts();
+  const contact = contacts.find((item) => item.id === contactId);
+  if (contact) {
+    const updatedContacts = contacts.filter(
+      (contact) => contact.id !== contactId
+    );
+    const updatedContact = { ...contact, ...body };
+    updatedContacts.push(updatedContact);
+    await writeContacts(updatedContacts);
+    return updatedContact;
+  }
+  return null;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
