@@ -1,20 +1,15 @@
 const express = require("express");
-const {
-  listContacts,
-  addContact,
-  getContactById,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
 const createError = require("http-errors");
-const { schema } = require("./schemes");
+const { joiSchema, favoriteJoiSchema } = require("../../models/contact");
 const { validateData } = require("../../middlewars/validation");
+
+const { Contact } = require("../../models/contact");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await Contact.find({});
     res.json({
       status: "success",
       code: 200,
@@ -30,7 +25,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw createError(404, "Not found");
     }
@@ -46,10 +41,9 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", validateData(schema), async (req, res, next) => {
+router.post("/", validateData(joiSchema), async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const result = await addContact(name, email, phone);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: "success",
       code: 201,
@@ -64,7 +58,9 @@ router.post("/", validateData(schema), async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const removedContact = await removeContact(req.params.contactId);
+    const removedContact = await Contact.findByIdAndDelete(
+      req.params.contactId
+    );
     if (!removedContact) {
       throw createError(404, "Not found");
     }
@@ -76,14 +72,13 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", validateData(schema), async (req, res, next) => {
+router.put("/:contactId", validateData(joiSchema), async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const updatedContact = await updateContact(
+    const { name, email, phone, favorite } = req.body;
+    const updatedContact = await Contact.findByIdAndUpdate(
       req.params.contactId,
-      name,
-      email,
-      phone
+      { name, email, phone, favorite },
+      { new: true }
     );
     if (!updatedContact) {
       throw createError(404, "Not found");
@@ -97,5 +92,30 @@ router.put("/:contactId", validateData(schema), async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch(
+  "/:contactId/favorite",
+  validateData(favoriteJoiSchema),
+  async (req, res, next) => {
+    try {
+      const { favorite } = req.body;
+      const updateFavorite = await Contact.findByIdAndUpdate(
+        req.params.contactId,
+        { favorite },
+        { new: true }
+      );
+      if (!updateFavorite) {
+        throw createError(404, "Not found");
+      }
+      res.json({
+        status: "success",
+        code: 200,
+        data: updateFavorite,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
