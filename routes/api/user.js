@@ -1,6 +1,10 @@
 const express = require('express');
 
-const { updateSubscription, updateAvatar } = require('../../controllers');
+const {
+  updateSubscription,
+  updateAvatar,
+  verifyEmail,
+} = require('../../controllers');
 
 const { validateBody, authenticate, upload } = require('../../middlewares');
 
@@ -21,5 +25,7 @@ userRouter.patch(
   upload.single('avatar'),
   updateAvatar
 );
+
+userRouter.get('/verify/:verificationToken', verifyEmail);
 
 module.exports = userRouter;
