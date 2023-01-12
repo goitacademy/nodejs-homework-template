@@ -38,6 +38,7 @@ const addContact = async ({ name, email, phone }) => {
       name,
       email,
       phone,
+      
     };
     contacts.push(newContact);
     await writeContacts(contacts);
