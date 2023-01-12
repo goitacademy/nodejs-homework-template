@@ -12,18 +12,20 @@ const {
   updateFavorite,
 } = require('../../controllers/contactsController');
 
+const asyncWrapper = require('../../helpers/handleHttpError');
+
 const router = express.Router();
 
-router.get('/', getContacts);
+router.get('/', asyncWrapper(getContacts));
 
-router.get('/:contactId', getOneContactById);
+router.get('/:contactId', asyncWrapper(getOneContactById));
 
-router.post('/', addContactValidation, addNewContact);
+router.post('/', addContactValidation, asyncWrapper(addNewContact));
 
-router.delete('/:contactId', deleteContact);
+router.delete('/:contactId', asyncWrapper(deleteContact));
 
-router.put('/:contactId', addContactValidation, changeOldContact);
+router.put('/:contactId', addContactValidation, asyncWrapper(changeOldContact));
 
-router.patch('/:contactId/favorite', addFavoriteValidation, updateFavorite);
+router.patch('/:contactId/favorite', addFavoriteValidation, asyncWrapper(updateFavorite));
 
 module.exports = router;
