@@ -4,6 +4,7 @@ const {
   updateSubscription,
   updateAvatar,
   verifyEmail,
+  sendVerificationMail,
 } = require('../../controllers');
 
 const { validateBody, authenticate, upload } = require('../../middlewares');
@@ -28,6 +29,10 @@ userRouter.patch(
 
 userRouter.get('/verify/:verificationToken', verifyEmail);
 
-userRouter.post('/verify', verifyEmail);
+userRouter.post(
+  '/verify',
+  validateBody(userSchemas.sendVerificationEmailSchema),
+  sendVerificationMail
+);
 
 module.exports = userRouter;

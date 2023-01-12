@@ -8,7 +8,12 @@ const {
   updateContactFavorite,
 } = require('./contacts');
 const { signUp, login, logout, getCurrent } = require('./auth');
-const { updateSubscription, updateAvatar, verifyEmail } = require('./users');
+const {
+  updateSubscription,
+  updateAvatar,
+  verifyEmail,
+  sendVerificationMail,
+} = require('./users');
 
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
@@ -24,4 +29,5 @@ module.exports = {
   updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
+  sendVerificationMail: ctrlWrapper(sendVerificationMail),
 };

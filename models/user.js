@@ -56,10 +56,15 @@ const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business').required(),
 });
 
+const sendVerificationEmailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 const userSchemas = {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  sendVerificationEmailSchema,
 };
 
 const User = model('user', userSchema);
