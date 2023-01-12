@@ -160,7 +160,13 @@ const avatarUpdate = async (req, res) => {
     });
 
   const resultUpload = path.join(avatarDir, filename);
-  await fs.rename(tempUpload, resultUpload);
+
+  try {
+    await fs.rename(tempUpload, resultUpload);
+  } catch (err) {
+    await fs.unlink(tempUpload);
+    console.error(err);
+  }
   avatarURL = path.join("avatars", filename);
   console.log("avatarURL", avatarURL);
 
