@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
+const { v4: uuidv4 } = require('uuid');
+const { sendEmail } = require('../../utils');
 
 const { User } = require('../../models');
 const { httpError } = require('../../utils');
@@ -19,7 +21,13 @@ const signUp = async (req, res) => {
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationToken: uuidv4(),
   });
+
+  sendEmail(
+    newUser.email,
+    `Please visit link to verify your email http://localhost:3000/api/users/verify/${newUser.verificationToken}`
+  );
 
   res.status(201).json({
     user: {

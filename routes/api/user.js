@@ -28,4 +28,6 @@ userRouter.patch(
 
 userRouter.get('/verify/:verificationToken', verifyEmail);
 
+userRouter.post('/verify', verifyEmail);
+
 module.exports = userRouter;
