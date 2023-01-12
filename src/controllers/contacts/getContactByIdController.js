@@ -1,11 +1,13 @@
+const { httpError } = require("../../helpers");
 const { getContactById } = require("../../services/contactsService");
 
-const getContactByIdController = async (req, res, next) => {
+const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-  if (contact) return res.json(contact);
+  const { _id } = req.user;
+  const contact = await getContactById(contactId, _id);
+  if (!contact) throw httpError(400, "Bad request!");
 
-  next();
+  res.json(contact);
 };
 
 module.exports = { getContactByIdController };

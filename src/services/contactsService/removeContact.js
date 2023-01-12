@@ -1,7 +1,7 @@
 const { Contact } = require("../../db");
 
-const removeContact = async (id) => {
-  return await Contact.findByIdAndRemove(id);
+const removeContact = async (id, userId) => {
+  return await Contact.findOneAndRemove({ _id: id, owner: userId });
 };
 
 module.exports = {
