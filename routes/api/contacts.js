@@ -99,18 +99,18 @@ router.patch(
   async (req, res, next) => {
     try {
       const { favorite } = req.body;
-      const updateFavorite = await Contact.findByIdAndUpdate(
+      const updateStatusContact = await Contact.findByIdAndUpdate(
         req.params.contactId,
         { favorite },
         { new: true }
       );
-      if (!updateFavorite) {
+      if (!updateStatusContact) {
         throw createError(404, "Not found");
       }
       res.json({
         status: "success",
         code: 200,
-        data: updateFavorite,
+        data: updateStatusContact,
       });
     } catch (error) {
       next(error);
