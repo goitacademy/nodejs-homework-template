@@ -1,8 +1,11 @@
-const api = require('../../models/contacts');
+// const api = require('../../models/contacts');
+
+const Contact = require('../models/contactsMongo');
 
 const getContacts = async (req, res) => {
   try {
-    const contactsList = await api.listContacts();
+    const contactsList = await Contact.find({}, '-__v');
+    // const contactsList = await api.listContacts();
     res.json({ contactsList, status: 200 });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +14,7 @@ const getContacts = async (req, res) => {
 
 const getOneContactById = async (req, res) => {
   try {
-    const searchedContact = await api.getContactById(req.params.contactId);
+    const searchedContact = await Contact.findById(req.params.contactId, '-__v');
 
     if (!searchedContact) {
       return res.status(404).json({ message: 'Not found' });
@@ -30,7 +33,7 @@ const addNewContact = async (req, res) => {
       return res.status(400).json({ message: 'missing required name field' });
     }
 
-    const newContact = await api.addContact({ name, email, phone });
+    const newContact = await Contact.create(req.body);
     res.status(201).json({ newContact, status: 201 });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -39,7 +42,7 @@ const addNewContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   try {
-    const result = await api.removeContact(req.params.contactId);
+    const result = await Contact.findByIdAndRemove(req.params.contactId);
     if (!result) {
       res.status(404).json({ message: 'Not found' });
     }
@@ -55,7 +58,26 @@ const changeOldContact = async (req, res) => {
       return res.status(400).json({ message: 'missing fields' });
     }
 
-    const updatedContact = await api.updateContact(req.params.contactId, req.body);
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
+      new: true,
+    });
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res.json({ updatedContact, status: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateFavorite = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).json({ message: 'missing field favorite' });
+    }
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
+      new: true,
+    });
     if (!updatedContact) {
       return res.status(404).json({ message: 'Not found' });
     }
@@ -71,4 +93,5 @@ module.exports = {
   addNewContact,
   deleteContact,
   changeOldContact,
+  updateFavorite,
 };

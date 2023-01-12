@@ -8,6 +8,18 @@ module.exports = {
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         .required(),
       phone: Joi.number().integer().min(7).required(),
+      favorite: Joi.boolean(),
+    });
+
+    const validatedResult = schema.validate(req.body);
+    if (validatedResult.error) {
+      return res.status(400).json({ message: validatedResult.error.details });
+    }
+    next();
+  },
+  addFavoriteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
     });
 
     const validatedResult = schema.validate(req.body);
