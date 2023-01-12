@@ -6,13 +6,9 @@ const {schemas} = require("../../models/contact")
 const router = express.Router();
 
 router.get("/", authenticate, ctrl.getAllContacts);
-
 router.get("/:contactId", authenticate, ctrl.getContact);
-
 router.post("/", authenticate, validateBody(schemas.addSchema), ctrl.postContact);
-
 router.delete("/:contactId", authenticate, ctrl.deleteContact);
-
 router.put("/:contactId", authenticate, validateBody(schemas.updateSchema), ctrl.updateContact);
 
 module.exports = router;

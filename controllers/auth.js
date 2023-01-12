@@ -10,6 +10,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
+    res.status(409);
     throw HttpError(409, "Email in use");
   }
 
@@ -27,7 +28,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!user || !passwordCompare) {
     throw HttpError(401, "Email or password is wrong");
@@ -35,9 +36,10 @@ const login = async (req, res) => {
 
   const payload = {
     id: user._id,
-    name: user.name,
-    email: user.email,
+    // name: user.name,
+    // email: user.email,
   };
+
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
@@ -50,9 +52,9 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { _id } = req.user;
+  const { _id: owner } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate({ _id: owner }, { token: "" });
   res.status(204);
 };
 
@@ -65,21 +67,29 @@ const current = async (req, res) => {
   });
 };
 
-// const list = async (req, res) => {
-//   const { username } = req.user;
-//   res.json({
-//     status: "success",
-//     code: 200,
-//     data: {
-//       message: `Authorization was successful: ${username}`,
-//     },
-//   });
-// };
+const updateSubscriptionType = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { email, subscription } = req.body;
+
+  if (
+    subscription === "starter" ||
+    subscription === "pro" ||
+    subscription === "business"
+  ) {
+    await User.findByIdAndUpdate({ _id: owner }, { subscription });
+    res.status(200).json({
+      email,
+      subscription,
+    });
+  }
+
+  throw HttpError(400)
+};
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
-  // list: ctrlWrapper(list),
+  updateSubscriptionType: ctrlWrapper(updateSubscriptionType),
 };

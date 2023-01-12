@@ -1,7 +1,16 @@
 ## Node.js Project
 
-урок 1 - 35:30, 55:10
-урок 2 - 30:00, 40:55
+router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
+router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
+router.post("/logout", authenticate, ctrl.logout);
+router.get("/current", authenticate, ctrl.current);
+router.patch("/", authenticate, ctrl.updateSubscriptionType)
+
+router.get("/", authenticate, ctrl.getAllContacts);
+router.get("/:contactId", authenticate, ctrl.getContact);
+router.post("/", authenticate, validateBody(schemas.addSchema), ctrl.postContact);
+router.delete("/:contactId", authenticate, ctrl.deleteContact);
+router.put("/:contactId", authenticate, validateBody(schemas.updateSchema), ctrl.updateContact);
 
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
 Форк створить репозиторій на вашому http://github.com

@@ -8,29 +8,28 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
+      minlength: 3,
+      maxlength: 20,
       required: [true, "Set name for contact"],
-    },
-    password: {
-      type: String,
-      required: [true, "Set password for user"],
-      minlength: 6,
     },
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true,
     },
-    subscription: {
+    phone: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      length: 10,
+      required: [true, "Phone number must have 10 digits."],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
-    token: String,
   },
   { versionKey: false, timestamps: true }
 );
@@ -38,15 +37,34 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  password: Joi.string().min(6).required(),
-  email: Joi.string().required(),
-  subscription: Joi.any().allow("starter", "pro", "business"),
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: {
+        allow: ["com", "net"],
+      },
+    })
+    .required(),
+  phone: Joi.string()
+    .regex(/^[0-9]{10}$/)
+    .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
+    .required(),
 });
 
 const updateSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().min(6).required(),
+  name: Joi.string().min(3).max(30),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: {
+        allow: ["com", "net"],
+      },
+    }),
+  phone: Joi.string()
+    .regex(/^[0-9]{10}$/)
+    .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
+  favorite: Joi.boolean()
 });
 
 const schemas = {
