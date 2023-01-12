@@ -18,8 +18,20 @@ const patchSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+const userShema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).max(20).required(),
+  subscription: Joi.string().optional(),
+});
+
+const subscriptionShema = Joi.object({
+  subscription: Joi.string().required(),
+});
+
 module.exports = {
   postSchema,
   putSchema,
   patchSchema,
+  userShema,
+  subscriptionShema,
 };

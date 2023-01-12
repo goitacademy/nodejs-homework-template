@@ -3,16 +3,18 @@ const {
   postSchema,
   putSchema,
   patchSchema,
+  userShema,
+  subscriptionShema,
 } = require("../helpers/validationІSchemas");
 
 const validation = (schema) => {
   return (req, res, next) => {
-  const validationResult = schema.validate(req.body);
+    const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-    throw new ValidationError(validationResult.error.details);
-  }
-  next();
-}
+      throw new ValidationError(validationResult.error.details[0].message);
+    }
+    next();
+  };
 };
 
 const postValidation = validation(postSchema);
@@ -21,8 +23,14 @@ const putValidation = validation(putSchema);
 
 const patchValidation = validation(patchSchema);
 
-module.exports = { postValidation, putValidation, patchValidation };
+const userValidation = validation(userShema);
 
+const subscriptionValidation = validation(subscriptionShema);
 
-
-
+module.exports = {
+  postValidation,
+  putValidation,
+  patchValidation,
+  userValidation,
+  subscriptionValidation,
+};

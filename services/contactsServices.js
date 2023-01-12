@@ -1,40 +1,51 @@
 const { Contacts } = require("../db/contactModel");
 
-const getContacts = async () => {
-  const contacts = await Contacts.find({});
+const getContacts = async (userId, page, limit, filters) => {
+  const contacts = await Contacts.find({ owner: userId, ...filters })
+    .skip(page)
+    .limit(limit);
   return contacts;
 };
 
-const getContactsById = async (id) => {
-  const contact = await Contacts.findById(id);
+const getContactsById = async (postId, userId) => {
+  const contact = await Contacts.findOne({ _id: postId, owner: userId });
   return contact;
 };
 
-const addContacts = async (body) => {
+const addContacts = async (body, userId) => {
   const { name, email, phone, favorite } = body;
-  const contact = new Contacts({ name, email, phone, favorite });
+  const contact = new Contacts({ name, email, phone, favorite, owner: userId });
   await contact.save();
   return contact;
 };
 
-const updateContactsById = async (id, body) => {
+const updateContactsById = async (postId, body, userId) => {
   const { name, email, phone, favorite = false } = body;
-  const updateContact = await Contacts.findByIdAndUpdate(id, {
-    $set: { name, email, phone, favorite },
-  });
-  return updateContact
+  const updateContact = await Contacts.findOneAndUpdate(
+    { _id: postId, owner: userId },
+    {
+      $set: { name, email, phone, favorite },
+    }
+  );
+  return updateContact;
 };
 
-const deleteContactsById = async (id) => {
-  const removeContact = await Contacts.findByIdAndDelete(id);
+const deleteContactsById = async (postId, userId) => {
+  const removeContact = await Contacts.findOneAndDelete({
+    _id: postId,
+    owner: userId,
+  });
   return removeContact;
 };
 
-const updateFavoriteById = async (id, favorite) => {
-  const updateFavorite = await Contacts.findByIdAndUpdate(id, {
-    $set: { favorite },
-  });
-return updateFavorite
+const updateFavoriteById = async (postId, favorite, userId) => {
+  const updateFavorite = await Contacts.findOneAndUpdate(
+    { _id: postId, owner: userId },
+    {
+      $set: { favorite },
+    }
+  );
+  return updateFavorite;
 };
 
 module.exports = {

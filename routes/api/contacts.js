@@ -14,6 +14,9 @@ const {
   deleteContactsByIdController,
   updateFavoriteByIdController,
 } = require("../../controllers/contactControllers");
+const { authMiddleware } = require("../../middleware/authMiddleware");
+
+router.use(authMiddleware);
 
 router.get("/", asyncWrapper(getContactsController));
 router.get("/:id", asyncWrapper(getContactsByIdController));
