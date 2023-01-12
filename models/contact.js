@@ -46,6 +46,7 @@ const addSchema = Joi.object({
       },
     })
     .required(),
+  favorite: Joi.boolean(),
   phone: Joi.string()
     .regex(/^[0-9]{10}$/)
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
@@ -61,15 +62,20 @@ const updateSchema = Joi.object({
         allow: ["com", "net"],
       },
     }),
+  favorite: Joi.boolean(),
   phone: Joi.string()
     .regex(/^[0-9]{10}$/)
-    .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
-  favorite: Joi.boolean()
+    .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
 });
+
+const updateFavoriteSchema = Joi.object({
+  favorite : Joi.boolean().required()
+})
 
 const schemas = {
   addSchema,
   updateSchema,
+  updateFavoriteSchema
 };
 
 const Contact = model("contact", contactSchema);

@@ -32,25 +32,35 @@ const postContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  // const { _id: owner } = req.user;
+  const { owner: id } = req.user;
   const result = await Contact.findOneAndUpdate(
-    { contactId },
-    req.body
-  );
+    { _id: contactId, owner: id }, req.body, { new: true } );
   if (!result) {
     throw HttpError(404);
   }
   res.json(result);
 };
 
-const deleteContact = async (req, res) => {
+const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
   const { owner: id } = req.user;
-  const bool = await Contact.findOneAndDelete({ contactId, owner: id });
-  if (bool === null) {
-    res.json({ message: "Not found", status: 404 });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: id }, req.body, { new: true } );
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.status(200).json(result);
+};
+
+const deleteContact = async (req, res) => {
+  const { contactId } = req.params;
+  // const { owner: id } = req.user;
+  const bool = await Contact.findOneAndRemove({ _id: contactId });
+  console.log(bool);
+  if (!bool) {
+    throw HttpError(404);
   } else {
-    res.json({ message: "Contact deleted", status: 200 });
+    res.status(200).json({ message: "Contact deleted" });
   }
 };
 
@@ -59,5 +69,6 @@ module.exports = {
   getContact: ctrlWrapper(getContact),
   postContact: ctrlWrapper(postContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
   deleteContact: ctrlWrapper(deleteContact),
 };
