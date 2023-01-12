@@ -1,25 +1,28 @@
-const express = require('express')
+const express = require('express');
+// const Joi = require("joi");
+const ctrl = require("../../controllers/contacts")
+
+// const contacts = require("../../models/contacts")
+
+// const {HttpError} = require("../../helpers")
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const addSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// })
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrl.listContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', ctrl.getContactById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', ctrl.addContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:id', ctrl.updateContact);
 
-module.exports = router
+router.delete('/:id', ctrl.removeContact);
+
+
+module.exports = router;
