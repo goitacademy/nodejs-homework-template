@@ -9,6 +9,7 @@ const subscriptionList = ["starter", "pro", "business"];
 const userShema = new mongoose.Schema(
   {
     name: { type: String, require: true },
+    avatarURL: { type: String, require: true },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -36,6 +37,7 @@ const User = mongoose.model("User", userShema);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
+  avatarURL: Joi.string().optional(),
   email: Joi.string().pattern(emailRegexp).required(),
   //   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
@@ -52,6 +54,11 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+// const avatarUpdateSchema = Joi.object({
+//   subscription: Joi.string()
+//     .valid(...subscriptionList)
+//     .required(),
+// });
 const subscriptionUpdateSchema = Joi.object({
   subscription: Joi.string()
     .valid(...subscriptionList)

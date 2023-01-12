@@ -1,7 +1,7 @@
 const express = require("express");
 const { schemas } = require("../../db/UserModel");
 const ctrl = require("../../controllers/authController");
-
+const { upload } = require("../../middlewares/upload");
 const { validateBody, authenticate } = require("../../middlewares");
 
 // const {
@@ -15,7 +15,12 @@ const router = express.Router();
 // router.post("/login", asyncWrapper(loginController));
 
 // signup
-router.post("/signup", validateBody(schemas.registerSchema), ctrl.register);
+router.post(
+  "/signup",
+  upload.single("avatar"),
+  validateBody(schemas.registerSchema),
+  ctrl.register
+);
 
 // signin
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
@@ -29,5 +34,11 @@ router.patch(
   authenticate,
   validateBody(schemas.subscriptionUpdateSchema),
   ctrl.subscriptionUpdate
+);
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrl.avatarUpdate
 );
 module.exports = router;
