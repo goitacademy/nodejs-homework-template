@@ -7,24 +7,21 @@ const {
 
 const {tryCatchWrapper} = require('../../helpers');
 
-const {
-  getContacts,
-  getContactById,
-  postContact,
-  deleteContact,
-  putContact,
-} = require('../../controllers/contactsController');
+const ctrlContact = require('../../controllers/contactsController');
 
 const router = new express.Router();
 
-router.get('/', tryCatchWrapper(getContacts));
+router.get('/', tryCatchWrapper(ctrlContact.getContacts));
 
-router.get('/:id', tryCatchWrapper(getContactById));
+router.get('/:id', tryCatchWrapper(ctrlContact.getById));
 
-router.post('/', addContactValidation, tryCatchWrapper(postContact));
+router.post('/', addContactValidation, tryCatchWrapper(ctrlContact.postContact));
 
-router.delete('/:id', tryCatchWrapper(deleteContact));
+router.delete('/:id', tryCatchWrapper(ctrlContact.deleteContact));
 
-router.put('/:id', putContactValidation, tryCatchWrapper(putContact));
+router.put('/:id', putContactValidation, tryCatchWrapper(ctrlContact.updateContact));
+
+router.patch("/:id/status", tryCatchWrapper(ctrlContact.updateStatus))
+
 
 module.exports = router;

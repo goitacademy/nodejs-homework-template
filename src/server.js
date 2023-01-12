@@ -1,25 +1,61 @@
-const app = require("./app");
+const express = require('express');
+const cors = require('cors');
+const contactsRouter = require('./routes/api/contacts');
 
-const mongoose = require("mongoose");
-const mongoDBUrl =
-  "mongodb+srv://OlenaDidkivska:QdExpSeWlnyslw7f@project0.bmpdr43.mongodb.net/test";
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false);
 
-  mongoose.Promise = global.Promise;
-  
-const main = async() => {
-  // подключемся к базе данных
-  mongoose.set("strictQuery", false);
-  await mongoose.connect(mongoDBUrl, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  }, () => {
-  console.log("Database connection successful");
+require('dotenv').config()
+
+const {HOST_URI} = process.env
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.use('/api/contacts', contactsRouter);
+
+
+
+
+app.use((_, res, __) => {
+  res.status(404).json({
+    status: 'error',
+    code: 404,
+    message: 'Not found',
+  });
 });
+
+app.use((err, _, res, __) => {
+  console.log('API Error:', err.message);
+  res.status(500).json({
+    status: 'fail',
+    code: 500,
+    message: err.message,
+    data: 'Internal Server Error',
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+const uriDb = process.env.DB_HOST;
+
+async function main() {
+  try {
+  await mongoose.connect(HOST_URI);
+  console.log('Database connection successful');
+  } catch (error) {
+    console.error('Error while connecting to mongodb', error.massage);
+    process.exit(1);
+  }
 }
-// запускаем подключение и взаимодействие с базой данных
-main().catch(console.log);
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
-});
+main()
+  .then(() => {
+    app.listen(PORT, function () {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  })
+  .catch(err =>
+    console.log(`Server not running. Error message: ${err.message}`),
+  );
