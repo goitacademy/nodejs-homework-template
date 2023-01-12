@@ -7,7 +7,7 @@ const {
   deleteContactById,
   changeContactById,
   updateStatusContact,
-} = require("../../controllers/contacts/index");
+} = require("../../controllers/index");
 
 const router = express.Router();
 
