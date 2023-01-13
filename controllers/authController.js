@@ -149,7 +149,7 @@ const subscriptionUpdate = async (req, res) => {
   });
 };
 const avatarUpdate = async (req, res) => {
-  const { _id, avatarURL: dbAvatarURL } = req.user;
+  const { _id } = req.user;
 
   // const [filelocation, avatarName] = dbAvatarURL.split(""); // eslint-disable-line
 
