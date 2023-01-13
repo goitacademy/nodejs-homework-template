@@ -1,29 +1,20 @@
-//Колбеки які відпрацьовують в роутах це контроллери.
-//Їх можна винести окремо у папку controllers
-
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-  updateStatusContact,
-} = require("../models/contacts");
+const { Contact } = require("../schemas/contact");
 const { schemaRequired, schemaOptional } = require("../schemas/validation");
 
 async function getContacts(req, res, next) {
-  const list = await listContacts();
-  res.json(list);
+  const { limit } = req.query;
+  const contacts = await Contact.find({}).limit(limit);
+  return res.json(contacts);
 }
 
 async function getContact(req, res, next) {
   const id = req.params.contactId;
-  const contact = await getContactById(id);
+  const contact = await Contact.findById(id);
+
   if (contact) {
-    res.status(200).json(contact);
-    return;
+    return res.status(200).json(contact);
   }
-  res.status(404).json({ message: "Not found" });
+  return res.status(404).json({ message: "Not found" });
 }
 
 async function createContact(req, res, next) {
@@ -31,63 +22,58 @@ async function createContact(req, res, next) {
 
   const validationResult = schemaRequired.validate(body);
   if (validationResult.error) {
-    res.status(400).json({ message: "missing required name field" });
-    return;
+    return res.status(400).json({ message: "missing required name field" });
   }
 
-  const contact = await addContact(body);
-  res.status(201).json(contact);
+  const contact = await Contact.create(body);
+  return res.status(201).json(contact);
 }
 
 async function deleteContact(req, res, next) {
   const id = req.params.contactId;
-  if (id) {
-    const ok = await removeContact(id);
-    if (ok) {
-      res.json({ message: "contact deleted" });
-      return;
-    }
+  const contact = await Contact.findById(id);
+
+  if (contact) {
+    const temp = await Contact.findByIdAndDelete(id);
+    console.log("temp", temp);
+
+    return res.status(200).json({ message: "contact deleted" });
   }
-  res.status(404).json({ message: "Not found" });
+
+  return res.status(404).json({ message: "Not found" });
 }
 
 async function editContact(req, res, next) {
   const id = req.params.contactId;
   const body = req.body;
   if (Object.keys(body).length === 0) {
-    res.status(400).json({ message: "missing fields" });
-    return;
+    return res.status(400).json({ message: "missing fields" });
   }
 
   const validationResult = schemaOptional.validate(body);
   if (validationResult.error) {
-    res.status(400).json({ message: "invalid value content" });
-    return;
+    return res.status(400).json({ message: "invalid value content" });
   }
 
-  const contact = await updateContact(id, body);
+  const contact = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (contact) {
-    res.status(200).json(contact);
-    return;
+    return res.status(200).json(contact);
   }
-  res.status(404).json({ message: "Not found" });
+  return res.status(404).json({ message: "Not found" });
 }
 
-async function setFavoriteContact(req, res, next) {
-  const contactId = req.params.contactId;
+async function updateStatusContact(req, res, next) {
+  const id = req.params.contactId;
   const body = req.body;
   if (Object.keys(body).length === 0) {
-    res.status(400).json({ message: "missing field favorite" });
-    return;
+    return res.status(400).json({ message: "missing field favorite" });
   }
 
-  const contact = await updateStatusContact(contactId, body);
+  const contact = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (contact) {
-    res.status(200).json(contact);
-    return;
+    return res.status(200).json(contact);
   }
-
-  res.status(404).json({ message: "Not found" });
+  return res.status(404).json({ message: "Not found" });
 }
 
 module.exports = {
@@ -96,5 +82,5 @@ module.exports = {
   createContact,
   deleteContact,
   editContact,
-  setFavoriteContact,
+  updateStatusContact,
 };
