@@ -149,7 +149,12 @@ const subscriptionUpdate = async (req, res) => {
   });
 };
 const avatarUpdate = async (req, res) => {
-  const { _id } = req.user;
+  const { _id, avatarURL: dbAvatarURL } = req.user;
+
+  // const [filelocation, avatarName] = dbAvatarURL.split(""); // eslint-disable-line
+
+  // console.log("avatar:", avatarName);
+  // console.log("location:", filelocation);
   let avatarURL = "";
   const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -176,10 +181,18 @@ const avatarUpdate = async (req, res) => {
     console.error(err);
   }
   avatarURL = path.join("avatars", filename);
-  console.log("avatarURL", avatarURL);
+  // console.log("avatarURL", avatarURL);
 
   await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
-
+  // if (filelocation) {
+  //   try {
+  //     console.log("deleteAvatarURL:", path.join(avatarDir, avatarName));
+  //     await fs.unlink(path.join(avatarDir, avatarName));
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   console.log("dbAvatarURL:", dbAvatarURL);
+  // }
   res.json({
     avatarURL: avatarURL,
     message: ` Avatar successfuly updated`,

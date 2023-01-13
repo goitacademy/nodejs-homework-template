@@ -14,7 +14,7 @@ const multerConfig = multer.diskStorage({
       extension === "png" ||
       extension === "bmp"
     ) {
-      cb(null, ` ${nanoid()}${file.originalname}`);
+      cb(null, `${nanoid()}${file.originalname}`);
     } else {
       cb(
         new Error(
