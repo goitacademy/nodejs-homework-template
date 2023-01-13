@@ -57,7 +57,7 @@ const addContact = async (req, res) => {
     const { name, email, phone } = req.body;
 
     const contacts = await fs.readFile(contactsPath, "utf-8");
-    let parsedContacts = JSON.parse(contacts);
+    const parsedContacts = JSON.parse(contacts);
 
     const newContact = {
       id: uid(4),
@@ -124,7 +124,7 @@ const updateContact = async (req, res) => {
     const { name, email, phone } = req.body;
 
     const contacts = await fs.readFile(contactsPath, "utf-8");
-    let parsedContacts = JSON.parse(contacts);
+    const parsedContacts = JSON.parse(contacts);
 
     const contactById = parsedContacts.find(
       (contact) => contact.id === contactId
