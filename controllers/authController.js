@@ -32,8 +32,8 @@ const { SECRET_KEY } = process.env;
 // };
 
 const register = async (req, res) => {
-  console.log("body", req.body);
-  console.log("file", req.file);
+  // console.log("body", req.body);
+  // console.log("file", req.file);
   const { email, password } = req.body;
   let avatarURL = "";
   const avatarDir = path.join(__dirname, "../", "public", "avatars");
@@ -54,10 +54,10 @@ const register = async (req, res) => {
     const resultUpload = path.join(avatarDir, filename);
     await fs.rename(tempUpload, resultUpload);
     avatarURL = path.join("avatars", filename);
-    console.log("avatarURL", avatarURL);
+    // console.log("avatarURL", avatarURL);
   } else {
     avatarURL = gravatar.url(email, { protocol: "http", s: "250" });
-    console.log("avatarURL", avatarURL);
+    // console.log("avatarURL", avatarURL);
   }
 
   const user = await User.findOne({ email });
@@ -78,6 +78,7 @@ const register = async (req, res) => {
     email: newUser.email,
   });
 };
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -109,6 +110,7 @@ const login = async (req, res) => {
     token,
     name: user.name,
     email: user.email,
+    subscription: user.subscription,
   });
 };
 
