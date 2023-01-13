@@ -1,7 +1,7 @@
-export const errorHandler = cb => {
+export const errorWrapper = controller => {
   return async (req, res, next) => {
     try {
-      await cb(req, res, next);
+      await controller(req, res, next);
     } catch (error) {
       return next(error);
     }
