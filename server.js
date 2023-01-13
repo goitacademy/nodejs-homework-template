@@ -9,7 +9,9 @@ mongoose.set("strictQuery", false);
 
 async function main() {
   try {
-    await mongoose.connect(HOST_URI);
+    await mongoose.connect(HOST_UR, {}).then(() => {
+      console.log("Database connection successful");
+    });
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000");
     });
