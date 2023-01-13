@@ -32,9 +32,8 @@ const postContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const { owner: id } = req.user;
   const result = await Contact.findOneAndUpdate(
-    { _id: contactId, owner: id }, req.body, { new: true } );
+    { _id: contactId }, req.body, { new: true } );
   if (!result) {
     throw HttpError(404);
   }
@@ -43,9 +42,9 @@ const updateContact = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const { owner: id } = req.user;
+  console.log(req.body)
   const result = await Contact.findOneAndUpdate(
-    { _id: contactId, owner: id }, req.body, { new: true } );
+    { _id: contactId }, req.body, { new: true } );
   if (!result) {
     throw HttpError(404);
   }
@@ -54,7 +53,6 @@ const updateFavorite = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  // const { owner: id } = req.user;
   const bool = await Contact.findOneAndRemove({ _id: contactId });
   console.log(bool);
   if (!bool) {
