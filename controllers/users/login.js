@@ -1,8 +1,8 @@
 const User = require("../../models/users");
 const {Unauthorized} = require("http-errors");
 const jwt = require("jsonwebtoken");
-
 const bcrypt = require("bcryptjs");
+const { HttpError } = require("../../helpers");
 
 const {SECRET_KEY} = process.env;
 
@@ -15,6 +15,11 @@ const login = async (req, res) => {
         if (!user || !passCompare) {
             throw Unauthorized("Email or password is wrong");
     }
+
+    if (!user.verify) {
+            throw HttpError(400, "Email is not verify")
+    }
+    
         const paylod = {
             id: user._id
     };

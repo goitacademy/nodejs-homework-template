@@ -6,12 +6,18 @@ const { ctrlWrapper } = require("../../helpers");
 
 const {validateBody, auth, upLoad} = require("../../middlewares");
 
-const { joiRegisterSchema, joiLoginSchema } = require("../../schemas");
+const { joiRegisterSchema, joiLoginSchema, verifyEmailSchema } = require("../../schemas");
 
 const router = express.Router();
 
 
 router.post('/signup', validateBody(joiRegisterSchema), ctrlWrapper(ctrl.register));
+
+router.get('/verify/:verificationToken', ctrlWrapper(ctrl.verifyEmail));
+
+router.post('/verify', validateBody(verifyEmailSchema), ctrlWrapper(ctrl.resendEmail));
+// router.post('/verify', ctrlWrapper(ctrl.resendEmail))
+
 
 router.post('/login', validateBody(joiLoginSchema), ctrlWrapper(ctrl.login));
 
