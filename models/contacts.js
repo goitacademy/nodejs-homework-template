@@ -41,10 +41,6 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await readContacts();
 
-    // if (!contacts.filter((contact) => contact.id === contactId)) {
-    //   return null;
-    // }
-
     const filteredContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
