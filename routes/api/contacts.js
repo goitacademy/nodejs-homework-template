@@ -12,19 +12,56 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 
+router.use('/:contactId', (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
+    res.status(404).json({ message: 'Not found' });
+  } else {
+    next();
+  }
+});
+
+router.use((req, res, next) => {
+  if (req.method === 'POST' && postSchema.validate(req.body).error) {
+    res.status(400).json({ message: postSchema.validate(req.body).error.message });
+  } else if (req.method === 'PUT' && putSchema.validate(req.body).error) {
+    res.status(400).json({ message: putSchema.validate(req.body).error.message });
+  } else if (req.method === 'PATCH' && patchSchema.validate(req.body).error) {
+    res.status(400).json({ message: patchSchema.validate(req.body).error.message });
+  } else {
+    next();
+  }
+  // let isValid = false;
+  // switch (req.method) {
+  //   case 'POST':
+  //     if (postSchema.validate(req.body).error) {
+  //       res.status(400).json({ message: postSchema.validate(req.body).error.message });
+  //     }
+  //     break;
+  //   case 'PUT':
+  //     if (putSchema.validate(req.body).error) {
+  //       res.status(400).json({ message: putSchema.validate(req.body).error.message });
+  //     }
+  //     break;
+  //   case 'PATCH':
+  //     if (patchSchema.validate(req.body).error) {
+  //       res.status(400).json({ message: patchSchema.validate(req.body).error.message });
+  //     }
+  //     break;
+  //   default:
+  //     isValid = true;
+  // }
+  // if (isValid) {
+  //   next();
+  // }
+});
+
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-    res.status(404).json({ message: 'Not found' });
-    return;
-  }
-  //
   const contact = await getContactById(req.params.contactId);
-  //
   if (contact) {
     res.status(200).json(contact);
   } else {
@@ -33,22 +70,12 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  if (postSchema.validate(req.body).error) {
-    res.status(400).json({ message: postSchema.validate(req.body).error.message });
-  } else {
-    const newContact = await addContact(req.body);
-    res.status(201).json(newContact);
-  }
+  const newContact = await addContact(req.body);
+  res.status(201).json(newContact);
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-    res.status(404).json({ message: 'Not found' });
-    return;
-  }
-  //
   const removedContact = await removeContact(req.params.contactId);
-  //
   if (removedContact) {
     res.status(200).json({ message: 'contact deleted' });
   } else {
@@ -57,16 +84,6 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-    res.status(404).json({ message: 'Not found' });
-    return;
-  }
-  //
-  if (putSchema.validate(req.body).error) {
-    res.status(400).json({ message: putSchema.validate(req.body).error.message });
-    return;
-  }
-  //
   if (req.body.name || req.body.email || req.body.phone) {
     const updatedContact = await updateContact(req.params.contactId, req.body);
     //
@@ -82,18 +99,7 @@ router.put('/:contactId', async (req, res, next) => {
 });
 
 router.patch('/:contactId', async (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.contactId)) {
-    res.status(404).json({ message: 'Not found' });
-    return;
-  }
-  //
-  if (patchSchema.validate(req.body).error) {
-    res.status(400).json({ message: patchSchema.validate(req.body).error.message });
-    return;
-  }
-  //
   const updatedContact = await updateStatusContact(req.params.contactId, req.body);
-  //
   if (updatedContact) {
     res.status(200).json(updatedContact);
   } else {
