@@ -1,151 +1,49 @@
-const { readFile, writeFile } = require("fs/promises");
-const path = require("path");
-const Joi = require("joi");
-
-const contactsPath = path.resolve(__dirname, "./contacts.json");
-
-const contactSchema = Joi.object({
-  id: Joi.string()
-    .regex(/^[0-9]*$/)
-    .required(),
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .regex(/^[0-9]*$/)
-    .required(),
-});
-
-const validator = (schema) => (req, res, next) => {
-  const body = req.body;
-  const validation = schema.validate(body);
-
-  if (validation.error) {
-    res.status(400).send(validation.error);
-    return;
-  }
-
-  return next();
-};
-
-async function readData() {
-  try {
-    const data = await readFile(contactsPath, "utf-8");
-    const contacts = JSON.parse(data);
-    return contacts;
-  } catch (error) {
-    console.error(error.message);
-  }
-}
-
-async function writeData(data) {
-  try {
-    const contacts = JSON.stringify(data);
-    await writeFile(contactsPath, contacts);
-  } catch (error) {
-    console.error(error.message);
-  }
-}
+const ContactSchema = require("./schemas");
 
 const listContacts = async (req, res) => {
-  try {
-    const contacts = await readData();
-    res.status(200).send(contacts);
-  } catch (error) {
-    console.error(error.message);
-  }
+  const contacts = await ContactSchema.find();
+  res.status(200).send(contacts);
 };
 
 const getContactById = async (req, res) => {
-  try {
-    const contacts = await readData();
-    const id = req.params.contactId;
+  const id = req.params.contactId;
+  const contact = await ContactSchema.findById(id);
 
-    const contactById = contacts.find((contact) => contact.id === id);
-    if (contactById) {
-      res.status(200).send(JSON.stringify(contactById));
-    } else {
-      res.status(404).send(JSON.stringify({ message: "Not found" }));
-    }
-  } catch (error) {
-    console.error(error.message);
-  }
+  res.status(200).send(JSON.stringify(contact));
 };
 
 const removeContact = async (req, res) => {
-  try {
-    const contacts = await readData();
-    const id = req.params.contactId;
-    const index = contacts.findIndex((contact) => contact.id === id);
-    if (index !== -1) {
-      contacts.splice(index, 1);
-      res.status(200).send(JSON.stringify({ message: "Contact deleted" }));
-      writeData(contacts);
-    } else {
-      res.status(404).send(JSON.stringify({ message: "Not found" }));
-    }
-  } catch (error) {
-    console.error(error.message);
-  }
+  const id = req.params.contactId;
+  const contact = await ContactSchema.findByIdAndRemove(id);
+  res.status(200).send(JSON.stringify({ message: "Contact deleted" }));
 };
 
 const addContact = async (req, res) => {
-  try {
-    const contacts = await readData();
-    const newContact = { id: null, ...req.body };
-    if (!validator(contactSchema)) {
-      res.status(400).send(JSON.stringify({ message: "missing fields" }));
-      return;
-    }
-
-    const duplicateContact = contacts.find(
-      (contact) => contact.name === newContact.name
-    );
-    if (duplicateContact) {
-      res.status(409).send(
-        JSON.stringify({
-          message: `Contact with the name ${duplicateContact.name} already exists`,
-        })
-      );
-      return;
-    }
-
-    contacts.forEach(({ id }) => {
-      newContact.id = String(Number(id) + 1);
-    });
-    contacts.push(newContact);
-    res.status(201).send(JSON.stringify(newContact));
-    writeData(contacts);
-  } catch (error) {
-    console.error(error.message);
-  }
+  const newContact = new ContactSchema(req.body);
+  await newContact.save();
+  res.status(201).send(JSON.stringify(newContact));
 };
 
 const updateContact = async (req, res) => {
-  try {
-    const contacts = await readData();
-    if (!validator(contactSchema)) return;
-    const { name, email, phone } = req.body;
+  const updateContact = await ContactSchema.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+  res.status(200).send(JSON.stringify(updateContact));
+};
 
-    const id = req.params.contactId;
-    const index = contacts.findIndex((contact) => contact.id === id);
+const updateStatusContact = async (req, res) => {
+  const id = req.params.contactId;
+  let { favorite } = req.body;
+  const statusContact = await ContactSchema.findByIdAndUpdate(id, {
+    $set: { favorite },
+  });
 
-    if (index !== -1) {
-      if (name) {
-        contacts[index].name = name;
-      }
-      if (email) {
-        contacts[index].email = email;
-      }
-      if (phone) {
-        contacts[index].phone = phone;
-      }
-      res.status(200).send(JSON.stringify(contacts[index]));
-      writeData(contacts);
-    } else {
-      res.status(404).send(JSON.stringify({ message: "Not found" }));
-    }
-  } catch (error) {
-    console.error(error.message);
+  if (favorite === undefined) {
+    res.status(400).send(JSON.stringify({ message: "missing field favorite" }));
+  } else if (favorite === true || favorite === false) {
+    return res.status(200).send(JSON.stringify(statusContact));
   }
 };
 
@@ -155,4 +53,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
