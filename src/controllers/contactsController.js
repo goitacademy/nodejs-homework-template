@@ -26,7 +26,7 @@ const getById = async (req, res) => {
 };
 
 const postContact = async (req, res, next) => {
-  await addContact(req.body);
+  await service.createContact(req.body);
   res.status(201).json({
     status: "contact added successfully",
     code: 201,
@@ -36,7 +36,7 @@ const postContact = async (req, res, next) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
 
-  await updateContact(id, req.body);
+  await service.updateContact(id, req.body);
 
   res.status(200).json({
     status: "contact update",
@@ -44,19 +44,33 @@ const updateContact = async (req, res) => {
   });
 };
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  const contact = await getById(id);
+  const contact = await service.getContactById(id);
 
   if (!contact) {
     res.status(400).json({ message: "Not found" });
     return;
   }
 
-  await removeContact(id);
+  await service.removeContact(id);
 
   res.status(200).json({ message: "contact deleted" });
+};
+
+const updateStatus = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.body) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+
+  await service.updateStatusContact(id, req.body, favorite);
+
+  res.status(200).json({
+    status: "contact update",
+    code: 200,
+  });
 };
 
 module.exports = {
@@ -65,4 +79,5 @@ module.exports = {
   postContact,
   deleteContact,
   updateContact,
+  updateStatus,
 };
