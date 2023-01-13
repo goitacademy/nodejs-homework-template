@@ -1,17 +1,18 @@
 import express from 'express';
-import contactsController from '../../controllers/contactsController.js';
-import contactSchema from '../../schemas/contactSchema.js';
-import { errorWrapper } from '../../helpers/errorWrapper.js';
-import validateBody from '../../middleware/validation.js';
-
-const router = express.Router();
-const {
+import {
   getAllContactsController,
   getContactByIdController,
   addContactController,
   updateContactController,
+  updateContactStatusController,
   deleteContactController,
-} = contactsController;
+} from '../../controllers/contactsController.js';
+import { contactSchema } from '../../schemas/contactSchema.js';
+import { contactStatusSchema } from '../../schemas/contactStatusSchema.js';
+import { errorWrapper } from '../../helpers/errorWrapper.js';
+import { validateBody } from '../../middleware/validateBody.js';
+
+const router = express.Router();
 
 router.get('/', errorWrapper(getAllContactsController));
 router.get('/:contactId', errorWrapper(getContactByIdController));
@@ -24,6 +25,11 @@ router.put(
   '/:contactId',
   validateBody(contactSchema),
   errorWrapper(updateContactController)
+);
+router.patch(
+  '/:contactId/favorite',
+  validateBody(contactStatusSchema),
+  errorWrapper(updateContactStatusController)
 );
 router.delete('/:contactId', errorWrapper(deleteContactController));
 

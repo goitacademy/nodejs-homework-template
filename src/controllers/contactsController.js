@@ -1,12 +1,13 @@
 import {
-  addContact,
-  deleteContact,
   getContacts,
   getContactById,
+  addContact,
   updateContact,
+  updateContactStatus,
+  deleteContact,
 } from '../services/contactsService.js';
 
-const getAllContactsController = async (_, res) => {
+export const getAllContactsController = async (_, res) => {
   const contactList = await getContacts();
 
   if (!contactList) {
@@ -27,8 +28,9 @@ const getAllContactsController = async (_, res) => {
   });
 };
 
-const getContactByIdController = async (req, res) => {
+export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
+
   const contact = await getContactById(contactId);
 
   if (!contact) {
@@ -47,8 +49,8 @@ const getContactByIdController = async (req, res) => {
   });
 };
 
-const addContactController = async (req, res) => {
-  const newContact = await addContact(req.body);
+export const addContactController = async ({ body }, res) => {
+  const newContact = await addContact(body);
 
   res.status(201).json({
     status: 'success',
@@ -57,15 +59,13 @@ const addContactController = async (req, res) => {
   });
 };
 
-const updateContactController = async (req, res) => {
+export const updateContactController = async (req, res) => {
   const {
     params: { contactId },
     body,
   } = req;
 
-  const updatedContact = await updateContact(contactId, {
-    ...body,
-  });
+  const updatedContact = await updateContact(contactId, body);
 
   if (!updatedContact) {
     return res.status(404).json({
@@ -83,7 +83,29 @@ const updateContactController = async (req, res) => {
   });
 };
 
-const deleteContactController = async (req, res) => {
+export const updateContactStatusController = async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  const updatedContact = await updateContactStatus(contactId, favorite);
+
+  if (!updatedContact) {
+    return res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `Not found contact id: ${contactId}`,
+      data: 'Not Found',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    data: { updatedContact },
+  });
+};
+
+export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
 
   const deletedContact = await deleteContact(contactId);
@@ -103,12 +125,4 @@ const deleteContactController = async (req, res) => {
     message: 'Contact deleted',
     data: 'Contact deleted',
   });
-};
-
-export default {
-  getAllContactsController,
-  getContactByIdController,
-  addContactController,
-  updateContactController,
-  deleteContactController,
 };

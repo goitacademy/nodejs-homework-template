@@ -1,4 +1,4 @@
-import { Contact } from '../db/contactsModel.js';
+import { Contact } from '../models/contactModel.js';
 
 export const getContacts = async () => {
   const contacts = await Contact.find({});
@@ -11,18 +11,27 @@ export const getContactById = async contactId => {
 };
 
 export const addContact = async contactData => {
-  const newContact = new Contact(contactData);
-  const savedContact = await newContact.save();
-
-  return savedContact;
+  const newContact = await Contact.create(contactData);
+  return newContact;
 };
 
-export const updateContact = async (contactId, { name, phone, email }) => {
-  await Contact.findByIdAndUpdate(contactId, {
-    $set: { name, phone, email },
-  });
+export const updateContact = async (contactId, contactToUpdate) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    contactToUpdate,
+    { new: true }
+  );
 
-  const updatedContact = await getContactById(contactId);
+  return updatedContact;
+};
+
+export const updateContactStatus = async (contactId, favorite) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
+
   return updatedContact;
 };
 
