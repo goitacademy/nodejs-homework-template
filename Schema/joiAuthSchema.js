@@ -5,7 +5,6 @@ const joiSingupSchema = Joi.object({
   email: Joi.string().required(),
   name: Joi.string().required(),
   subscription: Joi.string(),
-  token: Joi.string().required(),
 });
 
 const joiLoginSchema = Joi.object({
