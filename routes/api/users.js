@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { auth: ctrl } = require("../../controllers");
 
-const { validation, authenticate } = require("../../middlewares");
+const { validation, authenticate, upload } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
@@ -18,5 +18,13 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 // Logout request
 router.get("/logout", authenticate, ctrl.logout);
+
+// Avatar update
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrl.updateAvatar
+);
 
 module.exports = router;
