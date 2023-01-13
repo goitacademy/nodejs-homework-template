@@ -5,6 +5,7 @@ const Jimp = require("jimp");
 const { User } = require("../db/UserModel");
 const gravatar = require("gravatar");
 const path = require("path");
+const { WrongParametersError } = require("../helpers/errors");
 const { HttpError, ctrlWrapper } = require("../helpers");
 // require("dotenv").config();
 const { SECRET_KEY } = process.env;
@@ -42,17 +43,22 @@ const register = async (req, res) => {
     const { path: tempUpload, filename } = req.file;
     Jimp.read(tempUpload)
       .then((avatar) => {
+        const resultUpload = path.join(avatarDir, filename);
         return avatar
           .resize(250, 250) // resize
           .quality(60) // set JPEG quality
-          .write(tempUpload); // save
+          .write(resultUpload); // save
       })
       .catch((err) => {
         console.error(err);
       });
 
-    const resultUpload = path.join(avatarDir, filename);
-    await fs.rename(tempUpload, resultUpload);
+    // const resultUpload = path.join(avatarDir, filename);
+    try {
+      await fs.unlink(tempUpload);
+    } catch (err) {
+      console.error(err);
+    }
     avatarURL = path.join("avatars", filename);
     // console.log("avatarURL", avatarURL);
   } else {
@@ -147,26 +153,26 @@ const avatarUpdate = async (req, res) => {
   let avatarURL = "";
   const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
-  // if (!req.file) {
-  // }
+  if (!req.file) {
+    throw new WrongParametersError(`"missing file!"`);
+  }
   const { path: tempUpload, filename } = req.file;
   Jimp.read(tempUpload)
     .then((avatar) => {
+      const resultUpload = path.join(avatarDir, filename);
       return avatar
         .resize(250, 250) // resize
         .quality(60) // set JPEG quality
-        .write(tempUpload); // save
+        .write(resultUpload); // save
     })
     .catch((err) => {
       console.error(err);
     });
 
-  const resultUpload = path.join(avatarDir, filename);
-
+  // const resultUpload = path.join(avatarDir, filename);
   try {
-    await fs.rename(tempUpload, resultUpload);
-  } catch (err) {
     await fs.unlink(tempUpload);
+  } catch (err) {
     console.error(err);
   }
   avatarURL = path.join("avatars", filename);

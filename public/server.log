@@ -975,3 +975,14 @@
  POST /api/users/signup 13:01:2023_12:33:09
  POST /api/users/signup 13:01:2023_12:33:20
  POST /api/users/signup 13:01:2023_12:38:59
+ POST /api/users/signup 13:01:2023_10:49:28
+ POST /api/users/signup 13:01:2023_10:49:43
+ POST /api/users/signup 13:01:2023_10:51:20
+ PATCH /api/users/avatars 13:01:2023_10:57:05
+ PATCH /api/users/avatars 13:01:2023_10:57:21
+ POST /api/users/login 13:01:2023_10:57:53
+ PATCH /api/users/avatars 13:01:2023_10:58:09
+ PATCH /api/users/avatars 13:01:2023_10:58:54
+ PATCH /api/users/avatars 13:01:2023_10:59:43
+ PATCH /api/users/avatars 13:01:2023_11:00:11
+ PATCH /api/users/avatars 13:01:2023_11:00:37
