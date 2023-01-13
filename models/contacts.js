@@ -1,7 +1,8 @@
 const fs = require("fs/promises");
 const path = require("path");
+const { uid } = require("uid");
 
-const contactsPath = path.resolve("./models/contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async (req, res) => {
   try {
@@ -10,10 +11,10 @@ const listContacts = async (req, res) => {
 
     if (!parsedContacts.length) {
       console.log("no contacts");
-      return res.status(404).json({ status: "no contacts found" });
+      return res.status(404).json({ message: "no contacts found", code: 404 });
     }
 
-    res.json({ message: "list of contacts", parsedContacts });
+    res.json({ message: "list of contacts", code: 200, parsedContacts });
     console.table(parsedContacts);
   } catch (error) {
     console.log(error);
@@ -32,29 +33,80 @@ const getContactById = async (req, res) => {
     );
 
     if (!contactById.length) {
-      console.log("no contacts by Id");
+      console.log(`no contacts by id: '${contactId}' found`);
 
-      return res
-        .status(404)
-        .json({ status: `no contacts by Id: '${contactId}' found` });
+      return res.status(404).json({
+        message: `no contacts by id: '${contactId}' found`,
+        code: 404,
+      });
     }
 
-    res.json({ message: "contact by id", contactById });
+    res.json({
+      message: `contact by id: '${contactId}'`,
+      code: 200,
+      contactById,
+    });
     console.log(contactById);
   } catch (error) {
     console.log(error);
   }
 };
 
-const removeContact = async (contactId) => {
+const addContact = async (req, res) => {
   try {
-    const contacts = await fs.readFile(contactsPath, "utf-8");
+    const { name, email, phone } = req.body;
+    console.log("-----", req.body);
 
+    const contacts = await fs.readFile(contactsPath, "utf-8");
+    let parsedContacts = JSON.parse(contacts);
+    // console.log(parsedContacts);
+
+    const newContact = {
+      id: uid(4),
+      name,
+      email,
+      phone,
+    };
+    console.log(newContact);
+
+    parsedContacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
+
+    res.json({ message: "contact created", code: 201 });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const removeContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const contacts = await fs.readFile(contactsPath, "utf-8");
     const parsedContacts = JSON.parse(contacts);
 
-    const contactsAfterRemove = parsedContacts.filter(
-      (contact) => contact.id !== contactId.toString()
+    const contactById = parsedContacts.find(
+      (contact) => contact.id === contactId
     );
+    console.log("contact to delete:", contactById);
+
+    if (!contactById) {
+      console.log(`no contacts by id: '${contactId}' found`);
+
+      return res.status(404).json({
+        message: `no contacts by id: '${contactId}' found`,
+        code: 404,
+      });
+    }
+
+    const contactsAfterRemove = parsedContacts.filter(
+      (contact) => contact.id !== contactId
+    );
+
+    res.status(200).json({
+      message: `contact by id: '${contactId}' deleted`,
+      code: 200,
+      contactsAfterRemove,
+    });
 
     console.log(contactsAfterRemove);
 
@@ -63,29 +115,6 @@ const removeContact = async (contactId) => {
       JSON.stringify(contactsAfterRemove),
       "utf-8"
     );
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const addContact = async (body) => {
-  try {
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    let parsedContacts = JSON.parse(contacts);
-    console.log(parsedContacts);
-
-    const newContact = {
-      id: uid(4),
-      name: name.toString(),
-      email: email.toString(),
-      phone: phone.toString(),
-    };
-    console.log(newContact);
-
-    parsedContacts.push(newContact);
-    console.log(parsedContacts);
-
-    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
   } catch (error) {
     console.log(error);
   }
