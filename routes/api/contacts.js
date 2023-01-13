@@ -1,102 +1,37 @@
 const express = require("express");
-const contactsData = require("../../models/contacts");
+// const contactsData = require("../../models/contacts");
 const router = express.Router();
-const Joi = require("joi");
+// const Joi = require("joi");
+const { contacts: controllers } = require("../../controllers");
+const { joiSchema } = require("../../models/contact");
+const validation = require("../../middlewares/validation");
 
-function HttpError(status, message) {
-  const err = new Error(message);
-  err.status = status;
-  return err;
-}
+// const controllerWrapper = (ctrl) => {
+//   return async (req, res, next) => {
+//     try {
+//       await ctrl(req, res, next);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
+// };
 
-router.get("/", async (req, res, next) => {
-  const contacts = await contactsData.listContacts();
-  console.log("contacts:", contacts);
-  res.status(200).json(contacts);
-});
+const validateMiddleware = validation(joiSchema);
 
-router.get("/:id", async (req, res, next) => {
-  const { id } = req.params;
-  const contact = await contactsData.getContactById(id);
+// function HttpError(status, message) {
+//   const err = new Error(message);
+//   err.status = status;
+//   throw err;
+// }
 
-  if (!contact) {
-    const err = new Error("Movie not found");
-    err.status = 404;
-    return next(err);
-  }
-  return res.json(contact);
-});
+router.get("/", controllers.getAll);
 
-router.post("/", async (req, res, next) => {
-  // custom validation
-  // const { name, email, phone } = req.body;
-  // if (!name || !email || !phone) {
-  //   return res.json({ message: "missing required name field" });
-  // }
+router.get("/:id", controllers.getById);
 
-  const schema = Joi.object({
-    name: Joi.string().min(4).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string().min(7).required(),
-  });
-  const { error } = schema.validate(req.body);
+router.post("/", validateMiddleware, controllers.add);
 
-  if (error) {
-    return next(HttpError(400, error.message));
-  }
+router.put("/:id", validateMiddleware, controllers.updateById);
 
-  const contacts = await contactsData.addContact(req.body);
-
-  return res.status(201).json(contacts);
-});
-
-router.delete("/:id", async (req, res, next) => {
-  console.log("req.body", req.body);
-
-  const isDeleted = await contactsData.removeContact(req.params.id);
-
-  if (isDeleted) {
-    res.status(200).json({ message: "contact deleted" });
-  } else {
-    res.status(404).json({ message: "Not found" });
-  }
-});
-
-router.put("/:id", async (req, res, next) => {
-  console.log("req.body", req.body.name);
-
-  // if (!req.body) {
-  //   return res.status(400).json({ message: "missing fields" });
-  // }
-
-  const schema = Joi.object({
-    name: Joi.string().min(4).required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      })
-      .required(),
-    phone: Joi.string().min(7).required(),
-  });
-  const { error } = schema.validate(req.body);
-
-  if (error) {
-    return next(HttpError(400, error.message));
-  }
-
-  const contact = await contactsData.updateContact(req.params.id, req.body);
-
-  if (contact === null) {
-    res.status(404).json({ message: "Not found" });
-  } else {
-    res.status(200).json(contact);
-  }
-});
+router.delete("/:id", controllers.removeById);
 
 module.exports = router;

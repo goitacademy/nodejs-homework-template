@@ -19,7 +19,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500 } = err;
+  res.status(status).json({ message: err.message });
 });
 
 module.exports = app;
+
+// mongodb+srv://RichRichy:richrich123@cluster0.zalwjgj.mongodb.net/test --підключення до кластера
