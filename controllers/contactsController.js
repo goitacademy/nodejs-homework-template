@@ -1,11 +1,5 @@
 const { Contact } = require("../models/contactModel");
 
-const {
-  addContactSchema,
-  updateContactSchema,
-  updateStatusSchema,
-} = require("../validations/contact");
-
 const updateStatusContact = async (contactId, body) => {
   const contactDetail = await Contact.findByIdAndUpdate(
     contactId,
@@ -27,9 +21,8 @@ const getContactsList = async (req, res, next) => {
   }
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async ({ params: { contactId } }, res, next) => {
   try {
-    const { contactId } = req.params;
     const contact = await Contact.findById(contactId);
 
     if (!contact) {
@@ -42,15 +35,9 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-const addContact = async (req, res, next) => {
-  const { value, error } = addContactSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({ message: error?.details[0].message });
-  }
-
+const addContact = async ({ body }, res, next) => {
   try {
-    const newContact = new Contact(value);
+    const newContact = new Contact(body);
     await newContact.save();
 
     res.status(201).json({ message: "New contact saved success", newContact });
@@ -60,35 +47,25 @@ const addContact = async (req, res, next) => {
   }
 };
 
-const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
-
-  const { value, error } = updateContactSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({ message: error?.details[0].message });
-  }
-
+const updateContact = async ({ body, params: { contactId } }, res, next) => {
   try {
-    const contact = await Contact.findById(contactId);
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      {
+        $set: body,
+      },
+      { new: true }
+    );
 
-    if (!contact) {
+    if (updatedContact === null) {
       return res
         .status(404)
         .json({ message: `Contact id ${contactId} Not found` });
     }
 
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
-      {
-        $set: value,
-      },
-      { new: true }
-    );
-
     return res.status(200).json({
       message: `Success. Contact id:${contactId} updated`,
-      changes: value,
+      changes: body,
       updatedContact,
     });
   } catch (error) {
@@ -96,41 +73,28 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-const updateStatus = async (req, res, next) => {
-  const { contactId } = req.params;
-  const { value, error } = updateStatusSchema.validate(req.body);
-
-  if (error?.message) {
-    return res.status(400).json({ message: "Missing field favorite" });
-  }
-
+const updateStatus = async ({ body, params: { contactId } }, res, next) => {
   try {
-    const updatedContact = await updateStatusContact(contactId, value);
+    const updatedContact = await updateStatusContact(contactId, body);
 
     res.status(200).json(updatedContact);
   } catch (err) {
     res.status(404).json({ message: "Not found" });
-    // next(err);
   }
 };
 
-const removeContact = async (req, res, next) => {
+const removeContact = async ({ params: { contactId } }, res, next) => {
   try {
-    const { contactId } = req.params;
+    const removedContact = await Contact.findByIdAndDelete(contactId);
 
-    const contact = await Contact.findById(contactId);
-
-    if (!contact) {
+    if (removedContact === null) {
       return res
         .status(404)
         .json({ message: `Contact id ${contactId} Not found` });
     }
-
-    await Contact.findByIdAndDelete(contactId);
-
     res
       .status(200)
-      .json({ message: `Success. Contact ${contact._id} deleted ` });
+      .json({ message: `Success. Contact ${removedContact._id} deleted ` });
   } catch (error) {
     next(error);
   }
