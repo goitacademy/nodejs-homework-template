@@ -17,16 +17,5 @@ const sendEmail = async (data) => {
     }
 }
 
-// const email = {
-//     to: "elenholz@gmail.com",
-//     from: "elenholz@gmail.com",
-//     subject: "To be or not ro be!",
-//     html: "London"
-// };
-
-// sgMail.send(email)
-//     .then(() => console.log("Email send"))
-//     .catch(error=> console.log(error.message))
-
 
 module.exports = sendEmail;
