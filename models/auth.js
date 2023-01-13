@@ -9,7 +9,8 @@ const authSchema = new Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      match: /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/,
+      // eslint-disable-next-line no-useless-escape
+      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       unique: true,
     },
     subscription: {
@@ -18,6 +19,7 @@ const authSchema = new Schema(
       default: "starter",
     },
     token: String,
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true }
 );
