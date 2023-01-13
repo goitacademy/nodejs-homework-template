@@ -5,15 +5,17 @@ const contactsPath = path.resolve(
   "/Users/aleksandr/nodejs-homework-rest-api/models/contacts.json"
 );
 
+let contacts = [];
+
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
-    return JSON.parse(data);
-    // return JSON.parse("Hello world");
-    // console.log("Hello world");
-    // return data;
+    contacts = JSON.parse(data);
+    console.log(contacts);
+    // return contacts;
+    // return JSON.parse(data);
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
   }
 };
 
@@ -31,4 +33,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  contacts,
 };
