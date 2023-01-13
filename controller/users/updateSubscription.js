@@ -1,4 +1,3 @@
-
 const { User } = require("../../models");
 
 const updateSubscription = async (req, res) => {

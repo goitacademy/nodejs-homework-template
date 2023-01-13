@@ -16,7 +16,6 @@ const signIn = async (req, res) => {
 
     const token = generateToken(user);
 
-
     await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).json({

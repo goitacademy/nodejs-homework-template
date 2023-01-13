@@ -1,4 +1,3 @@
-
 const { Contact } = require("../../models");
 const { RequestError } = require("../../helpers");
 
