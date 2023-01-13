@@ -12,6 +12,10 @@ const userSchema = Joi.object({
   subscription: Joi.string(),
 });
 
+const updateSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const validator = (schema) => (req, res, next) => {
   const body = req.body;
   const valid = schema.validate(body);
@@ -27,6 +31,10 @@ router.post("/login", validator(userSchema), ctrlUsers.loginUser);
 router.post("/logout", userMiddleware, ctrlUsers.logoutUser);
 
 router.get("/current", userMiddleware, ctrlUsers.getCurrentUser);
-router.patch("/", userMiddleware);
+router.patch(
+  "/subscription",
+  [userMiddleware, validator(updateSchema)],
+  ctrlUsers.update
+);
 
 module.exports = router;

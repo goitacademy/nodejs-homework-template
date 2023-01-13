@@ -1,21 +1,21 @@
-const { verifyToken, generateToken } = require("../token");
+const { currentUser } = require("../service/users");
+const { verifyToken } = require("../token");
 
 const userMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
+  if (!req.headers.authorization) {
     res
       .status(401)
       .json({
         message: "Not authorized",
       })
       .end();
-    return;
   }
   try {
-    const userData = await verifyToken(token.slice(7));
+    const token = req.headers.authorization.slice(7);
+    const userData = await verifyToken(token);
     const user = await currentUser(userData.id);
     if (user && user.token === token) {
-      req.user = userData;
+      req.user = user;
       next();
       return;
     }

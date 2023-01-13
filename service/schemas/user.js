@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const user = new Schema({
   password: {
@@ -18,14 +17,6 @@ const user = new Schema({
   },
   token: String,
 });
-
-// user.methods.setPassword = function (password) {
-//   this.password = bcrypt.hash(password, bcrypt.genSalt(6));
-// };
-
-// user.methods.validPassword = function (password) {
-//   return bcrypt.compare(password, this.password);
-// };
 
 const User = model("user", user);
 

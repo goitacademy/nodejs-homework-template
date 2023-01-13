@@ -9,12 +9,6 @@ const registerUser = async (req, res, next) => {
   try {
     const { email, subscription } = await service.createUser(user);
     await user.save();
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 120_000_000,
-    });
     res.status(200).json({ user: { email, subscription } }).end();
   } catch (e) {
     if (e.code === 11000) {
@@ -30,31 +24,23 @@ const registerUser = async (req, res, next) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await service.regLogUser(email);
   const passwordMatches = await comparePassword(password, user.password);
   try {
-    const token = await generateToken({ id: user._id });
-    updateUser(user._id, { token });
-
     if (passwordMatches) {
-      res
-        .json({
-          status: "success",
-          code: 200,
-          user: {
-            email: user.email,
-            subscription: user.subscription,
-            id: user._id,
-          },
-        })
-        .cookie("token", token, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "strict",
-          maxAge: 120_000_000,
-        });
+      const token = await generateToken({ id: user._id });
+      service.updateUser(user._id, { token });
+      res.json({
+        status: "success",
+        code: 200,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+          id: user._id,
+        },
+      });
     } else {
       res
         .status(401)
@@ -69,16 +55,35 @@ const loginUser = async (req, res) => {
   }
 };
 
-const logoutUser = (req, res) => {
-  res.cookie("token", "", { maxAge: 0 }).status(200).end();
+const logoutUser = async (req, res) => {
+  const { _id } = req.user;
+  await service.updateUser(_id, { token: "" });
+  res.status(204).end();
 };
 
 const getCurrentUser = async (req, res) => {
-  const { _id } = req.user;
+  try {
+    res
+      .json({
+        status: "success",
+        code: 200,
+        data: {
+          email: req.user.email,
+          subscription: req.user.subscription,
+        },
+      })
+      .end();
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
 
-  const { email, subscription } = await service.currentUser(_id);
-
-  res.json({ email, subscription }).status(200).end();
+const update = async (req, res) => {
+  const { email, subscription } = await service.updateUser(req.user._id, {
+    subscription: req.body.subscription,
+  });
+  res.json({ email, subscription }).end();
 };
 
 module.exports = {
@@ -86,6 +91,7 @@ module.exports = {
   loginUser,
   logoutUser,
   getCurrentUser,
+  update,
 };
 
 // try {
