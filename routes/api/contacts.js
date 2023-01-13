@@ -9,13 +9,15 @@ const {
   removeContact,
 } = require("../../models/contacts");
 
+const { addPostValidation } = require("../../middlewares/validationMiddleware");
+
 router.get("/", listContacts);
 
 router.get("/:contactId", getContactById);
 
-router.post("/", addContact);
+router.post("/", addPostValidation, addContact);
 
-router.put("/:contactId", updateContact);
+router.put("/:contactId", addPostValidation, addPostValidation, updateContact);
 
 router.delete("/:contactId", removeContact);
 

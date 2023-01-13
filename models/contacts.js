@@ -121,18 +121,10 @@ const removeContact = async (req, res) => {
 const updateContact = async (req, res) => {
   try {
     const { contactId } = req.params;
-    console.log("contactId", contactId);
     const { name, email, phone } = req.body;
 
     const contacts = await fs.readFile(contactsPath, "utf-8");
     let parsedContacts = JSON.parse(contacts);
-
-    // const contactById = parsedContacts.filter(
-    //   (contact) => contact.id === contactId
-    // );
-
-    // if (!contactById.length) {
-    //   console.log(`no contacts by id: '${contactId}' found`);
 
     const contactById = parsedContacts.find(
       (contact) => contact.id === contactId
