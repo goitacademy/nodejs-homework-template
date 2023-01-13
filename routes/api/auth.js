@@ -7,6 +7,8 @@ const controllerWrapper = require("../../helpers/controllerWrapper");
 
 router.post("/register", controllerWrapper(ctrl.register));
 
+router.get("/verify/:verificationToken", controllerWrapper(ctrl.verifyToken));
+
 router.post("/login", controllerWrapper(ctrl.login));
 
 router.post("/logout", authenticate, controllerWrapper(ctrl.logout));
