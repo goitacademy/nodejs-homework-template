@@ -1,8 +1,16 @@
 const express = require('express');
 
+const {
+  addContactValidation,
+} = require('../../middlewares/validationMiddleware');
+
 const router = express.Router();
 
-const { listContacts, getContactById } = require('../../models/contacts');
+const {
+  listContacts,
+  getContactById,
+  addContact,
+} = require('../../models/contacts');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -26,8 +34,13 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  res.json({ message: 'template message' });
+router.post('/', addContactValidation, async (req, res, next) => {
+  try {
+    const result = await addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {

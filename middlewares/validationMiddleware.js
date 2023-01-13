@@ -11,13 +11,16 @@ module.exports = {
         })
         .required(),
       phone: Joi.string()
-        .pattern('^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$')
+        .pattern(
+          // eslint-disable-next-line prefer-regex-literals
+          new RegExp('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$')
+        )
         .required(),
     });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details });
+      return res.status(400).json({ message: validationResult.error.message });
     }
 
     next();
