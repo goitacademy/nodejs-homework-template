@@ -1,7 +1,8 @@
 const { Contact } = require('../../models');
 
 const postNewContact = async (req, res) => {
-  const newContact = await Contact.create(req.body);
+  const { _id } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner: _id });
   if (!newContact) {
     return res.json({
       status: 'error',

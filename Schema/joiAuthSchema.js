@@ -5,7 +5,7 @@ const joiSingupSchema = Joi.object({
   email: Joi.string().required(),
   name: Joi.string().required(),
   subscription: Joi.string(),
-  // token: Joi.string().required(),
+  token: Joi.string().required(),
 });
 
 const joiLoginSchema = Joi.object({
@@ -13,4 +13,8 @@ const joiLoginSchema = Joi.object({
   email: Joi.string().required(),
 });
 
-module.exports = { joiSingupSchema, joiLoginSchema };
+const joiSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+});
+
+module.exports = { joiSingupSchema, joiLoginSchema, joiSubscriptionSchema };
