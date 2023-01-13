@@ -25,7 +25,7 @@ const putSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^\(\d\d\d\) \d\d\d-\d\d\d\d$/)
     .optional(),
-});
+}).min(1);
 
 const patchSchema = Joi.object({
   favorite: Joi.boolean().required(),

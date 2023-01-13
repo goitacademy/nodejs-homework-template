@@ -30,29 +30,6 @@ router.use((req, res, next) => {
   } else {
     next();
   }
-  // let isValid = false;
-  // switch (req.method) {
-  //   case 'POST':
-  //     if (postSchema.validate(req.body).error) {
-  //       res.status(400).json({ message: postSchema.validate(req.body).error.message });
-  //     }
-  //     break;
-  //   case 'PUT':
-  //     if (putSchema.validate(req.body).error) {
-  //       res.status(400).json({ message: putSchema.validate(req.body).error.message });
-  //     }
-  //     break;
-  //   case 'PATCH':
-  //     if (patchSchema.validate(req.body).error) {
-  //       res.status(400).json({ message: patchSchema.validate(req.body).error.message });
-  //     }
-  //     break;
-  //   default:
-  //     isValid = true;
-  // }
-  // if (isValid) {
-  //   next();
-  // }
 });
 
 router.get('/', async (req, res, next) => {
@@ -84,17 +61,11 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  if (req.body.name || req.body.email || req.body.phone) {
-    const updatedContact = await updateContact(req.params.contactId, req.body);
-    //
-    if (updatedContact) {
-      res.status(200).json(updatedContact);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-    //
+  const updatedContact = await updateContact(req.params.contactId, req.body);
+  if (updatedContact) {
+    res.status(200).json(updatedContact);
   } else {
-    res.status(400).json({ message: 'Missing fields' });
+    res.status(404).json({ message: 'Not found' });
   }
 });
 
