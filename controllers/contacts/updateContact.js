@@ -1,37 +1,20 @@
-const contactsOperations = require("../../models/contacts");
+const { NotFound } = require("http-errors")
 
-const Joi = require("joi");
-
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
+const { Contact } = require("../../models/index")
 
 const updateContact = async (req, res, next) => {
-  try {
-        const { error } = contactSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;  
-    }
-    const { contactId } = req.params;
-    const result = await contactsOperations.updateContact(contactId, req.body);
-    if (!result) {
-      const error = new Error(`Product with id ${contactId} not found`);
-      error.status = 404;
-      throw error;      
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result
-      }
-    })
-  } catch (error) {
-    next(error)
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  if (!result) {
+    throw new NotFound(`Contact with id ${contactId} not found`);
   }
+  res.json({
+    status: 'success',
+    code: 200,
+    data: {
+      result
+    }
+  })
 }
 
 module.exports = updateContact;
