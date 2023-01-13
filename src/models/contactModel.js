@@ -19,6 +19,7 @@ const contactSchema = new Schema(
     phone: {
       type: String,
       required: true,
+      unique: true,
       minLength: [7, 'name should be at least 7 characters'],
       maxLength: [16, 'name should be at least 16 characters'],
     },
