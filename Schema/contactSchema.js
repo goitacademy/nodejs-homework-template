@@ -25,17 +25,19 @@ const contactSchema = new mongoose.Schema({
 const Contact = mongoose.model("contact", contactSchema);
 
 const Joischema = Joi.object({
-  name: Joi.string()
-  .alphanum()
-  .min(3)
-  .max(30)
-  .required(),
-  email: Joi.string()
-  .email({ minDomainSegments: 2 }),
+  name: Joi.string().alphanum().min(3).max(30).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+  }).required(),
   phone: Joi.string()
-    .pattern(+[0-9])
-    .length(14),
-    favorite: Joi.bool(),
+  .pattern(/[0-9]+/)
+  .length(10)
+  .required(),
+  favorite: Joi.bool(),
 });
 
-module.exports = {Joischema, Contact};
+const FavoriteSchemaContact = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
+module.exports = {Joischema, Contact, FavoriteSchemaContact};
