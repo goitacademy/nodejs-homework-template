@@ -44,7 +44,7 @@ const deleteContact = async (req, res) => {
   if (!contacts) {
     return res.status(404).json({ message: "Not found" });
   }
-  console.log(contacts);
+  //   console.log(contacts);
   res.status(200).json({ message: "contact is deleted" });
 };
 

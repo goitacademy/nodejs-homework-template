@@ -36,13 +36,13 @@ const removeContact = async (contactId) => {
       return ifIdInList;
     } else {
       const dataPostRemoved = data.filter((el) => el.id !== contactId);
-      const dataWithCorrectId = data.map((el, index) => {
-        el.id = index + 1;
-        return el.toString();
+      const dataWithCorrectId = dataPostRemoved.map((el, index) => {
+        el.id = (index + 1).toString();
+        return el;
       });
 
       const dataToWrite = JSON.stringify(dataWithCorrectId, null, 2);
-      console.log(dataToWrite);
+
       fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
         if (err) throw err;
         console.log("Data written to file");
