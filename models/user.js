@@ -6,7 +6,9 @@ const userSchema = Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, minlength: 6, required: true },
     token: { type: String, default: null },
+    avatarURL: { type: String, required: true, default: "avatars/default.png" },
   },
+
   { versionKey: false, timestamps: true }
 );
 
