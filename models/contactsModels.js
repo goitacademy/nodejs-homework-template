@@ -72,7 +72,29 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, email, phone } = body;
+    const rawData = await fs.readFile(contactsPath, "utf8");
+    const data = JSON.parse(rawData);
+    data.forEach((el) => {
+      if (el.id === contactId) {
+        el.name = name;
+        el.email = email;
+        el.phone = phone;
+      }
+    });
+    const dataToWrite = JSON.stringify(data, null, 2);
+
+    fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
+      if (err) throw err;
+      console.log("Data written to file");
+    });
+    return data[contactId - 1];
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 module.exports = {
   listContacts,

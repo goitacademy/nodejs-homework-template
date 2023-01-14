@@ -3,6 +3,7 @@ const {
   getContactById,
   addContact,
   removeContact,
+  updateContact,
 } = require("../../models/contactsModels.js");
 
 const getContacts = async (req, res) => {
@@ -39,14 +40,22 @@ const postContact = async (req, res) => {
   res.status(200).json({ newContact });
 };
 
+const putContact = async (req, res) => {
+  const id = req.params.contactId;
+  const { name, email, phone } = req.body;
+  if (!name || !email || !phone) {
+    return res.status(400).json({ message: "missing required name field" });
+  }
+  const contact = await updateContact(id, { name, email, phone });
+  res.status(200).json({ contact });
+};
+
 const deleteContact = async (req, res) => {
   const id = req.params.contactId;
-  //   console.log(id);
   const contacts = await removeContact(id);
   if (!contacts) {
     return res.status(404).json({ message: "Not found" });
   }
-  //   console.log(contacts);
   res.status(200).json({ message: "contact is deleted" });
 };
 
@@ -55,4 +64,5 @@ module.exports = {
   getContactByIdController,
   postContact,
   deleteContact,
+  putContact,
 };
