@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
   }
 
   if (err.message.includes("Cast to ObjectId failed for value")) {
-    res.status(400).json({ message: "id is invalid" });
+    return res.status(400).json({ message: "id is invalid" });
   }
 
   console.error("API Error", err.message, err.type);

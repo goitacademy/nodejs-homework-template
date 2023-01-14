@@ -32,7 +32,7 @@ router.put(
   tryCatchWrapper(changeContact)
 );
 router.patch(
-  "/:id",
+  "/:id/favorite",
   validateBody(contactUpdateStatusValidationSchema),
   tryCatchWrapper(updateStatusContact)
 );
