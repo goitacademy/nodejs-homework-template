@@ -26,7 +26,22 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  try {
+    const rawData = await fs.readFile(contactsPath, "utf8");
+    const data = JSON.parse(rawData);
+    const ifIdInList = data.find((el) => el.id === contactId);
+    // const dataPostRemoved = data.filter((el) => el.id !== contactId);
+    if (!ifIdInList) {
+      return ifIdInList;
+    } else {
+      const dataPostRemoved = data.filter((el) => el.id !== contactId);
+      return dataPostRemoved;
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 const addContact = async (body) => {
   try {

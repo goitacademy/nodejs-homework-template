@@ -2,6 +2,7 @@ const {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
 } = require("../../models/contactsModels.js");
 
 const getContacts = async (req, res) => {
@@ -36,8 +37,20 @@ const postContact = async (req, res) => {
   res.status(200).json({ newContact });
 };
 
+const deleteContact = async (req, res) => {
+  const id = req.params.contactId;
+  //   console.log(id);
+  const contacts = await removeContact(id);
+  if (!contacts) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  console.log(contacts);
+  res.status(200).json({ message: "contact is deleted" });
+};
+
 module.exports = {
   getContacts,
   getContactByIdController,
   postContact,
+  deleteContact,
 };
