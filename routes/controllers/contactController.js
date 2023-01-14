@@ -17,7 +17,7 @@ const getContacts = async (req, res) => {
 const getContactByIdController = async (req, res) => {
   const id = req.params.contactId;
   const contact = await getContactById(id);
-  if (!contact) {
+  if (contact.length === 0) {
     return res.status(404).json({ message: "Not found!" });
   }
   return res.json({ contact });
