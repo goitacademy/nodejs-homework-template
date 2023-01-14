@@ -16,9 +16,6 @@ function checkIfBodyExists() {
     if (!req.body || fieldsOfContactToUpdate.length === 0) {
       return next(httpError(400, "missing fields"));
     }
-    if (Object.keys(req.body)[0] !== "favorite") {
-      return next(httpError(400, "missing field favorite"));
-    }
     return next();
   };
 }
