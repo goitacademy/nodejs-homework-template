@@ -6,7 +6,7 @@ const {
 
 const getContacts = async (req, res) => {
   const contacts = await listContacts();
-  //   console.log(contacts);
+
   res.status(200).json({
     contacts,
     status: "success",
@@ -24,14 +24,15 @@ const getContactByIdController = async (req, res) => {
 
 const postContact = async (req, res) => {
   const { name, email, phone } = req.body;
-  //   console.log(req.params);
-  //   if (!name || !email || !phone) {
-  //     return res.status(400).json({ message: "missing required name field" });
-  //   }
+
+  if (!name || !email || !phone) {
+    return res.status(400).json({ message: "missing required name field" });
+  }
   const id = new Date().getTime().toString();
 
   const newContact = await addContact({ name, email, phone, id });
-  //   console.log(newContact);
+
+  res.status(200).json({ newContact });
 };
 
 module.exports = {
