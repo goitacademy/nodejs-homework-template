@@ -28,7 +28,8 @@ const postContact = async (req, res) => {
   if (!name || !email || !phone) {
     return res.status(400).json({ message: "missing required name field" });
   }
-  const id = new Date().getTime().toString();
+  const contactsArray = await listContacts();
+  const id = contactsArray.length + 1;
 
   const newContact = await addContact({ name, email, phone, id });
 
