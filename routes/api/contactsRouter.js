@@ -6,6 +6,8 @@ const {
   addContactValidation,
 } = require("../../utils/validation/postContactValidationSchema.js");
 
+const { validationBody } = require("../../utils/validation/validationBody");
+
 const {
   getContacts,
   getContactById,
@@ -21,12 +23,20 @@ const router = express.Router();
 
 router.get("/", asyncWrapper(getContacts));
 router.get("/:contactId", asyncWrapper(getContactById));
-router.post("/", addContactValidation, asyncWrapper(addContact));
+router.post(
+  "/",
+  validationBody(addContactValidation),
+  asyncWrapper(addContact)
+);
 router.delete("/:contactId", asyncWrapper(removeContact));
-router.put("/:contactId", changeContactValidation, asyncWrapper(updateContact));
+router.put(
+  "/:contactId",
+  validationBody(changeContactValidation),
+  asyncWrapper(updateContact)
+);
 router.patch(
   "/:contactId/favorite",
-  updateStatusValidation,
+  validationBody(updateStatusValidation),
   asyncWrapper(updateStatusContact)
 );
 
