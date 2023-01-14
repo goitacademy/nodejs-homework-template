@@ -5,10 +5,12 @@ const {
   createContact,
   deleteContact,
   changeContact,
+  changeStatus,
 } = require("../../controllers/contacts.controllers");
 const {
   addContactSchema,
   updateContactSchema,
+  updateContactStatusSchema,
 } = require("../../schemas/contacts");
 const { validateBody } = require("../../middlewares/index");
 const { tryCatchWrapper } = require("../../helpers");
@@ -27,6 +29,11 @@ contactsRouter.put(
   "/:contactId",
   validateBody(updateContactSchema),
   tryCatchWrapper(changeContact)
+);
+contactsRouter.patch(
+  "/:contactId",
+  validateBody(updateContactStatusSchema),
+  tryCatchWrapper(changeStatus)
 );
 
 module.exports = contactsRouter;

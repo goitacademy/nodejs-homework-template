@@ -1,11 +1,10 @@
-const { httpError } = require("../helpers");
+const { CustomError } = require("../helpers");
 
 function validateBody(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
-
     if (error) {
-      return next(httpError(400, error.message));
+      return new CustomError(404, error.message);
     }
     return next();
   };

@@ -9,6 +9,7 @@ const addContactSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(10).required(),
+  favorite: Joi.boolean().default(false),
 });
 
 const updateContactSchema = Joi.object({
@@ -20,6 +21,15 @@ const updateContactSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(10).required(),
+  favorite: Joi.boolean().default(false),
 });
 
-module.exports = { addContactSchema, updateContactSchema };
+const updateContactStatusSchema = Joi.object({
+  favorite: Joi.boolean(),
+});
+
+module.exports = {
+  addContactSchema,
+  updateContactSchema,
+  updateContactStatusSchema,
+};
