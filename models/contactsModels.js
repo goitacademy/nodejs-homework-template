@@ -109,7 +109,7 @@ const updateContactElement = async (body, contactId) => {
     return ifIdInList;
   }
   data.forEach((el) => {
-    if (el.id === req.params.id) {
+    if (el.id === contactId) {
       if (name) {
         el.name = name;
       }
@@ -117,7 +117,7 @@ const updateContactElement = async (body, contactId) => {
         el.email = email;
       }
       if (phone) {
-        el.email = phone;
+        el.phone = phone;
       }
     }
   });
