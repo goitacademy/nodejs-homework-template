@@ -100,10 +100,41 @@ const updateContact = async (contactId, body) => {
   }
 };
 
+const updateContactElement = async (body, contactId) => {
+  const { name, email, phone } = body;
+  const rawData = await fs.readFile(contactsPath, "utf8");
+  const data = JSON.parse(rawData);
+  const ifIdInList = data.find((el) => el.id === contactId);
+  if (!ifIdInList) {
+    return ifIdInList;
+  }
+  data.forEach((el) => {
+    if (el.id === req.params.id) {
+      if (name) {
+        el.name = name;
+      }
+      if (email) {
+        el.email = email;
+      }
+      if (phone) {
+        el.email = phone;
+      }
+    }
+  });
+  const dataToWrite = JSON.stringify(data, null, 2);
+
+  fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
+    if (err) throw err;
+    console.log("Data written to file");
+  });
+  return data[contactId - 1];
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateContactElement,
 };
