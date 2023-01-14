@@ -1,3 +1,4 @@
+
 const { Contact } = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
@@ -5,7 +6,6 @@ const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
-
   const query = favorite ? { owner, favorite } : { owner };
 
   const data = await Contact.find(query, "-createdAt -updatedAt", {
@@ -37,7 +37,20 @@ const updateContact = async (req, res) => {
   if (!result) {
     throw HttpError(404);
   }
-  res.json(result);
+  res.status(200).json(result);
+};
+
+const toggleContactFavorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+  if (!req.body) {
+    return res.json({ message: "missing field favorite", status: 400 });
+  }
+  const result = await contacts.updateStatusContact(contactId, favorite);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.status(200).json(result);
 };
 
 const updateFavorite = async (req, res) => {
@@ -69,4 +82,5 @@ module.exports = {
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
   deleteContact: ctrlWrapper(deleteContact),
+  toggleContactFavorite: ctrlWrapper(toggleContactFavorite),
 };

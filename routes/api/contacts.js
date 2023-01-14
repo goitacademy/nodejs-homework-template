@@ -11,6 +11,6 @@ router.post("/", authenticate, validateBody(schemas.addSchema), ctrl.postContact
 router.delete("/:contactId", authenticate, ctrl.deleteContact);
 router.put("/:contactId", authenticate, validateBody(schemas.updateSchema), ctrl.updateContact);
 router.patch("/:contactId/favorite", authenticate, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
-
+// router.patch("/:contactId/favorite", ctrl.toggleContactFavorite);
 
 module.exports = router;
