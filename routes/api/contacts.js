@@ -1,7 +1,5 @@
 const express = require("express");
-// const contactsData = require("../../models/contacts");
 const router = express.Router();
-// const Joi = require("joi");
 const { contacts: controllers } = require("../../controllers");
 const { joiSchema, favJoiSchema } = require("../../models/contact");
 const validation = require("../../middlewares/validation");
@@ -17,12 +15,6 @@ const validation = require("../../middlewares/validation");
 // };
 
 const validateMiddleware = validation(joiSchema);
-
-// function HttpError(status, message) {
-//   const err = new Error(message);
-//   err.status = status;
-//   throw err;
-// }
 
 router.get("/", controllers.getAll);
 

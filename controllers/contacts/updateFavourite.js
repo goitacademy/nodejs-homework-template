@@ -1,4 +1,4 @@
-const { NotFound } = require("http-errors");
+const { BadRequest } = require("http-errors");
 const { Contact } = require("../../models/contact");
 
 const updateFavourite = async (req, res, next) => {
@@ -11,8 +11,7 @@ const updateFavourite = async (req, res, next) => {
       { new: true }
     );
     if (!result) {
-      res.status(400).json({ message: "missing field favorite" });
-      next();
+      throw new BadRequest(`missing field favorite`);
     } else {
       res.json({
         status: "success",
@@ -23,8 +22,7 @@ const updateFavourite = async (req, res, next) => {
       });
     }
   } catch (error) {
-    res.status(400).json({ message: "missing field favorite" });
-    // next(error) як перекинути на 500 помилку?;
+    next(error);
   }
 };
 
