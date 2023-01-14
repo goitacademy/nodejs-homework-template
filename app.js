@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
+const { invalid } = require("joi");
 
 const app = express();
 
@@ -27,7 +28,11 @@ app.use((err, req, res, next) => {
     return res.status(err.status).json({ message: err.message });
   }
 
-  console.error("API Error", err.message);
+  if (err.message.includes("Cast to ObjectId failed for value")) {
+    res.status(400).json({ message: "id is invalid" });
+  }
+
+  console.error("API Error", err.message, err.type);
   res.status(500).json({ message: err.message });
 });
 

@@ -7,11 +7,13 @@ const {
   createContact,
   deleteContact,
   changeContact,
+  updateStatusContact,
 } = require("../../controllers/contacts.controller");
 
 const { validateBody } = require("../../middlewares/validation");
 const {
-  contactValidationSchema,
+  contactCreateValidationSchema,
+  contactUpdateStatusValidationSchema,
 } = require("../../schemas/contactValidationSchema");
 
 const router = express.Router();
@@ -20,14 +22,19 @@ router.get("/", tryCatchWrapper(getContacts));
 router.get("/:id", tryCatchWrapper(getContact));
 router.post(
   "/",
-  validateBody(contactValidationSchema),
+  validateBody(contactCreateValidationSchema),
   tryCatchWrapper(createContact)
 );
 router.delete("/:id", tryCatchWrapper(deleteContact));
 router.put(
   "/:id",
-  validateBody(contactValidationSchema),
+  validateBody(contactCreateValidationSchema),
   tryCatchWrapper(changeContact)
+);
+router.patch(
+  "/:id",
+  validateBody(contactUpdateStatusValidationSchema),
+  tryCatchWrapper(updateStatusContact)
 );
 
 module.exports = router;

@@ -13,50 +13,7 @@ async function main() {
     await mongoose.connect(HOST_URI);
     console.log("Mongodb connection successful!");
 
-    // // Schema
-    // const schema = mongoose.Schema(
-    //   {
-    //     name: {
-    //       type: String, // mongoose.Types.String,
-    //       required: [true, "Set name for contact"],
-    //       // enum: ["Viktor", "Volodymyr"],
-    //       unique: true,
-    //       minLength: [5, "It is too short"],
-    //     },
-    //     email: {
-    //       type: String,
-    //     },
-    //     phone: {
-    //       type: String,
-    //     },
-    //     favorite: {
-    //       type: Boolean,
-    //       default: false,
-    //     },
-    //     // year: {
-    //     //   type: Number,
-    //     //   min: [4, "It is too short!"],
-    //     //   // match: /\d{4}/,
-    //     //   required: true,
-    //     // },
-    //   },
-    //   {
-    //     versionKey: false,
-    //     timestamps: true,
-    //   }
-    // );
-
-    // // Model (Class)
-    // const Contact = mongoose.model("contact", schema);
-
-    // save new contact into mongodb
-    // const saveNewContact = await Contact.create({
-    //   name: "Volodymyr",
-    //   email: "v.khoptynec@gmail.com",
-    //   phone: "(075) 524-12523",
-    //   // year: 1979,
-    // });
-    // console.log("create new contact", saveNewContact);
+    //**Examples */
 
     // read from mongodb
     // const contacts = await Contact.find({});
