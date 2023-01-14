@@ -12,10 +12,9 @@ module.exports = {
         .required(),
       phone: Joi.string().alphanum().min(10).max(400).required(),
     });
-
-    const validationResult = schema.validate(req.body);
-    if (validationResult === error) {
-      return res.status(400).json({ status: validationResult.error.details });
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ status: error.details });
     }
     next();
   },
@@ -31,9 +30,9 @@ module.exports = {
       phone: Joi.string().alphanum().min(10).max(400).required(),
     });
 
-    const validationResult = schema.validate(req.body);
-    if (validationResult === error) {
-      return res.status(400).json({ status: validationResult.error.details });
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ status: error.details });
     }
     next();
   },
