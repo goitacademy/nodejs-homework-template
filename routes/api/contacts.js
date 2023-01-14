@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 // const Joi = require("joi");
 const { contacts: controllers } = require("../../controllers");
-const { joiSchema } = require("../../models/contact");
+const { joiSchema, favJoiSchema } = require("../../models/contact");
 const validation = require("../../middlewares/validation");
 
 // const controllerWrapper = (ctrl) => {
@@ -31,6 +31,12 @@ router.get("/:id", controllers.getById);
 router.post("/", validateMiddleware, controllers.add);
 
 router.put("/:id", validateMiddleware, controllers.updateById);
+
+router.patch(
+  "/:id/favourite",
+  validation(favJoiSchema),
+  controllers.updateFavourite
+);
 
 router.delete("/:id", controllers.removeById);
 

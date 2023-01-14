@@ -13,7 +13,7 @@ const contactSchema = Schema(
     phone: {
       type: String,
     },
-    favorite: {
+    favourite: {
       type: Boolean,
       default: false,
     },
@@ -30,7 +30,12 @@ const joiSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(7).required(),
-  favorite: Joi.bool(),
+  favourite: Joi.boolean().default(false),
+});
+
+// schema for PATCH
+const favJoiSchema = Joi.object({
+  favourite: Joi.boolean().default(false).required(),
 });
 
 const Contact = model("contact", contactSchema);
@@ -38,6 +43,7 @@ const Contact = model("contact", contactSchema);
 module.exports = {
   Contact,
   joiSchema,
+  favJoiSchema,
 };
 
 // const contactsPath = path.resolve(__dirname, "contacts.json");

@@ -4,7 +4,7 @@ const { Contact } = require("../../models/contact");
 const updateById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (!result) {
       throw new NotFound(`Contact with id:${id} was not found`);
       //   const err = new Error(`Contact with id:${id} was not found`);
