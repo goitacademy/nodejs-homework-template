@@ -7,7 +7,8 @@ const pushContacts = async (contacts) => {
   try {
     const stringifyContacts = JSON.stringify(contacts);
     await fs.writeFile(contactsPath, stringifyContacts);
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err.message);
   }
 };
