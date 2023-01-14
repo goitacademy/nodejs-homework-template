@@ -1,5 +1,5 @@
 const messages = {
-  400: "Missing required name field",
+  400: "Bad Request",
   401: "Unauthorized",
   403: "Forbidden",
   404: "Not found",
@@ -12,6 +12,4 @@ const HttpError = (status, message = messages[status]) => {
   return error;
 };
 
-module.exports = {
-  HttpError,
-};
+module.exports = HttpError;
