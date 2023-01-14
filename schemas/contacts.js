@@ -7,6 +7,7 @@ const addContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^[\]?[(]?[0-9]{3}[)]?[-\s\]?[0-9]{3}[-\s\]?[0-9]{4,6}$/im)
     .required(),
+  favorite: Joi.boolean().optional().default(false),
 });
 
 module.exports = {

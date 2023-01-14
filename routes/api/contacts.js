@@ -6,6 +6,7 @@ const {
   createContact,
   deleteContact,
   updateSomeContact,
+  updateStatusContact,
 } = require('../../controllers/contacts.controller');
 const { addContactSchema } = require('../../schemas/contacts');
 const { validateBody } = require('../../middlewares/index');
@@ -20,5 +21,7 @@ router.post('/', validateBody(addContactSchema), tryCatchWrapper(createContact))
 router.delete('/:contactId', tryCatchWrapper(deleteContact));
 
 router.put('/:contactId', validateBody(addContactSchema), tryCatchWrapper(updateSomeContact));
+
+router.patch('/:contactId/favorite', tryCatchWrapper(updateStatusContact));
 
 module.exports = router
