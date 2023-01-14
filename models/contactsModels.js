@@ -31,7 +31,6 @@ const removeContact = async (contactId) => {
     const rawData = await fs.readFile(contactsPath, "utf8");
     const data = JSON.parse(rawData);
     const ifIdInList = data.find((el) => el.id === contactId);
-    // const dataPostRemoved = data.filter((el) => el.id !== contactId);
     if (!ifIdInList) {
       return ifIdInList;
     } else {
@@ -59,7 +58,6 @@ const addContact = async (body) => {
   try {
     const { id, name, email, phone } = body;
     const rawData = await fs.readFile(contactsPath, "utf8");
-
     const data = JSON.parse(rawData);
     data.push({ id, name, email, phone });
     const dataToWrite = JSON.stringify(data, null, 2);
