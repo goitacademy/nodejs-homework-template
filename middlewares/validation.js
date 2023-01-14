@@ -4,7 +4,12 @@ module.exports = {
   postContactValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(30).required(),
-      email: Joi.string().alphanum().min(10).max(400).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net"] },
+        })
+        .required(),
       phone: Joi.string().alphanum().min(10).max(400).required(),
     });
 
@@ -17,7 +22,12 @@ module.exports = {
   putValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().alphanum().min(3).max(30).required(),
-      email: Joi.string().alphanum().min(10).max(400).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net"] },
+        })
+        .required(),
       phone: Joi.string().alphanum().min(10).max(400).required(),
     });
 
