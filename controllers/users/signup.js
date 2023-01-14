@@ -1,5 +1,5 @@
 const { User, HttpError } = require("../../models");
-const { hashSync, genSaltSync } = require("bcrypt");
+const { hashSync, genSaltSync } = require("bcryptjs");
 
 const signup = async (req, res, next) => {
   const { password, email } = req.body;
