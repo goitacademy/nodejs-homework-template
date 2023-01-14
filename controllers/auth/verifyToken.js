@@ -6,7 +6,7 @@ const verifyToken = async (req, res) => {
 
   const user = await User.findOne({ verificationToken });
 
-  if (!user) {
+  if (!user || !verificationToken) {
     throw RequestError(404);
   }
 
