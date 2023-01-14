@@ -15,7 +15,16 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  try {
+    const rawData = await fs.readFile(contactsPath, "utf8");
+    const data = JSON.parse(rawData);
+    const dataById = data.filter((el) => el.id === contactId);
+    return dataById;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 const removeContact = async (contactId) => {};
 
