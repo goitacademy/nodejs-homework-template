@@ -14,6 +14,12 @@ const login = async (req, res) => {
     throw error;
   }
 
+  if (!user.verify) {
+    const error = new Error("verify your email");
+    error.status = 401;
+    throw error;
+  }
+
   const payload = { id: user._id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });

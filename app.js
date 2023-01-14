@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+require("./helpers/sendEmail");
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
