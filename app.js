@@ -20,6 +20,9 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("API error:", err.message);
+  if (err.path === "_id") {
+    res.status(400).json({ message: err.message });
+  }
   res.status(err.status || 500).json({ message: err.message });
 });
 
