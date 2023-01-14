@@ -19,6 +19,11 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,  
+    }
 }, { versionKey: false, timestamps: true });
 // схема бросает ошибку с нужным статусом
 contactSchema.post("save", handleMongooseError);

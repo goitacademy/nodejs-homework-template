@@ -4,6 +4,8 @@ const app = require('./app')
 
 const { DB_HOST, PORT = 3000 } = process.env;
 
+mongoose.set('strictQuery', true)
+
 // подключаемся к базе данных
 mongoose.connect(DB_HOST)
   .then(() => {
