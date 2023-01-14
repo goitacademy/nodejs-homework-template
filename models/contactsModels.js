@@ -28,7 +28,15 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  try {
+    const { id, name, email, phone } = body;
+    const rawData = await fs.readFile(contactsPath, "utf8");
+    const data = JSON.parse(rawData);
+    data.push({ id, name, email, phone });
+    console.log(data);
+  } catch (error) {}
+};
 
 const updateContact = async (contactId, body) => {};
 

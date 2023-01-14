@@ -1,6 +1,7 @@
 const {
   listContacts,
   getContactById,
+  addContact,
 } = require("../../models/contactsModels.js");
 
 const getContacts = async (req, res) => {
@@ -21,7 +22,20 @@ const getContactByIdController = async (req, res) => {
   return res.json({ contact });
 };
 
+const postContact = async (req, res) => {
+  const { name, email, phone } = req.body;
+  //   console.log(req.params);
+  //   if (!name || !email || !phone) {
+  //     return res.status(400).json({ message: "missing required name field" });
+  //   }
+  const id = new Date().getTime().toString();
+
+  const newContact = await addContact({ name, email, phone, id });
+  //   console.log(newContact);
+};
+
 module.exports = {
   getContacts,
   getContactByIdController,
+  postContact,
 };
