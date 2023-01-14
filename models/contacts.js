@@ -43,12 +43,14 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const { name, email, phone } = body;
   const contacts = await readContacts();
   const contact = contacts.find((contact) => contact.id === contactId);
-  contact.name = name;
-  contact.email = email;
-  contact.phone = phone;
+  const { name, email, phone } = body;
+  if (contact) {
+    contact.name = name;
+    contact.email = email;
+    contact.phone = phone;
+  }
 
   await writeContacts(contacts);
   return contact;

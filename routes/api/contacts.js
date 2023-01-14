@@ -10,12 +10,16 @@ const {
 } = require("../../controllers/contactsController.js");
 const { tryCatchWrapper } = require("../../helpers");
 const { validateBody } = require("../../middlewares");
-const { addContactSchema } = require("../../schemas/contactSchema.js");
+const { contactSchema } = require("../../schemas/contactSchema.js");
 
 router.get("/", tryCatchWrapper(getContacts));
 router.get("/:contactId", tryCatchWrapper(getContact));
-router.post("/", validateBody(addContactSchema), tryCatchWrapper(postContact));
+router.post("/", validateBody(contactSchema), tryCatchWrapper(postContact));
 router.delete("/:contactId", tryCatchWrapper(deleteContact));
-router.put("/:contactId", tryCatchWrapper(putContact));
+router.put(
+  "/:contactId",
+  validateBody(contactSchema),
+  tryCatchWrapper(putContact)
+);
 
 module.exports = router;
