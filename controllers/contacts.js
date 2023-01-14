@@ -40,19 +40,6 @@ const updateContact = async (req, res) => {
   res.status(200).json(result);
 };
 
-const toggleContactFavorite = async (req, res, next) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
-  if (!req.body) {
-    return res.json({ message: "missing field favorite", status: 400 });
-  }
-  const result = await contacts.updateStatusContact(contactId, favorite);
-  if (!result) {
-    throw HttpError(404);
-  }
-  res.status(200).json(result);
-};
-
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
   console.log(req.body)
@@ -82,5 +69,4 @@ module.exports = {
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
   deleteContact: ctrlWrapper(deleteContact),
-  toggleContactFavorite: ctrlWrapper(toggleContactFavorite),
 };

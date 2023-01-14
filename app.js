@@ -3,7 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth")
-// chrome inspect             node --?inspect gile_name
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
