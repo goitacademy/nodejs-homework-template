@@ -77,6 +77,10 @@ const updateContact = async (contactId, body) => {
     const { name, email, phone } = body;
     const rawData = await fs.readFile(contactsPath, "utf8");
     const data = JSON.parse(rawData);
+    const ifIdInList = data.find((el) => el.id === contactId);
+    if (!ifIdInList) {
+      return ifIdInList;
+    }
     data.forEach((el) => {
       if (el.id === contactId) {
         el.name = name;
