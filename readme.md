@@ -5,7 +5,7 @@
 | Method | URL       | Params                                   | Descriptoin              |
 | ------ | --------- | ---------------------------------------- | ------------------------ |
 | post   | /register | name, email, password, subscription type | user`s registration      |
-| post   | login     | email, password                          | log in to system         |
+| post   | /login     | email, password                          | log in to system         |
 | post   | /logout   |                                          | log out from system      |
 | get    | /current  |                                          | ?                        |
 | patch  | /         |                                          | update subscription type |
