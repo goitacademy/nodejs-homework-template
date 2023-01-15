@@ -1,15 +1,9 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
 const schema = require("../schemas/schemas");
+const Contacts = require("../models/contacts");
 
 // get all Contacts
 const getContacts = async (req, res, next) => {
-  const contacts = await listContacts();
+  const contacts = await Contacts.find({});
   res.status(200).json(contacts);
 };
 
@@ -17,7 +11,7 @@ const getContacts = async (req, res, next) => {
 const getContact = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const contact = await getContactById(contactId);
+  const contact = await Contacts.findById(contactId);
 
   if (!contact) {
     res.status(404).json({ message: "Not found" });
@@ -28,26 +22,20 @@ const getContact = async (req, res, next) => {
 // delete contact by Id
 const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contacts.findById(contactId);
 
   if (!contact) {
     res.status(404).json({ message: "Not found" });
   }
 
-  await removeContact(contactId);
+  await Contacts.findByIdAndRemove(contactId);
 
   res.status(200).json({ message: "contact is deleted" });
 };
 
 // create new contact
 const createNewContact = async (req, res, next) => {
-  const { error } = schema.validate(req.query);
-
-  if (error) {
-    return res.status(400).json({ message: error.message });
-  }
-
-  const newContact = await addContact(req.query);
+  const newContact = await Contacts.create(req.query);
   res.status(201).json(newContact);
 };
 
@@ -62,14 +50,25 @@ const changeContact = async (req, res, next) => {
   }
 
   // audit contact by Id
-  const contact = await getContactById(contactId);
+  const contact = await Contacts.findById(contactId);
   if (!contact) {
     res.status(404).json({ message: "Not found" });
   }
 
-  const updatedContact = await updateContact(contactId, req.query);
+  const updatedContact = await Contacts.findOneAndUpdate(contactId, req.query);
 
   res.status(200).json(updatedContact);
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  // audit contact by Id
+  const contact = await Contacts.findById(contactId);
+
+  if (!contact) {
+    res.status(404).json({ message: "Not found" });
+  }
 };
 
 module.exports = {
@@ -78,4 +77,5 @@ module.exports = {
   deleteContact,
   createNewContact,
   changeContact,
+  updateStatusContact,
 };
