@@ -15,9 +15,15 @@ const updateContactsSchema = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.number().integer().required(),
+  favorite: Joi.boolean(),
+});
+
+const validationSchemaStatus = Joi.object({
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
   addContactsSchema,
   updateContactsSchema,
+  validationSchemaStatus,
 };

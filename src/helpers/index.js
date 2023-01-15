@@ -3,7 +3,7 @@ function tryCatchWrapper(enpointFn) {
     try {
       await enpointFn(req, res, next);
     } catch (error) {
-      res.status(error.code).json(error);
+      res.status(error.code).json({ message: error.message });
     }
   };
 }
