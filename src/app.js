@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const { errorHandler } = require("./helpers/index");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -22,14 +23,6 @@ app.use((_, res, __) => {
   });
 });
 
-app.use((err, _, res, __) => {
-  console.log("API Error:", err.message);
-  res.status(500).json({
-    status: "fail",
-    code: 500,
-    message: err.message,
-    data: "Internal Server Error",
-  });
-});
+app.use(errorHandler);
 
 module.exports = app;

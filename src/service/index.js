@@ -1,4 +1,5 @@
 const Contact = require("./schemas/contacts");
+const { UpdateStatusError } = require("../helpers/errors");
 
 const getAllContacts = async () => {
   return Contact.find({});
@@ -23,6 +24,11 @@ const removeContact = (id) => {
 };
 
 const updateStatusContact = (id, { favorite }) => {
+  console.log(favorite);
+  if (favorite === undefined) {
+    throw new UpdateStatusError("Not found");
+  }
+
   return Contact.findByIdAndUpdate(id, { favorite }, { new: true });
 };
 
