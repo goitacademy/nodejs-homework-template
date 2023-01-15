@@ -2,21 +2,21 @@ const express = require("express");
 const router = express.Router();
 const {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../cont.controllers");
+} = require("../../controllers/cont.controllers");
 const {
   updateContactValidation,
   addContactValidation,
 } = require("../../middlewares/validationMiddleware");
 
-// const validator = require("express-joi-validation").createValidator({});
+
 
 router
   .get("/", listContacts)
-  .get("/:id", getContactById)
+  .get("/:id", getById)
   .post("/", addContactValidation, addContact)
   .delete("/:id", removeContact)
   .put("/:id", updateContactValidation, updateContact);
