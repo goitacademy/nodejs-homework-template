@@ -60,9 +60,6 @@ async function changeContact(req, res, next) {
 async function changeStatus(req, res, next) {
   const { contactId } = req.params;
   const { body } = await req;
-  if (!body.favorite) {
-    next(new CustomError(400, "missing field favorite"));
-  }
 
   const updatedContact = await Contact.findOneAndUpdate(
     { _id: contactId },
