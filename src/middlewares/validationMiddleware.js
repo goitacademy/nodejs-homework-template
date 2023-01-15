@@ -7,7 +7,7 @@ module.exports = {
           email: Joi.string()
             .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
             .required(),
-          phone: Joi.string().min(10).max(16).required(),
+          phone: Joi.string().trim().regex(/^[6-9]\d{9}$/).required()
         });
         const { error } = schema.validate(req.body)
         if (error) {
@@ -22,7 +22,9 @@ module.exports = {
             minDomainSegments: 2,
             tlds: { allow: ["com", "net"] },
           }),
-          phone: Joi.string().min(10).max(16),
+          phone: Joi.string()
+            .trim()
+            .regex(/^[6-9]\d{9}$/),
         }).or("name", "email", "phone");
         const { error } = schema.validate(req.body)
         if (error) {
