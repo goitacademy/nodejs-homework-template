@@ -1,10 +1,20 @@
-const app = require('./app')
+require("dotenv").config();
+const {app }= require("./src/app");
+const { connectMongo } = require("./src/db/connection");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, (err) => {
-  if (err) {
-    console.error('Error at server launch', err);
+async function start() {
+  try {
+   connectMongo();
+    
+    app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Error at server launch", error.message);
   }
-  console.log(`Server running. Use our API on port: ${PORT}`);
-});
+ }
+ 
+start();

@@ -1,23 +1,28 @@
-const express = require('express');
+const express = require("express");
 const {
   getContacts,
   getContact,
   deleteContact,
   createContact,
   updatedContact,
-} = require('../../controllers/contacts.controller');
+  changeStatus
+} = require("../../controllers/contacts.controller");
 const {
   postContactValidation,
   putContactValidation,
 } = require("../../middlewares/validation");
 const router = express.Router();
-const Joi = require('joi');
-const { tryCatchWrapper } = require('../../helpers/error')
+const { tryCatchWrapper } = require("../../helpers/error");
 
 router.get("/", tryCatchWrapper(getContacts));
 router.get("/:contactId", tryCatchWrapper(getContact));
 router.post("/", postContactValidation, tryCatchWrapper(createContact));
 router.delete("/:contactId", tryCatchWrapper(deleteContact));
-router.put( "/:contactId", putContactValidation, tryCatchWrapper(updatedContact));
+router.put(
+  "/:contactId",
+  putContactValidation,
+  tryCatchWrapper(updatedContact)
+);
+router.patch("/:contactId/favorite", tryCatchWrapper(changeStatus));
 
-module.exports = router
+module.exports = router;
