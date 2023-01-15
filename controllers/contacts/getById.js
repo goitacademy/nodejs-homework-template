@@ -5,7 +5,6 @@ const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await Contact.findById(id);
-    console.log("result", result);
     if (!result) {
       throw new NotFound(`Contact with id:${id} was not found`);
     } else {

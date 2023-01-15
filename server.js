@@ -11,8 +11,6 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
-    // useCreateIndex: true,
-    // useUnifiedTopology: true,
   })
 
   .then(() => {

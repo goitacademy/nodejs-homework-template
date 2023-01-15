@@ -4,16 +4,6 @@ const { contacts: controllers } = require("../../controllers");
 const { joiSchema, favJoiSchema } = require("../../models/contact");
 const validation = require("../../middlewares/validation");
 
-// const controllerWrapper = (ctrl) => {
-//   return async (req, res, next) => {
-//     try {
-//       await ctrl(req, res, next);
-//     } catch (error) {
-//       next(error);
-//     }
-//   };
-// };
-
 const validateMiddleware = validation(joiSchema);
 
 router.get("/", controllers.getAll);
