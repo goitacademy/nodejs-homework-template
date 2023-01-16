@@ -1,37 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const {
-  listContacts,
-  // getContactById,
-  // addContact,
-  // updateContact,
-  // removeContact,
-} = require("../../models/contacts");
+  getContacts,
+  getContact,
+  newContact,
+  putContact,
+  deleteContact,
+} = require("../../controllers/contactsController");
+const { contactValidation } = require("../../middleware/validationMiddleware");
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
+router.get("/", getContacts);
 
-    res.status(200).json({ contacts });
-  } catch (error) {
-    res.status(400).json({ error });
-  }
-});
+router.get("/:contactId", getContact);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message id" });
-});
+router.post("/", contactValidation, newContact);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message post" });
-});
+router.put("/:contactId", contactValidation, putContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message delete" });
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message put" });
-});
+router.delete("/:contactId", deleteContact);
 
 module.exports = router;
