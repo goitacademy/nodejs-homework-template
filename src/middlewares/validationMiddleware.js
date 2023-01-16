@@ -1,35 +1,34 @@
-const Joi = require("joi")
+const { addSchema, updateSchema } = require("../schemas/contactsSchemas");
 
 module.exports = {
-    addContactValidation: (req, res, next) => {
-        const schema = Joi.object({
-          name: Joi.string().min(3).max(30).required(),
-          email: Joi.string()
-            .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-            .required(),
-          phone: Joi.string().trim().regex(/^[6-9]\d{9}$/).required()
+  addContactValidation: (req, res, next) => {
+    if (!Object.keys(req.body).length) {
+      return res
+        .status(400)
+        .json({
+          message: "Contact fields are not filled. All fields is required",
         });
-        const { error } = schema.validate(req.body)
-        if (error) {
-            return res.status(400).json({ status: "error", code: 400, message: error.message })
-        }
-        next()
-    },
-    updateContactValidation: (req, res, next) => {
-        const schema = Joi.object({
-          name: Joi.string(),
-          email: Joi.string().email({
-            minDomainSegments: 2,
-            tlds: { allow: ["com", "net"] },
-          }),
-          phone: Joi.string()
-            .trim()
-            .regex(/^[6-9]\d{9}$/),
-        }).or("name", "email", "phone");
-        const { error } = schema.validate(req.body)
-        if (error) {
-            return res.status(400).json({ status: "error", code: 400, message: error.message })
-        }
-        next()
     }
-}
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ status: "error", code: 400, message: error.message });
+    }
+    next();
+  },
+  updateContactValidation: (req, res, next) => {
+    if (!Object.keys(req.body).length) {
+      return res.status(400).json({
+        message: "Missing fields for update",
+      });
+    }
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ status: "error", code: 400, message: error.message });
+    }
+    next();
+  },
+};
