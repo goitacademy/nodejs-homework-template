@@ -102,4 +102,3 @@ module.exports = {
   getUpdatedContact,
 };
 
-// addContact({name: "ggggg", email: "ggg@ggg.com", phone: "444444"})
