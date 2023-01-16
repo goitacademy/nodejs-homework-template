@@ -1,10 +1,10 @@
 export const handleDuplicateKeyError = ({ keyValue }, res) => {
   const field = Object.keys(keyValue);
 
-  res.status(400).json({
+  res.status(409).json({
     status: 'error',
-    code: 400,
-    message: `Contact with that ${field} already exists.`,
-    data: 'Bad request',
+    code: 409,
+    message: ` ${field} already exists.`,
+    data: 'Conflict',
   });
 };
