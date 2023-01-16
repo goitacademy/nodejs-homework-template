@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((_, res, _) => {
+app.use((_, res) => {
   res.status(404).json({
     status: "error",
     code: 404,

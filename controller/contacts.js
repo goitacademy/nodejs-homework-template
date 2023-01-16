@@ -93,3 +93,12 @@ const remove = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports = {
+  getAll,
+  getContactById,
+  addContact,
+  updateContact,
+  updateStatus,
+  remove,
+};
