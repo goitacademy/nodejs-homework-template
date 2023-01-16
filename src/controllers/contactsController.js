@@ -1,13 +1,18 @@
+const { boolean } = require("joi");
 const {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 
 const get = async (req, res) => {
   const data = await listContacts();
+  if (!data) {
+    res.status(500).json({ status: 500, message: "server error" });
+  }
   res.status(200).json({ data, status: 200, message: "operation successful" });
 };
 
@@ -44,10 +49,29 @@ const change = async (req, res, next) => {
   res.status(200).json({ data, status: 200, message: "operation successful" });
 };
 
+const updateStatus = async (req, res, next) => {
+  const { favorite } = req.body;
+  const { contactId } = req.params;
+  if (favorite === true || favorite === false) {
+    const data = await updateStatusContact(contactId, req.body);
+    if (!data) {
+      return res.status(400).json({ status: 400, message: "Not found" });
+    }
+    return res
+      .status(200)
+      .json({ data, status: 200, message: "operation successful" });
+  }
+
+  return res
+    .status(400)
+    .json({ status: 400, message: "missing field favorite" });
+};
+
 module.exports = {
   get,
   getById,
   add,
   remove,
   change,
+  updateStatus,
 };

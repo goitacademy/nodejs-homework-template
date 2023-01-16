@@ -5,10 +5,12 @@ const {
   add,
   remove,
   change,
+  updateStatus,
 } = require("../../controllers/contactsController");
 const {
   postContactValidation,
   putContactValidation,
+  putchContactValidation,
 } = require("../../middlewares/validationMiddleware");
 
 const router = express.Router();
@@ -22,5 +24,7 @@ router.post("/", postContactValidation, add);
 router.delete("/:contactId", remove);
 
 router.put("/:contactId", putContactValidation, change);
+
+router.patch("/:contactId/favorite", putchContactValidation, updateStatus);
 
 module.exports = router;
