@@ -1,5 +1,6 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { hashSync, genSaltSync, compareSync } = require("bcryptjs");
 
 const userSchema = Schema(
   {
@@ -21,16 +22,20 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: "user",
-    },
   },
   { versionKey: false, timestamps: true }
 );
 
+userSchema.methods.setPassword = function (password) {
+  this.password = hashSync(password, genSaltSync(10));
+};
+
+userSchema.methods.comparePassword = function (password) {
+  return compareSync(password, this.password);
+};
+
 const joiSchema = Joi.object({
-  password: Joi.string().min(2).max(20).required(),
+  password: Joi.string().min(6).required(),
   email: Joi.string().required(),
 });
 

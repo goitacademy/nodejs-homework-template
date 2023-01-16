@@ -1,5 +1,5 @@
 const express = require("express");
-const { controllerWrapper, validation } = require("../../middlewares");
+const { auth, controllerWrapper, validation } = require("../../middlewares");
 const {
   contacts: {
     getAll,
@@ -18,9 +18,9 @@ const {
 
 const router = express.Router();
 
-router.get("/", controllerWrapper(getAll));
+router.get("/", auth, controllerWrapper(getAll));
 router.get("/:id", controllerWrapper(getById));
-router.post("/", validation(postContactSchema), controllerWrapper(add));
+router.post("/", auth, validation(postContactSchema), controllerWrapper(add));
 router.put("/:id", validation(putContactSchema), controllerWrapper(updateById));
 router.patch(
   "/:id/favorite",
