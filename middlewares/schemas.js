@@ -30,10 +30,7 @@ const addContactSchema = Joi.object({
 });
 
 const updateContactSchema = Joi.object({
-  name: Joi.string()
-  .alphanum()
-  .min(3)
-  .messages({
+  name: Joi.string().min(3).messages({
     "any.required": "Provide a name",
   }),
   phone: Joi.string()
