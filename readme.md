@@ -6,4 +6,6 @@ Technologies used:
 
 => Express
 
+=> Mongoose
+
 Made by [Marek Kalus](www.linkedin.com/in/marek-kalus-61a240247)
