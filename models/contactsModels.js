@@ -58,7 +58,8 @@ const updateContact = async (contactId, body) => {
 
 const removeContact = async (contactId) => {
   try {
-    console.log();
+    const result = await Contact.findByIdAndRemove({ _id: contactId });
+    return result;
   } catch (error) {
     console.error(error.message);
   }
