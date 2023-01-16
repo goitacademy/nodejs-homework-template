@@ -1,6 +1,6 @@
 const schema = require ('../../schemas/validate.js')
 const express = require('express')
-const { listContacts, getContactById, removeContact, addContact, updateContact} = require ("../../models/contacts.js")
+const { listContacts, getContactById, removeContact, addContact, updateContact, updateStatusContact} = require ("../../models/contacts.js")
 
 const router = express.Router()
 
@@ -28,7 +28,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const { error } = schema.validate(req.body)
   if (error) { 
-    return res.status(400).json({message: "bad request"})
+    return res.status(400).json(error.message)
   }
 
   try {
@@ -64,6 +64,18 @@ router.put('/:contactId', async (req, res, next) => {
   if (results) { 
     return res.json(results)
   } return res.status(400).json({message: error})
+})
+
+router.patch('/:contactId/favorite', async (contactId) => { 
+  try {
+    const data = await updateStatusContact(contactId)
+
+    if (!data) { 
+      res.status(400).json({"message": "missing field favorite"})
+    }
+  } catch (error) {
+    
+  }
 })
 
 module.exports = router
