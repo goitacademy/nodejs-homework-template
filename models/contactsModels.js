@@ -1,15 +1,44 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { Schema, model } = require("mongoose");
+
+const contactSchema = Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const Contact = model("contact", contactSchema);
 
 const contactsPath = path.resolve(
   "/Users/aleksandr/git_hub_projects/nodejs-homework-rest-api/models/contacts.json"
 );
 
+// const listContacts = async () => {
+//   try {
+//     const data = await fs.readFile(contactsPath, "utf-8");
+
+//     return JSON.parse(data);
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// };
+
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-
-    return JSON.parse(data);
+    const result = await Contact.find({});
+    return result;
   } catch (error) {
     console.error(error.message);
   }
