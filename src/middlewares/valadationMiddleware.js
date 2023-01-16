@@ -15,6 +15,7 @@ const addPostValidation = (req, res, next) => {
       )
       .required(),
     favorite: Joi.boolean(),
+
   });
   const validationSchema = schema.validate(req.body);
   if (validationSchema.error) {
@@ -40,6 +41,7 @@ const addPutValidation = (req, res, next) => {
       )
       .required(),
     favorite: Joi.boolean(),
+
   });
   const validationSchema = schema.validate(req.body);
   if (validationSchema.error) {
@@ -59,6 +61,7 @@ const updateFavoriteStatusValidation = (req, res, next) => {
   if (validationSchema.error) {
     return res.status(400).json({
       status: validationSchema.error.details,
+
     });
   }
   next();
@@ -67,5 +70,7 @@ const updateFavoriteStatusValidation = (req, res, next) => {
 module.exports = {
   addPostValidation,
   addPutValidation,
+
   updateFavoriteStatusValidation,
+
 };

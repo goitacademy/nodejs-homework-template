@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
 require("dotenv").config();
 
 const contactsRouter = require("./src/routes/api/contacts");
@@ -31,6 +32,7 @@ app.use((err, req, res, next) => {
     message: err.message,
     data: "Internal Server Error",
   });
+
 });
 
 module.exports = app;
