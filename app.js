@@ -3,8 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://AlexBerd:888Infinity@cluster0.svhdhds.mongodb.net/node-homework?retryWrites=true&w=majority";
+const { DB_HOST } = require("./config");
 
 mongoose
   .connect(DB_HOST)
