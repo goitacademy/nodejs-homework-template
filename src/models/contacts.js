@@ -28,7 +28,7 @@ async function removeContact(contactId) {
   return removeContact;
 }
 
-async function addContact(name, email, phone) {
+async function addContact({ name, email, phone }) {
   const data = await listContacts();
   const newContact = {
     id: `${Date.now()}`,
