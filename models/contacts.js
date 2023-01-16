@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-// const fs = require('fs').promises;
 const path = require("path");
 const shortid = require("shortid");
 const contactsPath = path.join(__dirname, "contacts.json");
@@ -60,13 +59,12 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contacts = await readData();
 
-  // const isContactExist = contacts.some(
-  const isContactExist = contacts.findIndex(
+  const isContactExist = contacts.some(
     (contact) => contact.name.toLowerCase() === body.name.toLowerCase()
   );
 
-  if (isContactExist > -1) {
-    // if (isContactExist) {
+  if (isContactExist) {
+    
     return;
   }
 
