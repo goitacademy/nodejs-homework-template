@@ -47,7 +47,7 @@ async function updateContacts(req, res, next) {
 }
 
 async function favoriteChange(req, res, next) {
-  const { name, email, phone, favorite } = req.body;
+  const { name, email, phone, favorite = false } = req.body;
   const { contactId } = req.params;
   const upFavorite = await Contacts.findByIdAndUpdate(contactId, {
     $set: { name, email, phone, favorite },
