@@ -25,16 +25,6 @@ const contactsPath = path.resolve(
   "/Users/aleksandr/git_hub_projects/nodejs-homework-rest-api/models/contacts.json"
 );
 
-// const listContacts = async () => {
-//   try {
-//     const data = await fs.readFile(contactsPath, "utf-8");
-
-//     return JSON.parse(data);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// };
-
 const listContacts = async () => {
   try {
     const result = await Contact.find({});
@@ -83,19 +73,29 @@ const removeContact = async (contactId) => {
   }
 };
 
+// const addContact = async (body) => {
+//   try {
+//     const { id, name, email, phone } = body;
+//     const rawData = await fs.readFile(contactsPath, "utf8");
+//     const data = JSON.parse(rawData);
+//     data.push({ id, name, email, phone });
+//     const dataToWrite = JSON.stringify(data, null, 2);
+
+//     fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
+//       if (err) throw err;
+//       console.log("Data written to file");
+//     });
+//     return { id, name, email, phone };
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// };
+
 const addContact = async (body) => {
   try {
-    const { id, name, email, phone } = body;
-    const rawData = await fs.readFile(contactsPath, "utf8");
-    const data = JSON.parse(rawData);
-    data.push({ id, name, email, phone });
-    const dataToWrite = JSON.stringify(data, null, 2);
-
-    fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-      if (err) throw err;
-      console.log("Data written to file");
-    });
-    return { id, name, email, phone };
+    const { name, email, phone } = body;
+    const result = await Contact.create({ name, email, phone });
+    return result;
   } catch (error) {
     console.error(error.message);
   }
