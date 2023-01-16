@@ -1,5 +1,10 @@
-const app = require('./app')
+const app = require("./app");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const PORT = 3000;
+
+app.listen(PORT, (error) => {
+  if (error) {
+    console.log("error in server launch:", error);
+  }
+  console.log("Server running. Use our API on port: 3000");
+});
