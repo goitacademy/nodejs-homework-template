@@ -65,7 +65,7 @@ const updateContact = async (req, res, next) => {
 const updateStatus = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { favorite = true } = req.body;
+    const { favorite } = req.body;
     if (favorite === undefined || favorite === null)
       return res.status(400).json({ message: "missing field favorite" });
     const result = await service.updateStatusContact(contactId, req.body);
@@ -87,7 +87,7 @@ const remove = async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await service.removeContact(contactId);
     if (!contact) return res.status(404).json({ message: "Not found" });
-    if (contact) return res.status(200).json({ message: "contact deleted" });
+    if (contact) return res.status(200).json({ message: "Contact deleted" });
   } catch (err) {
     console.error(err.message);
     next(err);
