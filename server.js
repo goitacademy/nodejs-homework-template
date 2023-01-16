@@ -4,11 +4,14 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const PORT = 3000;
-const DB_HOST =
-  "mongodb+srv://AlexBerd:888Infinity@cluster0.svhdhds.mongodb.net/node-homework?retryWrites=true&w=majority";
+// const DB_HOST =
+//   "mongodb+srv://AlexBerd:888Infinity@cluster0.svhdhds.mongodb.net/node-homework?retryWrites=true&w=majority";
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(DB_HOST)
+  .connect(process.env.DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     app.listen(PORT);
     console.log("Database connection successful");

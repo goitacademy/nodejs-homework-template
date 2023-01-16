@@ -30,42 +30,13 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const data = await Contact.find({});
-    const result = JSON.parse(data);
-    const resultById = result.filter((el) => el.id === contactId);
-    return resultById;
+    const result = await Contact.findOne({ _id: contactId });
+
+    return result;
   } catch (error) {
     console.error(error.message);
   }
 };
-
-// const removeContact = async (contactId) => {
-//   try {
-//     const rawData = await fs.readFile(contactsPath, "utf8");
-//     const data = JSON.parse(rawData);
-//     const ifIdInList = data.find((el) => el.id === contactId);
-//     if (!ifIdInList) {
-//       return ifIdInList;
-//     } else {
-//       const dataPostRemoved = data.filter((el) => el.id !== contactId);
-//       const dataWithCorrectId = dataPostRemoved.map((el, index) => {
-//         el.id = (index + 1).toString();
-//         return el;
-//       });
-
-//       const dataToWrite = JSON.stringify(dataWithCorrectId, null, 2);
-
-//       fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-//         if (err) throw err;
-//         console.log("Data written to file");
-//       });
-
-//       return dataPostRemoved;
-//     }
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// };
 
 const addContact = async (body) => {
   try {
