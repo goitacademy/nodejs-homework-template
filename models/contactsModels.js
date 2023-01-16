@@ -50,7 +50,10 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    console.log();
+    const result = Contact.findByIdAndUpdate({ _id: contactId }, body, {
+      new: true,
+    });
+    return result;
   } catch (error) {
     console.error(error.message);
   }
@@ -72,64 +75,6 @@ const updateContactElement = async (contactId, body) => {
     console.error(error.message);
   }
 };
-
-// const updateContact = async (contactId, body) => {
-//   try {
-//     const { name, email, phone } = body;
-//     const rawData = await fs.readFile(contactsPath, "utf8");
-//     const data = JSON.parse(rawData);
-//     const ifIdInList = data.find((el) => el.id === contactId);
-//     if (!ifIdInList) {
-//       return ifIdInList;
-//     }
-//     data.forEach((el) => {
-//       if (el.id === contactId) {
-//         el.name = name;
-//         el.email = email;
-//         el.phone = phone;
-//       }
-//     });
-//     const dataToWrite = JSON.stringify(data, null, 2);
-
-//     fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-//       if (err) throw err;
-//       console.log("Data written to file");
-//     });
-//     return data[contactId - 1];
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// };
-
-// const updateContactElement = async (body, contactId) => {
-//   const { name, email, phone } = body;
-//   const rawData = await fs.readFile(contactsPath, "utf8");
-//   const data = JSON.parse(rawData);
-//   const ifIdInList = data.find((el) => el.id === contactId);
-//   if (!ifIdInList) {
-//     return ifIdInList;
-//   }
-//   data.forEach((el) => {
-//     if (el.id === contactId) {
-//       if (name) {
-//         el.name = name;
-//       }
-//       if (email) {
-//         el.email = email;
-//       }
-//       if (phone) {
-//         el.phone = phone;
-//       }
-//     }
-//   });
-//   const dataToWrite = JSON.stringify(data, null, 2);
-
-//   fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-//     if (err) throw err;
-//     console.log("Data written to file");
-//   });
-//   return data[contactId - 1];
-// };
 
 module.exports = {
   listContacts,
