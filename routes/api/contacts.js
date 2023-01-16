@@ -10,6 +10,7 @@ const {
   createContact,
   deleteContact,
   updateContacts,
+  favoriteChange,
 } = require("../../controllers/controllers");
 
 router.get("/", tryCatchWrapper(getContacts));
@@ -25,5 +26,7 @@ router.put(
   validateBody(addContactAndUpdateSchema),
   tryCatchWrapper(updateContacts)
 );
+
+router.patch("/:contactId/favorite", tryCatchWrapper(favoriteChange));
 
 module.exports = router;
