@@ -12,31 +12,31 @@ const { NotFound } = require('http-errors');
 // });
 
 const updateById = async (req, res, next) => {
-  try {
-    // const { error } = contactsSchema.validate(req.body);
-    //  make validation of request
-    // if (error) {
-    //   error.status = 400;
-    //   throw error;
-    // }
+  // try {
+  // const { error } = contactsSchema.validate(req.body);
+  //  make validation of request
+  // if (error) {
+  //   error.status = 400;
+  //   throw error;
+  // }
 
-    const { contactId } = req.params;
+  const { contactId } = req.params;
 
-    const result = await contactOperations.updateContact(contactId, req.body);
+  const result = await contactOperations.updateContact(contactId, req.body);
 
-    if (!result) {
-      throw new NotFound(`Product with id=${contactId} not found`);
-    }
-    res.json({
-      status: 'success',
-      code: 200,
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
+  if (!result) {
+    throw new NotFound(`Product with id=${contactId} not found`);
   }
+  res.json({
+    status: 'success',
+    code: 200,
+    data: {
+      result,
+    },
+  });
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 module.exports = updateById;
