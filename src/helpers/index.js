@@ -1,4 +1,4 @@
-const { UpdateStatusError } = require("./errors");
+const { UpdateStatusError, ValidationError } = require("./errors");
 
 const tryCatchWrapper = (enpointFn) => {
   return async (req, res, next) => {
@@ -11,7 +11,7 @@ const tryCatchWrapper = (enpointFn) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  if (error instanceof UpdateStatusError) {
+  if (error instanceof UpdateStatusError || error instanceof ValidationError) {
     console.log(error.message);
     return res.status(error.status).json({ message: error.message });
   }

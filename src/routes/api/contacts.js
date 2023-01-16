@@ -1,13 +1,9 @@
 const express = require("express");
 
-const {
-  addContactValidation,
-  putContactValidation,
-} = require("../../middlewares/validationMiddleware");
-
 const { tryCatchWrapper } = require("../../helpers");
 
-const ctrlContact = require("../../controllers/contactsController");
+const validate = require("../../middlewares/validation");
+const ctrlContact = require("../../controllers/contacts");
 
 const router = new express.Router();
 
@@ -17,7 +13,7 @@ router.get("/:id", tryCatchWrapper(ctrlContact.getById));
 
 router.post(
   "/",
-  addContactValidation,
+  validate.addContactValidation,
   tryCatchWrapper(ctrlContact.postContact)
 );
 
@@ -25,7 +21,7 @@ router.delete("/:id", tryCatchWrapper(ctrlContact.deleteContact));
 
 router.put(
   "/:id",
-  putContactValidation,
+  validate.putContactValidation,
   tryCatchWrapper(ctrlContact.updateContact)
 );
 

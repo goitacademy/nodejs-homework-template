@@ -5,4 +5,11 @@ class UpdateStatusError extends Error {
   }
 }
 
-module.exports = { UpdateStatusError };
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.status = 400;
+  }
+}
+
+module.exports = { UpdateStatusError, ValidationError };
