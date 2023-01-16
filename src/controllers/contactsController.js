@@ -14,7 +14,7 @@ const getContacts = async (_, res) => {
 const getContById = async (req, res) => {
   const { contactId } = req.params;
   const data = await getContactById(contactId);
-  if (!data.length) {
+  if (!data) {
     return res.status(404).json({
       code: 404,
       message: `Contact with id: ${contactId} not found`,
