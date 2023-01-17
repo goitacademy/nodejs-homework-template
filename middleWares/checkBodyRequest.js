@@ -20,7 +20,22 @@ function checkIfBodyExists() {
   };
 }
 
+function checkIfBodyStatusExists() {
+  return (req, res, next) => {
+    const fieldsOfContactToUpdate = Object.values(req.body);
+    if (
+      !req.body ||
+      fieldsOfContactToUpdate.length === 0 ||
+      Object.keys(req.body)[0] !== "favorite"
+    ) {
+      return next(httpError(400, "missing field favorite"));
+    }
+    return next();
+  };
+}
+
 module.exports = {
   validateBody,
   checkIfBodyExists,
+  checkIfBodyStatusExists,
 };

@@ -21,8 +21,14 @@ const contactSchema = Joi.object({
     .min(3)
     .required()
     .messages({ "any.required": "missing required email field" }),
+  favorite: Joi.boolean().optional().default(false),
+});
+
+const contactStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   contactSchema,
+  contactStatusSchema,
 };
