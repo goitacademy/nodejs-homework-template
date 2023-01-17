@@ -58,4 +58,12 @@ export const getCurrentUser = async userId => {
   };
 };
 
-export const updateSubscription = async (email, password) => {};
+export const updateSubscription = async (userId, subscription) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: userId },
+    { subscription },
+    { new: true }
+  );
+
+  return updatedUser;
+};

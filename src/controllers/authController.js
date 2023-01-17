@@ -54,7 +54,15 @@ export const getCurrentUserController = async (req, res) => {
   res.json(setSuccessResponse(200, user));
 };
 
-// ! additional
 export const updateSubscriptionController = async (req, res) => {
-  await updateSubscription();
+  const { id: userId } = req.user;
+  const { subscription } = req.body;
+
+  const updatedUser = await updateSubscription(userId, subscription);
+
+  if (!updatedUser) {
+    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
+  }
+
+  res.json(setSuccessResponse(200, updatedUser));
 };
