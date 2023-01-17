@@ -14,6 +14,12 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Email is required'],
       unique: true,
+      trim: true,
+      lowercase: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        'Please enter a valid email address',
+      ],
     },
     subscription: {
       type: String,
@@ -25,7 +31,7 @@ const userSchema = new Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export const User = model('User', userSchema);

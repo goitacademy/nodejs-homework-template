@@ -1,28 +1,28 @@
-//TODO: JWT token decode
+import jwt from 'jsonwebtoken'; // JWT
+import { setErrorResponse } from '../helpers/setResponse.js';
+import { User } from '../models/userModel.js';
 
-// import jwt from 'jsonwebtoken'; // JWT
-// import { NotAuthorizedError } from '../helpers/errors.js';
+export const authMiddleware = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      throw new Error('Authorization required');
+    }
 
-// const authMiddleware = (req, res, next) => {
-//   try {
-//     const { authorization } = req.headers;
-//     const [tokenType, token] = authorization.split(' ');
+    const [tokenType, token] = authorization.split(' ');
+    if (!authorization || !token) {
+      throw new Error('Authorization token required');
+    }
 
-//     if (!authorization) {
-//       next(new NotAuthorizedError('Please, provide a token'));
-//     }
+    const userData = jwt.decode(token, process.env.JWT_SECRET);
 
-//     if (!token) {
-//       next(new NotAuthorizedError('Please, provide a token'));
-//     }
-//     const user = jwt.decode(token, process.env.JWT_SECRET);
-//     req.user = user;
-//     req.token = token;
+    if (!userData) {
+      throw new Error('Invalid token');
+    }
+    req.user = { id: userData.id };
 
-//     next();
-//   } catch (error) {
-//     next(new NotAuthorizedError('Invalid token'));
-//   }
-// };
-
-// export default authMiddleware;
+    next();
+  } catch (error) {
+    return res.status(401).json(setErrorResponse(401, error.message));
+  }
+};

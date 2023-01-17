@@ -1,23 +1,23 @@
 import { Contact } from '../models/contactModel.js';
 
-export const getContacts = async () => {
-  const contacts = await Contact.find({});
+export const getContacts = async owner => {
+  const contacts = await Contact.find({ owner });
   return contacts;
 };
 
-export const getContactById = async contactId => {
-  const contact = await Contact.findById(contactId);
+export const getContactById = async (contactId, owner) => {
+  const contact = await Contact.findById({ _id: contactId, owner });
   return contact;
 };
 
-export const addContact = async contactData => {
-  const newContact = await Contact.create(contactData);
+export const addContact = async (contactData, owner) => {
+  const newContact = await Contact.create({ ...contactData, owner });
   return newContact;
 };
 
-export const updateContact = async (contactId, contactToUpdate) => {
+export const updateContact = async (contactId, contactToUpdate, owner) => {
   const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
+    { _id: contactId, owner },
     contactToUpdate,
     { new: true }
   );
@@ -25,9 +25,9 @@ export const updateContact = async (contactId, contactToUpdate) => {
   return updatedContact;
 };
 
-export const updateContactStatus = async (contactId, favorite) => {
+export const updateContactStatus = async (contactId, favorite, owner) => {
   const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
+    { _id: contactId, owner },
     { favorite },
     { new: true }
   );
@@ -35,7 +35,10 @@ export const updateContactStatus = async (contactId, favorite) => {
   return updatedContact;
 };
 
-export const deleteContact = async contactId => {
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+export const deleteContact = async (contactId, owner) => {
+  const deletedContact = await Contact.findByIdAndDelete({
+    _id: contactId,
+    owner,
+  });
   return deletedContact;
 };

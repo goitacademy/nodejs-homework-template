@@ -11,8 +11,11 @@ import { contactSchema } from '../../schemas/contactSchema.js';
 import { contactStatusSchema } from '../../schemas/contactStatusSchema.js';
 import { errorWrapper } from '../../helpers/errorWrapper.js';
 import { validateBody } from '../../middleware/validateBody.js';
+import { authMiddleware } from '../../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+router.use(authMiddleware); // restricted routes
 
 router.get('/', errorWrapper(getAllContactsController));
 router.get('/:contactId', errorWrapper(getContactByIdController));

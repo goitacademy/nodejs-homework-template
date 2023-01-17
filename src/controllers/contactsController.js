@@ -1,4 +1,8 @@
 import {
+  setErrorResponse,
+  setSuccessResponse,
+} from '../helpers/setResponse.js';
+import {
   getContacts,
   getContactById,
   addContact,
@@ -7,122 +11,83 @@ import {
   deleteContact,
 } from '../services/contactsService.js';
 
-export const getAllContactsController = async (_, res) => {
-  const contactList = await getContacts();
+export const getAllContactsController = async (req, res) => {
+  const { id: userId } = req.user;
+  const contactList = await getContacts(userId);
 
   if (!contactList) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: 'Contact list not found',
-      data: 'Not found',
-    });
+    return res
+      .status(404)
+      .json(setErrorResponse(404, 'Contact list not found'));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: {
-      contactList,
-    },
-  });
+  res.json(setSuccessResponse(200, contactList));
 };
 
 export const getContactByIdController = async (req, res) => {
+  const { id: userId } = req.user;
   const { contactId } = req.params;
 
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, userId);
 
   if (!contact) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: `Not found contact id: ${contactId}`,
-      data: 'Not Found',
-    });
+    return res
+      .status(404)
+      .json(setErrorResponse(404, `Not found contact id: ${contactId}`));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: { contact },
-  });
+  res.json(setSuccessResponse(200, contact));
 };
 
-export const addContactController = async ({ body }, res) => {
-  const newContact = await addContact(body);
+export const addContactController = async ({ body, user }, res) => {
+  const { id: userId } = user;
+  const newContact = await addContact(body, userId);
 
-  res.status(201).json({
-    status: 'success',
-    code: 201,
-    data: { contact: newContact },
-  });
+  res.status(201).json(setSuccessResponse(201, newContact));
 };
 
-export const updateContactController = async (req, res) => {
-  const {
-    params: { contactId },
-    body,
-  } = req;
+export const updateContactController = async ({ body, params, user }, res) => {
+  const { contactId } = params;
+  const { id: userId } = user;
 
-  const updatedContact = await updateContact(contactId, body);
+  const updatedContact = await updateContact(contactId, body, userId);
 
   if (!updatedContact) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: `Not found contact id: ${contactId}`,
-      data: 'Not Found',
-    });
+    return res
+      .status(404)
+      .json(setErrorResponse(404, `Not found contact id: ${contactId}`));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: { updatedContact },
-  });
+  res.json(setSuccessResponse(200, updatedContact));
 };
 
 export const updateContactStatusController = async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+  const { id: userId } = req.user;
 
-  const updatedContact = await updateContactStatus(contactId, favorite);
+  const updatedContact = await updateContactStatus(contactId, favorite, userId);
 
   if (!updatedContact) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: `Not found contact id: ${contactId}`,
-      data: 'Not Found',
-    });
+    return res
+      .status(404)
+      .json(setErrorResponse(404, `Not found contact id: ${contactId}`));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: { updatedContact },
-  });
+  res.json(setSuccessResponse(200, updatedContact));
 };
 
 export const deleteContactController = async (req, res) => {
+  const { id: userId } = req.user;
   const { contactId } = req.params;
 
-  const deletedContact = await deleteContact(contactId);
+  const deletedContact = await deleteContact(contactId, userId);
 
   if (!deletedContact) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: `Not found contact id: ${contactId}`,
-      data: 'Not Found',
-    });
+    return res
+      .status(404)
+      .json(setErrorResponse(404, `Not found contact id: ${contactId}`));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    message: 'Contact deleted',
-    data: 'Contact deleted',
-  });
+  res.status(200).json(setSuccessResponse(200, 'Contact deleted'));
 };

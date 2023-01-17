@@ -1,4 +1,8 @@
 import {
+  setErrorResponse,
+  setSuccessResponse,
+} from '../helpers/setResponse.js';
+import {
   login,
   signup,
   logout,
@@ -11,37 +15,21 @@ export const signupController = async (req, res) => {
 
   const newUser = await signup({ email, password, subscription });
 
-  res.status(201).json({
-    status: 'created',
-    code: 200,
-    data: {
-      newUser,
-    },
-  });
+  res.status(201).json(setSuccessResponse(201, newUser));
 };
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
-  // const token = await login(email, password);
 
-  // TODO: check condition
-  if (!user || !token) {
-    return res.status(401).json({
-      status: 'error',
-      code: 401,
-      message: 'Email or password is wrong',
-      data: 'Unauthorized',
-    });
+  const userData = await login(email, password);
+
+  if (!userData) {
+    return res
+      .status(401)
+      .json(setErrorResponse(401, 'Email or password is wrong'));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: {
-      token,
-      user,
-    },
-  });
+  res.json(setSuccessResponse(200, userData));
 };
 
 export const logoutController = async (req, res) => {
@@ -50,20 +38,10 @@ export const logoutController = async (req, res) => {
 
   // TODO: check condition
   if (!user) {
-    return res.status(401).json({
-      status: 'error',
-      code: 401,
-      message: 'Not authorized',
-      data: 'Unauthorized',
-    });
+    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
   }
 
-  res.status(204).json({
-    status: 'success',
-    code: 204,
-    message: 'No Content',
-    data: 'No Content',
-  });
+  res.status(204).json(setSuccessResponse(204, 'No Content'));
 };
 
 export const getCurrentUserController = async (req, res) => {
@@ -71,21 +49,10 @@ export const getCurrentUserController = async (req, res) => {
 
   // TODO: check condition
   if (!user) {
-    return res.status(401).json({
-      status: 'error',
-      code: 401,
-      message: 'Not authorized',
-      data: 'Unauthorized',
-    });
+    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
   }
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: {
-      user,
-    },
-  });
+  res.json(setSuccessResponse(200, user));
 };
 
 // ! additional

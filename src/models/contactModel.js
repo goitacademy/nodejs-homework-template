@@ -18,6 +18,7 @@ const contactSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
       lowercase: true,
     },
     phone: {
@@ -32,7 +33,7 @@ const contactSchema = new Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export const Contact = model('Contact', contactSchema);
