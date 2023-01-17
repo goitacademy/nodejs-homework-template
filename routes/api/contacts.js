@@ -7,68 +7,77 @@ const {
   updateStatusContact,
 } = require('../../controllers/contacts.controller');
 const router = express.Router();
+const { HttpError } = require('../../helpers/index');
+const { tryCatchWrapper, validateBody } = require('../../helpers/index');
+const currentUser = require('../../middlwares/auth');
+const { contactValidation } = require("../../models/contact")
 
-router.get('/', async (req, res, next) => {
-  try {
-    res.status(200).json(await listContacts(req.limit));
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  '/',
+  currentUser,
+  tryCatchWrapper(async (req, res, next) => {
+    res.status(200).json(await listContacts(req, res));
+  }),
+);
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
+router.get(
+  '/:contactId',
+  tryCatchWrapper(async (req, res, next) => {
     const searchedContact = await getContactById(req.params.contactId);
     if (!searchedContact) {
-      res
-        .status(404)
-        .send(`Contact with id ${req.params.contactId} can't be found`);
+      return next(
+        HttpError(
+          404,
+          `Contact with id ${req.params.contactId} can't be found`,
+        ),
+      );
     }
     res.status(200).json(searchedContact);
-  } catch (error) {
-    next(error);
-  }
-});
+  }),
+);
 
-router.post('/', async (req, res, next) => {
-  try {
-    res.status(201).json(await addContact(req.body));
-  } catch (error) {
-    next(error);
-  }
-});
+router.post(
+  '/',
+  currentUser,
+  validateBody(contactValidation),
+  tryCatchWrapper(async (req, res, next) => {
+    res.status(201).json(await addContact(req));
+  }),
+);
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
+router.delete(
+  '/:contactId',
+  tryCatchWrapper(async (req, res, next) => {
     const contactById = req.params.contactId;
     const searchedContact = await getContactById(contactById);
 
     if (!searchedContact) {
-      res.status(404).send(`Contact with id ${contactById} can't be found`);
-      return;
+      return next(
+        HttpError(404, `Contact with id ${contactById} can't be found`),
+      );
     }
     await removeContact(contactById);
     res.status(200).json({ message: 'contact deleted' });
-  } catch (error) {
-    next(error);
-  }
-});
+  }),
+);
 
-router.put('/:contactId/favorite', async (req, res, next) => {
-  try {
+router.put(
+  '/:contactId/favorite',
+  validateBody(contactValidation),
+  tryCatchWrapper(async (req, res, next) => {
     const contactById = req.params.contactId;
     const contactBody = req.body;
     const searchedContact = await getContactById(contactById);
     if (!searchedContact) {
-      res.status(404).send(`Contact with id ${contactById} can't be found`);
+      return next(
+        HttpError(404, `Contact with id ${contactById} can't be found`),
+      );
     }
     if (!contactBody) {
-      res.status(404).send({ message: 'missing field favorite' });
+      return next(HttpError(404, `Missing field favorite`));
     }
     res.status(200).json(await updateStatusContact(contactById, req.body));
-  } catch (error) {
-    next({ message: 'Not found' }, error);
-  }
-});
+  }),
+);
 
 module.exports = router;
