@@ -2,7 +2,14 @@ const Joi = require("joi");
 
 const { HttpError } = require("../helpers");
 
-const { addContact, listContacts, getContactById, removeContact, updateContact, updateFavorite } = require("../models/contacts");
+const {
+   addContact, 
+   listContacts, 
+   getContactById, 
+   removeContact, 
+   updateContact, 
+   updateFavorite, 
+} = require("../models/contacts");
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
@@ -13,7 +20,10 @@ const addSchema = Joi.object({
 
 const getContactCtrl = async (req, res, next) => {
     try {
-      const result = await listContacts();
+      const {_id: owner} = req.user;
+      const {page = 1, limit = 20, favorite} = req.query;
+      const skip = (page - 1) * limit;
+      const result = await listContacts(owner, skip, limit, favorite);
       res.json({ 
         status: "success",
         code: 200,
@@ -26,12 +36,12 @@ const getContactCtrl = async (req, res, next) => {
 
 const addContactCtrl = async (req, res, next) => {
     try {
-      const {body} = req;
-      const {error} = addSchema.validate(body);
+      const {_id: owner} = req.user;
+      const {error} = addSchema.validate(req.body);
       if (error) {
         throw HttpError(404, "Not found")
       }
-      const result = await addContact(body);
+      const result = await addContact({...req.body, owner});
       res.json({ 
         status: "created",
         code: 201,
@@ -44,8 +54,9 @@ const addContactCtrl = async (req, res, next) => {
 
 const getContactByIdCtrl = async (req, res, next) => {
     try {
+      const {_id: owner} = req.user;
       const id = req.params.contactId;
-      const result = await getContactById(id);
+      const result = await getContactById(id, owner);
       if (!result) {
         throw HttpError(404, "Not found")
       }
@@ -61,8 +72,9 @@ const getContactByIdCtrl = async (req, res, next) => {
 
 const deleteByIdCtrl = async (req, res, next) => {
     try {
+      const {_id: owner} = req.user;
       const id = req.params.contactId;
-      const result = await removeContact(id);
+      const result = await removeContact(id, owner);
       if (!result) {
         throw HttpError(404, "Not found")
       }
@@ -79,17 +91,10 @@ const deleteByIdCtrl = async (req, res, next) => {
 
 const updateContactCtrl = async (req, res, next) => {
     try {
+      const {_id: owner} = req.user;
       const id = req.params.contactId;
       const {body} = req;
-      const {error} = addSchema.validate(body);
-      if (error) {
-        return res.status(400).json({
-          status: "error",
-          code: 400,
-          message: error.message,
-        }) 
-      }
-      const result = await updateContact(id, body);
+      const result = await updateContact(id, body, owner);
       if (!result) {
         throw HttpError(404, "Not found")
       }
@@ -106,17 +111,10 @@ const updateContactCtrl = async (req, res, next) => {
 
 const updateFavoriteCtrl = async (req, res, next) => {
     try {
+      const {_id: owner} = req.user;
       const id = req.params.contactId;
       const {body} = req;
-      const {error} = addSchema.validate(body);
-      if (error) {
-        return res.status(400).json({
-          status: "error",
-          code: 400,
-          message: error.message,
-        }) 
-      }
-      const result = await updateFavorite(id, body);
+      const result = await updateFavorite(id, body, owner);
   
       if (!result) {
         throw HttpError(404, "Not found")
@@ -138,5 +136,5 @@ module.exports = {
     getContactByIdCtrl,
     deleteByIdCtrl,
     updateContactCtrl,
-    updateFavoriteCtrl
+    updateFavoriteCtrl,
 }

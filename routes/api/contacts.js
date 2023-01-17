@@ -1,18 +1,33 @@
 const express = require('express');
 const router = express.Router();
 
-const { addContactCtrl, getContactCtrl, getContactByIdCtrl, deleteByIdCtrl, updateContactCtrl, updateFavoriteCtrl } = require("../../controllers/contacts")
+const {
+     addContactCtrl, 
+     getContactCtrl, 
+     getContactByIdCtrl, 
+     deleteByIdCtrl, 
+     updateContactCtrl, 
+     updateFavoriteCtrl,
+} = require("../../controllers/contacts");
 
-router.get('/', getContactCtrl)
+const { authenticate, isValidId } = require("../../middlewares");
 
-router.get('/:contactId', getContactByIdCtrl)
+router.get('/', authenticate, getContactCtrl)
 
-router.post('/', addContactCtrl)
+router.get('/:contactId', authenticate, isValidId, getContactByIdCtrl)
 
-router.delete('/:contactId', deleteByIdCtrl)
+router.post('/', authenticate, addContactCtrl)
 
-router.put('/:contactId', updateContactCtrl)
+router.delete('/:contactId', authenticate, isValidId, deleteByIdCtrl)
 
-router.patch('/:contactId/favorite', updateFavoriteCtrl)
+router.put('/:contactId', authenticate, isValidId, updateContactCtrl)
+
+router.patch('/:contactId/favorite', authenticate, isValidId, updateFavoriteCtrl)
 
 module.exports = router;
+
+
+// {
+//     "email": "tree12@gmail.com",
+//     "password": "123456"
+// }
