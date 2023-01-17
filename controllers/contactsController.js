@@ -1,6 +1,6 @@
-const { httpError } = require("../helpers");
+const { HttpError } = require("../helpers");
 const {
-  listContacts,
+  getContactService,
   getContactById,
   addContact,
   removeContact,
@@ -8,7 +8,7 @@ const {
 } = require("../models/contacts");
 
 const getContacts = async (req, res) => {
-  const contacts = await listContacts();
+  const contacts = await getContactService();
   res.json(contacts);
 };
 
@@ -17,7 +17,7 @@ const getContact = async (req, res, next) => {
   const contact = await getContactById(contactId);
 
   if (!contact) {
-    return next(httpError(404, "Not found"));
+    throw new HttpError(404, "Not found");
   }
 
   return res.json(contact);
@@ -33,7 +33,7 @@ const deleteContact = async (req, res, next) => {
   const contact = await getContactById(contactId);
 
   if (!contact) {
-    return next(httpError(404, "Not found"));
+    throw new HttpError(404, "Not found");
   }
 
   await removeContact(contactId);
@@ -46,7 +46,7 @@ const putContact = async (req, res, next) => {
   const updatedContact = await updateContact(contactId, req.body);
 
   if (!updatedContact) {
-    return next(httpError(404, "Not found"));
+    throw new HttpError(404, "Not found");
   }
 
   res.status(200).json(updatedContact);
