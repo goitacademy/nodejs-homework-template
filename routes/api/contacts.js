@@ -5,23 +5,26 @@ const {
 } = require('../../middlewares/validationMiddleware');
 
 const {
-  getListController,
-  getByIdController,
-  addController,
-  deleteController,
-  updateController,
+  getAll,
+  getById,
+  add,
+  updateById,
+  updateFavorite,
+  deleteById,
 } = require('../../controllers/contactsController');
 
 const router = express.Router();
 
-router.get('/', getListController);
+router.get('/', getAll);
 
-router.get('/:contactId', getByIdController);
+router.get('/:contactId', getById);
 
-router.post('/', addContactValidation, addController);
+router.post('/', addContactValidation, add);
 
-router.put('/:contactId', addContactValidation, updateController);
+router.put('/:contactId', addContactValidation, updateById);
 
-router.delete('/:contactId', deleteController);
+router.patch('/:contactId/favorite', updateFavorite);
+
+router.delete('/:contactId', deleteById);
 
 module.exports = router;
