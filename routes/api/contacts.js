@@ -2,7 +2,8 @@ const express = require("express");
 const {
   postContactValidation,
   putValidation,
-} = require("../../middlewares/validation");
+  patchValidation,
+} = require("../../middlewares/index");
 const {
   getContacts,
   getContactByIdController,
@@ -10,7 +11,7 @@ const {
   deleteContact,
   putContact,
   patchContact,
-} = require("../controllers/contactController");
+} = require("../../controllers/index");
 
 const router = express.Router();
 
@@ -24,6 +25,6 @@ router.delete("/:contactId", deleteContact);
 
 router.put("/:contactId", putValidation, putContact);
 
-router.patch("/:contactId", patchContact);
+router.patch("/:contactId/favorite", patchValidation, patchContact);
 
 module.exports = router;

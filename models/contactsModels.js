@@ -1,15 +1,31 @@
-const fs = require("fs").promises;
-const path = require("path");
+const { Schema, model } = require("mongoose");
 
-const contactsPath = path.resolve(
-  "/Users/aleksandr/git_hub_projects/nodejs-homework-rest-api/models/contacts.json"
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
 );
+
+const Contact = model("contact", contactSchema);
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-
-    return JSON.parse(data);
+    const result = await Contact.find({});
+    return result;
   } catch (error) {
     console.error(error.message);
   }
@@ -17,38 +33,9 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const rawData = await fs.readFile(contactsPath, "utf8");
-    const data = JSON.parse(rawData);
-    const dataById = data.filter((el) => el.id === contactId);
-    return dataById;
-  } catch (error) {
-    console.error(error.message);
-  }
-};
+    const result = await Contact.findById(contactId);
 
-const removeContact = async (contactId) => {
-  try {
-    const rawData = await fs.readFile(contactsPath, "utf8");
-    const data = JSON.parse(rawData);
-    const ifIdInList = data.find((el) => el.id === contactId);
-    if (!ifIdInList) {
-      return ifIdInList;
-    } else {
-      const dataPostRemoved = data.filter((el) => el.id !== contactId);
-      const dataWithCorrectId = dataPostRemoved.map((el, index) => {
-        el.id = (index + 1).toString();
-        return el;
-      });
-
-      const dataToWrite = JSON.stringify(dataWithCorrectId, null, 2);
-
-      fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-        if (err) throw err;
-        console.log("Data written to file");
-      });
-
-      return dataPostRemoved;
-    }
+    return result;
   } catch (error) {
     console.error(error.message);
   }
@@ -56,17 +43,9 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const { id, name, email, phone } = body;
-    const rawData = await fs.readFile(contactsPath, "utf8");
-    const data = JSON.parse(rawData);
-    data.push({ id, name, email, phone });
-    const dataToWrite = JSON.stringify(data, null, 2);
-
-    fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-      if (err) throw err;
-      console.log("Data written to file");
-    });
-    return { id, name, email, phone };
+    const { name, email, phone } = body;
+    const result = await Contact.create({ name, email, phone });
+    return result;
   } catch (error) {
     console.error(error.message);
   }
@@ -74,60 +53,33 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const { name, email, phone } = body;
-    const rawData = await fs.readFile(contactsPath, "utf8");
-    const data = JSON.parse(rawData);
-    const ifIdInList = data.find((el) => el.id === contactId);
-    if (!ifIdInList) {
-      return ifIdInList;
-    }
-    data.forEach((el) => {
-      if (el.id === contactId) {
-        el.name = name;
-        el.email = email;
-        el.phone = phone;
-      }
+    const result = Contact.findByIdAndUpdate({ _id: contactId }, body, {
+      new: true,
     });
-    const dataToWrite = JSON.stringify(data, null, 2);
-
-    fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-      if (err) throw err;
-      console.log("Data written to file");
-    });
-    return data[contactId - 1];
+    return result;
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const updateContactElement = async (body, contactId) => {
-  const { name, email, phone } = body;
-  const rawData = await fs.readFile(contactsPath, "utf8");
-  const data = JSON.parse(rawData);
-  const ifIdInList = data.find((el) => el.id === contactId);
-  if (!ifIdInList) {
-    return ifIdInList;
+const removeContact = async (contactId) => {
+  try {
+    const result = await Contact.findByIdAndRemove({ _id: contactId });
+    return result;
+  } catch (error) {
+    console.error(error.message);
   }
-  data.forEach((el) => {
-    if (el.id === contactId) {
-      if (name) {
-        el.name = name;
-      }
-      if (email) {
-        el.email = email;
-      }
-      if (phone) {
-        el.phone = phone;
-      }
-    }
-  });
-  const dataToWrite = JSON.stringify(data, null, 2);
+};
 
-  fs.writeFile(`${contactsPath}`, dataToWrite, (err) => {
-    if (err) throw err;
-    console.log("Data written to file");
-  });
-  return data[contactId - 1];
+const updateContactElement = async (contactId, body) => {
+  try {
+    const result = Contact.findByIdAndUpdate({ _id: contactId }, body, {
+      new: true,
+    });
+    return result;
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 module.exports = {
