@@ -2,10 +2,10 @@ const {
   getContacts,
   getContactByIdController,
   postContact,
-  deleteContact,
   putContact,
   patchContact,
-} = require("./contactController");
+  deleteContact,
+} = require("./contacts/index");
 
 module.exports = {
   getContacts,
