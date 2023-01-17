@@ -159,7 +159,7 @@ const avatarUpdate = async (req, res) => {
   const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
   if (!req.file) {
-    throw new WrongParametersError(`"missing file!"`);
+    throw new WrongParametersError("missing file!");
   }
   const { path: tempUpload, filename } = req.file;
   Jimp.read(tempUpload)
