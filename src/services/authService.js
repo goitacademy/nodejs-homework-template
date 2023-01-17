@@ -5,19 +5,17 @@ import { User } from '../models/userModel.js';
 export const signup = async ({ email, password, subscription }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const createdUser = await User.create({
+  const newUser = await User.create({
     email,
     password: hashedPassword,
     subscription,
   });
 
-  const newUser = {
-    id: createdUser._id,
-    email: createdUser.email,
-    subscription: createdUser.subscription,
+  return {
+    id: newUser._id,
+    email: newUser.email,
+    subscription: newUser.subscription,
   };
-
-  return newUser;
 };
 
 export const login = async (email, password) => {
@@ -29,6 +27,7 @@ export const login = async (email, password) => {
   if (!isPasswordValid) return null;
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  await User.findOneAndUpdate({ _id: user._id }, { token });
 
   return {
     token: token,
@@ -40,8 +39,23 @@ export const login = async (email, password) => {
   };
 };
 
-export const logout = async (email, password) => {};
+export const logout = async userId => {
+  const user = await User.findOneAndUpdate(
+    { _id: userId },
+    { token: null },
+    { new: true }
+  );
+  return user;
+};
 
-export const getCurrentUser = async (email, password) => {};
+export const getCurrentUser = async userId => {
+  const user = await User.findOne({ _id: userId });
+
+  return {
+    id: user._id,
+    email: user.email,
+    subscription: user.subscription,
+  };
+};
 
 export const updateSubscription = async (email, password) => {};

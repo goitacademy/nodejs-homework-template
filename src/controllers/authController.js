@@ -33,21 +33,20 @@ export const loginController = async (req, res) => {
 };
 
 export const logoutController = async (req, res) => {
-  const { userId } = req.body;
-  // await logout(userId);
+  const { id: userId } = req.user;
+  const user = await logout(userId);
 
-  // TODO: check condition
   if (!user) {
     return res.status(401).json(setErrorResponse(401, 'Not authorized'));
   }
 
-  res.status(204).json(setSuccessResponse(204, 'No Content'));
+  res.status(204).send();
 };
 
 export const getCurrentUserController = async (req, res) => {
-  await getCurrentUser();
+  const { id: userId } = req.user;
+  const user = await getCurrentUser(userId);
 
-  // TODO: check condition
   if (!user) {
     return res.status(401).json(setErrorResponse(401, 'Not authorized'));
   }

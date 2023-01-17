@@ -7,6 +7,7 @@ import {
   getCurrentUserController,
 } from '../../controllers/authController.js';
 import { errorWrapper } from '../../helpers/errorWrapper.js';
+import { authMiddleware } from '../../middleware/authMiddleware.js';
 import { validateBody } from '../../middleware/validateBody.js';
 import { userSchema } from '../../schemas/userSchema.js';
 
@@ -18,8 +19,8 @@ router.post(
   errorWrapper(signupController)
 );
 router.post('/login', validateBody(userSchema), errorWrapper(loginController));
-router.get('/logout', errorWrapper(logoutController));
-router.get('/current', errorWrapper(getCurrentUserController));
+router.get('/logout', authMiddleware, errorWrapper(logoutController));
+router.get('/current', authMiddleware, errorWrapper(getCurrentUserController));
 router.patch('/', errorWrapper(updateSubscriptionController)); //! additional
 
 export default router;

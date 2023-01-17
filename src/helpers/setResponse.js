@@ -14,14 +14,6 @@ export const setSuccessResponse = (code, data) => {
         data: data,
       };
 
-    case 204:
-      return {
-        status: 'success',
-        code: 204,
-        message: 'No Content',
-        data: data,
-      };
-
     default:
       break;
   }
