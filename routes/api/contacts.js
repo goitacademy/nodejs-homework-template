@@ -1,8 +1,8 @@
 const express = require('express');
 
-const {
-  addContactValidation,
-} = require('../../middlewares/validationMiddleware');
+const { validateBody } = require('../../middlewares');
+
+const { schemas } = require('../../models/contact');
 
 const {
   getAll,
@@ -19,11 +19,15 @@ router.get('/', getAll);
 
 router.get('/:contactId', getById);
 
-router.post('/', addContactValidation, add);
+router.post('/', validateBody(schemas.addSchema), add);
 
-router.put('/:contactId', addContactValidation, updateById);
+router.put('/:contactId', validateBody(schemas.addSchema), updateById);
 
-router.patch('/:contactId/favorite', updateFavorite);
+router.patch(
+  '/:contactId/favorite',
+  validateBody(schemas.updateFavoriteSchema),
+  updateFavorite
+);
 
 router.delete('/:contactId', deleteById);
 
