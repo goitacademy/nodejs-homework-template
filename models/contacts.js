@@ -28,7 +28,7 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await readDb();
   const updatedContacts = contacts.filter((contact) => contact.id !== contactId);
-  return writeDB(updatedContacts);
+  writeDB(updatedContacts);
 }
 
 const addContact = async (body) => {
@@ -38,7 +38,8 @@ const addContact = async (body) => {
   const contacts = await readDb();
   contacts.push(contact);
 
-  return writeDB(contacts);
+  await writeDB(contacts);
+  return contact;
 }
 
 const updateContact = async (contactId, body) => {
@@ -47,8 +48,10 @@ const updateContact = async (contactId, body) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id: contactId, ...body };
-  return writeDB(contacts[index]);
+
+  const updatedContact = { ...contacts[index], ...body };
+  await writeDB(contacts);
+  return updatedContact;
 }
 
 module.exports = {

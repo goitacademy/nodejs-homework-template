@@ -19,6 +19,14 @@ app.use((req, res, next) => {
   next();
 })
 
+app.use((error, req, res, next) => {
+  if (error.status) {
+    return res.status(error.status).json({
+      message: error.message,
+    });
+  }
+})
+
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
   next();
