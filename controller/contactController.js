@@ -1,50 +1,37 @@
 const fs = require("fs/promises");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
+const Contact = require("../models/contact.model");
 
 const listContacts = async () => {
-  const contactsJson = await fs.readFile("./models/contacts.json", "utf8");
-  return JSON.parse(contactsJson);
+  const contacts = await Contact.find();
+  return contacts;
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  return contacts.find((contact) => contact.id === contactId.toString());
+  const contacts = await Contact.findById(contactId);
+  return contacts;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const filteredContacts = contacts.filter((contact) => {
-    return contact.id !== contactId.toString();
-  });
-  if (filteredContacts.length === contacts.length) {
-    return null;
-  }
-  await fs.writeFile(
-    "./models/contacts.json",
-    JSON.stringify(filteredContacts)
-  );
-  return filteredContacts;
+  const contact = await Contact.deleteOne({ _id: contactId });
+  return contact;
 };
 
 const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
-  const contactNew = { id: uuidv4(), name, email, phone };
-  await fs.writeFile(
-    "./models/contacts.json",
-    JSON.stringify([...contacts, contactNew])
-  );
+  const contactNew = await Contact.create({ name, email, phone });
   return contactNew;
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const index = contacts.find((contact) => contact.id === contactId);
-  if (!index) {
-    return null;
-  }
-  contacts[index] = { id: contactId, ...body };
-  await fs.writeFile("./models/contacts.json", JSON.stringify(contacts));
-  return { id: contactId, ...body };
+  const contact = await Contact.findByIdAndUpdate({ _id: contactId, ...body }); // не працює !!!
+  // const contacts = await listContacts();
+  // const index = contacts.find((contact) => contact.id === contactId);
+  // if (!index) {
+  //   return null;
+  // }
+  // contacts[index] = { id: contactId, ...body };
+  // await fs.writeFile("./models/contacts.json", JSON.stringify(contacts));
+  return { _id: contactId, ...body };
 };
 
 module.exports = {
