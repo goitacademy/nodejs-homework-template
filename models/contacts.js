@@ -8,16 +8,18 @@ const {
 } = require("../services/contacts");
 
 const getContacts = async (req, res, next) => {
-  const isFavoritesRequest = req.query.favorite;
-  const contacts = await listContacts(isFavoritesRequest);
+  const contacts = await listContacts({ ...req.query, owner: req.user._id });
   res.set("Content-Type", "application/json").send(contacts);
 };
 
 const getById = async (req, res, next) => {
-  const id = req.params.contactId;
+  const searchFilters = {
+    _id: req.params.contactId,
+    owner: req.user._id,
+  };
 
   try {
-    const contact = await getContactById(id);
+    const contact = await getContactById(searchFilters);
 
     if (!contact) {
       res.status(404).json({ message: "Not found" }).end();
@@ -33,7 +35,10 @@ const getById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
-    const newContact = await addContact(req.body);
+    const newContact = await addContact({
+      ...req.body,
+      owner: req.user._id,
+    });
     res.status(201).json(newContact);
   } catch (error) {
     console.log(error);
@@ -42,11 +47,14 @@ const createContact = async (req, res, next) => {
 };
 
 const updateContactById = async (req, res, next) => {
-  const id = req.params.contactId;
   const contactChanges = req.body;
+  const searchFilters = {
+    _id: req.params.contactId,
+    owner: req.user._id,
+  };
 
   try {
-    const updatedContact = await updateContact(id, contactChanges);
+    const updatedContact = await updateContact(searchFilters, contactChanges);
 
     updatedContact
       ? res.status(200).json(updatedContact)
@@ -58,10 +66,13 @@ const updateContactById = async (req, res, next) => {
 };
 
 const deleteContactById = async (req, res, next) => {
-  const id = req.params.contactId;
+  const searchFilters = {
+    _id: req.params.contactId,
+    owner: req.user._id,
+  };
 
   try {
-    const isContactExist = await removeContact(id);
+    const isContactExist = await removeContact(searchFilters);
 
     isContactExist
       ? res.status(200).json({ message: "Contact deleted" })
@@ -73,10 +84,13 @@ const deleteContactById = async (req, res, next) => {
 };
 
 const setFavorite = async (req, res, next) => {
-  const id = req.params.contactId;
-  const favStatus = req.body;
+  const searchFilters = {
+    _id: req.params.contactId,
+    owner: req.user._id,
+  };
+
   try {
-    const updatedContact = await updateFavoriteStatus(id, favStatus);
+    const updatedContact = await updateFavoriteStatus(searchFilters, req.body);
 
     updatedContact
       ? res.status(200).json(updatedContact)

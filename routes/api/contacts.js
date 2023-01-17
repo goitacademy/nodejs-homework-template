@@ -45,7 +45,7 @@ const router = express.Router();
 
 router.get("/", authMiddleware, getContacts);
 
-router.get("/:contactId", getById);
+router.get("/:contactId", authMiddleware, getById);
 
 router.post("/", validator(addContactSchema), authMiddleware, createContact);
 

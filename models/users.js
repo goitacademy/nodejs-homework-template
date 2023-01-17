@@ -4,6 +4,8 @@ const {
   changeSubStatus,
 } = require("../services/users");
 const User = require("../services/usersSchema");
+var Jimp = require("jimp");
+const fs = require("fs").promises;
 
 const signup = async (req, res, next) => {
   try {
@@ -64,7 +66,7 @@ const getCurrentUser = async (req, res, next) => {
 
 const updateSubscription = async (req, res, next) => {
   try {
-    const { subscription } = req.body;
+    const subscription = req.body;
     const { _id } = req.user;
 
     const matchesAllowedSubs = ["starter", "pro", "business"].includes(
@@ -75,7 +77,7 @@ const updateSubscription = async (req, res, next) => {
         'Subscription status must be one of following values: ["starter", "pro", "business"]'
       );
     }
-    changeSubStatus(_id, subscription);
+    updateUserData(_id, subscription);
     res
       .status(200)
       .json({ message: "Subscription status has been changed succesfully" });
@@ -84,4 +86,35 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, logout, getCurrentUser, updateSubscription };
+const updateAvatar = async (req, res, next) => {
+  const id = req.user._id;
+  const avatar = req.file.path;
+  const [, fileExtention] = req.file.mimetype.split("/");
+  const uploadsPath = `public/avatars/${id}.${fileExtention}`;
+
+  try {
+    Jimp.read(avatar)
+      .then((avatar) => {
+        return avatar.resize(250, 250).write(uploadsPath);
+      })
+      .catch((error) => {
+        next(error);
+      });
+
+    await fs.unlink(avatar);
+    await updateUserData(id, { avatarURL: uploadsPath });
+
+    res.status(200).json({ avatarURL: uploadsPath });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  getCurrentUser,
+  updateSubscription,
+  updateAvatar,
+};

@@ -1,34 +1,30 @@
 const Contact = require("./contactSchema");
 
-const listContacts = async (isFavoritesRequest) => {
-  if (isFavoritesRequest) {
-    const favContacts = await Contact.find({ favorite: true });
-    return favContacts;
-  }
-  const contacts = await Contact.find();
+const listContacts = async (searchFilters) => {
+  const contacts = await Contact.find(searchFilters);
   return contacts;
 };
 
-async function getContactById(contactId) {
-  return Contact.findOne({ _id: contactId });
+async function getContactById(searchFilters) {
+  return Contact.findOne(searchFilters);
 }
 
 const addContact = async (body) => {
   return Contact.create(body);
 };
 
-const removeContact = async (contactId) => {
-  return Contact.findByIdAndRemove({ _id: contactId });
+const removeContact = async (searchFilters) => {
+  return Contact.findByIdAndRemove(searchFilters);
 };
 
-const updateContact = async (contactId, contactChanges) => {
-  return Contact.findByIdAndUpdate({ _id: contactId }, contactChanges, {
+const updateContact = async (searchFilters, contactChanges) => {
+  return Contact.findOneAndUpdate(searchFilters, contactChanges, {
     new: true,
   });
 };
 
-const updateFavoriteStatus = async (contactId, favStatus) => {
-  return Contact.findByIdAndUpdate({ _id: contactId }, favStatus, {
+const updateFavoriteStatus = async (searchFilters, favStatus) => {
+  return Contact.findByIdAndUpdate(searchFilters, favStatus, {
     new: true,
   });
 };
