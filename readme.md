@@ -2,13 +2,14 @@
 
 `http://localhost:3000/api/users`
 
-| Method | URL       | Params                                   | Descriptoin              |
-| ------ | --------- | ---------------------------------------- | ------------------------ |
-| post   | /register | name, email, password, subscription type | user`s registration      |
-| post   | /login     | email, password                          | log in to system         |
-| post   | /logout   |                                          | log out from system      |
-| get    | /current  |                                          | ?                        |
-| patch  | /         |                                          | update subscription type |
+| Method | URL       | Params                                          | Descriptoin              |
+| ------ | --------- | ----------------------------------------------- | ------------------------ |
+| post   | /register | name, email, password, subscription type        | user`s registration      |
+| post   | /login    | email, password                                 | log in to system         |
+| post   | /logout   |                                                 | log out from system      |
+| get    | /current  |                                                 | ?                        |
+| patch  | /         |                                                 | update subscription type |
+| patch  | / avatars | upload file (Content-Type: multipart/form-data) | update user`s avatar     |
 
 `http://localhost:3000/api/contacts`
 
