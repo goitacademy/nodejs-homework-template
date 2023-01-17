@@ -7,7 +7,7 @@ const {
   deleteContact,
   updateSomeContact,
   updateStatusContact,
-} = require('../../controllers/contacts.controller');
+} = require('../../controllers/contacts/index');
 const { addContactSchema } = require('../../schemas/contacts');
 const { validateBody } = require('../../middlewares/index');
 const router = express.Router()
