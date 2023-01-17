@@ -54,18 +54,6 @@
     "phone": "(748) 206-2688"
   },
   {
-    "id": "mK9",
-    "name": "Masha",
-    "email": "1@mail.com",
-    "phone": "111-111-11"
-  },
-  {
-    "id": "r1v",
-    "name": "Masha",
-    "email": "1@mail.com",
-    "phone": "111-111-11"
-  },
-  {
     "id": "gEI",
     "name": "Katya",
     "email": "1@mail.com",
@@ -79,30 +67,18 @@
   },
   {
     "id": "mhV",
-    "name": "",
+    "name": "Max",
     "email": "1@mail.com",
     "phone": "111-111-11"
   },
   {
-    "id": "8_2"
-  },
-  {
-    "id": "695"
+    "id": "695",
+    "name": "Harry Potter",
+    "email": "5@mail.com",
+    "phone": "111-111-111"
   },
   {
     "id": "qe_"
-  },
-  {
-    "id": "Hqy"
-  },
-  {
-    "id": "R-8"
-  },
-  {
-    "id": "q0e"
-  },
-  {
-    "id": "Qb4"
   },
   {
     "id": "fox",
@@ -115,5 +91,29 @@
     "name": "Hanna",
     "email": "4@mail.com",
     "phone": "5555555"
+  },
+  {
+    "id": "LRS",
+    "name": "Lololo",
+    "email": "2@mail.com",
+    "phone": " 222-22-22"
+  },
+  {
+    "id": "dfd",
+    "name": "Lololo",
+    "email": "2@mail.com",
+    "phone": " 222-22-22"
+  },
+  {
+    "id": "dzD",
+    "name": "Lololo",
+    "email": "2@mail.com",
+    "phone": " 222-22-22"
+  },
+  {
+    "id": "mZc",
+    "name": "Lalala",
+    "email": "1@mail.com",
+    "phone": "111-111-11"
   }
 ]

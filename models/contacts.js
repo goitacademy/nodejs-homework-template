@@ -37,16 +37,12 @@ const removeContact = async (contactId) => {
   const contacts = await readContacts();
   const updatedContacts = contacts.filter((item) => item.id !== contactId);
   await writeContacts(updatedContacts);
-  console.table(updatedContacts);
-  return updatedContacts;
-};
+  };
 
 const addContact = async (body) => {
   const id = nanoid(3)
   const contacts = await readContacts()
   const newContact = { id, ...body }
-  
-  
   contacts.push(newContact)
   await writeContacts(contacts)
   return newContact
@@ -55,7 +51,10 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const contacts = await readContacts()
   let [contact] = contacts.filter((item) => item.id === contactId);
-  contact = {contactId, ...body}
+  contact.name = body.name;
+  contact.email = body.email;
+  contact.phone = body.phone;
+  await writeContacts(contacts);
   return contact
 };
 
