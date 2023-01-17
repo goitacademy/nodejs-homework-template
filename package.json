@@ -11,8 +11,10 @@
     "dependencies": {
         "cors": "2.8.5",
         "cross-env": "7.0.3",
+        "dotenv": "^16.0.3",
         "express": "4.17.1",
         "joi": "^17.6.3",
+        "mongoose": "^6.6.5",
         "morgan": "1.10.0",
         "nanoid": "^3.3.4"
     },
