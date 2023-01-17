@@ -1,21 +1,24 @@
 const { Schema, model } = require("mongoose");
 
-const contactSchema = Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 const Contact = model("contact", contactSchema);
 
@@ -30,7 +33,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const result = await Contact.findOne({ _id: contactId });
+    const result = await Contact.findById(contactId);
 
     return result;
   } catch (error) {
@@ -70,7 +73,10 @@ const removeContact = async (contactId) => {
 
 const updateContactElement = async (contactId, body) => {
   try {
-    console.log();
+    const result = Contact.findByIdAndUpdate({ _id: contactId }, body, {
+      new: true,
+    });
+    return result;
   } catch (error) {
     console.error(error.message);
   }

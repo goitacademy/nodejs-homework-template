@@ -4,8 +4,6 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const PORT = 3000;
-// const DB_HOST =
-//   "mongodb+srv://AlexBerd:888Infinity@cluster0.svhdhds.mongodb.net/node-homework?retryWrites=true&w=majority";
 mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.DB_HOST, {
@@ -20,7 +18,3 @@ mongoose
     console.error(error.message);
     process.exit(1);
   });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running. Use our API on port: ${PORT}`);
-// });
