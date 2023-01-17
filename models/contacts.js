@@ -1,9 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid")
-
-const { mainModule } = require("process");
-
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 
@@ -50,7 +47,7 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await readContacts()
-  let [contact] = contacts.filter((item) => item.id === contactId);
+  const [contact] = contacts.filter((item) => item.id === contactId);
   contact.name = body.name;
   contact.email = body.email;
   contact.phone = body.phone;
