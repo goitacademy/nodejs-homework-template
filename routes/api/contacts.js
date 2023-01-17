@@ -1,25 +1,68 @@
-const express = require('express')
+const express = require("express");
+const Joi = require("joi");
+const {
+  getContacts,
+  getById,
+  updateContactById,
+  createContact,
+  deleteContactById,
+  setFavorite,
+} = require("../../models/contacts");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 
-const router = express.Router()
+const addContactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string()
+    .email({ tlds: { deny: ["ru"] } })
+    .required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const updateContactSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email({ tlds: { deny: ["ru"] } }),
+  phone: Joi.string(),
+}).or("name", "email", "phone");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const validator = (schema) => (req, res, next) => {
+  const body = req.body;
+  const validation = schema.validate(body);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  if (validation.error) {
+    res.status(400).send(validation.error.details[0].message);
+    return;
+  }
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  return next();
+};
 
-module.exports = router
+const router = express.Router();
+
+router.get("/", authMiddleware, getContacts);
+
+router.get("/:contactId", authMiddleware, getById);
+
+router.post("/", validator(addContactSchema), authMiddleware, createContact);
+
+router.delete("/:contactId", authMiddleware, deleteContactById);
+
+router.put(
+  "/:contactId",
+  validator(updateContactSchema),
+  authMiddleware,
+  updateContactById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validator(updateFavoriteSchema),
+  authMiddleware,
+  setFavorite
+);
+
+module.exports = router;
