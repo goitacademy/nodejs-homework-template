@@ -18,7 +18,8 @@ async function register(req, res, next) {
 
 async function login(req, res, next) {
   const { email, password } = req.body;
-  const storedUser = await User.findOne({email})
+  const storedUser = await User.findOne({ email });
+  try {
     const savedUser = await User.create({ email, password: hashedPassword });
     return res
       .status(201)
