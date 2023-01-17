@@ -1,3 +1,4 @@
 const RequestError = require("./requestError");
+const handleSaveErrors = require("./handleSaveErrors");
 
-module.exports = { RequestError };
+module.exports = { RequestError, handleSaveErrors };
