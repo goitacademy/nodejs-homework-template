@@ -1,25 +1,22 @@
 require("dotenv").config();
-
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-
 const app = express();
 
 const { connectMongo } = require("./db/connection");
 const { errorHandler } = require("./helpers/apiHelpers");
 const contactsRouter = require("./routers/contactsRouter");
+const authRouter = require("./routers/authRouter");
 
 const PORT = process.env.PORT || 3000;
-
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
 app.use("/api/contacts", contactsRouter);
-
+app.use("/api/auth", authRouter);
 app.use(errorHandler);
 
 const start = async () => {

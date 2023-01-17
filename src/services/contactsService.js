@@ -1,33 +1,40 @@
 const { Contact } = require("../db/contactModel");
-const { WrongParamsError } = require("../helpers/errors");
+const { WrongParamsError, NotAuthorizedError } = require("../helpers/errors");
 
-const getContacts = async () => {
-  const contacts = await Contact.find({});
+const getContacts = async (userId) => {
+  const contacts = await Contact.find({ userId });
   return contacts;
 };
-const getContactById = async (id) => {
-  const contact = await Contact.findById(id);
+const getContactById = async (contactId, userId) => {
+  const contact = await Contact.findOne({ _id: contactId, userId });
 
   if (!contact) {
-    throw new WrongParamsError(`Contact with id ${id} can't be found`);
+    throw new WrongParamsError(`Contact with id ${userId} can't be found`);
   }
   return contact;
 };
-const addContact = async ({ name, email, phone, favorite }) => {
+const addContact = async ({ name, email, phone, favorite }, userId) => {
   console.log(name);
-  const contact = new Contact({ name, email, phone, favorite });
+  const contact = new Contact({ name, email, phone, favorite, userId });
   await contact.save();
 };
-const removeContact = async (id) => {
-  const contact = await Contact.findByIdAndDelete(id);
+const removeContact = async (contactId, userId) => {
+  const contact = await Contact.findOneAndDelete({ _id: contactId, userId });
   if (!contact) {
-    throw new WrongParamsError(`Contact with id ${id} can't be found`);
+    throw new WrongParamsError(`Contact with id ${contactId} can't be found`);
   }
 };
-const updateContact = async (id, { name, email, phone, favorite }) => {
-  await Contact.findByIdAndUpdate(id, {
-    $set: { name, email, phone, favorite },
-  });
+const updateContact = async (
+  contactId,
+  { name, email, phone, favorite },
+  userId
+) => {
+  await Contact.findOneAndUpdate(
+    { _id: contactId, userId },
+    {
+      $set: { name, email, phone, favorite },
+    }
+  );
 };
 
 module.exports = {
