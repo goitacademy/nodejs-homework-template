@@ -44,3 +44,5 @@
     yarn add jsonwebtoken
     npm install bcryptjs
     npm install jsonwebtoken
+    ======hw05-avatars======
+    yarn add multer
