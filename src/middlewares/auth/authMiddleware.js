@@ -9,7 +9,8 @@ const authMiddleware = () => {
       return next(httpError(401, "Not authorized"));
 
     // eslint-disable-next-line dot-notation
-    const [, token] = req.headers["authorization"].split(" ");
+    const [tokenType, token] = req.headers["authorization"].split(" ");
+    if (tokenType !== "Bearer") return next(httpError(401, "Not authorized"));
 
     const parcedToken = await jwt.decode(token, process.env.JWT_SECRET);
     if (!parcedToken) return next(httpError(401, "Not authorized"));

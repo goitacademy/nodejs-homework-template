@@ -7,11 +7,8 @@ const { httpError } = require("../../helpers");
 const login = async (email, password) => {
   const user = await User.findOne({ email });
 
-  if (!user) throw httpError(401, "Email or password is wrong");
-
-  if (!(await bcrypt.compare(password, user.password))) {
+  if (!user || !(await bcrypt.compare(password, user.password)))
     throw httpError(401, "Email or password is wrong");
-  }
 
   const token = jwt.sign(
     { _id: user._id, email: user.email },
