@@ -5,10 +5,12 @@ const {
 
 const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const updatedContact = await updateContact(contactId, req.body);
+  const { _id } = req.user;
+  const updatedContact = await updateContact(contactId, _id, req.body);
 
   if (!updatedContact) return next();
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, _id);
+
   res.json(contact);
 };
 

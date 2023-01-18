@@ -1,9 +1,12 @@
 const { Contact } = require("../../db");
 
-const updateContact = async (id, body) => {
-  const contact = await Contact.findByIdAndUpdate(id, {
-    $set: { ...body },
-  });
+const updateContact = async (id, userId, body) => {
+  const contact = await Contact.findOneAndUpdate(
+    { _id: id, owner: userId },
+    {
+      $set: { ...body },
+    }
+  );
   return contact;
 };
 
