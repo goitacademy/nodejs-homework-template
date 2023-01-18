@@ -1,11 +1,14 @@
 const { Schema, model } = require('mongoose');
+
 const Joi = require('joi');
+
+const subscriptions = ['starter', 'pro', 'business'];
 
 const userSchema = Schema(
   {
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [true, 'Set password for user'],
     },
     email: {
       type: String,
@@ -14,13 +17,10 @@ const userSchema = Schema(
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: subscriptions,
       default: 'starter',
     },
-    token: {
-      type: String,
-      default: null,
-    },
+    token: String,
   },
   { versionKey: false, timestamps: true }
 );
@@ -28,7 +28,7 @@ const userSchema = Schema(
 const registerSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  subscription: Joi.string().valid(['starter', 'pro', 'business']),
+  subscription: Joi.string().valid(...subscriptions),
 });
 
 const loginSchema = Joi.object({
@@ -37,7 +37,9 @@ const loginSchema = Joi.object({
 });
 
 const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid(['starter', 'pro', 'business']).required(),
+  subscription: Joi.string()
+    .valid(...subscriptions)
+    .required(),
 });
 
 const schemas = { registerSchema, loginSchema, updateSubscriptionSchema };
