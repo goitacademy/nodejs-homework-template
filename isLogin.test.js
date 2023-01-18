@@ -3,7 +3,7 @@
 // echo "sendgrid.env" >> .gitignore;
 // source./ sendgrid.env;
 
-// const YOUR_API_KEY = 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;
+
 
 // // using Twilio SendGrid's v3 Node.js Library
 // // https://github.com/sendgrid/sendgrid-nodejs
