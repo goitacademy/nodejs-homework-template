@@ -1,8 +1,8 @@
-const bcrypt = require("bcrypt");
-const { User } = require("../../models/user");
-const { HttpError } = require("../../helpers");
+const bcrypt = require("bcrypt")
 const gravatar = require("gravatar")
-
+const { nanoid } = require("nanoid")
+const { User } = require("../../models/user")
+const { HttpError, sendEmail } = require("../../helpers");
 //Створюємо контролер реєстрації
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -15,11 +15,11 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 // Додаємо демо аватарку
   const avatarURL = gravatar.url(email);
-
+  const verificationCode = nanoid();
 
   //Реєструємо нового користувача
 
-  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationCode });
   // Передача на фронт енд
   res.status(201).json({
     subscription: newUser.subscription,
