@@ -1,9 +1,12 @@
-const express = require('express')
+const express = require('express');
+const contactsApi = require('../../models/contacts.js');
 
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const contacts = await contactsApi.listContacts();
+  // console.log(contacts);
+  res.json({ message: 'template message', contacts })
 })
 
 router.get('/:contactId', async (req, res, next) => {
