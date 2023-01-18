@@ -7,7 +7,7 @@ const {
 } = require("../models/contacts");
 const contactsSchema = require("../schemas/contactSchema");
 
-exports.contacts_list = async (req, res) => {
+exports.getAllContacts = async (req, res) => {
   try {
     const data = await listContacts();
     res.json(data).status(200);
@@ -16,7 +16,7 @@ exports.contacts_list = async (req, res) => {
   }
 };
 
-exports.contact_get = async (req, res) => {
+exports.getOne = async (req, res) => {
   try {
     const data = await getContactById(req.params.contactId);
     if (!data) {
@@ -28,7 +28,7 @@ exports.contact_get = async (req, res) => {
   }
 };
 
-exports.contact_create_post = async (req, res, next) => {
+exports.addContact = async (req, res, next) => {
   try {
     const { error, value } = contactsSchema.validate(req.body, {
       abortEarly: false,
@@ -43,7 +43,7 @@ exports.contact_create_post = async (req, res, next) => {
   }
 };
 
-exports.contact_delete = async (req, res, next) => {
+exports.deleteContact = async (req, res, next) => {
   try {
     const data = await removeContact(req.params.contactId);
     if (!data) {
@@ -55,7 +55,7 @@ exports.contact_delete = async (req, res, next) => {
   }
 };
 
-exports.contact_update_put = async (req, res, next) => {
+exports.updateContact = async (req, res, next) => {
   try {
     const { error, value } = contactsSchema.validate(req.body, {
       abortEarly: false,
