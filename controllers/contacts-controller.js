@@ -8,26 +8,26 @@ const {  listContacts,
 
 async function getContacts(req, res, next) {
   const contacts = await listContacts();
-  res.status(200).json({ contacts });
-     
   if (!contacts) {
   return next(HttpError(404, "Contacts not found"));
   }
+  
+  return res.status(200).json(contacts);
 }
 
 async function getContact(req, res, next) {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
-  res.status(200).json({ contact });
-    
   if (!contact) {
     return next(HttpError(404, "Contact not found"));
   }
+  
+  return res.status(200).json(contact);
 }
 
 async function createContact(req, res, next) {
   const newContact = await addContact(req.body);
-  res.status(201).json({newContact});
+  return res.status(201).json(newContact);
 }
 
 async function deleteContact(req, res, next) {
