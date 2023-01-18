@@ -7,7 +7,7 @@ const updateStatusContact = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
 
   if (!result) {
-    throw new NotFound(`Product with id=${contactId} not found`);
+    throw new NotFound(`missing field favorite`);
   }
   res.json({
     status: 'success',
