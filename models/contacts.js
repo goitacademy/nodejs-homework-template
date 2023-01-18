@@ -3,7 +3,7 @@ const Contact = require("../models/contact");
 const listContacts = async (owner, skip, limit, favorite) => {
   try {
     return await Contact.find(
-      favorite ? {owner, favorite} : owner,
+      favorite ? {owner, favorite} : {owner},
       "-createdAt -updatedAt", 
       {skip, limit}
     ).populate("owner", "email"); 
@@ -38,7 +38,7 @@ const removeContact = async (contactId, owner) => {
 
 const updateContact = async (contactId, body, owner) => {
   try {
-    return await Contact.findOneAndUpdate({_id: contactId, owner}, body, "-createdAt -updatedAt");
+    return await Contact.findOneAndUpdate({_id: contactId, owner}, body);
   } catch (error) {
     console.log(error);
   }
@@ -46,7 +46,7 @@ const updateContact = async (contactId, body, owner) => {
 
 const updateFavorite = async (contactId, body, owner) => {
   try {
-    return await Contact.findOneAndUpdate({_id: contactId, owner}, body, "-createdAt -updatedAt");
+    return await Contact.findOneAndUpdate({_id: contactId, owner}, body);
   } catch (error) {
     console.log(error);
   }
