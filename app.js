@@ -16,13 +16,10 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
+app.use(express.static('public'))
 
 app.use('/api/users', authRouter)
-app.use('/api/contacts',
-  authenticate,
-  contactsRouter)
-
-
+app.use('/api/contacts', authenticate, contactsRouter)
 
 
 app.use((req, res) => {
@@ -32,10 +29,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
       const { status = 500, message = 'Server error' } = err;
       res.status(status).json({ message, })
-
-  // res.status(500).json({ message: err.message })
 })
-
-
 
 module.exports = app
