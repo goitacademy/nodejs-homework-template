@@ -31,17 +31,33 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
+  // const contacts = await readFromDatabase();
+
+  // const updatedContact = { id: contactId, ...body };
+
+  // const updatedContacts = contacts.map((contact) =>
+  //   contact.id.toString() === contactId.toString() ? updatedContact : contact
+  // );
+
+  // await writeToDatabase(updatedContacts);
+
+  // return updatedContact;
+
   const contacts = await readFromDatabase();
 
-  const updatedContact = { id: contactId, ...body };
+  let isContact = false;
 
-  const updatedContacts = contacts.map((contact) =>
-    contact.id.toString() === contactId.toString() ? updatedContact : contact
-  );
+  contacts.forEach((contact) => {
+    if (contact.id.toString() === contactId.toString()) {
+      contact.name = body.name;
+      contact.email = body.email;
+      contact.phone = body.phone;
+      isContact = true;
+    }
+  });
+  await writeToDatabase(contacts);
 
-  await writeToDatabase(updatedContacts);
-
-  return updatedContact;
+  return isContact;
 };
 
 const removeContact = async (contactId) => {
