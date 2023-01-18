@@ -13,6 +13,8 @@ const router = express.Router();
 // Маршрут для реєстрації - signup
 router.post("/register", validateBody(schemas.registrerSchema), ctrlWrapper(ctrl.register));
 
+router.get('/verify/:verificationToken', ctrlWrapper(ctrl.verify))
+
 // Маршрут для логінізації - signin
 router.post("/login", validateBody(schemas.loginSchema), ctrlWrapper(ctrl.login))
 
@@ -20,7 +22,7 @@ router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent))
 
 router.post("/logout", authenticate, ctrlWrapper(ctrl.logout))
 
-//Заміна аватарки
+// Заміна аватарки
 router.patch("/avatars", authenticate, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
 // Експортувати роутер
 module.exports = router;
