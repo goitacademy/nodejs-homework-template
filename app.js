@@ -16,7 +16,11 @@ mongoose
   .connect(
     `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.uum8ffo.mongodb.net/?retryWrites=true&w=majority`
   )
-  .then(() => console.log("Connected!"));
+  .then(() => console.log("Database connection successful"))
+  .catch(() => {
+    console.log("Database connection failed");
+    process.exit(1);
+  });
 
 app.use(logger(formatsLogger));
 app.use(cors());

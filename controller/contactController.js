@@ -1,5 +1,3 @@
-const fs = require("fs/promises");
-// const { v4: uuidv4 } = require("uuid");
 const Contact = require("../models/contact.model");
 
 const listContacts = async () => {
@@ -17,21 +15,21 @@ const removeContact = async (contactId) => {
   return contact;
 };
 
-const addContact = async ({ name, email, phone }) => {
-  const contactNew = await Contact.create({ name, email, phone });
+const addContact = async ({ name, email, phone, favorite = false }) => {
+  const contactNew = await Contact.create({ name, email, phone, favorite });
   return contactNew;
 };
 
 const updateContact = async (contactId, body) => {
-  const contact = await Contact.findByIdAndUpdate({ _id: contactId, ...body }); // не працює !!!
-  // const contacts = await listContacts();
-  // const index = contacts.find((contact) => contact.id === contactId);
-  // if (!index) {
-  //   return null;
-  // }
-  // contacts[index] = { id: contactId, ...body };
-  // await fs.writeFile("./models/contacts.json", JSON.stringify(contacts));
-  return { _id: contactId, ...body };
+  const contact = await Contact.findByIdAndUpdate({ _id: contactId }, body);
+  return contact;
+};
+
+const updateStatusContact = async (contactId, body) => {
+  const contact = await Contact.findByIdAndUpdate({ _id: contactId }, body, {
+    new: true,
+  });
+  return contact;
 };
 
 module.exports = {
@@ -40,4 +38,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
