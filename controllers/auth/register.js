@@ -3,6 +3,8 @@ const gravatar = require("gravatar")
 const { nanoid } = require("nanoid")
 const { User } = require("../../models/user")
 const { HttpError, sendEmail } = require("../../helpers");
+
+
 //Створюємо контролер реєстрації
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -20,6 +22,15 @@ const register = async (req, res) => {
   //Реєструємо нового користувача
 
   const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationCode });
+  
+  const verifyEmail = {
+    to: email,
+    subject: "Verify you email",
+    html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${verificationCode}">Click verify email</a>`
+  };
+
+  await sendEmail(verifyEmail);
+
   // Передача на фронт енд
   res.status(201).json({
     subscription: newUser.subscription,

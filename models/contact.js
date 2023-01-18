@@ -2,7 +2,7 @@
 const { Schema, model } = require("mongoose");
 const {handleMongooseError} = require("../helpers")
 const Joi = require("joi");
-const { required } = require("joi");
+// const { required } = require("joi");
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
