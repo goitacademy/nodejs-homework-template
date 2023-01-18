@@ -1,80 +1,76 @@
-const contacts = require("../models/contacts");
-const { HttpError, NotFound } = require("../helpers/message");
-const { addContactSchema } = require("../schemas/contacts-validate");
+const { addContactSchema } = require("../schemas/contactsSchema");
 
-async function getContacts(req, res) {
-  const { limit } = req.query;
+const Contact = require("../models/contact");
 
-  const allContacts = await contacts.listContacts({ limit });
-
-  return res.json(allContacts);
+async function getContacts(req, res, next) {
+  res.json(
+    await Contact.find()
+  );
 }
 
-async function contactById(req, res, next) {
-  const { contactId } = req.params;
+async function getContact(req, res, next) {
+  const contactById = await Contact.findById(req.params.contactId);
 
-  const byId = await contacts.getContactById(contactId);
-
-  if (!byId) {
-    return next(HttpError(404, "Not found"));
+  if (!contactById) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
-  return res.json(byId);
+
+  res.status(200).json(await contactById);
 }
 
-async function createContact(req, res) {
+async function createContact(req, res, next) {
   const { error } = addContactSchema.validate(req.body);
-
   if (error) {
-    return res.status(400).json({
-      message: NotFound,
-    });
+    return res.status(404).json(error.details[0].message);
   }
 
   const { name, email, phone } = req.body;
 
-  const newContact = await contacts.addContact(name, email, phone);
-  res.status(200).json(newContact);
+  const newContact = {
+    name,
+    email,
+    phone,
+  };
+
+  const result = await Contact.create(newContact);
+  res.status(201).json(result);
 }
 
 async function deleteContact(req, res, next) {
-  const { contactId } = req.params;
-
-  const newContact = await contacts.getContactById(contactId);
-
-  if (!newContact) {
-    next(HttpError(404, "This path can't found"));
+  const result = await Contact.findByIdAndRemove(req.params.contactId);
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
   }
-
-  await contacts.removeContact(contactId);
-
-  return res.status(200).json(newContact);
+  res.status(200).json({ message: "contact deleted" });
 }
 
-async function changeContacts(req, res, next) {
-  const { contactId } = req.params;
-  const { body } = req;
-
+async function changeContact(req, res, next) {
   const { error } = addContactSchema.validate(req.body);
-
   if (error) {
-    return res.status(400).json({
-      message: NotFound,
-    });
+    return res.status(404).json(error.details[0].message);
   }
-
-  const updatedContacts = await contacts.updateContact(contactId, body);
-
-  if (!updatedContacts) {
-    return next(HttpError(404, "Page not found"));
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
   }
-
-  return res.status(200).json(updatedContacts);
+  res.status(200).json(result);
+}
+async function changeFavoriteContact(req, res, next) {
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json(result);
 }
 
 module.exports = {
   getContacts,
-  contactById,
+  getContact,
   createContact,
   deleteContact,
-  changeContacts,
+  changeContact,
+  changeFavoriteContact,
 };
