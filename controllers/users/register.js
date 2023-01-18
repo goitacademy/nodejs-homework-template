@@ -16,8 +16,8 @@ const register = async (req, res) => {
     code: 201,
     data: {
       user: {
-        email,
-        subscription,
+        email: result.email,
+        subscription: result.subscription,
       },
     },
   });
