@@ -2,7 +2,6 @@ const contactOperations = require('../../models/contacts');
 const { NotFound } = require('http-errors');
 
 const deleteById = async (req, res, next) => {
-  // try {
   const { contactId } = req.params;
   const result = await contactOperations.removeContact(contactId);
   if (!result) {
@@ -17,9 +16,6 @@ const deleteById = async (req, res, next) => {
       result,
     },
   });
-  // } catch (error) {
-  //   next(error);
-  // }
 };
 
 module.exports = deleteById;
