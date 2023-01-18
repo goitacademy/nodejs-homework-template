@@ -50,6 +50,7 @@ const updateContact = async (contactId, body) => {
   }
 
   const updatedContact = { ...contacts[index], ...body };
+  contacts.splice(index, 1, updatedContact);
   await writeDB(contacts);
   return updatedContact;
 }
