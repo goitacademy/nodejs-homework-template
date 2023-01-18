@@ -1,14 +1,15 @@
 const { Schema, model } = require('mongoose');
+const Joi = require('joi');
 
 const phoneRegex = /^\(([0-9]{3})\)([ ])([0-9]{3})([-])([0-9]{4})$/;
+// const { HandleMongooseError } = require('../helpers');
 
 const contactSchema = Schema(
   {
     name: {
       type: String,
       required: [true, 'Set name for contact'],
-      minlength: 2,
-      maxlength: 55,
+      unique: true,
     },
     email: {
       type: String,
@@ -24,37 +25,29 @@ const contactSchema = Schema(
       default: false,
     },
   },
-  { verisonKeu: false, timestamps: true }
+  { versionKey: false, timestamps: true }
 );
+// contactSchema.post('save', HandleMongooseError);
+
+const contactsSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  phone: Joi.string().regex(phoneRegex).message('Phone format (xxx) xxx-xxxx').required(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = { contactsSchema, updateFavoriteSchema };
 
 const Contact = model('contact', contactSchema);
 
 module.exports = {
   Contact,
+  schemas,
 };
-
-// const contactsPath = path.join(__dirname, 'contacts.json');
-// const updateContactsFile = async contacts => {
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-// };
-//  const contacts = require('../models/contacts.json');
-
-// const listContacts = async () => {
-//   const contacts = await fs.readFile(contactsPath, 'utf-8');
-
-//   return JSON.parse(contacts);
-// };
-
-// const getContactById = async contactId => {
-//   const contacts = await listContacts();
-//   const contact = contacts.find(({ id }) => id === contactId);
-
-//   if (!contact) {
-//     return null;
-//   }
-
-//   return contact;
-// };
 
 // const removeContact = async contactId => {
 //   const contacts = await listContacts();
