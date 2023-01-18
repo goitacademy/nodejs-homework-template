@@ -7,10 +7,7 @@ const authMiddleware = async (req, res, next) => {
   const [tokenType, token] = req.headers["authorization"].split(" ");
 
   if (tokenType !== "Bearer") {
-    // next(new NotAuthorizedError("Token type must be Bearer"));
-    return res
-      .status(401)
-      .json({ code: 401, msg: "Token type must be Bearer" });
+    next(new NotAuthorizedError("Token type must be Bearer"));
   }
 
   if (!token) {

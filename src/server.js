@@ -8,6 +8,7 @@ const { connectMongo } = require("./db/connection");
 const { errorHandler } = require("./helpers/apiHelpers");
 const contactsRouter = require("./routers/contactsRouter");
 const authRouter = require("./routers/authRouter");
+const filesRouter = require("./routers/filesRouter");
 
 const PORT = process.env.PORT || 3000;
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/contacts/avatars", filesRouter);
 app.use(errorHandler);
 
 const start = async () => {
