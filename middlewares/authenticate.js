@@ -4,7 +4,7 @@ const { Unauthorized } = require("http-errors");
 
 const { SECRET_KEY } = process.env;
 
-const current = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (!bearer) {
@@ -26,4 +26,4 @@ const current = async (req, res, next) => {
   }
 };
 
-module.exports = current;
+module.exports = authenticate;

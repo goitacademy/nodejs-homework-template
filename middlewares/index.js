@@ -1,9 +1,11 @@
 const validation = require("./validation");
 const ctrlWrapper = require("./ctrlWrapper");
-const current = require("./current");
+const authenticate = require("./authenticate");
+const upload = require("./upload");
 
 module.exports = {
   validation,
   ctrlWrapper,
-  current,
+  authenticate,
+  upload,
 };
