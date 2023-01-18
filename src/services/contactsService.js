@@ -1,7 +1,19 @@
 import { Contact } from '../models/contactModel.js';
 
-export const getContacts = async owner => {
-  const contacts = await Contact.find({ owner });
+export const getContacts = async (owner, { page, limit, favorite }) => {
+  const skip = limit * (page - 1);
+
+  const filterFields = { owner };
+  if (favorite) filterFields.favorite = favorite;
+
+  const contacts = await Contact.find(filterFields, {
+    owner: 0,
+    createdAt: 0,
+    updatedAt: 0,
+  })
+    .skip(skip)
+    .limit(limit);
+
   return contacts;
 };
 

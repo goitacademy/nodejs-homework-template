@@ -13,7 +13,10 @@ import {
 
 export const getAllContactsController = async (req, res) => {
   const { id: userId } = req.user;
-  const contactList = await getContacts(userId);
+  let { page = 1, limit = 5, favorite } = req.query;
+  limit = limit > 10 ? 10 : limit;
+
+  const contactList = await getContacts(userId, { page, limit, favorite });
 
   if (!contactList) {
     return res

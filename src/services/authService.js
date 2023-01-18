@@ -19,7 +19,10 @@ export const signup = async ({ email, password, subscription }) => {
 };
 
 export const login = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne(
+    { email },
+    { email: 1, subscription: 1, password: 1 }
+  );
 
   if (!user) return null;
 
@@ -27,7 +30,7 @@ export const login = async (email, password) => {
   if (!isPasswordValid) return null;
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  await User.findOneAndUpdate({ _id: user._id }, { token });
+  await User.findOneAndUpdate(user._id, { token });
 
   return {
     token: token,
@@ -40,22 +43,22 @@ export const login = async (email, password) => {
 };
 
 export const logout = async userId => {
-  const user = await User.findOneAndUpdate(
+  const { _id, email, subscription } = await User.findOneAndUpdate(
     { _id: userId },
     { token: null },
     { new: true }
   );
-  return user;
+
+  return { id: _id, email, subscription };
 };
 
 export const getCurrentUser = async userId => {
-  const user = await User.findOne({ _id: userId });
+  const { _id, email, subscription } = await User.findOne(
+    { _id: userId },
+    { email: 1, subscription: 1 }
+  );
 
-  return {
-    id: user._id,
-    email: user.email,
-    subscription: user.subscription,
-  };
+  return { id: _id, email, subscription };
 };
 
 export const updateSubscription = async (userId, subscription) => {
@@ -65,5 +68,9 @@ export const updateSubscription = async (userId, subscription) => {
     { new: true }
   );
 
-  return updatedUser;
+  return {
+    id: updatedUser._id,
+    email: updatedUser.email,
+    subscription: updatedUser.subscription,
+  };
 };

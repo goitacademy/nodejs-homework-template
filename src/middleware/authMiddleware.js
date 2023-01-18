@@ -9,7 +9,7 @@ export const authMiddleware = async (req, res, next) => {
       throw new Error('Authorization required');
     }
 
-    const [tokenType, token] = authorization.split(' ');
+    const [_, token] = authorization.split(' ');
     if (!authorization || !token) {
       throw new Error('Authorization token required');
     }

@@ -17,14 +17,12 @@ const contactSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       lowercase: true,
     },
     phone: {
       type: String,
       required: true,
-      unique: true,
       minLength: [7, 'Phone should be at least 7 characters'],
       maxLength: [16, 'Phone should be at least 16 characters'],
     },
