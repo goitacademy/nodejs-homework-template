@@ -1,26 +1,27 @@
-## Node.js Project
+# Backend for ContactApp (Node.js)
 
-router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
-router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
-router.post("/logout", authenticate, ctrl.logout);
-router.get("/current", authenticate, ctrl.current);
-router.patch("/", authenticate, ctrl.updateSubscriptionType)
+`http://localhost:3000/api/users`
 
-router.get("/", authenticate, ctrl.getAllContacts);
-router.get("/:contactId", authenticate, ctrl.getContact);
-router.post("/", authenticate, validateBody(schemas.addSchema), ctrl.postContact);
-router.delete("/:contactId", authenticate, ctrl.deleteContact);
-router.put("/:contactId", authenticate, validateBody(schemas.updateSchema), ctrl.updateContact);
+| Method | URL       | Params                                          | Descriptoin              |
+| ------ | --------- | ----------------------------------------------- | ------------------------ |
+| post   | /register | name, email, password, subscription type        | user`s registration      |
+| post   | /login    | email, password                                 | log in to system         |
+| post   | /logout   |                                                 | log out from system      |
+| get    | /current  |                                                 | ?                        |
+| patch  | /         |                                                 | update subscription type |
+| patch  | / avatars | upload file (Content-Type: multipart/form-data) | update user`s avatar     |
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+`http://localhost:3000/api/contacts`
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+| Method | URL         | Params                              | Descriptoin                            |
+| ------ | ----------- | ----------------------------------- | -------------------------------------- |
+| get    | /           |                                     | get all user`s contacts                |
+| get    | /:contactId |                                     | get info about specific user`s contact |
+| post   | /           | name, phone number, email, favorite | add contact                            |
+| delete | /:contactId |                                     | delete specific contact                |
+| put    | /:contactId | validateBody(schemas.updateSchema), | update specific contact                |
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-### Команди:
+## Команди:
 
 - `npm start` &mdash; старт сервера в режимі production
 - `npm run dev` &mdash; старт сервера в режимі розробки (development)
