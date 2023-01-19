@@ -2,7 +2,10 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./routes/api/contacts");
+const userMiddleware = require("./middlewares/user");
+
+const contactsRouter = require("./contacts/router");
+const usersRouter = require("./users/router");
 
 const app = express();
 
@@ -13,6 +16,7 @@ app
   .use(cors())
   .use(express.json())
   .use("/api/contacts", contactsRouter)
+  .use("/users", usersRouter)
   .use((err, req, res, next) => {
     if (err instanceof mongoose.Error.DisconnectedError) {
       res.status(500).json({ message: err.message });
