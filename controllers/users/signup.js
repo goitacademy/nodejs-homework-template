@@ -1,4 +1,5 @@
 const { User, HttpError } = require("../../models");
+const gravatar = require("gravatar");
 
 const signup = async (req, res, next) => {
   const { password, email } = req.body;
@@ -8,7 +9,8 @@ const signup = async (req, res, next) => {
     return next(new HttpError(409, "Email in use"));
   }
 
-  const newUser = new User({ email });
+  const avatarURL = gravatar.url(email);
+  const newUser = new User({ email, avatarURL });
   newUser.setPassword(password);
   newUser.save();
 
@@ -16,6 +18,7 @@ const signup = async (req, res, next) => {
     user: {
       email,
       subscription: newUser.subscription,
+      avatarURL,
     },
   });
 };
