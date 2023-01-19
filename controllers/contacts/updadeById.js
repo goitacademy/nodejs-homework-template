@@ -1,0 +1,1 @@
+const { Contacts } = require("../../model");

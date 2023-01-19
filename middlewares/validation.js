@@ -1,4 +1,4 @@
-const { joiSchema } = require("../model/contact");
+const { joiSchema } = require("../model");
 
 const validation = (joiSchema) => {
   return (req, res, next) => {

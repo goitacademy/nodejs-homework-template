@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const contactShema = new mongoose.Schema({
+const contactShema = Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -24,7 +24,7 @@ const joiSchema = Joi.object({
   phone: Joi.string().min(10).max(23),
 });
 
-const Contacts = mongoose.model("contacts", contactShema);
+const Contacts = model("contact", contactShema);
 
 module.exports = {
   Contacts,

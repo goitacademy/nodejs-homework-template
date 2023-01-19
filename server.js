@@ -2,14 +2,14 @@ const app = require("./app");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
-dotenv.config();
+// dotenv.config();
 mongoose.set("strictQuery", false);
 
-const { HOST_URI } = process.env;
+const { HOST_DB } = process.env;
 
 async function main() {
   try {
-    mongoose.connect(HOST_URI);
+    mongoose.connect(HOST_DB);
     console.log("Database connection successful");
   } catch (error) {
     console.log("Error", error.message);

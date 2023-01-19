@@ -4,16 +4,17 @@ function ErrorHttp(status, message) {
   return error;
 }
 
-module.exports = {
-  ErrorHttp,
-};
-
-function tryCatchWrapper(enpointFn) {
+function ctrlWrapper(ctrl) {
   return async (req, res, next) => {
     try {
-      await enpointFn(req, res, next);
+      await ctrl(req, res, next);
     } catch (error) {
       return next(error);
     }
   };
 }
+
+module.exports = {
+  ErrorHttp,
+  ctrlWrapper,
+};
