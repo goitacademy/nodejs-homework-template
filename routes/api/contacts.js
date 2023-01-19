@@ -16,7 +16,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", getContacts);
+router.get("/", auth, getContacts);
 
 router.get("/:contactId", getContactByIdController);
 

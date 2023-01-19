@@ -27,9 +27,10 @@ const contactSchema = Schema(
 
 const Contact = model("contact", contactSchema);
 
-const listContacts = async () => {
+const listContacts = async (body) => {
   try {
-    const result = await Contact.find({});
+    const { owner } = body;
+    const result = await Contact.find({ owner });
     return result;
   } catch (error) {
     console.error(error.message);
