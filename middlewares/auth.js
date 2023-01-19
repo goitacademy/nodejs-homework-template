@@ -5,7 +5,6 @@ const SECRET_KEY = `${process.env.SECRET_KEY}`;
 
 const auth = async (req, res, next) => {
   const { authorization = "" } = req.headers;
-  console.log(req.headers);
   const [bearer, token] = authorization.split(" ");
 
   try {
