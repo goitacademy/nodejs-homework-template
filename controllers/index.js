@@ -8,6 +8,7 @@ const {
 } = require("./contacts/index");
 
 const auth = require("./auth/index");
+const { getCurrent } = require("./users/index");
 
 module.exports = {
   getContacts,
@@ -17,4 +18,5 @@ module.exports = {
   putContact,
   patchContact,
   auth,
+  getCurrent,
 };
