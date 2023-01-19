@@ -1,7 +1,7 @@
-const RequestError = (status, message) => {
+function RequestError(status, message) {
   const error = new Error(message);
   error.status = status;
   return error;
-};
+}
 
-module.exports = RequestError;
+module.exports = { RequestError };
