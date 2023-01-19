@@ -7,6 +7,7 @@ const {
 } = require("./validation");
 
 const auth = require("./auth");
+const ctrlWrapper = require("./ctrlWrapper");
 
 module.exports = {
   postContactValidation,
@@ -15,4 +16,5 @@ module.exports = {
   userRegisterValidation,
   userLoginValidation,
   auth,
+  ctrlWrapper,
 };
