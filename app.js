@@ -27,8 +27,6 @@ app.use((err, req, res, next) => {
     res.status(400).json({ message: "Indalid Id" });
   }
 
-  console.error("APPPPPPPPPPPPPPP: ", err.message);
-
   res.status(500).json({ message: "Internal server error" });
 });
 
