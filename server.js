@@ -8,7 +8,7 @@ const { HOST_DB } = process.env;
 
 async function main() {
   try {
-    mongoose.connect(HOST_DB);
+    await mongoose.connect(HOST_DB);
     console.log("Database connection successful");
   } catch (error) {
     console.log("Error", error.message);
