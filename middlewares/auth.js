@@ -9,13 +9,13 @@ const auth = async (req, res, next) => {
 
   try {
     if (bearer !== "Bearer") {
-      throw new Unauthorized(`Not ${bearer}`);
+      throw new Unauthorized(`Not authorized`);
     }
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
     console.log(user);
-    if (!user) {
-      throw new Unauthorized(`${user}`);
+    if (!user || !user.token) {
+      throw new Unauthorized(`Not authorized`);
     }
     req.user = user;
     console.log(user);
