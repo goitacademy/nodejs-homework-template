@@ -20,7 +20,6 @@ const register = async (req, res) => {
       },
     },
   });
-  console.log(result);
 };
 
 module.exports = register;
