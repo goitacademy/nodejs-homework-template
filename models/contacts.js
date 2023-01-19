@@ -14,26 +14,26 @@ const listContacts = async () => {
 }
 
 const get = async (contactId) => {
-  
+
   const contacts = await listContacts();
   // console.log(contacts[4].id)
   const result = contacts.find(contact => contact.id === contactId);
   //  console.log(result)
-  if(!result) {
-      return null
-    }
+  if (!result) {
+    return null
+  }
   // console.log(result)
   return result;
 
 }
 
-const removeContact = async (contactId) => { 
+const removeContact = async (contactId) => {
   const contacts = await listContacts();
   // console.log(contactId)
   const idx = contacts.findIndex(contact => contact.id === String(contactId));
   // console.log(contactId)
-  if(idx === -1) {
-      return null
+  if (idx === -1) {
+    return null
   }
   const [remove] = contacts.splice(idx, 1)
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
@@ -42,7 +42,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   // console.log(body)
-  const {name, email, phone} = body
+  const { name, email, phone } = body
   const contacts = await listContacts();
   const newContacts = {
     id: v4(), name, email, phone
@@ -52,20 +52,20 @@ const addContact = async (body) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   // console.log(contacts)
   return newContacts;
- }
+}
 
 const updateContact = async (contactId, body) => {
   console.log(contactId)
-  const { name, email, phone} = body
+  const { name, email, phone } = body
   const contacts = await listContacts();
-    const idx = contacts.findIndex(contact => contact.id === String(contactId));
-    if(idx === -1) {
-        return null
-    }
-  contacts[idx] = {...{id: `${contactId}`, name, email, phone}}
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return contacts[idx];
- }
+  const idx = contacts.findIndex(contact => contact.id === String(contactId));
+  if (idx === -1) {
+    return null
+  }
+  contacts[idx] = { ...{ id: `${contactId}`, name, email, phone } }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return contacts[idx];
+}
 
 module.exports = {
   listContacts,

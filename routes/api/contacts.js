@@ -4,13 +4,13 @@ const Joi = require('joi');
 const contactsOptions = require("../../models/contacts")
 
 const contactsSchema = Joi.object({
-  name: Joi.string() 
-  .min(3)
-  .max(30)
-  .required(),
+  name: Joi.string()
+    .min(3)
+    .max(30)
+    .required(),
   email: Joi.string()
-  .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-  phone:Joi.string().required()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+  phone: Joi.string().required()
 })
 
 
@@ -30,24 +30,20 @@ router.get('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error)
-    // res.status(500).json({
-    //   status: "error",
-    //   code: 500,
-    //   massage: 'Server error'
-    // })
+    
   }
 })
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const {contactId} = req.params;
-    const result = await  contactsOptions.get(contactId);
-    if(!result) {      
+    const { contactId } = req.params;
+    const result = await contactsOptions.get(contactId);
+    if (!result) {
       return res.status(404).json({
         status: "error",
         code: 404,
         massage: `Contacts with id = ${contactId} not found`
-      })      
+      })
     }
     return res.json({
       status: "success",
@@ -59,19 +55,18 @@ router.get('/:contactId', async (req, res, next) => {
 
   } catch (error) {
     next(error)
-   
-  }
 
-  res.json({ message: 'template message' })
+  }
+  
 })
 
 router.post('/', async (req, res, next) => {
-console.log(req.body)
+  console.log(req.body)
   try {
     const { error } = contactsSchema.validate(req.body);
-    if(error) {
-      error.status = 400;
-      throw error;
+    if (error) {
+      error.status = 404;
+       throw error;
     }
     const result = await contactsOptions.addContact(req.body);
     // console.log(result)
@@ -81,24 +76,24 @@ console.log(req.body)
       data: {
         result: result,
       }
-    }) 
+    })
   } catch (error) {
     next(error);
   }
-   
+
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-  const {contactId} = req.params;
-    console.log({contactId})
+    const { contactId } = req.params;
+    console.log({ contactId })
     const result = await contactsOptions.removeContact(contactId);
-    if(!result) {      
+    if (!result) {
       return res.status(404).json({
         status: "error",
         code: 404,
         massage: `Contacts with id = ${contactId} not found`
-      })      
+      })
     }
     return res.json({
       status: "success",
@@ -109,7 +104,7 @@ router.delete('/:contactId', async (req, res, next) => {
       }
     })
   } catch (error) {
-    
+
   }
   res.json({ message: 'template message' })
 })
@@ -117,18 +112,18 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
-    if(error) {
+    if (error) {
       error.status = 400;
       throw error;
     }
-    const {contactId} = req.params;
+    const { contactId } = req.params;
     const updateContact = await contactsOptions.updateContact(contactId, req.body);
-    if(!updateContact) {      
+    if (!updateContact) {
       return res.status(404).json({
         status: "error",
         code: 404,
         massage: `Contacts with id = ${contactId} not found`
-      })      
+      })
     }
     return res.json({
       status: "success",
