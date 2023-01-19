@@ -1,6 +1,7 @@
 const express = require('express');
 
 const {
+  upload,
   authMiddleware,
   validation,
   controllerWrapper,
@@ -11,6 +12,13 @@ const { users: ctrl } = require('../../Controllers');
 const router = express.Router();
 
 router.get('/current', authMiddleware, controllerWrapper(ctrl.getCurrent));
+
+router.patch(
+  '/avatars',
+  authMiddleware,
+  upload.single('avatar'),
+  controllerWrapper(ctrl.updateAvatar),
+);
 
 router.patch(
   '/',
