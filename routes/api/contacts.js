@@ -11,30 +11,12 @@ const {
   updateContact,
 } = require('../../models/contacts')
 
-const schema = Joi.object({
-  name: Joi.string()
-      .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
-      .min(3)
-      .max(20)
-      .required(),
-  phone: Joi.string()
-      .length(10)
-      .pattern(/^[0-9]+$/)
-      .required(),
-  email: Joi.string()
-      .required()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ['com', 'net', 'uk', 'org'] },
-      }),
-})
-
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   const contacts = await listContacts()
   res.status(200).json({ contacts })
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', async (req, res) => {
   const contact = await getContactById(req.params.contactId)
   if (!contact) {
     res.status(404).json({ message: `Contact with id:${req.params.contactId} was not found` })
@@ -42,41 +24,75 @@ router.get('/:contactId', async (req, res, next) => {
   res.status(200).json({ contact })
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string()
+        .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
+        .min(3)
+        .max(20)
+        .required(),
+    phone: Joi.string()
+        .length(10)
+        .pattern(/^[0-9]+$/)
+        .required(),
+    email: Joi.string()
+        .required()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net', 'uk', 'org'] },
+        }),
+  })
   const validatedResult = schema.validate(req.body)
   if (validatedResult.error) {
     res.status(400).json({
       status: validatedResult.error.details.map((x) => x.message),
-      message: `Missing required "${validatedResult.error.details.map(
+      message: `Missing required ${validatedResult.error.details.map(
           (x) => x.context.key
-      )}" field`,
+      )} field`,
     })
   }
   const newContact = await addContact(req.body)
-  res.status(200).json({ newContact })
+  res.status(200).json({newContact})
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', async (req, res) => {
   const contact = await getContactById(req.params.contactId)
   if (contact.length === 0) {
-    res.status(400).json({ message: `Contact with id:${req.params.contactId} was not found` })
+    res.status(400).json({ message: `Contact with idl:${req.params.contactId} was not found` })
   }
   await removeContact(req.params.contactId)
-  res.status(200).json({ message: `Contact with id:${req.params.contactId} was successfully deleted` })
+  res.status(200).json({ message: `Contact with id:${req.params.contactId} was deleted` })
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', async (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string()
+        .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
+        .min(3)
+        .max(20)
+        .required(),
+    phone: Joi.string()
+        .length(10)
+        .pattern(/^[0-9]+$/)
+        .required(),
+    email: Joi.string()
+        .required()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net', 'uk', 'org'] },
+        }),
+  })
   const validatedResult = schema.validate(req.body)
   if (validatedResult.error) {
     res.status(400).json({
       status: validatedResult.error.details.map((x) => x.message),
-      message: `Missing required "${validatedResult.error.details.map(
+      message: `Missing required ${validatedResult.error.details.map(
           (x) => x.context.key
-      )}" field`,
+      )} field`,
     })
   }
   const updContact = await updateContact(req.params.contactId, req.body)
   req.status(200).json({ updContact })
 })
 
-module.exports = router
+module.exports = router;

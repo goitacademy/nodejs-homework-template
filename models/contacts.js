@@ -12,7 +12,7 @@ const getContactById = async (contactId) => {
   const contact = contacts.find((contact) => contact.id === String(contactId));
 
   if (!contact) {
-    return `\x1B[31m Contact with id ${contactId} not found!`;
+    return `Contact with id:${contactId} was not found!`;
   }
 
   return contact;
@@ -22,7 +22,7 @@ const removeContact = async (contactId) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === String(contactId));
   if (index === -1) {
-    return `\x1B[31m Contact with id ${contactId} not found!`;
+    return `Contact with id:${contactId} was not found!`;
   }
 
   const [removedContact] = contacts.splice(index, 1);
@@ -30,15 +30,16 @@ const removeContact = async (contactId) => {
   return removedContact;
 }
 
-const addContact = async ({name,email,phone}) => {
+const addContact = async ({name, email, phone}) => {
+  console.log({name}, {email}, {phone})
   if (!name) {
-    return "\x1B[31m Name is required!";
+    return "Name is required!";
   }
   if (!email) {
-    return "\x1B[31m E-mail is required!";
+    return "E-mail is required!";
   }
   if (!phone) {
-    return "\x1B[31m Phone is required!";
+    return "Phone is required!";
   }
   const contacts = await listContacts();
 
@@ -62,6 +63,7 @@ const updateContact = async (contactId, {name,email,phone}) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return updatedContact;
 }
+
 
 module.exports = {
   listContacts,
