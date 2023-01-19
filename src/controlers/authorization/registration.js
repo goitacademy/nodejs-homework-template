@@ -4,6 +4,7 @@ const { User } = require("../../models/userModel");
 
 const registrationController = async (req, res, next) => {
   try {
+    console.log(req.body);
     const validationResult = schema.schemaLogin.validate(req.body);
     if (validationResult.error) {
       return res.status(400).json({ status: validationResult.error });

@@ -24,9 +24,15 @@ class NotAuthorizedError extends Nodejs26Error {
     this.status = 401;
   }
 }
+const error = (status, message) => {
+  const newError = new Error(message);
+  newError.status = status;
+  return newError;
+};
 module.exports = {
   NotAuthorizedError,
   WrongParametersError,
   ValidationError,
   Nodejs26Error,
+  error,
 };
