@@ -12,9 +12,6 @@ const contactsSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
   phone: Joi.string().required()
 })
-
-
-
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
