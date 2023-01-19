@@ -9,4 +9,7 @@ router.post('/register', validation(schemas.registerSchema), ctrlWrapper(ctrl.re
 router.get('/current', auth, ctrlWrapper(ctrl.getCurrent));
 
 router.post('/login', validation(schemas.loginSchema), ctrlWrapper(ctrl.login));
+
+router.get('/logout', auth, ctrlWrapper(ctrl.logout));
+
 module.exports = router;
