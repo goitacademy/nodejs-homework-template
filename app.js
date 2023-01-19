@@ -19,7 +19,15 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  if (err.status) {
+    return res.status(err.status).json({ message: err.message });
+  }
+
+  if (err.message.includes("Cast to ObjectId failed for value")) {
+    res.status(400).json({ message: "Indalid Id" });
+  }
+
+  res.status(500).json({ message: "Internal server error" });
 });
 
 module.exports = app;
