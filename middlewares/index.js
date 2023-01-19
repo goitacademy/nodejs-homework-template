@@ -6,7 +6,7 @@ const {
   userLoginValidation,
 } = require("./validation");
 
-const auth = require("./auth");
+const { auth } = require("./auth");
 const ctrlWrapper = require("./ctrlWrapper");
 
 module.exports = {
