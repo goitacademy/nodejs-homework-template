@@ -31,19 +31,25 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  // const contacts = await readFromDatabase();
-
-  // const updatedContact = { id: contactId, ...body };
-
-  // const updatedContacts = contacts.map((contact) =>
-  //   contact.id.toString() === contactId.toString() ? updatedContact : contact
-  // );
-
-  // await writeToDatabase(updatedContacts);
-
-  // return updatedContact;
-
   const contacts = await readFromDatabase();
+
+  // const searchedContact = contacts.find(({ id }) => id === contactId);
+
+  // if (!searchedContact) {
+  //   return;
+  // }
+
+  // const newContacts = contacts.filter((contact) => {
+  //   if (contact.id.toString() === contactId.toString()) {
+  //     contact.name = body.name;
+  //     contact.email = body.email;
+  //     contact.phone = body.phone;
+  //   }
+  // });
+
+  // await writeToDatabase(newContacts);
+
+  // return true;
 
   let isContact = false;
 
