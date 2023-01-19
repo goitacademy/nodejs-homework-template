@@ -1,13 +1,13 @@
 import app from './app.js';
 import * as dotenv from 'dotenv'; // to get variables from .env
-import { connectMongo } from './src/db/connection.js';
+import { connectDb } from './src/db/connectDb.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    await connectMongo();
+    await connectDb();
 
     app.listen(PORT, err => {
       if (err) console.log('error st server launch', err);

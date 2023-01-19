@@ -1,32 +1,56 @@
-import { Contact } from '../db/contactsModel.js';
+import { Contact } from '../models/contactModel.js';
 
-export const getContacts = async () => {
-  const contacts = await Contact.find({});
+export const getContacts = async (owner, { page, limit, favorite }) => {
+  const skip = limit * (page - 1);
+
+  const filterFields = { owner };
+  if (favorite) filterFields.favorite = favorite;
+
+  const contacts = await Contact.find(filterFields, {
+    owner: 0,
+    createdAt: 0,
+    updatedAt: 0,
+  })
+    .skip(skip)
+    .limit(limit);
+
   return contacts;
 };
 
-export const getContactById = async contactId => {
-  const contact = await Contact.findById(contactId);
+export const getContactById = async (contactId, owner) => {
+  const contact = await Contact.findById({ _id: contactId, owner });
   return contact;
 };
 
-export const addContact = async contactData => {
-  const newContact = new Contact(contactData);
-  const savedContact = await newContact.save();
-
-  return savedContact;
+export const addContact = async (contactData, owner) => {
+  const newContact = await Contact.create({ ...contactData, owner });
+  return newContact;
 };
 
-export const updateContact = async (contactId, { name, phone, email }) => {
-  await Contact.findByIdAndUpdate(contactId, {
-    $set: { name, phone, email },
-  });
+export const updateContact = async (contactId, contactToUpdate, owner) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner },
+    contactToUpdate,
+    { new: true }
+  );
 
-  const updatedContact = await getContactById(contactId);
   return updatedContact;
 };
 
-export const deleteContact = async contactId => {
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+export const updateContactStatus = async (contactId, favorite, owner) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner },
+    { favorite },
+    { new: true }
+  );
+
+  return updatedContact;
+};
+
+export const deleteContact = async (contactId, owner) => {
+  const deletedContact = await Contact.findByIdAndDelete({
+    _id: contactId,
+    owner,
+  });
   return deletedContact;
 };
