@@ -9,15 +9,16 @@ const auth = async (req, res, next) => {
 
   try {
     if (bearer !== "Bearer") {
-      throw new Unauthorized("Not authorized");
+      throw new Unauthorized(`Not ${bearer}`);
     }
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
     console.log(user);
     if (!user) {
-      throw new Unauthorized("Not authorized");
+      throw new Unauthorized(`${user}`);
     }
     req.user = user;
+    console.log(user);
     next();
   } catch (error) {
     if (error.message === "Invalid signature") {

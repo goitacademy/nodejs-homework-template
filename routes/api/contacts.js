@@ -3,6 +3,7 @@ const {
   postContactValidation,
   putValidation,
   patchValidation,
+  auth,
 } = require("../../middlewares/index");
 const {
   getContacts,
@@ -19,7 +20,7 @@ router.get("/", getContacts);
 
 router.get("/:contactId", getContactByIdController);
 
-router.post("/", postContactValidation, postContact);
+router.post("/", auth, postContactValidation, postContact);
 
 router.delete("/:contactId", deleteContact);
 

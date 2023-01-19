@@ -16,6 +16,11 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -43,8 +48,9 @@ const getContactById = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const { name, email, phone } = body;
-    const result = await Contact.create({ name, email, phone });
+    const { name, email, phone, owner } = body;
+
+    const result = await Contact.create({ name, email, phone, owner });
     return result;
   } catch (error) {
     console.error(error.message);
