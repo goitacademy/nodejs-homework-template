@@ -30,7 +30,7 @@ const Contact = model("contact", contactSchema);
 const listContacts = async (body) => {
   try {
     const { owner } = body;
-    const result = await Contact.find({ owner });
+    const result = await Contact.find({ owner }).populate("owner");
     return result;
   } catch (error) {
     console.error(error.message);
