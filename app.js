@@ -2,6 +2,28 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
+const path = require('path');
+const multer = require('multer');
+
+const tempDir = path.join(__dirname, 'temp');
+console.log(tempDir);
+
+const multerConfig = multer.diskStorage({
+  distination: (req, file, cb) => {
+    cb(null, tempDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+  limits: {
+    fileSize: 2048,
+  },
+});
+
+const upload = multer({
+  storage: multerConfig,
+});
+
 require('dotenv').config();
 
 const authRouter = require('./routes/api/users');
