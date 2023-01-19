@@ -12,4 +12,6 @@ router.post('/login', validation(schemas.loginSchema), ctrlWrapper(ctrl.login));
 
 router.get('/logout', auth, ctrlWrapper(ctrl.logout));
 
+router.patch('/avatars');
+
 module.exports = router;
