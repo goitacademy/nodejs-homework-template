@@ -17,7 +17,6 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsOptions.listContacts();
-    //   console.log(contactId)
     return res.json({
       status: "success",
       code: 200,
@@ -27,7 +26,7 @@ router.get('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error)
-    
+
   }
 })
 
@@ -54,19 +53,17 @@ router.get('/:contactId', async (req, res, next) => {
     next(error)
 
   }
-  
+
 })
 
 router.post('/', async (req, res, next) => {
-  console.log(req.body)
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
       error.status = 404;
-       throw error;
+      throw error;
     }
     const result = await contactsOptions.addContact(req.body);
-    // console.log(result)
     return res.status(201).json({
       status: "success",
       code: 201,
@@ -83,7 +80,6 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    console.log({ contactId })
     const result = await contactsOptions.removeContact(contactId);
     if (!result) {
       return res.status(404).json({
