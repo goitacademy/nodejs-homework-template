@@ -1,4 +1,4 @@
-const ContactSchema = require("./schemas");
+const ContactSchema = require("./schema");
 
 const listContacts = async (req, res) => {
   const contacts = await ContactSchema.find();
