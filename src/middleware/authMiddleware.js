@@ -1,28 +1,26 @@
+import createError from 'http-errors';
 import jwt from 'jsonwebtoken'; // JWT
-import { setErrorResponse } from '../helpers/setResponse.js';
-import { User } from '../models/userModel.js';
 
 export const authMiddleware = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    if (!authorization) {
-      throw new Error('Authorization required');
-    }
+    if (!authorization) throw new createError(401, 'Authorization required');
 
-    const [_, token] = authorization.split(' ');
-    if (!authorization || !token) {
-      throw new Error('Authorization token required');
-    }
+    const [type, token] = authorization.split(' ');
+    if (!type) throw new createError(401, 'Token type invalid');
+    if (!token) throw new createError(401, 'Authorization token required');
 
-    const userData = jwt.decode(token, process.env.JWT_SECRET);
-
-    if (!userData) {
-      throw new Error('Invalid token');
-    }
-    req.user = { id: userData.id };
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = { userId };
 
     next();
   } catch (error) {
-    return res.status(401).json(setErrorResponse(401, error.message));
+    if (
+      error.name === 'TokenExpiredError' ||
+      error.name === 'JsonWebTokenError'
+    ) {
+      next(new createError(401, `Token error: ${error.message}`));
+    }
+    next(error);
   }
 };

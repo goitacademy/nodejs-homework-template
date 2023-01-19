@@ -1,7 +1,5 @@
-import {
-  setErrorResponse,
-  setSuccessResponse,
-} from '../helpers/setResponse.js';
+import createError from 'http-errors';
+import { setSuccessResponse } from '../helpers/setResponse.js';
 import {
   login,
   signup,
@@ -11,11 +9,18 @@ import {
 } from '../services/authService.js';
 
 export const signupController = async (req, res) => {
-  const { email, password, subscription } = req.body;
+  try {
+    const { email, password, subscription } = req.body;
 
-  const newUser = await signup({ email, password, subscription });
+    const newUser = await signup({ email, password, subscription });
 
-  res.status(201).json(setSuccessResponse(201, newUser));
+    res.status(201).json(setSuccessResponse(201, newUser));
+  } catch (error) {
+    if (error?.code === 11000) {
+      const field = Object.keys(error.keyValue);
+      throw new createError(409, ` ${field} already exists.`);
+    }
+  }
 };
 
 export const loginController = async (req, res) => {
@@ -23,46 +28,36 @@ export const loginController = async (req, res) => {
 
   const userData = await login(email, password);
 
-  if (!userData) {
-    return res
-      .status(401)
-      .json(setErrorResponse(401, 'Email or password is wrong'));
-  }
+  if (!userData) throw new createError(401, 'Email or password is wrong');
 
   res.json(setSuccessResponse(200, userData));
 };
 
 export const logoutController = async (req, res) => {
-  const { id: userId } = req.user;
+  const { userId } = req.user;
   const user = await logout(userId);
 
-  if (!user) {
-    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
-  }
+  if (!user) throw new createError(401, 'Not authorized');
 
   res.status(204).send();
 };
 
 export const getCurrentUserController = async (req, res) => {
-  const { id: userId } = req.user;
+  const { userId } = req.user;
   const user = await getCurrentUser(userId);
 
-  if (!user) {
-    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
-  }
+  if (!user) throw new createError(401, 'Not authorized');
 
   res.json(setSuccessResponse(200, user));
 };
 
 export const updateSubscriptionController = async (req, res) => {
-  const { id: userId } = req.user;
+  const { userId } = req.user;
   const { subscription } = req.body;
 
   const updatedUser = await updateSubscription(userId, subscription);
 
-  if (!updatedUser) {
-    return res.status(401).json(setErrorResponse(401, 'Not authorized'));
-  }
+  if (!updatedUser) throw new createError(401, 'Not authorized');
 
   res.json(setSuccessResponse(200, updatedUser));
 };
