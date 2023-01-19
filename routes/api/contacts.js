@@ -3,7 +3,7 @@ const router = express.Router();
 const { schemas } = require('../../models/contact');
 
 const { contacts: ctrl } = require('../../controllers');
-const { validation, ctrlWrapper } = require('../../middlewares');
+const { auth, validation, ctrlWrapper } = require('../../middlewares');
 
 const validateMiddleware = validation(schemas.contactsSchema);
 
@@ -11,7 +11,7 @@ router.get('/', ctrlWrapper(ctrl.getAll));
 
 router.get('/:contactId', ctrlWrapper(ctrl.getById));
 
-router.post('/', validateMiddleware, ctrlWrapper(ctrl.add));
+router.post('/', auth, validateMiddleware, ctrlWrapper(ctrl.add));
 
 router.delete('/:contactId', ctrlWrapper(ctrl.deleteById));
 
