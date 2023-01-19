@@ -15,7 +15,6 @@
  6. Если пользователь с таким id мы нашли в базе - его нужно 
  прикрепить к запросу (объект req)
 */
-
 const { Unauthorized } = require('http-errors');
 const jwt = require('jsonwebtoken');
 

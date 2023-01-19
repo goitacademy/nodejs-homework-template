@@ -7,7 +7,7 @@ const { auth, validation, ctrlWrapper } = require('../../middlewares');
 
 const validateMiddleware = validation(schemas.contactsSchema);
 
-router.get('/', ctrlWrapper(ctrl.getAll));
+router.get('/', auth, ctrlWrapper(ctrl.getAll));
 
 router.get('/:contactId', ctrlWrapper(ctrl.getById));
 
