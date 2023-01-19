@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const register = async (req, res) => {
   const { password, email } = req.body;
   const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  console.log(passwordHash);
   const user = await User.findOne({ email });
   if (user) {
     throw new Conflict(`This email: ${email} in use`);

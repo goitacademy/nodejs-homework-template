@@ -13,7 +13,7 @@ const login = async (req, res) => {
   }
   const passCompare = await bcrypt.compareSync(password, user.password);
   if (!passCompare) {
-    throw new Unauthorized(`Password ${password} is wrong ${user.password}`);
+    throw new Unauthorized(`Password ${password} is wrong`);
   }
 
   const payload = {
