@@ -7,3 +7,13 @@ function ErrorHttp(status, message) {
 module.exports = {
   ErrorHttp,
 };
+
+function tryCatchWrapper(enpointFn) {
+  return async (req, res, next) => {
+    try {
+      await enpointFn(req, res, next);
+    } catch (error) {
+      return next(error);
+    }
+  };
+}

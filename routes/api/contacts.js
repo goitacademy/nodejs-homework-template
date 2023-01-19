@@ -1,20 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const { ErrorHttp } = require("../../helpers/index.js");
-
 const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+  contacts: ctrl,
+  getContacts,
+} = require("../../controllers/contactController");
+// const {
+//   listContacts,
+//   getContactById,
+//   addContact,
+//   removeContact,
+//   updateContact,
+// } = require("../../models/contacts");
 
 const { validation } = require("../../middlewares");
-const { contactSchema } = require("../../shema");
+const { joiSchema } = require("../../model/contact");
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
+  const contacts = await getContacts();
   res.json({ contacts });
 });
 
@@ -27,9 +30,9 @@ router.get("/:contactId", async (req, res, next) => {
   res.status(200).json({ result });
 });
 
-router.post("/", validation(contactSchema), async (req, res, next) => {
+router.post("/", validation(joiSchema), async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
       return next(ErrorHttp(400, "missing required name field"));
     }
@@ -53,9 +56,9 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", validation(contactSchema), async (req, res, next) => {
+router.put("/:contactId", validation(joiSchema), async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
       return next(ErrorHttp(400, "missing fields"));
     }

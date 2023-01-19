@@ -1,8 +1,8 @@
-const { contactSchema } = require("../shema");
+const { joiSchema } = require("../model/contact");
 
-const validation = (contactSchema) => {
+const validation = (joiSchema) => {
   return (req, res, next) => {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
       error.status = 400;
       next(error);
