@@ -18,10 +18,11 @@ app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 
 // USERS ROUTER
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 // ERROR HANDLERS/MIDDLEWARES
 app.use((req, res) => {
+  console.log();
   res.status(404).json({ message: "Not found" });
 });
 
