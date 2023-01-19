@@ -15,6 +15,7 @@
     "commander": "^9.4.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
     "gravatar": "^1.8.2",
     "http-errors": "^2.0.0",
