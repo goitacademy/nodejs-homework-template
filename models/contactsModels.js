@@ -29,8 +29,12 @@ const Contact = model("contact", contactSchema);
 
 const listContacts = async (body) => {
   try {
-    const { owner } = body;
-    const result = await Contact.find({ owner }).populate("owner");
+    const { owner, page, limit } = body;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({ owner }, "", {
+      skip,
+      limit: Number(limit),
+    }).populate("owner", "_id email subscription");
     return result;
   } catch (error) {
     console.error(error.message);

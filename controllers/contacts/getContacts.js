@@ -2,7 +2,8 @@ const { listContacts } = require("../../models/index");
 
 const getContacts = async (req, res) => {
   const { _id } = req.user;
-  const contacts = await listContacts({ owner: _id });
+  const { page = 1, limit = 5 } = req.query;
+  const contacts = await listContacts({ owner: _id, page, limit });
 
   res.status(200).json({
     contacts,
