@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:id", async (req, res, next) => {
-  const contId = await getContactById(req.query.id);
+  const contId = await getContactById(req.params.id);
   contId
     ? res.status(200).json(contId)
     : res.status(404).json({ message: "ID not found" });
@@ -36,14 +36,14 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:id", async (req, res, next) => {
-  const deleteContactId = await removeContact(req.query.id);
+  const deleteContactId = await removeContact(req.params.id);
   deleteContactId
-    ? res.status(200).json(deleteContactId)
+    ? res.status(200).json({ message: "Contact deleted" })
     : res.status(404).json({ message: "ID not found" });
 });
 
 router.put("/:id", async (req, res, next) => {
-  const id = req.query.id;
+  const id = req.params.id;
   const body = req.body;
   const { name, email, phone } = body;
   const { error, value } = schema.validate({ name, email, phone });

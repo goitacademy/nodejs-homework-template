@@ -64,13 +64,16 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    // const { name, email, phone } = body;
     const contacts = await fs.readFile(contactsPath, "utf8");
     const contList = JSON.parse(contacts);
-    const updateId = contList.find((cont) => cont.id === contactId);
     const { name, email, phone } = body;
+    const updateId = contList.find((cont) => cont.id === contactId);
+
     const indexUpdateId = contList.findIndex((cont) => cont.id === contactId);
     if (updateId) {
+      contList[indexUpdateId].name = name;
+      contList[indexUpdateId].email = email;
+      contList[indexUpdateId].phone = phone;
       contList.splice(indexUpdateId, 1);
       const newUpdateContact = {
         id: updateId.id,
@@ -80,10 +83,8 @@ const updateContact = async (contactId, body) => {
       };
       contList.push(newUpdateContact);
       await fs.writeFile(contactsPath, JSON.stringify(contList), "utf8");
-      return newUpdateContact;
-    } else {
-      return updateId;
     }
+    return updateId;
   } catch (error) {
     console.log(error);
   }
