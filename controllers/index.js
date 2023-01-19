@@ -7,6 +7,8 @@ const {
   deleteContact,
 } = require("./contacts/index");
 
+const auth = require("./auth/index");
+
 module.exports = {
   getContacts,
   getContactByIdController,
@@ -14,4 +16,5 @@ module.exports = {
   deleteContact,
   putContact,
   patchContact,
+  auth,
 };

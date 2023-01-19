@@ -7,6 +7,8 @@ const {
   updateContactElement,
 } = require("./contactsModels");
 
+const { User } = require("./usersModels");
+
 module.exports = {
   listContacts,
   getContactById,
@@ -14,4 +16,5 @@ module.exports = {
   addContact,
   updateContact,
   updateContactElement,
+  User,
 };
