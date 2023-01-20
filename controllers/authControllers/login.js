@@ -1,6 +1,7 @@
 const User = require('../../models/users');
 const bcrypt = require('bcryptjs');
 const { Unauthorized } = require('http-errors');
+const {HttpError} = require('../../helpers')
 const jvt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
 
@@ -10,6 +11,9 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (user === null) {
         throw new Unauthorized(`User with email${email} not found`);
+    }
+    if (!user.verify) {
+        throw HttpError(401, 'Email not verify')
     }
     const passCompare = bcrypt.compareSync(password, user.password);
     if (!passCompare)

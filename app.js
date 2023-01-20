@@ -3,8 +3,6 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-// const multer = require('multer');
-// const patch = require('patch')
 
 
 require("dotenv").config();
