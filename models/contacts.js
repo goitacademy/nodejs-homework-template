@@ -1,168 +1,154 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { uid } = require("uid");
+const {
+  getContacts,
+  getContactById,
+  addContact,
+} = require("../servises/contactsService");
 
-const contactsPath = path.join(__dirname, "contacts.json");
-
-const listContacts = async (req, res) => {
+const ctrlGetContacts = async (req, res, next) => {
   try {
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    const parsedContacts = JSON.parse(contacts);
+    const result = await getContacts();
 
-    if (!parsedContacts.length) {
+    if (!result.length) {
       console.log("no contacts");
       return res.status(404).json({ message: "no contacts found", code: 404 });
     }
 
-    res.json({ message: "list of contacts", code: 200, parsedContacts });
-    console.table(parsedContacts);
+    res.json({ message: "list of contacts", code: 200, data: result });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
+    next(error);
   }
 };
 
-const getContactById = async (req, res) => {
+const ctrlGetContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    const result = await getContactById(contactId);
 
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    const parsedContacts = JSON.parse(contacts);
-
-    const contactById = parsedContacts.filter(
-      (contact) => contact.id === contactId
-    );
-
-    if (!contactById.length) {
-      console.log(`no contacts by id: '${contactId}' found`);
-
-      return res.status(404).json({
-        message: `no contacts by id: '${contactId}' found`,
-        code: 404,
+    if (result) {
+      return res.json({
+        message: `contact by id: '${contactId}'`,
+        code: 200,
+        data: result,
       });
     }
 
-    res.json({
-      message: `contact by id: '${contactId}'`,
-      code: 200,
-      contactById,
+    console.log(`no contacts by id: '${contactId}' found`);
+    return res.status(404).json({
+      message: `no contacts by id: '${contactId}' found`,
+      code: 404,
     });
-    console.log(contactById);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
 
-const addContact = async (req, res) => {
+const ctrlAddContact = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    const parsedContacts = JSON.parse(contacts);
-
+    const { name, email, phone, favorite } = req.body;
     const newContact = {
-      id: uid(4),
       name,
       email,
       phone,
+      favorite,
     };
-    console.log(newContact);
-
-    parsedContacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
+    await addContact(newContact);
 
     res.status(201).json({ message: "contact created", code: 201, newContact });
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
 
-const removeContact = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    const parsedContacts = JSON.parse(contacts);
+// const removeContact = async (req, res) => {
+//   try {
+//     const { contactId } = req.params;
+//     const contacts = await fs.readFile(contactsPath, "utf-8");
+//     const parsedContacts = JSON.parse(contacts);
 
-    const contactById = parsedContacts.find(
-      (contact) => contact.id === contactId
-    );
-    console.log("contact to delete:", contactById);
+//     const contactById = parsedContacts.find(
+//       (contact) => contact.id === contactId
+//     );
+//     console.log("contact to delete:", contactById);
 
-    if (!contactById) {
-      console.log(`no contacts by id: '${contactId}' found`);
+//     if (!contactById) {
+//       console.log(`no contacts by id: '${contactId}' found`);
 
-      return res.status(404).json({
-        message: `no contacts by id: '${contactId}' found`,
-        code: 404,
-      });
-    }
+//       return res.status(404).json({
+//         message: `no contacts by id: '${contactId}' found`,
+//         code: 404,
+//       });
+//     }
 
-    const contactsAfterRemove = parsedContacts.filter(
-      (contact) => contact.id !== contactId
-    );
+//     const contactsAfterRemove = parsedContacts.filter(
+//       (contact) => contact.id !== contactId
+//     );
 
-    res.status(200).json({
-      message: `contact by id: '${contactId}' deleted`,
-      code: 200,
-      contactsAfterRemove,
-    });
+//     res.status(200).json({
+//       message: `contact by id: '${contactId}' deleted`,
+//       code: 200,
+//       contactsAfterRemove,
+//     });
 
-    console.log(contactsAfterRemove);
+//     console.log(contactsAfterRemove);
 
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(contactsAfterRemove),
-      "utf-8"
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     await fs.writeFile(
+//       contactsPath,
+//       JSON.stringify(contactsAfterRemove),
+//       "utf-8"
+//     );
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-const updateContact = async (req, res) => {
-  try {
-    const { contactId } = req.params;
-    const { name, email, phone } = req.body;
+// const updateContact = async (req, res) => {
+//   try {
+//     const { contactId } = req.params;
+//     const { name, email, phone } = req.body;
 
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    const parsedContacts = JSON.parse(contacts);
+//     const contacts = await fs.readFile(contactsPath, "utf-8");
+//     const parsedContacts = JSON.parse(contacts);
 
-    const contactById = parsedContacts.find(
-      (contact) => contact.id === contactId
-    );
+//     const contactById = parsedContacts.find(
+//       (contact) => contact.id === contactId
+//     );
 
-    if (!contactById) {
-      console.log(`no contacts by id: '${contactId}' found`);
+//     if (!contactById) {
+//       console.log(`no contacts by id: '${contactId}' found`);
 
-      return res.status(404).json({
-        message: `no contacts by id: '${contactId}' found`,
-        code: 404,
-      });
-    }
+//       return res.status(404).json({
+//         message: `no contacts by id: '${contactId}' found`,
+//         code: 404,
+//       });
+//     }
 
-    parsedContacts.forEach((contact) => {
-      if (contact.id === contactId) {
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
+//     parsedContacts.forEach((contact) => {
+//       if (contact.id === contactId) {
+//         contact.name = name;
+//         contact.email = email;
+//         contact.phone = phone;
 
-        res.status(200).json({
-          message: `updated contact by id: '${contactId}' `,
-          code: 200,
-          contact,
-        });
-      }
-    });
+//         res.status(200).json({
+//           message: `updated contact by id: '${contactId}' `,
+//           code: 200,
+//           contact,
+//         });
+//       }
+//     });
 
-    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  ctrlGetContacts,
+  ctrlGetContactById,
+  ctrlAddContact,
+  // removeContact,
+  // updateContact,
 };
