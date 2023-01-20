@@ -40,22 +40,22 @@ const addContact = async ({ name, email, phone }) => {
     name,
     email,
     phone,
-    id: id,
+    id,
   };
   list.push(newContact);
   await updateContacts(list);
   return newContact;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
+const updateContact = async (id, { name, email, phone }) => {
   const contacts = await listContacts();
-  const item = contacts.findIndex((contact) => contact.id === contactId);
+  const item = contacts.findIndex((contact) => contact.id === id);
 
   if (item === -1) {
     return null;
   }
 
-  contacts[item] = { contactId, name, email, phone };
+  contacts[item] = { id, name, email, phone };
   await updateContacts(contacts);
   return contacts[item];
 };
