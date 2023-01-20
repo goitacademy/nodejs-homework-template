@@ -24,6 +24,11 @@ const authSchema = new Schema({
     enum: subscription,
     default: "starter"
   },
+  avatarURL: {
+    type: String,
+    required: true,
+
+  },
   token: String,
 });
 
