@@ -3,13 +3,18 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const fs = require("fs/promises");
 const {
   findOne,
   findOneAndUpdate,
   create,
 } = require("../models/functionsUsers");
+const User = require("../models/users");
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, PORT } = process.env;
+
 
 const schema = Joi.object({
   email: Joi.string()
@@ -21,6 +26,24 @@ const schema = Joi.object({
   password: Joi.string().required(),
 });
 
+const uploadAndPatchAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path, filename } = req.file;
+  const avatarUrlPath = `/avatars/${req.user._id}_${filename}`;
+  Jimp.read(req.file.path)
+    .then((result) => {
+      return result
+        .resize(250, 250) // resize
+        .write(`./public/${avatarUrlPath}`); // save
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  await fs.unlink(path);
+  await User.findByIdAndUpdate(_id, { avatarURL: avatarUrlPath });
+  res.send({avatarURL: `http://localhost:${PORT}${avatarUrlPath}`});
+};
+
 const crtlRegisterUser = async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) {
@@ -29,6 +52,8 @@ const crtlRegisterUser = async (req, res) => {
       .send({ message: "Помилка від Joi або іншої бібліотеки валідації" });
   }
   const { password, email } = req.body;
+  const resultUrl = gravatar.url(email);
+
   const isEmail = await findOne(email);
   if (isEmail) {
     return res.status(409).send({ message: "Email in use" });
@@ -37,12 +62,14 @@ const crtlRegisterUser = async (req, res) => {
   const newUser = await create({
     email,
     password: hashPassword,
+    avatarURL: resultUrl,
   });
 
   res.status(201).send({
     user: {
       email: email,
       subscription: newUser.subscription,
+      avatarURL: resultUrl,
     },
   });
 };
@@ -96,4 +123,5 @@ module.exports = {
   crtlLoginUser,
   ctrlLogoutUser,
   ctrlCurrentUser,
+  uploadAndPatchAvatar,
 };
