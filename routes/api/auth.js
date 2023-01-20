@@ -4,7 +4,7 @@ const router = express.Router();
 
 const ctrl = require('../../controllers/auth');
 
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, upload } = require('../../middlewares');
 const { schemas } = require('../../models/user');
 
 // запрос на регистрацию(signup)
@@ -18,6 +18,9 @@ router.get('/current', authenticate, ctrl.getCurrent)
 
 // разлогиниться
 router.post('/logout', authenticate, ctrl.logout)
+
+// изменить аватарку
+router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar)
 
 
 
