@@ -25,8 +25,7 @@ const updateAvatar = async(req, res) => {
     // отправили на фронтент
     res.json({
         avatarURL,
-    }); 
-   
+    });    
 }
 
 module.exports = updateAvatar;
