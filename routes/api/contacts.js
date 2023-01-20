@@ -26,6 +26,6 @@ router.delete("/:contactId", deleteContact);
 
 router.put("/:contactId", putValidation, putContact);
 
-router.patch("/:contactId/favorite", patchValidation, patchContact);
+router.patch("/:contactId/favorite", auth, patchValidation, patchContact);
 
 module.exports = router;

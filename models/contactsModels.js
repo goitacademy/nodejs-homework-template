@@ -85,9 +85,14 @@ const removeContact = async (contactId) => {
 
 const updateContactElement = async (contactId, body) => {
   try {
-    const result = Contact.findByIdAndUpdate({ _id: contactId }, body, {
-      new: true,
-    });
+    const { owner, favorite } = body;
+    const result = Contact.findByIdAndUpdate(
+      { _id: contactId, owner: owner },
+      { favorite },
+      {
+        new: true,
+      }
+    );
     return result;
   } catch (error) {
     console.error(error.message);
