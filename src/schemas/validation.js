@@ -14,7 +14,7 @@ const schemaOptional = Joi.object({
   favorite: Joi.boolean().optional(),
 });
 
-const schemaSignup = Joi.object({
+const schemaAuth = Joi.object({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   password: Joi.string().min(6).required(),
 });
@@ -22,5 +22,5 @@ const schemaSignup = Joi.object({
 module.exports = {
   schemaRequired,
   schemaOptional,
-  schemaSignup,
+  schemaAuth,
 };

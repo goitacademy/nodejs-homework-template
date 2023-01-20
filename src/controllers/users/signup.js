@@ -1,11 +1,11 @@
-const { User } = require("../../schemas/user");
 const bcrypt = require("bcrypt");
-const { schemaSignup } = require("../../schemas/validation");
+const { User } = require("../../schemas/user");
+const { schemaAuth } = require("../../schemas/validation");
 
 async function signup(req, res, next) {
   const { email, password } = req.body;
 
-  const validationResult = schemaSignup.validate({ email, password });
+  const validationResult = schemaAuth.validate({ email, password });
   if (validationResult.error) {
     return res.status(400).json({ message: validationResult.error.message });
   }
@@ -18,8 +18,7 @@ async function signup(req, res, next) {
       email,
       password: hashedPassword,
     });
-
-    console.log("savedUser", savedUser);
+    //console.log("savedUser", savedUser);
 
     return res.status(201).json({
       user: {
