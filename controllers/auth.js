@@ -1,6 +1,8 @@
-const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 
 const { HttpError } = require("../helpers");
 const User = require("../models/user");
@@ -17,14 +19,16 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL});
 
     res.json({ 
       status: "User created",
       code: 201,
       data: {
         email: newUser.email,
-        subscription: newUser.subscription
+        subscription: newUser.subscription,
       },
     })
   } catch (er) {
@@ -109,6 +113,32 @@ const updateSubscription = async (req, res, next) => {
   catch (er) {
     next(er)
   }
+};
+
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
+const updateAvatar = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      throw HttpError(400, "Avatar was not attached")
+    }
+    
+    const {_id} = req.user;
+    const {path: tempUpload, originalname} = req.file;
+
+    const fileName = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarDir, fileName);
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join("avatars", fileName);
+    await User.findByIdAndUpdate(_id, {avatarURL});
+
+    res.json({
+      avatarURL
+    })
+  }
+  catch (er) {
+    next(er)
+  }
 }
 
 module.exports = {
@@ -116,5 +146,6 @@ module.exports = {
   login,
   getCurrent,
   logout,
-  updateSubscription
+  updateSubscription,
+  updateAvatar
 };

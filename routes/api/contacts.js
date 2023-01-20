@@ -25,9 +25,3 @@ router.put('/:contactId', authenticate, isValidId, joiContactValidation.update, 
 router.patch('/:contactId/favorite', authenticate, isValidId, joiContactValidation.update, updateFavoriteCtrl)
 
 module.exports = router;
-
-
-// {
-//     "email": "tree12@gmail.com",
-//     "password": "123456"
-// }
