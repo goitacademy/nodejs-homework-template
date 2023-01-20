@@ -1,3 +1,4 @@
 const getCurrent = require("./getCurrent");
+const patchSubscription = require("./patchSubscription");
 
-module.exports = { getCurrent };
+module.exports = { getCurrent, patchSubscription };

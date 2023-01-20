@@ -35,6 +35,7 @@ const listContacts = async (body) => {
       skip,
       limit: Number(limit),
     }).populate("owner", "_id email subscription");
+
     return result;
   } catch (error) {
     console.error(error.message);
