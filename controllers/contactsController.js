@@ -4,9 +4,11 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateContactStatus,
 } = require("../models/contacts");
 
 const getContactsListController = async (req, res, next) => {
+
   const contacts = await listContacts();
   if (!contacts) {
     return res
@@ -32,13 +34,8 @@ const addContactController = async (req, res, next) => {
     return res.status(400).json({ message: "Missing fields" });
   }
 
-  const contact = await addContact(newContact);
-
-  if (!contact) {
-    return res.status(400).json({ message: "Name field is required!" });
-  }
-
-  res.json({ contact, message: "Success, contact added" });
+  await addContact(newContact);
+  res.json({ newContact, message: "Success, contact added" });
 };
 
 const deleteContactController = async (req, res, next) => {
@@ -68,10 +65,24 @@ const updateContactController = async (req, res, next) => {
   res.json({ contact, message: "Success, contact updated" });
 };
 
+const updateContactStatusController = async (req, res, next) => {
+  const { contactId: id } = req.params;
+  const newStatus = req.body;
+
+  const contact = await updateContactStatus(id, newStatus);
+
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  res.json({ contact, message: "Success, contact's status updated" });
+};
+
 module.exports = {
   getContacts: getContactsListController,
   getContactById: getContactByIdController,
   addContact: addContactController,
   removeContact: deleteContactController,
   updateContact: updateContactController,
+  updateContactStatus: updateContactStatusController,
 };
