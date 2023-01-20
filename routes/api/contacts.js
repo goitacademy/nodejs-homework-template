@@ -15,14 +15,11 @@ const schema = Joi.object({
   name: Joi.string()
       .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
       .min(3)
-      .max(20)
-      .required(),
+      .max(20),
   phone: Joi.string()
       .length(10)
-      .pattern(/^[0-9]+$/)
-      .required(),
+      .pattern(/^[0-9]+$/),
   email: Joi.string()
-      .required()
       .email({
         minDomainSegments: 2,
         tlds: { allow: ['com', 'net', 'uk', 'org'] },
