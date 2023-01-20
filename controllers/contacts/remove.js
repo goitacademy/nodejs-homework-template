@@ -8,10 +8,8 @@ const remove = async (req, res) => {
     throw createError(404, `Contact with id=${contactId} not found`);
   }
   res.json({
-    status: "success",
-    code: 200,
     data: {
-      result: removedContact,
+      removedContact,
     },
     message: "contact deleted",
   });

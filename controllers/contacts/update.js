@@ -9,10 +9,8 @@ const update = async (req, res) => {
     throw createError(404, "Not found");
   }
   res.json({
-    status: "success",
-    code: 200,
     data: {
-      result: updatedContact,
+      updatedContact,
     },
   });
 };
