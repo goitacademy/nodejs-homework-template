@@ -29,8 +29,10 @@ async function login(req, res, next) {
   const payload = { id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-  console.log(id, token);
-  //TODO token to DB
+  storedUser.token = token;
+  const updateUser = await storedUser.save();
+  console.log("loginUser", updateUser);
+
   return res.status(200).json({
     token,
     user: {
