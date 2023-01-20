@@ -2,6 +2,7 @@ const { User } = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
+const { BASE_URL } = process.env;
 const { sendEmailBySG } = require("../../helpers");
 
 const signup = async (req, res) => {
@@ -24,8 +25,7 @@ const signup = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    // html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click here to verify your email address</a>`,
-    html: `<a target="_blank" href="http://127.0.0.1:3000/api/users/verify/${verificationToken}">Click here to verify your email address</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click here to verify your email address</a>`,
   };
 
   await sendEmailBySG(verifyEmail);
