@@ -1,14 +1,12 @@
 const fs = require('fs/promises')
 const path = require("path");
-const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.join(__dirname,"/contacts.json");
 console.log(contactsPath);
 
 const listContacts = async () => {
   try {
-    const contacts = await fs.readFile(contactsPath);
-    // console.table(JSON.parse(response))
+    const contacts = await fs.readFile(contactsPath);   
      return JSON.parse(contacts);    
   } catch (error) {
     console.error("listContacts", error);
@@ -18,8 +16,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const contact = contacts.find((item) => String(item.id) === String(contactId));
-    // console.log("getContactById",contact);
+    const contact = contacts.find((item) => String(item.id) === String(contactId));   
     if (!contact) {
       return null;
     }
@@ -36,8 +33,7 @@ const removeContact = async (contactId) => {
     if(contacts.length === listAfterDelete.length) {
       console.log("User not found");
       return null;
-    }
-    // console.table(ListAfterDelete);
+    }    
     await fs.writeFile(contactsPath, JSON.stringify(listAfterDelete));
     return contactId;
   } catch (error) {
@@ -45,16 +41,12 @@ const removeContact = async (contactId) => {
   }
 }
 
-const addContact = async (body) => {
+const addContact = async (data) => {
   try {
-    const contacts = await listContacts();
-    const contact = {
-      id: uuidv4(),
-      ...body
-    }
-    contacts.push(contact);
+    const contacts = await listContacts();    
+    contacts.push(data);
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return contact;
+    return data;
   } catch (error) {
     console.error("addContact", error);
   }
@@ -69,7 +61,7 @@ const updateContact = async (contactId, body) => {
   }
   contacts[index] = {...contacts[index], ...body};
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return true;
+  return contacts[index];
 }
 
 module.exports = {
