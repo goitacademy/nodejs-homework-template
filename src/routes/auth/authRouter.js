@@ -10,6 +10,8 @@ const { tryCatchWrapper } = require("../../helpers");
 const { validateBody, authMiddleware } = require("../../middlewares");
 const { updateSubscriptionSchema } = require("../../schemas");
 const { registerSchema } = require("../../schemas/auth/registerSchema");
+const { uploadMiddleware } = require("../../middlewares");
+const { avatarController } = require("../../controllers/upload");
 
 const router = express.Router();
 
@@ -33,6 +35,13 @@ router.patch(
   authMiddleware(),
   validateBody(updateSubscriptionSchema),
   tryCatchWrapper(updateSubscriptionController)
+);
+
+router.patch(
+  "/avatars",
+  authMiddleware(),
+  uploadMiddleware.single("avatar"),
+  tryCatchWrapper(avatarController)
 );
 
 module.exports = { authRouter: router };

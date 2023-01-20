@@ -14,11 +14,17 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
+    "fs-extra": "^11.1.0",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.16.2",
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.3",
     "mongoose-paginate-v2": "^1.7.1",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^4.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
