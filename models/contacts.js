@@ -60,7 +60,6 @@ const updateContact = async (id, { name, email, phone }) => {
   return contacts[item];
 };
 
-
 module.exports = {
   listContacts,
   getContactById,
