@@ -18,8 +18,11 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const contact = contacts.filter((item) => String(item.id) === String(contactId));
+    const contact = contacts.find((item) => String(item.id) === String(contactId));
     // console.log("getContactById",contact);
+    if (!contact) {
+      return null;
+    }
     return contact;
   } catch (error) {
     console.error("getContactById", error);
@@ -29,9 +32,13 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const ListAfterDelete = contacts.filter(item => item.id !==contactId)
+    const listAfterDelete = contacts.filter(item => item.id !==contactId);
+    if(contacts.length === listAfterDelete.length) {
+      console.log("User not found");
+      return null;
+    }
     // console.table(ListAfterDelete);
-    await fs.writeFile(contactsPath, JSON.stringify(ListAfterDelete));
+    await fs.writeFile(contactsPath, JSON.stringify(listAfterDelete));
     return contactId;
   } catch (error) {
     console.error("removeContact", error);
@@ -55,12 +62,12 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((el, idx, array) => array[idx] === contactId)
+  const index = contacts.findIndex(item => item.id === contactId)
   if (index === -1) {
-    console.log("Element not found");
+    console.log("User not found");
     return null;
   }
-  contacts[index] = {...body};
+  contacts[index] = {...contacts[index], ...body};
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return true;
 }
