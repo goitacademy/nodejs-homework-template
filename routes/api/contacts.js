@@ -76,7 +76,7 @@ router.put('/:contactId', async (req, res, next) => {
     })
   }
   const updContact = await updateContact(req.params.contactId, req.body)
-  req.json(updContact)
+  res.json(updContact)
 })
 
 module.exports = router;
