@@ -16,6 +16,7 @@ const {
   contactUpdateStatusValidationSchema,
 } = require("../../schemas/contactValidationSchema");
 
+// TODO: change to contactsRouter
 const router = express.Router();
 
 router.get("/", tryCatchWrapper(getContacts));

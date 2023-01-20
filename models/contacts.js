@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema(
   {
     name: {
-      type: String, // mongoose.Types.String,
+      type: String,
       required: [true, "Set name for contact"],
-      // enum: ["Viktor", "Volodymyr"],
       unique: true,
       minLength: [3, "It is too short"],
       maxLength: [30, "It is too long"],
@@ -23,11 +22,9 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // year: {
-    //   type: Number,
-    //   min: [4, "It is too short!"],
-    //   // match: /\d{4}/,
-    //   required: true,
+    // owner: {
+    //   type: SchemaTypes.ObjectId,
+    //   ref: "user",
     // },
   },
   {
