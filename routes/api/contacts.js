@@ -4,26 +4,15 @@ const { NotFound } = require("http-errors");
 const router = express.Router();
 const Joi = require("joi");
 
+const { contacts: ctrl } = require("../../controlers");
+
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
 
-router.get("/", async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts();
-  try {
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result: contacts,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", ctrl.getAll);
 
 router.get("/:contactId", async (req, res, next) => {
   try {
