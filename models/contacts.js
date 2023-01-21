@@ -2,6 +2,9 @@ const {
   getContacts,
   getContactById,
   addContact,
+  removeContact,
+  updateContact,
+  updateContactStatus,
 } = require("../servises/contactsService");
 
 const ctrlGetContacts = async (req, res, next) => {
@@ -21,8 +24,9 @@ const ctrlGetContacts = async (req, res, next) => {
 };
 
 const ctrlGetContactById = async (req, res, next) => {
+  const { contactId } = req.params;
+
   try {
-    const { contactId } = req.params;
     const result = await getContactById(contactId);
 
     if (result) {
@@ -31,13 +35,12 @@ const ctrlGetContactById = async (req, res, next) => {
         code: 200,
         data: result,
       });
+    } else {
+      return res.status(404).json({
+        message: `no contacts by id: '${contactId}' found`,
+        code: 404,
+      });
     }
-
-    console.log(`no contacts by id: '${contactId}' found`);
-    return res.status(404).json({
-      message: `no contacts by id: '${contactId}' found`,
-      code: 404,
-    });
   } catch (error) {
     console.log(error);
     next(error);
@@ -45,16 +48,17 @@ const ctrlGetContactById = async (req, res, next) => {
 };
 
 const ctrlAddContact = async (req, res, next) => {
+  const { name, email, phone, favorite = false } = req.body;
+
   try {
-    const { name, email, phone, favorite } = req.body;
     const newContact = {
       name,
       email,
       phone,
       favorite,
     };
-    await addContact(newContact);
 
+    await addContact(newContact);
     res.status(201).json({ message: "contact created", code: 201, newContact });
   } catch (error) {
     console.log(error);
@@ -62,93 +66,104 @@ const ctrlAddContact = async (req, res, next) => {
   }
 };
 
-// const removeContact = async (req, res) => {
-//   try {
-//     const { contactId } = req.params;
-//     const contacts = await fs.readFile(contactsPath, "utf-8");
-//     const parsedContacts = JSON.parse(contacts);
+const ctrlUpdateContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone, favorite = false } = req.body;
 
-//     const contactById = parsedContacts.find(
-//       (contact) => contact.id === contactId
-//     );
-//     console.log("contact to delete:", contactById);
+  try {
+    const result = await updateContact(contactId, {
+      name,
+      email,
+      phone,
+      favorite,
+    });
 
-//     if (!contactById) {
-//       console.log(`no contacts by id: '${contactId}' found`);
+    if (result) {
+      console.log(`contact updated`);
+      return res.json({
+        message: `contact updated`,
+        code: 200,
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found task id: ${id}`,
+        data: "Not Found",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
-//       return res.status(404).json({
-//         message: `no contacts by id: '${contactId}' found`,
-//         code: 404,
-//       });
-//     }
+const ctrlUpdateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite = false } = req.body;
 
-//     const contactsAfterRemove = parsedContacts.filter(
-//       (contact) => contact.id !== contactId
-//     );
+  try {
+    if (!req.body) {
+      console.log(`missing field favorite`);
+      return res.json({
+        message: `missing field favorite`,
+        code: 400,
+        data: result,
+      });
+    }
 
-//     res.status(200).json({
-//       message: `contact by id: '${contactId}' deleted`,
-//       code: 200,
-//       contactsAfterRemove,
-//     });
+    const result = await updateContactStatus(contactId, { favorite });
 
-//     console.log(contactsAfterRemove);
+    if (result) {
+      console.log(`status updated`);
+      return res.json({
+        message: `status updated`,
+        code: 200,
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found task id: ${id}`,
+        data: "Not Found",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
-//     await fs.writeFile(
-//       contactsPath,
-//       JSON.stringify(contactsAfterRemove),
-//       "utf-8"
-//     );
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+const ctrlRemoveContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
 
-// const updateContact = async (req, res) => {
-//   try {
-//     const { contactId } = req.params;
-//     const { name, email, phone } = req.body;
-
-//     const contacts = await fs.readFile(contactsPath, "utf-8");
-//     const parsedContacts = JSON.parse(contacts);
-
-//     const contactById = parsedContacts.find(
-//       (contact) => contact.id === contactId
-//     );
-
-//     if (!contactById) {
-//       console.log(`no contacts by id: '${contactId}' found`);
-
-//       return res.status(404).json({
-//         message: `no contacts by id: '${contactId}' found`,
-//         code: 404,
-//       });
-//     }
-
-//     parsedContacts.forEach((contact) => {
-//       if (contact.id === contactId) {
-//         contact.name = name;
-//         contact.email = email;
-//         contact.phone = phone;
-
-//         res.status(200).json({
-//           message: `updated contact by id: '${contactId}' `,
-//           code: 200,
-//           contact,
-//         });
-//       }
-//     });
-
-//     await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    const result = await removeContact(contactId);
+    if (result) {
+      res.status(200).json({
+        message: `contact by id: '${contactId}' deleted`,
+        code: 200,
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        message: `no contacts by id: '${contactId}' found`,
+        code: 404,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 module.exports = {
   ctrlGetContacts,
   ctrlGetContactById,
   ctrlAddContact,
-  // removeContact,
-  // updateContact,
+  ctrlUpdateContact,
+  ctrlUpdateStatusContact,
+  ctrlRemoveContact,
 };
