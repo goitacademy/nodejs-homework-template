@@ -10,9 +10,13 @@ const validateBody = schema => {
 
         const { error } = schema.validate(req.body);
         const isFavorite = keys.includes('favorite')
+        const verify = keys.includes('email')
 
         if (error  && isFavorite && keys.length === 1) {
             next(HttpError(400, "missing field favorite"));
+        } else 
+            if (error  && verify && keys.length === 1) {
+            next(HttpError(400, "missing required field email"));
         } else 
             if (error && ((schema = 'registerSchema') || (schema = 'loginSchema'))) {
                 next(HttpError(400, "Bad Request"));
