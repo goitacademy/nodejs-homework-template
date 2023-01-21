@@ -57,9 +57,35 @@ const logout = async (req, res) => {
   res.json({ message: 'Logout success' });
 };
 
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+  console.log(_id);
+  console.log(subscription);
+  if (!_id) {
+    throw HttpError(401);
+  }
+
+  // Варіант №2
+  // const result = await User.findByIdAndUpdate(
+  //   _id,
+  //   { subscription },
+  //   { new: true }
+  // ).select({ email: 1, subscription: 1 });
+
+  // res.json(result);
+
+  await User.findByIdAndUpdate(_id, { subscription });
+
+  res.json({
+    message: `Subscription changed to ${subscription} successfully`,
+  });
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
