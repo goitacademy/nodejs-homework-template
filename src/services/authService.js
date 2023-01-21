@@ -1,15 +1,17 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 const { User } = require("../db/userModel");
 const { NotAuthorizedError, UserConflictError } = require("../helpers/errors");
 
 const registration = async (email, password) => {
   const existingUser = await User.findOne({ email });
+  const avatarURL = gravatar.url(email);
   if (existingUser) {
     throw new UserConflictError(`User with email: ${email} already exists`);
   }
 
-  const user = new User({ email, password });
+  const user = new User({ email, password, avatarURL });
   await user.save();
   return user;
 };
@@ -30,21 +32,23 @@ const login = async (email, password) => {
   await user.save();
   return { user, token };
 };
+
 const logout = async (userId) => {
   const user = await User.findOne({ _id: userId });
 
   if (!user) {
-    throw new NotAuthorizedError(`No user with email ${email} was found`);
+    throw new NotAuthorizedError(`No user with email ${userId} was found`);
   }
 
   user.token = "";
   await user.save();
 };
+
 const current = async (userId) => {
   const user = await User.findOne({ _id: userId });
 
   if (!user) {
-    throw new NotAuthorizedError(`No user with email ${email} was found`);
+    throw new NotAuthorizedError(`No user with email ${userId} was found`);
   }
   return user;
 };

@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/contacts/avatars", filesRouter);
+app.use("/api/users/avatars", filesRouter);
 app.use(errorHandler);
 
 const start = async () => {
