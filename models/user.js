@@ -10,9 +10,9 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: true,
       match: emailRegexp,
       unique: true,
+      required: true,
     },
     password: {
       type: String,
@@ -36,9 +36,7 @@ userSchema.post('save', handleMongooseError);
 const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
-  subscription: Joi.string()
-    .valid(...subscriptionList)
-    .required(),
+  subscription: Joi.string().valid(...subscriptionList),
 });
 
 const loginSchema = Joi.object({
@@ -47,9 +45,7 @@ const loginSchema = Joi.object({
 });
 
 const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string()
-    .valid(...subscriptionList)
-    .required(),
+  subscription: Joi.string().valid(...subscriptionList),
 });
 
 const schemas = {

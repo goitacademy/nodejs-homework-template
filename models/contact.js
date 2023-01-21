@@ -40,11 +40,11 @@ const addSchema = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'ca', 'uk', 'ua'] },
+      tlds: { allow: ['com', 'net', 'ca', 'uk', 'ua', 'org'] },
     })
     .required(),
   phone: Joi.string().pattern(phoneRegexp).required(),
-  favourite: Joi.boolean(),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
