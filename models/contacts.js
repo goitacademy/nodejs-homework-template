@@ -29,9 +29,9 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const listAfterDelete = contacts.filter(item => item.id !==contactId);
+    const listAfterDelete = contacts.filter(item => String(item.id) !== String(contactId));
     if(contacts.length === listAfterDelete.length) {
-      console.log("User not found");
+      console.log("Not found");
       return null;
     }    
     await fs.writeFile(contactsPath, JSON.stringify(listAfterDelete));
@@ -54,11 +54,13 @@ const addContact = async (data) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex(item => item.id === contactId)
+  // const { name, phone, email } = body;
+  const index = contacts.findIndex(item => String(item.id) === String(contactId))
   if (index === -1) {
-    console.log("User not found");
+    console.log("Not found");
     return null;
   }
+  
   contacts[index] = {...contacts[index], ...body};
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return contacts[index];
