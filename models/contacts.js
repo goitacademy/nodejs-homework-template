@@ -33,12 +33,26 @@ const getContactById = async (req, res, next) => {
     const contacs = await fs.readFile(contactsPath, "utf-8");
     const parsedContacts = JSON.parse(contacs);
 
+    const { contactId } = req.params;
     const contactByID = parsedContacts.filter(
       (contact) => contact.id === contactId.toString()
     );
+
+    if (!contactByID.length) {
+      const error = new Error(`contact by id=${contactId} not found`);
+      error.status = 404;
+      throw error;
+    }
+
+    res.json({
+      message: `contact by id=${contactId}`,
+      status: "success",
+      code: 200,
+      contactByID,
+    });
     console.table(contactByID);
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    next(err);
   }
 };
 async function addContact(name, email, phone) {
