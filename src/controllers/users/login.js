@@ -28,10 +28,15 @@ async function login(req, res, next) {
   const { id, subscription } = storedUser;
   const payload = { id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-
   storedUser.token = token;
-  const updateUser = await storedUser.save();
-  console.log("loginUser", updateUser);
+
+  try {
+    const updateUser = await storedUser.save();
+    console.log("loginUser", updateUser);
+  } catch (error) {
+    console.log("error", error.message);
+    return res.status(500).json({ message: error.message });
+  }
 
   return res.status(200).json({
     token,
