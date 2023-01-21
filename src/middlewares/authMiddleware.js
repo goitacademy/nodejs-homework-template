@@ -21,14 +21,13 @@ const authMiddleware = async (req, res, next) => {
 
     const decodeToken = jwt.verify(token, JWT_SECRET);
     const id = decodeToken.id;
-    console.log("decodeToken", decodeToken);
+    //console.log({ decodeTokenId: id });
     if (!id) {
       //"token not have id"
       return res.status(401).json({ message: "Not authorized3" });
     }
 
     const storedUser = await User.findById(id);
-    console.log("storedUser", storedUser);
     if (!storedUser) {
       //"user not exist"
       return res.status(401).json({ message: "Not authorized4" });
@@ -38,8 +37,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized5" });
     }
 
-    req.user = { id };
-
+    req.user = storedUser;
     next();
   } catch (err) {
     //console.error("authM err:", err);

@@ -2,7 +2,8 @@ const { Contact } = require("../../schemas/contact");
 
 async function deleteContact(req, res, next) {
   const id = req.params.contactId;
-  const contact = await Contact.findById(id);
+  const owrenId = req.user.id;
+  const contact = await Contact.findOne({ _id: id, owner: owrenId });
 
   if (contact) {
     const temp = await Contact.findByIdAndDelete(id);

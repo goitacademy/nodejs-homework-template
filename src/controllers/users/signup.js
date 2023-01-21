@@ -18,7 +18,7 @@ async function signup(req, res, next) {
       email,
       password: hashedPassword,
     });
-    //console.log("savedUser", savedUser);
+    console.log("signupUser", savedUser);
 
     return res.status(201).json({
       user: {
