@@ -21,8 +21,13 @@ const schemaAuth = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const schemaSubscription = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 module.exports = {
   schemaRequired,
   schemaOptional,
   schemaAuth,
+  schemaSubscription,
 };
