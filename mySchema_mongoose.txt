@@ -1,0 +1,34 @@
+{
+        name: {
+          type: String, // mongoose.Types.String,
+          required: true,
+          unique: true,
+          minLength: [1, "it is too short!!"],
+        },
+        email: {
+          type: String,
+          trim: true,
+          lowercase: true,
+          unique: true,
+          validate: {
+            validator: function(v) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+            },
+          message: "Please enter a valid email"
+        },
+          required: [true, "Email required"]
+        },
+        phone: {
+          type: String,
+          match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
+        },
+
+        favorite: {
+          type: Boolean,
+          default: false,
+        },
+      
+      {
+        timestamps: true,
+      }
+}

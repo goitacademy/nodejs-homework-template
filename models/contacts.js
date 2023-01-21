@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require('fs/promises');
-const { nanoid } = require("nanoid");
+const { Contact } = require("../schemas/contact");
 
 const contactsPath = path.resolve(__dirname, "./contacts.json");
 
@@ -23,44 +23,23 @@ async function writeDB(db) {
 
 
 const listContacts = async () => {
-   const db = await readDB();
-    console.table(db);
-    return db;
+   return Contact.find();
 }
 
 const getContactById = async (contactId) => {
-  const db = await listContacts();
-    const contact = db.find(
-        (contact) => contact.id == contactId
-    );
-  console.log(contact);
-  return contact;
+  return Contact.findById(contactId);
 }
 
 const removeContact = async (contactId) => {
-  const db = await readDB();
-    const updateDB = db.filter(todo => todo.id !== contactId);
-    await writeDB(updateDB);
-    console.log(`Id: ${contactId} was deleted`);
+  return Contact.findByIdAndDelete(contactId);
 }
 
 const addContact = async (body) => {
-  const id = nanoid(7);
-  const contact = { id, ...body };
-  const db = await readDB();
-  db.push(contact);
-  await writeDB(db);
+  return Contact.create(body);
 };
 
 const updateContact = async (contactId, body) => {
-  const data = await readDB();
-  const index = data.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  data[index] = { id: contactId, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(data));
-  return data[index];
+  return Contact.findByIdAndUpdate(contactId, body, { new: true });
 };
 
   module.exports = {
