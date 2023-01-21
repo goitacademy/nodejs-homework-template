@@ -11,7 +11,7 @@ const {
   noDataByIdError,
   missingFieldFavorite,
 } = require("../helpers/errorHandlers");
-const { successResult } = require("../helpers/successResult");
+const { successResult, successAddData } = require("../helpers/successResult");
 
 const ctrlGetContacts = async (req, res, next) => {
   try {
@@ -58,7 +58,7 @@ const ctrlAddContact = async (req, res, next) => {
     };
 
     await addContact(newContact);
-    successResult(res, 201, "contact created", result);
+    successAddData(res, 201, "contact created");
   } catch (error) {
     console.log(error);
     next(error);
@@ -110,7 +110,7 @@ const ctrlUpdateStatusContact = async (req, res, next) => {
   }
 };
 
-const ctrlRemoveContact = async (req, res) => {
+const ctrlRemoveContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 

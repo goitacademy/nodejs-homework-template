@@ -6,4 +6,11 @@ const successResult = (res, code, message, result) => {
   });
 };
 
-module.exports = { successResult };
+const successAddData = (res, code, message) => {
+  return res.json({
+    message,
+    code,
+  });
+};
+
+module.exports = { successResult, successAddData };
