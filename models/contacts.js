@@ -21,7 +21,7 @@ const removeContact = async (contactId) => {
   const contacts = await listContacts()
   const ind = contacts.findIndex(el => el.id === contactId)
   if(ind === -1) {
-    return console.log('Contact with this id don`t exist');
+    return console.log('Contact with this id don`t exist.');
   }
   const newContacts = contacts.filter((_, index) => index !== ind)
   await fs.writeFile(contactsPath, JSON.stringify(newContacts))
