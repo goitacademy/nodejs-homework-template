@@ -16,7 +16,6 @@ const postSchema = Joi.object({
 
 function postValidation(req, res, next) {
   if (postSchema.validate(req.body).error) {
-    console.log(postSchema.validate(req.body).error);
     res.status(400).json({ message: postSchema.validate(req.body).error.message });
   } else {
     next();
