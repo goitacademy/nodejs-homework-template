@@ -3,6 +3,11 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
+const {
+  noDataByIdError,
+  duplicateError,
+  serverError,
+} = require("./helpers/errorHandlers");
 
 const app = express();
 
@@ -24,13 +29,15 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err.stack);
-  res.status(500).json({
-    status: "fail",
-    code: 500,
-    message: err.message,
-    data: "Internal Server Error",
-  });
+  if (err.message.includes("Cast to ObjectId failed")) {
+    return noDataByIdError(res);
+  }
+
+  if (err.message.includes("duplicate")) {
+    return duplicateError(res);
+  }
+
+  serverError(err, res);
 });
 
 module.exports = app;

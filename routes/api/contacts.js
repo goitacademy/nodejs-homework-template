@@ -18,14 +18,10 @@ router.get("/:contactId", ctrlGetContactById);
 
 router.post("/", addPostValidation, ctrlAddContact);
 
+router.delete("/:contactId", ctrlRemoveContact);
+
 router.put("/:contactId", addPostValidation, ctrlUpdateContact);
 
-router.patch(
-  "/contacts/:contactId/favorite",
-  addPostValidation,
-  ctrlUpdateStatusContact
-);
-
-router.delete("/:contactId", ctrlRemoveContact);
+router.patch("/:contactId/favorite", ctrlUpdateStatusContact);
 
 module.exports = router;
