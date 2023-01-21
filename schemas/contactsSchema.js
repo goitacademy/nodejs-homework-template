@@ -19,6 +19,7 @@ const contactsSchema = Schema(
   },
   {
     versionKey: false,
+    timestamps: true,
   }
 );
 
