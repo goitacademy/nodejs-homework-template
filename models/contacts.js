@@ -7,6 +7,12 @@ const {
   updateContactStatus,
 } = require("../servises/contactsService");
 
+const {
+  noDataByIdError,
+  missingFieldFavorite,
+} = require("../helpers/errorHandlers");
+const { successResult } = require("../helpers/successResult");
+
 const ctrlGetContacts = async (req, res, next) => {
   try {
     const result = await getContacts();
@@ -16,7 +22,7 @@ const ctrlGetContacts = async (req, res, next) => {
       return res.status(404).json({ message: "no contacts found", code: 404 });
     }
 
-    res.json({ message: "list of contacts", code: 200, data: result });
+    successResult(res, 200, "list of contacts", result);
   } catch (error) {
     console.log(error.message);
     next(error);
@@ -30,17 +36,10 @@ const ctrlGetContactById = async (req, res, next) => {
     const result = await getContactById(contactId);
 
     if (result) {
-      return res.json({
-        message: `contact by id: '${contactId}'`,
-        code: 200,
-        data: result,
-      });
-    } else {
-      return res.status(404).json({
-        message: `no contacts by id: '${contactId}' found`,
-        code: 404,
-      });
+      successResult(res, 200, `contact by id: '${contactId}'`, result);
     }
+
+    noDataByIdError(res);
   } catch (error) {
     console.log(error);
     next(error);
@@ -59,7 +58,7 @@ const ctrlAddContact = async (req, res, next) => {
     };
 
     await addContact(newContact);
-    res.status(201).json({ message: "contact created", code: 201, newContact });
+    successResult(res, 201, "contact created", result);
   } catch (error) {
     console.log(error);
     next(error);
@@ -79,20 +78,10 @@ const ctrlUpdateContact = async (req, res, next) => {
     });
 
     if (result) {
-      console.log(`contact updated`);
-      return res.json({
-        message: `contact updated`,
-        code: 200,
-        data: result,
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found task id: ${id}`,
-        data: "Not Found",
-      });
+      successResult(res, 200, "contact updated", result);
     }
+
+    noDataByIdError(res);
   } catch (error) {
     console.log(error);
     next(error);
@@ -101,35 +90,20 @@ const ctrlUpdateContact = async (req, res, next) => {
 
 const ctrlUpdateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favorite = false } = req.body;
+  const { favorite } = req.body;
 
   try {
-    if (!req.body) {
-      console.log(`missing field favorite`);
-      return res.json({
-        message: `missing field favorite`,
-        code: 400,
-        data: result,
-      });
+    if (favorite === undefined) {
+      missingFieldFavorite(res);
     }
 
     const result = await updateContactStatus(contactId, { favorite });
 
     if (result) {
-      console.log(`status updated`);
-      return res.json({
-        message: `status updated`,
-        code: 200,
-        data: result,
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found task id: ${id}`,
-        data: "Not Found",
-      });
+      successResult(res, 200, "status updated", result);
     }
+
+    noDataByIdError(res);
   } catch (error) {
     console.log(error);
     next(error);
@@ -141,18 +115,12 @@ const ctrlRemoveContact = async (req, res) => {
     const { contactId } = req.params;
 
     const result = await removeContact(contactId);
+
     if (result) {
-      res.status(200).json({
-        message: `contact by id: '${contactId}' deleted`,
-        code: 200,
-        data: result,
-      });
-    } else {
-      return res.status(404).json({
-        message: `no contacts by id: '${contactId}' found`,
-        code: 404,
-      });
+      successResult(res, 200, `contact by id: '${contactId}' deleted`, result);
     }
+
+    noDataByIdError(res);
   } catch (error) {
     console.log(error);
     next(error);
