@@ -8,7 +8,7 @@ function tryCatchWrapper(endpointFunction) {
   };
 }
 
-function httpError(status, message) {
+function HttpError(status, message) {
   const error = new Error(message);
   error.status = status;
   return error;
@@ -16,5 +16,5 @@ function httpError(status, message) {
 
 module.exports = {
   tryCatchWrapper,
-  httpError,
+  HttpError,
 };
