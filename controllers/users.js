@@ -1,10 +1,11 @@
+const jwt = require('jsonwebtoken');
+const { HttpError } = require('../helpers');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
-const { HttpError } = require('../helpers');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 
+const dotenv = require('dotenv');
 dotenv.config();
+
 const { JWT_SECRET } = process.env;
 
 async function registration(req, res, next) {
@@ -45,7 +46,7 @@ async function login(req, res, next) {
   }
 
   const payload = { id: storedUser._id };
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: 15 });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
   const responseData = {
     token,
     user: {
@@ -57,7 +58,31 @@ async function login(req, res, next) {
   res.status(200).json({ ...responseData });
 }
 
+async function currentUser(req, res, next) {
+  const user = req.user;
+  const responseData = {
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  };
+  res.status(200).json({ ...responseData });
+}
+
+async function logout(req, res, next) {
+  const { id } = req.user;
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw HttpError(401, 'Not authorized');
+  }
+
+  res.status(204);
+}
+
 module.exports = {
   registration,
   login,
+  currentUser,
+  logout,
 };

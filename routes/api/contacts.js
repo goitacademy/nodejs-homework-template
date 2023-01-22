@@ -12,7 +12,9 @@ const {
   updateContact,
   updateContactStatus,
 } = require('../../controllers/contacts');
+const { authorization } = require('../../middleware');
 const mongoose = require('mongoose');
+const { tryCatchWrapper } = require('../../helpers');
 
 const contactsRouter = express.Router();
 
@@ -24,11 +26,21 @@ contactsRouter.use('/:contactId', (req, res, next) => {
   }
 });
 
-contactsRouter.get('/', listContacts);
-contactsRouter.get('/:contactId', getContactById);
-contactsRouter.post('/', postValidation, addContact);
-contactsRouter.delete('/:contactId', removeContact);
-contactsRouter.put('/:contactId', putValidation, updateContact);
-contactsRouter.patch('/:contactId', patchValidation, updateContactStatus);
+contactsRouter.get('/', tryCatchWrapper(authorization), listContacts);
+contactsRouter.get('/:contactId', tryCatchWrapper(authorization), getContactById);
+contactsRouter.post('/', tryCatchWrapper(authorization), postValidation, addContact);
+contactsRouter.delete('/:contactId', tryCatchWrapper(authorization), removeContact);
+contactsRouter.put(
+  '/:contactId',
+  tryCatchWrapper(authorization),
+  putValidation,
+  updateContact
+);
+contactsRouter.patch(
+  '/:contactId',
+  tryCatchWrapper(authorization),
+  patchValidation,
+  updateContactStatus
+);
 
 module.exports = contactsRouter;
