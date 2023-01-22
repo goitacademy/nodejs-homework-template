@@ -17,13 +17,7 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsOptions.listContacts();
-    return res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result: contacts
-      }
-    });
+    return res.json({contacts});
   } catch (error) {
     next(error)
 
