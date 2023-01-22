@@ -1,5 +1,6 @@
-const { getAllContacts } = require("./contacts");
+const { getAllContacts, getContactByID } = require("./contacts");
 
 module.exports = {
   getAllContacts,
+  getContactByID,
 };

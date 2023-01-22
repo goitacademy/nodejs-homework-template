@@ -6,9 +6,10 @@ const router = express.Router();
 
 router.get("/", asyncMiddlewareWrapper(contactsActions.getAllContacts));
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get(
+  "/:contactId",
+  asyncMiddlewareWrapper(contactsActions.getContactByID)
+);
 
 router.post("/", async (req, res, next) => {
   res.json({ message: "template message" });

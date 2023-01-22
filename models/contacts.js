@@ -12,7 +12,16 @@ const listContacts = async () => {
   return JSON.parse(contactsData);
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const contactsData = await FSOperationsHelper.readData();
+  const contactsArr = JSON.parse(contactsData);
+
+  const [foundContact] = contactsArr.filter(
+    (contact) => contact.id === contactId
+  );
+
+  return foundContact;
+};
 
 const removeContact = async (contactId) => {};
 
