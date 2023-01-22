@@ -13,9 +13,9 @@ const getCurrent = (req, res) => {
     try {
         const { id } = jwt.verify(token, SECRET_KEY);
         
-     } catch {
+    } catch {
         
-      }
+    }
     
 
 }
