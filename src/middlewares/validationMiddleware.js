@@ -4,15 +4,17 @@ module.exports = {
   addPostValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
-          .alphanum()
-          .min(3)
-          .max(30)
-          .required(),
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
       email: Joi.string()
-          .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
-          .required(),
+        .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
+        .required(),
       phone: Joi.string()
-          .required(),
+        .min(6) 
+        .max(11)
+        .required(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -29,15 +31,17 @@ module.exports = {
   patchPostValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
-          .alphanum()
-          .min(3)
-          .max(30)
-          .optional(),
+        .alphanum()
+        .min(3)
+        .max(30)
+        .optional(),
       email: Joi.string()
-          .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
-          .optional(),
+        .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
+        .optional(),
       phone: Joi.string()
-          .optional(),
+        .min(6) 
+        .max(11)
+        .optional(),
     });
 
     const validationResult = schema.validate(req.body);
