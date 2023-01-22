@@ -1,12 +1,11 @@
 const express = require("express");
-const {
-  get,
-  getById,
-  add,
-  remove,
-  change,
-  updateStatus,
-} = require("../../controllers/contactsController");
+const { add } = require("../../controllers/contacts/addNewContact");
+const { change } = require("../../controllers/contacts/changeContactById");
+const { get } = require("../../controllers/contacts/getAllContacts");
+const { getById } = require("../../controllers/contacts/getContactById");
+const { remove } = require("../../controllers/contacts/removeContactById");
+const { updateStatus } = require("../../controllers/contacts/updateStatusById");
+
 const {
   postContactValidation,
   putContactValidation,
