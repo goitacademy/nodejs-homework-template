@@ -10,6 +10,7 @@ const {
 const {
   noDataByIdError,
   missingFieldFavorite,
+  noDataError,
 } = require("../helpers/errorHandlers");
 const { successResult, successAddData } = require("../helpers/successResult");
 
@@ -18,8 +19,7 @@ const ctrlGetContacts = async (req, res, next) => {
     const result = await getContacts();
 
     if (!result.length) {
-      console.log("no contacts");
-      return res.status(404).json({ message: "no contacts found", code: 404 });
+      noDataError(res);
     }
 
     successResult(res, 200, "list of contacts", result);
@@ -36,7 +36,11 @@ const ctrlGetContactById = async (req, res, next) => {
     const result = await getContactById(contactId);
 
     if (result) {
-      successResult(res, 200, `contact by id: '${contactId}'`, result);
+      return res.json({
+        message: "contact",
+        code: 200,
+        data: result,
+      });
     }
 
     noDataByIdError(res);
@@ -78,7 +82,11 @@ const ctrlUpdateContact = async (req, res, next) => {
     });
 
     if (result) {
-      successResult(res, 200, "contact updated", result);
+      return res.json({
+        message: "contact updated",
+        code: 200,
+        data: result,
+      });
     }
 
     noDataByIdError(res);
@@ -100,7 +108,11 @@ const ctrlUpdateStatusContact = async (req, res, next) => {
     const result = await updateContactStatus(contactId, { favorite });
 
     if (result) {
-      successResult(res, 200, "status updated", result);
+      return res.json({
+        message: "status updated",
+        code: 200,
+        data: result,
+      });
     }
 
     noDataByIdError(res);
@@ -113,11 +125,14 @@ const ctrlUpdateStatusContact = async (req, res, next) => {
 const ctrlRemoveContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-
     const result = await removeContact(contactId);
 
     if (result) {
-      successResult(res, 200, `contact by id: '${contactId}' deleted`, result);
+      return res.json({
+        message: `contact by id: '${contactId}' deleted`,
+        code: 200,
+        data: result,
+      });
     }
 
     noDataByIdError(res);

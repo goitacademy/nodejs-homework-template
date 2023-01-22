@@ -8,7 +8,7 @@ const {
   ctrlRemoveContact,
   ctrlUpdateStatusContact,
   ctrlUpdateContact,
-} = require("../../models/contacts");
+} = require("../../controllers/contactsControllers");
 
 const { addPostValidation } = require("../../middlewares/validationMiddleware");
 
