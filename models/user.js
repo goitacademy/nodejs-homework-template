@@ -14,6 +14,7 @@ const userSchema = new Schema({
         // match: emailRegexp,
         unique: true,
     },
+    
     subscription: {
         type: String,
         enum: ["starter", "pro", "business"],

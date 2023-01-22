@@ -1,7 +1,7 @@
 const express = require('express');
 const ctrl = require("../../controllers");
 const  ctrlWrapper  = require("../../helpers/ctrlWrapper");
-const { validateBody, isValidId } = require("../../middleware");
+const { validateBody, isValidId,authenticate } = require("../../middleware");
 const {schemas} = require("../../models/contact");
 
 
@@ -9,12 +9,13 @@ const {schemas} = require("../../models/contact");
 
 const router = express.Router()
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/",authenticate, ctrlWrapper(ctrl.getAll));
 
 router.get("/:id",isValidId, ctrlWrapper(ctrl.getById));
 
 router.post(
     "/",
+    authenticate,
    validateBody(schemas.addSchema),
     ctrlWrapper(ctrl.add)
 );

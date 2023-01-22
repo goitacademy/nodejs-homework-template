@@ -9,8 +9,9 @@ const { registerSchema, loginSchema } = require("../../models/user");
 
 router.post("/register", validateBody(registerSchema), ctrlWrapper(ctrl.register))
 
-router.post("/login",validateBody(loginSchema),ctrlWrapper(ctrl.login)
-);
+router.post("/login",validateBody(loginSchema),ctrlWrapper(ctrl.login));
 
-router.get("/current",ctrlWrapper(authenticate),ctrlWrapper(ctrl.getCurrent));
+router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+
+router.post("/logout",authenticate,ctrlWrapper(ctrl.logout))
 module.exports = router;

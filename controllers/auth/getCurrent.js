@@ -5,19 +5,11 @@ const { SECRET_KEY } = process.env;
 
 
 const getCurrent = (req, res) => { 
-    const { authorization = "" } = req.headers;
-    const [bearer, token] = authorization.split(" ");
-     if (bearer !== "Bearer") {
-    next(HttpError(401));
-    }
-    try {
-        const { id } = jwt.verify(token, SECRET_KEY);
-        
-    } catch {
-        
-    }
-    
-
+ const { name, email } = req.user;
+  res.json({
+    name,
+    email,
+  });
 }
 
 module.exports = getCurrent
