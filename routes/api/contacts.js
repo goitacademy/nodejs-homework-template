@@ -23,4 +23,6 @@ router.put("/:contactId", authByToken, changeContact);
 
 router.patch("/:contactId/favorite", authByToken, updateStatusContact);
 
+router.patch("/:contactId/favorite", updateStatusContact);
+
 module.exports = router;

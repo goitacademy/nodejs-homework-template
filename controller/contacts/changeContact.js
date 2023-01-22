@@ -1,6 +1,6 @@
-const schema = require("../../schemas/Joi/contactStatusSchema");
+const schema = require("../../schemas/schemas");
 const Contacts = require("../../models/contacts");
-const { BadRequest, NotFound } = require("http-errors");
+const { NotFound, BadRequest } = require("http-errors");
 
 // change contact by Id
 const changeContact = async (req, res, next) => {
