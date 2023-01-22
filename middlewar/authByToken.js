@@ -8,11 +8,11 @@ const authByToken = async (req, res, next) => {
     const [type, token] = authHeader.split(" ");
 
     if (type !== "Bearer") {
-      next(Unauthorized("Token type is invalid"));
+      throw next(Unauthorized("Token type is invalid"));
     }
 
     if (!token) {
-      next(Unauthorized("No token provided"));
+      throw next(Unauthorized("No token provided"));
     }
 
     try {
@@ -25,7 +25,7 @@ const authByToken = async (req, res, next) => {
         error.name === "TokenExpiredError" ||
         error.name === "JsonWebTokenError"
       ) {
-        next(Unauthorized("No token provided"));
+        throw next(Unauthorized("No token provided"));
       }
       throw error;
     }
