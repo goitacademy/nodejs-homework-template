@@ -3,11 +3,6 @@ const { HttpError } = require('../helpers');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 
-const dotenv = require('dotenv');
-dotenv.config();
-
-const { JWT_SECRET } = process.env;
-
 async function registration(req, res, next) {
   try {
     const { email, password } = req.body;
@@ -28,35 +23,40 @@ async function registration(req, res, next) {
     if (error.code === 11000) {
       throw new HttpError(409, 'Email in use');
     }
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 }
 
 async function login(req, res, next) {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
+    const { JWT_SECRET } = process.env;
 
-  const storedUser = await User.findOne({ email });
-  if (!storedUser) {
-    throw new HttpError(401, 'Email or password is wrong');
+    const storedUser = await User.findOne({ email });
+    if (!storedUser) {
+      throw new HttpError(401, 'Email or password is wrong');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, storedUser.password);
+    if (!isPasswordValid) {
+      throw new HttpError(401, 'Email or password is wrong');
+    }
+
+    const payload = { id: storedUser._id };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    await User.findByIdAndUpdate(storedUser._id, { token });
+
+    const responseData = {
+      token,
+      user: {
+        email: storedUser.email,
+        subscription: storedUser.subscription,
+      },
+    };
+    res.status(200).json({ ...responseData });
+  } catch (error) {
+    next(error);
   }
-
-  const isPasswordValid = await bcrypt.compare(password, storedUser.password);
-  if (!isPasswordValid) {
-    throw new HttpError(401, 'Email or password is wrong');
-  }
-
-  const payload = { id: storedUser._id };
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-  await User.findByIdAndUpdate(storedUser._id, { token });
-
-  const responseData = {
-    token,
-    user: {
-      email: storedUser.email,
-      subscription: storedUser.subscription,
-    },
-  };
-  res.status(200).json({ ...responseData });
 }
 
 async function currentUser(req, res, next) {

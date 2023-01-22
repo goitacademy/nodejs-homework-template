@@ -12,6 +12,7 @@ async function listContacts(req, res, next) {
     .skip(skip)
     .limit(limit)
     .sort(sortBy);
+
   res.status(200).json(contacts);
 }
 
