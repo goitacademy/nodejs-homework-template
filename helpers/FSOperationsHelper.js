@@ -23,6 +23,7 @@ class FSOperationsHelper {
       path,
       "Can't read data from a file on a disk!"
     );
+
     FSOperationsHelper.writeDataWrapped = fsOperationCreator(
       fs.writeFile,
       path,
@@ -39,6 +40,4 @@ class FSOperationsHelper {
   }
 }
 
-module.exports = {
-  FSOperationsHelper,
-};
+module.exports = FSOperationsHelper;
