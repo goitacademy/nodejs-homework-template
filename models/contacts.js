@@ -1,4 +1,4 @@
-// const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid");
 const path = require("path");
 const { FSOperationsHelper } = require("@root/helpers");
 
@@ -22,7 +22,30 @@ const getContactById = async (contactId) => {
   return foundContact;
 };
 
-const addContact = async (body) => {};
+const addContact = async (contactData) => {
+  const newContact = { id: nanoid(), ...contactData };
+
+  contactsArray.push(newContact);
+  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
+
+  return newContact;
+};
+
+const updateContact = async (contactId, newContactData) => {
+  const contactIndex = contactsArray.findIndex(
+    (contact) => contact.id === contactId
+  );
+
+  if (contactIndex === -1) return null;
+
+  const oldContact = contactsArray[contactIndex];
+  const safeNewContactData = newContactData;
+  delete safeNewContactData.id;
+  contactsArray[contactIndex] = { ...oldContact, ...safeNewContactData };
+  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
+
+  return contactsArray[contactIndex];
+};
 
 const removeContact = async (contactId) => {
   const index = contactsArray.findIndex((contact) => contact.id === contactId);
@@ -31,19 +54,15 @@ const removeContact = async (contactId) => {
   }
 
   const [foundContact] = contactsArray.splice(index, 1);
-  await await FSOperationsHelper.writeData(
-    JSON.stringify(contactsArray, null, 2)
-  );
+  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
 
   return foundContact;
 };
-
-const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
   getContactById,
   addContact,
-  removeContact,
   updateContact,
+  removeContact,
 };

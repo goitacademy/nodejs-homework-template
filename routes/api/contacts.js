@@ -11,17 +11,16 @@ router.get(
   asyncMiddlewareWrapper(contactsActions.getContactByID)
 );
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", asyncMiddlewareWrapper(contactsActions.addContact));
+
+router.put(
+  "/:contactId",
+  asyncMiddlewareWrapper(contactsActions.updateContact)
+);
 
 router.delete(
   "/:contactId",
   asyncMiddlewareWrapper(contactsActions.deleteContactByID)
 );
-
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
 
 module.exports = router;
