@@ -1,25 +1,20 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
-// const userCreateValidationSchema = Joi.object({
-//   name: Joi.string().min(3).max(30).required(),
-//   email: Joi.string()
-//     .email({
-//       minDomainSegments: 2,
-//       tlds: { allow: ["com", "net"] },
-//     })
-//     .required(),
-//   phone: Joi.string().min(11).max(16).required(),
-// });
-
-// const contactUpdateStatusValidationSchema = Joi.object({
-//   favorite: Joi.boolean().required(),
-// });
+const userCreateValidationSchema = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ['com', 'net'] },
+    })
+    .required(),
+  password: Joi.string().min(6).max(16).required(),
+});
 
 const userUpdateStatusValidationSchema = Joi.object({
-  subscription: Joi.enum().required(), // enum: ["starter", "pro", "business"],
+  subscription: Joi.required(),
 });
 
 module.exports = {
-  //   contactCreateValidationSchema,
+  userCreateValidationSchema,
   userUpdateStatusValidationSchema,
 };

@@ -4,7 +4,6 @@ const { tryCatchWrapper } = require("../../helpers");
 const {
   getContact,
   getContacts,
-  // getFavoriteContacts,
   createContact,
   deleteContact,
   changeContact,
@@ -20,7 +19,6 @@ const {
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", tryCatchWrapper(getContacts));
-// contactsRouter.get("/", tryCatchWrapper(getFavoriteContacts));
 contactsRouter.get("/:id", tryCatchWrapper(getContact));
 contactsRouter.post(
   "/",

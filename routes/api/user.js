@@ -12,7 +12,6 @@ const { auth } = require("../../middlewares/validation");
 
 const { validateBody } = require("../../middlewares/validation");
 const {
-  // contactCreateValidationSchema,
   userUpdateStatusValidationSchema,
 } = require("../../schemas/userValidationSchema");
 
@@ -30,11 +29,11 @@ userRouter.get(
 );
 userRouter.get("/current", tryCatchWrapper(auth), tryCatchWrapper(current));
 
-// patch user/ subscription
 userRouter.patch(
-  "/",
-  validateBody(userUpdateStatusValidationSchema), // TODO create contactUpdateStatusUserValidationSchema
-  tryCatchWrapper(updateStatusUser) // TODO create updateStatusUser
+  '/',
+  tryCatchWrapper(auth),
+  validateBody(userUpdateStatusValidationSchema),
+  tryCatchWrapper(updateStatusUser)
 );
 
 module.exports = {

@@ -1,12 +1,14 @@
-const createError = require("http-errors");
-const { User } = require("../models/user");
+const { BadRequest, NotFound } = require('http-errors');
+const { User } = require('../models/user');
 
 async function createContact(req, res, next) {
   const { user } = req;
   const { id: contactId } = req.body;
 
   user.contacts.push(contactId);
-  await User.findByIdAndUpdate(user._id, user);
+  await User.findByIdAndUpdate(user._id, user, {
+    new: true,
+  });
 
   return res.status(201).json({
     data: {
@@ -17,13 +19,12 @@ async function createContact(req, res, next) {
 
 async function getContacts(req, res, next) {
   const { user } = req;
-  // const { contacts } = user;
 
-  const userWithContacts = await User.findById(user._id).populate("contacts", {
+  const userWithContacts = await User.findById(user._id).populate('contacts', {
     name: 1,
     email: 1,
     _id: 1,
-  }); // TODO: check bug, doesn't show contacts || .populate("contacts", "name email _id")
+  });
 
   return res.status(200).json({
     data: {
@@ -46,17 +47,27 @@ async function current(req, res, next) {
   });
 }
 
-// update subscription
 async function updateStatusUser(req, res, next) {
-  const { id } = req.params;
+  const { user } = req;
+  const { email, _id: id, subscription } = user;
   if (!req.body) {
-    throw createError.BadRequest(`Missing field subscription`);
+    throw BadRequest(`Missing field subscription`);
   }
-  const result = await Contact.findByIdAndUpdate(id, req.body, res);
+  const result = await User.findByIdAndUpdate(user._id, req.body, {
+    new: true,
+  });
   if (!result) {
-    throw createError.NotFound(`Contact with <${id}> not found`);
+    throw NotFound(`User with <${user.email}> not found`);
   }
-  return res.status(200).json(result);
+  return res.status(200).json({
+    data: {
+      user: {
+        email,
+        id,
+        subscription,
+      },
+    },
+  });
 }
 
 module.exports = {
