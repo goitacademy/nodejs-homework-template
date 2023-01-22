@@ -22,7 +22,7 @@ const getContactById = async (contactId) => {
     const data = await fs.readFile(contactsPath, 'utf8');
     const contacts = JSON.parse(data);
 
-    const contactById = contacts.filter(contact => contact.id === contactId);
+    const contactById = contacts.find(contact => contact.id === contactId);
     console.table(contactById);
     return contactById;
   } catch (error) {
@@ -62,7 +62,7 @@ const deleteContact = async (contactId) => {
 
     const contactsWithOutId = contacts.filter(contact => contact.id !== contactId);
     await fs.writeFile(contactsPath, JSON.stringify(contactsWithOutId, null, 2), 'utf8');
-    console.log(`Contact with id=${contactId} successfully deleted.`.blue);
+    console.log(`Contact with id '${contactId}' successfully deleted.`.blue);
     return deletedContact;
   } catch (error) {
     console.error(error);
@@ -74,12 +74,17 @@ const updateContact = async (contactId, body) => {
     const data = await fs.readFile(contactsPath, 'utf8');
     const contacts = JSON.parse(data);
 
-    const contactById = contacts.filter(contact => contact.id === contactId);
-
-    contactById = {
-      id: contactId, ...body
+    const idx = contacts.findIndex((contact) => contact.id === contactId);
+    if (idx === -1) {
+      return null;
     }
-    return contactById
+
+    contacts[idx] = { id: contactId, ...body };
+    console.table(contacts[idx]);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), 'utf8');
+    console.log(`Contact with id '${contactId}' successfully updated.`.bgWhite);
+    return contacts[idx];
   } catch (error) {
     console.error(error);
   }

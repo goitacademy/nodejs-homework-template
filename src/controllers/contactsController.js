@@ -56,8 +56,8 @@ const changeContact = async (req, res, next) => {
     const updatedContact = await updateContact(contactId, req.body);
 
     if (!updatedContact) {
-        return res.status(400).json({
-        message: "missing fields",
+        return res.status(404).json({
+        message: "Not found",
         });
     }
 

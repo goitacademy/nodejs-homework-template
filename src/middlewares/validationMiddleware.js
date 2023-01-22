@@ -17,7 +17,10 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({status: validationResult.error.details});
+      return res.status(400).json({
+        status: validationResult.error.details,
+        message: "missing required name field",
+      });
     }
 
     next();
