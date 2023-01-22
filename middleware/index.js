@@ -9,11 +9,10 @@ async function authorization(req, res, next) {
   const [type, token] = authHeader.split(' ');
 
   if (type !== 'Bearer') {
-    throw HttpError(401, 'token type must be Bearer');
+    throw HttpError(401, 'Token type must be Bearer');
   }
-
   if (!token) {
-    throw HttpError(401, 'no token provided');
+    throw HttpError(401, 'No token provided');
   }
 
   try {

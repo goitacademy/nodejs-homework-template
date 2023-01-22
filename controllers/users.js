@@ -37,16 +37,18 @@ async function login(req, res, next) {
 
   const storedUser = await User.findOne({ email });
   if (!storedUser) {
-    throw new HttpError(401, "user don't exist");
+    throw new HttpError(401, 'Email or password is wrong');
   }
 
   const isPasswordValid = await bcrypt.compare(password, storedUser.password);
   if (!isPasswordValid) {
-    throw new HttpError(401, 'password is wrong');
+    throw new HttpError(401, 'Email or password is wrong');
   }
 
   const payload = { id: storedUser._id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  await User.findByIdAndUpdate(storedUser._id, { token });
+
   const responseData = {
     token,
     user: {
@@ -54,30 +56,32 @@ async function login(req, res, next) {
       subscription: storedUser.subscription,
     },
   };
-
   res.status(200).json({ ...responseData });
 }
 
 async function currentUser(req, res, next) {
-  const user = req.user;
-  const responseData = {
-    user: {
-      email: user.email,
-      subscription: user.subscription,
-    },
-  };
-  res.status(200).json({ ...responseData });
+  const { email, subscription } = req.user;
+
+  res.status(200).json({ email, subscription });
 }
 
 async function logout(req, res, next) {
   const { id } = req.user;
-  const user = await User.findById(id);
 
-  if (!user) {
-    throw HttpError(401, 'Not authorized');
+  await User.findByIdAndUpdate(id, { token: null });
+  res.status(204).json();
+}
+
+async function updateSubscription(req, res, next) {
+  const { id } = req.user;
+  const { subscription } = req.body;
+
+  if (subscription !== 'starter' && subscription !== 'pro' && subscription !== 'business') {
+    throw new HttpError(400, 'Subscription must be < starter >, < pro > or < business >');
   }
 
-  res.status(204);
+  await User.findByIdAndUpdate(id, { subscription });
+  res.status(201).json({ message: `Suscription updated to < ${subscription} >` });
 }
 
 module.exports = {
@@ -85,4 +89,5 @@ module.exports = {
   login,
   currentUser,
   logout,
+  updateSubscription,
 };
