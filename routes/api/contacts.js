@@ -3,6 +3,8 @@ const {
   listContacts,
   getContactById,
   addContact,
+  updateContact,
+  removeContact,
 } = require("../../models/contacts");
 
 const router = express.Router();
@@ -13,12 +15,8 @@ router.get("/:contactId", getContactById);
 
 router.post("/", addContact);
 
-// router.delete("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.put("/:contactId", updateContact);
 
-// router.put("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.delete("/:contactId", removeContact);
 
 module.exports = router;
