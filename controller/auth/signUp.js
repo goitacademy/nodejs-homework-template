@@ -9,7 +9,7 @@ const signUp = async (req, res, next) => {
     const { error } = signUpSchema.validate(req.body);
 
     if (error) {
-      next(BadRequest(error.message));
+      throw next(BadRequest(error.message));
     }
 
     const salt = await bcrypt.genSalt();

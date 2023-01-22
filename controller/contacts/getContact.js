@@ -10,7 +10,7 @@ const getContact = async (req, res, next) => {
     const contact = await Contacts.findOne({ _id: contactId, owner: _id });
 
     if (!contact) {
-      next(NotFound("Not Found"));
+      throw next(NotFound("Not Found"));
     }
 
     return res.status(200).json(contact);

@@ -8,7 +8,7 @@ const changeSubscription = async (req, res, next) => {
     const { error } = subscriptionSchema.validate(req.body);
 
     if (error) {
-      next(BadRequest(error.message));
+      throw next(BadRequest(error.message));
     }
 
     const updatedUser = await Auth.findOneAndUpdate({ _id: _id }, req.body, {

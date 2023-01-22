@@ -8,14 +8,14 @@ const updateStatusContact = async (req, res, next) => {
     const { _id } = req.user;
 
     if (error) {
-      next(BadRequest(error.message));
+      throw next(BadRequest(error.message));
     }
 
     const { contactId } = req.params;
     const contact = await Contacts.findOne({ _id: contactId, owner: _id });
 
     if (!contact) {
-      next(NotFound("Not Found"));
+      throw next(NotFound("Not Found"));
     }
 
     const updatedContact = await Contacts.findOneAndUpdate(

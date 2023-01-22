@@ -20,7 +20,7 @@ const signIn = async (req, res, next) => {
     const token = jwt.sign({ id: user.id }, JWT_CODE, { expiresIn: "7d" });
 
     if (!isComparedPass) {
-      next(Unauthorized("email or password is not valid"));
+      throw next(Unauthorized("email or password is not valid"));
     }
 
     res.status(200).json({
