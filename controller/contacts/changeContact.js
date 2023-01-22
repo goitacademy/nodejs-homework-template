@@ -1,5 +1,6 @@
 const schema = require("../../schemas/Joi/contactStatusSchema");
 const Contacts = require("../../models/contacts");
+const { BadRequest, NotFound } = require("http-errors");
 
 // change contact by Id
 const changeContact = async (req, res, next) => {
@@ -10,13 +11,13 @@ const changeContact = async (req, res, next) => {
 
     // audit required fields
     if (error) {
-      res.status(400).json({ message: error.message });
+      next(BadRequest(error.message));
     }
 
     // audit contact by Id
     const contact = await Contacts.findOne({ _id: contactId, owner: _id });
     if (!contact) {
-      res.status(404).json({ message: "Not found" });
+      next(NotFound("Not Found"));
     }
 
     const updatedContact = await Contacts.findOneAndUpdate(

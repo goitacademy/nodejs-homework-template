@@ -14,12 +14,13 @@ const signIn = async (req, res, next) => {
 
     const user = await Auth.findOne({ email }).exec();
     const isComparedPass = await bcrypt.compare(password, user.password);
+    const { Unauthorized } = require("http-errors");
 
     const { JWT_CODE } = process.env;
     const token = jwt.sign({ id: user.id }, JWT_CODE, { expiresIn: "7d" });
 
     if (!isComparedPass) {
-      res.status(401).json({ message: "email or password is not valid" });
+      next(Unauthorized("email or password is not valid"));
     }
 
     res.status(200).json({

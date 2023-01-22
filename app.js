@@ -21,8 +21,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log("err:    ", err.message);
-  console.log(err.name);
+  // console.log("err:    ", err.message);
+  // console.log(err.name);
 
   if (err.name === "UnauthorizedError") {
     return res.status(401).json({ message: "Not authorized" });

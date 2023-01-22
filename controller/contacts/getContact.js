@@ -1,4 +1,5 @@
 const Contacts = require("../../models/contacts");
+const { NotFound } = require("http-errors");
 
 // get contact by Id
 const getContact = async (req, res, next) => {
@@ -9,8 +10,7 @@ const getContact = async (req, res, next) => {
     const contact = await Contacts.findOne({ _id: contactId, owner: _id });
 
     if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
+      next(NotFound("Not Found"));
     }
 
     return res.status(200).json(contact);

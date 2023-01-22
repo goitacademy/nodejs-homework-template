@@ -1,5 +1,5 @@
 const subscriptionSchema = require("../../schemas/Joi/subscriptionSchema");
-const BadRequest = require("http-errors");
+const { BadRequest } = require("http-errors");
 const Auth = require("../../models/auth");
 
 const changeSubscription = async (req, res, next) => {

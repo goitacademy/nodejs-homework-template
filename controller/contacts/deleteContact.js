@@ -1,4 +1,5 @@
 const Contacts = require("../../models/contacts");
+const { NotFound } = require("http-errors");
 
 // delete contact by Id
 const deleteContact = async (req, res, next) => {
@@ -9,7 +10,7 @@ const deleteContact = async (req, res, next) => {
     const contact = await Contacts.findOne({ _id: contactId, owner: _id });
 
     if (!contact) {
-      res.status(404).json({ message: "Not found" });
+      next(NotFound("Not Found"));
     }
 
     await Contacts.findOneAndRemove({ _id: contactId, owner: _id });
