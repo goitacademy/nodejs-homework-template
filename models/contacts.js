@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema(
   {
     name: {
-      type: String,
+      type: String, // mongoose.Types.String,
       required: [true, "Set name for contact"],
       unique: true,
       minLength: [3, "It is too short"],
@@ -22,10 +22,11 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // owner: {
-    //   type: SchemaTypes.ObjectId,
-    //   ref: "user",
-    // },
+    owner: {
+      type: mongoose.Types.ObjectId, // type: SchemaTypes.ObjectId,
+      // type: ObjectId,
+      ref: "user",
+    },
   },
   {
     versionKey: false,

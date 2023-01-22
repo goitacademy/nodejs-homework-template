@@ -16,8 +16,10 @@ const schema = mongoose.Schema(
     },
     contacts: {
       type: [mongoose.Types.ObjectId],
+      //   type: mongoose.Schema.Types.ObjectId,
       rel: "contacts",
-    }, // add new field
+    //   ref: "contacts",
+    }, // added new field
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],

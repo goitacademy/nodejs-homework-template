@@ -1,9 +1,5 @@
-const { User } = require("../models/user");
 const createError = require("http-errors");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
-const { JWT_SECRET } = process.env;
+const { User } = require("../models/user");
 
 async function createContact(req, res, next) {
   const { user } = req;
@@ -26,7 +22,8 @@ async function getContacts(req, res, next) {
   const userWithContacts = await User.findById(user._id).populate("contacts", {
     name: 1,
     email: 1,
-  }); // TODO: check bug, doesn't show contacts
+    _id: 1,
+  }); // TODO: check bug, doesn't show contacts || .populate("contacts", "name email _id")
 
   return res.status(200).json({
     data: {
@@ -35,7 +32,7 @@ async function getContacts(req, res, next) {
   });
 }
 
-async function me(req, res, next) {
+async function current(req, res, next) {
   const { user } = req;
   const { email, _id: id } = user;
 
@@ -49,8 +46,22 @@ async function me(req, res, next) {
   });
 }
 
+// update subscription
+async function updateStatusUser(req, res, next) {
+  const { id } = req.params;
+  if (!req.body) {
+    throw createError.BadRequest(`Missing field subscription`);
+  }
+  const result = await Contact.findByIdAndUpdate(id, req.body, res);
+  if (!result) {
+    throw createError.NotFound(`Contact with <${id}> not found`);
+  }
+  return res.status(200).json(result);
+}
+
 module.exports = {
   createContact,
   getContacts,
-  me,
+  current,
+  updateStatusUser,
 };

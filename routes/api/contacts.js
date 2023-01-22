@@ -4,6 +4,7 @@ const { tryCatchWrapper } = require("../../helpers");
 const {
   getContact,
   getContacts,
+  // getFavoriteContacts,
   createContact,
   deleteContact,
   changeContact,
@@ -16,26 +17,28 @@ const {
   contactUpdateStatusValidationSchema,
 } = require("../../schemas/contactValidationSchema");
 
-// TODO: change to contactsRouter
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get("/", tryCatchWrapper(getContacts));
-router.get("/:id", tryCatchWrapper(getContact));
-router.post(
+contactsRouter.get("/", tryCatchWrapper(getContacts));
+// contactsRouter.get("/", tryCatchWrapper(getFavoriteContacts));
+contactsRouter.get("/:id", tryCatchWrapper(getContact));
+contactsRouter.post(
   "/",
   validateBody(contactCreateValidationSchema),
   tryCatchWrapper(createContact)
 );
-router.delete("/:id", tryCatchWrapper(deleteContact));
-router.put(
+contactsRouter.delete("/:id", tryCatchWrapper(deleteContact));
+contactsRouter.put(
   "/:id",
   validateBody(contactCreateValidationSchema),
   tryCatchWrapper(changeContact)
 );
-router.patch(
+contactsRouter.patch(
   "/:id/favorite",
   validateBody(contactUpdateStatusValidationSchema),
   tryCatchWrapper(updateStatusContact)
 );
 
-module.exports = router;
+module.exports = {
+  contactsRouter,
+};

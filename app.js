@@ -4,7 +4,7 @@ const cors = require("cors");
 //TODO get away folder api
 const { authRouter } = require("./routes/api/auth");
 const { userRouter } = require("./routes/api/user");
-const contactsRouter = require("./routes/api/contacts");
+const { contactsRouter } = require("./routes/api/contacts");
 
 const app = express();
 

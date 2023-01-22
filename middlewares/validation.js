@@ -7,7 +7,6 @@ function validateBody(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      // throw new ValidationError(error.message);
       throw BadRequest(error.message);
     }
     return next();
@@ -15,9 +14,6 @@ function validateBody(schema) {
 }
 
 async function auth(req, res, next) {
-  console.log("in auth...");
-  // console.log("req.headers ", req.headers);
-
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
   if (type !== "Bearer") {

@@ -1,18 +1,26 @@
 const createError = require("http-errors");
-// const { NotFoundContact, FailedToUpdate } = require("../helpers/index");
 const { Contact } = require("../models/contacts");
 
-// TODO:add npm http error
 async function getContacts(req, res, next) {
-  const { limit = 0 } = req.query;
-  return res.status(200).json(await Contact.find({}).limit(limit));
+  const { limit = 20, page = 1 } = req.query;
+  const skip = (page - 1) * limit;
+  return res.status(200).json(await Contact.find({}).skip(skip).limit(limit)); // example: 127.0.0.1:3000/api/contacts?page=4&limit=3
+  // const { limit = 20, page = 1, favorite = true } = req.query;
+  // const skip = (page - 1) * limit;
+  // return res
+  //   .status(200)
+  //   .json(await Contact.find({}).skip(skip).limit(limit).favorite(favorite));
 }
+
+// async function getFavoriteContacts(req, res, next) {
+//   const { favorite = true } = req.query;
+//   return res.status(200).json(await Contact.find({}).favorite(favorite)); // example: 127.0.0.1:3000/api/contacts?page=4&limit=3
+// }
 
 async function getContact(req, res, next) {
   const { id } = req.params;
   const contact = await Contact.findById(id);
   if (!contact) {
-    // throw new NotFoundContact(`Contact with <${id}> not found`);
     throw createError.NotFound(`Contact with <${id}> not found`);
   }
   return res.status(200).json(contact);
@@ -28,7 +36,6 @@ async function deleteContact(req, res, next) {
   const { id } = req.params;
   const contact = await Contact.findByIdAndRemove(id);
   if (!contact) {
-    // throw new NotFoundContact(`Contact with <${id}> not found`);
     throw createError.NotFound(`Contact with <${id}> not found`);
   }
   return res
@@ -39,12 +46,10 @@ async function deleteContact(req, res, next) {
 async function changeContact(req, res, next) {
   const { id } = req.params;
   if (!req.body) {
-    // throw new FailedToUpdate(`Missing field body`);
     throw createError.BadRequest(`Missing field body`);
   }
   const result = await Contact.findByIdAndUpdate(id, req.body, res);
   if (!result) {
-    // throw new NotFoundContact(`Contact with <${id}> not found`);
     throw createError.NotFound(`Contact with <${id}> not found`);
   }
   return res.status(200).json(result);
@@ -53,13 +58,10 @@ async function changeContact(req, res, next) {
 async function updateStatusContact(req, res, next) {
   const { id } = req.params;
   if (!req.body) {
-    // throw new FailedToUpdate(`Missing field favorite`);
     throw createError.BadRequest(`Missing field favorite`);
   }
   const result = await Contact.findByIdAndUpdate(id, req.body, res);
   if (!result) {
-    // return next(HttpError(404, "Contact not found"));
-    // throw new NotFoundContact(`Contact with <${id}> not found`);
     throw createError.NotFound(`Contact with <${id}> not found`);
   }
   return res.status(200).json(result);
@@ -67,6 +69,7 @@ async function updateStatusContact(req, res, next) {
 
 module.exports = {
   getContacts,
+  // getFavoriteContacts,
   getContact,
   createContact,
   deleteContact,
