@@ -6,7 +6,7 @@ const { contacts: ctrl } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.getAllContacts));
+router.get("/", authWrapper, ctrlWrapper(ctrl.getAllContacts));
 
 router.get("/:id", ctrlWrapper(ctrl.getContactById));
 
