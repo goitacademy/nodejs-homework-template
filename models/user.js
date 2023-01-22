@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const Joi = require("joi");
 
 const userSchema = new Schema({
@@ -47,3 +48,5 @@ const User = model("user", userSchema);
       User,
   loginSchema
 };
+
+
