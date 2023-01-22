@@ -3,14 +3,17 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
 
 const contactsRouter = require('./routes/api/contacts')
 
-const DB_HOST = 'mongodb+srv://Andrii:Ek-2rFr7qy3ASB@cluster0.mmeks8d.mongodb.net/contacts_reader?retryWrites=true&w=majority'
+dotenv.config();
+
+const {DB_HOST} = process.env;
 
 const app = express();
-
+mongoose.set('strictQuery', true);
 mongoose.connect(DB_HOST)
 .then( () => console.log('Database connect success'))
 .catch( error => console.error(error.massage)) 
