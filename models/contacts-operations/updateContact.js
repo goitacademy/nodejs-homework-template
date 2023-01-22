@@ -6,18 +6,14 @@ const getContacts = require("./getContacts");
 const updateContact = async (id, { name, email, phone }) => {
   const contacts = await getContacts();
 
-  contacts.forEach((contact) => {
-    if (contact.id === id) {
-      contact.name = name;
-      contact.email = email;
-      contact.phone = phone;
-    }
-  });
+  const [contact] = contacts.filter((el) => el.id === id);
+  contact.name = name;
+  contact.email = email;
+  contact.phone = phone;
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4));
 
-  const [result] = contacts.filter((contact) => contact.id === id);
-  return result;
+  return contact;
 };
 
 module.exports = updateContact;

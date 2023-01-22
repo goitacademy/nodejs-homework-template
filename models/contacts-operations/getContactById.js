@@ -1,8 +1,8 @@
 const getContacts = require("./getContacts");
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const res = await getContacts();
-  const [result] = res.filter((contact) => contact.id === contactId);
+  const [result] = res.filter((el) => el.id === id);
   return result;
 };
 

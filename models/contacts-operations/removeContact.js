@@ -6,7 +6,7 @@ const getContacts = require("./getContacts");
 const removeContact = async (id) => {
   const contacts = await getContacts();
 
-  const idx = contacts.findIndex((contact) => contact.id === id);
+  const idx = contacts.findIndex((el) => el.id === id);
   if (idx === -1) {
     return null;
   }
