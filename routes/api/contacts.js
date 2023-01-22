@@ -1,6 +1,11 @@
 const express = require("express");
 const { asyncMiddlewareWrapper } = require("@root/helpers");
+const { validateBody } = require("@root/middlewares");
 const contactsActions = require("@root/controllers");
+const {
+  addContactSchema,
+  updateContactSchema,
+} = require("@root/schemas/contacts");
 
 const router = express.Router();
 
@@ -11,10 +16,15 @@ router.get(
   asyncMiddlewareWrapper(contactsActions.getContactByID)
 );
 
-router.post("/", asyncMiddlewareWrapper(contactsActions.addContact));
+router.post(
+  "/",
+  validateBody(addContactSchema),
+  asyncMiddlewareWrapper(contactsActions.addContact)
+);
 
 router.put(
   "/:contactId",
+  validateBody(updateContactSchema),
   asyncMiddlewareWrapper(contactsActions.updateContact)
 );
 
