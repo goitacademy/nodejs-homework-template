@@ -18,7 +18,7 @@ router.get(
 
 router.post(
   "/",
-  validateBody(addContactSchema),
+  validateBody(addContactSchema, "missing required name field"),
   asyncMiddlewareWrapper(contactsActions.addContact)
 );
 
