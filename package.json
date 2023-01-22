@@ -8,10 +8,14 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "_moduleAliases": {
+    "@root": "."
+  },
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "module-alias": "^2.2.2",
     "morgan": "1.10.0",
     "nanoid": "^4.0.0"
   },
