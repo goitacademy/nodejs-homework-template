@@ -1,7 +1,6 @@
 const contactsOperations = require("../models/contacts");
-const schems = require("../schemas/contactsSchemas");
 
-const allContacts = async (req, res, next) => {
+const allContacts = async (req, res) => {
   const contacts = await contactsOperations.listContacts();
   res.json({
     status: "success",
@@ -12,7 +11,7 @@ const allContacts = async (req, res, next) => {
   });
 };
 
-const contactById = async (req, res, next) => {
+const contactById = async (req, res) => {
   const { id } = req.params;
   const contact = await contactsOperations.getContactById(id);
   if (!contact) {
@@ -32,7 +31,7 @@ const contactById = async (req, res, next) => {
   });
 };
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -55,7 +54,7 @@ const addContact = async (req, res, next) => {
   });
 };
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { id } = req.params;
   await contactsOperations.removeContact(id);
   res.json({
@@ -71,7 +70,7 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   if (!req.body) {
     res.status(400).json({
       status: "error",
