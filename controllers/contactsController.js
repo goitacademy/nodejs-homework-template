@@ -1,5 +1,5 @@
 const contactsOperations = require("../models/contacts");
-const schems = require("../schemas/schemas");
+const schems = require("../schemas/contactsSchemas");
 
 const allContacts = async (req, res, next) => {
   const contacts = await contactsOperations.listContacts();
@@ -33,13 +33,6 @@ const contactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = schems.validate(req.body);
-
-  if (error) {
-    res.status(400).json(error.message);
-    return;
-  }
-
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -85,12 +78,6 @@ const updateContact = async (req, res, next) => {
       code: 400,
       message: "missing fields",
     });
-    return;
-  }
-
-  const { error } = schems.validate(req.body);
-  if (error) {
-    res.status(400).json(error.message);
     return;
   }
 
