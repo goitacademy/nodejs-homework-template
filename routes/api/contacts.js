@@ -1,25 +1,28 @@
-const express = require('express')
+const express = require("express");
+const {
+  getContacts,
+  getContact,
+  deleteContact,
+  createNewContact,
+  changeContact,
+  updateStatusContact,
+} = require("../../controller/contacts");
+const { authByToken } = require("../../middlewar/authByToken");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", authByToken, getContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", authByToken, getContact);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", authByToken, createNewContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", authByToken, deleteContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", authByToken, changeContact);
 
-module.exports = router
+router.patch("/:contactId/favorite", authByToken, updateStatusContact);
+
+router.patch("/:contactId/favorite", updateStatusContact);
+
+module.exports = router;
