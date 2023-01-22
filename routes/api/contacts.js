@@ -7,19 +7,20 @@ const {
   changeContact,
   updateStatusContact,
 } = require("../../controller/contacts");
+const { authByToken } = require("../../middlewar/authByToken");
 
 const router = express.Router();
 
-router.get("/", getContacts);
+router.get("/", authByToken, getContacts);
 
-router.get("/:contactId", getContact);
+router.get("/:contactId", authByToken, getContact);
 
-router.post("/", createNewContact);
+router.post("/", authByToken, createNewContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", authByToken, deleteContact);
 
-router.put("/:contactId", changeContact);
+router.put("/:contactId", authByToken, changeContact);
 
-router.patch("/:contactId/favorite", updateStatusContact);
+router.patch("/:contactId/favorite", authByToken, updateStatusContact);
 
 module.exports = router;

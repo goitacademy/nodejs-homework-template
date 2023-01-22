@@ -1,6 +1,7 @@
 const Auth = require("../../models/auth");
 const signUpSchema = require("../../schemas/Joi/signUpSchema");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const signIn = async (req, res, next) => {
   try {
@@ -12,16 +13,19 @@ const signIn = async (req, res, next) => {
     }
 
     const user = await Auth.findOne({ email }).exec();
-
     const isComparedPass = await bcrypt.compare(password, user.password);
+
+    const { JWT_CODE } = process.env;
+    const token = jwt.sign({ id: user.id }, JWT_CODE, { expiresIn: "7d" });
 
     if (!isComparedPass) {
       res.status(401).json({ message: "email or password is not valid" });
     }
 
-    res
-      .status(200)
-      .json({ user: { email: user.email, subscription: user.subscription } });
+    res.status(200).json({
+      token,
+      user: { email: user.email, subscription: user.subscription },
+    });
   } catch (error) {
     next(error);
   }
