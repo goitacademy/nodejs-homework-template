@@ -25,6 +25,14 @@ const userSchema = new Schema({
   avatarURL: {
     type: String,
     required:true,        
+  },  
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
   },
   token: {
     type: String,
@@ -53,10 +61,17 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+// Joi схема на проверку email 
+const emailSchema = Joi.object({    
+    email: Joi.string().pattern(emailRegexp).required(),       
+});
+
+
 const schemas = {
   registerSchema,
   loginSchema,
   subscriptionSchema,
+  emailSchema,
 }
 
 // создаём модель на основе mongoose схемы

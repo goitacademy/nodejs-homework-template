@@ -1,13 +1,18 @@
 const { Contact }  = require('../../models/contact');
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   try {
     const { _id: owner } = req.user;  
     // пагинация
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, favorite } = req.query;
     const skip = (page - 1) * limit;
-
-    const result = await Contact.find({ owner}, "-createdAt -updatedAt", { skip, limit: Number(limit) }).populate("owner", "email subscription");     
+// фильтрация по favorite
+    const query = { owner };
+    if (typeof favorite !== 'undefined') {
+      query.favorite = favorite;
+    }
+  //  query.favorite = favorite ? favorite : {$in: [true, false]}
+    const result = await Contact.find(query, "-createdAt -updatedAt", { skip, limit: Number(limit) }).populate("owner", "email subscription");     
 
     res.json(
       {
