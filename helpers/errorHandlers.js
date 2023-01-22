@@ -8,6 +8,13 @@ const serverError = (err, res) => {
   });
 };
 
+const noDataError = (res) => {
+  return res.status(404).json({
+    message: `no data found`,
+    code: 404,
+  });
+};
+
 const noDataByIdError = (res) => {
   return res.status(404).json({
     message: `no contacts by this id found`,
@@ -31,6 +38,7 @@ const missingFieldFavorite = (res) => {
 
 module.exports = {
   serverError,
+  noDataError,
   noDataByIdError,
   duplicateError,
   missingFieldFavorite,
