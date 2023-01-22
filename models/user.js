@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const { Schema, model } = require("mongoose");
 const Joi = require("Joi");
 
@@ -18,6 +19,10 @@ const userSchema = new Schema(
       type: String,
       enum: ["starter", "pro", "business"],
       default: "starter",
+    },
+    avatarURL: {
+      type: String,
+      required: true,
     },
     token: {
       type: String,

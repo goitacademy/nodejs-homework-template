@@ -6,7 +6,7 @@
 //   409: "Conflict",
 // };
 
-function HttpError(status, message) {
+function HttpError(status, message = "Not authorized") {
   const error = new Error(message);
   error.status = status;
 
