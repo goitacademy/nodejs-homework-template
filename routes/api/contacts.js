@@ -5,6 +5,7 @@ const {
   createContact,
   deleteContact,
   updateContactById,
+  updateStatusContact,
 } = require("../../controllers/controller.contacts.js");
 
 const routerContacts = express.Router();
@@ -14,5 +15,6 @@ routerContacts.get("/:id", getContact);
 routerContacts.post("/", createContact);
 routerContacts.delete("/:id", deleteContact);
 routerContacts.put("/:id", updateContactById);
+routerContacts.patch("/:id/favorite", updateStatusContact);
 
 module.exports = routerContacts;
