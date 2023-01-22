@@ -18,4 +18,5 @@ async function getContactByID(req, res, next) {
 module.exports = {
   getAllContacts,
   getContactByID,
+  deleteContactByID,
 };

@@ -2,37 +2,48 @@
 const path = require("path");
 const { FSOperationsHelper } = require("@root/helpers");
 
-//JSON.stringify(contacts, null, 2)
 const pathToContactsDB = path.join(__dirname, "contactsDB.json");
-FSOperationsHelper.init(pathToContactsDB);
+let contactsArray = null;
 
-const listContacts = async () => {
+//MAIN
+(async () => {
+  FSOperationsHelper.init(pathToContactsDB);
   const contactsData = await FSOperationsHelper.readData();
+  contactsArray = JSON.parse(contactsData);
+})();
 
-  return JSON.parse(contactsData);
-};
+const listContacts = async () => contactsArray;
 
 const getContactById = async (contactId) => {
-  const contactsData = await FSOperationsHelper.readData();
-  const contactsArr = JSON.parse(contactsData);
-
-  const [foundContact] = contactsArr.filter(
+  const [foundContact] = contactsArray.filter(
     (contact) => contact.id === contactId
   );
 
   return foundContact;
 };
 
-const removeContact = async (contactId) => {};
-
 const addContact = async (body) => {};
+
+const removeContact = async (contactId) => {
+  const index = contactsArray.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+
+  const [foundContact] = contactsArray.splice(index, 1);
+  await await FSOperationsHelper.writeData(
+    JSON.stringify(contactsArray, null, 2)
+  );
+
+  return foundContact;
+};
 
 const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 };
