@@ -1,14 +1,24 @@
-// const fs = require('fs/promises')
+// const { nanoid } = require("nanoid");
+const path = require("path");
+const { FSOperationsHelper } = require("@root/helpers");
 
-const listContacts = async () => {}
+//JSON.stringify(contacts, null, 2)
+const pathToContactsDB = path.join(__dirname, "contactsDB.json");
+FSOperationsHelper.init(pathToContactsDB);
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  const contactsData = await FSOperationsHelper.readData();
 
-const removeContact = async (contactId) => {}
+  return JSON.parse(contactsData);
+};
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async (contactId) => {};
+
+const addContact = async (body) => {};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +26,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
