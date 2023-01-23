@@ -2,10 +2,8 @@ const { NotFound, BadRequest } = require('http-errors');
 const { boolean } = require('joi');
 const { Contact } = require('../models/contacts');
 
-// TODO: fix bug, find({favorite}) коли не вказувати у query favorite=true/false
-// => повертає тільки контакти із значенням false
 async function getContacts(req, res, next) {
-  const { limit = 20, page = 1, favorite = null } = req.query;
+  const { limit = 20, page = 1, favorite = [true, false] } = req.query;
   // const search = req.query.search || ''; // example
   // .find({name: { $regex: search, $options: 'i' },}) // example
   const skip = (page - 1) * limit;
