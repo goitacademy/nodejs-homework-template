@@ -1,25 +1,29 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const {
+  validateParams,
+  validateBody,
+  validateUpdateBody,
+  checkJwt,
+} = require("../../middlewares");
 
-const router = express.Router()
+const ctrl = require("../../controllers/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", checkJwt, ctrl.listContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", validateParams, ctrl.getContactById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", checkJwt, validateBody, ctrl.addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", validateParams, validateBody, ctrl.updateContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch(
+  "/:contactId/favorite",
+  validateParams,
+  validateUpdateBody,
+  ctrl.updateStatusContact
+);
 
-module.exports = router
+router.delete("/:contactId", validateParams, checkJwt, ctrl.removeContact);
+
+module.exports = router;
