@@ -4,7 +4,6 @@ module.exports = {
   addPostValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
@@ -31,7 +30,6 @@ module.exports = {
   addPutValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .optional(),

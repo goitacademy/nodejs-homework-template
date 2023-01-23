@@ -66,14 +66,20 @@ const deleteContact = async (contactId) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, name, email, phone) => {
   try {
     const contacts = await listContacts();
 
     const [updatedContact] = contacts.filter(contact => contact.id === contactId);
-    updatedContact.name = body.name;
-    updatedContact.email = body.email;
-    updatedContact.phone = body.phone;
+    if (name) {
+      updatedContact.name = name;
+    }
+    if (email) {
+      updatedContact.email = email;
+    }
+    if (phone) {
+      updatedContact.phone = phone;
+    }
 
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), 'utf8');
     console.log(`Contact with id '${contactId}' successfully updated.`.bgWhite);

@@ -53,8 +53,9 @@ const removeContact = async (req, res, next) => {
 
 const changeContact = async (req, res, next) => {
     const { contactId } = req.params;
+    const { name, email, phone } = req.body;
 
-    const updatedContact = await updateContact(contactId, req.body);
+    const updatedContact = await updateContact(contactId, name, email, phone);
 
     if (!updatedContact) {
         return res.status(404).json({
