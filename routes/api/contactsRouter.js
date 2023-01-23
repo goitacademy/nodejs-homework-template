@@ -3,7 +3,6 @@ const router = express.Router();
 
 const {
   addContact,
-  updatePutContact,
   updatePatchContact,
   listContacts,
   getById,
@@ -21,8 +20,6 @@ router.post("/", validation(contactsSchema), addContact);
 
 router.delete("/:id", removeContact);
 
-router.put("/:id", validation(contactsSchema), updatePutContact);
-
-router.patch("/:id", updatePatchContact);
+router.patch("/:id", validation(contactsSchema), updatePatchContact);
 
 module.exports = { contactsRouter: router };

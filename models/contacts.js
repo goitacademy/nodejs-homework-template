@@ -29,31 +29,21 @@ const addContactItem = async (body) => {
   updateContacts(contacts);
   return newContact;
 };
-
 const updateContact = async (id, body) => {
-  const contacts = await contactsList();
-  const idx = contacts.findIndex((contact) => contact.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  contacts[idx] = { id: id, ...body };
-  updateContacts(contacts);
-  return contacts[idx];
-};
-
-const updatePatch = async (id, body) => {
   const contacts = await contactsList();
   const { name, email, phone } = body;
 
   contacts.forEach((contact) => {
-    if (name) {
-      contact.name = name;
-    }
-    if (email) {
-      contact.email = email;
-    }
-    if (phone) {
-      contact.phone = phone;
+    if (contact.id === id) {
+      if (name) {
+        contact.name = name;
+      }
+      if (email) {
+        contact.email = email;
+      }
+      if (phone) {
+        contact.phone = phone;
+      }
     }
   });
   updateContacts(contacts);
@@ -62,14 +52,14 @@ const updatePatch = async (id, body) => {
 
 const removeContactById = async (id) => {
   const contacts = await contactsList();
-  const idx = contacts.findIndex((contact) => contact.id === id);
-  if (idx === -1) {
+  const contact = contacts.findIndex((contact) => contact.id === id);
+  if (contact === -1) {
     return null;
   }
 
-  const filteredContacts = contacts.filter((_, index) => index !== idx);
+  const filteredContacts = contacts.filter((_, index) => index !== contact);
   updateContacts(filteredContacts);
-  return contacts[idx];
+  return contacts[contact];
 };
 
 module.exports = {
@@ -77,6 +67,5 @@ module.exports = {
   getContactById,
   addContactItem,
   updateContact,
-  updatePatch,
   removeContactById,
 };
