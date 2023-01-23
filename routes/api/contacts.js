@@ -11,21 +11,6 @@ const {
   updateContact,
 } = require('../../models/contacts')
 
-const schema = Joi.object({
-  name: Joi.string()
-      .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
-      .min(3)
-      .max(20),
-  phone: Joi.string()
-      .length(10)
-      .pattern(/^[0-9]+$/),
-  email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ['com', 'net', 'uk', 'org'] },
-      }),
-})
-
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts()
   res.json(contacts)
@@ -40,6 +25,23 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string()
+        .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
+        .min(3)
+        .max(20)
+        .required(),
+    phone: Joi.string()
+        .length(10)
+        .pattern(/^[0-9]+$/)
+        .required(),
+    email: Joi.string()
+        .required()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net', 'uk', 'org'] },
+        }),
+  })
   const validatedResult = schema.validate(req.body)
   if (validatedResult.error) {
     res.status(400).json({
@@ -63,6 +65,20 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string()
+        .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
+        .min(3)
+        .max(20),
+    phone: Joi.string()
+        .length(10)
+        .pattern(/^[0-9]+$/),
+    email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ['com', 'net', 'uk', 'org'] },
+        }),
+  })
   const validatedResult = schema.validate(req.body)
   if (validatedResult.error) {
     res.status(400).json({
