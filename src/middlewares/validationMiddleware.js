@@ -28,7 +28,7 @@ module.exports = {
     next();
   },
 
-  patchPostValidation: (req, res, next) => {
+  addPatchValidation: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string()
         .alphanum()
