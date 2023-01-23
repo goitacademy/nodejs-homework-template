@@ -33,6 +33,8 @@ mongoose.connect(DB_HOST)
 const authRouter = require('./routes/api/user');
 const usersRouter = require('./routes/api/usersData');
 const contactsRouter = require('./routes/api/contacts');
+
+
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/users', authRouter);
