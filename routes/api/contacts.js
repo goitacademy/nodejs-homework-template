@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const { addValidation } = require("../../validation.js");
 const {
   listContacts,
   getContactById,
@@ -13,10 +13,10 @@ router.get("/", listContacts);
 
 router.get("/:contactId", getContactById);
 
-router.post("/", addContact);
+router.post("/", addValidation, addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", updateContact);
+router.put("/:contactId", addValidation, updateContact);
 
 module.exports = router;
