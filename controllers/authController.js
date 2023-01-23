@@ -6,9 +6,10 @@ const { User } = require("../db/UserModel");
 const gravatar = require("gravatar");
 const path = require("path");
 const { WrongParametersError } = require("../helpers/errors");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 // require("dotenv").config();
-const { SECRET_KEY } = process.env;
+const { nanoid } = require("nanoid");
+const { SECRET_KEY, BASE_URL } = process.env;
 
 // const register = async (req, res) => {
 
@@ -70,15 +71,23 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(409, "Email in use");
   }
-
+  const verificationToken = nanoid();
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL: avatarURL,
+    verificationToken,
   });
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+  };
 
+  await sendEmail(verifyEmail);
+  // console.log("email sended");
   res.status(201).json({
     name: newUser.name,
     email: newUser.email,
@@ -90,6 +99,9 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password invalid"); // "Email invalid"
+  }
+  if (!user.verify) {
+    throw HttpError(401, "Email not verificated"); // "Email invalid"
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -198,8 +210,55 @@ const avatarUpdate = async (req, res) => {
     message: ` Avatar successfuly updated`,
   });
 };
+const verify = async (req, res) => {
+  const { verificationToken } = req.params;
+  // console.log("verificationToken ", verificationToken);
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404);
+  }
 
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+
+  res.json({
+    message: "Verify success",
+  });
+};
+const secondaryVerify = async (req, res) => {
+  const { email } = req.body;
+  // console.log("email", email);
+  if (!email) {
+    throw new WrongParametersError("missing required field email");
+  }
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(404);
+  }
+  const { verificationToken } = user;
+  if (user.verify) {
+    // throw HttpError();
+    throw new WrongParametersError("Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({
+    message: "Verification email sent",
+  });
+};
 module.exports = {
+  secondaryVerify: ctrlWrapper(secondaryVerify),
+  verify: ctrlWrapper(verify),
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),

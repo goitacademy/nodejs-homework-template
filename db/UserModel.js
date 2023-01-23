@@ -8,6 +8,15 @@ const emailRegexp =
 const subscriptionList = ["starter", "pro", "business"];
 const userShema = new mongoose.Schema(
   {
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
+
     name: { type: String, require: true },
     avatarURL: { type: String, require: true },
     password: {
@@ -64,10 +73,14 @@ const subscriptionUpdateSchema = Joi.object({
     .valid(...subscriptionList)
     .required(),
 });
+const verifySchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
 const schemas = {
   registerSchema,
   loginSchema,
   subscriptionUpdateSchema,
+  verifySchema,
 };
 
 module.exports = {

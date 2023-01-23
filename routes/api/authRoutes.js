@@ -21,7 +21,11 @@ router.post(
   validateBody(schemas.registerSchema),
   ctrl.register
 );
-
+router.post(
+  "/verify",
+  validateBody(schemas.verifySchema),
+  ctrl.secondaryVerify
+);
 // signin
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
@@ -41,4 +45,7 @@ router.patch(
   upload.single("avatar"),
   ctrl.avatarUpdate
 );
+
+router.get("/current", authenticate, ctrl.getCurrent);
+router.get("/verify/:verificationToken", ctrl.verify);
 module.exports = router;
