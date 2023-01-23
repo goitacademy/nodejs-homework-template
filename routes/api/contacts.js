@@ -16,19 +16,26 @@ const {
 const {
   contactSchema,
   contactStatusSchema,
-} = require("../../schema/validateSchema");
+} = require("../../schema/validateContactSchema");
+const { auth } = require("../../middleWares/auth");
 const { tryCatcher } = require("../../helpers/helpers");
 
-router.get("/", tryCatcher(getListOfContacts));
+router.get("/", tryCatcher(auth), tryCatcher(getListOfContacts));
 
-router.get("/:contactId", tryCatcher(getContact));
+router.get("/:contactId", tryCatcher(auth), tryCatcher(getContact));
 
-router.post("/", validateBody(contactSchema), tryCatcher(createContact));
+router.post(
+  "/",
+  tryCatcher(auth),
+  validateBody(contactSchema),
+  tryCatcher(createContact)
+);
 
-router.delete("/:contactId", tryCatcher(deleteContact));
+router.delete("/:contactId", tryCatcher(auth), tryCatcher(deleteContact));
 
 router.patch(
   "/:contactId/favorite",
+  tryCatcher(auth),
   checkIfBodyStatusExists(),
   validateBody(contactStatusSchema),
   tryCatcher(updateStatusContact)
@@ -36,6 +43,7 @@ router.patch(
 
 router.put(
   "/:contactId",
+  tryCatcher(auth),
   checkIfBodyExists(),
   validateBody(contactSchema),
   tryCatcher(editContact)

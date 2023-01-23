@@ -1,46 +1,29 @@
 const express = require("express");
 const userRouter = express.Router();
-const { me } = require("../../controllers/user.controller");
 const {
-  validateBody,
-  checkIfBodyExists,
-  checkIfBodyStatusExists,
-} = require("../../middleWares/checkBodyRequest");
+  register,
+  login,
+  logout,
+  current,
+  subscriptionUpdate,
+} = require("../../controllers/auth.controller");
 const { auth } = require("../../middleWares/auth");
+const { validateUser } = require("../../middleWares/checkUser");
+const { userSchema } = require("../../schema/validateUserSchema");
 const {
-  contactSchema,
-  contactStatusSchema,
-} = require("../../schema/validateSchema");
+  subscriptionSchema,
+} = require("../../schema/validateSubscriptionSchema");
 const { tryCatcher } = require("../../helpers/helpers");
 
-// userRouter.get("/", tryCatcher(auth), tryCatcher(getListOfContacts));
-
-// userRouter.get("/:contactId", tryCatcher(auth), tryCatcher(getContact));
-
-userRouter.get("/me", tryCatcher(auth), tryCatcher(me));
-
-// userRouter.post(
-//   "/",
-//   tryCatcher(auth),
-//   validateBody(contactSchema),
-//   tryCatcher(createContact)
-// );
-
-// userRouter.delete("/:contactId", tryCatcher(auth), tryCatcher(deleteContact));
-
-// userRouter.patch(
-//   "/:contactId/favorite",
-//   tryCatcher(auth),
-//   checkIfBodyStatusExists(),
-//   validateBody(contactStatusSchema),
-//   tryCatcher(updateStatusContact)
-// );
-
-// userRouter.put(
-//   "/:contactId",
-//   checkIfBodyExists(),
-//   validateBody(contactSchema),
-//   tryCatcher(editContact)
-// );
+userRouter.post("/signup", validateUser(userSchema), tryCatcher(register));
+userRouter.post("/login", validateUser(userSchema), tryCatcher(login));
+userRouter.get("/logout", tryCatcher(auth), tryCatcher(logout));
+userRouter.get("/current", tryCatcher(auth), tryCatcher(current));
+userRouter.patch(
+  "/",
+  tryCatcher(auth),
+  validateUser(subscriptionSchema),
+  tryCatcher(subscriptionUpdate)
+);
 
 module.exports = userRouter;
