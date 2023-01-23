@@ -41,7 +41,11 @@ const addContact = async (req, res, next) => {
 const updatePatchContact = async (req, res, next) => {
   try {
     const { id } = req.params;
+<<<<<<< HEAD
     const updatedContact = await updatePatch(id, req.body);
+=======
+    const updatedContact = await updateContact(id, req.body);
+>>>>>>> master
     if (!updatedContact) {
       throw new NotFound("Not found");
     }
