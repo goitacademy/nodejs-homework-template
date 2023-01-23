@@ -1,4 +1,5 @@
-const RequestError = require("./requestError");
-const handleSaveErrors = require("./handleSaveErrors");
+const contacts = require("./contacts");
+const auth = require("./auth");
+const users = require("./users");
 
-module.exports = { RequestError, handleSaveErrors };
+module.exports = { contacts, auth, users };

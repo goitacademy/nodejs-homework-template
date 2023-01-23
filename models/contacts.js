@@ -10,7 +10,7 @@ const contactSchema = new Schema(
     {
         name: {
             type: String,
-            require: true,
+            required: true,
             minLength: 3,
             maxLength: 30,
         },
@@ -18,15 +18,17 @@ const contactSchema = new Schema(
             type: String,
             trim: true,
             lowercase: true,
-            unique: true,
             required: true,
             match: [emailRegExp, "Please fill a valid email address"],
         },
         phone: {
             type: String,
             match: [phoneRegExp, "Please fill a valid phone number"],
-            require: true,
-            unique: true,
+            required: true,
+        },
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: "user",
         },
         favorite: {
             type: Boolean,
@@ -53,11 +55,11 @@ const favoriteSchema = Joi.object({
     favorite: Joi.boolean().required(),
 });
 
-const schemas = {
+const joiContactsSchemas = {
     contactsSchema,
     favoriteSchema,
 };
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { Contact, joiContactsSchemas };

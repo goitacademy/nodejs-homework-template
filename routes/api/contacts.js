@@ -1,24 +1,44 @@
 const express = require("express");
-const { validation, ctrlWrapper, isValidId } = require("../../middlewares");
-const { schemas } = require("../../models");
+const {
+    validation,
+    ctrlWrapper,
+    isValidId,
+    checkJwt,
+    checkUniqData,
+} = require("../../middlewares");
+const { joiContactsSchemas } = require("../../models");
 const { contacts: ctrl } = require("../../controller");
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", checkJwt, ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
+router.get("/:contactId", checkJwt, isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(schemas.contactsSchema), ctrlWrapper(ctrl.add));
+router.post(
+    "/",
+    checkJwt,
+    validation(joiContactsSchemas.contactsSchema),
+    checkUniqData,
+    ctrlWrapper(ctrl.add)
+);
 
-router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
+router.delete("/:contactId", checkJwt, isValidId, ctrlWrapper(ctrl.remove));
 
-router.put("/:contactId", isValidId, validation(schemas.contactsSchema), ctrlWrapper(ctrl.update));
+router.put(
+    "/:contactId",
+    checkJwt,
+    isValidId,
+    validation(joiContactsSchemas.contactsSchema),
+    checkUniqData,
+    ctrlWrapper(ctrl.update)
+);
 
 router.patch(
     "/:contactId/favorite",
+    checkJwt,
     isValidId,
-    validation(schemas.favoriteSchema),
+    validation(joiContactsSchemas.favoriteSchema),
     ctrlWrapper(ctrl.patch)
 );
 
