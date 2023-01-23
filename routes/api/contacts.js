@@ -35,20 +35,16 @@ const schemaPost = Joi.object({
 
 const schemaPut = Joi.object({
     name: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
+        .pattern(/^([A-Z]{1}\w{1,14})\s([A-Z]{1}\w{1,14})$/, { invert: false })
         .trim()
         .messages({
-          'string.base': `Name should be a type of 'text'`,
+          'string.pattern.base': `Name should be a type of 'Firstname Lastname' with min/max length 5/30 symbols`,
           'string.empty': `Name cannot be an empty field`,
-          'string.min': `Name should have a minimum length 3`,
-          'string.max': `Name should have a maximum length 30`,
           'any.required': `Name is a required field`
         }),
 
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .email()
         .trim()
         .messages({
           'string.email': `The string is not a valid e-mail`,
@@ -56,15 +52,11 @@ const schemaPut = Joi.object({
         }),
 
     phone: Joi.string()
-        .pattern(/^[0-9]+$/, { invert: false })
-        .min(8)
-        .max(10)
+        .pattern(/^\(\d{3}\)\s\d{3}-\d{4}$/, { invert: false })
         .trim()
         .messages({
-          'string.pattern.base': `Phone should be a type of 'number'`,
+          'string.pattern.base': `Phone should be a type of 'number' like (XXX) XXX-XXXX`,
           'string.empty': `Phone cannot be an empty field`,
-          'string.min': `Phone should have a minimum length 8`,
-          'string.max': `Phone should have a maximum length 10`,
           'any.required': `Phone is a required field`
         }),
 })
