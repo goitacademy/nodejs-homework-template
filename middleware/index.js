@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { HttpError } = require('../helpers/index');
+const HttpError = require('../helpers/httpError');
 const { User } = require('../models/user');
 
 const { JWT_SECRET } = process.env;
@@ -9,10 +9,10 @@ async function authorization(req, res, next) {
   const [type, token] = authHeader.split(' ');
 
   if (type !== 'Bearer') {
-    throw HttpError(401, 'Token type must be Bearer');
+    throw new HttpError(401, 'Token type must be Bearer');
   }
   if (!token) {
-    throw HttpError(401, 'No token provided');
+    throw new HttpError(401, 'No token provided');
   }
 
   try {
@@ -22,9 +22,9 @@ async function authorization(req, res, next) {
     req.user = user;
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      throw HttpError(401, 'jwt token is expired');
+      throw new HttpError(401, 'jwt token is expired');
     }
-    throw HttpError(401, error.message);
+    throw new HttpError(401, error.message);
   }
 
   next();
