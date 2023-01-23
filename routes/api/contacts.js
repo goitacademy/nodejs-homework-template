@@ -42,7 +42,7 @@ router.post("/", schemaPostContact, async (req, res, next) => {
     const contact = await addContact(req.body);
     res.status(201).json(contact);
   } catch (error) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -55,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
     }
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: error.message });
   }
 });
 

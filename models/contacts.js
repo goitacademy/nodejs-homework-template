@@ -45,7 +45,7 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const { name, email, phone } = body;
-  contacts.forEach((element) => {
+  contacts.forEach((item) => {
     if (item.id === contactId) {
       item.name = name;
       item.email = email;
