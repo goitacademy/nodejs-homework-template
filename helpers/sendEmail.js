@@ -15,7 +15,7 @@ const data = {
 const sendEmail = async (data) => {
     const email = { ...data, from: 'vitaospanova@ukr.net'};
     try {
-        await sendEmail.send(email);
+        await sgMail.send(email);
         return true;        
     } catch (error) {
         console.log(error.message)
