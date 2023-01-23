@@ -1,18 +1,43 @@
-const { BadRequest } = require("http-errors");
+const Joi = require("joi");
 
-const validation = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (Object.keys(req.body).length === 0) {
-      throw new BadRequest("missing fields");
-    }
-    if (error) {
-      const [er] = error.details[0].path;
-      throw new BadRequest(`missing required ${er} field`);
-    }
+module.exports = {
+  postValidation: (req, res, next) => {
+    const schema = Joi.object({
+      name: Joi.string().alphanum().min(3).max(10).required(),
+      email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+        .required(),
+      phone: Joi.string().alphanum().min(3).max(10).required(),
+    });
 
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      return res.status(400).json({
+        status: validationResult.error.details,
+        message: `missing required field`,
+      });
+    }
     next();
-  };
-};
+  },
 
-module.exports = validation;
+  patchValidation: (req, res, next) => {
+    const schema = Joi.object({
+      name: Joi.string().alphanum().min(3).max(10).optional(),
+      email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+        .optional(),
+      phone: Joi.string().alphanum().min(3).max(10).optional(),
+    });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      return res.status(400).json({
+        status: validationResult.error.details,
+        message: `missing required field`,
+      });
+    }
+    next();
+  },
+};

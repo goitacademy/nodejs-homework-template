@@ -9,17 +9,19 @@ const {
   removeContact,
 } = require("../../controllers/contactsControllers");
 
-const validation = require("../../middlewares/validationMiddleware");
-const contactsSchema = require("../../validationSchemas/contactsSchema");
+const {
+  postValidation,
+  patchValidation,
+} = require("../../middlewares/validationMiddleware");
 
 router.get("/", listContacts);
 
 router.get("/:id", getById);
 
-router.post("/", validation(contactsSchema), addContact);
+router.post("/", postValidation, addContact);
 
 router.delete("/:id", removeContact);
 
-router.patch("/:id", validation(contactsSchema), updatePatchContact);
+router.patch("/:id", patchValidation, updatePatchContact);
 
 module.exports = { contactsRouter: router };
