@@ -8,7 +8,7 @@ const {
 } = require('../../controllers/users');
 const { tryCatchWrapper } = require('../../helpers');
 const { authorization } = require('../../middleware');
-const { userValidation } = require('../../validation/schemas/user');
+const { userValidation } = require('../../validation/user');
 
 const usersRouter = express.Router();
 

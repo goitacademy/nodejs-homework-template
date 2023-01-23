@@ -1,9 +1,5 @@
 const express = require('express');
-const {
-  postValidation,
-  putValidation,
-  patchValidation,
-} = require('../../validation/schemas/contact');
+const { postValidation, putValidation, patchValidation } = require('../../validation/contact');
 const {
   listContacts,
   getContactById,
