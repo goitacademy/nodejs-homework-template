@@ -17,12 +17,20 @@ router.post(
   ctrlWrapper(ctrl.register)
 );
 
+router.post(
+  "/verify",
+  validateBody(schemas.emaelSchema),
+  ctrlWrapper(ctrl.resendVerifyEmail)
+);
+
 /* sign in */
 router.post(
   "/login",
   validateBody(schemas.loginSchema),
   ctrlWrapper(ctrl.login)
 );
+
+router.get(" /verify/:verificationToken", ctrlWrapper(ctrl.verify));
 
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
