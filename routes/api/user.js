@@ -6,14 +6,10 @@ const {
   logout,
   current,
   subscriptionUpdate,
-} = require("../../controllers/auth.controller");
-const { auth } = require("../../middleWares/auth");
-const { validateUser } = require("../../middleWares/checkUser");
-const { userSchema } = require("../../schema/validateUserSchema");
-const {
-  subscriptionSchema,
-} = require("../../schema/validateSubscriptionSchema");
-const { tryCatcher } = require("../../helpers/helpers");
+} = require("../../controllers");
+const { validateUser, auth } = require("../../middleWares");
+const { userSchema, subscriptionSchema } = require("../../schema");
+const { tryCatcher } = require("../../helpers");
 
 userRouter.post("/signup", validateUser(userSchema), tryCatcher(register));
 userRouter.post("/login", validateUser(userSchema), tryCatcher(login));

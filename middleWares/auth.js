@@ -1,4 +1,4 @@
-const { httpError } = require("../helpers/helpers");
+const { httpError } = require("../helpers");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/users");
 

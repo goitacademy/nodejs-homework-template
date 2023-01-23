@@ -7,18 +7,15 @@ const {
   deleteContact,
   editContact,
   updateStatusContact,
-} = require("../../controllers/contact.controller");
+} = require("../../controllers");
 const {
   validateBody,
   checkIfBodyExists,
   checkIfBodyStatusExists,
-} = require("../../middleWares/checkBodyRequest");
-const {
-  contactSchema,
-  contactStatusSchema,
-} = require("../../schema/validateContactSchema");
-const { auth } = require("../../middleWares/auth");
-const { tryCatcher } = require("../../helpers/helpers");
+  auth,
+} = require("../../middleWares");
+const { contactSchema, contactStatusSchema } = require("../../schema");
+const { tryCatcher } = require("../../helpers");
 
 router.get("/", tryCatcher(auth), tryCatcher(getListOfContacts));
 
