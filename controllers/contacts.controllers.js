@@ -5,7 +5,7 @@ async function getContacts(req, res, next) {
   const { limit = 20, page = 1 } = req.query;
   const skip = (page - 1) * limit;
   const contacts = await Contact.find({}).skip(skip).limit(limit);
-  if (!contacts) {
+  if (contacts.length === 0) {
     next(new CustomError(404, "Contact not found"));
   }
   res.status(200).json(contacts);

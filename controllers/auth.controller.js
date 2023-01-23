@@ -24,7 +24,7 @@ async function register(req, res, next) {
     });
   } catch (error) {
     if (error.message.includes("E11000 duplicate key error collection")) {
-      next(new CustomError(409, "User with this email already exists"));
+      return next(new CustomError(409, "User with this email already exists"));
     }
     throw error;
   }
