@@ -1,12 +1,12 @@
-require("colors");
+require('colors');
 
-const path = require("path");
-const app = require("./app");
-const { dbConnect } = require("./db/connectionMongoDb");
-
-require("dotenv").config({
-  path: path.join(__dirname, "config/.env"),
+const path = require('path');
+require('dotenv').config({
+  path: path.join(__dirname, 'config/.env'),
 });
+
+const app = require('./app');
+const { dbConnect } = require('./db/connectionMongoDb');
 
 const { PORT } = process.env || 3000;
 
