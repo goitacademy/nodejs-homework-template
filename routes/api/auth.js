@@ -10,14 +10,19 @@ const { validateBody, authenticate, upload } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
-router.post("/users/signup", validateBody(schemas.registerSchema), ctrlWrapper(ctrl.register));
+router.post("/signup", validateBody(schemas.registerSchema), ctrlWrapper(ctrl.register));
 
-router.post("/users/login", validateBody(schemas.registerSchema), ctrlWrapper(ctrl.login));
+router.get("/verify/:verificationCode", ctrlWrapper(ctrl.verify))
 
-router.get("/users/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+router.get("/verify", validateBody(schemas.emailSchema), ctrlWrapper(ctrl.resendVerifyEmail))
 
-router.get("/users/logout", authenticate, ctrlWrapper(ctrl.logout));
 
-router.patch("/users/avatars", authenticate, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
+router.post("/login", validateBody(schemas.registerSchema), ctrlWrapper(ctrl.login));
+
+router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+
+router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
+
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
 
 module.exports = router;
