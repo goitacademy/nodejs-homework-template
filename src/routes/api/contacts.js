@@ -2,7 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const {
   addPostValidation,
-  addPatchValidation } = require('../../middlewares/validationMiddleware');
+  addPutValidation } = require('../../middlewares/validationMiddleware');
 const contactsController = require('../../controllers/contactsController');
 
 // GET /api/contacts => [...contacts]
@@ -18,9 +18,9 @@ router.post('/', addPostValidation, contactsController.createContact);
 router.delete('/:contactId', contactsController.removeContact);
 
 // PUT /api/contacts/123 => [changedContact, ...contacts]
-router.put('/:contactId', addPostValidation, contactsController.changeContact);
+router.put('/:contactId', addPutValidation, contactsController.changeContact);
 
 // PATCH /api/contacts/123 => [changedContact, ...contacts]
-router.patch('/:contactId', addPatchValidation, contactsController.patchContact);
+// router.patch('/:contactId', addPatchValidation, contactsController.patchContact);
 
 module.exports = router;

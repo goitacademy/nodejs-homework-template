@@ -4,7 +4,7 @@ const {
     addContact,
     deleteContact,
     updateContact,
-    partialUpdateContact
+    // partialUpdateContact
 } = require('../models/contacts');
 
 const getContacts = async (req, res, next) => {
@@ -65,20 +65,20 @@ const changeContact = async (req, res, next) => {
     res.status(200).json({updatedContact, status: 'success'});
 };
 
-const patchContact = async (req, res, next) => {
-    const { contactId } = req.params;
-    const { name, email, phone } = req.body;
+// const patchContact = async (req, res, next) => {
+//     const { contactId } = req.params;
+//     const { name, email, phone } = req.body;
     
-    const updatedContact = await partialUpdateContact(contactId, name, email, phone);
+//     const updatedContact = await partialUpdateContact(contactId, name, email, phone);
 
-    if (!updatedContact) {
-        return res.status(404).json({
-        message: "Not found",
-        });
-    }
+//     if (!updatedContact) {
+//         return res.status(404).json({
+//         message: "Not found",
+//         });
+//     }
 
-    res.status(200).json({updatedContact, status: 'success'});
-};
+//     res.status(200).json({updatedContact, status: 'success'});
+// };
 
 module.exports = {
     getContacts,
@@ -86,6 +86,6 @@ module.exports = {
     createContact, 
     removeContact,
     changeContact,
-    patchContact
+    // patchContact
 }
 
