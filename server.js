@@ -1,19 +1,18 @@
-const app = require("./app");
-const mongoose = require("mongoose");
+require('dotenv').config();
+const app = require('./app');
+const PORT = process.env.PORT || 3000;
 
-const { connectMongo } = require("./db/connect");
-require("dotenv").config();
+const { mongoConnect } = require('./db/connections');
 
 const start = async () => {
   try {
-    await connectMongo();
-    console.log("Database connection successful");
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
+    await mongoConnect();
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
   }
-  app.listen(3000, () => {
-    console.log("Server running. Use our API on port: 3000");
-  });
 };
+
 start();

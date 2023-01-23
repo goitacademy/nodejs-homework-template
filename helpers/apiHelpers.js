@@ -3,12 +3,14 @@ const {
   LoginAuthError,
   VerificationError,
   BadRequestError,
-} = require("./errors");
-const asyncWrapper = (controller) => {
+} = require('./errors');
+
+const asyncWrapper = controller => {
   return (req, res, next) => {
     controller(req, res).catch(next);
   };
 };
+
 const errorHandler = (err, req, res, next) => {
   if (
     err instanceof RegistrationConflictError ||
@@ -20,7 +22,13 @@ const errorHandler = (err, req, res, next) => {
   }
   res.status(500).json({ message: err.message });
 };
+
+const registrationConflictError = (err, req, res, next) => {
+  res.status(409).json({ message: err.message });
+};
+
 module.exports = {
   asyncWrapper,
   errorHandler,
+  registrationConflictError,
 };

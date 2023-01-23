@@ -1,53 +1,53 @@
-// const fs = require("fs").promises;
-// const path = require("path");
-// const contactsPath = path.resolve("./models/contacts.json");
-const { Contact } = require("../db/contactModel");
-const listContacts = async (owner) => {
-  const data = await Contact.find({ owner });
+const { Contact } = require('../db/contactModel');
 
+const listContacts = async (owner, page, limit, favorite) => {
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  if (favorite) {
+    const data = await Contact.find({ $and: [{ owner }, { favorite }] })
+      .skip(skip)
+      .limit(limit);
+    return data;
+  } else {
+    const data = await Contact.find({ owner }).skip(skip).limit(limit);
+    return data;
+  }
+};
+
+const getContactById = async (contactId, owner) => {
+  const data = await Contact.find({ $and: [{ owner }, { _id: contactId }] });
   return data;
 };
 
-const getContactById = async (contactId) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const parsedData = JSON.parse(data);
-  const contactById = parsedData.find((contact) => contact.id === contactId);
-  console.table(contactById);
-  return contactById;
+const removeContact = async (contactId, owner) => {
+  const data = await Contact.findOneAndRemove({ $and: [{ owner }, { _id: contactId }] });
+  return data;
 };
 
-const removeContact = async (contactId) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const parsedData = JSON.parse(data);
-  const contactById = parsedData.filter((contact) => contact.id !== contactId);
-  console.table(contactById);
-  return contactById;
+const addContact = async ({ name, email, phone, favorite }, owner) => {
+  const contact = new Contact({ name, email, phone, favorite, owner });
+  const newContact = await contact.save();
+  return newContact;
 };
 
-const addContact = async (name, email, phone) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const parsedData = JSON.parse(data);
-  const id = Math.random().toString();
-  parsedData.push({ id, name, email, phone });
-  const jsonNewData = JSON.stringify(parsedData);
-  fs.writeFile(contactsPath, jsonNewData);
-  return jsonNewData;
+const updateContact = async (contactId, owner, body) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { $and: [{ owner }, { _id: contactId }] },
+    { $set: body },
+    { runValidators: true, new: true }
+  );
+
+  return updatedContact;
 };
 
-const updateContact = async (contactId, name, email, phone) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const parsedData = JSON.parse(data);
-  parsedData.forEach((contact) => {
-    if (contact.id === contactId) {
-      contact.id = contactId;
-      contact.name = name;
-      contact.email = email;
-      contact.phone = phone;
-    }
-  });
-  const jsonNewData = JSON.stringify(parsedData);
-  fs.writeFile(contactsPath, jsonNewData);
-  return jsonNewData;
+const updateStatusContact = async (contactId, owner, favorite) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { $and: [{ owner }, { _id: contactId }] },
+    { favorite },
+    { runValidators: true, new: true }
+  );
+
+  return updatedContact;
 };
 
 module.exports = {
@@ -56,4 +56,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

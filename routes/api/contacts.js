@@ -1,44 +1,40 @@
-const express = require("express");
-
-const router = express.Router();
-// const modelMiddleware = require("/nodejs-homework-template-vm/middlewears/models");
+const express = require('express');
 const {
   addContactValidation,
-  putContactVlidation,
-  patchContactVlidation,
-} = require("../../middlewears/validationMiddleware");
-const { isValidId } = require("../../middlewears/validationI");
+  putContactValidation,
+  patchContactFavoriteValidation,
+} = require('../../middlewares/validationMiddleware');
+const { isValidId } = require('../../middlewares/validationIdMiddleware');
 const {
-  getContacts,
-  addContacts,
-  getContactsById,
-  putContacts,
-  removeContacts,
-  putContactsFav,
-} = require("/nodejs-homework-template-vm/contrillers/contactController");
-const {
-  asyncWrapper,
-} = require("/nodejs-homework-template-vm/helpers/apiHelpers");
-const { authMiddleware } = require("../../middlewears/authMiddleware");
+  listContactsController,
+  getContactByIdController,
+  addContactValidationController,
+  removeContactController,
+  updateContactController,
+  updateStatusContactController,
+} = require('../../controllers/contactsController');
+const { asyncWrapper } = require('../../helpers/apiHelpers');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
+
+const router = express.Router();
+
 router.use(authMiddleware);
-router.get("/", asyncWrapper(getContacts));
 
-router.get("/:contactId", isValidId, asyncWrapper(getContactsById));
+router.get('/', asyncWrapper(listContactsController));
 
-router.post("/", addContactValidation, asyncWrapper(addContacts));
+router.get('/:contactId', isValidId, asyncWrapper(getContactByIdController));
 
-router.delete("/:contactId", isValidId, asyncWrapper(removeContacts));
+router.post('/', addContactValidation, asyncWrapper(addContactValidationController));
 
-router.put(
-  "/:contactId",
+router.delete('/:contactId', isValidId, asyncWrapper(removeContactController));
 
-  putContactVlidation,
-  isValidId,
-  asyncWrapper(putContacts)
-);
+router.put('/:contactId', isValidId, putContactValidation, asyncWrapper(updateContactController));
+
 router.patch(
-  "/:contactId/favorite",
-  patchContactVlidation,
-  asyncWrapper(putContactsFav)
+  '/:contactId/favorite',
+  isValidId,
+  patchContactFavoriteValidation,
+  asyncWrapper(updateStatusContactController)
 );
+
 module.exports = router;
