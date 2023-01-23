@@ -43,7 +43,34 @@ async function login(req, res, next) {
   });
 }
 
+async function logout(req, res, next) {
+  const { email, password } = req.body;
+  const storedUser = await User.findOne({ email });
+
+  if (!storedUser) {
+    throw new httpError(401, "Email is wrong");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, storedUser.password);
+
+  if (!isPasswordValid) {
+    throw new httpError(401, "Password is wrong");
+  }
+
+  const token = jwt.sign({ id: storedUser._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  return res.status(200).json({
+    token,
+    user: {
+      email,
+      subscription: "starter",
+    },
+  });
+}
+
 module.exports = {
   register,
   login,
+  logout,
 };

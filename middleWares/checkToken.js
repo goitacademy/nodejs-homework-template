@@ -2,7 +2,7 @@ const { httpError } = require("../helpers/helpers");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/users");
 
-async function auth(req, res, next) {
+async function checkToken(req, res, next) {
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
   if (type !== "Bearer") {
@@ -28,4 +28,4 @@ async function auth(req, res, next) {
   next();
 }
 
-module.exports = { auth };
+module.exports = { checkToken };

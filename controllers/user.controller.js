@@ -2,7 +2,7 @@ const { httpError } = require("../helpers/helpers");
 // const { Contact } = require("../models/contacts");
 
 async function me(req, res, next) {
-  console.log(100);
+  const { user } = req;
   return await res.status(200).json({ ok: "200" });
 }
 
