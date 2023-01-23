@@ -1,16 +1,21 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./src/routes/api/contacts");
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
+const url = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.hpoeewd.mongodb.net/db-contacts`;
+
 mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.hpoeewd.mongodb.net/test`
-  )
+  .connect(url)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log("Database connection successful");
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
   });
 
 const app = express();

@@ -1,55 +1,48 @@
-const fs = require("fs/promises");
-const path = require("path");
-
-const contactPath = path.resolve("./src/models/contacts.json");
+const { Contact } = require("./contactModel");
 
 async function listContacts() {
-  const data = await fs.readFile(contactPath);
-  return JSON.parse(data);
+  const contacts = await Contact.find({});
+  return contacts;
 }
 
 async function getContactById(contactId) {
-  const data = await listContacts();
-  const result = data.find((item) => item.id === contactId);
-  if (!result) {
-    return null;
-  }
-  return result;
+  const contact = await Contact.findById(contactId);
+
+  if (!contact)
+    throw new WrongParamsError(`Contact with id: ${contactId} not found`);
+
+  return contact;
 }
 
 async function removeContact(contactId) {
-  const data = await listContacts();
-  const index = data.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [removeContact] = data.splice(index, 1);
-  await fs.writeFile(contactPath, JSON.stringify(data));
-  return removeContact;
+  const data = await Contact.findByIdAndDelete(contactId);
+  if (!data)
+    throw new WrongParamsError(`Contact with id: ${contactId} not found`);
+
+  return;
 }
 
-async function addContact({ name, email, phone }) {
-  const data = await listContacts();
-  const newContact = {
-    id: `${Date.now()}`,
-    name,
-    email,
-    phone,
-  };
-  data.push(newContact);
-  await fs.writeFile(contactPath, JSON.stringify(data));
+async function addContact(body) {
+  const newContact = await Contact.create(body);
   return newContact;
 }
 
 async function updateContact(contactId, body) {
-  const data = await listContacts();
-  const index = data.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  data[index] = { id: contactId, ...body };
-  await fs.writeFile(contactPath, JSON.stringify(data));
-  return data[index];
+  const data = await Contact.findByIdAndUpdate(contactId, body, { new: true });
+
+  if (!data)
+    throw new WrongParamsError(`Contact with id: ${contactId} not found`);
+
+  return data;
+}
+
+async function updateStatusContact(contactId, body) {
+  const data = await Contact.findByIdAndUpdate(contactId, body, { new: true });
+
+  if (!data)
+    throw new WrongParamsError(`Contact with id: ${contactId} not found`);
+
+  return data;
 }
 
 module.exports = {
@@ -58,4 +51,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

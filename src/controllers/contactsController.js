@@ -4,6 +4,7 @@ const {
   listContacts,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 
 const getContacts = async (_, res) => {
@@ -14,25 +15,13 @@ const getContacts = async (_, res) => {
 const getContById = async (req, res) => {
   const { contactId } = req.params;
   const data = await getContactById(contactId);
-  if (!data) {
-    return res.status(404).json({
-      code: 404,
-      message: `Contact with id: ${contactId} not found`,
-    });
-  }
+
   res.status(200).json({ code: 200, data });
 };
 
 const removeCont = async (req, res) => {
   const { contactId } = req.params;
-  const data = await removeContact(contactId);
-
-  if (!data) {
-    return res.status(404).json({
-      code: 404,
-      message: `Contact with id: ${contactId} not found`,
-    });
-  }
+  await removeContact(contactId);
 
   res.status(200).json({
     code: 200,
@@ -52,11 +41,13 @@ const updateCont = async (req, res) => {
   const body = req.body;
   const data = await updateContact(contactId, body);
 
-  if (!data) {
-    return res
-      .status(404)
-      .json({ message: `Contact with id: ${contactId} not found` });
-  }
+  res.status(200).json({ code: 200, data });
+};
+
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  const body = req.body;
+  const data = await updateStatusContact(contactId, body);
 
   res.status(200).json({ code: 200, data });
 };
@@ -67,4 +58,5 @@ module.exports = {
   removeCont,
   addCont,
   updateCont,
+  updateFavorite,
 };
