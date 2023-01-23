@@ -21,8 +21,8 @@ const getContact = async (req, res) => {
 
 const addNewContact = async (req, res) => {
   const { name, email, phone } = req.body;
-  await addContact(name, email, phone);
-  res.json({ status: "succes" });
+  const newContact = await addContact(name, email, phone);
+  res.status(201).json({ newContact, status: "succes" });
 };
 
 const deleteContact = async (req, res, next) => {
@@ -34,11 +34,14 @@ const deleteContact = async (req, res, next) => {
 };
 
 const updateContactById = async (req, res, next) => {
-  const status = await updateContact(req.params.contactId, req.body);
+  const { status, updatedContact } = await updateContact(
+    req.params.contactId,
+    req.body
+  );
   if (!status) {
     return res.status(404).json({ status: `Not found` });
   }
-  res.json({ status: `succes` });
+  res.json({ updatedContact, status: `succes` });
 };
 
 module.exports = {

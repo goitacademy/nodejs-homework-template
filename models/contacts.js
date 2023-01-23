@@ -49,6 +49,7 @@ const addContact = async (name, email, phone) => {
     const parseData = JSON.parse(data);
     const newData = [...parseData, newContact];
     await fs.writeFile(contactsPath, JSON.stringify(newData));
+    return newContact;
   } catch (err) {
     console.log(err);
   }
@@ -69,7 +70,11 @@ const updateContact = async (contactId, { name, email, phone }) => {
   });
   if (status) {
     await fs.writeFile(contactsPath, JSON.stringify(newData));
-    return status;
+    const data = await fs.readFile(contactsPath);
+    const updatedContact = JSON.parse(data).filter(
+      (contact) => contact.id === contactId
+    );
+    return { status, updatedContact };
   }
   status = false;
   return status;
