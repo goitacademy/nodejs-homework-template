@@ -4,7 +4,7 @@ const { HttpErrror, sendEmail } = require("../../helpers");
 const resendVerify = async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) {
+  if (!user || user.verify) {
     throw HttpErrror(404, "User not found");
   }
   if (user) {
