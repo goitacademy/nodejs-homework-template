@@ -9,6 +9,7 @@ const contact = new Schema({
   },
   phone: {
     type: String,
+    uniq: true,
   },
   favorite: {
     type: Boolean,
@@ -16,6 +17,6 @@ const contact = new Schema({
   },
 });
 
-const Contact = model("contact", contact);
+const ContactSchema = model("contact", contact);
 
-module.exports = Contact;
+module.exports = ContactSchema;
