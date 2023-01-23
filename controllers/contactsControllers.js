@@ -3,7 +3,6 @@ const {
   getContactById,
   addContactItem,
   updateContact,
-  updatePatch,
   removeContactById,
 } = require("../models/contacts");
 const { NotFound } = require("http-errors");
@@ -52,19 +51,6 @@ const updatePatchContact = async (req, res, next) => {
   }
 };
 
-const updatePutContact = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const updatedContact = await updateContact(id, req.body);
-    if (!updatedContact) {
-      throw new NotFound("Not found");
-    }
-    res.json(updatedContact);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const removeContact = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -80,7 +66,6 @@ const removeContact = async (req, res, next) => {
 
 module.exports = {
   addContact,
-  updatePutContact,
   updatePatchContact,
   listContacts,
   getById,
