@@ -1,10 +1,12 @@
 const { updateStatusContact } = require("../../models/contacts");
 
-const updateStatus = async (req, res, next) => {
+const updateStatusById = async (req, res, next) => {
+  console.log(req.user);
+  const ownerId = req.user.id;
   const { favorite } = req.body;
   const { contactId } = req.params;
   if (favorite === true || favorite === false) {
-    const data = await updateStatusContact(contactId, req.body);
+    const data = await updateStatusContact(contactId, req.body, ownerId);
     if (!data) {
       return res.status(400).json({ status: 400, message: "Not found" });
     }
@@ -17,6 +19,4 @@ const updateStatus = async (req, res, next) => {
     .status(400)
     .json({ status: 400, message: "missing field favorite" });
 };
-module.exports = {
-  updateStatus,
-};
+module.exports = updateStatusById;

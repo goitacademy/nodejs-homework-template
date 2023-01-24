@@ -1,11 +1,10 @@
-const fs = require("fs/promises");
-const path = require("path");
 const { Contacts } = require("../db/contactsModel");
-const contactsPath = path.resolve("./src/models/contacts.json");
 
-const listContacts = async () => {
+const listContacts = async (req) => {
+  const { id } = req.user;
+  console.log(id);
   try {
-    const data = await Contacts.find();
+    const data = await Contacts.find({ owner: id });
     return data;
   } catch (error) {
     console.log(error);
@@ -13,9 +12,9 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (contactId) => {
+const getById = async (contactId, ownerId) => {
   try {
-    const data = await Contacts.findById(contactId);
+    const data = await Contacts.findById({ owner: ownerId, _id: contactId });
     return data;
   } catch (error) {
     console.log(error);
@@ -23,9 +22,12 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, ownerId) => {
   try {
-    const data = await Contacts.findByIdAndRemove(contactId);
+    const data = await Contacts.findByIdAndRemove({
+      owner: ownerId,
+      _id: contactId,
+    });
     return data;
   } catch (error) {
     console.log(error);
@@ -33,15 +35,16 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {
+const addContact = async (req) => {
+  const { name, email, phone, favorite } = req.body;
   try {
-    const user = {
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-      favorite: body.favorite ? body.favorite : false,
-    };
-    const contact = new Contacts(user);
+    const contact = new Contacts({
+      owner: req.user.id,
+      name: name,
+      email: email,
+      phone: phone,
+      favorite: favorite ? favorite : false,
+    });
     await contact.save();
     return contact;
   } catch (error) {
@@ -50,17 +53,20 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, ownerId) => {
   try {
-    await Contacts.findByIdAndUpdate(contactId, {
-      $set: {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        favorite: body.favorite,
-      },
-    });
-    const data = await Contacts.findById(contactId);
+    await Contacts.findByIdAndUpdate(
+      { owner: ownerId, _id: contactId },
+      {
+        $set: {
+          name: body.name,
+          email: body.email,
+          phone: body.phone,
+          favorite: body.favorite,
+        },
+      }
+    );
+    const data = await Contacts.findById({ owner: ownerId, _id: contactId });
     return data;
   } catch (error) {
     console.log(error);
@@ -68,12 +74,15 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, body) => {
+const updateStatusContact = async (contactId, body, ownerId) => {
   try {
-    await Contacts.findByIdAndUpdate(contactId, {
-      favorite: body.favorite,
-    });
-    const data = await Contacts.findById(contactId);
+    await Contacts.findByIdAndUpdate(
+      { owner: ownerId, _id: contactId },
+      {
+        favorite: body.favorite,
+      }
+    );
+    const data = await Contacts.findById({ owner: ownerId, _id: contactId });
     return data;
   } catch (error) {
     console.log(error);
@@ -83,7 +92,7 @@ const updateStatusContact = async (contactId, body) => {
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
