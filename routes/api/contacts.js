@@ -1,22 +1,15 @@
 const express = require('express')
-const Joi = require('joi');
 
-const contactsOptions = require("../../models/contacts")
+// const contactsOptions = require("../../models/contacts")
 
-const contactsSchema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .max(30)
-    .required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-  phone: Joi.string().required()
-})
+const {Contact} = require('../../models/contact');
+const {schemas} = require("../../models/contact")
+
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await contactsOptions.listContacts();
+    const contacts = await Contact.find({}, "-__v");
     return res.json({contacts});
   } catch (error) {
     next(error)
@@ -27,7 +20,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsOptions.get(contactId);
+    const result = await Contact.findOne({_id: contactId},  "-__v");
     if (!result) {
       return res.status(404).json({
         status: "error",
@@ -52,12 +45,12 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       error.status = 404;
       throw error;
     }
-    const result = await contactsOptions.addContact(req.body);
+    const result = await Contact.create(req.body);
     return res.status(201).json({
       status: "success",
       code: 201,
@@ -74,7 +67,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsOptions.removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       return res.status(404).json({
         status: "error",
@@ -98,13 +91,13 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       error.status = 400;
       throw error;
     }
     const { contactId } = req.params;
-    const updateContact = await contactsOptions.updateContact(contactId, req.body);
+    const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!updateContact) {
       return res.status(404).json({
         status: "error",
