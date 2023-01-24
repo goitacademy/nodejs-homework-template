@@ -1,34 +1,35 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Schema
 const schema = mongoose.Schema(
   {
     name: {
       type: String, // mongoose.Types.String,
-      required: [true, "Set name for contact"],
-      // enum: ["Viktor", "Volodymyr"],
+      required: [true, 'Set name for contact'],
       unique: true,
-      minLength: [3, "It is too short"],
-      maxLength: [30, "It is too long"],
+      minLength: [3, 'It is too short'],
+      maxLength: [30, 'It is too long'],
     },
     email: {
       type: String,
     },
     phone: {
       type: String,
-      minLength: [11, "It is too short"],
-      maxLength: [16, "It is too long"],
+      minLength: [11, 'It is too short'],
+      maxLength: [16, 'It is too long'],
     },
     favorite: {
       type: Boolean,
       default: false,
     },
-    // year: {
-    //   type: Number,
-    //   min: [4, "It is too short!"],
-    //   // match: /\d{4}/,
-    //   required: true,
-    // },
+    // owner: {
+    //   type: SchemaTypes.ObjectId,
+    //   ref: 'user',
+    // }, // from conspect
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   {
     versionKey: false,
@@ -36,7 +37,7 @@ const schema = mongoose.Schema(
   }
 );
 
-const Contact = mongoose.model("contact", schema);
+const Contact = mongoose.model('contact', schema);
 
 module.exports = {
   Contact,
