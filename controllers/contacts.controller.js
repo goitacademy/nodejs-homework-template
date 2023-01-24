@@ -30,7 +30,6 @@ async function deleteContactService(req, res, next) {
   const contact = await getContactById(id);
   if (!contact) {
    throw new HttpError(404, "Not found");;
-        // return next(new HttpError(404, "Not found"));
     }
     await removeContact(id);
     return res.status(200).json({ message: "Contact deleted" });
