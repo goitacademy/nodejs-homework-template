@@ -1,25 +1,43 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { restart } = require("nodemon");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/contacts");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { ctrlWrapper } = require("../../routes/api/helpers");
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validateBody, validateParams } = require("../../middlewares");
 
-module.exports = router
+const schemas = require("../../schemas/contacts");
+
+router.get("/", ctrlWrapper(ctrl.listContacts));
+
+router.get(
+  "/:contactId",
+  validateParams(schemas.contactIdSchema),
+  ctrlWrapper(ctrl.getContactById)
+);
+
+router.post(
+  "/",
+  validateBody(schemas.contactSchema),
+  ctrlWrapper(ctrl.addContact)
+);
+
+router.delete(
+  "/:contactId",
+  validateParams(schemas.contactIdSchema),
+  ctrlWrapper(ctrl.removeContact)
+);
+
+router.put(
+  "/:contactId",
+  validateParams(schemas.contactIdSchema),
+  validateBody(schemas.contactSchema),
+  ctrlWrapper(ctrl.updateContact)
+);
+
+module.exports = router;
