@@ -41,10 +41,7 @@ const addContact = async (body) => {
     email: email,
     phone: phone,
   };
-  const allContacts = await listContacts();
-  allContacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-  console.log(`Contact "${name}" is added`);
+
   return newContact;
 };
 
@@ -55,15 +52,12 @@ const updateContact = async (contactId, body) => {
     (contact) => contact.id === contactId
   );
   if (contactIndex !== -1) {
-    allContacts[contactIndex].name = name;
-    allContacts[contactIndex].email = email;
-    allContacts[contactIndex].phone = phone;
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-    console.log(`Contact "${name}" is updated`);
-    return allContacts[contactIndex];
-  } else {
-    return null;
+    const updateContact = { id: contactId, ...allContacts[contactIndex], body };
+    allContacts[contactIndex] = updateContact;
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+    return updateContact;
   }
+  return null;
 };
 
 module.exports = {
