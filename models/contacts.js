@@ -15,9 +15,9 @@ async function writeDb(db) {
 }
 
 
-async function listContacts() {
+async function listContacts({ limit = 10}) {
   const db = await readDb();
-  return db;
+  return db.slice(-limit);
 }
 
 async function getContactById(id) {

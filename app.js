@@ -18,10 +18,6 @@ app.use(express.json()); // tell express to work with JSON
 // routes
 app.use("/api/contacts", routerContacts);
 
-app.use((req, res) => {
-  return res.status(404).json({ message: "Not found" });
-});
-
 // 404
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
@@ -29,14 +25,9 @@ app.use((req, res) => {
 
 // error handling
 app.use((error, req, res, next) => {
-  if (error.status) {
-    res.status(error.status).json({
-      message: error.message,
-    });
-  }
-  res
-    .status(error.status || 500)
-    .json({ message: error.message || "Internal server error" });
+  // if (error.status) {
+    res.status(error.status || 500).json({ message: error.message || "Internal server error" });
 });
+
 
 module.exports = app;

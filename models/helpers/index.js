@@ -8,20 +8,13 @@ function tryCatchWrapper(endpointFn) {
     }
 }
 
-// function HttpError(status, message) {
-//     const err = new Error(message);
-//     err.status = status;
-//     return err;
-// }
 
 class HttpError extends Error {
-  constructor(message) {
+  constructor(status, message) {
       super(message);
-      this.name = "HttpError";
+      this.status = status;
   }
 }
-
-
 
 module.exports = {
     tryCatchWrapper,
