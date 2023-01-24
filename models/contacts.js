@@ -35,6 +35,12 @@ const contactSchema = new Schema (  {
 { versionKey: false, timestamps: true }
 );
 
+contactSchema.post("save", (error, data, next)=> {
+  const {name, code} = error;
+  error.status = (name === "MongoServerError" && code === 11000) ? 409 : 400;
+  next()
+});
+
 const Contact = model("contact", contactSchema);
 
 module.exports = Contact;

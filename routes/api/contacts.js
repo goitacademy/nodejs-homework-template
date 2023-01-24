@@ -10,9 +10,9 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:id", ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(contactSchema.contactSchema), ctrlWrapper(ctrl.add));
+router.post("/", validation(contactSchema.newContactSchema), ctrlWrapper(ctrl.add));
 
-router.put("/:id", validation(contactSchema.contactSchema), ctrlWrapper(ctrl.updateById));
+router.put("/:id", validation(contactSchema.updateContactSchema), ctrlWrapper(ctrl.updateById));
 
 router.patch("/:id/favorite", validation(contactSchema.favoriteContactSchema), ctrlWrapper(ctrl.updateFavorite))
 
