@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const dotenv = require("dotenv");
-dotenv.config();
+
 const { HOST_URI } = process.env;
 
 const connectMongo = async () => {

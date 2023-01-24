@@ -5,6 +5,14 @@ const updateContacts = require("./contacts/updateContacts");
 const getContact = require("./contacts/getContact");
 const getAllContacts = require("./contacts/getAllContacts");
 
+const {
+  register,
+  login,
+  changeSubscription,
+  currentUser,
+  logoutUser,
+} = require("./authController/index");
+
 module.exports = {
   favoriteChange,
   createContact,
@@ -12,4 +20,9 @@ module.exports = {
   updateContacts,
   getContact,
   getAllContacts,
+  register,
+  login,
+  changeSubscription,
+  currentUser,
+  logoutUser,
 };
