@@ -14,6 +14,8 @@ router.post("/", validation(contactSchema), ctrlWrapper(ctrl.add));
 
 router.put("/:id", validation(contactSchema), ctrlWrapper(ctrl.updateById));
 
+router.patch("/:id/favorite", validation(contactSchema.favoriteContactSchema), ctrlWrapper(ctrl.updateById))
+
 router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
