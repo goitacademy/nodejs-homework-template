@@ -2,6 +2,7 @@ const { User } = require("../../models");
 const { joiRegistrationSchema } = require("../../models");
 const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const signup = async (req, res, next) => {
   try {
@@ -22,7 +23,12 @@ const signup = async (req, res, next) => {
 
     // set hashPassword using bcrypt
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    User.create({ email, password: hashPassword, subscription });
+
+    // get a random avatar when a new user signup
+    const avatarURL = gravatar.url(email);
+
+    // save email, hashed password, subscription and avatar URL into database:
+    User.create({ email, password: hashPassword, subscription, avatarURL });
 
     // OR OPTION#2 Set hash password via methods in Schema
     // const newUser = new User({ email, password, subscription });
