@@ -54,13 +54,14 @@ const updateContact = async (id, body) => {
   if (idx === -1) {
     return null;
   }
-  const { name, email, phone } = body;
+  // const { name, email, phone } = body;
 
-  idx.name = name;
-  idx.email = email;
-  idx.phone = phone;
+  // idx.name = name;
+  // idx.email = email;
+  // idx.phone = phone;
 
-  const newContactList = await fs.writeFile(filePath, JSON.stringify(contacts));
+  contacts[idx] = { id, ...body };
+  await fs.writeFile(filePath, JSON.stringify(contacts));
   return contacts[idx];
 };
 

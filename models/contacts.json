@@ -13,7 +13,7 @@
   },
   {
     "id": "3",
-    "name": "Kennedy Lan",
+    "name": "Kennedy Lane",
     "email": "mattis.Cras@nonenimMauris.net",
     "phone": "(542) 451-7038"
   },
@@ -58,5 +58,11 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "b4e2f489-1de0-4028-bb6f-69b45837ff18",
+    "name": "Rostyk",
+    "email": "abra@egmail.com",
+    "phone": "0971234567"
   }
 ]

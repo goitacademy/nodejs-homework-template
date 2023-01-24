@@ -3,9 +3,9 @@ const Joi = require("joi");
 
 const contactSchema = Joi.object({
   // id: Joi.string().required(),
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
 });
 
 const router = express.Router();
@@ -15,7 +15,6 @@ const contactsOperation = require("../../models/contacts");
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsOperation.listContacts();
-
     // res.json({ contacts });
     res.json({ message: "template message", contacts });
   } catch (error) {
