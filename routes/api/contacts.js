@@ -9,8 +9,8 @@ const {
 } = require("../../models/contacts");
 
 const {
-  addDataValidation,
-  updateDataValidation
+  addDataValid,
+  updateDataValid
 } = require('../../dataValidation/dataValidation');
 
 
@@ -31,7 +31,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 })
 
-router.post('/',addDataValidation, async (req, res, next) => {
+router.post('/',addDataValid, async (req, res, next) => {
   const newContact = await addContact(req.body);
   if (newContact) {
     return res.status(201).json({ data: newContact });
@@ -50,7 +50,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 })
 
-router.put('/:contactId',updateDataValidation, async (req, res, next) => {
+router.put('/:contactId',updateDataValid, async (req, res, next) => {
   const renewedContact = await updateContact(req.params.contactId, req.body);
 
   if (renewedContact) {
