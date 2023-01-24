@@ -18,6 +18,10 @@ const userSchema = Schema({
   token: {
     type: String,
   },
+  avatarURL: {
+    type: String,
+    required: true,
+  },
 });
 
 const User = model("user", userSchema);
