@@ -3,15 +3,17 @@ const HttpError = require('../helpers/httpError');
 
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
+const gravatar = require('gravatar');
 
 async function registration(req, res, next) {
   try {
     const { email, password } = req.body;
+    const avatarURL = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true);
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = await User.create({ email, password: hashedPassword });
+    const newUser = await User.create({ email, password: hashedPassword, avatarURL });
     const responseData = {
       user: {
         email,
@@ -85,10 +87,16 @@ async function updateSubscription(req, res, next) {
   res.status(201).json({ message: `Suscription updated to < ${subscription} >` });
 }
 
+async function changeAvatar(req, res, next) {
+  console.log(req.file);
+  res.json({ ok: true });
+}
+
 module.exports = {
   registration,
   login,
   currentUser,
   logout,
   updateSubscription,
+  changeAvatar,
 };
