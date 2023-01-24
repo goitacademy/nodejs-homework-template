@@ -22,7 +22,7 @@ const contactSchema = new Schema (  {
     required: [true, 'Set phone number for contact'],
     validate: {
       validator: function(v) {
-        return /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(v);
+        return /^(\(\d{3}\))\s?(\d{3}-\d{4})$/.test(v);
       },
       message: props => `${props.value} is not a valid phone number!`
     },
