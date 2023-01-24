@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controllers = require("../../controllers/contacts/index");
 const addSchemas = require("../../schemas/schemas");
+const addSchemasOpt = require("../../schemas/schemasOpt");
 const { controlerWrapper } = require("../../helpers/index");
 const { validBody } = require("../../middleware/index");
 
@@ -17,7 +18,7 @@ router.post(
 
 router.put(
   "/:contactId",
-  validBody(addSchemas.shcemas),
+  validBody(addSchemasOpt.shcemasOpt),
   controlerWrapper(controllers.updateContact)
 );
 

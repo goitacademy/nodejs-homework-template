@@ -49,10 +49,7 @@ const removeContact = async (contactId) => {
   const data = await fs.readFile(contactsPath, "utf8");
   const parsed = JSON.parse(data);
   const removeIndex = parsed.findIndex((contact) => contact.id === contactId);
-  if (removeIndex === -1) {
-    return undefined;
-  }
-  const removed = parsed[removeIndex];
+  const removed = parsed.splice(-1, removeIndex);
   parsed.splice(removeIndex, 1);
   await fs.writeFile(contactsPath, JSON.stringify(parsed, undefined, 2));
   return removed;
