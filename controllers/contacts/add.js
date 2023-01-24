@@ -1,9 +1,9 @@
 const { BadRequest } = require("http-errors");
 
-const contactsOperations = require("../../models/contacts");
+const Contact = require("../../models/contacts");
 
 const add = async (req, res) => {
-    const result = await contactsOperations.addContact(req.body);
+    const result = await Contact.create(req.body);
     
     if (!result) {
         throw new BadRequest(`missing required name field`);        
