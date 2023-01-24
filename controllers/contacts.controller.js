@@ -26,19 +26,16 @@ async function creacteContactService(req, res, next) {
 
 async function deleteContactService(req, res, next) {
     const { id } = req.params;
-    const contact = await getContactById(id);
-    if (!contact) {
-        return next(new HttpError(404, "Not found"));
+  const contact = await getContactById(id);
+  if (!contact) {
+   throw new HttpError(404, "Not found");;
+        // return next(new HttpError(404, "Not found"));
     }
     await removeContact(id);
     return res.status(200).json({ message: "Contact deleted" });
 }
  
 async function updateContactService(req, res, next) {
-    if (!Object.keys(req.body).length) {
-    return next(new HttpError(400, "Missing fields"));
-  }
-    
     const { id } = req.params;
     const updatedContact = await updateContact(id, req.body);
     

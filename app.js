@@ -28,15 +28,15 @@ app.use((req, res) => {
 })
 
 // error handling
-app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).json({
-      message: err.message,
+app.use((error, req, res, next) => {
+  if (error.status) {
+    res.status(error.status).json({
+      message: error.message,
     });
   }
   res
-    .status(err.status || 500)
-    .json({ message: err.message } || { message: "Internal server error" });
+    .status(error.status || 500)
+    .json({ message: error.message || "Internal server error" });
 });
 
 module.exports = app;
