@@ -39,7 +39,7 @@ async function addContact(body) {
   }
 }
 
-async function removeContact(contactsPath, contactId) {
+async function removeContact(contactId) {
   try {
     const contactsArr = await listContacts(contactsPath);
     const contactWithId = contactsArr.find((el) => el.id === contactId);

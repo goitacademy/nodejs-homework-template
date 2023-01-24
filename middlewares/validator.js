@@ -14,9 +14,6 @@ const addContactSchema = Joi.object({
     .required(),
   phone: Joi.string().min(8).max(13).required(),
 });
-// .with("name")
-// .with("email")
-// .with("phone");
 
 
 exports.validateAddContact = validator(addContactSchema);
