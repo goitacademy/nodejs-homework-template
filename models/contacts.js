@@ -1,65 +1,29 @@
-const fs = require("fs/promises");
-const path = require("path");
-const shortid = require("shortid");
+const mongoose = require("mongoose");
 
-const contactsPath = path.resolve(__dirname, "contacts.json");
-
-const readContacts = async () => {
-  const contactsRaw = await fs.readFile(contactsPath);
-  return JSON.parse(contactsRaw);
-};
-
-const writeContacts = async (contacts) => {
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-};
-
-const getContactService = async () => {
-  return await readContacts();
-};
-
-const getContactById = async (contactId) => {
-  const contacts = await readContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
-  return contact || null;
-};
-
-const removeContact = async (contactId) => {
-  const contacts = await readContacts();
-  const updatedContacts = contacts.filter(
-    (contact) => contact.id !== contactId
-  );
-  await writeContacts(updatedContacts);
-};
-
-const addContact = async (body) => {
-  const id = shortid();
-  const newContact = { id, ...body };
-
-  const contacts = await readContacts();
-  contacts.push(newContact);
-  await writeContacts(contacts);
-
-  return newContact;
-};
-
-const updateContact = async (contactId, body) => {
-  const contacts = await readContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
-  const { name, email, phone } = body;
-  if (contact) {
-    contact.name = name;
-    contact.email = email;
-    contact.phone = phone;
+const schema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    versionKey: false,
   }
+);
 
-  await writeContacts(contacts);
-  return contact;
-};
+const Contact = mongoose.model("contact", schema);
 
 module.exports = {
-  getContactService,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  Contact,
 };

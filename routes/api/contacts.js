@@ -21,5 +21,6 @@ router.put(
   validateBody(contactSchema),
   tryCatchWrapper(putContact)
 );
+// router.patch("/:contactId/favorite", tryCatchWrapper(patchContact));
 
 module.exports = router;
