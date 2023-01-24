@@ -33,7 +33,7 @@ const createContact = async (req, res, next) => {
     if (!newContact) {
         return res.status(404).json({
         message: "missing required name field",
-        });
+        });       
     }
 
     res.status(201).json({newContact, status: 'success'});
