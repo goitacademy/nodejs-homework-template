@@ -33,7 +33,7 @@
   npm i nodemon --save-dev
   npx nodemon contacts.js
   npx nodemon server.js
-  $ npm install --global yarn -install yarn/
+  $ npm install --global yarn -install yarn/ (запустить в самом начале для установки yarn пакета)
   $ yarn - start yarn
   $ yarn add express -install express
   $ yarn start:dev
@@ -47,3 +47,12 @@
     ======hw05-avatars======
     yarn add multer
     yarn add gravatar
+    =======hw06-email=======
+    Appi key sendgrid
+
+    npm install --save @sendgrid/mail
+    npm install nodemailer
+    kalafi6676@minterp.com
+    from ghbgfhfn@gmail.com
+    npm install --global yarn
+    yarn add nanoid

@@ -23,8 +23,10 @@ const login = async (req, res, next) => {
     // check if password is already in the database
     const checkPassword = bcrypt.compareSync(password, user.password);
 
-    if (!user || !checkPassword) {
-      throw new createError.Unauthorized(`Email or password are not found`);
+    if (!user || !checkPassword || !user.verify) {
+      throw new createError.Unauthorized(
+        `Either email or password are not found or email is not verified`
+      );
     }
 
     // // OPTION #2 Compare passwords using methods in Schema
@@ -38,7 +40,7 @@ const login = async (req, res, next) => {
     };
 
     // create a Token
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "25h" });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
 
     // write the Token into Database to the user that just logged-in
     await User.findByIdAndUpdate(user._id, { token });
