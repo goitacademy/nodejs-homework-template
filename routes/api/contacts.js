@@ -8,12 +8,12 @@ const {
   removeContact,
   updateContact,
   updateContactStatus,
-} = require("../../controllers/contactsController");
+} = require("../../controllers/contacts");
 
 const {
   contactValidation,
   updateContactValidation,
-} = require("../../middlewares/validation");
+} = require("../../middlewares/contactValidation");
 
 router.get("/", getContacts);
 router.get("/:contactId", getContactById);
