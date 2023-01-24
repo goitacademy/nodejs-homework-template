@@ -14,8 +14,6 @@ const getContactById = async (contactId) => {
   const allContacts = await listContacts();
   const findedContact = allContacts.find(({ id }) => id === String(contactId));
 
-  if (!findedContact) return null;
-
   return findedContact;
 };
 
@@ -41,19 +39,15 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const { name, email, phone } = body;
-
   const allContacts = await listContacts();
   const contactIndex = allContacts.findIndex(({ id }) => id === String(contactId));
 
   if (contactIndex === -1) return null;
 
-  allContacts[contactIndex].name = name;
-  allContacts[contactIndex].email = email;
-  allContacts[contactIndex].phone = phone;
+  const { id, name, email, phone } = allContacts[contactIndex];
+  allContacts[contactIndex] = { id, name, email, phone, ...body };
 
   await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-
   return allContacts[contactIndex];
 };
 
