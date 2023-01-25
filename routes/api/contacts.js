@@ -2,9 +2,9 @@ const express = require("express");
 
 const { contacts: controllers } = require("../../controllers");
 const { validation, controllerWrapper } = require("../../middleware");
-const { contactSchema } = require("../../schemas");
+const { joiSchema, favoriteJoiSchema } = require("../../models/contact");
 
-const validationMiddlewere = validation(contactSchema);
+const validationMiddlewere = validation(joiSchema);
 
 const router = express.Router();
 
@@ -22,6 +22,12 @@ router.put(
   "/:contactId",
   validationMiddlewere,
   controllerWrapper(controllers.updateContact)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validation(favoriteJoiSchema),
+  controllerWrapper(controllers.changeFavorite)
 );
 
 router.delete("/:contactId", controllerWrapper(controllers.deleteContact));
