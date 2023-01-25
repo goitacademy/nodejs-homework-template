@@ -3,8 +3,8 @@ const { HttpError } = require("../models/helpers/index.js");
 
 
 async function getContactsService(req, res) {
-  const { limit } = req.query;
-  const contacts = await listContacts({limit});
+  const { limit = 10 } = req.query;
+  const contacts = await listContacts({limit}); 
   res.json(contacts);
 };
 

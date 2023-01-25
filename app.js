@@ -1,7 +1,7 @@
+// qZRhej5142LnSy3i   // password MongoDb
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const morgan = require('morgan');
 
 const { routerContacts } = require('./routes/api/contacts');
 
@@ -12,7 +12,6 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 // middelvwares
 app.use(cors());
 app.use(logger(formatsLogger));
-app.use(morgan("dev"));
 app.use(express.json()); // tell express to work with JSON
 
 // routes
