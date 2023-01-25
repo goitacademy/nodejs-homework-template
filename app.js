@@ -1,25 +1,31 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// qZRhej5142LnSy3i   // password MongoDb
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
 
-const contactsRouter = require('./routes/api/contacts')
+const { routerContacts } = require('./routes/api/contacts');
 
-const app = express()
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+// middelvwares
+app.use(cors());
+app.use(logger(formatsLogger));
+app.use(express.json()); // tell express to work with JSON
 
-app.use('/api/contacts', contactsRouter)
+// routes
+app.use("/api/contacts", routerContacts);
 
+// 404
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+// error handling
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).json({ message: error.message || "Internal server error" });
+});
 
-module.exports = app
+
+module.exports = app;
