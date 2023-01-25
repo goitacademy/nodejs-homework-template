@@ -54,13 +54,7 @@ const updateContact = async (id, body) => {
   if (idx === -1) {
     return null;
   }
-  // const { name, email, phone } = body;
-  // idx.name = name;
-  // idx.email = email;
-  // idx.phone = phone;
   const item = await getContactById(id);
-  console.log("____", item);
-  console.log("=====", body);
   contacts[idx] = {
     ...item,
     ...body,
