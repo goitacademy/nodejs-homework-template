@@ -5,6 +5,9 @@ const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 
+const fs = require('fs');
+const path = require('path');
+
 async function registration(req, res, next) {
   try {
     const { email, password } = req.body;
@@ -88,8 +91,30 @@ async function updateSubscription(req, res, next) {
 }
 
 async function changeAvatar(req, res, next) {
-  console.log(req.file);
-  res.json({ ok: true });
+  const { filename } = req.file;
+  const { id } = req.user;
+
+  const splitedFilename = filename.split('.');
+  const fileExt = splitedFilename[splitedFilename.length - 1];
+  const newFilename = id + '.' + fileExt;
+
+  const tmpPath = path.resolve(__dirname, '../tmp', filename);
+  const publicPath = path.resolve(__dirname, '../public/avatars', newFilename);
+
+  fs.rename(tmpPath, publicPath, error => {
+    if (error) {
+      fs.unlink(tmpPath, error => {
+        if (error) {
+          throw error;
+        }
+      });
+      throw error;
+    }
+  });
+
+  const user = await User.findByIdAndUpdate(id, { avatarURL: publicPath }, { new: true });
+
+  res.status(200).json(user.avatarURL);
 }
 
 module.exports = {
