@@ -1,130 +1,71 @@
 const express = require('express')
 const router = express.Router()
-const Joi = require("joi");
 
+const { validation, ctrlWrapper } = require("../../middleWares")
+const { contactSchema } = require("../../schemas");
+const { contacts: ctrl } = require("../../controllers");
 
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  phone: Joi.required(),
-  email: Joi.string().email().required()
-})
+const validateMiddleware = validation(contactSchema);
 
-const contactsOperations = require("../../models/contacts");
-
-
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await contactsOperations.getAll();
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result: contacts,
-      }
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
+router.get("/", ctrlWrapper(ctrl.getAll));
 
 // знайти контакт по id===============================================================================================================
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.getById(contactId);
-
-    if (!result) {
-    
-      const error = new Error(`Contact with id=${contactId} not found`);
-      error.status = 404;
-      throw error;
-    }
-
-    res.json({
-      status: "success",
-      code: 200,
-      data: {result},
-    })
-
-  } catch (error) {
-    next(error);
-  }
-})
+router.get('/:contactId', ctrlWrapper(ctrl.getById) )
 
 // Додавання контакта=========================================================================
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const result = await contactsOperations.addContact(req.body);
-    res.status(201).json({
-    status: "success",
-      code: 201,
-      data: {result},
-    })
-  } catch (error) {
-    next(error);
-  }
-})
+router.post('/', validateMiddleware, ctrlWrapper(ctrl.addContact))
 
 // оновлення контакта по id================================================================
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-
-    const { contactId } = req.params;
-    const result = await contactsOperations.updateContactById(contactId, req.body);
-    if (!result) {
-      const error = new Error(`Contact with id=${contactId} not found`);
-      error.status = 404;
-      throw error;
-    }
-    
-    res.status(201).json({
-    status: "success",
-      code: 201,
-      data: {result},
-    })
-  } catch (error) {
-    next(error);
-  }
-})
-
+router.put('/:contactId', validateMiddleware, ctrlWrapper(ctrl.updateContactById))
 
 // видалення контакту============================================================================
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.removeContactById(contactId);
-    if (!result) {
-      const error = new Error(`Contact with id=${contactId} not found`);
-      error.status = 404;
-      throw error;
-    }
-    res.json({
-      status: "success",
-      code: 200,
-      message: "contact deleted",
-      data: {result}
-    });
-  }
-  catch (error) {
-    next(error);
-  }
-}) 
+router.delete('/:contactId', ctrlWrapper(ctrl.removeContactById)); 
 
 module.exports = router;
 
+// // Comments 2
+// const express = require('express')
+// const router = express.Router()
 
-// COMMENTS
+// // імпортуємо middleware для валідації та ctrlWrapper
+// const { validation, ctrlWrapper } = require("../../middleWares")
+// // імпортуємо схему валідації
+// const { contactSchema } = require("../../schemas");
+// // імпортуємо contacts (об'єкт функцій-контроллерів) із controllers і переіменовуємо його в ctrl
+// const { contacts: ctrl } = require("../../controllers");
+
+// // створюємо ф-ю валідації
+// const validateMiddleware = validation(contactSchema);
+// // тобто по факту буде відбуватись: contactSchema.validate(req.body);
+
+// // і тепер в роутах передаємо потрібну ф-ю-контроллер
+// // тобто ідея в тому, щоб винести функції-контроллери для запитів в окрему папку - controllers, а суди їх передати другим
+// // аргументом після маршруту
+
+// // ctrlWrapper - ф-я(middleware), в якій виконується блок try-cath. Спочатку запит виконується саме чере цю middleware
+// router.get("/", ctrlWrapper(ctrl.getAll));
+
+// // знайти контакт по id===============================================================================================================
+// router.get('/:contactId', ctrlWrapper(ctrl.getById) )
+
+// // Додавання контакта=========================================================================
+// // при додаванні контакту спочатку запит пройде через validateMiddleware, і якщо не буде помилки, то виконається далі ф-я-контроллер
+// //  ctrl.addContact. Якщо ж помилка буде, то далі запит просто не піде
+// // таким чином, ми полегшуємо код, і всередині контроллера не проводимо валідація, а просто створюємо мідлвару,
+// // яку цю валідацію робить, і відповідно ставимо її між маршрутом запиту та контроллером
+// router.post('/', validateMiddleware, ctrlWrapper(ctrl.addContact))
+
+// // оновлення контакта по id================================================================
+// router.put('/:contactId', validateMiddleware, ctrlWrapper(ctrl.updateContactById))
+
+
+// // видалення контакту============================================================================
+// router.delete('/:contactId', ctrlWrapper(ctrl.removeContactById)); 
+
+// module.exports = router;
+
+
+// COMMENTS - 1
 // // express - бібліотека для створення серверу
 // const express = require('express')
 // // // створюємо певну сторінку з різними запитами (зберігаючи основний сервер)
