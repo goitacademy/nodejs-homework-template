@@ -1,5 +1,6 @@
 const express = require("express");
 
+
 const { contacts: ctrl } = require("../../controllers");
 
 const { validation, ctrlWrapper } = require("../../middlewares");
@@ -17,5 +18,6 @@ router.post("/", validation(contactSchema), ctrlWrapper(ctrl.addContact));
 router.delete("/:id", ctrlWrapper(ctrl.removeContact));
 
 router.put("/:id", ctrlWrapper(ctrl.updateContactById));
+
 
 module.exports = router;
