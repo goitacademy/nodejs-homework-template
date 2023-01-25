@@ -6,15 +6,21 @@ const { ctrl } = require("../../controllers");
 
 const { validation, ctrlWrapper } = require("../../middlewares");
 
-const schema = require("../../schemas");
+const { joiSchema, joiStatusSchema } = require("../../models/contact");
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:id", ctrlWrapper(ctrl.getByID));
 
-router.post("/", validation(schema), ctrlWrapper(ctrl.add));
+router.post("/", validation(joiSchema), ctrlWrapper(ctrl.add));
 
-router.put("/:id", validation(schema), ctrlWrapper(ctrl.update));
+router.put("/:id", validation(joiSchema), ctrlWrapper(ctrl.update));
+
+router.patch(
+  "/:id/favorite",
+  validation(joiStatusSchema),
+  ctrlWrapper(ctrl.updateStatus)
+);
 
 router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
