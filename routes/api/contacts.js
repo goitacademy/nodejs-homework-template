@@ -1,25 +1,49 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const {
+  getListOfContacts,
+  getContact,
+  createContact,
+  deleteContact,
+  editContact,
+  updateStatusContact,
+} = require("../../controllers");
+const {
+  validateBody,
+  checkIfBodyExists,
+  checkIfBodyStatusExists,
+  auth,
+} = require("../../middleWares");
+const { contactSchema, contactStatusSchema } = require("../../schema");
+const { tryCatcher } = require("../../helpers");
 
-const router = express.Router()
+router.get("/", tryCatcher(auth), tryCatcher(getListOfContacts));
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", tryCatcher(auth), tryCatcher(getContact));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  tryCatcher(auth),
+  validateBody(contactSchema),
+  tryCatcher(createContact)
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", tryCatcher(auth), tryCatcher(deleteContact));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch(
+  "/:contactId/favorite",
+  tryCatcher(auth),
+  checkIfBodyStatusExists(),
+  validateBody(contactStatusSchema),
+  tryCatcher(updateStatusContact)
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  tryCatcher(auth),
+  checkIfBodyExists(),
+  validateBody(contactSchema),
+  tryCatcher(editContact)
+);
 
-module.exports = router
+module.exports = router;
