@@ -67,6 +67,9 @@ export const updateSubscriptionController = async (req, res) => {
 
 export const updateAvatarController = async (req, res) => {
   const { userId } = req.user;
+
+  if (!req.file) throw new createError(400, `File doesn't exist`);
+
   const { filename } = req.file;
   const tmpPath = path.resolve(FILE_DIR, filename);
   const publicPath = path.resolve('./public/avatars', filename);

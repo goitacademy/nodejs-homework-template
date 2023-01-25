@@ -26,8 +26,7 @@ router.get('/logout', authMiddleware, errorWrapper(logoutController));
 router.get('/current', authMiddleware, errorWrapper(getCurrentUserController));
 router.patch(
   '/',
-  authMiddleware,
-  validateBody(userSubscriptionSchema),
+  [authMiddleware, validateBody(userSubscriptionSchema)],
   errorWrapper(updateSubscriptionController)
 );
 router.patch(
