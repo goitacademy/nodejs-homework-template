@@ -9,10 +9,15 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "commander": "^10.0.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.7.0",
+    "mongoose": "^6.8.4",
+    "morgan": "1.10.0",
+    "nanoid": "^3.3.4"
   },
   "devDependencies": {
     "eslint": "7.19.0",
