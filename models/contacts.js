@@ -49,14 +49,18 @@ const addContact = async ({ name, email, phone }) => {
 // Update contact by id
 const updateContact = async (id, body) => {
   const contacts = await listContacts();
-  const { name, email, phone } = body;
 
   const idx = contacts.findIndex((item) => item.id === String(id));
   if (idx === -1) {
     return null;
   }
-
+  // const { name, email, phone } = body;
+  // idx.name = name;
+  // idx.email = email;
+  // idx.phone = phone;
   const item = await getContactById(id);
+  console.log("____", item);
+  console.log("=====", body);
   contacts[idx] = {
     ...item,
     ...body,

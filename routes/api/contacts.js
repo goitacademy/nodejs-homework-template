@@ -68,12 +68,18 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 router.put("/:id", async (req, res, next) => {
+  const schema = Joi.object({
+    // id: Joi.string(),
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string(),
+  });
   try {
-    // const { error } = contactSchema.validate(req.body);
-    // if (error) {
-    //   error.status = 400;
-    //   throw error;
-    // }
+    const { error } = schema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
     const { id } = req.params;
 
     const result = await contactsOperation.updateContact(id, req.body);
