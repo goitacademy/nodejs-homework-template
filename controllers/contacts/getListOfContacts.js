@@ -1,4 +1,3 @@
-const { httpError } = require("../../helpers");
 const { Contact } = require("../../models/contacts");
 
 async function getListOfContacts(req, res, next) {
