@@ -1,82 +1,46 @@
-const fs = require('fs/promises');
-const { nanoid } = require("nanoid");
-const path = require("path");
+const {Schema, model} = require("mongoose");
 
-const contactsPath = path.join(__dirname, './contacts.json');
+const contactSchema = new Schema (  {
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+    unique: true,
+  },
+  email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    unique: true,
+          validate: {
+            validator: function(email) {
+              const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,4})+$/;
+              return re.test(email)
+          }, message: 'Please fill a valid email address'},
+  },
+  phone: {
+    type: String,
+    required: [true, 'Set phone number for contact'],
+    validate: {
+      validator: function(v) {
+        return /^(\(\d{3}\))\s?(\d{3}-\d{4})$/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+},
+{ versionKey: false, timestamps: true }
+);
 
+contactSchema.post("save", (error, data, next)=> {
+  const {name, code} = error;
+  error.status = (name === "MongoServerError" && code === 11000) ? 409 : 400;
+  next()
+});
 
-const listContacts = async () => {
-  try {
-    const res = await fs.readFile(contactsPath);
-    return JSON.parse(res);
-} catch (error) {
-    console.log(error.message);
-}
-}
+const Contact = model("contact", contactSchema);
 
-const getContactById = async (contactId) => {
-  try {
-    const contacts = await listContacts();    
-    const res = contacts.find(item=>item.id===contactId);
-    return res || null;
-} catch (error) {
-    console.log(error.message);
-} 
-}
-
-const removeContact = async (contactId) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(item=>item.id===contactId);
-    if (index===-1){ return null }
-    const [res] = contacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return res;
-} catch (error) {
-    console.log(error.message);
-}
-}
-
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-  try {
-    const contacts = await listContacts();
-  
-    const newContact = {
-        id: nanoid(),
-        name,
-        email,
-        phone
-    }
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return newContact;
-} catch (error) {
-    console.log(error.message);
-}
-}
-
-const updateContact = async (contactId, body) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(item=>item.id===contactId);
-    if (index===-1){ return null }
-    const newContact = {
-      ...contacts[index],
-      ...body,
-  }
-  contacts.splice(index, 1, newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-  } catch (error) {
-    
-  }
-}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = Contact;
