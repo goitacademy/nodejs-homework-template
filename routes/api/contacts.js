@@ -1,16 +1,13 @@
-const express = require('express')
-
-// const contactsOptions = require("../../models/contacts")
-
-const {Contact} = require('../../models/contact');
-const {schemas} = require("../../models/contact")
+const express = require('express');
+const { Contact } = require('../../models/contact');
+const { schemas } = require("../../models/contact");
 
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await Contact.find({}, "-__v");
-    return res.json({contacts});
+    return res.json({ contacts });
   } catch (error) {
     next(error)
 
@@ -20,7 +17,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findOne({_id: contactId},  "-__v");
+    const result = await Contact.findOne({ _id: contactId }, "-__v");
     if (!result) {
       return res.status(404).json({
         status: "error",
@@ -38,7 +35,6 @@ router.get('/:contactId', async (req, res, next) => {
 
   } catch (error) {
     next(error)
-
   }
 
 })
@@ -86,7 +82,6 @@ router.delete('/:contactId', async (req, res, next) => {
   } catch (error) {
 
   }
-  res.json({ message: 'template message' })
 })
 
 router.put('/:contactId', async (req, res, next) => {
@@ -97,7 +92,7 @@ router.put('/:contactId', async (req, res, next) => {
       throw error;
     }
     const { contactId } = req.params;
-    const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const updateContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
     if (!updateContact) {
       return res.status(404).json({
         status: "error",
