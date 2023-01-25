@@ -1,5 +1,5 @@
-import app from './app.js';
 import * as dotenv from 'dotenv'; // to get variables from .env
+import app from './app.js';
 import { connectDb } from './src/db/connectDb.js';
 
 dotenv.config();

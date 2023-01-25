@@ -5,9 +5,11 @@ import {
   logoutController,
   updateSubscriptionController,
   getCurrentUserController,
+  updateAvatarController,
 } from '../../controllers/authController.js';
 import { errorWrapper } from '../../helpers/errorWrapper.js';
 import { authMiddleware } from '../../middleware/authMiddleware.js';
+import { upload } from '../../middleware/uploadMiddleware.js';
 import { validateBody } from '../../middleware/validateBody.js';
 import { userSchema } from '../../schemas/userSchema.js';
 import { userSubscriptionSchema } from '../../schemas/userSubscriptionSchema.js';
@@ -27,6 +29,11 @@ router.patch(
   authMiddleware,
   validateBody(userSubscriptionSchema),
   errorWrapper(updateSubscriptionController)
+);
+router.patch(
+  '/avatars',
+  [authMiddleware, upload.single('avatar')],
+  errorWrapper(updateAvatarController)
 );
 
 export default router;

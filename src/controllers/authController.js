@@ -6,7 +6,10 @@ import {
   logout,
   getCurrentUser,
   updateSubscription,
+  updateAvatar,
 } from '../services/authService.js';
+import path from 'path';
+import { FILE_DIR } from '../constants/constants.js';
 
 export const signupController = async (req, res) => {
   try {
@@ -60,4 +63,25 @@ export const updateSubscriptionController = async (req, res) => {
   if (!updatedUser) throw new createError(401, 'Not authorized');
 
   res.json(setSuccessResponse(200, updatedUser));
+};
+
+export const updateAvatarController = async (req, res) => {
+  const { userId } = req.user;
+  const { filename } = req.file;
+  const tmpPath = path.resolve(FILE_DIR, filename);
+  const publicPath = path.resolve('./public/avatars', filename);
+
+  try {
+    const updatedUser = await updateAvatar({
+      userId,
+      filename,
+      tmpPath,
+      publicPath,
+    });
+
+    res.json(setSuccessResponse(200, updatedUser));
+  } catch (error) {
+    await fs.unlink(tmpPath);
+    throw new createError(400, error.message);
+  }
 };
