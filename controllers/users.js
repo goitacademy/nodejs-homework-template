@@ -103,11 +103,11 @@ async function changeAvatar(req, res, next) {
 
   fs.rename(tmpPath, publicPath, error => {
     if (error) {
-      fs.unlink(tmpPath, error => {
-        if (error) {
-          throw error;
-        }
-      });
+      throw error;
+    }
+  });
+  fs.unlink(tmpPath, error => {
+    if (error) {
       throw error;
     }
   });
