@@ -11,18 +11,21 @@ const auth = (req, res, next) => {
       : null;
     jwt.verify(token, secret, function (error, decoded) {
       if (error) {
-        return res.status(401).json({ status: 401, message: error.message });
+        return res.status(401).json({
+          status: "error",
+          code: 401,
+          message: "Unauthorized",
+        });
       }
     });
 
-    if (!user || err || user.token !== token) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-        data: "Unauthorized",
-      });
-    }
+    // if (!user || err || user.token !== token) {
+    //   return res.status(401).json({
+    //     status: "error",
+    //     code: 401,
+    //     message: "Unauthorized",
+    //   });
+    // }
 
     req.user = user;
     next();
