@@ -1,94 +1,78 @@
 const express = require('express');
-// const Joi = require('joi');
-
-const router = express.Router();
-
-const contactsOperations = require('../../models/contacts');
-
-const { validationBody } = require('../../middlewares/validateBody');
+const { httpError, tryCatchWrapper } = require('../../services/index.js');
+const { validateBody } = require('../../middlewares/validateBody');
 const { addContactSchema } = require('../../schemas/addContactValidation');
 const {
   updateContactSchema,
 } = require('../../schemas/updateContactValidation');
+const {
+  getContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require('../../models/contacts');
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contacts = await contactsOperations.listContacts();
+router.get(
+  '/',
+  tryCatchWrapper(async (req, res, next) => {
+    const contacts = await getContacts();
+    await res.status(200).json(contacts);
+    next();
+  })
+);
 
-    res.status(200).json(contacts);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get('/:contactId', async (req, res, next) => {
-  try {
+router.get(
+  '/:contactId',
+  tryCatchWrapper(async (req, res, next) => {
     const { contactId } = req.params;
-    const contact = await contactsOperations.getContactById(contactId);
+    const contact = await getContactById(contactId);
 
     if (!contact) {
-      const error = new Error('Not found');
-      error.status = 404;
-      throw error;
+      return next(httpError(404, 'Not found'));
     }
 
-    res.status(200).json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
+    return res.status(200).json(contact);
+  })
+);
 
-router.post('/', validationBody(addContactSchema), async (req, res, next) => {
-  try {
-    const createdContact = await contactsOperations.addContact(req.body);
-
+router.post(
+  '/',
+  validateBody(addContactSchema),
+  tryCatchWrapper(async (req, res, next) => {
+    const createdContact = await addContact(req.body);
     res.status(201).json(createdContact);
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
+router.delete(
+  '/:contactId',
+  tryCatchWrapper(async (req, res, next) => {
     const { contactId } = req.params;
-
-    const deletedContact = await contactsOperations.removeContact(contactId);
+    const deletedContact = await getContactById(contactId);
 
     if (!deletedContact) {
-      const error = new Error(`Not found`);
-      error.status(404);
-      throw error;
+      return next(httpError(404, 'Not found'));
     }
-
-    res.status(200).json({ message: 'Contact deleted' });
-  } catch (error) {
-    next(error);
-  }
-});
+    await removeContact(contactId);
+    return res.status(200).json({ message: 'Contact deleted' });
+  })
+);
 
 router.put(
   '/:contactId',
-  validationBody(updateContactSchema),
-  async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
+  validateBody(updateContactSchema),
+  tryCatchWrapper(async (req, res, next) => {
+    const { contactId } = req.params;
+    const updatedContact = await updateContact(contactId, req.body);
 
-      const updatedContact = await contactsOperations.updateContact(
-        contactId,
-        req.body
-      );
-
-      if (!updatedContact) {
-        const error = new Error('Not found');
-        error.status = 404;
-        throw error;
-      }
-
-      res.status(200).json(updatedContact);
-    } catch (error) {
-      next(error);
+    if (!updatedContact) {
+      return next(httpError(404, 'Not found'));
     }
-  }
+
+    return res.status(200).json(updatedContact);
+  })
 );
 
 module.exports = router;
