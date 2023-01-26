@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'; // to get variables from .env
+import * as dotenv from 'dotenv';
 import { mongoose } from 'mongoose';
 
 dotenv.config();
