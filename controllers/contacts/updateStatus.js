@@ -1,13 +1,9 @@
-const { Contact } = require("../../models/contact");
+const service = require("../../services");
 
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
   const { favorite } = req.body;
-  const result = await Contact.findByIdAndUpdate(
-    id,
-    { favorite },
-    { new: true }
-  );
+  const result = await service.updateStatus(id, favorite);
 
   res.json({
     status: "success",

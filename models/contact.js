@@ -6,12 +6,12 @@ const contactSchema = Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
       unique: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
     },
     phone: {

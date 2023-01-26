@@ -1,19 +1,17 @@
-require("dotenv").config();
-const mongoose = require("mongoose").set("strictQuery", true);
-const { DB_HOST, PORT = 3000 } = process.env;
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "config", ".env") });
+require("colors");
 
+const { PORT = 3000 } = process.env;
 const app = require("./app");
+const connectDb = require("./config/db");
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(
-        `It's alive!!!! (Server running. Use this API on port: ${PORT})`
-      );
-    });
-  })
-  .catch((err) => {
-    console.log(err.message);
-    process.exit(1);
-  });
+(async () => {
+  await connectDb();
+})();
+
+app.listen(PORT, () => {
+  console.log(
+    `It's alive!!!! (Server running. Use this API on port: ${PORT})`.green
+  );
+});

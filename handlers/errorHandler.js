@@ -4,6 +4,7 @@ const errorHandler = (error) => {
     error.message = `contact with id:${error.value} not found`;
     return error;
   }
+
   if (error.code === 11000) {
     console.log(error.keyValue.name);
     error.status = 409;
