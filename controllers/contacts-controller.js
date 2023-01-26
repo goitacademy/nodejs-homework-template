@@ -1,13 +1,8 @@
 const { HttpError } = require("../helpers/error-func");
-const {  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contacts");
 
 async function getContacts(req, res, next) {
-  const contacts = await listContacts();
+  const contacts = await Contact.find();
   if (!contacts) {
   return next(HttpError(404, "Contacts not found"));
   }
@@ -17,7 +12,7 @@ async function getContacts(req, res, next) {
 
 async function getContact(req, res, next) {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     return next(HttpError(404, "Contact not found"));
   }
@@ -26,29 +21,40 @@ async function getContact(req, res, next) {
 }
 
 async function createContact(req, res, next) {
-  const newContact = await addContact(req.body);
+  const newContact = await Contact.create(req.body);
   return res.status(201).json(newContact);
 }
 
 async function deleteContact(req, res, next) {
   const { contactId } = req.params;
-  const delContact = await getContactById(contactId);
+  const delContact = await Contact.findById(contactId);
   if (!delContact) {
     return next(HttpError(404, "No contact"));
   }
 
-  await removeContact(contactId);
+  Contact.findByIdAndRemove(contactId);
   return res.status(200).json({delContact, "message": "contact deleted"}); 
 }
 
-async function updateContacts(req, res, next) {
+async function updateContact(req, res, next) {
   const { contactId } = req.params;
 
   if (!req.body.name && !req.body.email && !req.body.phone) {
     return next(HttpError(400, "message : missing fields"));
   }
 
-  const updatedContact = await updateContact(contactId, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  return res.status(200).json(updatedContact);
+}
+
+async function updateStatusContact(req, res, next) { 
+  const { contactId } = req.params;
+
+  if (!req.body.favorite) {
+    return next(HttpError(400, "message : missing field favorite"));
+  }
+
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
   return res.status(200).json(updatedContact);
 }
 
@@ -57,5 +63,6 @@ module.exports = {
   getContact,
   createContact,
   deleteContact,
-  updateContacts,
+  updateContact,
+  updateStatusContact
 };
