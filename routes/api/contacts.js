@@ -6,15 +6,17 @@ const {
   deleteContact,
   updateContactById,
   updateStatusContact,
-} = require("../../controllers/controller.contacts.js");
+} = require("../../controllers/contacts/index.js");
+const { auth } = require("../../middlewares/index.js");
+const { isValidId } = require("../../middlewares/index.js");
 
 const routerContacts = express.Router();
 
-routerContacts.get("/", getAllContacts);
-routerContacts.get("/:id", getContact);
-routerContacts.post("/", createContact);
-routerContacts.delete("/:id", deleteContact);
-routerContacts.put("/:id", updateContactById);
-routerContacts.patch("/:id/favorite", updateStatusContact);
+routerContacts.get("/", auth, getAllContacts);
+routerContacts.get("/:id", auth, isValidId, getContact);
+routerContacts.post("/", auth, createContact);
+routerContacts.delete("/:id", auth, isValidId, deleteContact);
+routerContacts.put("/:id", auth, isValidId, updateContactById);
+routerContacts.patch("/:id/favorite", auth, isValidId, updateStatusContact);
 
 module.exports = routerContacts;
