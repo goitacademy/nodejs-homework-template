@@ -1,6 +1,6 @@
 const service = require("../../services");
 
-const removeById = async (req, res, next) => {
+const removeById = async (req, res) => {
   const { id } = req.params;
   const result = await service.removeById(id);
 

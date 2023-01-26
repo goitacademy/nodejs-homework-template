@@ -1,6 +1,6 @@
 const service = require("../../services");
 
-const getByID = async (req, res, next) => {
+const getByID = async (req, res) => {
   const { id } = req.params;
   const result = await service.getByID(id);
 

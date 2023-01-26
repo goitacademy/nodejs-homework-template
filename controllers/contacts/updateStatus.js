@@ -1,6 +1,6 @@
 const service = require("../../services");
 
-const updateStatus = async (req, res, next) => {
+const updateStatus = async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
   const result = await service.updateStatus(id, favorite);

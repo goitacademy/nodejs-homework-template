@@ -1,6 +1,6 @@
 const services = require("../../services");
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   const result = await services.getAll();
 
   res.json({
