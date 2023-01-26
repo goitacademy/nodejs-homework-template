@@ -10,7 +10,7 @@ const {
 
 const schema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email(),
+  email: Joi.string().email().required(),
   phone: Joi.string().alphanum().min(9).max(13).required(),
 });
 
@@ -32,12 +32,16 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const { error, value } = schema.validate(req.body);
+router.post("/", async (req, res, next) => {
+  const { error } = schema.validate(req.body);
   if (error) {
     res.status(400).json({ message: "missing required field" });
   }
-  const { name, email, phone } = value;
+  next();
+});
+
+router.post("/", async (req, res) => {
+  const { name, email, phone } = req.body;
   const newContact = await addContact(name, email, phone);
   res.status(201).json(newContact);
 });
@@ -55,12 +59,15 @@ router.delete("/:contactId", async (req, res) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { error, value } = schema.validate(req.body);
+  const { error } = schema.validate(req.body);
   if (error) {
     res.status(400).json({ message: "missing required field" });
   }
+  next();
+});
 
-  const { name, email, phone } = value;
+router.put("/:contactId", async (req, res, next) => {
+  const { name, email, phone } = req.body;
 
   const updatedContact = await updateContact(
     req.params.contactId,

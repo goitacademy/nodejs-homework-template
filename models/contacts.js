@@ -20,7 +20,6 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
-  console.table(contacts);
   const newContacts = contacts.filter(
     (contact) => contact.id !== String(contactId)
   );
