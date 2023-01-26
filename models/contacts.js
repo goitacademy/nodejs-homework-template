@@ -1,4 +1,5 @@
 const {Schema, model} = require("mongoose");
+const handleMongooseError = require('../helpers/handleMongooseError');
 
 const contactSchema = new Schema (  {
   name: {
@@ -31,15 +32,15 @@ const contactSchema = new Schema (  {
     type: Boolean,
     default: false,
   },
+  // owner: {
+  //   type: SchemaTypes.ObjectId,
+  //   ref: 'user',
+  // }
 },
 { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", (error, data, next)=> {
-  const {name, code} = error;
-  error.status = (name === "MongoServerError" && code === 11000) ? 409 : 400;
-  next()
-});
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
