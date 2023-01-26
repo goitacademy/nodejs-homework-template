@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
+const { MONGO_URL } = process.env;
 
 const connectMongo = async () => {
   mongoose.set("strictQuery", false);
   mongoose
-    .connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(() => console.log("Database connection successful"));
+    .connect(MONGO_URL)
+    .then(() => console.log("Database connection successful"))
+    .catch((err) => {
+      console.log(err.message);
+      process.exit(1);
+    });
 };
 
 module.exports = { connectMongo };

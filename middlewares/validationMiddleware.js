@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidationError } = require("../helpers");
 
 module.exports = {
   postValidation: (req, res, next) => {
@@ -13,10 +14,7 @@ module.exports = {
     const validationResult = schema.validate(req.body);
 
     if (validationResult.error) {
-      return res.status(400).json({
-        status: validationResult.error.details,
-        message: `missing required field`,
-      });
+      next(ValidationError(validationResult.error.details));
     }
     next();
   },
