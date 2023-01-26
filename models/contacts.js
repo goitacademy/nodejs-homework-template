@@ -4,7 +4,7 @@
 
 // const getContactById = async (contactId) => {}
 
-const removeContact = async (contactId) => {}
+// const removeContact = async (contactId) => {}
 
 const addContact = async (body) => {}
 
