@@ -1,11 +1,12 @@
 const { addContactSchema } = require("../schemas/contactsSchema");
 
-const Contact = require("../models/contact");
+const Contact = require("../models/contacts");
 
 async function getContacts(req, res, next) {
-  res.json(
-    await Contact.find()
-  );
+  const { limit = 20, page = 1 } = req.query;
+  const pagination = (page - 1) * limit;
+  const contacts = await Contact.find({}).skip(pagination).limit(limit)
+  return res.status(200).json(contacts);
 }
 
 async function getContact(req, res, next) {

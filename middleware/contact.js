@@ -11,3 +11,5 @@ const validationContact = (schema) => {
   };
   
   module.exports = validationContact;
+
+  

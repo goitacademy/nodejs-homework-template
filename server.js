@@ -5,13 +5,13 @@ const { app } = require("./app");
 dotenv.config(); 
 mongoose.set("strictQuery", true);
 
-const { HOST_URI, PORT = 3000} = process.env;
+const { HOST_URI, PORT = 3001} = process.env;
 
 mongoose
   .connect(HOST_URI)
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Server running. Use our API on port: 3000");
+      console.log("Server running. Use our API on port: 3001");
     });
   })
   .catch((error) => {

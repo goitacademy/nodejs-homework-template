@@ -13,3 +13,5 @@ const validationFavorite = (schema) => {
   };
   
   module.exports = validationFavorite;
+
+  

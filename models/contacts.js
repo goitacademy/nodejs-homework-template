@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const SchemaTypes = mongoose.SchemaTypes;
 
 const schema = mongoose.Schema({
   name: {
@@ -14,6 +15,10 @@ const schema = mongoose.Schema({
   favorite: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: SchemaTypes.ObjectId,
+    ref: "user",
   },
 });
 
