@@ -9,6 +9,11 @@ const schema = Joi.object({
       tlds: { allow: ["com", "net", "org"] },
     })
     .required(),
+  favorite: Joi.boolean(),
 });
 
-module.exports = { schema };
+const schemaFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { schema, schemaFavorite };
