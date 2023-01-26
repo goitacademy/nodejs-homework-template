@@ -16,7 +16,8 @@ res.status(201).json({
     code: 201,
     data: {
         user: {
-            email
+            email, 
+            subscription: newUser.subscription,           
         }
     }
 });
