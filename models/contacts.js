@@ -35,6 +35,7 @@ const removeContact = async (contactId) => {
       return null;
     }
     const spliceIdx = contacts.splice(idx, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4));
     return spliceIdx;
   } catch (error) {
     console.log(error.message);
@@ -45,7 +46,6 @@ const addContact = async (body) => {
   try {
     const contacts = await listContacts();
     const newContacts = { ...body, id: uuidv4() };
-    console.log(newContacts);
     contacts.push(newContacts);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4));
     return newContacts;
@@ -62,8 +62,8 @@ const updateContact = async (contactId, body) => {
       return null;
     }
 
-    contacts[idx] = { ...body, contactId };
-    await fs.writeFile(contactsPath, JSON.stringify(contactsPath, null, 4));
+    contacts[idx] = { ...body, id:contactId};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4));
     return contacts[idx];
   } catch (error) {
     console.log(error.message);
