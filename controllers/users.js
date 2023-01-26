@@ -4,14 +4,17 @@ const HttpError = require('../helpers/httpError');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
+const Jimp = require('jimp');
 
 const fs = require('fs');
 const path = require('path');
 
+const { STATIC_URL, PORT } = process.env;
+
 async function registration(req, res, next) {
   try {
     const { email, password } = req.body;
-    const avatarURL = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true);
+    const avatarURL = gravatar.url(email, { s: '250', r: 'x', d: 'retro' }, true);
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -101,19 +104,19 @@ async function changeAvatar(req, res, next) {
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
   const publicPath = path.resolve(__dirname, '../public/avatars', newFilename);
 
-  fs.rename(tmpPath, publicPath, error => {
-    if (error) {
-      throw error;
-    }
-  });
-  fs.unlink(tmpPath, error => {
-    if (error) {
-      throw error;
-    }
-  });
+  await Jimp.read(tmpPath)
+    .then(async image => {
+      await image.resize(250, Jimp.AUTO).writeAsync(tmpPath);
+    })
+    .then(() => {
+      fs.renameSync(tmpPath, publicPath);
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
 
-  const user = await User.findByIdAndUpdate(id, { avatarURL: publicPath }, { new: true });
-
+  const avatarURL = STATIC_URL + PORT + '/avatars/' + newFilename;
+  const user = await User.findByIdAndUpdate(id, { avatarURL: avatarURL }, { new: true });
   res.status(200).json(user.avatarURL);
 }
 
