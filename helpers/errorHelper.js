@@ -1,4 +1,4 @@
-const errorHandler = (error) => {
+const errorHelper = (error) => {
   if (error.name === "CastError") {
     error.status = 404;
     error.message = `contact with id:${error.value} not found`;
@@ -20,4 +20,4 @@ const errorHandler = (error) => {
   }
 };
 
-module.exports = errorHandler;
+module.exports = errorHelper;
