@@ -15,7 +15,7 @@ module.exports = {
         .max(11)
         .required(),
       favorite: Joi.boolean()
-        .required(),
+        .optional(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -42,6 +42,22 @@ module.exports = {
         .min(6) 
         .max(11)
         .optional(),
+      favorite: Joi.boolean()
+        .optional(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({status: validationResult.error.details});
+    }
+
+    next();
+  },
+
+  addPatchValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean()
+        .required(),
     });
 
     const validationResult = schema.validate(req.body);

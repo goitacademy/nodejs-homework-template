@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 
+mongoose.set('strictQuery', false);
+
 const connectMongo = async () => {
-    return mongoose.connect(process.env.MONGO_URL,
-        {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-        })
+    return mongoose.connect(process.env.DB_HOST)
 };
 
 module.exports = {

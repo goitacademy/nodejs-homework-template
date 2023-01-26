@@ -16,6 +16,7 @@ const start = async () => {
     });
   } catch (err) {
     console.error(`Failed to launch application with error: ${err.message}`);
+    process.exit(1);
   }
 }
 
