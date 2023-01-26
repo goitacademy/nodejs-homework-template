@@ -1,5 +1,6 @@
 const {Schema, model} = require("mongoose");
 const handleMongooseError = require('../helpers/handleMongooseError');
+const emailRegexp = require('../helpers/regExp');
 
 const userSchema = new Schema ({
     password: {
@@ -9,6 +10,7 @@ const userSchema = new Schema ({
       email: {
         type: String,
         required: [true, 'Email is required'],
+        match:emailRegexp,
         unique: true,
       },
       subscription: {
