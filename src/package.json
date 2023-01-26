@@ -1,0 +1,32 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " NODE_ENV=production node ./server.js",
+    "dev": "NODE_ENV=development npx nodemon ./server.js",
+    "lint": "npx eslint ../src",
+    "lint:fix": "npx eslint ../src --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-google": "^0.14.0",
+    "nodemon": "^2.0.20",
+    "npx": "^10.2.2"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.7.0",
+    "mongodb": "^4.13.0",
+    "morgan": "^1.10.0",
+    "nanoid": "^3.3.3"
+  }
+}
