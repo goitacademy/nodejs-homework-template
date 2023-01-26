@@ -1,18 +1,22 @@
 const express = require("express");
+const Joi = require("joi");
+
+const contactsOptions = require("../../models/contacts");
+
+const contactsSchema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+  phone: Joi.string().required(),
+});
 const router = express.Router();
-const Contacts = require("../../models/contacts");
-const validate = require("./validation");
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await Contacts.listContacts();
-    return res.json({
-      status: "Success",
-      code: 200,
-      data: {
-        contacts,
-      },
-    });
+    const contacts = await contactsOptions.listContacts();
+    return res.json({ contacts });
   } catch (error) {
     next(error);
   }
@@ -20,37 +24,40 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.contactId);
-
-    if (contact) {
-      return res.json({
-        status: "Success",
-        code: 200,
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(400).json({
-        status: "Error",
-        code: 400,
-        message: "Not found",
+    const { contactId } = req.params;
+    const result = await contactsOptions.get(contactId);
+    if (!result) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        massage: `Contacts with id = ${contactId} not found`,
       });
     }
+    return res.json({
+      status: "success",
+      code: 200,
+      data: {
+        data: result,
+      },
+    });
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/", validate.createContact, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    const contact = await Contacts.addContact(req.body);
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      error.status = 404;
+      throw error;
+    }
+    const result = await contactsOptions.addContact(req.body);
     return res.status(201).json({
-      status: "Success",
+      status: "success",
       code: 201,
-      message: "New contact has been added",
       data: {
-        contact,
+        result: result,
       },
     });
   } catch (error) {
@@ -60,49 +67,53 @@ router.post("/", validate.createContact, async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.contactId);
-
-    if (contact) {
-      return res.json({
-        status: "Success",
-        code: 200,
-        message: "Contact has been deleted",
-      });
-    } else {
-      return res.status(400).json({
-        status: "Error",
+    const { contactId } = req.params;
+    const result = await contactsOptions.removeContact(contactId);
+    if (!result) {
+      return res.status(404).json({
+        status: "error",
         code: 404,
-        message: "Not found",
+        massage: `Contacts with id = ${contactId} not found`,
       });
     }
-  } catch (error) {
-    next(error);
-  }
+    return res.json({
+      status: "success",
+      code: 200,
+      message: "contact deleted",
+      data: {
+        data: result,
+      },
+    });
+  } catch (error) {}
+  res.json({ message: "template message" });
 });
 
-router.patch("/:contactId", validate.updateContact, async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(
-      req.params.contactId,
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
+    const { contactId } = req.params;
+    const updateContact = await contactsOptions.updateContact(
+      contactId,
       req.body
     );
-
-    if (contact) {
-      return res.json({
-        status: "Success",
-        code: 200,
-        message: "Contact has been updated",
-        data: {
-          contact,
-        },
-      });
-    } else {
-      return res.status(400).json({
-        status: "Error",
+    if (!updateContact) {
+      return res.status(404).json({
+        status: "error",
         code: 404,
-        message: "Not found",
+        massage: `Contacts with id = ${contactId} not found`,
       });
     }
+    return res.json({
+      status: "success",
+      code: 200,
+      data: {
+        data: updateContact,
+      },
+    });
   } catch (error) {
     next(error);
   }
