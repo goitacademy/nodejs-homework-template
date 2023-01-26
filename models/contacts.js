@@ -2,7 +2,7 @@
 
 // const listContacts = async () => {}
 
-const getContactById = async (contactId) => {}
+// const getContactById = async (contactId) => {}
 
 const removeContact = async (contactId) => {}
 
