@@ -1,25 +1,28 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
+const { controllerContacts } = require("../../controllers");
+const { authMiddleware } = require("../../middlewares");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  GET ALL  =====================
+// using authMiddleware to verify that the owner(user) can get only thier contacts.
+// contacts that belong to specific user (with their id)
+router.get("/", authMiddleware, controllerContacts.getAllContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  GET BY ID  =====================
+router.get("/:contactId", controllerContacts.getById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  ADD CONTACT  ==================
+// using authMiddleware to verify that only logged-in user can add contacts
+router.post("/", authMiddleware, controllerContacts.addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  UPDATE CONTACT BY ID ==================
+router.put("/:contactId", controllerContacts.updateById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// =====================  UPDATE CONTACT BY CATEGORY FAVORITE ==================
+router.patch("/:contactId/favorite", controllerContacts.updateStatusContact);
 
-module.exports = router
+// =====================  DELETE CONTACT BY ID ==================
+router.delete("/:contactId", controllerContacts.deleteContact);
+
+module.exports = router;
