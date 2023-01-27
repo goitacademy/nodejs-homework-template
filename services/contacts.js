@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const { runInNewContext } = require('vm');
 
 // const pathContacts = path.resolve('../models/contacts.json');
 const pathContacts = path.join(__dirname, 'contacts.json');
@@ -29,13 +30,21 @@ const addContact = async body => {
     const contactsBySort = [...contactsList].sort(
       (a, b) => Number(a.id) - Number(b.id)
     );
-    fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
+    await fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
   } catch (error) {
     console.error(error);
   }
 };
 
-const removeContact = async contactId => {};
+const removeContact = async contactId => {
+  try {
+    const contactsList = await listContacts();
+    const newContactsList = contactsList.filter(el => el.id !== contactId);
+    await fs.writeFile(pathContacts, JSON.stringify(newContactsList), 'utf8');
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const updateContact = async (contactId, body) => {};
 

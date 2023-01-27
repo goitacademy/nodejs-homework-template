@@ -3,6 +3,7 @@ const {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
 } = require('../../services/contacts');
 
 const router = express.Router();
@@ -65,9 +66,20 @@ router.post(
 router.delete('/contacts/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const contactsList = await listContacts();
-  removeContact(contactId);
   const contact = contactsList.filter(el => el.id === contactId);
-  res.json({ message: 'template message' });
+
+  if (contact.length === 0) {
+    res.status(404).json({ message: 'Not found' });
+    return;
+  }
+
+  removeContact(contactId);
+  res.json({
+    status: 'success',
+    code: 200,
+    message: 'contact deleted',
+    data: { contact },
+  });
 });
 
 router.put('/:contactId', async (req, res, next) => {
