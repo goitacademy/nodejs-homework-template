@@ -46,7 +46,22 @@ const removeContact = async contactId => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const contactsList = await listContacts();
+    const contact = contactsList.find(el => el.id === contactId);
+
+    if (contact === undefined) {
+      return null;
+    };
+
+    const contactUpdated = { ...contact, ...body };
+    await fs.writeFile(pathContacts, JSON.stringify(contactUpdated), "utf8");
+    return contactUpdated;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   listContacts,
