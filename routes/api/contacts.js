@@ -37,14 +37,14 @@ router.post('/contacts', postContact = async (req, res, next) => {
 
   const contactId = Math.floor(Math.random() * 100);
   const contactsList = await listContacts();
-  const isId = contactsList.some(contact => contact.id === contactId);
+  const isId = contactsList.some(contact => Number(contact.id) === contactId);
   if (isId) {
     postContact(req, res, next);
     return;
   }
   
   const contact = {
-    id: contactId,
+    id: `${contactId}`,
     name,
     email,
     phone,

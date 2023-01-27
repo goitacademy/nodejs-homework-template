@@ -22,7 +22,18 @@ const getContactById = async contactId => {
   }
 };
 
-const addContact = async body => {};
+const addContact = async body => {
+  try {
+    const contactsList = await listContacts();
+    contactsList.push(body);
+    const contactsBySort = [...contactsList].sort(
+      (a, b) => Number(a.id) - Number(b.id)
+    );
+    fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const removeContact = async contactId => {};
 
