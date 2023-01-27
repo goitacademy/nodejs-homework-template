@@ -5,7 +5,7 @@ const getAll = require("./getAll");
 
 const add = async (body) => {
   const contactList = await getAll();
-  const newContact = { ...body, id: uuidv4() };
+  const newContact = { id: uuidv4(), ...body };
   contactList.push(newContact);
   await fs.writeFile(filePath, JSON.stringify(contactList));
   return newContact;
