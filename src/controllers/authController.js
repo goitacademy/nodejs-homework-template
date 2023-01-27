@@ -6,6 +6,7 @@ import {
   logout,
   getCurrentUser,
   updateSubscription,
+  updateAvatar,
 } from '../services/authService.js';
 
 export const signupController = async (req, res) => {
@@ -59,5 +60,13 @@ export const updateSubscriptionController = async (req, res) => {
 
   if (!updatedUser) throw new createError(401, 'Not authorized');
 
+  res.json(setSuccessResponse(200, updatedUser));
+};
+
+export const updateAvatarController = async (req, res) => {
+  const { userId } = req.user;
+  const { filename } = req.file;
+
+  const updatedUser = await updateAvatar(userId, filename);
   res.json(setSuccessResponse(200, updatedUser));
 };

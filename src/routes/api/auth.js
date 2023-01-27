@@ -5,9 +5,12 @@ import {
   logoutController,
   updateSubscriptionController,
   getCurrentUserController,
+  updateAvatarController,
 } from '../../controllers/authController.js';
 import { errorWrapper } from '../../helpers/errorWrapper.js';
 import { authMiddleware } from '../../middleware/authMiddleware.js';
+import { updateImageMiddleware } from '../../middleware/updateImageMiddleware.js';
+import { upload } from '../../middleware/uploadMiddleware.js';
 import { validateBody } from '../../middleware/validateBody.js';
 import { userSchema } from '../../schemas/userSchema.js';
 import { userSubscriptionSchema } from '../../schemas/userSubscriptionSchema.js';
@@ -24,9 +27,13 @@ router.get('/logout', authMiddleware, errorWrapper(logoutController));
 router.get('/current', authMiddleware, errorWrapper(getCurrentUserController));
 router.patch(
   '/',
-  authMiddleware,
-  validateBody(userSubscriptionSchema),
+  [authMiddleware, validateBody(userSubscriptionSchema)],
   errorWrapper(updateSubscriptionController)
+);
+router.patch(
+  '/avatars',
+  [authMiddleware, upload.single('avatar'), updateImageMiddleware],
+  errorWrapper(updateAvatarController)
 );
 
 export default router;
