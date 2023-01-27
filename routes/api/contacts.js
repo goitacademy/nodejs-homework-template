@@ -1,25 +1,34 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
+const {
+  getContacts,
+  getContact,
+  postContact,
+  deleteContact,
+  putContact,
+  updateStatusContact,
+} = require("../../controllers/contactsController.js");
+const { tryCatchWrapper } = require("../../helpers");
+const { validateBody } = require("../../middlewares");
+const {
+  contactSchema,
+  contactStatusSchema,
+} = require("../../schemas/contactSchema.js");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", tryCatchWrapper(getContacts));
+router.get("/:contactId", tryCatchWrapper(getContact));
+router.post("/", validateBody(contactSchema), tryCatchWrapper(postContact));
+router.delete("/:contactId", tryCatchWrapper(deleteContact));
+router.put(
+  "/:contactId",
+  validateBody(contactSchema),
+  tryCatchWrapper(putContact)
+);
+router.patch(
+  "/:contactId/favorite",
+  validateBody(contactStatusSchema),
+  tryCatchWrapper(updateStatusContact)
+);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
