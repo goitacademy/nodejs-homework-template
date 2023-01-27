@@ -22,9 +22,9 @@ const getContactById = async contactId => {
   }
 };
 
-const removeContact = async contactId => {};
-
 const addContact = async body => {};
+
+const removeContact = async contactId => {};
 
 const updateContact = async (contactId, body) => {};
 

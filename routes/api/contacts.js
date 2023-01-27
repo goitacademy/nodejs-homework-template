@@ -18,8 +18,7 @@ router.get('/contacts/:contactId', async (req, res, next) => {
   const contactById = await getContactById(contactId);
 
   if (contactById === undefined) {
-    res.status(404).json({ message: 'Not found' });
-    return;
+    return res.status(404).json({ message: 'Not found' });
   }
 
   res.json({
