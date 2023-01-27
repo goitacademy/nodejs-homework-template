@@ -8,7 +8,6 @@ const getCurrent = async (req, res) => {
                 subscription,
                 email
             }
-
         }
     })
 }
