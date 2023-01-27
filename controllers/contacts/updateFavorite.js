@@ -1,10 +1,19 @@
 const { Contact } = require("../../models");
 const createError = require("http-errors");
 
-const updateById = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
   const { id } = req.params;
-  // const { name, email, phone } = req.body;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const { favorite } = req.params;
+
+  if (!req.body) {
+    throw createError(400, `missing field favorite`);
+  }
+
+  const result = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    { new: true }
+  );
   if (!result) {
     throw createError(404, `Contact with id=${id} not found`);
   }
@@ -18,4 +27,4 @@ const updateById = async (req, res, next) => {
   });
 };
 
-module.exports = updateById;
+module.exports = updateFavorite;

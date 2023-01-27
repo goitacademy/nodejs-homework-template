@@ -1,13 +1,8 @@
-const contactsOperations = require("../../models/contacts");
+const { Contact } = require("../../models");
 
 const addContact = async (req, res) => {
-  const { name, email, phone } = req.body;
-  const result = await contactsOperations.asyncHandler(
-    contactsOperations.addContact,
-    name,
-    email,
-    phone
-  );
+  // const { name, email, phone } = req.body;
+  const result = await Contact.create(req.body);
 
   res.status(201).json({
     status: "success",
