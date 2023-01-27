@@ -1,5 +1,9 @@
 const express = require('express');
-const { listContacts, getContactById, addContact, removeContact } = require('../../services/contacts');
+const {
+  listContacts,
+  getContactById,
+  addContact,
+} = require('../../services/contacts');
 
 const router = express.Router();
 
@@ -28,35 +32,35 @@ router.get('/contacts/:contactId', async (req, res, next) => {
   });
 });
 
-router.post('/contacts', postContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+router.post(
+  '/contacts',
+  (postContact = async (req, res, next) => {
+    const { name, email, phone } = req.body;
+    if (name === '' || name === null) {
+      return res.status(400).json({ message: 'missing required name field' });
+    }
+    const contactId = Math.floor(Math.random() * 100);
+    const contactsList = await listContacts();
+    const isId = contactsList.some(contact => Number(contact.id) === contactId);
+    if (isId) {
+      postContact(req, res, next);
+      return;
+    }
 
-  if (name === '' || name === null) {
-    return res.status(400).json({ "message": "missing required name field" });
-  };
-
-  const contactId = Math.floor(Math.random() * 100);
-  const contactsList = await listContacts();
-  const isId = contactsList.some(contact => Number(contact.id) === contactId);
-  if (isId) {
-    postContact(req, res, next);
-    return;
-  }
-  
-  const contact = {
-    id: `${contactId}`,
-    name,
-    email,
-    phone,
-  };
-
-  addContact(contact);
-  res.json({
-    status: "success",
-    code: 201,
-    data: {contact},
-  });
-});
+    const contact = {
+      id: `${contactId}`,
+      name,
+      email,
+      phone,
+    };
+    addContact(contact);
+    res.json({
+      status: 'success',
+      code: 201,
+      data: { contact },
+    });
+  })
+);
 
 router.delete('/contacts/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
