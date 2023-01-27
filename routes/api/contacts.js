@@ -10,6 +10,7 @@ router.get('/contacts', async (req, res, next) => {
     code: 200,
     data: { contacts },
   });
+  // res.status(200).json({ contacts });
 });
 
 router.get('/:contactId', async (req, res, next) => {
