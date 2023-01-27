@@ -12,12 +12,8 @@ router.get("/:id", ctrlWrapper(ctrl.getById));
 
 router.post("/", validation(contactSchema), ctrlWrapper(ctrl.add));
 
-// router.delete("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.delete("/:id", ctrlWrapper(ctrl.removeById));
 
-// router.put("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.put("/:id", validation(contactSchema), ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
