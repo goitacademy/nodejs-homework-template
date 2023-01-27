@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getById));
+router.get("/:id", ctrlWrapper(ctrl.getById));
 
 // router.post("/", async (req, res, next) => {
 //   res.json({ message: "template message" });
