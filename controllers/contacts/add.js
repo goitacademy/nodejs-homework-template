@@ -1,4 +1,4 @@
-const contactsOperations = require("../../routes/api/contacts");
+const contactsOperations = require("../../models");
 
 const add = async (req, res, next) => {
   const result = await contactsOperations.add(req.body);
