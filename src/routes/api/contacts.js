@@ -14,7 +14,7 @@ const { addSchema, updateSchema } = require("../../middleware/middleware");
 
 router.get("/", getContacts);
 
-router.get("/:contactId", getContById);
+router.get("api/contacts/", getContById);
 
 router.post("/", addSchema, addCont);
 
