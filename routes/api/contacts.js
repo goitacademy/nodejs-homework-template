@@ -8,7 +8,9 @@ router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsOperations.getAll();
     res.json({ status: "success", code: 200, data: { result: contacts } });
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
@@ -16,11 +18,14 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await contactsOperations.getById(contactId);
     if (!contact) {
-      res.json({ message: "not found" });
-      return;
+      const err = new Error("not found");
+      err.status = 404;
+      throw err;
     }
     res.json({ status: "success", code: 200, data: { result: contact } });
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post("/", async (req, res, next) => {
