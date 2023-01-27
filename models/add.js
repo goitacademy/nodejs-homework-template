@@ -5,7 +5,7 @@ const contactsPath = require("./contactsPath");
 
 const add = async (data) => {
   const contacts = await getAll();
-  const newContact = { data, id: uuidv4() };
+  const newContact = { ...data, id: uuidv4() };
   const newArray = [...contacts, newContact];
   await fs.writeFile(contactsPath, JSON.stringify(newArray));
   return newContact;
