@@ -10,7 +10,7 @@ const {
 } = require("../../controllers/controllers");
 
 
-const { addSchema, updateSchema } = require("../../middleware/middleware");
+const { addSchema, updateSchema } = require("../../middlewares/middlewares");
 
 router.get("/", getContacts);
 
