@@ -1,12 +1,8 @@
 const { services: srv } = require("../../service");
 
-const listContactsController = async (req, res, next) => {
-  try {
-    const contacts = await srv.getContacts();
-    res.json({ contacts });
-  } catch (error) {
-    next(error);
-  }
+const listContactsController = async (req, res) => {
+  const contacts = await srv.getContacts();
+  res.json({ contacts });
 };
 
 const getByIdController = async (req, res) => {
@@ -26,17 +22,16 @@ const updateContactController = async (req, res) => {
   res.json(updatedContact);
 };
 
-const updateStatusContactController = async (req, res, next) => {
+const updateStatusContactController = async (req, res) => {
   const { id } = req.params;
-  if (!req.body) {
-    res.json({ message: "missing field favorite" });
-  }
   const updatedContact = await srv.updateStatusContact(id, req.body);
-
+  if (!updatedContact) {
+    res.json.status(404)({ message: "Not found" });
+  }
   res.json(updatedContact);
 };
 
-const removeContactController = async (req, res, next) => {
+const removeContactController = async (req, res) => {
   const { id } = req.params;
   await srv.removeContactById(id);
   res.json({ message: "contact deleted" });

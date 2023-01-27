@@ -28,9 +28,12 @@ const updateContact = async (id, body) => {
 };
 
 const updateStatusContact = async (id, body) => {
-  const { name, phone, email, favorite } = body;
+  const { favorite } = body;
+  if (!favorite) {
+    throw new WrongParametersError("missing field favorite");
+  }
   await Contact.findByIdAndUpdate(id, {
-    $set: { name, phone, email, favorite },
+    $set: { favorite },
   });
   return Contact.findById(id);
 };
