@@ -31,6 +31,7 @@ const addContact = async body => {
       (a, b) => Number(a.id) - Number(b.id)
     );
     await fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
+    return body;
   } catch (error) {
     console.error(error);
   }
@@ -56,7 +57,10 @@ const updateContact = async (contactId, body) => {
     };
 
     const contactUpdated = { ...contact, ...body };
-    await fs.writeFile(pathContacts, JSON.stringify(contactUpdated), "utf8");
+    await removeContact(contactId);
+    await addContact(contactUpdated);
+    // contactsList.push(contactUpdated);
+    // await fs.writeFile(pathContacts, JSON.stringify(contactUpdated), "utf8");
     return contactUpdated;
   } catch (error) {
     console.error(error);
