@@ -2,6 +2,23 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+const mongoose = require("mongoose");
+const DB_HOST =
+  "mongodb+srv://Oksana:JuliaSim@cluster0.ore3edv.mongodb.net/db-contacts?retryWrites=true&w=majority";
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
+
+// const Cat = mongoose.model("Cat", { name: String });
+
+// const kitty = new Cat({ name: "Zildjian" });
+// kitty.save().then(() => console.log("meow"));
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
