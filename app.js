@@ -19,9 +19,17 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.kind === "ObjectId") {
+    return res.status(404).json({
+      message: "Not founderewer",
+    });
+  }
+
   res
     .status(err.status || 500)
     .json({ message: err.message || "Internal server error" });
 });
 
-module.exports = app;
+module.exports = {
+  app,
+};
