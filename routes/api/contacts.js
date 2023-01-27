@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express');
 const {
   listContacts,
@@ -82,8 +83,17 @@ router.delete('/contacts/:contactId', async (req, res, next) => {
   });
 });
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+router.put('/contacts/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+
+  if (req.body === {}) {
+    res.status(400).json({ message: 'missing fields' });
+    return;
+  }
+
+  const contactsList = await listContacts();
+  const contactById = contactsList.filter(el => el.id === contactId);
 });
 
 module.exports = router;
