@@ -1,10 +1,11 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { ctrlWrapper, HttpError } = require("../helpers");
+const { nanoid } = require("nanoid");
+const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 require("dotenv").config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const { SECRET_KEY, BASE_URL } = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -14,9 +15,17 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const verificationToken = nanoid();
+  const varifyEmail = {
+    to: email,
+    subject: "Contacts App. Verify email",
+    html: `<a targt="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Verify email. </a><p>Please, click below</p>`,
+  };
+  await sendEmail(varifyEmail)
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = await User.create({ ...req.body, password: hashPassword, verificationToken });
 
   res.status(201).json({
     user: {
@@ -26,12 +35,32 @@ const register = async (req, res) => {
   });
 };
 
+const verify = async (req, res) => {
+  const { verificationToken } = req.params
+  const user = await User.findOne({ verificationToken })
+  
+  if (!user) {
+    throw HttpError(404)
+  }
+
+  await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: ""})
+
+  res.status(200).json({
+    message: "Verification successful"
+  })
+
+}
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!user || !passwordCompare) {
     throw HttpError(401, "Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw HttpError(401, "Email doesn't verifed");
   }
 
   const payload = {
@@ -83,11 +112,12 @@ const updateSubscriptionType = async (req, res) => {
     });
   }
 
-  throw HttpError(400)
+  throw HttpError(400);
 };
 
 module.exports = {
   register: ctrlWrapper(register),
+  verify: ctrlWrapper(verify),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
