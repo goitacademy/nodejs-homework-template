@@ -1,5 +1,5 @@
 const express = require('express');
-const { listContacts, getContactById, addContact } = require('../../services/contacts');
+const { listContacts, getContactById, addContact, removeContact } = require('../../services/contacts');
 
 const router = express.Router();
 
@@ -58,7 +58,11 @@ router.post('/contacts', postContact = async (req, res, next) => {
   });
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/contacts/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  const contactsList = await listContacts();
+  removeContact(contactId);
+  const contact = contactsList.filter(el => el.id === contactId);
   res.json({ message: 'template message' });
 });
 
