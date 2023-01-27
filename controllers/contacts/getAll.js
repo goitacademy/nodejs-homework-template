@@ -1,4 +1,3 @@
-const { contacts } = require("..");
 const operations = require("../../models/contacts");
 
 const getAll = async (req, res) => {
