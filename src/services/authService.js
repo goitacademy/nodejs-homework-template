@@ -1,7 +1,4 @@
 import bcrypt from 'bcrypt'; // hash password
-import fs from 'fs/promises'; // working with files
-import gravatar from 'gravatar'; // making avatar
-import Jimp from 'jimp'; // image update
 import jwt from 'jsonwebtoken'; // JWT
 import { User } from '../models/userModel.js';
 
@@ -70,13 +67,7 @@ export const updateSubscription = async (userId, subscription) => {
   return updatedUser;
 };
 
-export const updateAvatar = async data => {
-  const { userId, filename, tmpPath, publicPath } = data;
-  const file = await Jimp.read(tmpPath); // find initial file
-  file.cover(250, 250).resize(250, Jimp.AUTO).quality(60).write(publicPath); // change initial file and redirect to public folder
-
-  await fs.unlink(tmpPath); // remove initial file from tmp folder
-
+export const updateAvatar = async (userId, filename) => {
   const updatedUser = await User.findByIdAndUpdate(
     { _id: userId },
     { avatarURL: `/avatars/${filename}` },

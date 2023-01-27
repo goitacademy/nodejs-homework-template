@@ -20,7 +20,6 @@ app.use((_, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log('err', err);
   if (err.status) {
     const { status, message } = err;
     return res.status(status).json(message);

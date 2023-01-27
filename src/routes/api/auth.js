@@ -9,6 +9,7 @@ import {
 } from '../../controllers/authController.js';
 import { errorWrapper } from '../../helpers/errorWrapper.js';
 import { authMiddleware } from '../../middleware/authMiddleware.js';
+import { updateImageMiddleware } from '../../middleware/updateImageMiddleware.js';
 import { upload } from '../../middleware/uploadMiddleware.js';
 import { validateBody } from '../../middleware/validateBody.js';
 import { userSchema } from '../../schemas/userSchema.js';
@@ -31,7 +32,7 @@ router.patch(
 );
 router.patch(
   '/avatars',
-  [authMiddleware, upload.single('avatar')],
+  [authMiddleware, upload.single('avatar'), updateImageMiddleware],
   errorWrapper(updateAvatarController)
 );
 

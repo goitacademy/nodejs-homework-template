@@ -6,7 +6,7 @@ import createError from 'http-errors';
 dotenv.config();
 
 describe('Auth middleware test', () => {
-  it.skip('should call next() and add user to req. object in case token is valid', () => {
+  it('should call next() and add user to req. object in case token is valid', () => {
     const user = { _id: '1111' };
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
@@ -22,7 +22,7 @@ describe('Auth middleware test', () => {
     expect(mockNext).toHaveBeenCalled();
   });
 
-  it.skip('should call next() with error in case authorization header missing', () => {
+  it('should call next() with error in case authorization header missing', () => {
     const mReq = { headers: {} };
     const mRes = {};
     const mockNext = jest.fn();
@@ -34,7 +34,7 @@ describe('Auth middleware test', () => {
     );
   });
 
-  it.skip('should call next() with error in case token is expired', () => {
+  it('should call next() with error in case token is expired', () => {
     const user = { _id: '1111' };
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1',
@@ -53,5 +53,3 @@ describe('Auth middleware test', () => {
     );
   });
 });
-
-// use for jest with ECMAScript Modules -->  NODE_OPTIONS=--experimental-vm-modules npx jest
