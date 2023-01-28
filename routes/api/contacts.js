@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require("express");
+// const { HttpError } = require("../../helpers");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const models = require("../../models/contacts");
+const {
+  getContacts,
+  getContact,
+  createContact,
+  deleteContact,
+} = require("../../controllers/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getContacts);
+router.get("/:contactId", getContact);
+router.post("/", createContact);
+router.delete("/:contactId", deleteContact);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// router.put("/:contactId", async (req, res, next) => {
+//   res.json({ message: "template message" });
+// });
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
