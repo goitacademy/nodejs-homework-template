@@ -1,25 +1,32 @@
-const express = require('express')
+const express = require("express");
+const contacts_controller = require("../../controllers");
+const { controller_exception_wrapper } = require("../../helpers");
+const { validate_body } = require("../../middlewares");
+const { add_contact_schema } = require("../../helpers/schemas");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", controller_exception_wrapper(contacts_controller.get_list));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get(
+  "/:contactId",
+  controller_exception_wrapper(contacts_controller.get_by_id)
+);
+router.post(
+  "/",
+  validate_body(add_contact_schema),
+  controller_exception_wrapper(contacts_controller.create)
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete(
+  "/:contactId",
+  controller_exception_wrapper(contacts_controller.delete_by_id)
+);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  validate_body(add_contact_schema),
+  controller_exception_wrapper(contacts_controller.update)
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
