@@ -3,7 +3,7 @@ const createError = require("http-errors");
 
 const updateFavorite = async (req, res, next) => {
   const { id } = req.params;
-  const { favorite } = req.params;
+  const { favorite } = req.body;
 
   if (!req.body) {
     throw createError(400, `missing field favorite`);
