@@ -28,5 +28,5 @@ function validateBody(schema) {
 module.exports = {
   tryCatchWrapper,
   HttpError,
-  validateBody
+  validateBody,
 };

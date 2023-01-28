@@ -1,10 +1,14 @@
 const { User } = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
 const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs/promises');
 
 dotenv.config();
-const { SEKRET } = process.env;
+const { SECRET } = process.env;
+const { avatarResize } = require('../middlwares/avatarUpload');
 
 const register = async (req, res) => {
   const { email, password, subscription, token } = req.body;
@@ -17,12 +21,14 @@ const register = async (req, res) => {
       data: 'Conflict',
     });
   }
+  const avatarURL = gravatar.url(email);
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
   const result = await User.create({
     email,
     password: hashPassword,
     subscription,
+    avatarURL,
     token,
   });
   res.status(201).json({
@@ -31,6 +37,7 @@ const register = async (req, res) => {
     user: {
       email,
       subscription: subscription ?? 'starter',
+      avatarURL,
     },
     data: {
       message: 'Registration successful',
@@ -57,7 +64,7 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SEKRET, { expiresIn: '1h' });
+  const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     status: 'success',
@@ -95,9 +102,40 @@ const logout = async (req, res) => {
   });
 };
 
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
+const updateAvatar = async (req, res) => {
+  const { path: tempUpload, originalname } = req.file;
+  const { _id: id } = req.user;
+  avatarResize(originalname);
+  const avatarName = `${id}_${originalname}`;
+  try {
+    const resultUpload = path.join(avatarsDir, avatarName);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join('public', 'avatars', avatarName);
+
+    await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
+    res.json({
+      status: 'OK',
+      code: 200,
+      data: {
+        avatarURL,
+      },
+    });
+  } catch (error) {
+    await fs.unlink(tempUpload);
+    res.status(401).json({
+      status: 'Unauthorized',
+      code: 401,
+      message: 'Not authorized',
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   getCurrentUser,
   logout,
+  updateAvatar,
 };

@@ -10,7 +10,7 @@ const router = express.Router();
 const { HttpError } = require('../../helpers/index');
 const { tryCatchWrapper, validateBody } = require('../../helpers/index');
 const currentUser = require('../../middlwares/auth');
-const { contactValidation } = require("../../models/contact")
+const { contactValidation } = require('../../models/contact');
 
 router.get(
   '/',

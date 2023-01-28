@@ -20,20 +20,20 @@ const schema = mongoose.Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'users',
-    required: true
+    required: true,
   },
 });
 
-  const contactValidation = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.number().integer().required(),
-    favorite: Joi.boolean()
-  });
+const contactValidation = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.number().integer().required(),
+  favorite: Joi.boolean(),
+});
 
 const Contact = mongoose.model('contacts', schema);
 
 module.exports = {
-  Contact, 
-  contactValidation
+  Contact,
+  contactValidation,
 };
