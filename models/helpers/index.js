@@ -1,3 +1,5 @@
+const handleSchemaValidationErrors = require("./handleSchemaValidationErrors");
+
 function tryCatchWrapper(endpointFn) {
     return async (req, res, next) => {
         try {
@@ -8,15 +10,7 @@ function tryCatchWrapper(endpointFn) {
     }
 }
 
-
-class HttpError extends Error {
-  constructor(status, message) {
-      super(message);
-      this.status = status;
-  }
-}
-
 module.exports = {
     tryCatchWrapper,
-    HttpError,
+    handleSchemaValidationErrors,
 };
