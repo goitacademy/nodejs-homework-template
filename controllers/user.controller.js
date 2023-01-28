@@ -1,3 +1,4 @@
+// require('dotenv').config();
 const { BadRequest, NotFound } = require('http-errors');
 const { User } = require('../models/user');
 const path = require('path');

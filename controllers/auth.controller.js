@@ -1,8 +1,9 @@
+// require('dotenv').config();
 const { User } = require('../models/user');
 const { Conflict, Unauthorized } = require('http-errors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+require('dotenv').config();
 const { JWT_SECRET } = process.env;
 var gravatar = require('gravatar');
 

@@ -16,7 +16,7 @@ const schema = mongoose.Schema(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
+      // unique: true,
       match: [/[a-z0-9]+@[a-z0-9]+/, 'user email is not valid'], // simple check
     },
     contacts: [
