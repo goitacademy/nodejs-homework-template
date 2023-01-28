@@ -1,47 +1,71 @@
-const { services: srv } = require("../../service");
+const { Contact } = require("../../models/contact");
+const { WrongParametersError, NotFoundError } = require("../../helpers");
 
-const listContactsController = async (req, res) => {
-  const contacts = await srv.getContacts();
+// const { services: srv } = require("../../service");
+
+const getAll = async (req, res) => {
+  const contacts = await Contact.find({});
   res.json({ contacts });
 };
 
-const getByIdController = async (req, res) => {
+const getById = async (req, res) => {
   const { id } = req.params;
-  const contact = await srv.getContactById(id);
-  res.json(contact);
+  const contactById = await Contact.findById(id);
+  if (!contactById) {
+    throw new NotFoundError(`Contact with id=${id} not found`);
+  }
+  res.json(contactById);
 };
 
-const addContactController = async (req, res) => {
-  const newContact = await srv.addContact(req.body);
+const add = async (req, res) => {
+  const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
 
-const updateContactController = async (req, res) => {
+const updateById = async (req, res) => {
   const { id } = req.params;
-  const updatedContact = await srv.updateContact(id, req.body);
-  res.json(updatedContact);
-};
-
-const updateStatusContactController = async (req, res) => {
-  const { id } = req.params;
-  const updatedContact = await srv.updateStatusContact(id, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
-    res.json.status(404)({ message: "Not found" });
+    throw new NotFoundError(`Contact with id=${req.id} not found`);
   }
   res.json(updatedContact);
 };
 
-const removeContactController = async (req, res) => {
+const updateStatusById = async (req, res) => {
   const { id } = req.params;
-  await srv.removeContactById(id);
-  res.json({ message: "contact deleted" });
+  const { favorite } = req.body;
+  if (!favorite) {
+    throw new WrongParametersError("missing field favorite");
+  }
+  const updatedContact = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    {
+      new: true,
+    }
+  );
+  if (!updatedContact) {
+    throw new NotFoundError(`Contact with id=${req.id} not found`);
+  }
+  res.json(updatedContact);
+};
+
+const removeById = async (req, res) => {
+  const { id } = req.params;
+  const removedContact = await Contact.findByIdAndRemove(id);
+  if (!removedContact) {
+    throw new NotFoundError(`Contact with id=${req.id} not found`);
+  }
+  res.json(removedContact);
 };
 
 module.exports = {
-  addContactController,
-  updateContactController,
-  updateStatusContactController,
-  listContactsController,
-  getByIdController,
-  removeContactController,
+  add,
+  updateById,
+  updateStatusById,
+  getAll,
+  getById,
+  removeById,
 };

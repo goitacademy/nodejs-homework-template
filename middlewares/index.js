@@ -1,3 +1,3 @@
-const { postValidation, patchValidation } = require("./validationMiddleware");
+const { validation } = require("./validationMiddleware");
 
-module.exports = { postValidation, patchValidation };
+module.exports = { validation };

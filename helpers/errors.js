@@ -11,4 +11,12 @@ class WrongParametersError extends Error {
     this.status = 400;
   }
 }
-module.exports = { ValidationError, WrongParametersError };
+
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.status = 404;
+  }
+}
+
+module.exports = { ValidationError, WrongParametersError, NotFoundError };

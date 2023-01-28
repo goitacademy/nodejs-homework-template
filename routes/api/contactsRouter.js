@@ -4,23 +4,27 @@ const router = express.Router();
 const { asyncWrapper } = require("../../helpers");
 const { controllers: ctrl } = require("../../controllers");
 
-const { validation } = require("../../middlewares/validationMiddleware");
-const { postSchema, patchSchema } = require("../../models/contact.js");
-const postValidation = validation(postSchema);
-const patchValidation = validation(patchSchema);
+const { validation } = require("../../middlewares");
+const {
+  postSchema,
+  putSchema,
+  patchSchema,
+} = require("../../models/contact.js");
 
-router.get("/", asyncWrapper(ctrl.listContactsController));
+router.get("/", asyncWrapper(ctrl.getAll));
 
-router.get("/", asyncWrapper(ctrl.listContactsController));
+router.get("/:id", asyncWrapper(ctrl.getById));
 
-router.get("/:id", asyncWrapper(ctrl.getByIdController));
+router.post("/", validation(postSchema), asyncWrapper(ctrl.add));
 
-router.post("/", postValidation, asyncWrapper(ctrl.addContactController));
+router.delete("/:id", asyncWrapper(ctrl.removeById));
 
-router.delete("/:id", asyncWrapper(ctrl.removeContactController));
+router.patch(
+  "/:id/favorite",
+  validation(patchSchema),
+  asyncWrapper(ctrl.updateStatusById)
+);
 
-router.patch("/:id/favorite", asyncWrapper(ctrl.updateStatusContactController));
-
-router.put("/:id", patchValidation, asyncWrapper(ctrl.updateContactController));
+router.put("/:id", validation(putSchema), asyncWrapper(ctrl.updateById));
 
 module.exports = { contactsRouter: router };

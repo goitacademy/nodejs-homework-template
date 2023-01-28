@@ -32,18 +32,24 @@ const postSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   phone: Joi.string().alphanum().min(3).max(10).required(),
+  favorite: Joi.bool(),
 });
 
-const patchSchema = Joi.object({
+const putSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(10).optional(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .optional(),
   phone: Joi.string().alphanum().min(3).max(10).optional(),
+  favorite: Joi.bool(),
+});
+
+const patchSchema = Joi.object({
+  favorite: Joi.bool(),
 });
 
 const Contact = model("contact", contactSchema);
 
 Contact.createIndexes();
 
-module.exports = { Contact, postSchema, patchSchema };
+module.exports = { Contact, postSchema, putSchema, patchSchema };
