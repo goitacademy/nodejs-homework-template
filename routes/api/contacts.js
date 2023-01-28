@@ -1,87 +1,20 @@
 const express = require("express");
-const Joi = require("joi");
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
-} = require("../../models/contacts");
-
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().alphanum().min(9).max(13).required(),
-});
+const { validation, ctrlWrapper } = require("../../middlewares");
+const { contactsSchema, patchSchema } = require("../../schemas");
+const { contacts: ctrl } = require("../../controller");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const contacts = await listContacts();
-  res.status(200).json(contacts);
-});
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", async (req, res) => {
-  const contact = await getContactById(req.params.contactId);
-  if (contact) {
-    res.status(200).json(contact);
-  } else {
-    res
-      .status(404)
-      .json({ message: "I am sorry! We don`t have contact with this id :( " });
-  }
-});
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post("/", async (req, res, next) => {
-  const { error } = schema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: "missing required field" });
-  }
-  next();
-});
+router.post("/", validation(contactsSchema), ctrlWrapper(ctrl.add));
 
-router.post("/", async (req, res) => {
-  const { name, email, phone } = req.body;
-  const newContact = await addContact(name, email, phone);
-  res.status(201).json(newContact);
-});
+router.delete("/:contactId", ctrlWrapper(ctrl.remove));
 
-router.delete("/:contactId", async (req, res) => {
-  const newContacts = await removeContact(req.params.contactId);
+router.put("/:contactId", validation(contactsSchema), ctrlWrapper(ctrl.update));
 
-  if (!newContacts) {
-    res
-      .status(404)
-      .json({ message: "I am sorry! We don`t have contact with this id :( " });
-  } else {
-    res.status(200).json({ message: "Contact deleted!" });
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  const { error } = schema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: "missing required field" });
-  }
-  next();
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-
-  const updatedContact = await updateContact(
-    req.params.contactId,
-    name,
-    email,
-    phone
-  );
-  if (!updatedContact) {
-    res
-      .status(404)
-      .json({ message: "I am sorry! We don`t have contact with this id :( " });
-  } else {
-    res.status(200).json(updatedContact);
-  }
-});
+router.patch("/:contactId", validation(patchSchema), ctrlWrapper(ctrl.patch));
 
 module.exports = router;
