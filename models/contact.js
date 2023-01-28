@@ -11,6 +11,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      required: [true, "Set contact email"],
     },
     phone: {
       type: String,
@@ -45,7 +46,7 @@ const putSchema = Joi.object({
 });
 
 const patchSchema = Joi.object({
-  favorite: Joi.bool(),
+  favorite: Joi.bool().required(),
 });
 
 const Contact = model("contact", contactSchema);
