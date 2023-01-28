@@ -15,47 +15,65 @@ const {
 
 
 router.get('/', async (req, res, next) => {
-  const contacts = await listContacts();
+  try{
+    const contacts = await listContacts();
   if(contacts) {
     return res.status(200).json({contacts});
+  }
+  }catch(error){
+    console.log(error.message);
   }
   next()
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const foundedContact = await getContactById(req.params.contactId);
+  try{
+    const foundedContact = await getContactById(req.params.contactId);
   if (foundedContact) {
-    return res.status(200).json({ data: foundedContact });
+    return res.status(200).json({message: "contact found", data: foundedContact });
+  }
+  }catch(error){
+    console.log(error.message);
   }
   next();
 
 })
 
 router.post('/',addDataValid, async (req, res, next) => {
-  const newContact = await addContact(req.body);
+  try{
+    const newContact = await addContact(req.body);
   if (newContact) {
-    return res.status(201).json({ data: newContact });
+    return res.status(200).json({message: "add new contact", data: newContact });
+  }
+  }catch(error){
+    console.log(error.message);
   }
   next();
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const deleteContact = await removeContact(req.params.contactId);
-  if (deleteContact) {
-    return res
-      .status(200)
-      .json({ message: "contact deleted", data: deleteContact });
+  try{
+    const deletedContact = await removeContact(req.params.contactId);
+  console.log('deleteContact: ', deletedContact);
+  if (deletedContact) {
+    return res.status(200).json({ message: "contact deleted", data: deletedContact });
+  }
+  }catch(error){
+    console.log(error.message);
   }
   next();
 
 })
 
 router.put('/:contactId',updateDataValid, async (req, res, next) => {
-  const renewedContact = await updateContact(req.params.contactId, req.body);
-
+  try{
+    const renewedContact = await updateContact(req.params.contactId, req.body);
   if (renewedContact) {
-    return res.status(200).json({ data: renewedContact });
+    return res.status(200).json({message: "contact renewed", data: renewedContact });
   }
+}catch(error){
+  console.log(error.message);
+}
   next();
 
 })
