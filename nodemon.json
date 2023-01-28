@@ -1,3 +1,7 @@
 {
-  "ignore": ["node_modules", "models/contacts.json"]
+  "events": {
+    "start": "cls || clear",
+    "restart": "cls || clear"
+  },
+  "ignore": ["node_modules", "models/contactsDB.json"]
 }
