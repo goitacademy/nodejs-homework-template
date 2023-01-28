@@ -1,26 +1,26 @@
-const express = require('express');
-const router = express.Router();
 const createError = require('http-errors');
-const contactsOperation = require('../../models/contacts');
-const validateSchema = require('../../validation/validationShema');
-
 const { 
     listContacts, 
     getContactById, 
     addContact, 
     removeContact, 
-    updateContact 
-} = contactsOperation;
+    updateContact, 
+    updateContactStatus,
+} = require('../service/index');
+const { 
+  contactAddSchema, 
+  contactUpdateSchema, 
+  contactUpdateStatusSchema, 
+ } = require('../validation/validationShema');
 
-const { contactAddSchema, contactUpdateSchema } = validateSchema;
 
-router.get('/', async (req, res, next) => {
+const getAll = async (req, res, next) => {
     const contacts = await listContacts();
     res.status(200).json({ data: contacts });
-})
+}
 
 
-router.get('/:id', async (req, res, next) => {
+const getById = async (req, res, next) => {
     const { id } = req.params;
     const contactById = await getContactById(id);
 
@@ -29,10 +29,10 @@ router.get('/:id', async (req, res, next) => {
     }
 
     res.status(200).json({ data: contactById });
-})
+}
 
 
-router.post("/", async (req, res, next) => {
+const add = async (req, res, next) => {
     const validationResult = contactAddSchema.validate(req.body);
 
     if (validationResult.error) {
@@ -41,12 +41,13 @@ router.post("/", async (req, res, next) => {
       });
     }
 
-    const newContact = await addContact(req.body);
+    const { name, email, phone } = req.body;
+    const newContact = await addContact({ name, email, phone });
     res.status(201).json({ data: newContact });
-});
+}
 
 
-router.delete("/:id", async (req, res, next) => {
+const remove = async (req, res, next) => {
     const { id } = req.params;
     const contactDeleted = await removeContact(id);
 
@@ -55,10 +56,10 @@ router.delete("/:id", async (req, res, next) => {
     }
 
     res.status(200).json({ message: "contact deleted" });
-});
+}
 
 
-router.put("/:id", async (req, res, next) => {
+const updateById = async (req, res, next) => {
     const validationResult = contactUpdateSchema.validate(req.body);
 
     if (validationResult.error) {
@@ -75,6 +76,33 @@ router.put("/:id", async (req, res, next) => {
     }
 
     res.status(200).json({ data: contactUpdated });
-});
+}
 
-module.exports = router;
+
+const updateStatus = async (req, res, next) => {
+  const validationResult = contactUpdateStatusSchema.validate(req.body);
+
+  if (validationResult.error) {
+    return res.status(400).json({
+      message: "missing field favorite",
+    });
+  }
+
+  const { id } = req.params;
+  const contactUpdatedStatus = await updateContactStatus(id, req.body.favorite);
+
+  if (!contactUpdatedStatus) {
+    return next(createError(404, "Not found"));
+  }
+
+  res.status(200).json({ data: contactUpdatedStatus });
+}
+
+module.exports = {
+  getAll,
+  getById,
+  add,
+  remove,
+  updateById,
+  updateStatus,
+};
