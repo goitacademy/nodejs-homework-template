@@ -4,15 +4,24 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
+var gravatar = require('gravatar');
 
 async function register(req, res, next) {
   const { email, password } = req.body;
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(password, salt);
+  // const salt = await bcrypt.genSalt(); // moved to the models user
+  // const hashedPassword = await bcrypt.hash(password, salt); // moved to the models user
+
+  var avatarURL = gravatar.url(
+    email,
+    { s: '200', r: 'pg', d: 'robohash' }, // d: 'robohash': default image with robot
+    false
+  );
   try {
     const savedUser = await User.create({
       email,
-      password: hashedPassword,
+      // password: hashedPassword,
+      password,
+      avatarURL,
     });
     res.status(201).json({
       data: {
@@ -20,6 +29,7 @@ async function register(req, res, next) {
           email,
           id: savedUser._id,
           subscription: savedUser.subscription,
+          avatarURL: savedUser.avatarURL,
         },
       },
     });
@@ -36,12 +46,12 @@ async function login(req, res, next) {
   const { email, password } = req.body;
   const storedUser = await User.findOne({ email });
   if (!storedUser) {
-    throw Conflict('email or password is not valid');
+    throw Conflict('email is not valid'); // TODO change email or password is not valid
   }
 
   const isPasswordValid = await bcrypt.compare(password, storedUser.password);
   if (!isPasswordValid) {
-    throw Conflict('email or password is not valid');
+    throw Conflict('password is not valid'); // TODO change email or password is not valid
   }
   const payload = { id: storedUser._id };
   const token = jwt.sign(payload, JWT_SECRET, {
@@ -54,6 +64,7 @@ async function login(req, res, next) {
         email,
         id: storedUser._id,
         subscription: storedUser.subscription,
+        avatarURL: storedUser.avatarURL,
       },
     },
   });

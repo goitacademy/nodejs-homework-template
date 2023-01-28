@@ -30,6 +30,10 @@ const schema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
     },
+    image: {
+      type: String, // TODO change to array
+      default: '',
+    },
   },
   {
     versionKey: false,
