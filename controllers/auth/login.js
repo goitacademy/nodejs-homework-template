@@ -13,8 +13,8 @@ const login = async (req, res) => {
     throw new Unauthorized(`Email ${email} not found`);
   }
   const passCompare = bcrypt.compare(password, user.password);
-  if (!passCompare) {
-    throw new Unauthorized("Password wrong");
+  if (!user.verify || !passCompare) {
+    throw new Unauthorized("Email is not verify, or password wrong");
   }
   const payload = {
     id: user._id,

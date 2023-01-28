@@ -1,9 +1,3 @@
-function ErrorHttp(status, message) {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-}
+const { sendEmail } = require("./sendEmail");
 
-module.exports = {
-  ErrorHttp,
-};
+module.exports = { sendEmail };

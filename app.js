@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const sgMail = require("@sendgrid/mail");
+
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
