@@ -23,7 +23,8 @@ const {
 
 router.get('/', getAll);
 router.get('/:contactId', getById);
-router.post('/', joyValidate, addById);
+router.post('/', addById);
+// router.post('/', joyValidate, addById);
 router.delete('/:contactId', deleteById);
 router.put('/:contactId',joyValidate, updateById);
 
