@@ -1,4 +1,6 @@
 const {Schema, model} = require("mongoose");
+const handleMongooseError = require('../helpers/handleMongooseError');
+const {emailRegexp, phoneRedexp} = require('../helpers/regExp');
 
 const contactSchema = new Schema (  {
   name: {
@@ -12,9 +14,8 @@ const contactSchema = new Schema (  {
     lowercase: true,
     unique: true,
           validate: {
-            validator: function(email) {
-              const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,4})+$/;
-              return re.test(email)
+            validator: function(email) {              
+              return emailRegexp.test(email)
           }, message: 'Please fill a valid email address'},
   },
   phone: {
@@ -22,7 +23,7 @@ const contactSchema = new Schema (  {
     required: [true, 'Set phone number for contact'],
     validate: {
       validator: function(v) {
-        return /^(\(\d{3}\))\s?(\d{3}-\d{4})$/.test(v);
+        return phoneRedexp.test(v);
       },
       message: props => `${props.value} is not a valid phone number!`
     },
@@ -31,15 +32,16 @@ const contactSchema = new Schema (  {
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required:true
+  }
 },
 { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", (error, data, next)=> {
-  const {name, code} = error;
-  error.status = (name === "MongoServerError" && code === 11000) ? 409 : 400;
-  next()
-});
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
