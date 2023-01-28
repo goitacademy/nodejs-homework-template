@@ -1,4 +1,5 @@
 const { HttpError } = require('../models/helpers/index');
+const isValidId = require('./isValidId');
 
 function validateBody(schema) {
     return (req, res, next) => {
@@ -12,4 +13,5 @@ function validateBody(schema) {
 
 module.exports = {
     validateBody,
+    isValidId,
 }
