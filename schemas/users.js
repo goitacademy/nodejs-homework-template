@@ -12,7 +12,11 @@ const login = Joi.object({
     password: Joi.string().min(6).required(),
     email: Joi.string().pattern(emailRegexp).required(),
 });
+const subscriprion = Joi.object({
+    subscription:Joi.string().valid(...subscription).required(),
+});
 module.exports = {
     register,
-    login
+    login,
+    subscriprion
 }
