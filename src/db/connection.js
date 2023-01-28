@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const mongoUrl =
-  "mongodb+srv://bloodseeker:bloodseeker1995ZM@cluster0.kwbm97q.mongodb.net/?retryWrites=true&w=majority";
+const mongoUrl = process.env.MONGO_URL;
 
 mongoose.set("strictQuery", false);
 
 const connectMongo = async () => {
-  return mongoose.connect(
-    "mongodb+srv://bloodseeker:bloodseeker1995ZM@cluster0.kwbm97q.mongodb.net/?retryWrites=true&w=majority"
-  );
+  return mongoose.connect(mongoUrl);
 };
 
 module.exports = {
