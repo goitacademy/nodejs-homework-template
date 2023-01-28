@@ -1,25 +1,35 @@
-const express = require("express");
-const { tryCatchWrapper} = require("../../models/helpers/index.js")
-const { getContactsService, getContactService, creacteContactService, deleteContactService, updateContactService} = require("../../controllers/contacts.controller.js")
-const { validateBody } = require("../../middelwares/index")
-const { addContactSchema } = require("../../schemas/contactShema");
+const express = require('express');
 const routerContacts = express.Router();
+const ctrlTasks = require("../../controllers/contacts.controller.js");
+const { tryCatchWrapper} = require("../../models/helpers/index.js")
+const { validateBody, isValidId } = require("../../middelwares/index")
+const { schemas } = require("../../models/contact");
+
 
 routerContacts.get('/',
-    tryCatchWrapper(getContactsService));
+    tryCatchWrapper(ctrlTasks.getContactsService));
 
 routerContacts.get('/:id',
-    tryCatchWrapper(getContactService));
+    isValidId,
+    tryCatchWrapper(ctrlTasks.getContactByIdService));
 
 routerContacts.post('/',
-    validateBody(addContactSchema),
-    tryCatchWrapper(creacteContactService));
+    validateBody(schemas.addContactSchema),
+    tryCatchWrapper(ctrlTasks.creacteContactService));
 
 routerContacts.delete('/:id',
-    tryCatchWrapper(deleteContactService));
+    isValidId,
+    tryCatchWrapper(ctrlTasks.deleteContactService));
  
 routerContacts.put('/:id',
-    validateBody(addContactSchema),
-    tryCatchWrapper(updateContactService));
+    isValidId,
+    validateBody(schemas.addContactSchema),
+    tryCatchWrapper(ctrlTasks.updateContactService));
+
+routerContacts.patch('/:id/favorite',
+    isValidId,
+    // validateBody(schemas.updateFavoriteSchema),
+    tryCatchWrapper(ctrlTasks.updateFavoriteService))
+
 
 module.exports = { routerContacts };
