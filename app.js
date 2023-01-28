@@ -5,27 +5,35 @@ const cors = require('cors');
 
 const { routerContacts } = require('./routes/api/contacts');
 
-const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
 
+const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 // middelvwares
-app.use(cors());
 app.use(logger(formatsLogger));
 app.use(express.json()); // tell express to work with JSON
+app.use(cors()); // разрешаем кроссдоменные запросы к нашему приложению через промежуточное ПО cors
 
 // routes
 app.use("/api/contacts", routerContacts);
 
 // 404
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
-
-// error handling
-app.use((error, req, res, next) => {
-    res.status(error.status || 500).json({ message: error.message || "Internal server error" });
+app.use((_, res, __) => {
+  res.status(404).json({
+    status: 'error',
+    code: 404,
+    message: 'Use api on routes: /api/contacts',
+    data: 'Not found',
+  });
 });
 
+// error handling
+app.use((error, _, res, __) => {
+  return res
+    .status(error.status || 500)
+    .json({ message: error.message } || {message: "Internal server error" });
+});
 
 module.exports = app;
