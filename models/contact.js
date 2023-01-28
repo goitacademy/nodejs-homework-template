@@ -35,6 +35,7 @@ const addContactSchema = Joi.object({
     favorite: Joi.bool(),
 })
 
+
 const updateFavoriteSchema = Joi.object({
     favorite: Joi.bool().required(),
 })
