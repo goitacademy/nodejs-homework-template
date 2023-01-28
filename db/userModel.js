@@ -15,6 +15,7 @@ const userShema = new Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
+  avatarURL: String,
   token: String,
 });
 
