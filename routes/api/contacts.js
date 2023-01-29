@@ -7,6 +7,11 @@ const {
   removeContact,
   updateContact,
 } = require('../../services/contacts');
+const {
+  schemaAddContact,
+  schemaUpdateContact,
+} = require('../../schemas/contacts');
+const { validateContact } = require('../../middlewares/validateContact');
 
 const router = express.Router();
 
@@ -36,12 +41,12 @@ router.get('/contacts/:contactId', async (req, res, next) => {
 });
 
 router.post(
-  '/contacts',
+  '/contacts', validateContact(schemaAddContact),
   (postContact = async (req, res, next) => {
     const { name, email, phone } = req.body;
-    if (name === '' || name === null) {
-      return res.status(400).json({ message: 'missing required name field' });
-    }
+    // if (name === '' || name === null) {
+    //   return res.status(400).json({ message: 'missing required name field' });
+    // }
     const contactId = Math.floor(Math.random() * 100);
     const contactsList = await listContacts();
     const isId = contactsList.some(contact => Number(contact.id) === contactId);
@@ -91,21 +96,20 @@ router.put('/contacts/:contactId', async (req, res, next) => {
   const keys = Object.keys(req.body);
 
   if (keys.length === 0) {
-  // if (name === undefined && email === undefined && phone === undefined) {
-    res.status(400).json({ "message": 'missing fields' });
+    // if (name === undefined && email === undefined && phone === undefined) {
+    res.status(400).json({ message: 'missing fields' });
     return;
-  };
+  }
 
   const contact = await updateContact(contactId, req.body);
-  
 
   if (contact === null) {
-    res.status(404).json({ "message": "Not found" });
+    res.status(404).json({ message: 'Not found' });
     return;
   }
 
   res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     data: { contact },
   });
