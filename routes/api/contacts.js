@@ -28,7 +28,7 @@ routerContacts.put('/:id',
 
 routerContacts.patch('/:id/favorite',
     isValidId,
-    // validateBody(schemas.updateFavoriteSchema),
+    validateBody(schemas.updateFavoriteSchema),
     tryCatchWrapper(ctrlTasks.updateFavoriteService))
 
 

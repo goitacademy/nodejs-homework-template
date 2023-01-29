@@ -49,17 +49,10 @@ const updateContactService = async(req, res, next) => {
 }
 
 const updateFavoriteService = async (req, res, next) => {
-  const keys = Object.keys(req.body);
-  const fieldFavorite = keys.find((value) => value === 'favorite');
-
-  if (!fieldFavorite) {
-    return next(new HttpError(400, "Missing field favorite"))
-  }
-
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!result) {
-    return next(new HttpError(400, "Not found"));
+    return next(new HttpError(404, "Not found"));
   }
   res.status(200).json(result);
 }

@@ -21,19 +21,14 @@ app.use("/api/contacts", routerContacts);
 
 // 404
 app.use((_, res, __) => {
-  res.status(404).json({
-    status: 'error',
-    code: 404,
-    message: 'Use api on routes: /api/contacts',
-    data: 'Not found',
-  });
+  res.status(404).json({message: 'Use api on routes: /api/contacts'});
 });
 
 // error handling
 app.use((error, _, res, __) => {
   return res
     .status(error.status || 500)
-    .json({ message: error.message } || {message: "Internal server error" });
+    .json({ message: error.message || "Internal server error" });
 });
 
 module.exports = app;
