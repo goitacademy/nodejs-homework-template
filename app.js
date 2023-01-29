@@ -18,22 +18,22 @@ app.use("/api/users", routeUsers);
 
 
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Not found' })
-  next();
-})
+	res.status(404).json({ message: 'Not found' })
+	next();
+});
 
 app.use((error, req, res, next) => {
-  if (error.status) {
-    return res.status(error.status).json({
-      message: error.message,
-    });
-  }
-  next();
-})
+	if (error.status) {
+		return res.status(error.status).json({
+			message: error.message,
+		});
+	}
+	next();
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-  next();
-})
+	res.status(500).json({ message: err.message })
+	next();
+});
 
 module.exports = app;

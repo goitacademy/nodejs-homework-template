@@ -6,32 +6,36 @@ require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
 async function auth(req, res, next) {
-  const authHeader = req.headers.authorization || "";
-  const [type, token] = authHeader.split(" ");
+	const authHeader = req.headers.authorization || "";
+	const [type, token] = authHeader.split(" ");
 
-  if (type !== "Bearer") {
-    return next(HttpError(401, "token type is not valid"));
-  }
+	if (type !== "Bearer") {
+		return next(HttpError(401, "token type is not valid"));
+	}
 
-  if (!token) {
-    return next(HttpError(401, "no token provided"));
-  }
+	if (!token) {
+		return next(HttpError(401, "No token provided"));
+	}
 
-  try {
-    const { id } = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(id);
-    req.user = user;
+	try {
+		const { id } = jwt.verify(token, JWT_SECRET);
+		const user = await User.findById(id);
+		if (!user) {
+			return next(HttpError(404, "Not find user!"));
+		}
 
-  } catch (error) {
-    if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
-      return next(HttpError(401, "Not authorized"));
-    }
-    throw error;
-  }
+		req.user = user;
 
-  next();
-}
+	} catch (error) {
+		if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
+			return next(HttpError(401, "Not authorized!"));
+		}
+		throw error;
+	}
+
+	next();
+};
 
 module.exports = {
-  auth,
+	auth,
 };

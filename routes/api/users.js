@@ -7,7 +7,7 @@ const {userSchema} = require("../../validation/user-validation")
 const routeUsers = express.Router();
 
 routeUsers.post("/signup", validateBody(userSchema), tryCatchWrapper(signupUser));
-routeUsers.post("/login", validateBody(userSchema), tryCatchWrapper(auth), tryCatchWrapper(loginUser)); 
+routeUsers.post("/login", validateBody(userSchema), tryCatchWrapper(loginUser)); 
 routeUsers.get("/logout", tryCatchWrapper(auth), tryCatchWrapper(logoutUser));
 routeUsers.get("/current", tryCatchWrapper(auth), tryCatchWrapper(currentUser));
 routeUsers.patch("/", tryCatchWrapper(auth), tryCatchWrapper(updateUser)); 
