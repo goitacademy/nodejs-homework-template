@@ -1,4 +1,11 @@
 const { Contacts } = require("../db/contactsModel");
+const { WrongParametersError } = require("../helpers/errors");
+
+const verifyErrorById = (id, found) => {
+  if (!found) {
+    throw new WrongParametersError(`Contact with id '${id}' not found!`);
+  }
+};
 
 const listContacts = async () => {
   return await Contacts.find();
@@ -6,11 +13,14 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contact = await Contacts.findById({ _id: contactId });
+  verifyErrorById(contactId, contact);
+
   return contact;
 };
 
 const removeContact = async (contactId) => {
   const contact = await Contacts.findByIdAndDelete({ _id: contactId });
+  verifyErrorById(contactId, contact);
   return contact;
 };
 
@@ -25,8 +35,11 @@ const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
   const searchContact = await Contacts.findByIdAndUpdate(
     { _id: contactId },
-    { $set: { name, email, phone } }
+    { name, email, phone },
+    { new: true }
   );
+  verifyErrorById(contactId, searchContact);
+
   return searchContact;
 };
 
@@ -34,8 +47,11 @@ const favoriteContact = async (contactId, body) => {
   const { favorite } = body;
   const searchContact = await Contacts.findByIdAndUpdate(
     { _id: contactId },
-    { $set: { favorite } }
+    { favorite }
   );
+
+  verifyErrorById(contactId, searchContact);
+
   return searchContact;
 };
 
