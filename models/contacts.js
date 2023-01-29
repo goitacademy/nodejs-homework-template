@@ -1,6 +1,7 @@
 const joi = require('joi');
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
+const { mongooseErrorHandler } = require('@root/helpers');
 
 const contactScheme = new Schema(
   {
@@ -21,6 +22,7 @@ const contactScheme = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+contactScheme.post('save', mongooseErrorHandler);
 const ContactModel = mongoose.model('contacts', contactScheme);
 
 const joiSchemas = {
