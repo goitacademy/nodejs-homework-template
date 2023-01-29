@@ -14,7 +14,8 @@ const getById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await Contact.findOne({ _id: contactId }, "-__v");
-    if (!result) {
+   
+    if (!result) {     
       return res.status(404).json({
         status: "error",
         code: 404,
@@ -98,6 +99,7 @@ const updateStatusContact = async (req, res, next) => {
 
   }
 }
+  
 
 module.exports = {
   getAll,

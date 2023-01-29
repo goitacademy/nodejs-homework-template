@@ -40,7 +40,7 @@ const addValidationContacts = (req, res, next) => {
     next();
 };
 
-const addValidationFavorite = (req, res, next) => {
+const validateToggleFavorite = (req, res, next) => {
     const addSchema = Joi.object({
 
         favorite: Joi.boolean().required()
@@ -56,5 +56,5 @@ const addValidationFavorite = (req, res, next) => {
 
 module.exports = {
     addValidationContacts,
-    addValidationFavorite
+    validateToggleFavorite
 }
