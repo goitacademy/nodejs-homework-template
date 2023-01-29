@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const  handleSchemaValidErrors = require("../middleware/index");
+// const  handleSchemaValidationErrors = require("../middleware/index");
 const contactSchema = new Schema(
   {
     name: {
@@ -24,24 +24,14 @@ const contactSchema = new Schema(
       default: [false,"Favorite must be true or false"],
     },
 
-    // const genreList = ["fantastic", "love"];
-    // const isbnRegexp = /^\d{3}-\d-\d{3}-\d{5}-\d$/;
-
-    // enum  - choose from list
-    // genre:{ type: String, enum: genreList, `genre must be on of:"fantastic", "love"` required: true}
-    // match - specific format of number example: ISBN-13: 978-2-266-11156-0,
-    // unique - дополнит задать настройки в indexes: create->name->field->sort any->options=create unique index
-    // isbn:{ type: String, match: /^\d{3}-\d-\d{3}-\d{5}-\d$/, unique: true,  required: true}
   },
   // прописываем дату создания и дату обновления вместо версии __v:0
   { versionKey: false, timeStamps: true }
 );
 
-contactSchema.post("save",  handleSchemaValidErrors);
+// contactSchema.post("save",  handleSchemaValidationErrors);
 
-// const phonePattern =
-//   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
-//  or /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
+const phonePattern = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
 
 const joiSchema = Joi.object({
   name: Joi.string()
@@ -51,22 +41,34 @@ const joiSchema = Joi.object({
     .required(),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string()
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/)
+  .pattern(phonePattern)
     .min(9)
     .max(14)
     .required(),
-  // pattern(phonePattern)
   favorite: Joi.boolean(),
-  // genre: Joi.string().valueOf(...genreList).required() ,
-  // isbn: Joi.string().pattern(isbnRegexp).required(),
+ 
 });
 
 // const schemas = {
-//   addSchema,
+//   joiSchema,
 // };
-
 
 
 const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, joiSchema };
+
+
+
+    // const genreList = ["fantastic", "love"];
+    // const isbnRegexp = /^\d{3}-\d-\d{3}-\d{5}-\d$/;
+
+    // enum  - choose from list
+    // genre:{ type: String, enum: genreList, `genre must be on of:"fantastic", "love"` required: true}
+    // match - specific format of number example: ISBN-13: 978-2-266-11156-0,
+    // unique - дополнит задать настройки в indexes: create->name->field->sort any->options=create unique index
+    // isbn:{ type: String, match: /^\d{3}-\d-\d{3}-\d{5}-\d$/, unique: true,  required: true}
+
+// joi
+// genre: Joi.string().valueOf(...genreList).required() ,
+// isbn: Joi.string().pattern(isbnRegexp).required(),

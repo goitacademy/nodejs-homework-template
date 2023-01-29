@@ -1,27 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-// const {joyValidation} = require('../../middleware');
-// const {contactSchema} = require ('../../schemas');
-// const joyValidate = joyValidation(contactSchema);
 const { joiSchema } = require("../../models/contacts");
-const { joyValidation } = require("../../middleware/index");
+const { joyValidation, isValidId } = require("../../middleware/index");
 const validateMiddleware = joyValidation(joiSchema);
-// const {
-//   // getAll,
-//   // getById,
-//   addById,
-//   // deleteById,
-//   // updateById,
-// } = require("../../controllers/index");
 
-const { getAll, addById } = require("../../controllers/index");
+const { getAll, getById, addById, updateById } = require("../../controllers/index");
 router.get("/", getAll);
-// router.get('/:contactId', getById);
+router.get('/:contactId',isValidId,  getById);
 router.post("/", validateMiddleware, addById);
 // router.post('/',  addById);
 
 // router.delete('/:contactId', deleteById);
-// router.put('/:contactId', validateMiddleware, updateById);
+// router.put('/:contactId', isValidId, validateMiddleware, updateById);
+router.put('/:contactId', updateById);
+
 
 module.exports = router;
