@@ -1,9 +1,9 @@
 const { Contacts } = require("../db/contactsModel");
-const { WrongParametersError } = require("../helpers/errors");
+const { ParametersError } = require("../helpers/errors");
 
 const verifyErrorById = (id, found) => {
   if (!found) {
-    throw new WrongParametersError(`Contact with id '${id}' not found!`);
+    throw new ParametersError(`Contact with id '${id}' not found!`);
   }
 };
 

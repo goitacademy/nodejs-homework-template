@@ -5,7 +5,7 @@ class ValidationError extends Error {
   }
 }
 
-class WrongParametersError extends Error {
+class ParametersError extends Error {
   constructor(message) {
     super(message);
     this.status = 400;
@@ -14,5 +14,5 @@ class WrongParametersError extends Error {
 
 module.exports = {
   ValidationError,
-  WrongParametersError,
+  ParametersError,
 };
