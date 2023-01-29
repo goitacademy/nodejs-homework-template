@@ -1,68 +1,64 @@
-const { nanoid } = require("nanoid");
-const path = require("path");
-const { FSOperationsHelper } = require("@root/helpers");
+const joi = require('joi');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
-const pathToContactsDB = path.join(__dirname, "contactsDB.json");
-let contactsArray = null;
+const { DB_HOST, NODE_ENV } = process.env;
+const isDevMode = NODE_ENV === 'development';
 
-//MAIN
-(async () => {
-  FSOperationsHelper.init(pathToContactsDB);
-  const contactsData = await FSOperationsHelper.readData();
-  contactsArray = JSON.parse(contactsData);
-})();
+const contactScheme = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const listContacts = async () => contactsArray;
+const addContactSchema = joi.object({
+  name: joi.string().required(),
+  email: joi.string().required(),
+  phone: joi.string().required(),
+});
 
-const getContactById = async (contactId) => {
-  const [foundContact] = contactsArray.filter(
-    (contact) => contact.id === contactId
-  );
+const updateContactSchema = joi
+  .object({
+    name: joi.string().optional(),
+    email: joi.string().optional(),
+    phone: joi.string().optional(),
+  })
+  .or('name', 'email', 'phone');
 
-  return foundContact;
-};
-
-const addContact = async (contactData) => {
-  const newContact = { id: nanoid(), ...contactData };
-
-  contactsArray.push(newContact);
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
-
-  return newContact;
-};
-
-const updateContact = async (contactId, newContactData) => {
-  const contactIndex = contactsArray.findIndex(
-    (contact) => contact.id === contactId
-  );
-
-  if (contactIndex === -1) return null;
-
-  const oldContact = contactsArray[contactIndex];
-  const safeNewContactData = newContactData;
-  delete safeNewContactData.id;
-  contactsArray[contactIndex] = { ...oldContact, ...safeNewContactData };
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
-
-  return contactsArray[contactIndex];
-};
-
-const removeContact = async (contactId) => {
-  const index = contactsArray.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
+async function connectToContactsDB() {
+  mongoose.set('strictQuery', false);
+  try {
+    await mongoose.connect(DB_HOST);
+    isDevMode && console.log(`Successfully connected to DB`);
+  } catch (error) {
+    isDevMode &&
+      console.log(`Can't connect to DB. Aborting process...\nError: ${error}`);
+    return 1;
   }
 
-  const [foundContact] = contactsArray.splice(index, 1);
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
+  return 0;
+}
 
-  return foundContact;
-};
+const joiContactsSchemas = { addContactSchema, updateContactSchema };
+const ContactsModel = mongoose.model('contacts', contactScheme);
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
+  connectToContactsDB,
+  ContactsModel,
+  contactScheme,
+  joiContactsSchemas,
 };
