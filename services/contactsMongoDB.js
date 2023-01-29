@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+
+const { contactScheme } = require('@root/schemas/contactsMongo');
 const { DB_HOST, NODE_ENV } = process.env;
+
 const isDevMode = NODE_ENV === 'development';
+const ContactsModel = mongoose.model('contacts', contactScheme);
 
 async function connectToContactsDB() {
   mongoose.set('strictQuery', false);
@@ -16,4 +20,4 @@ async function connectToContactsDB() {
   return 0;
 }
 
-module.exports = connectToContactsDB;
+module.exports = { connectToContactsDB, ContactsModel };
