@@ -5,16 +5,21 @@ const contactAddSchema = Joi.object({
   email: Joi.string()
   .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'ukr'] } })
   .required(),
-  phone: Joi.number().integer().positive().min(5).required(),
+  phone: Joi.string().min(5).max(15).required(),
 });
 
 const contactUpdateSchema = Joi.object({
   name: Joi.string().min(3).max(20),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua', 'ukr'] } }),
-  phone: Joi.number().integer().positive().min(5),
+  phone: Joi.string().min(5).max(15),
+});
+
+const contactUpdateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
     contactAddSchema,
     contactUpdateSchema,
+    contactUpdateStatusSchema,
 }
