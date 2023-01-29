@@ -1,6 +1,6 @@
 const express = require('express');
-const { tryCatchWrapper } = require("../../helpers/error-func");
-const {validateBody, contactSchema, updateContactSchema} = require('../../validation/contacts-validation')
+const { tryCatchWrapper, validateBody } = require("../../helpers/error-func");
+const { contactSchema, updateContactSchema } = require('../../validation/contacts-validation');
 const {
   getContacts,
   getContact,

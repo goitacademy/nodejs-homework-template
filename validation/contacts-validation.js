@@ -1,16 +1,4 @@
 const Joi = require("joi");
-const { HttpError } = require("../helpers/error-func");
-
-function validateBody(schema) {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      return next(HttpError(400, error.message));
-    }
-
-    next();
-  };
-}
 
 const contactSchema = Joi.object({
     name: Joi.string().required().messages({
@@ -33,7 +21,6 @@ const updateContactSchema = Joi.object({
 });
 
 module.exports = {
-  validateBody,
   contactSchema,
   updateContactSchema,
 };
