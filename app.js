@@ -28,4 +28,3 @@ module.exports = app;
 
 
 //Logingorizont89
-//mongodb+srv://Victor:Logingorizont89@cluster0.qdlfuvo.mongodb.net/test
