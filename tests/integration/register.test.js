@@ -8,7 +8,7 @@ mongoose.set('strictQuery', false);
 
 const { HOST_TEST_URI } = process.env;
 
-describe.skip('register', () => {
+describe('register', () => {
   beforeAll(async () => {
     await mongoose.connect(HOST_TEST_URI);
     console.log('Mongo-db-test connection successful!');
@@ -21,13 +21,18 @@ describe.skip('register', () => {
   });
 
   it('should register new user', async () => {
-    const response = await supertest(app).post('/api/auth/register').send({
-      email: 'testUser@gmail.com',
-      password: '123456',
-    });
-    console.log('response.body: ', response.body);
+    const responseRegister = await supertest(app)
+      .post('/api/auth/register')
+      .send({
+        email: 'testUser@gmail.com',
+        password: '123456',
+      });
+    console.log(
+      'REGISTER_TEST: responseRegister.body: ',
+      responseRegister.body
+    );
 
-    expect(response.statusCode).toBe(201);
-    expect(response.body.data.user.email).toBe('testUser@gmail.com');
+    expect(responseRegister.statusCode).toBe(201);
+    expect(responseRegister.body.data.user.email).toBe('testUser@gmail.com');
   });
 });

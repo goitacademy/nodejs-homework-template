@@ -1,4 +1,3 @@
-// require('dotenv').config();
 const { BadRequest, NotFound } = require('http-errors');
 const { User } = require('../models/user');
 const path = require('path');
@@ -122,8 +121,8 @@ async function uploadAvatarUser(req, res, next) {
 
     // add Jimp
     const avatar = await Jimp.read(tmpPath);
-    avatar.resize(250, 250); // resize // BUG: doesn't resize
-    avatar.write('filename'); // save
+    avatar.resize(250, 250); // resize
+    avatar.write(tmpPath); // save
 
     await fs.rename(tmpPath, publicPath);
   } catch (error) {

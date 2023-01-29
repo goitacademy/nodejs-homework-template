@@ -1,4 +1,3 @@
-// require('dotenv').config();
 const { User } = require('../models/user');
 const { Conflict, Unauthorized } = require('http-errors');
 const bcrypt = require('bcrypt');

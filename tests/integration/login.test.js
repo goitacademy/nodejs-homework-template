@@ -21,19 +21,19 @@ describe('login', () => {
   });
 
   it('should register new user', async () => {
-    const responseRegister = await supertest(app)
+    await supertest(app) // const responseRegister =
       .post('/api/auth/register')
       .send({
         email: 'testUser@gmail.com',
         password: '123456',
       });
-    console.log('responseRegister.body: ', responseRegister.body);
+    // console.log('responseRegister.body: ', responseRegister.body);
 
     const responseLogin = await supertest(app).post('/api/auth/login').send({
       email: 'testUser@gmail.com',
       password: '123456',
     });
-    console.log('responseLogin.body: ', responseLogin.body);
+    console.log('LOGIN_TEST: responseLogin.body: ', responseLogin.body);
 
     expect(responseLogin.statusCode).toBe(200);
     expect(responseLogin.body.data.user.email).toBe('testUser@gmail.com');

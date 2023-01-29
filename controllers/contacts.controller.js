@@ -1,4 +1,3 @@
-// require('dotenv').config();
 const { NotFound, BadRequest } = require('http-errors');
 const { Contact } = require('../models/contacts');
 const path = require('path');
