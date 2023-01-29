@@ -21,8 +21,8 @@ const contactScheme = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-
 const ContactModel = mongoose.model('contacts', contactScheme);
+
 const joiSchemas = {
   addContactSchema: joi.object({
     name: joi.string().required(),
