@@ -17,15 +17,25 @@ router.get(
 
 router.post(
   '/',
-  validateBody(joiSchemas.addContactSchema, 'missing required object field'),
+  validateBody(joiSchemas.addSchema, 'missing required object field'),
   asyncMiddlewareWrapper(contactsActions.addContact)
 );
 
 router.put(
   '/:contactId',
   validateID,
-  validateBody(joiSchemas.updateContactSchema),
+  validateBody(joiSchemas.updateSchema),
   asyncMiddlewareWrapper(contactsActions.updateContact)
+);
+
+router.patch(
+  '/:contactId/favorite',
+  validateID,
+  validateBody(
+    joiSchemas.updateFavoriteField,
+    'missing field in request`s object: "favorite"'
+  ),
+  asyncMiddlewareWrapper(contactsActions.updateStatus)
 );
 
 router.delete(

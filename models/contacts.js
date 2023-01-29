@@ -26,20 +26,24 @@ contactScheme.post('save', mongooseErrorHandler);
 const ContactModel = mongoose.model('contacts', contactScheme);
 
 const joiSchemas = {
-  addContactSchema: joi.object({
+  addSchema: joi.object({
     name: joi.string().required(),
     email: joi.string().required(),
     phone: joi.string().required(),
     favorite: joi.boolean(),
   }),
 
-  updateContactSchema: joi
+  updateSchema: joi
     .object({
       name: joi.string().optional(),
       email: joi.string().optional(),
       phone: joi.string().optional(),
     })
     .or('name', 'email', 'phone'),
+
+  updateFavoriteField: joi.object({
+    favorite: joi.boolean().required(),
+  }),
 };
 
 module.exports = {

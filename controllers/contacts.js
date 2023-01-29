@@ -40,10 +40,15 @@ async function updateContact(req, res, next) {
   res.status(200).json(updatedContact);
 }
 
+async function updateStatus(req, res, next) {
+  updateContact(req, res, next);
+}
+
 module.exports = {
   getAllContacts,
   getContactByID,
   addContact,
   updateContact,
   deleteContactByID,
+  updateStatus,
 };
