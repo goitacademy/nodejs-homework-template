@@ -53,12 +53,12 @@ async function connectToContactsDB() {
   return 0;
 }
 
-const joiContactsSchemas = { addContactSchema, updateContactSchema };
+const joiSchemas = { addContactSchema, updateContactSchema };
 const ContactsModel = mongoose.model('contacts', contactScheme);
 
 module.exports = {
   connectToContactsDB,
   ContactsModel,
   contactScheme,
-  joiContactsSchemas,
+  joiSchemas,
 };

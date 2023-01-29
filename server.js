@@ -1,5 +1,5 @@
 const app = require('./app');
-const { connectToContactsDB } = require('./services/contactsMongoDB');
+const { connectToContactsDB } = require('@root/models/contacts');
 const { PORT } = process.env;
 
 //MAIN

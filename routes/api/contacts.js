@@ -1,9 +1,9 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
 const { validateBody } = require('@root/middlewares');
+const { joiSchemas } = require('@root/models/contacts');
 const validateID = require('@root/middlewares/validateID');
 const contactsActions = require('@root/controllers');
-const { joiSchemas } = require('@root/schemas');
 
 const router = express.Router();
 
