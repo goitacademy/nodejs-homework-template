@@ -12,5 +12,6 @@ router.get("/current", authenticate, ctrl.current);
 router.get("/verify/:verificationToken", ctrl.verify)
 router.post("/verify", ctrl.verifyNewly)
 router.patch("/", authenticate, ctrl.updateSubscriptionType)
+router.post("/password_recovery", ctrl.passwordRecovery)
 
 module.exports = router;

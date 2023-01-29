@@ -157,6 +157,32 @@ const updateSubscriptionType = async (req, res) => {
   throw HttpError(400);
 };
 
+const passwordRecovery = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email, verify: true });
+
+  if (!user) {
+    throw HttpError(404);
+  }
+
+  const newPassword = nanoid();
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+  await User.findByIdAndUpdate({ _id: user._id }, { password: hashPassword });
+
+  const emailPassword = {
+    to: email,
+    subject: "Contacts App. Password recovery",
+    text: `Here is your temperary password: ${newPassword}`,
+    html: `<p>Here is your temperary password: ${newPassword}</p>`,
+  };
+  await sendEmail(emailPassword);
+
+  res.status(200).json({
+    message: "password updated successfuly",
+  });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   verify: ctrlWrapper(verify),
@@ -165,4 +191,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
   updateSubscriptionType: ctrlWrapper(updateSubscriptionType),
+  passwordRecovery: ctrlWrapper(passwordRecovery),
 };
