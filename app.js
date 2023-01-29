@@ -3,12 +3,14 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
 
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -29,5 +31,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+
+
 
 module.exports = app;
