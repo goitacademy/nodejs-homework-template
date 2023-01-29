@@ -1,16 +1,17 @@
-const contactsOperations = require("../../models/contacts");
-const contactSchema = require("../../models/contactSchema");
+const { Contact, joiSchema } = require("../../models");
 
 const putCont = async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
       error.status = 400;
       error.message = "Missing required name field";
       throw error;
     }
     const { contactId } = req.params;
-    const contact = await contactsOperations.updateContact(contactId, req.body);
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!contact) {
       const error = new Error(`Not found`);
       error.status = 404;
