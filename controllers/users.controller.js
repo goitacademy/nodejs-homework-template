@@ -15,10 +15,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
   if (user) {
     return res.status(409).json({
-      status: 'error',
-      code: 409,
       message: 'Email is already in use',
-      data: 'Conflict',
     });
   }
   const avatarURL = gravatar.url(email);
@@ -32,15 +29,11 @@ const register = async (req, res) => {
     token,
   });
   res.status(201).json({
-    status: 'success',
-    code: 201,
+    message: 'Registration successful',
     user: {
       email,
       subscription: subscription ?? 'starter',
       avatarURL,
-    },
-    data: {
-      message: 'Registration successful',
     },
   });
 
@@ -53,10 +46,7 @@ const login = async (req, res) => {
   const passCompare = bcrypt.compareSync(password, user.password);
   if (!user || !passCompare) {
     res.status(401).json({
-      status: 'error',
-      code: 401,
       message: 'Email or password is wrong',
-      data: 'Unauthorized',
     });
   }
 
@@ -66,39 +56,27 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
   await User.findByIdAndUpdate(user._id, { token });
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      token,
-      user: {
-        email,
-        subscription,
-      },
+  res.status(200).json({
+    token,
+    user: {
+      email,
+      subscription,
     },
   });
 };
 
 const getCurrentUser = (req, res, next) => {
   const { email } = req.user;
-  res.json({
-    status: 'success',
-    code: 200,
-    data: {
-      message: `Authorization was successful: ${email}`,
-    },
+  res.status(200).res.json({
+    message: `Authorization was successful: ${email}`,
   });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
-  res.json({
-    status: 'No Content',
-    code: 204,
-    data: {
-      message: `No content`,
-    },
+  res.status(204).res.json({
+    message: `No content`,
   });
 };
 
@@ -115,20 +93,11 @@ const updateAvatar = async (req, res) => {
 
     await User.findByIdAndUpdate(req.user._id, { avatarURL });
 
-    res.json({
-      status: 'OK',
-      code: 200,
-      data: {
-        avatarURL,
-      },
+    res.status(200).json({
+      avatarURL,
     });
   } catch (error) {
     await fs.unlink(tempUpload);
-    res.status(401).json({
-      status: 'Unauthorized',
-      code: 401,
-      message: 'Not authorized',
-    });
   }
 };
 
