@@ -7,6 +7,14 @@ require("dotenv").config();
 
 const { SECRET_KEY, BASE_URL } = process.env.SECRET_KEY;
 
+const createVarifyEmail = (email, verificationToken) => {
+  return {
+    to: email,
+    subject: "Contacts App. Verify email",
+    html: `<h2>Thank you for registration</h2><a targt="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Please, confirm your email.</a><p>Have a nice day</p>`,
+  };
+};
+
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -16,16 +24,15 @@ const register = async (req, res) => {
   }
 
   const verificationToken = nanoid();
-  const varifyEmail = {
-    to: email,
-    subject: "Contacts App. Verify email",
-    html: `<a targt="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Verify email. </a><p>Please, click below</p>`,
-  };
-  await sendEmail(varifyEmail)
-
+  const verifyEmail = createVarifyEmail(email, verificationToken);
+  await sendEmail(verifyEmail);
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword, verificationToken });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    verificationToken,
+  });
 
   res.status(201).json({
     user: {
@@ -36,24 +43,59 @@ const register = async (req, res) => {
 };
 
 const verify = async (req, res) => {
-  const { verificationToken } = req.params
-  const user = await User.findOne({ verificationToken })
-  
-  if (!user) {
-    throw HttpError(404)
+  const { verificationToken } = req.params;
+
+  if (!verificationToken) {
+    throw HttpError(404);
   }
 
-  await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: ""})
+  const user = await User.findOne({ verificationToken, verify: false });
+
+  if (!user) {
+    throw HttpError(404);
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
 
   res.status(200).json({
-    message: "Verification successful"
-  })
+    message: "Verification successful",
+  });
+};
 
-}
+const verifyNewly = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw HttpError(400, "missing required field email");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user.verify) {
+    return res.status(400).json({
+      message: "Verification has already been passed",
+    });
+  }
+
+  const verifyEmail = createVarifyEmail(email, user.verificationToken);
+  await sendEmail(verifyEmail);
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+
+  res.status(200).json({
+    message: "Verification email sent",
+  });
+};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email, verify: true });
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!user || !passwordCompare) {
     throw HttpError(401, "Email or password is wrong");
@@ -118,6 +160,7 @@ const updateSubscriptionType = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   verify: ctrlWrapper(verify),
+  verifyNewly: ctrlWrapper(verifyNewly),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
