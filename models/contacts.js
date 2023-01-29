@@ -28,6 +28,7 @@ const joiSchemas = {
     name: joi.string().required(),
     email: joi.string().required(),
     phone: joi.string().required(),
+    favorite: joi.boolean(),
   }),
 
   updateContactSchema: joi
