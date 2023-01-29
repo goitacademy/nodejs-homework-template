@@ -1,15 +1,17 @@
 const { httpError } = require('@root/helpers');
-const contactsOperations = require('@root/models/contacts');
+const { ContactModel } = require('@root/models/contacts');
 
 async function getAllContacts(req, res, next) {
-  // const contacts = await contactsOperations.listContacts();
-  // res.status(200).json(contacts);
+  const contacts = await ContactModel.find({});
+
+  res.status(200).json(contacts);
 }
 
 async function getContactByID(req, res, next) {
-  // const contact = await contactsOperations.getContactById(req.params.contactId);
-  // if (!contact) throw httpError(404);
-  // res.json(contact);
+  const contact = await ContactModel.findById(req.params.contactId);
+  if (!contact) throw httpError(404);
+
+  res.json(contact);
 }
 
 async function addContact(req, res, next) {

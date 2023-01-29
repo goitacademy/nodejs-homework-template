@@ -41,6 +41,5 @@ const joiSchemas = {
 
 module.exports = {
   ContactModel,
-  contactScheme,
   joiSchemas,
 };
