@@ -25,7 +25,7 @@ const add = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await removeContact(contactId);
+  await removeContact(contactId);
   res.json({ message: `Contact with ${contactId} deleted` });
 };
 

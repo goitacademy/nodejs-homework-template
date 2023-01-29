@@ -4,9 +4,13 @@ const shortid = require("shortid");
 
 const contactsPath = path.resolve("./models/contacts.json");
 
-const getContactById = async (contactId) => {}
+const contactsData = async () => {
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
+};
 
-const removeContact = async (contactId) => {}
+const writeContacts = (data) =>
+  fs.writeFile(contactsPath, JSON.stringify(data, null, 2), "utf8");
 
 
 
