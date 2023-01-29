@@ -1,5 +1,6 @@
 const { Contact } = require("../../models/contacts");
-const createError = require('http-errors');
+const {requestError} = require("../../helpers/requestError");
+// const createError = require('http-errors');
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
@@ -7,7 +8,7 @@ const getById = async (req, res) => {
   const result = await Contact.findById(contactId);
 
   if (!result) {
-    throw createError(404, `Product with ID=${contactId} not found`);
+    throw requestError(404, "Not found");
   }
   res.json({
     status: 'success',

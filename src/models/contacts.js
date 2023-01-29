@@ -1,30 +1,46 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+// const { bool } = require("joi");
 // const  handleSchemaValidationErrors = require("../middleware/index");
 const contactSchema = new Schema(
+  // {
+  //   name: {
+  //     type: String,
+  //     required: [true, "Set name for contact"],
+  //   },
+
+  //   email: {
+  //     type: String,
+  //     required: [false, "Set email for contact"],
+  //     // match: /^(\d{3}) \d{3}-\d{2}-\d{2}$/,
+  //   },
+
+  //   phone: {
+  //     type: String,
+  //     required: [true, "Set phone for contact"],
+  //   },
+
+  //   favorite: {
+  //     type: Boolean, 
+  //     default: [false,"Favorite must be true or false"],
+  //   },
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: [true, 'Set name for contact'],
     },
-
     email: {
       type: String,
-      required: [false, "Set email for contact"],
-      // match: /^(\d{3}) \d{3}-\d{2}-\d{2}$/,
     },
-
     phone: {
       type: String,
-      required: [true, "Set phone for contact"],
     },
-
     favorite: {
-      type: Boolean, 
-      default: [false,"Favorite must be true or false"],
+      type: Boolean,
+      default: false,
     },
-
   },
+
   // прописываем дату создания и дату обновления вместо версии __v:0
   { versionKey: false, timeStamps: true }
 );
@@ -45,9 +61,13 @@ const joiSchema = Joi.object({
     .min(9)
     .max(14)
     .required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.bool(),
  
 });
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.bool().required()
+})
 
 // const schemas = {
 //   joiSchema,
@@ -56,7 +76,7 @@ const joiSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, joiSchema };
+module.exports = { Contact, joiSchema, updateFavoriteSchema };
 
 
 

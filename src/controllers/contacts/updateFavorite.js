@@ -2,11 +2,17 @@ const { Contact } = require("../../models/contacts");
 // const createError = require("http-errors");
 const {requestError} = require("../../helpers/requestError");
 
-const updateById = async (req, res) => {
+const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true} );
+  const {favorite} = req.body;
+  const result = await Contact.findByIdAndUpdate(contactId, {favorite},{new:true} );
+  
   if (!result) {
     throw requestError(404, "Not found");
+  }
+
+  if(!req.body){
+    throw requestError(400, "Missing field favorite");
   }
 
   res.json({
@@ -16,4 +22,4 @@ const updateById = async (req, res) => {
   });
 };
 
-module.exports = updateById;
+module.exports = updateFavorite;
