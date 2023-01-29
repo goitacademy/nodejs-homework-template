@@ -76,6 +76,27 @@ const updateContact = async (req, res, next) => {
     next(error);
 
   }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+
+    const { contactId } = req.params;
+    const {favorite} = req.body;
+    const updateContact = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true });
+    if (!updateContact) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        massage: `Contacts with id = ${contactId} not found`
+      })
+    }
+    return res.status(200).json(updateContact)
+
+  } catch (error) {
+    next(error);
+
+  }
 }
 
 module.exports = {
@@ -83,6 +104,7 @@ module.exports = {
   getById,
   createContacts,
   deleteContacts,
-  updateContact
+  updateContact,
+  updateStatusContact
 
 }
