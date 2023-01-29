@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -10,7 +10,7 @@ const updateContactSchema = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().optional(),
   phone: Joi.string().optional(),
-}).or("name", "email", "phone");
+}).or('name', 'email', 'phone');
 
 module.exports = {
   addContactSchema,
