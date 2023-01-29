@@ -11,7 +11,5 @@ const connectDb = require("./config/db");
 })();
 
 app.listen(PORT, () => {
-  console.log(
-    `It's alive!!!! (Server running. Use this API on port: ${PORT})`.green
-  );
+  console.log(`Server running. Use this API on port: ${PORT})`.green);
 });
