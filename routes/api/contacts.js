@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 
-const { tryCatchWrapper } = require("../../helpers");
+const { tryCatchWrapper } = require('../../helpers');
 const {
   getContact,
   getContacts,
@@ -8,33 +8,39 @@ const {
   deleteContact,
   changeContact,
   updateStatusContact,
-} = require("../../controllers/contacts.controller");
+  uploadImageContact,
+} = require('../../controllers/contacts.controller');
 
-const { validateBody } = require("../../middlewares/validation");
+const { validateBody, upload } = require('../../middlewares/validation');
 const {
   contactCreateValidationSchema,
   contactUpdateStatusValidationSchema,
-} = require("../../schemas/contactValidationSchema");
+} = require('../../schemas/contactValidationSchema');
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", tryCatchWrapper(getContacts));
-contactsRouter.get("/:id", tryCatchWrapper(getContact));
+contactsRouter.get('/', tryCatchWrapper(getContacts));
+contactsRouter.get('/:id', tryCatchWrapper(getContact));
 contactsRouter.post(
-  "/",
+  '/',
   validateBody(contactCreateValidationSchema),
   tryCatchWrapper(createContact)
 );
-contactsRouter.delete("/:id", tryCatchWrapper(deleteContact));
+contactsRouter.delete('/:id', tryCatchWrapper(deleteContact));
 contactsRouter.put(
-  "/:id",
+  '/:id',
   validateBody(contactCreateValidationSchema),
   tryCatchWrapper(changeContact)
 );
 contactsRouter.patch(
-  "/:id/favorite",
+  '/:id/favorite',
   validateBody(contactUpdateStatusValidationSchema),
   tryCatchWrapper(updateStatusContact)
+);
+contactsRouter.patch(
+  '/:id/image',
+  upload.single('image'), // TODO change to array
+  tryCatchWrapper(uploadImageContact)
 );
 
 module.exports = {

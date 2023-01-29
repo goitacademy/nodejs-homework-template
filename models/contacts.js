@@ -22,13 +22,13 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // owner: {
-    //   type: SchemaTypes.ObjectId,
-    //   ref: 'user',
-    // }, // from conspect
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
+    },
+    image: {
+      type: String, // TODO change to array
+      default: '',
     },
   },
   {

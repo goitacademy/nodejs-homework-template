@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 // Schema
 const schema = mongoose.Schema(
@@ -18,26 +19,38 @@ const schema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contact',
-        required: [true, 'Contact id is required'],
-        unique: true,
+        // unique: true,
       },
     ],
-    // contacts: {
-    //   type: [mongoose.Types.ObjectId],
-    //   rel: 'contact',
-    // },
     subscription: {
       type: String,
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
     token: String, // token: { type: String, default: null, },
+    avatarURL: {
+      type: String,
+      default: '',
+    },
   },
   {
     versionKey: false,
     timestamps: true,
   }
 );
+// Example
+// schema.pre('save', async function () {
+//   await doStuff();
+//   await doMoreStuff();
+// });
+
+schema.pre('save', async function () {
+  // console.log('pre save..., this', this);
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+
+  this.password = hashedPassword;
+});
 
 const User = mongoose.model('user', schema);
 
