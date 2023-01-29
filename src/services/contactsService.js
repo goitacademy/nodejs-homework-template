@@ -47,7 +47,7 @@ const favoriteContact = async (contactId, body) => {
   const { favorite } = body;
   const searchContact = await Contacts.findByIdAndUpdate(
     { _id: contactId },
-    { favorite }
+    { $set: { favorite } }
   );
 
   verifyErrorById(contactId, searchContact);

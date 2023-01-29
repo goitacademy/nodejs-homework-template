@@ -24,7 +24,6 @@ const removeContactController = async (req, res, next) => {
 const updateContactController = async (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
-
   await serviceContact.updateContact(id, body);
   res.status(200).json({ status: "success" });
 };
@@ -34,6 +33,7 @@ const favoriteContactController = async (req, res, next) => {
   const body = req.body;
 
   await serviceContact.favoriteContact(id, body);
+  res.status(200).json({ status: "success" });
 };
 
 module.exports = {
