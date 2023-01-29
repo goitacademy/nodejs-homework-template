@@ -1,7 +1,5 @@
-const joyValidation = require('./joyValidation');
-// const handleSchemaValidationErrors = require('./handleSchemaValidErrors');
+const joyValidation = require("./joyValidation");
+const handleError = require("./handleError");
 const isValidId = require("../middleware/isValidId");
-module.exports = {joyValidation, isValidId,
-  // handleSchemaValidationErrors
 
-};
+module.exports = { joyValidation, isValidId, handleError };

@@ -1,33 +1,10 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-// const { bool } = require("joi");
-// const  handleSchemaValidationErrors = require("../middleware/index");
 const contactSchema = new Schema(
-  // {
-  //   name: {
-  //     type: String,
-  //     required: [true, "Set name for contact"],
-  //   },
-
-  //   email: {
-  //     type: String,
-  //     required: [false, "Set email for contact"],
-  //     // match: /^(\d{3}) \d{3}-\d{2}-\d{2}$/,
-  //   },
-
-  //   phone: {
-  //     type: String,
-  //     required: [true, "Set phone for contact"],
-  //   },
-
-  //   favorite: {
-  //     type: Boolean, 
-  //     default: [false,"Favorite must be true or false"],
-  //   },
   {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -45,8 +22,6 @@ const contactSchema = new Schema(
   { versionKey: false, timeStamps: true }
 );
 
-// contactSchema.post("save",  handleSchemaValidationErrors);
-
 const phonePattern = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
 
 const joiSchema = Joi.object({
@@ -56,38 +31,51 @@ const joiSchema = Joi.object({
     .max(30)
     .required(),
   email: Joi.string().email({ minDomainSegments: 2 }),
-  phone: Joi.string()
-  .pattern(phonePattern)
-    .min(9)
-    .max(14)
-    .required(),
+  phone: Joi.string().pattern(phonePattern).min(9).max(14).required(),
   favorite: Joi.bool(),
- 
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.bool().required()
-})
-
-// const schemas = {
-//   joiSchema,
-// };
-
+  favorite: Joi.bool().required(),
+});
 
 const Contact = model("contact", contactSchema);
-
 module.exports = { Contact, joiSchema, updateFavoriteSchema };
 
 
 
-    // const genreList = ["fantastic", "love"];
-    // const isbnRegexp = /^\d{3}-\d-\d{3}-\d{5}-\d$/;
 
-    // enum  - choose from list
-    // genre:{ type: String, enum: genreList, `genre must be on of:"fantastic", "love"` required: true}
-    // match - specific format of number example: ISBN-13: 978-2-266-11156-0,
-    // unique - дополнит задать настройки в indexes: create->name->field->sort any->options=create unique index
-    // isbn:{ type: String, match: /^\d{3}-\d-\d{3}-\d{5}-\d$/, unique: true,  required: true}
+
+//*   My variant
+// {
+//   name: {
+//     type: String,
+//     required: [true, "Set name for contact"],
+//   },
+
+//   email: {
+//     type: String,
+//     required: [false, "Set email for contact"],
+//     // match: /^(\d{3}) \d{3}-\d{2}-\d{2}$/,
+//   },
+
+//   phone: {
+//     type: String,
+//     required: [true, "Set phone for contact"],
+//   },
+
+//   favorite: {
+//     type: Boolean,
+//     default: [false,"Favorite must be true or false"],
+//   },
+// const genreList = ["fantastic", "love"];
+// const isbnRegexp = /^\d{3}-\d-\d{3}-\d{5}-\d$/;
+
+// enum  - choose from list
+// genre:{ type: String, enum: genreList, `genre must be on of:"fantastic", "love"` required: true}
+// match - specific format of number example: ISBN-13: 978-2-266-11156-0,
+// unique - дополнит задать настройки в indexes: create->name->field->sort any->options=create unique index
+// isbn:{ type: String, match: /^\d{3}-\d-\d{3}-\d{5}-\d$/, unique: true,  required: true}
 
 // joi
 // genre: Joi.string().valueOf(...genreList).required() ,

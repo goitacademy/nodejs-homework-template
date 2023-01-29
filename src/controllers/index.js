@@ -5,11 +5,11 @@ const updateById = require("./contacts/updateById");
 const updateFavorite = require("./contacts/updateFavorite");
 const deleteById = require("./contacts/deleteById");
 
-module.exports = { 
-  getAll, 
+module.exports = {
+  getAll,
   getById,
-  addById, 
+  addById,
   updateById,
   updateFavorite,
-  deleteById, 
+  deleteById,
 };

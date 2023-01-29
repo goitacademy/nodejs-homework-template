@@ -1,6 +1,5 @@
 const { Contact } = require("../../models/contacts");
-const {requestError} = require("../../helpers/requestError");
-// const createError = require('http-errors');
+const { requestError } = require("../../helpers/requestError");
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
@@ -11,7 +10,7 @@ const getById = async (req, res) => {
     throw requestError(404, "Not found");
   }
   res.json({
-    status: 'success',
+    status: "success",
     code: 200,
     data: { result: result },
   });
