@@ -1,19 +1,17 @@
-const contacts = require("../../models/contacts.json");
+const { Contact } = require("../../models");
 const createError = require("http-errors");
 
 const updateContact = async (req, res) => {
-  const { name, phone, email } = req.body;
-  const [contact] = contacts.filter(
-    (contact) => contact.id === req.params.contactId
-  );
-  if (!contact) {
+  const { contactId } = req.params;
+  const body = req.body;
+  const data = await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  if (!data) {
     throw createError(404, "Not found");
   }
-  contact.name = name;
-  contact.email = email;
-  contact.phone = phone;
   res.status(200).json({
+    status: "success",
     code: 200,
+    data,
   });
 };
 
