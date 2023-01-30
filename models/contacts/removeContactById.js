@@ -9,7 +9,10 @@ const removeContactById = async (contactId) => {
     return null;
   }
   const removeContact = contactList[index];
-  const newContactList = contactList.filter((_, id) => id !== removeContact.id);
+  console.log(removeContact.id);
+  const newContactList = contactList.filter(
+    (contact) => contact.id !== removeContact.id
+  );
   await fs.writeFile(filePath, JSON.stringify(newContactList));
   return removeContact;
 };

@@ -8,9 +8,14 @@ const updateContactById = async (id, body) => {
   if (index === -1) {
     return null;
   }
-  const updatedContact = contactList[index];
-  const updatedContactList = { ...contactList, ...{ id, ...body } };
+  const updatedContactList = contactList.map((contact) => {
+    if (contact.id === id) {
+      return { ...contact, ...body };
+    }
+    return contact;
+  });
   await fs.writeFile(filePath, JSON.stringify(updatedContactList));
+  const updatedContact = updatedContactList[index];
   return updatedContact;
 };
 
