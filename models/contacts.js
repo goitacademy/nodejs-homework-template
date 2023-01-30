@@ -40,8 +40,6 @@ const updateContact = async (contactId, body) => {
   contact.email = email;
   contact.phone = phone;
 
-  contacts.push(contact);
-
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return body;
 };
