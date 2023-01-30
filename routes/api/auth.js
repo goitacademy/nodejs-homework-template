@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrl = require("../../controllers/auth");
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
 const router = express.Router();
@@ -13,5 +13,6 @@ router.get("/verify/:verificationToken", ctrl.verify)
 router.post("/verify", ctrl.verifyNewly)
 router.patch("/", authenticate, ctrl.updateSubscriptionType)
 router.post("/password_recovery", ctrl.passwordRecovery)
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updateAvatar)
 
 module.exports = router;

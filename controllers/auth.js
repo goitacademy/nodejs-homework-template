@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { nanoid } = require("nanoid");
 const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
+const Jimp = require("jimp");
 require("dotenv").config();
 
 const { SECRET_KEY, BASE_URL } = process.env.SECRET_KEY;
@@ -16,6 +20,7 @@ const createVarifyEmail = (email, verificationToken) => {
 };
 
 const register = async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -27,11 +32,14 @@ const register = async (req, res) => {
   const verifyEmail = createVarifyEmail(email, verificationToken);
   await sendEmail(verifyEmail);
 
+  const avatarURL = gravatar.url(email);
   const hashPassword = await bcrypt.hash(password, 10);
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     verificationToken,
+    avatarURL,
   });
 
   res.status(201).json({
@@ -181,6 +189,28 @@ const passwordRecovery = async (req, res) => {
   res.status(200).json({
     message: "password updated successfuly",
   });
+}
+
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, filename } = req.file;
+  const newFileName = `${_id}_${filename}`;
+
+  await Jimp.read(tempUpload)
+    .then((image) => {
+      image.resize(250, 250);
+      image.write(path.join("temp", filename));
+    })
+    .catch((err) => console.log(err));
+
+  const resultUpload = path.join(avatarDir, newFileName);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", newFileName);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
 };
 
 module.exports = {
@@ -192,4 +222,6 @@ module.exports = {
   current: ctrlWrapper(current),
   updateSubscriptionType: ctrlWrapper(updateSubscriptionType),
   passwordRecovery: ctrlWrapper(passwordRecovery),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
+
