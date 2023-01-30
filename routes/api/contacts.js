@@ -91,27 +91,31 @@ router.delete('/contacts/:contactId', async (req, res, next) => {
   });
 });
 
-router.put('/contacts/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const keys = Object.keys(req.body);
+router.put(
+  '/contacts/:contactId',
+  validateContact(schemaUpdateContact),
+  async (req, res, next) => {
+    const { contactId } = req.params;
+    const keys = Object.keys(req.body);
 
-  if (keys.length === 0) {
-    res.status(400).json({ message: 'missing fields' });
-    return;
+    if (keys.length === 0) {
+      res.status(400).json({ message: 'missing fields' });
+      return;
+    }
+
+    const contact = await updateContact(contactId, req.body);
+
+    if (contact === null) {
+      res.status(404).json({ message: 'Not found' });
+      return;
+    }
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { contact },
+    });
   }
-
-  const contact = await updateContact(contactId, req.body);
-
-  if (contact === null) {
-    res.status(404).json({ message: 'Not found' });
-    return;
-  }
-
-  res.json({
-    status: 'success',
-    code: 200,
-    data: { contact },
-  });
-});
+);
 
 module.exports = router;
