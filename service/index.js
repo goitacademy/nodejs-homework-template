@@ -4,12 +4,12 @@ const getAllcontacts = async () => {
   return Contact.find({})
 }
 
-const getContactById = (id) => {
+const getContactById = async ({ id } , res) => {
   return Contact.findOne({ _id: id })
 }
 
 const createContact = ({ name, email, phone }) => {
-  return Contact.create({ name, email, phone })
+  return Contact.save({ name, email, phone })
 }
 
 const updateContact = (id, fields) => {

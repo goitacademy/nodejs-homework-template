@@ -3,9 +3,6 @@ const Schema = mongoose.Schema;
 
 const contact = new Schema(
     {
-        _id: {
-            type: String,
-        },
         name: {
           type: String,
           required: [true, 'Set name for contact'],
