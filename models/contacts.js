@@ -32,14 +32,6 @@ const updateStatusContact = async (contactId, favorite) => {
     {
       returnDocument: "after",
     }
-    // (err, doc) => {
-    //   if (err) {
-    //     throw new Error("not found!!! TEST");
-    //   }
-    //   console.log("ERRRRRROR:", err);
-    //   console.log("DOCCCCC:", doc);
-    //   return doc;
-    // }
   );
 
   return result;
