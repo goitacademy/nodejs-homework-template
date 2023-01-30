@@ -1,4 +1,4 @@
-const { ValidatoinError, WrongParametersError } = require('../helpers/errors');
+const { ValidatoinError, WrongParametersError, NotFoundError } = require('./errors');
 
 const asyncWrapper = (controller) => {
   return (req, res, next) => {
@@ -9,7 +9,8 @@ const asyncWrapper = (controller) => {
 const errorHandler = (error, req, res, next) => {
   if (
     error instanceof ValidatoinError ||
-    error instanceof WrongParametersError
+    error instanceof WrongParametersError ||
+    error instanceof NotFoundError
   ) {
     return res.status(error.status).json({ message: error.message });
   }

@@ -1,5 +1,5 @@
 const { Contact } = require('../db/contactModel');
-const { WrongParametersError } = require('../helpers/errors');
+const { NotFoundError } = require('../helpers/errors');
 require('colors');
 
 const listContacts = async () => {
@@ -19,8 +19,8 @@ const getContactById = async (contactId) => {
     console.log(contactById);
 
     if (!contactById) {
-      throw new WrongParametersError("Not found");
-    };
+      throw new NotFoundError(`Contact with id '${contactId}' not found`);
+    }
     
     return contactById;
   } catch (error) {
@@ -46,7 +46,7 @@ const deleteContact = async (contactId) => {
     console.log(deletedContact);
 
     if (!deletedContact) {
-      throw new WrongParametersError("Not found");
+      throw new NotFoundError(`Contact with id '${contactId}' not found`);
     };
 
     console.log(`Contact with id '${contactId}' successfully deleted.`.blue);
@@ -65,7 +65,7 @@ const updateContact = async (contactId, name, email, phone, favorite) => {
     const updatedContact = await Contact.findById(contactId);
 
     if (!updatedContact) {
-      throw new WrongParametersError("Not found");
+      throw new NotFoundError(`Contact with id '${contactId}' not found`);
     };
 
     console.log(`Contact with id '${contactId}' successfully updated.`.bgWhite);
@@ -84,7 +84,7 @@ const updateStatusContact = async (contactId, favorite) => {
     const updatedContact = await Contact.findById(contactId);
 
     if (!updatedContact) {
-      throw new WrongParametersError("Not found");
+      throw new NotFoundError(`Contact with id '${contactId}' not found`);
     };
 
     console.log(`Contact's status with id '${contactId}' successfully updated.`.bgWhite);
