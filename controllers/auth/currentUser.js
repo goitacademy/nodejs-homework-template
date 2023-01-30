@@ -2,6 +2,7 @@ const { currentUser } = require("../../servises/user");
 
 const currentUserController = async (req, res) => {
   try {
+
     const { _id } = req.user;
 
     const { email, subscription } = await currentUser(_id);

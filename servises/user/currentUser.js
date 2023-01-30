@@ -1,4 +1,4 @@
-const { HttpError } = require("../../helpers");
+const { HttpError } = require("../../helpers/error");
 const { User } = require("../../models/modelUser");
 
 const currentUser = async (_id) => {
@@ -18,4 +18,3 @@ const currentUser = async (_id) => {
 module.exports = {
   currentUser,
 };
-

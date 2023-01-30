@@ -4,6 +4,7 @@ function HttpError(status, message) {
   return err;
 }
 
+
 module.exports = {
   HttpError,
 };

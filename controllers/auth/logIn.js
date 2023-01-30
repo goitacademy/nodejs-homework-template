@@ -2,6 +2,7 @@ const { logIn } = require("../../servises/user");
 
 const logInController = async (req, res) => {
   try {
+    
     const { email, password } = req.body;
 
     const { token, subscription } = await logIn(email, password);

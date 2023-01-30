@@ -1,4 +1,4 @@
-const { HttpError } = require("../../helpers");
+const { HttpError } = require("../../helpers/error");
 const { User } = require("../../models/modelUser");
 
 const logOut = async (_id) => {
