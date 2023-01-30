@@ -20,6 +20,7 @@ const usersSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  avatarUrl: String,
 
   versionKey: false,
 });
