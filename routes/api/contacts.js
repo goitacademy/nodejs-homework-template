@@ -50,12 +50,6 @@ router.post(
     const { name, email, phone } = req.body;
     const contactsList = await listContacts();
 
-    const isName = contactsList.some(contact => contact.name === name);
-    if (isName) {
-      console.log('This name is');
-      return;
-    }
-
     const contactId = Math.floor(Math.random() * 100);
     const isId = contactsList.some(contact => Number(contact.id) === contactId);
     if (isId) {
