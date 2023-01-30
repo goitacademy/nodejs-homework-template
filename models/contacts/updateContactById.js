@@ -1,9 +1,9 @@
 const fs = require("fs").promises;
 const filePath = require("./filePath");
-const getAll = require("./getAll");
+const getContactsList = require("./getContactsList");
 
-const updateById = async (id, body) => {
-  const contactList = await getAll();
+const updateContactById = async (id, body) => {
+  const contactList = await getContactsList();
   const index = contactList.findIndex((item) => item.id === id);
 
   if (index === -1) {
@@ -15,4 +15,4 @@ const updateById = async (id, body) => {
   return contactList[index];
 };
 
-module.exports = updateById;
+module.exports = updateContactById;

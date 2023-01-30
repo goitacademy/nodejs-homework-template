@@ -1,8 +1,8 @@
 const { setSuccessResponse } = require("../../helpers");
-const operations = require("../../models/contacts");
+const { createContact } = require("../../models/contacts");
 
 const createContactController = async (req, res) => {
-  const newContact = await operations.add(req.body);
+  const newContact = await createContact(req.body);
   res.json(setSuccessResponse(200, newContact));
 };
 

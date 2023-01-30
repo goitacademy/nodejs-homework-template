@@ -1,9 +1,9 @@
 const fs = require("fs").promises;
 const filePath = require("./filePath");
-const getAll = require("./getAll");
+const getContactsList = require("./getContactsList");
 
-const removeById = async (contactId) => {
-  const contactList = await getAll();
+const removeContactById = async (contactId) => {
+  const contactList = await getContactsList();
   const index = contactList.findIndex(({ id }) => id === contactId);
   const removeContact = contactList[index];
 
@@ -17,4 +17,5 @@ const removeById = async (contactId) => {
   return removeContact;
 };
 
-module.exports = removeById;
+module.exports = removeContactById;
+
