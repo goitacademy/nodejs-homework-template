@@ -1,7 +1,14 @@
-const contactsOperation = require("../../models/contacts");
+const { Contact } = require("../../models/contact");
 
 const addContact = async (req, res) => {
-	const newContact = await contactsOperation.addContact(req.body);
+	if (!req.body.name) {
+		throw new Error("Name is required");
+	}
+
+	const newContact = await Contact.create(req.body);
+	if (!newContact) {
+		throw new Error("Contact not added");
+	}
 	res.status(201).json({
 		status: "success",
 		code: 201,
