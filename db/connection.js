@@ -1,14 +1,14 @@
-const mongoClient = require("mongodb").MongoClient;
-const collections = require("./collections");
+const mongoose = require("mongoose");
+const { MONGO_URL } = process.env;
 
 const connectMongo = async () => {
-  const client = await mongoClient.connect(process.env.MONGO_URL, {
+  mongoose.set("strictQuery", false);
+  return mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-
-  const db = client.db("db");
-  collections.Contacts = db.collection("contacts");
 };
 
-module.exports = { connectMongo };
+module.exports = {
+  connectMongo,
+};
