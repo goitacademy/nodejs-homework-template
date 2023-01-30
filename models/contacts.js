@@ -14,7 +14,9 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const contact = await Contact.findByIdAndUpdate(contactId, body);
+  const contact = await Contact.findByIdAndUpdate(contactId, body, {
+    returnDocument: "after",
+  });
   return contact;
 };
 

@@ -20,6 +20,7 @@ const start = async () => {
     });
   } catch (error) {
     console.log("Start error: ", error);
+
     process.exit(1);
   }
 };
