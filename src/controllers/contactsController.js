@@ -19,7 +19,7 @@ const removeContactController = async (req, res, next) => {
   const removeId = req.params.id;
   await serviceContact.removeContact(removeId);
 
-  res.status(200).json({ removeId, status: "Delete cintact successfully" });
+  res.status(200).json({ removeId, status: "Delete contact successfully" });
 };
 
 const updateContactController = async (req, res, next) => {
