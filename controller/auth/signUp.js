@@ -1,4 +1,5 @@
 const { User } = require("../../models");
+const gravatar = require("gravatar");
 const { RequestError } = require("../../helpers");
 
 const signUp = async (req, res) => {
@@ -10,7 +11,9 @@ const signUp = async (req, res) => {
         throw RequestError(409, "Email in use");
     }
 
-    const newUser = new User({ name, email });
+    const avatarURL = gravatar.url(email, { protocol: "https" });
+
+    const newUser = new User({ name, email, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
 
@@ -18,7 +21,12 @@ const signUp = async (req, res) => {
         status: "success",
         code: 201,
         data: {
-            user: { name: newUser.name, email: newUser.email, subscription: newUser.subscription },
+            user: {
+                name: newUser.name,
+                email: newUser.email,
+                subscription: newUser.subscription,
+                avatarURL: newUser.avatarURL,
+            },
         },
     });
 };
