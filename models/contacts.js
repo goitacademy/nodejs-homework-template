@@ -1,16 +1,12 @@
 import { nanoid } from "nanoid";
 import fs from "fs/promises";
 import path from "path";
+import { RequestError } from "../helpers/RequestError.js";
 
-const contactsPath = path.resolve("./contacts.json");
-
+const contactsPath = path.resolve("./models/contacts.json");
 export async function listContacts() {
-  try {
-    const contacts = await fs.readFile(contactsPath);
-    return JSON.parse(contacts);
-  } catch (error) {
-    console.log(error);
-  }
+  const contacts = await fs.readFile(contactsPath);
+  return JSON.parse(contacts);
 }
 
 export async function getContactById(contactId) {
@@ -18,6 +14,9 @@ export async function getContactById(contactId) {
   const contact = contacts.find(
     (contact) => contact.id === contactId.toString()
   );
+  if (!contact) {
+    throw RequestError(404, "Not found");
+  }
   return contact;
 }
 
