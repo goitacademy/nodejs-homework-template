@@ -1,22 +1,45 @@
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
+const bcrypt = require("bcryptjs");
+
 const { User } = require("../models/userModels");
 require("dotenv").config();
+
 const secret = process.env.SECRET;
 
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-        data: "Unauthorized",
-      });
-    }
-    req.user = user;
-    next();
-  })(req, res, next);
+// const auth = (req, res, next) => {
+//   passport.authenticate("jwt", { session: false }, (err, user) => {
+//     if (!user || err) {
+//       return res.status(401).json({
+//         status: "error",
+//         code: 401,
+//         message: "Unauthorized",
+//         data: "Unauthorized",
+//       });
+//     }
+//     req.user = user;
+//     next();
+//   })(req, res, next);
+// };
+
+const signup = async (name, email, password) => {
+  const user = await User.findOne({ email });
+
+  if (user) {
+    return res.status(409).json({
+      status: "error",
+      code: 409,
+      message: "Email is already in use",
+      data: "Conflict",
+    });
+  }
+
+  const hashPassword = bcrypt.hashSync(password);
+
+  const newUser = await User.create({ name, email, password: hashPassword });
+  return newUser;
+
+  // newUser.setPassword(password);
+  // await newUser.save();
 };
 
 const login = async ({ email, password }) => {
@@ -46,32 +69,6 @@ const login = async ({ email, password }) => {
   });
 };
 
-const registration = async ({ email, password }) => {
-  const user = await User.findOne({ email });
-  if (user) {
-    return res.status(409).json({
-      status: "error",
-      code: 409,
-      message: "Email is already in use",
-      data: "Conflict",
-    });
-  }
-  try {
-    const newUser = new User({ username, email });
-    newUser.setPassword(password);
-    await newUser.save();
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      data: {
-        message: "Registration successful",
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 // router.get("/list", auth, (req, res, next) => {
 //   const { username } = req.user;
 //   res.json({
@@ -83,4 +80,4 @@ const registration = async ({ email, password }) => {
 //   });
 // });
 
-module.exports = { login, registration };
+module.exports = { signup, login };
