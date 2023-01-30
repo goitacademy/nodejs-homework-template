@@ -16,18 +16,17 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
+
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
     return null;
   }
-  const [result] = contacts.splise(index, 1);
-  console.log(result);
+  // const [result] = contacts.splise(index, 1);
   const newContactsList = contacts.filter(
     (contact) => contact.id !== contactId
   );
   await rewriteContacts(newContactsList);
-  console.log("result", result);
-  return result || null;
+  return "result" || null;
 };
 
 const rewriteContacts = async (contacts) => {
@@ -37,7 +36,6 @@ const rewriteContacts = async (contacts) => {
 };
 
 const addContact = async (data) => {
-  console.log("addContact");
   const contacts = await listContacts();
   const newContact = { id: nanoid(), ...data };
   contacts.push(newContact);
@@ -46,14 +44,13 @@ const addContact = async (data) => {
 };
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
+  const idx = contacts.findIndex((item) => item.id === contactId);
+  if (idx === -1) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
-  console.log(contacts);
-  await updateContact(contacts);
-  return contacts[index];
+  contacts[idx] = { ...contacts[idx], ...body };
+  await rewriteContacts(contacts);
+  return contacts[idx];
 };
 
 module.exports = {

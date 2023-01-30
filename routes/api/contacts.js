@@ -1,7 +1,7 @@
 const express = require("express");
 const contacts = require("../../models/contacts");
 const router = express.Router();
-const { RequestError } = require("../../errors/helpers/requestErors");
+const RequestError = require("../../errors/helpers/requestErors");
 const Joi = require("joi");
 // Joi для типізації данних що заходять з фронту, якщо якіхось полів не вистачає-викине помилку
 
@@ -61,10 +61,10 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
-    console.log(error);
+    console.log("addSchema", error);
 
     if (error) {
-      throw RequestError(404, "Not found");
+      throw RequestError(400, "missing required name field");
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -74,13 +74,18 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  const { id } = req.params;
-  const result = await contacts.removeContact(id);
-  if (!result) {
-    throw RequestError(404, "Not found");
+  try {
+    const { contactId } = req.params;
+    console.log(req.params);
+    const result = await contacts.removeContact(contactId);
+    if (!result) {
+      throw RequestError(404, "Not found");
+    }
+    res.json({ message: "contact deleted" });
+    // res.status(204).send(result);}
+  } catch (error) {
+    next(error);
   }
-  res.json({ message: "contact deleted" });
-  // res.status(204).send(result);
 });
 
 router.put("/:contactId", async (req, res, next) => {
