@@ -4,7 +4,7 @@ const { NotFound } = require("http-errors");
 const updateStatusContact = async (req, res) => {
 	const id = req.params.contactId;
 
-	if (req.body.favorite === undefined) {
+	if (!req.body.favorite) {
 		res.status(400).json({ message: "missing field favorite" });
 	}
 
