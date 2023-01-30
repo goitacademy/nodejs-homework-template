@@ -18,6 +18,7 @@
     "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.3",
+    "mongoose-paginate-v2": "^1.7.1",
     "morgan": "1.10.0",
     "nanoid": "^4.0.0",
     "uuid": "^9.0.0",

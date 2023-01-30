@@ -10,7 +10,7 @@ const isAuthorized = async (req, res, next) => {
     });
   }
   const [, newToken] = token.split(" ");
-  console.log("🚀 ~ file: auth.js:13 ~ isAuthorized ~ newToken", newToken);
+  // console.log("🚀 ~ file: auth.js:13 ~ isAuthorized ~ newToken", newToken);
 
   const decoded = jwtVerify(newToken);
   // console.log("🚀 ~ file: auth.js:13 ~ isAuthorized ~ decoded", decoded);

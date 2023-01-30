@@ -1,12 +1,30 @@
 const Contact = require("../models/contact.model");
 
-const listContacts = async (_id) => {
-  const contacts = await Contact.find({ owner: _id });
+const listContacts = async (_id, page, perPage) => {
+  // const { page, perPage } = req.query;
+  // if (!page) {
+  //   page = 1;
+  // }
+  // if (!perPage) {
+  //   perPage = 20;
+  // }
+  // const limit = parseInt(perPage);
+  // const skip = (page - 1) * perPage;
+  // const contacts = await Contact.find(
+  //   { owner: _id },
+  //   {},
+  //   { limit: limit, skip: skip }
+  // );
+  const contacts = await Contact.find({ owner: _id })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
   return contacts;
 };
 
-const listFavoriteContacts = async (_id) => {
-  const contacts = await Contact.find({ favorite: true, owner: _id });
+const listFavoriteContacts = async (_id, page, perPage) => {
+  const contacts = await Contact.find({ favorite: true, owner: _id })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
   return contacts;
 };
 
