@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { ValidatoinError } = require('../helpers/errors');
 
 module.exports = {
   addPostValidation: (req, res, next) => {
@@ -9,21 +10,18 @@ module.exports = {
         .required(),
       email: Joi.string()
         .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
-        .required(),
+        .optional(),
       phone: Joi.string()
         .min(6) 
         .max(11)
-        .required(),
+        .optional(),
       favorite: Joi.boolean()
         .optional(),
     });
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({
-        status: validationResult.error.details,
-        message: "missing required name field",
-      });
+      next(new ValidatoinError("Missing required name field"));
     }
 
     next();
@@ -48,7 +46,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({status: validationResult.error.details});
+      next(new ValidatoinError(validationResult.error));
     }
 
     next();
@@ -62,7 +60,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({status: validationResult.error.details});
+      next(new ValidatoinError("Missing field favorite"));
     }
 
     next();

@@ -1,4 +1,5 @@
 const { Contact } = require('../db/contactModel');
+const { WrongParametersError } = require('../helpers/errors');
 require('colors');
 
 const listContacts = async () => {
@@ -18,9 +19,7 @@ const getContactById = async (contactId) => {
     console.log(contactById);
 
     if (!contactById) {
-      return res.status(404).json({
-        message: "Not found",
-      });
+      throw new WrongParametersError("Not found");
     };
     
     return contactById;
@@ -47,10 +46,8 @@ const deleteContact = async (contactId) => {
     console.log(deletedContact);
 
     if (!deletedContact) {
-        return res.status(404).json({
-        message: "Not found",
-        });
-    }
+      throw new WrongParametersError("Not found");
+    };
 
     console.log(`Contact with id '${contactId}' successfully deleted.`.blue);
     return;
@@ -68,10 +65,8 @@ const updateContact = async (contactId, name, email, phone, favorite) => {
     const updatedContact = await Contact.findById(contactId);
 
     if (!updatedContact) {
-        return res.status(404).json({
-        message: "Not found",
-        });
-    }
+      throw new WrongParametersError("Not found");
+    };
 
     console.log(`Contact with id '${contactId}' successfully updated.`.bgWhite);
     return updatedContact;
@@ -89,10 +84,8 @@ const updateStatusContact = async (contactId, favorite) => {
     const updatedContact = await Contact.findById(contactId);
 
     if (!updatedContact) {
-        return res.status(404).json({
-        message: "Not found",
-        });
-    }
+      throw new WrongParametersError("Not found");
+    };
 
     console.log(`Contact's status with id '${contactId}' successfully updated.`.bgWhite);
     return updatedContact;
