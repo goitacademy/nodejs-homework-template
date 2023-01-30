@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 // const Joi = require("joi");
 const {
-  contatcJoiSchema,
+  contactJoiSchema,
   contactSchemaUpdate,
   favoriteSchema,
 } = require("../../models/contact");
@@ -46,7 +46,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contatcJoiSchema.validate(req.body);
+    const { error } = contactJoiSchema.validate(req.body);
 
     if (error) {
       error.status = 400;
