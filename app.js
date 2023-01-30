@@ -2,20 +2,32 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./routes/api/contacts");
+const { contactRouter } = require("./routes/api/contacts");
+const { authRouter } = require("./routes/api/auth");
+const { userRouter } = require("./routes/api/user");
 
 const app = express();
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-app.use(logger(formatsLogger));
+app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
+app.use("/public/avatars", express.static("public/avatars"));
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 
-app.use((err , req, res) => {
-  if(err.status){
+app.use((err, req, res) => {
+  console.error("handling errors", err.message, err.email);
+  if (err.name === "ValidationError") {
+    res.status(err.status).json({
+      message: err.message,
+    });
+  }
+});
+
+app.use((err, req, res) => {
+  if (err.status) {
     res.status(err.status).json({ message: err.status });
   }
 });
@@ -28,4 +40,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-module.exports = app;
+module.exports = {
+  app,
+};
