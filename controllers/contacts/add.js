@@ -1,9 +1,9 @@
-const contactOperations = require("../../models");
+const { Contact } = require("../../models");
 const createError = require("http-errors");
 
 const add = async (req, res, next) => {
   try {
-    const result = await contactOperations.addContact(req.body);
+    const result = await Contact.create(req.body);
     if (!result) {
       throw createError(404, `Bad request`);
     }

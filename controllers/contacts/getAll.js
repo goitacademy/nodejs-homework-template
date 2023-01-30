@@ -1,10 +1,10 @@
-const contactOperations = require("../../models");
+const { Contact } = require("../../models");
 const createError = require("http-errors");
 
 const getAll = async (req, res, next) => {
   try {
-    const allContacts = await contactOperations.listContacts();
-    if (!allContacts.length) {
+    const allContacts = await Contact.find({});
+    if (!allContacts) {
       throw createError(404, `No contacts, please try later.`);
     }
     res.json({
