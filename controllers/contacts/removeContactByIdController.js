@@ -2,7 +2,7 @@ const { NotFound } = require("http-errors");
 
 const operations = require("../../models/contacts");
 
-const removeContactById = async (req, res) => {
+const removeContactByIdController = async (req, res) => {
   const { id } = req.params;
   const result = await operations.removeById(id);
   if (!result) {
@@ -18,4 +18,4 @@ const removeContactById = async (req, res) => {
   });
 };
 
-module.exports = removeContactById;
+module.exports = removeContactByIdController;

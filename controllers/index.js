@@ -1,5 +1,15 @@
-const controller = require("./contacts");
+const {
+  getContactsListController,
+  getContactByIdController,
+  createContactController,
+  updateContactByIdController,
+  removeContactByIdController,
+} = require("./contacts");
 
 module.exports = {
-  controller,
+  getContactsListController,
+  getContactByIdController,
+  createContactController,
+  updateContactByIdController,
+  removeContactByIdController,
 };
