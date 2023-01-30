@@ -33,12 +33,16 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
+  const { name, email, phone } = body;
   const contacts = await listContacts();
-  const updatedContacts = contacts.find((contact) => contact.id === contactId);
+  const contact = contacts.find((contact) => contact.id === contactId);
+  contact.name = name;
+  contact.email = email;
+  contact.phone = phone;
 
-  updatedContacts.push(body);
+  contacts.push(contact);
 
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return body;
 };
 
