@@ -1,4 +1,4 @@
-const ctrlWrapper = (сontroller) => {
+const errorHandling = (сontroller) => {
   return async (req, res, next) => {
     try {
       await сontroller(req, res, next);
@@ -8,4 +8,4 @@ const ctrlWrapper = (сontroller) => {
   };
 };
 
-module.exports = ctrlWrapper;
+module.exports = errorHandling;

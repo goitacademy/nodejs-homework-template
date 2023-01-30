@@ -1,6 +1,7 @@
 const express = require("express");
 
-const { validation, ctrlWrapper } = require("../../middlewares");
+const { validation } = require("../../middlewares");
+const { errorHandling } = require("../../helpers");
 const { contactSchema } = require("../../schemas");
 const {
   getContactsListController,
@@ -12,22 +13,22 @@ const {
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(getContactsListController));
+router.get("/", errorHandling(getContactsListController));
 
-router.get("/:id", ctrlWrapper(getContactByIdController));
+router.get("/:id", errorHandling(getContactByIdController));
 
 router.post(
   "/",
   validation(contactSchema),
-  ctrlWrapper(createContactController)
+  errorHandling(createContactController)
 );
 
-router.delete("/:id", ctrlWrapper(removeContactByIdController));
+router.delete("/:id", errorHandling(removeContactByIdController));
 
 router.put(
   "/:id",
   validation(contactSchema),
-  ctrlWrapper(updateContactByIdController)
+  errorHandling(updateContactByIdController)
 );
 
 module.exports = router;
