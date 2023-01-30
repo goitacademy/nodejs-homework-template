@@ -14,7 +14,9 @@ const updateStatusContact = async (req, res) => {
   );
 
   if (!result) {
-    throw new NotFound(`Contact with id = ${contactId} not found`);
+    return res
+      .status(400)
+      .json({ status: "error", code: 400, message: "Missing field favorite" });
   }
   res.json({
     status: "success",
