@@ -1,8 +1,5 @@
-const getAll = require("./getAll");
-const getById = require("./getById");
-const add = require("./add");
-const remove = require("./remove");
-const update = require("./update");
-const patch = require("./updateFavorite");
+const contacts = require("./contacts");
+const auth = require("./auth");
+const users = require("./users");
 
-module.exports = { getAll, getById, add, remove, update, patch };
+module.exports = { contacts, auth, users };

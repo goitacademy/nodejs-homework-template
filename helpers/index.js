@@ -1,5 +1,5 @@
-const contacts = require("./contacts");
-const auth = require("./auth");
-const users = require("./users");
+const RequestError = require("./requestError");
+const handleSaveErrors = require("./handleSaveErrors");
+const generateToken = require("./generateToken");
 
-module.exports = { contacts, auth, users };
+module.exports = { RequestError, handleSaveErrors, generateToken };
