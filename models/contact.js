@@ -21,7 +21,7 @@ const contactSchema = Schema(
 );
 const Contact = model("contact", contactSchema);
 
-const contatcJoiSchema = Joi.object({
+const contactJoiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
@@ -39,7 +39,7 @@ const favoriteSchema = Joi.object({
 
 module.exports = {
   Contact,
-  contatcJoiSchema,
+  contactJoiSchema,
   contactSchemaUpdate,
   favoriteSchema,
 };
