@@ -59,8 +59,6 @@ const updateContact = async (contactId, body) => {
     const contactUpdated = { ...contact, ...body };
     await removeContact(contactId);
     await addContact(contactUpdated);
-    // contactsList.push(contactUpdated);
-    // await fs.writeFile(pathContacts, JSON.stringify(contactUpdated), "utf8");
     return contactUpdated;
   } catch (error) {
     console.error(error);

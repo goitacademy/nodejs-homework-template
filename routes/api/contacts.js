@@ -16,13 +16,16 @@ const { validateContact } = require('../../middlewares/validateContact');
 const router = express.Router();
 
 router.get('/contacts', async (req, res, next) => {
-  const contacts = await listContacts();
-  res.json({
-    status: 'success',
-    code: 200,
-    data: { contacts },
-  });
-  // res.status(200).json({ contacts });
+  try {
+    const contacts = await listContacts();
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { contacts },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.get('/contacts/:contactId', async (req, res, next) => {
@@ -41,12 +44,11 @@ router.get('/contacts/:contactId', async (req, res, next) => {
 });
 
 router.post(
-  '/contacts', validateContact(schemaAddContact),
+  '/contacts',
+  validateContact(schemaAddContact),
   (postContact = async (req, res, next) => {
     const { name, email, phone } = req.body;
-    // if (name === '' || name === null) {
-    //   return res.status(400).json({ message: 'missing required name field' });
-    // }
+
     const contactId = Math.floor(Math.random() * 100);
     const contactsList = await listContacts();
     const isId = contactsList.some(contact => Number(contact.id) === contactId);
@@ -91,12 +93,9 @@ router.delete('/contacts/:contactId', async (req, res, next) => {
 
 router.put('/contacts/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
-  // const { name, email, phone } = req.body;
-
   const keys = Object.keys(req.body);
 
   if (keys.length === 0) {
-    // if (name === undefined && email === undefined && phone === undefined) {
     res.status(400).json({ message: 'missing fields' });
     return;
   }
