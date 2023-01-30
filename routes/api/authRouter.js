@@ -1,17 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  ctrlLogin,
-  ctrlRegistration,
-} = require("../../controllers/authControllers");
+const { ctrlSignup, ctrlLogin } = require("../../controllers/authControllers");
 
 const { addAuthValidation } = require("../../middlewares/authValidation");
 
-router.post("/users/signup", addAuthValidation, ctrlRegistration);
+router.post("/signup", addAuthValidation, ctrlSignup);
 
-router.post("/users/login", addAuthValidation, ctrlLogin);
+router.post("/login", addAuthValidation, ctrlLogin);
 
-// router.post("/users/logout", ctrlGetContacts);
+// router.post("/logout", ctrlGetContacts);
 
 module.exports = router;

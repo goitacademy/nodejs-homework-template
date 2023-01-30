@@ -1,10 +1,22 @@
-const { registration, login } = require("../services/authService");
+const { signup, login } = require("../servises/authService");
 
-const ctrlRegistration = async (req, res) => {
-  const { email, password } = req.body;
+const ctrlSignup = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
 
-  await registration(email, password);
-  res.json({ status: "success" });
+    await signup(name, email, password);
+
+    res.status(201).json({
+      status: "Created",
+      code: 201,
+      data: {
+        message: "Registration successful",
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
 };
 
 const ctrlLogin = async (req, res) => {
@@ -15,6 +27,6 @@ const ctrlLogin = async (req, res) => {
 };
 
 module.exports = {
-  ctrlRegistration,
+  ctrlSignup,
   ctrlLogin,
 };
