@@ -3,25 +3,25 @@ const contactDdbPath = require("./dbPath");
 const get = require("./get");
 
 async function patch(contactId, { name, email, phone }) {
-    const strContactId = String(contactId);
-    const contacts = await get();
+  const contacts = await get();
 
-    const index = contacts.findIndex((contact) => contact.id === strContactId);
-    if (index === -1) {
-        return null;
+  const updatedContact = contacts.forEach((contact) => {
+    if (contact.id === contactId) {
+      if (name) {
+        contact.name = name;
+      }
+      if (email) {
+        contact.email = email;
+      }
+      if (phone) {
+        contact.phone = phone;
+      }
+      return contact;
     }
+  });
 
-    const { id, name: oldName, email: oldEmail, phone: oldPhone } = contacts[index];
-
-    contacts[index] = {
-        id,
-        name: name ?? oldName,
-        email: email ?? oldEmail,
-        phone: phone ?? oldPhone,
-    };
-
-    await fs.writeFile(contactDdbPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+  await fs.writeFile(contactDdbPath, JSON.stringify(contacts, null, 2));
+  return updatedContact;
 }
 
 module.exports = patch;

@@ -3,17 +3,17 @@ const contactDdbPath = require("./dbPath");
 const get = require("./get");
 
 async function remove(contactId) {
-    const strContactId = String(contactId);
-    const contacts = await get();
+  const contacts = await get();
 
-    const index = contacts.findIndex((contact) => contact.id === strContactId);
-    if (index === -1) {
-        return null;
-    }
+  const newContacts = contacts.filter(
+    (contact) => contact.id !== String(contactId)
+  );
 
-    const [removedContact] = contacts.splice(index, 1);
-    await fs.writeFile(contactDdbPath, JSON.stringify(contacts, null, 2));
-    return removedContact;
+  if (contacts.length === newContacts.length) {
+    return null;
+  }
+  await fs.writeFile(contactDdbPath, JSON.stringify(contacts, null, 2));
+  return newContacts;
 }
 
 module.exports = remove;
