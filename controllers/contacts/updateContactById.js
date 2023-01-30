@@ -1,23 +1,24 @@
-const contactOperations = require("../../models/contacts");
-const Joi = require("joi");
+// const contactOperations = require("../../models/contacts");
+const { Contact } = require("../../models/contactsModel");
+// const Joi = require("joi");
 const { NotFound } = require("http-errors");
 
-const contactSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-});
+// const contactSchema = Joi.object({
+//   name: Joi.string(),
+//   email: Joi.string(),
+//   phone: Joi.string(),
+// });
 
 const updateContactById = async (req, res, next) => {
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    error.status = 404;
-    throw error;
-  }
+  // const { error } = contactSchema.validate(req.body);
+  // if (error) {
+  //   error.status = 404;
+  //   throw error;
+  // }
   const { id } = req.params;
   // const { name, email, phone } = req.body;
 
-  const result = await contactOperations.updateContactById(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw new NotFound(`Contact with id=${id} not found`);
   }

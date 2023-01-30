@@ -6,4 +6,16 @@ const contactSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
+const changeContactSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
+
+const updateStatusContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 module.exports = contactSchema;
+module.exports = changeContactSchema;
+module.exports = updateStatusContactSchema;

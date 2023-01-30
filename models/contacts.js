@@ -24,53 +24,41 @@ async function addContact(data) {
   return newContact;
 }
 
-async function removeContact(contactId) {
+async function removeContact(id) {
   const contacts = await listContacts();
-  const findContact = contacts.find((item) => item.id === contactId);
+  const findContact = contacts.find((item) => item.id === id);
   if (!findContact) {
     return null;
   }
-  const newContacts = contacts.filter((item) => item.id !== contactId);
+  const newContacts = contacts.filter((item) => item.id !== id);
   await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  console.log(findContact);
   return findContact;
 }
 
-async function getContactById(contactId) {
+async function getContactById(id) {
   const contacts = await listContacts();
-  const findContact = contacts.find((item) => item.id === contactId);
+  console.log(id);
+
+  const findContact = contacts.find((item) => item.id === id);
+  console.log(findContact);
   return findContact;
 }
 
-// async function updateContactById(contactId, data) {
-//   const contacts = await listContacts();
-//  console.log(data);
-//   const idx = contacts.findIndex((item) => item.id === contactId);
-//   console.log(idx);
-//   if (idx === -1) {
-//     return null;
-//   }
-
-//   contacts[idx] = { contactId, ...data };
-//   console.log(contacts[idx]);
-//   console.log(contacts(contactId));
-//   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-//   return contacts[idx];
-// }
-
-async function updateContactById(contactId, data) {
+async function updateContactById(id, data) {
   const contacts = await listContacts();
   let { name, email, phone } = data;
-  const idx = contacts.find((item) => item.id === contactId);
+  const idx = contacts.find((item) => item.id === id);
   if (idx === -1) {
     return null;
   }
- 
+
   !name && (name = idx.name);
   !email && (email = idx.email);
   !phone && (phone = idx.phone);
-  
-  contacts[idx] = { contactId, name, email, phone };
-  console.log(contacts[idx]);
+
+  contacts[idx] = { id, name, email, phone };
+  // console.log(contacts[idx]);
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return contacts[idx];
