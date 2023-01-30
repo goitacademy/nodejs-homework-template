@@ -8,6 +8,7 @@ module.exports = {
       phone: Joi.string()
         .pattern(/^[+0-9]+$/)
         .required(),
+      favorite: Joi.bool(),
     });
 
     const validationResult = schema.validate(req.body);

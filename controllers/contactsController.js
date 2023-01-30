@@ -1,9 +1,11 @@
+const { default: mongoose } = require("mongoose");
 const {
   listContacts,
   getContactById,
   addContact,
   updateContact,
   removeContact,
+  updateStatusContact,
 } = require("../models/contacts");
 
 const getContacts = async (req, res) => {
@@ -76,10 +78,30 @@ const deleteContact = async (req, res) => {
   }
 };
 
+const setFavorite = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    if (!favorite) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+
+    const result = await updateStatusContact(contactId, favorite);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof mongoose.Error.CastError) {
+      res.status(404).json({ message: "not found" });
+    }
+    res.status(500).json({ error: { ...error, message: error.message } });
+  }
+};
+
 module.exports = {
   getContacts,
   newContact,
   getContact,
   putContact,
   deleteContact,
+  setFavorite,
 };
