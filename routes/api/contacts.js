@@ -1,24 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
+// const Joi = require("joi");
+const {
+  contatcJoiSchema,
+  contactSchemaUpdate,
+  favoriteSchema,
+} = require("../../models/contact");
+const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
-
-const contactsOperations = require("../../models/contacts");
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-
-const contactSchemaUpdate = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-});
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await contactsOperations.listContacts();
+    const contacts = await Contact.find({});
     res.json({
       status: "success",
       code: 200,
@@ -34,7 +27,8 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const resultId = await contactsOperations.getContactById(contactId);
+    const resultId = await Contact.findById(contactId); // findOne({_id:contactId}) - спосіб шукати по ID
+    console.log(resultId);
     if (!resultId) {
       throw new NotFound("Not found");
     }
@@ -52,22 +46,22 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = contatcJoiSchema.validate(req.body);
 
     if (error) {
       error.status = 400;
       throw error;
     }
 
-    const resultPost = await contactsOperations.addContact(req.body);
+    const resultPost = await Contact.create(req.body);
     res.status(201).json({
-      status: "saccess",
+      status: "saccess ",
       code: 201,
       data: {
         resultPost,
       },
     });
-  } catch (error) {
+  } catch (error ) {
     next(error);
   }
 });
@@ -75,7 +69,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const resultDelete = await contactsOperations.removeContact(contactId);
+    const resultDelete = await Contact.findByIdAndRemove(contactId);
     if (!resultDelete) {
       throw new NotFound(` not found `);
     }
@@ -101,9 +95,36 @@ router.put("/:contactId", async (req, res, next) => {
     }
     const { contactId } = req.params;
     const data = req.body;
-    const resultPut = await contactsOperations.updateContact(contactId, data);
+    const resultPut = await Contact.findByIdAndUpdate(contactId, data, {
+      new: true,
+    });
     if (!resultPut) {
       throw new NotFound("missing fields");
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        resultPut,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { error } = favoriteSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error("Missing field favorite");
+    }
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const resultPut = await Contact.findByIdAndUpdate(contactId,{ favorite },{ new: true });
+    if (!resultPut) {
+      throw new NotFound("Not found");
     }
     res.json({
       status: "success",
