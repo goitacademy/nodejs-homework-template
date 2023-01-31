@@ -33,14 +33,16 @@ async function addContact({ name, email, phone }) {
 
 async function removeContact(contactId) {
   const contacts = await listContacts();
-  const newContacts = contacts.findIndex((item) => item.id === contactId);
-  if (newContacts === -1) {
-    return null;
-  }
-  const removeCon = contacts.splice(newContacts, 1);
+  let deletedContact;
+  const newContacts = contacts.filter((contact) => {
+    if (contact.id === contactId) {
+      deletedContact = contact;
+    }
+    return contact.id !== contactId;
+  });
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return removeCon;
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  return deletedContact;
 }
 
 async function updateContact(contactId, body) {
