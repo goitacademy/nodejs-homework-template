@@ -1,13 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const { ctrlSignup, ctrlLogin } = require("../../controllers/authControllers");
+const {
+  ctrlSignup,
+  ctrlLogin,
+  ctrlCurrent,
+} = require("../../controllers/authControllers");
 
-const { addAuthValidation } = require("../../middlewares/authValidation");
+const {
+  addSignupValidation,
+  addLoginValidation,
+} = require("../../middlewares/authValidation");
 
-router.post("/signup", addAuthValidation, ctrlSignup);
+const { auth } = require("../../middlewares/auth");
 
-router.post("/login", addAuthValidation, ctrlLogin);
+router.post("/signup", addSignupValidation, ctrlSignup);
+
+router.post("/login", addLoginValidation, ctrlLogin);
+
+router.get("/current", auth, ctrlCurrent);
 
 // router.post("/logout", ctrlGetContacts);
 

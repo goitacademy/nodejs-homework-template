@@ -15,8 +15,10 @@ const {
 const { successResult, successAddData } = require("../helpers/successResult");
 
 const ctrlGetContacts = async (req, res, next) => {
+  const { _id } = req.user;
+
   try {
-    const result = await getContacts();
+    const result = await getContacts(_id);
 
     if (!result.length) {
       noDataError(res);
@@ -51,6 +53,7 @@ const ctrlGetContactById = async (req, res, next) => {
 };
 
 const ctrlAddContact = async (req, res, next) => {
+  const { _id } = req.user;
   const { name, email, phone, favorite = false } = req.body;
 
   try {
@@ -61,7 +64,8 @@ const ctrlAddContact = async (req, res, next) => {
       favorite,
     };
 
-    await addContact(newContact);
+    await addContact(newContact, _id);
+
     successAddData(res, 201, "contact created");
   } catch (error) {
     console.log(error);
