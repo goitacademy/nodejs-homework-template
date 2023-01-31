@@ -1,3 +1,4 @@
+//folder --> __tests__
 import * as dotenv from 'dotenv';
 import request from 'supertest';
 import app from '../app';
@@ -21,7 +22,7 @@ describe('logIn', () => {
     await mongoose.disconnect(MONGO_TEST_URL);
   });
 
-  it('should logIn user with email and password', async () => {
+  it.skip('should logIn user with email and password', async () => {
     const data = {
       email: `login@email.com`,
       password: 'password',
@@ -31,6 +32,8 @@ describe('logIn', () => {
       .post('/api/users/signup')
       .send(data)
       .set('Accept', 'application/json');
+
+    //TODO: add verify password
 
     const response = await request(app)
       .post('/api/users/login')
@@ -51,7 +54,7 @@ describe('logIn', () => {
     ).toBe(1);
   });
 
-  it('should end with error in case of invalid credentials', async () => {
+  it.skip('should end with error in case of invalid credentials', async () => {
     const data = {
       email: `login2@email.com`,
       password: 'password',

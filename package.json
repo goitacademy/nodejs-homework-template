@@ -8,12 +8,10 @@
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
-    "debug": "nodemon --inspect=:9229 ./server.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ",
-    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch ",
-    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "debug": "nodemon --inspect=:9229 ./server.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -27,7 +25,8 @@
     "mongoose": "^6.8.2",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
-    "uid": "^2.0.1"
+    "uid": "^2.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

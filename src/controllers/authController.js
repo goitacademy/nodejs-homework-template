@@ -7,6 +7,8 @@ import {
   getCurrentUser,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  resendEmail,
 } from '../services/authService.js';
 
 export const signupController = async (req, res) => {
@@ -22,6 +24,34 @@ export const signupController = async (req, res) => {
       throw new createError(409, ` ${field} already exists.`);
     }
   }
+};
+
+export const emailVerificationController = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  if (!verificationToken) {
+    throw new createError(400, ` ${verificationToken} is required`);
+  }
+
+  const user = await verifyEmail(verificationToken);
+
+  if (!user) {
+    throw new createError(404, `Not found`);
+  }
+
+  res.status(200).json({ message: 'Email verification is successful' });
+};
+
+export const resendEmailVerificationController = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await resendEmail(email);
+
+  if (!user) {
+    throw new createError(404, `User with ${email} not found`);
+  }
+
+  res.status(200).json({ message: 'Verification email has been sent' });
 };
 
 export const loginController = async (req, res) => {

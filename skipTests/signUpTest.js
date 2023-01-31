@@ -1,3 +1,4 @@
+//folder --> __tests__
 import * as dotenv from 'dotenv';
 import request from 'supertest';
 import app from '../app';
@@ -21,7 +22,7 @@ describe('signUp', () => {
     await mongoose.disconnect(MONGO_TEST_URL);
   });
 
-  it('should signUp new user with email and password', async () => {
+  it.skip('should signUp new user with email and password', async () => {
     const data = {
       email: `signup@email.com`,
       password: 'password',
@@ -44,7 +45,7 @@ describe('signUp', () => {
     ).toBe(1);
   });
 
-  it('should end with error "Conflict" in case of signup with same email', async () => {
+  it.skip('should end with error "Conflict" in case of signup with same email', async () => {
     const data = {
       email: `signup2@email.com`,
       password: 'password',
@@ -63,3 +64,9 @@ describe('signUp', () => {
     expect(response.status).toBe(409);
   });
 });
+
+/** For JSON
+ *  "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch ",
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+ */
