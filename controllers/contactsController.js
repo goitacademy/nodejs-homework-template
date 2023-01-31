@@ -1,7 +1,7 @@
-const contactsOperations = require("../models/contacts");
+const { Contact } = require("../models/contact");
 
 const allContacts = async (req, res) => {
-  const contacts = await contactsOperations.listContacts();
+  const contacts = await Contact.find({});
   res.json({
     status: "success",
     code: 200,
@@ -13,7 +13,7 @@ const allContacts = async (req, res) => {
 
 const contactById = async (req, res) => {
   const { id } = req.params;
-  const contact = await contactsOperations.getContactById(id);
+  const contact = await Contact.findById(id);
   if (!contact) {
     res.status(404).json({
       status: "error",
@@ -43,7 +43,7 @@ const addContact = async (req, res) => {
     return;
   }
 
-  const newContact = await contactsOperations.addContact(req.body);
+  const newContact = await Contact.create(req.body);
 
   res.status(201).json({
     status: "success",
@@ -56,7 +56,7 @@ const addContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  await contactsOperations.removeContact(id);
+  await Contact.findByIdAndRemove(id);
   res.json({
     status: "success",
     code: 200,
@@ -81,7 +81,7 @@ const updateContact = async (req, res) => {
   }
 
   const { id } = req.params;
-  const contact = await contactsOperations.updateContact(id, req.body);
+  const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!contact) {
     res.status(404).json({
       status: "error",
@@ -98,10 +98,38 @@ const updateContact = async (req, res) => {
   });
 };
 
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+  if (!req.body) {
+    res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "Missing field favorite",
+    });
+    return;
+  }
+
+  const contact = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    { new: true }
+  );
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      contact,
+    },
+  });
+};
+
 module.exports = {
   allContacts,
   contactById,
   addContact,
   deleteContact,
   updateContact,
+  updateStatusContact,
 };
