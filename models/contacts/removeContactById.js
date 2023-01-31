@@ -9,7 +9,6 @@ const removeContactById = async (contactId) => {
     return null;
   }
   const removeContact = contactList[index];
-  console.log(removeContact.id);
   const newContactList = contactList.filter(
     (contact) => contact.id !== removeContact.id
   );
