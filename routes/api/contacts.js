@@ -1,12 +1,31 @@
 const express = require("express");
+const { PaginationParameters } = require("mongoose-paginate-v2");
 const router = express.Router();
 
 const functions = require("../../controller/contactController");
-const { schema, schemaFavorite } = require("../../validation/validation.js");
+const { isAuthorized } = require("../../middleware/auth");
+const contactModel = require("../../models/contact.model");
+const {
+  schemaContact,
+  schemaFavorite,
+} = require("../../validation/validation.js");
+
+router.use(isAuthorized);
 
 router.get("/", async (req, res) => {
+  if (req.query.favorite) {
+    const favoriteContacts = await functions.listFavoriteContacts();
+    return res.send(favoriteContacts);
+  }
+  const { page, perPage } = req.query;
+  if (!page) {
+    page = 1;
+  }
+  if (!perPage) {
+    perPage = 20;
+  }
   const contacts = await functions.listContacts();
-  res.send(contacts);
+  return res.send(contacts);
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -19,7 +38,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const validationResult = schema.validate(req.body);
+  const validationResult = schemaContact.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({
       message: validationResult.error.details[0].message,
@@ -40,7 +59,7 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   const { id } = req.params;
-  const validationResult = schema.validate(req.body);
+  const validationResult = schemaContact.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({
       message: validationResult.error.details[0].message,
