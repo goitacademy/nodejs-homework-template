@@ -9,6 +9,10 @@ export async function listContacts() {
   return JSON.parse(contacts);
 }
 
+async function updateContacts(contacts) {
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+}
+
 export async function getContactById(contactId) {
   const contacts = await listContacts();
   const contact = contacts.find(
@@ -21,17 +25,17 @@ export async function getContactById(contactId) {
 }
 
 export async function removeContact(contactId) {
-  let contacts = await listContacts();
-  contacts = contacts.filter((contact) => contact.id !== contactId.toString());
-  try {
-    fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return `Contact with id:${contactId} successfully removed`;
-  } catch (error) {
-    console.log(error);
+  const contacts = await listContacts();
+  const contactIdx = contacts.findIndex((contact) => contact.id === contactId);
+  if (contactIdx === -1) {
+    return null;
   }
+  contacts.splice(contactIdx, 1);
+  await updateContacts(contacts);
+  return "contact deleted";
 }
 
-export async function addContact(name, email, phone) {
+export async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
   contacts.push({
     id: nanoid(),
@@ -39,12 +43,17 @@ export async function addContact(name, email, phone) {
     email,
     phone,
   });
-  try {
-    fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return contacts.slice(-1)[0];
-  } catch (error) {
-    console.log(error);
-  }
+  await updateContacts(contacts);
+  return contacts.slice(-1)[0];
 }
 
-// const updateContact = async (contactId, body) => {};
+export async function updateContact(contactId, { name, email, phone }) {
+  const contacts = await listContacts();
+  const contactIdx = contacts.findIndex((contact) => contact.id === contactId);
+  if (contactIdx === -1) {
+    return null;
+  }
+  contacts[contactIdx] = { id: contactId, name, email, phone };
+  await updateContacts(contacts);
+  return contacts[contactIdx];
+}
