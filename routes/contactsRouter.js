@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const asyncWrapper = require("../helpers/wrapperController")
+const asyncWrapper = require("../helpers/apiHelpers")
 const {
   addContactValidation,
   putContactValidation
@@ -18,5 +18,6 @@ router.get('/:contactId', asyncWrapper(getContactById));
 router.post('/', addContactValidation, asyncWrapper(addContact));
 router.delete('/:contactId', asyncWrapper(deleteContact));
 router.put('/:contactId', putContactValidation, asyncWrapper(putContacts));
+router.patch('/:contactId/favorite',)
 
 module.exports = router;

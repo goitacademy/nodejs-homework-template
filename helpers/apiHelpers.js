@@ -8,4 +8,4 @@ const asyncWrapper = (controller) => {
     };
   }
 
-  module.exports = asyncWrapper;
+module.exports = { asyncWrapper };
