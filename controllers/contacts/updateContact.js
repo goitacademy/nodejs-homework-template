@@ -1,4 +1,4 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models");
 const { NotFound } = require("http-errors");
 
 const updateContact = async (req, res) => {

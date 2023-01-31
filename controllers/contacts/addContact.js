@@ -1,11 +1,12 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models");
 
 const addContact = async (req, res) => {
 	if (!req.body.name) {
 		throw new Error("Name is required");
 	}
 
-	const newContact = await Contact.create(req.body);
+	const { _id } = req.user;
+	const newContact = await Contact.create({ ...req.body, owner: _id });
 	if (!newContact) {
 		throw new Error("Contact not added");
 	}
