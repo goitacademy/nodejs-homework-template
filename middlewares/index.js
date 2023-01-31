@@ -1,3 +1,4 @@
 const { validation } = require("./validationMiddleware");
+const { auth } = require("./auth");
 
-module.exports = { validation };
+module.exports = { validation, auth };

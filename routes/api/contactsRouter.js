@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const { asyncWrapper } = require("../../helpers");
 const { controllers: ctrl } = require("../../controllers");
-
+const { asyncWrapper } = require("../../helpers");
 const { validation } = require("../../middlewares");
 const {
   postSchema,

@@ -1,7 +1,5 @@
+const { BadRequest, NotFound } = require("http-errors");
 const { Contact } = require("../../models/contact");
-const { WrongParametersError, NotFoundError } = require("../../helpers");
-
-// const { services: srv } = require("../../service");
 
 const getAll = async (req, res) => {
   const contacts = await Contact.find({});
@@ -12,7 +10,7 @@ const getById = async (req, res) => {
   const { id } = req.params;
   const contactById = await Contact.findById(id);
   if (!contactById) {
-    throw new NotFoundError(`Contact with id=${id} not found`);
+    throw new NotFound(`Contact with id=${id} not found`);
   }
   res.json(contactById);
 };
@@ -28,7 +26,7 @@ const updateById = async (req, res) => {
     new: true,
   });
   if (!updatedContact) {
-    throw new NotFoundError(`Contact with id=${req.id} not found`);
+    throw new NotFound(`Contact with id=${req.id} not found`);
   }
   res.json(updatedContact);
 };
@@ -37,7 +35,7 @@ const updateStatusById = async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
   if (!favorite) {
-    throw new WrongParametersError("missing field favorite");
+    throw new BadRequest("missing field favorite");
   }
   const updatedContact = await Contact.findByIdAndUpdate(
     id,
@@ -47,7 +45,7 @@ const updateStatusById = async (req, res) => {
     }
   );
   if (!updatedContact) {
-    throw new NotFoundError(`Contact with id=${req.id} not found`);
+    throw new NotFound(`Contact with id=${req.id} not found`);
   }
   res.json(updatedContact);
 };
@@ -56,7 +54,7 @@ const removeById = async (req, res) => {
   const { id } = req.params;
   const removedContact = await Contact.findByIdAndRemove(id);
   if (!removedContact) {
-    throw new NotFoundError(`Contact with id=${req.id} not found`);
+    throw new NotFound(`Contact with id=${req.id} not found`);
   }
   res.json(removedContact);
 };
