@@ -50,6 +50,8 @@ router.get("/:contactId", async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
     console.log(result, "result");
     if (!result) {
+      console.log("get in");
+
       throw RequestError(404, "Not found");
     }
     res.json(result);
