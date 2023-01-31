@@ -1,8 +1,8 @@
-const contactOperations = require("../../models");
+const { Contact } = require("../../models");
 
 const add = async (req, res, next) => {
   try {
-    const result = await contactOperations.addContact(req.body);
+    const result = await Contact.create(req.body);
     if (!result) {
      return res.status(404).json({message :"Bad request"})
     }

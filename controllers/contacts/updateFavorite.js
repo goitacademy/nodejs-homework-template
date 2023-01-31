@@ -1,13 +1,13 @@
-const {Contact} = require("../../models");
+const { Contact } = require("../../models");
 
-const update = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
     if (!result) {
-          return res.status(404).json({ message: "Bad request" })
+     return res.status(404).json({ message: "Bad request" })
     }
     res.json({
       status: "Success",
@@ -20,4 +20,4 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = update;
+module.exports = updateFavorite;
