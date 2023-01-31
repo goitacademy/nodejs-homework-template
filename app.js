@@ -20,7 +20,7 @@ app.use((_, res) => {
 
 app.use((err, _, res, __) => {
   const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ message: message });
+  res.status(status).json({ message });
 });
 
 module.exports = app;

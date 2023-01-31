@@ -1,9 +1,48 @@
 const { User } = require("../models/user");
-// const RequestError = require("../helpers/RequestError");
+const RequestError = require("../helpers/RequestError");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const secret = process.env.JWT_SECRET;
 
 const registration = async (req, res, _) => {
-  const user = await User.create(req.body);
-  res.status(201).json(user);
+  const { email, password } = req.body;
+
+  const isUserExist = await User.findOne({ email });
+  if (isUserExist) throw RequestError(409, "Email in use");
+
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
+
+  const user = await User.create({ email: email, password: hashPassword });
+  res.status(201).json({
+    email: user.email,
+    subscription: user.subscription,
+  });
 };
 
-module.exports = { registration };
+const login = async (req, res, _) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) throw RequestError(401, "Email or password is wrong");
+
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare) throw RequestError(401, "Email or password is wrong");
+
+  const payload = {
+    id: user._id,
+    usermail: user.email,
+  };
+
+  const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+
+  res.status(200).json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
+
+module.exports = { registration, login };
