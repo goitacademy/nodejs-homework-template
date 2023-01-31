@@ -2,6 +2,7 @@
   "name": "nodejs-homework-rest-api",
   "version": "0.0.0",
   "private": true,
+  
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -14,6 +15,7 @@
     "dotenv": "^16.0.3",
     "express": "4.17.1",
     "joi": "^17.7.0",
+    "mongoose": "^6.9.0",
     "morgan": "1.10.0",
     "uuid": "^9.0.0"
   },
