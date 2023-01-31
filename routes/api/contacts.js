@@ -1,97 +1,25 @@
-const express = require('express')
-const Joi = require('joi')
+const express = require("express");
+const { validation, ctrlWrapper, isValidId } = require("../../middlewares");
+const { schemas } = require("../../models");
+const { contacts: ctrl } = require("../../controller");
 
-const router = express.Router()
+const router = express.Router();
 
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require('../../models/contacts')
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-const schemaWRequired = Joi.object({
-  name: Joi.string()
-      .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
-      .min(3)
-      .max(20)
-      .required(),
-  phone: Joi.string()
-      .length(10)
-      .pattern(/^[0-9]+$/)
-      .required(),
-  email: Joi.string()
-      .required()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ['com', 'net', 'uk', 'org'] },
-      }),
-})
+router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
-const schemaWORequired = Joi.object({
-  name: Joi.string()
-      .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+$/)
-      .min(3)
-      .max(20),
-  phone: Joi.string()
-      .length(10)
-      .pattern(/^[0-9]+$/),
-  email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ['com', 'net', 'uk', 'org'] },
-      }),
-})
+router.post("/", validation(schemas.contactsSchema), ctrlWrapper(ctrl.add));
 
-router.get('/', async (req, res, next) => {
-  const contacts = await listContacts()
-  res.json(contacts)
-})
+router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
 
-router.get('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId)
-  if (!contact) {
-    res.status(404).json({ message: `Contact with id:${req.params.contactId} was not found` })
-  }
-  res.json(contact)
-})
+router.put("/:contactId", isValidId, validation(schemas.contactsSchema), ctrlWrapper(ctrl.update));
 
-router.post('/', async (req, res, next) => {
-  const validatedResult = schemaWRequired.validate(req.body)
-  if (validatedResult.error) {
-    res.status(400).json({
-      status: validatedResult.error.details.map((x) => x.message),
-      message: `Missing required ${validatedResult.error.details.map(
-          (x) => x.context.key
-      )} field`,
-    })
-  }
-  const newContact = await addContact(req.body)
-  res.status(201).json(newContact)
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId)
-  if (contact.length === 0) {
-    res.status(400).json({ message: `Contact with id:${req.params.contactId} was not found` })
-  }
-  await removeContact(req.params.contactId)
-  res.status(200).json({ message: `Contact with id:${req.params.contactId} was deleted` })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  const validatedResult = schemaWORequired.validate(req.body)
-  if (validatedResult.error) {
-    res.status(400).json({
-      status: validatedResult.error.details.map((x) => x.message),
-      message: `Missing required ${validatedResult.error.details.map(
-          (x) => x.context.key
-      )} field`,
-    })
-  }
-  const updContact = await updateContact(req.params.contactId, req.body)
-  res.json(updContact)
-})
+router.patch(
+    "/:contactId/favorite",
+    isValidId,
+    validation(schemas.favoriteSchema),
+    ctrlWrapper(ctrl.patch)
+);
 
 module.exports = router;
