@@ -7,6 +7,8 @@ const { httpError } = require("../../helpers");
 const login = async (email, password) => {
   const user = await User.findOne({ email });
 
+  if (!user.verify) throw httpError(401, "Don't verified email!");
+
   if (!user || !(await bcrypt.compare(password, user.password)))
     throw httpError(401, "Email or password is wrong");
 

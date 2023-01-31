@@ -5,6 +5,8 @@ const { currentController } = require("./currentController");
 const {
   updateSubscriptionController,
 } = require("./updateSubscriptionController");
+const { userVerificationController } = require("./userVerificationController");
+const { sendVerifyController } = require("./sendVerifyController");
 
 module.exports = {
   registerController,
@@ -12,4 +14,6 @@ module.exports = {
   logoutController,
   currentController,
   updateSubscriptionController,
+  userVerificationController,
+  sendVerifyController,
 };

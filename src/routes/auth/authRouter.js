@@ -5,10 +5,12 @@ const {
   logoutController,
   currentController,
   updateSubscriptionController,
+  userVerificationController,
+  sendVerifyController,
 } = require("../../controllers/auth");
 const { tryCatchWrapper } = require("../../helpers");
 const { validateBody, authMiddleware } = require("../../middlewares");
-const { updateSubscriptionSchema } = require("../../schemas");
+const { updateSubscriptionSchema, sendVerifySchema } = require("../../schemas");
 const { registerSchema } = require("../../schemas/auth/registerSchema");
 const { uploadMiddleware } = require("../../middlewares");
 const { avatarController } = require("../../controllers/upload");
@@ -42,6 +44,17 @@ router.patch(
   authMiddleware(),
   uploadMiddleware.single("avatar"),
   tryCatchWrapper(avatarController)
+);
+
+router.get(
+  "/verify/:verificationToken",
+  tryCatchWrapper(userVerificationController)
+);
+
+router.post(
+  "/verify",
+  validateBody(sendVerifySchema),
+  tryCatchWrapper(sendVerifyController)
 );
 
 module.exports = { authRouter: router };
