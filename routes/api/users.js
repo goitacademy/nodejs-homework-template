@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer();
 
 const functions = require("../../controller/userController");
 const { isAuthorized } = require("../../middleware/auth");
+const { editAvatar } = require("../../middleware/avatar");
 const {
   schemaUser,
   schemaSubscription,
@@ -23,6 +26,7 @@ router.post("/signup", async (req, res, next) => {
     email: user.email,
     token: user.token,
     subscription: user.subscription,
+    avatarURL: user.avatarURL,
   });
 });
 
@@ -72,5 +76,18 @@ router.patch("/", isAuthorized, async (req, res, next) => {
     subscription: user.subscription,
   });
 });
+
+router.patch(
+  "/avatars",
+  isAuthorized,
+  upload.single("avatar"),
+  editAvatar,
+  async (req, res, next) => {
+    const user = await functions.updateAvatar(req.user._id, req.file.path);
+    return res.status(200).send({
+      avatarURL: user.avatarURL,
+    });
+  }
+);
 
 module.exports = router;

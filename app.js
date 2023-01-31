@@ -21,7 +21,7 @@ mongoose
     console.log("Database connection failed");
     process.exit(1);
   });
-
+app.use(express.static("public"));
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
