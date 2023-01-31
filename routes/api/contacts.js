@@ -1,79 +1,31 @@
 const express = require('express')
-const Joi = require("joi");
-const {
-  listContacts,
+const router = express.Router();
+const ctrlWrapper = require("../../help/ctrlWrapper");
+const {  getAllContacts,
   getContactById,
-  removeContact,
-  addContact,
+  createContact,
   updateContact,
-} = require("../../models/contacts");
-
-const mySchema = Joi.object({
-  name: Joi.string().required(),
-  phone: Joi.string().required(),
-  email: Joi.string().required(),
-});
-
-const router = express.Router()
+  updateContacStatus,
+  deleteContact,
+} = require("../../controllers/contacts")
+const { validate } = require("../../middlewears/validate");
+const { nySchema, statusSchema } = require("../../models/contacts");
 
 
-router.get('/', async (request, response, next) => {
- try{
-  const contact = await listContacts()
-  response.status(200).json(contact)
- } catch(error){
-  next(error)
- }
-})
+router.get('/', ctrlWrapper(getAllContacts))
 
-router.get("/:contactId", async (request, response, next) => {
-  try {
-    const contact = await getContactById(request.params.contactId);
-    if (!contact) {
-      return response.status(404).json({ message: "Not found" });
-    }
-    response.status(200).json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:contactId", ctrlWrapper(getContactById));
 
-router.post('/', async (request, response, next) => {
-  try{
-    const {error} = mySchema.validate(request.body);
-    if (error){
-      response.status(400).json({message: "specify the request field"})
-    }
-    const contact = await addContact(request.body)
-    response.status(201).json(contact)
-  } catch(error){
-    next (error)
-  }
-})
+router.post('/',  validate(nySchema), ctrlWrapper(createContact))
 
-router.delete('/:contactId', async (request, response, next) => {
-  try{
-    const contact = await removeContact(request.params.contactId)
-    if(!contact){
-      return response.status(404).json({message: "not found"})
-    }
-    response.status(200).json({message: "successfuly deleted"})
-  } catch (error){
-    next(error)
-  }
-})
+router.delete('/:contactId',  ctrlWrapper(deleteContact))
 
-router.put('/:contactId', async (request, response, next) => {
-  try{
-    const {error} = mySchema.validate(request.body)
-    if(error) {
-      response.status(400).json({message: "specify the request field"})
-    }
-    const contact = await updateContact(request.params.contactId, request.body)
-    response.status(200).json(contact)
-  } catch(error){
-    next(error)
-  }
-})
+router.put('/:contactId',validate(nySchema), ctrlWrapper(updateContact))
+
+router.patch(
+  "/:contactId/favorite",
+  validate(statusSchema),
+  ctrlWrapper(updateContacStatus)
+);
 
 module.exports = router
