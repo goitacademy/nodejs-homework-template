@@ -82,9 +82,23 @@ async function getCurrentUser(req, res, next) {
   });
 }
 
+async function updateSubscription(req, res, next) {
+  const { _id } = req.user
+  const {subscription} = req.body
+   const updatedUser= await User.findByIdAndUpdate(
+      _id,
+      { subscription },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    return res.status(200).json(updatedUser);
+}
 module.exports = {
   register,
   login,
   logout,
   getCurrentUser,
+  updateSubscription,
 };

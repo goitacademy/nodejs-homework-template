@@ -16,8 +16,7 @@ const schema = mongoose.Schema({
     default: "starter"
   },
   token: String,
-  // default: null,
-},
+  },
     {
         versionKey: false,
         timestamps: true,
