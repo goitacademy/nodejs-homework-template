@@ -4,18 +4,15 @@ const getContactsList = require("./getContactsList");
 
 const updateContactById = async (id, body) => {
   const contactList = await getContactsList();
-  const index = contactList.findIndex((item) => item.id === id);
-  if (index === -1) {
-    return null;
-  }
+  let updatedContact;
   const updatedContactList = contactList.map((contact) => {
     if (contact.id === id) {
-      return { ...contact, ...body };
+      updatedContact = { ...contact, ...body };
+      return updatedContact;
     }
     return contact;
   });
   await fs.writeFile(filePath, JSON.stringify(updatedContactList));
-  const updatedContact = updatedContactList[index];
   return updatedContact;
 };
 

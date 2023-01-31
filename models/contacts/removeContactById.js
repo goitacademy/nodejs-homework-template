@@ -4,14 +4,13 @@ const getContactsList = require("./getContactsList");
 
 const removeContactById = async (contactId) => {
   const contactList = await getContactsList();
-  const index = contactList.findIndex(({ id }) => id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const removeContact = contactList[index];
-  const newContactList = contactList.filter(
-    (contact) => contact.id !== removeContact.id
-  );
+  let removeContact;
+  const newContactList = contactList.filter((contact) => {
+    if (contact.id === contactId) {
+      removeContact = contact;
+    }
+    return contact.id !== contactId;
+  });
   await fs.writeFile(filePath, JSON.stringify(newContactList));
   return removeContact;
 };
