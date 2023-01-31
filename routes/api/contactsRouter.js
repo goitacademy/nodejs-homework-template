@@ -10,13 +10,15 @@ const {
   ctrlUpdateContact,
 } = require("../../controllers/contactsControllers");
 
+const { auth } = require("../../middlewares/auth");
+
 const { addPostValidation } = require("../../middlewares/validationMiddleware");
 
-router.get("/", ctrlGetContacts);
+router.get("/", auth, ctrlGetContacts);
 
 router.get("/:contactId", ctrlGetContactById);
 
-router.post("/", addPostValidation, ctrlAddContact);
+router.post("/", auth, addPostValidation, ctrlAddContact);
 
 router.delete("/:contactId", ctrlRemoveContact);
 

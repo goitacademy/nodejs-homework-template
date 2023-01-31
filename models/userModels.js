@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+// const bcrypt = require("bcryptjs");
 
 const userSchema = new Schema(
   {
@@ -9,8 +10,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minLength: 3,
-      maxLength: 30,
     },
     email: {
       type: String,
@@ -29,6 +28,10 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+// userSchema.methods.setPassword = function (password) {
+//   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// };
 
 const User = model("user", userSchema);
 

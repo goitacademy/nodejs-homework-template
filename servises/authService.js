@@ -1,76 +1,49 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// const signup = async (name, email, password) => {
+//   const user = await User.findOne({ email });
 
-const { User } = require("../models/userModels");
-require("dotenv").config();
+//   if (user) {
+//     return res.json({
+//       status: "error",
+//       code: 409,
+//       message: "Email in use",
+//       data: "Conflict",
+//     });
+//   }
 
-const secret = process.env.SECRET;
+// const newUser = new User({ name, email });
+// newUser.setPassword(password);
+// newUser.save();
 
-// const auth = (req, res, next) => {
-//   passport.authenticate("jwt", { session: false }, (err, user) => {
-//     if (!user || err) {
-//       return res.status(401).json({
-//         status: "error",
-//         code: 401,
-//         message: "Unauthorized",
-//         data: "Unauthorized",
-//       });
-//     }
-//     req.user = user;
-//     next();
-//   })(req, res, next);
+//   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+//   const newUser = await User.create({ name, email, password: hashPassword });
+
+//   return newUser;
 // };
 
-const signup = async (name, email, password) => {
-  const user = await User.findOne({ email });
+// const login = async (email, password) => {
+//   const user = await User.findOne({ email });
+//   const validPassword = bcrypt.compareSync(password, user.password);
 
-  if (user) {
-    return res.status(409).json({
-      status: "error",
-      code: 409,
-      message: "Email is already in use",
-      data: "Conflict",
-    });
-  }
+//   if (!user || !validPassword) {
+//     return res.json({
+//       status: "error",
+//       code: 401,
+//       message: "Email or password is wrong",
+//       data: "Bad request",
+//     });
+//   }
 
-  const hashPassword = bcrypt.hashSync(password);
+//   const payload = {
+//     id: user._id,
+//     // username: user.username,
+//   };
 
-  const newUser = await User.create({ name, email, password: hashPassword });
-  return newUser;
+//   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+//   return token;
+// };
 
-  // newUser.setPassword(password);
-  // await newUser.save();
-};
-
-const login = async ({ email, password }) => {
-  const user = await User.findOne({ email });
-
-  if (!user || !user.validPassword(password)) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: "Incorrect login or password",
-      data: "Bad request",
-    });
-  }
-
-  const payload = {
-    id: user.id,
-    // username: user.username,
-  };
-
-  const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      token,
-    },
-  });
-};
-
-// router.get("/list", auth, (req, res, next) => {
-//   const { username } = req.user;
+// const getCurrent = async (name, email, password) => {
+//   const { authorization = "" } = req.user;
 //   res.json({
 //     status: "success",
 //     code: 200,
@@ -78,6 +51,6 @@ const login = async ({ email, password }) => {
 //       message: `Authorization was successful: ${username}`,
 //     },
 //   });
-// });
+// };
 
-module.exports = { signup, login };
+// module.exports = { signup, login };
