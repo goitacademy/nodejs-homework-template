@@ -6,6 +6,7 @@ const schemaAddContact = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .required(),
+  favorite: Joi.boolean().default(true)
 });
 
 const schemaPutContact = Joi.object({
@@ -14,6 +15,11 @@ const schemaPutContact = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .optional(),
+  favorite: Joi.boolean().optional()
+});
+
+const schemaPatchContact = Joi.object({ 
+  favorite: Joi.boolean().required()
 });
 
 const addContactValidation = (req, res, next) => {
@@ -32,7 +38,16 @@ const putContactValidation = (req, res, next) => {
   next();
 };
 
+const patchContactValidation = (req, res, next) => {
+  const { error } = schemaPatchContact.validate(req.body);
+  if (error) {
+    return res.status(400).json({ status: error.details });
+  }
+  next();
+};
+
 module.exports = {
   addContactValidation,
   putContactValidation,
+  patchContactValidation
 };
