@@ -15,7 +15,11 @@ const schema = mongoose.Schema(
     favorite: {
       type: Boolean,
       default: false,
-  },
+    },
+    owner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'users',
+    }
       }, {
         versionKey: false,
         timestamps: true,

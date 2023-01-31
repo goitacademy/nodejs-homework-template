@@ -1,8 +1,11 @@
 const { Contact } = require("../models/contacts");
 
 async function getContacts(req, res, next) {
-  try {
-    const contacts = await Contact.find();
+    try {
+      const { _id } = req.user
+      const { page = 1, limit = 20 } = req.query
+      const skip = (page - 1) * limit
+    const contacts = await Contact.find({owner: _id}, "", {skip, limit:Number(limit)});
     console.log("contacts:", contacts);
     res.status(200).json(contacts);
   } catch (error) {
@@ -26,8 +29,9 @@ async function getContact(req, res, next) {
 
 async function createContact(req, res, next) {
   try {
+    const {_id} = req.user
     const { name, email, phone, favorite} = req.body;
-    const newContact = await Contact.create({ name, email, phone, favorite });
+    const newContact = await Contact.create({ name, email, phone, favorite, owner: _id });
     return res.status(201).json(newContact);
   } catch (error) {
     next(error);
