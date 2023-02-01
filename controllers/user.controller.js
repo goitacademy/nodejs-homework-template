@@ -4,10 +4,8 @@ const fs = require('fs/promises');
 var Jimp = require('jimp');
 
 const { User } = require('../models/user');
-PORT = process.env.PORT || 3000;
-
 const { sendMailNodemailer } = require('../helpers/index');
-// const { JWT_SECRET } = process.env;
+PORT = process.env.PORT || 3000;
 
 async function createContact(req, res, next) {
   const { user } = req;
@@ -76,12 +74,16 @@ async function sendRepeatVerifyEmail(req, res, next) {
     subject: 'Please confirm your email!',
     html: `<a href="127.0.0.1:${PORT}/api/auth/verify/${storedUser.verificationToken}">Please, confirm your email!</a>`,
   });
+  // or we can use sandgrid:
+  // await sendMailSandgrid({
+  //   to: email,
+  //   subject: 'Please confirm your email!',
+  //   html: `<a href="127.0.0.1:${PORT}/api/auth/verify/${storedUser.verificationToken}">Please, confirm your email!</a>`,
+  // });
 
-  return res
-    .status(200)
-    .json({
-      message: 'Sent repeat verification mail! Please, check your mail box!',
-    });
+  return res.status(200).json({
+    message: 'Sent repeat verification mail! Please, check your mail box!',
+  });
 }
 
 async function updateStatusUser(req, res, next) {

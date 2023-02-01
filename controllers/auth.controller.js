@@ -36,6 +36,13 @@ async function register(req, res, next) {
       html: `<a href="127.0.0.1:${PORT}/api/auth/verify/${verificationToken}">Please, confirm your email!</a>`,
     });
 
+    // or we can use sendgrig:
+        // await sendMailSandgrid({
+        //   to: email,
+        //   subject: 'Please confirm your email!',
+        //   html: `<a href="127.0.0.1:${PORT}/api/auth/verify/${verificationToken}">Please, confirm your email!</a>`,
+        // });
+
     res.status(201).json({
       data: {
         user: {

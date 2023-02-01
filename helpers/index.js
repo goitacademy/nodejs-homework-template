@@ -17,18 +17,25 @@ function tryCatchWrapper(enpointFn) {
 }
 
 // add sandgrid
-// async function sendMailSandgrid() {
-//   sendGrid.setApiKey(SENDGRID_API_TEST_KEY);
-//   const email = {
-//     from: 'v.mashyka@gmail.com',
-//     to: 'v.mashyka@gmail.com',
-//     subject: 'Sendgrid greeting',
-//     html: '<h1>Hello, Viktor is here!</h1>',
-//     text: 'Hello, Viktor is here!',
-//   };
-//   const response = await sendGrid.send(email);
-//   console.log('response sendGrid: ', response);
-// }
+async function sendMailSandgrid({ to, subject, html }) {
+  sendGrid.setApiKey(SENDGRID_API_TEST_KEY);
+  // example:
+  // const email = {
+  //   from: 'v.mashyka@gmail.com',
+  //   to: 'v.mashyka@gmail.com',
+  //   subject: 'Sendgrid greeting',
+  //   html: '<h1>Hello, Viktor is here!</h1>',
+  //   text: 'Hello, Viktor is here!',
+  // };
+  const email = {
+    from: 'v.mashyka@gmail.com',
+    to,
+    subject,
+    html,
+  };
+  const response = await sendGrid.send(email);
+  console.log('response sendGrid: ', response);
+}
 
 // add nodemailer
 async function sendMailNodemailer({ to, subject, html }) {
@@ -78,4 +85,5 @@ async function sendMailNodemailer({ to, subject, html }) {
 module.exports = {
   tryCatchWrapper,
   sendMailNodemailer,
+  sendMailSandgrid,
 };
