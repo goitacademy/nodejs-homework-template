@@ -17,6 +17,6 @@ router.post("/login", validation(joiLoginSchema), asyncWrapper(ctrl.login));
 
 router.get("/current", auth, asyncWrapper(ctrl.getCurrent));
 
-router.post("/logout", validation(joiLoginSchema), asyncWrapper(ctrl.logout));
+router.get("/logout", auth, asyncWrapper(ctrl.logout));
 
 module.exports = { authRouter: router };
