@@ -1,10 +1,8 @@
 const express = require("express");
-const { PaginationParameters } = require("mongoose-paginate-v2");
 const router = express.Router();
-
 const functions = require("../../controller/contactController");
 const { isAuthorized } = require("../../middleware/auth");
-const contactModel = require("../../models/contact.model");
+
 const {
   schemaContact,
   schemaFavorite,
@@ -13,10 +11,6 @@ const {
 router.use(isAuthorized);
 
 router.get("/", async (req, res) => {
-  if (req.query.favorite) {
-    const favoriteContacts = await functions.listFavoriteContacts();
-    return res.send(favoriteContacts);
-  }
   const { page, perPage } = req.query;
   if (!page) {
     page = 1;
@@ -24,7 +18,15 @@ router.get("/", async (req, res) => {
   if (!perPage) {
     perPage = 20;
   }
-  const contacts = await functions.listContacts();
+  if (req.query.favorite) {
+    const favoriteContacts = await functions.listFavoriteContacts(
+      req.user._id,
+      page,
+      perPage
+    );
+    return res.send(favoriteContacts);
+  }
+  const contacts = await functions.listContacts(req.user._id, page, perPage);
   return res.send(contacts);
 });
 

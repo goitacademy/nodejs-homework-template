@@ -24,6 +24,7 @@ const User = new Schema({
     type: String,
     default: null,
   },
+  avatarURL: String,
 });
 
 module.exports = mongoose.model("User", User);

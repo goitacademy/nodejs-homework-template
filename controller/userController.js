@@ -1,7 +1,7 @@
-const { isAuthorized } = require("../middleware/auth");
+const gravatar = require("gravatar");
 const User = require("../models/user.model");
 const { hashPassword, comparePassword } = require("../utils/hash.util");
-const { jwtSign, jwtVerify } = require("../utils/jwt.util");
+const { jwtSign } = require("../utils/jwt.util");
 
 const signUp = async ({ email, password }) => {
   const user = await User.findOne({ email: email });
@@ -12,15 +12,15 @@ const signUp = async ({ email, password }) => {
     email,
     password: hashPassword(password),
   });
-
+  const secureUrl = gravatar.url(email, { s: "100", r: "x", d: "retro" }, true);
   const updatedUser = await User.findOneAndUpdate(
     { _id: newUser._id },
     {
       token: jwtSign({ _id: newUser._id }),
+      avatarURL: secureUrl,
     },
     { new: true }
   );
-
   return updatedUser;
 };
 
@@ -58,9 +58,19 @@ const updateSubscription = async (_id, subscription) => {
   return user;
 };
 
+const updateAvatar = async (_id, avatarURL) => {
+  const user = await User.findByIdAndUpdate(
+    { _id },
+    { avatarURL },
+    { new: true }
+  );
+  return user;
+};
+
 module.exports = {
   signUp,
   signIn,
   logout,
   updateSubscription,
+  updateAvatar,
 };
