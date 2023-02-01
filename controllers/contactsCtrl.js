@@ -15,10 +15,9 @@ const ctrlGetContacts = async (req, res, next) => {
   try {
     const result = await getContacts();
 
-    if (!result.length) {
+    if (!result) {
       return res.status(404).json({ message: "no contacts", code: 404 });
     }
-
     res.json({ message: "list of contacts", code: 200, result });
     console.table(result);
   } catch (error) {
@@ -53,7 +52,7 @@ const ctrlRemoveContact = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
 
-    if (!result.length) {
+    if (!result) {
       return res.status(404).json({
         message: `id ${contactId} not found`,
         code: 404,
