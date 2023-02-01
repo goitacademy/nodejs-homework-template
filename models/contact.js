@@ -39,6 +39,7 @@ const postSchema = Joi.object({
     .required(),
   phone: Joi.string().alphanum().min(3).max(10).required(),
   favorite: Joi.bool(),
+  owner: Joi.string(),
 });
 
 const putSchema = Joi.object({
