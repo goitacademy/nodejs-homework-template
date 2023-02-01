@@ -2,7 +2,11 @@ const { BadRequest, NotFound } = require("http-errors");
 const { Contact } = require("../../models/contact");
 
 const getAll = async (req, res) => {
-  const contacts = await Contact.find({});
+  const { _id } = req.user;
+  const contacts = await Contact.find({ owner: _id }).populate(
+    "owner",
+    "_id email"
+  );
   res.json({ contacts });
 };
 

@@ -10,7 +10,7 @@ const {
   patchSchema,
 } = require("../../models/contact.js");
 
-router.get("/", asyncWrapper(ctrl.getAll));
+router.get("/", auth, asyncWrapper(ctrl.getAll));
 
 router.get("/:id", asyncWrapper(ctrl.getById));
 
