@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -16,6 +17,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
   },
 
   // прописываем дату создания и дату обновления вместо версии __v:0
@@ -40,6 +45,7 @@ const updateFavoriteSchema = Joi.object({
 });
 
 const Contact = model("contact", contactSchema);
+
 module.exports = { Contact, joiSchema, updateFavoriteSchema };
 
 
