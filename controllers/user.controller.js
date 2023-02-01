@@ -1,10 +1,13 @@
-const { BadRequest, NotFound } = require('http-errors');
+const { BadRequest, NotFound, Conflict } = require('http-errors');
 const path = require('path');
 const fs = require('fs/promises');
 var Jimp = require('jimp');
 
 const { User } = require('../models/user');
 PORT = process.env.PORT || 3000;
+
+const { sendMailNodemailer } = require('../helpers/index');
+// const { JWT_SECRET } = process.env;
 
 async function createContact(req, res, next) {
   const { user } = req;
@@ -54,11 +57,38 @@ async function current(req, res, next) {
   });
 }
 
+async function sendRepeatVerifyEmail(req, res, next) {
+  const { email } = req.body;
+  if (!email) {
+    throw BadRequest(`Missing required field email!`);
+  }
+  const storedUser = await User.findOne({ email });
+  console.log('storedUser: ', storedUser);
+  if (!storedUser) {
+    throw Conflict('Email is not valid');
+  }
+  if (storedUser.verify) {
+    throw BadRequest('Verification has already been passed!');
+  }
+
+  await sendMailNodemailer({
+    to: email,
+    subject: 'Please confirm your email!',
+    html: `<a href="127.0.0.1:${PORT}/api/auth/verify/${storedUser.verificationToken}">Please, confirm your email!</a>`,
+  });
+
+  return res
+    .status(200)
+    .json({
+      message: 'Sent repeat verification mail! Please, check your mail box!',
+    });
+}
+
 async function updateStatusUser(req, res, next) {
   const { user } = req;
   const { email, _id: id, subscription, avatarURL } = user;
   if (!req.body) {
-    throw BadRequest(`Missing field subscription`);
+    throw BadRequest(`Missing field subscription!`);
   }
   const result = await User.findByIdAndUpdate(user._id, req.body, {
     new: true,
@@ -122,6 +152,7 @@ module.exports = {
   createContact,
   getContacts,
   current,
+  sendRepeatVerifyEmail,
   updateStatusUser,
   uploadAvatarUser,
 };

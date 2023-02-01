@@ -5,6 +5,7 @@ const {
   createContact,
   getContacts,
   current,
+  sendRepeatVerifyEmail,
   updateStatusUser,
   uploadAvatarUser,
 } = require('../../controllers/user.controller');
@@ -29,6 +30,7 @@ userRouter.get(
   tryCatchWrapper(getContacts)
 );
 userRouter.get('/current', tryCatchWrapper(auth), tryCatchWrapper(current));
+userRouter.post('/verify', tryCatchWrapper(sendRepeatVerifyEmail));
 userRouter.patch(
   '/',
   tryCatchWrapper(auth),
