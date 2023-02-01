@@ -1,8 +1,21 @@
+require('dotenv').config();
 const fs = require('fs').promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
 
-const contactsPath = path.resolve('./models/contacts.json');
+run();
+async function run() {
+  try {
+    await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
+    console.log('Database connection successful');
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+ const contactsPath = path.resolve('./models/contacts.json');
 
 const listContacts = async function () {
   try {
