@@ -1,5 +1,3 @@
-const multer = require("multer");
-
 const fs = require("fs").promises;
 const Jimp = require("jimp");
 
@@ -19,7 +17,7 @@ async function editAvatar(req, res, next) {
       console.error(err);
     });
   req.file.path = `/public/avatars/${fileName}.${fileType}`;
-  await fs.unlink(`./tmp/${fileName}.${fileType}`);
+  // await fs.unlink(`./tmp/${fileName}.${fileType}`);
   next();
 }
 

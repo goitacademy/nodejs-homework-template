@@ -1,10 +1,8 @@
 const express = require("express");
-const { PaginationParameters } = require("mongoose-paginate-v2");
 const router = express.Router();
-
 const functions = require("../../controller/contactController");
 const { isAuthorized } = require("../../middleware/auth");
-const contactModel = require("../../models/contact.model");
+
 const {
   schemaContact,
   schemaFavorite,
