@@ -25,7 +25,7 @@ module.exports = {
         minDomainSegments: 2,
         tlds: { allow: ["com", "net"] },
       }),
-      name: Joi.string().min(3).max(30).required(),
+      name: Joi.string().min(3).max(30),
     });
     validationSchema(schema, req, res);
     next();
