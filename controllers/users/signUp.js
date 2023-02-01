@@ -7,7 +7,9 @@ const signUp = async (req, res) => {
   if (user) {
     throw new Conflict(`${email} in use`);
   }
-  const newUser = await User.create({ email, password });
+  const newUser = new User({ email });
+  newUser.setPassword(password);
+  newUser.save();
   res.status(201).json({
     user: {
       email,
