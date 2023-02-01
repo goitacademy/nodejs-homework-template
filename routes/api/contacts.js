@@ -1,25 +1,72 @@
-const express = require('express')
+const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-const router = express.Router()
+const {
+  validationAddContact,
+  validationUpdateContact,
+} = require("../../schemas/createContactValidation");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const createError = require("../../helpers/createError");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const contacts = await listContacts();
+    res.status(200).json(contacts);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const contact = await getContactById(req.params.contactId);
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = validationAddContact.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const contact = await addContact(req.body);
+    res.status(201).json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    await removeContact(req.params.contactId);
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = validationUpdateContact.validate(req.body);
+    if (error) {
+      throw createError(400, error.message);
+    }
+    const contact = await updateContact(req.params.contactId, req.body);
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
