@@ -8,6 +8,7 @@ const validateJoiMiddleware = joiValidation(joiSignupSchema);
 
 router.post("/signup", validateJoiMiddleware, ctrlWrapper(ctrl.signup));
 router.post("/login", validateJoiMiddleware, ctrlWrapper(ctrl.login));
+router.get("/logout",  ctrlWrapper(ctrl.logout));
 
 
 module.exports = router;
