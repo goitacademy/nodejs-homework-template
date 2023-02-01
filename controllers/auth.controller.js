@@ -1,10 +1,13 @@
-const { User } = require('../models/user');
-const { Conflict, Unauthorized } = require('http-errors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const { JWT_SECRET } = process.env;
 var gravatar = require('gravatar');
+const { v4 } = require('uuid');
+const { Conflict, Unauthorized } = require('http-errors');
+
+const { User } = require('../models/user');
+const { sendMailNodemailer } = require('../helpers/index');
+const { JWT_SECRET } = process.env;
+const PORT = process.env.PORT || 3000;
 
 async function register(req, res, next) {
   const { email, password } = req.body;
@@ -17,12 +20,22 @@ async function register(req, res, next) {
     false
   );
   try {
+    const verificationToken = v4();
     const savedUser = await User.create({
       email,
       // password: hashedPassword,
       password,
       avatarURL,
+      verify: false,
+      verificationToken,
     });
+
+    await sendMailNodemailer({
+      to: email,
+      subject: 'Please confirm your email!',
+      html: `<a href="127.0.0.1:${PORT}/api/users/verify/${verificationToken}">Please, confirm your email!</a>`,
+    });
+
     res.status(201).json({
       data: {
         user: {
@@ -30,6 +43,7 @@ async function register(req, res, next) {
           id: savedUser._id,
           subscription: savedUser.subscription,
           avatarURL: savedUser.avatarURL,
+          verificationToken: savedUser.verificationToken,
         },
       },
     });
@@ -42,16 +56,39 @@ async function register(req, res, next) {
   }
 }
 
+async function verifyEmail(req, res, next) {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken: verificationToken });
+  if (!user) {
+    throw BadRequest(`Verify token is not valid!`);
+  }
+
+  await User.findByIdAndUpdate(
+    user._id,
+    {
+      verify: true,
+      verificationToken: null,
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({ message: 'Verification successful!' });
+}
+
 async function login(req, res, next) {
   const { email, password } = req.body;
   const storedUser = await User.findOne({ email });
   if (!storedUser) {
-    throw Conflict('email is not valid'); // TODO change email or password is not valid
+    throw Conflict('Email or password is not valid!');
+  }
+
+  if (!storedUser.verify) {
+    throw Conflict('Email is not verified! Please check your mail box!');
   }
 
   const isPasswordValid = await bcrypt.compare(password, storedUser.password);
   if (!isPasswordValid) {
-    throw Conflict('password is not valid'); // TODO change email or password is not valid
+    throw Conflict('Email or password is not valid!');
   }
   const payload = { id: storedUser._id };
   const token = jwt.sign(payload, JWT_SECRET, {
@@ -90,6 +127,7 @@ async function logout(req, res, next) {
 
 module.exports = {
   register,
+  verifyEmail,
   login,
   logout,
 };

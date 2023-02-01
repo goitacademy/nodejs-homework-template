@@ -1,8 +1,8 @@
 const { NotFound, BadRequest } = require('http-errors');
-const { Contact } = require('../models/contacts');
 const path = require('path');
 const fs = require('fs/promises');
 
+const { Contact } = require('../models/contacts');
 PORT = process.env.PORT || 3000;
 
 async function getContacts(req, res, next) {
@@ -12,8 +12,6 @@ async function getContacts(req, res, next) {
     favorite = [true, false],
     search = '',
   } = req.query;
-  // const search = req.query.search || ''; // example
-  // .find({name: { $regex: search, $options: 'i' },}) // example
   const skip = (page - 1) * limit;
   return res.status(200).json(
     await Contact.find({ favorite, name: { $regex: search, $options: 'i' } })
@@ -26,7 +24,7 @@ async function getContact(req, res, next) {
   const { id } = req.params;
   const contact = await Contact.findById(id);
   if (!contact) {
-    throw NotFound(`Contact with <${id}> not found`);
+    throw NotFound(`Contact with <${id}> not found!`);
   }
   return res.status(200).json(contact);
 }
@@ -45,7 +43,7 @@ async function deleteContact(req, res, next) {
   }
   return res
     .status(200)
-    .json({ message: `Contact with name <${contact.name}> has been deleted` });
+    .json({ message: `Contact with name <${contact.name}> has been deleted!` });
 }
 
 async function changeContact(req, res, next) {
@@ -55,7 +53,7 @@ async function changeContact(req, res, next) {
   }
   const result = await Contact.findByIdAndUpdate(id, req.body, res);
   if (!result) {
-    throw NotFound(`Contact with <${id}> not found`);
+    throw NotFound(`Contact with <${id}> not found!`);
   }
   return res.status(200).json(result);
 }
@@ -67,14 +65,12 @@ async function updateStatusContact(req, res, next) {
   }
   const result = await Contact.findByIdAndUpdate(id, req.body, res);
   if (!result) {
-    throw NotFound(`Contact with <${id}> not found`);
+    throw NotFound(`Contact with <${id}> not found!`);
   }
   return res.status(200).json(result);
 }
 
-// add contact image
 async function uploadImageContact(req, res, next) {
-  // req.file
   console.log('req.file ', req.file);
   const { filename } = req.file;
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
@@ -97,7 +93,7 @@ async function uploadImageContact(req, res, next) {
 
   // const imagePath = `/public/images/${filename}`;
   const contact = await Contact.findById(contactId);
-  contact.image = `http://127.0.0.1:${PORT}/public/images/${filename}`; // http/127.0.0.1/public/images/${filename}
+  contact.image = `http://127.0.0.1:${PORT}/public/images/${filename}`;
   await contact.save();
 
   return res.status(200).json({ data: { image: contact.image } }); // TODO change to array

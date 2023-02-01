@@ -19,7 +19,6 @@ const schema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contact',
-        // unique: true,
       },
     ],
     subscription: {
@@ -31,6 +30,14 @@ const schema = mongoose.Schema(
     avatarURL: {
       type: String,
       default: '',
+    },
+    verify: {
+      type: Boolean,
+      // default: false,
+    },
+    verificationToken: {
+      type: String,
+      // required: [true, 'Verify token is required'],
     },
   },
   {

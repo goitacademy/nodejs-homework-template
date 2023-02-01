@@ -29,7 +29,6 @@ userRouter.get(
   tryCatchWrapper(getContacts)
 );
 userRouter.get('/current', tryCatchWrapper(auth), tryCatchWrapper(current));
-
 userRouter.patch(
   '/',
   tryCatchWrapper(auth),

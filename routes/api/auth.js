@@ -3,6 +3,7 @@ const { tryCatchWrapper } = require('../../helpers');
 const { validateBody } = require('../../middlewares/validation');
 const {
   register,
+  verifyEmail,
   login,
   logout,
 } = require('../../controllers/auth.controller');
@@ -17,6 +18,7 @@ authRouter.post(
   validateBody(userCreateValidationSchema),
   tryCatchWrapper(register)
 );
+authRouter.get('/verify/:verificationToken', tryCatchWrapper(verifyEmail));
 authRouter.post('/login', tryCatchWrapper(login));
 authRouter.post('/logout', tryCatchWrapper(logout));
 

@@ -1,3 +1,11 @@
+// add sandgrid
+const sendGrid = require('@sendgrid/mail');
+const { SENDGRID_API_TEST_KEY } = process.env;
+
+// add nodemailer
+const nodemailer = require('nodemailer');
+const { USER_NODEMAILER, PASS_NODEMAILER } = process.env;
+
 function tryCatchWrapper(enpointFn) {
   return async (req, res, next) => {
     try {
@@ -6,6 +14,49 @@ function tryCatchWrapper(enpointFn) {
       return next(error);
     }
   };
+}
+
+// add sandgrid
+// async function sendMailSandgrid() {
+//   sendGrid.setApiKey(SENDGRID_API_TEST_KEY);
+//   const email = {
+//     from: 'v.mashyka@gmail.com',
+//     to: 'v.mashyka@gmail.com',
+//     subject: 'Sendgrid greeting',
+//     html: '<h1>Hello, Viktor is here!</h1>',
+//     text: 'Hello, Viktor is here!',
+//   };
+//   const response = await sendGrid.send(email);
+//   console.log('response sendGrid: ', response);
+// }
+
+// add nodemailer
+async function sendMailNodemailer({ to, subject, html }) {
+  // example:
+  // const email = {
+  //   from: 'v.mashyka@gmail.com',
+  //   to: 'v.mashyka@gmail.com',
+  //   subject: 'Nodemailer greeting',
+  //   html: '<h1>Hello, Viktor is here!</h1>',
+  //   text: 'Hello, Viktor is here!',
+  // };
+
+  const email = {
+    from: 'v.mashyka@gmail.com',
+    to,
+    subject,
+    html,
+  };
+  const transport = nodemailer.createTransport({
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+      user: USER_NODEMAILER,
+      pass: PASS_NODEMAILER,
+    },
+  });
+  const response = await transport.sendMail(email);
+  console.log('response nodemailer: ', response);
 }
 
 //**Example 1 */
@@ -26,4 +77,5 @@ function tryCatchWrapper(enpointFn) {
 
 module.exports = {
   tryCatchWrapper,
+  sendMailNodemailer,
 };

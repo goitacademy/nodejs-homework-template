@@ -1,6 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config(); // require('dotenv').config();
+
 mongoose.set('strictQuery', false);
 // mongoose.set("debug", true); // enable logging
 
