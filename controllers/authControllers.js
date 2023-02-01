@@ -5,6 +5,10 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET;
 
 const { User } = require("../models/userModels");
+const {
+  emailInUse,
+  wrongEmailOrPassword,
+} = require("../helpers/errorHandlers");
 
 const ctrlSignup = async (req, res, next) => {
   try {
@@ -12,11 +16,9 @@ const ctrlSignup = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.json({
-        status: "error",
+      return res.status(409).json({
         code: 409,
         message: "Email in use",
-        data: "Conflict",
       });
     }
 
@@ -44,11 +46,9 @@ const ctrlLogin = async (req, res, next) => {
     const validPassword = bcrypt.compareSync(password, user.password);
 
     if (!user || !validPassword) {
-      return res.json({
-        status: "error",
+      return res.status(401).json({
         code: 401,
         message: "Email or password is wrong",
-        data: "Bad request",
       });
     }
 
@@ -57,6 +57,7 @@ const ctrlLogin = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+    await User.findByIdAndUpdate(user._id, { token });
 
     res.json({
       status: "success",
@@ -73,7 +74,7 @@ const ctrlLogin = async (req, res, next) => {
 
 const ctrlCurrent = async (req, res, next) => {
   try {
-    const { name, email } = req.user;
+    const { name, email, subscription } = req.user;
 
     res.json({
       status: "success",
@@ -82,8 +83,45 @@ const ctrlCurrent = async (req, res, next) => {
         user: {
           name,
           email,
+          subscription,
         },
       },
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+};
+
+const ctrlLogout = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findByIdAndUpdate(_id, { token: null });
+
+    if (!user) {
+      unauthorized(res);
+    }
+
+    res.status(204).json({
+      status: "No content",
+      code: 204,
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+};
+
+const ctrlUpdateCurrent = async (req, res, next) => {
+  try {
+    const { subscription } = req.body;
+    const { _id } = req.user;
+
+    await User.findByIdAndUpdate({ _id }, { $set: { subscription } });
+
+    res.json({
+      status: "subscription updated",
+      code: 200,
     });
   } catch (error) {
     console.log(error.message);
@@ -95,4 +133,6 @@ module.exports = {
   ctrlSignup,
   ctrlLogin,
   ctrlCurrent,
+  ctrlLogout,
+  ctrlUpdateCurrent,
 };

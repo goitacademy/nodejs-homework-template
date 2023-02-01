@@ -10,21 +10,19 @@ const auth = async (req, res, next) => {
 
   try {
     if (bearer !== "Bearer") {
-      return res.json({
-        status: "401 Unauthorized",
-        code: 401,
+      return res.status(401).json({
         message: "Not authorized",
+        code: 401,
       });
     }
 
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
 
-    if (!user) {
-      return res.json({
-        status: "401 Unauthorized",
-        code: 401,
+    if (!user || !user.token) {
+      return res.status(401).json({
         message: "Not authorized",
+        code: 401,
       });
     }
 

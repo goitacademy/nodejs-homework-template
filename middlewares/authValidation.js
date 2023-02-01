@@ -47,4 +47,25 @@ const addLoginValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { addSignupValidation, addLoginValidation };
+const addSubscriptionValidation = (req, res, next) => {
+  const schema = Joi.object({
+    subscription: Joi.string().valid("starter", "pro", "business").required(),
+  });
+
+  const validationResult = schema.validate(req.body);
+
+  if (validationResult.error) {
+    return res.status(400).json({
+      message: validationResult.error.details,
+      code: 400,
+    });
+  }
+
+  next();
+};
+
+module.exports = {
+  addSignupValidation,
+  addLoginValidation,
+  addSubscriptionValidation,
+};
