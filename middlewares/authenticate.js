@@ -3,7 +3,7 @@ const { User } = require('../models/user');
 
 const RequestError = require('../helpers/requestError');
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, _, next) => {
   const { authorization = '' } = req.headers;
 
   const [bearer, token] = authorization.split(' ');
@@ -12,7 +12,10 @@ module.exports = async (req, res, next) => {
     next(RequestError(401, 'Not authorized'));
   }
   try {
-    const { id } = jwt.verify(token, process.env.SECRET);
+    const { id } = jwt.verify(
+      token,
+      process.env.SECRET_KEY
+    );
 
     const user = await User.findById(id);
 

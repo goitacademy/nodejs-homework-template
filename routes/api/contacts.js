@@ -6,8 +6,9 @@ const {
   validation,
   ctrlWrapper,
   authenticate,
+  isValidId,
 } = require('../../middlewares');
-const isValidId = require('../../middlewares/isValidId');
+
 const { schemas } = require('../../models/contact');
 
 router.get('/', authenticate, ctrlWrapper(ctrl.getAll));

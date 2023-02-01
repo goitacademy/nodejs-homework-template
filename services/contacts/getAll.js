@@ -1,6 +1,6 @@
 const { Contact } = require('../../models/contact');
 
-const getAll = async (req) => {
+module.exports = async (req) => {
   const { _id: owner } = req.user;
 
   const { page = 1, limit = 10, favorite } = req.query;
@@ -17,5 +17,3 @@ const getAll = async (req) => {
     limit,
   }).populate('owner', 'subscription email');
 };
-
-module.exports = getAll;

@@ -1,7 +1,10 @@
-const { register, login } = require('../../services/users');
+const {
+  register,
+  login,
+  updateToken,
+} = require('../../services/users');
 
 const RequestError = require('../../helpers/requestError');
-const { User } = require('../../models/user');
 
 module.exports = async (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +24,7 @@ module.exports = async (req, res) => {
   }
 
   const token = await login.getToken(user.id);
-  await User.findByIdAndUpdate(user.id, { token });
+  await updateToken(user.id, token);
 
   res.json({
     token,
