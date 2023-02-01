@@ -44,12 +44,10 @@ const deleteContact = async (req, res) => {
 };
 
 const setFavorite = async (req, res) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
-  if (!favorite) {
-    throw new WrongParamsError("Missing field favorite");
-  }
-  const result = await updateStatusContact(contactId, favorite);
+  const result = await updateStatusContact(
+    req.params.contactId,
+    req.body.favorite
+  );
   res.status(200).json(result);
 };
 

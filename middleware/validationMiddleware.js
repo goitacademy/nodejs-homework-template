@@ -20,4 +20,17 @@ module.exports = {
 
     next();
   },
+
+  favoriteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.bool().required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      throw new ValidationError(validationResult.error.message);
+    }
+
+    next();
+  },
 };
