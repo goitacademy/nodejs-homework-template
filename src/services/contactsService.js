@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Contact } = require('../db/contactModel');
 const { NotFoundError } = require('../helpers/errors');
 require('colors');
@@ -15,7 +16,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const contactById = await Contact.findById(contactId);
+    const contactById = await Contact.findById(mongoose.Types.ObjectId(contactId));
     console.log(contactById);
 
     if (!contactById) {
