@@ -10,28 +10,28 @@ const serverError = (err, res) => {
 
 const noDataError = (res) => {
   return res.status(404).json({
-    message: `no data found`,
+    message: "no data found",
     code: 404,
   });
 };
 
 const noDataByIdError = (res) => {
   return res.status(404).json({
-    message: `no contacts by this id found`,
+    message: "no contacts by this id found",
     code: 404,
   });
 };
 
 const duplicateError = (res) => {
   return res.status(400).json({
-    message: `contact with such a name already exist`,
+    message: "contact with such a name already exist",
     code: 400,
   });
 };
 
 const missingFieldFavorite = (res) => {
   return res.json({
-    message: `missing field favorite`,
+    message: "missing field favorite",
     code: 400,
   });
 };

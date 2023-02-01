@@ -5,11 +5,14 @@ const {
   ctrlSignup,
   ctrlLogin,
   ctrlCurrent,
+  ctrlLogout,
+  ctrlUpdateCurrent,
 } = require("../../controllers/authControllers");
 
 const {
   addSignupValidation,
   addLoginValidation,
+  addSubscriptionValidation,
 } = require("../../middlewares/authValidation");
 
 const { auth } = require("../../middlewares/auth");
@@ -20,6 +23,13 @@ router.post("/login", addLoginValidation, ctrlLogin);
 
 router.get("/current", auth, ctrlCurrent);
 
-// router.post("/logout", ctrlGetContacts);
+router.patch(
+  "/current/subscription",
+  auth,
+  addSubscriptionValidation,
+  ctrlUpdateCurrent
+);
+
+router.get("/logout", auth, ctrlLogout);
 
 module.exports = router;
