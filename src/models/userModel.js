@@ -23,17 +23,14 @@ const userSchema = new Schema(
         'Please enter a valid email address',
       ],
     },
-
     verify: {
       type: Boolean,
       default: false,
     },
-
     verificationToken: {
       type: String,
       required: [true, 'Verify token is required'],
     },
-
     subscription: {
       type: String,
       enum: ['starter', 'pro', 'business'],

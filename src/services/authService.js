@@ -1,30 +1,20 @@
-import * as dotenv from 'dotenv'; // to get variables from .env
 import bcrypt from 'bcrypt'; // hash password
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken'; // JWT
 import { User } from '../models/userModel.js';
-import sgMail from '@sendgrid/mail'; // to send email
 import { v4 as uuidv4 } from 'uuid';
-
-dotenv.config();
-
-const { SENDGRID_API_KEY } = process.env;
-sgMail.setApiKey(SENDGRID_API_KEY);
+import { sendEmail } from '../helpers/sendEmail.js';
 
 export const signup = async newUserData => {
   const verificationToken = uuidv4();
 
   const newUser = await User.create({ ...newUserData, verificationToken });
 
-  const message = {
-    to: newUser.email,
-    from: 'vera.voronova@hotmail.com',
-    subject: 'Email verification',
-    text: `Please, confirm your email: http://localhost:3000/api/users//verify/${verificationToken}`,
-    html: `Please, <a href="http://localhost:3000/api/users/verify/${verificationToken}">confirm</a> your email `,
-  };
-
-  await sgMail.send(message);
+  await sendEmail({
+    type: 'verification',
+    email: newUser.email,
+    verificationToken,
+  });
 
   return {
     email: newUser.email,
@@ -45,17 +35,7 @@ export const verifyEmail = async verificationToken => {
   user.verify = true;
   await user.save();
 
-  console.log('user in verification', user);
-
-  const message = {
-    to: user.email,
-    from: 'vera.voronova@hotmail.com',
-    subject: 'Thank you for registration',
-    text: "You've been successfully registered",
-    html: "<h1>You've been successfully registered</h1>",
-  };
-
-  await sgMail.send(message);
+  await sendEmail({ type: 'registration', email: user.email });
 
   return user;
 };
@@ -76,26 +56,23 @@ export const resendEmail = async email => {
   user.verificationToken = verificationToken;
   await user.save();
 
-  const message = {
-    to: user.email,
-    from: 'vera.voronova@hotmail.com',
-    subject: 'Email verification',
-    text: `Please, confirm your email: http://localhost:3000/api/users//verify/${verificationToken}`,
-    html: `Please, <a href="http://localhost:3000/api/users/verify/${verificationToken}">confirm</a> your email `,
-  };
-
-  await sgMail.send(message);
+  await sendEmail({
+    type: 'verification',
+    email: user.email,
+    verificationToken,
+  });
 
   return { email };
 };
 
 export const login = async (email, password) => {
   const user = await User.findOne(
-    { email, verify: true },
-    { email: 1, subscription: 1, password: 1, avatarURL: 1 }
+    { email },
+    { email: 1, subscription: 1, password: 1, verify: 1, avatarURL: 1 }
   );
 
   if (!user) return null;
+  if (!user.verify) throw new createError(401, `Email is not verified`);
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) return null;
