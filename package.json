@@ -20,11 +20,12 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "morgan": "1.10.0",
+    "prettier": "^2.8.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",

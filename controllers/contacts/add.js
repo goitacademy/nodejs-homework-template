@@ -1,10 +1,10 @@
-const service = require("../../services");
+const service = require('../../services');
 
 const add = async (req, res) => {
-  const result = await service.add(req.body);
+  const result = await service.add(req);
 
   res.status(201).json({
-    status: "success",
+    status: 'success',
     code: 201,
     data: {
       result,

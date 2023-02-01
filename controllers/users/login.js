@@ -1,6 +1,7 @@
-const { register, login } = require("../../services/users");
+const { register, login } = require('../../services/users');
 
-const RequestError = require("../../helpers/requestError");
+const RequestError = require('../../helpers/requestError');
+const { User } = require('../../models/user');
 
 module.exports = async (req, res) => {
   const { email, password } = req.body;
@@ -10,12 +11,18 @@ module.exports = async (req, res) => {
     throw RequestError(401, `Email: ${email} invalid`);
   }
 
-  const isValidPassword = await login.isValidHash(password, user.password);
+  const isValidPassword = await login.isValidHash(
+    password,
+    user.password
+  );
+
   if (!isValidPassword) {
     throw RequestError(401, `Password invalid`);
   }
 
   const token = await login.getToken(user.id);
+  await User.findByIdAndUpdate(user.id, { token });
+
   res.json({
     token,
     user: {

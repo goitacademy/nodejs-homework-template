@@ -1,16 +1,19 @@
-const RequestError = require("../../helpers/requestError");
-const service = require("../../services");
+const RequestError = require('../../helpers/requestError');
+const service = require('../../services');
 
 const removeById = async (req, res) => {
   const { id } = req.params;
-  const result = await service.removeById(id);
 
+  const result = await service.removeById(id);
   if (!result) {
-    throw RequestError(404, `contact with id:${id} ALREADY deleted`);
+    throw RequestError(
+      404,
+      `contact with id:${id} ALREADY deleted`
+    );
   }
 
   res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     message: `contact with id:${id} deleted`,
     data: {

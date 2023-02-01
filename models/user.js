@@ -1,6 +1,6 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
-const Joi = require("joi");
-const handleMongooseErr = require("../helpers/handleMongooseErr");
+const { Schema, model } = require('mongoose');
+const Joi = require('joi');
+const handleMongooseErr = require('../helpers/handleMongooseErr');
 
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -15,32 +15,31 @@ const userSchema = Schema(
     password: {
       type: String,
       minlength: 6,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required'],
     },
     email: {
       type: String,
       match: emailRegex,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: ['starter', 'pro', 'business'],
+      default: 'starter',
     },
     token: {
       type: String,
       default: null,
     },
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: "user",
-    },
   },
-  { versionKey: false, timestamps: { createdAt: true, updatedAt: false } }
+  {
+    versionKey: false,
+    timestamps: { createdAt: true, updatedAt: false },
+  }
 );
 
-userSchema.post("save", handleMongooseErr);
+userSchema.post('save', handleMongooseErr);
 
 const registerSchema = Joi.object({
   name: Joi.string().min(1),
@@ -58,7 +57,7 @@ const schemas = {
   loginSchema,
 };
 
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
 module.exports = {
   User,

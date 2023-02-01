@@ -1,10 +1,10 @@
-const services = require("../../services");
+const services = require('../../services');
 
 const getAll = async (req, res) => {
-  const result = await services.getAll();
+  const result = await services.getAll(req);
 
   res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     data: {
       result,

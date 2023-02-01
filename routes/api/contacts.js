@@ -1,31 +1,52 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const { contacts: ctrl } = require("../../controllers");
-const { validation, ctrlWrapper } = require("../../middlewares");
-const isValidId = require("../../middlewares/isValidId");
-const { schemas } = require("../../models/contact");
+const { contacts: ctrl } = require('../../controllers');
+const {
+  validation,
+  ctrlWrapper,
+  authenticate,
+} = require('../../middlewares');
+const isValidId = require('../../middlewares/isValidId');
+const { schemas } = require('../../models/contact');
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get('/', authenticate, ctrlWrapper(ctrl.getAll));
 
-router.get("/:id", isValidId, ctrlWrapper(ctrl.getByID));
+router.get(
+  '/:id',
+  authenticate,
+  isValidId,
+  ctrlWrapper(ctrl.getByID)
+);
 
-router.post("/", validation(schemas.joiContact), ctrlWrapper(ctrl.add));
+router.post(
+  '/',
+  authenticate,
+  validation(schemas.joiContact),
+  ctrlWrapper(ctrl.add)
+);
 
 router.put(
-  "/:id",
+  '/:id',
+  authenticate,
   isValidId,
   validation(schemas.joiContact),
   ctrlWrapper(ctrl.update)
 );
 
 router.patch(
-  "/:id/favorite",
+  '/:id/favorite',
+  authenticate,
   isValidId,
   validation(schemas.joiStatus),
   ctrlWrapper(ctrl.updateStatus)
 );
 
-router.delete("/:id", isValidId, ctrlWrapper(ctrl.removeById));
+router.delete(
+  '/:id',
+  authenticate,
+  isValidId,
+  ctrlWrapper(ctrl.removeById)
+);
 
 module.exports = router;
