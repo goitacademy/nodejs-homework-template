@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { controllers: ctrl } = require("../../controllers");
 const { asyncWrapper } = require("../../helpers");
-const { validation } = require("../../middlewares");
+const { auth, validation } = require("../../middlewares");
 const {
   postSchema,
   putSchema,
@@ -14,7 +14,7 @@ router.get("/", asyncWrapper(ctrl.getAll));
 
 router.get("/:id", asyncWrapper(ctrl.getById));
 
-router.post("/", validation(postSchema), asyncWrapper(ctrl.add));
+router.post("/", auth, validation(postSchema), asyncWrapper(ctrl.add));
 
 router.delete("/:id", asyncWrapper(ctrl.removeById));
 

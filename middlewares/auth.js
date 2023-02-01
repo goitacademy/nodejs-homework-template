@@ -19,17 +19,16 @@ const { User } = require("../models");
 const { SECRET_KEY } = process.env;
 
 const auth = async (req, res, next) => {
-  const { autorization = "" } = req.headers;
-  const [bearer, token] = autorization.split(" ");
-
+  const { authorization = " " } = req.headers;
+  const [bearer, token] = authorization.split(" ");
   try {
     if (bearer !== "Bearer") {
-      throw new Unauthorized(`Not autorized zagolovok`);
+      throw new Unauthorized(`Not authorized zagolovok`);
     }
     const { id } = jwt.verify(token, SECRET_KEY);
-    const user = User.findById(id);
+    const user = await User.findById(id);
     if (!user) {
-      throw new Unauthorized(`Not autorized net usera`);
+      throw new Unauthorized(`Not autorized net user`);
     }
     req.user = user;
     next();
