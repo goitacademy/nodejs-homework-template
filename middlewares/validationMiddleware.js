@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const {ValidationError} = require("../helpers/errors");
 
 const schemaAddContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -25,7 +26,7 @@ const schemaPatchContact = Joi.object({
 const addContactValidation = (req, res, next) => {
   const { error } = schemaAddContact.validate(req.body);
   if (error) {
-    return res.status(400).json({ status: error.details });
+    next(new ValidationError(error.details));
   }
   next();
 };
@@ -33,7 +34,7 @@ const addContactValidation = (req, res, next) => {
 const putContactValidation = (req, res, next) => {
   const { error } = schemaPutContact.validate(req.body);
   if (error) {
-    return res.status(400).json({ status: error.details });
+    next(new ValidationError(error.details));
   }
   next();
 };
@@ -41,7 +42,7 @@ const putContactValidation = (req, res, next) => {
 const patchContactValidation = (req, res, next) => {
   const { error } = schemaPatchContact.validate(req.body);
   if (error) {
-    return res.status(400).json({ status: error.details });
+    next(new ValidationError(error.details));
   }
   next();
 };

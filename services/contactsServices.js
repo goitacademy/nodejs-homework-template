@@ -1,4 +1,5 @@
 const { Contact } = require("../db/contactsModel");
+const {WrongParametersError} = require("../helpers/errors");
 
 const getContacts = async () => {    
   const contacts = await Contact.find({});  
@@ -7,6 +8,9 @@ const getContacts = async () => {
 
 const getContactById = async (id) => {
   const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new WrongParametersError(`Not found such id ${id}`);
+  }
   return contact;
 };
 
