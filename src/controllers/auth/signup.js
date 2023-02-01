@@ -13,7 +13,7 @@ const signup = async (req, res, next) => {
     const result = await User.create({ email, password });
     res.status(201).json({
       status: "success",
-      code: 200,
+      code: 201,
       user: { email: result.email, subscription: result.subscription },
     });
   } catch (error) {

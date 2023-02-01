@@ -1,4 +1,4 @@
-const joyValidation = (schema) => {
+const joiValidation = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -9,4 +9,4 @@ const joyValidation = (schema) => {
   };
 };
 
-module.exports = joyValidation;
+module.exports = joiValidation;

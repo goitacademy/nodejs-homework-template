@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 // 
-const { joiSignupSchema } = require("../../models/index");
-const { joyValidation, ctrlWrapper } = require("../../middleware/index");
-const {auth: ctrl} = require("../../controllers/index")
-const validateJoiMiddleware = joyValidation(joiSignupSchema);
+const { joiSignupSchema } = require("../../models/user");
+const { joiValidation, ctrlWrapper } = require("../../middleware");
+const {auth: ctrl} = require("../../controllers")
+const validateJoiMiddleware = joiValidation(joiSignupSchema);
 // const updateJoiFavoriteSchema = joyValidation(updateFavoriteSchema);
 
 // const {

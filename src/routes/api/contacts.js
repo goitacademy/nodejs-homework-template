@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const { joiSchema, updateFavoriteSchema } = require("../../models/contacts");
-const { joyValidation, isValidId } = require("../../middleware/index");
+const { joiValidation, isValidId } = require("../../middleware/index");
 const {  ctrlWrapper } = require("../../middleware/index");
 const {contacts: ctrl} = require("../../controllers/index")
-const validateJoiMiddleware = joyValidation(joiSchema);
-const updateJoiFavoriteSchema = joyValidation(updateFavoriteSchema);
+const validateJoiMiddleware = joiValidation(joiSchema);
+const updateJoiFavoriteSchema = joiValidation(updateFavoriteSchema);
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
