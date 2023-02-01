@@ -33,4 +33,11 @@ router.get(
   ctrlWrapper(ctrl.logout)
 );
 
+router.patch(
+  '/',
+  authenticate,
+  validation(schemas.updateSubscriptionSchema),
+  ctrlWrapper(ctrl.updateSubscription)
+);
+
 module.exports = router;
