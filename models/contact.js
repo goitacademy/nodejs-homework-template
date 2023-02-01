@@ -7,11 +7,17 @@ const contactSchema = Schema(
 		name: {
 			type: String,
 			required: [true, "Set name for contact"],
+			minLength: 3,
+			maxLength: 30,
+			trim: true,
 		},
 		email: {
 			type: String,
 			required: [true, "Set email for contact"],
 			unique: true,
+			minLength: 3,
+			maxLength: 30,
+			trim: true,
 		},
 		phone: {
 			type: String,

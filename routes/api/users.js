@@ -25,4 +25,11 @@ router.get(
 
 router.get("/logout", auth, controllerWrapper(ctrl.logout));
 
+router.patch(
+	"/",
+	auth,
+	validation(schemas.joiUpdateSubscription),
+	controllerWrapper(ctrl.updateSubscription)
+);
+
 module.exports = router;

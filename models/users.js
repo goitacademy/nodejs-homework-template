@@ -6,13 +6,16 @@ const userSchema = Schema(
 	{
 		password: {
 			type: String,
-			minlength: 6,
+			minLength: 6,
+			maxLength: 30,
 			required: [true, "Set password for user"],
+			trim: true,
 		},
 		email: {
 			type: String,
 			required: [true, "Email is required"],
 			unique: true,
+			trim: true,
 		},
 		subscription: {
 			type: String,
@@ -39,9 +42,14 @@ const joiLoginSchema = Joi.object({
 	email: Joi.string().email().required(),
 });
 
+const joiUpdateSubscription = Joi.object({
+	subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const schemas = {
 	joiRegisterSchema,
 	joiLoginSchema,
+	joiUpdateSubscription,
 };
 
 const User = model("user", userSchema);
