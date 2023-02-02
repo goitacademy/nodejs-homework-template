@@ -1,8 +1,8 @@
-const RequestError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
+// const RequestError = (status, message) => {
+//   const error = new Error(message);
+//   error.status = status;
 
-  return error;
-};
+//   return error;
+// };
 
-module.exports = RequestError;
+// module.exports = RequestError;

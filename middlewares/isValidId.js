@@ -1,11 +1,11 @@
 const { isValidObjectId } = require('mongoose');
-const RequestError = require('../helpers/requestError');
+const httpError = require('http-errors');
 
 const isValidId = (req, _, next) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
-    const error = RequestError(
+    const error = httpError(
       400,
       `format of this id:${id} is not correct`
     );

@@ -1,12 +1,12 @@
-const RequestError = require('../../helpers/requestError');
 const { register } = require('../../services/users');
+const httpError = require('http-errors');
 
 module.exports = async (req, res) => {
   const { email } = req.body;
 
   const user = await register.findUser(email);
   if (user) {
-    throw RequestError(
+    throw httpError(
       409,
       `User with email: ${email} already exists`
     );

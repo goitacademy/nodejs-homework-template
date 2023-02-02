@@ -1,4 +1,4 @@
-const RequestError = require('../../helpers/requestError');
+const httpError = require('http-errors');
 const service = require('../../services');
 
 const update = async (req, res) => {
@@ -6,10 +6,7 @@ const update = async (req, res) => {
   const result = await service.update(id, req.body);
 
   if (!result) {
-    throw RequestError(
-      404,
-      `contact with id:${id} not found`
-    );
+    throw httpError(404, `contact with id:${id} not found`);
   }
 
   res.json({

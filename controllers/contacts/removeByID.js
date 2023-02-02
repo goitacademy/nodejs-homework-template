@@ -1,4 +1,4 @@
-const RequestError = require('../../helpers/requestError');
+const httpError = require('http-errors');
 const service = require('../../services');
 
 const removeById = async (req, res) => {
@@ -6,7 +6,7 @@ const removeById = async (req, res) => {
 
   const result = await service.removeById(id);
   if (!result) {
-    throw RequestError(
+    throw httpError(
       404,
       `contact with id:${id} ALREADY deleted`
     );
