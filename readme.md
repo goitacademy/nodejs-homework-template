@@ -6,3 +6,5 @@
 
 - Libs: bcrypt, jsonwebtoken, morgan, multer, http-errors, joi validation,
   gravatar + jimp
+
+- SendGrid - email sending
