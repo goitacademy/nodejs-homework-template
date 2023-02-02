@@ -31,9 +31,10 @@ export const verifyEmail = async verificationToken => {
 
   if (!user || user.verify) return null;
 
-  user.verificationToken = 'verified';
-  user.verify = true;
-  await user.save();
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { verificationToken: 'verified', verify: true }
+  );
 
   await sendEmail({ type: 'registration', email: user.email });
 
@@ -53,8 +54,7 @@ export const resendEmail = async email => {
     throw new createError(400, `Verification has already been passed`);
   }
 
-  user.verificationToken = verificationToken;
-  await user.save();
+  await User.findByIdAndUpdate({ _id: user._id }, { verificationToken });
 
   await sendEmail({
     type: 'verification',
