@@ -1,8 +1,9 @@
 const { Contact } = require("../../models/index");
 
-const getAll = async (_, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find({}, "-createdAt -updatedAt");
+    const {_id} = req.user;
+    const result = await Contact.find({owner: _id}, "-createdAt -updatedAt").populate("owner", "_id email subscription");
     res.json({
       status: "success",
       code: 200,

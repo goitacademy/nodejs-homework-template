@@ -29,8 +29,6 @@ const authVerifyToken = async(req, res, next)=>{
   //  разделили bearer and token
   const [bearer, token] = authorization.split(" ");
 
-
-
 try {
   // Проверяем есть ли вообще bearer
 if(bearer !== "Bearer"){
