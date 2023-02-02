@@ -33,11 +33,11 @@ const schema = mongoose.Schema(
     },
     verify: {
       type: Boolean,
-      // default: false,
+      default: false, // ask mentor
     },
     verificationToken: {
       type: String,
-      // required: [true, 'Verify token is required'],
+      required: [true, 'Verify token is required'], // ask mentor
     },
   },
   {

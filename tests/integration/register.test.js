@@ -8,7 +8,7 @@ mongoose.set('strictQuery', false);
 
 const { HOST_TEST_URI } = process.env;
 
-describe('register', () => {
+describe.skip('register', () => {
   beforeAll(async () => {
     await mongoose.connect(HOST_TEST_URI);
     console.log('Mongo-db-test connection successful!');

@@ -20,14 +20,19 @@ describe('login', () => {
     console.log('Mongo-db-test disconnection successful!');
   });
 
-  it('should register new user', async () => {
+  it('should register new user, verify and login', async () => {
     await supertest(app) // const responseRegister =
       .post('/api/auth/register')
       .send({
         email: 'testUser@gmail.com',
         password: '123456',
       });
-    // console.log('responseRegister.body: ', responseRegister.body);
+    // add verify // ask mentor
+    const storedUser = await User.findOne({ email: 'testUser@gmail.com' });
+    console.log('storedUser: ', storedUser);
+    await supertest(app).post(
+      `/api/auth/verify/${storedUser.verificationToken}`
+    );
 
     const responseLogin = await supertest(app).post('/api/auth/login').send({
       email: 'testUser@gmail.com',
