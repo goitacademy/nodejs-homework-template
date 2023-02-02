@@ -7,11 +7,11 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  res.json({ message: "This is hm2" });
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  res.json({ message: "This is hm2" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
