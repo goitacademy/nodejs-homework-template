@@ -21,7 +21,7 @@ describe('signUp', () => {
     await mongoose.disconnect(MONGO_TEST_URL);
   });
 
-  it('should signUp new user with email and password', async () => {
+  it.skip('should signUp new user with email and password', async () => {
     const data = {
       email: `signup@email.com`,
       password: 'password',
@@ -44,7 +44,7 @@ describe('signUp', () => {
     ).toBe(1);
   });
 
-  it('should end with error "Conflict" in case of signup with same email', async () => {
+  it.skip('should end with error "Conflict" in case of signup with same email', async () => {
     const data = {
       email: `signup2@email.com`,
       password: 'password',

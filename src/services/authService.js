@@ -1,9 +1,20 @@
 import bcrypt from 'bcrypt'; // hash password
+import createError from 'http-errors';
 import jwt from 'jsonwebtoken'; // JWT
 import { User } from '../models/userModel.js';
+import { v4 as uuidv4 } from 'uuid';
+import { sendEmail } from '../helpers/sendEmail.js';
 
 export const signup = async newUserData => {
-  const newUser = await User.create(newUserData);
+  const verificationToken = uuidv4();
+
+  const newUser = await User.create({ ...newUserData, verificationToken });
+
+  await sendEmail({
+    type: 'verification',
+    email: newUser.email,
+    verificationToken,
+  });
 
   return {
     email: newUser.email,
@@ -12,13 +23,56 @@ export const signup = async newUserData => {
   };
 };
 
-export const login = async (email, password) => {
+export const verifyEmail = async verificationToken => {
+  const user = await User.findOne(
+    { verificationToken },
+    { email: 1, verificationToken: 1, verify: 1 }
+  );
+
+  if (!user || user.verify) return null;
+
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { verificationToken: 'verified', verify: true }
+  );
+
+  await sendEmail({ type: 'registration', email: user.email });
+
+  return user;
+};
+
+export const resendEmail = async email => {
+  const verificationToken = uuidv4();
+
   const user = await User.findOne(
     { email },
-    { email: 1, subscription: 1, password: 1, avatarURL: 1 }
+    { email: 1, verificationToken: 1, verify: 1 }
   );
 
   if (!user) return null;
+  if (user.verify) {
+    throw new createError(400, `Verification has already been passed`);
+  }
+
+  await User.findByIdAndUpdate({ _id: user._id }, { verificationToken });
+
+  await sendEmail({
+    type: 'verification',
+    email: user.email,
+    verificationToken,
+  });
+
+  return { email };
+};
+
+export const login = async (email, password) => {
+  const user = await User.findOne(
+    { email },
+    { email: 1, subscription: 1, password: 1, verify: 1, avatarURL: 1 }
+  );
+
+  if (!user) return null;
+  if (!user.verify) throw new createError(401, `Email is not verified`);
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) return null;
