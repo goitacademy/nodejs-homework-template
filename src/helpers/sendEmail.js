@@ -2,7 +2,7 @@ import sgMail from '@sendgrid/mail'; // to send email
 import * as dotenv from 'dotenv'; // to get variables from .env
 dotenv.config();
 
-const { SENDGRID_API_KEY } = process.env;
+const { SENDGRID_API_KEY, PORT } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 const getMessage = ({ type, email, verificationToken }) => {
@@ -10,7 +10,7 @@ const getMessage = ({ type, email, verificationToken }) => {
 
   switch (type) {
     case 'verification':
-      dynamic_template_data.href = `http://localhost:3000/api/users/verify/${verificationToken}`;
+      dynamic_template_data.href = `http://localhost:${PORT}/api/users/verify/${verificationToken}`;
       return {
         to: email,
         from: 'v.voronova.1117@gmail.com',
