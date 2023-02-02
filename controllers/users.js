@@ -45,4 +45,24 @@ const login = async (req, res, _) => {
   });
 };
 
-module.exports = { registration, login };
+const logout = async (req, res, _) => {
+  // const { id } = req.user;
+
+  res.status(204);
+};
+
+const current = async (req, res, _) => {
+  const { id } = req.user;
+  const { email, subscription } = await User.findById(id);
+  res.status(200).json({ email, subscription });
+};
+
+const updateSubscription = async (req, res, _) => {
+  const { id } = req.user;
+  const subscription = req.body;
+  const user = await User.findByIdAndUpdate(id, subscription, { new: true });
+
+  res.status(200).json({ subscription: user.subscription });
+};
+
+module.exports = { registration, login, logout, current, updateSubscription };

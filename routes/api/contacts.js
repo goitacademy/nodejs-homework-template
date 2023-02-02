@@ -11,6 +11,9 @@ const {
 } = require("../../controllers/contacts");
 const { validate } = require("../../middlewares/validateBody");
 const { schema, statusSchema } = require("../../models/contact");
+const auth = require("../../middlewares/authMiddleware");
+
+router.use(auth);
 
 router.get("/", ctrlWrapper(getAllContacts));
 router.get("/:contactId", ctrlWrapper(getContactById));

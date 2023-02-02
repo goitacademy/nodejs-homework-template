@@ -25,6 +25,10 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const registerSchema = Joi.object({
   email: Joi.string()
     .pattern(emailRegex)
@@ -41,4 +45,4 @@ const loginSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-module.exports = { User, registerSchema, loginSchema };
+module.exports = { User, registerSchema, loginSchema, subscriptionSchema };
