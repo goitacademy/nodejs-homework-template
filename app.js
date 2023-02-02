@@ -2,7 +2,9 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contacts')
+require('dotenv').config();
+const contactsRouter = require('./routes/contactsRouter')
+const {errorHandler} = require("./helpers/apiHelpers")
 
 const app = express()
 
@@ -18,9 +20,6 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Illegal path'})  
 })
 
-app.use((err, req, res, next) => {
-  
-  res.status(500).json({ message: err.message })
-})
+app.use(errorHandler)
 
 module.exports = app
