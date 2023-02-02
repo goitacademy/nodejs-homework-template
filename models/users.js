@@ -6,8 +6,8 @@ const userSchema = Schema(
 	{
 		password: {
 			type: String,
-			minLength: 6,
-			maxLength: 30,
+			minLength: [6, "min length is 6"],
+			maxLength: [30, "max length is 30"],
 			required: [true, "Set password for user"],
 			trim: true,
 		},
