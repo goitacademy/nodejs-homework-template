@@ -44,4 +44,14 @@ const validationUpdateContact = Joi.object({
   }),
 }).or("name", "email", "phone");
 
-module.exports = { validationAddContact, validationUpdateContact };
+const validationUpdateFavorite = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": "missing field favorite",
+  }),
+});
+
+module.exports = {
+  validationAddContact,
+  validationUpdateContact,
+  validationUpdateFavorite,
+};

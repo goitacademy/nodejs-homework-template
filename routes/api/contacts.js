@@ -10,7 +10,7 @@ const {
 const {
   validationAddContact,
   validationUpdateContact,
-} = require("../../schemas/createContactValidation");
+} = require("../../validation/createContactValidation");
 
 const createError = require("../../helpers/createError");
 
