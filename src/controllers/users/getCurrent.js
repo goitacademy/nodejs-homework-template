@@ -1,15 +1,18 @@
 // const {User} = require("../../models");
 
+const getCurrent = async (req, res, next) => {
+  try {
+    // console.log(req.user);
+    const { email, subscription } = req.user;
 
-const getCurrent = async(req, res, next)=>{
-// try {
-  
-console.log(req.user)
-
-
-// } catch (error) {
-//   next(error)
-// }
-}
+    res.json({
+      status: "success",
+      code: 200,
+      user: { email: email, subscription: subscription },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = getCurrent;
