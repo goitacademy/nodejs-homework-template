@@ -4,26 +4,27 @@ dotenv.config();
 
 const { SENDGRID_API_KEY } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY);
-console.log('SENDGRID_API_KEY', SENDGRID_API_KEY);
 
 const getMessage = ({ type, email, verificationToken }) => {
+  let dynamic_template_data = {};
+
   switch (type) {
     case 'verification':
+      dynamic_template_data.href = `http://localhost:3000/api/users/verify/${verificationToken}`;
       return {
         to: email,
         from: 'v.voronova.1117@gmail.com',
-        subject: 'Email verification',
-        text: `Please, confirm your email: http://localhost:3000/api/users//verify/${verificationToken}`,
-        html: `Please, <a href="http://localhost:3000/api/users/verify/${verificationToken}">confirm</a> your email `,
+        templateId: 'd-d49a8fe3c1ab40fca7731b281812d7a9',
+        dynamic_template_data,
       };
 
     case 'registration':
+      dynamic_template_data.email = email;
       return {
         to: email,
         from: 'v.voronova.1117@gmail.com',
-        subject: 'Thank you for registration',
-        text: "You've been successfully registered",
-        html: "<h1>You've been successfully registered</h1>",
+        templateId: 'd-0d4ec29672394956aff19f0b22280c26',
+        dynamic_template_data,
       };
 
     default:

@@ -31,7 +31,7 @@ export const verifyEmail = async verificationToken => {
 
   if (!user || user.verify) return null;
 
-  user.verificationToken = null;
+  user.verificationToken = 'verified';
   user.verify = true;
   await user.save();
 

@@ -25,6 +25,11 @@ app.use((err, req, res, next) => {
     return res.status(status).json(message);
   }
 
+  if (err.name === 'ValidationError') {
+    const { message } = err;
+    return res.status(400).json(message);
+  }
+
   if (err.message.includes('ObjectId failed')) {
     return res.status(400).json('Id type is invalid');
   }
