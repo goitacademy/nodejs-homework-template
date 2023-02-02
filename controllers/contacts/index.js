@@ -3,6 +3,7 @@ const {
   updateById,
   updateStatusById,
   getAll,
+  getFavorite,
   getById,
   removeById,
 } = require("./contacts");
@@ -12,6 +13,7 @@ module.exports = {
   updateById,
   updateStatusById,
   getAll,
+  getFavorite,
   getById,
   removeById,
 };

@@ -51,8 +51,17 @@ const joiLoginSchema = Joi.object({
   token: Joi.string(),
 });
 
+const joiUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const User = model("users", userSchema);
 
 User.createIndexes();
 
-module.exports = { User, joiRegisterSchema, joiLoginSchema };
+module.exports = {
+  User,
+  joiRegisterSchema,
+  joiLoginSchema,
+  joiUpdateSubscriptionSchema,
+};

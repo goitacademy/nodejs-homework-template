@@ -1,4 +1,4 @@
-const { Conflict, Unauthorized } = require("http-errors");
+const { Conflict, Unauthorized, BadRequest, NotFound } = require("http-errors");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 const { User } = require("../../models");
@@ -63,9 +63,38 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateSubscription = async (req, res) => {
+  const { _id, email } = req.user;
+  const { subscription } = req.body;
+  if (!subscription) {
+    throw new BadRequest("missing field subscription");
+  }
+  const updatedSubscription = await User.findByIdAndUpdate(
+    _id,
+    {
+      subscription,
+    },
+    {
+      new: true,
+    }
+  );
+  if (!updatedSubscription) {
+    throw new NotFound(`Erro update Subscription user with email=${email}`);
+  }
+  res.status(200).json({
+    data: {
+      user: {
+        email,
+        subscription,
+      },
+    },
+  });
+};
+
 module.exports = {
   signup,
   login,
   logout,
   getCurrent,
+  updateSubscription,
 };
