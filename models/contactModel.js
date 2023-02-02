@@ -20,6 +20,6 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model("contact", contactSchema);
+const Contact = model("Contact", contactSchema);
 
 module.exports = { Contact };
