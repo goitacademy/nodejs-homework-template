@@ -6,7 +6,7 @@ const {
   updateContact,
 } = require('../services/contacts');
 
-const controllerGetContacts = async (req, res, next) => {
+const controllerGetContacts = async (req, res) => {
   try {
     const contacts = await listContacts();
     res.json({
@@ -19,7 +19,7 @@ const controllerGetContacts = async (req, res, next) => {
   }
 };
 
-const controllerGetContactById = async (req, res, next) => {
+const controllerGetContactById = async (req, res) => {
   const { contactId } = req.params;
   const contactById = await getContactById(contactId);
 
@@ -34,14 +34,14 @@ const controllerGetContactById = async (req, res, next) => {
   });
 };
 
-const controllerPostContact = async (req, res, next) => {
+const controllerPostContact = async (req, res) => {
   const { name, email, phone } = req.body;
   const contactsList = await listContacts();
 
   const contactId = Math.floor(Math.random() * 100);
   const isId = contactsList.some(contact => Number(contact.id) === contactId);
   if (isId) {
-    controllerPostContact(req, res, next);
+    controllerPostContact(req, res);
     return;
   }
 
@@ -59,7 +59,7 @@ const controllerPostContact = async (req, res, next) => {
   });
 };
 
-const controllerDeleteContact = async (req, res, next) => {
+const controllerDeleteContact = async (req, res) => {
   const { contactId } = req.params;
   const contactsList = await listContacts();
   const contact = contactsList.filter(el => el.id === contactId);
@@ -78,7 +78,7 @@ const controllerDeleteContact = async (req, res, next) => {
   });
 };
 
-const controllerPutContact = async (req, res, next) => {
+const controllerPutContact = async (req, res) => {
   const { contactId } = req.params;
   const keys = Object.keys(req.body);
 
