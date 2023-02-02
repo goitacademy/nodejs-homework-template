@@ -17,6 +17,7 @@ const getContactById = async (id) => {
 const addContact = async ({ name, phone, email, favorite }) => {
   const contact = new Contact({ name, phone, email, favorite });
   await contact.save();
+  return contact;
 };
 const deleteContactById = async (id) => {
   await Contact.findByIdAndRemove(id);
