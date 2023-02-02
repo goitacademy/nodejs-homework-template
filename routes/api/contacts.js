@@ -5,7 +5,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("../../services/index");
 
 const {
   validationAddContact,
