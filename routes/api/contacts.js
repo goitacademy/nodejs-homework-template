@@ -1,25 +1,37 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const contactsController = require('../../controllers/contactsController');
+const validation = require('../../middlewares/validation');
+const tryCatchMiddleware = require('../../middlewares/tryCatchMiddleware');
+const { joiProduct, joiFavoriteField } = require('../../models/contact');
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', tryCatchMiddleware(contactsController.getAllContacts));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', tryCatchMiddleware(contactsController.getOneContact));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  '/',
+  validation(joiProduct),
+  tryCatchMiddleware(contactsController.addContact),
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete(
+  '/:contactId',
+  tryCatchMiddleware(contactsController.deleteContact),
+);
 
-module.exports = router
+router.put(
+  '/:contactId',
+  validation(joiProduct),
+  tryCatchMiddleware(contactsController.updateContact),
+);
+
+router.patch(
+  '/:contactId/favorite',
+  validation(joiFavoriteField),
+  tryCatchMiddleware(contactsController.updateFavouriteField),
+);
+
+module.exports = router;
