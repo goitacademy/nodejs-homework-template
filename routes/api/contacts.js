@@ -1,6 +1,11 @@
 const express = require("express");
 const { contacts: ctrl } = require("../../controllers");
-const { validation, ctrlWrapper, isValidId } = require("../../middlewares");
+const {
+  validation,
+  ctrlWrapper,
+  isValidId,
+  auth,
+} = require("../../middlewares");
 const {
   addValidation,
   updateValidation,
@@ -13,7 +18,7 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(addValidation), ctrlWrapper(ctrl.add));
+router.post("/", auth, validation(addValidation), ctrlWrapper(ctrl.add));
 
 router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
 
