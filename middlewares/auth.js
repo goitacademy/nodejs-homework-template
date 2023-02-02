@@ -11,11 +11,14 @@ async function auth(req, res, next) {
   if (type !== "Bearer") {
     throw RequestError(401, "token type is not valid");
   }
+  if (!token) {
+    throw RequestError(401, "Not authorized");
+  }
 
   try {
     const { id } = jwt.verify(token, "JWT_SECRET");
     const user = await User.findById(id);
-    if (!user || !token) {
+    if (!user) {
       throw RequestError(401, "Not authorized");
     }
     req.user = user;
