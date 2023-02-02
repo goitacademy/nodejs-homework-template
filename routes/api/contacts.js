@@ -1,15 +1,16 @@
 const express = require("express");
 
 const { contacts: ctrl } = require("../../controllers");
-const ctrlWrapper = require("../../middlewares/ctrlWrapper");
+// const ctrlWrapper = require("../../middlewares/index");
 const router = express.Router();
 
 const {
   addContactValidation,
   favoriteValidation,
-} = require("../../middlewares/validationMiddleware");
+  ctrlWrapper,
+} = require("../../middlewares");
 
-router.get("/", ctrl.getAll);
+router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
