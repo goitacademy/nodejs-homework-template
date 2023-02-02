@@ -8,7 +8,7 @@ const contactsSchema = Joi.object({
 
 const patchSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string(),
+  email: Joi.string().email(),
   phone: Joi.string(),
 });
 
