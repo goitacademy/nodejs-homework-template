@@ -7,6 +7,10 @@ import authRouter from './src/routes/api/auth.js';
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+// app.get('/', (req, res) => {
+//   res.send('API is running');
+// });
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
