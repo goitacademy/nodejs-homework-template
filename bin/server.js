@@ -18,9 +18,3 @@ const start = async () => {
 };
 
 start();
-
-// app.listen(PORT, (err) =>
-//   err
-//     ? console.error("Error at server launch", err.message)
-//     : console.log(`Server running. Use our API on port: ${PORT}`)
-// );

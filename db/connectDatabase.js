@@ -15,10 +15,3 @@ async function connectDatabase() {
 
 module.exports = { connectDatabase };
 
-// connectDatabase().catch(err => console.log(err));
-
-// async function connectDatabase() {
-//   await mongoose.connect(DB_HOST);
-
-// use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-// }
