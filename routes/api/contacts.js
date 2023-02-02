@@ -1,6 +1,6 @@
 const express = require("express");
 const { validation, ctrlWrapper } = require("../../middlewares/middleWares");
-const { contactSchema } = require("../../schema/contacts");
+const { contactSchema, favoriteContactSchema } = require("../../schema/contacts");
 const { contacts: ctrl } = require("../../controllers");
 const router = express.Router();
 const validateMiddleWareUpdate = validation(
@@ -12,6 +12,11 @@ const validateMiddleWareAdd = validation(
   "You should put name in this field"
 );
 
+const validateMiddleWarePatch = validation(
+  favoriteContactSchema,
+  "You should put name in this field"
+);
+
 router.get("/", ctrlWrapper(ctrl.getAll));
 router.get("/:contactId", ctrlWrapper(ctrl.getById));
 router.post("/", validateMiddleWareAdd, ctrlWrapper(ctrl.add));
@@ -20,6 +25,11 @@ router.put(
   "/:contactId",
   validateMiddleWareUpdate,
   ctrlWrapper(ctrl.updateById)
+);
+router.patch(
+  "/:contactId/favorite",
+  validateMiddleWarePatch,
+  ctrlWrapper(ctrl.updateStatusContact)
 );
 
 module.exports = router;
