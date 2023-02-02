@@ -8,7 +8,10 @@
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
-    "debug": "nodemon --inspect=:9229 ./server.js"
+    "debug": "nodemon --inspect=:9229 ./server.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch ",
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
