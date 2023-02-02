@@ -1,6 +1,6 @@
 const express = require("express");
 const { validation, ctrlWrapper } = require("../../middlewares/middleWares");
-const { contactSchema, favoriteContactSchema } = require("../../models/index");
+const { contactSchema, favoriteContactSchema } = require("../../schema/contacts");
 const { contacts: ctrl } = require("../../controllers");
 const router = express.Router();
 const validateMiddleWareUpdate = validation(
