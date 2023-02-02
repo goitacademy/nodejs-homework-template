@@ -6,10 +6,4 @@ const contactsSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-const patchSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string(),
-});
-
-module.exports = { contactsSchema, patchSchema };
+module.exports = { contactsSchema };

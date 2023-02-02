@@ -1,4 +1,4 @@
-const { RequestError } = require("../helpers");
+const { RequestError } = require("../helpers/requestError");
 
 const validation = (schema) => {
   const func = async (req, res, next) => {
