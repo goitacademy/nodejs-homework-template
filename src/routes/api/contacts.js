@@ -7,19 +7,20 @@ const {
   addCont,
   deleteCont,
   updateCont,
+  updateFavorite,
 } = require("../../controllers/controllers");
+const {
+  addContValidation,
+  updateContValidation,
+} = require("../../middleware/middleware");
+const tryCatch = require("../../utils/try-catch.utils");
 
-
-const { addSchema, updateSchema } = require("../../middlewares/middlewares");
-
-router.get("/", getContacts);
-
-router.get("api/contacts/", getContById);
-
-router.post("/", addSchema, addCont);
-
-router.delete("/:contactId", deleteCont);
-
-router.put("/:contactId", updateSchema, updateCont);
+router
+  .get("/", getContacts)
+  .get("/:contactId", tryCatch(getContById))
+  .post("/", addContValidation, addCont)
+  .delete("/:contactId", deleteCont)
+  .put("/:contactId", updateContValidation, tryCatch(updateCont))
+  .patch("/:contactId", updateContValidation, tryCatch(updateFavorite));
 
 module.exports = router;
