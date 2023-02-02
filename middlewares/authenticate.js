@@ -8,7 +8,7 @@ module.exports = async (req, _, next) => {
 
   const [bearer, token] = authorization.split(' ');
 
-  if (bearer !== 'Bearer') {
+  if (bearer !== 'Bearer' || !token) {
     next(RequestError(401, 'Not authorized'));
   }
   try {
