@@ -14,7 +14,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
