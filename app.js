@@ -4,12 +4,13 @@ import cors from 'cors';
 import contactsRouter from './src/routes/api/contacts.js';
 import authRouter from './src/routes/api/auth.js';
 
+const { BASE_URL } = process.env;
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-// app.get('/', (req, res) => {
-//   res.send('API is running');
-// });
+app.get('/', (_, res) => {
+  res.send(`API is running: ${BASE_URL}`);
+});
 
 app.use(logger(formatsLogger));
 app.use(cors());
