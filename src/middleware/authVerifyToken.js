@@ -19,39 +19,39 @@
 const { Unauthorized } = require("http-errors");
 const jwt = require("jsonwebtoken");
 
+const { User } = require("../models");
+const { SECRET_KEY } = process.env;
 
-const {User} =require("../models");
-const{SECRET_KEY} = process.env;
-
-const authVerifyToken = async(req, res, next)=>{
-
-  const {authorization = ""} = req.headers;
+const authVerifyToken = async (req, res, next) => {
+  const { authorization = "" } = req.headers;
   //  разделили bearer and token
   const [bearer, token] = authorization.split(" ");
 
-try {
-  // Проверяем есть ли вообще bearer
-if(bearer !== "Bearer"){
-throw new Unauthorized("Not authorized Bearer");
-}
+  try {
+    // Проверяем есть ли вообще bearer
+    if (bearer !== "Bearer" || !token) {
+      throw new Unauthorized("Not authorized Bearer");
+    }
+    // Проверяем есть ли вообще token
+    // if (!token) {
+    //   throw new Unauthorized("Not authorized Token");
+    // }
+    //  проверяем валидацию токена по id
+    const { id } = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(id);
 
-//  проверяем валидацию токена
-const {id} = jwt.verify(token, SECRET_KEY);
-  const user = await User.findById(id);
+    if (!user || !user.token) {
+      throw new Unauthorized("Not authorized User");
+    }
 
-if(!user || !user.token){
-  throw new Unauthorized("Not authorized User");
-}
-
-req.user = user;
-next();
-} catch (error) {
-  if(error.message === "Invalid signature"){
-    error.status = 401;
-}
-next(error);
-}
-
+    req.user = user;
+    next();
+  } catch (error) {
+    if (error.message === "Invalid signature") {
+      error.status = 401;
+    }
+    next(error);
+  }
 };
 
 module.exports = authVerifyToken;
