@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="" id="contact-add-form" anctype="multipart/form-data">
+      <div>
+        <input name="name" placeholder="Contact name" required />
+      </div>
+      <div>
+        <input name="email" placeholder="Contact e-mail" required />
+      </div>
+      <div>
+        <input type="file" name="photo" required multiple />
+      </div>
+      <button>Add contact</button>
+    </form>
+    <script>
+      const contactAddForm = document.getElementById("contact-add-form");
+      contactAddForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const data = FormData();
+        data.append("name", name.value);
+        data.append("email", number.value);
+        data.append("avatar", avatar.files[0]);
+      });
+    </script>
+  </body>
+</html>
