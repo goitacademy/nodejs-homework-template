@@ -5,16 +5,17 @@ const { contacts: ctrl } = require("../../controllers");
 const router = express.Router();
 
 const {
+  auth,
   addContactValidation,
   favoriteValidation,
   ctrlWrapper,
 } = require("../../middlewares");
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post("/", addContactValidation, ctrlWrapper(ctrl.add));
+router.post("/", auth, addContactValidation, ctrlWrapper(ctrl.add));
 
 router.delete("/:contactId", ctrlWrapper(ctrl.removeById));
 
