@@ -1,5 +1,5 @@
-const createError = require("../helpers/createError");
-const schemaId = require("../validation/createIdSchema");
+const createError = require("../../helpers/createError");
+const schemaId = require("../createIdSchema");
 
 function validateId(req, _, next) {
   const { error } = schemaId.validate(req.params.contactId);
