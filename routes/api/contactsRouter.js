@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { controllers: ctrl } = require("../../controllers");
-const { asyncWrapper } = require("../../helpers");
-const { auth, validation } = require("../../middlewares");
+const { auth, validation, asyncWrapper } = require("../../middlewares");
 const {
   postSchema,
   putSchema,
@@ -11,8 +10,6 @@ const {
 } = require("../../models/contact.js");
 
 router.get("/", auth, asyncWrapper(ctrl.getAll));
-
-router.get("/favorite", auth, asyncWrapper(ctrl.getFavorite));
 
 router.get("/:id", auth, asyncWrapper(ctrl.getById));
 

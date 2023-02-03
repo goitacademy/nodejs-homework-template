@@ -1,4 +1,4 @@
-const { ValidationError, WrongParametersError } = require("./errors");
+const { ValidationError, WrongParametersError } = require("../helpers/errors");
 
 const asyncWrapper = (controller) => {
   return (req, res, next) => {

@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { asyncWrapper } = require("../../helpers");
-const { validation, auth } = require("../../middlewares");
+const { validation, auth, asyncWrapper } = require("../../middlewares");
 const {
   joiRegisterSchema,
   joiLoginSchema,

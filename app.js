@@ -5,7 +5,6 @@ require("dotenv").config();
 
 const { contactsRouter } = require("./routes/api/contactsRouter");
 const { authRouter } = require("./routes/api/authRouter");
-const { errorHandler } = require("./helpers/apiHelpers");
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -20,7 +19,5 @@ app.use("/api/contacts", contactsRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
-
-app.use(errorHandler);
 
 module.exports = app;
