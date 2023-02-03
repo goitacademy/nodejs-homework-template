@@ -1,9 +1,11 @@
-const { getAllContacts } = require("../../controllers/contacts/getAllContacts");
-const { getContact } = require("../../controllers/contacts/getContact");
-const { createContact } = require("../../controllers/contacts/createContact");
-const { deleteContact } = require("../../controllers/contacts/deleteContact");
-const { favoriteChange } = require("../../controllers/contacts/favoriteChange");
-const { updateContacts } = require("../../controllers/contacts/updateContacts");
+const {
+  getAllContacts,
+  getContact,
+  createContact,
+  deleteContact,
+  favoriteChange,
+  updateContacts,
+} = require("../../controllers");
 
 const express = require("express");
 const router = express.Router();

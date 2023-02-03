@@ -12,6 +12,9 @@ async function login(req, res, next) {
     if (!storedUser || !isPasswordValid) {
       return next(HttpError(401, "Email or password is wrong"));
     }
+    if (!storedUser.verify) {
+      return next(HttpError(400, "Email not verify"));
+    }
     const payload = { id: storedUser._id };
     const token = jwt.sign(payload, JWT_SECRET);
 

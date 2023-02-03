@@ -1,9 +1,11 @@
-const favoriteChange = require("./contacts/favoriteChange");
-const createContact = require("./contacts/createContact");
-const deleteContact = require("./contacts/deleteContact");
-const updateContacts = require("./contacts/updateContacts");
-const getContact = require("./contacts/getContact");
-const getAllContacts = require("./contacts/getAllContacts");
+const {
+  createContact,
+  deleteContact,
+  favoriteChange,
+  getAllContacts,
+  getContact,
+  updateContacts,
+} = require("./contacts");
 
 const {
   register,
@@ -11,7 +13,10 @@ const {
   changeSubscription,
   currentUser,
   logoutUser,
-} = require("./authController/index");
+  changeUserAvatar,
+  reVerificationOfEmail,
+  verifyEmail,
+} = require("./authController");
 
 module.exports = {
   favoriteChange,
@@ -25,4 +30,7 @@ module.exports = {
   changeSubscription,
   currentUser,
   logoutUser,
+  changeUserAvatar,
+  reVerificationOfEmail,
+  verifyEmail,
 };
