@@ -1,5 +1,18 @@
-const app = require('./app')
+const app = require("./app");
+const mongoose = require("mongoose");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set("strictQuery", false);
+
+mongoose
+  .connect(
+    "mongodb+srv://user:user123@cluster0.yukfpdx.mongodb.net/contacts_reader?retryWrites=true&w=majority"
+  )
+  .then(() => app.listen(PORT))
+  .then(() => console.log("Database connection successful"))
+  .catch((err) => {
+    console.log(err.message);
+    // якщо поилка, то завершує незакінчені процеси на сервері
+    process.exit(1);
+  });
