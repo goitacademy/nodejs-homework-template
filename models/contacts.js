@@ -25,7 +25,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const { data: listOfContacts } = await listContacts();
+    const listOfContacts = await listContacts();
 
     const contact = listOfContacts.find((elem) => elem.id === `${contactId}`);
     if (contact) {
@@ -36,7 +36,7 @@ const removeContact = async (contactId) => {
         contactsPath,
         JSON.stringify(newListOfContacts, null, 2)
       );
-      return { message: "Сontact deleted" };
+      return ({ message: "Сontact deleted" });
     }
     return null;
   } catch (error) {
@@ -46,7 +46,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const { data: listOfContacts } = await listContacts();
+    const listOfContacts = await listContacts();
     const newContact = {
       ...body,
       id: nanoid(),
@@ -62,7 +62,7 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const { data: list } = await listContacts();
+    const list = await listContacts();
 
     const newList = list.map((elem) => {
       if (elem.id === `${contactId}`) {
