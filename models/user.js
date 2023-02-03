@@ -35,9 +35,9 @@ const joiSchema = Joi.object({
     })
     .required(),
   subscription: Joi.string(),
-  token: Joi.bool(),
+  token: Joi.string(),
 });
 
-const User = model("users", usersShema);
+const User = model("user", usersShema);
 
 module.exports = { User, joiSchema };
