@@ -9,14 +9,14 @@ const getAll = async (req, res) => {
     const contacts = await Contact.find({ owner: _id }, "", {
       skip,
       limit: Number(limit),
-    }).populate("owner", "_id email");
-    res.json({ contacts });
+    }).populate("owner", "_id name email");
+    res.json(contacts);
   } else {
     const contacts = await Contact.find({ owner: _id, favorite }, "", {
       skip,
       limit: Number(limit),
-    }).populate("owner", "_id email", favorite);
-    res.json({ contacts });
+    }).populate("owner", "_id name email");
+    res.json(contacts);
   }
 };
 
@@ -79,7 +79,6 @@ module.exports = {
   updateById,
   updateStatusById,
   getAll,
-  getFavorite,
   getById,
   removeById,
 };
