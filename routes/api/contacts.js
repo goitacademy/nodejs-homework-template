@@ -13,30 +13,22 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const list = await listContacts();
-    if (typeof list === "string") {
-      res.status(404).json({ message: list });
-    } else {
-      res.status(200).json(list);
-      next();
-    }
+      res.json(list);
   } catch (error) {
-    res.json(`${error}`);
-    next();
+    next(error)
   }
 });
 
 router.get("/:contactId", async (req, res, next) => {
   try {
     const contact = await getContactById(`${req.params.contactId}`);
-    if (!contact || typeof contact === "string") {
+    if (!contact) {
       res.status(404).json({ message: "Not found" });
     } else {
-      res.status(200).json(contact);
-      next();
+      res.json(contact);
     }
   } catch (error) {
-    res.json(`${error}`);
-    next();
+    next(error)
   }
 });
 
@@ -45,7 +37,7 @@ router.post("/", async (req, res, next) => {
     const { name, email, phone } = req.body;
 
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(2).max(30).required(),
+      name: Joi.string().alphanum().pattern(/^[ ,-]+$/).min(2).max(30).required(),
       email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
@@ -59,44 +51,32 @@ router.post("/", async (req, res, next) => {
     const validetionData = schema.validate(req.body);
     if (validetionData.error) {
       res.status(400).json({ message: "Missing required name field." });
-      next();
     } else {
       const newContact = await addContact({ name, email, phone });
-      if (typeof newContact === "string") {
-        res.status(404).json({ message: `${newContact}` });
-        next();
-      } else {
         res.status(201).json(newContact);
-        next();
-      }
     }
   } catch (error) {
-    res.json(`${error}`);
-    next();
+    next(error)
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const message = await removeContact(`${req.params.contactId}`);
-    if (!message || typeof message === "string") {
+    if (!message) {
       res.status(404).json({ message: "Not found" });
-      next();
     } else {
-      res.status(200).json(message);
-      next();
+      res.json(message);
     }
   } catch (error) {
-    res.json(`${error}`);
-    next();
+    next(error)
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
   try {
     const schema = Joi.object({
-      name: Joi.string().alphanum().min(2).max(30),
-
+      name: Joi.string().pattern(/^[a-z,A-Z,0-9, ,-]+$/).min(2).max(30).required(),
       email: Joi.string().email({
         minDomainSegments: 2,
         tlds: { allow: ["com", "net"] },
@@ -110,24 +90,21 @@ router.put("/:contactId", async (req, res, next) => {
     const validetionData = schema.validate(req.body);
 
     if (validetionData.error) {
-      res.status(400).json({ message: "Missing fields" });
-      next();
+      res.status(400).json({ message: "Missing required name field." });
       return;
-    }
-    const updatedContact = await updateContact(
+    } else {
+      const updatedContact = await updateContact(
       `${req.params.contactId}`,
       req.body
     );
-    if (!updatedContact || typeof updateContact === "string") {
+    if (!updatedContact) {
       res.status(404).json({ message: "Not found" });
-      next();
     } else {
-      res.status(200).json(updatedContact);
-      next();
+      res.json(updatedContact);
     }
+}
   } catch (error) {
-    res.json(`${error}`);
-    next();
+    next(error)
   }
 });
 
