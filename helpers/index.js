@@ -1,8 +1,11 @@
-function HttpError(status, message) {
-  const error = new Error(message);
-  error.status = status;
-  return error;
+class HttpError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "HttpError";
+    this.message = message;
+  }
 }
+
 function tryCatchWrapper(enpointFn) {
   return async (req, res, next) => {
     try {
@@ -12,6 +15,8 @@ function tryCatchWrapper(enpointFn) {
     }
   };
 }
+
+
 
 module.exports = {
   HttpError,

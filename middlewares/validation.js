@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("./../models/user");
-const {HttpError} = require("../helpers/index")
+const { HttpError } = require("../helpers/index");
 const { JWT_SECRET } = process.env;
 
 function validateBody(schema) {
@@ -18,11 +18,11 @@ async function auth(req, res, next) {
   const [type, token] = authHeader.split(" ");
 
   if (type !== "Bearer") {
-    throw HttpError(401, "token type is not valid");
+    return next(new HttpError("token type is not valid"));
   }
 
   if (!token) {
-    throw HttpError(401, "no token provided");
+    return next(new HttpError("no token provided"));
   }
 
   try {
@@ -30,15 +30,17 @@ async function auth(req, res, next) {
     const user = await User.findById(id);
     req.user = user;
   } catch (error) {
-    if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError") {
-      throw HttpError(401, "jwt token is not valid");
+    if (
+      error.name === "TokenExpiredError" ||
+      error.name === "JsonWebTokenError"
+    ) {
+      return next(new HttpError("jwt token is not valid"));
     }
     throw error;
   }
 
   next();
 }
-
 
 module.exports = {
   validateBody,

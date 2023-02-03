@@ -1,6 +1,6 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
-const { Unauthorized, Conflict } = require('http-errors')
+const { Unauthorized, Conflict, NotFound } = require("http-errors");
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env;
@@ -17,12 +17,12 @@ async function register(req, res, next) {
     });
     console.log(savedUser);
     res.status(201).json({
-      data: {
-        user: savedUser,
+      user: {
+        email,
       },
     });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     if (error.message.includes("E11000 duplicate key error")) {
       throw Conflict("Email in use");
     }
@@ -49,51 +49,47 @@ async function login(req, res, next) {
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
   await User.findByIdAndUpdate(storedUser._id, { token });
   return res.json({
-    data: {
-      token: token,
-      user: {
-        email: email,
-        subscription: "starter",
-      },
+    token: token,
+    user: {
+      email: email,
+      subscription: "starter",
     },
   });
 }
 
 async function logout(req, res, next) {
-  const { _id } = req.user
-  await User.findByIdAndUpdate(_id, { token: null })
-  return res.status(204).json()
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: null });
+  return res.status(204).json();
 }
 
 async function getCurrentUser(req, res, next) {
   const { id, email, token, subscription } = req.user;
   if (!token) {
-    throw Unauthorized("Not authorized")  
+    throw Unauthorized("Not authorized");
   }
   return res.status(200).json({
-    data: {
-      user: {
-        _id: id,
-        email: email,
-        subscription: subscription,
-        token: token,
-      },
+    user: {
+      _id: id,
+      email: email,
+      subscription: subscription,
+      token: token,
     },
   });
 }
 
 async function updateSubscription(req, res, next) {
-  const { _id } = req.user
-  const {subscription} = req.body
-   const updatedUser= await User.findByIdAndUpdate(
-      _id,
-      { subscription },
-      { new: true }
-    );
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Not found" });
-    }
-    return res.status(200).json(updatedUser);
+  const { _id } = req.user;
+  const { subscription } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+  if (!updatedUser) {
+    throw NotFound("Not found");
+  }
+  return res.status(200).json(updatedUser);
 }
 module.exports = {
   register,
