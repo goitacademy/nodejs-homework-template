@@ -1,4 +1,6 @@
 const { User } = require("../models/user");
+const path = require("path");
+const fs = require("fs/promises");
 
 async function createContact(req, res, next) {
   const { user } = req;
@@ -35,8 +37,37 @@ async function current(req, res, next) {
     data: { user: { email, id, subscription } },
   });
 }
+
+async function updateAvatar(req, res, next) {
+  const { filename } = req.file;
+  const tmpPath = await path.resolve(__dirname, "../tmp", filename);
+  const publicPath = await path.resolve(
+    __dirname,
+    "../public/avatars",
+    filename
+  );
+  try {
+    await fs.rename(tmpPath, publicPath);
+
+    const userId = req.user._id;
+
+    const avatarURL = `/avatars/${filename}`;
+
+    const updateAvatar = await User.findByIdAndUpdate(
+      userId,
+      { avatarURL },
+      { new: true }
+    );
+    return res.status(200).json({ avatarURL: updateAvatar.avatarURL });
+  } catch (error) {
+    await fs.unlink(tmpPath);
+    return res.status(401).json({ message: "Not authorized" });
+  }
+}
+
 module.exports = {
   createContact,
   getContacts,
   current,
+  updateAvatar,
 };

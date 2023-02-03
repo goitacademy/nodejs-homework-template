@@ -9,6 +9,7 @@ const addUserSchema = Joi.object({
     .required(),
   password: Joi.number(),
   subscription: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 module.exports = {

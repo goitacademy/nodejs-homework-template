@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const { CustomError } = require("../helpers/index");
+const gravatar = require("gravatar");
 
 async function register(req, res, next) {
   const { email, password, subscription } = req.body;
@@ -14,12 +15,14 @@ async function register(req, res, next) {
       email,
       password: hashedPassword,
       subscription,
+      avatarURL: gravatar.url(email, { protocol: "https" }),
     });
 
     return res.status(201).json({
       user: {
         email: savedUser.email,
         subscription: savedUser.subscription,
+        avatarURL: savedUser.avatarURL,
       },
     });
   } catch (error) {
@@ -58,6 +61,7 @@ async function login(req, res, next) {
     user: {
       email,
       subscription: storedUser.subscription,
+      avatarURL: storedUser.avatarURL,
     },
   });
 }

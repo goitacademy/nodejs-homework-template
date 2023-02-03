@@ -15,11 +15,14 @@ const schema = mongoose.Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
-  contacts: {
-    type: [mongoose.Types.ObjectId],
-    rel: "contact",
-  },
+  contacts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      rel: "contact",
+    },
+  ],
   token: String,
+  avatarURL: String,
 });
 
 const User = mongoose.model("user", schema);

@@ -9,7 +9,7 @@ function tryCatchWrapper(endpointFn) {
 }
 class CustomError extends Error {
   constructor(status, message) {
-    super(message); // (1)
+    super(message);
     this.name = "httpError";
     this.status = status;
     this.message = message;
