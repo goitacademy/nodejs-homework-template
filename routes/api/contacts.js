@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { validation } = require("../../middlewares");
-const { errorHandling } = require("../../helpers");
+const { errorHandler } = require("../../helpers");
 const { contactSchema, contactStatusSchema } = require("../../schemas");
 const {
   getContactsListController,
@@ -14,28 +14,28 @@ const {
 
 const router = express.Router();
 
-router.get("/", errorHandling(getContactsListController));
+router.get("/", errorHandler(getContactsListController));
 
-router.get("/:id", errorHandling(getContactByIdController));
+router.get("/:id", errorHandler(getContactByIdController));
 
 router.post(
   "/",
   validation(contactSchema),
-  errorHandling(createContactController)
+  errorHandler(createContactController)
 );
 
-router.delete("/:id", errorHandling(removeContactByIdController));
+router.delete("/:id", errorHandler(removeContactByIdController));
 
 router.put(
   "/:id",
   validation(contactSchema),
-  errorHandling(updateContactByIdController)
+  errorHandler(updateContactByIdController)
 );
 
 router.patch(
   "/:id/favorite",
   validation(contactStatusSchema),
-  errorHandling(updateStatusContactController)
+  errorHandler(updateStatusContactController)
 );
 
 module.exports = router;
