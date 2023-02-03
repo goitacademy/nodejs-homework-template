@@ -18,15 +18,6 @@ const auth = (req, res, next) => {
         });
       }
     });
-
-    // if (!user || err || user.token !== token) {
-    //   return res.status(401).json({
-    //     status: "error",
-    //     code: 401,
-    //     message: "Unauthorized",
-    //   });
-    // }
-
     req.user = user;
     next();
   })(req, res, next);
