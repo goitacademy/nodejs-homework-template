@@ -1,6 +1,6 @@
 const { User } = require("../../db/userModel");
-const { HttpError } = require("../../helpers/index");
 const { sendEmail } = require("../../helpers/sendEmail");
+const { HttpError } = require("../../helpers/index");
 
 const reVerificationOfEmail = async (req, res, next) => {
   try {
