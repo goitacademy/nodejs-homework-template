@@ -4,11 +4,15 @@ const RequestError = require("../helpers/RequestError");
 const getAllContacts = async (req, res, _) => {
   const { id } = req.user;
 
-  let { page = 1, limit = 10 } = req.query;
+  let { page = 1, limit = 10, favorite } = req.query;
   limit = +limit > 10 ? 10 : +limit;
   const skip = +page > 1 ? +limit * (+page - 1) : 0;
+  const sortByFavorite = favorite ? { favorite: -1 } : {};
 
-  const contacts = await Contact.find({ owner: id }).skip(skip).limit(limit);
+  const contacts = await Contact.find({ owner: id })
+    .skip(skip)
+    .limit(limit)
+    .sort(sortByFavorite);
 
   res.status(200).json({ contacts, page: +page, limit });
 };
