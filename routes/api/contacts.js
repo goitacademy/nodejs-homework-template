@@ -9,8 +9,10 @@ router.get("/:contactId", ctrl.getById);
 
 router.post("/", ctrl.addCont);
 
-router.delete("/:contactId", ctrl.delCont);
-
 router.put("/:contactId", ctrl.putCont);
+
+router.patch("/:contactId/favorite", ctrl.patchFav);
+
+router.delete("/:contactId", ctrl.delCont);
 
 module.exports = router;
