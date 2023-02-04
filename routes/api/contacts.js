@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-// const Joi = require("joi");
+
 const {
   contactJoiSchema,
   contactSchemaUpdate,
   favoriteSchema,
 } = require("../../models/contact");
+
 const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
 
@@ -139,3 +140,5 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
 });
 
 module.exports = router;
+
+
