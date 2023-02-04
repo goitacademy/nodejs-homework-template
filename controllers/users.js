@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { httpError } = require('@root/helpers');
 const { UserModel } = require('@root/models');
