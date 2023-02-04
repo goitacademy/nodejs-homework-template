@@ -1,24 +1,27 @@
 const express = require("express");
-const { validation } = require("../../middlewares");
+const { validationMiddleware, authMiddleware } = require("../../middlewares");
 const { errorHandler } = require("../../helpers");
 const { userSignupSchema, userLoginSchema } = require("../../schemas");
 const {
   signupUserController,
   loginUserController,
+  logoutUserController,
 } = require("../../controllers");
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  validation(userSignupSchema),
+  validationMiddleware(userSignupSchema),
   errorHandler(signupUserController)
 );
 
 router.post(
   "/login",
-  validation(userLoginSchema),
+  validationMiddleware(userLoginSchema),
   errorHandler(loginUserController)
 );
+
+router.get("/logout", authMiddleware, errorHandler(logoutUserController));
 
 module.exports = router;

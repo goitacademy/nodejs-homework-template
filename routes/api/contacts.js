@@ -1,6 +1,5 @@
 const express = require("express");
-
-const { validation } = require("../../middlewares");
+const { validationMiddleware } = require("../../middlewares");
 const { errorHandler } = require("../../helpers");
 const { contactSchema, contactStatusSchema } = require("../../schemas");
 const {
@@ -20,7 +19,7 @@ router.get("/:id", errorHandler(getContactByIdController));
 
 router.post(
   "/",
-  validation(contactSchema),
+  validationMiddleware(contactSchema),
   errorHandler(createContactController)
 );
 
@@ -28,13 +27,13 @@ router.delete("/:id", errorHandler(removeContactByIdController));
 
 router.put(
   "/:id",
-  validation(contactSchema),
+  validationMiddleware(contactSchema),
   errorHandler(updateContactByIdController)
 );
 
 router.patch(
   "/:id/favorite",
-  validation(contactStatusSchema),
+  validationMiddleware(contactStatusSchema),
   errorHandler(updateStatusContactController)
 );
 
