@@ -1,68 +1,52 @@
-const { nanoid } = require("nanoid");
-const path = require("path");
-const { FSOperationsHelper } = require("@root/helpers");
+const joi = require('joi');
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
+const { mongooseErrorHandler } = require('@root/helpers');
 
-const pathToContactsDB = path.join(__dirname, "contactsDB.json");
-let contactsArray = null;
+const contactScheme = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
+contactScheme.post('save', mongooseErrorHandler);
+const ContactModel = mongoose.model('contacts', contactScheme);
 
-//MAIN
-(async () => {
-  FSOperationsHelper.init(pathToContactsDB);
-  const contactsData = await FSOperationsHelper.readData();
-  contactsArray = JSON.parse(contactsData);
-})();
+const joiSchemas = {
+  addSchema: joi.object({
+    name: joi.string().required(),
+    email: joi.string().required(),
+    phone: joi.string().required(),
+    favorite: joi.boolean(),
+  }),
 
-const listContacts = async () => contactsArray;
+  updateSchema: joi
+    .object({
+      name: joi.string().optional(),
+      email: joi.string().optional(),
+      phone: joi.string().optional(),
+    })
+    .or('name', 'email', 'phone'),
 
-const getContactById = async (contactId) => {
-  const [foundContact] = contactsArray.filter(
-    (contact) => contact.id === contactId
-  );
-
-  return foundContact;
-};
-
-const addContact = async (contactData) => {
-  const newContact = { id: nanoid(), ...contactData };
-
-  contactsArray.push(newContact);
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
-
-  return newContact;
-};
-
-const updateContact = async (contactId, newContactData) => {
-  const contactIndex = contactsArray.findIndex(
-    (contact) => contact.id === contactId
-  );
-
-  if (contactIndex === -1) return null;
-
-  const oldContact = contactsArray[contactIndex];
-  const safeNewContactData = newContactData;
-  delete safeNewContactData.id;
-  contactsArray[contactIndex] = { ...oldContact, ...safeNewContactData };
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
-
-  return contactsArray[contactIndex];
-};
-
-const removeContact = async (contactId) => {
-  const index = contactsArray.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-
-  const [foundContact] = contactsArray.splice(index, 1);
-  await FSOperationsHelper.writeData(JSON.stringify(contactsArray, null, 2));
-
-  return foundContact;
+  updateFavoriteField: joi.object({
+    favorite: joi.boolean().required(),
+  }),
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
+  ContactModel,
+  joiSchemas,
 };
