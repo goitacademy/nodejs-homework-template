@@ -1,9 +1,8 @@
 const Joi = require("joi");
 
 const validationAddContact = Joi.object({
-  name: Joi.string().alphanum().min(2).max(30).required().messages({
+  name: Joi.string().min(2).max(30).required().messages({
     "string.base": "'name' should be a type of string",
-    "string.alphanum": "'name' must only contain alpha-numeric characters",
     "string.max":
       "length of field 'name' must be less than or equal to 30 characters long",
     "string.min": "length of field 'name' must be at least 2 characters long",
@@ -22,12 +21,12 @@ const validationAddContact = Joi.object({
     "string.empty": "'phone' must contain value",
     "any.required": "missing required field 'phone'",
   }),
+  favorite: Joi.boolean(),
 });
 
 const validationUpdateContact = Joi.object({
-  name: Joi.string().alphanum().min(2).max(30).messages({
+  name: Joi.string().min(2).max(30).messages({
     "string.base": "'name' should be a type of string",
-    "string.alphanum": "'name' must only contain alpha-numeric characters",
     "string.max":
       "length of field 'name' must be less than or equal to 30 characters long",
     "string.min": "length of field 'name' must be at least 2 characters long",
@@ -44,4 +43,14 @@ const validationUpdateContact = Joi.object({
   }),
 }).or("name", "email", "phone");
 
-module.exports = { validationAddContact, validationUpdateContact };
+const validationUpdateFavorite = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": "missing field favorite",
+  }),
+});
+
+module.exports = {
+  validationAddContact,
+  validationUpdateContact,
+  validationUpdateFavorite,
+};
