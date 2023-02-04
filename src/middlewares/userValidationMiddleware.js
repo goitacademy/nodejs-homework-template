@@ -28,4 +28,16 @@ module.exports = {
     }
     next();
   },
+  userVerificationValidation: (req, res, next) => {
+    const schema = Joi.object({
+      email: Joi.string().min(5).max(30).required(),
+    });
+    const validationResult = schema.validate(req.body);
+    if (validationResult.error) {
+      return res
+        .status(400)
+        .json({ status: 400, message: validationResult.error.details });
+    }
+    next();
+  },
 };

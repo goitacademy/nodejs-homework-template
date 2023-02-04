@@ -6,10 +6,19 @@ const { userController } = require("../../controllers");
 const {
   usersSignUnValidation,
   usersLogInValidation,
+  userVerificationValidation,
 } = require("../../middlewares/userValidationMiddleware");
 const upload = require("../../middlewares/upload");
 
 router.post("/signup", usersSignUnValidation, userController.signUp);
+
+router.get("/verify/:verificationToken", userController.verification);
+
+router.post(
+  "/verify",
+  userVerificationValidation,
+  userController.secondVerification
+);
 
 router.post("/login", usersLogInValidation, userController.logIn);
 
