@@ -11,20 +11,26 @@ const {
   postValidationMiddleware,
   putValidationMiddleware,
 } = require("../../middlewawes/validationMiddlevares");
+const { auth } = require("../../middlewawes/authMiddlevares");
 const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(getContacts));
+router.get("/", auth, ctrlWrapper(getContacts));
 
-router.get("/:contactId", ctrlWrapper(getContById));
+router.get("/:contactId", auth, ctrlWrapper(getContById));
 
-router.post("/", postValidationMiddleware, ctrlWrapper(addCont));
+router.post("/", auth, postValidationMiddleware, ctrlWrapper(addCont));
 
-router.delete("/:contactId", ctrlWrapper(removeCont));
+router.delete("/:contactId", auth, ctrlWrapper(removeCont));
 
-router.put("/:contactId", putValidationMiddleware, ctrlWrapper(updateCont));
+router.put(
+  "/:contactId",
+  auth,
+  putValidationMiddleware,
+  ctrlWrapper(updateCont)
+);
 
-router.patch("/:contactId/favorite", ctrlWrapper(updateFavorite));
+router.patch("/:contactId/favorite", auth, ctrlWrapper(updateFavorite));
 
 module.exports = router;

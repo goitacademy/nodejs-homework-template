@@ -7,8 +7,9 @@ const {
   updateStatusContact,
 } = require("../models/contacts");
 
-const getContacts = async (_, res) => {
-  const data = await listContacts();
+const getContacts = async (req, res) => {
+  const { id } = req.user;
+  const data = await listContacts(id);
   res.status(200).json({ data });
 };
 
