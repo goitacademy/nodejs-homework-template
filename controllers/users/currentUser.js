@@ -5,7 +5,7 @@ async function currentUser(req, res, next) {
   try {
     const { _id: id } = req.user;
     const userId = await User.findById(id);
-    console.log("userId", userId);
+
     if (!userId) {
       throw RequestError(401, "Not authorized");
     }
