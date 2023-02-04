@@ -1,3 +1,4 @@
 const signupUserController = require("./signupUserController");
+const loginUserController = require("./loginUserController");
 
-module.exports = { signupUserController };
+module.exports = { signupUserController, loginUserController };
