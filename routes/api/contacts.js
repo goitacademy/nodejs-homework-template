@@ -1,7 +1,9 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
 const { validateBody } = require('@root/middlewares');
-const { joiSchemas } = require('@root/models/contacts');
+const {
+  contactJoiSchemas: { addSchema, updateSchema, updateFavoriteField },
+} = require('@root/models');
 const validateID = require('@root/middlewares/validateID');
 const contactsActions = require('@root/controllers');
 
@@ -17,14 +19,14 @@ router.get(
 
 router.post(
   '/',
-  validateBody(joiSchemas.addSchema, 'missing required object field'),
+  validateBody(addSchema, 'missing required object field'),
   asyncMiddlewareWrapper(contactsActions.addContact)
 );
 
 router.put(
   '/:contactId',
   validateID,
-  validateBody(joiSchemas.updateSchema),
+  validateBody(updateSchema),
   asyncMiddlewareWrapper(contactsActions.updateContact)
 );
 
@@ -32,7 +34,7 @@ router.patch(
   '/:contactId/favorite',
   validateID,
   validateBody(
-    joiSchemas.updateFavoriteField,
+    updateFavoriteField,
     'missing field in request`s object: "favorite"'
   ),
   asyncMiddlewareWrapper(contactsActions.updateStatus)

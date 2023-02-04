@@ -25,7 +25,7 @@ const contactScheme = new Schema(
 contactScheme.post('save', mongooseErrorHandler);
 const ContactModel = mongoose.model('contacts', contactScheme);
 
-const joiSchemas = {
+const contactJoiSchemas = {
   addSchema: joi.object({
     name: joi.string().required(),
     email: joi.string().required(),
@@ -48,5 +48,5 @@ const joiSchemas = {
 
 module.exports = {
   ContactModel,
-  joiSchemas,
+  contactJoiSchemas,
 };
