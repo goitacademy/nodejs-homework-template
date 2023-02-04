@@ -1,5 +1,5 @@
 const express = require("express");
-const { auth } = require("../../middlewawes/authMiddlevares");
+const auth = require("../../middlewawes/authMiddlevares");
 const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 const {
   signup,

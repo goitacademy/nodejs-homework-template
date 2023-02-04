@@ -11,7 +11,7 @@ const {
   postValidationMiddleware,
   putValidationMiddleware,
 } = require("../../middlewawes/validationMiddlevares");
-const { auth } = require("../../middlewawes/authMiddlevares");
+const auth = require("../../middlewawes/authMiddlevares");
 const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 
 const router = express.Router();

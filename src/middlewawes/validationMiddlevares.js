@@ -1,4 +1,5 @@
 const Joi = require("joi");
+
 const postValidationMiddleware = (req, res, next) => {
   const contactSchema = Joi.object({
     name: Joi.string().required(),
@@ -9,6 +10,7 @@ const postValidationMiddleware = (req, res, next) => {
   const validationData = contactSchema.validate(req.body);
 
   if (validationData.error) {
+    console.log("hello");
     return res.status(400).json({
       message: `missing required ${validationData.error.details[0].path} field`,
     });

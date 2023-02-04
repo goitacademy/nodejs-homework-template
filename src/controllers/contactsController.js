@@ -33,7 +33,8 @@ const removeCont = async (req, res) => {
 
 const addCont = async (req, res) => {
   const body = req.body;
-  const data = await addContact(body);
+  const { id } = req.user;
+  const data = await addContact(id, body);
   res.status(201).json({ code: 201, data });
 };
 

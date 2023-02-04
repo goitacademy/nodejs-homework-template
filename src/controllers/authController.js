@@ -5,14 +5,14 @@ const {
   joiLoginSchema,
   joiSubscriptionSchema,
 } = require("../models/userModel");
-const { createError } = require("../helpers/createError");
+const createError = require("../helpers/createError");
 
 const { SECRET_KEY } = process.env;
 
 const signup = async (req, res) => {
   const { error } = joiRegisterSchema.validate(req.body);
   if (error) {
-    throw createError(400);
+    throw createError(400, "Please, all fields are required");
   }
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
