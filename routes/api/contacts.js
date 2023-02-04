@@ -1,28 +1,3 @@
-<<<<<<< Updated upstream
-const express = require('express')
-
-const router = express.Router()
-
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-=======
 const express = require("express");
 const ContactsController = require("../../controllers/ContactsController");
 const { joiSchema } = require("../../models/contacts");
@@ -56,6 +31,5 @@ router.put(
   ContactsController.update
 );
 router.delete("/contacts/:id", ContactsController.remove);
->>>>>>> Stashed changes
 
-module.exports = router
+module.exports = router;
