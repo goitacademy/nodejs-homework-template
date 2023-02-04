@@ -7,6 +7,7 @@ const {
   addContactController,
   removeContactController,
   updateContactController,
+  changeFavouriteStatusController,
 } = require("../../controller/contacts");
 
 const router = express.Router();
@@ -23,6 +24,11 @@ router.put(
   "/:contactId",
   validation(contactsSchema),
   ctrlWrapper(updateContactController)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  ctrlWrapper(changeFavouriteStatusController)
 );
 
 module.exports = router;
