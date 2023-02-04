@@ -6,6 +6,7 @@ const {
   signupUserController,
   loginUserController,
   logoutUserController,
+  getCurrentUserController,
 } = require("../../controllers");
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.post(
 );
 
 router.get("/logout", authMiddleware, errorHandler(logoutUserController));
+
+router.get("/current", authMiddleware, errorHandler(getCurrentUserController));
 
 module.exports = router;
