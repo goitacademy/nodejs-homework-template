@@ -1,5 +1,5 @@
 const { httpError } = require('@root/helpers');
-const { ContactModel } = require('@root/models/contacts');
+const { ContactModel } = require('@root/models');
 
 async function getAllContacts(req, res, next) {
   const contacts = await ContactModel.find({});
