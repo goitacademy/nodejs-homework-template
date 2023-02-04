@@ -1,17 +1,20 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // eslint-disable-line
+
 const contactSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "Set name for contact"],
       minlength: 2,
-      maxlength: 10,
+      maxlength: 20,
     },
     email: {
       type: String,
       required: [true, "Set contact email"],
+      match: [emailRegexp, "Please enter a valid email"],
     },
     phone: {
       type: String,
@@ -33,21 +36,17 @@ const contactSchema = new Schema(
 );
 
 const postSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(10).required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  phone: Joi.string().alphanum().min(3).max(10).required(),
+  name: Joi.string().min(3).max(20).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  phone: Joi.string().min(3).max(20).required(),
   favorite: Joi.bool(),
   owner: Joi.string(),
 });
 
 const putSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(10).optional(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .optional(),
-  phone: Joi.string().alphanum().min(3).max(10).optional(),
+  name: Joi.string().min(3).max(20).optional(),
+  email: Joi.string().pattern(emailRegexp).optional(),
+  phone: Joi.string().min(3).max(20).optional(),
   favorite: Joi.bool(),
 });
 
