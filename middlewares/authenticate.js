@@ -11,6 +11,7 @@ module.exports = async (req, _, next) => {
   if (bearer !== 'Bearer' || !token) {
     next(httpError(401, 'Not authorized'));
   }
+
   try {
     const { id } = jwt.verify(
       token,

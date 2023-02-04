@@ -7,10 +7,10 @@ module.exports = async (req) => {
 
   const skip = (page - 1) * limit;
 
-  const searchParams =
-    favorite === ('true' || 'false')
-      ? { owner, favorite }
-      : { owner };
+  const searchParams = { owner };
+  if (favorite === ('true' || 'false')) {
+    searchParams.favorite = favorite;
+  }
 
   return await Contact.find(searchParams, null, {
     skip,
