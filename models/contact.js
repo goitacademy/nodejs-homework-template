@@ -56,6 +56,6 @@ const patchSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-Contact.createIndexes();
+// Contact.createIndexes();
 
 module.exports = { Contact, postSchema, putSchema, patchSchema };

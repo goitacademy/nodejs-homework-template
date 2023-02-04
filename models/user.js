@@ -57,7 +57,7 @@ const joiUpdateSubscriptionSchema = Joi.object({
 
 const User = model("users", userSchema);
 
-User.createIndexes();
+// User.createIndexes();
 
 module.exports = {
   User,

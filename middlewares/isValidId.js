@@ -2,10 +2,10 @@ const { isValidObjectId } = require("mongoose");
 const { BadRequest } = require("http-errors");
 
 const isValidId = (req, _, next) => {
-  const { contactId } = req.params;
-  const isCorrectId = isValidObjectId(contactId);
+  const { id } = req.params;
+  const isCorrectId = isValidObjectId(id);
   if (!isCorrectId) {
-    next(new BadRequest(`${contactId} is not correct id format`));
+    next(new BadRequest(`${id} is not correct id format`));
   }
   next();
 };

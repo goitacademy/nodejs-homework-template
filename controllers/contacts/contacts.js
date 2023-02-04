@@ -5,40 +5,67 @@ const getAll = async (req, res) => {
   const { _id } = req.user;
   const { page = 1, limit = 20, favorite, name } = req.query;
   const skip = (page - 1) * limit;
+
   if (favorite && name) {
-    const contacts = await Contact.find({ owner: _id, favorite, name }, "", {
-      skip,
-      limit: Number(limit),
-    }).populate("owner", "_id name email");
-    res.json(contacts);
-  } else if (favorite && !name) {
+    const contacts = await Contact.find(
+      { owner: _id, favorite, name: { $regex: `${name}` } },
+      "",
+      {
+        skip,
+        limit: Number(limit),
+      }
+    ).populate("owner", "_id name email");
+    if (contacts.length === 0) {
+      throw new NotFound(`Contact ${name} not found`);
+    } else {
+      res.json(contacts);
+    }
+  } else if (favorite) {
     const contacts = await Contact.find({ owner: _id, favorite }, "", {
       skip,
       limit: Number(limit),
     }).populate("owner", "_id name email");
-    res.json(contacts);
-  } else if (!favorite && name) {
-    const contacts = await Contact.find({ owner: _id, name }, "", {
-      skip,
-      limit: Number(limit),
-    }).populate("owner", "_id name email");
-    res.json(contacts);
+    if (contacts.length === 0) {
+      throw new NotFound();
+    } else {
+      res.json(contacts);
+    }
+  } else if (name) {
+    const contacts = await Contact.find(
+      { owner: _id, name: { $regex: `${name}` } },
+      "",
+      {
+        skip,
+        limit: Number(limit),
+      }
+    ).populate("owner", "_id name email");
+    if (contacts.length === 0) {
+      throw new NotFound(`Contact ${name} not found`);
+    } else {
+      res.json(contacts);
+    }
   } else {
     const contacts = await Contact.find({ owner: _id }, "", {
       skip,
       limit: Number(limit),
     }).populate("owner", "_id name email");
-    res.json(contacts);
+    if (contacts.length === 0) {
+      throw new NotFound();
+    } else {
+      res.json(contacts);
+    }
   }
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
+  const { _id } = req.user;
   const contactById = await Contact.findById(id);
   if (!contactById) {
     throw new NotFound(`Contact with id=${id} not found`);
-  }
-  res.json(contactById);
+  } else if (_id !== res.json(contactById.owner)) {
+    throw new BadRequest(`Wrong current user`);
+  } else res.json(contactById);
 };
 
 const add = async (req, res) => {
