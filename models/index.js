@@ -1,9 +1,9 @@
 const { ContactModel, contactJoiSchemas } = require('./contacts');
-const { UserModel, userJoiSchemas } = require('./users');
+const { UserModel, userJoiSchema } = require('./users');
 
 module.exports = {
   ContactModel,
   contactJoiSchemas,
   UserModel,
-  userJoiSchemas,
+  userJoiSchema,
 };

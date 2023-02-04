@@ -29,12 +29,12 @@ const userScheme = new Schema(
 userScheme.post('save', mongooseErrorHandler);
 const UserModel = mongoose.model('users', userScheme);
 
-const userJoiSchemas = joi.object({
+const userJoiSchema = joi.object({
   password: joi.string().min(6).required(),
   email: joi.string().required(),
 });
 
 module.exports = {
   UserModel,
-  userJoiSchemas,
+  userJoiSchema,
 };
