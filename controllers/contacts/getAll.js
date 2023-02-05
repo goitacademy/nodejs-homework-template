@@ -1,7 +1,4 @@
-// const contacts = require("../../models/contacts.json");
 const { Contact } = require("../../models");
-
-// const { Contact } = require("../../models/contacts");
 
 const listContacts = async (req, res) => {
   const { _id } = req.user;
