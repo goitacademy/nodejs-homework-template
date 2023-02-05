@@ -5,11 +5,11 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-} = require("../services");
+} = require("../services/contactsService");
 
 const getContactsController = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await listContacts(req.user.id);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
@@ -18,7 +18,7 @@ const getContactsController = async (req, res, next) => {
 
 const getContactByIdController = async (req, res, next) => {
   try {
-    const contact = await getContactById(req.params.contactId);
+    const contact = await getContactById(req.params.contactId, req.user.id);
     res.status(200).json(contact);
   } catch (error) {
     next(error);
@@ -27,7 +27,7 @@ const getContactByIdController = async (req, res, next) => {
 
 const addContactController = async (req, res, next) => {
   try {
-    const contact = await addContact(req.body);
+    const contact = await addContact({ ...req.body, owner: req.user.id });
     res.status(201).json(contact);
   } catch (error) {
     next(error);
@@ -36,7 +36,8 @@ const addContactController = async (req, res, next) => {
 
 const deleteContactController = async (req, res, next) => {
   try {
-    await removeContact(req.params.contactId);
+    console.log("Hello");
+    await removeContact(req.params.contactId, req.user.id);
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);
@@ -45,7 +46,11 @@ const deleteContactController = async (req, res, next) => {
 
 const updateContactController = async (req, res, next) => {
   try {
-    const contact = await updateContact(req.params.contactId, req.body);
+    const contact = await updateContact(
+      req.params.contactId,
+      req.user.id,
+      req.body
+    );
     res.status(200).json(contact);
   } catch (error) {
     next(error);
@@ -54,7 +59,11 @@ const updateContactController = async (req, res, next) => {
 
 const updateFavoriteController = async (req, res, next) => {
   try {
-    const contact = await updateStatusContact(req.params.contactId, req.body);
+    const contact = await updateStatusContact(
+      req.params.contactId,
+      req.user.id,
+      req.body
+    );
     res.status(200).json(contact);
   } catch (error) {
     next(error);
