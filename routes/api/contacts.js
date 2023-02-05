@@ -21,7 +21,6 @@ const schema = Joi.object({
 router.get("/", async (req, res, next) => {
 	try {
 		const result = await listContacts();
-		console.log("test");
 		res.status(200).json(result);
 	} catch (err) {
 		next(err);
@@ -43,14 +42,13 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-	const { name, email, phone } = req.body;
 	console.log(req.body);
 	try {
 		const { error } = schema.validate(req.body);
 		if (error) {
 			res.status(400).json({ message: result.error.message });
 		} else {
-			const result = addContact(name, email, phone);
+			const result = addContact(req.body);
 			res.status(200).json(result);
 		}
 	} catch (err) {

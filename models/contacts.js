@@ -37,13 +37,14 @@ const removeContact = async (contactId) => {
 	return filtredContacts;
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (data) => {
+	const { name, email, phone } = data;
 	const contacts = await getContactsFromFile();
 	const newContact = {
-		id: Number(contacts[contacts.length - 1].id) + 1,
-		name: name,
-		email: email,
-		phone: phone,
+		id: (Number(contacts[contacts.length - 1].id) + 1).toString(),
+		name,
+		email,
+		phone,
 	};
 	contacts.push(newContact);
 	saveContactsToFile(contacts);
@@ -51,7 +52,8 @@ const addContact = async ({ name, email, phone }) => {
 	return contacts;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
+const updateContact = async (contactId, body) => {
+	const { name, email, phone } = body;
 	const data = await getContactsFromFile();
 
 	const newContact = {
