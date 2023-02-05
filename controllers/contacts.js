@@ -6,7 +6,10 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../services/contactsService");
-const { WrongParametersError } = require("../helpers/errors");
+const {
+  WrongParametersError,
+  MissingFieldsError,
+} = require("../helpers/errors");
 
 async function getContactsController(req, res, next) {
   const contacts = await getContacts();
@@ -19,7 +22,7 @@ async function getContactByIdController(req, res, next) {
   if (!contact) {
     throw new WrongParametersError("Not found");
   }
-  res.status(200).json(contact);
+  res.json(contact);
 }
 
 async function postContactController(req, res, next) {
@@ -35,7 +38,7 @@ async function deleteContactController(req, res, next) {
 
 async function changeContactController(req, res, next) {
   if (!req.body) {
-    return res.status(400).json({ message: "missing fields" });
+    throw new MissingFieldsError("Missing fields");
   }
 
   const contact = await updateContact(req.params.contactId, req.body);
@@ -48,7 +51,7 @@ async function changeContactController(req, res, next) {
 
 async function changeFavoriteStatusController(req, res, next) {
   if (!req.body) {
-    return res.status(400).json({ message: "missing field favorite" });
+    throw new MissingFieldsError("Missing field favorite");
   }
   const contact = await updateStatusContact(req.params.contactId, req.body);
   if (!contact) {

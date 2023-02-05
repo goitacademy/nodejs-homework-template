@@ -9,7 +9,8 @@ async function main() {
   try {
     await mongoose.connect(DB_HOST);
     console.log("Database connection is successful");
-    app.listen(PORT, () => {
+    app.listen(PORT, (err) => {
+      if (err) console.error("Error at aserver launch", err);
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   } catch (error) {
