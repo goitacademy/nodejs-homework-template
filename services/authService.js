@@ -53,8 +53,23 @@ const logout = async (id) => {
   await User.findByIdAndUpdate(id, { token: "" });
 };
 
+const getCurrentUser = async (id) => {
+  return User.findById(id);
+};
+
+const updateSubscription = async (id, subscription) => {
+  const userAfterSubscriptionUpdate = User.findByIdAndUpdate(
+    id,
+    { subscription },
+    { new: true }
+  );
+  return userAfterSubscriptionUpdate;
+};
+
 module.exports = {
   register,
   login,
   logout,
+  getCurrentUser,
+  updateSubscription,
 };

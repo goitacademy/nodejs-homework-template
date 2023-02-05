@@ -18,4 +18,13 @@ const schemaAuth = Joi.object({
     }),
 });
 
-module.exports = schemaAuth;
+const schemaUpdateSubscription = Joi.object({
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .required()
+    .messages({
+      "any.required": "missing field subscription",
+    }),
+});
+
+module.exports = { schemaAuth, schemaUpdateSubscription };
