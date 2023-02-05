@@ -1,8 +1,11 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-
-const userJoiSchema = Joi.object({
-  name: Joi.string().required(),
+const bcrypt = require("bcrypt");
+const registerJoiSchema = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().min(6).required(),
+});
+const loginJoiSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
 });
@@ -31,8 +34,18 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
+// 2) способ хешировать password - регістр
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+};
+
+// 2)спосіб - логін
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 const User = model("user", userSchema);
 module.exports = {
   User,
-  userJoiSchema,
+  registerJoiSchema,
+  loginJoiSchema,
 };

@@ -29,7 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const resultId = await Contact.findById(contactId); // findOne({_id:contactId}) - спосіб шукати по ID
-    console.log(resultId);
+    
     if (!resultId) {
       throw new NotFound("Not found");
     }
