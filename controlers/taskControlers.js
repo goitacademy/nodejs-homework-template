@@ -1,10 +1,4 @@
-// const {
-//     listContacts,
-//     // getContactById,
-//     // addContact,
-//     // removeContact,
-//     // updateContact,
-//   } = require("../models/contacts");
+
   const {Contact} = require('../models/contactModel');
 
   const getContacList = async (req, res, next) => {
@@ -63,10 +57,10 @@
 
     const  changeContact =  async (req, res, next) => {
       const {contactId} = req.params;
-      const {name, email, phone, favorite} = req.body;
+      const {name, email, phone} = req.body;
       try{
           const renewedContact = await Contact.findByIdAndUpdate(contactId,
-            {$set:{name, email, phone, favorite}});
+            {$set:{name, email, phone}});
         if (renewedContact) {
           return res.status(200).json({message: "contact renewed", data: renewedContact });
         }
@@ -76,10 +70,31 @@
         next();
       
       };
+
+      const updateStatusContact = async (req, res, next) => {
+        const {contactId} = req.params;
+        // const {favorite} = req.body;
+        try{
+            const FavoriteContact = await Contact.findByIdAndUpdate(
+              contactId,
+              {favorite:false}
+
+              );
+              if (FavoriteContact) {
+                return res.status(200).json({message: "contact add to favorite", data: FavoriteContact });
+              }
+
+        }catch(error){
+          console.log( error.message);
+
+        }next();
+
+      };
   module.exports = {
     getContacList,
     getContact,
     addNewContact,
     deleteContact,
-    changeContact 
+    changeContact,
+    updateStatusContact 
   }

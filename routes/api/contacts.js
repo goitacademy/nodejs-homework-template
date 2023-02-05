@@ -5,12 +5,14 @@ const {
   getContact,
   addNewContact,
   deleteContact,
-  changeContact 
+  changeContact,
+  updateStatusContact
 } = require("../../controlers/taskControlers");
 
 const {
   addDataValid,
-  updateDataValid
+  updateDataValid,
+  updateFavoriteValid
 } = require('../../dataValidation/dataValidation');
 
 
@@ -23,5 +25,7 @@ router.post('/',addDataValid, addNewContact);
 router.delete('/:contactId', deleteContact);
 
 router.put('/:contactId',updateDataValid, changeContact);
+
+router.patch('/:contactId/favorite',updateFavoriteValid, updateStatusContact)
 
 module.exports = router
