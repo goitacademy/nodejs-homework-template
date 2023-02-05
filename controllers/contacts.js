@@ -2,7 +2,25 @@ const { HttpError } = require('@root/helpers');
 const { ContactModel } = require('@root/models');
 
 async function getAllContacts(req, res, next) {
-  const contacts = await ContactModel.find({});
+  let filterObject = {};
+  let optionsObject = {};
+  const { favorite, page, limit } = req.query;
+
+  // form pagination options object for mongoose
+  if (page && limit)
+    optionsObject = {
+      skip: (parseInt(page) - 1) * parseInt(limit),
+      limit: parseInt(limit),
+    };
+
+  // form filter object for mongoose
+  if (favorite !== undefined)
+    filterObject = {
+      favorite: favorite === 'true',
+    };
+
+  // get contacts with optional filters and pagination
+  const contacts = await ContactModel.find(filterObject, '', optionsObject);
 
   res.status(200).json(contacts);
 }

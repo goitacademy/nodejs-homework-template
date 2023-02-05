@@ -20,7 +20,11 @@ const router = express.Router();
 
 router.all('*', validateJwtToken);
 
-router.get('/', asyncMiddlewareWrapper(contactsActions.getAllContacts));
+router.get(
+  '/',
+  validateQueryParams(getContactsQueryParam, 'Wrong query parameter value'),
+  asyncMiddlewareWrapper(contactsActions.getAllContacts)
+);
 
 router.get(
   '/:contactId',

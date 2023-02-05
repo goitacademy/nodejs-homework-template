@@ -44,6 +44,12 @@ const contactJoiSchemas = {
   updateFavoriteField: joi.object({
     favorite: joi.boolean().required(),
   }),
+
+  getContactsQueryParam: joi.object({
+    favorite: joi.boolean().optional(),
+    limit: joi.number().optional(),
+    page: joi.number().optional(),
+  }),
 };
 
 module.exports = {
