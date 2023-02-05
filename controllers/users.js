@@ -36,7 +36,7 @@ async function login(req, res, next) {
 
   // add token and update in DB
   const { _id, subscription } = userWithEmail;
-  const token = jwt.sign({ _id }, SECRET_KEY, { expiresIn: '1s' });
+  const token = jwt.sign({ _id }, SECRET_KEY, { expiresIn: '2h' });
   userWithEmail.token = token;
   const updatedUser = await userWithEmail.save();
   if (!updatedUser)
