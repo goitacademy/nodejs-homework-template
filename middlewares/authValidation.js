@@ -20,7 +20,8 @@ const validateJwtToken = async (req, res, next) => {
   // get user
   const { _id: id } = jwt.decode(token);
   const userWithToken = await UserModel.findById(id);
-  if (!userWithToken) return next(new HttpError(401));
+  if (!userWithToken || userWithToken.token !== token)
+    return next(new HttpError(401));
 
   // save user`s info and process further
   req.user = { id };
