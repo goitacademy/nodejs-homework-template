@@ -1,6 +1,6 @@
 const express = require("express");
 const { validation, ctrlWrapper } = require("../../middlewares");
-const { contactsSchema } = require("../../schemas/contact");
+const { contactsSchema, favoriteSchema } = require("../../schemas/contact");
 const {
   getAllContactsController,
   getContactsByIdController,
@@ -28,6 +28,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  validation(favoriteSchema),
   ctrlWrapper(changeFavouriteStatusController)
 );
 

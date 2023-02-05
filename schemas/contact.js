@@ -7,4 +7,8 @@ const contactsSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-module.exports = { contactsSchema };
+const favoriteSchema = Joi.object({
+  favorite: Joi.boolean(),
+});
+
+module.exports = { contactsSchema, favoriteSchema };
