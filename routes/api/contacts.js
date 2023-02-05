@@ -1,5 +1,5 @@
 const express = require("express");
-const { validationMiddleware } = require("../../middlewares");
+const { validationMiddleware, authMiddleware } = require("../../middlewares");
 const { errorHandler } = require("../../helpers");
 const { contactSchema, contactStatusSchema } = require("../../schemas");
 const {
@@ -13,12 +13,13 @@ const {
 
 const router = express.Router();
 
-router.get("/", errorHandler(getContactsListController));
+router.get("/", authMiddleware, errorHandler(getContactsListController));
 
 router.get("/:id", errorHandler(getContactByIdController));
 
 router.post(
   "/",
+  authMiddleware,
   validationMiddleware(contactSchema),
   errorHandler(createContactController)
 );
