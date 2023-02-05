@@ -30,9 +30,7 @@ const addShema = Joi.object({
 });
 const updateFavoriteSchema = Joi.object({ favorite: Joi.boolean().required() });
 
-const schemas = { addShema, updateFavoriteSchema };
-
 const Contact = model("contact", contactSchema);
 // const Contact = model( "contact" - така ж назва як і в створенної колекціі в базі данних, тільки в однині, мангус зрозуміє  , contactSchema);
 
-module.exports = { Contact, schemas, updateFavoriteSchema };
+module.exports = { Contact, addShema, updateFavoriteSchema };
