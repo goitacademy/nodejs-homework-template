@@ -1,13 +1,15 @@
-const contactsRepository = require("../../models/contacts.js");
+const { ContactModel } = require("../../models/contact.model");
+const { createHttpException } = require("../../helpers/create-http-exception");
 
 const getById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contactsRepository.getById(id);
-    res.json(result);
-  } catch (error) {
-    next(error);
+  const { id } = req.params;
+
+  const result = await ContactModel.findById(id);
+  if (!result) {
+    throw createHttpException(404, "The contact is not found");
   }
+
+  res.json(result);
 };
 
 module.exports = {
