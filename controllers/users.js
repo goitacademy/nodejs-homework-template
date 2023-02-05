@@ -67,9 +67,24 @@ async function getCurrentUserInfo(req, res, next) {
   res.status(200).json({ email, subscription });
 }
 
+async function changeSubscription(req, res, next) {
+  const { userDoc } = req.user;
+
+  // update info about user
+  userDoc.subscription = req.body.subscription;
+  const updatedUser = await userDoc.save();
+  if (!updatedUser)
+    throw new MongoDBActionError('Failed to update user`s info');
+
+  // send back user info
+  const { email, subscription } = updatedUser;
+  res.status(200).json({ email, subscription });
+}
+
 module.exports = {
   signup,
   login,
   logout,
   getCurrentUserInfo,
+  changeSubscription,
 };

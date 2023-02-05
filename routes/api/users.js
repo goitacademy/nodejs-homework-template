@@ -1,7 +1,7 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
 const { validateBody, validateJwtToken } = require('@root/middlewares');
-const { userJoiSchema } = require('@root/models');
+const { userJoiSchema, subscriptionJoiSchema } = require('@root/models');
 // const validateID = require('@root/middlewares/validateID');
 const { authActions } = require('@root/controllers');
 
@@ -26,6 +26,15 @@ router.get(
   '/current',
   validateJwtToken,
   asyncMiddlewareWrapper(authActions.getCurrentUserInfo)
+);
+router.patch(
+  '/',
+  validateJwtToken,
+  validateBody(
+    subscriptionJoiSchema,
+    'Ошибка от Joi или другой библиотеки валидации'
+  ),
+  asyncMiddlewareWrapper(authActions.changeSubscription)
 );
 
 module.exports = router;
