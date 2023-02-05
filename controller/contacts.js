@@ -10,10 +10,10 @@ const {
 
 const getAll = async (req, res, next) => {
   const { _id } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
 
-  const contacts = await listContacts({ _id, skip, limit });
+  const contacts = await listContacts({ _id, skip, limit, favorite });
   res.status(200).json({ data: contacts });
 };
 

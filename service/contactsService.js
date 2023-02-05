@@ -1,11 +1,16 @@
 const Contact = require('./schemas/contacts');
 
-const listContacts = async ({ _id, skip, limit }) => {
-  const allContacts = await Contact.find(
-    { owner: _id }, "-updatedAt -createdAt", { skip, limit: Number(limit) }
-  ).populate("owner", "_id email");
+const listContacts = async ({ _id, skip, limit, favorite }) => {
 
-  return allContacts;
+  if(!favorite) {
+    return await Contact.find(
+      { owner: _id }, "-updatedAt -createdAt", { skip, limit: Number(limit) }
+    ).populate("owner", "_id email");
+  } else {
+    return await Contact.find(
+      { owner: _id, favorite }, "-updatedAt -createdAt", { skip, limit: Number(limit) }
+    ).populate("owner", "_id email");
+  }
 };
 
 const getContactById = async (contactId) => {

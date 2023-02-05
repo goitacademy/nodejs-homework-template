@@ -19,7 +19,7 @@ const {
 } = require('../../controller/contacts');
 
 router.get('/', auth, ctrlWrapper(getAll));
-router.get('/:id', ctrlWrapper(getById));
+router.get('/:id', auth, ctrlWrapper(getById));
 router.post("/", auth, validateRequest(contactAddSchema), ctrlWrapper(add));
 router.delete("/:id", auth, ctrlWrapper(remove));
 router.put("/:id", auth, validateRequest(contactUpdateSchema), ctrlWrapper(updateById));
