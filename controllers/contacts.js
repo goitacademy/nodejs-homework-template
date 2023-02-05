@@ -1,4 +1,4 @@
-const { httpError } = require('@root/helpers');
+const { HttpError } = require('@root/helpers');
 const { ContactModel } = require('@root/models');
 
 async function getAllContacts(req, res, next) {
@@ -9,7 +9,7 @@ async function getAllContacts(req, res, next) {
 
 async function getContactByID(req, res, next) {
   const contact = await ContactModel.findById(req.params.contactId);
-  if (!contact) throw httpError(404);
+  if (!contact) throw new HttpError(404);
 
   res.json(contact);
 }
@@ -24,7 +24,7 @@ async function deleteContactByID(req, res, next) {
   const deletedContact = await ContactModel.findByIdAndRemove(
     req.params.contactId
   );
-  if (!deletedContact) throw httpError(404);
+  if (!deletedContact) throw new HttpError(404);
 
   res.status(200).json({ message: 'contact deleted' });
 }
@@ -35,7 +35,7 @@ async function updateContact(req, res, next) {
     req.body,
     { new: true }
   );
-  if (!updatedContact) throw httpError(404);
+  if (!updatedContact) throw new HttpError(404);
 
   res.status(200).json(updatedContact);
 }
