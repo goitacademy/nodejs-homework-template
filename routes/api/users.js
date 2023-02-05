@@ -1,6 +1,6 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
-const { validateBody } = require('@root/middlewares');
+const { validateBody, validateJwtToken } = require('@root/middlewares');
 const { userJoiSchema } = require('@root/models');
 // const validateID = require('@root/middlewares/validateID');
 const { authActions } = require('@root/controllers');
@@ -16,6 +16,11 @@ router.post(
   '/login',
   validateBody(userJoiSchema, 'Ошибка от Joi или другой библиотеки валидации'),
   asyncMiddlewareWrapper(authActions.login)
+);
+router.get(
+  '/logout',
+  validateJwtToken,
+  asyncMiddlewareWrapper(authActions.logout)
 );
 
 module.exports = router;

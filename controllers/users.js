@@ -46,7 +46,21 @@ async function login(req, res, next) {
   res.status(200).json({ token, user: { email, subscription } });
 }
 
+async function logout(req, res, next) {
+  const { id: userID, userDoc } = req.user;
+
+  // annulate user`s token
+  userDoc.token = null;
+  const updatedUser = await userDoc.save();
+  if (!updatedUser)
+    throw new MongoDBActionError('Failed to update user`s info');
+
+  // report
+  res.status(204).send();
+}
+
 module.exports = {
   signup,
   login,
+  logout,
 };

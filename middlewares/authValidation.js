@@ -24,7 +24,7 @@ const validateJwtToken = async (req, res, next) => {
     return next(new HttpError(401));
 
   // save user`s info and process further
-  req.user = { id };
+  req.user = { id, userDoc: userWithToken };
   next();
 };
 
