@@ -1,12 +1,17 @@
 const express = require("express");
 const { validationMiddleware, authMiddleware } = require("../../middlewares");
 const { errorHandler } = require("../../helpers");
-const { userSignupSchema, userLoginSchema } = require("../../schemas");
+const {
+  userSignupSchema,
+  userLoginSchema,
+  userSubscriptionSchema,
+} = require("../../schemas");
 const {
   signupUserController,
   loginUserController,
   logoutUserController,
   getCurrentUserController,
+  updateUserSubscriptionController,
 } = require("../../controllers");
 
 const router = express.Router();
@@ -26,5 +31,12 @@ router.post(
 router.get("/logout", authMiddleware, errorHandler(logoutUserController));
 
 router.get("/current", authMiddleware, errorHandler(getCurrentUserController));
+
+router.patch(
+  "/",
+  authMiddleware,
+  validationMiddleware(userSubscriptionSchema),
+  errorHandler(updateUserSubscriptionController)
+);
 
 module.exports = router;

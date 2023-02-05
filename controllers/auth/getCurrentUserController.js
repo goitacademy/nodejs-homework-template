@@ -3,14 +3,14 @@ const { User } = require("../../models");
 
 const getCurrentUserController = async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findOne({ _id });
+  const currentUser = await User.findOne(
+    { _id },
+    { email: 1, subscription: 1 }
+  );
 
-  if (!user) throw new Unauthorized("Not authorized");
+  if (!currentUser) throw new Unauthorized("Not authorized");
 
-  res.status(200).json({
-    email: user.email,
-    subscription: user.subscription,
-  });
+  res.status(200).json(currentUser);
 };
 
 module.exports = getCurrentUserController;

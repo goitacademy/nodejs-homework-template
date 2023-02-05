@@ -11,9 +11,7 @@ const updateStatusContactController = async (req, res) => {
     { new: true }
   );
 
-  if (!updatedContact) {
-    throw new NotFound(`Contact with id=${id} not found`);
-  }
+  if (!updatedContact) throw new NotFound(`Contact with id=${id} not found`);
 
   res.status(200).json(updatedContact);
 };
