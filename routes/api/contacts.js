@@ -6,10 +6,11 @@ const {
 	validation,
 	controllerWrapper,
 	isValidId,
+	auth,
 } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
 
-router.get("/", controllerWrapper(controller.listContacts));
+router.get("/", auth, controllerWrapper(controller.listContacts));
 
 router.get(
 	"/:contactId",
@@ -19,6 +20,7 @@ router.get(
 
 router.post(
 	"/",
+	auth,
 	validation(schemas.addSchema),
 	controllerWrapper(controller.addContact)
 );
@@ -38,7 +40,7 @@ router.put(
 router.patch(
 	"/:contactId/favorite",
 	isValidId,
-	// validation(schemas.updateFavoriteSchema),
+	validation(schemas.updateFavoriteSchema),
 	controllerWrapper(controller.updateStatusContact)
 );
 

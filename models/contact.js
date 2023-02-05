@@ -7,11 +7,17 @@ const contactSchema = Schema(
 		name: {
 			type: String,
 			required: [true, "Set name for contact"],
+			minLength: [3, "min length is 3"],
+			maxLength: [30, "max length is 30"],
+			trim: true,
 		},
 		email: {
 			type: String,
-			required: [true, "Set name for contact"],
+			required: [true, "Set email for contact"],
 			unique: true,
+			minLength: [3, "min length is 3"],
+			maxLength: [30, "max length is 30"],
+			trim: true,
 		},
 		phone: {
 			type: String,
@@ -20,6 +26,11 @@ const contactSchema = Schema(
 		favorite: {
 			type: Boolean,
 			default: false,
+		},
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "user",
+			required: true,
 		},
 	},
 	{ versionKey: false, timestamps: true }
