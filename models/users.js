@@ -28,8 +28,8 @@ const userScheme = new Schema(
   { versionKey: false, timestamps: true }
 );
 userScheme.post('save', mongooseErrorHandler);
-userScheme.methods.addPassword = async password => {
-  this.password = await bcrypt.hash(password, 10);
+userScheme.methods.addPassword = function (password) {
+  this.password = bcrypt.hashSync(password, 10);
 };
 const UserModel = mongoose.model('users', userScheme);
 

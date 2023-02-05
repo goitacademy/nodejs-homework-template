@@ -4,12 +4,18 @@ const { UserModel } = require('@root/models');
 
 async function signup(req, res, next) {
   const { email, password } = req.body;
-  console.log((await UserModel.find({ email })).length);
 
-  const hasUserWithEmail = !!(await UserModel.find({ email })).length;
-  console.log(hasUserWithEmail);
+  const hasUserWithEmail = !!(await UserModel.findOne({ email }));
+  if (hasUserWithEmail) throw httpError(409, 'Email in use');
 
-  res.status(200).json();
+  const newUser = new UserModel({ email });
+  newUser.addPassword(password);
+  const savedUser = await newUser.save();
+  if (!savedUser) throw httpError(_, 'Failed to save new user');
+
+  res
+    .status(201)
+    .json({ user: { email, subscription: savedUser.subscription } });
 }
 
 module.exports = {
