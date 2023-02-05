@@ -1,8 +1,17 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
-const { validateBody, validateJwtToken } = require('@root/middlewares');
 const {
-  contactJoiSchemas: { addSchema, updateSchema, updateFavoriteField },
+  validateBody,
+  validateQueryParams,
+  validateJwtToken,
+} = require('@root/middlewares');
+const {
+  contactJoiSchemas: {
+    addSchema,
+    updateSchema,
+    updateFavoriteField,
+    getContactsQueryParam,
+  },
 } = require('@root/models');
 const validateID = require('@root/middlewares/validateID');
 const { contactsActions } = require('@root/controllers');

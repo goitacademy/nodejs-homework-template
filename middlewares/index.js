@@ -1,4 +1,4 @@
-const validateBody = require('./bodyValidation');
+const { validateBody, validateQueryParams } = require('./joiValidation');
 const validateJwtToken = require('./authValidation');
 
-module.exports = { validateBody, validateJwtToken };
+module.exports = { validateBody, validateQueryParams, validateJwtToken };
