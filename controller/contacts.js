@@ -20,7 +20,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
     const { id } = req.params;
-    const contactById = await getContactById(id);
+    const contactById = await getContactById(id,  req.user._id);
 
     if (!contactById) {
       return next(createError(404, 'Not found'));
@@ -40,7 +40,7 @@ const add = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
     const { id } = req.params;
-    const contactDeleted = await removeContact(id);
+    const contactDeleted = await removeContact(id, req.user._id);
 
     if (!contactDeleted) {
       return next(createError(404, "Not found"));
@@ -52,7 +52,7 @@ const remove = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     const { id } = req.params;
-    const contactUpdated = await updateContact(id, req.body);
+    const contactUpdated = await updateContact(id, req.body, req.user._id);
 
     if (!contactUpdated) {
       return next(createError(404, "Not found"));
@@ -64,7 +64,7 @@ const updateById = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
-  const contactUpdatedStatus = await updateContactStatus(id, req.body.favorite);
+  const contactUpdatedStatus = await updateContactStatus(id, req.body.favorite, req.user._id);
 
   if (!contactUpdatedStatus) {
     return next(createError(404, "Not found"));

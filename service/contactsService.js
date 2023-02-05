@@ -1,25 +1,21 @@
 const Contact = require('./schemas/contacts');
 
 const listContacts = async ({ _id, skip, limit, favorite }) => {
+  const filters = favorite ? { owner: _id, favorite } : { owner: _id };
 
-  if(!favorite) {
-    return await Contact.find(
-      { owner: _id }, "-updatedAt -createdAt", { skip, limit: Number(limit) }
-    ).populate("owner", "_id email");
-  } else {
-    return await Contact.find(
-      { owner: _id, favorite }, "-updatedAt -createdAt", { skip, limit: Number(limit) }
-    ).populate("owner", "_id email");
-  }
+  const allContacts = await Contact.find(
+    filters, "-updatedAt -createdAt", { skip, limit: Number(limit) }
+  ).populate("owner", "_id email");
+  return allContacts;
 };
 
-const getContactById = async (contactId) => {
-  const contactById = await Contact.findOne({ _id: contactId });
+const getContactById = async (contactId, userId) => {
+  const contactById = await Contact.findOne({  owner: userId, _id: contactId });
   return contactById;
 };
 
-const removeContact = async (contactId) => {
-  const contactDeleted = await Contact.findOneAndRemove({ _id: contactId});
+const removeContact = async (contactId, userId) => {
+  const contactDeleted = await Contact.findOneAndRemove({ owner: userId, _id: contactId});
   return contactDeleted;
 };
 
@@ -34,9 +30,9 @@ const addContact = async ({ name, email, phone, _id }) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, userId) => {
   const contactUpdated = await Contact.findOneAndUpdate(
-    { _id: contactId },
+    { owner: userId, _id: contactId },
     body,
     { new: true }
   );
@@ -44,9 +40,9 @@ const updateContact = async (contactId, body) => {
   return contactUpdated;
 };
 
-const updateContactStatus = async (contactId, body) => {
+const updateContactStatus = async (contactId, body, userId) => {
   const contactUpdateStatus = await Contact.findOneAndUpdate(
-    { _id: contactId },
+    { owner: userId, _id: contactId },
     { favorite: body },
     { new: true }
   );
