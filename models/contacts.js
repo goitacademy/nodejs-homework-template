@@ -34,8 +34,7 @@ const removeContact = async (contactId) => {
 	console.table(filtredContacts);
 };
 
-const addContact = async (body) => {
-	const { name, email, phone } = body;
+const addContact = async ({ name, email, phone }) => {
 	const contacts = await getContactsFromFile();
 	const newContact = {
 		id: Number(contacts[contacts.length - 1].id) + 1,
@@ -48,8 +47,7 @@ const addContact = async (body) => {
 	console.table(contacts);
 };
 
-const updateContact = async (contactId, body) => {
-	const { name, email, phone } = body;
+const updateContact = async (contactId, { name, email, phone }) => {
 	const data = await getContactsFromFile();
 
 	const newContact = {
