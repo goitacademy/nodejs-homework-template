@@ -6,18 +6,16 @@ const {
     removeContact, 
     updateContact, 
     updateContactStatus,
-} = require('../service/index');
-const { 
-  contactAddSchema, 
-  contactUpdateSchema, 
-  contactUpdateStatusSchema, 
- } = require('../validation/validationShema');
-
+} = require('../service/contactsService');
 
 const getAll = async (req, res, next) => {
-    const contacts = await listContacts();
-    res.status(200).json({ data: contacts });
-}
+  const { _id } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const contacts = await listContacts({ _id, skip, limit });
+  res.status(200).json({ data: contacts });
+};
 
 
 const getById = async (req, res, next) => {
@@ -33,18 +31,11 @@ const getById = async (req, res, next) => {
 
 
 const add = async (req, res, next) => {
-    const validationResult = contactAddSchema.validate(req.body);
-
-    if (validationResult.error) {
-      return res.status(400).json({
-        message: validationResult.error.details,
-      });
-    }
-
-    const { name, email, phone } = req.body;
-    const newContact = await addContact({ name, email, phone });
-    res.status(201).json({ data: newContact });
-}
+  const { _id } = req.user;
+  const { name, email, phone } = req.body;
+  const newContact = await addContact({ name, email, phone, _id });
+  res.status(201).json({ data: newContact });
+};
 
 
 const remove = async (req, res, next) => {
@@ -60,14 +51,6 @@ const remove = async (req, res, next) => {
 
 
 const updateById = async (req, res, next) => {
-    const validationResult = contactUpdateSchema.validate(req.body);
-
-    if (validationResult.error) {
-      return res.status(400).json({
-        message: validationResult.error.details,
-      });
-    }
-
     const { id } = req.params;
     const contactUpdated = await updateContact(id, req.body);
 
@@ -80,14 +63,6 @@ const updateById = async (req, res, next) => {
 
 
 const updateStatus = async (req, res, next) => {
-  const validationResult = contactUpdateStatusSchema.validate(req.body);
-
-  if (validationResult.error) {
-    return res.status(400).json({
-      message: "missing field favorite",
-    });
-  }
-
   const { id } = req.params;
   const contactUpdatedStatus = await updateContactStatus(id, req.body.favorite);
 
