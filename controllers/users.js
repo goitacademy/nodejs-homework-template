@@ -47,7 +47,7 @@ async function login(req, res, next) {
 }
 
 async function logout(req, res, next) {
-  const { id: userID, userDoc } = req.user;
+  const { userDoc } = req.user;
 
   // annulate user`s token
   userDoc.token = null;
@@ -59,8 +59,17 @@ async function logout(req, res, next) {
   res.status(204).send();
 }
 
+async function getCurrentUserInfo(req, res, next) {
+  const { userDoc } = req.user;
+  const { email, subscription } = userDoc;
+
+  // send back user info
+  res.status(200).json({ email, subscription });
+}
+
 module.exports = {
   signup,
   login,
   logout,
+  getCurrentUserInfo,
 };

@@ -22,5 +22,10 @@ router.get(
   validateJwtToken,
   asyncMiddlewareWrapper(authActions.logout)
 );
+router.get(
+  '/current',
+  validateJwtToken,
+  asyncMiddlewareWrapper(authActions.getCurrentUserInfo)
+);
 
 module.exports = router;
