@@ -12,5 +12,10 @@ router.post(
   validateBody(userJoiSchema, 'Ошибка от Joi или другой библиотеки валидации'),
   asyncMiddlewareWrapper(authActions.signup)
 );
+router.post(
+  '/login',
+  validateBody(userJoiSchema, 'Ошибка от Joi или другой библиотеки валидации'),
+  asyncMiddlewareWrapper(authActions.login)
+);
 
 module.exports = router;
