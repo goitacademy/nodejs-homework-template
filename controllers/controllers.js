@@ -6,7 +6,7 @@ const {
   updateContact,
 } = require('../services/contacts');
 
-const controllerGetContacts = async (req, res) => {
+const controllerGetContacts = async (req, res, next) => {
   try {
     const contacts = await listContacts();
     res.json({
@@ -16,22 +16,28 @@ const controllerGetContacts = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-const controllerGetContactById = async (req, res) => {
+const controllerGetContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactById = await getContactById(contactId);
+  try {
+    const contactById = await getContactById(contactId);
 
-  if (contactById === undefined) {
-    return res.status(404).json({ message: 'Not found' });
+    if (contactById === undefined) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { contactById },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    next(error);
   }
-
-  res.json({
-    status: 'success',
-    code: 200,
-    data: { contactById },
-  });
 };
 
 const controllerPostContact = async (req, res) => {
