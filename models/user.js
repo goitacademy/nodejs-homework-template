@@ -28,6 +28,11 @@ const userSchema = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    avatarOriginalName: String,
     token: {
       type: String,
       default: null,
@@ -35,7 +40,7 @@ const userSchema = Schema(
   },
   {
     versionKey: false,
-    timestamps: { createdAt: true, updatedAt: false },
+    timestamps: { createdAt: true, updatedAt: true },
   }
 );
 

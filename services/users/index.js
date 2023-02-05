@@ -3,6 +3,8 @@ const login = require('./login');
 const removeToken = require('./logout');
 const updateSubscription = require('./updateSubscription');
 const updateToken = require('./updateToken');
+const updateAvatar = require('./updateAvatar');
+const resizeAvatar = require('./resizeAvatar');
 
 module.exports = {
   register,
@@ -10,4 +12,6 @@ module.exports = {
   removeToken,
   updateSubscription,
   updateToken,
+  updateAvatar,
+  resizeAvatar,
 };
