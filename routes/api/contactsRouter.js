@@ -7,7 +7,6 @@ const {
   validation,
   asyncWrapper,
   isValidId,
-  isCurrent,
 } = require("../../middlewares");
 const {
   postSchema,

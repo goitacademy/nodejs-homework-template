@@ -60,12 +60,12 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
-  const contactById = await Contact.findById(id);
-  if (!contactById) {
+  const contact = await Contact.findById(id);
+  if (!contact) {
     throw new NotFound(`Contact with id=${id} not found`);
-  } else if (_id !== res.json(contactById.owner)) {
+  } else if (_id.toString() !== contact.owner.toString()) {
     throw new BadRequest(`Wrong current user`);
-  } else res.json(contactById);
+  } else res.json(contact);
 };
 
 const add = async (req, res) => {
@@ -76,41 +76,56 @@ const add = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  if (!updatedContact) {
-    throw new NotFound(`Contact with id=${req.id} not found`);
+  const { _id } = req.user;
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new NotFound(`Contact with id=${id} not found`);
+  } else if (_id.toString() !== contact.owner.toString()) {
+    throw new BadRequest(`Wrong current user`);
+  } else {
+    const updatedContact = await Contact.findOneAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.json(updatedContact);
   }
-  res.json(updatedContact);
 };
 
 const updateStatusById = async (req, res) => {
+  const { _id } = req.user;
   const { id } = req.params;
   const { favorite } = req.body;
-  if (!favorite) {
-    throw new BadRequest("missing field favorite");
-  }
-  const updatedContact = await Contact.findByIdAndUpdate(
-    id,
-    { favorite },
-    {
-      new: true,
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new NotFound(`Contact with id=${id} not found`);
+  } else if (_id.toString() !== contact.owner.toString()) {
+    throw new BadRequest(`Wrong current user`);
+  } else {
+    if (!favorite) {
+      throw new BadRequest("missing field favorite");
     }
-  );
-  if (!updatedContact) {
-    throw new NotFound(`Contact with id=${req.id} not found`);
+    const updatedContact = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      {
+        new: true,
+      }
+    );
+    res.json(updatedContact);
   }
-  res.json(updatedContact);
 };
 
 const removeById = async (req, res) => {
   const { id } = req.params;
-  const removedContact = await Contact.findByIdAndRemove(id);
-  if (!removedContact) {
-    throw new NotFound(`Contact with id=${req.id} not found`);
+  const { _id } = req.user;
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new NotFound(`Contact with id=${id} not found`);
+  } else if (_id.toString() !== contact.owner.toString()) {
+    throw new BadRequest(`Wrong current user`);
+  } else {
+    const deletedContact = await Contact.deleteOne({ _id: id });
+    res.json(deletedContact);
   }
-  res.json(removedContact);
 };
 
 module.exports = {
