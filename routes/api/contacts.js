@@ -56,4 +56,17 @@ router.put('/:contactId', async (req, res, next) => {
   res.status(200).json({ message: 'done' });
 });
 
+router.patch('/:contactId', async (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json({ message: 'bad request', info: validationResult.error });
+  }
+
+  await ContactsModel.findByIdAndUpdate(req.params.contactId, req.body);
+  res.status(200).json({ message: 'done' });
+});
+
 module.exports = router;
