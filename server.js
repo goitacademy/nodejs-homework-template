@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 mongoose.set("strictQuery", false);
 
-const { HOST_URI } = process.evn;
+const { HOST_URI } = process.env;
 
 const port = 5151;
 
@@ -22,3 +22,4 @@ async function main() {
     process.exit(1);
   }
 }
+main();

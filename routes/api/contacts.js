@@ -1,6 +1,6 @@
 const express = require("express");
 const { schema } = require("./schema");
-const { validateSchema } = require("../../middleware/middleware");
+
 const {
   listContacts,
   getContactById,
