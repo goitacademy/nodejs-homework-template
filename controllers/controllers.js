@@ -40,51 +40,61 @@ const controllerGetContactById = async (req, res, next) => {
   }
 };
 
-const controllerPostContact = async (req, res) => {
+const controllerPostContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
-  const contactsList = await listContacts();
+  try {
+    const contactsList = await listContacts();
 
-  const contactId = Math.floor(Math.random() * 100);
-  const isId = contactsList.some(contact => Number(contact.id) === contactId);
-  if (isId) {
-    controllerPostContact(req, res);
-    return;
+    const contactId = Math.floor(Math.random() * 100);
+    const isId = contactsList.some(contact => Number(contact.id) === contactId);
+    if (isId) {
+      controllerPostContact(req, res, next);
+      return;
+    }
+
+    const contact = {
+      id: `${contactId}`,
+      name,
+      email,
+      phone,
+    };
+    addContact(contact);
+    res.json({
+      status: 'success',
+      code: 201,
+      data: { contact },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    next(error);
   }
-
-  const contact = {
-    id: `${contactId}`,
-    name,
-    email,
-    phone,
-  };
-  addContact(contact);
-  res.json({
-    status: 'success',
-    code: 201,
-    data: { contact },
-  });
 };
 
-const controllerDeleteContact = async (req, res) => {
+const controllerDeleteContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactsList = await listContacts();
-  const contact = contactsList.filter(el => el.id === contactId);
+  try {
+    const contactsList = await listContacts();
+    const contact = contactsList.filter(el => el.id === contactId);
 
-  if (contact.length === 0) {
-    res.status(404).json({ message: 'Not found' });
-    return;
+    if (contact.length === 0) {
+      res.status(404).json({ message: 'Not found' });
+      return;
+    }
+
+    removeContact(contactId);
+    res.json({
+      status: 'success',
+      code: 200,
+      message: 'contact deleted',
+      data: { contact },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    next(error);
   }
-
-  removeContact(contactId);
-  res.json({
-    status: 'success',
-    code: 200,
-    message: 'contact deleted',
-    data: { contact },
-  });
 };
 
-const controllerPutContact = async (req, res) => {
+const controllerPutContact = async (req, res, next) => {
   const { contactId } = req.params;
   const keys = Object.keys(req.body);
 
@@ -93,18 +103,23 @@ const controllerPutContact = async (req, res) => {
     return;
   }
 
-  const contact = await updateContact(contactId, req.body);
+  try {
+    const contact = await updateContact(contactId, req.body);
 
-  if (contact === null) {
-    res.status(404).json({ message: 'Not found' });
-    return;
+    if (contact === null) {
+      res.status(404).json({ message: 'Not found' });
+      return;
+    }
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { contact },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    next(error);
   }
-
-  res.json({
-    status: 'success',
-    code: 200,
-    data: { contact },
-  });
 };
 
 module.exports = {
