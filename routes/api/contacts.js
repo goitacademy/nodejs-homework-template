@@ -1,6 +1,6 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
-const { validateBody } = require('@root/middlewares');
+const { validateBody, validateJwtToken } = require('@root/middlewares');
 const {
   contactJoiSchemas: { addSchema, updateSchema, updateFavoriteField },
 } = require('@root/models');
@@ -8,6 +8,8 @@ const validateID = require('@root/middlewares/validateID');
 const contactsActions = require('@root/controllers');
 
 const router = express.Router();
+
+router.all('*', validateJwtToken);
 
 router.get('/', asyncMiddlewareWrapper(contactsActions.getAllContacts));
 

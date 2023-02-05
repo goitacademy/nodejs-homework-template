@@ -1,3 +1,4 @@
-const validateBody = require("./bodyValidation");
+const validateBody = require('./bodyValidation');
+const validateJwtToken = require('./authValidation');
 
-module.exports = { validateBody };
+module.exports = { validateBody, validateJwtToken };
