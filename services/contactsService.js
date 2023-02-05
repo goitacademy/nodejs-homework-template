@@ -1,31 +1,31 @@
 const { Contacts } = require("../models/contact");
 
-const getContacts = async () => {
-  return await Contacts.find();
+const getContacts = async (owner) => {
+  return await Contacts.find({ owner });
 };
 
-const getContactById = async (contactId) => {
-  return await Contacts.findById(contactId);
+const getContactById = async (contactId, owner) => {
+  return await Contacts.findOne({ _id: contactId, owner });
 };
 
-const addContact = async ({ name, email, phone, favorite }) => {
-  return await Contacts.create({ name, email, phone, favorite });
+const addContact = async ({ name, email, phone, favorite }, owner) => {
+  return await Contacts.create({ name, email, phone, favorite, owner });
 };
 
-const removeContact = async (contactId) => {
-  return await Contacts.findByIdAndRemove(contactId);
+const removeContact = async (contactId, owner) => {
+  return await Contacts.findOneAndRemove({ _id: contactId, owner });
 };
 
-const updateContact = async (contactId, body) => {
-  return await Contacts.findByIdAndUpdate(contactId, body, {
+const updateContact = async (contactId, body, owner) => {
+  return await Contacts.findOneAndUpdate({ _id: contactId, owner }, body, {
     new: true,
     runValidators: true,
   });
 };
 
-const updateStatusContact = async (contactId, body) => {
-  return await Contacts.findByIdAndUpdate(
-    contactId,
+const updateStatusContact = async (contactId, body, owner) => {
+  return await Contacts.findOneAndUpdate(
+    { _id: contactId, owner },
     { favorite: body.favorite },
     {
       new: true,

@@ -1,4 +1,4 @@
-const express = require("express");
+const routers = require("express").Router();
 
 const {
   registerUserController,
@@ -6,13 +6,23 @@ const {
   logoutUserController,
   refreshUserController,
 } = require("../../controllers/users");
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 
-const router = express.Router();
+const auth = require("../../middlewares/auth");
+const {
+  authUserValidation,
+} = require("../../middlewares/validationMiddleware");
 
-router.post("/signup", registerUserController);
+routers.post(
+  "/signup",
+  authUserValidation,
+  asyncWrapper(registerUserController)
+);
 
-router.post("/login", loginUserController);
+routers.post("/login", authUserValidation, asyncWrapper(loginUserController));
 
-router.post("/logout", logoutUserController);
+routers.post("/logout", auth, asyncWrapper(logoutUserController));
 
-router.get("/current", refreshUserController);
+routers.get("/current", auth, asyncWrapper(refreshUserController));
+
+module.exports = routers;

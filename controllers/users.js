@@ -1,3 +1,4 @@
+const { Users } = require("../models/user");
 const {
   registerUser,
   loginUser,
@@ -7,7 +8,9 @@ const {
 
 const registerUserController = async (req, res) => {
   const newUser = await registerUser(req.body);
-  res.status(201).json({ user: newUser });
+  res.status(201).json({
+    user: { email: newUser.email, subscription: newUser.subscription },
+  });
 };
 
 const loginUserController = async (req, res) => {
@@ -15,9 +18,15 @@ const loginUserController = async (req, res) => {
   res.status(201).json(user);
 };
 
-const logoutUserController = async (req, res) => {};
+const logoutUserController = async (req, res) => {
+  await logoutUser(req.user._id);
+  res.status(204).json();
+};
 
-const refreshUserController = async (req, res) => {};
+const refreshUserController = async (req, res) => {
+  const user = await refreshUser(req.user.token);
+  res.json(user);
+};
 
 module.exports = {
   registerUserController,

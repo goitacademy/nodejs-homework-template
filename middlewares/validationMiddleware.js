@@ -87,4 +87,24 @@ module.exports = {
 
     next();
   },
+
+  authUserValidation: (req, res, next) => {
+    const schema = Joi.object({
+      password: Joi.string()
+        .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+        .required(),
+      email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+        .required(),
+      subscription: Joi.string().allow("starter", "pro", "business").optional(),
+    });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      next(new ValidationErrror(validationResult.error.message));
+    }
+
+    next();
+  },
 };
