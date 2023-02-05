@@ -6,7 +6,7 @@ const { mongooseErrorHandler } = require('@root/helpers');
 
 const userScheme = new Schema(
   {
-    password: {
+    hashedPassword: {
       type: String,
       required: [true, 'Password is required'],
     },
@@ -25,12 +25,21 @@ const userScheme = new Schema(
       default: null,
     },
   },
-  { versionKey: false, timestamps: true }
+  {
+    methods: {
+      addPassword(password) {
+        this.hashedPassword = bcrypt.hashSync(password, 10);
+      },
+      comparePasswords(password) {
+        return bcrypt.compareSync(password, this.hashedPassword);
+      },
+    },
+    versionKey: false,
+    timestamps: true,
+  }
 );
 userScheme.post('save', mongooseErrorHandler);
-userScheme.methods.addPassword = function (password) {
-  this.password = bcrypt.hashSync(password, 10);
-};
+
 const UserModel = mongoose.model('users', userScheme);
 
 const userJoiSchema = joi.object({
