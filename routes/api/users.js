@@ -10,8 +10,6 @@ router.get("/current", async (req, res, next) => {
   const [bearer, token] = authorization.split(" ");
 
   try {
-    const { email } = req.user;
-
     if (bearer !== "Bearer") {
       throw new Unauthorized("Not authorized");
     }
@@ -21,6 +19,8 @@ router.get("/current", async (req, res, next) => {
       throw new Unauthorized("Not authorized");
     }
     req.user = user;
+    next();
+    const { email } = req.user;
     res.json({
       status: "success",
       code: 200,
@@ -30,7 +30,6 @@ router.get("/current", async (req, res, next) => {
         },
       },
     });
-    next();
   } catch (error) {
     if (error.message === "Invalid sugnature") {
       error.status = 401;
