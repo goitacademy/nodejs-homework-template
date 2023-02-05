@@ -1,14 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 require("dotenv").config();
 const SECRET_KEY = process.env.SECRET;
 
 const { User } = require("../models/userModels");
-const {
-  emailInUse,
-  wrongEmailOrPassword,
-} = require("../helpers/errorHandlers");
 
 const ctrlSignup = async (req, res, next) => {
   try {
@@ -22,15 +19,21 @@ const ctrlSignup = async (req, res, next) => {
       });
     }
 
+    const avatarURL = gravatar.url(email);
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-    await User.create({ name, email, password: hashPassword });
+    await User.create({ name, email, password: hashPassword, avatarURL });
 
     res.json({
       status: "Created",
       code: 201,
+      message: "Registration successful",
       data: {
-        message: "Registration successful",
+        user: {
+          name,
+          email,
+          avatarURL,
+        },
       },
     });
   } catch (error) {
@@ -129,10 +132,26 @@ const ctrlUpdateCurrent = async (req, res, next) => {
   }
 };
 
+const ctrlUpdateAvatart = async (req, res, next) => {
+  // try {
+  //   const { subscription } = req.body;
+  //   const { _id } = req.user;
+  //   await User.findByIdAndUpdate({ _id }, { $set: { subscription } });
+  //   res.json({
+  //     status: "subscription updated",
+  //     code: 200,
+  //   });
+  // } catch (error) {
+  //   console.log(error.message);
+  //   next(error);
+  // }
+};
+
 module.exports = {
   ctrlSignup,
   ctrlLogin,
   ctrlCurrent,
   ctrlLogout,
   ctrlUpdateCurrent,
+  ctrlUpdateAvatart,
 };

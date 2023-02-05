@@ -11,7 +11,6 @@ const {
 const {
   noDataByIdError,
   missingFieldFavorite,
-  noDataError,
 } = require("../helpers/errorHandlers");
 const { successResult, successAddData } = require("../helpers/successResult");
 

@@ -7,6 +7,7 @@ const {
   ctrlCurrent,
   ctrlLogout,
   ctrlUpdateCurrent,
+  ctrlUpdateAvatart,
 } = require("../../controllers/authControllers");
 
 const {
@@ -16,6 +17,7 @@ const {
 } = require("../../middlewares/authValidation");
 
 const { auth } = require("../../middlewares/auth");
+const upload = require("../../middlewares/upload");
 
 router.post("/signup", addSignupValidation, ctrlSignup);
 
@@ -26,8 +28,16 @@ router.get("/current", auth, ctrlCurrent);
 router.patch(
   "/current/subscription",
   auth,
+  upload.single("avatart"),
   addSubscriptionValidation,
   ctrlUpdateCurrent
+);
+
+router.patch(
+  "/current/avatars",
+  auth,
+  addSubscriptionValidation,
+  ctrlUpdateAvatart
 );
 
 router.get("/logout", auth, ctrlLogout);
