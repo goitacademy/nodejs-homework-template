@@ -31,7 +31,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
 	const contacts = await getContactsFromFile();
-	const filtredContacts = contacts.find((contact) => contact.id !== contactId);
+	const filtredContacts = contacts.filter((contact) => contact.id !== contactId);
 	saveContactsToFile(filtredContacts);
 	console.table(filtredContacts);
 	return filtredContacts;
