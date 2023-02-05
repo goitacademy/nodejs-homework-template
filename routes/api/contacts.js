@@ -5,7 +5,7 @@ const {
   contactJoiSchemas: { addSchema, updateSchema, updateFavoriteField },
 } = require('@root/models');
 const validateID = require('@root/middlewares/validateID');
-const contactsActions = require('@root/controllers');
+const { contactsActions } = require('@root/controllers');
 
 const router = express.Router();
 

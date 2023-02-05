@@ -3,7 +3,7 @@ const { asyncMiddlewareWrapper } = require('@root/helpers');
 const { validateBody } = require('@root/middlewares');
 const { userJoiSchema } = require('@root/models');
 // const validateID = require('@root/middlewares/validateID');
-const authActions = require('@root/controllers');
+const { authActions } = require('@root/controllers');
 
 const router = express.Router();
 
