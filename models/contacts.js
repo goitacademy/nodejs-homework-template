@@ -19,12 +19,14 @@ async function getContactsFromFile() {
 const listContacts = async () => {
 	const data = await getContactsFromFile();
 	console.table(data);
+	return data;
 };
 
 const getContactById = async (contactId) => {
 	const contacts = await getContactsFromFile();
-	const filtredContacts = contacts.find((contact) => contact.id === contactId);
-	console.table(filtredContacts);
+	const filtredContact = contacts.find((contact) => contact.id === contactId);
+	console.table(filtredContact);
+	return filtredContact;
 };
 
 const removeContact = async (contactId) => {
@@ -32,6 +34,7 @@ const removeContact = async (contactId) => {
 	const filtredContacts = contacts.find((contact) => contact.id !== contactId);
 	saveContactsToFile(filtredContacts);
 	console.table(filtredContacts);
+	return filtredContacts;
 };
 
 const addContact = async ({ name, email, phone }) => {
@@ -45,6 +48,7 @@ const addContact = async ({ name, email, phone }) => {
 	contacts.push(newContact);
 	saveContactsToFile(contacts);
 	console.table(contacts);
+	return contacts;
 };
 
 const updateContact = async (contactId, { name, email, phone }) => {

@@ -21,6 +21,7 @@ const schema = Joi.object({
 router.get("/", async (req, res, next) => {
 	try {
 		const result = await listContacts();
+		console.log("test");
 		res.status(200).json(result);
 	} catch (err) {
 		next(err);
@@ -75,8 +76,8 @@ router.put("/:id", async (req, res, next) => {
 	const { id } = req.params;
 	const { name, email, phone } = req.body;
 	const { error } = schema.validate(req.body);
-	
-  try {
+
+	try {
 		if (error) {
 			res.status(400).json({ message: "missing required name field" });
 			return;
