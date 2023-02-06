@@ -26,9 +26,17 @@ class NotAutorizedError extends CustomError {
     }
 }
 
+class ConflictError extends CustomError {
+    constructor(message) {
+        super(message);
+        this.status = 409;        
+    }
+}
+
 module.exports = {
     CustomError,
     ValidationError, 
     WrongParametersError,
-    NotAutorizedError
+    NotAutorizedError,
+    ConflictError
 }

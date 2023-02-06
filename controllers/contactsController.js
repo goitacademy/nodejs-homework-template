@@ -8,9 +8,16 @@ const {
  } = require("../services/contactsServices");
 
 const getContactsController = async (req, res, next) => {  
-  const {_id: userId} = req.user;
-  const contacts = await getContacts(userId);
-  res.json(contacts);
+  const { _id: userId } = req.user;
+  let {
+    page = 1,
+    limit = 20,
+    
+  } = req.query;
+  limit = parseInt(limit) > 20 ? 20 : parseInt(limit);
+  const skip = (parseInt(page) - 1) * limit;
+  const contacts = await getContacts(userId, {skip, limit});
+  res.json({ contacts, skip, limit });
 };
 
 const getContactByIdController = async (req, res, next) => {
