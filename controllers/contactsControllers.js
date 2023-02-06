@@ -1,5 +1,5 @@
-const db = require("../contacts");
-const { HttpError } = require("../helpers/index");
+const db = require("../models/contacts");
+const { HttpError } = require("../helpers");
 
 
 // get list

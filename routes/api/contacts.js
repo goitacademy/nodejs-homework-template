@@ -1,8 +1,8 @@
-const express = require("express")
-const { tryCatchWrapper } = require("../../models/helpers/index");
-const {  validateBody } = require("../../models/middlewares/index");
-const { addContactsSchema } = require("../../models/schemas/movies");
-const { getContact, getContacts, createContact, deleteContact,} = require("../../models/controllers/contacts.controller");
+const express = require('express');
+const { tryCatchWrapper } = require('../../helpers/index');
+const { validateBody } = require('../../middlewares/index');
+const { addContactsSchema } = require('../../schemas/contactValidationSchemas');
+const { getContact, getContacts, createContact, deleteContact } = require('../../controllers/contactsControllers');
 
 const routerContacts = express.Router();
 
@@ -17,10 +17,9 @@ routerContacts.delete('/:id', tryCatchWrapper(deleteContact));
 //    res.status(200).json({ id: 1, name: "The Godfather" });
 // });
 
-module.exports ={
-    router: routerContacts,
-}
-
+module.exports = {
+  routerContacts,
+};
 
 // router.get('/', async (req, res, next) => {
 //   res.json({ message: 'Home work №2 done!!' })
