@@ -4,13 +4,14 @@ const {
   logout,
   getCurrentUser,
   updateSubscription,
+  uploadAvatar,
 } = require("../services/authService");
 
 const registerController = async (req, res, next) => {
   try {
     const user = await register(req.body);
-    const { email, subscription } = user.toObject();
-    res.status(201).json({ user: { email, subscription } });
+    const { email, subscription, avatarURL } = user.toObject();
+    res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (error) {
     next(error);
   }
@@ -55,10 +56,21 @@ const updateSubscriptionController = async (req, res, next) => {
   }
 };
 
+const updateAvatarController = async (req, res, next) => {
+  try {
+    const user = await uploadAvatar(req.user.id, req.file);
+    const { avatarURL } = user.toObject();
+    res.status(200).json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
   logoutController,
   currentUserController,
   updateSubscriptionController,
+  updateAvatarController,
 };

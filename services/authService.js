@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 const User = require("../models/user");
 const createError = require("../helpers/createError");
 
@@ -19,6 +22,7 @@ const register = async (body) => {
   const userNew = await User.create({
     email,
     password: hash,
+    avatarURL: gravatar.url(email),
   });
 
   return userNew;
@@ -66,10 +70,33 @@ const updateSubscription = async (id, subscription) => {
   return userAfterSubscriptionUpdate;
 };
 
+const uploadAvatar = async (id, data) => {
+  const { path: tempDir, originalname = "" } = data;
+  const [extension] = originalname.split(".").reverse();
+  const newFileName = `${id}.${extension}`;
+  const uploadDir = path.join(
+    __dirname,
+    "../",
+    "public",
+    "avatars",
+    newFileName
+  );
+
+  await fs.rename(tempDir, uploadDir);
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { avatarURL: path.join("avatars", newFileName) },
+    { new: true }
+  );
+  return user;
+};
+
 module.exports = {
   register,
   login,
   logout,
   getCurrentUser,
   updateSubscription,
+  uploadAvatar,
 };
