@@ -13,19 +13,21 @@ const {SECRET_KEY, BASE_URL} = process.env;
 
 
 const register = async(req, res) => {
-    const {email, password} = req.body;
+    const { email, password, name } = req.body;
     const user = await User.findOne({email});
 
     if(user) {
         throw HttpError(409, "Email in use")
     }
-
     const hashPassword = await bcrypt.hash(password, 10);
-
     const avatarURL = gravatar.url(email)
     const verificationCode = nanoid();
-    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationCode});
-
+    const newUser = await User.create({
+        ...req.body,
+        password: hashPassword,
+        avatarURL,
+        verificationCode
+    });
     const verifyEmail = {
         to: email,
         subject: "Verify your email",
@@ -35,8 +37,12 @@ const register = async(req, res) => {
     await sendEmail(verifyEmail)
 
     res.status(201).json({
-        email: newUser.email,
-        password: newUser.password,
+        user: {
+            name: newUser.name,
+            email: newUser.email,
+            avatarURL: newUser.avatarURL,
+            subscription: newUser.subscription,
+        } 
     })
 }
 
@@ -99,21 +105,24 @@ const login = async(req, res) => {
     await User.findByIdAndUpdate(user._id, {token})
     res.json({
         token,
+        user: {
+            name: user.name,
+            email: user.email,
+            subscription: user.subscription,
+            avatarUrl: user.avatarURL,
+        },
     })
 }
 
 const getCurrent = async (req, res) => { 
-    const { email, subscription } = req.user;
-    
-    res.json({ email, subscription });
+    const { name, email, subscription, avatarURL } = req.user;
+    res.json({ user: { name, email, subscription, avatarURL } });
 }
 
 const logout = async (req, res) => { 
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: '' })
-    res.json({
-        message: 'Logout success'
-    })
+    res.json(204).end();
 }
 
 const updateSubscription = async (req, res) => { 
@@ -137,10 +146,14 @@ const updateAvatar = async(req, res)=> {
     const resultUpload = path.join(avatarsDir, filename)
     await fs.rename(tempUpload, resultUpload);
     const avatarURL = path.join("avatars", filename)
-    await User.findByIdAndUpdate(_id, {avatarURL})
+    const user = await User.findByIdAndUpdate(_id, {avatarURL}, { new: true })
 
     res.json({
-        avatarURL,
+        user: {
+            email: user.email,
+            subscription: user.subscription,
+            avatarUrl: user.avatarURL,
+        },
     })
 }
 

@@ -6,6 +6,9 @@ const emailRegexp = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/
 const subscriptions = ["starter", "pro", "business"];
 
 const userSchema = new Schema({
+  name: {
+    type: String,
+  },
   password: {
     type: String,
     required: [true, 'Password is required'],
@@ -42,8 +45,10 @@ const userSchema = new Schema({
 userSchema.post('save', handleMongooseError)
 
 const registerSchema = Joi.object({
+    name: Joi.string(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
+    subscription: Joi.string(),
 })
 
 const loginSchema = Joi.object({
