@@ -2,11 +2,12 @@ const {
     signup, 
     login,
     logout,
+    updateSubscription,
 } = require('../services/authService')
 
 const ctrlSignup = async (req, res) => { 
     const { email, password, subscription } = req.body;
-    console.log("email, password", email, password)
+    
     const user = await signup(email, password, subscription);
 
     res.status(201).json({user});
@@ -34,9 +35,20 @@ const ctrlCurrent = async (req, res) => {
     res.status(200).json({user});
 };
 
+const ctrlChangeSubscription = async (req, res) => { 
+    const { _id } = req.user;
+    const { subscription } = req.body;
+
+    const user = await updateSubscription(_id, subscription);
+
+    res.status(200).json({user});
+};
+
+
 module.exports = {
     ctrlSignup,
     ctrlLogin,
     ctrlLogout,
-    ctrlCurrent
+    ctrlCurrent,
+    ctrlChangeSubscription,
 }

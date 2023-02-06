@@ -7,11 +7,13 @@ const {
     ctrlSignup,
     ctrlLogin,
     ctrlLogout,
-    ctrlCurrent } = require('../../controllers/authController');
+    ctrlCurrent,
+    ctrlChangeSubscription} = require('../../controllers/authController');
 
 router.post('/users/signup', userValidation, asyncWrapper(ctrlSignup));
 router.post('/users/login', userValidation, asyncWrapper(ctrlLogin));
 router.get('/users/logout', authMiddleware, asyncWrapper(ctrlLogout));
 router.get('/users/current', authMiddleware, asyncWrapper(ctrlCurrent));
+router.patch('/users', authMiddleware, asyncWrapper(ctrlChangeSubscription));
 
 module.exports = router;

@@ -38,9 +38,15 @@ const logout = async (_id ) => {
     await User.findByIdAndUpdate(_id, { token: null });
 };
 
+const updateSubscription = async (_id, subscription ) => {
+    const user = await User.findByIdAndUpdate(_id, { subscription });
+    return user;
+};
+
 
 module.exports = {
     signup,
     login,
     logout,
+    updateSubscription,
 };

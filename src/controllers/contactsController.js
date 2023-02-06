@@ -13,12 +13,13 @@ const getContacts = async (req, res, next) => {
     let {
         page = 1,
         limit = 20,
+        favorite = true,
     } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
 
-    const contacts = await listContacts(owner, { skip, limit });
+    const contacts = await listContacts(owner, { skip, limit, favorite });
     
     res.status(200).json({contacts, page, limit});
 }

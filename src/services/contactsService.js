@@ -1,9 +1,9 @@
 const { Contact } = require('../db/contactModel');
 require('colors');
 
-const listContacts = async (owner, {skip, limit}) => {
+const listContacts = async (owner,  {skip, limit, favorite}) => {
   try {
-    const contacts = await Contact.find({ owner })
+    const contacts = await Contact.find({ owner, favorite })
       .select({ __v: 0 })
       .skip(skip)
       .limit(limit);
