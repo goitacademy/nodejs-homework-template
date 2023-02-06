@@ -20,17 +20,17 @@ const listContacts = async ({limit = 0}) => {
   return db.slice(-limit);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const db = await readDb();
-  const contact = db.find((c) => c.id === contactId);
+  const contact = db.find((c) => c.id === id);
 
   return contact || null;
 
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const db = await readDb();
-  const updatedDb = db.filter((c) => c.id !== contactId);
+  const updatedDb = db.filter((c) => c.id !== id);
   await writeDB(updatedDb);
 };
 
@@ -46,7 +46,10 @@ const addContact = async ({name, email, phone}) => {
   return contact;
 };
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => {
+
+
+}
 
 module.exports = {
   listContacts,

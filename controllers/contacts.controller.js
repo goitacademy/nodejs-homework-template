@@ -1,4 +1,4 @@
-const db = require("../contacts");
+const db = require("../models/contacts");
 const { HttpError } = require("../helpers/index");
 
 
@@ -6,7 +6,7 @@ const { HttpError } = require("../helpers/index");
 async function getContacts(req, res) {
   const { limit } = req.query;
   console.log("limit:", limit);
-  const contacts = await db. listContacts({ limit });
+  const contacts = await db.listContacts({ limit });
   console.log("movies:", contacts);
   res.json(contacts);
 }
@@ -17,7 +17,7 @@ async function getContact(req, res, next) {
   const contact = await db.getContactById(id);
 
   if (!contact) {
-    return next(HttpError(404, "Movie not found"));
+    return next(HttpError(404, "Contact not found"));
   }
   return res.json(contact);
 }

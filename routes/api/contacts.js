@@ -1,8 +1,8 @@
 const express = require("express")
-const { tryCatchWrapper } = require("../../models/helpers/index");
-const {  validateBody } = require("../../models/middlewares/index");
-const { addContactsSchema } = require("../../models/schemas/movies");
-const { getContact, getContacts, createContact, deleteContact,} = require("../../models/controllers/contacts.controller");
+const { tryCatchWrapper } = require("../../helpers/index");
+const {  validateBody } = require("../../middlewares/index");
+const { addContactsSchema } = require("../../schemas/movies");
+const { getContact, getContacts, createContact, deleteContact,} = require("../../controllers/contacts.controller");
 
 const routerContacts = express.Router();
 
@@ -18,7 +18,7 @@ routerContacts.delete('/:id', tryCatchWrapper(deleteContact));
 // });
 
 module.exports ={
-    router: routerContacts,
+   routerContacts,
 }
 
 
