@@ -1,19 +1,34 @@
 const { User } = require("../models/user");
 const { Conflict } = require("http-errors");
+const { sendMail } = require("../helpers/index");
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { v4 } = require("uuid");
 
 const { JWT_SECRET } = process.env;
 
 async function register(req, res, next) {
   const { email, password } = req.body;
-  console.log(email, password);
 
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
 
   try {
-    const newUser = await User.create({ email, password: hashedPassword });
+    const verificationToken = v4();
+
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      verify: false,
+      verificationToken,
+    });
+
+    await sendMail({
+      to: email,
+      subject: "Please confirm your email",
+      html: `<a href="localhost:3001/api/users/verify/${verificationToken}">Confirm your email</a>`,
+    });
 
     res.status(201).json({
       data: {
@@ -50,7 +65,7 @@ async function login(req, res, next) {
 
   const payload = { id: storedUser._id };
 
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
   return res.json({
     token,

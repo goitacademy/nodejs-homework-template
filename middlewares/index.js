@@ -5,9 +5,6 @@ const { User } = require("../models/user");
 const multer = require("multer");
 const path = require("path");
 
-// const sgMail = require("@sendgrid/mail");
-// const { SENDGRID_API_KEY, USER_EMAIL } = process.env;
-
 const jwt = require("jsonwebtoken");
 
 function validateBody(schema) {
@@ -63,28 +60,8 @@ const upload = multer({
   storage,
 });
 
-// sgMail.setApiKey(SENDGRID_API_KEY);
-
-// const msg = {
-//   to: USER_EMAIL, // Change to your recipient
-//   from: USER_EMAIL, // Change to your verified sender
-//   subject: "Sending with SendGrid is Fun",
-//   text: "and easy to do anywhere, even with Node.js",
-//   html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-// };
-
-// sgMail
-//   .send(msg)
-//   .then(() => {
-//     console.log("Email sent");
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
-
 module.exports = {
   validateBody,
   upload,
-  // msg,
   auth,
 };

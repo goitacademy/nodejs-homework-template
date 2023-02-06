@@ -1,10 +1,12 @@
 const express = require("express");
 const { tryCatchWrapper } = require("../../helpers/index");
-const { auth, upload, msg } = require("../../middlewares");
+const { auth, upload } = require("../../middlewares");
 const {
   logout,
   current,
   avatars,
+  verifyEmail,
+  repeatVerify,
 } = require("../../controllers/user.controller");
 
 const userRouter = express.Router();
@@ -16,7 +18,8 @@ userRouter.patch(
   upload.single("avatar"),
   tryCatchWrapper(avatars)
 );
-// userRouter.get("/verify/:verificationToken", tryCatchWrapper(msg));
+userRouter.get("/verify/:token", tryCatchWrapper(verifyEmail));
+userRouter.post("/verify", tryCatchWrapper(repeatVerify));
 
 module.exports = {
   userRouter,

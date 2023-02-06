@@ -1,5 +1,6 @@
 const { User } = require("../models/user");
-const { Unauthorized } = require("http-errors");
+const { Unauthorized, BadRequest } = require("http-errors");
+const { sendMail } = require("../helpers/index");
 const path = require("path");
 const fs = require("fs/promises");
 
@@ -61,8 +62,63 @@ async function current(req, res, next) {
   });
 }
 
+async function verifyEmail(req, res, next) {
+  const { token } = req.params;
+
+  const userWithToken = await User.findOne({
+    verificationToken: token,
+  });
+
+  if (!userWithToken) {
+    throw BadRequest("User not found");
+  }
+
+  await User.findByIdAndUpdate(userWithToken._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  return res.json({
+    message: "Verification successful",
+  });
+}
+
+async function repeatVerify(req, res, next) {
+  const { email } = req.body;
+  const { verificationToken } = req;
+
+  const userWithEmail = await User.findOne({
+    email,
+  });
+
+  if (!userWithEmail) {
+    throw BadRequest("Missing required field email");
+  }
+
+  const userWithToken = await User.findByIdAndUpdate(
+    userWithEmail,
+    verificationToken
+  );
+
+  if (!userWithToken.verificationToken) {
+    throw BadRequest("Verification has already been passed");
+  }
+
+  await sendMail({
+    to: email,
+    subject: "Please confirm your email",
+    html: `<a href="localhost:3001/api/users/verify/${userWithToken.verificationToken}">Confirm your email</a>`,
+  });
+
+  res.status(201).json({
+    message: "Verification email sent",
+  });
+}
+
 module.exports = {
   avatars,
   current,
   logout,
+  verifyEmail,
+  repeatVerify,
 };
