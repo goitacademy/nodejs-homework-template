@@ -1,2 +1,3 @@
 const getCurrent = require("./getCurrent");
-module.exports = { getCurrent };
+const updateAvatar = require("./updateAvatar")
+module.exports = { getCurrent, updateAvatar };

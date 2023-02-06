@@ -5,6 +5,8 @@ const {
   favoriteValidation,
 } = require("./validationMiddleware");
 const ctrlWrapper = require("./ctrlWrapper");
+const upload = require("./upload");
+
 
 module.exports = {
   auth,
@@ -12,4 +14,5 @@ module.exports = {
   authValidation,
   favoriteValidation,
   ctrlWrapper,
+  upload,
 };
