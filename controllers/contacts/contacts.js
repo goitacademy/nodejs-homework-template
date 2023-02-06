@@ -1,56 +1,37 @@
-const { BadRequest, NotFound } = require("http-errors");
+const { NotFound, BadRequest } = require("http-errors");
 const { Contact } = require("../../models/contact");
 
 const getAll = async (req, res) => {
   const { _id } = req.user;
-  const { page = 1, limit = 20, favorite, name } = req.query;
+  const { page = 1, limit = 20, favorite, name, email } = req.query;
   const skip = (page - 1) * limit;
+  const filters = { owner: _id };
 
-  if (favorite && name) {
-    const contacts = await Contact.find(
-      { owner: _id, favorite, name: { $regex: `${name}` } },
-      "",
-      {
-        skip,
-        limit: Number(limit),
-      }
-    ).populate("owner", "_id name email");
-    if (contacts.length === 0) {
-      throw new NotFound(`Contact ${name} not found`);
-    } else {
-      res.json(contacts);
-    }
-  } else if (favorite) {
-    const contacts = await Contact.find({ owner: _id, favorite }, "", {
+  if (favorite) filters.favorite = favorite;
+  if (name) filters.name = name;
+  if (email) filters.email = email;
+
+  if (filters.name || filters.favorite || filters.email) {
+    const contacts = await Contact.find(filters, "-createdAt -updatedAt", {
       skip,
       limit: Number(limit),
     }).populate("owner", "_id name email");
     if (contacts.length === 0) {
-      throw new NotFound();
-    } else {
-      res.json(contacts);
-    }
-  } else if (name) {
-    const contacts = await Contact.find(
-      { owner: _id, name: { $regex: `${name}` } },
-      "",
-      {
-        skip,
-        limit: Number(limit),
-      }
-    ).populate("owner", "_id name email");
-    if (contacts.length === 0) {
-      throw new NotFound(`Contact ${name} not found`);
+      throw new NotFound(`Contact not found`);
     } else {
       res.json(contacts);
     }
   } else {
-    const contacts = await Contact.find({ owner: _id }, "", {
-      skip,
-      limit: Number(limit),
-    }).populate("owner", "_id name email");
+    const contacts = await Contact.find(
+      { owner: _id },
+      "-createdAt -updatedAt",
+      {
+        skip,
+        limit: Number(limit),
+      }
+    ).populate("owner", "_id name email");
     if (contacts.length === 0) {
-      throw new NotFound();
+      throw new NotFound(`Contact list empty`);
     } else {
       res.json(contacts);
     }
@@ -60,12 +41,10 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
-  const contact = await Contact.findById(id);
-  if (!contact) {
+  const findContact = await Contact.findOne({ _id: id, owner: _id });
+  if (!findContact) {
     throw new NotFound(`Contact with id=${id} not found`);
-  } else if (_id.toString() !== contact.owner.toString()) {
-    throw new BadRequest(`Wrong current user`);
-  } else res.json(contact);
+  } else res.json(findContact);
 };
 
 const add = async (req, res) => {
@@ -77,55 +56,50 @@ const add = async (req, res) => {
 const updateById = async (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
-  const contact = await Contact.findById(id);
-  if (!contact) {
-    throw new NotFound(`Contact with id=${id} not found`);
-  } else if (_id.toString() !== contact.owner.toString()) {
-    throw new BadRequest(`Wrong current user`);
-  } else {
-    const updatedContact = await Contact.findOneAndUpdate(id, req.body, {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: id, owner: _id },
+    req.body,
+    {
       new: true,
-    });
-    res.json(updatedContact);
+    }
+  );
+  if (!updatedContact) {
+    throw new NotFound(`Contact with id=${id} not found`);
   }
+  res.json(updatedContact);
 };
 
 const updateStatusById = async (req, res) => {
   const { _id } = req.user;
   const { id } = req.params;
   const { favorite } = req.body;
-  const contact = await Contact.findById(id);
-  if (!contact) {
-    throw new NotFound(`Contact with id=${id} not found`);
-  } else if (_id.toString() !== contact.owner.toString()) {
-    throw new BadRequest(`Wrong current user`);
-  } else {
-    if (!favorite) {
-      throw new BadRequest("missing field favorite");
-    }
-    const updatedContact = await Contact.findByIdAndUpdate(
-      id,
-      { favorite },
-      {
-        new: true,
-      }
-    );
-    res.json(updatedContact);
+  if (!favorite) {
+    throw new BadRequest(`Field favorite is required`);
   }
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: id, owner: _id },
+    { favorite },
+    {
+      new: true,
+    }
+  );
+  if (!updatedContact) {
+    throw new NotFound(`Contact with id=${id} not found`);
+  }
+  res.json(updatedContact);
 };
 
 const removeById = async (req, res) => {
   const { id } = req.params;
   const { _id } = req.user;
-  const contact = await Contact.findById(id);
-  if (!contact) {
+  const deletedContact = await Contact.findOneAndRemove({
+    _id: id,
+    owner: _id,
+  });
+  if (!deletedContact) {
     throw new NotFound(`Contact with id=${id} not found`);
-  } else if (_id.toString() !== contact.owner.toString()) {
-    throw new BadRequest(`Wrong current user`);
-  } else {
-    const deletedContact = await Contact.deleteOne({ _id: id });
-    res.json(deletedContact);
   }
+  res.json(deletedContact);
 };
 
 module.exports = {
