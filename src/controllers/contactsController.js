@@ -13,7 +13,7 @@ const getContacts = async (req, res, next) => {
     let {
         page = 1,
         limit = 20,
-        favorite = true,
+        favorite,
     } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);

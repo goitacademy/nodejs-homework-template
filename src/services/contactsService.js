@@ -3,7 +3,16 @@ require('colors');
 
 const listContacts = async (owner,  {skip, limit, favorite}) => {
   try {
-    const contacts = await Contact.find({ owner, favorite })
+    if (favorite) {
+      const contacts = await Contact.find({ owner, favorite })
+        .select({ __v: 0 })
+        .skip(skip)
+        .limit(limit);
+      console.log(`Total contacts: ${contacts.length}`.green);
+      return contacts;
+    }
+
+    const contacts = await Contact.find({ owner })
       .select({ __v: 0 })
       .skip(skip)
       .limit(limit);
