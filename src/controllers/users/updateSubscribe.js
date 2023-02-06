@@ -1,9 +1,9 @@
 const { User } = require("../../models");
 
 const updateSubscribe = async (req, res, next) => {
+  const { _id, subscription } = req.user;
+
   try {
-    // console.log(req.user);
-    const { _id, subscription } = req.user;
     const user = await User.findByIdAndUpdate(
       _id,
       { ...req.body },
