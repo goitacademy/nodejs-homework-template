@@ -1,16 +1,16 @@
 const express = require("express");
 const { contacts: ctrl } = require("../../controllers");
-const { validation, isValidation } = require("../../middlewares");
+const { validation, isValidation, authorization } = require("../../middlewares");
 const { schemas } = require("../../models");
 const router = express.Router();
 // GET /api/contacts/
-router.get("/", ctrl.getAll);
+router.get("/", authorization, ctrl.getAll);
 
 // GET /api/contacts/:contactId
 router.get("/:contactId", isValidation, ctrl.getById);
 
 // POST /api/contacts/
-router.post("/", validation(schemas.addContactSchema), ctrl.add);
+router.post("/", authorization,validation(schemas.addContactSchema), ctrl.add);
 
 // DELETE /api/contacts/:contactId
 router.delete("/:contactId", ctrl.remove);
