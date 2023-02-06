@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
+
 const registerJoiSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
