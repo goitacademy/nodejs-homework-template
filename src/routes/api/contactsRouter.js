@@ -4,9 +4,12 @@ const {
   addPostValidation,
   addPutValidation,
   addPatchValidation,
-} = require('../../middlewares/validationMiddleware');
+} = require('../../middlewares/contactValidation');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 const { asyncWrapper } = require('../../helpers/apiHelpers');
 const ctrlContact = require('../../controllers/contactsController');
+
+router.use(authMiddleware);
 
 router.get('/', asyncWrapper(ctrlContact.getContacts));
 router.get('/:contactId',asyncWrapper(ctrlContact.getById));

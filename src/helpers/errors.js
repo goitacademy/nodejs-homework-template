@@ -1,26 +1,42 @@
-class ValidatoinError extends Error{
+class Nodejs55Error extends Error{
     constructor(message) {
         super(message);
         this.status = 400;
     }
 }
 
-class WrongParametersError extends Error{
+class ValidatoinError extends Nodejs55Error{
     constructor(message) {
         super(message);
         this.status = 400;
     }
 }
 
-class NotFoundError extends Error {
+class NotFoundError extends Nodejs55Error{
     constructor(message) {
         super(message);
         this.status = 404;
     }
 }
 
+class RegistrationConflictError extends Nodejs55Error{
+    constructor(message) {
+        super(message);
+        this.status = 409;
+    }
+}
+
+class NotAuthorizedError extends Nodejs55Error {
+    constructor(message) {
+        super(message);
+        this.status = 401;
+    }
+}
+
 module.exports = {
+    Nodejs55Error,
     ValidatoinError,
-    WrongParametersError,
     NotFoundError,
+    RegistrationConflictError,
+    NotAuthorizedError,
 }
