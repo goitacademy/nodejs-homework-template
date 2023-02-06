@@ -5,18 +5,19 @@ const {
   deleteContactById,
   putContactById,
   updateStatusContactById
- } = require("../services/contactsServices");
+} = require("../services/contactsServices");
+
 
 const getContactsController = async (req, res, next) => {  
-  const { _id: userId } = req.user;
+  const { _id: owner } = req.user;
   let {
     page = 1,
     limit = 20,
-    
+    favorite
   } = req.query;
   limit = parseInt(limit) > 20 ? 20 : parseInt(limit);
   const skip = (parseInt(page) - 1) * limit;
-  const contacts = await getContacts(userId, {skip, limit});
+  const contacts = await getContacts(owner, {skip, limit, favorite});
   res.json({ contacts, skip, limit });
 };
 

@@ -1,4 +1,4 @@
-const {registration, login} = require("../services/authService");
+const { registration, login, logout, current, changeSubscription } = require("../services/authService");
 
 const registrationController = async (req, res) => {
     const {email, password} = req.body;
@@ -19,16 +19,33 @@ const loginController = async (req, res) => {
         }  })
 }
 
-const logoutController = async (req, res) => { }
+const logoutController = async (req, res) => { 
+    const { _id } = req.user;
+    await logout(_id)
+    // await User.findByIdAndUpdate(_id, { token: null });    
+    res.status(204).json()
+}
+
 const currentUserController = async (req, res) => {
     // console.log("currentUserController");
-    const {email, subscription} = req.user
-    res.json({ email, subscription    })
- }
+    const { _id } = req.user;
+    const user = await current(_id);
+    const {email, subscription} = user
+    res.json({ email, subscription  })
+}
+ 
+const changeSubscriptionController = async (req, res) => {
+    console.log("In changeSuscriptionController")
+    const { _id } = req.user;
+    const { subscription } = req.body
+    const user = await changeSubscription(_id, subscription)
+    res.json({ email: user.email, subscription: user.subscription  })
+}
 
 module.exports = {
     registrationController,
     loginController,
     logoutController,
-    currentUserController
+    currentUserController,
+    changeSubscriptionController
 }

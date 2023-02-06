@@ -9,13 +9,13 @@ const authMiddleware = async(req,res,next) => {
      if (!token || tokenType !== "Bearer"){
         next(new NotAutorizedError("Not authorized"))
     }    
-        const { _id } = jwt.decode(token, process.env.JWT_SECRET);
-        
-        const user = await User.findById(_id);
-        if (!user) {
+        const u = jwt.decode(token, process.env.JWT_SECRET);
+        // console.log(u._id)
+        const user = await User.findById(u._id);
+        if (!user || !user.token) {
             next(new NotAutorizedError("Not authorized"))
         }
-        req.user = user;
+        req.user = u;
         req.token = token;        
         next();
     }catch(e){

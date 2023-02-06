@@ -11,6 +11,10 @@ const joiLoginShema = Joi.object({
   email: Joi.string().required()  
 }) 
 
+const joiSubscriptionShema = Joi.object({
+  subscription: Joi.string().valid('starter', 'pro', 'business')
+})
+
 const userRegisterValidation = (req, res, next) => {
   const { error } = joiRegisterShema.validate(req.body);
   if (error) {
@@ -27,7 +31,16 @@ const userLoginValidation = (req, res, next) => {
   next();
 }
 
+const userSubscriptionValidation = (req, res, next) => { 
+  const { error } = joiSubscriptionShema.validate(req.body);
+  if (error) {
+    next(new ValidationError("Ошибка от Joi или недопустимое значение subscription")); 
+  }
+  next();
+}
+
 module.exports = {
   userRegisterValidation,
   userLoginValidation,  
+  userSubscriptionValidation
 };

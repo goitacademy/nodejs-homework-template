@@ -32,7 +32,24 @@ const login = async (email, password) => {
   return { token, user };
 };
 
+const logout = async (_id) => {
+  await User.findByIdAndUpdate(_id, { token: null });
+  return { message: "success"};
+}
+
+const current = async (_id) => {
+  return await User.findById(_id)   
+}
+
+const changeSubscription = async (_id, subscription) => {
+  console.log("subscription",subscription)
+    return await User.findByIdAndUpdate(_id, { subscription }, {new: true});
+ }
+
 module.exports = {
   registration,
   login,
+  logout,
+  current,
+  changeSubscription
 };

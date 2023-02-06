@@ -6,11 +6,13 @@ const {
   registrationController,
   loginController,
   logoutController,
-  currentUserController
+  currentUserController,
+  changeSubscriptionController
 } = require("../controllers/authController");
 const {
   userRegisterValidation,
   userLoginValidation,
+  userSubscriptionValidation
 } = require("../middlewares/authValidationMiddleware");
 const {authMiddleware} = require("../middlewares/authMiddleware");
 
@@ -18,5 +20,6 @@ router.post("/signup", userRegisterValidation, asyncWrapper(registrationControll
 router.post("/login", userLoginValidation, asyncWrapper(loginController));
 router.get("/logout", authMiddleware, asyncWrapper(logoutController));
 router.get("/current", authMiddleware, asyncWrapper(currentUserController));
+router.patch("/",authMiddleware, userSubscriptionValidation, asyncWrapper(changeSubscriptionController))
 
 module.exports = router;
