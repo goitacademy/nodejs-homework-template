@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const { userValidation } = require('../../middlewares/userValidation');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 const { asyncWrapper } = require('../../helpers/apiHelpers');
 const {
     ctrlSignup,
@@ -10,7 +11,7 @@ const {
 
 router.post('/users/signup', userValidation, asyncWrapper(ctrlSignup));
 router.post('/users/login', userValidation, asyncWrapper(ctrlLogin));
-router.get('/users/logout', asyncWrapper(ctrlLogout));
-router.get('/users/current', asyncWrapper(ctrlCurrent));
+router.get('/users/logout', authMiddleware, asyncWrapper(ctrlLogout));
+router.get('/users/current', authMiddleware, asyncWrapper(ctrlCurrent));
 
 module.exports = router;

@@ -9,17 +9,25 @@ const {
 const { NotFoundError } = require('../helpers/errors');
 
 const getContacts = async (req, res, next) => {
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
+    let {
+        page = 1,
+        limit = 20,
+    } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
 
-    const contacts = await listContacts(userId);
-    res.status(200).json({contacts});
+    const contacts = await listContacts(owner, { skip, limit });
+    
+    res.status(200).json({contacts, page, limit});
 }
 
 const getById = async (req, res, next) => {
     const { contactId } = req.params;
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
 
-    const contact = await getContactById(contactId, userId);
+    const contact = await getContactById(contactId, owner);
 
     if (!contact) {
         throw new NotFoundError("Not found");
@@ -30,17 +38,17 @@ const getById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
     const { name, email, phone, favorite } = req.body;
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
 
-    const newContact = await addContact(name, email, phone, favorite, userId);
+    const newContact = await addContact(name, email, phone, favorite, owner);
 
     res.status(201).json({newContact});
 };
 
 const removeContact = async (req, res, next) => {
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
 
-    const deletedContact = await deleteContact(req.params.contactId, userId);
+    const deletedContact = await deleteContact(req.params.contactId, owner);
 
     if (!deletedContact) {
       throw new NotFoundError(`Contact with id '${req.params.contactId}' not found`);
@@ -52,9 +60,9 @@ const removeContact = async (req, res, next) => {
 const changeContact = async (req, res, next) => {
     const { contactId } = req.params;
     const { name, email, phone, favorite } = req.body;
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
 
-    const updatedContact = await updateContact(contactId, name, email, phone, favorite, userId);
+    const updatedContact = await updateContact(contactId, name, email, phone, favorite, owner);
 
     if (!updatedContact) {
       throw new NotFoundError(`Contact with id '${contactId}' not found`);
@@ -66,9 +74,9 @@ const changeContact = async (req, res, next) => {
 const patchContact = async (req, res, next) => {
     const { contactId } = req.params;
     const { favorite } = req.body;
-    const { _id: userId } = req.user;
+    const { _id: owner } = req.user;
     
-    const updatedContact = await updateStatusContact(contactId, favorite, userId);
+    const updatedContact = await updateStatusContact(contactId, favorite, owner);
 
     if (!updatedContact) {
       throw new NotFoundError(`Contact with id '${contactId}' not found`);

@@ -5,17 +5,12 @@ const { RegistrationConflictError, NotAuthorizedError } = require('../helpers/er
 
 const signup = async (email, password, subscription) => {
     const user = await User.findOne({ email });
-    
-    if (email === user.email) {
+    console.log("user", user)
+    if (user) {
         throw new RegistrationConflictError("Email in use");
     };
 
-    const newUser = new User({
-        email,
-        password,
-        subscription,
-    })
-    await newUser.save();
+    const newUser = await User.create({ email, password, subscription });
     return newUser;
 };
 
@@ -32,17 +27,15 @@ const login = async (email, password, subscription) => {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    await User.findByIdAndUpdate(user._id, { token });
+    user.token = token;
      
     const data = { token: token, user: user };
     return data;
 };
 
-const logout = async () => {
-    
-};
-
-const current = async () => {
-    
+const logout = async (_id ) => {
+    await User.findByIdAndUpdate(_id, { token: null });
 };
 
 
@@ -50,5 +43,4 @@ module.exports = {
     signup,
     login,
     logout,
-    current,
 };

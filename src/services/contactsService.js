@@ -1,9 +1,12 @@
 const { Contact } = require('../db/contactModel');
 require('colors');
 
-const listContacts = async (userId) => {
+const listContacts = async (owner, {skip, limit}) => {
   try {
-    const contacts = await Contact.find({userId});
+    const contacts = await Contact.find({ owner })
+      .select({ __v: 0 })
+      .skip(skip)
+      .limit(limit);
 
     console.log(`Total contacts: ${contacts.length}`.green);
     return contacts;
@@ -12,11 +15,12 @@ const listContacts = async (userId) => {
   }
 };
 
-const getContactById = async (contactId, userId) => {
+const getContactById = async (contactId, owner) => {
   try {
     const contactById = await Contact.findOne({
-      _id: contactId, userId });
-    console.log("contactById", contactById);
+      _id: contactId, owner})
+      .select({ __v: 0 });
+    console.log(`Contact with id '${contactId}'`.cyan, contactById);
     
     return contactById;
   } catch (error) {
@@ -24,9 +28,9 @@ const getContactById = async (contactId, userId) => {
   }
 };
 
-const addContact = async (name, email, phone, favorite, userId) => {
+const addContact = async (name, email, phone, favorite, owner) => {
   try {
-    const newContact = new Contact({ name, email, phone, favorite, userId });
+    const newContact = new Contact({ name, email, phone, favorite, owner });
     await newContact.save();
 
     console.log(`Contact ${name} successfully added.`.yellow);
@@ -36,10 +40,11 @@ const addContact = async (name, email, phone, favorite, userId) => {
   }
 };
 
-const deleteContact = async (contactId, userId) => {
+const deleteContact = async (contactId, owner) => {
   try {
     const deletedContact = await Contact.findOneAndRemove({
-      _id: contactId, userId });
+      _id: contactId, owner})
+    .select({ __v: 0 });
 
     console.log(`Contact with id '${contactId}' successfully deleted.`.blue);
     return deletedContact;
@@ -48,12 +53,11 @@ const deleteContact = async (contactId, userId) => {
   }
 };
 
-const updateContact = async (contactId, name, email, phone, favorite, userId) => {
+const updateContact = async (contactId, name, email, phone, favorite, owner) => {
   try {
     await Contact.findOneAndUpdate(
-      { _id: contactId, userId },
-      { $set: { name, email, phone, favorite } },
-    );
+      { _id: contactId, owner },
+      { $set: { name, email, phone, favorite } });
 
     const updatedContact = await Contact.findById(contactId);
 
@@ -64,12 +68,11 @@ const updateContact = async (contactId, name, email, phone, favorite, userId) =>
   }
 };
 
-const updateStatusContact = async (contactId, favorite, userId) => {
+const updateStatusContact = async (contactId, favorite, owner) => {
   try {
     await Contact.findOneAndUpdate(
-      { _id: contactId, userId },
-      { $set: { favorite } },
-    );
+      { _id: contactId, owner },
+      { $set: { favorite } });
 
     const updatedContact = await Contact.findById(contactId);
 

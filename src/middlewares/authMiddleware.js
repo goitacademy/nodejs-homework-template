@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../db/userModel');
 const { NotAuthorizedError } = require('../helpers/errors');
 
 const authMiddleware = async (req, res, next) => {
@@ -10,14 +11,16 @@ const authMiddleware = async (req, res, next) => {
             next(new NotAuthorizedError("Not authorized"));
         }
 
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("user", user);
+        const tokenData = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("tokenData", tokenData);
+        const user = await User.findById(tokenData._id, '-password -__v');
 
-        // if (!user || user.token !== token) {
-        //     next(new NotAuthorizedError("Not authorized"));
-        // }
+        if (!user || user.token !== token) {
+            next(new NotAuthorizedError("Not authorized"));
+        }
         
         req.user = user;
+        console.log("req.user", req.user);
         next();
     } catch (err) {
         next(new NotAuthorizedError("Not authorized"));
