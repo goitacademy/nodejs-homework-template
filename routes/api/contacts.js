@@ -14,6 +14,7 @@ const postContactSchema = Joi.object()
   })
   .or("email", "phone")
   .messages({
+    "any.required": "missing required name field",
     "object.missing":
       "One of [email] or [phone] values should be not null",
   });
@@ -27,7 +28,7 @@ const putContactSchema = Joi.object()
   .or("name", "email", "phone")
   .messages({
     "object.missing":
-      "One of [name], [email] or [phone] values should be not null",
+      "Missing fields: [name], [email] or [phone] values should be not null",
   });
 
 const router = express.Router();
@@ -51,7 +52,7 @@ router.get(
       if (!contact) {
         throw HttpError(
           404,
-          `Contact with id ${req.params.contactId} was not found`
+          `Not found. [id ${req.params.contactId}]`
         );
       }
       res.json(contact);
@@ -66,6 +67,7 @@ router.post("/", async (req, res, next) => {
     const { error } = postContactSchema.validate(
       req.body
     );
+    console.log(error);
     if (error) {
       throw HttpError(400, error.message); // Joi validation error
     }
@@ -86,11 +88,10 @@ router.delete(
       if (!contact)
         throw HttpError(
           404,
-          `Contact with id ${req.params.contactId} was not found`
+          `Not found. [id ${req.params.contactId}]`
         );
       res.json({
-        message:
-          "Contact was successfully deleted",
+        message: "Contact deleted",
       });
     } catch (error) {
       next(error);
@@ -115,7 +116,7 @@ router.put(
       if (!contact)
         throw HttpError(
           404,
-          `Contact with id ${id} was not found`
+          `Not found [id ${id}]`
         );
       res.json(contact);
     } catch (error) {
