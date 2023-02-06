@@ -7,6 +7,18 @@ const contactsPath = path.format({
   base: "contacts.json",
 });
 
+const idPath = path.format({
+  root: "/ignored",
+  dir: "models",
+  base: "id.json",
+});
+
+const readLastId = async () => {
+  return fs.readFile(idPath).then((id) => {
+    return JSON.parse(id);
+  });
+};
+
 const listContacts = async () => {
   return fs.readFile(contactsPath).then((contacts) => {
     return JSON.parse(contacts);
@@ -39,11 +51,17 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
+  let { id } = await readLastId();
+  console.log(id);
+  id = Number(id) + 1;
+  body = { id: `${id}`, ...body };
+  await fs.writeFile(idPath, JSON.stringify({ id }));
   const contacts = await fs
     .readFile(contactsPath)
     .then((contacts) => JSON.parse(contacts))
     .then((contacts) => [...contacts, body]);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return body;
 };
 
 const updateContact = async (contactId, body) => {
