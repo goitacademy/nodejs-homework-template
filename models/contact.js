@@ -16,6 +16,11 @@ const contactsShema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 });
 
 const joiSchema = Joi.object({
