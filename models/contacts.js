@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const MOCK_DB_FILENAME = "contacts.json";
 
@@ -34,21 +34,21 @@ const removeContact = async (contactId) => {
     JSON.stringify(
       contacts.filter(
         (contact) => contact.id !== contactId
-      )
+      ),
+      null,
+      2
     )
   );
   return toRemove;
 };
 
 const addContact = async (body) => {
-  const newbie = { ...body, id: nanoid() };
+  const newbie = { ...body, id: nanoid(5) };
   const contacts = await listContacts();
+  contacts.push(newbie);
   await fs.writeFile(
     dbPath,
-    JSON.stringify({
-      ...contacts,
-      ...newbie,
-    })
+    JSON.stringify(contacts, null, 2)
   );
   return newbie;
 };
@@ -67,7 +67,7 @@ const updateContact = async (contactId, body) => {
 
   await fs.writeFile(
     dbPath,
-    JSON.stringify(contacts)
+    JSON.stringify(contacts, null, 2)
   );
   return contacts[index];
 };
