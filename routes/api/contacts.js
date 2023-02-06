@@ -1,25 +1,45 @@
-const express = require('express')
+const express = require("express")
+const { tryCatchWrapper } = require("../../models/helpers/index");
+const {  validateBody } = require("../../models/middlewares/index");
+const { addContactsSchema } = require("../../models/schemas/movies");
+const { getContact, getContacts, createContact, deleteContact,} = require("../../models/controllers/contacts.controller");
 
-const router = express.Router()
+const routerContacts = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'Home work №2 done!!' })
-})
+routerContacts.get('/', tryCatchWrapper(getContacts));
+routerContacts.get('/:id', tryCatchWrapper(getContact));
+routerContacts.post('/', validateBody(addContactsSchema), tryCatchWrapper(createContact));
+routerContacts.delete('/:id', tryCatchWrapper(deleteContact));
+// router.put('/:id', tryCatchWrapper(updateContact));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// routMovies.put('/1', (req, res) => {
+// // update movie by id
+//    res.status(200).json({ id: 1, name: "The Godfather" });
+// });
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+module.exports ={
+    router: routerContacts,
+}
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// router.get('/', async (req, res, next) => {
+//   res.json({ message: 'Home work №2 done!!' })
+// })
 
-module.exports = router
+// router.get('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+// router.post('/', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+// router.delete('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+// router.put('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+// module.exports = router
