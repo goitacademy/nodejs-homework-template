@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs/promises");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
@@ -132,19 +134,31 @@ const ctrlUpdateCurrent = async (req, res, next) => {
   }
 };
 
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+
 const ctrlUpdateAvatart = async (req, res, next) => {
-  // try {
-  //   const { subscription } = req.body;
-  //   const { _id } = req.user;
-  //   await User.findByIdAndUpdate({ _id }, { $set: { subscription } });
-  //   res.json({
-  //     status: "subscription updated",
-  //     code: 200,
-  //   });
-  // } catch (error) {
-  //   console.log(error.message);
-  //   next(error);
-  // }
+  const { path: tempUpload, originalname } = req.file;
+  const { _id: id } = req.user;
+  const imageName = `${id}_${originalname}`;
+
+  try {
+    const resultUpload = path.join(avatarsDir, imageName);
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join("public", "avatars", imageName);
+    await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
+    res.json({
+      status: "avatar updated",
+      code: 200,
+      avatar: avatarURL,
+    });
+  } catch (error) {
+    await fs.unlink(tempUpload);
+
+    console.log(error.message);
+    next(error);
+  }
 };
 
 module.exports = {

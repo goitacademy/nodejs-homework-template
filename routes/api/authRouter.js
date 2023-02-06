@@ -28,7 +28,6 @@ router.get("/current", auth, ctrlCurrent);
 router.patch(
   "/current/subscription",
   auth,
-  upload.single("avatart"),
   addSubscriptionValidation,
   ctrlUpdateCurrent
 );
@@ -36,7 +35,7 @@ router.patch(
 router.patch(
   "/current/avatars",
   auth,
-  addSubscriptionValidation,
+  upload.single("avatar"),
   ctrlUpdateAvatart
 );
 
