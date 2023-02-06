@@ -1,12 +1,8 @@
+const { createContact, getContacts, me } =require ("../../controllers/user-controller")
 const express = require("express");
+const { tryCatchWrapper } = require("../../helpers/helpers");
 const router = express.Router();
-const { createContact, getContacts, me } =require ("../../controllers/users");
-const {
-    tryCatchWrapper,
-  } = require("../../middleware/index");
-  
-const { auth } = require("../../middleware/auth");
-
+const { auth } = require("../../middleware/index");
 
 router.post("/contacts", tryCatchWrapper(auth), tryCatchWrapper(createContact));
 router.get("/contacts", tryCatchWrapper(auth), tryCatchWrapper(getContacts));
