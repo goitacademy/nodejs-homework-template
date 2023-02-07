@@ -14,8 +14,9 @@ const userRouter = express.Router();
 userRouter.get("/logout", tryCatchWrapper(auth), tryCatchWrapper(logout));
 userRouter.get("/current", tryCatchWrapper(auth), tryCatchWrapper(current));
 userRouter.patch(
-  "/avatars/:id",
+  "/avatars",
   upload.single("avatar"),
+  tryCatchWrapper(auth),
   tryCatchWrapper(avatars)
 );
 userRouter.get("/verify/:token", tryCatchWrapper(verifyEmail));

@@ -19,6 +19,13 @@ async function logout(req, res, next) {
 
 async function avatars(req, res, next) {
   const { filename } = req.file;
+  const { user } = req;
+
+  const userWithMovies = await User.findById(user._id);
+
+  if (!userWithMovies) {
+    throw Unauthorized("Not authorized");
+  }
 
   const tmpPath = path.resolve(__dirname, "../tmp", filename);
 
@@ -31,10 +38,9 @@ async function avatars(req, res, next) {
 
     throw Unauthorized("Not authorized");
   }
-  const userId = req.params.id;
 
-  const user = await User.findByIdAndUpdate(
-    userId,
+  const url = await User.findByIdAndUpdate(
+    userWithMovies,
     {
       avatarURL: `/public/avatars/${filename}`,
     },
@@ -42,7 +48,7 @@ async function avatars(req, res, next) {
   );
   return res.json({
     data: {
-      avatarURL: user.avatarURL,
+      avatarURL: url.avatarURL,
     },
   });
 }
