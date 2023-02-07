@@ -1,9 +1,9 @@
 const {
   listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
+  // getContactById,
+  // addContact,
+  // removeContact,
+  // updateContact,
 } = require('../services/contacts');
 
 const controllerGetContacts = async (req, res, next) => {
