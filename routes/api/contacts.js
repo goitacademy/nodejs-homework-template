@@ -4,7 +4,7 @@ const {
   getContacts,
   getContact,
   createContact,
-  removeContact,
+  removedContact,
   createPutContact,
 } = require("../../controllers/contacts.controllers");
 
@@ -19,7 +19,7 @@ router.get("/:contactId", tryCatchWrapper(getContact));
 
 router.post("/", validate(addContactSchema), tryCatchWrapper(createContact));
 
-router.delete("/:contactId", tryCatchWrapper(removeContact));
+router.delete("/:contactId", tryCatchWrapper(removedContact));
 
 router.put(
   "/:contactId",
