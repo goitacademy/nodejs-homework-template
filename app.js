@@ -1,6 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
-// const MongoClient = require("mongodb").MongoClient;
+
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");

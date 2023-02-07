@@ -1,13 +1,6 @@
 const express = require("express");
-const { schema } = require("./schema");
-const { Contact } = require("../../models/schemaContacts");
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+const { schema } = require("../../utils/schemaContacts/schemaContacts");
+const { Contact } = require("../../utils/validation/validationSchemas");
 
 const router = express.Router();
 
