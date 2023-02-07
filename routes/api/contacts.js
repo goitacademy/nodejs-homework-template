@@ -1,6 +1,7 @@
 const express = require("express");
 const controllers = require("../../controllers/contacts");
-const { ctrlWrapper, validateBody } = require('../../helpers');
+const ctrlWrapper = require('../../helpers/ctrlWrapper');
+const {validateBody} = require('../../helpers');
 const schemas = require('../../schemas/contactSchema')
 
 const router = express.Router();
@@ -18,6 +19,12 @@ router.put(
 );
 
 router.delete('/:contactId', ctrlWrapper(controllers.removeContact));
+
+router.patch(
+  '/:contactId/favorite',
+  validateBody(schemas.addSchema),
+  ctrlWrapper(controllers.updateStatusContact)
+);
 
 
 
