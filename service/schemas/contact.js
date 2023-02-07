@@ -16,6 +16,10 @@ const contact = new Schema(
         favorite: {
           type: Boolean,
           default: false,
+        },
+        owner: {
+          type: String,
+          ref: 'user',
         }
       },
       { versionKey: false, timestamps: true }
