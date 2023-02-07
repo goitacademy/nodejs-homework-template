@@ -3,13 +3,10 @@ const { HttpError } = require('../../helpers');
 const Joi = require('joi');
 
 const requestBodySchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean().required(),
 });
 
-const updateContact = async (req, res) => {
+const updateFavorite = async (req, res) => {
   const { error } = requestBodySchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
@@ -24,4 +21,4 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-module.exports = updateContact;
+module.exports = updateFavorite;

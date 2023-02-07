@@ -1,4 +1,4 @@
-const operation = require('../../models/contacts');
+const contactModel = require('../../models/contact');
 const { HttpError } = require('../../helpers');
 const Joi = require('joi');
 
@@ -6,14 +6,17 @@ const requestBodySchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const addContact = async (req, res) => {
   const { error } = requestBodySchema.validate(req.body);
+
   if (error) {
     throw HttpError(400, error.message);
   }
-  const result = await operation.addContact(req.body);
+
+  const result = await contactModel.create(req.body);
   res.status(201).json(result);
 };
 
