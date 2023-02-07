@@ -46,9 +46,15 @@ const addContact = async ({name, email, phone}) => {
   return contact;
 };
 
-const updateContact = async (contactId, body) => {
-
-
+const putContact = async (id, body) => {
+  const db = await readDb();
+  const updateId = db.findIndex(contact => contact.id === id);
+  if (updateId === -1) {
+    return null;
+  };
+db[updateId] = {...db[updateId], ...body};
+await writeDB(db);
+return db[updateId];
 }
 
 module.exports = {
@@ -56,5 +62,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  putContact,
 }

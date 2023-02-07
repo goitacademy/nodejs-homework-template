@@ -45,11 +45,6 @@ async function createContact(req, res, next) {
   res.status(201).json(newContact);
 }
 
-// routMovies.put('/1', (req, res) => {
-// // update movie by id
-//    res.status(200).json({ id: 1, name: "The Godfather" });
-// });
-
 async function deleteContact (req, res, next) {
   const { id } = req.params;
   const contact = await db.getContactById(id);
@@ -60,9 +55,37 @@ async function deleteContact (req, res, next) {
   return res.status(200).json(contact);
 }
 
+
+async function updateContact(req, res, next) {
+  const { body } = req;
+  const { error } = editContacts.validate(body);
+  if (error || !Object.keys(body).length) {
+    return  next (HttpError(400, "missing fields"));
+  }
+  const { id } = req.params;
+  const contact = await db.putContact(id, body)
+  if (!contact) {
+    return next (HttpError(404, "Not found"));
+  }
+  res.json(contact);
+}
+
+
+
+
+
+
+
+
+// routMovies.put('/1', (req, res) => {
+// // update movie by id
+//    res.status(200).json({ id: 1, name: "The Godfather" });
+// });
+
 module.exports = {
   getContact,
   getContacts,
   createContact,
   deleteContact,
+  updateContact,
 };
