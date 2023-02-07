@@ -1,18 +1,20 @@
 const { ContactModel } = require("../../models/contact.model");
 
-const updateById = async (req, res, next) => {
+const updateContactFavorite = async (req, res, next) => {
   const { id } = req.params;
-  const { name, email, phone, favorite } = req.body;
+  const { favorite } = req.body;
 
+  if (!favorite) {
+    res.json({ message: "missing field favorite" });
+  }
   const result = await ContactModel.findByIdAndUpdate(
     id,
-    { name, email, phone, favorite },
+    { favorite },
     { new: true }
   );
-
   res.json(result);
 };
 
 module.exports = {
-  updateById,
+  updateContactFavorite,
 };

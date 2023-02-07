@@ -6,6 +6,8 @@ const addContactSchema = Joi.object({
   email: Joi.string().min(1).max(30).required(),
 
   phone: Joi.string().min(1).max(30).required(),
+
+  favorite: Joi.bool(),
 });
 
 module.exports = {
