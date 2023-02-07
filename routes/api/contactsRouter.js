@@ -19,7 +19,11 @@ const {
 
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
+const { authMiddleware } = require("../../middlewares/authMiddleware");
+
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", asyncWrapper(getContacts));
 router.get("/:contactId", asyncWrapper(getContactById));
@@ -40,4 +44,4 @@ router.patch(
   asyncWrapper(updateStatusContact)
 );
 
-module.exports = router;
+module.exports = { contactsRouter: router };
