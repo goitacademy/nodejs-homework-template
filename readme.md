@@ -2,7 +2,7 @@
 
 DB_URI = 'mongodb+srv://Dzybystim:42aseper@cluster0.zai00qq.mongodb.net/db-contacts'
 PORT = '7000'
-
+SECRET = 'verySecret'
 
 
 ## GoIT Node.js Course Template Homework
