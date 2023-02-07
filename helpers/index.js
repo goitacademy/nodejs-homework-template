@@ -1,9 +1,9 @@
 const requestError = require('./requestError');
-const ctrlWraper = require('./ctrlWrapper');
+const ctrlWrapper = require('./ctrlWrapper');
 const validateBody = require('./validateBody');
 
 module.exports = {
   requestError,
-  ctrlWraper,
+  ctrlWrapper,
   validateBody,
 };

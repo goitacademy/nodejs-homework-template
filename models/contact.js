@@ -1,5 +1,8 @@
 const { Schema, model } = require("mongoose");
-const addSchema = require('../schemas/contactSchema')
+const {
+  addSchema,
+  updFavoriteContactSchema,
+} = require('../schemas/contactSchema');
 
 const contactSchema = new Schema({
   name: {
@@ -19,8 +22,9 @@ const contactSchema = new Schema({
 });
 
 const schemas = {
-    addSchema,
-}
+  addSchema,
+  updFavoriteContactSchema,
+};
 
 const Contact = model('contact', contactSchema);
 
