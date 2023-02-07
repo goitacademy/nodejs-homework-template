@@ -42,7 +42,7 @@ async function createContact(req, res, next) {
 
   console.log("name:", name, "email:", email, "phone:", phone);
   const newContact = await db.addContact(name, email, phone);
-  res.status(201).json(newContact);
+  return res.status(201).json(newContact);
 }
 
 async function deleteContact (req, res, next) {
@@ -57,11 +57,7 @@ async function deleteContact (req, res, next) {
 
 
 async function updateContact(req, res, next) {
-  const { body } = req;
-  const { error } = editContacts.validate(body);
-  if (error || !Object.keys(body).length) {
-    return  next (HttpError(400, "missing fields"));
-  }
+  const { body } = req.body;
   const { id } = req.params;
   const contact = await db.putContact(id, body)
   if (!contact) {
@@ -70,17 +66,6 @@ async function updateContact(req, res, next) {
   res.json(contact);
 }
 
-
-
-
-
-
-
-
-// routMovies.put('/1', (req, res) => {
-// // update movie by id
-//    res.status(200).json({ id: 1, name: "The Godfather" });
-// });
 
 module.exports = {
   getContact,

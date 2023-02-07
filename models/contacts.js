@@ -34,7 +34,7 @@ const removeContact = async (id) => {
   await writeDB(updatedDb);
 };
 
-const addContact = async ({name, email, phone}) => {
+const addContact = async (name, email, phone) => {
   const id = nanoid();
   const contact = { id, name, email, phone};
 
@@ -46,9 +46,9 @@ const addContact = async ({name, email, phone}) => {
   return contact;
 };
 
-const putContact = async (id, body) => {
+const putContact = async (contactId, body) => {
   const db = await readDb();
-  const updateId = db.findIndex(contact => contact.id === id);
+  const updateId = db.findIndex((contact) => contact.id === contactId);
   if (updateId === -1) {
     return null;
   };
