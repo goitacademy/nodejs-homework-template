@@ -1,4 +1,5 @@
-const { addSchema, updateSchema } = require("../schemas/schemas");
+const { addSchema, updateSchema } = require("../schemas/contactSchemas");
+const { userSchema } = require("../schemas/userSchemas");
 
 module.exports = {
   addContValidation: (req, res, next) => {
@@ -35,4 +36,21 @@ module.exports = {
     }
     next();
   },
+
+    userValidation: (req, res, next) => { 
+     if (!Object.keys(req.body).length) {
+       return res.status(400).json({
+         message: "User fields are not filled. All fields are required",
+       });
+    }
+     const { error } = userSchema.validate(req.body);
+    if (error) {
+       console.log(error);
+       return res
+         .status(400)
+         .json({ status: "error", code: 400, message: error.message });
+     }
+     next();
+  }
+
 };

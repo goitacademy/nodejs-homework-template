@@ -19,7 +19,7 @@ router
   .get("/", getContacts)
   .get("/:contactId", tryCatch(getContById))
   .post("/", addContValidation, addCont)
-  .delete("/:contactId", deleteCont)
+  .delete("/:contactId", tryCatch(deleteCont))
   .put("/:contactId", updateContValidation, tryCatch(updateCont))
   .patch("/:contactId", updateContValidation, tryCatch(updateFavorite));
 
