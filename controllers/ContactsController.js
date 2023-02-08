@@ -105,11 +105,8 @@ class ContactsController {
 
   async updateStatusContact(req, res, next) {
     const { id } = req.params;
-    console.log(id);
-
     const { favorite } = req.body;
-    console.log(favorite);
-    console.log(req.body);
+
     const updatedContact = await Contact.findByIdAndUpdate(
       id,
       { favorite },

@@ -9,14 +9,12 @@ const contactsPath = path.join(__dirname, "contacts.json");
 
 const getAllContacts = async () => {
   try {
-    // const listContacts = await Contact.find();
-    // console.log(contactsPath);
-    // const contactsList = JSON.parse(
-    //   await fs.readFile(contactsPath, {
-    //     encoding: "utf8",
-    //   })
-    // );
-    return Contact.find();
+    const contactsList = JSON.parse(
+      await fs.readFile(contactsPath, {
+        encoding: "utf8",
+      })
+    );
+    return contactsList;
   } catch (error) {
     console.log(error);
   }

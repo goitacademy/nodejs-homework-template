@@ -6,8 +6,6 @@ const path = require("path");
 const Contact = require("./models/ContactsModel");
 const configPath = path.join(__dirname, ".", "config", ".env");
 
-console.log(Contact);
-
 dotenv.config({ path: configPath });
 
 const app = express();
