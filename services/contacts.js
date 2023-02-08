@@ -16,17 +16,7 @@ const getContactById = async contactId => {
 };
 
 const addContact = async body => {
-  try {
-    const contactsList = await listContacts();
-    contactsList.push(body);
-    const contactsBySort = [...contactsList].sort(
-      (a, b) => Number(a.id) - Number(b.id)
-    );
-    await fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
-    return body;
-  } catch (error) {
-    console.error(error);
-  }
+  return Contact.create({ body });
 };
 
 // const removeContact = async contactId => {
@@ -61,6 +51,6 @@ module.exports = {
   listContacts,
   getContactById,
   // removeContact,
-  // addContact,
+  addContact,
   // updateContact,
 };
