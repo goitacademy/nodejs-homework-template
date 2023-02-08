@@ -6,10 +6,10 @@ const getPatch = async (req, res) => {
   const owner = req.user._id;
   const _id = ObjectId(req.params.contactId);
   const { favorite } = req.body;
-  const resultPut = await Contact.findByIdAndUpdate(
+  const resultPut = await Contact.findOne(
     { owner, _id },
     { $set: { favorite } },
-    { new: true }
+    { new: true } //findByIdAndUpdate
   );
   if (!resultPut) {
     throw new NotFound("Not found");

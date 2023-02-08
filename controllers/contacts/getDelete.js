@@ -5,7 +5,8 @@ const ObjectId = require("mongodb").ObjectId;
 const getDelete = async (req, res) => {
   const owner = req.user._id;
   const _id = ObjectId(req.params.contactId);
-  const resultDelete = await Contact.findByIdAndRemove({owner,_id});
+  const resultDelete = await Contact.findOne({owner,_id});   //findByIdAndRemove
+  
   if (!resultDelete) {
     throw new NotFound(` not found `);
   }
