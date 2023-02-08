@@ -1,13 +1,30 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
-const { validateBody } = require('@root/middlewares');
-const { joiSchemas } = require('@root/models/contacts');
+const {
+  validateBody,
+  validateQueryParams,
+  validateJwtToken,
+} = require('@root/middlewares');
+const {
+  contactJoiSchemas: {
+    addSchema,
+    updateSchema,
+    updateFavoriteField,
+    getContactsQueryParam,
+  },
+} = require('@root/models');
 const validateID = require('@root/middlewares/validateID');
-const contactsActions = require('@root/controllers');
+const { contactsActions } = require('@root/controllers');
 
 const router = express.Router();
 
-router.get('/', asyncMiddlewareWrapper(contactsActions.getAllContacts));
+router.all('*', validateJwtToken);
+
+router.get(
+  '/',
+  validateQueryParams(getContactsQueryParam, 'Wrong query parameter value'),
+  asyncMiddlewareWrapper(contactsActions.getAllContacts)
+);
 
 router.get(
   '/:contactId',
@@ -17,14 +34,14 @@ router.get(
 
 router.post(
   '/',
-  validateBody(joiSchemas.addSchema, 'missing required object field'),
+  validateBody(addSchema, 'missing required object field'),
   asyncMiddlewareWrapper(contactsActions.addContact)
 );
 
 router.put(
   '/:contactId',
   validateID,
-  validateBody(joiSchemas.updateSchema),
+  validateBody(updateSchema),
   asyncMiddlewareWrapper(contactsActions.updateContact)
 );
 
@@ -32,7 +49,7 @@ router.patch(
   '/:contactId/favorite',
   validateID,
   validateBody(
-    joiSchemas.updateFavoriteField,
+    updateFavoriteField,
     'missing field in request`s object: "favorite"'
   ),
   asyncMiddlewareWrapper(contactsActions.updateStatus)

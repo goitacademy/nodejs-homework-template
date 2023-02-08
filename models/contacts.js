@@ -19,13 +19,18 @@ const contactScheme = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 contactScheme.post('save', mongooseErrorHandler);
 const ContactModel = mongoose.model('contacts', contactScheme);
 
-const joiSchemas = {
+const contactJoiSchemas = {
   addSchema: joi.object({
     name: joi.string().required(),
     email: joi.string().required(),
@@ -44,9 +49,15 @@ const joiSchemas = {
   updateFavoriteField: joi.object({
     favorite: joi.boolean().required(),
   }),
+
+  getContactsQueryParam: joi.object({
+    favorite: joi.boolean().optional(),
+    limit: joi.number().optional(),
+    page: joi.number().optional(),
+  }),
 };
 
 module.exports = {
   ContactModel,
-  joiSchemas,
+  contactJoiSchemas,
 };
