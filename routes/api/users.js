@@ -92,8 +92,8 @@ router.patch(
 );
 
 router.get("/verify/:verificationToken", async (req, res, next) => {
-  const verificationToken = req.params.verificationToken;
-  const user = await functions.verifyUser({ verificationToken });
+  const { verificationToken } = req.params;
+  const user = await functions.verifyUser(_id, verificationToken);
   if (!user) {
     return res.status(404).json({
       message: "User not found",
@@ -102,6 +102,19 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
   return res.status(200).json({
     message: "Verification successful",
   });
+});
+
+router.post("/verify", async (req, res, next) => {
+  const { email } = req.body;
+  // const user = await functions.resendVerifyUser(verificationToken);
+  // if (!user) {
+  //   return res.status(404).json({
+  //     message: "User not found",
+  //   });
+  // }
+  // return res.status(200).json({
+  //   message: "Verification successful",
+  // });
 });
 
 module.exports = router;

@@ -4,9 +4,6 @@ const { hashPassword, comparePassword } = require("../utils/hash.util");
 const { jwtSign } = require("../utils/jwt.util");
 const { v4: uuidv4 } = require("uuid");
 const { sendVerifyEmail } = require("../utils/verify.util");
-const sgMail = require("@sendgrid/mail");
-require("dotenv").config();
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signUp = async ({ email, password }) => {
   const user = await User.findOne({ email: email });
@@ -25,26 +22,11 @@ const signUp = async ({ email, password }) => {
     {
       token: jwtSign({ _id: newUser._id }),
       avatarURL: secureUrl,
-      // verificationToken,
+      verificationToken: verificationToken,
     },
     { new: true }
   );
-  // sendVerifyEmail(verificationToken, email);
-  const msg = {
-    to: email, // Change to your recipient
-    from: "uu.sokil@gmail.com", // Change to your verified sender
-    subject: "Sign up", // Change to your
-    text: "Congratulations! You have successfully signed up",
-    html: `<a href="http://localhost:3000/api/users/verify/${newUser._id}">Please, verify your email!</a>`,
-  };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  sendVerifyEmail(verificationToken, email);
   return updatedUser;
 };
 
@@ -68,8 +50,6 @@ const logout = async (_id) => {
     },
     { new: true }
   );
-  console.log("🚀 ~ file: userController.js:47 ~ logout ~ user", user);
-
   return user;
 };
 
@@ -91,17 +71,32 @@ const updateAvatar = async (_id, avatarURL) => {
   return user;
 };
 
-const verifyUser = async ({ _id }) => {
-  const user = await User.findByIdAndUpdate(
+const verifyUser = async (_id, verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+  console.log(user);
+  if (!user) {
+    return null;
+  }
+  const verifyUser = await User.findOneAndUpdate(
     { _id },
-    {
-      verify: true,
-      verificationToken: null,
-    },
+    { verificationToken: null, verify: true },
     { new: true }
   );
-  console.log("🚀 ~ file: userController.js:99 ~ verifyUser ~ user", user);
-  return user;
+  return verifyUser;
+};
+
+const resendVerifyUser = async (_id, verificationToken) => {
+  // const user = await User.findOne({ verificationToken });
+  // console.log(user);
+  // if (!user) {
+  //   return null;
+  // }
+  // await User.findOneAndUpdate(
+  //   { _id },
+  //   { verificationToken: null, verify: true },
+  //   { new: true }
+  // );
+  // return;
 };
 
 module.exports = {
@@ -111,4 +106,5 @@ module.exports = {
   updateSubscription,
   updateAvatar,
   verifyUser,
+  resendVerifyUser,
 };
