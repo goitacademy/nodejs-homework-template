@@ -12,12 +12,7 @@ const listContacts = async () => {
 };
 
 const getContactById = async contactId => {
-  try {
-    const contactsList = await listContacts();
-    return contactsList.find(contact => contact._id.toString() === contactId);
-  } catch (error) {
-    console.error(error.message);
-  }
+  return await Contact.findOne({ _id: contactId });
 };
 
 const addContact = async body => {
