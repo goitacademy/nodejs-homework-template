@@ -2,12 +2,10 @@ const app = require('./app');
 require('dotenv').config();
 const { mongoConnect } = require('./services/mongoConnect');
 
-const PORT = process.env.PORT || 3000;
-
 const start = async () => {
   try {
     await mongoConnect();
-    app.listen(PORT, () => {
+    app.listen(3000, () => {
       console.log('Database connection successful');
     });
   } catch (err) {
