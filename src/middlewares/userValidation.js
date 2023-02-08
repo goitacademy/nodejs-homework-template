@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { ValidatoinError } = require('../helpers/errors');
 
 module.exports = {
-    userValidation: (req, res, next) => {
+    userPostValidation: (req, res, next) => {
         const schema = Joi.object({
             password: Joi.string()
                 .min(3)
@@ -10,10 +10,11 @@ module.exports = {
                 .required(),
             email: Joi.string()
                 .pattern(/^[\w.]+@[\w]+.[\w]+$/)
-                .error(new Error("Invalid email format example@example.com"))
                 .required(),
             subscription: Joi.string()
                 .valid("starter", "pro", "business")
+                .optional(),
+            avatarURL: Joi.string()
                 .optional(),
             token: Joi.string()
                 .optional(),
@@ -22,6 +23,21 @@ module.exports = {
         const validationResult = schema.validate(req.body);
         if (validationResult.error) {
             next(new ValidatoinError("Invalid fields"));
+        }
+
+        next();
+    },
+
+    userPatchValidation: (req, res, next) => {
+        const schema = Joi.object({
+            subscription: Joi.string()
+                .valid("starter", "pro", "business")
+                .required(),
+        });
+
+        const validationResult = schema.validate(req.body);
+        if (validationResult.error) {
+            next(new ValidatoinError("Missing field subscription"));
         }
 
         next();
