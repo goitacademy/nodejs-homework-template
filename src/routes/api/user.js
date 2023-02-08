@@ -9,7 +9,7 @@ const validateJoiMiddleware = joiValidation(joiUpdateUserSchema);
 
 router.get("/current", authVerifyToken, ctrlWrapper(ctrl.getCurrent));
 router.patch("/subscribe", authVerifyToken, validateJoiMiddleware, ctrlWrapper(ctrl.updateSubscribe));
-router.patch("/avatars", upload.single("avatar"), authVerifyToken, ctrlWrapper(ctrl.uploadAvatar));
+router.patch("/avatars", authVerifyToken, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar));
 
 
 

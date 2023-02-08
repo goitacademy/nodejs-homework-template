@@ -1,5 +1,5 @@
 const getCurrent = require("./getCurrent");
 const updateSubscribe = require("./updateSubscribe");
-const uploadAvatar = require("./uploadAvatar");
+const updateAvatar = require("./updateAvatar");
 
-module.exports = { getCurrent, updateSubscribe, uploadAvatar  };
+module.exports = { getCurrent, updateSubscribe, updateAvatar };
