@@ -6,7 +6,7 @@ const getPatch = async (req, res) => {
   const owner = req.user._id;
   const _id = ObjectId(req.params.contactId);
   const { favorite } = req.body;
-  const resultPut = await Contact.findOne(
+  const resultPut = await Contact.findOneAndUpdate(
     { owner, _id },
     { $set: { favorite } },
     { new: true } //findByIdAndUpdate
