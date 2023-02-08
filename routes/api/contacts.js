@@ -1,25 +1,79 @@
-const express = require('express')
+const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const data = await listContacts();
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const data = await getContactById(contactId);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      res.status(400).json({ message: "missing required name field" });
+    }
+    const body = { name, email, phone };
+    const data = await addContact(body);
+    res.status(201).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const data = await removeContact(contactId);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const {name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      res.status(400).json({ message: "missing fields" });
+    }
+    const body = {name, email, phone };
+    const data = await updateContact(contactId, body);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-module.exports = router
+module.exports = router;
