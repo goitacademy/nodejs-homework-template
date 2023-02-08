@@ -17,7 +17,7 @@ async function editAvatar(req, res, next) {
       console.error(err);
     });
   req.file.path = `/public/avatars/${fileName}.${fileType}`;
-  // await fs.unlink(`./tmp/${fileName}.${fileType}`);
+  await fs.unlink(`./tmp/${fileName}.${fileType}`);
   next();
 }
 

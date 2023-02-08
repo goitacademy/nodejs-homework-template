@@ -2,6 +2,8 @@ const gravatar = require("gravatar");
 const User = require("../models/user.model");
 const { hashPassword, comparePassword } = require("../utils/hash.util");
 const { jwtSign } = require("../utils/jwt.util");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signUp = async ({ email, password }) => {
   const user = await User.findOne({ email: email });
@@ -21,6 +23,21 @@ const signUp = async ({ email, password }) => {
     },
     { new: true }
   );
+  const msg = {
+    to: email, // Change to your recipient
+    from: "uu.sokil@gmail.com", // Change to your verified sender
+    subject: "Sign up", // Change to your
+    text: "Congratulations! You have successfully signed up",
+    html: "<h1>Sign up!</h1>",
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   return updatedUser;
 };
 
