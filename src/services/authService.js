@@ -34,7 +34,7 @@ const logout = async (id) => {
 };
 const getCurrentUser = async (id) => {
   const user = await User.findById(id);
-  if (!user) {
+  if (!user || !user.token) {
     throw new NotAuthorizedError("Not authorized");
   }
   return user;

@@ -9,7 +9,7 @@ const registrationController = async(req, res) => {
 }
 
 const loginController = async (req, res) => {
-    const { email, password } = reg.body;
+    const { email, password } = req.body;
     const token = await login(email, password);
     res.status(200).json({ token, user: { email: `${email}` }})
 };

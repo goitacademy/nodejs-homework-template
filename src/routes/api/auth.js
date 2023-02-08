@@ -5,7 +5,7 @@ const {
   logoutController,
   getCurrentUserController,
 } = require("../../controllers/userControllers");
-const { authMiddleware } = require("../../middleware/authMiddleware,js");
+const { authMiddleware } = require("../../middleware/authMiddleware.js");
 const { userValidation } = require("../../middleware/middleware");
 const router = express.Router();
 const tryCatch = require("../../utils/try-catch.utils");
