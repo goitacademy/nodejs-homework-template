@@ -1,17 +1,20 @@
 const createError = require('http-errors');
+const path = require('path');
+const fs = require('fs/promises');
 const User = require('../service/schemas/users');
 const { 
   createUser, 
   loginUser, 
   logoutUser, 
-  updateUserSubscription
+  updateUserSubscription, 
+  updateUserAvatar, 
  } = require('../service/userService');
 
 const create = async (req, res, next) => {
   const { email, password } = req.body;
 
   const checkEmail = await User.findOne({ email });
-  if (checkEmail) next(createError(409, "Email in use"));
+  if (checkEmail) return next(createError(409, "Email in use"));
 
   const user = await createUser({ email, password });
 
@@ -84,10 +87,24 @@ const updateSubscription = async (req, res, next) => {
   });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const { path: tempUpload, originalname } = req.file;
+  const imageName = `${req.user._id}_${originalname}`;
+  const resultUpload = path.join(__dirname, "../", "public", "avatars", imageName);
+
+  await fs.rename(tempUpload, resultUpload);
+  const avatarUrl = path.join("avatars", imageName);
+
+  const changeAvatar = await updateUserAvatar(req.user._id, avatarUrl);
+
+  res.status(200).json({ avatarURL: changeAvatar });
+};
+
 module.exports = {
   create,
   login,
   logout,
   currentUser,
   updateSubscription,
+  updateAvatar,
 };
