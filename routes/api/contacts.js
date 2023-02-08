@@ -76,10 +76,6 @@ router.put("/:contactId", async (req, res, next) => {
 
 router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
-    const { favorite } = req.body;
-
-    if (!favorite)
-      return res.status(400).json({ message: "missing field favorite" });
     const response = await Contact.findByIdAndUpdate(
       req.params.contactId,
       req.body
