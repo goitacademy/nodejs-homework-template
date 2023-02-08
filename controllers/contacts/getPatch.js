@@ -1,11 +1,16 @@
 const { NotFound } = require("http-errors");
 const { Contact } = require("../../models/contact");
+const ObjectId = require("mongodb").ObjectId;
 
-
-async (req, res) => {
-  const { contactId } = req.params;
+const getPatch = async (req, res) => {
+  const owner = req.user._id;
+  const _id = ObjectId(req.params.contactId);
   const { favorite } = req.body;
-  const resultPut = await Contact.findByIdAndUpdate(contactId,{ favorite },{ new: true });
+  const resultPut = await Contact.findByIdAndUpdate(
+    { owner, _id },
+    { $set: { favorite } },
+    { new: true }
+  );
   if (!resultPut) {
     throw new NotFound("Not found");
   }
@@ -17,3 +22,4 @@ async (req, res) => {
     },
   });
 };
+module.exports = getPatch;

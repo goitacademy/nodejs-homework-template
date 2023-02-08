@@ -1,9 +1,11 @@
 const { NotFound } = require("http-errors");
-const { Contact } = require("../../models");
+const { Contact } = require("../../models/contact");
+const ObjectId = require("mongodb").ObjectId;
 
 const getContactId = async (req, res) => {
-  const { contactId } = req.params;
-  const resultId = await Contact.findById(contactId); // findOne({_id:contactId}) - спосіб шукати по ID
+  const owner = req.user._id;
+  const _id = ObjectId(req.params.contactId);
+  const resultId = await Contact.findOne({ owner, _id }); // findOne({_id:contactId}) - спосіб шукати по ID
 
   if (!resultId) {
     throw new NotFound("Not found");

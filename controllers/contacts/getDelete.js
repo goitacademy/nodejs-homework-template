@@ -1,9 +1,11 @@
 const { Contact } = require("../../models/contact");
 const { NotFound } = require("http-errors");
+const ObjectId = require("mongodb").ObjectId;
 
-async (req, res) => {
-  const { contactId } = req.params;
-  const resultDelete = await Contact.findByIdAndRemove(contactId);
+const getDelete = async (req, res) => {
+  const owner = req.user._id;
+  const _id = ObjectId(req.params.contactId);
+  const resultDelete = await Contact.findByIdAndRemove({owner,_id});
   if (!resultDelete) {
     throw new NotFound(` not found `);
   }
@@ -16,3 +18,4 @@ async (req, res) => {
     },
   });
 };
+module.exports = getDelete;
