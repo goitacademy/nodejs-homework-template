@@ -27,6 +27,7 @@ router.post("/signup", async (req, res, next) => {
     token: user.token,
     subscription: user.subscription,
     avatarURL: user.avatarURL,
+    verificationToken: user.verificationToken,
   });
 });
 
@@ -90,20 +91,17 @@ router.patch(
   }
 );
 
-router.get(
-  "/verify/:verificationToken",
-  isAuthorized,
-  async (req, res, next) => {
-    const validationResult = schemaSubscription.validate(req.body);
-    if (verificationToken.error) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-    return res.status(200).json({
-      message: "Verification successful",
+router.get("/verify/:verificationToken", async (req, res, next) => {
+  const verificationToken = req.params.verificationToken;
+  const user = await functions.verifyUser({ verificationToken });
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
     });
   }
-);
+  return res.status(200).json({
+    message: "Verification successful",
+  });
+});
 
 module.exports = router;

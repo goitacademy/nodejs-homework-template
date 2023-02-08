@@ -25,14 +25,14 @@ const User = new Schema({
     default: null,
   },
   avatarURL: String,
-  verify: {
-    type: Boolean,
-    default: false,
-  },
-  verificationToken: {
-    type: String,
-    required: [true, "Verify token is required"],
-  },
+  // verify: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  // verificationToken: {
+  //   type: String,
+  //   required: [true, "Verify token is required"],
+  // },
 });
 
 module.exports = mongoose.model("User", User);

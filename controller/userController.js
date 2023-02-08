@@ -2,7 +2,10 @@ const gravatar = require("gravatar");
 const User = require("../models/user.model");
 const { hashPassword, comparePassword } = require("../utils/hash.util");
 const { jwtSign } = require("../utils/jwt.util");
+const { v4: uuidv4 } = require("uuid");
+const { sendVerifyEmail } = require("../utils/verify.util");
 const sgMail = require("@sendgrid/mail");
+require("dotenv").config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signUp = async ({ email, password }) => {
@@ -15,20 +18,24 @@ const signUp = async ({ email, password }) => {
     password: hashPassword(password),
   });
   const secureUrl = gravatar.url(email, { s: "100", r: "x", d: "retro" }, true);
+  const verificationToken = uuidv4();
+
   const updatedUser = await User.findOneAndUpdate(
     { _id: newUser._id },
     {
       token: jwtSign({ _id: newUser._id }),
       avatarURL: secureUrl,
+      // verificationToken,
     },
     { new: true }
   );
+  // sendVerifyEmail(verificationToken, email);
   const msg = {
     to: email, // Change to your recipient
     from: "uu.sokil@gmail.com", // Change to your verified sender
     subject: "Sign up", // Change to your
     text: "Congratulations! You have successfully signed up",
-    html: "<h1>Sign up!</h1>",
+    html: `<a href="http://localhost:3000/api/users/verify/${newUser._id}">Please, verify your email!</a>`,
   };
   sgMail
     .send(msg)
@@ -84,10 +91,24 @@ const updateAvatar = async (_id, avatarURL) => {
   return user;
 };
 
+const verifyUser = async ({ _id }) => {
+  const user = await User.findByIdAndUpdate(
+    { _id },
+    {
+      verify: true,
+      verificationToken: null,
+    },
+    { new: true }
+  );
+  console.log("🚀 ~ file: userController.js:99 ~ verifyUser ~ user", user);
+  return user;
+};
+
 module.exports = {
   signUp,
   signIn,
   logout,
   updateSubscription,
   updateAvatar,
+  verifyUser,
 };
