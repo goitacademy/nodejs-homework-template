@@ -6,6 +6,7 @@ const getById = async (req, res, next) => {
   const result = await Contact.findById({
     _id: contactId,
   });
+  // findOne
 
   if (!result) {
     throw new NotFound(`Product with id=${contactId} not found`);
