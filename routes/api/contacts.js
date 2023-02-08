@@ -17,11 +17,11 @@ const router = express.Router();
 
 router.get('/contacts', controllerGetContacts);
 router.get('/contacts/:contactId', controllerGetContactById);
-// router.post(
-//   '/contacts',
-//   validateContact(schemaAddContact),
-//   controllerPostContact
-// );
+router.post(
+  '/contacts',
+  validateContact(schemaAddContact),
+  controllerPostContact
+);
 // router.delete('/contacts/:contactId', controllerDeleteContact);
 // router.put(
 //   '/contacts/:contactId',

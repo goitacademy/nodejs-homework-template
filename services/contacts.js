@@ -8,11 +8,7 @@ const { Contact } = require('./schemas/contact');
 // const pathContacts = path.join(__dirname, 'contacts.json');
 
 const listContacts = async () => {
-  try {
-    return await Contact.find();
-  } catch (error) {
-    console.log(error.message);
-  }
+  return await Contact.find();
 };
 
 const getContactById = async contactId => {
@@ -24,19 +20,19 @@ const getContactById = async contactId => {
   }
 };
 
-// const addContact = async body => {
-//   try {
-//     const contactsList = await listContacts();
-//     contactsList.push(body);
-//     const contactsBySort = [...contactsList].sort(
-//       (a, b) => Number(a.id) - Number(b.id)
-//     );
-//     await fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
-//     return body;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const addContact = async body => {
+  try {
+    const contactsList = await listContacts();
+    contactsList.push(body);
+    const contactsBySort = [...contactsList].sort(
+      (a, b) => Number(a.id) - Number(b.id)
+    );
+    await fs.writeFile(pathContacts, JSON.stringify(contactsBySort), 'utf8');
+    return body;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // const removeContact = async contactId => {
 //   try {

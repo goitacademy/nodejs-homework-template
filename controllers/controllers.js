@@ -40,24 +40,8 @@ const controllerGetContactById = async (req, res, next) => {
 };
 
 const controllerPostContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
   try {
-    const contactsList = await listContacts();
-
-    const contactId = Math.floor(Math.random() * 100);
-    const isId = contactsList.some(contact => Number(contact.id) === contactId);
-    if (isId) {
-      controllerPostContact(req, res, next);
-      return;
-    }
-
-    const contact = {
-      id: `${contactId}`,
-      name,
-      email,
-      phone,
-    };
-    addContact(contact);
+    addContact(req.body);
     res.json({
       status: 'success',
       code: 201,
