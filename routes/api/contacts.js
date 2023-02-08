@@ -49,7 +49,7 @@ router.post("/", async (req, res, next) => {
 			res.status(400).json({ message: result.error.message });
 		} else {
 			const result = addContact(req.body);
-			res.status(200).json(result);
+			res.status(201).json(result);
 		}
 	} catch (err) {
 		next(err);
