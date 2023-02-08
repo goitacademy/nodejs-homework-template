@@ -15,14 +15,14 @@ const listContacts = async () => {
   }
 };
 
-// const getContactById = async contactId => {
-//   try {
-//     const contactsList = await listContacts();
-//     return contactsList.find(contact => contact.id === contactId);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// };
+const getContactById = async contactId => {
+  try {
+    const contactsList = await listContacts();
+    return contactsList.find(contact => contact._id.toString() === contactId);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
 // const addContact = async body => {
 //   try {
@@ -68,7 +68,7 @@ const listContacts = async () => {
 
 module.exports = {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   // addContact,
   // updateContact,

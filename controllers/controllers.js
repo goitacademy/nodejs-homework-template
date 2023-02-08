@@ -1,6 +1,6 @@
 const {
   listContacts,
-  // getContactById,
+  getContactById,
   // addContact,
   // removeContact,
   // updateContact,
@@ -24,7 +24,6 @@ const controllerGetContactById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contactById = await getContactById(contactId);
-
     if (contactById === undefined) {
       return res.status(404).json({ message: 'Not found' });
     }

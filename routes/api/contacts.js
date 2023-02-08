@@ -13,12 +13,10 @@ const {
   controllerPutContact,
 } = require('../../controllers/controllers');
 
-
 const router = express.Router();
 
-
 router.get('/contacts', controllerGetContacts);
-// router.get('/contacts/:contactId', controllerGetContactById);
+router.get('/contacts/:contactId', controllerGetContactById);
 // router.post(
 //   '/contacts',
 //   validateContact(schemaAddContact),
