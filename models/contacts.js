@@ -1,19 +1,22 @@
 const fs = require("fs/promises");
 const path = require("path");
 const joi = require("joi");
+
 const { uid } = require("uid");
+const Contact = require("./ContactsModel");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const getAllContacts = async () => {
   try {
-    console.log(contactsPath);
-    const contactsList = JSON.parse(
-      await fs.readFile(contactsPath, {
-        encoding: "utf8",
-      })
-    );
-    return contactsList;
+    // const listContacts = await Contact.find();
+    // console.log(contactsPath);
+    // const contactsList = JSON.parse(
+    //   await fs.readFile(contactsPath, {
+    //     encoding: "utf8",
+    //   })
+    // );
+    return Contact.find();
   } catch (error) {
     console.log(error);
   }
