@@ -11,12 +11,12 @@ const requestBodySchema = Joi.object({
 
 const addContact = async (req, res) => {
   const { error } = requestBodySchema.validate(req.body);
+  const { _id: owner } = req.user;
 
   if (error) {
     throw HttpError(400, error.message);
   }
-
-  const result = await contactModel.create(req.body);
+  const result = await contactModel.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
