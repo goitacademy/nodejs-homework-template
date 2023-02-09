@@ -22,7 +22,7 @@ router.post(
   validateContact(schemaAddContact),
   controllerPostContact
 );
-// router.delete('/contacts/:contactId', controllerDeleteContact);
+router.delete('/contacts/:contactId', controllerDeleteContact);
 // router.put(
 //   '/contacts/:contactId',
 //   validateContact(schemaUpdateContact),

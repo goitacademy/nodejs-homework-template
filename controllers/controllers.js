@@ -2,7 +2,7 @@ const {
   listContacts,
   getContactById,
   addContact,
-  // removeContact,
+  removeContact,
   // updateContact,
 } = require('../services/contacts');
 
@@ -56,21 +56,17 @@ const controllerPostContact = async (req, res, next) => {
 const controllerDeleteContact = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contactsList = await listContacts();
-    const contact = contactsList.filter(el => el.id === contactId);
-
-    if (contact.length === 0) {
+    const contact = await removeContact(contactId);
+    if (contact) {
+      res.json({
+        status: 'success',
+        code: 200,
+        message: 'contact deleted',
+        data: { contact },
+      });
+    } else {
       res.status(404).json({ message: 'Not found' });
-      return;
     }
-
-    removeContact(contactId);
-    res.json({
-      status: 'success',
-      code: 200,
-      message: 'contact deleted',
-      data: { contact },
-    });
   } catch (error) {
     res.status(500).json({ message: error.message });
     next(error);

@@ -19,15 +19,9 @@ const addContact = async body => {
   return await Contact.create(body);
 };
 
-// const removeContact = async contactId => {
-//   try {
-//     const contactsList = await listContacts();
-//     const newContactsList = contactsList.filter(el => el.id !== contactId);
-//     await fs.writeFile(pathContacts, JSON.stringify(newContactsList), 'utf8');
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const removeContact = async contactId => {
+  return await Contact.findByIdAndRemove({ _id: contactId });
+};
 
 // const updateContact = async (contactId, body) => {
 //   try {
@@ -50,7 +44,7 @@ const addContact = async body => {
 module.exports = {
   listContacts,
   getContactById,
-  // removeContact,
+  removeContact,
   addContact,
   // updateContact,
 };
