@@ -2,6 +2,9 @@ const fs = require('fs/promises');
 const path = require('path');
 
 const filePath = path.resolve(__dirname, 'contacts.json');
+const updateContactsFile = async (data) => {
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+};
 
 const listContacts = async () => {
   const contacts = await fs.readFile(filePath, 'utf8');
@@ -18,24 +21,21 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
-  let removedContact;
-  const newContacts = contacts.filter((c) => {
-    if (c.id === contactId) {
-      removedContact = c;
-      return false;
-    }
-    return true;
-  });
-  await fs.writeFile(filePath, JSON.stringify(newContacts), 'utf-8');
+  const contactIndex = contacts.findIndex((c) => c.id === contactId);
+
+  if (contactIndex === -1) {
+    return null;
+  }
+  const [removedContact] = contacts.splice(contactIndex, 1);
+  await updateContactsFile(contacts);
 
   return removedContact;
 };
 
 const addContact = async (body) => {
   const contacts = await listContacts();
-
   contacts.push(body);
-  await fs.writeFile(filePath, JSON.stringify(contacts), 'utf8');
+  await updateContactsFile(contacts);
 
   return body;
 };
@@ -53,7 +53,7 @@ const updateContact = async (contactId, body) => {
   });
 
   if (updatedContact) {
-    await fs.writeFile(filePath, JSON.stringify(updatedContacts), 'utf8');
+    await updateContactsFile(updatedContacts);
   }
 
   return updatedContact;
