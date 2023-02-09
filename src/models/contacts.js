@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const filePath = path.resolve('src/models', 'contacts.json');
+const filePath = path.resolve(__dirname, 'contacts.json');
 
 const listContacts = async () => {
   const contacts = await fs.readFile(filePath, 'utf8');
