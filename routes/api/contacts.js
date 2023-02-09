@@ -30,18 +30,22 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const contacts = await contactsOperations.addContact();
-  res.json({ message: "template message" });
+  try {
+    const result = await contactsOperations.addContact(reg.body);
+    res.status(201).json({
+      status: "succes",
+      code: 201,
+      data: { result },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // router.delete("/:id", async (req, res, next) => {
-//   const contacts = await contactsOperations.removeContact();
-//   res.json({ message: "template message" });
 // });
 
 // router.put("/:id", async (req, res, next) => {
-//   const contacts = await contactsOperations.updateContact();
-//   res.json({ message: "template message" });
 // });
 
 module.exports = router;
