@@ -18,13 +18,14 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts()
-  const idx =  contacts.findIndex(item => item.id === contactId)
-    if (idx === -1) {
-        return null
-    }
-    const contactsAfterDelete = await contacts.filter((_, index) => index !== idx)
-    await fs.writeFile(filePath, JSON.stringify(contactsAfterDelete))
-    return contacts[idx];
+  const requestedContact = contacts.find(contact => contact.id === contactId)
+
+  if (!requestedContact) return false
+
+  const updatedContacts = contacts.filter(contact => contact.id !== contactId)
+  await fs.writeFile(filePath, JSON.stringify(updatedContacts))
+
+  return requestedContact
 }
 
 const addContact = async (body) => {
@@ -36,21 +37,21 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-  const data = await listContacts()
-  const contactById = await data.find(item => item.id === contactId)
-  if(contactById === -1){
-        return null;
-  }
-  const updatedContacts = await data.map(contact => {
+  const contacts = await listContacts()
+  const requestedContact = contacts.find(contact => contact.id === contactId)
+
+  if (!requestedContact) return
+
+  const updatedContacts = contacts.map(contact => {
     if (contact.id === contactId) {
       return {...contact, ...body}
     }
     return contact
   })
 
-  data[contactById] = { ...body, contactId }
   await fs.writeFile(filePath, JSON.stringify(updatedContacts))
-  return data[contactById]
+
+  return updatedContacts.find(contact => contact.id === contactId)
 }
 
 module.exports = {

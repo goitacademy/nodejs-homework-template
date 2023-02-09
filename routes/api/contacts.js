@@ -51,8 +51,7 @@ try {
 
 router.post('/', async (req, res, next) => {
   try {
-      const { error } = contactSchema.validate(req.body);
-  console.log(error)
+  const { error } = contactSchema.validate(req.body);
   if (error) {
     error.status = 400;
     throw error;
