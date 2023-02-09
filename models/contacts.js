@@ -10,7 +10,6 @@ const listContacts = async () => {
     return JSON.parse(data);
   } catch (error) {
     console.log(error);
-    //
     throw new Error("Internal Server Error");
   }
 };
@@ -31,6 +30,7 @@ const getContactById = async (contactId) => {
     return null;
   } catch (error) {
     console.log(error);
+     throw new Error("Internal Server Error");
   }
 };
 
