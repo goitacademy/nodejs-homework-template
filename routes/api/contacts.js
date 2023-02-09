@@ -1,5 +1,4 @@
 const express = require("express");
-const contacts = require("../../models/contacts.json");
 const router = express.Router();
 const controllers = require("../../controllers");
 const { controllerExceptionWrapper } = require("../../helpers");
@@ -19,6 +18,10 @@ router
     "/:id",
     validateBody(addContactSchema),
     controllerExceptionWrapper(controllers.updateById)
+  )
+  .patch(
+    "/:id/favorite",
+    controllerExceptionWrapper(controllers.toggleFavorite)
   );
 
 module.exports = router;
