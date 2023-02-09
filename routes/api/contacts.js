@@ -23,10 +23,10 @@ router.post(
   controllerPostContact
 );
 router.delete('/contacts/:contactId', controllerDeleteContact);
-// router.put(
-//   '/contacts/:contactId',
-//   validateContact(schemaUpdateContact),
-//   controllerPutContact
-// );
+router.put(
+  '/contacts/:contactId',
+  validateContact(schemaUpdateContact),
+  controllerPutContact
+);
 
 module.exports = router;

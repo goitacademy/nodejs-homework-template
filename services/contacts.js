@@ -24,7 +24,9 @@ const removeContact = async contactId => {
 };
 
 const updateContact = async (contactId, body) => {
-  return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
+  return await Contact.findByIdAndUpdate({ _id: contactId }, body, {
+    new: true,
+  });
 };
 
 module.exports = {
