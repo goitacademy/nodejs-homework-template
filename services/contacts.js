@@ -23,28 +23,14 @@ const removeContact = async contactId => {
   return await Contact.findByIdAndRemove({ _id: contactId });
 };
 
-// const updateContact = async (contactId, body) => {
-//   try {
-//     const contactsList = await listContacts();
-//     const contact = contactsList.find(el => el.id === contactId);
-
-//     if (contact === undefined) {
-//       return null;
-//     }
-
-//     const contactUpdated = { ...contact, ...body };
-//     await removeContact(contactId);
-//     await addContact(contactUpdated);
-//     return contactUpdated;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const updateContact = async (contactId, body) => {
+  return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
+};
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 };
