@@ -7,43 +7,31 @@ const contactsPath = path.format({
   base: "contacts.json",
 });
 
-const idPath = path.format({
-  root: "/ignored",
-  dir: "models",
-  base: "id.json",
-});
-
-const readLastId = async () => {
-  return fs.readFile(idPath).then((id) => {
-    return JSON.parse(id);
-  });
-};
-
 const listContacts = async () => {
   return fs.readFile(contactsPath).then((contacts) => {
     return JSON.parse(contacts);
   });
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   return fs
     .readFile(contactsPath)
     .then((contacts) =>
-      JSON.parse(contacts).find((contact) => contact.id === contactId)
+      JSON.parse(contacts).find((contact) => contact.id === id)
     );
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   let isExist = false;
   const contacts = await fs
     .readFile(contactsPath)
     .then((contacts) => JSON.parse(contacts))
     .then((contacts) =>
       contacts.filter((contact) => {
-        if (contact.id === contactId) {
+        if (contact.id === id) {
           isExist = true;
         }
-        return contact.id !== contactId;
+        return contact.id !== id;
       })
     );
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
@@ -51,15 +39,19 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  let { id } = await readLastId();
-  console.log(id);
-  id = Number(id) + 1;
-  body = { id: `${id}`, ...body };
-  await fs.writeFile(idPath, JSON.stringify({ id }));
   const contacts = await fs
     .readFile(contactsPath)
     .then((contacts) => JSON.parse(contacts))
-    .then((contacts) => [...contacts, body]);
+    .then((contacts) => {
+      const id = contacts.reduce((newId, contact) => {
+        if (Number(contact.id) < newId) {
+          return newId
+        }
+        return Number(contact.id) + 1;
+      },1)
+      body = { id: `${id}`, ...body };
+      return [...contacts, body]
+    });
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return body;
 };
