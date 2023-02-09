@@ -1,3 +1,4 @@
 const RequestError = require("./RequestError");
+const sendMail = require("./sendMail.js");
 
-module.exports = RequestError;
+module.exports = { RequestError, sendMail };

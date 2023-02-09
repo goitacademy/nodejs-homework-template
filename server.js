@@ -15,7 +15,7 @@ async function main() {
 
     app.listen(PORT, () =>
       console.log(
-        `Server running. Use our API on port http://localhost:${PORT}/api/contacts/ `
+        `Server running. Use our API on port http://localhost:${PORT}/ `
       )
     );
   } catch (error) {

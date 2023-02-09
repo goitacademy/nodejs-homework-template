@@ -7,6 +7,7 @@ const {
   currentUser,
   updateSubscription,
   updateByAvatar,
+  verifyEmail,
 } = require("../../controllers/users/index.js");
 const { auth, upload } = require("../../middlewares/index.js");
 
@@ -18,5 +19,6 @@ routerUsers.get("/logout", auth, logout);
 routerUsers.get("/current", auth, currentUser);
 routerUsers.patch("/", auth, updateSubscription);
 routerUsers.patch("/avatars", auth, upload.single("avatar"), updateByAvatar);
+routerUsers.get("/verify/:verificationToken", verifyEmail);
 
 module.exports = routerUsers;

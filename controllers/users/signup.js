@@ -1,8 +1,9 @@
 const { User } = require("../../models/user.js");
-const { RequestError } = require("../../helpers/index.js");
+const { RequestError, sendMail } = require("../../helpers/index.js");
 const { userSchemaSignup } = require("../../schemas/validationSchemaUser.js");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
+const { nanoid } = require("nanoid");
 
 async function signup(req, res, next) {
   try {
@@ -22,10 +23,20 @@ async function signup(req, res, next) {
     const hashedPassword = await bcrypt.hash(password, salt);
     const avatarProfile = gravatar.url(email);
 
+    const verificationToken = nanoid();
+
     const savedUser = await User.create({
       email,
       password: hashedPassword,
       avatarURL: avatarProfile,
+      verify: false,
+      verificationToken,
+    });
+
+    await sendMail({
+      to: email,
+      subject: "Confirm registration",
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Confirm your email</a>`,
     });
 
     return res.status(201).json({
@@ -33,6 +44,8 @@ async function signup(req, res, next) {
         email,
         subscription: savedUser.subscription,
         avatarURL: savedUser.avatarURL,
+        verify: savedUser.verify,
+        verificationToken: savedUser.verificationToken,
       },
     });
   } catch (error) {

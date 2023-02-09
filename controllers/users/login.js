@@ -23,6 +23,13 @@ async function login(req, res, next) {
       throw RequestError(401, "Email or password is wrong");
     }
 
+    if (!user.verify) {
+      throw RequestError(
+        401,
+        "Email is not verified! Please check your mail box"
+      );
+    }
+
     const payload = { id: user._id };
     const token = jwt.sign(payload, "JWT_SECRET", { expiresIn: "1h" });
     await User.findByIdAndUpdate(user._id, { token });
