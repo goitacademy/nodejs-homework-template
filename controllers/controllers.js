@@ -103,12 +103,10 @@ const controllerPutContact = async (req, res, next) => {
 
 const controllerPatchFavorite = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favorite } = req.body.favorite;
-
-  console.log(contactId, favorite);
+  const { favorite } = req.body;
 
   try {
-    const contact = await updateStatusContact(contactId, favorite);
+    const contact = await updateStatusContact(contactId, { favorite });
     if (contact) {
       res.json({
         status: 'success',
