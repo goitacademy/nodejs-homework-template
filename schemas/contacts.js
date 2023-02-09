@@ -17,6 +17,15 @@ const schemaUpdateContact = Joi.object({
     tlds: { allow: ['com', 'net'] },
   }),
   phone: Joi.string().min(10).max(20),
+  favorite: Joi.boolean(),
 });
 
-module.exports = { schemaAddContact, schemaUpdateContact };
+const schemaUpdateFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = {
+  schemaAddContact,
+  schemaUpdateContact,
+  schemaUpdateFavorite,
+};

@@ -15,11 +15,11 @@ app.use(express.json());
 app.use('/api', contactsRouter);
 
 app.use((req, res) => {
+  console.log('Ошибка пришла в app.js');
   res.status(404).json({ message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
-  console.log('Ошибка пришла в app.js');
   res.status(500).json({ message: err.message });
 });
 

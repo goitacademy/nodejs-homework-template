@@ -4,6 +4,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require('../services/contacts');
 
 const controllerGetContacts = async (req, res, next) => {
@@ -77,19 +78,13 @@ const controllerPutContact = async (req, res, next) => {
   const { contactId } = req.params;
   const keys = Object.keys(req.body);
 
-  console.log(contactId);
-  console.log(req.body);
-
   if (keys.length === 0) {
     res.status(400).json({ message: 'missing fields' });
     return;
   }
 
   try {
-    console.log('до обращения к базе');
     const contact = await updateContact(contactId, req.body);
-
-    console.log(contact);
 
     if (contact) {
       res.json({
@@ -106,10 +101,42 @@ const controllerPutContact = async (req, res, next) => {
   }
 };
 
+const controllerPatchFavorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const keys = Obect.keys(req.body);
+
+  if (keys.length === 0) {
+    res.status(400).json({ message: 'missing field favorite' });
+    return;
+  }
+
+  const { favorite } = req.body.favorite;
+
+  console.log(contactId, keys, favorite);
+
+  try {
+    const contact = await updateStatusContact(contactId, favorite);
+    if (result) {
+      res.json({
+        status: 'success',
+        code: 200,
+        data: { contact },
+      });
+    } else {
+      console.log('No body favorite');
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 module.exports = {
   controllerGetContacts,
   controllerGetContactById,
   controllerPostContact,
   controllerDeleteContact,
   controllerPutContact,
+  controllerPatchFavorite,
 };
