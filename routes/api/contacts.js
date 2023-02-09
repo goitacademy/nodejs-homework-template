@@ -11,9 +11,10 @@ import {
   listContacts,
   getContactById,
   removeContact,
-  addContact,
+  // addContact,
   updateContact,
-} from "../../models/contacts";
+} from "../../models/contacts.js";
+import addContact from "../../models/contacts.js";
 // const { contactValidator } = require("./../../utils/validators/validator.js");
 import { contactValidator } from "./../../utils/validators/validator.js";
 

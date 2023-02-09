@@ -7,7 +7,8 @@ import path from "path";
 // require("colors");
 // import colors from colors;
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join("models", "contacts.json");
+// const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
   try {
@@ -53,7 +54,7 @@ const addContact = async (body) => {
 
     const contacts = await listContacts();
     const newContact = {
-      // id: nanoid(),
+      id: nanoid(),
       name,
       email,
       phone,
@@ -95,10 +96,12 @@ const updateContact = async (contactId, body) => {
 //   updateContact,
 // };
 
-export default {
+export {
   listContacts,
   getContactById,
   removeContact,
-  addContact,
+  // addContact,
   updateContact,
 };
+
+export default addContact;
