@@ -22,7 +22,7 @@ const validateFavorite = schema => {
       console.log(result);
 
       if (result.error) {
-        res.status(400).json({ message: 'missing required name field' });
+        res.status(400).json({ message: 'missing field favorite' });
         return;
       }
       next();
