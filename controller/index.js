@@ -39,7 +39,10 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { name, email, phone, favorite } = await req.body;
+    let { name, email, phone, favorite } = await req.body;
+    if (!favorite) {
+      favorite = false;
+    }
     const check = JoiSchema.allRequired.validate({
       name,
       email,
