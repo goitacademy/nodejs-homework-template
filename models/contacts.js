@@ -38,9 +38,6 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts()
-  const requestedContact = contacts.find(contact => contact.id === contactId)
-
-  if (!requestedContact) return
 
   const updatedContacts = contacts.map(contact => {
     if (contact.id === contactId) {
