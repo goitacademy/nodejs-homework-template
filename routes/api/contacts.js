@@ -1,6 +1,6 @@
 const express = require("express");
-const { schema } = require("../../utils/schemaContacts/schemaContacts");
-const { Contact } = require("../../utils/validation/validationSchemas");
+const { schema } = require("../../utils/validation/validationContact");
+const { Contact } = require("../../utils/schemas/schemaContact");
 
 const router = express.Router();
 
