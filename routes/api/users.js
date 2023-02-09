@@ -93,7 +93,8 @@ router.patch(
 
 router.get("/verify/:verificationToken", async (req, res, next) => {
   const { verificationToken } = req.params;
-  const user = await functions.verifyUser(_id, verificationToken);
+  console.log("verificationToken", verificationToken);
+  const user = await functions.verifyUser(verificationToken);
   if (!user) {
     return res.status(404).json({
       message: "User not found",
@@ -106,10 +107,20 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
 
 router.post("/verify", async (req, res, next) => {
   const { email } = req.body;
-  // const user = await functions.resendVerifyUser(verificationToken);
+  if (!email) {
+    return res.status(400).json({
+      message: "missing required field email",
+    });
+  }
+  const user = await functions.resendVerifyUser(email);
+  if (user.message) {
+    return res.status(user.status).json({
+      message: user.message,
+    });
+  }
   // if (!user) {
-  //   return res.status(404).json({
-  //     message: "User not found",
+  //   return res.status(400).json({
+  //     message: "Verification has already been passed",
   //   });
   // }
   // return res.status(200).json({
