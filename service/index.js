@@ -2,14 +2,28 @@ const Contacts = require('./schemas/contacts');
 
 const listContacts = async () => await Contacts.find();
 
-const getContactById = id => Contacts.findOne({ _id: id });
+const getContactById = async id =>
+  Contacts.findOne({ _id: id })
+    .then(result => result)
+    .catch(() => false);
 
 const addContact = ({ name, email, phone, favorite }) =>
   Contacts.create({ name, email, phone, favorite });
 
-const removeContact = id => Contacts.findByIdAndRemove({ _id: id });
+const removeContact = id =>
+  Contacts.findByIdAndRemove({ _id: id })
+    .then(result => result)
+    .catch(() => false);
 
-const updateContact = body => Contacts.findByIdAndUpdate(body);
+const updateContact = (id, body) =>
+  Contacts.findByIdAndUpdate({ _id: id }, body, { new: true })
+    .then(result => result)
+    .catch(() => false);
+
+const updateStatusContact = (id, body) =>
+  Contacts.findByIdAndUpdate({ _id: id }, body, { new: true })
+    .then(result => result)
+    .catch(() => false);
 
 module.exports = {
   listContacts,
@@ -17,4 +31,5 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 };

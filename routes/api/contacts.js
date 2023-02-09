@@ -4,12 +4,14 @@ const ctrlContacts = require('../../controller');
 
 router.get('/', ctrlContacts.get);
 
-router.get('/:contactId', ctrlContacts.getById);
+router.get('/:id', ctrlContacts.getById);
 
 router.post('/', ctrlContacts.create);
 
-router.delete('/:contactId', ctrlContacts.removeById);
+router.delete('/:id', ctrlContacts.removeById);
 
-router.put('/:contactId', ctrlContacts.update);
+router.put('/:id', ctrlContacts.update);
+
+router.patch('/:id/favorite', ctrlContacts.updateStatus);
 
 module.exports = router;

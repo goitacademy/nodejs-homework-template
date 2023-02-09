@@ -17,8 +17,8 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await service.getContactById(contactId);
+    const { id } = req.params;
+    const contact = await service.getContactById(id);
     if (contact) {
       res.json({
         status: 'success',
@@ -67,8 +67,8 @@ const create = async (req, res, next) => {
 
 const removeById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const isDelete = await service.removeContact(contactId);
+    const { id } = req.params;
+    const isDelete = await service.removeContact(id);
     if (isDelete) {
       res.json({
         status: 'contact deleted',
@@ -88,7 +88,7 @@ const removeById = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const { id } = req.params;
     const { name, email, phone, favorite } = req.body;
     const check = JoiSchema.atLeastOne.validate({
       name,
@@ -103,10 +103,45 @@ const update = async (req, res, next) => {
       });
       return;
     }
-    const contact = await service.updateContact(
-      contactId,
+    newContact = JSON.parse(JSON.stringify(check.value));
+    const contact = await service.updateContact(id, newContact);
+    if (contact) {
+      res.json({
+        status: 'success',
+        code: 200,
+        data: { contact },
+      });
+      return;
+    }
+    res.status(404).json({
+      message: 'Not found',
+      code: 404,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const updateStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { favorite } = req.body;
+    const check = JoiSchema.atLeastOne.validate({
+      favorite,
+    });
+    if (check.error) {
+      res.status(400).json({
+        message: check.error.details[0].message,
+        code: 400,
+      });
+      return;
+    }
+    const contact = await service.updateStatusContact(
+      id,
       JSON.parse(JSON.stringify(check.value))
     );
+    console.log(contact);
     if (contact) {
       res.json({
         status: 'success',
@@ -131,4 +166,5 @@ module.exports = {
   create,
   removeById,
   update,
+  updateStatus,
 };
