@@ -15,6 +15,7 @@ router.get("/", async (req, res, next) => {
     res.json(data);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
@@ -23,12 +24,15 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const data = await getContactById(contactId);
     if (!data) {
-      res.status(404).json({ message: "Not found" });
+      const error = new Error("Not found");
+      error.status = 404;
+      next(error);
       return;
     }
     res.json(data);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
@@ -36,7 +40,9 @@ router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
-      res.status(400).json({ message: "missing required name field" });
+      const error = new Error("missing required name field");
+      error.status = 400;
+      next(error);
       return;
     }
     const body = { name, email, phone };
@@ -44,6 +50,7 @@ router.post("/", async (req, res, next) => {
     res.status(201).json(data);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
@@ -52,32 +59,40 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const data = await removeContact(contactId);
     if (!data) {
-      res.status(404).json({ message: "Not found" });
+      const error = new Error("Not found");
+      error.status = 404;
+      next(error);
       return;
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const {name, email, phone } = req.body;
+    const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
-      res.status(400).json({ message: "missing fields" });
+      const error = new Error("missing required name field");
+      error.status = 400;
+      next(error);
       return;
     }
-    const body = {name, email, phone };
+    const body = { name, email, phone };
     const data = await updateContact(contactId, body);
     if (!data) {
-      res.status(404).json({ message: "Not found" });
+      const error = new Error("Not found");
+      error.status = 404;
+      next(error);
       return;
     }
     res.status(200).json(data);
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 

@@ -1,17 +1,19 @@
-const fs = require('fs/promises');
+const fs = require("fs/promises");
 const path = require("path");
 const { v1 } = require("uuid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
-   try {
-     const data = await fs.readFile(contactsPath);
-     return JSON.parse(data);
-   } catch (error) {
-     console.log(error);
-   }
-}
+  try {
+    const data = await fs.readFile(contactsPath);
+    return JSON.parse(data);
+  } catch (error) {
+    console.log(error);
+    //
+    throw new Error("Internal Server Error");
+  }
+};
 
 const getContactById = async (contactId) => {
   try {
@@ -22,7 +24,7 @@ const getContactById = async (contactId) => {
     const contactById = contacts.find(
       (contact) => contact.id === contactIdString
     );
-
+    console.log(contactById);
     if (contactById) {
       return contactById;
     }
@@ -30,7 +32,7 @@ const getContactById = async (contactId) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 const removeContact = async (contactId) => {
   try {
@@ -47,11 +49,11 @@ const removeContact = async (contactId) => {
     return contactsById;
   } catch (error) {
     console.log(error);
+    throw new Error("Internal Server Error");
   }
-}
+};
 
 const addContact = async (body) => {
-  
   try {
     const contacts = await listContacts();
     const newContact = { id: v1(), ...body };
@@ -60,29 +62,30 @@ const addContact = async (body) => {
     return newContact;
   } catch (error) {
     console.log(error);
+    throw new Error("Internal Server Error");
   }
-}
+};
 
 const updateContact = async (contactId, body) => {
-    
   try {
-   const contactsById = await getContactById(contactId);
-   if (!contactsById) {
-     return contactsById;
-   }
-   const contactIdString = contactId.toString();
-   const contacts = await listContacts();
-   const newContacts = contacts.filter(
-     (contact) => contact.id !== contactIdString
-   );
-    const newContact = { contactId, ...body };
+    const contactsById = await getContactById(contactId);
+    if (!contactsById) {
+      return contactsById;
+    }
+    const contactIdString = contactId.toString();
+    const contacts = await listContacts();
+    const newContacts = contacts.filter(
+      (contact) => contact.id !== contactIdString
+    );
+    const newContact = { id: contactId, ...body };
     newContacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(newContacts), "utf8");
     return newContact;
   } catch (error) {
     console.log(error);
+    throw new Error("Internal Server Error");
   }
-}
+};
 
 module.exports = {
   listContacts,
@@ -90,4 +93,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
