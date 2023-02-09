@@ -24,13 +24,13 @@ router.get("/:contactId", contatsControllers.getById);
 
 router.post("/", validationAddContact, contatsControllers.add);
 
+router.put("/:contactId", validationUpdateContact, contatsControllers.update);
+
 router.patch(
   "/:contactId/favorite",
   validationUpdateStatusContact,
   contatsControllers.updateStatusContact
 );
-
-router.put("/:contactId", validationUpdateContact, contatsControllers.update);
 
 router.delete("/:contactId", contatsControllers.remove);
 
