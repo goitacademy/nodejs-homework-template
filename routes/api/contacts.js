@@ -57,7 +57,23 @@ router.post("/", async (req, res, next) => {
 // router.delete("/:id", async (req, res, next) => {
 // });
 
-// router.put("/:id", async (req, res, next) => {
-// });
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
+    const { id } = req.params;
+    const contact = await contactsOperations.updateContact(id, req.body);
+    res.status(201).json({
+      status: "success",
+      code: 200,
+      data: { contact },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
