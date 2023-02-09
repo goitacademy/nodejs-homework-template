@@ -21,9 +21,9 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  const data = JSON.parse(await fs.readFile(contactsPath, "utf8"));
+  const data = await listContacts();
 
-  const filterContacts = await getContactById(contactId);
+  const filterContacts = await data.find(({ id }) => id === contactId);
   if (!filterContacts) {
     return null;
   }
@@ -36,7 +36,7 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async ({ name, email, phone }) => {
-  const data = JSON.parse(await fs.readFile(contactsPath, "utf8"));
+  const data = await listContacts();
 
   const newContacts = {
     id: ID.generate(new Date().toJSON()),
