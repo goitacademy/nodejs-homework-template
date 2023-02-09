@@ -17,11 +17,6 @@ const avatarURL = path.join("public", "avatars", imageName);
 // public/avatars/my-avatar.png
 await User.findByIdAndUpdate(req.user._id, {avatarURL});
 res.json({avatarURL});
-// res.json({
-    //   status: "success",
-    //   code: 200,
-      // massage: "тут будет ссылка на изображение",
-    // });
   } catch (error) {
     await fs.unlink(tempUpload);
     throw error;

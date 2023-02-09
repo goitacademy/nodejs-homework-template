@@ -4,4 +4,4 @@ const ctrlWrapper = require("./ctrlWrapper");
 const authVerifyToken = require("./authVerifyToken");
 const upload = require("./upload");
 
-module.exports = {joiValidation, isValidId, upload,  ctrlWrapper, authVerifyToken};
+module.exports = {upload, joiValidation, isValidId,  ctrlWrapper, authVerifyToken};

@@ -6,7 +6,7 @@ const { SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, avatarURL } = req.body;
     const user = await User.findOne({ email });
 
     if (!user || !user.comparePassword(password)) {
@@ -23,7 +23,8 @@ const login = async (req, res, next) => {
       status: "success",
       code: 200,
       token: token,
-      user: { email: user.email, subscription: user.subscription },
+      avatar: avatarURL,
+      user: { email: user.email,   subscription: user.subscription },
     });
 
   } catch (error) {
