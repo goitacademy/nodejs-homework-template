@@ -1,9 +1,11 @@
 const express = require("express");
+const books = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "new message" });
+  const allBooks = await books.listContacts();
+  res.json(allBooks);
 });
 
 router.get("/:contactId", async (req, res, next) => {
