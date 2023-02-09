@@ -25,6 +25,7 @@ router.get("/:id", async (req, res, next) => {
         code: 404,
         message: `Contact id ${id} not found`,
       });
+      return;
     }
     res.json({ status: "success", code: 200, data: { result } });
   } catch (error) {
