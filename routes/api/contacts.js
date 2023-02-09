@@ -1,15 +1,20 @@
 const express = require("express");
-const books = require("../../models/contacts");
+const contacts = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const allBooks = await books.listContacts();
+  const allBooks = await contacts.listContacts();
   res.json(allBooks);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "old template message" });
+  const { contactId } = req.params;
+  const idContact = await contacts.getContactById(contactId);
+  if (!idContact) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  res.json(idContact);
 });
 
 router.post("/", async (req, res, next) => {
