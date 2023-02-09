@@ -1,15 +1,22 @@
 const { User } = require("../models/user");
-const { HttpError } = require("../helpers/helpers");
+const { HttpError, sendMail } = require("../helpers/helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+const sgMail = require('@sendgrid/mail');
+const { v4 } = require('uuid');
+
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const { SECRET_KEY} = process.env;
 
 async function register(req, res, next) {
   const { email, password } = req.body;
+  const verifyToken = v4();
 
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -19,6 +26,14 @@ async function register(req, res, next) {
       email,
       password: hashedPassword,
       avatarUrl,
+      verifyToken,
+      verify: false,
+    });
+
+    await sendMail({
+      to: email,
+      subject: "please confirm your email",
+      html: `<a href="localhost:3001/api/users/verify/${verifyToken}">confirm your email</a>`,
     });
 
     res.status(201).json({
@@ -28,6 +43,8 @@ async function register(req, res, next) {
           id: newUser._id,
         },
       },
+
+      
     });
   } catch (error) {
     if (error.message.includes("E11000 duplicate key error")) {
@@ -39,9 +56,9 @@ async function register(req, res, next) {
 }
 
 async function login(req, res, next) {
-  const { email, password } = req.body;
+  const { email, password} = req.body;
   const loginUser = await User.findOne({
-    email,
+    email, verify:true
   });
   if (!loginUser) {
     throw new HttpError(401, "email is not valid");
@@ -101,10 +118,15 @@ async function uploadAvatar(req, res, next) {
 
 }
 
+const verificationUser = async (req, res) => {
+
+}
+
 module.exports = {
   register,
   login,
   logout,
   getCurrent,
   uploadAvatar,
+  verificationUser
 };

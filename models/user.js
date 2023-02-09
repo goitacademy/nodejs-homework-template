@@ -14,10 +14,14 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
     default: "starter",
+  },
+  verifyToken: {
+    type: String,
   },
   token: {
     type: String,
@@ -30,6 +34,11 @@ const userSchema = mongoose.Schema({
       ref: "contact",
     },
   ],
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  
 });
 
 
