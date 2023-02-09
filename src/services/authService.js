@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
+const path = require("path");
+const fs = require("fs/promises");
+const Jimp = require("jimp");
 const { User } = require('../db/userModel');
 const { RegistrationConflictError, NotAuthorizedError } = require('../helpers/errors');
 
@@ -50,10 +53,26 @@ const updateSubscription = async (_id, subscription ) => {
     return user;
 };
 
-const updateAvatar = async (_id, avatarURL ) => {
-    const user = await User.findByIdAndUpdate(_id, { avatarURL });
-    user.avatarURL = avatarURL;
-    return user;
+const updateAvatar = async (_id, temporaryName, originalname) => {
+    console.log("temporaryName", temporaryName);
+    const avatarsDir = path.resolve('./public/avatars');
+    const [, extension] = originalname.split('.');
+    const avatarName = `${_id}.${extension}`;
+
+    try {
+        const avatar = await Jimp.read(temporaryName);
+        avatar.resize(250, 250);
+
+        const avatarPath = path.join(avatarsDir, avatarName);
+        console.log("avatarPath", avatarPath);
+        await fs.rename(temporaryName, avatarPath);
+        const avatarURL = path.join("avatars", avatarName);
+        await User.findByIdAndUpdate(_id, { avatarURL });
+        return avatarURL;
+    } catch (err) {
+        await fs.unlink(temporaryName);
+        throw new Error(err.message);
+    }
 };
 
 module.exports = {

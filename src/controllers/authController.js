@@ -3,7 +3,7 @@ const {
     login,
     logout,
     updateSubscription,
-    // updateAvatar,
+    updateAvatar,
 } = require('../services/authService')
 
 const ctrlSignup = async (req, res) => { 
@@ -46,12 +46,12 @@ const ctrlChangeSubscription = async (req, res) => {
 };
 
 const ctrlChangeAvatar = async (req, res) => { 
-    // const { _id } = req.user;
-    // const { avatarURL } = req.body;
+    const { _id } = req.user;
+    const { path: temporaryName, originalname } = req.file;
+    
+    const avatarURL = await updateAvatar(_id, temporaryName, originalname);
 
-    // const user = await updateAvatar(_id, avatarURL);
-
-    res.status(200).json({status:'success'});
+    res.status(200).json({avatarURL});
 };
 
 module.exports = {
