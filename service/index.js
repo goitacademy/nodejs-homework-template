@@ -1,8 +1,6 @@
 const Contacts = require('./schemas/contacts');
 
-const listContacts = async () => {
-  return await Contacts.find();
-};
+const listContacts = async () => await Contacts.find();
 
 const getContactById = id => Contacts.findOne({ _id: id });
 

@@ -1,24 +1,5 @@
 const service = require('../service');
-const Joi = require('joi');
-
-const custom = Joi.defaults(() =>
-  Joi.object({
-    name: Joi.string().pattern(
-      /^([A-Z]+'?[a-z]+|[A-Z][a-z]+'?[a-z]+) ([A-Z]+'?[a-z]+|[A-Z][a-z]+'?[a-z]+)$/
-    ),
-    email: Joi.string().email(),
-    phone: Joi.string().pattern(
-      /^([+][0-9]{0,4})?[\s]?([(][0-9]{1,3}[)])?[\s]?[0-9]{2,3}[-\s]?[0-9]{2,3}[-\s]?[0-9]{2,4}$/
-    ),
-    favorite: Joi.boolean(),
-  })
-);
-
-const schema = custom.object().or('name', 'email', 'phone');
-const schemaRequired = custom
-  .object()
-  .options({ presence: 'required' })
-  .required();
+const JoiSchema = require('./Joi/schema');
 
 const get = async (req, res, next) => {
   try {
@@ -35,8 +16,8 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  const { contactId } = req.params;
   try {
+    const { contactId } = req.params;
     const contact = await service.getContactById(contactId);
     if (contact) {
       res.json({
@@ -57,16 +38,21 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { name, email, phone, favorite } = await req.body;
-  const check = schemaRequired.validate({ name, email, phone, favorite });
-  if (check.error) {
-    res.status(400).json({
-      message: check.error.details[0].message,
-      code: 400,
-    });
-    return;
-  }
   try {
+    const { name, email, phone, favorite } = await req.body;
+    const check = JoiSchema.allRequired.validate({
+      name,
+      email,
+      phone,
+      favorite,
+    });
+    if (check.error) {
+      res.status(400).json({
+        message: check.error.details[0].message,
+        code: 400,
+      });
+      return;
+    }
     const contact = await service.addContact({ name, email, phone, favorite });
     res.json({
       status: 'success',
@@ -80,8 +66,8 @@ const create = async (req, res, next) => {
 };
 
 const removeById = async (req, res, next) => {
-  const { contactId } = req.params;
   try {
+    const { contactId } = req.params;
     const isDelete = await service.removeContact(contactId);
     if (isDelete) {
       res.json({
@@ -101,26 +87,31 @@ const removeById = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const { contactId } = req.params;
-  const { name, email, phone, favorite } = req.body;
-  const check = schema.validate({ name, email, phone, favorite });
-  if (check.error) {
-    res.status(400).json({
-      message: check.error.details[0].message,
-      code: 400,
-    });
-    return;
-  }
   try {
-    const isExist = await service.updateContact(
+    const { contactId } = req.params;
+    const { name, email, phone, favorite } = req.body;
+    const check = JoiSchema.atLeastOne.validate({
+      name,
+      email,
+      phone,
+      favorite,
+    });
+    if (check.error) {
+      res.status(400).json({
+        message: check.error.details[0].message,
+        code: 400,
+      });
+      return;
+    }
+    const contact = await service.updateContact(
       contactId,
       JSON.parse(JSON.stringify(check.value))
     );
-    if (isExist) {
+    if (contact) {
       res.json({
         status: 'success',
         code: 200,
-        data: { ...isExist },
+        data: { contact },
       });
       return;
     }
