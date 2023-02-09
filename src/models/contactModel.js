@@ -1,7 +1,4 @@
-const { default: mongoose } = require("mongoose");
-
-const Schema = mongoose.Schema;
-// const OjectId = Schema.ObjectId;
+const { Schema, model,  mongoose } = require ("mongoose");
 
 const Contact = new Schema({
   name: {
