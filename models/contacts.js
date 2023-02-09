@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+const { v4 } = require("uuid");
 
 const contactsPath = require("./contactsPatch");
 
@@ -21,7 +22,17 @@ const getContactById = async (id) => {
 
 const removeContact = async (id) => {};
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  const contacts = await listContacts();
+  const newContact = { id: v4(), ...body };
+  const newContacts = [...contacts, newContact];
+  await fs.writeFile(
+    contactsPath,
+    JSON.stringify(newContacts, null, 2),
+    "utf8"
+  );
+  return newContact;
+};
 
 const updateContact = async (id, body) => {};
 

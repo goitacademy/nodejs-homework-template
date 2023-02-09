@@ -31,11 +31,11 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const result = await contactsOperations.addContact(reg.body);
+    const contact = await contactsOperations.addContact(req.body);
     res.status(201).json({
-      status: "succes",
+      status: "success",
       code: 201,
-      data: { result },
+      data: { contact },
     });
   } catch (error) {
     next(error);
