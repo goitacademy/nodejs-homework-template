@@ -54,8 +54,29 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// router.delete("/:id", async (req, res, next) => {
-// });
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const contact = await contactsOperations.removeContact(req.params.id);
+    if (contact) {
+      return res.json({
+        status: "Success",
+        code: 200,
+        message: "Contact deleted",
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: "Error",
+        code: 404,
+        message: "Not Found",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.put("/:id", async (req, res, next) => {
   try {
@@ -66,6 +87,9 @@ router.put("/:id", async (req, res, next) => {
     }
     const { id } = req.params;
     const contact = await contactsOperations.updateContact(id, req.body);
+    if (!result) {
+      throw createError(404, `Contact id ${id} not found`);
+    }
     res.status(201).json({
       status: "success",
       code: 200,

@@ -22,14 +22,17 @@ const getContactById = async (id) => {
 
 const removeContact = async (id) => {
   const contacts = await listContacts();
-  const idx = contacts.findIndex((contact) => contact.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  const [removeContact] = contacts.splice(idx, 1);
-  await updateContacts(contacts);
-  console.table(contacts);
-  return "Success remove";
+  const contact = contacts.find((contact) => String(contact.id) === String(id));
+  if (!contact) return;
+  const newContacts = contacts.filter(
+    (contact) => String(contact.id) === String(id)
+  );
+  await fs.writeFile(
+    contactsPath,
+    JSON.stringify(newContacts, null, 2),
+    "utf8"
+  );
+  return contact;
 };
 
 const addContact = async (body) => {
