@@ -40,9 +40,8 @@ const controllerGetContactById = async (req, res, next) => {
 };
 
 const controllerPostContact = async (req, res, next) => {
-  const { body } = req;
   try {
-    const contact = await addContact(body);
+    const contact = await addContact(req.body);
     res.json({
       status: 'success',
       code: 201,
