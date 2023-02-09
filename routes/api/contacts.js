@@ -24,6 +24,7 @@ router.get("/:contactId", async (req, res, next) => {
     const data = await getContactById(contactId);
     if (!data) {
       res.status(404).json({ message: "Not found" });
+      return;
     }
     res.json(data);
   } catch (error) {
@@ -36,6 +37,7 @@ router.post("/", async (req, res, next) => {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
       res.status(400).json({ message: "missing required name field" });
+      return;
     }
     const body = { name, email, phone };
     const data = await addContact(body);
@@ -51,6 +53,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const data = await removeContact(contactId);
     if (!data) {
       res.status(404).json({ message: "Not found" });
+      return;
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
@@ -64,11 +67,13 @@ router.put("/:contactId", async (req, res, next) => {
     const {name, email, phone } = req.body;
     if (!name || !email || !phone) {
       res.status(400).json({ message: "missing fields" });
+      return;
     }
     const body = {name, email, phone };
     const data = await updateContact(contactId, body);
     if (!data) {
       res.status(404).json({ message: "Not found" });
+      return;
     }
     res.status(200).json(data);
   } catch (error) {
