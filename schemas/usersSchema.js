@@ -6,14 +6,14 @@ const custom = Joi.defaults(() =>
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     ),
     email: Joi.string().email(),
-    subscription: Joi.array().items(
-      Joi.string().valid('starter', 'pro', 'business')
-    ),
+    subscription: Joi.string().valid('starter', 'pro', 'business'),
     token: Joi.string().token(),
   })
 );
 
-const atLeastOne = custom.object().or('name', 'email', 'phone', 'favorite');
+const atLeastOne = custom
+  .object()
+  .or('password', 'email', 'subscription', 'token');
 const allRequired = custom
   .object()
   .options({ presence: 'required' })

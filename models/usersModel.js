@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const contacts = new Schema(
+const users = new Schema(
   {
     password: {
       type: String,
@@ -26,12 +26,12 @@ const contacts = new Schema(
     versionKey: false,
     timestamps: true,
     owner: {
-      type: SchemaTypes.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
     },
   }
 );
 
-const Contacts = mongoose.model('contacts', contacts);
+const Users = mongoose.model('users', users);
 
-module.exports = Contacts;
+module.exports = Users;
