@@ -12,7 +12,7 @@ const { v4 } = require('uuid');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const { SECRET_KEY} = process.env;
+const { SECRET_KEY, PORT} = process.env;
 
 async function register(req, res, next) {
   const { email, password } = req.body;
@@ -33,7 +33,7 @@ async function register(req, res, next) {
     await sendMail({
       to: email,
       subject: "please confirm your email",
-      html: `<a href="localhost:3001/api/users/verify/${verifyToken}">confirm your email</a>`,
+      html: `<a href="localhost:${PORT}/api/users/verify/${verifyToken}">confirm your email</a>`,
     });
 
     res.status(201).json({
