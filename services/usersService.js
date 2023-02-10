@@ -8,6 +8,15 @@ const addUser = ({ password, email, subscription, token }) => {
   }
 };
 
+const getUser = ({ password, email }) => {
+  try {
+    return Users.findOne({ password, email });
+  } catch (err) {
+    return false;
+  }
+};
+
 module.exports = {
   addUser,
+  getUser,
 };
