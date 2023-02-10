@@ -1,8 +1,8 @@
 const ReqError = require("../help/ReqError");
 
 const validate = (schema) => {
-  return (req, _, next) => {
-    const { error } = schema.validate(req.body);
+  return (request, response, next) => {
+    const { error } = schema.validate(request.body);
 
     if (error) {
       const { message } = error.details[0];

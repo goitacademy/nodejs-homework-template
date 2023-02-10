@@ -10,7 +10,9 @@ const {  getAllContacts,
 } = require("../../controllers/contacts")
 const { validate } = require("../../middlewears/validate");
 const { nySchema, statusSchema } = require("../../models/contacts");
+const auth = require("../../middlewears/authMiddl")
 
+router.use(auth)
 
 router.get('/', ctrlWrapper(getAllContacts))
 
