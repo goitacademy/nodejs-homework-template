@@ -34,8 +34,9 @@ const register = async (req, res, next) => {
       res.status(201).json({
         Status: '201 Created',
         'Content-Type': 'application/json',
-        ResponseBody: {},
+        ResponseBody: { user },
       });
+      return;
     }
     res.status(409).json({
       Status: '409 Conflict',
