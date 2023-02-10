@@ -23,15 +23,18 @@ const removeContact = async (contactId) => {
   await fs.writeFile(contactsPath, JSON.stringify(contact));
 };
 
-const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  contacts.push({
+const addContact = async ({ name, email, phone }) => {
+  const newContact = {
     id: shortid.generate(),
     name,
     email,
     phone,
-  });
-  res.status(201).json({ message: "success" });
+  };
+
+  const contacts = await listContacts();
+  contacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return newContact;
 };
 
 const updateContact = async (req, res, next) => {

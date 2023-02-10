@@ -33,7 +33,14 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", addValidation, addContact);
+router.post("/", addValidation, async (req, res, next) => {
+  try {
+    const contact = await addContact(req.body);
+    res.status(201).json({ contact, message: "success" });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
