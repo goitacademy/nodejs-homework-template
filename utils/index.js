@@ -1,3 +1,3 @@
-const controlWrapper = require("./controlWrapper");
+const controlWrapper = require("./ctrlWrapper");
 
 module.exports = { controlWrapper };

@@ -1,7 +1,7 @@
-const controlWrapper = (control) => {
+const ctrlWrapper = (ctrl) => {
 	const func = async (req, res, next) => {
 		try {
-			await control(req, res, next);
+			await ctrl(req, res, next);
 		} catch (error) {
 			next(error);
 		}
@@ -10,4 +10,4 @@ const controlWrapper = (control) => {
 	return func;
 };
 
-module.exports = controlWrapper;
+module.exports = ctrlWrapper;
