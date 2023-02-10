@@ -8,9 +8,9 @@ const addUser = ({ password, email, subscription, token }) => {
   }
 };
 
-const getUser = ({ password, email }) => {
+const getUser = ({ email }) => {
   try {
-    return Users.findOne({ password, email });
+    return Users.findOne({ email });
   } catch (err) {
     return false;
   }

@@ -1,5 +1,6 @@
 const usersService = require('../services/usersService');
 const JoiSchema = require('../schemas/usersSchema');
+const bcrypt = require('bcrypt');
 
 const register = async (req, res, next) => {
   try {
@@ -24,26 +25,37 @@ const register = async (req, res, next) => {
       });
       return;
     }
+    const isExist = await usersService.getUser({ email });
+    if (isExist) {
+      res.status(409).json({
+        Status: '409 Conflict',
+        'Content-Type': 'application/json',
+        ResponseBody: {
+          message: 'Email in use',
+        },
+      });
+      return;
+    }
+    const hash = await bcrypt.hash(password, 10);
     const user = await usersService.addUser({
-      password,
+      password: hash,
       email,
       subscription,
       token,
     });
-    if (user) {
-      res.status(201).json({
-        Status: '201 Created',
+    if (!user) {
+      res.status(409).json({
+        Status: '409 Conflict',
         'Content-Type': 'application/json',
-        ResponseBody: { user },
+        ResponseBody: {
+          message: "Can't create user",
+        },
       });
-      return;
     }
-    res.status(409).json({
-      Status: '409 Conflict',
+    res.status(201).json({
+      Status: '201 Created',
       'Content-Type': 'application/json',
-      ResponseBody: {
-        message: 'Email in use',
-      },
+      ResponseBody: { user },
     });
   } catch (err) {
     console.error(err);
@@ -51,7 +63,7 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, net) => {
+const login = async (req, res, next) => {
   try {
     let { password, email, subscription, token } = await req.body;
     subscription = 'starter';
@@ -70,7 +82,6 @@ const login = async (req, res, net) => {
       return;
     }
     const user = await usersService.getUser({
-      password,
       email,
     });
     if (!user) {
@@ -83,15 +94,26 @@ const login = async (req, res, net) => {
       });
       return;
     }
-    res.status(200).json({
-      Status: '200 OK',
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      res.status(200).json({
+        Status: '200 OK',
+        'Content-Type': 'application/json',
+        ResponseBody: {
+          token: 'to-do',
+          user: {
+            email,
+            subscription,
+          },
+        },
+      });
+      return;
+    }
+    res.status(401).json({
+      Status: '401 Unauthorized',
       'Content-Type': 'application/json',
       ResponseBody: {
-        token: 'to-do',
-        user: {
-          email,
-          subscription,
-        },
+        message: 'Email or password is wrong',
       },
     });
   } catch (err) {
