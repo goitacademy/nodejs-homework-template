@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { validation, auth, asyncWrapper } = require("../../middlewares");
+const { validation, auth, asyncWrapper, upload } = require("../../middlewares");
 const {
   joiRegisterSchema,
   joiLoginSchema,
@@ -9,6 +9,13 @@ const {
 } = require("../../models");
 
 const { auth: ctrl } = require("../../controllers");
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  asyncWrapper(ctrl.updateAvatar)
+);
 
 router.post(
   "/signup",
