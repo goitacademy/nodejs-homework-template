@@ -3,19 +3,22 @@ const express = require('express');
 const {
   schemaAddContact,
   schemaUpdateContact,
+  schemaUpdateFavorite,
 } = require('../../schemas/contacts');
-const { validateContact } = require('../../middlewares/validateContact');
+const {
+  validateContact,
+  validateFavorite,
+} = require('../../middlewares/validateContact');
 const {
   controllerGetContacts,
   controllerGetContactById,
   controllerPostContact,
   controllerDeleteContact,
   controllerPutContact,
+  controllerPatchFavorite,
 } = require('../../controllers/controllers');
 
-
 const router = express.Router();
-
 
 router.get('/contacts', controllerGetContacts);
 router.get('/contacts/:contactId', controllerGetContactById);
@@ -29,6 +32,11 @@ router.put(
   '/contacts/:contactId',
   validateContact(schemaUpdateContact),
   controllerPutContact
+);
+router.patch(
+  '/contacts/:contactId/favorite',
+  validateFavorite(schemaUpdateFavorite),
+  controllerPatchFavorite
 );
 
 module.exports = router;

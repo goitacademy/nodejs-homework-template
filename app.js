@@ -12,9 +12,10 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", contactsRouter);
+app.use('/api', contactsRouter);
 
 app.use((req, res) => {
+  console.log('Ошибка пришла в app.js');
   res.status(404).json({ message: 'Not found' });
 });
 

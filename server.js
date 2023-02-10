@@ -1,5 +1,17 @@
-const app = require('./app')
+const app = require('./app');
+require('dotenv').config();
+const { mongoConnect } = require('./services/mongoConnect');
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const start = async () => {
+  try {
+    await mongoConnect();
+    app.listen(3000, () => {
+      console.log('Database connection successful');
+    });
+  } catch (err) {
+    console.log(`Error message: ${err.message}`);
+    process.exit(1);
+  }
+};
+
+start();
