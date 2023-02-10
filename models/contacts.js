@@ -21,18 +21,16 @@ const getContactById = async (contactId) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId.toString());
-  if (index === -1) {
-    return null;
-  }
-  const updatedContacts = contacts.map((contact, idx) => {
-    if (index === idx) {
+  let changedContact = null
+  const updatedContacts = contacts.map((contact, index) => {
+    if (contactId === index) {
+      changedContact = contact
       return { ...contact, ...body };
-    }
+    } 
     return contact;
   });
   await updateContacts(updatedContacts);
-  return contacts[index];
+  return changedContact;
 };
 
 const removeContact = async (contactId) => {
