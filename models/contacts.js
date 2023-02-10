@@ -50,7 +50,7 @@ async function addContact(body) {
       ...body,
     };
     contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, "\t"));
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return newContact;
   } catch (error) {
     console.log(error.message);
