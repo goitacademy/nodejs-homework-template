@@ -6,10 +6,11 @@ const {
   createContact,
   removedContact,
   createPutContact,
+  createStatusContact,
 } = require("../../controllers/contacts.controllers");
 
 const { validate } = require("../../middlewares/index");
-const { addContactSchema } = require("../../schemas/contacts");
+const { addContactSchema, favoriteSchema } = require("../../schemas/contacts");
 
 const router = express.Router();
 
@@ -25,6 +26,12 @@ router.put(
   "/:contactId",
   validate(addContactSchema),
   tryCatchWrapper(createPutContact)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validate(favoriteSchema),
+  tryCatchWrapper(createStatusContact)
 );
 
 module.exports = router;
