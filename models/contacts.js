@@ -1,32 +1,26 @@
-// const fs = require('fs/promises')
+const fs = require("fs").promises;
+const path = require("path");
 const shortid = require("shortid");
 
-let contacts = require("./contacts.json");
+const contactsPath = path.resolve("./models/contacts.json");
 
-const listContacts = async (req, res, next) => {
-  res.status(200).json({ contacts, message: "success" });
+const contacts = require("./contacts.json");
+
+const listContacts = async () => {
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
 };
 
-const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
   const [contact] = contacts.filter((item) => item.id === contactId);
-
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  res.json({ contact, message: "success" });
+  return contact;
 };
 
-const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const [contact] = contacts.filter((item) => item.id === contactId);
-
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  contacts = contacts.filter((item) => item.id !== req.params.contactId);
-
-  res.status(200).json({ message: "contact deleted" });
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.filter((item) => item.id !== contactId);
+  await fs.writeFile(contactsPath, JSON.stringify(contact));
 };
 
 const addContact = async (req, res, next) => {
