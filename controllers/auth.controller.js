@@ -3,7 +3,7 @@ const { HttpError } = require("../utils/helpers/httpError");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-async function register(req, res, next) {
+async function signup(req, res, next) {
   const { email, password } = req.body;
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -52,7 +52,20 @@ async function login(req, res, next) {
   });
 }
 
+async function logout(req, res, next) {
+  const { _id } = req.user;
+
+  const user = await User.findById(_id);
+
+  if (!user || !user.token) return next(new HttpError(401, "Not authorized"));
+
+  await User.findByIdAndUpdate(_id, { $set: { token: null } });
+
+  res.status(204).json();
+}
+
 module.exports = {
-  register,
+  signup,
   login,
+  logout,
 };

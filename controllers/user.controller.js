@@ -12,6 +12,15 @@ async function current(req, res, next) {
   });
 }
 
+async function getContact(req, res, next) {
+  const { user } = req;
+  const { contacts } = user;
+
+  return res.status(200).json({
+    data: [contacts],
+  });
+}
+
 module.exports = {
   current,
 };
