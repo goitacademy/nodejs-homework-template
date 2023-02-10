@@ -1,5 +1,4 @@
 import joi from "joi";
-// const joi = require("joi");
 
 const contactSchema = joi.object({
   name: joi.string().min(3),
@@ -12,5 +11,3 @@ const validator = (schema) => (body) => {
 };
 
 export const contactValidator = validator(contactSchema);
-
-// module.exports = { contactValidator };
