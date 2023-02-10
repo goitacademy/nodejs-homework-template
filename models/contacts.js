@@ -4,8 +4,6 @@ const shortid = require("shortid");
 
 const contactsPath = path.resolve("./models/contacts.json");
 
-const contacts = require("./contacts.json");
-
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, "utf-8");
   return JSON.parse(data);
@@ -37,26 +35,16 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+const updateContact = async (contactId, { name, email, phone }) => {
+  const contacts = await listContacts();
+  const contact = contacts.find((contact) => contact.id === contactId);
+  contact.name = name;
+  contact.email = email;
+  contact.phone = phone;
 
-  const { contactId } = req.params;
-
-  const [contact] = contacts.filter((item) => item.id === contactId);
-
-  if (!contact) {
-    return res.status(400).json({ message: "Not found" });
-  }
-
-  contacts.forEach((contact) => {
-    if (contact.id === req.params.contactId) contact.name = name;
-    contact.email = email;
-    contact.phone = phone;
-  });
-
-  res.status(200).json({ message: "success" });
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return contact;
 };
-
 module.exports = {
   listContacts,
   getContactById,
