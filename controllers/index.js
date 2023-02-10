@@ -1,17 +1,5 @@
-const {
-  getContacts,
-  getContactByIdController,
-  postContact,
-  putContact,
-  patchContact,
-  deleteContact,
-} = require("./contacts/index");
+const contacts = require('./contacts');
 
 module.exports = {
-  getContacts,
-  getContactByIdController,
-  postContact,
-  deleteContact,
-  putContact,
-  patchContact,
+  contacts,
 };

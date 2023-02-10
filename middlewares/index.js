@@ -1,7 +1,11 @@
-const {
-  postContactValidation,
-  putValidation,
-  patchValidation,
-} = require("./validation");
+const validation = require('./validation');
+const ctrlWrapper = require('./ctrlWrapper');
+const handleErrors = require('./validationErrors');
+const isValidId = require('./isValidId');
 
-module.exports = { postContactValidation, putValidation, patchValidation };
+module.exports = {
+  validation,
+  ctrlWrapper,
+  handleErrors,
+  isValidId,
+};

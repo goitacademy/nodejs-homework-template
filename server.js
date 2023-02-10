@@ -1,20 +1,22 @@
-const app = require("./app");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+const mongoose = require('mongoose');
 
-dotenv.config();
-const PORT = 3000;
-mongoose.set("strictQuery", false);
+const app = require('./app');
+
+
+
+// const DB_HOST = "mongodb+srv://yevdokymenkodn:170287@cluster0.bf09pl4.mongodb.net/db-contacts?retryWrites=true&w=majority"
+
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set('strictQuery', true);
+
 mongoose
-  .connect(process.env.DB_HOST, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect("mongodb+srv://yevdokymenkodn:170287@cluster0.bf09pl4.mongodb.net/db-contacts?retryWrites=true&w=majority")
   .then(() => {
     app.listen(PORT);
-    console.log("Database connection successful");
+    console.log('Database connection successful');
   })
-  .catch((error) => {
-    console.error(error.message);
+  .catch(error => {
+    console.log(error.message);
     process.exit(1);
   });

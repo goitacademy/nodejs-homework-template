@@ -1,17 +1,7 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateContactElement,
-} = require("./contactsModels");
+const { Contact, joiSchema, favoriteJoiSchema } = require('./contact');
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateContactElement,
+  Contact,
+  joiSchema,
+  favoriteJoiSchema,
 };
