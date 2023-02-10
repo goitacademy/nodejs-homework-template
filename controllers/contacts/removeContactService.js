@@ -1,6 +1,6 @@
 const {removeContact} = require("../../services/index");
     
-const HttpError = require("../../helpers/HttpError.js");
+const HttpError = require("../../helpers/HttpError");
 
 async function removeContactService(req, res, next) {
     const { contactId } = req.params;

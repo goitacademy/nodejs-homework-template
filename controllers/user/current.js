@@ -6,7 +6,8 @@ async function current(req, res, next) {
   
     const user = await User.findById(_id);
   
-    if (!user || !user.token) return next(new HttpError(401, "Not authorized"));
+    if (!user || !user.token) 
+    return next(new HttpError(401, "Not authorized"));
   
     res.json({
       email: user.email,

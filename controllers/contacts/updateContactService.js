@@ -1,6 +1,6 @@
-const {removeContact} = require("../../services/index");
+const {updateContact} = require("../../services/index");
     
-const HttpError = require("../../helpers/HttpError.js");
+const HttpError = require("../../helpers/HttpError");
 
 async function updateContactService(req, res, next) {
     if (!Object.keys(req.body).length) {

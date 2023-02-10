@@ -1,6 +1,6 @@
 const {getContactById} = require("../../services/index");
     
-const HttpError = require("../../helpers/HttpError.js");
+const HttpError = require("../../helpers/HttpError");
 
 async function getContactService(req, res, next) {
     const { contactId } = req.params;

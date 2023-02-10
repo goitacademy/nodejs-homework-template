@@ -7,7 +7,7 @@ const JWT_SECRET = process.env;
 const HttpError = require("../../helpers/HttpError");
 
 async function login(req, res, next) {
-    const { password, email } = req.body;
+    const { email, password } = req.body;
 
     const isUserValid = await findUser({
         email,
@@ -25,9 +25,7 @@ async function login(req, res, next) {
 
     const payload = { id: isUserValid._id };
 
-    const token = jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "3h",
-    });
+    const token = jwt.sign(payload, JWT_SECRET);
     
     const updatedUser = await findAndUpdate(
         isUserValid._id,

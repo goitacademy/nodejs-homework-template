@@ -16,4 +16,4 @@ authRouter.post(
 
 authRouter.post("/login", validateBody(findUserSchema), tryCatchWrapper(login));
 
-module.exports = { authRouter, };
+module.exports = { authRouter };

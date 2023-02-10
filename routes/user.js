@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { tryCatchWrapper } = require('../helpers/index.js');
+const { tryCatchWrapper } = require('../helpers/index');
 
 const {
     current,

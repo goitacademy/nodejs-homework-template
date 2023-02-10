@@ -6,7 +6,8 @@ async function logout(req, res, next) {
   
     const user = await User.findById(_id);
   
-    if (!user || !user.token) return next(new HttpError(401, "Not authorized"));
+    if (!user || !user.token) 
+    return next(new HttpError(401, "Not authorized"));
   
     await User.findByIdAndUpdate(_id, { $set: { token: null } });
   

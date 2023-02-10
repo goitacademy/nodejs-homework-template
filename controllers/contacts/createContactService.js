@@ -1,12 +1,12 @@
 const {addContact} = require("../../services/index");
     
-const HttpError = require("../../helpers/HttpError.js");
+const HttpError = require("../../helpers/HttpError");
 
 async function createContactService(req, res, next) {
-    const { name, email, phone, favorite } = req.body;
+    const { name, email, phone, favorite, owner, } = req.body;
   
     try {
-      const newContact = await addContact({name, email, phone, favorite});
+      const newContact = await addContact({name, email, phone, favorite, owner});
       return res.status(201).json(newContact);
     } catch (error) {
       return next(new HttpError(400, "Missing fields"));

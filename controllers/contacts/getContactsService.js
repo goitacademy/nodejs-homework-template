@@ -1,6 +1,6 @@
 const {listContacts} = require("../../services/index");
     
-const HttpError = require("../../helpers/HttpError.js");
+const HttpError = require("../../helpers/HttpError");
 
 async function getContactsService(req, res, next) {
     try {

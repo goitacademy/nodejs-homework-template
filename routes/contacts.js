@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { tryCatchWrapper } = require('../helpers/index.js');
+const { tryCatchWrapper } = require('../helpers/index');
 const {
   updateContactService,
   removeContactService,
@@ -8,13 +8,13 @@ const {
   getContactService,
   getContactsService,
   updateStatusContactService,
-} = require("../controllers/index.js");
+} = require("../controllers/index");
 const {
   validateBody,
   addContactSchema,
   updateContactSchema,
   updateStatusContactSchema,
-} = require("../middlewares/index.js");
+} = require("../middlewares/index");
 
 const contactsRouter = express.Router();
 
