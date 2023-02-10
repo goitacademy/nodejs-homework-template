@@ -8,13 +8,20 @@ const schema = mongoose.Schema(
     },
     email: {
       type: String,
+      unique: true,
     },
     phone: {
       type: String,
+      unique: true,
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'user',
+      required: true,
     },
   }
 );

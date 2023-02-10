@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { tryCatchWrapper } = require('../helpers/index.js');
+const { tryCatchWrapper } = require('../helpers/index');
 const {
   updateContactService,
   removeContactService,
@@ -8,38 +8,38 @@ const {
   getContactService,
   getContactsService,
   updateStatusContactService,
-} = require("../controllers/contacts.controllers");
-const { validateBody } = require("../middlewares/index");
+} = require("../controllers/index");
 const {
+  validateBody,
   addContactSchema,
   updateContactSchema,
   updateStatusContactSchema,
-} = require("../middlewares/schemas");
+} = require("../middlewares/index");
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get("/", tryCatchWrapper(getContactsService));
+contactsRouter.get("/", tryCatchWrapper(getContactsService));
 
-router.get("/:contactId", tryCatchWrapper(getContactService));
+contactsRouter.get("/:contactId", tryCatchWrapper(getContactService));
 
-router.post(
+contactsRouter.post(
   "/",
   validateBody(addContactSchema),
   tryCatchWrapper(createContactService)
 );
 
-router.delete("/:contactId", tryCatchWrapper(removeContactService));
+contactsRouter.delete("/:contactId", tryCatchWrapper(removeContactService));
 
-router.put(
+contactsRouter.put(
   "/:contactId",
   validateBody(updateContactSchema),
   tryCatchWrapper(updateContactService)
 );
 
-router.patch(
+contactsRouter.patch(
   "/:contactId/favorite",
   validateBody(updateStatusContactSchema),
   tryCatchWrapper(updateStatusContactService)
 );
 
-module.exports = router
+module.exports = { contactsRouter, };
