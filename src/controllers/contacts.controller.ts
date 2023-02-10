@@ -1,16 +1,17 @@
-const contactsApi = require('../models/contacts');
-const crypto = require('crypto');
+import * as contactsApi from '../models/contacts';
+import crypto from 'crypto';
+import { Request, Response } from 'express';
 
-const getContacts = async (_, res) => {
+export const getContacts = async (_: Request, res: Response) => {
   try {
     const contacts = await contactsApi.listContacts();
     res.status(200).json({ contacts });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
-const getContactById = async (req, res) => {
+export const getContactById = async (req: Request, res: Response) => {
   try {
     const { contactId } = req.params;
     const contact = await contactsApi.getContactById(contactId);
@@ -21,11 +22,11 @@ const getContactById = async (req, res) => {
       res.status(404).json({ message: 'Not found' });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
-const addContact = async (req, res) => {
+export const addContact = async (req: Request, res: Response) => {
   try {
     const newContact = await contactsApi.addContact({ id: crypto.randomUUID(), ...req.body });
 
@@ -35,11 +36,11 @@ const addContact = async (req, res) => {
       res.status(404).json({ message: 'Not found' });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
-const deleteContactById = async (req, res) => {
+export const deleteContactById = async (req: Request, res: Response) => {
   try {
     const { contactId } = req.params;
     const removedContact = await contactsApi.removeContact(contactId);
@@ -50,11 +51,11 @@ const deleteContactById = async (req, res) => {
       res.status(404).json({ message: `Contact not found.` });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
-const updateContactById = async (req, res) => {
+export const updateContactById = async (req: Request, res: Response) => {
   try {
     const { contactId } = req.params;
     const updatedContact = await contactsApi.updateContact(contactId, req.body);
@@ -65,8 +66,6 @@ const updateContactById = async (req, res) => {
       res.status(404).json({ message: `Contact not found.` });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
-
-module.exports = { getContacts, getContactById, addContact, deleteContactById, updateContactById };

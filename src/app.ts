@@ -1,8 +1,7 @@
-const express = require('express');
-const logger = require('morgan');
-const cors = require('cors');
-
-const contactsRouter = require('./routes/api/contacts');
+import express, { NextFunction, Request, Response } from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+import contactsRouter from './routes/api/contacts';
 
 const app = express();
 
@@ -14,12 +13,12 @@ app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
 
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, req, res, next) => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ message: err.message });
 });
 
-module.exports = app;
+export default app;

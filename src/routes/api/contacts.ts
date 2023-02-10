@@ -1,17 +1,16 @@
-const express = require('express');
-
-const {
+import express from 'express';
+import {
   getContactByIdValidation,
   addContactValidation,
   updateContactValidation,
-} = require('../../middlewares/contacts.validation.middleware');
-const {
+} from '../../middlewares/contacts.validation.middleware';
+import {
   getContacts,
   getContactById,
   addContact,
   deleteContactById,
   updateContactById,
-} = require('../../controllers/contacts.controller');
+} from '../../controllers/contacts.controller';
 
 const router = express.Router();
 
@@ -21,4 +20,4 @@ router.post('/', addContactValidation, addContact);
 router.delete('/:contactId', getContactByIdValidation, deleteContactById);
 router.put('/:contactId', [getContactByIdValidation, updateContactValidation], updateContactById);
 
-module.exports = router;
+export default router;
