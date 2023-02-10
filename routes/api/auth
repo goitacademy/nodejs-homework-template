@@ -1,0 +1,9 @@
+// const express = require("express");
+
+// const { validation, ctrlWrapper } = require("../../middlewares");
+// const { auth: ctrl } = require("../../controllers");
+
+// const router = express.Router();
+
+// router.post("/register", ctrl.register);
+// module.exports = router;
