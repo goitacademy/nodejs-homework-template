@@ -6,6 +6,7 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts");
+const { addValidation } = require("../../middlevares");
 
 const router = express.Router();
 
@@ -40,7 +41,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", addValidation, async (req, res, next) => {
   try {
     const newContact = await addContact(req.body);
     res.json({
@@ -70,7 +71,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", addValidation, async (req, res, next) => {
   try {
     const updatedContact = await updateContact(req.params.contactId, req.body);
 
