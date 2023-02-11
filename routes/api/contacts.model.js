@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+require("dotenv").config();
 
 const contactSchema = new Schema({
   name: {
@@ -22,7 +23,7 @@ let contactModel = {};
 async function main() {
   try {
     await mongoose.connect(
-      "mongodb+srv://and_mar:kk@cluster0.8cpylgv.mongodb.net/?retryWrites=true&w=majority"
+      `mongodb+srv://and_mar:${process.env.MONGO_DB_PASSWORD}@cluster0.8cpylgv.mongodb.net/?retryWrites=true&w=majority`
     );
   } catch (error) {
     console.log(error);
