@@ -138,6 +138,7 @@ const logout = async (req, res, next) => {
           message: 'Not authorized',
         },
       });
+      return;
     }
     await userService.updateUserToken({
       _id: user.id,
@@ -152,8 +153,37 @@ const logout = async (req, res, next) => {
   }
 };
 
+const current = async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    const user = await userService.getUserByEmail({ email });
+    if (!user) {
+      res.status(401).json({
+        Status: '401 Unauthorized',
+        'Content-Type': 'application/json',
+        ResponseBody: {
+          message: 'Not authorized',
+        },
+      });
+      return;
+    }
+    res.json({
+      Status: '200 OK',
+      'Content-Type': 'application/json',
+      ResponseBody: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
+  current,
 };
