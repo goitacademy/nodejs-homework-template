@@ -16,7 +16,7 @@ const {
   controllerDeleteContact,
   controllerPutContact,
   controllerPatchFavorite,
-} = require('../../controllers/controllers');
+} = require('../../controllers/contacts');
 
 const router = express.Router();
 
