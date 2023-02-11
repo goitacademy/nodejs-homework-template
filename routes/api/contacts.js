@@ -4,7 +4,7 @@ const {
   schemaAddContact,
   schemaUpdateContact,
   schemaUpdateFavorite,
-} = require('../../schemas/contacts');
+} = require('../../schemas/validateShemaContact');
 const {
   validateContact,
   validateFavorite,
@@ -16,7 +16,7 @@ const {
   controllerDeleteContact,
   controllerPutContact,
   controllerPatchFavorite,
-} = require('../../controllers/controllers');
+} = require('../../controllers/contacts');
 
 const router = express.Router();
 
