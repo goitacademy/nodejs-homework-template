@@ -22,7 +22,7 @@ let contactModel = {};
 async function main() {
   try {
     await mongoose.connect(
-      "mongodb+srv://vitititi:Vo4okidik123@mongodb-test.586p9pl.mongodb.net/test_db?retryWrites=true&w=majority"
+      "mongodb+srv://and_mar:7P2b7xTYaIuAvn8Q@cluster0.8cpylgv.mongodb.net/?retryWrites=true&w=majority"
     );
   } catch (error) {
     console.log(error);
