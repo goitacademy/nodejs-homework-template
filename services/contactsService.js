@@ -1,37 +1,41 @@
 const Contacts = require('../models/contactsModel');
 
-const listContacts = async () => await Contacts.find();
+const listContacts = async userId => await Contacts.find({ owner: userId });
 
-const getContactById = async id => {
+const getContactById = async ({ userId, contactId }) => {
   try {
-    return Contacts.findOne({ _id: id });
+    return Contacts.findOne({ _id: contactId, owner: userId });
   } catch (err) {
     return false;
   }
 };
 
-const addContact = ({ name, email, phone, favorite }) =>
-  Contacts.create({ name, email, phone, favorite });
+const addContact = ({ name, email, phone, favorite, owner }) =>
+  Contacts.create({ name, email, phone, favorite, owner });
 
-const removeContact = id => {
+const removeContact = ({ userId, contactId }) => {
   try {
-    return Contacts.findByIdAndRemove({ _id: id });
+    return Contacts.findOneAndRemove({ _id: contactId, owner: userId });
   } catch (err) {
     return false;
   }
 };
 
-const updateContact = (id, body) => {
+const updateContact = ({ userId, contactId, body }) => {
   try {
-    return Contacts.findByIdAndUpdate({ _id: id }, body, { new: true });
+    return Contacts.findOneAndUpdate({ _id: contactId, owner: userId }, body, {
+      new: true,
+    });
   } catch (err) {
     return false;
   }
 };
 
-const updateStatusContact = (id, body) => {
+const updateStatusContact = ({ userId, contactId, body }) => {
   try {
-    return Contacts.findByIdAndUpdate({ _id: id }, body, { new: true });
+    return Contacts.findOneAndUpdate({ _id: contactId, owner: userId }, body, {
+      new: true,
+    });
   } catch (err) {
     return false;
   }

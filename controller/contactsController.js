@@ -3,7 +3,8 @@ const JoiSchema = require('../schemas/contactsSchema');
 
 const get = async (req, res, next) => {
   try {
-    const contacts = await contactsService.listContacts();
+    const { _id } = req.user;
+    const contacts = await contactsService.listContacts(_id);
     res.json({
       status: 'success',
       code: 200,
@@ -17,8 +18,12 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const contact = await contactsService.getContactById(id);
+    const { _id } = await req.user;
+    const { id } = await req.params;
+    const contact = await contactsService.getContactById({
+      userId: _id,
+      contactId: id,
+    });
     if (contact) {
       res.json({
         status: 'success',
@@ -39,6 +44,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
+    const { _id } = await req.user;
     let { name, email, phone, favorite } = await req.body;
     if (!favorite) {
       favorite = false;
@@ -61,6 +67,7 @@ const create = async (req, res, next) => {
       email,
       phone,
       favorite,
+      owner: _id,
     });
     res.json({
       status: 'success',
@@ -75,8 +82,12 @@ const create = async (req, res, next) => {
 
 const removeById = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
-    const isDelete = await contactsService.removeContact(id);
+    const isDelete = await contactsService.removeContact({
+      userId: _id,
+      contactId: id,
+    });
     if (isDelete) {
       res.json({
         status: 'contact deleted',
@@ -96,6 +107,7 @@ const removeById = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
     const { name, email, phone, favorite } = req.body;
     const isValid = JoiSchema.atLeastOne.validate({
@@ -112,7 +124,11 @@ const update = async (req, res, next) => {
       return;
     }
     const newContact = JSON.parse(JSON.stringify(isValid.value));
-    const contact = await contactsService.updateContact(id, newContact);
+    const contact = await contactsService.updateContact({
+      userId: _id,
+      contactId: id,
+      body: newContact,
+    });
     if (contact) {
       res.json({
         status: 'success',
@@ -133,6 +149,7 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
     const { favorite } = req.body;
     const isValid = JoiSchema.atLeastOne.validate({
@@ -145,10 +162,11 @@ const updateStatus = async (req, res, next) => {
       });
       return;
     }
-    const contact = await contactsService.updateStatusContact(
-      id,
-      JSON.parse(JSON.stringify(isValid.value))
-    );
+    const contact = await contactsService.updateStatusContact({
+      userId: _id,
+      contactId: id,
+      body: JSON.parse(JSON.stringify(isValid.value)),
+    });
     if (contact) {
       res.json({
         status: 'success',
