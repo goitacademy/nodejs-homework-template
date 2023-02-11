@@ -22,11 +22,9 @@ const contactSchema = new Schema({
 let contactModel = {};
 async function main() {
   try {
-    const connection = await mongoose.connect(
+    await mongoose.connect(
       `mongodb+srv://and_mar:${process.env.MONGO_DB_PASSWORD}@cluster0.8cpylgv.mongodb.net/?retryWrites=true&w=majority`
     );
-
-    console.log(connection);
   } catch (error) {
     console.log(error);
     process.exit(1);
