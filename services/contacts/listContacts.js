@@ -1,4 +1,4 @@
-const { Contact } = require('../schemas/contact');
+const { Contact } = require('../../schemas/modelContact');
 
 const listContacts = async () => {
   return await Contact.find();

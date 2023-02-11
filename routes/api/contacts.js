@@ -4,7 +4,7 @@ const {
   schemaAddContact,
   schemaUpdateContact,
   schemaUpdateFavorite,
-} = require('../../schemas/contacts');
+} = require('../../schemas/validateShemaContact');
 const {
   validateContact,
   validateFavorite,
