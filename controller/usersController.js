@@ -181,9 +181,54 @@ const current = async (req, res, next) => {
   }
 };
 
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { _id } = await req.user;
+    const { subscription } = await req.body;
+    const isValid = JoiSchema.atLeastOne.validate({ subscription });
+    console.log(isValid);
+    if (isValid.error) {
+      res.status(400).json({
+        Status: '400 Bad Request',
+        'Content-Type': 'application/json',
+        ResponseBody: { message: isValid.error.details[0].message },
+      });
+      return;
+    }
+    const user = await userService.updateUserSubscription({
+      _id,
+      body: { subscription },
+    });
+    if (!user) {
+      res.status(401).json({
+        Status: '401 Unauthorized',
+        'Content-Type': 'application/json',
+        ResponseBody: {
+          message: 'Not authorized',
+        },
+      });
+      return;
+    }
+    res.status(200).json({
+      Status: '200 OK',
+      'Content-Type': 'application/json',
+      ResponseBody: {
+        user: {
+          emai: user.email,
+          subscription: user.subscription,
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   current,
+  updateSubscription,
 };
