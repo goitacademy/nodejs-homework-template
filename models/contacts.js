@@ -1,110 +1,55 @@
-const fs = require("fs/promises");
-const path = require("path");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const contactsDir = path.join(__dirname, "..", "models", "contacts.json");
+const phoneRegex = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+// const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-const listContacts = async () => {
-  try {
-    const contactsList = await fs.readFile(contactsDir, (err, data) => {
-      if (err) console.log(err);
-      return data;
-    });
-    return JSON.parse(contactsList);
-  } catch (error) {
-    console.log(error);
-  }
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      // match: [emailRegex, "Please fill a valid email address"],
+    },
+    phone: {
+      type: String,
+      // match: phoneRegex,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
+
+contactsSchema.post("save", (error, data, next) => {
+  error.status = 400;
+  next();
+});
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email(),
+  phone: Joi.string().regex(phoneRegex),
+  favorite: Joi.boolean(),
+});
+
+const updateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string().regex(phoneRegex),
+  favorite: Joi.boolean(),
+});
+
+const schemas = {
+  addSchema,
+  updateSchema,
 };
 
-const getContactById = async (contactId) => {
-  try {
-    const contactsList = await fs.readFile(contactsDir, (err, data) => {
-      if (err) console.log(err);
-      return data;
-    });
-    const parsedData = JSON.parse(contactsList);
-    return parsedData.find((contact) => contact.id === contactId);
-  } catch (error) {
-    console.log(error);
-  }
-};
+const Contact = model("Contact", contactsSchema);
 
-const removeContact = async (contactId) => {
-  let matchedContact = false;
-  try {
-    const contacts = await fs.readFile(contactsDir, (err, data) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      return data;
-    });
-    const parsedData = JSON.parse(contacts);
-    const updatedContacts = parsedData.filter(({ id }) => {
-      if (id === contactId) {
-        matchedContact = true;
-      }
-      return id !== contactId;
-    });
-    if (matchedContact) {
-      await fs.writeFile(contactsDir, JSON.stringify(updatedContacts));
-      return contactId;
-    }
-    return null;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const addContact = async (body) => {
-  try {
-    const contacts = await fs.readFile(contactsDir, (err, data) => {
-      if (err) console.log(err);
-      return data;
-    });
-    const parsedData = JSON.parse(contacts);
-    const createdId = parsedData.length + 1;
-    const newContact = {
-      id: createdId.toString(),
-      ...body,
-    };
-    const updatedContacts = [...parsedData, newContact];
-    await fs.writeFile(contactsDir, JSON.stringify(updatedContacts));
-    return newContact;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
-};
-const updateContact = async (contactId, body) => {
-  let contactUpdated;
-  try {
-    const contacts = await fs.readFile(contactsDir, (err, data) => {
-      if (err) console.log(err);
-      return data;
-    });
-    const parsedData = JSON.parse(contacts);
-    const updatedContacts = parsedData.map((contact) => {
-      if (contact.id === contactId) {
-        contactUpdated = {
-          ...contact,
-          ...body,
-        };
-        return contactUpdated;
-      }
-      return contact;
-    });
-    await fs.writeFile(contactsDir, JSON.stringify(updatedContacts));
-    return contactUpdated;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contact, schemas };
