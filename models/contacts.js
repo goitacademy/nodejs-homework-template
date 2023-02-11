@@ -24,8 +24,8 @@ const updateContact = async (contactId, body) => {
   let changedContact = null
   const updatedContacts = contacts.map((contact, index) => {
     if (contactId === index) {
-      changedContact = contact
-      return { ...contact, ...body };
+      changedContact = { ...contact, ...body };
+      return changedContact;
     } 
     return contact;
   });
