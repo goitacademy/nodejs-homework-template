@@ -1,8 +1,8 @@
-const Users = require('../models/usersModel');
+const User = require('../models/usersModel');
 
 const addUser = ({ password, email, subscription, token }) => {
   try {
-    return Users.create({ password, email, subscription, token });
+    return User.create({ password, email, subscription, token });
   } catch (err) {
     return false;
   }
@@ -10,7 +10,7 @@ const addUser = ({ password, email, subscription, token }) => {
 
 const getUser = ({ email }) => {
   try {
-    return Users.findOne({ email });
+    return User.findOne({ email });
   } catch (err) {
     return false;
   }

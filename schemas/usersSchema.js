@@ -7,13 +7,10 @@ const custom = Joi.defaults(() =>
     ),
     email: Joi.string().email(),
     subscription: Joi.string().valid('starter', 'pro', 'business'),
-    token: Joi.string().token(),
   })
 );
 
-const atLeastOne = custom
-  .object()
-  .or('password', 'email', 'subscription', 'token');
+const atLeastOne = custom.object().or('password', 'email', 'subscription');
 const allRequired = custom
   .object()
   .options({ presence: 'required' })
