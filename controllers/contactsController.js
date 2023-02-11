@@ -1,4 +1,4 @@
-const { Contact, schemas } = require("../../models/contacts");
+const { Contact, schemas } = require("../models/contacts");
 
 const addContact = async (req, res) => {
 	const { error } = schemas.addContact.validate(req.body);
