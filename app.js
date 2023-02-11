@@ -24,8 +24,22 @@ app.use((req, res) => {
 
 // error handling
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+app.use((error, req, res, next) => {
+
+if (error.status) {
+  return res.status(error.status).json({
+    message: error.message,
+  })
+}
+
+  console.error('API Error: ', error.message, error.type);
+  
+
+  if (error.message.includes('Cast to ObjectId failed for value')) {
+    return res.status(400).json({ message: 'id is invalid', });
+  }
+
+  return res.status(500).json({ message: error.message });
 });
 
 module.exports = app;
