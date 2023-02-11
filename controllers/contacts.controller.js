@@ -58,7 +58,7 @@ async function deleteContact (req, res, next) {
 
 
 async function updateContact(req, res, next) {
-  const { body } = req.body;
+  const { body } = req;
   const { id } = req.params;
   const contact = await Contact.findByIdAndUpdate(id, body)
   if (!contact) {
@@ -69,12 +69,12 @@ async function updateContact(req, res, next) {
 
 
 async function updateStatusContact(req, res, next) {
-  const { body } = req.body;
+  const { body } = req;
   const { id } = req.params;
   if (!body) {
     return res.status(400).json({"message": "missing field favorite"})
   }
-  const contact = await Contact.findByIdAndUpdate(id, body, {new: true,}) 
+  const contact = await Contact.findByIdAndUpdate(id, body, {new: true}) 
     if (!contact) {
       return next (HttpError(404, "Not found"));
     }
