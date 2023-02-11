@@ -1,11 +1,11 @@
-const Joi = require('joi');
-const operations = require('../../models/operations');
+const { Contact, schema } = require('../../models/contacts');
+// const Joi = require('joi');
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+// const schema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().email().required(),
+//   phone: Joi.string().required(),
+// });
 
 const addContact = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ const addContact = async (req, res, next) => {
       error.status = 400;
       throw error;
     }
-    const result = await operations.add(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: 'success',
       code: 201,
