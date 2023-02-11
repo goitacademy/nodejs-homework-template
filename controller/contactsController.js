@@ -4,10 +4,11 @@ const JoiSchema = require('../schemas/contactsSchema');
 const get = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, favorite } = req.query;
     const skip = (page - 1) * limit;
+    const filters = { owner: _id, favorite };
     const contacts = await contactsService.listContacts({
-      userId: _id,
+      filters,
       skip,
       limit,
     });
