@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const path = require('path');
 const fs = require('fs/promises');
+const Jimp = require("jimp");
 const User = require('../service/schemas/users');
 const { 
   createUser, 
@@ -72,6 +73,7 @@ const currentUser = async (req, res, next) => {
   });
 };
 
+
 const updateSubscription = async (req, res, next) => {
   const { _id } = req.user;
   const userSubscription = await updateUserSubscription(_id, req.body.subscription);
@@ -87,17 +89,29 @@ const updateSubscription = async (req, res, next) => {
   });
 };
 
+
 const updateAvatar = async (req, res, next) => {
-  const { path: tempUpload, originalname } = req.file;
+  const { path: tmpUpload, originalname } = req.file;
   const imageName = `${req.user._id}_${originalname}`;
-  const resultUpload = path.join(__dirname, "../", "public", "avatars", imageName);
+  const resultUpload = path.join( __dirname, "../", "public", "avatars", imageName);
 
-  await fs.rename(tempUpload, resultUpload);
-  const avatarUrl = path.join("avatars", imageName);
+  try {
+    const image = await Jimp.read(tmpUpload);
+    await image
+      .autocrop()
+      .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
+      .writeAsync(tmpUpload);
+  
+    await fs.rename(tmpUpload, resultUpload);
 
-  const changeAvatar = await updateUserAvatar(req.user._id, avatarUrl);
+    const avatarUrl = path.join("avatars", imageName);
+    const changeAvatar = await updateUserAvatar(req.user._id, avatarUrl);
 
-  res.status(200).json({ avatarURL: changeAvatar });
+    res.status(200).json({ avatarURL: changeAvatar });
+  } catch (error) {
+    console.log(error);
+    fs.unlink(tmpUpload);
+  }
 };
 
 module.exports = {
