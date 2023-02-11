@@ -1,66 +1,57 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { ContactsList } = require("./contactsSchema");
+const { HttpError } = require("../helpers/HttpError");
 
-const contactsPath = path.join(__dirname, `/contacts.json`);
-
-const listContacts = async () => {
-  const list = await fs.readFile(contactsPath, "utf-8");
-  return JSON.parse(list);
+const listContacts = async (req, res) => {
+  const list = await ContactsList.find({}, "-createdAt -updatedAt");
+  return list;
 };
 
-const getContactById = async (contactId) => {
-  const listOfContacts = await listContacts();
-  const contact = listOfContacts.find((elem) => elem.id === `${contactId}`);
+const getContactById = async (req, res) => {
+const {contactId} = req.params;
+  const contact = await ContactsList.findById(contactId);
+  if (!contact) {
+    throw HttpError(404, "Not found");
+  }
   return contact;
 };
 
-const removeContact = async (contactId) => {
-  const listOfContacts = await listContacts();
-
-  const contact = listOfContacts.find((elem) => elem.id === `${contactId}`);
-  if (contact) {
-    const newListOfContacts = listOfContacts.filter(
-      (elem) => elem.id !== `${contactId}`
-    );
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(newListOfContacts, null, 2)
-    );
-    return { message: "Сontact deleted" };
-  }
-  return null;
-};
-
-const addContact = async (body) => {
-  const listOfContacts = await listContacts();
-  const newContact = {
-    ...body,
-    id: nanoid(),
-  };
-
-  listOfContacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(listOfContacts, null, 2));
-  return newContact;
-};
-
-const updateContact = async (contactId, body) => {
-  const list = await listContacts();
-  const contact = list.find((elem) => elem.id === `${contactId}`);
+const removeContact = async (req, res) => {
+const {contactId} = req.params;
+  const contact = await ContactsList.findByIdAndRemove(contactId);
   if (!contact) {
-    return null;
+    throw HttpError(404, "Not found");
   }
-  const newList = list.map((elem) => {
-    if (elem.id === `${contactId}`) {
-      elem = { ...elem, ...body };
-      return elem;
-    }
-    return elem;
+  return({
+    message: "Delete success",
   });
-  await fs.writeFile(contactsPath, JSON.stringify(newList, null, 2));
+};
 
-  const newContact = newList.find((elem) => elem.id === `${contactId}`);
+const addContact = async (req, res) => {
+  const newContact = await ContactsList.create(req.body);
   return newContact;
+};
+
+const updateContact = async (req, res) => {
+  const {contactId} = req.params;
+
+  const contact = await ContactsList.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!contact) {
+    throw HttpError(404, "Not found");
+  }
+  return contact;
+};
+
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await ContactsList.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!contact) {
+    throw HttpError(404, `Not found`);
+  }
+  return contact;
 };
 
 module.exports = {
@@ -69,4 +60,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite,
 };
