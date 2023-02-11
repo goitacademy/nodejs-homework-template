@@ -24,7 +24,7 @@ const register = async (req, res, next) => {
       });
       return;
     }
-    const isExist = await userService.getUser({ email });
+    const isExist = await userService.getUserByEmail({ email });
     if (isExist) {
       res.status(409).json({
         Status: '409 Conflict',
@@ -78,7 +78,7 @@ const login = async (req, res, next) => {
       });
       return;
     }
-    const user = await userService.getUser({
+    const user = await userService.getUserByEmail({
       email,
     });
     if (!user) {
@@ -108,6 +108,7 @@ const login = async (req, res, next) => {
       username: user.email,
     };
     const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+    await userService.updateUserToken({ _id: user.id, body: { token } });
     res.status(200).json({
       Status: '200 OK',
       'Content-Type': 'application/json',
@@ -125,7 +126,34 @@ const login = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    const { _id } = await req.user;
+    const user = await userService.getUserById({ _id });
+    if (!user) {
+      res.status(401).json({
+        Status: '401 Unauthorized',
+        'Content-Type': 'application/json',
+        ResponseBody: {
+          message: 'Not authorized',
+        },
+      });
+    }
+    await userService.updateUserToken({
+      _id: user.id,
+      body: { token: null },
+    });
+    res.status(204).json({
+      Status: '204 No Content',
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };
