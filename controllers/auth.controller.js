@@ -65,12 +65,16 @@ async function login(req, res, next) {
   await User.findByIdAndUpdate(storedUser._id, { token });
 
   return res.status(200).json({
-    token: token,
-    user: {
-      email,
-      subscription: storedUser.subscription,
-      id: storedUser._id,
+    data: {
+      token,
     },
+
+    // token: token,
+    // user: {
+    //   email,
+    //   subscription: storedUser.subscription,
+    //   id: storedUser._id,
+    // },
   });
 }
 

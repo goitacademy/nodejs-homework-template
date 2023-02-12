@@ -23,15 +23,12 @@ match: [/[a-z0-9]+@[a-z0-9]+/, "user email is not valid"],
         type: String,
         default: null,
       },
-contacts: {
-    type: [mongoose.Types.ObjectId],
-    rel: "contact",
-}
-
-
-
-
-}, {
+contacts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "contact",
+}]
+}, 
+{
     timestamp: true,
     versionKey: false,
 })
