@@ -13,7 +13,12 @@ const signupUserController = async (req, res) => {
 
   newUser.save();
 
-  res.status(201).json(newUser);
+  res.status(201).json({
+    user: {
+      email,
+      subscription: "starter",
+    },
+  });
 };
 
 module.exports = signupUserController;

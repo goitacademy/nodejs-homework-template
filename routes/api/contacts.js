@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get("/", authMiddleware, errorHandler(getContactsListController));
 
-router.get("/:id", errorHandler(getContactByIdController));
+router.get("/:id", authMiddleware, errorHandler(getContactByIdController));
 
 router.post(
   "/",
@@ -24,16 +24,22 @@ router.post(
   errorHandler(createContactController)
 );
 
-router.delete("/:id", errorHandler(removeContactByIdController));
+router.delete(
+  "/:id",
+  authMiddleware,
+  errorHandler(removeContactByIdController)
+);
 
 router.put(
   "/:id",
+  authMiddleware,
   validationMiddleware(contactSchema),
   errorHandler(updateContactByIdController)
 );
 
 router.patch(
   "/:id/favorite",
+  authMiddleware,
   validationMiddleware(contactStatusSchema),
   errorHandler(updateStatusContactController)
 );

@@ -1,16 +1,11 @@
 const { Unauthorized } = require("http-errors");
-const { User } = require("../../models");
 
 const getCurrentUserController = async (req, res) => {
-  const { _id } = req.user;
-  const currentUser = await User.findOne(
-    { _id },
-    { email: 1, subscription: 1 }
-  );
+  const { email, subscription } = req.user;
 
-  if (!currentUser) throw new Unauthorized("Not authorized");
+  if (!email) throw new Unauthorized("Not authorized");
 
-  res.status(200).json(currentUser);
+  res.status(200).json({ email, subscription });
 };
 
 module.exports = getCurrentUserController;
