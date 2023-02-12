@@ -31,12 +31,12 @@ app.use((_, res) => {
   });
 });
 
-app.use((err, _, res, __) => {
-  console.log(err.stack);
+app.use((e, _, res, __) => {
+  console.log(e.stack);
   res.status(500).json({
     status: "fail",
     code: 500,
-    message: err.message,
+    message: e.message,
     data: "Internal Server Error",
   });
 });

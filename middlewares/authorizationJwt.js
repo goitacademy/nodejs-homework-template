@@ -20,18 +20,16 @@ passport.use(
       if (user) {
         return done(null, user);
       }
-    } catch (e) {
-      return done(e);
+    } catch (err) {
+      return done(err);
     }
   })
 );
 
 const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (e, user) => {
-    const token = req.headers.authorization.slice(7);
-    if (token !== user.token || !user || e) {
-      return res.status(401).json({ message: "Not authorized" });
-    }
+  passport.authenticate("jwt", { session: false }, (error, user) => {
+    if (!user || error)
+      return res.status(401).json({ message: "Unauthorized!" });
     req.user = user;
     next();
   })(req, res, next);

@@ -22,7 +22,7 @@ connection
       console.log(`Use our API on port: ${PORT}`);
     });
   })
-  .catch((err) => {
-    console.log(`Server not running. Error message: ${err.message}`);
+  .catch((e) => {
+    console.log(`Server not running. Error message: ${e.message}`);
     process.exit(1);
   });

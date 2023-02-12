@@ -97,9 +97,9 @@ const updateAvatar = async (req, res, next) => {
     if (!user) return res.status(401).json({ message: "Not authorized" });
     const newUser = await service.updateUser(user.id, { avatarURL });
     res.status(200).json({ avatarURL: newUser.avatarURL });
-  } catch (err) {
+  } catch (e) {
     await fs.unlink(tmpPath);
-    next(err);
+    next(e);
   }
 };
 
