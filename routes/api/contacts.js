@@ -1,14 +1,14 @@
 const express = require("express");
 const { contacts: ctrl } = require("../../controllers");
-const { validation } = require("../../middlewares");
+const { auth, validation } = require("../../middlewares");
 const { schemas } = require("../../models");
 
 const router = express.Router();
-router.get("/", ctrl.getAll);
+router.get("/", auth, ctrl.getAll);
 
 router.get("/:contactId", ctrl.getById);
 
-router.post("/", validation(schemas.joiSchema), ctrl.add);
+router.post("/", auth, validation(schemas.joiSchema), ctrl.add);
 
 router.put("/:contactId", validation(schemas.joiSchema), ctrl.update);
 
