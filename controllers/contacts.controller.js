@@ -5,11 +5,13 @@ const {Contact} = require("../mod/contact")
 
 // get list
 async function getContacts(req, res) {
-  const { limit } = req.query;
+  const { limit = 5, page } = req.query;
+  const skyp = (page - 1) * limit;
+
   console.log("limit:", limit);
-  const contacts = await Contact.find({}).limit(limit);
+  const contacts = await Contact.find({}).skip(skyp).limit(limit);
   console.log("movies:", contacts);
-  res.json(contacts);
+  return res.json(contacts);
 }
 
 // get by id

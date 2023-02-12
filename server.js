@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 
+dotenv.config();
+
 
 // anable logging
 mongoose.set('debug', true);
 
-
-dotenv.config();
 mongoose.set('strictQuery', false);
 const { HOST_URI } = process.env;
 
