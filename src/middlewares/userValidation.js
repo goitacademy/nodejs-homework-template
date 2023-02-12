@@ -9,7 +9,7 @@ module.exports = {
                 .max(30)
                 .required(),
             email: Joi.string()
-                .pattern(/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/)
+                .email({minDomainSegments: 2, tlds: {allow: ['com', 'net']}})
                 .required(),
             subscription: Joi.string()
                 .valid("starter", "pro", "business")
