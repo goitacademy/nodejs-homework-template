@@ -1,7 +1,7 @@
 const { User } = require('../../schemas/modelUser');
 const { addUser } = require('../../services/users');
 
-const controllerSingUpUser = async (req, res, next) => {
+const controllerSingUpUser = async (req, res) => {
   const { email, password } = req.body;
   const userFind = await User.findOne({ email });
 
