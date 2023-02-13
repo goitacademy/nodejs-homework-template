@@ -12,11 +12,7 @@ const get = async (req, res, next) => {
       skip,
       limit,
     });
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { contacts },
-    });
+    res.json({ contacts });
   } catch (err) {
     console.error(err);
     next(err);
@@ -32,17 +28,9 @@ const getById = async (req, res, next) => {
       contactId: id,
     });
     if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
-      return;
+      return res.json({ contact });
     }
-    res.status(404).json({
-      status: 'Not found',
-      code: 404,
-    });
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);
@@ -63,11 +51,9 @@ const create = async (req, res, next) => {
       favorite,
     });
     if (isValid.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
-      return;
     }
     const contact = await contactsService.addContact({
       name,
@@ -76,11 +62,7 @@ const create = async (req, res, next) => {
       favorite,
       owner: _id,
     });
-    res.json({
-      status: 'success',
-      code: 201,
-      data: { contact },
-    });
+    res.status(201).json({ contact });
   } catch (err) {
     console.error(err);
     next(err);
@@ -95,17 +77,12 @@ const removeById = async (req, res, next) => {
       userId: _id,
       contactId: id,
     });
-    if (isDelete) {
-      res.json({
-        status: 'contact deleted',
-        code: 200,
-      });
-    } else {
-      res.status(404).json({
-        message: 'Not found',
-        code: 404,
-      });
+    if (!isDelete) {
+      return res.status(404).json();
     }
+    res.json({
+      Status: 'contact deleted',
+    });
   } catch (err) {
     console.error(err);
     next(err);
@@ -124,11 +101,9 @@ const update = async (req, res, next) => {
       favorite,
     });
     if (isValid.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
-      return;
     }
     const newContact = JSON.parse(JSON.stringify(isValid.value));
     const contact = await contactsService.updateContact({
@@ -137,17 +112,10 @@ const update = async (req, res, next) => {
       body: newContact,
     });
     if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
+      res.json({ contact });
       return;
     }
-    res.status(404).json({
-      message: 'Not found',
-      code: 404,
-    });
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);
@@ -165,7 +133,6 @@ const updateStatus = async (req, res, next) => {
     if (isValid.error) {
       res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
       return;
     }
@@ -175,17 +142,10 @@ const updateStatus = async (req, res, next) => {
       body: JSON.parse(JSON.stringify(isValid.value)),
     });
     if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
+      res.json({ contact });
       return;
     }
-    res.status(404).json({
-      message: 'Not found',
-      code: 404,
-    });
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);

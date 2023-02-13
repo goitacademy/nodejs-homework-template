@@ -18,20 +18,14 @@ const register = async (req, res, next) => {
     });
     if (isValid.error) {
       res.status(400).json({
-        Status: '400 Bad Request',
-        'Content-Type': 'application/json',
-        ResponseBody: { message: isValid.error.details[0].message },
+        message: isValid.error.details[0].message,
       });
       return;
     }
     const isExist = await userService.getUserByEmail({ email });
     if (isExist) {
       res.status(409).json({
-        Status: '409 Conflict',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Email in use',
-        },
+        message: 'Email in use',
       });
       return;
     }
@@ -43,18 +37,10 @@ const register = async (req, res, next) => {
     });
     if (!user) {
       res.status(409).json({
-        Status: '409 Conflict',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: "Can't create user",
-        },
+        message: "Can't create user",
       });
     }
-    res.status(201).json({
-      Status: '201 Created',
-      'Content-Type': 'application/json',
-      ResponseBody: { user },
-    });
+    res.status(201).json({ user });
   } catch (err) {
     console.error(err);
     next(err);
@@ -71,11 +57,7 @@ const login = async (req, res, next) => {
       subscription,
     });
     if (isValid.error) {
-      res.status(400).json({
-        Status: '400 Bad Request',
-        'Content-Type': 'application/json',
-        ResponseBody: { message: isValid.error.details[0].message },
-      });
+      res.status(400).json({ message: isValid.error.details[0].message });
       return;
     }
     const user = await userService.getUserByEmail({
@@ -83,22 +65,14 @@ const login = async (req, res, next) => {
     });
     if (!user) {
       res.status(401).json({
-        Status: '401 Unauthorized',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Email or password is wrong',
-        },
+        message: 'Email or password is wrong',
       });
       return;
     }
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       res.status(401).json({
-        Status: '401 Unauthorized',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Email or password is wrong',
-        },
+        message: 'Email or password is wrong',
       });
       return;
     }
@@ -109,15 +83,11 @@ const login = async (req, res, next) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: '1h' });
     await userService.updateUserToken({ _id: user.id, body: { token } });
-    res.status(200).json({
-      Status: '200 OK',
-      'Content-Type': 'application/json',
-      ResponseBody: {
-        token,
-        user: {
-          email,
-          subscription,
-        },
+    res.json({
+      token,
+      user: {
+        email,
+        subscription,
       },
     });
   } catch (err) {
@@ -132,11 +102,7 @@ const logout = async (req, res, next) => {
     const user = await userService.getUserById({ _id });
     if (!user) {
       res.status(401).json({
-        Status: '401 Unauthorized',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Not authorized',
-        },
+        message: 'Not authorized',
       });
       return;
     }
@@ -144,9 +110,7 @@ const logout = async (req, res, next) => {
       _id: user.id,
       body: { token: null },
     });
-    res.status(204).json({
-      Status: '204 No Content',
-    });
+    res.status(204).json();
   } catch (err) {
     console.error(err);
     next(err);
@@ -159,21 +123,13 @@ const current = async (req, res, next) => {
     const user = await userService.getUserByEmail({ email });
     if (!user) {
       res.status(401).json({
-        Status: '401 Unauthorized',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Not authorized',
-        },
+        message: 'Not authorized',
       });
       return;
     }
     res.json({
-      Status: '200 OK',
-      'Content-Type': 'application/json',
-      ResponseBody: {
-        email: user.email,
-        subscription: user.subscription,
-      },
+      email: user.email,
+      subscription: user.subscription,
     });
   } catch (err) {
     console.error(err);
@@ -188,11 +144,7 @@ const updateSubscription = async (req, res, next) => {
     const isValid = JoiSchema.atLeastOne.validate({ subscription });
     console.log(isValid);
     if (isValid.error) {
-      res.status(400).json({
-        Status: '400 Bad Request',
-        'Content-Type': 'application/json',
-        ResponseBody: { message: isValid.error.details[0].message },
-      });
+      res.status(400).json({ message: isValid.error.details[0].message });
       return;
     }
     const user = await userService.updateUserSubscription({
@@ -201,22 +153,14 @@ const updateSubscription = async (req, res, next) => {
     });
     if (!user) {
       res.status(401).json({
-        Status: '401 Unauthorized',
-        'Content-Type': 'application/json',
-        ResponseBody: {
-          message: 'Not authorized',
-        },
+        message: 'Not authorized',
       });
       return;
     }
-    res.status(200).json({
-      Status: '200 OK',
-      'Content-Type': 'application/json',
-      ResponseBody: {
-        user: {
-          emai: user.email,
-          subscription: user.subscription,
-        },
+    res.json({
+      user: {
+        emai: user.email,
+        subscription: user.subscription,
       },
     });
   } catch (err) {

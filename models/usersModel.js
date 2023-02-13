@@ -26,7 +26,7 @@ const user = new Schema(
     versionKey: false,
     timestamps: true,
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'user',
     },
   }
