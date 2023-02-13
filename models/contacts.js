@@ -1,14 +1,56 @@
-// const fs = require('fs/promises')
+const fs = require('fs').promises;
+const path = require('path');
 
-const listContacts = async () => {}
+const contactsPath = path.join('./models', '/contacts.json');
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(contactsPath);
+  return JSON.parse(data.toString());
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async contactId => {
+  const contacts = await listContacts();
+  return contacts.find(({ id }) => id.toString() === contactId.toString());
+};
 
-const addContact = async (body) => {}
+const removeContact = async contactId => {
+  const allContacts = await listContacts();
+  const filteredContacts = allContacts.filter(
+    ({ id }) => id.toString() !== contactId.toString()
+  );
+  await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
+};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async ({ name, email, phone }) => {
+  const allContacts = await listContacts();
+  if (
+    allContacts.some(
+      contact =>
+        name === contact.name ||
+        email === contact.email ||
+        phone === contact.phone
+    )
+  ) {
+    return null;
+  }
+  const newContact = { id: `${Date.now()}`, name, email, phone };
+  const newContacts = [...allContacts, newContact];
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const allContacts = await listContacts();
+  const contact = allContacts.find(
+    ({ id }) => id.toString() === contactId.toString()
+  );
+  const updatedContact = { ...contact, ...body };
+  const updatedAllContacts = allContacts.map(contact =>
+    contact.id === contactId ? updatedContact : contact
+  );
+  await fs.writeFile(contactsPath, JSON.stringify(updatedAllContacts));
+  return updatedContact;
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +58,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
