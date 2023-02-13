@@ -41,9 +41,6 @@ if(error.name === "ValidationError") {
   })
 }
 
-
-
-
   // console.error('API Error: ', error.message, error.type);
 
   // handle ObjectId validation:
