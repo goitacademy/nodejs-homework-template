@@ -34,6 +34,8 @@ const login = async (req, res) => {
 
   await user.findByIdAndUpdate(findUser._id, { token });
   res.status(201).json({
+    email: findUser.email,
+    name: findUser.name,
     token,
   });
 };
