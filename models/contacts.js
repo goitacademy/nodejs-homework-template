@@ -12,6 +12,7 @@ async function getParsedData() {
 async function listContacts() {
   try {
     const contacts = await getParsedData();
+    return contacts
   } catch (error) {
     console.log(error);
   }
@@ -21,20 +22,21 @@ async function getContactById(contactId) {
   try {
     const contacts = await getParsedData();
     const getContact = contacts.find((item) => item.id === contactId);
-
-    if (!getContact) {
-      return null;
-    }
+    return getContact
   } catch (error) {
     console.log(error);
   }
 }
 async function removeContact(contactId) {
   try {
-    const contacts = await getParsedData();
-    const getFilteredContact = contacts.filter((item) => item.id !== contactId);
-    const stringifiedContacts = JSON.stringify(getFilteredContact);
-    await fs.writeFile(contactsPath, stringifiedContacts, "utf8");
+    const contacts = await listContacts();
+    const findIndex = contacts.findIndex((contact) => contact.id === contactId);
+    if (findIndex === -1) {
+      return null;
+    }
+    const [deleteContact] = contacts.splice(findIndex, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return deleteContact;
   } catch (error) {
     console.log(error);
   }
@@ -57,17 +59,17 @@ async function addContact(name, email, phone) {
   }
 }
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  const contacts = await getParsedData();
-  const idx = contacts.findIndex((contact) => contact.id === contactId);
+const updateContact = async (id, { name, email, phone }) => {
+  const contacts = await listContacts();
+  const findIndex = contacts.findIndex((contact) => contact.id === id);
 
-  if (idx === -1) {
+  if (findIndex === -1) {
     return null;
   }
 
-  contacts[idx] = { name, email, phone };
+  contacts[findIndex] = { id, name, email, phone };
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return contacts[idx];
+  return contacts[findIndex];
 };
 
 module.exports = {
