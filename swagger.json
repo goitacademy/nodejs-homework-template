@@ -40,25 +40,43 @@
         "post": {
           "tags": ["Users"],
           "summary": "Add new user in system",
+          "produces": ["application/json"],
           "parameters": [
             {
-              "name": "email",
               "in": "body",
-              "description": "user email"
-            },
-            {
-              "name": "password",
-              "in": "body",
-              "description": "user password"
+              "name": "new user",
+              "description": "user information",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password"
+                  }
+                }
+              }
             }
           ],
-          "produces": ["application/json"],
           "responses": {
             "201": {
-              "description": "New user is created",
+              "description": "User added successfully",
               "schema": {
                 "$ref": "#/definitions/User"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "409": {
+              "description": "Email already exist"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -72,6 +90,7 @@
             {
               "name": "email",
               "in": "body",
+              "example": "example@example.com",
               "required": true,
               "description": "Email to send verification"
             }
@@ -114,25 +133,40 @@
         "post": {
           "tags": ["Users"],
           "summary": "Login user",
+          "produces": ["application/json"],
           "parameters": [
             {
-              "name": "email",
               "in": "body",
-              "description": "user email"
-            },
-            {
-              "name": "password",
-              "in": "body",
-              "description": "user password"
+              "name": "user",
+              "description": "user information",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password"
+                  }
+                }
+              }
             }
           ],
-          "produces": ["application/json"],
           "responses": {
             "200": {
-              "description": "User has been logged in",
+              "description": "User has been logged in successfully",
               "schema": {
                 "$ref": "#/definitions/UserWithJWT"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -148,10 +182,11 @@
           ],
           "parameters": [
             {
-              "type": "apiKey",
-              "name": "Authorization",
               "in": "header",
-              "required": true
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
             }
           ],
           "produces": ["application/json"],
@@ -161,6 +196,12 @@
               "schema": {
                 "$ref": "#/definitions/SuccessResponse"
               }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -175,12 +216,27 @@
               "Bearer": []
             }
           ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
+            }
+          ],
           "responses": {
             "200": {
               "description": "User has been found",
               "schema": {
                 "$ref": "#/definitions/User"
               }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -196,9 +252,26 @@
           ],
           "parameters": [
             {
-              "name": "subscription",
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
+            },
+            {
               "in": "body",
-              "description": "user subscription ['starter', 'pro', 'business']"
+              "name": "subscription",
+              "description": "user subscription ['starter', 'pro', 'business']",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subscription": {
+                    "type": "string",
+                    "example": "business"
+                  }
+                }
+              }
             }
           ],
           "produces": ["application/json"],
@@ -208,6 +281,12 @@
               "schema": {
                 "$ref": "#/definitions/User"
               }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -223,9 +302,26 @@
           ],
           "parameters": [
             {
-              "name": "avatar",
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
+            },
+            {
               "in": "body",
-              "description": "user avatar file"
+              "name": "avatar",
+              "description": "user avatar",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "file",
+                    "example": "file.png"
+                  }
+                }
+              }
             }
           ],
           "produces": ["application/json"],
@@ -235,6 +331,12 @@
               "schema": {
                 "$ref": "#/definitions/User"
               }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
@@ -248,12 +350,27 @@
               "Bearer": []
             }
           ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
+            }
+          ],
           "responses": {
             "200": {
-              "description": "OK",
+              "description": "user contacts received",
               "schema": {
                 "$ref": "#/definitions/Contacts"
               }
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         },
@@ -267,43 +384,68 @@
           ],
           "parameters": [
             {
-              "name": "name",
-              "in": "body",
-              "description": "user name",
-              "required": true
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
             },
             {
-              "name": "email",
               "in": "body",
-              "description": "user email",
-              "required": true
-            },
-            {
-              "name": "phone",
-              "in": "body",
-              "description": "user phone",
-              "required": true
-            },
-            {
-              "name": "favorite",
-              "in": "body",
-              "description": "is it favorite",
-              "required": false
+              "name": "new contact",
+              "description": "contact information",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "name"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "(123)-4-345-345"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "example@example.com"
+                  },
+                  "favorite": {
+                    "type": "boolean",
+                    "example": "true"
+                  }
+                }
+              }
             }
           ],
-          "produces": ["application/json"],
           "responses": {
             "201": {
-              "description": "New contact has been created",
+              "description": "Contact added successfully",
               "schema": {
                 "$ref": "#/definitions/Contact"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
       },
       "/api/contacts/{id}": {
         "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "contact id",
             "in": "path",
@@ -322,10 +464,19 @@
           ],
           "responses": {
             "200": {
-              "description": "OK",
+              "description": "contact with Id",
               "schema": {
                 "$ref": "#/definitions/Contact"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         },
@@ -340,36 +491,55 @@
           ],
           "parameters": [
             {
-              "name": "name",
-              "in": "body",
-              "description": "user name",
-              "required": true
+              "in": "header",
+              "name": "Authorization",
+              "description": "Authorization token",
+              "required": true,
+              "type": "string"
             },
             {
-              "name": "email",
               "in": "body",
-              "description": "user email",
-              "required": true
-            },
-            {
-              "name": "phone",
-              "in": "body",
-              "description": "user phone",
-              "required": true
-            },
-            {
-              "name": "favorite",
-              "in": "body",
-              "description": "is it favorite",
-              "required": false
+              "name": "new contact",
+              "description": "contact information",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "name"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "(123)-4-345-345"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "example@example.com"
+                  },
+                  "favorite": {
+                    "type": "boolean",
+                    "example": "true"
+                  }
+                }
+              }
             }
           ],
           "responses": {
             "200": {
-              "description": "Contact is updated",
+              "description": "Contact added successfully",
               "schema": {
                 "$ref": "#/definitions/Contact"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         },
@@ -398,10 +568,19 @@
             "type": "string"
           },
           {
-            "name": "favorite",
             "in": "body",
-            "description": "is it favorite",
-            "required": false
+            "name": "new contact",
+            "description": "contact information",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "favorite": {
+                  "type": "boolean",
+                  "example": "true"
+                }
+              }
+            }
           }
         ],
         "patch": {
@@ -419,6 +598,15 @@
               "schema": {
                 "$ref": "#/definitions/Contact"
               }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal server error"
             }
           }
         }
