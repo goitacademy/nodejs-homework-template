@@ -52,3 +52,13 @@ export const updateContactByIdController = async (req: Request, res: Response) =
   }
   res.status(200).json(responseData(updatedContact, 200));
 };
+
+export const updateFavoriteByIdController = async (req: Request, res: Response) => {
+  const { contactId } = req.params;
+  const updatedContact = await updateContactByIdService(contactId, req.body);
+
+  if (!updatedContact) {
+    throw new WrongParametersError(`Contact not found`);
+  }
+  res.status(200).json(responseData(updatedContact, 200));
+};
