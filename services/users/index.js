@@ -1,3 +1,4 @@
 const { addUser } = require('./addUser');
+const { loginUser } = require('./loginUser');
 
-module.exports = { addUser };
+module.exports = { addUser, loginUser };

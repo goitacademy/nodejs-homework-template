@@ -1,3 +1,4 @@
 const { controllerSingUpUser } = require('./controllerSingUpUser');
+const { controllerLoginUser } = require('./controllerLoginUser');
 
-module.exports = { controllerSingUpUser };
+module.exports = { controllerSingUpUser, controllerLoginUser };
