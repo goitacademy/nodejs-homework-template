@@ -25,7 +25,6 @@ const controllerLoginUser = async (req, res, next) => {
     }
 
     const payload = { _id: user._id.toString() };
-    console.log(payload);
     const token = jwt.sign(payload, JWT_SECRET);
 
     await loginUser(user._id, token);
