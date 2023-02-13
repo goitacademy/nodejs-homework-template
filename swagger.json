@@ -27,23 +27,13 @@
       }
     ],
 
-    "components": {
-      "securitySchemes": {
-        "bearerAuth": {
-          "type": "http",
-          "in": "header",
-          "name": "Authorization",
-          "description": "Bearer token to access these api endpoints",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        }
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
       }
     },
-    "security": [
-      {
-        "bearerAuth": []
-      }
-    ],
 
     "paths": {
       "/api/users/signup": {
@@ -151,11 +141,16 @@
         "get": {
           "tags": ["Users"],
           "summary": "Logout user",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "parameters": [
             {
-              "name": "Authorization token",
-              "in": "headers",
-              "description": "User Bearer JWT",
+              "type": "apiKey",
+              "name": "Authorization",
+              "in": "header",
               "required": true
             }
           ],
@@ -174,15 +169,12 @@
         "get": {
           "tags": ["Users"],
           "summary": "Get current user",
-          "parameters": [
+          "produces": ["application/json"],
+          "security": [
             {
-              "name": "Authorization token",
-              "in": "headers",
-              "description": "User Bearer JWT",
-              "required": true
+              "Bearer": []
             }
           ],
-          "produces": ["application/json"],
           "responses": {
             "200": {
               "description": "User has been found",
@@ -197,13 +189,12 @@
         "patch": {
           "tags": ["Users"],
           "summary": "Update user subscription",
-          "parameters": [
+          "security": [
             {
-              "name": "Authorization token",
-              "in": "headers",
-              "description": "User Bearer JWT",
-              "required": true
-            },
+              "Bearer": []
+            }
+          ],
+          "parameters": [
             {
               "name": "subscription",
               "in": "body",
@@ -225,13 +216,12 @@
         "patch": {
           "tags": ["Users"],
           "summary": "Update user's avatar",
-          "parameters": [
+          "security": [
             {
-              "name": "Authorization token",
-              "in": "headers",
-              "description": "User Bearer JWT",
-              "required": true
-            },
+              "Bearer": []
+            }
+          ],
+          "parameters": [
             {
               "name": "avatar",
               "in": "body",
@@ -250,17 +240,14 @@
         }
       },
       "/api/contacts": {
-        "parameters": [
-          {
-            "name": "Authorization token",
-            "in": "headers",
-            "description": "User Bearer JWT",
-            "required": true
-          }
-        ],
         "get": {
           "tags": ["Contacts"],
           "summary": "Get all user contacts",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "responses": {
             "200": {
               "description": "OK",
@@ -273,6 +260,11 @@
         "post": {
           "tags": ["Contacts"],
           "summary": "Add new contact",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "parameters": [
             {
               "name": "name",
@@ -313,12 +305,6 @@
       "/api/contacts/{id}": {
         "parameters": [
           {
-            "name": "Authorization token",
-            "in": "headers",
-            "required": true,
-            "description": "User Bearer JWT"
-          },
-          {
             "name": "contact id",
             "in": "path",
             "required": true,
@@ -329,6 +315,11 @@
         "get": {
           "tags": ["Contacts"],
           "summary": "Get contact by Id",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "responses": {
             "200": {
               "description": "OK",
@@ -340,8 +331,13 @@
         },
         "put": {
           "tags": ["Contacts"],
-          "summary": "Update contact",
+          "summary": "Update contact with given Id",
           "produces": ["application/json"],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "parameters": [
             {
               "name": "name",
@@ -378,8 +374,13 @@
           }
         },
         "delete": {
-          "summary": "Delete contact with given Id",
           "tags": ["Contacts"],
+          "summary": "Delete contact with given Id",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "responses": {
             "200": {
               "description": "contact has been deleted"
@@ -389,12 +390,6 @@
       },
       "/api/contacts/{id}/favorite": {
         "parameters": [
-          {
-            "name": "Authorization token",
-            "in": "headers",
-            "required": true,
-            "description": "User Bearer JWT"
-          },
           {
             "name": "contact id",
             "in": "path",
@@ -413,6 +408,11 @@
           "tags": ["Contacts"],
           "summary": "Update favorite status",
           "produces": ["application/json"],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
           "responses": {
             "200": {
               "description": "Contact favorite status has been updated",
