@@ -5,7 +5,7 @@
     "info": {
       "title": "Phonebook Express API with Swagger",
       "version": "0.1.0",
-      "description": "This is CRUD API application made with Express and documented with Swagger",
+      "description": "This is a simple CRUD API application made with Express and documented with Swagger",
       "license": {
         "name": "MIT",
         "url": "https://spdx.org/licenses/MIT.html"
@@ -406,7 +406,7 @@
             "name": "favorite",
             "in": "body",
             "description": "is it favorite",
-            "required": true
+            "required": false
           }
         ],
         "patch": {
@@ -498,5 +498,5 @@
       }
     }
   },
-  "apis": ["./routes/*.js"]
+  "apis": ["./routes/api/*.js"]
 }
