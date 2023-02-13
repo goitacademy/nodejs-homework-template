@@ -4,6 +4,9 @@ const {User} =require("./../mod/user");
 const multer = require("multer");
 const path = require('path');
 
+
+const { JWT_SECRET } = process.env;
+
 function validateBody(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
@@ -17,6 +20,8 @@ function validateBody(schema) {
 
 async function auth(req, res, next) {
 
+console.log(req.headers);
+
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
 
@@ -29,10 +34,11 @@ async function auth(req, res, next) {
   }
 
   try{
-  const {id} = jwt.verify(token, process.env.JWT_SECRET);
+  const {id} = jwt.verify(token, JWT_SECRET);
   const user = await User.findById(id);
-  console.log("user", user);
-
+  if(!user){
+    throw HttpError(401, "Not found")
+  }
   req.user = user;
   } catch(error){
     if(error.name === 'TokenExpiredError' || error.name ==='JsonWebTokenError'){
@@ -53,10 +59,8 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({
-  storage,
-  // limits: {},
-});
+
+const upload = multer({storage});
 
 module.exports = {
   validateBody,

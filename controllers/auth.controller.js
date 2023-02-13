@@ -1,6 +1,6 @@
 const { User } = require('../mod/user');
-const { HttpError } = require('../helpers/index');
-const { Conflict, Unauthorized } = require('http-errors');
+// const { HttpError } = require('../helpers/index');
+const { Conflict, Unauthorized, BadRequest } = require('http-errors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -32,7 +32,8 @@ async function register(req, res, next) {
       //   throw new HttpError(409, 'User with this email already exists');
       throw Conflict('Email in use(409)');
     }
-    throw new HttpError(400, 'Error');
+    // throw new HttpError(400, 'Bad request');
+    throw new BadRequest('Bad request(400)')
   }
 }
 
@@ -55,7 +56,8 @@ async function login(req, res, next) {
   const isPasswordValid = await bcrypt.compare(password, storedUser.password);
 
   if (!isPasswordValid) {
-    throw new HttpError(401, 'password is wrong');
+    // throw new HttpError(401, 'password is wrong');
+    throw new Unauthorized('password is wrong(401)');
   }
 
   const payload = { id: storedUser._id };
@@ -64,16 +66,16 @@ async function login(req, res, next) {
   await User.findByIdAndUpdate(storedUser._id, { token });
 
   return res.status(200).json({
-    data: {
-      token,
-    },
-
-    // token: token,
-    // user: {
-    //   email,
-    //   subscription: storedUser.subscription,
-    //   id: storedUser._id,
+    // data: {
+    //   token,
     // },
+
+    token: token,
+    user: {
+      email,
+      subscription: storedUser.subscription,
+      id: storedUser._id,
+    },
   });
 }
 
