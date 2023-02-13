@@ -3,12 +3,13 @@ const { Contact } = require('../mod/contact');
 
 // get list
 async function getContacts(req, res) {
-  const { id: owner } = req.user;
-  const { limit = 20, page = 1, favorite } = req.query;
+  // const { id: owner } = req.user;
+  const {  page = 1, limit = 5, favorite } = req.query;
   const skyp = (page - 1) * limit;
 
   console.log('limit:', limit);
-  const contacts = await Contact.find({ owner }).skip(Number(skyp)).limit(Number(limit));
+
+  const contacts = await Contact.find({}).limit(Number(limit)).skip(Number(skyp));
 
   if (!favorite) {
     console.log('contacts:', contacts);

@@ -9,7 +9,11 @@ const schema = mongoose.Schema(
       type: String,
     },
     phone: { type: String, match: /\d{7}/, },
-    favorite: {type: Boolean, default: false,}
+    favorite: {type: Boolean, default: false,},
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
  
 
