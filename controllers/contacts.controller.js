@@ -2,6 +2,7 @@ const { HttpError } = require('../helpers/index');
 const { Contact } = require('../mod/contact');
 const path = require('path');
 const fs = require('fs/promises');
+const Jimp = require("jimp");
 
 // get list
 async function getContacts(req, res) {
@@ -86,12 +87,23 @@ async function updateStatusContact(req, res, next) {
   return res.status(200).json(contact);
 }
 
+
+
+
+
 async function uploadImage(req, res, next) {
-  // req.file
-  console.log('req.file', req.file);
+
   const { filename } = req.file;
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
   const publicPath = path.resolve(__dirname, '../public/avatars', filename);
+  
+  await Jimp.read(tmpPath).then((image) => {
+    return image.resize(250, 250).write(tmpPath);
+  }).catch((error) => {
+    console.error(error);
+  });
+  
+  
   try {
     await fs.rename(tmpPath, publicPath);
   } catch (error) {

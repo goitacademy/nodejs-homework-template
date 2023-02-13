@@ -2,7 +2,6 @@ const { User } = require('../mod/user');
 const { HttpError } = require('../helpers/index');
 const { Conflict, Unauthorized } = require('http-errors');
 const jwt = require('jsonwebtoken');
-
 const bcrypt = require('bcrypt');
 
 const { JWT_SECRET } = process.env;
