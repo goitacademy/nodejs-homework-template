@@ -9,6 +9,6 @@ const {
 } = require('../../controllers/users');
 
 router.post('/users/signup', validateUser(schemaAddUser), controllerSingUpUser);
-router.post('/users/login', controllerLoginUser);
+router.post('/users/login', validateUser(schemaAddUser), controllerLoginUser);
 
 module.exports = router;

@@ -10,12 +10,15 @@ const controllerLoginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await loginUser(email);
-    const isPassword = await bcrypt.compare(password, user.password);
+    if (!user) {
+      return res.status(401).json({
+        message: 'Email or password is wrong',
+      });
+    }
 
-    if (!user || !isPassword) {
-      return res.json({
-        status: 'Unauthorized',
-        code: 401,
+    const isPassword = await bcrypt.compare(password, user.password);
+    if (!isPassword) {
+      return res.status(401).json({
         message: 'Email or password is wrong',
       });
     }
