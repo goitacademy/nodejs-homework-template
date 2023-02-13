@@ -1,4 +1,7 @@
 const { User } = require('../mod/user');
+const path = require('path');
+const fs = require('fs/promises');
+const Jimp = require("jimp");
 
 
 async function createContact(req, res, next) {
@@ -33,7 +36,7 @@ async function getContacts(req, res, next) {
   });
 }
 
-async function me(req, res, next) {
+async function getCurrentUser(req, res, next) {
   const { user } = req;
   const { email, _id: id, subscription } = user;
 
@@ -48,8 +51,42 @@ async function me(req, res, next) {
   });
 }
 
+
+async function updateAvatar(req, res, next) {
+  const { id } = req.user;
+  const { filename } = req.file;
+  const tmpPath = path.resolve(__dirname, "../tpm", filename);
+  const publicPath = path.resolve(__dirname, "../public/avatars", filename);
+
+  await Jimp.read(tmpPath).then((image) => {
+    return image.resize(250, 250).write(tmpPath);
+  }).catch((error) => {
+    console.error(error);
+  });
+
+  try {
+    await fs.rename(tmpPath, publicPath);
+  } catch (error) {
+    await fs.unlink(tmpPath);
+    return error;
+  };
+
+  const upUser = await User.findByIdAndUpdate(
+    id,
+    {
+      avatarURL: `/public/avatars/${filename}`,
+    },
+    {
+      new: true,
+    }
+  );
+  console.log("upUser", upUser);
+
+
+  }
 module.exports = {
   createContact,
   getContacts,
-  me,
-};
+  getCurrentUser,
+  updateAvatar,
+}
