@@ -4,16 +4,18 @@ require('dotenv').config();
 const { User } = require('../schemas/modelUser');
 
 const authMiddleware = async (req, res, next) => {
-  const [tokenType, token] = req.headers['autorization'];
+  const { authorization = '' } = req.headers;
+  const [tokenType, token] = authorization.split(' ');
+
   if (tokenType !== 'Bearer' || !token) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Not authorized',
     });
   }
 
   try {
-    const { id } = jwt.verify(token, process.env.SECRET);
-    const user = await User.findById(id);
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    const user = await User.findById(_id);
     if (!user || token !== user.token) {
       res.status(401).json({
         message: 'Not authorized',
