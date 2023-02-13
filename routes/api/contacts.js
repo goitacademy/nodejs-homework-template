@@ -1,8 +1,9 @@
 const express = require("express");
 const { tryCatchWrapper } = require("../../helpers/index");
-const {  validateBody, upload } = require("../../middlewares/index");
+const {  validateBody, upload, resize } = require("../../middlewares/index");
 const { addContactsSchema,  editContactsSchema, favoriteContactschema } = require("../../schemas/contacts");
 const { getContact, getContacts, createContact, deleteContact, updateContact, updateStatusContact, uploadImage } = require("../../controllers/contacts.controller");
+
 
 const routerContacts = express.Router();
 
@@ -12,7 +13,7 @@ routerContacts.post('/', validateBody(addContactsSchema), tryCatchWrapper(create
 routerContacts.delete('/:id', tryCatchWrapper(deleteContact));
 routerContacts.put('/:id', validateBody(editContactsSchema), tryCatchWrapper(updateContact));
 routerContacts.patch('/:id', validateBody(favoriteContactschema), tryCatchWrapper(updateStatusContact));
-routerContacts.patch('/:id/avatarURL', upload.single("avatarURL"), tryCatchWrapper(uploadImage));
+routerContacts.patch('/:id/avatarURL', upload.single("avatarURL"), resize(250, 250), tryCatchWrapper(uploadImage));
 
 
 

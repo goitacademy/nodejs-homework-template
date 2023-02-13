@@ -8,11 +8,11 @@ const schema = mongoose.Schema(
       type: String,
       unique: true,
       required: [true, 'Email is required'],
-      match: [/[a-z0-9]+@[a-z0-9]+/, 'user email is not valid'],
+    //   match: [/[a-z0-9]+@[a-z0-9]+/, 'user email is not valid'],
     },
     password: {
       type: String,
-      minLength: [6, 'password should be at least 6 characters long'],
+    //   minLength: [6, 'password should be at least 6 characters long'],
       required: [true, 'Password is required'],
     },
     subscription: {
@@ -28,6 +28,14 @@ const schema = mongoose.Schema(
         type: String, 
         default: '' 
     },
+    verify: {
+        type: Boolean,
+        default: false,
+      },
+      verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+      },
     contacts: [
       {
         type: mongoose.Schema.Types.ObjectId,

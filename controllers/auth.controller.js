@@ -1,8 +1,10 @@
 const { User } = require('../mod/user');
-const { HttpError } = require('../helpers/index');
+const { sendMail } = require('../helpers/index');
+const gravatar = require("gravatar");
 const { Conflict, Unauthorized } = require('http-errors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { v4 } = require("uuid");
 
 const { JWT_SECRET } = process.env;
 
@@ -14,25 +16,41 @@ async function register(req, res, next) {
 
 
   try {
+    const verificationToken = v4();
+
     const savedUser = await User.create({
       email,
       password: hashedPassword,
+      avatarURL: gravatar.url(email),
+      verificationToken,
+      verified: false,
+
     });
+
+   
+
+await sendMail({
+  to: email,
+  subject: "Please confirm you email",
+  html: `<a href="localhost:3000/api/users/verify/${verificationToken}">Confirm your email</a>`
+})
+
+
+
+
     res.status(201).json({
-      data: {
         user: {
           email,
           id: savedUser._id,
           subscription: savedUser.subscription,
+          avatarURL: savedUser.avatarURL,
         },
-      },
     });
   } catch (error) {
     if (error.message.includes('E11000 duplicate key error')) {
       //   throw new HttpError(409, 'User with this email already exists');
       throw Conflict('Email in use(409)');
     }
-    throw new HttpError(400, 'Error');
   }
 }
 
@@ -52,10 +70,14 @@ async function login(req, res, next) {
     throw new Unauthorized('email is wrong(401)');
   }
 
+  if (!storedUser.verify) {
+    throw new Unauthorized('(401)email is not verified! Please check you mail box');
+  }
+
   const isPasswordValid = await bcrypt.compare(password, storedUser.password);
 
   if (!isPasswordValid) {
-    throw new HttpError(401, 'password is wrong');
+    throw new Unauthorized( '(401) password is wrong');
   }
 
   const payload = { id: storedUser._id };
@@ -99,9 +121,6 @@ async function upSubscription(req, res, next) {
 
   res.status(200).json(upUser);
 }
-
-
-
 
 
 module.exports = {
