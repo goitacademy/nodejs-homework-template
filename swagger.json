@@ -1,619 +1,516 @@
 {
-  "definition": {
-    "openapi": "3.1.0",
-    "swagger": "2.0",
-    "info": {
-      "title": "Phonebook Express API with Swagger",
-      "version": "0.1.0",
-      "description": "This is a simple CRUD API application made with Express and documented with Swagger",
-      "license": {
-        "name": "MIT",
-        "url": "https://spdx.org/licenses/MIT.html"
+  "openapi": "3.0.0",
+  "info": {
+    "version": "2.0.2",
+    "title": "Phonebook Express API with Swagger",
+    "description": "This is a simple CRUD API application made with Express and documented with Swagger"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://phonebook-node.up.railway.app"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    },
+    {
+      "name": "Contacts",
+      "description": "API for contacts in the system"
+    }
+  ],
+
+  "paths": {
+    "/api/users/signup": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "Email already exist"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
       }
     },
-    "servers": [
-      {
-        "url": "https://phonebook-node.up.railway.app"
-      }
-    ],
-    "tags": [
-      {
-        "name": "Users",
-        "description": "API for users in the system"
-      },
-      {
-        "name": "Contacts",
-        "description": "API for contacts in the system"
-      }
-    ],
-
-    "securityDefinitions": {
-      "Bearer": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
-      }
-    },
-
-    "paths": {
-      "/api/users/signup": {
-        "post": {
-          "tags": ["Users"],
-          "summary": "Add new user in system",
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "new user",
-              "description": "user information",
-              "required": true,
+    "/api/users/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "resend email confirmation",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["email"],
                 "properties": {
                   "email": {
                     "type": "string",
-                    "example": "example@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "password"
+                    "description": "User's email",
+                    "format": "email",
+                    "example": "example@mail.com"
                   }
                 }
               }
             }
-          ],
-          "responses": {
-            "201": {
-              "description": "User added successfully",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "409": {
-              "description": "Email already exist"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
           }
-        }
-      },
-      "/api/users/verify": {
-        "post": {
-          "tags": ["Users"],
-          "summary": "resend email confirmation",
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "name": "email",
-              "in": "body",
-              "example": "example@example.com",
-              "required": true,
-              "description": "Email to send verification"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Verification email has been sent",
-              "schema": {
-                "$ref": "#/definitions/SuccessResponse"
-              }
-            }
-          }
-        }
-      },
-      "/api/users/verify/{verificationToken}": {
-        "get": {
-          "tags": ["Users"],
-          "summary": "verify user email",
-          "parameters": [
-            {
-              "name": "verification token",
-              "in": "path",
-              "required": true,
-              "description": "Verification token to verify email",
-              "type": "string"
-            }
-          ],
-          "produces": ["application/json"],
-          "responses": {
-            "200": {
-              "description": "Email verification is successful",
-              "schema": {
-                "$ref": "#/definitions/SuccessResponse"
-              }
-            }
-          }
-        }
-      },
-      "/api/users/login": {
-        "post": {
-          "tags": ["Users"],
-          "summary": "Login user",
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "user",
-              "description": "user information",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "example": "example@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "password"
-                  }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email has been sent",
+            "content": {
+              "application/json": {
+                "sсhema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "User has been logged in successfully",
-              "schema": {
-                "$ref": "#/definitions/UserWithJWT"
-              }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
           }
         }
-      },
-      "/api/users/logout": {
-        "get": {
-          "tags": ["Users"],
-          "summary": "Logout user",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "produces": ["application/json"],
-          "responses": {
-            "204": {
-              "description": "User has been logged out",
-              "schema": {
-                "$ref": "#/definitions/SuccessResponse"
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
+      }
+    },
+    "/api/users/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "verify user email",
+        "parameters": [
+          {
+            "name": "verification token",
+            "in": "path",
+            "required": true,
+            "description": "Verification token to verify email",
+            "type": "string"
           }
-        }
-      },
-      "/api/users/current": {
-        "get": {
-          "tags": ["Users"],
-          "summary": "Get current user",
-          "produces": ["application/json"],
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "User has been found",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
-          }
-        }
-      },
-      "/api/users/": {
-        "patch": {
-          "tags": ["Users"],
-          "summary": "Update user subscription",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "subscription",
-              "description": "user subscription ['starter', 'pro', 'business']",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "subscription": {
-                    "type": "string",
-                    "example": "business"
-                  }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verification is successful",
+            "content": {
+              "application/json": {
+                "sсhema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
-          ],
-          "produces": ["application/json"],
-          "responses": {
-            "200": {
-              "description": "User subscription has been updated",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
           }
         }
-      },
-      "/api/users/avatars": {
-        "patch": {
-          "tags": ["Users"],
-          "summary": "Update user's avatar",
-          "security": [
-            {
-              "Bearer": []
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
             }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "avatar",
-              "description": "user avatar",
-              "required": true,
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User has been logged in successfully",
+            "content": {
+              "application/json": {
+                "sсhema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get current user",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "User has been found",
+            "content": {
+              "application/json": {
+                "sсhema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "204": {
+            "description": "User has been logged out",
+            "content": {
+              "application/json": {
+                "sсhema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update user subscription",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Subscription",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User subscription has been updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/users/avatars": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update user's avatar",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Avatar",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "avatar": {
-                    "type": "file",
-                    "example": "file.png"
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               }
-            }
-          ],
-          "produces": ["application/json"],
-          "responses": {
-            "200": {
-              "description": "User avatar has been updated",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
-          }
-        }
-      },
-      "/api/contacts": {
-        "get": {
-          "tags": ["Contacts"],
-          "summary": "Get all user contacts",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "user contacts received",
-              "schema": {
-                "$ref": "#/definitions/Contacts"
-              }
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
             }
           }
         },
-        "post": {
-          "tags": ["Contacts"],
-          "summary": "Add new contact",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "new contact",
-              "description": "contact information",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "name"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "example": "(123)-4-345-345"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "example@example.com"
-                  },
-                  "favorite": {
-                    "type": "boolean",
-                    "example": "true"
-                  }
+        "responses": {
+          "200": {
+            "description": "User avatar has been updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
-          ],
-          "responses": {
-            "201": {
-              "description": "Contact added successfully",
-              "schema": {
-                "$ref": "#/definitions/Contact"
-              }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
-          }
-        }
-      },
-      "/api/contacts/{id}": {
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "Authorization token",
-            "required": true,
-            "type": "string"
           },
-          {
-            "name": "contact id",
-            "in": "path",
-            "required": true,
-            "description": "ID of contact that we want to find",
-            "type": "string"
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
           }
-        ],
-        "get": {
-          "tags": ["Contacts"],
-          "summary": "Get contact by Id",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "contact with Id",
-              "schema": {
-                "$ref": "#/definitions/Contact"
-              }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
-          }
-        },
-        "put": {
-          "tags": ["Contacts"],
-          "summary": "Update contact with given Id",
-          "produces": ["application/json"],
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "parameters": [
-            {
-              "in": "header",
-              "name": "Authorization",
-              "description": "Authorization token",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "new contact",
-              "description": "contact information",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "name"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "example": "(123)-4-345-345"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "example@example.com"
-                  },
-                  "favorite": {
-                    "type": "boolean",
-                    "example": "true"
-                  }
+        }
+      }
+    },
+    "/api/contacts": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get all user contacts",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "user contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contacts"
                 }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Contact added successfully",
-              "schema": {
-                "$ref": "#/definitions/Contact"
-              }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
-            }
-          }
-        },
-        "delete": {
-          "tags": ["Contacts"],
-          "summary": "Delete contact with given Id",
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "contact has been deleted"
-            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       },
-      "/api/contacts/{id}/favorite": {
-        "parameters": [
-          {
-            "name": "contact id",
-            "in": "path",
-            "required": true,
-            "description": "ID of contact that we want to find",
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "new contact",
-            "description": "contact information",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "favorite": {
-                  "type": "boolean",
-                  "example": "true"
-                }
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Add new contact",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "New user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserRequest"
               }
             }
           }
-        ],
-        "patch": {
-          "tags": ["Contacts"],
-          "summary": "Update favorite status",
-          "produces": ["application/json"],
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Contact favorite status has been updated",
-              "schema": {
-                "$ref": "#/definitions/Contact"
+        },
+        "responses": {
+          "201": {
+            "description": "Contact added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
               }
-            },
-            "400": {
-              "description": "Bad request"
-            },
-            "401": {
-              "description": "Unauthorized"
-            },
-            "500": {
-              "description": "Internal server error"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/contacts/{id}": {
+      "parameters": [
+        {
+          "name": "contact id",
+          "in": "path",
+          "required": true,
+          "description": "Id of contact that needs to be found",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get contact by Id",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "contact with Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Contacts"],
+        "summary": "Update contact with given Id",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Contact to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Contacts"],
+        "summary": "Delete contact with given Id",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "contact has been deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
             }
           }
         }
       }
     },
-
-    "definitions": {
+    "/api/contacts/{id}/favorite": {
+      "parameters": [
+        {
+          "name": "contact id",
+          "in": "path",
+          "required": true,
+          "description": "Id of contact that needs to be found",
+          "type": "string"
+        }
+      ],
+      "patch": {
+        "tags": ["Contacts"],
+        "summary": "Update favorite status",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Favorite",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
       "User": {
         "required": ["email", "password"],
         "properties": {
@@ -626,28 +523,17 @@
             "format": "email"
           },
           "subscription": {
-            "type": "string"
+            "type": "string",
+            "example": "business"
           },
           "avatar": {
             "type": "string"
           }
         }
       },
-      "UserWithJWT": {
-        "required": ["email", "password"],
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "user": {
-            "type": "object",
-            "$ref": "#/definitions/User"
-          }
-        }
-      },
       "Users": {
         "type": "array",
-        "$ref": "#/definitions/User"
+        "$ref": "#/components/schemas/User"
       },
       "Contact": {
         "required": ["name", "email", "phone"],
@@ -673,9 +559,10 @@
       },
       "Contacts": {
         "type": "array",
-        "$ref": "#/definitions/Contact"
+        "$ref": "#/components/schemas/Contact"
       },
       "SuccessResponse": {
+        "type": "object",
         "required": ["message"],
         "properties": {
           "message": {
@@ -683,8 +570,101 @@
             "uniqueItems": true
           }
         }
+      },
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "example@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User`s password",
+            "example": "password"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "example@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User`s password",
+            "example": "password"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "SubscriptionRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "subscription": {
+            "type": "string",
+            "description": "User subscription ['starter', 'pro', 'business']",
+            "example": "business"
+          }
+        }
+      },
+      "AddUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "FirstName LastName"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(123)-476-345-345"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@example.com"
+          },
+          "favorite": {
+            "type": "boolean",
+            "example": "true"
+          }
+        }
+      },
+      "UpdateFavoriteRequest": {
+        "type": "object",
+        "properties": {
+          "favorite": {
+            "type": "boolean",
+            "example": "true"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
-  },
-  "apis": ["./routes/api/*.js"]
+  }
 }
