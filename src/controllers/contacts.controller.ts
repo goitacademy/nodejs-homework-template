@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import crypto from 'crypto';
 import { responseData } from 'helpers/apiHelpers';
 import {
   addContactService,
@@ -28,7 +27,7 @@ export const getContactByIdController = async (req: Request, res: Response) => {
 };
 
 export const addContactController = async (req: Request, res: Response) => {
-  const newContact = await addContactService({ id: crypto.randomUUID(), ...req.body });
+  const newContact = await addContactService(req.body);
 
   res.status(201).json(responseData(newContact, 201));
 };

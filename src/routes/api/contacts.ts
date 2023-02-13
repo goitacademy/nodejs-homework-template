@@ -16,13 +16,11 @@ import { asyncWrapper } from 'helpers/apiHelpers';
 const router = express.Router();
 
 router.get('/', asyncWrapper(getContactsController));
-router.get('/:contactId', getContactByIdValidation, asyncWrapper(getContactByIdController));
 router.post('/', addContactValidation, asyncWrapper(addContactController));
-router.delete('/:contactId', getContactByIdValidation, asyncWrapper(deleteContactByIdController));
-router.put(
-  '/:contactId',
-  [getContactByIdValidation, updateContactValidation],
-  asyncWrapper(updateContactByIdController)
-);
+router
+  .route('/:contactId')
+  .get(getContactByIdValidation, asyncWrapper(getContactByIdController))
+  .delete(getContactByIdValidation, asyncWrapper(deleteContactByIdController))
+  .put([getContactByIdValidation, updateContactValidation], asyncWrapper(updateContactByIdController));
 
 export default router;
