@@ -17,13 +17,12 @@ app.use('/api', contactsRouter);
 app.use('/api', usersRouter);
 
 app.use((req, res) => {
-  console.log('Ошибка пришла в app.js');
+  console.log('Ошибка 404 пришла в app.js');
   res.status(404).json({ message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
   console.log('Ошибка 500 пришла в app.js');
-
   res.status(500).json({ message: err.message });
 });
 
