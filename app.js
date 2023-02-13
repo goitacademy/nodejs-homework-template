@@ -21,6 +21,7 @@ app.use(express.json());
 app.use('/api/contacts', routerContacts);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/public/avatars', express.static('public/avatars'));
 
 // 404
 

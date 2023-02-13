@@ -1,14 +1,16 @@
 const { HttpError } = require('../helpers/index');
 const { Contact } = require('../mod/contact');
+const path = require('path');
+const fs = require('fs/promises');
 
 // get list
 async function getContacts(req, res) {
-  const { id: owner } = req.user;
-  const { limit = 20, page = 1, favorite } = req.query;
+  // const { id: owner } = req.user;
+  const { limit = 5, page = 1, favorite } = req.query;
   const skyp = (page - 1) * limit;
 
   console.log('limit:', limit);
-  const contacts = await Contact.find({ owner }).skip(Number(skyp)).limit(Number(limit));
+  const contacts = await Contact.find({}).limit(Number(limit)).skip(Number(skyp));
 
   if (!favorite) {
     console.log('contacts:', contacts);
@@ -84,13 +86,34 @@ async function updateStatusContact(req, res, next) {
   return res.status(200).json(contact);
 }
 
-//     // ==== update ====
-//     // const contact = await Contact.findByIdAndUpdate(
-//     //   '63e662b49cff7686e6c5c136',
-//     //   { name: 'updated name 3' },
-//     //   { new: true }
-//     // );
-//     // console.log('updated contact: ', contact);
+async function uploadImage(req, res, next) {
+  // req.file
+  console.log('req.file', req.file);
+  const { filename } = req.file;
+  const tmpPath = path.resolve(__dirname, '../tmp', filename);
+  const publicPath = path.resolve(__dirname, '../public/avatars', filename);
+  try {
+    await fs.rename(tmpPath, publicPath);
+  } catch (error) {
+    await fs.unlink(tmpPath);
+    throw error;
+  }
+
+  const contactId = req.params.id;
+
+  const contact = await Contact.findById(contactId);
+  contact.avatarURL = `/public/avatars/${filename}`;
+  await contact.save();
+
+ 
+
+  // TODO
+  return res.json({
+    data: {
+      avatarURL: contact.avatarURL,
+    },
+  });
+}
 
 module.exports = {
   getContact,
@@ -99,4 +122,5 @@ module.exports = {
   deleteContact,
   updateContact,
   updateStatusContact,
+  uploadImage,
 };

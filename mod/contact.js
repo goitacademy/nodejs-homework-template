@@ -1,28 +1,41 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 // Schema
 
-const schema = mongoose.Schema(
+const schema = new Schema(
   {
-    name: { type: String, required: [true, 'Set name for contact'],},
+    name: { type: String, required: [true, 'Set name for contact'] },
+    avatarURL: {
+      type: String,
+      default: "",
+    },
+
     email: {
       type: String,
     },
-    phone: { type: String, match: /\d{7}/, },
-    favorite: {type: Boolean, default: false,}
+    phone: { type: String, match: /\d{7}/ },
+    favorite: { type: Boolean, default: false },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
- 
 
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
+  {
+ 
+  }
+
+
 );
 
 // Model (Class)
 
-const Contact = mongoose.model('contact', schema);
+const Contact = model('contact', schema);
 
-module.exports ={
-    Contact,
-}
+module.exports = {
+  Contact,
+};
 
 // async function main() {
 //   try {

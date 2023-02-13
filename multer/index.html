@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="form">
+      <input
+        type="file"
+        name="file"
+      />
+      <button type="sybmit">Send file</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("form");
+      form.addEventListener('submit', function (e) {
+        console.log('post image to server');
+
+        e.preventDefault();
+        const formData = new FormData();
+        console.log(this.elements);
+
+        formData.append('image', this.elements.file.files[0]);
+         
+        const url = "http://localhost:3000/upload"
+        fetch(url, {
+            method: "post",
+            body: formData
+        }).catch(e => console.log(e))
+      });
+    </script>
+  </body>
+</html>
