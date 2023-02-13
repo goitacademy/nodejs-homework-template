@@ -3,14 +3,14 @@ const Joi = require("joi");
 
 const userSchema = Schema(
   {
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-    },
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
     },
     subscription: {
       type: String,

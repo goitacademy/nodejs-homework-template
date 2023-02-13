@@ -1,3 +1,5 @@
 const register = require("./register");
 
-module.exports = register;
+module.exports = {
+    register,
+};
