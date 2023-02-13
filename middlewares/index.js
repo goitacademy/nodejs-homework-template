@@ -2,6 +2,9 @@ const { HttpError } = require('../helpers');
 const jwt = require("jsonwebtoken");
 const {User} =require("./../mod/user");
 
+
+const { JWT_SECRET } = process.env;
+
 function validateBody(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
@@ -15,6 +18,8 @@ function validateBody(schema) {
 
 async function auth(req, res, next) {
 
+console.log(req.headers);
+
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
 
@@ -27,7 +32,7 @@ async function auth(req, res, next) {
   }
 
   try{
-  const {id} = jwt.verify(token, process.env.JWT_SECRET);
+  const {id} = jwt.verify(token, JWT_SECRET);
   const user = await User.findById(id);
   console.log("user", user);
 
@@ -41,7 +46,6 @@ async function auth(req, res, next) {
 
   next()
 }
-
 
 
 module.exports = {
