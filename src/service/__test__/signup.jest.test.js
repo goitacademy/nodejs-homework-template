@@ -34,6 +34,7 @@ describe("Signup test", () => {
 
     const result = await signup(mReq, mRes);
     expect(result.status).toBe(201);
+    // expect(mRes.status).lastCalledWith(201);
   });
 });
 
