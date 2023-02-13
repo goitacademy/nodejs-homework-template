@@ -7,5 +7,6 @@ const { joiSchema } = require("../../models/user");
 const router = express.Router();
 
 router.post("/register", validation(joiSchema), ctrlWrapper(ctrl.register));
+router.post("/login", validation(joiSchema), ctrlWrapper(ctrl.login));
 
 module.exports = router;
