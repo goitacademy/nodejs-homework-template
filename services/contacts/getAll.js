@@ -7,12 +7,13 @@ module.exports = async (req) => {
 
   const skip = (page - 1) * limit;
 
-  const searchParams = { owner };
+  const query = { owner };
+
   if (favorite === ('true' || 'false')) {
-    searchParams.favorite = favorite;
+    query.favorite = favorite;
   }
 
-  return await Contact.find(searchParams, null, {
+  return await Contact.find(query, null, {
     skip,
     limit,
   }).populate('owner', 'subscription email');

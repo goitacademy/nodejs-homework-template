@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 const findUser = async (email) =>
   await User.findOne({ email });
 
-const hashPass = async (password) => {
-  return await bcrypt.hash(password, 10);
+const hashPass = (password) => {
+  return bcrypt.hashSync(password, 10);
 };
 
 const createNewUser = async (user, avatarURL) => {

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const isValidHash = async (password, hashedPassword) => {
-  return await bcrypt.compare(password, hashedPassword);
+  return bcrypt.compareSync(password, hashedPassword);
 };
 
 const getToken = async (id) => {
