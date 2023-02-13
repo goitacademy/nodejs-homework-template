@@ -1,0 +1,502 @@
+{
+  "definition": {
+    "openapi": "3.1.0",
+    "swagger": "2.0",
+    "info": {
+      "title": "Phonebook Express API with Swagger",
+      "version": "0.1.0",
+      "description": "This is CRUD API application made with Express and documented with Swagger",
+      "license": {
+        "name": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    },
+    "servers": [
+      {
+        "url": "https://phonebook-node.up.railway.app"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      },
+      {
+        "name": "Contacts",
+        "description": "API for contacts in the system"
+      }
+    ],
+
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "in": "header",
+          "name": "Authorization",
+          "description": "Bearer token to access these api endpoints",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+
+    "paths": {
+      "/api/users/signup": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Add new user in system",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "body",
+              "description": "user email"
+            },
+            {
+              "name": "password",
+              "in": "body",
+              "description": "user password"
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "201": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/verify": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "resend email confirmation",
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "email",
+              "in": "body",
+              "required": true,
+              "description": "Email to send verification"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Verification email has been sent",
+              "schema": {
+                "$ref": "#/definitions/SuccessResponse"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/verify/{verificationToken}": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "verify user email",
+          "parameters": [
+            {
+              "name": "verification token",
+              "in": "path",
+              "required": true,
+              "description": "Verification token to verify email",
+              "type": "string"
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Email verification is successful",
+              "schema": {
+                "$ref": "#/definitions/SuccessResponse"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/login": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Login user",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "body",
+              "description": "user email"
+            },
+            {
+              "name": "password",
+              "in": "body",
+              "description": "user password"
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User has been logged in",
+              "schema": {
+                "$ref": "#/definitions/UserWithJWT"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/logout": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Logout user",
+          "parameters": [
+            {
+              "name": "Authorization token",
+              "in": "headers",
+              "description": "User Bearer JWT",
+              "required": true
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "204": {
+              "description": "User has been logged out",
+              "schema": {
+                "$ref": "#/definitions/SuccessResponse"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/current": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get current user",
+          "parameters": [
+            {
+              "name": "Authorization token",
+              "in": "headers",
+              "description": "User Bearer JWT",
+              "required": true
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User has been found",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/": {
+        "patch": {
+          "tags": ["Users"],
+          "summary": "Update user subscription",
+          "parameters": [
+            {
+              "name": "Authorization token",
+              "in": "headers",
+              "description": "User Bearer JWT",
+              "required": true
+            },
+            {
+              "name": "subscription",
+              "in": "body",
+              "description": "user subscription ['starter', 'pro', 'business']"
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User subscription has been updated",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/users/avatars": {
+        "patch": {
+          "tags": ["Users"],
+          "summary": "Update user's avatar",
+          "parameters": [
+            {
+              "name": "Authorization token",
+              "in": "headers",
+              "description": "User Bearer JWT",
+              "required": true
+            },
+            {
+              "name": "avatar",
+              "in": "body",
+              "description": "user avatar file"
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "User avatar has been updated",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/api/contacts": {
+        "parameters": [
+          {
+            "name": "Authorization token",
+            "in": "headers",
+            "description": "User Bearer JWT",
+            "required": true
+          }
+        ],
+        "get": {
+          "tags": ["Contacts"],
+          "summary": "Get all user contacts",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Contacts"
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Contacts"],
+          "summary": "Add new contact",
+          "parameters": [
+            {
+              "name": "name",
+              "in": "body",
+              "description": "user name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "in": "body",
+              "description": "user email",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "in": "body",
+              "description": "user phone",
+              "required": true
+            },
+            {
+              "name": "favorite",
+              "in": "body",
+              "description": "is it favorite",
+              "required": false
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "201": {
+              "description": "New contact has been created",
+              "schema": {
+                "$ref": "#/definitions/Contact"
+              }
+            }
+          }
+        }
+      },
+      "/api/contacts/{id}": {
+        "parameters": [
+          {
+            "name": "Authorization token",
+            "in": "headers",
+            "required": true,
+            "description": "User Bearer JWT"
+          },
+          {
+            "name": "contact id",
+            "in": "path",
+            "required": true,
+            "description": "ID of contact that we want to find",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": ["Contacts"],
+          "summary": "Get contact by Id",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Contact"
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": ["Contacts"],
+          "summary": "Update contact",
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "name",
+              "in": "body",
+              "description": "user name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "in": "body",
+              "description": "user email",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "in": "body",
+              "description": "user phone",
+              "required": true
+            },
+            {
+              "name": "favorite",
+              "in": "body",
+              "description": "is it favorite",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Contact is updated",
+              "schema": {
+                "$ref": "#/definitions/Contact"
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete contact with given Id",
+          "tags": ["Contacts"],
+          "responses": {
+            "200": {
+              "description": "contact has been deleted"
+            }
+          }
+        }
+      },
+      "/api/contacts/{id}/favorite": {
+        "parameters": [
+          {
+            "name": "Authorization token",
+            "in": "headers",
+            "required": true,
+            "description": "User Bearer JWT"
+          },
+          {
+            "name": "contact id",
+            "in": "path",
+            "required": true,
+            "description": "ID of contact that we want to find",
+            "type": "string"
+          },
+          {
+            "name": "favorite",
+            "in": "body",
+            "description": "is it favorite",
+            "required": true
+          }
+        ],
+        "patch": {
+          "tags": ["Contacts"],
+          "summary": "Update favorite status",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Contact favorite status has been updated",
+              "schema": {
+                "$ref": "#/definitions/Contact"
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "definitions": {
+      "User": {
+        "required": ["email", "password"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "subscription": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        }
+      },
+      "UserWithJWT": {
+        "required": ["email", "password"],
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "$ref": "#/definitions/User"
+          }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "$ref": "#/definitions/User"
+      },
+      "Contact": {
+        "required": ["name", "email", "phone"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "favorite": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Contacts": {
+        "type": "array",
+        "$ref": "#/definitions/Contact"
+      },
+      "SuccessResponse": {
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "uniqueItems": true
+          }
+        }
+      }
+    }
+  },
+  "apis": ["./routes/*.js"]
+}

@@ -4,21 +4,24 @@ import cors from 'cors';
 import contactsRouter from './src/routes/api/contacts.js';
 import authRouter from './src/routes/api/auth.js';
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerDocument from './swagger.json' assert { type: 'json' };
+
 const { BASE_URL } = process.env;
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
-
-app.get('/', (_, res) => {
-  res.send(`API is running: ${BASE_URL}`);
-});
+const specifications = swaggerJsdoc(swaggerDocument);
 
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use(express.static('public')); // to serve static files
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', authRouter);
-app.use(express.static('public')); // to serve static files
+
+app.use('/', swaggerUi.serve, swaggerUi.setup(specifications));
 
 app.use((_, res) => {
   res.status(404).json('Use api on route not found');

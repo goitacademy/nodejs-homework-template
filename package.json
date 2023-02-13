@@ -28,6 +28,8 @@
     "mongoose": "^6.8.2",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.0",
     "uid": "^2.0.1",
     "uuid": "^9.0.0"
   },
