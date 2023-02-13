@@ -7,11 +7,7 @@ const controllerSingUpUser = async (req, res) => {
     const userFind = await User.findOne({ email });
 
     if (userFind) {
-      return res.json({
-        status: 'conflict',
-        code: 409,
-        message: 'Email in use',
-      });
+      return res.status(409).json({ message: 'Email in use' });
     }
 
     const user = await addUser(email, password);
@@ -26,6 +22,7 @@ const controllerSingUpUser = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log('error in controller signup');
     res.status(500).json({ message: error.message });
     next(error);
   }
