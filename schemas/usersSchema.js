@@ -10,6 +10,10 @@ const custom = Joi.defaults(() =>
   })
 );
 
+const adressURL = Joi.object({
+  avatarURL: Joi.string().uri(),
+});
+
 const atLeastOne = custom.object().or('password', 'email', 'subscription');
 const allRequired = custom
   .object()
@@ -19,4 +23,5 @@ const allRequired = custom
 module.exports = {
   atLeastOne,
   allRequired,
+  adressURL,
 };

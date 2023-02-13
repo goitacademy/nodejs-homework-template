@@ -2,8 +2,13 @@ const userService = require('../services/userService');
 const JoiSchema = require('../schemas/usersSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const path = require('path');
+const fs = require('fs/promises');
+const uniqueFileName = require('unique-filename');
 require('dotenv').config();
 const secret = process.env.SECRET;
+const storeImage = path.join(process.cwd(), 'public', 'avatars');
 
 const register = async (req, res, next) => {
   try {
@@ -22,6 +27,11 @@ const register = async (req, res, next) => {
       });
       return;
     }
+    const avatarURL = gravatar.url(
+      email,
+      { s: '100', r: 'x', d: 'robohash' },
+      true
+    );
     const isExist = await userService.getUserByEmail({ email });
     if (isExist) {
       res.status(409).json({
@@ -34,6 +44,7 @@ const register = async (req, res, next) => {
       password: hash,
       email,
       subscription,
+      avatarURL,
     });
     if (!user) {
       res.status(409).json({
@@ -169,10 +180,33 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { description } = await req.body;
+    const { path: temporaryName, originalname } = req.file;
+    const uniqueName =
+      uniqueFileName(storeImage, originalname) + path.extname(temporaryName);
+    // obrobić obrazek
+    // zmienić link awatara w bazie na nowy
+    // usunąć stary obraz
+    try {
+      await fs.rename(temporaryName, uniqueName);
+    } catch (err) {
+      await fs.unlink(temporaryName);
+      return next(err);
+    }
+    res.json({ description, message: 'File loaded' });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   current,
   updateSubscription,
+  updateAvatar,
 };
