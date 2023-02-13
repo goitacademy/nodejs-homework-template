@@ -17,6 +17,7 @@ const {
   controllerPutContact,
   controllerPatchFavorite,
 } = require('../../controllers/contacts');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 
 const router = express.Router();
 
