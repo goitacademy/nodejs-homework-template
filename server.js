@@ -1,14 +1,13 @@
+require('dotenv').config();
+
 const app = require('./app');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
 
 
 // anable logging
 mongoose.set('debug', true);
 
-
-dotenv.config();
 mongoose.set('strictQuery', false);
 const { HOST_URI } = process.env;
 

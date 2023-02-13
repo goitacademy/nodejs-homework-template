@@ -1,4 +1,4 @@
-const express = require("express")
+const express = require("express");
 const { tryCatchWrapper } = require("../../helpers/index");
 const {  validateBody } = require("../../middlewares/index");
 const { addContactsSchema,  editContactsSchema, favoriteContactschema } = require("../../schemas/contacts");
