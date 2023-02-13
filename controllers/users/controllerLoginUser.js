@@ -3,13 +3,14 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const { loginUser } = require('../../services/users');
+const { User } = require('../../schemas/modelUser');
 
 const JWT_SECRET = process.env.SECRET;
 
 const controllerLoginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await loginUser(email);
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
         message: 'Email or password is wrong',
@@ -26,6 +27,7 @@ const controllerLoginUser = async (req, res, next) => {
     const payload = { _id: user._id };
     const token = jwt.sign(payload, JWT_SECRET);
 
+    await loginUser(user._id, token);
     res.json({
       status: 'success',
       code: 200,
