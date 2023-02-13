@@ -1,4 +1,4 @@
-const { Contact } = require("../../models/index");
+const { Contact } = require("../../models");
 const { NotFound } = require("http-errors");
 
 const updateStatusContact = async (req, res, next) => {
@@ -12,7 +12,11 @@ const updateStatusContact = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Not found`);
   }
-  res.status(200).json(result);
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    data: { result },
+  });
 };
 
 module.exports = updateStatusContact;
