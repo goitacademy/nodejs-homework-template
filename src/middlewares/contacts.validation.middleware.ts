@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import joi from 'joi';
 
 const validationFields = {
+  // Mongo Db validation
+  // Joi.string().pattern(/^[0-9a-fA-F]{24}$/, 'Invalid id.')
   contactId: joi.alternatives(joi.number(), joi.string().guid({ version: 'uuidv4' })),
   name: joi.string().min(3).max(30),
   email: joi.string().email(),

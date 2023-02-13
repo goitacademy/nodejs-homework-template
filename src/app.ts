@@ -1,7 +1,9 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import contactsRouter from './routes/api/contacts';
+import { errorMiddleware } from './middlewares/errors.middleware';
+import { responseClientError } from 'helpers/apiHelpers';
 
 const app = express();
 
@@ -14,11 +16,9 @@ app.use(express.json());
 app.use('/api/contacts', contactsRouter);
 
 app.use((_, res) => {
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json(responseClientError(new Error('Not found'), 404));
 });
 
-app.use((err: Error, _req: Request, res: Response) => {
-  res.status(500).json({ message: err.message });
-});
+app.use(errorMiddleware);
 
 export default app;

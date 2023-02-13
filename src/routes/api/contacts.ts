@@ -3,21 +3,26 @@ import {
   getContactByIdValidation,
   addContactValidation,
   updateContactValidation,
-} from '../../middlewares/contacts.validation.middleware';
+} from 'middlewares/contacts.validation.middleware';
 import {
-  getContacts,
-  getContactById,
-  addContact,
-  deleteContactById,
-  updateContactById,
-} from '../../controllers/contacts.controller';
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  deleteContactByIdController,
+  updateContactByIdController,
+} from 'controllers/contacts.controller';
+import { asyncWrapper } from 'helpers/apiHelpers';
 
 const router = express.Router();
 
-router.get('/', getContacts);
-router.get('/:contactId', getContactByIdValidation, getContactById);
-router.post('/', addContactValidation, addContact);
-router.delete('/:contactId', getContactByIdValidation, deleteContactById);
-router.put('/:contactId', [getContactByIdValidation, updateContactValidation], updateContactById);
+router.get('/', asyncWrapper(getContactsController));
+router.get('/:contactId', getContactByIdValidation, asyncWrapper(getContactByIdController));
+router.post('/', addContactValidation, asyncWrapper(addContactController));
+router.delete('/:contactId', getContactByIdValidation, asyncWrapper(deleteContactByIdController));
+router.put(
+  '/:contactId',
+  [getContactByIdValidation, updateContactValidation],
+  asyncWrapper(updateContactByIdController)
+);
 
 export default router;

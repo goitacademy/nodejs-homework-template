@@ -1,71 +1,55 @@
-import * as contactsApi from '../models/contacts';
-import crypto from 'crypto';
 import { Request, Response } from 'express';
+import crypto from 'crypto';
+import { responseData } from 'helpers/apiHelpers';
+import {
+  addContactService,
+  getContactByIdService,
+  getContactsService,
+  removeContactByIdService,
+  updateContactByIdService,
+} from 'services/contacts.service';
+import { WrongParametersError } from 'helpers/errors';
 
-export const getContacts = async (_: Request, res: Response) => {
-  try {
-    const contacts = await contactsApi.listContacts();
-    res.status(200).json({ contacts });
-  } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
-  }
+export const getContactsController = async (_: Request, res: Response) => {
+  const contacts = await getContactsService();
+
+  res.status(200).json(responseData({ contacts }, 200));
 };
 
-export const getContactById = async (req: Request, res: Response) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await contactsApi.getContactById(contactId);
+export const getContactByIdController = async (req: Request, res: Response) => {
+  const { contactId } = req.params;
+  const contact = await getContactByIdService(contactId);
 
-    if (contact) {
-      res.status(200).json(contact);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
+  if (!contact) {
+    throw new WrongParametersError(`Contact not found`);
   }
+
+  res.status(200).json(responseData(contact, 200));
 };
 
-export const addContact = async (req: Request, res: Response) => {
-  try {
-    const newContact = await contactsApi.addContact({ id: crypto.randomUUID(), ...req.body });
+export const addContactController = async (req: Request, res: Response) => {
+  const newContact = await addContactService({ id: crypto.randomUUID(), ...req.body });
 
-    if (newContact) {
-      res.status(201).json(newContact);
-    } else {
-      res.status(404).json({ message: 'Not found' });
-    }
-  } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
-  }
+  res.status(201).json(responseData(newContact, 201));
 };
 
-export const deleteContactById = async (req: Request, res: Response) => {
-  try {
-    const { contactId } = req.params;
-    const removedContact = await contactsApi.removeContact(contactId);
+export const deleteContactByIdController = async (req: Request, res: Response) => {
+  const { contactId } = req.params;
+  const removedContact = await removeContactByIdService(contactId);
 
-    if (removedContact) {
-      res.status(200).json({ message: `"${removedContact.name}" contact has been deleted.` });
-    } else {
-      res.status(404).json({ message: `Contact not found.` });
-    }
-  } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
+  if (!removedContact) {
+    throw new WrongParametersError(`Contact not found`);
   }
+
+  res.status(200).json(responseData(removedContact, 200));
 };
 
-export const updateContactById = async (req: Request, res: Response) => {
-  try {
-    const { contactId } = req.params;
-    const updatedContact = await contactsApi.updateContact(contactId, req.body);
+export const updateContactByIdController = async (req: Request, res: Response) => {
+  const { contactId } = req.params;
+  const updatedContact = await updateContactByIdService(contactId, req.body);
 
-    if (updatedContact) {
-      res.status(200).json(updatedContact);
-    } else {
-      res.status(404).json({ message: `Contact not found.` });
-    }
-  } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
+  if (!updatedContact) {
+    throw new WrongParametersError(`Contact not found`);
   }
+  res.status(200).json(responseData(updatedContact, 200));
 };
