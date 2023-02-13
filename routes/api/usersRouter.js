@@ -8,10 +8,12 @@ const {
   controllerSingUpUser,
   controllerLoginUser,
   controllerLogoutUser,
+  controllerGetUser,
 } = require('../../controllers/users');
 
 router.post('/users/signup', validateUser(schemaAddUser), controllerSingUpUser);
 router.post('/users/login', validateUser(schemaAddUser), controllerLoginUser);
 router.get('/users/logout', authMiddleware, controllerLogoutUser);
+router.get('/users/current', authMiddleware, controllerGetUser);
 
 module.exports = router;

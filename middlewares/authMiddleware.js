@@ -6,7 +6,6 @@ const { User } = require('../schemas/modelUser');
 const authMiddleware = async (req, res, next) => {
   const { authorization = '' } = req.headers;
   const [tokenType, token] = authorization.split(' ');
-  console.log(token);
 
   if (tokenType !== 'Bearer' || !token) {
     console.log('No token');
