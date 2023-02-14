@@ -1,19 +1,28 @@
 const express = require('express');
 const router = new express.Router();
-const { userValidation } = require('../../middlewares/userValidation');
-const { authMiddleware } = require('../../middlewares/authMiddleware');
+const {
+    userPostValidation,
+    userPatchValidation,
+    authMiddleware,
+    avatarMiddleware } = require('../../middlewares');
 const { asyncWrapper } = require('../../helpers/apiHelpers');
 const {
     ctrlSignup,
     ctrlLogin,
     ctrlLogout,
     ctrlCurrent,
-    ctrlChangeSubscription} = require('../../controllers/authController');
+    ctrlChangeSubscription,
+    ctrlChangeAvatar } = require('../../controllers/authController');
 
-router.post('/users/signup', userValidation, asyncWrapper(ctrlSignup));
-router.post('/users/login', userValidation, asyncWrapper(ctrlLogin));
+router.post('/users/signup', userPostValidation, asyncWrapper(ctrlSignup));
+router.post('/users/login', userPostValidation, asyncWrapper(ctrlLogin));
 router.get('/users/logout', authMiddleware, asyncWrapper(ctrlLogout));
 router.get('/users/current', authMiddleware, asyncWrapper(ctrlCurrent));
-router.patch('/users', authMiddleware, asyncWrapper(ctrlChangeSubscription));
+router.patch('/users', userPatchValidation, authMiddleware, asyncWrapper(ctrlChangeSubscription));
+router.patch('/users/avatars',
+    authMiddleware,
+    avatarMiddleware.single('avatar'),
+    asyncWrapper(ctrlChangeAvatar)
+);
 
 module.exports = router;
