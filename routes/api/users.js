@@ -14,6 +14,11 @@ router.get('/current', auth, userController.current);
 
 router.patch('/', auth, userController.updateSubscription);
 
-router.patch('/avatars', upload.single('avatar'), userController.updateAvatar);
+router.patch(
+  '/avatars',
+  auth,
+  upload.single('avatar'),
+  userController.updateAvatar
+);
 
 module.exports = router;

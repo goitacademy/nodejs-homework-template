@@ -40,10 +40,19 @@ const updateUserSubscription = ({ _id, body }) => {
   }
 };
 
+const updateUserAvatar = ({ _id, body }) => {
+  try {
+    return User.findOneAndUpdate({ _id }, body, { new: true });
+  } catch (err) {
+    return false;
+  }
+};
+
 module.exports = {
   addUser,
   getUserByEmail,
   getUserById,
   updateUserToken,
   updateUserSubscription,
+  updateUserAvatar,
 };

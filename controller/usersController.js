@@ -6,6 +6,7 @@ const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
 const uniqueFileName = require('unique-filename');
+const Jimp = require('jimp');
 require('dotenv').config();
 const secret = process.env.SECRET;
 const storeImage = path.join(process.cwd(), 'public', 'avatars');
@@ -183,18 +184,41 @@ const updateSubscription = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   try {
     const { description } = await req.body;
-    const { path: temporaryName, originalname } = req.file;
-    const uniqueName =
-      uniqueFileName(storeImage, originalname) + path.extname(temporaryName);
-    // obrobić obrazek
-    // zmienić link awatara w bazie na nowy
-    // usunąć stary obraz
+    const { path: temporaryName } = req.file;
+    const uniqueName = uniqueFileName(storeImage) + path.extname(temporaryName);
     try {
-      await fs.rename(temporaryName, uniqueName);
+      Jimp.read(temporaryName, async (err, avatar) => {
+        if (err) {
+          console.log(err);
+          next(err);
+        }
+        await avatar
+          .cover(
+            250,
+            250,
+            Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE
+          )
+          .quality(60)
+          .write(uniqueName);
+      });
     } catch (err) {
       await fs.unlink(temporaryName);
       return next(err);
     }
+    await fs.unlink(temporaryName);
+    const { _id, avatarURL } = req.user;
+    const indexURL = uniqueName.indexOf('avatars');
+    const newAvatarURL = uniqueName.toString().substring(indexURL - 1);
+    const updateAvatar = await userService.updateUserAvatar({
+      _id,
+      body: { avatarURL: newAvatarURL },
+    });
+    if (!updateAvatar) {
+      return res.status(500).json();
+    }
+    try {
+      await fs.unlink(path.join(storeImage, '..', avatarURL));
+    } catch (err) {}
     res.json({ description, message: 'File loaded' });
   } catch (err) {
     console.log(err);
