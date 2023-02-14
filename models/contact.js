@@ -1,7 +1,5 @@
 const { Schema, model } = require('mongoose');
 
-// Schema
-
 const schema = new Schema(
   {
     name: { type: String, required: [true, 'Set name for contact'] },

@@ -25,25 +25,3 @@ routerContacts.patch('/:id/avatarURL', upload.single('avatarURL'), resize(250, 2
 module.exports = {
   routerContacts,
 };
-
-// router.get('/', async (req, res, next) => {
-//   res.json({ message: 'Home work №2 done!!' })
-// })
-
-// router.get('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// module.exports = router

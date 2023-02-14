@@ -41,8 +41,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // console.error('API Error: ', error.message, error.type);
-
   // handle ObjectId validation:
 
   if (error.message.includes('Cast to ObjectId failed for value')) {

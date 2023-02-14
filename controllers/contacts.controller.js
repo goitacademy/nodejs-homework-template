@@ -1,12 +1,11 @@
 const { HttpError } = require('../helpers/index');
-const { Contact } = require('../mod/contact');
+const { Contact } = require('../models/contact');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
 
 // get list
 async function getContacts(req, res) {
-  // const { id: owner } = req.user;
   const { limit = 5, page = 1, favorite } = req.query;
   const skyp = (page - 1) * limit;
 
@@ -78,15 +77,7 @@ async function uploadImage(req, res, next) {
   const { filename } = req.file;
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
 
-  // Вариант 1
-  // resize
-  // const image = await Jimp.read(tmpPath);
-  // await image.resize(250, 250);
-  // await image.writeAsync(tmpPath)
-
   const publicPath = path.resolve(__dirname, '../public/avatars', filename);
-
-  // Вариант 2
 
   await Jimp.read(tmpPath)
     .then((image) => {
@@ -109,7 +100,6 @@ async function uploadImage(req, res, next) {
   contact.avatarURL = `/public/avatars/${filename}`;
   await contact.save();
 
-  // TODO
   return res.json({
     data: {
       avatarURL: contact.avatarURL,

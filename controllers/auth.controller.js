@@ -1,10 +1,7 @@
-const { User } = require('../mod/user');
-
+const { User } = require('../models/user');
 const { sendMail } = require('../helpers/index');
 const gravatar = require('gravatar');
 const { Conflict, Unauthorized } = require('http-errors');
-
-// const { HttpError } = require('../helpers/index');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -45,16 +42,10 @@ async function register(req, res, next) {
     });
   } catch (error) {
     if (error.message.includes('E11000 duplicate key error')) {
-      //   throw new HttpError(409, 'User with this email already exists');
       throw Conflict('Email in use(409)');
     }
   }
 }
-
-// 1. Find user by email
-// 2. I user not exist => throw an error 401
-// 3. If user exist => check password
-// 4. If password is the same => then return 200
 
 async function login(req, res, next) {
   const { email, password } = req.body;
@@ -83,10 +74,6 @@ async function login(req, res, next) {
   await User.findByIdAndUpdate(storedUser._id, { token });
 
   return res.status(200).json({
-    // data: {
-    //   token,
-    // },
-
     token: token,
     user: {
       email,

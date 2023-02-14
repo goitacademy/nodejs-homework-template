@@ -1,4 +1,4 @@
-const { User } = require('../mod/user');
+const { User } = require('../models/user');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
@@ -10,9 +10,6 @@ async function createContact(req, res, next) {
   const { id: contactId } = req.body;
 
   user.contacts.push({ _id: contactId });
-  // Variant-1
-  // const updatedUser = await User.findByIdAndUpdate(user._id, user, {new: true, fields: {contacts: 1}});
-  // Variant-2
   const updatedUser = await User.findByIdAndUpdate(user._id, user, { new: true }).select({ contacts: 1, _id: 0 });
 
   console.log('updatedContact:', updatedUser);
@@ -108,8 +105,6 @@ async function verifyEmail(req, res, next) {
     message: 'Verification successful',
   });
 }
-
-// ======
 
 async function repeatVerifyEmail(req, res, next) {
   const { email } = req.body;

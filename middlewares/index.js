@@ -1,6 +1,6 @@
 const { HttpError } = require('../helpers');
 const jwt = require('jsonwebtoken');
-const { User } = require('./../mod/user');
+const { User } = require('../models/user');
 const multer = require('multer');
 const path = require('path');
 const Jimp = require('jimp');
