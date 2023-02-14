@@ -105,33 +105,7 @@
         }
       }
     },
-    "/api/users/verify/{verificationToken}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "verify user email",
-        "parameters": [
-          {
-            "name": "verification token",
-            "in": "path",
-            "required": true,
-            "description": "Verification token to verify email",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Email verification is successful",
-            "content": {
-              "application/json": {
-                "sсhema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/api/users/login": {
       "post": {
         "tags": ["Users"],
@@ -370,11 +344,12 @@
     "/api/contacts/{id}": {
       "parameters": [
         {
-          "name": "contact id",
+          "name": "id",
           "in": "path",
           "required": true,
           "description": "Id of contact that needs to be found",
-          "type": "string"
+          "type": "string",
+          "format": "ObjectId"
         }
       ],
       "get": {
@@ -463,7 +438,7 @@
     "/api/contacts/{id}/favorite": {
       "parameters": [
         {
-          "name": "contact id",
+          "name": "id",
           "in": "path",
           "required": true,
           "description": "Id of contact that needs to be found",
