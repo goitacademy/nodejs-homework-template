@@ -9,11 +9,11 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", validation(schemas.contactsSchema), ctrlWrapper(ctrl.add));
+router.post("/", validation(schemas.contactsWRequiredSchema), ctrlWrapper(ctrl.add));
 
 router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.remove));
 
-router.put("/:contactId", isValidId, validation(schemas.contactsSchema), ctrlWrapper(ctrl.update));
+router.put("/:contactId", isValidId, validation(schemas.contactsWORequiredSchema), ctrlWrapper(ctrl.update));
 
 router.patch(
     "/:contactId/favorite",

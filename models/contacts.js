@@ -38,7 +38,7 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleSaveErrors);
 
-const contactsSchema = Joi.object({
+const contactsWRequiredSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().pattern(emailRegExp).required().messages({
     "string.pattern.base": `Please fill a valid email address`,
@@ -49,13 +49,25 @@ const contactsSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
+const contactsWORequiredSchema = Joi.object({
+    name: Joi.string().min(3).max(30),
+    email: Joi.string().pattern(emailRegExp).messages({
+        "string.pattern.base": `Please fill a valid email address`,
+    }),
+    phone: Joi.string().pattern(phoneRegExp).messages({
+        "string.pattern.base": `Please fill a valid phone number`,
+    }),
+    favorite: Joi.boolean(),
+});
+
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
 const schemas = {
-  contactsSchema,
-  favoriteSchema,
+    contactsWORequiredSchema,
+    contactsWRequiredSchema,
+    favoriteSchema,
 };
 
 const Contact = model("contact", contactSchema);
