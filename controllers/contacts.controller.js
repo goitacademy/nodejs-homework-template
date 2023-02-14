@@ -1,12 +1,11 @@
 const { HttpError } = require('../helpers/index');
-const { Contact } = require('../mod/contact');
+const { Contact } = require('../models/contact');
 const path = require('path');
 const fs = require('fs/promises');
-const Jimp = require("jimp");
+const Jimp = require('jimp');
 
 // get list
 async function getContacts(req, res) {
-  // const { id: owner } = req.user;
   const { limit = 5, page = 1, favorite } = req.query;
   const skyp = (page - 1) * limit;
 
@@ -75,18 +74,19 @@ async function updateStatusContact(req, res, next) {
 }
 
 async function uploadImage(req, res, next) {
-
   const { filename } = req.file;
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
+
   const publicPath = path.resolve(__dirname, '../public/avatars', filename);
-  
-  await Jimp.read(tmpPath).then((image) => {
-    return image.resize(250, 250).write(tmpPath);
-  }).catch((error) => {
-    console.error(error);
-  });
-  
-  
+
+  await Jimp.read(tmpPath)
+    .then((image) => {
+      return image.resize(250, 250).write(tmpPath);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   try {
     await fs.rename(tmpPath, publicPath);
   } catch (error) {
@@ -100,9 +100,6 @@ async function uploadImage(req, res, next) {
   contact.avatarURL = `/public/avatars/${filename}`;
   await contact.save();
 
- 
-
-  // TODO
   return res.json({
     data: {
       avatarURL: contact.avatarURL,
