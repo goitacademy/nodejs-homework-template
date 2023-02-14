@@ -1,10 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import { ContactType } from 'types/Contact.type';
-import { phonePattern, validationFields } from 'helpers/validation';
+import { isEmailValid, phonePattern } from 'helpers/validation';
 
-const isEmailValid = (email: string) => validationFields.email.validate(email);
-
-const schema = new mongoose.Schema<ContactType>({
+const schema = new Schema<ContactType>({
   name: {
     type: String,
     minlength: 3,
@@ -22,6 +20,10 @@ const schema = new mongoose.Schema<ContactType>({
   favorite: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: Types.ObjectId,
+    ref: 'users',
   },
 });
 

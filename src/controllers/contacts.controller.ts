@@ -7,7 +7,7 @@ import {
   removeContactByIdService,
   updateContactByIdService,
 } from 'services/contacts.service';
-import { WrongParametersError } from 'helpers/errors';
+import { NotFoundError } from 'helpers/errors';
 
 export const getContactsController = async (_: Request, res: Response) => {
   const contacts = await getContactsService();
@@ -20,7 +20,7 @@ export const getContactByIdController = async (req: Request, res: Response) => {
   const contact = await getContactByIdService(contactId);
 
   if (!contact) {
-    throw new WrongParametersError(`Contact not found`);
+    throw new NotFoundError(`Contact not found`);
   }
 
   res.status(200).json(responseData(contact, 200));
@@ -37,7 +37,7 @@ export const deleteContactByIdController = async (req: Request, res: Response) =
   const removedContact = await removeContactByIdService(contactId);
 
   if (!removedContact) {
-    throw new WrongParametersError(`Contact not found`);
+    throw new NotFoundError(`Contact not found`);
   }
 
   res.status(200).json(responseData(removedContact, 200));
@@ -48,7 +48,7 @@ export const updateContactByIdController = async (req: Request, res: Response) =
   const updatedContact = await updateContactByIdService(contactId, req.body);
 
   if (!updatedContact) {
-    throw new WrongParametersError(`Contact not found`);
+    throw new NotFoundError(`Contact not found`);
   }
   res.status(200).json(responseData(updatedContact, 200));
 };
@@ -58,7 +58,7 @@ export const updateFavoriteByIdController = async (req: Request, res: Response) 
   const updatedContact = await updateContactByIdService(contactId, req.body);
 
   if (!updatedContact) {
-    throw new WrongParametersError(`Contact not found`);
+    throw new NotFoundError(`Contact not found`);
   }
   res.status(200).json(responseData(updatedContact, 200));
 };

@@ -7,5 +7,8 @@ export const validationFields = {
   name: joi.string().min(3).max(30),
   email: joi.string().email(),
   phone: joi.string().pattern(phonePattern),
+  password: joi.string().min(3).max(30),
   favorite: joi.boolean(),
 };
+
+export const isEmailValid = (email: string) => !validationFields.email.validate(email).error;
