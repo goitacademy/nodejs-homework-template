@@ -18,6 +18,7 @@ async function signup(req, res, next) {
   // create and save new user
   const newUser = new UserModel({ email });
   newUser.addPassword(password);
+  newUser.setAvatar();
   const savedUser = await newUser.save();
   if (!savedUser) throw new MongoDBActionError('Failed to save new user');
 
