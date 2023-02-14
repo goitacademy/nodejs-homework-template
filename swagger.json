@@ -9,10 +9,10 @@
   "produces": ["application/json"],
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://phonebook-node.up.railway.app"
     },
     {
-      "url": "https://phonebook-node.up.railway.app"
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [
