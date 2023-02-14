@@ -1,19 +1,58 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const listContacts = async () => {}
+const phoneRegex = /^\(([0-9]{3})\)([ ])([0-9]{3})([-])([0-9]{4})$/;
 
-const getContactById = async (contactId) => {}
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      match: phoneRegex,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const removeContact = async (contactId) => {}
+const contactsSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  phone: Joi.string()
+    .regex(phoneRegex)
+    .message("Phone format (xxx) xxx-xxxx")
+    .required(),
+  favorite: Joi.boolean(),
+});
 
-const addContact = async (body) => {}
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
 
-const updateContact = async (contactId, body) => {}
+const schemas = { contactsSchema, updateFavoriteSchema };
+
+const Contact = model("contact", contactSchema);
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+  Contact,
+  schemas,
+};
