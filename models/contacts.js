@@ -17,12 +17,12 @@ const listContacts = async () => {
 const getById = async (contactId) => {
   try {
     const data = await listContacts();
-    const contact = data.filter(({ id }) => id === contactId);
-    if (!contact) {
-      console.log(`Contact with id=${contactId} doesn't exist.`.yellow);
+    const index = data.findIndex(({ id }) => id === contactId);
+    if (index === -1) {
+      console.log(`Contact with id=${contactId} doesn't exist`.yellow);
       return null;
     }
-    return contact;
+    return data[index];
   } catch (err) {
     console.log(`Error:${err.message}`.red);
   }
@@ -47,7 +47,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     const { name, email, phone } = body;
-    let contacts = await listContacts();
+    const contacts = await listContacts();
     const newContact = {
       id: uid(12),
       name,
@@ -64,14 +64,9 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex(({ id }) => id === contactId);
-  if (index === -1) {
-    console.log(`Contact with id=${contactId} doesn't exist`.yellow);
-    return null;
-  }
-
-  const contactToUpdate = contacts[index];
+  const contactToUpdate = await getById(contactId);
   const updatedContact = { ...contactToUpdate, ...body };
+  const index = contacts.findIndex(({ id }) => id === contactId);
 
   contacts.splice(index, 1, updatedContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
