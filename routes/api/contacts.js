@@ -14,20 +14,21 @@ const { contact: ctrl } = require("../../controllers");
 router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
 // Знайти контакт по id
-router.get("/:id", ctrlWrapper(ctrl.getById));
+router.get("/:id", auth, ctrlWrapper(ctrl.getById));
 
 // Додавання нового контакту
 router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.add));
 
 // Видалення контакту
-router.delete("/:id", ctrlWrapper(ctrl.removeContact));
+router.delete("/:id", auth, ctrlWrapper(ctrl.removeContact));
 
 // Зміна значення поля по id
-router.put("/:id", validation(joiSchemaUpdate), ctrlWrapper(ctrl.change));
+router.put("/:id", auth, validation(joiSchemaUpdate), ctrlWrapper(ctrl.change));
 
 // Зміна значення одного поля
 router.patch(
   "/:id/favorite",
+  auth,
   validation(joiSchemaFavorite),
   ctrlWrapper(ctrl.changeOneProp)
 );

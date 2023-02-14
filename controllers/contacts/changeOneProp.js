@@ -1,33 +1,26 @@
-const { Contact, joiSchemaFavorite } = require("../../models/contact");
+const { Contact } = require("../../models/contact");
+// const ObjectId = require("mongodb").ObjectId;
 
 const changeOneProp = async (req, res, next) => {
-  try {
-    const { error } = joiSchemaFavorite.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error({ message: "missing field favorite" });
-    }
-    const { id } = req.params;
-    const { favorite } = req.body;
+  const owner = req.user._id;
+  const _id = req.params.id;
+  const { favorite } = req.body;
 
-    const result = await Contact.findByIdAndUpdate(
-      id,
-      { favorite },
-      { new: true }
-    );
-    if (!result) {
-      return res.status(404).json({ message: "Not found" });
-    }
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
+  const result = await Contact.findByIdAndUpdate(
+    { owner, _id },
+    { $set: { favorite } },
+    { new: true }
+  );
+  if (!result) {
+    return res.status(404).json({ message: "Not found" });
   }
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = changeOneProp;

@@ -3,6 +3,7 @@ const { Contact } = require("../../models/contact");
 const getAll = async (req, res, next) => {
   try {
     const { _id } = req.user;
+    console.log(_id);
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
     const contacts = await Contact.find({ owner: _id }, "", {
