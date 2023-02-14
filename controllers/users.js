@@ -5,8 +5,11 @@ const {
   UserConflictError,
 } = require('@root/helpers');
 const { UserModel } = require('@root/models');
+const fs = require('fs/promises');
+const path = require('path');
 
 const { SECRET_KEY } = process.env;
+const pathToAvatars = path.resolve(__dirname, '..', 'public', 'avatars');
 
 async function signup(req, res, next) {
   const { email, password } = req.body;
@@ -82,10 +85,34 @@ async function changeSubscription(req, res, next) {
   res.status(200).json({ email, subscription });
 }
 
+async function updateAvatar(req, res, next) {
+  const { userDoc } = req.user;
+  const { filename: avatarFilename, path: pathToTmpAvatar } = req.file;
+  const publicPathToAvatar = path.join(pathToAvatars, avatarFilename);
+
+  // move image to avatars folder
+  try {
+    await fs.rename(pathToTmpAvatar, publicPathToAvatar);
+  } catch (error) {
+    await fs.unlink(pathToTmpAvatar);
+    throw error;
+  }
+
+  // update user's avatar
+  userDoc.setAvatar(publicPathToAvatar);
+  const updatedUser = await userDoc.save();
+  if (!updatedUser)
+    throw new MongoDBActionError('Failed to update user`s avatar');
+
+  // send back user info
+  res.status(200).json({ avatarURL: '/avatars/' + avatarFilename });
+}
+
 module.exports = {
   signup,
   login,
   logout,
   getCurrentUserInfo,
   changeSubscription,
+  updateAvatar,
 };

@@ -1,9 +1,13 @@
 const express = require('express');
 const { asyncMiddlewareWrapper } = require('@root/helpers');
-const { validateBody, validateJwtToken } = require('@root/middlewares');
+const {
+  validateBody,
+  validateJwtToken,
+  uploadFile,
+} = require('@root/middlewares');
 const { userJoiSchema, subscriptionJoiSchema } = require('@root/models');
 // const validateID = require('@root/middlewares/validateID');
-const { authActions } = require('@root/controllers');
+const { authActions, updateUserAvatar } = require('@root/controllers');
 
 const router = express.Router();
 
@@ -35,6 +39,12 @@ router.patch(
     'Ошибка от Joi или другой библиотеки валидации'
   ),
   asyncMiddlewareWrapper(authActions.changeSubscription)
+);
+router.patch(
+  '/avatars',
+  validateJwtToken,
+  uploadFile.single('avatar'),
+  asyncMiddlewareWrapper(updateUserAvatar)
 );
 
 module.exports = router;
