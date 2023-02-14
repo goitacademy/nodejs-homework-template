@@ -11,6 +11,7 @@ async function getContacts(req, res) {
   const skyp = (page - 1) * limit;
 
   console.log('limit:', limit);
+
   const contacts = await Contact.find({}).limit(Number(limit)).skip(Number(skyp));
 
   if (!favorite) {
@@ -36,20 +37,6 @@ async function getContact(req, res, next) {
 // post
 async function createContact(req, res, next) {
   const { name, email, phone, favorite } = req.body;
-  //   1 - own validation
-  //   if (!title) {
-  //     return next(HttpError(400, "title is required!"));
-  //   }
-  //   2 - with library
-  //   const schema = Joi.object({
-  //     title: Joi.string().min(3).required(),
-  //   });
-
-  //   const { error } = schema.validate(req.body);
-
-  //   if (error) {
-  //     return next(HttpError(400, error.message));
-  //   }
 
   console.log('name:', name, 'email:', email, 'phone:', phone, 'favorite:', favorite);
   const newContact = await Contact.create({ name, email, phone, favorite });

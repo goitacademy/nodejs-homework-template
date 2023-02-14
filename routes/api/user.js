@@ -4,7 +4,6 @@ const { auth } = require("../../middlewares/index");
 
 const { createContact, getContacts, getCurrentUser, updateAvatar, verifyEmail, repeatVerifyEmail } = require("../../controllers/user.controller");
 
-
 const userRouter = express.Router();
 
 userRouter.post('/contacts',tryCatchWrapper(auth),  tryCatchWrapper(createContact));
@@ -17,4 +16,5 @@ userRouter.get('/verify', tryCatchWrapper(repeatVerifyEmail));
 module.exports ={
     userRouter,
 }
+
 

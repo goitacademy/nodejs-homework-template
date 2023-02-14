@@ -1,7 +1,11 @@
 const { User } = require('../mod/user');
+
 const { sendMail } = require('../helpers/index');
 const gravatar = require("gravatar");
 const { Conflict, Unauthorized } = require('http-errors');
+
+// const { HttpError } = require('../helpers/index');
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { v4 } = require("uuid");
@@ -86,16 +90,16 @@ async function login(req, res, next) {
   await User.findByIdAndUpdate(storedUser._id, { token });
 
   return res.status(200).json({
-    data: {
-      token,
-    },
-
-    // token: token,
-    // user: {
-    //   email,
-    //   subscription: storedUser.subscription,
-    //   id: storedUser._id,
+    // data: {
+    //   token,
     // },
+
+    token: token,
+    user: {
+      email,
+      subscription: storedUser.subscription,
+      id: storedUser._id,
+    },
   });
 }
 
