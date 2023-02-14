@@ -16,7 +16,7 @@ const register = async (req, res) => {
     newUser.save();
     
     res.status(201).json({
-        status: 'success',
+        status: 'succes',
         code: 201,
         data: {
             user: {
