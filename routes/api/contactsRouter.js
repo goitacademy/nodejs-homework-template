@@ -17,10 +17,13 @@ const {
   controllerPutContact,
   controllerPatchFavorite,
 } = require('../../controllers/contacts');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/contacts', controllerGetContacts);
+// router.use(authMiddleware);
+
+router.get('/contacts', authMiddleware, controllerGetContacts);
 router.get('/contacts/:contactId', controllerGetContactById);
 router.post(
   '/contacts',
