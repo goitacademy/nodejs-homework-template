@@ -105,7 +105,6 @@
         }
       }
     },
-
     "/api/users/login": {
       "post": {
         "tags": ["Users"],
@@ -127,7 +126,7 @@
             "description": "User has been logged in successfully",
             "content": {
               "application/json": {
-                "sсhema": {
+                "schema": {
                   "$ref": "#/components/schemas/LoginResponse"
                 }
               }
