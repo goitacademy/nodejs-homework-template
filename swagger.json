@@ -313,7 +313,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserRequest"
+                "$ref": "#/components/schemas/AddContactRequest"
               }
             }
           }
@@ -389,7 +389,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserRequest"
+                "$ref": "#/components/schemas/AddContactRequest"
               }
             }
           }
@@ -603,7 +603,7 @@
           }
         }
       },
-      "AddUserRequest": {
+      "AddContactRequest": {
         "type": "object",
         "properties": {
           "name": {
@@ -612,7 +612,7 @@
           },
           "phone": {
             "type": "string",
-            "example": "(123)-476-345-345"
+            "example": "(123)476-34-34"
           },
           "email": {
             "type": "string",
