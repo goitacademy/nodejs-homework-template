@@ -5,7 +5,6 @@ const multer = require('multer');
 const path = require('path');
 const Jimp = require('jimp');
 
-
 const { JWT_SECRET } = process.env;
 
 function validateBody(schema) {
@@ -25,24 +24,22 @@ async function auth(req, res, next) {
 
   if (type !== 'Bearer') {
     throw HttpError(401, 'token type is nod valid.');
-
   }
 
   if (!token) {
     throw HttpError(401, 'no token provided');
   }
 
-  try{
-  const {id} = jwt.verify(token, JWT_SECRET);
-  const user = await User.findById(id);
-  if(!user){
-    throw HttpError(401, "Not found")
-  }
-  req.user = user;
-  } catch(error){
-    if(error.name === 'TokenExpiredError' || error.name ==='JsonWebTokenError'){
-      throw HttpError(401, "jwt token is not valid")
-
+  try {
+    const { id } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(id);
+    if (!user) {
+      throw HttpError(401, 'Not found');
+    }
+    req.user = user;
+  } catch (error) {
+    if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+      throw HttpError(401, 'jwt token is not valid');
     }
     throw error;
   }
@@ -59,8 +56,7 @@ const storage = multer.diskStorage({
   },
 });
 
-
-const upload = multer({storage});
+const upload = multer({ storage });
 
 function resize(w, h) {
   return async (req, res, next) => {

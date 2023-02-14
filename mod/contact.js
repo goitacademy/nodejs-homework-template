@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 // Schema
 
@@ -7,7 +7,7 @@ const schema = new Schema(
     name: { type: String, required: [true, 'Set name for contact'] },
     avatarURL: {
       type: String,
-      default: "",
+      default: '',
     },
 
     email: {
@@ -18,14 +18,12 @@ const schema = new Schema(
     favorite: { type: Boolean, default: false },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
     },
   },
 
   { versionKey: false, timestamps: true },
-  {
-  }
-
+  {}
 );
 
 // Model (Class)

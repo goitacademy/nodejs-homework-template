@@ -2,7 +2,7 @@ const { HttpError } = require('../helpers/index');
 const { Contact } = require('../mod/contact');
 const path = require('path');
 const fs = require('fs/promises');
-const Jimp = require("jimp");
+const Jimp = require('jimp');
 
 // get list
 async function getContacts(req, res) {
@@ -74,30 +74,28 @@ async function updateStatusContact(req, res, next) {
   return res.status(200).json(contact);
 }
 
-
 async function uploadImage(req, res, next) {
-
   const { filename } = req.file;
   const tmpPath = path.resolve(__dirname, '../tmp', filename);
 
   // Вариант 1
   // resize
-// const image = await Jimp.read(tmpPath);
-// await image.resize(250, 250);
-// await image.writeAsync(tmpPath)
-
+  // const image = await Jimp.read(tmpPath);
+  // await image.resize(250, 250);
+  // await image.writeAsync(tmpPath)
 
   const publicPath = path.resolve(__dirname, '../public/avatars', filename);
-  
+
   // Вариант 2
 
-  await Jimp.read(tmpPath).then((image) => {
-    return image.resize(250, 250).write(tmpPath);
-  }).catch((error) => {
-    console.error(error);
-  });
-  
-  
+  await Jimp.read(tmpPath)
+    .then((image) => {
+      return image.resize(250, 250).write(tmpPath);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   try {
     await fs.rename(tmpPath, publicPath);
   } catch (error) {
@@ -110,8 +108,6 @@ async function uploadImage(req, res, next) {
   const contact = await Contact.findById(contactId);
   contact.avatarURL = `/public/avatars/${filename}`;
   await contact.save();
-
- 
 
   // TODO
   return res.json({
