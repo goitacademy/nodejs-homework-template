@@ -1,8 +1,8 @@
 const { Contact } = require('../../models/contact');
 
-module.exports = async (id, favorite) => {
+module.exports = async (_id, favorite) => {
   return await Contact.findByIdAndUpdate(
-    id,
+    _id,
     { favorite },
     { new: true }
   );

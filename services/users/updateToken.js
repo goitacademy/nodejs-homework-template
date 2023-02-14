@@ -1,5 +1,5 @@
 const { User } = require('../../models/user');
 
-module.exports = async (id, token) => {
-  return User.findByIdAndUpdate(id, { token });
+module.exports = async (_id, token) => {
+  return User.findByIdAndUpdate(_id, { token });
 };

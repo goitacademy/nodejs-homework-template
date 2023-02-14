@@ -4,14 +4,14 @@ const {
   updateToken,
 } = require('../../services/users');
 
-const httpError = require('http-errors');
+const { Unauthorized } = require('http-errors');
 
 module.exports = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await register.findUser(email);
   if (!user) {
-    throw httpError(401, `Email: ${email} invalid`);
+    throw Unauthorized(`Email: ${email} invalid`);
   }
 
   const isValidPassword = await login.isValidHash(
@@ -20,11 +20,11 @@ module.exports = async (req, res) => {
   );
 
   if (!isValidPassword) {
-    throw httpError(401, `Password invalid`);
+    throw Unauthorized(`Password invalid`);
   }
 
-  const token = await login.getToken(user.id);
-  await updateToken(user.id, token);
+  const token = await login.getToken(user._id);
+  await updateToken(user._id, token);
 
   res.json({
     token,

@@ -1,12 +1,11 @@
-const httpError = require('http-errors');
+const { NotFound } = require('http-errors');
 const service = require('../../services');
 
 const getByID = async (req, res) => {
   const result = await service.getByID(req);
 
   if (!result) {
-    throw httpError(
-      404,
+    throw NotFound(
       `contact with id: ${req.params.id} not found`
     );
   }

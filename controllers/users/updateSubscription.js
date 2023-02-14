@@ -5,7 +5,7 @@ const {
 module.exports = async (req, res) => {
   const user = await updateSubscription(req);
 
-  res.json({
+  res.status(200).json({
     status: 'success',
     message: `subscription updated to: ${user.subscription}!`,
     user: {

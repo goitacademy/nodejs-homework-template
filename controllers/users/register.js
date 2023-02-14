@@ -1,5 +1,5 @@
 const { register } = require('../../services/users');
-const httpError = require('http-errors');
+const { Conflict } = require('http-errors');
 
 const gravatar = require('gravatar');
 
@@ -8,8 +8,7 @@ module.exports = async (req, res) => {
 
   const user = await register.findUser(email);
   if (user) {
-    throw httpError(
-      409,
+    throw Conflict(
       `User with email: ${email} already exists`
     );
   }

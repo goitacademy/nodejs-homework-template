@@ -1,12 +1,11 @@
 const { Contact } = require('../../models/contact');
 
 module.exports = async (req) => {
-  const { _id: owner } = req.user;
-
   const { page = 1, limit = 10, favorite } = req.query;
 
   const skip = (page - 1) * limit;
 
+  const { _id: owner } = req.user;
   const query = { owner };
 
   if (favorite === ('true' || 'false')) {

@@ -1,8 +1,8 @@
 const { User } = require('../../models/user');
 
-module.exports = async (id) => {
+module.exports = async (_id) => {
   return User.findByIdAndUpdate(
-    id,
+    _id,
     { token: null },
     { new: true }
   );

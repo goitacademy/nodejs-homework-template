@@ -21,10 +21,12 @@ app.use('/api/contacts', contactsRouter);
 app.use('/api/users', authRouter);
 
 app.use((_, res) => {
-  res.status(404).json({ message: 'Invalid URL' });
+  res
+    .status(404)
+    .json({ status: 'error', message: 'Invalid URL' });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, next) => {
   const { status = 500 } = err;
   res.status(status).json({ message: err.message });
 });

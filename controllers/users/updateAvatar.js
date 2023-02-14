@@ -14,22 +14,32 @@ const avatarDir = path.join(
 );
 
 module.exports = async (req, res) => {
-  const { path: tempUpload, originalname } = req.file;
+  try {
+    const { path: tempUpload, originalname } = req.file;
+    const { _id } = req.user;
 
-  await resizeAvatar(tempUpload);
+    await resizeAvatar(tempUpload);
 
-  const { _id } = req.user;
+    const [name, extension] = originalname.split('.');
+    const newAvatarName = `${_id}.${extension}`;
 
-  const [originalName, extension] = originalname.split('.');
-  const newAvatarName = `${_id}.${extension}`;
+    const resultUpload = path.join(
+      avatarDir,
+      newAvatarName
+    );
+    await fs.rename(tempUpload, resultUpload);
 
-  const resultUpload = path.join(avatarDir, newAvatarName);
-  await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join('avatars', newAvatarName);
+    await updateAvatar(_id, avatarURL, name);
 
-  const avatarURL = path.join('avatars', newAvatarName);
-  await updateAvatar(_id, avatarURL, originalName);
-
-  res.json({
-    avatarURL,
-  });
+    res.json({
+      avatarURL,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json(
+        'An error occurred while updating your avatar.'
+      );
+  }
 };

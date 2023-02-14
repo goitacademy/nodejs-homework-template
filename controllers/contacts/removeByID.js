@@ -1,4 +1,4 @@
-const httpError = require('http-errors');
+const { NotFound } = require('http-errors');
 const service = require('../../services');
 
 const removeById = async (req, res) => {
@@ -6,16 +6,12 @@ const removeById = async (req, res) => {
 
   const result = await service.removeById(id);
   if (!result) {
-    throw httpError(
-      404,
-      `contact with id:${id} ALREADY deleted`
-    );
+    throw NotFound(`Contact with id:${id} not found`);
   }
 
-  res.json({
+  res.status(200).json({
     status: 'success',
-    code: 200,
-    message: `contact with id:${id} deleted`,
+    message: `Contact with id:${id} deleted`,
     data: {
       result,
     },

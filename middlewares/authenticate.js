@@ -19,9 +19,9 @@ module.exports = async (req, _, next) => {
   }
 
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
+    const { _id } = jwt.verify(token, SECRET_KEY);
 
-    const user = await User.findById(id).select(
+    const user = await User.findById(_id).select(
       'email subscription token'
     );
 
@@ -35,11 +35,6 @@ module.exports = async (req, _, next) => {
 
     next();
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      return next(
-        Unauthorized('JWT is invalid or has expired')
-      );
-    }
-    next(Unauthorized('Not authorized'));
+    next(Unauthorized(error.message || 'Not authorized'));
   }
 };
