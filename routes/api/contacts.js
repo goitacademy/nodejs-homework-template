@@ -1,5 +1,9 @@
 const express = require("express");
 const createError = require("http-errors");
+const {
+  addPostsValidation,
+  updatePostValidation,
+} = require("../../middleware/validationMiddleware");
 const router = express.Router();
 const contactsOperations = require("../../models/contacts");
 
@@ -59,15 +63,39 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.post("/", async (req, res, next) => {
+
+  try {
+    const { error } = addPostsValidation.validate(req.body);
+    if (error.status = 400) {
+      next(error);
+    }
+    const addContact = await contactsOperations.addContact(req.body);
+
+    res.json({
+      status: "success",
+      code: 201,
+      data: {
+        addContact,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    const { error } = updatePostValidation.validate(req.body);
+    if (error.status = 400) {
+      next(error);
+    }
     const { contactId } = req.params;
-    const {name, email} = req.body;
-    const updatedContact = await contactsOperations.updateContact(contactId, {name, email});
+    const { name, email } = req.body;
+    const updatedContact = await contactsOperations.updateContact(contactId, {
+      name,
+      email,
+    });
     if (!updatedContact) {
       return next(createError(404, `Something went wrong`));
     }
