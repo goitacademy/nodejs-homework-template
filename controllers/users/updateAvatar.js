@@ -15,10 +15,10 @@ const avatarDir = path.join(
 
 module.exports = async (req, res) => {
   try {
-    const { path: tempUpload, originalname } = req.file;
+    const { path: tempUploadPath, originalname } = req.file;
     const { _id } = req.user;
 
-    await resizeAvatar(tempUpload);
+    await resizeAvatar(tempUploadPath);
 
     const [name, extension] = originalname.split('.');
     const newAvatarName = `${_id}.${extension}`;
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
       avatarDir,
       newAvatarName
     );
-    await fs.rename(tempUpload, resultUpload);
+    await fs.rename(tempUploadPath, resultUpload);
 
     const avatarURL = path.join('avatars', newAvatarName);
     await updateAvatar(_id, avatarURL, name);

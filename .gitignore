@@ -2,3 +2,4 @@ node_modules/
 .env
 .prettierrc
 nodemon.json
+__tests__
