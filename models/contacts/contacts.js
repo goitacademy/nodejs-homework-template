@@ -1,5 +1,5 @@
 const { ContactsList } = require("./contactsSchema");
-const { HttpError } = require("../helpers/HttpError");
+const { HttpError } = require("../../helpers/HttpError");
 
 const listContacts = async (req, res) => {
   const list = await ContactsList.find({}, "-createdAt -updatedAt");

@@ -6,8 +6,8 @@ const {
   addContact,
   updateContact,
   updateFavorite,
-} = require("../../models/contacts");
-const {schemas} = require("../../models/contactsSchema");
+} = require("../../models/contacts/contacts");
+const {schemas} = require("../../models/contacts/contactsSchema");
 
 const router = express.Router();
 
