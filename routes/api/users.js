@@ -1,47 +1,15 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+const express = require("express");
+const router = express.Router();
+const ctrl = require("../../controllers/usersController");
+const { ctrlWrapper } = require("../../utils");
+const { auth } = require("../../middlewares");
 
-const userSchema = new Schema(
-	{
-		name: {
-			type: String,
-			required: true,
-		},
-		email: {
-			type: String,
-			required: [true, "Email is required"],
-			unique: true,
-		},
-		password: {
-			type: String,
-			minlength: 6,
-			required: [true, "Password is required"],
-		},
-		subscription: {
-			type: String,
-			enum: ["starter", "pro", "business"],
-			default: "starter",
-		},
-		token: {
-			type: String,
-			default: null,
-		},
-		owner: {
-			type: Schema.Types.ObjectId,
-			ref: "user",
-		},
-	},
-	{ versionKey: false, timestamps: true }
-);
+router.post("/signup", ctrlWrapper(ctrl.register));
 
-const schemas = {
-	register: registerSchema,
-	login: loginSchema,
-};
+router.post("/login", ctrlWrapper(ctrl.login));
 
-const User = model("user", userSchema);
+router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 
-module.exports = {
-	User,
-	schemas,
-};
+router.get("/current", auth, ctrlWrapper(ctrl.listCurrent));
+
+module.exports = router;
