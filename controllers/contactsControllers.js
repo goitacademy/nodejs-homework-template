@@ -64,8 +64,8 @@ const addContact = async (req, res, next) => {
   try {
     const { error } = addPostsValidation.validate(req.body);
     if (error) {
-        return next(createError(404, error.message));
-      }
+      return next(createError(404, error.message));
+    }
     const addContact = await contactsOperations.addContact(req.body);
 
     res.json({
@@ -84,10 +84,10 @@ const updateContact = async (req, res, next) => {
   try {
     const { error } = updatePostValidation.validate(req.body);
     if (error) {
-        return next(createError(404, error.message));
-      }
+      return next(createError(404, error.message));
+    }
     const { contactId } = req.params;
-    const { name, email, phone} = req.body;
+    const { name, email, phone } = req.body;
     const updatedContact = await contactsOperations.updateContact(contactId, {
       name,
       email,
