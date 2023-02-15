@@ -17,7 +17,7 @@ const listCurrent = async (req, res) => {
 const login = async (req, res) => {
 	const { error } = schemas.login.validate(req.body);
 	if (error) {
-		res.status(400).json({ message: "Incorrect format of entered data" });
+		res.status(400).json({ message: "Incorrect format of entered data " });
 		return;
 	}
 	const { email, password, subscription } = req.body;
@@ -83,6 +83,5 @@ module.exports = {
 	listCurrent,
 	login,
 	logout,
-	register
+	register,
 };
-
