@@ -3,6 +3,12 @@ import joi from 'joi';
 import { validationFields } from 'helpers/validation';
 import { ValidationError } from 'helpers/errors';
 
+const contactsSchema = joi.object({
+  limit: validationFields.limit.optional(),
+  page: validationFields.page.optional(),
+  favorite: validationFields.favorite.optional(),
+});
+
 const contactIdSchema = joi.object({
   contactId: validationFields.contactId.required(),
 });
@@ -28,6 +34,16 @@ const updateContactSchema = joi
 const updateFavoriteSchema = joi.object({
   favorite: validationFields.favorite.required(),
 });
+
+export const getContactsValidation = (req: Request, _res: Response, next: NextFunction): any => {
+  const validationResult = contactsSchema.validate(req.query);
+
+  if (validationResult.error) {
+    throw new ValidationError(validationResult.error.message);
+  }
+
+  next();
+};
 
 export const getContactByIdValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = contactIdSchema.validate(req.params);

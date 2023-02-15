@@ -1,10 +1,15 @@
 import { ContactModel } from 'models/contact.schema';
 import { ContactType } from 'types/Contact.type';
+import { ContactsQueryType } from 'types/ContactsQuery.type';
 
-export const getContactsService = async (owner: string) => {
-  const contacts = await ContactModel.find({ owner }).select({ __v: 0 });
+export const getContactsService = async (owner: string, { limit, skip, favorite, page }: ContactsQueryType) => {
+  const searchQuery: { owner: string; favorite?: boolean } = { owner };
+  if (favorite !== undefined) {
+    searchQuery.favorite = favorite;
+  }
+  const contacts = await ContactModel.find(searchQuery).select({ __v: 0 }).limit(limit!).skip(skip!);
 
-  return contacts;
+  return { contacts, page, limit };
 };
 
 export const getContactByIdService = async (contactId: string, owner: string) => {

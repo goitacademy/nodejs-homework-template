@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { UnAuthorizedError } from 'helpers/errors';
 import { UserModel } from 'models/user.schema';
-import { UserType } from 'types/User.type';
+import { ESubscription, UserType } from 'types/User.type';
 
 export const getUserByEmail = async (email: string) => {
   const user = await UserModel.findOne({ email }).select({ __v: 0 });
@@ -44,4 +44,14 @@ export const loginService = async (candidate: UserType) => {
 
 export const logoutService = async (id: string) => {
   await UserModel.findByIdAndUpdate(id, { token: null });
+};
+
+export const updateSubscriptionService = async (userId: string, subscription: ESubscription) => {
+  const user = await UserModel.findByIdAndUpdate(userId, { subscription }, { new: true }).select({
+    email: 1,
+    subscription: 1,
+    _id: 0,
+  });
+
+  return user;
 };

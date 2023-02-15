@@ -4,6 +4,7 @@ import {
   addContactValidation,
   updateContactValidation,
   updateFavoriteValidation,
+  getContactsValidation,
 } from 'middlewares/contacts.validation.middleware';
 import {
   getContactsController,
@@ -17,7 +18,7 @@ import { asyncWrapper } from 'helpers/apiHelpers';
 
 const router = express.Router();
 
-router.get('/', asyncWrapper(getContactsController));
+router.get('/', getContactsValidation, asyncWrapper(getContactsController));
 router.post('/', addContactValidation, asyncWrapper(addContactController));
 router
   .route('/:contactId')
