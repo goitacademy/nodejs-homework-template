@@ -35,7 +35,7 @@ export class ValidationError extends BaseError {
 export class NotFoundError extends BaseError {
   constructor(message: string) {
     super(message);
-    this._code = 400;
+    this._code = 404;
     this._status = 'error';
     this._data = 'Not found';
   }
@@ -75,7 +75,7 @@ export class UnAuthorizedError extends BaseError {
 export class ServerError extends BaseError {
   constructor(message: string) {
     super(message);
-    this._code = 400;
+    this._code = 500;
     this._status = 'fail';
     this._data = 'Internal Server Error';
   }

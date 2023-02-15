@@ -1,28 +1,36 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { isEmailValid } from 'helpers/validation';
 import { ESubscription, UserType } from 'types/User.type';
 
-const schema = new mongoose.Schema<UserType>({
-  password: {
-    type: String,
-    minlength: 3,
-    maxlength: 30,
-    required: [true, 'Set password for user'],
+type UserMethodsType = {
+  validPassword: (password: string) => Promise<boolean>;
+};
+type UserModelType = Model<UserType, {}, UserMethodsType>;
+
+const schema = new Schema<UserType, UserModelType, UserMethodsType>(
+  {
+    password: {
+      type: String,
+      minlength: 3,
+      maxlength: 30,
+      required: [true, 'Set password for user'],
+    },
+    email: {
+      type: String,
+      validate: [isEmailValid, 'Please fill a valid email address'],
+      required: [true, 'Email is required'],
+      unique: true,
+    },
+    subscription: {
+      type: String,
+      enum: ESubscription,
+      default: ESubscription.Starter,
+    },
+    token: String,
   },
-  email: {
-    type: String,
-    validate: [isEmailValid, 'Please fill a valid email address'],
-    required: [true, 'Email is required'],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ESubscription,
-    default: ESubscription.Starter,
-  },
-  token: String,
-});
+  { timestamps: true }
+);
 
 schema.pre('save', async function () {
   if (this.isNew) {
@@ -30,4 +38,8 @@ schema.pre('save', async function () {
   }
 });
 
-export const UserModel = mongoose.model('User', schema);
+schema.methods.validPassword = async function (password: string) {
+  return bcrypt.compare(password, this.password);
+};
+
+export const UserModel = mongoose.model<UserType, UserModelType>('User', schema);

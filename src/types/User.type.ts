@@ -6,6 +6,7 @@ export enum ESubscription {
 }
 
 export type UserType = {
+  _id?: string;
   password: string;
   email: string;
   subscription?: ESubscription;
