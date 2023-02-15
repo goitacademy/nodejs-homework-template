@@ -15,9 +15,11 @@ const getOneContactById = async (req, res) => {
 };
 
 const addNewContact = async (req, res) => {
+  
   const newContact = await contacts.addContact(req.body);
+  console.log(newContact);
   if (newContact) {
-    res.status(201).json({ data: newContact });
+    res.status(201).send(newContact);
   } else {
     res.status(400).json({ message: "missing required name field" });
   }
