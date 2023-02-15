@@ -17,12 +17,12 @@ const listContacts = async () => {
 const getById = async (contactId) => {
   try {
     const data = await listContacts();
-    const contact = data.filter(({ id }) => id === contactId);
-    if (!contact) {
-      console.log(`Contact with id=${contactId} doesn't exist.`.yellow);
+    const index = data.findIndex(({ id }) => id === contactId);
+    if (index === -1) {
+      console.log(`Contact with id=${contactId} doesn't exist`.yellow);
       return null;
     }
-    return contact;
+    return data[index];
   } catch (err) {
     console.log(`Error:${err.message}`.red);
   }
@@ -30,15 +30,15 @@ const getById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const data = await listContacts();
-    const index = data.findIndex(({ id }) => id === contactId);
+    const contacts = await listContacts();
+    const index = contacts.findIndex(({ id }) => id === contactId);
     if (index === -1) {
       console.log(`Contact with id=${contactId} doesn't exist`.yellow);
       return null;
     }
-    const updatedData = data.filter((_, i) => i !== index);
-    fs.writeFile(contactsPath, JSON.stringify(updatedData));
-    return data[index];
+    const removedContact = contacts.splice(index, 1);
+    fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return removedContact;
   } catch (err) {
     console.log(`Error:${err.message}.`.red);
   }
@@ -54,8 +54,8 @@ const addContact = async (body) => {
       email,
       phone,
     };
-    const updatedData = [...contacts, newContact];
-    fs.writeFile(contactsPath, JSON.stringify(updatedData));
+    contacts.push(newContact);
+    fs.writeFile(contactsPath, JSON.stringify(contacts));
     return newContact;
   } catch (err) {
     return console.log(`Error: ${err.message}`.red);
@@ -64,18 +64,12 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-
-  const contactToUpdate = contacts.find(({ id }) => id === contactId);
-  if (!contactToUpdate) {
-    console.log(`Contact with id=${contactId} doesn't exist.`.yellow);
-    return null;
-  }
-  const contactsWithoutUpdate = contacts.filter(({ id }) => id !== contactId);
-
+  const contactToUpdate = await getById(contactId);
   const updatedContact = { ...contactToUpdate, ...body };
+  const index = contacts.findIndex(({ id }) => id === contactId);
 
-  const updatedData = [...contactsWithoutUpdate, updatedContact];
-  await fs.writeFile(contactsPath, JSON.stringify(updatedData));
+  contacts.splice(index, 1, updatedContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return updatedContact;
 };
 
