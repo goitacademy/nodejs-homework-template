@@ -1,22 +1,18 @@
-const express = require("express");
 const { v4: uuidv4 } = require("uuid");
-const { addPostValidation } = require("../../middlewares/validationMiddleware");
 const {
 	listContacts,
 	getContactById,
 	removeContact,
 	addContact,
 	updateContact,
-} = require("../../models/contacts");
+} = require("../models/contacts");
 
-const router = express.Router();
-
-router.get("/", async (req, res) => {
+const getAllContacts = async (req, res) => {
 	const getContacts = await listContacts();
 	res.status(200).json(getContacts);
-});
+}
 
-router.get("/:contactId", async (req, res) => {
+const getOneContactById = async (req, res) => {
 	const { contactId } = req.params;
 	const getContact = await getContactById(contactId);
 	if (getContact) {
@@ -24,9 +20,9 @@ router.get("/:contactId", async (req, res) => {
 	} else {
 		res.status(404).json({ message: "Not found" });
 	}
-});
+}
 
-router.post("/", addPostValidation, async (req, res) => {
+const postNewContact = async (req, res) => {
 	const { name, email, phone } = req.body;
 	await addContact({
 		id: uuidv4(),
@@ -35,9 +31,8 @@ router.post("/", addPostValidation, async (req, res) => {
 		phone,
 	});
 	res.status(201).json({ message: "new contact added" });
-});
-
-router.delete("/:contactId", async (req, res) => {
+}
+const removeContactById = async (req, res) => {
 	const { contactId } = req.params;
 	if (contactId) {
 		await removeContact(contactId);
@@ -45,9 +40,9 @@ router.delete("/:contactId", async (req, res) => {
 	} else {
 		res.status(400).json({ message: "Not found" });
 	}
-});
+}
 
-router.put("/:contactId", async (req, res, next) => {
+const changeContactById = async (req, res) => {
 	const { contactId } = req.params;
 	const { name, email, phone } = req.body;
 	if (!name || !email || !phone) {
@@ -64,6 +59,12 @@ router.put("/:contactId", async (req, res, next) => {
 			res.status(404).json({ message: "Not found" });
 		}
 	}
-});
+}
 
-module.exports = router;
+module.exports = {
+  getAllContacts,
+  getOneContactById,
+  postNewContact,
+  removeContactById,
+  changeContactById
+}

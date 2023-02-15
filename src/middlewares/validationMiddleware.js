@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 module.exports = {
-	addPostValidation: (req, res, next) => {
+	contactValidation: (req, res, next) => {
 		const schema = Joi.object({
 			name: Joi.string().alphanum().min(3).max(38).required(),
 			email: Joi.string().email({
