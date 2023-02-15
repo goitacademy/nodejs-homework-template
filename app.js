@@ -28,3 +28,9 @@ app.use((err, req, res, next) => {
 // });
 
 module.exports = app;
+
+// RFc5up2bU8iqeGNW;
+
+// zoQ9yklohgNggTzP;
+
+// mongodb+srv://Samusev:zoQ9yklohgNggTzP@cluster0.oa5lfc6.mongodb.net/test
