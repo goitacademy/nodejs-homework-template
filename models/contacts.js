@@ -32,9 +32,9 @@ const removeContact = async (contactId) => {
         return null;
     }
 
-    const [removeContact] = contactsList.splice(index, 1);
-    await updateFile(contactsList);
-    return removeContact;
+    const [contact] = contactsList.splice(index, 1);
+    await updateFile(filePath, contactsList);
+    return contact;
 };
 
 const addContact = async (body) => {
@@ -53,12 +53,9 @@ const updateContact = async (contactId, body) => {
         return null;
     }
 
-    contactsList[index].name = body.name;
-    contactsList[index].email = body.email;
-    contactsList[index].phone = body.phone;
-    const updatedContact = { contactId, ...body };
+    contactsList[index] = { id: contactId, ...body };
     await updateFile(filePath, contactsList);
-    return updatedContact;
+    return contactsList[index];
 };
 
 module.exports = {
