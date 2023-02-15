@@ -6,18 +6,8 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
-const Joi = require("joi");
 
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-
-  phone: Joi.string().min(5).max(30),
-
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-});
+const { contactShemas } = require("../../schemas");
 
 const router = express.Router();
 
@@ -51,7 +41,7 @@ router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
 
-    const { error } = schema.validate({ name, email, phone });
+    const { error } = contactShemas.validate({ name, email, phone });
     if (error) {
       error.status = 400;
       throw error;
@@ -86,7 +76,7 @@ router.put("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
 
-    const { error } = schema.validate({ name, email, phone });
+    const { error } = contactShemas.validate({ name, email, phone });
     if (error) {
       error.status = 400;
       throw error;
