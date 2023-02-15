@@ -52,7 +52,7 @@ router.put("/:contactId", async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ message: "missing fields" });
   }
-  // const { name, email, phone } = req.body;
+
   const { contactId } = req.params;
 
   const updatedContact = await updateContact(contactId, req.body);
