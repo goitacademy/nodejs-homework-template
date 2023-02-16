@@ -1,7 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const { validation } = require('../../middlewares/validationMiddleware')
+const {
+  addValidation,
+  updateValidation,
+  statusValidation,
+} = require("../../middlewares/validationMiddleware");
 
 const {
   listContacts,
@@ -9,16 +13,21 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatus,
 } = require("../../сontrollers/contactsControllers");
 
-router.get('/', listContacts)
+const controllerError = require("../../сontrollers/controllerError")
 
-router.get('/:contactId', getContactById)
+router.get('/', (listContacts))
 
-router.post('/', validation, addContact)
+router.get('/:contactId', controllerError(getContactById))
 
-router.delete('/:contactId', removeContact)
+router.post("/", addValidation, controllerError(addContact));
 
-router.put('/:contactId', validation, updateContact)
+router.delete('/:contactId', controllerError(removeContact))
+
+router.put("/:contactId", updateValidation, controllerError(updateContact));
+
+router.patch("/:contactId/favorite", statusValidation, controllerError(updateStatus));
 
 module.exports = router
