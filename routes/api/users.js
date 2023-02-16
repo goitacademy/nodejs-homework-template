@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../../controller/usersController');
 const auth = require('../../middlewares/userAuth');
-const { upload } = require('../../middlewares/avatarsUpload');
+const { avatarUpload } = require('../../middlewares/avatarsUpload');
 
 router.post('/signup', userController.register);
 
@@ -17,7 +17,7 @@ router.patch('/', auth, userController.updateSubscription);
 router.patch(
   '/avatars',
   auth,
-  upload.single('avatar'),
+  avatarUpload.single('avatar'),
   userController.updateAvatar
 );
 

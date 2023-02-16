@@ -17,6 +17,7 @@ const register = async (req, res, next) => {
     if (!subscription) {
       subscription = 'starter';
     }
+
     const isValid = JoiSchema.allRequired.validate({
       password,
       email,
@@ -28,11 +29,13 @@ const register = async (req, res, next) => {
       });
       return;
     }
+
     const avatarURL = gravatar.url(
       email,
       { s: '100', r: 'x', d: 'robohash' },
       true
     );
+
     const isExist = await userService.getUserByEmail({ email });
     if (isExist) {
       res.status(409).json({
@@ -40,6 +43,7 @@ const register = async (req, res, next) => {
       });
       return;
     }
+
     const hash = await bcrypt.hash(password, 10);
     const user = await userService.addUser({
       password: hash,
@@ -52,6 +56,7 @@ const register = async (req, res, next) => {
         message: "Can't create user",
       });
     }
+
     res.status(201).json({ user });
   } catch (err) {
     console.error(err);
@@ -63,6 +68,7 @@ const login = async (req, res, next) => {
   try {
     let { password, email, subscription } = await req.body;
     subscription = 'starter';
+
     const isValid = JoiSchema.allRequired.validate({
       password,
       email,
@@ -72,6 +78,7 @@ const login = async (req, res, next) => {
       res.status(400).json({ message: isValid.error.details[0].message });
       return;
     }
+
     const user = await userService.getUserByEmail({
       email,
     });
@@ -81,6 +88,7 @@ const login = async (req, res, next) => {
       });
       return;
     }
+
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       res.status(401).json({
@@ -95,6 +103,7 @@ const login = async (req, res, next) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: '1h' });
     await userService.updateUserToken({ _id: user.id, body: { token } });
+
     res.json({
       token,
       user: {
@@ -118,10 +127,12 @@ const logout = async (req, res, next) => {
       });
       return;
     }
+
     await userService.updateUserToken({
       _id: user.id,
       body: { token: null },
     });
+
     res.status(204).json();
   } catch (err) {
     console.error(err);
@@ -139,6 +150,7 @@ const current = async (req, res, next) => {
       });
       return;
     }
+
     res.json({
       email: user.email,
       subscription: user.subscription,
@@ -153,12 +165,14 @@ const updateSubscription = async (req, res, next) => {
   try {
     const { _id } = await req.user;
     const { subscription } = await req.body;
+
     const isValid = JoiSchema.atLeastOne.validate({ subscription });
     console.log(isValid);
     if (isValid.error) {
       res.status(400).json({ message: isValid.error.details[0].message });
       return;
     }
+
     const user = await userService.updateUserSubscription({
       _id,
       body: { subscription },
@@ -169,6 +183,7 @@ const updateSubscription = async (req, res, next) => {
       });
       return;
     }
+
     res.json({
       user: {
         emai: user.email,
@@ -186,12 +201,14 @@ const updateAvatar = async (req, res, next) => {
     const { description } = await req.body;
     const { path: temporaryName } = req.file;
     const uniqueName = uniqueFileName(storeImage) + path.extname(temporaryName);
+
     try {
       Jimp.read(temporaryName, async (err, avatar) => {
         if (err) {
           console.log(err);
           next(err);
         }
+
         await avatar
           .cover(
             250,
@@ -206,9 +223,11 @@ const updateAvatar = async (req, res, next) => {
       return next(err);
     }
     await fs.unlink(temporaryName);
+
     const { _id, avatarURL } = req.user;
     const indexURL = uniqueName.indexOf('avatars');
     const newAvatarURL = uniqueName.toString().substring(indexURL - 1);
+
     const updateAvatar = await userService.updateUserAvatar({
       _id,
       body: { avatarURL: newAvatarURL },
@@ -216,9 +235,11 @@ const updateAvatar = async (req, res, next) => {
     if (!updateAvatar) {
       return res.status(500).json();
     }
+
     try {
       await fs.unlink(path.join(storeImage, '..', avatarURL));
     } catch (err) {}
+
     res.json({ description, message: 'File loaded' });
   } catch (err) {
     console.log(err);
