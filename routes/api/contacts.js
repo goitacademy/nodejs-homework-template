@@ -21,18 +21,24 @@ const validationUpdateStatusContact = contactsValidation.updateStatusValidation(
 
 router.get("/", auth, contatsControllers.getAll);
 
-router.get("/:contactId", contatsControllers.getById);
+router.get("/:contactId", auth, contatsControllers.getById);
 
 router.post("/", auth, validationAddContact, contatsControllers.add);
 
-router.put("/:contactId", validationUpdateContact, contatsControllers.update);
+router.put(
+  "/:contactId",
+  auth,
+  validationUpdateContact,
+  contatsControllers.update
+);
 
 router.patch(
   "/:contactId/favorite",
+  auth,
   validationUpdateStatusContact,
   contatsControllers.updateStatusContact
 );
 
-router.delete("/:contactId", contatsControllers.remove);
+router.delete("/:contactId", auth, contatsControllers.remove);
 
 module.exports = router;
