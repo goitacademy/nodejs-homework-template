@@ -1,7 +1,7 @@
 const ctrlWrapper = (ctrl) => {
-    return async (req, res, next) => {
+    return async (request, response, next) => {
       try {
-        await ctrl(req, res, next);
+        await ctrl(request, response, next);
       } catch (error) {
         next(error);
       }
