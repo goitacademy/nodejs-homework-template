@@ -19,9 +19,6 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await listContacts()
   const requestedContact = contacts.find(contact => contact.id === contactId)
-
-  if (!requestedContact) return false
-
   const updatedContacts = contacts.filter(contact => contact.id !== contactId)
   await fs.writeFile(filePath, JSON.stringify(updatedContacts))
 
