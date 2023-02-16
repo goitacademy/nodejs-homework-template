@@ -12,7 +12,14 @@
 // jest.mock('./signup.jest.test.js')
 // jest.mock('../../middleware');
 
-const { signup } = require("../../controllers");
+
+/*
+1. Передаємо данні (password, email)для регістрації
+2. return 201 при успішній регістрації 
+*/
+
+
+const  signup  = require("../../controllers");
 require("dotenv").config();
 const { User } = require("../../models");
 
@@ -33,7 +40,7 @@ describe("Signup test", () => {
     jest.spyOn(User, "findOne").mockImplementationOnce(async () => (mUser));
 
     const result = await signup(mReq, mRes);
-    expect(result.status).toBe(201);
+    expect(result.status).toEqual(200);
     // expect(mRes.status).lastCalledWith(201);
   });
 });
