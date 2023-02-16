@@ -37,7 +37,7 @@ const removeContact = async (contactId) => {
       return null;
     }
     const removedContact = contacts.splice(index, 1);
-    fs.writeFile(contactsPath, JSON.stringify(contacts));
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
     return removedContact;
   } catch (err) {
     console.log(`Error:${err.message}.`.red);
@@ -55,7 +55,7 @@ const addContact = async (body) => {
       phone,
     };
     contacts.push(newContact);
-    fs.writeFile(contactsPath, JSON.stringify(contacts));
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
     return newContact;
   } catch (err) {
     return console.log(`Error: ${err.message}`.red);
