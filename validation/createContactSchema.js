@@ -11,6 +11,8 @@ const createContactSchema = Joi.object({
     .required(),
 
   phone: Joi.string().min(10).max(13).required(),
+
+  favorite: Joi.string(),
 });
 
 module.exports = createContactSchema;
