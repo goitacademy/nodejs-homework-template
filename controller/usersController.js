@@ -7,9 +7,14 @@ const path = require('path');
 const fs = require('fs/promises');
 const uniqueFileName = require('unique-filename');
 const Jimp = require('jimp');
+const { v4: uuidv4 } = require('uuid');
+const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 const secret = process.env.SECRET;
+const sengridToken = process.env.SENDGRID_TOKEN;
+
 const storeImage = path.join(process.cwd(), 'public', 'avatars');
+sgMail.setApiKey(sengridToken);
 
 const register = async (req, res, next) => {
   try {
@@ -24,10 +29,9 @@ const register = async (req, res, next) => {
       subscription,
     });
     if (isValid.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: isValid.error.details[0].message,
       });
-      return;
     }
 
     const avatarURL = gravatar.url(
@@ -38,23 +42,45 @@ const register = async (req, res, next) => {
 
     const isExist = await userService.getUserByEmail({ email });
     if (isExist) {
-      res.status(409).json({
+      return res.status(409).json({
         message: 'Email in use',
       });
-      return;
     }
 
     const hash = await bcrypt.hash(password, 10);
+    const verificationToken = uuidv4();
     const user = await userService.addUser({
       password: hash,
       email,
       subscription,
       avatarURL,
+      verify: false,
+      verificationToken,
     });
     if (!user) {
       res.status(409).json({
         message: "Can't create user",
       });
+    }
+
+    const msg = {
+      to: user.email,
+      from: 'SomeApp@email.com',
+      subject: 'Verify your account',
+      text: `Please, click the link to verify your account: ${path.join(
+        process.cwd(),
+        'users/verify',
+        `:${verificationToken}`
+      )}`,
+    };
+    try {
+      await sgMail.send(msg);
+    } catch (err) {
+      console.error(err);
+      if (err.response) {
+        console.error(err.response.body);
+      }
+      return;
     }
 
     res.status(201).json({ user });
@@ -75,26 +101,31 @@ const login = async (req, res, next) => {
       subscription,
     });
     if (isValid.error) {
-      res.status(400).json({ message: isValid.error.details[0].message });
-      return;
+      return res
+        .status(400)
+        .json({ message: isValid.error.details[0].message });
     }
 
     const user = await userService.getUserByEmail({
       email,
     });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Email or password is wrong',
       });
-      return;
+    }
+
+    if (!user.verify) {
+      return res.status(404).json({
+        message: 'User not verified',
+      });
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Email or password is wrong',
       });
-      return;
     }
 
     const payload = {
@@ -122,10 +153,9 @@ const logout = async (req, res, next) => {
     const { _id } = await req.user;
     const user = await userService.getUserById({ _id });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Not authorized',
       });
-      return;
     }
 
     await userService.updateUserToken({
@@ -145,10 +175,9 @@ const current = async (req, res, next) => {
     const { email } = req.user;
     const user = await userService.getUserByEmail({ email });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Not authorized',
       });
-      return;
     }
 
     res.json({
@@ -169,8 +198,9 @@ const updateSubscription = async (req, res, next) => {
     const isValid = JoiSchema.atLeastOne.validate({ subscription });
     console.log(isValid);
     if (isValid.error) {
-      res.status(400).json({ message: isValid.error.details[0].message });
-      return;
+      return res
+        .status(400)
+        .json({ message: isValid.error.details[0].message });
     }
 
     const user = await userService.updateUserSubscription({
@@ -178,10 +208,9 @@ const updateSubscription = async (req, res, next) => {
       body: { subscription },
     });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Not authorized',
       });
-      return;
     }
 
     res.json({
