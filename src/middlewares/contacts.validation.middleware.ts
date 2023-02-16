@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import joi from 'joi';
 import { validationFields } from 'helpers/validation';
+import { ValidationError } from 'helpers/errors';
+
+const contactsSchema = joi.object({
+  limit: validationFields.limit.optional(),
+  page: validationFields.page.optional(),
+  favorite: validationFields.favorite.optional(),
+});
 
 const contactIdSchema = joi.object({
   contactId: validationFields.contactId.required(),
@@ -28,38 +35,48 @@ const updateFavoriteSchema = joi.object({
   favorite: validationFields.favorite.required(),
 });
 
-export const getContactByIdValidation = (req: Request, res: Response, next: NextFunction): any => {
+export const getContactsValidation = (req: Request, _res: Response, next: NextFunction): any => {
+  const validationResult = contactsSchema.validate(req.query);
+
+  if (validationResult.error) {
+    throw new ValidationError(validationResult.error.message);
+  }
+
+  next();
+};
+
+export const getContactByIdValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = contactIdSchema.validate(req.params);
 
   if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
+    throw new ValidationError(validationResult.error.message);
   }
 
   next();
 };
-export const addContactValidation = (req: Request, res: Response, next: NextFunction): any => {
+export const addContactValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = addContactSchema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
+    throw new ValidationError(validationResult.error.message);
   }
 
   next();
 };
-export const updateContactValidation = (req: Request, res: Response, next: NextFunction): any => {
+export const updateContactValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = updateContactSchema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
+    throw new ValidationError(validationResult.error.message);
   }
 
   next();
 };
-export const updateFavoriteValidation = (req: Request, res: Response, next: NextFunction): any => {
+export const updateFavoriteValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = updateFavoriteSchema.validate(req.body);
 
   if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
+    throw new ValidationError(validationResult.error.message);
   }
 
   next();
