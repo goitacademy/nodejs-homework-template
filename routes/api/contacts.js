@@ -19,7 +19,7 @@ const validationUpdateStatusContact = contactsValidation.updateStatusValidation(
   updateStatusJoiSchema
 );
 
-router.get("/", contatsControllers.getAll);
+router.get("/", auth, contatsControllers.getAll);
 
 router.get("/:contactId", contatsControllers.getById);
 
