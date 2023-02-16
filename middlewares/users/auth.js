@@ -23,7 +23,7 @@ const auth = async (req, res, next) => {
 
     const user = await User.findById(id);
 
-    if (!user) {
+    if (!user || !user.token) {
       res.status(401).json({
         status: "Error",
         code: 401,
