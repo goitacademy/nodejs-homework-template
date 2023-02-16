@@ -33,6 +33,14 @@ const userSchema = Schema(
       required: true,
     },
     avatarOriginalName: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
     token: {
       type: String,
       default: null,
@@ -63,10 +71,15 @@ const updateSubscriptionSchema = Joi.object({
     .required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegex).required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  emailSchema,
 };
 
 const User = model('user', userSchema);

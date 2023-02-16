@@ -9,12 +9,17 @@ const hashPass = (password) => {
   return bcrypt.hashSync(password, 10);
 };
 
-const createNewUser = async (user, avatarURL) => {
+const createNewUser = async (
+  user,
+  avatarURL,
+  verificationCode
+) => {
   const hashedPassword = await hashPass(user.password);
 
   const newUser = await User.create({
     email: user.email,
     password: hashedPassword,
+    verificationCode,
     avatarURL,
   });
 

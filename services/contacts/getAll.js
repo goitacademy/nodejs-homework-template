@@ -8,9 +8,7 @@ module.exports = async (req) => {
   const { _id: owner } = req.user;
   const query = { owner };
 
-  if (favorite === ('true' || 'false')) {
-    query.favorite = favorite;
-  }
+  query.favorite = favorite || { $in: [true, false] };
 
   return await Contact.find(query, null, {
     skip,
