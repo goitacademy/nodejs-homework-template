@@ -1,8 +1,21 @@
 const User = require('../models/usersModel');
 
-const addUser = ({ password, email, subscription, token = null }) => {
+const addUser = ({
+  password,
+  email,
+  subscription,
+  token = null,
+  verificationToken,
+}) => {
   try {
-    return User.create({ password, email, subscription, token });
+    return User.create({
+      password,
+      email,
+      subscription,
+      token,
+      verify: false,
+      verificationToken,
+    });
   } catch (err) {
     return false;
   }

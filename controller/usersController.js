@@ -9,12 +9,14 @@ const uniqueFileName = require('unique-filename');
 const Jimp = require('jimp');
 const { v4: uuidv4 } = require('uuid');
 const sgMail = require('@sendgrid/mail');
+
 require('dotenv').config();
 const secret = process.env.SECRET;
-const sengridToken = process.env.SENDGRID_TOKEN;
+const sendgridToken = process.env.SENDGRID_TOKEN;
+const sendgridEmail = process.env.SENDGRID_EMAIL;
 
 const storeImage = path.join(process.cwd(), 'public', 'avatars');
-sgMail.setApiKey(sengridToken);
+sgMail.setApiKey(sendgridToken);
 
 const register = async (req, res, next) => {
   try {
@@ -54,34 +56,25 @@ const register = async (req, res, next) => {
       email,
       subscription,
       avatarURL,
-      verify: false,
       verificationToken,
     });
     if (!user) {
-      res.status(409).json({
+      return res.status(409).json({
         message: "Can't create user",
       });
     }
 
+    const verificationEmail = `${req.protocol}://${req.get(
+      'host'
+    )}/api/users/verify/:${verificationToken}`;
+    console.log(verificationEmail);
     const msg = {
-      to: user.email,
-      from: 'SomeApp@email.com',
+      to: email,
+      from: sendgridEmail,
       subject: 'Verify your account',
-      text: `Please, click the link to verify your account: ${path.join(
-        process.cwd(),
-        'users/verify',
-        `:${verificationToken}`
-      )}`,
+      text: `Please, click the link to verify your account: ${verificationEmail}`,
     };
-    try {
-      await sgMail.send(msg);
-    } catch (err) {
-      console.error(err);
-      if (err.response) {
-        console.error(err.response.body);
-      }
-      return;
-    }
+    await sgMail.send(msg);
 
     res.status(201).json({ user });
   } catch (err) {
