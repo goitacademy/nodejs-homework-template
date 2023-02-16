@@ -14,5 +14,6 @@ const validationUserLogin =
 router.post("/register", validationUserAuth, usersControllers.register);
 router.post("/login", validationUserLogin, usersControllers.login);
 router.get("/current", auth, usersControllers.getCurrent);
+router.post("/logout", auth, usersControllers.logout);
 
 module.exports = router;
