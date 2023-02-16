@@ -19,8 +19,6 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  // giving default value to status (500) and message (server error) of coming error
-  // if it's not status 404 which we throw manually - it will be always 500
   const { status = 500, message = "server error" } = err;
   res.status(status).json({ message: message });
 });
