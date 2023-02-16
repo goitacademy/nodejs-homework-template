@@ -7,6 +7,7 @@ import { errorMiddleware } from './middlewares/errors.middleware';
 import { responseError } from 'helpers/apiHelpers';
 import { RouteNotFoundError } from 'helpers/errors';
 import { authMiddleware } from './middlewares/auth.middleware';
+import path from 'path';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use('/avatars', express.static(path.join(process.cwd(), 'public/avatars')));
 app.use('/api/contacts', authMiddleware, contactsRouter);
 app.use('/api/users', usersRouter);
 

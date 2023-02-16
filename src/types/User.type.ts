@@ -9,6 +9,7 @@ export type UserType = {
   _id?: string;
   password: string;
   email: string;
+  avatarURL?: String;
   subscription?: ESubscription;
   token?: string;
 };
