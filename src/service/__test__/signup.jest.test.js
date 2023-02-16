@@ -30,7 +30,7 @@ describe("Signup test", () => {
       email: "email1@ukr.net",
       subscription: "starter",
     };
-    jest.spyOn(User, "findOne").mockImplementationOnce(async () => mUser);
+    jest.spyOn(User, "findOne").mockImplementationOnce(async () => (mUser));
 
     const result = await signup(mReq, mRes);
     expect(result.status).toBe(201);
