@@ -48,6 +48,17 @@ const updateUserAvatar = ({ _id, body }) => {
   }
 };
 
+const verifyToken = ({ verificationToken }) => {
+  try {
+    return User.findOneAndUpdate(
+      { verificationToken },
+      { verify: true, verificationToken: null }
+    );
+  } catch (err) {
+    return false;
+  }
+};
+
 module.exports = {
   addUser,
   getUserByEmail,
@@ -55,4 +66,5 @@ module.exports = {
   updateUserToken,
   updateUserSubscription,
   updateUserAvatar,
+  verifyToken,
 };
