@@ -65,7 +65,8 @@ const verifyToken = ({ verificationToken }) => {
   try {
     return User.findOneAndUpdate(
       { verificationToken },
-      { verify: true, verificationToken: null }
+      { verify: true, verificationToken: null },
+      { new: true }
     );
   } catch (err) {
     return false;

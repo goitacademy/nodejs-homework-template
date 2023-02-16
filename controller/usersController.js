@@ -20,7 +20,7 @@ sgMail.setApiKey(sendgridToken);
 
 const register = async (req, res, next) => {
   try {
-    let { password, email, subscription } = await req.body;
+    let { password, email, subscription } = req.body;
     if (!subscription) {
       subscription = 'starter';
     }
@@ -67,7 +67,6 @@ const register = async (req, res, next) => {
     const verificationEmail = `${req.protocol}://${req.get(
       'host'
     )}/api/users/verify/:${verificationToken}`;
-    console.log(verificationEmail);
     const msg = {
       to: email,
       from: sendgridEmail,
@@ -85,7 +84,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    let { password, email, subscription } = await req.body;
+    let { password, email, subscription } = req.body;
     subscription = 'starter';
 
     const isValid = JoiSchema.allRequired.validate({
@@ -109,7 +108,7 @@ const login = async (req, res, next) => {
     }
 
     if (!user.verify) {
-      return res.status(404).json({
+      return res.status(403).json({
         message: 'User not verified',
       });
     }
@@ -143,7 +142,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    const { _id } = await req.user;
+    const { _id } = req.user;
     const user = await userService.getUserById({ _id });
     if (!user) {
       return res.status(401).json({
@@ -185,11 +184,10 @@ const current = async (req, res, next) => {
 
 const updateSubscription = async (req, res, next) => {
   try {
-    const { _id } = await req.user;
-    const { subscription } = await req.body;
+    const { _id } = req.user;
+    const { subscription } = req.body;
 
     const isValid = JoiSchema.atLeastOne.validate({ subscription });
-    console.log(isValid);
     if (isValid.error) {
       return res
         .status(400)
@@ -220,14 +218,14 @@ const updateSubscription = async (req, res, next) => {
 
 const updateAvatar = async (req, res, next) => {
   try {
-    const { description } = await req.body;
+    const { description } = req.body;
     const { path: temporaryName } = req.file;
     const uniqueName = uniqueFileName(storeImage) + path.extname(temporaryName);
 
     try {
       Jimp.read(temporaryName, async (err, avatar) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           next(err);
         }
 
@@ -264,16 +262,18 @@ const updateAvatar = async (req, res, next) => {
 
     res.json({ description, message: 'File loaded' });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 };
 
 const verifyToken = async (req, res, next) => {
   try {
-    const { verificationToken } = await req.params;
+    const { verificationToken } = req.params;
+    console.log(verificationToken);
 
-    const isVerify = userService.verifyToken({ verificationToken });
+    const isVerify = await userService.verifyToken({ verificationToken });
+    console.log(isVerify);
     if (!isVerify) {
       return res.status(404).json({
         message: 'User not found',
@@ -284,7 +284,49 @@ const verifyToken = async (req, res, next) => {
       message: 'Verification successful',
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    next(err);
+  }
+};
+
+const sendVerification = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const isValid = JoiSchema.atLeastOne.validate({ email });
+    if (isValid.error) {
+      return res
+        .status(400)
+        .json({ message: isValid.error.details[0].message });
+    }
+
+    const user = await userService.getUserByEmail({ email });
+    if (!user) {
+      return res.status(401).json({
+        message: 'Email is wrong',
+      });
+    }
+    if (user.verify) {
+      return res.status(400).json({
+        message: 'Verification has already been passed',
+      });
+    }
+
+    const verificationEmail = `${req.protocol}://${req.get(
+      'host'
+    )}/api/users/verify/:${user.verificationToken}`;
+    const msg = {
+      to: email,
+      from: sendgridEmail,
+      subject: 'Verify your account',
+      text: `Please, click the link to verify your account: ${verificationEmail}`,
+    };
+    await sgMail.send(msg);
+
+    res.json({
+      message: 'Verification email sent',
+    });
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 };
@@ -297,4 +339,5 @@ module.exports = {
   updateSubscription,
   updateAvatar,
   verifyToken,
+  sendVerification,
 };
