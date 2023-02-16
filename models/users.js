@@ -11,14 +11,17 @@ const usersSchema = Schema(
       type: String,
       required: [true, "Email is required"],
       minlength: 6,
-      //   unique: true,
+      // unique: true,
     },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: String,
+    token: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );
