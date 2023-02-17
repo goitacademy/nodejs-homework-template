@@ -42,6 +42,7 @@ const loginUser = async (req) => {
 
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
+  console.log(_id);
   await User.findByIdAndUpdate(_id, { token: "" });
 };
 
@@ -53,7 +54,12 @@ const updateSubUser = async (req, res) => {
   if (!updatedUser) {
     throw HttpError(404, `Not found`);
   }
-  return updatedUser;
+
+ const user = {
+      email: updatedUser.email,
+      subscription: updatedUser.subscription,
+    }
+  return user;
 };
 
 module.exports = {
