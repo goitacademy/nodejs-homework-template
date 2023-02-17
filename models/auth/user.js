@@ -45,8 +45,22 @@ const logoutUser = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: "" });
 };
 
+const updateSubUser = async (req, res) => {
+  const { _id } = req.user;
+  console.log(_id);
+  const updatedUser =  await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  });
+  if (!updatedUser) {
+    throw HttpError(404, `Not found`);
+  }
+  return updatedUser;
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  updateSubUser
 };

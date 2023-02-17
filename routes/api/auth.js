@@ -3,8 +3,9 @@ const {
   registerUser,
   loginUser,
   logoutUser,
+  updateSubUser
 } = require("../../models/auth/user");
-const { registerSchema, loginSchema } = require("../../models/auth/userSchema");
+const { registerSchema, loginSchema, updateSubSchema } = require("../../models/auth/userSchema");
 const authenticate = require("../../middlewares/authMiddlewar");
 
 const router = express.Router();
@@ -59,6 +60,20 @@ router.post("/logout", authenticate, async (req, res, next) => {
   try {
     await logoutUser(req);
     res.status(204);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/", authenticate, async (req, res, next) => {
+  try {
+    const { error } = updateSubSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: "Missing field subscription." });
+    } else {
+      const updateUser = await updateSubUser(req, res);
+      res.json(updateUser);
+    }
   } catch (error) {
     next(error);
   }

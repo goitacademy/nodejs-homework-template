@@ -3,10 +3,13 @@ const { HttpError } = require("../../helpers/HttpError");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 5 } = req.query;
+  const { page = 1, limit = 5, favorite } = req.query;
   const skip = (page - 1) * limit;
-
-  const list = await ContactsList.find({ owner }, "-createdAt -updatedAt", {
+const user = {owner}
+  if (favorite !== undefined) {
+  user.favorite = favorite
+}
+  const list = await ContactsList.find(user, "-createdAt -updatedAt", {
     skip,
     limit,
   }).populate("owner", "name email");
