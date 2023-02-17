@@ -1,65 +1,52 @@
 const { User } = require("./userSchema");
-// const { HttpError } = require("../../helpers/HttpError");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const HttpError = require("../../helpers/HttpError");
+
+dotenv.config();
+
+const { SECRET_KEY } = process.env;
 
 const registerUser = async (req) => {
-  await User.create(req.body);
-  const {name, email} = req.body
-  return { name, email};
+  const { name, email, password, subscription } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
+
+  await User.create({ name, email, subscription, password: hashPassword });
+  return { email, subscription };
 };
 
-// const getContactById = async (req, res) => {
-// const {contactId} = req.params;
-//   const contact = await ContactsList.findById(contactId);
-//   if (!contact) {
-//     throw HttpError(404, "Not found");
-//   }
-//   return contact;
-// };
+const loginUser = async (req) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password is wrong");
+  }
+  const compareResult = await bcrypt.compare(password, user.password);
+  if (!compareResult) {
+    throw HttpError(401, "Email or password is wrong");
+  }
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
-// const removeContact = async (req, res) => {
-// const {contactId} = req.params;
-//   const contact = await ContactsList.findByIdAndRemove(contactId);
-//   if (!contact) {
-//     throw HttpError(404, "Not found");
-//   }
-//   return({
-//     message: "Delete success",
-//   });
-// };
+  return {
+    token: token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  };
+};
 
-// const addContact = async (req, res) => {
-//   const newContact = await ContactsList.create(req.body);
-//   return newContact;
-// };
-
-// const updateContact = async (req, res) => {
-//   const {contactId} = req.params;
-
-//   const contact = await ContactsList.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!contact) {
-//     throw HttpError(404, "Not found");
-//   }
-//   return contact;
-// };
-
-// const updateFavorite = async (req, res) => {
-//   const { contactId } = req.params;
-//   const contact = await ContactsList.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!contact) {
-//     throw HttpError(404, `Not found`);
-//   }
-//   return contact;
-// };
+const logoutUser = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+};
 
 module.exports = {
   registerUser,
-  // getContactById,
-  // removeContact,
-  // addContact,
-  // updateContact,
-  // updateFavorite,
+  loginUser,
+  logoutUser,
 };

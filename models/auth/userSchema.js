@@ -10,19 +10,22 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, 'Set password for user'],
+    required: [true, "Set password for user"],
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: [true, "Email is required"],
     unique: true,
   },
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
-    default: "starter"
+    default: "starter",
   },
-  token: String
+  token: {
+    type: String,
+    default: "",
+  },
 });
 
 userSchema.post("save", (error, data, next) => {
@@ -41,10 +44,7 @@ const registerSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
-  password: Joi.string()
-    .min(7)
-    .max(20)
-    .required(),
+  password: Joi.string().min(7).max(20).required(),
   subscription: Joi.string().default("starter"),
 });
 
@@ -52,10 +52,7 @@ const loginSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
-  password: Joi.string()
-    .min(7)
-    .max(20)
-    .required(),
+  password: Joi.string().min(7).max(20).required(),
 });
 
 module.exports = {
