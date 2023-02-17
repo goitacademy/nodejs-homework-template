@@ -21,4 +21,3 @@ const getDelete = async (req, res) => {
 };
 module.exports = getDelete;
 
-findOne
