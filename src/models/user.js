@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
+const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
 const userSchema = new Schema(
   {
@@ -56,7 +57,11 @@ const joiUpdateUserSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-module.exports = { joiSignupSchema, joiUpdateUserSchema, User };
+const verifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+module.exports = { joiSignupSchema, joiUpdateUserSchema, verifyEmailSchema, User };
 
 // const joiLoginSchema = Joi.object({
 //   password: Joi.string().min(7).required(),
