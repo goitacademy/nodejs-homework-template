@@ -4,4 +4,12 @@ const add = require("./add");
 const remove = require("./remove");
 const update = require("./update");
 
-module.exports = { getAll, getById, add, remove, update };
+const ctrlWrapper = require("../../helpers/ctrlWrapper");
+
+module.exports = {
+    getAll: ctrlWrapper(getAll),
+    getById: ctrlWrapper(getById),
+    add: ctrlWrapper(add),
+    remove: ctrlWrapper(remove),
+    update: ctrlWrapper(update),
+};
