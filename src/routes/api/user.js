@@ -11,6 +11,8 @@ router.get("/current", authVerifyToken, ctrlWrapper(ctrl.getCurrent));
 router.patch("/subscribe", authVerifyToken, validateJoiMiddleware, ctrlWrapper(ctrl.updateSubscribe));
 router.patch("/avatars", authVerifyToken, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar));
 
+// создать эндпоинт GET /users/verify/:verificationToken,
+// router.get("/verify/:verificationToken", authVerifyToken, ctrlWrapper(ctrl.verificationToken));
 
 
 module.exports = router;

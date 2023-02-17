@@ -22,9 +22,18 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-      avatarURL:{ type: String,
-        required: [true, "URL is required"],
-    }
+    avatarURL: { 
+      type: String, 
+      required: [true, "URL is required"] },
+      
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
 
   { versionKey: false, timestamps: true }
@@ -42,15 +51,12 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 const joiUpdateUserSchema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business").required()
-})
-
-
-
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 
 const User = model("user", userSchema);
 
-module.exports = { joiSignupSchema, joiUpdateUserSchema,  User };
+module.exports = { joiSignupSchema, joiUpdateUserSchema, User };
 
 // const joiLoginSchema = Joi.object({
 //   password: Joi.string().min(7).required(),

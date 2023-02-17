@@ -4,7 +4,7 @@ const fs = require("fs/promises");
 const Jimp = require("jimp");
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
-console.log(avatarsDir);
+// console.log(avatarsDir);
 
 const updateAvatar = async (req, res, next) => {
   const { path: tempUpload, originalname } = req.file;
