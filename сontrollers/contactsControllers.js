@@ -56,6 +56,7 @@ const updateStatus = async (req, res) => {
   res.status(200).send(updetedFavorite);
 };
 
+
 module.exports = {
   listContacts,
   getContactById,
