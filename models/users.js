@@ -31,7 +31,7 @@ const User = model("user", usersSchema);
 const authUserJoiSchema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().email().required(),
-  subscription: Joi.string().valid("starter pro business"),
+  subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
 const loginUserJoiSchema = Joi.object({
@@ -39,8 +39,13 @@ const loginUserJoiSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+const changeSubscriptionUserJoiSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 module.exports = {
   User,
   authUserJoiSchema,
   loginUserJoiSchema,
+  changeSubscriptionUserJoiSchema,
 };
