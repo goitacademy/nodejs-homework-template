@@ -40,7 +40,7 @@ router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const deletedContact = await removeContact(contactId);
   if (deletedContact) {
-    return res.status(200).json({ message: "contact deleted" });
+    return res.status(204).json({ message: "contact deleted" });
   } else {
     return res.status(404).json({ message: "Not found" });
   }
@@ -49,7 +49,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res) => {
   const { error } = contactPutValidator(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
-  if (!req.body) {
+  if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: "missing fields" });
   }
 
