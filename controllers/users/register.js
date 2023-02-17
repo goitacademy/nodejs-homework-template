@@ -4,25 +4,25 @@ const {
 } = require('../../services/users');
 const { Conflict } = require('http-errors');
 const { v4: uuid } = require('uuid');
-
 const gravatar = require('gravatar');
+
 module.exports = async (req, res) => {
   const { email } = req.body;
   const verificationCode = uuid();
   const { BASE_URL } = process.env;
 
-  const verifyEmail = {
+  const emailOptions = {
     to: email,
-    subject: 'Test to verify some email',
+    subject: 'Verify your email',
     html: `<a target="_blank" 
     href="${BASE_URL}/api/users/verify/${verificationCode}">
-    Click to verify email</a>`,
+    Click to verify your email</a>`,
   };
 
-  await sendEmail(verifyEmail);
+  await sendEmail(emailOptions);
 
-  const user = await register.findUser(email);
-  if (user) {
+  const existingUser = await register.findUser(email);
+  if (existingUser) {
     throw Conflict(
       `User with email: ${email} already exists`
     );

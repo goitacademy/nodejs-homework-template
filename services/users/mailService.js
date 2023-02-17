@@ -18,9 +18,20 @@ const transporter = nodemailer.createTransport(
 );
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: EMAIL };
-  const info = await transporter.sendMail(email);
-  console.log('Email sent: ' + info.response);
+  if (!data.to || !data.html) {
+    throw new Error(
+      'Invalid email data: to and html are required'
+    );
+  }
+
+  try {
+    const email = { ...data, from: EMAIL };
+    const info = await transporter.sendMail(email);
+    console.log('Email sent: ' + info.response);
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw new Error('Failed to send email');
+  }
 };
 
 module.exports = sendEmail;

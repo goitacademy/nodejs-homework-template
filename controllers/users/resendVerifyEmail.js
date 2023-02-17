@@ -4,6 +4,7 @@ const { sendEmail } = require('../../services/users');
 
 module.exports = async (req, res) => {
   const { email } = req.body;
+  const { BASE_URL } = process.env;
 
   const user = await User.findOne({ email });
 
@@ -14,16 +15,15 @@ module.exports = async (req, res) => {
     );
   }
 
-  const { BASE_URL } = process.env;
   const verifyResendEmail = {
     to: email,
-    subject: 'Test to RESEND verify some email',
+    subject: 'Resend verification email',
     html: `<a target="_blank" 
     href="${BASE_URL}/api/users/verify/${user.verificationCode}">
-    Click to verify email</a>`,
+    Click to verify your email</a>`,
   };
-
   await sendEmail(verifyResendEmail);
+
   res.json({
     Status: '200 Ok',
     message: 'Verification email sent',

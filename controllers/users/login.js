@@ -18,7 +18,6 @@ module.exports = async (req, res) => {
     password,
     user.password
   );
-
   if (!isValidPassword) {
     throw Unauthorized(`Password invalid`);
   }
