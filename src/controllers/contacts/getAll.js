@@ -1,5 +1,5 @@
 const { NotFound } = require("http-errors");
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models");
 
 const getAll = async (req, res) => {
   const { _id } = req.user;
@@ -22,6 +22,7 @@ const getAll = async (req, res) => {
       res.json(contacts);
     }
   } else {
+    const total = await Contact.find().countDocuments();
     const contacts = await Contact.find(
       { owner: _id },
       "-createdAt -updatedAt",
@@ -33,7 +34,7 @@ const getAll = async (req, res) => {
     if (contacts.length === 0) {
       throw new NotFound(`Contact list empty`);
     } else {
-      res.json(contacts);
+      res.json({ total, contacts });
     }
   }
 };

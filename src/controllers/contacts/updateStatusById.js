@@ -1,5 +1,5 @@
 const { NotFound, BadRequest } = require("http-errors");
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models");
 
 const updateStatusById = async (req, res) => {
   const { _id } = req.user;

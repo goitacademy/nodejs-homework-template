@@ -19,7 +19,6 @@ const contactSchema = new Schema(
     phone: {
       type: String,
       required: true,
-      index: true,
       unique: [true, "Phone must be unique"],
     },
     favorite: {
@@ -35,7 +34,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const postSchema = Joi.object({
+const joiPostSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
   email: Joi.string().pattern(emailRegexp).required(),
   phone: Joi.string().min(3).max(20).required(),
@@ -43,19 +42,17 @@ const postSchema = Joi.object({
   owner: Joi.string(),
 });
 
-const putSchema = Joi.object({
+const joiPutSchema = Joi.object({
   name: Joi.string().min(3).max(20).optional(),
   email: Joi.string().pattern(emailRegexp).optional(),
   phone: Joi.string().min(3).max(20).optional(),
   favorite: Joi.bool(),
 });
 
-const patchSchema = Joi.object({
+const joiPatchSchema = Joi.object({
   favorite: Joi.bool().required(),
 });
 
 const Contact = model("contact", contactSchema);
 
-// Contact.createIndexes();
-
-module.exports = { Contact, postSchema, putSchema, patchSchema };
+module.exports = { Contact, joiPostSchema, joiPutSchema, joiPatchSchema };

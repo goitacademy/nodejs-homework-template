@@ -7,9 +7,10 @@ const { NotFound } = require("http-errors");
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
-  const { path: tempUpload, originalname } = req.file;
+  const { path: tempUpload, filename } = req.file;
   const { _id: id } = req.user;
-  const imageName = `${id}_${originalname}`;
+  const [extention] = filename.split(".").reverse();
+  const avatarName = `${id}.${extention}`;
   try {
     const img = await jimp.read(tempUpload);
     await img
@@ -22,9 +23,9 @@ const updateAvatar = async (req, res) => {
       .quality(60)
       .writeAsync(tempUpload);
 
-    const resultUpload = path.join(avatarsDir, imageName);
+    const resultUpload = path.join(avatarsDir, avatarName);
     await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join("public", "avatars", imageName);
+    const avatarURL = path.join("src", "public", "avatars", avatarName);
     await User.findByIdAndUpdate(id, { avatarURL });
     res.json({ avatarURL });
   } catch (error) {

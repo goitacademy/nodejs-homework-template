@@ -39,7 +39,7 @@ userSchema.methods.setPassword = function (password) {
 };
 
 userSchema.methods.comparePassword = function (password) {
-  return (bcrypt.compareSync = bcrypt.hashSync(password, this.password));
+  return bcrypt.compareSync(password, this.password);
 };
 
 const joiRegisterSchema = Joi.object({
@@ -66,8 +66,6 @@ const joiUpdateAvatarSchema = Joi.object({
 });
 
 const User = model("users", userSchema);
-
-// User.createIndexes();
 
 module.exports = {
   User,

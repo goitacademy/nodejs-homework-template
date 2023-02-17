@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const { MONGO_URL } = process.env;
+const { DB_HOST } = process.env;
 
 const connectMongo = async () => {
   mongoose.set("strictQuery", false);
   mongoose
-    .connect(MONGO_URL)
+    .connect(DB_HOST)
     .then(() => console.log("Database connection successful"))
     .catch((err) => {
       console.log(err.message);
