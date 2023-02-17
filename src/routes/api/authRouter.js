@@ -14,8 +14,15 @@ router.patch(
   "/avatars",
   auth,
   upload.single("avatar"),
-  asyncWrapper(ctrl.updateAvatar)
+  ctrl.updateAvatarCloudinary
 );
+
+// router.patch(
+//   "/avatars",
+//   auth,
+//   upload.single("avatar"),
+//   asyncWrapper(ctrl.updateAvatar)
+// );
 
 router.post(
   "/signup",
