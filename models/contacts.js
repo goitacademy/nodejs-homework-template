@@ -26,7 +26,7 @@ const removeContact = async (contactId) => {
   return contacts.find(({ id }) => id === contactId);
 };
 
-const updateContact = async (contactId, body) => {
+const updateContactById = async (contactId, body) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((c) => c.id === contactId);
   if (index === -1) {
@@ -43,5 +43,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContactById,
 };
