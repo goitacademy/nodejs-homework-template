@@ -1,4 +1,4 @@
-const { Conflict } = require("http-errors");
+// const { Conflict } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const { User } = require("../../models");
 const gravatar = require("gravatar");
@@ -11,7 +11,12 @@ const signup = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      throw new Conflict(`User with ${email} already exist `);
+      res.status(409).json({
+        status: "error",
+        code: 409,
+        message: `User with ${email} already exist `,
+      });
+      
     }
     const avatarURL = gravatar.url(email);
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -26,7 +31,7 @@ const signup = async (req, res, next) => {
     const verifySendMail = {
       to: email,
       subject: "Confirm of email registration",
-      html: `<a href ="http://localhost:3000/api/auth/verify/${verificationToken}" target="_blank">Click to confirm of email registration</a>"`,
+      html: `<a href ="http://localhost:3000/api/auth/verify/:${verificationToken}" target="_blank">Click to confirm of email registration</a>"`,
     };
 
     await sendEmail(verifySendMail);
@@ -37,6 +42,7 @@ const signup = async (req, res, next) => {
         email: result.email,
         subscription: result.subscription,
         avatarURL,
+        verificationToken,
       },
     });
   } catch (error) {

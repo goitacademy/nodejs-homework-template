@@ -1,5 +1,3 @@
-const {RequestError} = require("../../helpers");
-
 const jwt = require("jsonwebtoken");
 
 const { User } = require("../../models");
@@ -11,13 +9,21 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user || !user.comparePassword(password)) {
-      throw new RequestError(400, "Email or password is wrong");
+      res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Email is wrong or not verify, or password is wrong",
+      });
     }
     
 
-    if (!user.verify) {
-      throw new RequestError(400, "Email is not verify");
-    }
+    // if (!user.verify) {
+    //   res.status(400).json({
+    //     status: "error",
+    //     code: 400,
+    //     message: "Email is not verify",
+    //   });
+    // }
 
     const payload = {
       id: user._id
