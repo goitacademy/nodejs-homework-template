@@ -3,9 +3,13 @@ const {
   registerUser,
   loginUser,
   logoutUser,
-  updateSubUser
+  updateSubUser,
 } = require("../../models/auth/user");
-const { registerSchema, loginSchema, updateSubSchema } = require("../../models/auth/userSchema");
+const {
+  registerSchema,
+  loginSchema,
+  updateSubSchema,
+} = require("../../models/auth/userSchema");
 const authenticate = require("../../middlewares/authMiddlewar");
 
 const router = express.Router();

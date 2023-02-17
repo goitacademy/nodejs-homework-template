@@ -47,8 +47,7 @@ const logoutUser = async (req, res) => {
 
 const updateSubUser = async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
-  const updatedUser =  await User.findByIdAndUpdate(_id, req.body, {
+  const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   });
   if (!updatedUser) {
@@ -57,10 +56,9 @@ const updateSubUser = async (req, res) => {
   return updatedUser;
 };
 
-
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  updateSubUser
+  updateSubUser,
 };
