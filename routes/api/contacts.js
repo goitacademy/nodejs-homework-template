@@ -5,9 +5,9 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("../../service");
 
-const { contactShemas } = require("../../schemas");
+// const { contactShemas } = require("../../schemas");
 
 const router = express.Router();
 
@@ -39,14 +39,14 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, favorite } = req.body;
 
-    const { error } = contactShemas.validate({ name, email, phone });
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const body = { name, email, phone };
+    // const { error } = contactShemas.validate({ name, email, phone });
+    // if (error) {
+    //   error.status = 400;
+    //   throw error;
+    // }
+    const body = { name, email, phone, favorite };
     const data = await addContact(body);
     res.status(201).json(data);
   } catch (error) {
@@ -74,14 +74,14 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { name, email, phone } = req.body;
+    const { name, email, phone, favorite } = req.body;
 
-    const { error } = contactShemas.validate({ name, email, phone });
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const body = { name, email, phone };
+    // const { error } = contactShemas.validate({ name, email, phone });
+    // if (error) {
+    //   error.status = 400;
+    //   throw error;
+    // }
+    const body = { name, email, phone, favorite };
     const data = await updateContact(contactId, body);
     if (!data) {
       const error = new Error("Not found");
