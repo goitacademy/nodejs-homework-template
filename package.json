@@ -14,11 +14,8 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.7.0",
-<<<<<<< Updated upstream
-=======
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.1",
->>>>>>> Stashed changes
     "morgan": "1.10.0",
     "uuid": "^9.0.0"
   },

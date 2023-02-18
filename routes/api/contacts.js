@@ -14,9 +14,6 @@ router.delete('/:contactId', mdd.auth, mdd.id, ctrl.deleteContact);
 
 router.put('/:contactId', mdd.auth, mdd.id, mdd.contactBody, ctrl.updateContact);
 
-<<<<<<< Updated upstream
-=======
 router.patch('/:id/favorite', mdd.auth, mdd.id, mdd.favorite, ctrl.favoriteUpdate);
 
->>>>>>> Stashed changes
 module.exports = router;

@@ -4,9 +4,6 @@ const addContact = require('./contacts/addContact');
 const deleteContact = require('./contacts/deleteContact');
 const updateContact = require('./contacts/updateContact');
 
-<<<<<<< Updated upstream
-module.exports = { getAllContacts, getContactById, addContact, deleteContact, updateContact };
-=======
 const signUp = require('./users/signUp');
 const login = require('./users/login');
 const getCurrentUser = require('./users/getCurrentUser');
@@ -26,4 +23,3 @@ module.exports = {
   logout,
   subscription,
 };
->>>>>>> Stashed changes
