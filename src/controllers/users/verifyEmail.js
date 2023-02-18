@@ -1,9 +1,9 @@
 const { User } = require("../../models");
 
-const verifyEmail = async (res, req) => {
+const verifyEmail = async (req, res) => {
 
   const {verificationToken } = req.params;
-  console.log(verificationToken);
+  console.log(req.params);
   const user = await User.findOne({ verificationToken });
 
   if (!user) {

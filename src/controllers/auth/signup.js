@@ -30,7 +30,7 @@ const signup = async (req, res, next) => {
       avatarURL,
       verificationToken,
     });
-
+    await User.save();
     const verifySendMail = {
       to: email,
       subject: "Confirm of email registration",
