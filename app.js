@@ -12,14 +12,22 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use('/contacts', contactsRouter);
+app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
+  console.log('come in here');
   res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+app.use(
+  (
+    { status = 500, message = 'Internal Server Error', details = null },
+    req,
+    res,
+    next
+  ) => {
+    res.status(status).json({ message: message, details });
+  }
+);
 
 module.exports = app;

@@ -1,28 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
-const SchemaValidator = require(path.resolve('middlewares/SchemaValidator'));
-const validateRequest = SchemaValidator();
-// generic route handler
-const genericHandler = (req, res, next) => {
-  res.json({
-    status: 'success',
-    data: req.body,
-  });
-};
-router.get('/', async (req, res, next) => {
-  res.json({ contacts: [], message: 'template message' });
-});
+const schemaValidator = require('../../middlewares/SchemaValidator');
+const ctrl = require('../../controllers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'go go go' });
-});
+router.get('/', ctrl.getContacts);
 
-router.post('/', (validateRequest, genericHandler));
+router.get('/:contactId', ctrl.getContactById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: req.route.path });
-});
+router.post('/', schemaValidator, ctrl.addContact);
 
-router.put('/:contactId', (validateRequest, genericHandler));
+router.delete('/:contactId', ctrl.removeContact);
+
+router.put('/:contactId', schemaValidator, ctrl.updateContact);
 module.exports = router;
