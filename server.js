@@ -12,9 +12,10 @@ const connectDb = require('./config/db');
   await connectDb();
 })();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(
-    `Server is running. Use this API on port: ${PORT}, or on 8081 if you're using docker`
-      .green.italic
+    `Server is running. Use this API on port: ${
+      server.address().port
+    }`.green.italic
   );
 });
