@@ -65,13 +65,18 @@ const updateContact = async (id, body) => {
 const removeContact = async (id) => {
   try {
     const contacts = await listContacts();
-    const contactRemove = contacts.filter(
-      (contact) => contact.id !== id
+    const contactRemove = contacts.findIndex(
+      (contact) => contact.id === id
     );
+    if (contactRemove === -1) {
+      return null;
+    }
+    const [result] = contacts.splice(contactRemove, 1);
     await fs.writeFile(
       contactsPath,
-      JSON.stringify(contactRemove, null, 2)
+      JSON.stringify(contacts, null, 2)
     );
+    return result;
   } catch (error) {
     console.log(error.message);
   }
