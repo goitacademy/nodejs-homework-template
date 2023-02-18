@@ -4,10 +4,8 @@ const fs = require('fs/promises')
 const path = require("path");
 const contactsPath = path.join(__dirname, "/models/contacts.json");
 const contacts = JSON.parse(fs.readFile(contactsPath, "utf8"))
-const allContactsFunc = require('/models/contacts')
-// const contacts = 
-//     fs.readFileSync('./db/contacts.json', { encoding: 'utf-8' }),
-// );
+const allContactsFunc = require('models/contacts.js')
+
 
 router.get('/', async (req, res, next) => {
   const contactsList = contacts.listContacts();
@@ -24,7 +22,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
 const { contactId } = req.params;
   const contactById = allContactsFunc.getContactById(contactId)
-  if (getId) {
+  if (contactId) {
     return res.json({
     status: 'success',
     code: 200,
@@ -41,7 +39,7 @@ const { contactId } = req.params;
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body;
-  const addContact = allContactsFunc.addContact(body)
+  const addContact = allContactsFunc.addContact(name, email, phone )
   if (!name || !email || !phone) {
     return res.status(400).json({
     status:  "missing required name field",
@@ -61,7 +59,7 @@ router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const removeContact = allContactsFunc.removeContactById(contactId);
   
-  if (deleteId) {
+  if (contactId) {
     return res.json({
     status: 'success',
     code: 200,
@@ -83,7 +81,7 @@ router.put('/:contactId', async (req, res, next) => {
   const update = allContactsFunc.updateContact(contactId);
   if (!update) {
   return res.status(404).json({
-            message: ERROR_MESSAGES.NOT_FOUND,
+            status:"ERROR_MESSAGES.NOT_FOUND" ,
         });
 }
 if (!name || !email || !phone) {
