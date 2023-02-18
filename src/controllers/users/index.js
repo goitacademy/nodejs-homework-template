@@ -2,7 +2,7 @@ const getCurrent = require("./getCurrent");
 const updateSubscribe = require("./updateSubscribe");
 const updateAvatar = require("./updateAvatar");
 const resendVerifyEmail = require("./resendVerifyEmail");
-const verifyEmail = require("../users/verifyEmail");
+const verifyEmail = require("./verifyEmail");
 
 module.exports = {
   getCurrent,

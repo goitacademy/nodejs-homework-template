@@ -2,7 +2,8 @@ const { User } = require("../../models");
 
 const verifyEmail = async (res, req) => {
 
-  const { verificationToken } = req.params;
+  const {verificationToken } = req.params;
+  console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
@@ -15,11 +16,11 @@ const verifyEmail = async (res, req) => {
 
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationToken: "",
+    verificationToken: null,
   });
 
   res.json({
-    status: "succes",
+    status: "success",
     code: 200,
     message: "Verification successful",
   });

@@ -54,12 +54,12 @@ userSchema.methods.comparePassword = function (password) {
 const joiUpdateUserSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
-
-const User = model("user", userSchema);
-
 const verifyEmailSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
 });
+
+const User = model("user", userSchema);
+
 
 module.exports = { joiSignupSchema, joiUpdateUserSchema, verifyEmailSchema, User };
 
