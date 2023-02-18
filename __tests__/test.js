@@ -10,9 +10,8 @@ const { User } = require('../models/user');
 
 const { DB_TEST_HOST, PORT } = process.env;
 
-describe('test auth routes', () => {
+describe('test login rout', () => {
   let server;
-  // jest.setTimeout(23000);
 
   beforeAll(() => (server = app.listen(PORT)));
 
