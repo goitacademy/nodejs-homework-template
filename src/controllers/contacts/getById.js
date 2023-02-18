@@ -1,5 +1,4 @@
 const { Contact } = require("../../models/index");
-const { requestError } = require("../../helpers/requestError");
 
 const getById = async (req, res, next) => {
   try {
@@ -8,7 +7,11 @@ const getById = async (req, res, next) => {
     const result = await Contact.findById(contactId);
 
     if (!result) {
-      throw requestError(404, "Not found");
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "User not found",
+      });
     }
     res.json({
       status: "success",

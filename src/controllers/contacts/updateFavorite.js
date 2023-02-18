@@ -1,5 +1,5 @@
-const { Contact } = require("../../models/index");
-const { requestError } = require("../../helpers/requestError");
+const { Contact } = require("../../models");
+
 
 const updateFavorite = async (req, res, next) => {
   try {
@@ -12,11 +12,20 @@ const updateFavorite = async (req, res, next) => {
     );
 
     if (!result) {
-      throw requestError(404, "Not found");
+      res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Not found",
+      });
     }
+    
 
     if (!req.body) {
-      throw requestError(400, "Missing field favorite");
+      res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Missing field favorite",
+      });
     }
 
     res.json({

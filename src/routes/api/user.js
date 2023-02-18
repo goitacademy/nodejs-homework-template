@@ -9,6 +9,7 @@ const validateVerifyEmail = joiValidation(verifyEmailSchema);
 
 
 router.post("/verify", validateVerifyEmail, ctrlWrapper(ctrl.resendVerifyEmail));
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
 router.get("/current", authVerifyToken, ctrlWrapper(ctrl.getCurrent));
 router.patch("/subscribe", authVerifyToken, validateJoiMiddleware, ctrlWrapper(ctrl.updateSubscribe));
 router.patch("/avatars", authVerifyToken, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar));

@@ -1,5 +1,5 @@
 const { Contact } = require("../../models/index");
-const { requestError } = require("../../helpers/requestError");
+
 
 const updateById = async (req, res, next) => {
   try {
@@ -8,7 +8,11 @@ const updateById = async (req, res, next) => {
       new: true,
     });
     if (!result) {
-      throw requestError(404, "Not found");
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Not found",
+      });
     }
 
     res.json({
