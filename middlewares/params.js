@@ -1,6 +1,8 @@
 const params = (req, res, next) => {
   const { _id } = req.user;
 
+  console.log('ID', _id);
+
   let page = 0;
   let limit = 0;
   let query = { owner: _id };
@@ -25,6 +27,7 @@ const params = (req, res, next) => {
   const skip = (page - 1) * limit;
 
   req.query = query;
+
   req.skip = skip;
   req.limit = Number(limit);
   next();

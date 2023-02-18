@@ -1,7 +1,9 @@
+const { Contact } = require('../../models/contacts');
+
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndRemove(contactId);
+    const result = await Contact.findByIdAndRemove(contactId).populate('owner', 'email');
 
     if (!result) {
       const err = new Error();

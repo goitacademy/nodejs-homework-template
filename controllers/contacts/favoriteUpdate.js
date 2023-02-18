@@ -2,10 +2,13 @@ const { Contact } = require('../../models/contacts');
 
 const favoriteUpdate = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { contactId } = req.params;
     const { favorite } = req.body;
 
-    const result = await Contact.findByIdAndUpdate(id, { favorite }, { new: true });
+    const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true }).populate(
+      'owner',
+      'email'
+    );
 
     res.status(201).json({
       status: 'success',

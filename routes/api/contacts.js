@@ -14,6 +14,6 @@ router.delete('/:contactId', mdd.auth, mdd.id, ctrl.deleteContact);
 
 router.put('/:contactId', mdd.auth, mdd.id, mdd.contactBody, ctrl.updateContact);
 
-router.patch('/:id/favorite', mdd.auth, mdd.id, mdd.favorite, ctrl.favoriteUpdate);
+router.patch('/:contactId/favorite', mdd.auth, mdd.id, mdd.favorite, ctrl.favoriteUpdate);
 
 module.exports = router;
