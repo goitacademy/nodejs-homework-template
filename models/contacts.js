@@ -16,23 +16,22 @@ const getContactById = async (contactId) => {
     const contactById = parsedContacts.filter(({ id }) => id === contactId);
 
     if (contactById.length === 0) {
-      return console.log(`There is no contact with id: ${contactId}`);
+      return null;
     }
 
-    return [contactById];
+    return contactById;
 
 }
 
 const removeContact = async (contactId) => {
-    const contacts = await fs.readFile(contactsPath, "utf8");
-    const parsedContacts = JSON.parse(contacts);
+    const parsedContacts = await listContacts();
 
     const newList = parsedContacts.filter(
       (contact) => contact.id !== contactId
     );
 
     if (parsedContacts.length === newList.length) {
-      return console.log(`There is no contact with id: ${contactId} to remove`);
+      return null;
     }
     await fs.writeFile(
       contactsPath,
@@ -46,14 +45,12 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-  const {name, email, phone} = body;
-
-  const newContact = { id: id(), name, email, phone };
+  const newContact = { ...body, id: id()};
 
     const contacts = await fs.readFile(contactsPath, "utf8");
     const parsedContacts = JSON.parse(contacts);
 
-    const nameToFind = parsedContacts.find(
+    /* const nameToFind = parsedContacts.find(
       (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
     const emailToFind = parsedContacts.find(
@@ -75,7 +72,7 @@ const addContact = async (body) => {
       return console.log(
         `The contact with phone number: ${phone} already exists`
       );
-    };
+    }; */
 
     const newList = [...parsedContacts, newContact];
     await fs.writeFile(
@@ -84,26 +81,29 @@ const addContact = async (body) => {
       "utf8"
     );
     
-    return newList;
+    return newContact;
 }
 
 const updateContact = async (contactId, body) => {
 
   const contacts = await listContacts();
 
-  const contactToUpdate = await getContactById(contactId);
+  const contactToUpdateIndex = contacts.findIndex(({id}) => id === contactId);
 
-  const updatedContact = {...contactToUpdate, ...body};
+  if (contactToUpdateIndex < 0) {
+    return null;
+  }
 
-  const newList = [...contacts, updatedContact];
+  let contactToUpdate = contacts[contactToUpdateIndex];
+  contacts[contactToUpdateIndex] = {...contactToUpdate, ...body}
 
   await fs.writeFile(
     contactsPath,
-    JSON.stringify(newList, null, "\t"),
+    JSON.stringify(contacts, null, "\t"),
     "utf8"
   );
 
-  return newList;
+  return contacts[contactToUpdateIndex];
 }
 
 module.exports = {
