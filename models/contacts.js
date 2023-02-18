@@ -1,6 +1,5 @@
 const fs = require('fs/promises')
 const path = require('path');
-const { stringify } = require('querystring');
 const contactsPath = path.resolve('./models/contacts.json')
 
 const listContacts = async () => {
@@ -15,7 +14,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  const newcontacts=contacts.filter((x) => parseInt(x.id) != +contactId)
+  const newcontacts=contacts.filter((x) => parseInt(x.id) !== +contactId)
   if (newcontacts.length===contacts.length) return 'failure'
   fs.writeFile(contactsPath,JSON.stringify(newcontacts))
   return 'success'
@@ -32,7 +31,7 @@ const updateContact = async (contactId, body) => {
   let isContactUpdated = false;
   let updatedContact
   const newContacts = contacts.map((x)=>{
-    if (+x.id!=+contactId) return x
+    if (+x.id!==+contactId) return x
     isContactUpdated=true;
     updatedContact={
       id : contactId+'',

@@ -23,7 +23,7 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  let {name, email, phone} = req.body
+  const {name, email, phone} = req.body
   if (!name || !phone || !email) return res.status(400).json({"message": "missing required name field"})
   try{
     await contactValidationSchema.validateAsync(req.body)
@@ -31,8 +31,8 @@ router.post('/', async (req, res, next) => {
   catch(err){
     return res.status(400).json({"message": err.message})
   }
-  let newId = Date.now()+''
-  let newContact = {
+  const newId = Date.now()+''
+  const newContact = {
     id: newId,
     name: name,
     email: email,
@@ -43,13 +43,13 @@ res.status(201).json(newContact)
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  let result = await removeContact(req.params.contactId);
+  const result = await removeContact(req.params.contactId);
   if (result==='failure') return res.status(404).json({"message": "Not found"})
   else res.status(200).json({"message": "contact deleted"})
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  let {name, email, phone} = req.body
+  const {name, email, phone} = req.body
   if (!name && !email && !phone) return res.status(400).json({"message": "missing fields"})
   let contact
   try{
@@ -58,7 +58,7 @@ router.put('/:contactId', async (req, res, next) => {
   catch(err){
     return res.status(400).json({"message": err.message})
   }
-  let result = await updateContact(req.params.contactId, contact)
+  const result = await updateContact(req.params.contactId, contact)
 
   if (!result) return res.status(404).json({"message": "Not found"})
   return res.status(200).json(result)
