@@ -26,7 +26,7 @@ const getContactById = async (contactId) => {
     const allContacts = await listContacts();
     const contactById = allContacts.find(contact => contact.id === contactId);
     if (!contactId) {
-      return console.log(`contact with ID: ${contactId} NOT FOUND!!! `)
+      return null;
     }  
     return contactById;
   } catch (error) {
