@@ -17,7 +17,7 @@ router.get(
   '/:id',
   authenticate,
   isValidId,
-  ctrlWrapper(ctrl.getByID)
+  ctrlWrapper(ctrl.getContactById)
 );
 
 router.post(
@@ -47,7 +47,7 @@ router.delete(
   '/:id',
   authenticate,
   isValidId,
-  ctrlWrapper(ctrl.removeById)
+  ctrlWrapper(ctrl.removeContactById)
 );
 
 module.exports = router;

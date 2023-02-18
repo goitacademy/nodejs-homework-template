@@ -1,10 +1,10 @@
 const { NotFound } = require('http-errors');
 const service = require('../../services');
 
-const removeById = async (req, res) => {
+const removeContactById = async (req, res) => {
   const { id } = req.params;
 
-  const result = await service.removeById(id);
+  const result = await service.removeContactById(id);
   if (!result) {
     throw NotFound(`Contact with id:${id} not found`);
   }
@@ -18,4 +18,4 @@ const removeById = async (req, res) => {
   });
 };
 
-module.exports = removeById;
+module.exports = removeContactById;

@@ -1,8 +1,8 @@
 const { NotFound } = require('http-errors');
 const service = require('../../services');
 
-const getByID = async (req, res) => {
-  const result = await service.getByID(req);
+const getContactById = async (req, res) => {
+  const result = await service.getContactById(req);
 
   if (!result) {
     throw NotFound(
@@ -19,4 +19,4 @@ const getByID = async (req, res) => {
   });
 };
 
-module.exports = getByID;
+module.exports = getContactById;
