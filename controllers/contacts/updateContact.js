@@ -26,6 +26,13 @@ const updateContact = async (req, res, next) => {
 
     const result = await operations.updById(contactId, contact, req.body);
 
+    if (!result) {
+      const err = new Error();
+      err.status = 404;
+      err.message = `Contact with ID=${contactId} not found`;
+      throw err;
+    }
+
     res.status(201).json({
       status: 'success',
       code: 201,
