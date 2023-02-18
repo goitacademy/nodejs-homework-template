@@ -12,8 +12,7 @@ cloudinary.config({
 const updateAvatarCloudinary = async (req, res) => {
   const { path: pathFile, filename } = req.file;
   const { _id: id } = req.user;
-  console.log("pathFile:", pathFile);
-  console.log("filename:", filename);
+
   const [extention] = filename.split(".").reverse();
   const avatarName = `${id}.${extention}`;
 
