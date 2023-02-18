@@ -1,10 +1,10 @@
-const contactsOperation = require('../../models/contacts');
+const { Contact } = require('../../models');
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const removeContact = await contactsOperation.removeContact(contactId);
-  if (!removeContact) {
-    const error = new Error(`Contact by id=${contactId} not found`);
+  const result = await Contact.remove({ _id: contactId });
+  if (!result) {
+    const error = new Error(`Contact by id=${{ contactId }} not found`);
     error.status = 404;
     throw error;
   }
@@ -12,7 +12,7 @@ const removeContact = async (req, res) => {
     status: 'success',
     message: 'contact deleted',
     code: 200,
-    data: { removeContact },
+    data: { result },
   });
 };
 
