@@ -7,7 +7,7 @@ const { randomUUID } = require("crypto");
 
 const signup = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, subscription } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
@@ -18,32 +18,38 @@ const signup = async (req, res, next) => {
       });
       
     }
+    const verificationToken = randomUUID();
     const avatarURL = gravatar.url(email);
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const verificationToken = randomUUID();
+    
 
-    const result = await User.create({
+    await User.create({
       email,
       password: hashPassword,
+      subscription,
       avatarURL,
       verificationToken,
     });
+
     const verifySendMail = {
       to: email,
       subject: "Confirm of email registration",
-      html: `<a href ="http://localhost:3000/api/auth/verify/:${verificationToken}" target="_blank">Click to confirm of email registration</a>"`,
+      html: `<a href ="http://localhost:3000/api/users/verify/${verificationToken}" target="_blank">Click to confirm of email registration</a>`,
     };
 
     await sendEmail(verifySendMail);
+
     res.status(201).json({
-      status: "success",
-      code: 201,
+      status: 'success',
+    code: 201,
+    data: {
       user: {
-        email: result.email,
-        subscription: result.subscription,
         avatarURL,
+        email,
+        subscription,
         verificationToken,
       },
+    }
     });
   } catch (error) {
     next(error);
