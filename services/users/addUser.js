@@ -1,9 +1,10 @@
 const { User } = require('../../schemas/modelUser');
 
-const addUser = async (email, password) => {
+const addUser = async (email, password, avatarURL) => {
   return await User.create({
     email,
     password,
+    avatarURL,
   });
 };
 
