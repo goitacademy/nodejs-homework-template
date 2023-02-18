@@ -1,5 +1,3 @@
-const operations = require('../../models/operations');
-
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;

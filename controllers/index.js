@@ -3,6 +3,7 @@ const getContactById = require('./contacts/getContactById');
 const addContact = require('./contacts/addContact');
 const deleteContact = require('./contacts/deleteContact');
 const updateContact = require('./contacts/updateContact');
+const favoriteUpdate = require('./contacts/favoriteUpdate');
 
 const signUp = require('./users/signUp');
 const login = require('./users/login');

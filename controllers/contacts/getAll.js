@@ -1,8 +1,5 @@
-const operations = require('../../models/operations');
-
 const getAllContacts = async (req, res, next) => {
   const { limit, skip, query } = req;
-  console.log(query);
   try {
     const result = await Contact.find(query, '', {
       skip,

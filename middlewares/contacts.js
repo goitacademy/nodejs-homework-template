@@ -1,4 +1,4 @@
-const { schema, favoriteSchema, subscriptionSchema } = require('../models/contacts');
+const { schema, favoriteSchema } = require('../models/contacts');
 
 const contactBody = (req, res, next) => {
   const { error } = schema.validate(req.body);

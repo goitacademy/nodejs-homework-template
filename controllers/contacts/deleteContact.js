@@ -1,5 +1,3 @@
-const operations = require('../../models/operations');
-
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
