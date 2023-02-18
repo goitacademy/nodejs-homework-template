@@ -23,13 +23,34 @@ const removeContact = async (contactId) => {
   }
   const [result] = contactsArray.splice(index, 1);
   await fs.writeFile(pathContacts, JSON.stringify(contactsArray, null, 2));
-  console.log(result);
+
   return result;
 };
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  const contacts = await listContacts();
+  const contactsArray = JSON.parse(contacts);
+  const newContact = {
+    id: '43',
+    ...body,
+  };
+  contactsArray.push(newContact);
 
-const updateContact = async (contactId, body) => {};
+  await fs.writeFile(pathContacts, JSON.stringify(contactsArray, null, 2));
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contactsArray = JSON.parse(contacts);
+  const index = contactsArray.findIndex((item) => item.id === contactId);
+
+  if (index === -1) {
+    return null;
+  }
+  contactsArray[index] = { id: contactId, ...body };
+  await fs.writeFile(pathContacts, JSON.stringify(contactsArray, null, 2));
+  return contactsArray[index];
+};
 
 module.exports = {
   listContacts,
