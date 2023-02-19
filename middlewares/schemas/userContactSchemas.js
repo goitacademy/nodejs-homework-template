@@ -5,12 +5,17 @@ const schemas = {
     name: Joi.string(),
     email: Joi.string(),
     phone: Joi.string(),
-  }).or("name", "email", "phone"),
+    favorite: Joi.boolean(),
+  }).or("name", "email", "phone", "favorite"),
 
   addContact: Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean(),
+  }),
+  updateContactStatus: Joi.object({
+    favorite: Joi.boolean().required(),
   }),
 };
 
