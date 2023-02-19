@@ -1,20 +1,33 @@
 const express = require("express");
-const router = express.Router();
-const { contactValidation } = require("../../middlewares/validationMiddleware");
-const {getAllContacts} = require('../../controllers/getAllContactsController')
-const {getOneContactById} = require('../../controllers/getOneContactByIdController')
-const {addNewContact} = require('../../controllers/addNewContactController')
-const {removeContactById} = require('../../controllers/removeContactByIdController')
-const {changeContactById} = require('../../controllers/changeContactByIdController')
+const contactsRouter = express.Router();
+// const { contactValidation } = require("../../middlewares/validationMiddleware");
+const {
+	getAllContacts,
+} = require("../../controllers/getAllContactsController");
+const {
+	getOneContactById,
+} = require("../../controllers/getOneContactByIdController");
+const { addNewContact } = require("../../controllers/addNewContactController");
+const {
+	removeContactById,
+} = require("../../controllers/removeContactByIdController");
+const {
+	changeContactById,
+} = require("../../controllers/changeContactByIdController");
+const {
+	changeStatusContact,
+} = require("../../controllers/changeStatusContactByIdController");
 
-router.get("/", getAllContacts);
+contactsRouter.get("/", getAllContacts);
 
-router.get("/:contactId", getOneContactById);
+contactsRouter.get("/:contactId", getOneContactById);
 
-router.post("/", contactValidation, addNewContact);
+contactsRouter.post("/", addNewContact);
 
-router.delete("/:contactId", removeContactById);
+contactsRouter.delete("/:contactId", removeContactById);
 
-router.put("/:contactId", contactValidation, changeContactById);
+contactsRouter.put("/:contactId", changeContactById);
 
-module.exports = router;
+contactsRouter.patch("/:contactId/favorite", changeStatusContact);
+
+module.exports = contactsRouter;

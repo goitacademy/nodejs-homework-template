@@ -17,8 +17,8 @@ const schema = new mongoose.Schema({
 	},
 });
 
-const Contact = mongoose.model("contacts", schema);
+const ContactModel  = mongoose.model("contacts", schema);
 
 module.exports = {
-	Contact,
+	ContactModel ,
 };
