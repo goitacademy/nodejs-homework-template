@@ -3,12 +3,13 @@ const Joi = require("joi");
 module.exports = {
 	contactValidation: (req, res, next) => {
 		const schema = Joi.object({
-			name: Joi.string().alphanum().min(3).max(38).required(),
+			name: Joi.string().min(3).max(38).required(),
 			email: Joi.string().email({
 				minDomainSegments: 2,
 				tlds: { allow: ["com", "net"] },
 			}),
-			phone: Joi.string().alphanum().min(6).max(15).required(),
+			phone: Joi.string().min(6).max(15).required(),
+			favorite: Joi.boolean()
 		});
 		const validationResult = schema.validate(req.body);
 		if (validationResult.error) {
