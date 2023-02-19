@@ -13,7 +13,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
     const parsedContacts = await listContacts();
 
-    const contactById = parsedContacts.filter(({ id }) => id === contactId);
+    const [contactById] = parsedContacts.filter(({ id }) => id === contactId);
 
     if (contactById.length === 0) {
       return null;
@@ -49,30 +49,6 @@ const addContact = async (body) => {
 
     const contacts = await fs.readFile(contactsPath, "utf8");
     const parsedContacts = JSON.parse(contacts);
-
-    /* const nameToFind = parsedContacts.find(
-      (contact) => contact.name.toLowerCase() === name.toLowerCase()
-    );
-    const emailToFind = parsedContacts.find(
-      (contact) => contact.email.toLowerCase() === email.toLowerCase()
-    );
-    const phoneToFind = parsedContacts.find(
-      (contact) => contact.phone === phone
-    );
-
-    if (nameToFind) {
-      return console.log(`The contact named ${name} already exists`);
-    };
-
-    if (emailToFind) {
-      return console.log(`The contact with email: ${email} already exists`);
-    };
-
-    if (phoneToFind) {
-      return console.log(
-        `The contact with phone number: ${phone} already exists`
-      );
-    }; */
 
     const newList = [...parsedContacts, newContact];
     await fs.writeFile(

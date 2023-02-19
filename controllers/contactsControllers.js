@@ -7,6 +7,7 @@ const {
 } = require("../models/contacts.js");
 
 const {isEmpty} = require('../helpers/apiHelpers');
+const {contactValidation} = require('../middlewares/validationMiddleware');
 
 
 const listContactsController = async (_, res) => {
@@ -26,8 +27,18 @@ const getContactByIdController = async (req, res) => {
 };
 
 const addContactController = async (req, res) => {
+  const { error, value } = contactValidation.validate(req.body);
+  const {name, email, phone} = req.body;
+  const missing = !name || !email || !phone;
+  if (missing) {
+    return res.status(400).json({message: `missing ${missing} field`});;
+  }
+  if (error) {
+    return res.status(400).json({message: error.details[0].message});
+  }
+  
   const newContact = await addContact(req.body);
-  return res.status(201).json(newContact)
+  return res.status(201).json(newContact);
 }
 
 const removeContactController = async (req,res) => {
