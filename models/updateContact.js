@@ -13,7 +13,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
 
-  let contactToUpdate = contacts[contactToUpdateIndex];
+  const contactToUpdate = contacts[contactToUpdateIndex];
   contacts[contactToUpdateIndex] = { ...contactToUpdate, ...body };
 
   await fs.writeFile(
