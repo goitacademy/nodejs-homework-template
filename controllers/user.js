@@ -9,8 +9,6 @@ const path = require("path");
 const { imgOpt } = require("../help/image");
 
 
-
-
 const regist = async (request, response, next) => {
   const { email, password } = request.body;
 
@@ -21,7 +19,7 @@ const regist = async (request, response, next) => {
   const hashPassword = await bcrypt.hash(password, salt);
 
   const avatarURL = gravatar.url(email);
-  console.log(avatarURL);
+  // console.log(avatarURL);
 
   const user = await User.create({
     email: email,
@@ -67,8 +65,8 @@ const logout = async (request, response, next) => {
 };
 
 const current = async (request, response, next) => {
-  const { id } = request.user;
-  const { email, subscription } = await User.findById(id);
+  // const { id } = request.user;
+  const { email, subscription } = request.user;;
   response.status(200).json({ email, subscription });
 };
 
