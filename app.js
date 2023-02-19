@@ -1,19 +1,6 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();
-const { DB_HOST } = process.env;
-mongoose
-  .connect(DB_HOST)
-  .then(() => {
-    console.log('Database connected');
-  })
-  .catch((err) => {
-    console.error(err.message);
-    process.exit(1);
-  });
 
 const contactsRouter = require('./routes/api/contacts');
 
@@ -31,8 +18,15 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+app.use(
+  (
+    { status = 500, message = 'Internal Server Error', details = null },
+    req,
+    res,
+    next
+  ) => {
+    res.status(status).json({ message: message, details });
+  }
+);
 
 module.exports = app;
