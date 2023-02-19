@@ -34,11 +34,37 @@ const getContactById = async (contactId) => {
   }
 }
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex(contact => contact.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = allContacts.splice(index, 1);
+  await wrightDb(allContacts);
+  return result
+}
 
-const addContact = async (body) => {}
+const addContact = async (body) => {
+  const allContacts = await listContacts();
+  const newContact = {
+    id: uuid(), ...body,
+  }
+  allContacts.push(newContact)
+  await wrightDb(allContacts);
+  return newContact;
+}
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex(contact => contact.id === contactId);
+  if (index === -1) { return null }
+  
+  allContacts[index] = { contactId, ...body }
+  await wrightDb(allContacts);
+  return allContacts[index];
+
+}
 
 module.exports = {
   listContacts,
