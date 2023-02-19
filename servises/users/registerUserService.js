@@ -1,13 +1,12 @@
 const { User } = require("../../db/userModel");
-const bcrypt = require("bcrypt");
 
 const registerUserService = async (email, password) => {
-  const contact = new User({
+  const user = new User({
     email,
-    password: await bcrypt.hash(password, 10),
+    password,
   });
-  await contact.save();
+  await user.save();
 
-  return contact;
+  return user;
 };
 module.exports = { registerUserService };

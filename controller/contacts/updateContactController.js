@@ -1,6 +1,7 @@
 const { updateContactService } = require("../../servises/updateContactService");
 
 const updateContactController = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
   const { name, email, phone, favorite } = req.body;
   const data = await updateContactService(
@@ -8,7 +9,8 @@ const updateContactController = async (req, res) => {
     name,
     email,
     phone,
-    favorite
+    favorite,
+    _id
   );
 
   res.status(200).json({ data });

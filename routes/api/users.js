@@ -1,12 +1,15 @@
 const express = require("express");
 const { validation, ctrlWrapper } = require("../../middlewares");
-const { usersSchema } = require("../../schemas/users");
+const usersSchema = require("../../schemas/users");
+const registerUserController = require("../../controller/users/registerUserController");
+const loginUserController = require("../../controller/users/loginUserController");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 const {
-  registerUserController,
-} = require("../../controller/users/registerUserController");
+  logoutUserController,
+} = require("../../controller/users/logoutUserController");
 const {
-  loginUserController,
-} = require("../../controller/users/loginUserController");
+  currentUserController,
+} = require("../../controller/users/currentUserController");
 
 const router = express.Router();
 
@@ -21,5 +24,7 @@ router.post(
   validation(usersSchema),
   ctrlWrapper(loginUserController)
 );
-
+router.use(authMiddleware);
+router.get("/logout", ctrlWrapper(logoutUserController));
+router.get("/current", ctrlWrapper(currentUserController));
 module.exports = router;

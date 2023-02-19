@@ -6,11 +6,15 @@ const updateContactService = async (
   name,
   email,
   phone,
-  favorite
+  favorite,
+  owner
 ) => {
-  const data = await Contact.findByIdAndUpdate(contactId, {
-    $set: { name, email, phone, favorite },
-  });
+  const data = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: owner },
+    {
+      $set: { name, email, phone, favorite },
+    }
+  );
 
   if (!data) {
     throw RequestError(404, `id:${contactId} not found`);

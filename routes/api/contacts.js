@@ -1,5 +1,6 @@
 const express = require("express");
 const { validation, ctrlWrapper } = require("../../middlewares");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 const { contactsSchema, favoriteSchema } = require("../../schemas/contact");
 const {
   getAllContactsController,
@@ -11,6 +12,8 @@ const {
 } = require("../../controller/contacts");
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", ctrlWrapper(getAllContactsController));
 
