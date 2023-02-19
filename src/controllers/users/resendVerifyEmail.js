@@ -2,7 +2,7 @@ const { User } = require("../../models");
 const { randomUUID } = require("crypto");
 const {sendEmail } = require("../../helpers");
 
-const resendVerifyEmail = async (res, req) => {
+const resendVerifyEmail = async ( req, res) => {
 
   const { email } = req.body;
   if (!email) {
@@ -39,7 +39,7 @@ const verificationToken = randomUUID();
   const verifySendMail = {
     to: email,
     subject: "Confirmation email registration",
-    html: `<a href ="http://localhost:3000/api/users/verify/${verificationToken}" target="_blank">Click to confirm of email</a>"`,
+    html: `<a href ="http://localhost:3000/api/users/verify/${verificationToken}" target="_blank">Click to confirm of email</a>`,
   };
 
   await sendEmail(verifySendMail);
