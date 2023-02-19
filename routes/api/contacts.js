@@ -1,9 +1,17 @@
 const express = require('express');
+const Joi = require('joi');
 
 const contacts = require('../../models/contacts');
 const { HttpError } = require('../../helpers');
 
 const router = express.Router();
+
+const newContSchema = Joi.object({
+  id: Joi.any(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -28,7 +36,10 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    console.log(req.body);
+    const { error } = newContSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = contacts.addContact(req.body);
     res.json(result);
   } catch (error) {
@@ -38,7 +49,10 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    await contacts.removeContact(req.params.contactId);
+    const deletedContact = await contacts.removeContact(req.params.contactId);
+    if (!deletedContact) {
+      throw HttpError(404, 'Not found');
+    }
     res.json({ message: 'contact deleted' });
   } catch (error) {
     next(error);
@@ -46,10 +60,19 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
+  const bodyLength = Object.keys(req.body).length;
+  if (bodyLength === 0) {
+    res.status(400).json({ message: 'missing fields' });
+    return;
+  }
   try {
+    const { error } = newContSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const { contactId } = req.params;
-    await contacts.updateContact(contactId, req.body);
-    res.json({ message: 'template message' });
+    const updatedContact = await contacts.updateContact(contactId, req.body);
+    res.json(updatedContact);
   } catch (error) {
     next(error);
   }
