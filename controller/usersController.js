@@ -270,10 +270,8 @@ const updateAvatar = async (req, res, next) => {
 const verifyToken = async (req, res, next) => {
   try {
     const { verificationToken } = req.params;
-    console.log(verificationToken);
 
     const isVerify = await userService.verifyToken({ verificationToken });
-    console.log(isVerify);
     if (!isVerify) {
       return res.status(404).json({
         message: 'User not found',
