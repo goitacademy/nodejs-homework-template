@@ -1,14 +1,13 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-
+const dotenv = require("dotenv");
+dotenv.config();
 const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(
-    "mongodb+srv://user:user123@cluster0.yukfpdx.mongodb.net/contacts_reader?retryWrites=true&w=majority"
-  )
+  .connect(DB_HOST)
   .then(() => app.listen(PORT))
   .then(() => console.log("Database connection successful"))
   .catch((err) => {
