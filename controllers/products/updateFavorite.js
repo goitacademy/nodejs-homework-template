@@ -1,11 +1,16 @@
 const { Contact } = require('../../models');
 
-const updateContact = async (req, res) => {
+const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
+  const { favorite } = req.body;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    {
+      new: true,
+    }
+  );
 
   if (!result) {
     const error = new Error(`Contact by id=${contactId} not found`);
@@ -19,4 +24,4 @@ const updateContact = async (req, res) => {
   });
 };
 
-module.exports = updateContact;
+module.exports = updateFavorite;
