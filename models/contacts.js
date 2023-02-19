@@ -13,9 +13,7 @@ const getContacts = async () => {
 
 const listContacts = async () => {
   try {
-    const contacts = await getContacts();
-
-    return contacts;
+    return await getContacts();
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +23,7 @@ const getContactById = async (contactId) => {
   try {
     const contacts = await getContacts();
 
-    const [contactById] = contacts.filter(({ id }) => id === contactId);
+    const contactById = contacts.find(({ id }) => id === contactId);
 
     return contactById;
   } catch (error) {
@@ -49,19 +47,50 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await getContacts();
 
-    const [contactById] = contacts.filter(({ id }) => id !== contactId);
+    const contactById = await getContactById(contactId);
 
-    if (!contactById) {
-      return { error: "Contact not found" };
-    }
+    if (!contactById) return;
 
+    const filteredContacts = contacts.filter(({ id }) => id !== contactId);
+
+    await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
     return contactById;
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, phone, email } = body;
+    const contacts = await getContacts();
+
+    const contactById = await getContactById(contactId);
+
+    if (name) contactById.name = name;
+
+    if (phone) contactById.phone = phone;
+
+    if (email) contactById.email = email;
+
+    let updatedContact = null;
+
+    const updatedContacts = contacts.map((contact) => {
+      if (contact.id === contactId) {
+        contact = contactById;
+        updatedContact = contactById;
+      }
+
+      return contact;
+    });
+
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
+
+    return updatedContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   listContacts,
