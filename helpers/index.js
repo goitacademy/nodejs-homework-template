@@ -1,3 +1,3 @@
-const { isEmpty, controllerWrapper } = require('./apiHelpers');
+const { isEmpty, controllerWrapper, errorHandler } = require('./apiHelpers');
 
-module.exports = { isEmpty, controllerWrapper };
+module.exports = { isEmpty, controllerWrapper, errorHandler };
