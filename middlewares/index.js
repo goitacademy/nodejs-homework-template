@@ -1,7 +1,7 @@
-// const { globalErrorHandler } = require("./global-error-handler.middleware");
 const { validateBody } = require("./validate-body.middleware");
+const { authUser } = require("./auth-user.middleware");
 
 module.exports = {
-  //   globalErrorHandler,
+  authUser,
   validateBody,
 };
