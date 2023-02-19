@@ -1,1 +1,2 @@
 DB_HOST = mongodb+srv://pradocw8053:07061990@atlascluster.0ewipvk.mongodb.net/?retryWrites=true&w=majority
+SECRET_KEY = Olya12453LC
