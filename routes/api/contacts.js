@@ -1,25 +1,67 @@
-const express = require('express')
+const func = require("../../models/contacts");
 
-const router = express.Router()
+const express = require("express");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const data = await func.listContacts();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json({
+    status: "success",
+    code: 200,
+    contacts: data,
+  });
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const data = await func.getContactById(req.params.contactId);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  data !== "Not found"
+    ? res.json({
+        status: "success",
+        code: 200,
+        contact: data,
+      })
+    : res.status(404).json({
+        status: "undefined",
+        code: 404,
+        message: "Not found",
+      });
+});
 
-module.exports = router
+router.post("/", async (req, res, next) => {
+  const data = await func.addContact(req.body);
+  data !== "missing required name field"
+    ? res.status(201).json({
+        message: "contact added",
+        status: 201,
+        data: data,
+      })
+    : res.status(400).json({
+        status: 400,
+        message: data,
+      });
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const data = await func.removeContact(req.params.contactId);
+
+  if (data !== "Not found") {
+    res.status(200).json({
+      status: 200,
+      message: `Contact was deleted`,
+      contact: data,
+    });
+  } else {
+    res.status(404).json({
+      status: 404,
+      message: "Not found",
+    });
+  }
+  res.end();
+});
+
+router.put("/:contactId", async (req, res, next) => {});
+
+module.exports = router;
