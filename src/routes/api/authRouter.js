@@ -17,12 +17,9 @@ router.patch(
   ctrl.updateAvatarCloudinary
 );
 
-// router.patch(
-//   "/avatars",
-//   auth,
-//   upload.single("avatar"),
-//   asyncWrapper(ctrl.updateAvatar)
-// );
+router.get("/verify/:verificationToken", asyncWrapper(ctrl.verifyEmail));
+
+router.post("/verify", asyncWrapper(ctrl.repeatVerifyEmail));
 
 router.post(
   "/signup",

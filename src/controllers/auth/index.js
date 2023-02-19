@@ -3,8 +3,9 @@ const { login } = require("./login");
 const { getCurrent } = require("./getCurrent");
 const { logout } = require("./logout");
 const { updateSubscription } = require("./updateSubscription");
-const { updateAvatar } = require("./updateAvatar");
 const { updateAvatarCloudinary } = require("./updateAvatarCloudinary");
+const { verifyEmail } = require("./verifyEmail");
+const { repeatVerifyEmail } = require("./repeatVerifyEmail");
 
 module.exports = {
   signup,
@@ -12,6 +13,7 @@ module.exports = {
   getCurrent,
   logout,
   updateSubscription,
-  updateAvatar,
   updateAvatarCloudinary,
+  verifyEmail,
+  repeatVerifyEmail,
 };
