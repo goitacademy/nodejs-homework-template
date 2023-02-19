@@ -49,9 +49,23 @@ router.post('/', async (req, res, next) => {
 })
 
 /* router.delete('/:contactId', async (req, res, next) => {
-})
+}) */
 
 router.put('/:contactId', async (req, res, next) => {
-}) */
+    try {
+      const { error } = addSchema.validate(req.body);
+      if (error) {
+        throw HttpError(400, error.message);
+      }
+      const {contactId} = req.params;
+      const result = await contacts.updateContact(contactId, req.body);
+      if (!result) {
+        throw HttpError(404, "Contact not found");
+      }
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+}) 
 
 module.exports = router
