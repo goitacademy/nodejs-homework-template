@@ -10,4 +10,4 @@ const contactValidation = Joi.object({
     phone: Joi.string().pattern(/^\W+\d{3}\W+\s\d+\-*\d*$/),
 });
 
-module.exports = {contactValidation};
+module.exports = contactValidation;

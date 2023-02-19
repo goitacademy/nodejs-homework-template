@@ -8,9 +8,9 @@ const {
   removeContactController,
   addContactController,
   updateContactController,
-} = require("../../controllers/contactsControllers.js");
+} = require("../../controllers");
 
-const {controllerWrapper} = require('../../helpers/apiHelpers');
+const {controllerWrapper} = require('../../helpers');
 
 router.get("/", controllerWrapper(listContactsController));
 
