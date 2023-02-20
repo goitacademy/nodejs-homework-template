@@ -1,11 +1,3 @@
-// const {
-//   addContact,
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   updateContact,
-// } = require("../models/contacts");
-
 const contactsModel = require("../models/contacts");
 
 const getContacts = async (req, res) => {
