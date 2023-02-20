@@ -19,7 +19,7 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.json({ message: 'template ' })
 })
 
 module.exports = router
