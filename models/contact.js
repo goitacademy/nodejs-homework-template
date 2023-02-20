@@ -28,7 +28,5 @@ const handleSaveErrors = (error, data, next) => {
 };
 
 contactSchema.post("save", handleSaveErrors);
-
 const Contact = model("contact", contactSchema);
-
 module.exports = Contact;
