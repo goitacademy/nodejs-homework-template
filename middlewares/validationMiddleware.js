@@ -8,6 +8,7 @@ const contactValidation = Joi.object({
       "string.pattern.base":
         "The name should consist of a first and a last name",
     }),
+    
   email: Joi.string()
     .email()
     .trim()
