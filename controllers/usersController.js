@@ -1,14 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const gravatar = require("gravatar");
-
+const { User, schemas } = require("../models/users");
+const { SECRET_KEY } = process.env;
 const path = require("path");
 const fs = require("fs/promises");
-
-const { User, schemas } = require("../models/users");
 const avatarsDir = path.join(process.cwd(), "public", "avatars");
-
-const { SECRET_KEY } = process.env;
 
 const listCurrent = async (req, res) => {
 	const { name, email, subscription } = req.user;
@@ -22,7 +18,7 @@ const listCurrent = async (req, res) => {
 const login = async (req, res) => {
 	const { error } = schemas.login.validate(req.body);
 	if (error) {
-		res.status(400).json({ message: "Incorrect format of entered data " });
+		res.status(400).json({ message: "Incorrect format of entered data" });
 		return;
 	}
 	const { email, password, subscription } = req.body;

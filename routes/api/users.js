@@ -15,3 +15,4 @@ router.get("/current", auth, ctrlWrapper(ctrl.listCurrent));
 router.patch("/avatars", auth, upload.single("avatar"), resize, ctrlWrapper(ctrl.setAvatar));
 
 module.exports = router;
+
