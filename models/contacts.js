@@ -46,36 +46,35 @@ const addContact = async (body) => {
   const data = await fs.readFile(contactsPath, "utf8");
   const result = JSON.parse(data);
   try {
-    if (!body.name || !body.email || !body.phone) {
-      return "missing required name field";
-    } else {
-      const newContact = {
-        id: g.newId(),
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-      };
-      result.push(newContact);
-      await fs.writeFile(contactsPath, JSON.stringify(result), "utf8");
-      return newContact;
-    }
+    const newContact = {
+      id: g.newId(),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
+
+    result.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(result), "utf8");
+    return newContact;
   } catch (error) {
     console.error(error);
   }
 };
 const updateContact = async (contactId, body) => {
   const data = await fs.readFile(contactsPath, "utf8");
-  const result = JSON.parse(data);
-  const contact = result.filter((evt) => evt.id !== contactId);
-  const findContact = result.find((evt) => evt.id === contactId);
-  await fs.writeFile(contactsPath, JSON.stringify(contact), "utf8");
+  const contacts = JSON.parse(data);
 
-  try {
-    if (body.name || body.email || body.phone) {
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  const contactToUpdate = contacts.find((contact) => contact.id === contactId);
+  if (!contactToUpdate) return "Not found";
+
+  const updatedContact = { ...contactToUpdate, ...body };
+  const updatedContacts = contacts.map((contact) =>
+    contact.id === contactId ? updatedContact : contact
+  );
+
+  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts), "utf8");
+
+  return updatedContact;
 };
 
 module.exports = {
