@@ -11,6 +11,12 @@ const contactSchema = Joi.object({
   phone: Joi.string().required(),
 })
 
+const putSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+})
+
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts();
@@ -94,7 +100,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const {error} = contactSchema.validate(req.body);
+    const {error} = putSchema.validate(req.body);
   if (error) {
     error.status = 400;
     throw error;
