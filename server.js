@@ -1,21 +1,22 @@
 const app = require("./app");
 require("dotenv").config();
-const MongoClient = require("mongodb").MongoClient;
+const {MongoClient} = require("mongodb");
+
+const PORT = process.env.PORT || 3050;
 
 const start = async () => {
   const client = await MongoClient.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   });
-const db = client.db()
+  const db = client.db();
 
-const Contacts = db.collection('contacts');
-const contacts = await Contacts.find({
+  const Contacts = db.collection("contacts");
+  const contacts = await Contacts.find({}).toArray();
+  console.log(contacts);
 
-})  
-console.log(contacts);
-
-  app.listen(3000, () => {
-    console.log("Server running. Use our API on port: 3000");
+  app.listen(PORT, () => {
+    console.log(`Server running. Use our API on port: ${PORT}`);
   });
 };
 
