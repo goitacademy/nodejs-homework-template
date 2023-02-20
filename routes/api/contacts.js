@@ -1,25 +1,92 @@
-const express = require('express')
+const express = require("express");
+const {
+  addContact,
+  listContacts,
+  getContactById,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
+const { addValidation } = require("../../middlevares");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const contactsList = await listContacts();
+    res.json({
+      status: "success",
+      code: 200,
+      data: contactsList,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const contact = await getContactById(req.params.contactId);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+    if (!contact) {
+      next();
+    }
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+    res.json({
+      status: "success",
+      code: 200,
+      data: contact,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", addValidation, async (req, res, next) => {
+  try {
+    const newContact = await addContact(req.body);
+    res.json({
+      status: "created",
+      code: 201,
+      data: newContact,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const removeResult = await removeContact(req.params.contactId);
+
+    if (!removeResult) {
+      next();
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", addValidation, async (req, res, next) => {
+  try {
+    const updatedContact = await updateContact(req.params.contactId, req.body);
+
+    if (!updatedContact) {
+      return next();
+    }
+
+    res.json({
+      status: "success",
+      code: 200,
+      data: updatedContact,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
