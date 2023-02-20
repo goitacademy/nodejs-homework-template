@@ -3,13 +3,19 @@ const path = require('path');
 
 const controllerUpdateAvatarUser = async (req, res) => {
   const { destination, filename } = req.file;
-  const [name, extention] = filename.split('.');
   const tmpDir = path.join(destination, filename);
-  const publicAvatar = path.join(__dirname, '..', '..', 'public', 'avatars');
+  const publicAvatar = path.join(
+    __dirname,
+    '..',
+    '..',
+    'public',
+    'avatars',
+    filename
+  );
 
   await Jimp.read(tmpDir)
     .then(image => {
-      return image.resize(250, 250).write(tmpDir);
+      return image.resize(250, 250).write(publicAvatar);
     })
     .catch(err => {
       console.error(err);
