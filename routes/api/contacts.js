@@ -1,17 +1,10 @@
 const express = require('express');
-const Joi = require('joi');
 
 const contacts = require('../../models/contacts');
 const { HttpError } = require('../../helpers');
+const { newContSchema } = require('../../schemas/');
 
 const router = express.Router();
-
-const newContSchema = Joi.object({
-  id: Joi.any(),
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
 
 router.get('/', async (req, res, next) => {
   try {
