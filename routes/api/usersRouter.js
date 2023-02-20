@@ -19,6 +19,7 @@ router.get('/users/logout', authMiddleware, controllerLogoutUser);
 router.get('/users/current', authMiddleware, controllerGetUser);
 router.patch(
   '/users/avatars',
+  authMiddleware,
   uploadMiddleware.single('avatar'),
   controllerUpdateAvatarUser
 );
