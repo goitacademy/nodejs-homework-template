@@ -4,8 +4,12 @@ const gravatar = require('gravatar');
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+const sgMail = require('@sendgrid/mail');
 const { User } = require('../db/userModel');
 const { RegistrationConflictError, NotAuthorizedError } = require('../helpers/errors');
+require('dotenv').config();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signup = async (email, password, subscription, avatarURL) => {
     const user = await User.findOne({ email });
@@ -20,6 +24,15 @@ const signup = async (email, password, subscription, avatarURL) => {
         subscription,
         avatarURL: gravatar.url(email),
     });
+
+    const msg = {
+        to: email,
+        from: 'antifishka.zp@gmail.com', 
+        subject: 'Thank you for registration!',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+    await sgMail.send(msg);
     return newUser;
 };
 
