@@ -19,3 +19,5 @@ const favoriteUpdate = async (req, res, next) => {
     next(e);
   }
 };
+
+module.exports = favoriteUpdate;
