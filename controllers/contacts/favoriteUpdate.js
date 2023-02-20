@@ -1,17 +1,14 @@
-const { Contact, favoriteSchema } = require('../../models/contacts');
+const { Contact } = require('../../models/contacts');
 
 const favoriteUpdate = async (req, res, next) => {
   try {
-    const { id } = req.params;
-
-    const { error } = favoriteSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
+    const { contactId } = req.params;
     const { favorite } = req.body;
 
-    const result = await Contact.findByIdAndUpdate(id, { favorite }, { new: true });
+    const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true }).populate(
+      'owner',
+      'email'
+    );
 
     res.status(201).json({
       status: 'success',
@@ -22,5 +19,3 @@ const favoriteUpdate = async (req, res, next) => {
     next(e);
   }
 };
-
-module.exports = favoriteUpdate;
