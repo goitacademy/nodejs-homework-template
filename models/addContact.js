@@ -1,9 +1,8 @@
 const fs = require("fs").promises;
-const path = require("path");
+const {contactsPath} = require('../helpers');
 const { v4: id } = require("uuid");
 const listContacts = require('./listContacts');
 
-const contactsPath = path.join(__dirname, '..', 'db', "contacts.json");
 
 const addContact = async (body) => {
   const newContact = { ...body, id: id() };
