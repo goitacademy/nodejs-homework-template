@@ -40,8 +40,9 @@ router.post('/', async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = contacts.addContact(req.body);
-    res.json(result);
+    const result = await contacts.addContact(req.body);
+    console.log(result);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
