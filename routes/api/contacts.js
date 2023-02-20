@@ -1,7 +1,9 @@
 const express = require("express");
 const contacts = require("../../models/contacts");
-const Joi = require("joi");
 const nodeId = require("node-id");
+const createValidator = require("../../middlewares/joi/create.validator");
+const updateValidator = require("../../middlewares/joi/update.validator");
+const deepTrim = require("deep-trim");
 
 const router = express.Router();
 
@@ -28,23 +30,9 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  const { name, email, phone } = await req.body;
+router.post("/", createValidator, async (req, res, next) => {
   try {
-    if (!name)
-      return res
-        .status(400)
-        .json({ message: `missing required ${name} field` });
-
-    if (!email)
-      return res
-        .status(400)
-        .json({ message: `missing required ${email} field` });
-
-    if (!phone)
-      return res
-        .status(400)
-        .json({ message: `missing required ${phone} field` });
+    const { name, email, phone } = await deepTrim(req.body);
 
     const body = {
       id: nodeId(),
@@ -82,14 +70,11 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", updateValidator, async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
 
-    const { name, email, phone } = await req.body;
-
-    if (!name && !email && !phone)
-      return res.status(400).json({ message: "missing fields" });
+    const { name, email, phone } = await deepTrim(req.body);
 
     const body = {
       name,
