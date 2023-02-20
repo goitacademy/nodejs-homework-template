@@ -1,25 +1,36 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// quzz7qPsVKgEXaHX
 
-const contactsRouter = require('./routes/api/contacts')
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+require('dotenv').config();
 
-const app = express()
+const contactsRouter = require('./routes/api/contacts');
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const app = express();
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use('/api/contacts', contactsRouter)
+app.use(logger(formatsLogger));
 
+/** this middleware helps solve problems related to cors */
+app.use(cors());
+
+/** this middleware recognizes content type of body */
+app.use(express.json());
+
+/** here are send our routes */
+app.use('/api/contacts', contactsRouter);
+
+/** if front-end require for what is not */
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: 'Not found' });
+});
 
+/** if something went wrong */
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = 'Server error' } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+module.exports = app;

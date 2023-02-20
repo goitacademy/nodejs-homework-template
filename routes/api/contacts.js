@@ -1,25 +1,48 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+/**
+ * our functions which one is responsible for operations with data depending on the route
+ */
+const ctrl = require('../../controlers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+/** in this wrapper  I took out try catch.  */
+const { ctrlWrapper } = require('../../helpers');
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+/** in this function I took out validation body of request */
+const { validateBody } = require('../../middlewares');
+const { isValidId } = require('../../middlewares');
+/** validation body of request */
+const {
+  contactsAddSchema,
+  contactsUpdateSchema,
+} = require('../../models/contact');
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrlWrapper(ctrl.getAllContacts));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', isValidId, ctrlWrapper(ctrl.getContactById));
 
-module.exports = router
+router.post(
+  '/',
+  validateBody(contactsAddSchema),
+  ctrlWrapper(ctrl.addContacts)
+);
+
+router.delete('/:contactId', isValidId, ctrlWrapper(ctrl.deleteContact));
+
+router.put(
+  '/:contactId',
+  isValidId,
+  validateBody(contactsAddSchema),
+  ctrlWrapper(ctrl.updateContact)
+);
+
+router.patch(
+  '/:contactId/favorite',
+  isValidId,
+  validateBody(contactsUpdateSchema),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
+
+module.exports = router;
