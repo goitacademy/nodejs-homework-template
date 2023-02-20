@@ -1,7 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+
+const path = require("path");
+const fs = require("fs/promises");
 
 const { User, schemas } = require("../models/users");
+const avatarsDir = path.join(process.cwd(), "public", "avatars");
 
 const { SECRET_KEY } = process.env;
 
@@ -51,7 +56,7 @@ const logout = async (req, res) => {
 	res.status(204).send();
 };
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
 	const { error } = schemas.register.validate(req.body);
 	if (error) {
 		res.status(400).json({ message: "Incorrect format of entered data" });
@@ -65,17 +70,43 @@ const register = async (req, res) => {
 	}
 	try {
 		const hashPassword = await bcrypt.hash(password, 10);
-		const result = await User.create({ ...req.body, password: hashPassword });
+		const hashEmail = await gravatar.url(email);
+		const result = await User.create({
+			...req.body,
+			password: hashPassword,
+			avatarURL,
+		});
 
 		res.status(201).json({
 			user: {
 				name: result.name,
 				email: result.email,
 				subscription: result.subscription,
+				avatarURL: hashEmail,
 			},
 		});
 	} catch (e) {
 		next(e);
+	}
+};
+
+const updateAvatar = async (req, res) => {
+	try {
+		console.log(req.user);
+		const { _id } = req.user;
+		const { path: tempPath, originalname } = req.file;
+		const [extension] = originalname.split(".").reverse();
+		const newName = `${_id}.${extension}`;
+		const uploadPath = path.join(avatarsDir, newName);
+		await fs.rename(tempPath, uploadPath);
+		const avatarURL = path.join("avatars", newName);
+		await User.findByIdAndUpdate(_id, { avatarURL });
+		res.json({
+			avatarURL,
+		});
+	} catch (error) {
+		await fs.unlink(req.file.path);
+		throw error;
 	}
 };
 
@@ -84,4 +115,5 @@ module.exports = {
 	login,
 	logout,
 	register,
+	updateAvatar,
 };

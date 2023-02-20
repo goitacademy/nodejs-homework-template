@@ -14,7 +14,6 @@ const userSchema = new Schema(
 		},
 		password: {
 			type: String,
-			minlength: 6,
 			required: [true, "Password is required"],
 		},
 		subscription: {
@@ -29,6 +28,9 @@ const userSchema = new Schema(
 		owner: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
+		},
+		avatarURL: {
+			type: String,
 		},
 	},
 	{ versionKey: false, timestamps: true }
