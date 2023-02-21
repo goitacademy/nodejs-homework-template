@@ -2,8 +2,9 @@ const _ = require('lodash');
 const Schemas = require('../schemas');
 
 const schemaValidator = (req, res, next) => {
+  console.log('req: ', req.route.path);
   const method = req.method.toLowerCase();
-  const _supportedMethods = ['post', 'put'];
+  const _supportedMethods = ['post', 'put', 'patch'];
   const _validationOptions = {
     abortEarly: false, // abort after the last validation error
     allowUnknown: true, // allow unknown keys that will be ignored

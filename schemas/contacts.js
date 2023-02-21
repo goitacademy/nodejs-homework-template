@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
-const contactIdSchema = Joi.string().guid({ version: 'uuidv4' });
-
+const idSchema = Joi.string().guid();
+const favoriteSchema = Joi.object({ favorite: Joi.boolean().required() });
 const nameSchema = Joi.string().regex(
   /\b([A-Za-zÀ-ÿà-ÿА-Яа-я]['.]?[-a-z.]+[ ]*)+/
 );
@@ -16,13 +16,14 @@ const emailSchema = Joi.string().email({
   tlds: { allow: ['com', 'net', 'ua'] },
 });
 const personDataSchema = Joi.object().keys({
-  id: contactIdSchema,
   name: nameSchema.required(),
   phone: phoneSchema.required(),
   email: emailSchema.required(),
+  favorite: Joi.boolean().default(false),
 });
 
 module.exports = {
   personDataSchema,
-  contactIdSchema,
+  idSchema,
+  favoriteSchema,
 };
