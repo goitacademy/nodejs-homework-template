@@ -1,6 +1,6 @@
 const isBodyNotEmpty = require('./isBodyNotEmpty');
 const isValidId = require('./isValidId');
-const schemaValidator = require('./schemaValidator');
+const schemaValidator = require('./SchemaValidator');
 module.exports = {
   isBodyNotEmpty,
   isValidId,
