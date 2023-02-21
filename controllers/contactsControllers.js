@@ -31,7 +31,6 @@ const getOneContact = tryCatchWrapper(async (req, res) => {
 });
 const createContact = tryCatchWrapper(async (req, res) => {
   const { error, value } = addContactSchema.validate(req.body);
-  console.log(addContactSchema.validate(req.body));
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
