@@ -5,7 +5,7 @@ const {
   isValidId,
   isBodyNotEmpty,
 } = require('../../middlewares');
-const ctrl = require('../../controllers/contacts');
+const { contacts: ctrl } = require('../../controllers');
 router.get('/', ctrl.getContacts);
 
 router.get('/:id', ctrl.getContactById);
