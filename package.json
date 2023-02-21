@@ -18,6 +18,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.9.2",
     "morgan": "1.10.0",
+    "passport-jwt": "^4.0.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

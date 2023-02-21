@@ -1,8 +1,10 @@
 const { personDataSchema, favoriteSchema } = require('./contacts');
+const { authSchema } = require('./auth');
 module.exports = {
-  '/': personDataSchema,
-  '/:id': personDataSchema,
-  '/:id/favorite': favoriteSchema,
+  '/api/contacts/': personDataSchema,
+  '/api/contacts/:id': personDataSchema,
+  '/api/contacts/:id/favorite': favoriteSchema,
+  // '/'
 };
 
 ///mongodb+srv://MainUser:keUTVufEHVduUZCO@contactsdb.4ftab1n.mongodb.net/test
