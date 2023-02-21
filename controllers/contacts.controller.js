@@ -42,9 +42,8 @@ const addContact = async (req, res) => {
 };
 
 const removeContact = async (req, res) => {
-  const removeResult = await ContactsModel.findByIdAndRemove({
-    _id: req.params.contactId,
-  });
+  const { contactId } = req.params;
+  const removeResult = await ContactsModel.findByIdAndRemove(contactId);
 
   if (!removeResult) {
     res.status(404);
@@ -58,8 +57,9 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+  const { contactId } = req.params;
   const updatedContact = await ContactsModel.findByIdAndUpdate(
-    { _id: req.params.contactId },
+    contactId,
     { ...req.body },
     { new: true }
   );
@@ -76,10 +76,33 @@ const updateContact = async (req, res) => {
   });
 };
 
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  console.log("contact id", contactId);
+
+  const updateStatusContact = await ContactsModel.findByIdAndUpdate(
+    contactId,
+    { ...req.body },
+    { new: true }
+  );
+
+  if (!updateStatusContact) {
+    res.status(404);
+    throw new Error("Not found");
+  }
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: updateStatusContact,
+  });
+};
+
 module.exports = {
   getContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
+  updateFavorite,
 };

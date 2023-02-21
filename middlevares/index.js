@@ -1,3 +1,3 @@
-const addValidation = require("./validation");
+const { addValidation, addFavValidation } = require("./validation");
 
-module.exports = { addValidation };
+module.exports = { addValidation, addFavValidation };
