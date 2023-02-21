@@ -4,7 +4,7 @@ module.exports = {
   '/api/contacts/': personDataSchema,
   '/api/contacts/:id': personDataSchema,
   '/api/contacts/:id/favorite': favoriteSchema,
-  // '/'
+  '/api/auth': authSchema,
 };
 
 ///mongodb+srv://MainUser:keUTVufEHVduUZCO@contactsdb.4ftab1n.mongodb.net/test
