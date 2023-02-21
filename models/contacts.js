@@ -1,50 +1,72 @@
-const fs = require('fs/promises')
-const path = require('path');
-const contactsPath = path.resolve('./models/contacts.json')
+const fsPromises = require("fs/promises");
+const path = require("path");
+const contactsPath = path.resolve("./models/contacts.json");
+const readContacts = async () => {
+  return JSON.parse(
+    await fsPromises.readFile(contactsPath, { encoding: "utf8" })
+  );
+};
 
-const listContacts = async () => {
-  const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  return contacts
-}
+const listContacts = async (req, res) => {
+  const contacts = await readContacts();
+  return res.status(200).json(contacts);
+};
 
-const getContactById = async (contactId) => {
-  const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  return contacts.find((x)=>+x.id===+contactId)
-}
+const getContactById = async (req, res) => {
+  const contactId = req.params.contactId;
+  const contacts = await readContacts();
+  const result = contacts.find((x) => +x.id === +contactId)
+  if (!result) return res.status(404).json({"message": "Not found"})
+  return res.status(200).json(result);
+};
 
-const removeContact = async (contactId) => {
-  const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  const newcontacts=contacts.filter((x) => parseInt(x.id) !== +contactId)
-  if (newcontacts.length===contacts.length) return 'failure'
-  fs.writeFile(contactsPath,JSON.stringify(newcontacts))
-  return 'success'
-}
+const removeContact = async (req, res) => {
+  const contacts = await readContacts();
+  const contactId = req.params.contactId
+  const newcontacts = contacts.filter((x) => parseInt(x.id) !== +contactId);
+  if (newcontacts.length === contacts.length)
+    return res.status(404).json({ message: "Not found" });
+  await fsPromises.writeFile(contactsPath, JSON.stringify(newcontacts));
+  return res.status(200).json({ message: "contact deleted" });
+};
 
-const addContact = async (body) => {
-  const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  contacts.push(body);
-  fs.writeFile(contactsPath, JSON.stringify(contacts))
-}
+const addContact = async (req, res) => {
+  const { name, email, phone } = req.body;
+  const newId = Date.now().toString();
 
-const updateContact = async (contactId, body) => {
-  const contacts = JSON.parse(await fs.readFile(contactsPath, { encoding: "utf8" }))
-  let isContactUpdated = false;
-  let updatedContact
-  const newContacts = contacts.map((x)=>{
-    if (+x.id!==+contactId) return x
-    isContactUpdated=true;
-    updatedContact={
-      id : contactId+'',
-      name: (body.name) ? body.name : x.name, 
-      email: (body.email) ? body.email : x.email,
-      phone: (body.phone) ? body.phone : x.phone,
+  const newContact = {
+    id: newId,
+    name: name,
+    email: email,
+    phone: phone,
+  };
+
+  const contacts = await readContacts();
+  contacts.push(newContact);
+  await fsPromises.writeFile(contactsPath, JSON.stringify(contacts));
+  res.status(201).json(newContact);
+};
+
+const updateContact = async (req, res) => {
+  const body = req.body;
+  const contactId = String(req.params.contactId)
+  const contacts = await readContacts();
+
+  const contactToUpdate = contacts.find((x) => x.id === contactId)
+
+  if (contactToUpdate === undefined) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  for (const field of ['name', 'email', 'phone']) {
+    const value = body[field]
+    if (value !== undefined) {
+      contactToUpdate[field] = value
     }
-    return updatedContact
-  })
-  if (!isContactUpdated) return false
-  fs.writeFile(contactsPath,JSON.stringify(newContacts))
-  return updatedContact
-}
+  }
+  await fsPromises.writeFile(contactsPath, JSON.stringify(contacts))
+  return res.status(200).json(contactToUpdate);
+};
 
 module.exports = {
   listContacts,
@@ -52,4 +74,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
