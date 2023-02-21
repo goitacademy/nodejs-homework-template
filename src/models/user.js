@@ -73,6 +73,10 @@ const joiUpdateAvatarSchema = Joi.object({
   avatarURL: Joi.string().required(),
 });
 
+const joiVerifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 const User = model("users", userSchema);
 
 module.exports = {
@@ -81,4 +85,5 @@ module.exports = {
   joiLoginSchema,
   joiUpdateSubscriptionSchema,
   joiUpdateAvatarSchema,
+  joiVerifyEmailSchema,
 };

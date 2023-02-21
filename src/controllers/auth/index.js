@@ -5,7 +5,7 @@ const { logout } = require("./logout");
 const { updateSubscription } = require("./updateSubscription");
 const { updateAvatarCloudinary } = require("./updateAvatarCloudinary");
 const { verifyEmail } = require("./verifyEmail");
-const { repeatVerifyEmail } = require("./repeatVerifyEmail");
+const { resendVerifyEmail } = require("./resendVerifyEmail");
 
 module.exports = {
   signup,
@@ -15,5 +15,5 @@ module.exports = {
   updateSubscription,
   updateAvatarCloudinary,
   verifyEmail,
-  repeatVerifyEmail,
+  resendVerifyEmail,
 };

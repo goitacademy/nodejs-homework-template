@@ -6,6 +6,7 @@ const {
   joiRegisterSchema,
   joiLoginSchema,
   joiUpdateSubscriptionSchema,
+  joiVerifyEmailSchema,
 } = require("../../models");
 
 const { auth: ctrl } = require("../../controllers");
@@ -19,7 +20,11 @@ router.patch(
 
 router.get("/verify/:verificationToken", asyncWrapper(ctrl.verifyEmail));
 
-router.post("/verify", asyncWrapper(ctrl.repeatVerifyEmail));
+router.post(
+  "/verify",
+  validation(joiVerifyEmailSchema),
+  asyncWrapper(ctrl.resendVerifyEmail)
+);
 
 router.post(
   "/signup",
