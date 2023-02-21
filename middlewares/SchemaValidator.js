@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Schemas = require('../schemas');
 
 const schemaValidator = (req, res, next) => {
+  console.log('req: ', req.route.path);
   const method = req.method.toLowerCase();
   const _supportedMethods = ['post', 'put'];
   const _validationOptions = {

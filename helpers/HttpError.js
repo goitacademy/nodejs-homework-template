@@ -1,9 +1,9 @@
-const HttpError = ({ status, message = '', details = {} }) => {
+const HttpError = ({ status = 404, message = '', details = null }) => {
   const error = new Error(message);
   error.status = status;
-  if (details) {
-    error.details = details;
-  }
+
+  error.details = details;
+
   return error;
 };
 
