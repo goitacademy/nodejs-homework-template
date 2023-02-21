@@ -1,7 +1,7 @@
-const contactsModel = require("../models/contacts");
+const ContactsModel = require("../models/contacts");
 
 const getContacts = async (req, res) => {
-  const contactsList = await contactsModel.listContacts();
+  const contactsList = await ContactsModel.find();
   res.json({
     status: "success",
     code: 200,
@@ -10,8 +10,9 @@ const getContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  console.log("in the fn");
-  const contact = await contactsModel.getContactById(req.params.contactId);
+  const contact = await ContactsModel.findOne({
+    _id: req.params.contactId,
+  });
 
   if (!contact) {
     res.status(404);
@@ -26,7 +27,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await contactsModel.addContact(req.body);
+  const newContact = await ContactsModel.create({ ...req.body });
+
+  if (!newContact) {
+    res.status(400);
+    throw new Error("Unable to create contact");
+  }
+
   res.json({
     status: "created",
     code: 201,
@@ -35,7 +42,9 @@ const addContact = async (req, res) => {
 };
 
 const removeContact = async (req, res) => {
-  const removeResult = await contactsModel.removeContact(req.params.contactId);
+  const removeResult = await ContactsModel.findByIdAndRemove({
+    _id: req.params.contactId,
+  });
 
   if (!removeResult) {
     res.status(404);
@@ -49,9 +58,10 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  const updatedContact = await contactsModel.updateContact(
-    req.params.contactId,
-    req.body
+  const updatedContact = await ContactsModel.findByIdAndUpdate(
+    { _id: req.params.contactId },
+    { ...req.body },
+    { new: true }
   );
 
   if (!updatedContact) {

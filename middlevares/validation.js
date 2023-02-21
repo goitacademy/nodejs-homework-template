@@ -5,10 +5,10 @@ const contactSchema = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
     })
     .required(),
   phone: Joi.string().min(2).max(40).required(),
+  favorite: Joi.boolean(),
 });
 
 addValidation = (req, res, next) => {
