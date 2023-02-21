@@ -21,7 +21,7 @@ router.put(
   schemaValidator,
   ctrl.updateContact
 );
-router.put(
+router.patch(
   '/:id/favorite',
   isValidId,
   isBodyNotEmpty('Missing favorite field'),
