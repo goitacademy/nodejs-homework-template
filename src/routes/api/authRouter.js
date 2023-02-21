@@ -8,6 +8,7 @@ const {
 const { asyncWrapper } = require('../../helpers/apiHelpers');
 const {
     ctrlSignup,
+    ctrlVerification,
     ctrlLogin,
     ctrlLogout,
     ctrlCurrent,
@@ -15,6 +16,7 @@ const {
     ctrlChangeAvatar } = require('../../controllers/authController');
 
 router.post('/users/signup', userPostValidation, asyncWrapper(ctrlSignup));
+router.get('/users/verify/:verificationToken', asyncWrapper(ctrlVerification));
 router.post('/users/login', userPostValidation, asyncWrapper(ctrlLogin));
 router.get('/users/logout', authMiddleware, asyncWrapper(ctrlLogout));
 router.get('/users/current', authMiddleware, asyncWrapper(ctrlCurrent));

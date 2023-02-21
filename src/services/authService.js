@@ -4,12 +4,11 @@ const gravatar = require('gravatar');
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
-const sgMail = require('@sendgrid/mail');
+const { v4: uuidv4 } = require('uuid');
 const { User } = require('../db/userModel');
-const { RegistrationConflictError, NotAuthorizedError } = require('../helpers/errors');
+const { RegistrationConflictError, NotAuthorizedError, NotFoundError } = require('../helpers/errors');
+const sendEmail = require('../helpers/sendEmail');
 require('dotenv').config();
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signup = async (email, password, subscription, avatarURL) => {
     const user = await User.findOne({ email });
@@ -18,26 +17,48 @@ const signup = async (email, password, subscription, avatarURL) => {
         throw new RegistrationConflictError("Email in use");
     };
 
+    const verificationToken = uuidv4();
+
     const newUser = await User.create({
         email,
         password,
         subscription,
         avatarURL: gravatar.url(email),
+        verificationToken,
     });
 
-    const msg = {
+    await sendEmail({
         to: email,
-        from: 'antifishka.zp@gmail.com', 
-        subject: 'Thank you for registration!',
-        text: 'and easy to do anywhere, even with Node.js',
-        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-    };
-    await sgMail.send(msg);
+        subject: 'Verification email',
+        text: `Please, confirm your email address POST http://localhost:8083/api/auth/users/verify/${verificationToken}`,
+        html: `Please, confirm your email address POST http://localhost:8083/api/auth/users/verify/${verificationToken}`,
+    });
+
     return newUser;
 };
 
+const verifyEmail = async (verificationToken) => {
+    const user = await User.findOne({ verificationToken });
+    
+    if (!user) {
+        throw new NotFoundError('User not found');
+    };
+
+    await User.findByIdAndUpdate(
+        { _id: user._id },
+        { verificationToken: 'verified', verify: true }
+    );
+
+    await sendEmail({
+        to: user.email,
+        subject: 'Thank you for registration!',
+        text: `Verification successful`,
+        html: `Verification successful`,
+    });
+};
+
 const login = async (email, password, subscription) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, verify: true });
 
     if (!user || !await bcrypt.compare(password, user.password)) {
         throw new NotAuthorizedError("Email or password is wrong");
@@ -90,6 +111,7 @@ const updateAvatar = async (_id, temporaryName, originalname) => {
 
 module.exports = {
     signup,
+    verifyEmail,
     login,
     logout,
     updateSubscription,
