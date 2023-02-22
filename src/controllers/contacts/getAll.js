@@ -22,7 +22,6 @@ const getAll = async (req, res) => {
       res.json(contacts);
     }
   } else {
-    const total = await Contact.find().countDocuments();
     const contacts = await Contact.find(
       { owner: _id },
       "-createdAt -updatedAt",
@@ -34,7 +33,7 @@ const getAll = async (req, res) => {
     if (contacts.length === 0) {
       throw new NotFound(`Contact list empty`);
     } else {
-      res.json({ total, contacts });
+      res.json(contacts);
     }
   }
 };

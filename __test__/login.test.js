@@ -25,6 +25,8 @@ describe("test signup controller", () => {
       password: "1111",
     };
     const response = await supertest(app).post("/api/users/login").send(req);
+    console.log(response.body.data.user);
+
     const { email, subscription } = response.body.data.user;
     const { token } = response.body.data;
     expect(response.statusCode).toBe(200);
