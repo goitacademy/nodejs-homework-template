@@ -4,6 +4,9 @@ const {
   updatePostValidation,
 } = require("../middleware/validationMiddleware");
 const createError = require("http-errors");
+const { Contacts} = require('../db/collections')
+
+// const contacts = 
 
 const getContacts = async (req, res, next) => {
   try {
