@@ -1,3 +1,12 @@
+// importing mongoose
+const mongoose = require("mongoose");
+
+// importing dotenv. this package delivers .env vars values to process.env
+const dotenv = require("dotenv");
+
+// reading .env
+dotenv.config();
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
@@ -19,6 +28,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  // giving default value to status (500) and message (server error) of coming error
+  // if it's not status 404 which we throw manually - it will be always 500
   const { status = 500, message = "server error" } = err;
   res.status(status).json({ message: message });
 });
