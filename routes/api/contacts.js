@@ -1,25 +1,32 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require ("../../controllers/contacts")
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ========== Routing for different features: 
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ===========getting List of All Contacts ================= 
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrl.getAllContacts)
 
-module.exports = router
+// ============Getting a given Contact by  ID ===============
+
+router.get("/:contactId", ctrl.getContactById)
+
+// =============Adding a Contact =============================
+
+router.post("/", ctrl.addContact)
+
+// ============ Deleting  a Contact ==========================
+
+router.delete("/:contactId", ctrl.removeContact );
+
+// ==============Updating a Contact ===========================
+
+router.put("/:contactId", ctrl.updateContact );
+
+
+
+module.exports = router;
