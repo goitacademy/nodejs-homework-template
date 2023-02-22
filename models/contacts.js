@@ -15,14 +15,14 @@ const listContacts = async (req, res) => {
 const getContactById = async (req, res) => {
   const contactId = req.params.contactId;
   const contacts = await readContacts();
-  const result = contacts.find((x) => +x.id === +contactId)
-  if (!result) return res.status(404).json({"message": "Not found"})
+  const result = contacts.find((x) => +x.id === +contactId);
+  if (!result) return res.status(404).json({ message: "Not found" });
   return res.status(200).json(result);
 };
 
 const removeContact = async (req, res) => {
   const contacts = await readContacts();
-  const contactId = req.params.contactId
+  const contactId = req.params.contactId;
   const newcontacts = contacts.filter((x) => parseInt(x.id) !== +contactId);
   if (newcontacts.length === contacts.length)
     return res.status(404).json({ message: "Not found" });
@@ -49,22 +49,22 @@ const addContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const body = req.body;
-  const contactId = String(req.params.contactId)
+  const contactId = String(req.params.contactId);
   const contacts = await readContacts();
 
-  const contactToUpdate = contacts.find((x) => x.id === contactId)
+  const contactToUpdate = contacts.find((x) => x.id === contactId);
 
   if (contactToUpdate === undefined) {
     return res.status(404).json({ message: "Not found" });
   }
 
-  for (const field of ['name', 'email', 'phone']) {
-    const value = body[field]
+  for (const field of ["name", "email", "phone"]) {
+    const value = body[field];
     if (value !== undefined) {
-      contactToUpdate[field] = value
+      contactToUpdate[field] = value;
     }
   }
-  await fsPromises.writeFile(contactsPath, JSON.stringify(contacts))
+  await fsPromises.writeFile(contactsPath, JSON.stringify(contacts));
   return res.status(200).json(contactToUpdate);
 };
 
