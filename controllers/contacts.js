@@ -1,21 +1,19 @@
-const express = require("express");
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
-const { isContactValid } = require("../../validator/validator.js");
-const router = express.Router();
+} = require("../models/contacts");
+const { isContactValid } = require("../schemas/validation.js");
 
-router.get("/", async (req, res, next) => {
+const getContacts = async (req, res) => {
   const contacts = await listContacts();
   console.log("GET /", contacts);
   res.status(200).json(contacts);
-});
+};
 
-router.get("/:contactId", async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
   if (contact) {
@@ -23,9 +21,9 @@ router.get("/:contactId", async (req, res, next) => {
   } else {
     res.status(404).json({ message: "Contact was not found" });
   }
-});
+};
 
-router.post("/", async (req, res, next) => {
+const postContact = async (req, res) => {
   const { error } = isContactValid(req.body);
   if (error) {
     res.status(400).json({ message: "Missing required name field" });
@@ -36,9 +34,9 @@ router.post("/", async (req, res, next) => {
   } else {
     res.status(400).json({ message: "Contact is already added." });
   }
-});
+};
 
-router.delete("/:contactId", async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { contactId } = req.params;
   const updateContacts = await removeContact(contactId);
   if (updateContacts) {
@@ -46,9 +44,9 @@ router.delete("/:contactId", async (req, res, next) => {
   } else {
     res.status(404).json({ message: "Contact was not found" });
   }
-});
+};
 
-router.put("/:contactId", async (req, res, next) => {
+const putContact = async (req, res) => {
   const { error } = isContactValid(req.body);
   if (error) {
     res.status(400).json({ message: "Missing fields." });
@@ -60,6 +58,12 @@ router.put("/:contactId", async (req, res, next) => {
   } else {
     res.status(404).json({ message: "Contact was not found" });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getContacts,
+  getById,
+  postContact,
+  deleteContact,
+  putContact,
+};
