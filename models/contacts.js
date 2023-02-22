@@ -1,19 +1,31 @@
-// const fs = require('fs/promises')
+const { Unauthorized } = require("http-errors");
+const jwt = require("jsonwebtoken");
 
-const listContacts = async () => {}
+const { User } = require("../models/user");
 
-const getContactById = async (contactId) => {}
+const { SECRET_KEY } = process.env;
 
-const removeContact = async (contactId) => {}
+const auth = async (req, res, next) => {
+  const { authorization } = req.headers;
+  const [bearer, token] = authorization.split(" ");
 
-const addContact = async (body) => {}
+  try {
+    if (bearer !== "Bearer" || !token) {
+      throw new Unauthorized("Not authorized");
+    }
+    const { id } = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(id);
+    if (!user || user.token !== token) {
+      throw new Unauthorized("Not authorized");
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    if (error.message === "Invalid sugnature") {
+      error.status = 401;
+    }
+    next(error);
+  }
+};
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = auth;
