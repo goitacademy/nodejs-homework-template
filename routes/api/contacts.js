@@ -1,7 +1,6 @@
 const express = require('express');
-// const Joi = require("joi");
 
-const {contactValidation, putContactValidation} = require("../../schemas/validation")
+const {contactValidation, putContactValidation} = require("../../schemas/validation.js")
 
 const {
   listContacts,
@@ -14,12 +13,6 @@ const {
 const { HttpError } = require("../../helpers");
 
 const router = express.Router();
-
-// const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// })
 
 router.get('/', async (req, res, next) => {
   try {

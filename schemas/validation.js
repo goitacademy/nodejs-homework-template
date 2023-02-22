@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { HttpError } = require("../../helpers");
+const { HttpError } = require("../helpers");
 
 module.exports = {
    contactValidation: (req, res, next) => {
@@ -9,7 +9,7 @@ module.exports = {
             minDomainSegments: 2,
             tlds: { allow: ['com', 'net', 'ua']},
         }).required(),
-        phone: Joi.string().required(),
+        phone: Joi.number().min(7).required(),
     });
 
     const {error} = schema.validate(req.body);
@@ -27,7 +27,7 @@ module.exports = {
               minDomainSegments: 2,
               tlds: { allow: ["com", "net", "ua"] },
             }),
-          phone: Joi.string(),
+          phone: Joi.number().optional(),
         });
 
     const {error} = schema.validate(req.body);
