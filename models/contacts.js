@@ -56,21 +56,17 @@ const addContact = async ({ name, email, phone }) => {
 
 // ===========function to Update(Change) Contact by Id  ====================
 
-const updateContact = async (id, body) => {
-    const contacts = await listContacts();
-    const index = contacts.findIndex((item) => item.id === id);
-    if (index === -1) {
-      return null;
-    }
-    const contactUpdate = { ...contacts[index], ...body };
-   
-    const allContacts = contacts.filter((item) => item.id !== id);
-
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify([...allContacts, contactUpdate], null, 2)
-    );
-    return contactUpdate;
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(
+    (item) => item.id === contactId.toString()
+  );
+  if (index < 0) {
+    return null;
+  }
+  contacts[index] = { ...contacts[index], ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return contacts[index];
 };
 
 
