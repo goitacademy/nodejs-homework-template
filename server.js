@@ -1,10 +1,13 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const {DB_HOST} = require('./config')
+// const { DB_HOST } = require('./config')
+const { DB_HOST } = process.env;
 
 // mongoose.set("strictQurey", true);
 mongoose.set("strictQuery", true);
+
+console.log(process.env);
 
 mongoose.connect(DB_HOST).then(() =>
   app
