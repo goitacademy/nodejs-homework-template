@@ -1,5 +1,7 @@
 const express = require('express');
-const Joi = require("joi");
+// const Joi = require("joi");
+
+const {contactValidation, putContactValidation} = require("../../schemas/validation")
 
 const {
   listContacts,
@@ -13,11 +15,11 @@ const { HttpError } = require("../../helpers");
 
 const router = express.Router();
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
+// const addSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// })
 
 router.get('/', async (req, res, next) => {
   try {
@@ -43,12 +45,8 @@ router.get('/:contactId', async (req, res, next) => {
   
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', contactValidation, async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const result = await addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -70,12 +68,8 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', putContactValidation, async (req, res, next) => {
   try {
-      const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) {
