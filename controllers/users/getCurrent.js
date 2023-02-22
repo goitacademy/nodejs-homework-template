@@ -1,9 +1,9 @@
 const getCurrent = (req, res) => {
-  const { email, subscription } = req.user;
+  const { email, name } = req.user;
 
   res.json({
+    name,
     email,
-    subscription,
   });
 };
 

@@ -11,7 +11,7 @@ router.get("/:contactId", isValidId, authenticate, controllers.getById);
 router.post(
   "/",
   authenticate,
-  validateBody(contactSchemas.validatingSchema, "Missing required name field"),
+  validateBody(contactSchemas.validatingSchema, "Missing required field"),
   controllers.postNew
 );
 

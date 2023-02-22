@@ -9,9 +9,11 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      required: false,
     },
     phone: {
       type: String,
+      required: [true, "Set phone number for contact"],
     },
     favorite: {
       type: Boolean,
@@ -27,7 +29,7 @@ const contactSchema = new Schema(
 
 const validatingSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().optional(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });

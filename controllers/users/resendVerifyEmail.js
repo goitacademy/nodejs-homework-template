@@ -1,5 +1,7 @@
 const { User } = require("../../models");
-const { HttpError } = require("../../helpers");
+const { HttpError, sendMail } = require("../../helpers");
+
+const { BASE_URL } = process.env;
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -15,10 +17,10 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify you email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
-  await sendEmail(verifyEmail);
+  await sendMail(verifyEmail);
 
   res.json({
     message: "Verify email resend",
