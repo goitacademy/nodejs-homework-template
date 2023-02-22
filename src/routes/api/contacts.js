@@ -1,22 +1,14 @@
 const express = require("express");
 const contactsRouter = express.Router();
-// const { contactValidation } = require("../../middlewares/validationMiddleware");
+
 const {
-	getAllContacts,
-} = require("../../controllers/getAllContactsController");
-const {
-	getOneContactById,
-} = require("../../controllers/getOneContactByIdController");
-const { addNewContact } = require("../../controllers/addNewContactController");
-const {
-	removeContactById,
-} = require("../../controllers/removeContactByIdController");
-const {
+	addNewContact,
 	changeContactById,
-} = require("../../controllers/changeContactByIdController");
-const {
 	changeStatusContact,
-} = require("../../controllers/changeStatusContactByIdController");
+	getAllContacts,
+	getOneContactById,
+	removeContactById,
+} = require("../../controllers/index");
 
 contactsRouter.get("/", getAllContacts);
 
