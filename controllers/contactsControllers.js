@@ -4,13 +4,14 @@ const {
   updatePostValidation,
 } = require("../middleware/validationMiddleware");
 const createError = require("http-errors");
-const { Contacts} = require('../db/collections')
+const { Contacts } = require("../db/collections");
+const { connectMongo } = require("../db/connection");
 
-// const contacts = 
 
 const getContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsOperations.listContacts();
+    const {Posts} = await connectMongo()
+    const contacts = await Contacts.find({}).toArray();
     res.json({
       status: "success",
       code: 200,
