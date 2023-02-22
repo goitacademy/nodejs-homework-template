@@ -1,21 +1,18 @@
-// const app = require('./app')
+const mongoose = require("mongoose");
 
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000")
-// })
+const app = require("./app");
 
-//////////////////////////////////////
+const DB_HOST =
+  "mongodb+srv://Vitalii:Mango970512prettyboy@cluster0.dueofuh.mongodb.net/db_contact?retryWrites=true&w=majority";
 
-const app = require('./app');
-console.log(process.env);
+mongoose.set("strictQuery", true);
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
-})
-
-// const{PORT = 3000} = process.env;
-// app.listen(PORT, () => {
-//   console.log(`Server running. Use our API on port: ${PORT}`);
-// })
+mongoose
+  .connect(DB_HOST)
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
