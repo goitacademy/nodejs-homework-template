@@ -1,7 +1,7 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const {DB_HOST} = require('./comfig')
+const {DB_HOST} = require('./config')
 
 // mongoose.set("strictQurey", true);
 mongoose.set("strictQuery", true);
