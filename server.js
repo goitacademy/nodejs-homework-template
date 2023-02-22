@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 
 const DB_HOST =
-  "mongodb+srv://Serhii: FznHbzv2te8Qtxmw@cluster0.sdqsyn2.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://Serhii:FznHbzv2te8Qtxmw@cluster0.sdqsyn2.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.set("strictQuery", true);
 
