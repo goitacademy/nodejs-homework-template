@@ -30,14 +30,8 @@
     "phone": "(186) 568-3720"
   },
   {
-    "id": "7",
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
-  },
-  {
-    "id": "8",
-    "name": "Simon Morton",
+    "contactId": "8",
+    "name": "Simon",
     "email": "dui.Fusce.diam@Donec.com",
     "phone": "(233) 738-2360"
   },
@@ -54,8 +48,8 @@
     "phone": "(123) 123-1234"
   },
   {
-    "id": "7a310cf6-f5a1-4cfa-8ba4-1015459597f5",
-    "name": "Simon",
+    "contactId": "7a310cf6-f5a1-4cfa-8ba4-1015459597f5",
+    "name": "Simon Swan",
     "email": "dui.Fusce.diam@Donec.com",
     "phone": "(233) 738-2360"
   }
