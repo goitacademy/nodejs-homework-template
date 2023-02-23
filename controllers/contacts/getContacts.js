@@ -16,6 +16,7 @@ const getContacts = async (req, res) => {
   };
 
   const result = await Contact.find(favFilter)
+    .populate('owner', '_id email')
     .sort({ _id: direction })
     .skip(pageSize * (page - 1))
     .limit(pageSize)

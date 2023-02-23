@@ -4,16 +4,14 @@ const { HttpSuccess, HttpError } = require('../../helpers');
 const getContactById = async (req, res) => {
   const { id } = req.params;
   const { user } = req;
-  if (user.id !== id) {
-    throw HttpError({
-      status: 403,
-      message: "You don't have right to see this contact",
-    });
-  }
-  const data = await Contact.findById(id);
+
+  const data = await Contact.findOne({
+    _id: id,
+    owner: { _id: user.id },
+  }).populate('owner', '_id email');
 
   if (!data) {
-    throw HttpError({ status: 404, message: "Contact doesn't exist" });
+    throw HttpError({ status: 404, message: 'Contact not found' });
   }
   res.json(HttpSuccess({ data }));
 };
