@@ -47,6 +47,7 @@ router.post('/', async (req, res, next) => {
 
   const schema = Joi.object({
     name: Joi.string()
+      .alphanum()
       .min(5)
       .max(30)
       .required(),
@@ -99,6 +100,7 @@ router.put('/:contactId', async (req, res, next) => {
 
   const schema = Joi.object({
     name: Joi.string()
+      .alphanum()
       .min(5)
       .max(30),
     email: Joi.string()
