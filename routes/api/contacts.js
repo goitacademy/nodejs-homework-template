@@ -1,11 +1,11 @@
 const express = require('express')
-const router = express.Router()
+const contactsRouter = express.Router();
 
 const {
   addValidation,
   updateValidation,
   statusValidation,
-} = require("../../middlewares/validationMiddleware");
+} = require("../../middlewares/validationContacts");
 
 const {
   listContacts,
@@ -17,17 +17,28 @@ const {
 } = require("../../сontrollers/contactsControllers");
 
 const controllerError = require("../../сontrollers/controllerError")
+const authorization = require("../../middlewares/authorization");
 
-router.get('/', (listContacts))
+contactsRouter.use(authorization);
 
-router.get('/:contactId', controllerError(getContactById))
+contactsRouter.get("/", controllerError(listContacts));
 
-router.post("/", addValidation, controllerError(addContact));
+contactsRouter.get("/:contactId", controllerError(getContactById));
 
-router.delete('/:contactId', controllerError(removeContact))
+contactsRouter.post("/", addValidation, controllerError(addContact));
 
-router.put("/:contactId", updateValidation, controllerError(updateContact));
+contactsRouter.delete("/:contactId", controllerError(removeContact));
 
-router.patch("/:contactId/favorite", statusValidation, controllerError(updateStatus));
+contactsRouter.put(
+  "/:contactId",
+  updateValidation,
+  controllerError(updateContact)
+);
 
-module.exports = router
+contactsRouter.patch(
+  "/:contactId/favorite",
+  statusValidation,
+  controllerError(updateStatus)
+);
+
+module.exports = contactsRouter;
