@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const Joi = require('joi');
-
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts')
+const { addContactValid, changeContactValid } = require('../../middlewares/validationMiddleware');
 
 
 
@@ -32,7 +31,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', addContactValid, async (req, res, next) => {
   const { name, email, phone } = req.body
   if (!name) {
     res.status(400).json({ message: 'missing required name field' })
@@ -45,27 +44,7 @@ router.post('/', async (req, res, next) => {
     return
   }
 
-  const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(5)
-      .max(30)
-      .required(),
-    email: Joi.string()
-      .email()
-      .required(),
-    phone: Joi.string()
-      .min(7)
-      .max(30)
-      .required(),
 
-  })
-
-  const validationResult = schema.validate(req.body);
-
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.details })
-  }
 
   const data = await addContact({ name, email, phone });
   res.status(201).json({
@@ -89,7 +68,7 @@ router.delete('/:contactId', async (req, res, next) => {
   })
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', changeContactValid, async (req, res, next) => {
   const { contactId } = req.params
   const { name, email, phone } = req.body
 
@@ -98,23 +77,7 @@ router.put('/:contactId', async (req, res, next) => {
     return
   }
 
-  const schema = Joi.object({
-    name: Joi.string()
-      .alphanum()
-      .min(5)
-      .max(30),
-    email: Joi.string()
-      .email(),
-    phone: Joi.string()
-      .min(7)
-      .max(30)
-  })
 
-  const validationResult = schema.validate(req.body);
-
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.details })
-  }
 
   const data = await updateContact(contactId, { name, email, phone });
   if (!data) {
