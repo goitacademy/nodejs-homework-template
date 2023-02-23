@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
-const { DB_HOST } = require("./config");
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
