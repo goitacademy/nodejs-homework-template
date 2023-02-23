@@ -35,7 +35,7 @@ const removeContact = async (contactId) => {
       await fs.writeFile(contactsPath, JSON.stringify(contacts));
     }
 
-    return;
+    return idx;
   } catch (error) {
     console.log(error)
   }
