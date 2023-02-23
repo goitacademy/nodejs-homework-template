@@ -1,42 +1,29 @@
 const express = require("express");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-} = require("../../models/contacts");
-
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json(contacts);
-});
+const {
+  deleteContact,
+  postContact,
+  putContact,
+  getContact,
+  getContacts,
+} = require("../../controllers/contactsController");
+const { tryCatchWrapper } = require("../../helpers");
+const { validateBody } = require("../../middlewares/index");
+const { addContactsShema } = require("../../schemas/contacts");
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  return res.status(200).json(contact);
-});
+router.get("/", tryCatchWrapper(getContacts));
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:contactId", tryCatchWrapper(getContact));
 
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  await removeContact(contactId);
-  res.status(200).json({ message: "contact deleted" });
-});
+router.post("/", validateBody(addContactsShema), tryCatchWrapper(postContact));
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", tryCatchWrapper(deleteContact));
+
+router.put(
+  "/:contactId",
+  validateBody(addContactsShema),
+  tryCatchWrapper(putContact)
+);
 
 module.exports = router;
