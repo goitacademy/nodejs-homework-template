@@ -7,6 +7,17 @@ const addContact = require("../controllers/addContact");
 const removeContact = require("../controllers/removeContact");
 const updateContact = require("../controllers/updateContact");
 
+const Joi = require("joi");
+
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "org", "co.uk", ".ca"] },
+  }),
+  phone: Joi.string(),
+});
+
 router.get("/api/contacts", async (req, res, next) => {
   res.send("Это главный роутер");
   const contacts = await listContacts();
@@ -41,13 +52,18 @@ router.get("/api/contacts/:id", async (req, res, next) => {
 
 router.post("/api/contacts", async (req, res, next) => {
   const { name, email, phone } = req.body;
-  const contacts = await addContact(name, email, phone);
-  res.json({
-    status: 200,
-    data: {
-      contacts,
-    },
-  });
+  try {
+    const value = await schema.validateAsync({ name, email, phone });
+    const contacts = await addContact(value);
+    res.json({
+      status: 200,
+      data: {
+        contacts,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 router.delete("/api/contacts/:id", async (req, res, next) => {
@@ -75,19 +91,25 @@ router.delete("/api/contacts/:id", async (req, res, next) => {
 router.put("/api/contacts/:id", async (req, res, next) => {
   const contactId = req.params.id;
   const { name, email, phone } = req.body;
+
   if (!req.body) {
     res.json({
       status: 400,
       message: "missing fields",
     });
   } else if (contactId) {
-    const contacts = await updateContact(contactId, name, email, phone);
-    res.json({
-      status: 200,
-      data: {
-        contacts,
-      },
-    });
+    try {
+      const value = await schema.validateAsync({ name, email, phone });
+      const contacts = await updateContact(contactId, value);
+      res.json({
+        status: 200,
+        data: {
+          contacts,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   } else {
     res.json({
       status: 404,
