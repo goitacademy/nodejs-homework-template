@@ -1,11 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
     "id": "2",
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
@@ -30,12 +24,6 @@
     "phone": "(501) 472-5218"
   },
   {
-    "id": "6",
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
-  },
-  {
     "id": "7",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
@@ -54,9 +42,15 @@
     "phone": "(704) 398-7993"
   },
   {
-    "id": "10",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
+    "id": "5ab6bac0-4e5f-45d6-8970-d1af426ad2c9",
+    "name": "Jo Biden",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(945) 914-7792"
+  },
+  {
+    "id": "9ff0af7a-f192-4cc0-a434-8e9d6443b83f",
+    "name": "Albert Einstein",
+    "email": "einstein777@gmail.com",
+    "phone": "380991234567"
   }
 ]
