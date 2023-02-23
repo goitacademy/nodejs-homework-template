@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { listContacts, getContactById, addContact, removeContact } = require('../../models/contacts')
+const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts')
 
 
 
@@ -42,7 +42,14 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params
+  const { name, email, phone } = req.body
+  const data = await updateContact(contactId, { name, email, phone });
+  res.json({
+    status: 'success',
+    code: 200,
+    data,
+  })
 })
 
 module.exports = router

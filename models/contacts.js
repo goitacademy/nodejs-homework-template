@@ -30,8 +30,11 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
     const idx = contacts.findIndex(contact => contact.id === String(contactId));
-    contacts.splice(idx, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts), 'utf8');
+    if (idx !== -1) {
+      contacts.splice(idx, 1);
+      await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    }
+
     return;
   } catch (error) {
     console.log(error)
@@ -56,7 +59,23 @@ const addContact = async ({ name, email, phone }) => {
   }
 }
 
-const updateContact = async (contactId, body) => { }
+const updateContact = async (contactId, { name, email, phone }) => {
+
+  try {
+    const contacts = await listContacts();
+    const idx = contacts.findIndex(contact => contact.id === String(contactId));
+    if (idx !== -1) {
+      contacts[idx].name = name;
+      contacts[idx].email = email;
+      contacts[idx].phone = phone;
+      await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    }
+    return contacts[idx];
+  } catch (error) {
+    console.log(error)
+  }
+
+}
 
 
 module.exports = {
