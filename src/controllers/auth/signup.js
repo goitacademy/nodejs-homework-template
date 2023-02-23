@@ -23,7 +23,7 @@ const signup = async (req, res) => {
   const mail = {
     to: email,
     subject: "Confirm email",
-    html: `<a target="_blank" href="http://localhost:8080/api/users/verify/${verificationToken}">Confirm email</a>`,
+    html: `<a target="_blank" href="https://phonebokapp.herokuapp.com/api/users/verify/${verificationToken}">Confirm email</a>`,
   };
 
   await sendEmail(mail);
