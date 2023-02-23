@@ -47,19 +47,22 @@ async function addContact({name, email, phone}) {
 
 const updateContact = async (contactId, body) => {
   const contacts = await fs.readFile(contactsPath, "utf-8");
+  console.log(contacts);
   const contactParse = JSON.parse(contacts);
   const contactResult = contactParse.findIndex(
-    (contact) => Number(contact.contactId) === Number(contactId));
+    (contact) => Number(contact.id) === Number(contactId));
 
   if (contactResult === -1) {
     return null;
   }
-  contactParse[contactResult] = { contactId, ...body };
+  contactParse[contactResult] = {id: contactId, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contactParse, null, 2));
   return contactParse[contactResult];
+
   }
 
 
+  
 module.exports = {
   listContacts,
   getContactById,
