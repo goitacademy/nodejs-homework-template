@@ -6,12 +6,6 @@
     "phone": "(294) 840-6685"
   },
   {
-    "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
-  },
-  {
     "id": "4",
     "name": "Wylie Pope",
     "email": "est@utquamvel.net",
@@ -52,5 +46,11 @@
     "name": "Simon Swan",
     "email": "dui.Fusce.diam@Donec.com",
     "phone": "(233) 738-2360"
+  },
+  {
+    "contactId": "2019950f-efc2-4a76-a20c-2a0bb70d3b25",
+    "name": "Kiwi",
+    "email": "kiwi@egetlacus.ca",
+    "phone": "(294) 840-6685"
   }
 ]
