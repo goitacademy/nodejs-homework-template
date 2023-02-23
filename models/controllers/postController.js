@@ -1,7 +1,6 @@
 const {customAlphabet} = require('nanoid');
 const nanoid = customAlphabet('1234567890', 3)
 
-
 const {listContacts, listContactById, postContact, removeContact, updateContact} = require("../contacts");
 
 const getContacts = async (req, res, next) => {

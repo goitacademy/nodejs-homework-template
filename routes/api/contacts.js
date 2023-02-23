@@ -12,7 +12,6 @@ const {
 const {addPostValidation, updatePostValidation}  = require('../../middlewars/postsValitation');
 
 
-
 router.get('/', getContacts )
 
 router.get('/:contactId', getContactById )
