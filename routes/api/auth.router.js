@@ -3,6 +3,7 @@ const authController = require("../../controllers/auth");
 const {
   controllerExceptionWrapper,
 } = require("../../helpers/controller-exception-wrapper");
+const { upload } = require("../../controllers/auth/update_user_avatar");
 const { userSignUpSchema, userSignInSchema } = require("../../helpers/schemas");
 const { validateBody, authUser } = require("../../middlewares");
 
@@ -29,6 +30,12 @@ router.get(
   "/current",
   authUser,
   controllerExceptionWrapper(authController.current)
+);
+router.patch(
+  "/users/avatars",
+  authUser,
+  upload.single("avatar"),
+  controllerExceptionWrapper(authController.updateUserAvatar)
 );
 
 module.exports = router;
