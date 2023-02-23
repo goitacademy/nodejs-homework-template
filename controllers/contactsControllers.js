@@ -6,7 +6,7 @@ const {
   updateContactById,
   updateStatusContactbyId,
 } = require("../models/contactsService");
-const { v4: uuidv4 } = require("node-uuid");
+
 const {
   addContactSchema,
   updateContactSchema,
@@ -40,7 +40,7 @@ const createContact = tryCatchWrapper(async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
   const { name, email, phone } = value;
-  const contact = { id: uuidv4(), name, email, phone };
+  const contact = { name, email, phone };
   const data = await addContact(contact);
   res.status(201).json(data);
 });
@@ -75,6 +75,9 @@ const updateStatusContact = tryCatchWrapper(async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
   const data = await updateStatusContactbyId(req.params.contactId, req.body);
+  if (!data) {
+    return res.status(404).json({ message: "Not found" });
+  }
   return res.json(data);
 });
 module.exports = {
