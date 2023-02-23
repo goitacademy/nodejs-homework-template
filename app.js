@@ -2,6 +2,19 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+// const DB_HOST =
+//   "mongodb+srv://dinavelkova:3ibcyJSaMkuTCrGU@mongodb.aybpusr.mongodb.net/03-mongodb?retryWrites=true&w=majority";
+
+// mongoose.set("strictQuery", false);
+
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => console.log("Database connection successful"))
+//   .catch((error) => {
+//     console.log(error.message);
+//     process.exit(1);
+//   });
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -24,3 +37,5 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+// 3ibcyJSaMkuTCrGU
