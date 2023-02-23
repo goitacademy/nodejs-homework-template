@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Joi = require('joi');
 
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts')
 
@@ -44,6 +45,27 @@ router.post('/', async (req, res, next) => {
     return
   }
 
+  const schema = Joi.object({
+    name: Joi.string()
+      .min(5)
+      .max(30)
+      .required(),
+    email: Joi.string()
+      .email()
+      .required(),
+    phone: Joi.string()
+      .min(7)
+      .max(30)
+      .required(),
+
+  })
+
+  const validationResult = schema.validate(req.body);
+
+  if (validationResult.error) {
+    return res.status(400).json({ message: validationResult.error.details })
+  }
+
   const data = await addContact({ name, email, phone });
   res.status(201).json({
     status: 'success',
@@ -73,6 +95,23 @@ router.put('/:contactId', async (req, res, next) => {
   if (!name || !email || !phone) {
     res.status(400).json({ message: 'missing fields' })
     return
+  }
+
+  const schema = Joi.object({
+    name: Joi.string()
+      .min(5)
+      .max(30),
+    email: Joi.string()
+      .email(),
+    phone: Joi.string()
+      .min(7)
+      .max(30)
+  })
+
+  const validationResult = schema.validate(req.body);
+
+  if (validationResult.error) {
+    return res.status(400).json({ message: validationResult.error.details })
   }
 
   const data = await updateContact(contactId, { name, email, phone });
