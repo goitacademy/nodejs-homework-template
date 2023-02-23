@@ -20,6 +20,7 @@ router.get('/:contactId', async (req, res, next) => {
 
   if (!data) {
     res.status(404).json({ message: 'Not found' })
+    return
   }
 
   res.json({
@@ -32,9 +33,15 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body
-
   if (!name) {
-    res.status(404).json({ message: 'Not found' })
+    res.status(400).json({ message: 'missing required name field' })
+    return
+  } if (!email) {
+    res.status(400).json({ message: 'missing required email field' })
+    return
+  } if (!phone) {
+    res.status(400).json({ message: 'missing required phone field' })
+    return
   }
 
   const data = await addContact({ name, email, phone });
@@ -48,7 +55,8 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params
   await removeContact(contactId);
-  res.status(204).json({
+  res.status(200).json({
+    message: 'contact deleted'
   })
 })
 
