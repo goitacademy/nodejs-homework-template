@@ -1,10 +1,8 @@
 const { User } = require('../../models');
 const { HttpError } = require('../../helpers');
 const HttpSuccess = require('../../helpers/HttpSuccess');
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-dotenv.config();
-
+require('dotenv').config();
 const { SECRET_KEY } = process.env;
 
 const logIn = async (req, res) => {

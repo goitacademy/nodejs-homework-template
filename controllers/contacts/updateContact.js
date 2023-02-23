@@ -7,6 +7,13 @@ const updateContact = async (req, res, next) => {
     throw HttpError({ status: 400, message: 'Missing fields' });
   }
   const { id } = req.params;
+  const { user } = req;
+  if (user.id !== id) {
+    throw HttpError({
+      status: 403,
+      message: "You can't update contact that doesn't belong to your account",
+    });
+  }
   const result = await Contact.findByIdAndUpdate(id, req.body, {
     new: true,
   });

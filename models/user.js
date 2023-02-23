@@ -1,18 +1,18 @@
 const { Schema, model } = require('mongoose');
-const { passwordRegExp } = require('../helpers/regExp');
 const emailRegExp = require('../helpers/regExp/email');
 const bcrypt = require('bcrypt');
+const { handleMongooseError } = require('../helpers');
+
 const userModel = Schema(
   {
     password: {
       type: String,
       required: [true, 'Password is required'],
-      // match: passwordRegExp,
     },
     email: {
       type: String,
       required: [true, 'Email is required'],
-      // match: emailRegExp,
+      match: emailRegExp,
       unique: true,
     },
     subscription: {
@@ -27,6 +27,8 @@ const userModel = Schema(
     timestamps: true,
   }
 );
+userModel.post('save', handleMongooseError);
+
 userModel.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };

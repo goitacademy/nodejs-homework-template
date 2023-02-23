@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../helpers');
+
 const {
   regExps: { phoneRegExp, emailRegExp, nameRegExp },
 } = require('../helpers');
@@ -26,11 +28,17 @@ const contactModel = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   {
     versionKey: false,
     timestamps: true,
   }
 );
+contactModel.post('save', handleMongooseError);
 const Contact = model('contact', contactModel);
 module.exports = Contact;

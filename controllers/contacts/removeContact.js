@@ -2,6 +2,13 @@ const { Contact } = require('../../models/index');
 const { HttpSuccess, HttpError } = require('../../helpers');
 const removeContact = async (req, res) => {
   const { id } = req.params;
+  const { user } = req;
+  if (user.id !== id) {
+    throw HttpError({
+      status: 403,
+      message: "You can't remove contact that doesn't belong to your account",
+    });
+  }
   const removedContact = await Contact.findByIdAndRemove(id);
   if (!removedContact) {
     throw HttpError({

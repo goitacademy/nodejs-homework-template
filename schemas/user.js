@@ -10,8 +10,12 @@ const logInSchema = Joi.object().keys({
 const signUpSchema = logInSchema.keys({
   confirmPassword: Joi.string().required().valid(Joi.ref('password')),
 });
+const subscriptionSchema = Joi.object({
+	subscription: Joi.string().valid("starter", "pro", "business").required([true, "subscription couldn't be empty"]).default("starter")
+})
 
 module.exports = {
   signUpSchema,
   logInSchema,
+  subscriptionSchema,
 };

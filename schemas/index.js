@@ -1,9 +1,10 @@
 const { personDataSchema, favoriteSchema } = require('./contacts');
-const { signUpSchema, logInSchema } = require('./user');
+const { logInSchema, subscriptionSchema } = require('./user');
 module.exports = {
   '/api/contacts': personDataSchema,
   '/api/contacts/:id': personDataSchema,
   '/api/contacts/:id/favorite': favoriteSchema,
   '/api/auth/signup': logInSchema,
   '/api/auth/login': logInSchema,
+  '/api/users': subscriptionSchema,
 };
