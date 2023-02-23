@@ -1,5 +1,7 @@
-const signUp = require('./signUp');
-
+const { ctrlWrapper } = require('../../helpers');
+const logIn = require('./logIn');
+const signUp = require('./singUp');
 module.exports = {
-  signUp,
+  logIn: ctrlWrapper(logIn),
+  signUp: ctrlWrapper(signUp),
 };

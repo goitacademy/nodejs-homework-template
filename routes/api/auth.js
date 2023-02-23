@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
 const { schemaValidator, isBodyNotEmpty } = require('../../middlewares');
-const { auth: ctrl } = require('../../controllers');
-
-router.post('/signUp', ctrl.signUp);
+const ctrl = require('../../controllers/auth');
+router.post('/signup', isBodyNotEmpty(), schemaValidator, ctrl.signUp);
+router.post('/login', isBodyNotEmpty(), schemaValidator, ctrl.logIn);
 
 module.exports = router;

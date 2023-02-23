@@ -4,6 +4,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 const { DB_HOST, PORT = 3001 } = process.env;
 mongoose.set('strictQuery', true);
+
+// const { randomBytes } = require('node:crypto');
+
+// const buf = randomBytes(256);
+// console.log('buf: ', buf.toString('hex'));
 mongoose
   .connect(DB_HOST)
   .then(() => {
