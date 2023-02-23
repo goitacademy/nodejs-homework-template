@@ -51,14 +51,16 @@ const addContact = async (name, email, phone) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, { name, email, phone }) => {
   const data = await fs.readFile(contactsPath, "utf8");
   try {
     const contacts = JSON.parse(data);
     const contactById = contacts.find((contact) => contact.id === contactId);
 
     const idx = contacts.indexOf(contactById);
-    contacts[idx] = body;
+    contacts[idx].name = name;
+    contacts[idx].email = email;
+    contacts[idx].phone = phone;
 
     console.log(contacts[idx]);
     console.log(contacts);

@@ -75,8 +75,25 @@ router.delete("/api/contacts/:id", async (req, res, next) => {
 router.put("/api/contacts/:id", async (req, res, next) => {
   const contactId = req.params.id;
   const { name, email, phone } = req.body;
-
-  res.json({ message: "template message" });
+  if (!req.body) {
+    res.json({
+      status: 400,
+      message: "missing fields",
+    });
+  } else if (contactId) {
+    const contacts = await updateContact(contactId, name, email, phone);
+    res.json({
+      status: 200,
+      data: {
+        contacts,
+      },
+    });
+  } else {
+    res.json({
+      status: 404,
+      message: "Not found",
+    });
+  }
 });
 
 module.exports = router;
