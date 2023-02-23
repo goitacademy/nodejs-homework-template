@@ -12,5 +12,8 @@ const updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string().pattern(/^\+?[\d\s()-]+$/),
 });
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
-module.exports = { addContactSchema, updateContactSchema };
+module.exports = { addContactSchema, updateContactSchema, updateStatusSchema };

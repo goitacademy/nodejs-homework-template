@@ -4,9 +4,14 @@ const {
   addContact,
   removeContact,
   updateContactById,
-} = require("../models/contacts");
+  updateStatusContactbyId,
+} = require("../models/contactsService");
 const { v4: uuidv4 } = require("node-uuid");
-const { addContactSchema, updateContactSchema } = require("../schemas/joi");
+const {
+  addContactSchema,
+  updateContactSchema,
+  updateStatusSchema,
+} = require("../schemas/joiValidate");
 
 const tryCatchWrapper = (fn) => async (req, res) => {
   try {
@@ -64,10 +69,19 @@ const updateContact = tryCatchWrapper(async (req, res) => {
   }
   return res.status(400).json({ message: "Missing required name field" });
 });
+const updateStatusContact = tryCatchWrapper(async (req, res) => {
+  const { error } = updateStatusSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  const data = await updateStatusContactbyId(req.params.contactId, req.body);
+  return res.json(data);
+});
 module.exports = {
   getContacts,
   getOneContact,
   createContact,
   deleteContact,
   updateContact,
+  updateStatusContact,
 };
