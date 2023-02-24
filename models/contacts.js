@@ -12,9 +12,8 @@ const listContacts = async () => {
 
 const listContactById = async (contactId) => {
     try {
-        const result = await fs.readFile('./models/contacts.json', 'utf8')// todo: listContacts?
-        const data = JSON.parse(result);
-        return data.find(item => item.id === contactId);// todo: find?
+        const result = await listContacts()
+        return await result.find(item => item.id === contactId);
     } catch (err) {
         return err;
     }
@@ -34,15 +33,20 @@ const postContact = async (body) => {
 const removeContact = async (contactId) => {
     try {
         const oldContacts = await listContacts();
-        const isContact = oldContacts.find(item => item.id === contactId);// todo: find?
-        console.log('isContact: ', isContact);
+        const isContact = oldContacts.find(item => item.id === contactId);
         if (isContact) {
             const newContacts = JSON.stringify(oldContacts.filter(item => item.id !== contactId));
             await fs.writeFile('./models/contacts.json', newContacts, 'utf-8')
-            return {"message": "contact deleted"};
+            return {
+                "statusCode": 200,
+                "message": "contact deleted"
+            };
         }
         ;
-        return {"message": "Not found"};
+        return {
+            "statusCode": 404,
+            "message": "Not found"
+        };
 
     } catch (err) {
         return err;
@@ -53,8 +57,6 @@ const removeContact = async (contactId) => {
 const updateContact = async (contactId, body) => {
     try {
         const oldContacts = await listContacts();
-        const isContact = oldContacts.find(item => item.id === contactId);// todo: find?
-        console.log('isContact: ', isContact);
         let newContact = null;
         const newContacts = await oldContacts.map(contact => {
             if (contact.id === contactId) {
@@ -64,10 +66,7 @@ const updateContact = async (contactId, body) => {
             return contact
         })
 
-        console.log(newContacts);
-
         if (newContact) {
-            console.log('yahooo');
             await fs.writeFile('./models/contacts.json', JSON.stringify(newContacts), 'utf-8')
             return newContact;
 

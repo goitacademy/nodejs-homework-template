@@ -29,7 +29,6 @@ const addContact = async (req, res, next) => {
     let contact = req.body
     const id = nanoid(2).toString();
     contact = {"id": id, ...contact}
-    console.log(contact);
     const result = await postContact(contact);
     res.status(201).json({result})
 }
@@ -37,27 +36,20 @@ const addContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
     const id = req.params.contactId;
     const deleteResult = await removeContact(id);
-    if (deleteResult.message === 'Not found') {
+    if (deleteResult.statusCode === 404) {
         return res.status(404).json(deleteResult)
-    }
-    ;
-    if (deleteResult.message === 'contact deleted') {
+    };
+    if (deleteResult.statusCode === 200) {
         return res.status(200).json(deleteResult)
-    }
-    ;
+    };
 }
 
 const putContact = async (req, res, next) => {
     const id = req.params.contactId;
     const body = req.body;
-    const {name, email, phone} = body
-    // console.log(body);
-    if (Object.keys(req.body).length === 0 || (!name && !email && !phone)) {
-        console.log('no body');
+    if (Object.keys(req.body).length === 0) {
         return res.status(400).json({"message": "missing fields"})
-    }// todo: add checking to rite fields only
-
-
+    }
 
     const updatedContact = await updateContact(id, body)
     if (updatedContact) {
