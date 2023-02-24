@@ -2,7 +2,6 @@ const _ = require('lodash');
 const Schemas = require('../schemas');
 
 const schemaValidator = (req, res, next) => {
-  console.log('req: ', req.route.path);
   const method = req.method.toLowerCase();
   const _supportedMethods = ['post', 'put', 'patch'];
   const _validationOptions = {
@@ -10,11 +9,14 @@ const schemaValidator = (req, res, next) => {
     allowUnknown: true, // allow unknown keys that will be ignored
     stripUnknown: true, // remove unknown keys from the validated data
   };
+  const { baseUrl } = req;
   const route = req.route.path;
+  const fullRoutePath = baseUrl.toLowerCase() + route;
+  console.log('fullRoutePath: ', fullRoutePath);
 
-  if (_.includes(_supportedMethods, method) && _.has(Schemas, route)) {
+  if (_.includes(_supportedMethods, method) && _.has(Schemas, fullRoutePath)) {
     // get schema for the current route
-    const _schema = _.get(Schemas, route);
+    const _schema = _.get(Schemas, fullRoutePath);
 
     const { error } = _schema.validate(req.body, _validationOptions);
     if (error) {

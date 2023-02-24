@@ -1,15 +1,10 @@
 const { personDataSchema, favoriteSchema } = require('./contacts');
+const { logInSchema, subscriptionSchema } = require('./user');
 module.exports = {
-  '/': personDataSchema,
-  '/:id': personDataSchema,
-  '/:id/favorite': favoriteSchema,
+  '/api/contacts': personDataSchema,
+  '/api/contacts/:id': personDataSchema,
+  '/api/contacts/:id/favorite': favoriteSchema,
+  '/api/auth/signup': logInSchema,
+  '/api/auth/login': logInSchema,
+  '/api/users': subscriptionSchema,
 };
-
-///mongodb+srv://MainUser:keUTVufEHVduUZCO@contactsdb.4ftab1n.mongodb.net/test
-// mongodb+srv://mainUser:keUTVufEHVduUZCO@contactsdb.4ftab1n.mongodb.net/test
-// //keUTVufEHVduUZCO
-// mongodb+srv://myuser:MckhdxjqQUvMkvKF@contactsdb.4ftab1n.mongodb.net/test
-// MckhdxjqQUvMkvKF;
-
-// mongodb+srv://myuser:MckhdxjqQUvMkvKF@contactsdb.4ftab1n.mongodb.net/?retryWrites=true&w=majority
-// contacts-db-12
