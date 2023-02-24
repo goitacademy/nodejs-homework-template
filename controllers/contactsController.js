@@ -14,6 +14,7 @@ const getAllContacts = async (req, res, next) => {
 
 const getContactByid = async (req, res, next) => {
   try {
+    console.log('hello ', req.params.contactId);
     const data = await contactsModel.getContactById(req.params.contactId);
     if (!data) {
       res.status(404);
@@ -38,11 +39,7 @@ const addNewContact = async (req, res, next) => {
       return;
     }
     const newContact = await contactsModel.addContact(body);
-    if (!newContact) {
-      res.status(400);
-      res.json({ message: 'Contact with this fields already exist' });
-      return;
-    }
+
     res.status(201);
     res.json({ data: newContact, message: 'Create succesfull' });
   } catch (error) {
@@ -53,13 +50,14 @@ const addNewContact = async (req, res, next) => {
 const deleteContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const data = await contactsModel.getContactById(contactId);
-    if (!data) {
+
+    const deletedContact = await contactsModel.removeContact(contactId);
+    if (!deletedContact) {
       res.status(404);
       res.json({ message: 'User not found' });
       return;
     }
-    await contactsModel.removeContact(contactId);
+
     res.json({ message: 'Contact deleted' });
   } catch (error) {
     next(error);
@@ -77,14 +75,12 @@ const updateContactById = async (req, res, next) => {
       res.json({ message: error.details[0]?.message });
       return;
     }
-
-    const data = await contactsModel.getContactById(contactId);
-    if (!data) {
+    const updateContact = await contactsModel.updateContact(contactId, body);
+    if (!updateContact) {
       res.status(404);
       res.json({ message: 'User not found' });
       return;
     }
-    const updateContact = await contactsModel.updateContact(contactId, body);
     res.status(200);
     res.json({ data: updateContact, message: 'Contact update' });
   } catch (error) {
@@ -92,10 +88,37 @@ const updateContactById = async (req, res, next) => {
   }
 };
 
+const updateFavoriteContact = async (req, res, next) => {
+  try {
+    const { body } = req;
+    const { contactId } = req.params;
+
+    if (!body.favorite) {
+      res.status(400);
+      res.json({ message: 'Missing field favorite' });
+      return;
+    }
+
+    const favoriteContact = await contactsModel.updateStatusContact(
+      contactId,
+      body.favorite
+    );
+    if (!favoriteContact) {
+      res.status(404);
+      res.json({ message: 'User not found' });
+      return;
+    }
+    res.status(200);
+    res.json({ data: favoriteContact, message: 'Favorite contact update' });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getAllContacts,
   getContactByid,
   addNewContact,
   deleteContactById,
   updateContactById,
+  updateFavoriteContact,
 };
