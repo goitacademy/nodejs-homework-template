@@ -17,14 +17,9 @@ const authUser = async (req, res, next) => {
     }
 
     try {
-      const { userId, sessionKey } = verifyToken(token);
+      const { userId } = verifyToken(token);
       const userInstance = await UserModel.findById(userId);
-
       if (!userInstance) {
-        throw createHttpException(401, unauthorizedMessage);
-      }
-
-      if (userInstance.sessionKey !== sessionKey) {
         throw createHttpException(401, unauthorizedMessage);
       }
 

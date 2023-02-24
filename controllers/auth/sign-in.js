@@ -22,17 +22,13 @@ const signIn = async (req, res, next) => {
     throw createHttpException(401, unauthorizedMessage);
   }
 
-  const sessionKey = crypto.randomUUID();
-
-  await UserModel.findOneAndUpdate(
+  const data = await UserModel.findOneAndUpdate(
     { email },
-    { sessionKey },
     { runValidators: true }
   );
-
+  console.log(data);
   const accessToken = createAccessToken({
     userId: userInstance._id.toString(),
-    sessionKey,
   });
   res.json({ accessToken });
 };

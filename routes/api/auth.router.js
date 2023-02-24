@@ -3,7 +3,7 @@ const authController = require("../../controllers/auth");
 const {
   controllerExceptionWrapper,
 } = require("../../helpers/controller-exception-wrapper");
-const { upload } = require("../../controllers/auth/update_user_avatar");
+const { upload } = require("../../controllers/auth/update-avatar");
 const { userSignUpSchema, userSignInSchema } = require("../../helpers/schemas");
 const { validateBody, authUser } = require("../../middlewares");
 
