@@ -1,91 +1,60 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const { Contact } = require("../models/contact");
+const { RequestError } = require("../utils");
+const { ctrlWrapper } = require("../utils");
 
-const {
-  contactsSchema,
-  contactsUpdateSchema,
-} = require("../middleware/contactsValidation");
-
-const { createError } = require("../utils/createError");
-const { createResult } = require("../utils/createResult");
-
-const getListContacts = async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    createResult(res, contacts);
-  } catch (error) {
-    next(error);
-  }
-};
-const getContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await getContactById(contactId);
-    if (!result) {
-      throw createError(404, `Contact with id=${contactId} not found`);
-    }
-    createResult(res, { ...result });
-  } catch (error) {
-    next(error);
-  }
-};
-const addNewContact = async (req, res, next) => {
-  try {
-    const { error } = contactsSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const result = await addContact(req.body);
-    res.status(201);
-    createResult(res, result);
-  } catch (error) {
-    next(error);
-  }
-};
-const removeContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await removeContact(contactId);
-    if (!result) {
-      throw createError(404, `Contact with id=${contactId} not found`);
-    }
-    createResult(res, result, `Contact with id=${contactId} deleted`);
-  } catch (error) {
-    next(error);
-  }
+const getListContacts = async (req, res) => {
+  const result = await Contact.find({}, "-createdAt -ubdatedAt");
+  res.json(result);
 };
 
-const updateContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    if (Object.keys(req.body).length === 0) {
-      throw createError(400, `missing fields`);
-    }
-    const { error } = contactsUpdateSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw createError(404, `Contact with id=${contactId} not found`);
-    }
-    createResult(res, result);
-  } catch (error) {
-    next(error);
+const getContactById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findById(id);
+  if (!result) {
+    throw RequestError(404, "Not found");
   }
+  res.json(result);
+};
+
+const addContact = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
+
+const updateContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw RequestError(404, "Not found");
+  }
+  res.json(result);
+};
+
+const updateFavoriteContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw RequestError(404, "Not found");
+  }
+  res.json(result);
+};
+
+const removeContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndRemove(id);
+  if (!result) {
+    throw RequestError(404, "Not found");
+  }
+  res.json({
+    message: "Delete saccess",
+  });
 };
 
 module.exports = {
-  getListContacts,
-  getContact,
-  removeContactById,
-  addNewContact,
-  updateContactById,
+  getAll: ctrlWrapper(getListContacts),
+  getById: ctrlWrapper(getContactById),
+  add: ctrlWrapper(addContact),
+  updateById: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavoriteContact),
+  removeById: ctrlWrapper(removeContact),
 };
