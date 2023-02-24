@@ -7,6 +7,7 @@ const {
 const { UserModel } = require('@root/models');
 const fs = require('fs/promises');
 const path = require('path');
+const Jimp = require('jimp');
 
 const { SECRET_KEY } = process.env;
 const pathToAvatars = path.resolve(__dirname, '..', 'public', 'avatars');
@@ -90,13 +91,9 @@ async function updateAvatar(req, res, next) {
   const { filename: avatarFilename, path: pathToTmpAvatar } = req.file;
   const publicPathToAvatar = path.join(pathToAvatars, avatarFilename);
 
-  // move image to avatars folder
-  try {
-    await fs.rename(pathToTmpAvatar, publicPathToAvatar);
-  } catch (error) {
-    await fs.unlink(pathToTmpAvatar);
-    throw error;
-  }
+  // resize and move image to avatars folder
+  (await Jimp.read(pathToTmpAvatar)).cover(250, 250).write(publicPathToAvatar);
+  await fs.unlink(pathToTmpAvatar);
 
   // update user's avatar
   userDoc.setAvatar(publicPathToAvatar);
