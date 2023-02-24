@@ -4,18 +4,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 dotenv.config();
-// const DB_HOST =
-//   "mongodb+srv://dinavelkova:3ibcyJSaMkuTCrGU@mongodb.aybpusr.mongodb.net/03-mongodb?retryWrites=true&w=majority";
-
-// mongoose.set("strictQuery", false);
-
-// mongoose
-//   .connect(DB_HOST)
-//   .then(() => console.log("Database connection successful"))
-//   .catch((error) => {
-//     console.log(error.message);
-//     process.exit(1);
-//   });
 
 const contactsRouter = require("./routes/api/contacts");
 
