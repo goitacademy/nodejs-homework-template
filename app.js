@@ -1,7 +1,9 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const dotenv = require("dotenv");
 
+dotenv.config();
 // const DB_HOST =
 //   "mongodb+srv://dinavelkova:3ibcyJSaMkuTCrGU@mongodb.aybpusr.mongodb.net/03-mongodb?retryWrites=true&w=majority";
 
