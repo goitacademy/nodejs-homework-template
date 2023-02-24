@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const { getCurrent } = require("../../middlewares");
 const {
   listContacts,
   getById,
@@ -10,9 +11,9 @@ const {
   updateStatusContact,
 } = require("../../controllers");
 
-router.get("/", listContacts);
+router.get("/", getCurrent, listContacts);
 router.get("/:contactId", getById);
-router.post("/", addContact);
+router.post("/", getCurrent, addContact);
 router.delete("/:contactId", removeContact);
 router.put("/:contactId", updateContact);
 router.patch("/:contactId/favorite", updateStatusContact);

@@ -1,6 +1,6 @@
 const { Contact } = require("../models");
 
-const { HttpError, ctrlWrapper } = require("../utils");
+const { HttpError, ctrlWrapper } = require("../middlewares");
 
 const {
   contactPostValidator,
@@ -9,7 +9,21 @@ const {
 } = require("../schemasJoi");
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({});
+  const { _id } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const result = await Contact.find({ owner: _id }, "", {
+    skip,
+    limit: Number(limit),
+  }).populate("owner", "_id email subscription");
+  if (req.query.favorite) {
+    const favoriteContacts = await Contact.find({ owner: _id, favorite: true });
+    // const favoriteContacts = result.filter(
+    //   (contact) => true === contact.favorite
+    // );
+    return res.status(200).json(favoriteContacts);
+  }
   return res.status(200).json(result);
 };
 
@@ -27,8 +41,15 @@ const addContact = async (req, res, next) => {
   const { error } = contactPostValidator(req.body);
   if (error)
     return res.status(400).json({ message: "missing required name field" });
+  const { _id } = req.user;
   const { name, email, phone, favorite } = req.body;
-  const contact = await Contact.create({ name, email, phone, favorite });
+  const contact = await Contact.create({
+    name,
+    email,
+    phone,
+    favorite,
+    owner: _id,
+  });
   if (contact) return res.status(201).json(contact);
 };
 

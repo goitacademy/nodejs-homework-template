@@ -2,9 +2,18 @@ const {
   contactPostValidator,
   contactPutValidator,
   favoriteJoiSchema,
-} = require("./validation");
+} = require("./contactsValidation");
+
+const {
+  userRegJoiSchema,
+  userLoginJoiSchema,
+  userUpdateSchema,
+} = require("./userValidation");
 
 module.exports = {
+  userRegJoiSchema,
+  userLoginJoiSchema,
+  userUpdateSchema,
   contactPostValidator,
   contactPutValidator,
   favoriteJoiSchema,
