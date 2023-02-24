@@ -1,15 +1,7 @@
 const ContactModel = require("../../models/contact")
-
 const { HttpError } = require("../../helpers")
-const { addSchema } = require("../../schemas")
 
-const updateContact = async (req, res) => {
-    const { error } = addSchema.validate(req.body)
-
-    if (error) {
-        throw HttpError(400, "Missing fields")
-    }
-
+const updateContactFavorite = async (req, res) => {
     const { id } = req.params
     const result = await ContactModel.findByIdAndUpdate(id, req.body, { new: true })
 
@@ -20,4 +12,4 @@ const updateContact = async (req, res) => {
     res.json(result)
 }
 
-module.exports = updateContact
+module.exports = updateContactFavorite
