@@ -1,3 +1,10 @@
+Дані з файлу .env
+
+DB_URI = 'mongodb+srv://Dzybystim:42aseper@cluster0.zai00qq.mongodb.net/db-contacts'
+PORT = '7000'
+SECRET = 'verySecret'
+
+
 ## GoIT Node.js Course Template Homework
 
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
@@ -28,4 +35,4 @@
 - `npm start` &mdash; старт сервера в режимі production
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помил
