@@ -12,11 +12,9 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Set email for contact"],
     },
     phone: {
       type: String,
-      required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
@@ -26,9 +24,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model("contact", contactSchema);
-
-module.exports = Contact;
+// module.exports = Contact;
 
 contactSchema.post("save", handleMongooseError);
 
@@ -36,7 +32,7 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string()
     .required()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+    .email({ tlds: { allow: false } }),
   phone: Joi.string().required(),
 });
 
@@ -48,6 +44,7 @@ const schemas = {
   addSchema,
   updateFavoriteSchema,
 };
+const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
