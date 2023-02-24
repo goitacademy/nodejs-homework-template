@@ -4,6 +4,7 @@ const {
   loginUser,
   logoutUser,
   updateSubUser,
+  updateAvatar
 } = require("../../models/auth/user");
 const {
   registerSchema,
@@ -11,10 +12,11 @@ const {
   updateSubSchema,
 } = require("../../models/auth/userSchema");
 const authenticate = require("../../middlewares/authMiddlewar");
+const upload = require("../../middlewares/upload")
 
 const router = express.Router();
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", upload.single("avatar"), async (req, res, next) => {
   try {
     const { error } = registerSchema.validate(req.body);
     if (error) {
@@ -78,6 +80,15 @@ router.patch("/", authenticate, async (req, res, next) => {
       const updateUser = await updateSubUser(req, res);
       res.json(updateUser);
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/avatars", authenticate, upload.single("avatar"), async (req, res, next) => {
+  try {
+      const updateUser = await updateAvatar(req, res);
+      res.json(updateUser);
   } catch (error) {
     next(error);
   }
