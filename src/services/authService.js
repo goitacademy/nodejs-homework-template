@@ -10,6 +10,8 @@ const { RegistrationConflictError, NotAuthorizedError, NotFoundError } = require
 const sendEmail = require('../helpers/sendEmail');
 require('dotenv').config();
 
+const { BASE_URL } = process.env;
+
 const signup = async (email, password, subscription, avatarURL) => {
     const user = await User.findOne({ email });
     
@@ -29,11 +31,10 @@ const signup = async (email, password, subscription, avatarURL) => {
 
     await sendEmail({
         to: email,
-        subject: 'Verification email',
-        text: `Please, confirm your email address POST http://localhost:8083/api/auth/users/verify/${verificationToken}`,
-        html: `Please, confirm your email address POST http://localhost:8083/api/auth/users/verify/${verificationToken}`,
+        subject: 'Mail confirmation',
+        html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">Please, confirm your email address</a>`,
     });
-
+    
     return newUser;
 };
 
@@ -44,24 +45,40 @@ const verifyEmail = async (verificationToken) => {
         throw new NotFoundError('User not found');
     };
 
-    await User.findByIdAndUpdate(
-        { _id: user._id },
-        { verificationToken: 'verified', verify: true }
+    await User.findByIdAndUpdate( user._id,
+        { verificationToken: null, verify: true } 
     );
 
     await sendEmail({
         to: user.email,
-        subject: 'Thank you for registration!',
-        text: `Verification successful`,
-        html: `Verification successful`,
+        subject: 'Thank you for verification your email!',
+        html: `<p>Verification successful!</p>`,
     });
+};
+
+const resendEmail = async (verificationToken) => {
+    // const user = await User.findOne({ verificationToken });
+    
+    // if (!user) {
+    //     throw new NotFoundError('User not found');
+    // };
+
+    // await User.findByIdAndUpdate( user._id,
+    //     { verificationToken: null, verify: true } 
+    // );
+
+    // await sendEmail({
+    //     to: user.email,
+    //     subject: 'Thank you for verification your email!',
+    //     html: `<p>Verification successful!</p>`,
+    // });
 };
 
 const login = async (email, password, subscription) => {
     const user = await User.findOne({ email, verify: true });
 
     if (!user || !await bcrypt.compare(password, user.password)) {
-        throw new NotAuthorizedError("Email or password is wrong");
+        throw new NotAuthorizedError("Email or password is wrong or email is not verify");
     }
 
     const payload = {
@@ -94,17 +111,19 @@ const updateAvatar = async (_id, temporaryName, originalname) => {
     const avatarName = `${_id}.${extension}`;
 
     try {
+        // resize
         const avatar = await Jimp.read(temporaryName);
         avatar.resize(250, 250);
-
+        // move to public/avatars
         const avatarPath = path.join(avatarsDir, avatarName);
         console.log("avatarPath", avatarPath);
-        await fs.rename(temporaryName, avatarPath);
+        await fs.rename(temporaryName, avatarPath); // move to different directory
+        // save path to db
         const avatarURL = path.join("avatars", avatarName);
         await User.findByIdAndUpdate(_id, { avatarURL });
         return avatarURL;
     } catch (err) {
-        await fs.unlink(temporaryName);
+        await fs.unlink(temporaryName); // remove
         throw new Error(err.message);
     }
 };
@@ -112,6 +131,7 @@ const updateAvatar = async (_id, temporaryName, originalname) => {
 module.exports = {
     signup,
     verifyEmail,
+    resendEmail,
     login,
     logout,
     updateSubscription,

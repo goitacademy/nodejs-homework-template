@@ -1,6 +1,7 @@
 const {
     signup, 
     verifyEmail,
+    // resendEmail,
     login,
     logout,
     updateSubscription,
@@ -21,6 +22,14 @@ const ctrlVerification  = async (req, res) => {
     await verifyEmail(verificationToken);
 
     res.status(200).json({ message: 'Verification successful' });
+};
+
+const ctrlReVerification  = async (req, res) => { 
+    // const { verificationToken } = req.params;
+    
+    // await resendEmail(verificationToken);
+
+    // res.status(200).json({ message: 'Verification successful' });
 };
 
 const ctrlLogin = async (req, res) => { 
@@ -55,6 +64,7 @@ const ctrlChangeSubscription = async (req, res) => {
 };
 
 const ctrlChangeAvatar = async (req, res) => { 
+    console.log("req.file", req.file);
     const { _id } = req.user;
     const { path: temporaryName, originalname } = req.file;
     
@@ -66,6 +76,7 @@ const ctrlChangeAvatar = async (req, res) => {
 module.exports = {
     ctrlSignup,
     ctrlVerification,
+    ctrlReVerification,
     ctrlLogin,
     ctrlLogout,
     ctrlCurrent,
