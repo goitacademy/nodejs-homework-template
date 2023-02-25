@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   getContacts,
   getContactById,
@@ -6,7 +7,12 @@ const {
   addContact,
   updateContact,
 } = require("../../controllers/contactsControllers");
-const router = express.Router();
+const models = require("../../middleware/models");
+// const modelsMiddleware = require("../../middleware/models");
+ 
+
+
+router.use(models)
 
 router.get("/", getContacts);
 
