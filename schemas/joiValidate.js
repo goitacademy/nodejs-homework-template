@@ -6,6 +6,7 @@ const addContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^\+?[\d\s()-]+$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 const updateContactSchema = Joi.object({
   name: Joi.string().min(2),

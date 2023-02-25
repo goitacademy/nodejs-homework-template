@@ -39,8 +39,8 @@ const createContact = tryCatchWrapper(async (req, res) => {
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
-  const { name, email, phone } = value;
-  const contact = { name, email, phone };
+  const { name, email, phone, favorite } = value;
+  const contact = { name, email, phone, favorite };
   const data = await addContact(contact);
   res.status(201).json(data);
 });
