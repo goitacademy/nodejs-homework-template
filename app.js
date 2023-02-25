@@ -2,7 +2,10 @@ const express = require('express')
 const morgan = require("morgan");
 const cors = require('cors')
 const mongoose = require("mongoose");
+
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
+
 require("dotenv").config();
 
 mongoose.set("strictQuery", true);
@@ -25,7 +28,8 @@ app.use(morgan(formatsLogger));
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
