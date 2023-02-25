@@ -1,2 +1,2 @@
-const Contact = require("./contacts");
+const { Contact } = require("./contact");
 module.exports = { Contact };
