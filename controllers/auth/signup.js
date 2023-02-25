@@ -1,10 +1,11 @@
 const { User } = require("../../models");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 
 const signUp = async (req, res, next) => {
   try {
-    const { email, subscription, password } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       throw createError(
@@ -13,14 +14,16 @@ const signUp = async (req, res, next) => {
       );
     }
 
+    const avatarURL = gravatar.url(email);
     const saltPassword = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, saltPassword);
 
-    await User.create({
-      subscription,
-      email,
+    const newUser = await User.create({
+      ...req.body,
       password: hashedPassword,
+      avatarURL,
     });
+    const { subscription } = newUser;
 
     res.status(201).json({
       status: "Created",
@@ -29,6 +32,7 @@ const signUp = async (req, res, next) => {
         user: {
           email,
           subscription,
+          avatarURL,
         },
       },
     });
