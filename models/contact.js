@@ -24,8 +24,6 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// module.exports = Contact;
-
 contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
