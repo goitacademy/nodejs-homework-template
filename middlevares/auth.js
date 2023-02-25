@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
     const { id } = jwt.verify(token, SECRET_WORD);
 
     //find user and send data next()
-    const user = await UserModel.findById(id).select("email");
+    const user = await UserModel.findById(id).select("email subscription");
     req.user = user;
     next();
   } catch (err) {
