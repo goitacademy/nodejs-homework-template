@@ -2,10 +2,14 @@ const express = require("express");
 
 const router = express.Router();
 
-const listContacts = require("../models/contacts.js/listContacts");
-const addContact = require("../models/contacts.js/addContact");
-const removeContact = require("../models/contacts.js/removeContact");
-const updateContact = require("../models/contacts.js/updateContact");
+const contactOperations = require("../../models/contacts.js");
+
+const { listContacts, addContact, removeContact, updateContact } =
+  contactOperations;
+console.log(listContacts);
+console.log(addContact);
+console.log(removeContact);
+console.log(updateContact);
 
 const Joi = require("joi");
 
@@ -52,17 +56,24 @@ router.get("/api/contacts/:id", async (req, res, next) => {
 
 router.post("/api/contacts", async (req, res, next) => {
   const { name, email, phone } = req.body;
-  try {
-    const value = await schema.validateAsync({ name, email, phone });
-    const contacts = await addContact(value);
+  if (name && email && phone) {
+    try {
+      const value = await schema.validateAsync({ name, email, phone });
+      const contacts = await addContact(value);
+      res.json({
+        status: 201,
+        data: {
+          contacts,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  } else {
     res.json({
-      status: 200,
-      data: {
-        contacts,
-      },
+      status: 400,
+      message: "missing required name field",
     });
-  } catch (error) {
-    console.log(error.message);
   }
 });
 
