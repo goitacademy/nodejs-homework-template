@@ -1,5 +1,5 @@
 const express = require("express");
-const { addValidation, addFavValidation } = require("../../middlevares");
+const { addValidation, addFavValidation, auth } = require("../../middlevares");
 const {
   getContacts,
   getContactById,
@@ -12,18 +12,19 @@ const asyncHandler = require("express-async-handler");
 
 const router = express.Router();
 
-router.get("/", asyncHandler(getContacts));
+router.get("/", auth, asyncHandler(getContacts));
 
-router.get("/:contactId", asyncHandler(getContactById));
+router.get("/:contactId", auth, asyncHandler(getContactById));
 
-router.post("/", addValidation, asyncHandler(addContact));
+router.post("/", auth, addValidation, asyncHandler(addContact));
 
-router.delete("/:contactId", asyncHandler(removeContact));
+router.delete("/:contactId", auth, asyncHandler(removeContact));
 
-router.put("/:contactId", addValidation, asyncHandler(updateContact));
+router.put("/:contactId", auth, addValidation, asyncHandler(updateContact));
 
 router.patch(
   "/:contactId/favorite",
+  auth,
   addFavValidation,
   asyncHandler(updateFavorite)
 );
