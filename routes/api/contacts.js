@@ -2,10 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
-const listContacts = require("../controllers/listContacts");
-const addContact = require("../controllers/addContact");
-const removeContact = require("../controllers/removeContact");
-const updateContact = require("../controllers/updateContact");
+const listContacts = require("../models/contacts.js/listContacts");
+const addContact = require("../models/contacts.js/addContact");
+const removeContact = require("../models/contacts.js/removeContact");
+const updateContact = require("../models/contacts.js/updateContact");
 
 const Joi = require("joi");
 
