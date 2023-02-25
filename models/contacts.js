@@ -1,67 +1,21 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4 } = require("uuid");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const contactSchema = Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const contactsPath = require("./contactsPatch");
-
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(data);
-  return contacts;
-};
-
-const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const result = contacts.find((contact) => String(contact.id) === String(id));
-  if (!result) {
-    return null;
-  }
-
-  return result;
-};
-
-const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => String(contact.id) === String(id));
-  if (!contact) return;
-  const newContacts = contacts.filter(
-    (contact) => String(contact.id) === String(id)
-  );
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newContacts, null, 2),
-    "utf8"
-  );
-  return contact;
-};
-
-const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = { id: v4(), ...body };
-  const newContacts = [...contacts, newContact];
-  await fs.writeFile(
-    contactsPath,
-    JSON.stringify(newContacts, null, 2),
-    "utf8"
-  );
-  return newContact;
-};
-
-const updateContact = async (id, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(
-    (contact) => String(contact.id) === String(id)
-  );
-  if (index === -1) return;
-  contacts[index] = { ...contacts[index], ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf8");
-  return contacts[index];
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+const Contact = model("contact", contactSchema);
+module.exports = Contact;
