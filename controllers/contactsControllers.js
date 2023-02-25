@@ -71,6 +71,7 @@ const updateContact = tryCatchWrapper(async (req, res) => {
 });
 const updateStatusContact = tryCatchWrapper(async (req, res) => {
   const { error } = updateStatusSchema.validate(req.body);
+
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
