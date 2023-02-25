@@ -13,6 +13,7 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.8.1",
+    "mongoose": "^6.10.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {
