@@ -8,6 +8,7 @@ const {
   removeContactController,
   addContactController,
   updateContactController,
+  updateStatusContactController,
 } = require("../../controllers");
 
 const {controllerWrapper} = require('../../helpers');
@@ -21,5 +22,7 @@ router.post("/", controllerWrapper(addContactController));
 router.delete("/:contactId", controllerWrapper(removeContactController));
 
 router.put("/:contactId", controllerWrapper(updateContactController));
+
+router.patch("/:contactId/favorite", controllerWrapper(updateStatusContactController));
 
 module.exports = router;
