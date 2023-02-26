@@ -14,4 +14,6 @@ router.post('/logout', mdd.auth, ctrl.logout);
 
 router.patch('/', mdd.auth, mdd.subscription, ctrl.subscription);
 
+router.patch('/avatars', mdd.auth, mdd.multer.single('image'), ctrl.updateAvatar);
+
 module.exports = router;

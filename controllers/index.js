@@ -5,13 +5,12 @@ const deleteContact = require('./contacts/deleteContact');
 const updateContact = require('./contacts/updateContact');
 const favoriteUpdate = require('./contacts/favoriteUpdate');
 
-
 const signUp = require('./users/signUp');
 const login = require('./users/login');
 const getCurrentUser = require('./users/getCurrentUser');
 const logout = require('./users/logout');
 const subscription = require('./users/subscription');
-
+const updateAvatar = require('./users/updateAvatar');
 
 module.exports = {
   getAllContacts,
@@ -26,5 +25,5 @@ module.exports = {
   getCurrentUser,
   logout,
   subscription,
-
+  updateAvatar,
 };

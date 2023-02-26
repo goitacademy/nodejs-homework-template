@@ -1,6 +1,7 @@
 const { auth, id, register, login, subscription } = require('./auth');
 const { contactBody, favorite } = require('./contacts');
 const params = require('./params');
+const multer = require('./multer');
 
 module.exports = {
   auth,
@@ -11,4 +12,5 @@ module.exports = {
   favorite,
   params,
   subscription,
+  multer,
 };
