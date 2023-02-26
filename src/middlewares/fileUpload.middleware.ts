@@ -22,7 +22,7 @@ export const upload = multer({
     const [type] = file.mimetype.split('/');
 
     if (type !== 'image') {
-      return cb(new ValidationError('You can upload only image file'));
+      return cb(new ValidationError('You can upload only the image file'));
     }
 
     cb(null, true);

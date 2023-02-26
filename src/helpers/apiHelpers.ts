@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { BaseError } from './errors';
 
 export const asyncWrapper =
-  (controller: (req: Request, res: Response) => Promise<void>) => (req: Request, res: Response, next: NextFunction) => {
+  (controller: (req: Request, res: Response) => Promise<void>) =>
+    (req: Request, res: Response, next: NextFunction) => {
     controller(req, res).catch(next);
   };
 

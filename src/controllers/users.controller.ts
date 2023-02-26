@@ -30,7 +30,7 @@ export const registerController = async (req: Request, res: Response) => {
 export const loginController = async (req: Request, res: Response) => {
   const data = await loginService(req.body);
 
-  res.status(201).json(responseData(data, 201));
+  res.status(200).json(responseData(data, 200));
 };
 
 export const logoutController = async (req: IRequest, res: Response) => {
