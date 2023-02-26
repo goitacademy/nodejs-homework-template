@@ -19,6 +19,11 @@ const schemaUpdate = Joi.object().keys({
     phone: phone.optional(),
 });
 
+const schemaFaforite = Joi.object({
+    favorite: Joi.boolean()
+        .required(),
+});
+
 
 module.exports = {
     addPostValidation: (req, res, next) => {
@@ -31,6 +36,15 @@ module.exports = {
     },
     updatePostValidation: (req, res, next) => {
         const validationResult = schemaUpdate.validate(req.body);
+        if (validationResult.error
+        ) {
+            return res.status(400).json({status: validationResult.error.details[0].message})
+        }
+        next();
+    },
+
+    updateFavoriteValidation: (req, res, next) => {
+        const validationResult = schemaFaforite.validate(req.body);
         if (validationResult.error
         ) {
             return res.status(400).json({status: validationResult.error.details[0].message})
