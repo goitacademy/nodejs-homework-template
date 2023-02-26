@@ -7,12 +7,11 @@ const {
   addContact,
   updateContact,
 } = require("../../controllers/contactsControllers");
-const models = require("../../middleware/models");
-// const modelsMiddleware = require("../../middleware/models");
+
  
 
 
-router.use(models)
+
 
 router.get("/", getContacts);
 

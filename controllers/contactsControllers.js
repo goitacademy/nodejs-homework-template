@@ -8,7 +8,6 @@ const createError = require("http-errors");
 const { connectMongo } = require("../db/connection");
 
 const getContacts = async (req, res, next) => {
-
   try {
     const contacts = await req.db.Contacts.find({}).toArray();
     res.json({
@@ -70,7 +69,6 @@ const addContact = async (req, res, next) => {
   //     return next(createError(404, error.message));
   //   }
   //   const addContact = await contactsOperations.addContact(req.body);
-
   //   res.json({
   //     status: "success",
   //     code: 201,
