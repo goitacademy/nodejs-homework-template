@@ -1,6 +1,5 @@
 const { Contact } = require('../models/contact');
 const { HttpError, ctrlWrapper } = require('../helpers');
-// const { newContSchema } = require('../schemas/');
 
 const getList = async (req, res) => {
   const list = await Contact.find({}, '-createdAt -updatedAt');
@@ -14,10 +13,6 @@ const getById = async (req, res) => {
   res.json(contactById);
 };
 const add = async (req, res) => {
-  // const { error } = newContSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400, error.message);
-  // }
   const result = await Contact.create(req.body);
   console.log(result);
   res.status(201).json(result);
