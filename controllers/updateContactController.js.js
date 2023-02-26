@@ -1,4 +1,4 @@
-const { updateContact } = require("../models");
+const { updateContact } = require("../services");
 
 const { isEmpty } = require("../helpers");
 const contactValidation = require("../middlewares");

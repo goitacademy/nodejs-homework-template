@@ -1,4 +1,4 @@
-const {listContacts} = require("../models");
+const {listContacts} = require("../services");
 
 const listContactsController = async (_, res) => {
   const contacts = await listContacts();

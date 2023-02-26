@@ -1,4 +1,4 @@
-const { addContact } = require("../models");
+const { addContact } = require("../services");
 const contactValidation = require("../middlewares");
 
 const addContactController = async (req, res) => {
