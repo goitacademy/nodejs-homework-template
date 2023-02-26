@@ -1,0 +1,47 @@
+GET http://localhost:3000/api/contacts
+Accept: application/json
+###
+
+GET http://localhost:3000/api/contacts/40
+Accept: application/json
+###
+
+POST http://localhost:3000/api/contacts
+Content-Type: application/json
+
+{
+  "name": "joe",
+  "email": "eeemmmaaaiiilll",
+  "phone": "11111116"
+}
+###
+POST http://localhost:3000/api/contacts
+Content-Type: application/json
+
+{
+  "name": "joeї111'",
+  "email": "examp@email.com",
+  "phone": "+111111162222"
+}
+###
+
+POST http://localhost:3000/api/contacts
+Content-Type: application/json
+
+{
+  "name": "joeї222'",
+  "email": "examp@email.com"
+}
+###
+
+DELETE http://localhost:3000/api/contacts/19
+Accept: application/json
+###
+
+PUT http://localhost:3000/api/contacts/76
+Content-Type: application/json
+
+{
+  "phone": "+981641103302"
+}
+###

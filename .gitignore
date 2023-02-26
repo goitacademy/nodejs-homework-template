@@ -1,2 +1,7 @@
 node_modules/
 .env
+.idea
+.idea.*
+rest-api_requests.http
+models/contacts.json.bak
+
