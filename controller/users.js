@@ -2,6 +2,7 @@ const {User} = require('../service/schemas/users')
 const {hash, compare} = require('./bcrypt')
 const jwt = require('jsonwebtoken');
 const process  = require('process');
+const gravatar = require('gravatar');
 
 const addUserController = async (body, res) => {
     try{
@@ -21,6 +22,8 @@ const addUserController = async (body, res) => {
     const user = await User({  email, subscription });
     const hashPass = await hash(password)
     user.password = hashPass
+    const avatar = gravatar.url(email, {protocol: 'https', s: '100'})
+    user.avatarURL = avatar
     await user.save();
     return res.status(201).json({
         user: {
@@ -135,11 +138,27 @@ const patchUserSubscription = async(req, res) => {
     }
 }
 
+const patchUserAvatarController = async(req,res) => {
+    try{
+        const avatarPath = req.file.path
+
+        if(!avatarPath){
+            res.status(401).json({ message: 'Not authorized' })
+        }
+
+        res.json({avatarURL: avatarPath})
+    }catch(err){
+        res.status(400).json({ message: err.message })
+    }
+
+}
+
 module.exports = {
     addUserController,
     findUserController,
     getAllUsersController,
     logoutUsersController,
     getCurrentUserController,
-    patchUserSubscription
+    patchUserSubscription,
+    patchUserAvatarController
   }

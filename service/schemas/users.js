@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Schema = mongoose.Schema;
 
 
+
 const user = new Schema(
     {
 password: {
@@ -21,6 +22,9 @@ subscription: {
 token: {
   type: String,
   default: null,
+},
+avatarURL: {
+  type: String 
 },},
       { versionKey: false, timestamps: true }
 )
