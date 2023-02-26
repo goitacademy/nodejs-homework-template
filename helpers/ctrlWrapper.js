@@ -1,3 +1,5 @@
+//decorator function for promis processing
+
 const ctrlWrapper = (ctrl) => {
 	const func = async (req, res, next) => {
 		try {
