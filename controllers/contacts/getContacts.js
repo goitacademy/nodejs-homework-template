@@ -2,6 +2,7 @@ const { ContactsModel } = require("../../models");
 
 const getContacts = async (req, res) => {
   const { page = 1, limit = 20, favorite } = req.query;
+  const { id } = req.user;
 
   switch (favorite) {
     case "true":
@@ -19,7 +20,7 @@ const getContacts = async (req, res) => {
 
   async function getContactsList(data) {
     const contactsList = await ContactsModel.find(
-      data,
+      { $and: [data, { owner: id }] },
       "name email phone favorite",
       {
         limit: Number(limit),

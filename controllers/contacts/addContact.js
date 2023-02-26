@@ -1,7 +1,8 @@
 const { ContactsModel } = require("../../models");
 
 const addContact = async (req, res) => {
-  const newContact = await ContactsModel.create({ ...req.body });
+  const { id } = req.user;
+  const newContact = await ContactsModel.create({ ...req.body, owner: id });
 
   if (!newContact) {
     res.status(400);
