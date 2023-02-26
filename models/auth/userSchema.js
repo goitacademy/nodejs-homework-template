@@ -26,6 +26,10 @@ const userSchema = new Schema({
     type: String,
     default: "",
   },
+  avatarURL: {
+    type: String,
+    required: [true, "Is required"],
+  }
 });
 
 userSchema.post("save", (error, data, next) => {
@@ -46,6 +50,7 @@ const registerSchema = Joi.object({
     .required(),
   password: Joi.string().min(7).max(20).required(),
   subscription: Joi.string().default("starter"),
+  avatarURL: Joi.string(),
 });
 
 const loginSchema = Joi.object({
@@ -59,9 +64,10 @@ const updateSubSchema = Joi.object({
     subscription: Joi.string().valid('starter', 'pro', 'business').required()
 })
 
+
 module.exports = {
   User,
   registerSchema,
   loginSchema,
-  updateSubSchema
+  updateSubSchema,
 };
