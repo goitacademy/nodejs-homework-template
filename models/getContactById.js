@@ -1,15 +1,7 @@
-const listContacts = require('./listContacts');
+const {Contacts} = require('../db');
 
 const getContactById = async (contactId) => {
-  const parsedContacts = await listContacts();
-
-  const [contactById] = parsedContacts.filter(({ id }) => id === contactId);
-
-  if (!contactById) {
-    return null;
-  }
-
-  return contactById;
+return await Contacts.find({_id: contactId});
 };
 
 module.exports = getContactById;

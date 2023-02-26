@@ -8,15 +8,12 @@ const isEmpty = (obj) => {
 
 const controllerWrapper = (controller) => {
   return (req, res, next) => {
-    try {
-      controller(req, res);
-    } catch (err) {
-      next(err);
-    }
+    controller(req, res).catch(next);
   };
+
 };
 
-const errorHandler = (err, _, res) => {
+const errorHandler = (err, _, res, next) => {
     const errStatus = err.statusCode || 500;
     const errMsg = err.message || 'Something went wrong';
 
