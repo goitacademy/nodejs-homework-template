@@ -12,9 +12,6 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-const DB_HOST =
-  "mongodb+srv://303vlad:EYF3TJOC18YKtb2f@cluster0.05vjugd.mongodb.net/db-contacts";
-
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
