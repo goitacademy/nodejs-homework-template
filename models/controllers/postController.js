@@ -18,13 +18,6 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-    if (Object.keys(req.body).length > 3) {
-        return res.status(400).json({"message": "only name, email and phone is required"})
-    }
-    const {name, email, phone} = req.body
-    if (!name || !email || !phone) {
-        return res.status(400).json({"message": "missing required name field"})
-    }
 
     let contact = req.body
     const id = nanoid(2).toString();
@@ -44,7 +37,7 @@ const deleteContact = async (req, res, next) => {
     };
 }
 
-const putContact = async (req, res, next) => {
+const patchContact = async (req, res, next) => {
     const id = req.params.contactId;
     const body = req.body;
     if (Object.keys(req.body).length === 0) {
@@ -65,5 +58,5 @@ module.exports = {
     getContactById,
     addContact,
     deleteContact,
-    putContact,
+    patchContact,
 }
