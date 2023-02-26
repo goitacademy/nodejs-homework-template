@@ -1,11 +1,11 @@
 const app = require('./app');
 const mongoose = require('mongoose');
 
+const { DB_HOST } = process.env;
+
 mongoose.set('strictQuery', true);
 mongoose
-  .connect(
-    'mongodb+srv://Tvinlee:lSnidN4VAebBsDqN@cluster0.rqfgtfx.mongodb.net/db-contacts?retryWrites=true&w=majority'
-  )
+  .connect(DB_HOST)
   .then(() => {
     app.listen(3000);
     console.log('database connect sucsess');
