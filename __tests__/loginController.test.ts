@@ -27,7 +27,7 @@ describe('Login controller test', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.data.token).toBeDefined();
     expect(res.body.data.user.email).toEqual(mEmail);
-    expect(res.body.data.user.subscription).toBeDefined();
+    expect(typeof res.body.data.user.subscription).toBe('string');
   });
 
   it('should return error when wrong password', async () => {
