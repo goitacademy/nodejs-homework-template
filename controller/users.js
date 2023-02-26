@@ -158,9 +158,9 @@ const patchUserAvatarController = async(req,res) => {
         
         await fs.rename(oldPath, newPath)
 
-        const userAvatar = await User.findOneAndUpdate(req.user._id, {avatarURL: newPath}, { new: true } )
+        await User.findOneAndUpdate(req.user._id, {avatarURL: `/avatars/${req.file.filename}`}, { new: true } )
 
-        res.json({avatarURL: userAvatar.avatarURL})
+        res.json({avatarURL: `/avatars/${req.file.filename}`})
     }catch(err){
         await fs.unlink(req.file.path)
         res.status(400).json({ message: err.message })
