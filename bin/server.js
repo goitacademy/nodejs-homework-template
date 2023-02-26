@@ -1,13 +1,16 @@
-const mongoose = require("mongoose");
+const { connect } = require("mongoose");
 
-const app = require("../app");
-
-const { DB_HOST, PORT = 8000 } = process.env;
-mongoose.set("strictQuery", false);
-mongoose
-  .connect(DB_HOST)
-  .then(() => app.listen(PORT))
-  .catch((error) => {
-    console.log(error.message);
-    process.exit(1);
+const connectDB = async () => {
+  const { MONGODB_URI } = process.env;
+  const db = await connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   });
+
+  console.log(
+    `MongoDB are connected: DB-name: ${db.connection.name}, Cluster: ${db.connection.host}, `
+      .cyan.bold
+  );
+};
+
+module.exports = connectDB;

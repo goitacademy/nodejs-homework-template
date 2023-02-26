@@ -1,10 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-require("dotenv").config();
+const dotenv = require("dotenv");
 
+const connectDB = require("./bin/server");
+require("colors");
 const contactsRouter = require("./routes/api/contacts");
-
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -24,4 +25,17 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message });
 });
 
+// Load env variables
+dotenv.config();
+
+// Connect DB
+connectDB();
+
+// Provide server
+const { PORT, NODE_ENV } = process.env || 5050;
+
+console.log(PORT);
+app.listen(PORT, () => {
+  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`.cyan.bold);
+});
 module.exports = app;
