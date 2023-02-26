@@ -2,7 +2,7 @@ const joi = require('joi');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { Schema } = require('mongoose');
-const { mongooseErrorHandler } = require('@root/helpers');
+const { mongooseErrorHandler } = require('../helpers');
 const gravatar = require('gravatar');
 
 const userScheme = new Schema(

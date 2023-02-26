@@ -3,8 +3,8 @@ const {
   AuthCredentialsError,
   MongoDBActionError,
   UserConflictError,
-} = require('@root/helpers');
-const { UserModel } = require('@root/models');
+} = require('../helpers');
+const { UserModel } = require('../models');
 const fs = require('fs/promises');
 const path = require('path');
 const Jimp = require('jimp');
@@ -27,8 +27,8 @@ async function signup(req, res, next) {
   if (!savedUser) throw new MongoDBActionError('Failed to save new user');
 
   // report
-  const { subscription } = savedUser;
-  res.status(201).json({ user: { email, subscription: subscription } });
+  const { subscription, token } = savedUser;
+  res.status(201).json({ user: { email, subscription, token } });
 }
 
 async function login(req, res, next) {
