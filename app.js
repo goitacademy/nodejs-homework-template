@@ -1,4 +1,5 @@
 const express = require('express')
+const MongoClient = require("mongodb").MongoClient;
 const logger = require('morgan')
 const cors = require('cors')
 
@@ -21,5 +22,13 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+
+const start = async () => {
+ app.listen(3000, () => {
+    console.log("Server running. Use our API on port: 3000");
+  });
+}
+
+start()
 
 module.exports = app
