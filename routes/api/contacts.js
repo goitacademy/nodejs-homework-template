@@ -1,7 +1,8 @@
+// ----------------------------------------------------------------------------
+//                         Router
+// ----------------------------------------------------------------------------
 const express = require("express");
 const joi = require("joi");
-const contacts = require("../../models/contacts");
-const { HttpError } = require("../../utils");
 const ctrl = require("../../controllers/contacts");
 
 const { validateBody } = require("../../middlewares");

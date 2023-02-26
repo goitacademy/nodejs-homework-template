@@ -1,18 +1,12 @@
 // -----------------------------------------------------
 //                 Controllers
 // -----------------------------------------------------
-const contacts = require("../models/contacts");
+const contacts = [];
 const { ctrlWrapper, HttpError } = require("../utils");
-const joi = require("joi");
-
-const addSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().required(),
-  phone: joi.string().required(),
-});
+const Contact = require("../models/contact");
 
 const getAll = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.status(200).json({
     code: 200,
     result: result,
@@ -20,7 +14,7 @@ const getAll = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  const contact = await contacts.getContactById(req.params.contactId);
+  const contact = await Contact.findById(req.params.contactId);
   if (!contact) {
     throw HttpError(404, "Not found");
   }
