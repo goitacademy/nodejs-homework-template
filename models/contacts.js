@@ -1,10 +1,9 @@
-const fs = require('fs/promises')
-
+const {Contacts} = require('../db/contactsModel')
 
 const listContacts = async () => {
     try {
-        const result = await fs.readFile('./models/contacts.json', 'utf8');
-        return JSON.parse(result);
+        const data = await Contacts.find({})
+        return data
     } catch (err) {
         return err;
     }
@@ -12,8 +11,8 @@ const listContacts = async () => {
 
 const listContactById = async (contactId) => {
     try {
-        const result = await listContacts()
-        return await result.find(item => item.id === contactId);
+        const data = await Contacts.findById(contactId)
+        return data
     } catch (err) {
         return err;
     }
@@ -21,10 +20,7 @@ const listContactById = async (contactId) => {
 
 const postContact = async (body) => {
     try {
-        const oldContacts = await listContacts();
-        const newContacts = JSON.stringify([...oldContacts, body])
-        await fs.writeFile('./models/contacts.json', newContacts, 'utf-8')
-        return body
+        return Contacts.create(body)
     } catch (err) {
         return err;
     }
@@ -32,52 +28,32 @@ const postContact = async (body) => {
 
 const removeContact = async (contactId) => {
     try {
-        const oldContacts = await listContacts();
-        const isContact = oldContacts.find(item => item.id === contactId);
-        if (isContact) {
-            const newContacts = JSON.stringify(oldContacts.filter(item => item.id !== contactId));
-            await fs.writeFile('./models/contacts.json', newContacts, 'utf-8')
-            return {
-                "statusCode": 200,
-                "message": "contact deleted"
-            };
+        const contact = await Contacts.findByIdAndRemove(contactId);
+        if (!contact) {
+            return {"message": "Not found"};
         }
-        ;
-        return {
-            "statusCode": 404,
-            "message": "Not found"
-        };
-
+        return {"message": "contact deleted"};
     } catch (err) {
         return err;
     }
 }
-
 
 const updateContact = async (contactId, body) => {
     try {
-        const oldContacts = await listContacts();
-        let newContact = null;
-        const newContacts = await oldContacts.map(contact => {
-            if (contact.id === contactId) {
-                newContact = {...contact, ...body};
-                return newContact
-            }
-            return contact
-        })
-
-        if (newContact) {
-            await fs.writeFile('./models/contacts.json', JSON.stringify(newContacts), 'utf-8')
-            return newContact;
-
-        } else {
-            return null
-        }
+        return  Contacts.update({_id: contactId}, body);
     } catch (err) {
         return err;
     }
-
 }
+
+const updateFavorite = async (contactId, body) => {
+    try {
+        return Contacts.update({_id: contactId}, body);
+    } catch (err) {
+        return err;
+    }
+}
+
 
 module.exports = {
     listContacts,
@@ -85,4 +61,7 @@ module.exports = {
     postContact,
     removeContact,
     updateContact,
+    updateFavorite,
 }
+
+// todo: delete contacts.json.bak

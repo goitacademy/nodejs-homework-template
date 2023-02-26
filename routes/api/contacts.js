@@ -7,19 +7,26 @@ const {
     addContact,
     deleteContact,
     patchContact,
+    updateFavoriteContact,
 } = require('../../models/controllers/postController');
 
-const {addPostValidation, updatePostValidation}  = require('../../middlewars/postsValitation');
+const {
+    addPostValidation,
+    updatePostValidation,
+    updateFavoriteValidation
+} = require('../../middlewars/postsValitation');
 
 
-router.get('/', getContacts )
+router.get('/', getContacts)
 
-router.get('/:contactId', getContactById )
+router.get('/:contactId', getContactById)
 
 router.post('/', addPostValidation, addContact)
 
-router.delete('/:contactId', deleteContact )
+router.delete('/:contactId', deleteContact)
 
-router.patch('/:contactId', updatePostValidation, patchContact )
+router.patch('/:contactId', updatePostValidation, patchContact)
+
+router.patch('/:contactId/favorite/', updateFavoriteValidation, updateFavoriteContact)
 
 module.exports = router
