@@ -1,7 +1,3 @@
-const path = require("path");
-
-const contactsPath = path.join(__dirname, '..', 'db', "contacts.json");
-
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
