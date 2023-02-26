@@ -31,3 +31,11 @@ export const subscriptionValidation = (req: Request, _res: Response, next: NextF
 
   next();
 };
+
+export const avatarValidation = (req: Request, _res: Response, next: NextFunction): any => {
+  if (req.file?.fieldname !== 'avatar') {
+    throw new ValidationError('"avatar" field is required');
+  }
+
+  next();
+};

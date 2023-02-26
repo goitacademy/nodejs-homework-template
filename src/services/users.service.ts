@@ -19,9 +19,9 @@ export const registerService = async (candidate: UserType) => {
   const user = new UserModel(candidate);
   await user.save();
 
-  const { email, subscription } = user;
+  const { email, subscription, avatarURL } = user;
 
-  return { email, subscription };
+  return { email, subscription, avatarURL };
 };
 
 export const loginService = async (candidate: UserType) => {
@@ -31,7 +31,7 @@ export const loginService = async (candidate: UserType) => {
     throw new UnAuthorizedError('Email or password is wrong');
   }
 
-  const { email, subscription, _id } = user;
+  const { email, subscription, avatarURL, _id } = user;
   const payload = {
     _id,
     email,
@@ -39,7 +39,7 @@ export const loginService = async (candidate: UserType) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
   await user.update({ token });
 
-  return { token, user: { email, subscription } };
+  return { token, user: { email, subscription, avatarURL } };
 };
 
 export const logoutService = async (id: string) => {
@@ -50,6 +50,18 @@ export const updateSubscriptionService = async (userId: string, subscription: ES
   const user = await UserModel.findByIdAndUpdate(userId, { subscription }, { new: true }).select({
     email: 1,
     subscription: 1,
+    avatarURL: 1,
+    _id: 0,
+  });
+
+  return user;
+};
+
+export const updateAvatarService = async (userId: string, avatarURL: string) => {
+  const user = await UserModel.findByIdAndUpdate(userId, { avatarURL }, { new: true }).select({
+    email: 1,
+    subscription: 1,
+    avatarURL: 1,
     _id: 0,
   });
 

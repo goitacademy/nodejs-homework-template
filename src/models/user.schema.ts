@@ -22,6 +22,7 @@ const schema = new Schema<UserType, UserModelType, UserMethodsType>(
       required: [true, 'Email is required'],
       unique: true,
     },
+    avatarURL: String,
     subscription: {
       type: String,
       enum: ESubscription,

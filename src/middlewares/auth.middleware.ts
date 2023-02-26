@@ -24,9 +24,9 @@ export const authMiddleware = async (req: IRequest, _res: Response, next: NextFu
     if (!user || user.token !== token) {
       return next(new UnAuthorizedError('Invalid token'));
     }
-    const { _id, email, subscription } = user;
+    const { _id, email, subscription, avatarURL } = user;
 
-    req.user = { _id, email, subscription };
+    req.user = { _id, email, subscription, avatarURL };
 
     next();
   } catch (err) {
