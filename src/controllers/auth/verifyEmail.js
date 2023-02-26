@@ -11,9 +11,11 @@ const verifyEmail = async (req, res) => {
     verify: true,
     verificationToken: null,
   });
-  res.status(200).json({
-    message: "Verification successful",
-  });
+  res.send(`<!DOCTYPE html>
+  <html>
+      <h1>Verification sucess</h1>
+      <a href="http://localhost:3000/Phonebook-frontend-new/">Login link</a>
+  </html>`);
 };
 
 module.exports = { verifyEmail };

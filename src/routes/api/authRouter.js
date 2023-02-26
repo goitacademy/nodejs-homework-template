@@ -18,6 +18,8 @@ router.patch(
   ctrl.updateAvatarCloudinary
 );
 
+router.get("/", asyncWrapper(ctrl.getAll));
+
 router.get("/verify/:verificationToken", asyncWrapper(ctrl.verifyEmail));
 
 router.post(

@@ -12,6 +12,7 @@ const resendVerifyEmail = async (req, res) => {
     return res.status(400).json({
       message: "missing required field email",
     });
+    /* Check if token exist*/
   } else if (user.verify) {
     return res.status(400).json({
       message: "Verification has already been passed",

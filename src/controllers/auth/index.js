@@ -6,6 +6,7 @@ const { updateSubscription } = require("./updateSubscription");
 const { updateAvatarCloudinary } = require("./updateAvatarCloudinary");
 const { verifyEmail } = require("./verifyEmail");
 const { resendVerifyEmail } = require("./resendVerifyEmail");
+const { getAll } = require("./getAll");
 
 module.exports = {
   signup,
@@ -16,4 +17,5 @@ module.exports = {
   updateAvatarCloudinary,
   verifyEmail,
   resendVerifyEmail,
+  getAll,
 };

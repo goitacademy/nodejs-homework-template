@@ -3,6 +3,7 @@ const { Conflict } = require("http-errors");
 const gravatar = require("gravatar");
 const { v4 } = require("uuid");
 const { sendEmail } = require("../../helpers");
+require("dotenv").config();
 
 const signup = async (req, res) => {
   const { email, password, subscription } = req.body;
@@ -10,7 +11,7 @@ const signup = async (req, res) => {
   if (user) {
     throw new Conflict(`Email: ${email} in use`);
   }
-  const avatarURL = gravatar.url(email);
+  const avatarURL = gravatar.url(email, { s: "25" });
   const verificationToken = v4();
   const newUser = new User({
     email,
@@ -20,12 +21,16 @@ const signup = async (req, res) => {
   });
   newUser.setPassword(password);
   await newUser.save();
+  const url = `${process.env.BASE_URL}api/users/verify/${verificationToken}`;
   const mail = {
     to: email,
     subject: "Confirm email",
-    html: `<a target="_blank" href="https://phonebokapp.herokuapp.com/api/users/verify/${verificationToken}">Confirm email</a>`,
+    html: `
+    To verify email type button <br>
+    <a href="${url}">
+    <button>Verify email</button>
+  </a> `,
   };
-
   await sendEmail(mail);
   res.status(201).json({
     data: {
