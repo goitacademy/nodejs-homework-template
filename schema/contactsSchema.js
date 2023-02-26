@@ -9,6 +9,7 @@ const contactSchema = Joi.object({
     .required(),
   phone: Joi.string().min(2).max(40).required(),
   favorite: Joi.boolean(),
+  owner: Joi.string(),
 });
 
 module.exports = contactSchema;
