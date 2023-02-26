@@ -16,19 +16,7 @@ router.get("/", ctrl.getAll);
 
 router.get("/:contactId", ctrl.getContactById);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const body = req.body;
-    const { error } = addSchema.validate(body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const contact = await contacts.addContact(body);
-    res.status(201).json({ code: 201, result: contact });
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", ctrl.addContact);
 
 router.delete("/:contactId", async (req, res, next) => {
   try {

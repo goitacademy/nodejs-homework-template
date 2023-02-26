@@ -2,7 +2,7 @@
 //                 Controllers
 // -----------------------------------------------------
 const contacts = require("../models/contacts");
-const { ctrlWrapper } = require("../utils");
+const { ctrlWrapper, HttpError } = require("../utils");
 
 const getAll = async (req, res) => {
   const result = await contacts.listContacts();
@@ -23,6 +23,18 @@ const getContactById = async (req, res) => {
   });
 };
 
+const addContact = async (req, res) => {
+  const body = req.body;
+  const { error } = addSchema.validate(body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+  const contact = await contacts.addContact(body);
+  res.status(201).json({ code: 201, result: contact });
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
+  getContactById: ctrlWrapper(getContactById),
+  addContact: ctrlWrapper(addContact),
 };
