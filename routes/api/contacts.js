@@ -11,7 +11,7 @@ router.get("/:id", isValidId, ctrl.getById);
 
 router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
-router.put("/:id", validateBody(schemas.addSchema), ctrl.updateById);
+router.put("/:id", validateBody(schemas.updateSchema), ctrl.updateById);
 
 router.patch(
   "/:id/favorite",
