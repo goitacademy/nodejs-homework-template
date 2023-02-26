@@ -4,6 +4,8 @@ const contacts = require("../../models/contacts");
 const { HttpError } = require("../../utils");
 const ctrl = require("../../controllers/contacts");
 
+const { validateBody } = require("../../middlewares");
+
 const addSchema = joi.object({
   name: joi.string().required(),
   email: joi.string().required(),
@@ -16,36 +18,10 @@ router.get("/", ctrl.getAll);
 
 router.get("/:contactId", ctrl.getContactById);
 
-router.post("/", ctrl.addContact);
+router.post("/", validateBody(addSchema), ctrl.addContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const removeContact = await contacts.removeContact(contactId);
-    if (!removeContact) {
-      throw HttpError(404, "Not found");
-    }
-    res.json({ code: 200, message: "contact deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", ctrl.removeContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const putContact = await contacts.updateContact(contactId, req.body);
-    if (!putContact) {
-      throw HttpError(404, "Not found");
-    }
-    res.json({ code: 200, result: putContact });
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:contactId", validateBody(addSchema), ctrl.updateContact);
 
 module.exports = router;
