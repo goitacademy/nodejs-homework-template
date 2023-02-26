@@ -1,10 +1,9 @@
-const contactsOperations = require("../models/contacts");
-const { contactSchema } = require("../schemas");
-const { controllerWrapper } = require("../utils");
-const { HttpError } = require("../utils");
+const ContactLeaveSchema = require("../models/contact");
+const { contactComesSchema, updateFavoriteSchema } = require("../schemas");
+const { controllerWrapper, HttpError } = require("../utils");
 
 const listContacts = async (request, response) => {
-  const contacts = await contactsOperations.listContacts();
+  const contacts = await ContactLeaveSchema.find({}, "-createdAt -updatedAt");
   response.json({
     status: "success",
     code: 200,
@@ -16,25 +15,25 @@ const listContacts = async (request, response) => {
 
 const getContactById = async (request, response) => {
   const { id } = request.params;
-  const result = await contactsOperations.getContactById(id);
-  if (!result) {
+  const contact = await ContactLeaveSchema.findById(id);
+  if (!contact) {
     throw HttpError(404, "Not found");
   }
   response.json({
     status: "success",
     code: 200,
     data: {
-      result,
+      result: contact,
     },
   });
 };
 
 const addContact = async (request, response) => {
-  const { error } = contactSchema.validate(request.body);
+  const { error } = contactComesSchema.validate(request.body);
   if (error) {
     throw HttpError(400, "missing required name field");
   }
-  const result = await contactsOperations.addContact(request.body);
+  const result = await ContactLeaveSchema.create(request.body);
   response.status(201).json({
     status: "success",
     code: 201,
@@ -46,7 +45,7 @@ const addContact = async (request, response) => {
 
 const removeContact = async (request, response) => {
   const { id } = request.params;
-  const result = await contactsOperations.removeContact(id);
+  const result = await ContactLeaveSchema.findByIdAndRemove(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -61,12 +60,35 @@ const removeContact = async (request, response) => {
 };
 
 const updateContact = async (request, response) => {
-  const { error } = contactSchema.validate(request.body);
+  const { error } = contactComesSchema.validate(request.body);
   if (error) {
     throw HttpError(400, "missing fields");
   }
   const { id } = request.params;
-  const result = contactsOperations.updateContact(id, request.body);
+  const result = await ContactLeaveSchema.findByIdAndUpdate(id, request.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  response.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
+
+const updateStatusContact = async (request, response) => {
+  const { error } = updateFavoriteSchema.validate(request.body);
+  if (error) {
+    throw HttpError(400, "missing field favorite");
+  }
+  const { id } = request.params;
+  const result = await ContactLeaveSchema.findByIdAndUpdate(id, request.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -85,4 +107,5 @@ module.exports = {
   addContact: controllerWrapper(addContact),
   removeContact: controllerWrapper(removeContact),
   updateContact: controllerWrapper(updateContact),
+  updateStatusContact: controllerWrapper(updateStatusContact),
 };
