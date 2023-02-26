@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.get('/', ctrl.getList);
 
-router.get('/:contactId', ctrl.getById);
+router.get('/:contactId', isValidId, ctrl.getById);
 
-router.post('/', isValidId, validateBody(newContSchema), ctrl.add);
+router.post('/', validateBody(newContSchema), ctrl.add);
 
 router.delete('/:contactId', isValidId, ctrl.del);
 
