@@ -10,7 +10,7 @@ const { ctrlWrapper } = require('../../routes/api/helpers');
 
 const { validateBody, validateParams } = require('../../middlewares');
 
-const { schemas } = require('../../models/contact');
+const { schemas } = require('../models/contact');
 
 router.get('/', ctrlWrapper(ctrl.listContacts));
 
