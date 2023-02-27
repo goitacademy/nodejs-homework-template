@@ -31,11 +31,14 @@ const sendEmail = async (data) => {
     const transporter = nodemailer.createTransport(nodemailerConfig);
 
     const email = { ...data, from: 'antifishka.zp@meta.ua' };
-        
-    await transporter
-        .sendMail(email)
-        .then(() => console.log("Email send success"))
-        .catch(err => console.log(err.message));
+    console.log(email);
+
+    try {
+        await transporter.sendMail(email);
+        console.log("Email send success");
+    } catch (error) {
+        console.log(error.message)
+    }
 };  
 
 module.exports = sendEmail;
