@@ -1,21 +1,45 @@
+// const express = require("express");
+
+// const router = express.Router();
+
+// const { contactsController } = require("../../controllers");
+
+// const { isValidId } = require("../../middlewares");
+
+// router.get("/", contactsController.listContacts);
+
+// router.get("/:id", isValidId, contactsController.getContactById);
+
+// router.post("/", contactsController.addContact);
+
+// router.delete("/:id", isValidId, contactsController.removeContact);
+
+// router.put("/:id", isValidId, contactsController.updateContact);
+
+// router.patch("/:id/favorite", isValidId, contactsController.updateStatusContact);
+
+// module.exports = router;
+
+///////////////////////////////////
+
 const express = require("express");
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-const controllers = require("../../controllers/contacts");
+const { contactsController } = require("../../controllers");
 
 const { isValidId } = require("../../middlewares");
 
-router.get("/", controllers.listContacts);
+contactsRouter.get("/", contactsController.listContacts);
 
-router.get("/:id", isValidId, controllers.getContactById);
+contactsRouter.get("/:id", isValidId, contactsController.getContactById);
 
-router.post("/", controllers.addContact);
+contactsRouter.post("/", contactsController.addContact);
 
-router.delete("/:id", isValidId, controllers.removeContact);
+contactsRouter.delete("/:id", isValidId, contactsController.removeContact);
 
-router.put("/:id", isValidId, controllers.updateContact);
+contactsRouter.put("/:id", isValidId, contactsController.updateContact);
 
-router.patch("/:id/favorite", isValidId, controllers.updateStatusContact);
+contactsRouter.patch("/:id/favorite", isValidId, contactsController.updateStatusContact);
 
-module.exports = router;
+module.exports = contactsRouter;
