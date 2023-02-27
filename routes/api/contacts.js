@@ -17,7 +17,7 @@ const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email({
     minDomainSegments: 2,
-    tlds: { allow: ["com", "net", "org", "co.uk", ".ca"] },
+    tlds: { allow: ["com", "net", "org"] },
   }),
   phone: Joi.string(),
 });
@@ -56,24 +56,17 @@ router.get("/api/contacts/:id", async (req, res, next) => {
 
 router.post("/api/contacts", async (req, res, next) => {
   const { name, email, phone } = req.body;
-  if (name && email && phone) {
-    try {
-      const value = await schema.validateAsync({ name, email, phone });
-      const contacts = await addContact(value);
-      res.json({
-        status: 201,
-        data: {
-          contacts,
-        },
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  } else {
+  try {
+    const value = await schema.validateAsync({ name, email, phone });
+    const contacts = await addContact(value);
     res.json({
-      status: 400,
-      message: "missing required name field",
+      status: 200,
+      data: {
+        contacts,
+      },
     });
+  } catch (error) {
+    console.log(error.message);
   }
 });
 
