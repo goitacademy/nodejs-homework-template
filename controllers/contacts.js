@@ -13,17 +13,40 @@ const listContacts = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
 
-  const result = await Contact.find({ owner: _id }, "", {
+  // якщо реалізовувати тільки фільтр улюблених контактів, то
+  // const query = req.query.favorite ? { owner: _id, favorite: true } : { owner: _id };
+
+  // якщо я вас правильно зрозуміла на рахунок фільтрації ще й для name та phone, то зробила switch-case
+  const query = req.query;
+  switch ({ query }) {
+    case "favorite":
+      {
+        owner: _id, (favorite = true);
+      }
+      break;
+    case "name":
+      {
+        owner: _id, (name = req.query.name);
+      }
+      break;
+    case "phone":
+      {
+        owner: _id, (phone = req.query.phone);
+      }
+      break;
+    default:
+      {
+        owner: _id;
+      }
+      break;
+  }
+
+  const result = await Contact.find(query, "", {
     skip,
     limit: Number(limit),
-  }).populate("owner", "_id email subscription");
-  if (req.query.favorite) {
-    const favoriteContacts = await Contact.find({ owner: _id, favorite: true });
-    // const favoriteContacts = result.filter(
-    //   (contact) => true === contact.favorite
-    // );
-    return res.status(200).json(favoriteContacts);
-  }
+  })
+    .sort("name")
+    .populate("owner", "_id email subscription");
   return res.status(200).json(result);
 };
 

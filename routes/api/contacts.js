@@ -12,10 +12,10 @@ const {
 } = require("../../controllers");
 
 router.get("/", getCurrent, listContacts);
-router.get("/:contactId", getById);
+router.get("/:contactId", getCurrent, getById);
 router.post("/", getCurrent, addContact);
-router.delete("/:contactId", removeContact);
-router.put("/:contactId", updateContact);
-router.patch("/:contactId/favorite", updateStatusContact);
+router.delete("/:contactId", getCurrent, removeContact);
+router.put("/:contactId", getCurrent, updateContact);
+router.patch("/:contactId/favorite", getCurrent, updateStatusContact);
 
 module.exports = { contactsRouter: router };
