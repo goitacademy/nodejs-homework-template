@@ -4,16 +4,16 @@ const {Contact} = require("../models/contact")
 const {HttpError, ctrlWrapper} = require("../helpers");
 
 const getAll = async (req, res) => {
-      const result = await Contact.find({}, "name");
-      // const result = await Contact.find();
+      // const result = await Contact.find({}, "name");
+      const result = await Contact.find();
+      // console.log(result);
       res.json(result);
-      console.log(result);
   }
   
 
 const getById = async (req, res) => {
      const {contactId} = req.params;
-    //  const result = await Contact.findOne({_contactId:contactId})
+    //  const result = await Contact.findOne({_id: contactId})
     const result = await Contact.findById(contactId)
 
      if (!result) {   
