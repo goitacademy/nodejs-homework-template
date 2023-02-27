@@ -1,17 +1,24 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-const DB_HOST =
-  "mongodb+srv://oleksii:<password>@cluster0.iexrtqk.mongodb.net/?retryWrites=true&w=majority";
+dotenv.config();
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connection successful"))
-  .catch((err) => {
-    console.log(err);
-  });
+// const { DB_HOST } = process.env
+
+
+
+// mongoose.set("strictQuery", false);
+
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => console.log("Database connection successful"))
+//   .catch((err) => {
+//     console.log(err);
+//     process.exit(1);
+//   });
 
 const contactsRouter = require("./routes/api/contacts");
 

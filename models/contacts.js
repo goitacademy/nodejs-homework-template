@@ -53,3 +53,46 @@ module.exports = {
   addContact,
   updateContact,
 };
+
+// const { Schema, model } = require("mongoose");
+// const Joi = require("joi");
+
+// const contactSchema = new Schema({
+//   name: {
+//     type: String,
+//     required: [true, "Set name for contact"],
+//   },
+//   email: {
+//     type: String,
+//   },
+//   phone: {
+//     type: String,
+//   },
+//   favorite: {
+//     type: Boolean,
+//     default: false,
+//   },
+// });
+
+// contactSchema.post("save", function (error, doc, next) {
+//   if (error.name === "MongoError" && error.code === 11000) {
+//     next(new Error("Contact already exists"));
+//   } else {
+//     next(error);
+//   }
+// });
+
+// const Contact = model("Contact", contactSchema);
+
+// const addSchema = Joi.object({
+//   name: Joi.string().alphanum().min(3).max(30).required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().min(3).max(30).required(),
+//   favorite: Joi.boolean(),
+// });
+
+// const schemas = {
+//   addSchema,
+// };
+
+// module.exports = { Contact, schemas };
