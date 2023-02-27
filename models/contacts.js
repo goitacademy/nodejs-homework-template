@@ -1,4 +1,4 @@
-const {Contacts} = require('../db/contactsModel')
+const {Contacts} = require('../db/contactsModel');
 
 const listContacts = async () => {
     try {
@@ -40,7 +40,7 @@ const removeContact = async (contactId) => {
 
 const updateContact = async (contactId, body) => {
     try {
-        return  Contacts.update({_id: contactId}, body);
+        return Contacts.updateOne({_id: contactId}, body);
     } catch (err) {
         return err;
     }
@@ -48,7 +48,7 @@ const updateContact = async (contactId, body) => {
 
 const updateFavorite = async (contactId, body) => {
     try {
-        return Contacts.update({_id: contactId}, body);
+        return Contacts.updateOne({_id: contactId}, body);
     } catch (err) {
         return err;
     }
@@ -63,5 +63,3 @@ module.exports = {
     updateContact,
     updateFavorite,
 }
-
-// todo: delete contacts.json.bak

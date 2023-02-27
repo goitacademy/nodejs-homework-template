@@ -3,5 +3,3 @@ node_modules/
 .idea
 .idea.*
 rest-api_requests.http
-models/contacts.json.bak
-

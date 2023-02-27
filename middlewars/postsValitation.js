@@ -31,7 +31,6 @@ module.exports = {
         if (validationResult.error) {
             return res.status(400).json({status: validationResult.error.details[0].message})
         }
-
         next();
     },
     updatePostValidation: (req, res, next) => {
