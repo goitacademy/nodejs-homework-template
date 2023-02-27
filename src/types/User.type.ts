@@ -12,4 +12,6 @@ export type UserType = {
   avatarURL?: String;
   subscription?: ESubscription;
   token?: string;
+  verify?: boolean;
+  verificationToken?: string;
 };

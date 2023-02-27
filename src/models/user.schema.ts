@@ -29,6 +29,14 @@ const schema = new Schema<UserType, UserModelType, UserMethodsType>(
       default: ESubscription.Starter,
     },
     token: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
   },
   { timestamps: true }
 );

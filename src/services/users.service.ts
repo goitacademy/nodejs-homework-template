@@ -9,6 +9,12 @@ export const getUserByEmail = async (email: string) => {
   return user;
 };
 
+export const getUserByVerificationToken = async (verificationToken: string) => {
+  const user = await UserModel.findOne({ verificationToken }).select({ __v: 0 });
+
+  return user;
+};
+
 export const getUserById = async (id: string): Promise<UserType | null> => {
   const user = await UserModel.findById(id).select({ email: 1, subscription: 1, token: 1 });
 
@@ -37,7 +43,7 @@ export const loginService = async (candidate: UserType) => {
     email,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
-  await user.update({ token });
+  await user.updateOne({ token });
 
   return { token, user: { email, subscription, avatarURL } };
 };
