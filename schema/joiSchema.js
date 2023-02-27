@@ -1,11 +1,30 @@
 const Joi = require('joi');
 
-const schema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  phone: Joi.string().min(3).max(30).required(),
-  email: Joi.string().min(3).max(30).required(),
-});
+// module.exports = {
+//   addPostValidation: (req, res, next) => {
+    
 
-module.exports = {
-  schema,
-};
+//     const schema = Joi.object({
+//       name: Joi.string(),
+//       phone: Joi.string(),
+//       email: Joi.string()
+//     });
+
+//     const validationResult = schema.validate(req.boby)
+//     if (validationResult.error) {
+//       return res.status(400).json({status:validationResult.error.details})
+//     }
+
+//   }
+// }
+
+
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      phone: Joi.string(),
+      email: Joi.string(),
+      favorite: Joi.boolean(),
+    });
+
+    
+module.exports = { schema }

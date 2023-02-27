@@ -1,50 +1,37 @@
-const {Contact} = require('../db/collections')
+const { Contact } = require("../db/collections");
 
-// const fs = require("fs").promises;
-// const path = require("path");
-// const { v4: uuidv4 } = require("uuid");
-
-// const contactsPath = path.resolve("models", "contacts.json");
-
-async function listContacts() {
+async function getContacts() {
   const contacts = await Contact.find({});
   return contacts;
 }
 
-async function getContactById(contactId) {
-  const contacts = await listContacts();
-  const contactFilter = contacts.filter((contact) => contact.id === contactId);
-  return contactFilter;
-}
+const getContactById = async (contactId) => {
+  const contactById = await Contact.findById({ _id: contactId });
+  return contactById;
+};
 
 async function removeContact(contactId) {
-  const contacts = await listContacts();
-  const contactFilter = contacts.filter((contact) => contact.id !== contactId);
-  await fs.writeFile(contactsPath, JSON.stringify(contactFilter, null, 4));
-  return contactFilter;
+  const deletedContact = await Contact.deleteOne({ _id: contactId });
+  return deletedContact;
 }
 
-async function addContact({ name, email, phone }) {
-  const newContact = { id: uuidv4(), name, email, phone };
-  const contacts = await listContacts();
-  const contactsAdd = [...contacts, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(contactsAdd, null, 4));
+async function addContact({ name, email, phone, favorite }) {
+  const newContact = await new Contact({ name, email, phone, favorite });
+  await newContact.save();
   return newContact;
 }
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  contacts[index] = { ...contacts[index], name, email, phone };
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
+const updateContact = async (contactId, { name, email, phone, favorite }) => {
+  const contactsUpdate = await Contact.updateOne(
+    { _id: contactId },
+    { name, email, phone, favorite },
+    { new: true }
+  );
+  return contactsUpdate;
 };
 
 module.exports = {
-  listContacts,
+  getContacts,
   getContactById,
   removeContact,
   addContact,
