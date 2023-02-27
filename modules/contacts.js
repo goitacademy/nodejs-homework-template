@@ -36,10 +36,11 @@ const removeContact = async (contactId) => {
     const contacts = JSON.parse(json);
     const index = contacts.findIndex((contact) => contact.id === contactId);
     if (index >= 0) {
+      const removedContact = contacts[index];
       contacts.splice(index, 1);
       await fs.writeFile(contactsPath, JSON.stringify(contacts));
-      return true;
-    } else return false;
+      return removedContact;
+    }
   } catch (error) {
     return error;
   }
@@ -51,11 +52,8 @@ const addContact = async (body) => {
     let existingContact = false;
     const json = await fs.readFile(contactsPath, "utf8");
     const contacts = JSON.parse(json);
-    for (const contact of contacts) {
-      if (contact.email === email) {
-        existingContact = true;
-        return false;
-      }
+    if (contacts.find((contact) => contact.email === email)) {
+      existingContact = true;
     }
 
     if (!existingContact) {
@@ -71,22 +69,14 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const { name, email, phone } = body;
   try {
     const json = await fs.readFile(contactsPath, "utf8");
     const contacts = JSON.parse(json);
     const index = contacts.findIndex((contact) => contact.id === contactId);
     if (index >= 0) {
-      const upgradeContact = {
-        id: contactId,
-        name: name || contacts[index].name,
-        email: email || contacts[index].email,
-        phone: phone || contacts[index].phone,
-      };
-      contacts.splice(index, 1);
-      contacts.push(upgradeContact);
+      contacts[index] = { ...contacts[index], ...body };
       await fs.writeFile(contactsPath, JSON.stringify(contacts));
-      return upgradeContact;
+      return contacts[index];
     } else return false;
   } catch (error) {}
 };

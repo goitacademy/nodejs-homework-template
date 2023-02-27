@@ -1,5 +1,4 @@
 const express = require("express");
-const Joi = require("joi");
 const {
   listContacts,
   getContactById,
@@ -7,25 +6,7 @@ const {
   removeContact,
   updateContact,
 } = require("../../modules/contacts");
-
-const postSchema = Joi.object({
-  name: Joi.string().alphanum().min(5).max(16).required(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    })
-    .required(),
-  phone: Joi.string().pattern(/^[0-9]+$/, { name: "numbers" }),
-});
-const putSchema = Joi.object({
-  name: Joi.string().alphanum().min(5).max(16),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-  phone: Joi.string().pattern(/^[0-9]+$/, { name: "numbers" }),
-});
+const { postSchema, putSchema } = require("./validate");
 
 const router = express.Router();
 
