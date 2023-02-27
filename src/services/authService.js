@@ -9,8 +9,9 @@ const { User } = require('../db/userModel');
 const { RegistrationConflictError, NotAuthorizedError, NotFoundError } = require('../helpers/errors');
 const sendEmail = require('../helpers/sendEmail');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
-const { BASE_URL } = process.env;
+const { BASE_URL, META_PASSWORD } = process.env;
 
 const signup = async (email, password, subscription, avatarURL) => {
     const user = await User.findOne({ email });
@@ -29,11 +30,29 @@ const signup = async (email, password, subscription, avatarURL) => {
         verificationToken,
     });
 
-    await sendEmail({
+    const nodemailerConfig = {
+        host: "smtp.meta.ua",
+        port: 465, // 25, 465 и 2255
+        secure: true,
+        auth: {
+            user: "antifishka.zp@meta.ua",
+            pass: META_PASSWORD
+        }
+    }
+
+    const transporter = nodemailer.createTransport(nodemailerConfig);
+
+    const emailOptions = {
+        from: 'antifishka.zp@meta.ua',
         to: email,
         subject: 'Mail confirmation',
         html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">Please, confirm your email address</a>`,
-    });
+    };
+
+    transporter
+        .sendMail(emailOptions)
+        .then(() => console.log("Email send success"))
+        .catch(err => console.log(err));
     
     return newUser;
 };
