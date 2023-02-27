@@ -1,4 +1,3 @@
-
 const fs = require("fs").promises;
 const path = require("path");
 const shortid = require("shortid");
@@ -28,24 +27,16 @@ async function getById(contactId) {
   }
 }
 
-async function removeContact(contactId) {
-  try {
-    const data = await listContacts();
-    const deletedContact = data.find(({ id }) => id !== contactId);
-    const filteredContacts = data.filter(({ id }) => id !== contactId);
-
-    if (!deletedContact) {
-      return;
-    }
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(filteredContacts, null, 2),
-      "utf8"
-    );
-    return deletedContact;
-  } catch (error) {
-    return console.error(error.message);
+async function removeContact(id) {
+  const data = await listContacts();
+  const index = data.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
   }
+
+  const [result] = data.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+  return result;
 }
 
 async function addContact(newData) {
