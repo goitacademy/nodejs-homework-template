@@ -1,15 +1,14 @@
-const { updateContact } = require("../services");
-
+const { updateStatusContact } = require("../services");
 const { isEmpty } = require("../helpers");
 const contactValidation = require("../middlewares");
 
-const updateContactController = async (req, res) => {
+const updateStatusContactController = async (req, res) => {
   const { contactId: id } = req.params;
   const { error } = contactValidation.validate(req.body);
-
+  
   if (isEmpty(req.body)) {
     return res.status(400).json({
-      message: "missing fields",
+      message: "missing field favorite",
     });
   }
 
@@ -17,13 +16,14 @@ const updateContactController = async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const updatedContact = await updateContact(id, req.body);
-  if (!updatedContact) {
+  const updateStatus = await updateStatusContact(id, req.body);
+
+  if (!updateStatus) {
     return res.status(404).json({
       message: "Not found",
     });
   }
-  return res.status(200).json(updatedContact);
+  return res.status(200).json(updateStatus);
 };
 
-module.exports = updateContactController;
+module.exports = updateStatusContactController;

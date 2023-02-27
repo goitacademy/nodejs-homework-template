@@ -8,7 +8,7 @@ const contactValidation = Joi.object({
       "string.pattern.base":
         "The name should consist of a first and a last name",
     }),
-    
+
   email: Joi.string()
     .email()
     .trim()
@@ -21,6 +21,8 @@ const contactValidation = Joi.object({
       "string.pattern.base":
         "The phone number should contain a country code and a number: (xxx) xxx-xxx",
     }),
+
+  favorite: Joi.boolean(),
 });
 
 module.exports = contactValidation;
