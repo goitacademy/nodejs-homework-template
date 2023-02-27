@@ -29,3 +29,8 @@
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+
+Пароль для подключения в MongoDB Compass:
+1q5NEWjVDTmudviD
+
+mongodb+srv://Myroslava_V:1q5NEWjVDTmudviD@cluster0.p12h427.mongodb.net/test
