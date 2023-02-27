@@ -9,9 +9,13 @@ const updateStatusContact = async (req, res, next) => {
     }
 
     const { contactId } = req.params;
-    const result = await modelContact.Contact.findByIdAndUpdate(contactId, req.body, {
-      new: true,
-    });
+    const result = await modelContact.Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!result) {
       throw createError(404, `Not found ${contactId}`);
     }
