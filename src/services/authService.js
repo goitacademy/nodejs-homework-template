@@ -6,12 +6,11 @@ const fs = require("fs/promises");
 const Jimp = require("jimp");
 const { v4: uuidv4 } = require('uuid');
 const { User } = require('../db/userModel');
-const { RegistrationConflictError, NotAuthorizedError, NotFoundError } = require('../helpers/errors');
-const sendEmail = require('../helpers/sendEmail');
+const { RegistrationConflictError, NotAuthorizedError, NotFoundError, Nodejs55Error } = require('../helpers/errors');
+const { sendEmail } = require('../helpers/sendEmail');
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 
-const { BASE_URL, META_PASSWORD } = process.env;
+const { BASE_URL } = process.env;
 
 const signup = async (email, password, subscription, avatarURL) => {
     const user = await User.findOne({ email });
@@ -20,7 +19,7 @@ const signup = async (email, password, subscription, avatarURL) => {
         throw new RegistrationConflictError("Email in use");
     };
 
-    const verificationToken = uuidv4();
+    const verificationToken = uuidv4(5);
 
     const newUser = await User.create({
         email,
@@ -29,30 +28,12 @@ const signup = async (email, password, subscription, avatarURL) => {
         avatarURL: gravatar.url(email),
         verificationToken,
     });
-
-    const nodemailerConfig = {
-        host: "smtp.meta.ua",
-        port: 465, // 25, 465 и 2255
-        secure: true,
-        auth: {
-            user: "antifishka.zp@meta.ua",
-            pass: META_PASSWORD
-        }
-    }
-
-    const transporter = nodemailer.createTransport(nodemailerConfig);
-
-    const emailOptions = {
-        from: 'antifishka.zp@meta.ua',
+    
+    await sendEmail({
         to: email,
         subject: 'Mail confirmation',
         html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">Please, confirm your email address</a>`,
-    };
-
-    transporter
-        .sendMail(emailOptions)
-        .then(() => console.log("Email send success"))
-        .catch(err => console.log(err));
+    });
     
     return newUser;
 };
@@ -71,26 +52,22 @@ const verifyEmail = async (verificationToken) => {
     await sendEmail({
         to: user.email,
         subject: 'Thank you for verification your email!',
-        html: `<p>Verification successful!</p>`,
+        html: `<p>Verification was successful!</p>`,
     });
 };
 
-const resendEmail = async (verificationToken) => {
-    // const user = await User.findOne({ verificationToken });
+const resendEmail = async (email) => {
+    const user = await User.findOne({ email, verify: false });
     
-    // if (!user) {
-    //     throw new NotFoundError('User not found');
-    // };
+    if (!user) {
+        throw new Nodejs55Error('Verification has already been passed');
+    };
 
-    // await User.findByIdAndUpdate( user._id,
-    //     { verificationToken: null, verify: true } 
-    // );
-
-    // await sendEmail({
-    //     to: user.email,
-    //     subject: 'Thank you for verification your email!',
-    //     html: `<p>Verification successful!</p>`,
-    // });
+    await sendEmail({
+        to: user.email,
+        subject: 'Mail confirmation',
+        html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${user.verificationToken}">Please, confirm your email address</a>`,
+    });
 };
 
 const login = async (email, password, subscription) => {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const {
     userPostValidation,
+    userVerifyValidation,
     userPatchValidation,
     authMiddleware,
     avatarMiddleware } = require('../../middlewares');
@@ -18,7 +19,7 @@ const {
 
 router.post('/users/signup', userPostValidation, asyncWrapper(ctrlSignup));
 router.get('/users/verify/:verificationToken', asyncWrapper(ctrlVerification));
-router.post('/users/verify', asyncWrapper(ctrlReVerification));
+router.post('/users/verify', userVerifyValidation, asyncWrapper(ctrlReVerification));
 router.post('/users/login', userPostValidation, asyncWrapper(ctrlLogin));
 router.get('/users/logout', authMiddleware, asyncWrapper(ctrlLogout));
 router.get('/users/current', authMiddleware, asyncWrapper(ctrlCurrent));

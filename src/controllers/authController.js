@@ -1,7 +1,7 @@
 const {
     signup, 
     verifyEmail,
-    // resendEmail,
+    resendEmail,
     login,
     logout,
     updateSubscription,
@@ -25,11 +25,11 @@ const ctrlVerification  = async (req, res) => {
 };
 
 const ctrlReVerification  = async (req, res) => { 
-    // const { verificationToken } = req.params;
+    const { email } = req.body;
     
-    // await resendEmail(verificationToken);
+    await resendEmail(email);
 
-    // res.status(200).json({ message: 'Verification successful' });
+    res.status(200).json({ message: 'Verification email sent' });
 };
 
 const ctrlLogin = async (req, res) => { 

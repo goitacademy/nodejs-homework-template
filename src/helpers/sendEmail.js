@@ -12,7 +12,7 @@
 
 // module.exports = sendEmail;
 
-// Nodemailer service
+// Nodemailer with meta.ua service
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
@@ -24,16 +24,14 @@ const sendEmail = async (data) => {
         port: 465, // 25, 465 и 2255
         secure: true,
         auth: {
-            user: "antifishka.zp@meta.ua",
+            user: "antifishka.goit@meta.ua",
             pass: META_PASSWORD
         }
     }
-    console.log("nodemailerConfig", nodemailerConfig);
 
     const transporter = nodemailer.createTransport(nodemailerConfig);
 
-    const email = { ...data, from: 'antifishka.zp@meta.ua' };
-    console.log("email", email);
+    const email = { ...data, from: "antifishka.goit@meta.ua" };
 
     try {
         await transporter.sendMail(email);
@@ -43,7 +41,9 @@ const sendEmail = async (data) => {
     }
 };  
 
-module.exports = sendEmail;
+module.exports = {
+    sendEmail,
+}
 
 
 
