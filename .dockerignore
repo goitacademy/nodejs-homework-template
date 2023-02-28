@@ -1,0 +1,5 @@
+node_modules
+.vscode
+__test__
+.env
+jest.*
