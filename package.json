@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production ts-node ./src/server.ts",
     "start:dev": "cross-env NODE_ENV=development nodemon",
+    "start:prod": "cross-env NODE_ENV=production NODE_PATH=./src ts-node ./dist/src/server.js",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "test": "jest"
