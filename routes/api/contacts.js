@@ -1,25 +1,21 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const ctrl = require('../../controllers/');
+const mdd = require('../../middlewares/');
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', mdd.auth, mdd.params, ctrl.getAllContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', mdd.auth, mdd.id, ctrl.getContactById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', mdd.auth, mdd.contactBody, ctrl.addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', mdd.auth, mdd.id, ctrl.deleteContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', mdd.auth, mdd.id, mdd.contactBody, ctrl.updateContact);
 
-module.exports = router
+router.patch('/:contactId/favorite', mdd.auth, mdd.id, mdd.favorite, ctrl.favoriteUpdate);
+
+router.patch('/:id/favorite', ctrl.favoriteUpdate);
+
+module.exports = router;
