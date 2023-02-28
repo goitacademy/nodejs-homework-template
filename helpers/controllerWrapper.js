@@ -1,12 +1,12 @@
 const controllerWrapper = (controller) => {
-    const func = async (res, req, next) => {
-      try {
-        await controller(res, req, next);
-      } catch (error) {
-        next(error);
-      }
-    };
-    return func;
+  const func = async (res, req, next) => {
+    try {
+      await controller(res, req, next);
+    } catch (error) {
+      next(error);
+    }
   };
-  
-  module.exports = controllerWrapper;
+  return func;
+};
+
+module.exports = controllerWrapper;
