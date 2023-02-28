@@ -1,16 +1,17 @@
 const getCurrent = (req, res) => {
-    const { email, subscription } = req.user;
-  
-    res.status(200).json({
-      status: "Ok",
-      code: 200,
-      data: {
-        user: {
-          email,
-          subscription,
-        },
+  const { email, subscription, avatarURL } = req.user;
+
+  res.status(200).json({
+    status: "Ok",
+    code: 200,
+    data: {
+      user: {
+        email,
+        subscription,
+        avatarURL,
       },
-    });
-  };
-  
-  module.exports = getCurrent;
+    },
+  });
+};
+
+module.exports = getCurrent;
