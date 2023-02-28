@@ -3,13 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "npx tsc",
     "start": "cross-env NODE_ENV=production ts-node ./src/server.ts",
     "start:dev": "cross-env NODE_ENV=development nodemon",
+    "start:prod": "cross-env NODE_ENV=production NODE_PATH=./dist/src node ./dist/src/server.js",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "test": "jest"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
