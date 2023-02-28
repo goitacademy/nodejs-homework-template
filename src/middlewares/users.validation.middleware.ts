@@ -8,6 +8,10 @@ const authSchema = joi.object({
   password: validationFields.password.required(),
 });
 
+const emailSchema = joi.object({
+  email: validationFields.email.required(),
+});
+
 const subscriptionSchema = joi.object({
   subscription: validationFields.subscription.required(),
 });
@@ -24,6 +28,16 @@ export const authValidation = (req: Request, _res: Response, next: NextFunction)
 
 export const subscriptionValidation = (req: Request, _res: Response, next: NextFunction): any => {
   const validationResult = subscriptionSchema.validate(req.body);
+
+  if (validationResult.error) {
+    throw new ValidationError(validationResult.error.message);
+  }
+
+  next();
+};
+
+export const emailValidation = (req: Request, _res: Response, next: NextFunction): any => {
+  const validationResult = emailSchema.validate(req.body);
 
   if (validationResult.error) {
     throw new ValidationError(validationResult.error.message);

@@ -37,6 +37,10 @@ export const loginService = async (candidate: UserType) => {
     throw new UnAuthorizedError('Email or password is wrong');
   }
 
+  if (!user.verify) {
+    throw new UnAuthorizedError('Please, verify your email');
+  }
+
   const { email, subscription, avatarURL, _id } = user;
   const payload = {
     _id,

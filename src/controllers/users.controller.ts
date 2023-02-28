@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import crypto from 'crypto';
 import gavatar from 'gravatar';
@@ -16,7 +17,23 @@ import {
 import { IRequest } from 'types/Request.interface';
 import { removeFile, resizeImageService } from 'services/file.service';
 
+dotenv.config();
 sgMail.setApiKey(process.env.MAIL_API_KEY!);
+
+const sendVerificationMail = async (email: string, verificationToken: string) => {
+  try {
+    const msg = {
+      to: email,
+      from: 'dev.andrii.zaimak@ukr.net',
+      subject: 'Thank you for registration!',
+      text: `Please, confirm your email address  http://localhost:3000/api/users/verify/${verificationToken}`,
+      html: `Please, confirm your email address  http://localhost:3000/api/users/verify/${verificationToken}`,
+    };
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error((error as sgMail.ResponseError).response.body);
+  }
+};
 
 export const registerController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -26,25 +43,11 @@ export const registerController = async (req: Request, res: Response) => {
     throw new DatabaseError('Email is already in use');
   }
 
-  const avatarURL = gavatar.url(email);
+  const avatarURL = 'https:' + gavatar.url(email);
   const verificationToken = crypto.randomUUID();
   const user = await registerService({ email, password, avatarURL, verificationToken });
-  // TODO: send mail
-  const msg = {
-    to: 'dev.andrii.zaimak@gmail.com', // Change to your recipient
-    from: 'goit.dev.test.user@gmail.com', // Change to your verified sender
-    subject: 'Sending with SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-  };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log('Email sent');
-    })
-    .catch((error) => {
-      console.error(error.response.body);
-    });
+
+  await sendVerificationMail(email, verificationToken);
 
   res.status(201).json(responseData({ user }, 201));
 };
@@ -82,7 +85,7 @@ export const updateUserAvatarController = async (req: IRequest, res: Response) =
 };
 
 export const verifyController = async (req: IRequest, res: Response) => {
-  const { verificationToken } = req.query;
+  const { verificationToken } = req.params;
   const user = await getUserByVerificationToken(verificationToken as string);
 
   if (!user) {
@@ -107,8 +110,9 @@ export const sendVerifyMailController = async (req: IRequest, res: Response) => 
     throw new ValidationError('Verification has already been passed');
   }
 
-  // TODO: Send mail
-  await user.updateOne({ verificationToken: crypto.randomUUID() });
+  const verificationToken = crypto.randomUUID();
+  await user.updateOne({ verificationToken });
+  sendVerificationMail(user.email, verificationToken);
 
   res.status(200).json(responseData({ message: `Verification email sent` }, 200));
 };
