@@ -1,7 +1,6 @@
 const app = require("./app");
 require("dotenv").config();
-const connectMongo = require("./db/connection");
-
+const { connectMongo } = require("./db/contacts");
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
