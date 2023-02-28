@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
   }
 
   const { subscription, _id } = user;
-  const token = jwt.sign({ id: user._id }, process.env.SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.SECRET, { expiresIn: "200h"});
   await User.findByIdAndUpdate(_id, { token });
 
   res.status(200).send({
