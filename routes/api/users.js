@@ -11,5 +11,5 @@ router.post(
   validation(joiRegisterSchema),
   ctrlWrapper(ctrl.register)
 );
-
+router.post("/login", validation(joiRegisterSchema), ctrlWrapper(ctrl.login));
 module.exports = router;
