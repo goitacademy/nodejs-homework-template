@@ -1,25 +1,36 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
+const {
+  joiSchema,
+  joiSchemaUpdate,
+  joiSchemaFavorite,
+} = require("../../models/contact");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { auth, validation, ctrlWrapper } = require("../../middlewares");
+const { contact: ctrl } = require("../../controllers");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Показати всі контакти
+router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Знайти контакт по id
+router.get("/:id", auth, ctrlWrapper(ctrl.getById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Додавання нового контакту
+router.post("/", auth, validation(joiSchema), ctrlWrapper(ctrl.add));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Видалення контакту
+router.delete("/:id", auth, ctrlWrapper(ctrl.removeContact));
 
-module.exports = router
+// Зміна значення поля по id
+router.put("/:id", auth, validation(joiSchemaUpdate), ctrlWrapper(ctrl.change));
+
+// Зміна значення одного поля
+router.patch(
+  "/:id/favorite",
+  auth,
+  validation(joiSchemaFavorite),
+  ctrlWrapper(ctrl.changeOneProp)
+);
+
+module.exports = router;
