@@ -14,24 +14,21 @@ const listContacts = async (req, res) => {
   const skip = (page - 1) * limit;
 
   // якщо реалізовувати тільки фільтр улюблених контактів, то
-  // const query = req.query.favorite ? { owner: _id, favorite: true } : { owner: _id };
+  // const query = req.query.favorite
+  //   ? { owner: _id, favorite: true }
+  //   : { owner: _id };
 
-  // якщо я вас правильно зрозуміла на рахунок фільтрації ще й для name та phone, то зробила switch-case
   const query = req.query;
   switch ({ query }) {
-    case "favorite":
-      {
-        owner: _id, (favorite = true);
-      }
-      break;
-    case "name":
-      {
-        owner: _id, (name = req.query.name);
-      }
-      break;
+    case "favorite": {
+      owner: _id, (favorite = true);
+    }
+    case "name": {
+      owner: _id, ({ name } = req.query);
+    }
     case "phone":
       {
-        owner: _id, (phone = req.query.phone);
+        owner: _id, ({ phone } = req.query);
       }
       break;
     default:
