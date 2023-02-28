@@ -1,13 +1,14 @@
 const { User } = require("../../models");
 const path = require("path");
 const fs = require("fs/promises");
+const { v4: uuidv4 } = require("uuid");
 
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
   const { _id: id } = req.user;
-  const imageName = `${id}_${originalname}`;
+  const imageName = `${id}_${uuidv4()}_${originalname}`;
   try {
     const resultUpload = path.join(avatarDir, imageName);
     await fs.rename(tempUpload, resultUpload);
