@@ -12,7 +12,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api", contactsRouter);
 
 app.use((req, res) => {
   console.log("Not found");
