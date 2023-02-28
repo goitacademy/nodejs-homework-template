@@ -1,6 +1,6 @@
 const messages = {
-  400: "missing fields",
-  404: "Not found",
+  400: 'missing fields',
+  404: 'Not found',
 };
 
 const HttpError = (status, message = [status]) => {

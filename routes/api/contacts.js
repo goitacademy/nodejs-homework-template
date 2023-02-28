@@ -6,11 +6,11 @@ const router = express.Router();
 
 const ctrl = require('../../controllers/contacts');
 
-const { ctrlWrapper } = require('../../routes/api/helpers');
+const { ctrlWrapper } = require('../../routes/api/helpers/index');
 
 const { validateBody, validateParams } = require('../../middlewares');
 
-const { schemas } = require('../models/contact');
+const { schemas } = require('../../models/contact');
 
 router.get('/', ctrlWrapper(ctrl.listContacts));
 
