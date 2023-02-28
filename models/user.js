@@ -6,7 +6,7 @@ const userSchema = Schema(
       type: String,
       required: [true, "Set password for user"],
       minlength: 6,
-      maxlength: 15,
+      // maxlength: 15,
     },
     email: {
       type: String,
