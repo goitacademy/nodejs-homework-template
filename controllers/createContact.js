@@ -1,6 +1,6 @@
 const { addContact } = require("../models/contacts");
 const { schema } = require("../schema/joiSchema");
-const { Contact } = require("../db/collections");
+
 
 const createContact = async (req, res) => {
   try {
@@ -9,9 +9,13 @@ const createContact = async (req, res) => {
     if (error) {
       return res.status(400).json({ message: "Missing required name field" });
     }
+    const { name, email, phone, favorite } = req.body;
+    if (favorite === null) {
+      favorite = 'false'
+    }
 
-    const contact = req.body;
-    const newContact = await addContact(contact);
+    // const contact = req.body;
+    const newContact = await addContact({ name, email, phone, favorite });
 
     res.status(201).json(newContact);
   } catch (error) {
