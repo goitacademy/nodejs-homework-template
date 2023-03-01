@@ -8,13 +8,22 @@ const validation = {
         name: Joi.string().min(3).trim().required(),
         email: Joi.string().trim().required(),
         phone: Joi.string().pattern(NUMBER_REGEXP, {name: "valid phone number"}).pattern(NUMBERS_ONLY_REGEXP, {name: "numbers and special symbols"}).trim().required(),
+        favorite: Joi.bool(),
     }),
 
     updateSchema: Joi.object({
         name: Joi.string().min(3).trim(),
         email: Joi.string().email().trim(),
-        phone: Joi.string().pattern(NUMBER_REGEXP, {name: "valid phone number"}).pattern(NUMBERS_ONLY_REGEXP, {name: "numbers and special symbols"}).trim(),
-}).min(1),
+        phone: Joi
+            .string()
+            .pattern(NUMBER_REGEXP, {name: "valid phone number"})
+            .pattern(NUMBERS_ONLY_REGEXP, {name: "numbers and special symbols"}).trim(),
+        favorite: Joi.bool(),
+    }).min(1),
+    
+    updateFavorite: Joi.object({
+        favorite: Joi.bool().required(),
+    }),
 };
 
 module.exports = validation;

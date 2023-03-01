@@ -1,14 +1,14 @@
-const { listContacts, getContactById, addContactToList, updateContactById, removeContactById } = require('../models/contacts.js');
 const HttpError = require('../utils/http-error');
-const controllerWrap = require("../utils/controller-wrap")
+const controllerWrap = require("../utils/controller-wrap");
+const Contact = require('../models/contact');
 
 const getContactsList = async (req, res) => {
-    res.json(await listContacts());
+    res.json(await Contact.find());
 }
 
 const getContact = async (req, res) => {
     const {contactId} = req.params;
-    const result = await getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if(!result) {
         throw HttpError({status: 404, message: "Not found"});
     }
@@ -16,14 +16,14 @@ const getContact = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-    const result = await addContactToList(req.body);
+    const result = await Contact.create(req.body);
 
     res.status(201).json(result);
 }
 
 const deleteContact = async (req, res) => {
     const {contactId} = req.params;
-    const result = await removeContactById(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       throw HttpError({status: 404, message: "Not found"});
     }
@@ -32,16 +32,28 @@ const deleteContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
     const {contactId} = req.params;
-    const result = await updateContactById(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) {
       throw HttpError({status: 404, message: "Not found"});
     }
     res.json(result);
 }
 
+const updateFavorite = async (req, res) => {
+    const {contactId} = req.params;
+    console.log(contactId);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    if (!result) {
+      throw HttpError({status: 404, message: "Not found"});
+    }
+    res.json(result);
+};
+
 module.exports = {
     getContactsList: controllerWrap(getContactsList), 
     getContact: controllerWrap(getContact), 
     addContact: controllerWrap(addContact), 
     updateContact: controllerWrap(updateContact), 
-    deleteContact: controllerWrap(deleteContact)};
+    deleteContact: controllerWrap(deleteContact),
+    updateFavorite: controllerWrap(updateFavorite),
+};
