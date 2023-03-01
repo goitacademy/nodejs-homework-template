@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 const emailRegExp = require('../helpers/regExp/email');
 const bcrypt = require('bcrypt');
 const { handleMongooseError } = require('../helpers');
-
+const gravatar = require('gravatar');
 const userModel = Schema(
   {
     password: {
@@ -20,6 +20,9 @@ const userModel = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
+    avatarUrl: {
+      type: String,
+    },
     token: String,
   },
   {
@@ -34,6 +37,13 @@ userModel.methods.setPassword = function (password) {
 };
 userModel.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
+};
+userModel.methods.createDefaultAvatar = function () {
+  this.avatarUrl = gravatar.url(this.email, {
+    s: '250',
+    protocol: 'https',
+    format: 'png',
+  });
 };
 const User = model('user', userModel);
 

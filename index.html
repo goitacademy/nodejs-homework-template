@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="contacts"><img src="./public/avatars/me.jpg" alt="" /></div>
+    <form id="form" enctype="multipart/form-data">
+      <input type="file" name="fileInput" id="file" multiple />
+      <button type="submit">submit</button>
+    </form>
+    <img src="./public/avatars/IMG_4014.JPG" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.22.0/axios.js"></script>
+    <script>
+      const form = document.getElementById('form');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const { fileInput } = this.elements;
+        const data = new FormData();
+        data.append('avatar', fileInput.files[0]);
+      });
+      // const productsContainer = document.getElementById('contacts');
+      const baseURL = 'http://localhost:3000';
+      // const productsRequest = axios.get(`${baseURL}/api/contacts`);
+      // productsRequest
+      //   .then(({ data }) => {
+      //     const productElements = data
+      //       .map(
+      //         (item) => `<div>
+      //               <h4>${item.title}</h4>
+      //               <img src="${baseURL}/${item.cover}" /></div>`
+      //       )
+      //       .join();
+      //     productsContainer.insertAdjacentHTML('beforeend', productElements);
+      //   })
+      //   .catch((error) =>
+    </script>
+  </body>
+</html>
