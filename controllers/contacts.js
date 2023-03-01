@@ -29,30 +29,7 @@ const listContacts = async (req, res) => {
   }
 
   if (phone) {
-    searchParams.phone = {
-      phone: req.query.phone,
-    };
-  }
-
-  if (favorite && name) {
-    searchParams.favorite = favorite;
-    searchParams.name = name;
-  }
-
-  if (name && phone) {
-    searchParams.name = name;
     searchParams.phone = phone;
-  }
-
-  if (favorite && phone) {
-    searchParams.favorite = favorite;
-    searchParams.phone = phone;
-  }
-
-  if (name && phone && favorite) {
-    searchParams.name = name;
-    searchParams.phone = phone;
-    searchParams.favorite = favorite;
   }
 
   const result = await Contact.find(searchParams)
