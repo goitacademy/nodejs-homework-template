@@ -20,7 +20,7 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(409, "Email in use");
   }
-  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const hashPassword = await bcrypt.hash(password, bcrypt.genSaltSync(10));
   const result = await User.create({
     email,
     password: hashPassword,
@@ -37,7 +37,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  const passCompare = bcrypt.compareSync(password, user.password);
+  const passCompare = await bcrypt.compare(password, user.password);
   if (!user || !passCompare) {
     throw HttpError(401, "Email or password is wrong");
   }

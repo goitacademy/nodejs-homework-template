@@ -10,38 +10,54 @@ const {
 
 const listContacts = async (req, res) => {
   const { _id } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite, name, phone } = req.query;
   const skip = (page - 1) * limit;
 
   // якщо реалізовувати тільки фільтр улюблених контактів, то
-  // const query = req.query.favorite
+  // const searchParams = req.query.favorite
   //   ? { owner: _id, favorite: true }
   //   : { owner: _id };
 
-  const query = req.query;
-  switch ({ query }) {
-    case "favorite": {
-      owner: _id, (favorite = true);
-    }
-    case "name": {
-      owner: _id, ({ name } = req.query);
-    }
-    case "phone":
-      {
-        owner: _id, ({ phone } = req.query);
-      }
-      break;
-    default:
-      {
-        owner: _id;
-      }
-      break;
+  const searchParams = { owner: _id };
+
+  if (favorite) {
+    searchParams.favorite = favorite;
   }
 
-  const result = await Contact.find(query, "", {
-    skip,
-    limit: Number(limit),
-  })
+  if (name) {
+    searchParams.name = name;
+  }
+
+  if (phone) {
+    searchParams.phone = {
+      phone: req.query.phone,
+    };
+  }
+
+  if (favorite && name) {
+    searchParams.favorite = favorite;
+    searchParams.name = name;
+  }
+
+  if (name && phone) {
+    searchParams.name = name;
+    searchParams.phone = phone;
+  }
+
+  if (favorite && phone) {
+    searchParams.favorite = favorite;
+    searchParams.phone = phone;
+  }
+
+  if (name && phone && favorite) {
+    searchParams.name = name;
+    searchParams.phone = phone;
+    searchParams.favorite = favorite;
+  }
+
+  const result = await Contact.find(searchParams)
+    .skip(skip)
+    .limit(Number(limit))
     .sort("name")
     .populate("owner", "_id email subscription");
   return res.status(200).json(result);
