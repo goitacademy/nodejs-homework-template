@@ -39,15 +39,14 @@ const signup = async (email, password, subscription, avatarURL) => {
 };
 
 const verifyEmail = async (verificationToken) => {
-    const user = await User.findOne({ verificationToken });
+    const user = await User.findOneAndUpdate(
+        { verificationToken },
+        { verificationToken: null, verify: true }
+    );
     
     if (!user) {
         throw new NotFoundError('User not found');
     };
-
-    await User.findByIdAndUpdate( user._id,
-        { verificationToken: null, verify: true } 
-    );
 
     await sendEmail({
         to: user.email,
