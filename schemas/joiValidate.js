@@ -6,11 +6,15 @@ const addContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^\+?[\d\s()-]+$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 const updateContactSchema = Joi.object({
   name: Joi.string().min(2),
   email: Joi.string().email(),
   phone: Joi.string().pattern(/^\+?[\d\s()-]+$/),
 });
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
-module.exports = { addContactSchema, updateContactSchema };
+module.exports = { addContactSchema, updateContactSchema, updateStatusSchema };
