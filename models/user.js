@@ -20,11 +20,6 @@ const userSchema = Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    // token: String,
-    // owner: {
-    //   type: SchemaTypes.ObjectId,
-    //   ref: "users",
-    // },
   },
   { versionKey: false, timestamps: true }
 );
