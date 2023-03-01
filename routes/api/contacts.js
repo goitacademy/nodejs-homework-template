@@ -1,25 +1,56 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const controller = require("../../controllers/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { controllerWrapper } = require("../../helpers");
+const {
+  validateIdParam,
+  validateBody,
+  authenticate,
+} = require("../../middlewares");
+const { schemas } = require("../../models/contact");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", authenticate, controllerWrapper(controller.getAllContacts));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get(
+  "/:contactId",
+  authenticate,
+  validateIdParam,
+  controllerWrapper(controller.getContactById)
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  authenticate,
+  validateBody(schemas.addContactSchema, "missing required fields"),
+  controllerWrapper(controller.addContact)
+);
 
-module.exports = router
+router.delete(
+  "/:contactId",
+  authenticate,
+  validateIdParam,
+  controllerWrapper(controller.removeContactById)
+);
+
+router.put(
+  "/:contactId",
+  authenticate,
+  validateIdParam,
+  validateBody(schemas.updateContactSchema),
+
+  controllerWrapper(controller.updateContactById)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  validateIdParam,
+  validateBody(schemas.updateFavoriteSchema),
+
+  controllerWrapper(controller.updateFavorite)
+);
+
+module.exports = router;
