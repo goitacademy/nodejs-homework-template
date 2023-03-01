@@ -1,6 +1,5 @@
 const { User } = require('../../models');
 const { HttpError } = require('../../helpers');
-const HttpSuccess = require('../../helpers/HttpSuccess');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { SECRET_KEY } = process.env;
@@ -20,10 +19,9 @@ const logIn = async (req, res) => {
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '10h' });
   await User.findByIdAndUpdate(user._id, { token });
-  res.json(
-    HttpSuccess({
-      data: { user: { email, subscription: user.subscription }, token },
-    })
-  );
+  res.json({
+    user: { email, subscription: user.subscription },
+    token,
+  });
 };
 module.exports = logIn;

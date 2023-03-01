@@ -12,11 +12,6 @@ const signUp = async (req, res) => {
   newUser.setPassword(password);
   newUser.createDefaultAvatar();
   newUser.save();
-  res.status(201).json(
-    HttpSuccess({
-      status: 201,
-      data: { user: { email, subscription: 'starter' } },
-    })
-  );
+  res.status(201).json({ user: { email, subscription: 'starter' } });
 };
 module.exports = signUp;

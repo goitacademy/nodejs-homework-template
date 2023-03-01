@@ -12,7 +12,6 @@ const schemaValidator = (req, res, next) => {
   const { baseUrl } = req;
   const route = req.route.path;
   const fullRoutePath = baseUrl.toLowerCase() + route;
-  console.log('fullRoutePath: ', fullRoutePath);
 
   if (_.includes(_supportedMethods, method) && _.has(Schemas, fullRoutePath)) {
     // get schema for the current route

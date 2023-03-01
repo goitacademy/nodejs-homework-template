@@ -1,4 +1,3 @@
-const { HttpSuccess } = require('../../helpers');
 const { User } = require('../../models');
 
 const setSubscription = async (req, res) => {
@@ -7,6 +6,6 @@ const setSubscription = async (req, res) => {
     new: true,
     select: { email: true, subscription: true },
   });
-  res.json(HttpSuccess({ data: result, message: 'Subscription updated' }));
+  res.statusMessage('Subscription updated').json(result);
 };
 module.exports = setSubscription;

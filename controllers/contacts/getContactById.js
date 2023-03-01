@@ -1,5 +1,5 @@
 const { Contact } = require('../../models/index');
-const { HttpSuccess, HttpError } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
@@ -13,6 +13,6 @@ const getContactById = async (req, res) => {
   if (!data) {
     throw HttpError({ status: 404, message: 'Contact not found' });
   }
-  res.json(HttpSuccess({ data }));
+  res.json(data);
 };
 module.exports = getContactById;

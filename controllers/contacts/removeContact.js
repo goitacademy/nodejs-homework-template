@@ -1,5 +1,5 @@
 const { Contact } = require('../../models/index');
-const { HttpSuccess, HttpError } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 const removeContact = async (req, res) => {
   const { id } = req.params;
   const { user } = req;
@@ -16,12 +16,13 @@ const removeContact = async (req, res) => {
       message: "You can't remove contact which is not exist",
     });
   }
-  res.json(
-    HttpSuccess({
-      data: removeContact.id,
+
+  res.statusMessage('Contact deleted').json({
+    data: {
+      id: removeContact.id,
       message: 'Contact deleted',
       code: 204,
-    })
-  );
+    },
+  });
 };
 module.exports = removeContact;

@@ -1,5 +1,5 @@
 const { Contact } = require('../../models/index');
-const { HttpSuccess, HttpError } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 const setFavorite = async (req, res) => {
   const { id } = req.params;
   const { user } = req;
@@ -13,11 +13,6 @@ const setFavorite = async (req, res) => {
   if (!result) {
     throw HttpError({ status: 400, message: 'Status were not updated' });
   }
-  res.json(
-    HttpSuccess({
-      data: result,
-      message: 'Contact updated',
-    })
-  );
+  res.statusMessage('Contact updated').json(result);
 };
 module.exports = setFavorite;

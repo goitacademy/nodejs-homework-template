@@ -7,14 +7,21 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="contacts"><img src="./public/avatars/me.jpg" alt="" /></div>
+    <div id="contacts">
+      <img id="contactImage" src="" alt="avatar" />
+    </div>
     <form id="form" enctype="multipart/form-data">
       <input type="file" name="fileInput" id="file" multiple />
       <button type="submit">submit</button>
     </form>
-    <img src="./public/avatars/IMG_4014.JPG" />
+    <!-- <img src="./public/avatars/IMG_4014.JPG" /> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.22.0/axios.js"></script>
     <script>
+      const axiosInstance = axios.create({
+        baseURL: `https://contactsdb-4y00.onrender.com/api/`,
+      });
+      // const productsContainer = document.getElementById('contacts');
+      const baseURL = 'https://contactsdb-4y00.onrender.com/api/';
       const form = document.getElementById('form');
 
       form.addEventListener('submit', function (e) {
@@ -22,10 +29,40 @@
         const { fileInput } = this.elements;
         const data = new FormData();
         data.append('avatar', fileInput.files[0]);
+        axiosInstance.patch('users/avatar', data).then((result) => {
+          console.log('result: ', result);
+        });
       });
-      // const productsContainer = document.getElementById('contacts');
-      const baseURL = 'http://localhost:3000';
-      // const productsRequest = axios.get(`${baseURL}/api/contacts`);
+      const getCurrent = async () => {
+        currentUser = await axiosInstance.get(`users/current`);
+        return currentUser;
+      };
+      const getUser = async () => {
+        const user = await axiosInstance
+          .post(`auth/login`, {
+            email: 'duin@egetlacus.ca',
+            password: 'Mypassword1',
+          })
+          .then(({ data }) => {
+            axiosInstance.defaults.headers.common[
+              'Authorization'
+            ] = `Bearer ${data.token}`;
+            console.log(
+              '  axiosInstance.defaults.headers: ',
+              axiosInstance.defaults.headers
+            );
+
+            getCurrent().then(({ data }) => {
+              const imgCont = document.getElementById('contactImage');
+              imgCont.src = data.user.avatarUrl;
+            });
+          });
+      };
+      getUser();
+
+      // productsRequest.then(({ data }) => {
+      //
+      // });
       // productsRequest
       //   .then(({ data }) => {
       //     const productElements = data

@@ -21,6 +21,6 @@ const updateContact = async (req, res, next) => {
   if (!result) {
     throw HttpError({ status: 404, message: 'Contact not found!' });
   }
-  res.json(HttpSuccess({ data: result, message: 'Updated successfully' }));
+  res.statusMessage('Updated successfully').json({ data: { result } });
 };
 module.exports = updateContact;
