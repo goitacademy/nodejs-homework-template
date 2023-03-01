@@ -18,10 +18,10 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
-    token: String,
+    // token: String,
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "users",
+      ref: "user",
       require: true,
     },
   },
