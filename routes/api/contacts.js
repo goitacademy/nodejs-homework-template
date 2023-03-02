@@ -17,16 +17,16 @@ console.log(removeContact);
 console.log(updateContact);
 console.log(getContactById);
 
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const schema = Joi.object({
-//   name: Joi.string().min(3).max(30).required(),
-//   email: Joi.string().email({
-//     minDomainSegments: 2,
-//     tlds: { allow: ["com", "net", "org"] },
-//   }),
-//   phone: Joi.string(),
-// });
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "org"] },
+  }),
+  phone: Joi.string(),
+});
 
 router.get("/contacts", async (req, res, next) => {
   res.send("Это главный роутер");
@@ -80,9 +80,10 @@ router.post("/contacts", async (req, res, next) => {
     };
   } else {
     try {
-      // const value = await schema.validateAsync({ name, email, phone });
-      // console.log(value);
-      const contacts = await addContact(name, email, phone);
+      const value = await schema.validateAsync({ name, email, phone });
+      console.log(value);
+      const contacts = await addContact(value);
+      // const contacts = await addContact(name, email, phone);
       console.log(contacts);
       res.status(201).json({
         status: 201,
@@ -133,8 +134,9 @@ router.put("/contacts/:id", async (req, res, next) => {
     };
   } else if (contactId) {
     try {
-      // const value = await schema.validateAsync({ name, email, phone });
-      const contacts = await updateContact(contactId, { name, email, phone });
+      const value = await schema.validateAsync({ name, email, phone });
+      const contacts = await removeContact(contactId, value);
+      // const contacts = await updateContact(contactId, { name, email, phone });
       return res.status(200).json({
         status: 200,
         data: {
