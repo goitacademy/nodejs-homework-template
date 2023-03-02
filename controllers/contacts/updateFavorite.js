@@ -1,13 +1,18 @@
 const { Contact } = require("../../models/contact");
 
-const getById = async (req, res) => {
+const updateFavorite = async (req, res) => {
+  const { body } = req;
   const { id } = req.params;
   const { _id } = req.user;
-  const contact = await Contact.findOne(
+  const contactToUpdate = await Contact.findOneAndUpdate(
     { _id: id, owner: _id },
-    "-createdAt -updatedAt"
-  ).populate("owner", "_id name email");
-  if (!contact) {
+    body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  if (!contactToUpdate) {
     const error = new Error(`contact whith id = ${id} not found`);
     error.status = 404;
     throw error;
@@ -16,9 +21,9 @@ const getById = async (req, res) => {
     status: "success",
     code: 200,
     data: {
-      result: contact,
+      result: contactToUpdate,
     },
   });
 };
 
-module.exports = getById;
+module.exports = updateFavorite;

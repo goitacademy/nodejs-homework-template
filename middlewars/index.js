@@ -1,7 +1,9 @@
 const validation = require("./validation");
-const cntrlWrap = require("./cntrlWrap");
+const isValidId = require("./isValidId");
+const auth = require("./auth");
 
 module.exports = {
   validation,
-  cntrlWrap,
+  isValidId,
+  auth,
 };
