@@ -1,8 +1,6 @@
-const express = require("express");
+const contactOperations = require("../models/contacts");
 
-const router = express.Router();
-
-const contactOperations = require("../../models/contacts.js");
+// const { request } = require("../../../app.js");
 
 const {
   listContacts,
@@ -28,7 +26,7 @@ const schema = Joi.object({
   phone: Joi.string(),
 });
 
-router.get("/contacts", async (req, res, next) => {
+const getConts = async (req, res, next) => {
   res.send("Это главный роутер");
   try {
     const contacts = await listContacts();
@@ -40,9 +38,9 @@ router.get("/contacts", async (req, res, next) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-});
+};
 
-router.get("/contacts/:id", async (req, res, next) => {
+const getContById = async (req, res, next) => {
   const contactId = req.params.id;
   console.log("ID=", contactId);
   res.send("Это роутер контакта c ID=" + contactId);
@@ -65,9 +63,9 @@ router.get("/contacts/:id", async (req, res, next) => {
       },
     });
   }
-});
+};
 
-router.post("/contacts", async (req, res, next) => {
+const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
     return () => {
@@ -94,9 +92,9 @@ router.post("/contacts", async (req, res, next) => {
       console.log(error.message);
     }
   }
-});
+};
 
-router.delete("/contacts/:id", async (req, res, next) => {
+const delContact = async (req, res, next) => {
   const contactId = req.params.id;
   if (!contactId) {
     return () => {
@@ -116,9 +114,9 @@ router.delete("/contacts/:id", async (req, res, next) => {
       },
     });
   }
-});
+};
 
-router.put("/contacts/:id", async (req, res, next) => {
+const updateCont = async (req, res, next) => {
   const contactId = req.params.id;
   const { name, email, phone } = req.body;
 
@@ -153,6 +151,12 @@ router.put("/contacts/:id", async (req, res, next) => {
       next();
     };
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getConts,
+  getContById,
+  createContact,
+  delContact,
+  updateCont,
+};
