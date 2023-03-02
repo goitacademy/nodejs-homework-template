@@ -6,6 +6,6 @@ const setSubscription = async (req, res) => {
     new: true,
     select: { email: true, subscription: true },
   });
-  res.statusMessage('Subscription updated').json(result);
+  res.statusMessage('Subscription updated').json({ data: result });
 };
 module.exports = setSubscription;

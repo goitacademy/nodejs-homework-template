@@ -26,7 +26,7 @@ const addAvatar = async (req, res) => {
       throw HttpError({ status: 404, message: "Can't update avatar" });
     }
 
-    res.json({ avatarUrl });
+    res.json({ data: { avatarUrl } });
   } catch (error) {
     await fs.unlink(tempUpload);
     throw HttpError({ status: 400, message: 'Failed to update avatar' });

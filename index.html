@@ -37,6 +37,11 @@
         currentUser = await axiosInstance.get(`users/current`);
         return currentUser;
       };
+      const getContacts = async () => {
+        const result = await axiosInstance('contacts');
+        console.log('result: ', result);
+      };
+
       const getUser = async () => {
         const user = await axiosInstance
           .post(`auth/login`, {
@@ -56,6 +61,7 @@
               const imgCont = document.getElementById('contactImage');
               imgCont.src = data.user.avatarUrl;
             });
+            getContacts();
           });
       };
       getUser();

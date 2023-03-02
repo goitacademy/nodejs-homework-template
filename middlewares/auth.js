@@ -7,7 +7,7 @@ const authCheckValid = async (req, res, next) => {
   const { authorization = '' } = req.headers;
   const [bearer, token] = authorization.split(' ');
 
-  if (bearer !== 'Bearer') {
+  if (bearer !== 'Bearer' || !token) {
     next({ status: 401, message: 'Not authorized' });
   }
   try {

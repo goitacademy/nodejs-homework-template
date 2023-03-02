@@ -2,7 +2,7 @@ const HttpSuccess = ({ code = 200, data, message = '' }) => {
   const result = {
     status: 'success',
     code,
-    data,
+    ...data,
   };
   if (message) {
     result.message = message;

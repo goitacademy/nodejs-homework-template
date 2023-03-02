@@ -1,6 +1,5 @@
 const { User } = require('../../models');
 const { HttpError } = require('../../helpers');
-const HttpSuccess = require('../../helpers/HttpSuccess');
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;

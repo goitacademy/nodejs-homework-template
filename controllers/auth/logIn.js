@@ -5,8 +5,10 @@ require('dotenv').config();
 const { SECRET_KEY } = process.env;
 
 const logIn = async (req, res) => {
+  console.log('req: ', req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  console.log('user: ', user);
 
   if (!user || !user.comparePassword(password)) {
     throw HttpError({

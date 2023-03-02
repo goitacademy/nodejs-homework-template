@@ -30,6 +30,6 @@ const getContacts = async (req, res) => {
     totalContacts,
   };
 
-  return res.json(data);
+  return res.json({ data });
 };
 module.exports = getContacts;

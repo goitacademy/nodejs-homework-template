@@ -13,6 +13,6 @@ const setFavorite = async (req, res) => {
   if (!result) {
     throw HttpError({ status: 400, message: 'Status were not updated' });
   }
-  res.statusMessage('Contact updated').json(result);
+  res.statusMessage('Contact updated').json({ data: result });
 };
 module.exports = setFavorite;
