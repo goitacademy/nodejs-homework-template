@@ -1,6 +1,6 @@
-const HttpError = require('../utils/http-error');
+const HttpError = require("../utils/http-error");
 const controllerWrap = require("../utils/controller-wrap");
-const Contact = require('../models/contact');
+const Contact = require("../models/contact");
 
 const getContactsList = async (req, res) => {
     res.json(await Contact.find());
@@ -17,7 +17,6 @@ const getContact = async (req, res) => {
 
 const addContact = async (req, res) => {
     const result = await Contact.create(req.body);
-
     res.status(201).json(result);
 }
 
@@ -27,7 +26,7 @@ const deleteContact = async (req, res) => {
     if (!result) {
       throw HttpError({status: 404, message: "Not found"});
     }
-    res.json({ message: 'contact deleted' });
+    res.json({ message: "contact deleted" });
 }
 
 const updateContact = async (req, res) => {
@@ -44,7 +43,6 @@ const updateFavorite = async (req, res) => {
         throw HttpError({status: 400, message: "missing field favorite"})
     }
     const {contactId} = req.params;
-    console.log(contactId);
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) {
       throw HttpError({status: 404, message: "Not found"});

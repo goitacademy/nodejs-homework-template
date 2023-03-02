@@ -1,5 +1,5 @@
-const {Schema, model} = require('mongoose');
-const handleMongooseError = require('../utils/handle-mongoose-error');
+const {Schema, model} = require("mongoose");
+const handleMongooseError = require("../utils/handle-mongoose-error");
 
 const contactSchema = new Schema({
     name: {
@@ -20,8 +20,8 @@ const contactSchema = new Schema({
     },
 });
 
-contactSchema.post('save', handleMongooseError);
+contactSchema.post("save", handleMongooseError);
 
-const Contact = model('contact', contactSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = Contact;

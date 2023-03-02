@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const NUMBER_REGEXP = /\+?\d{1,4}?[-\d\s]?\(?\d{1,3}?\)?[-\d\s]?\d{1,4}[-\d\s]?\d{1,4}[-\d\s]?\d{1,9}/;
 const NUMBERS_ONLY_REGEXP = /^\+?[\d\s-()]*$/;
@@ -22,7 +22,7 @@ const validation = {
     }).min(1),
     
     updateFavorite: Joi.object({
-        favorite: Joi.bool().required(),
+        favorite: Joi.bool().required().messages({"any.required": "missing field favorite"}),
     }).max(1),
 };
 
