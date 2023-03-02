@@ -50,17 +50,13 @@ async function addContact({ name, email, phone }) {
 
 async function updateContact(contactId, body) {
   const parsedContacts = await listContacts();
-  let updatedContact = false;
-
-  //  У цьому випадку фор використаний для переривання проходження по масиву, після знаходження потрібного контакту, адже якщо потрібний контакт буде першим у списку, немає потреби проходитись по тисячях наступних контактів.
-  for (let i = 0; i < parsedContacts.length; i++) {
-    if (parsedContacts[i].id === contactId) {
-      parsedContacts[i] = { ...parsedContacts[i], ...body };
-      updatedContact = parsedContacts[i];
-      fs.writeFile(contactsPath, JSON.stringify(parsedContacts));
-      return updatedContact;
-    }
+  const index = parsedContacts.findIndex(contact => String(contact.id) === String(contactId));
+  if (index === -1) {
+    return null;
   }
+  const updatedContact = { ...parsedContacts[index], ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(parsedContacts));
+  return updatedContact;
 }
 
 module.exports = {
