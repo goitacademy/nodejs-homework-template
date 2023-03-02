@@ -23,7 +23,7 @@ const validation = {
     
     updateFavorite: Joi.object({
         favorite: Joi.bool().required(),
-    }),
+    }).max(1),
 };
 
 module.exports = validation;
