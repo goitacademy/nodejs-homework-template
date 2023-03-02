@@ -34,9 +34,8 @@ router.get("/contacts", async (req, res, next) => {
     const contacts = await listContacts();
     res.json({
       status: 200,
-      data: {
-        contacts,
-      },
+      data: contacts,
+      contacts,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -57,12 +56,12 @@ router.get("/contacts/:id", async (req, res, next) => {
       next();
     };
   } else {
-    const contact = await getContactById(contactId);
-    console.log(contact);
+    const contactById = await getContactById(contactId);
+    console.log(contactById);
     return res.status(200).json({
       status: 200,
       data: {
-        contact,
+        contactById,
       },
     });
   }
@@ -82,13 +81,12 @@ router.post("/contacts", async (req, res, next) => {
     try {
       const value = await schema.validateAsync({ name, email, phone });
       console.log(value);
-      const contacts = await addContact(value);
-      // const contacts = await addContact(name, email, phone);
-      console.log(contacts);
+      const newContacts = await addContact(value);
+      console.log(newContacts);
       res.status(201).json({
         status: 201,
         data: {
-          contacts,
+          newContacts,
         },
       });
     } catch (error) {
@@ -135,12 +133,11 @@ router.put("/contacts/:id", async (req, res, next) => {
   } else if (contactId) {
     try {
       const value = await schema.validateAsync({ name, email, phone });
-      const contacts = await removeContact(contactId, value);
-      // const contacts = await updateContact(contactId, { name, email, phone });
+      const updatedContact = await updateContact(contactId, value);
       return res.status(200).json({
         status: 200,
         data: {
-          contacts,
+          updatedContact,
         },
       });
     } catch (error) {
