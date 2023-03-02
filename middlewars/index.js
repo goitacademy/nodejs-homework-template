@@ -1,7 +1,7 @@
 const validation = require("./validation");
-const cntrlWrap = require("./cntrlWrap");
+const isValidId = require("./isValidId");
 
 module.exports = {
   validation,
-  cntrlWrap,
+  isValidId,
 };
