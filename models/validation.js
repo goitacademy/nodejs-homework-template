@@ -25,13 +25,14 @@ const contactUpdateSchema = Joi.object({
 }).min(1);
 
 
-const validateContact = (schema, object) => {
-  const { error, value } = schema.validate(object);
+const validateContact = (req, res, next) => {
+  const { error, value } = newContactSchema.validate(req.body);
 
+  req.error = { error: null, value };
   if (error) {
-    return { error: error.details[0].message, value: null };
+    req.error = { error: error.details[0].message, value: null };
   }
-  return { error: null, value };
+  next();
 };
 
-module.exports = { newContactSchema, contactUpdateSchema,validateContact };
+module.exports = { newContactSchema, contactUpdateSchema, validateContact };
