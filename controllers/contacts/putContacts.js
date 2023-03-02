@@ -12,11 +12,7 @@ const putContacts = async (req, res) => {
     throw HttpError(404, "Not found");
   }
   res.json({
-    status: "success",
-    code: 200,
-    data: {
-      contact,
-    },
+    contact,
   });
 };
 
