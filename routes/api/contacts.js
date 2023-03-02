@@ -1,17 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const controllerContacts = require("../../controller/contacts");
+const auth = require('../../middlewares/auth')  
+//  const { updateContact,
+//   removeContact,
+//   addContact,
+//   getById,
+//   allContacts,
+//   serchInContacts,
+//   chengOfPart,
+//  } = require("../../controller/contactsController/index");
+  const allContacts = require('../../controller/contactsController/allContacts')
+   const updateContact=require("../../controller/contactsController/updateContact")
+const removeContact =require("../../controller/contactsController/removeContact")
+const addContact = require("../../controller/contactsController/addContact")
+const getById = require("../../controller/contactsController/getById")
+const chengOfPart = require("../../controller/contactsController/chengOfPart")
+const serchInContacts =require("../../controller/contactsController/serchInContacts")
+// const controllerContacts = require("../../controller/contacts");
+// const controller = require('../../controller/index')
 
-router.get("/", controllerContacts.allContacts);
+router.get("/",auth, allContacts);
+router.get("/:contactId", getById);
 
-router.get("/:contactId", controllerContacts.getById);
+router.get("/search", serchInContacts);
 
-router.get("/search", controllerContacts.serchInContacts);
+router.post("/", addContact);
 
-router.post("/", controllerContacts.addContact);
+router.delete("/:contactId", removeContact);
 
-router.delete("/:contactId", controllerContacts.removeContact);
+router.put("/:contactId", updateContact);
 
-router.put("/:contactId", controllerContacts.updateContact);
+router.patch("/:contactId", chengOfPart);
 
 module.exports = router;
