@@ -8,15 +8,16 @@ const getById = async (req, res, next) => {
     const result = await Contact.findById(contactId);
 
     if (!result) {
-      throw requestError(404, "Not found");
+      return next(requestError(404, "Not found"));
     }
+
     res.json({
       status: "success",
       code: 200,
-      data: { result: result },
+      data: { result },
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    return next(err);
   }
 };
 

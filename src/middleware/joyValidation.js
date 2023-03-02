@@ -1,6 +1,6 @@
 const joyValidation = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+  return async (req, res, next) => {
+    const { error } = await schema.validate(req.body);
     if (error) {
       error.status = 400;
       next(error);

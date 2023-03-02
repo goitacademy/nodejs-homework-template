@@ -1,6 +1,6 @@
-const { isValidObjectId } = require("mongoose");
+const { isValidObjectId } = require("mongoose-lean-getters");
 const requestError = require("../helpers/requestError");
-
+ 
 const isValidId = (req, res, next) => {
   const { contactId } = req.params;
   if (!isValidObjectId(contactId)) {
