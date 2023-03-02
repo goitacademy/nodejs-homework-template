@@ -28,11 +28,12 @@ router.get('/:contactId', async (req, res) => {
   res.json(data);
 });
 
-router.post('/', async (req, res) => {
-  const { error, value } = validateContact(newContactSchema, req.body);
 
-  if (error) {
-    res.status(400).json({ message: error });
+router.use(validateContact);
+
+router.post('/',async (req, res) => {
+  if (req.error) {
+    res.status(400).json({ message: req.error });
     return;
   }
   const data = await addContact(value);
@@ -41,7 +42,7 @@ router.post('/', async (req, res) => {
 
 router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params;
-  const dara = await removeContact(contactId);
+  const data = await removeContact(contactId);
   if (!data) {
     res.status(404).json({ message: "Not found" });
     return;
