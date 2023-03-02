@@ -12,6 +12,14 @@ const JoiSchema = Joi.object({
   }),
 });
 
+const updateContactSchema = Joi.object({
+  name: Joi.string().min(2),
+  phone: Joi.string(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+  }),
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -67,7 +75,7 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = JoiSchema.validate(req.body);
+    const { error } = updateContactSchema.validate(req.body);
     if (error) {
       throw HttpError(400, "missing fields");
     }
