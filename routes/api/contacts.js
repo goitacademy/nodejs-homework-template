@@ -28,45 +28,45 @@ console.log(getContactById);
 //   phone: Joi.string(),
 // });
 
-// router.get("/contacts", async (req, res, next) => {
-//   res.send("Это главный роутер");
-//   try {
-//     const contacts = await listContacts();
-//     res.json({
-//       status: 200,
-//       data: {
-//         contacts,
-//       },
-//     });
-//   } catch (error) {
-//     res.status(400).json({message: error.message});
-//   }
-// });
+router.get("/contacts", async (req, res, next) => {
+  res.send("Это главный роутер");
+  try {
+    const contacts = await listContacts();
+    res.json({
+      status: 200,
+      data: {
+        contacts,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
-// router.get("/contacts/:id", async (req, res, next) => {
-//   const contactId = req.params.id;
-//   console.log("ID=", contactId);
-//   res.send("Это роутер контакта c ID=" + contactId);
-//   if (!contactId) {
-//     return () => {
-//       console.log("Contact not found");
-//       res.status(404).json({
-//         message: "Not found",
-//         status: 404,
-//       });
-//       next();
-//     };
-//   } else {
-//     const contact = await getContactById(contactId);
-//     console.log(contact);
-// return res.status(200).json({
-//       status: 200,
-//       data: {
-//         contact,
-//       },
-//     });
-//   }
-// });
+router.get("/contacts/:id", async (req, res, next) => {
+  const contactId = req.params.id;
+  console.log("ID=", contactId);
+  res.send("Это роутер контакта c ID=" + contactId);
+  if (!contactId) {
+    return () => {
+      console.log("Contact not found");
+      res.status(404).json({
+        message: "Not found",
+        status: 404,
+      });
+      next();
+    };
+  } else {
+    const contact = await getContactById(contactId);
+    console.log(contact);
+    return res.status(200).json({
+      status: 200,
+      data: {
+        contact,
+      },
+    });
+  }
+});
 
 router.post("/contacts", async (req, res, next) => {
   const { name, email, phone } = req.body;
