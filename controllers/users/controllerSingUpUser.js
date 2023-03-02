@@ -1,8 +1,10 @@
 const { User } = require('../../schemas/modelUser');
 const { addUser } = require('../../services/users');
+const gravatar = require('gravatar');
 
 const controllerSingUpUser = async (req, res) => {
   const { email, password } = req.body;
+  const avatarURL = gravatar.url(email, { protocol: 'https' });
   try {
     const userFind = await User.findOne({ email });
 
@@ -10,7 +12,7 @@ const controllerSingUpUser = async (req, res) => {
       return res.status(409).json({ message: 'Email in use' });
     }
 
-    const user = await addUser(email, password);
+    const user = await addUser(email, password, avatarURL);
     res.json({
       status: 'success',
       code: 201,
