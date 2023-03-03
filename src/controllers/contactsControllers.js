@@ -9,11 +9,11 @@ const {
   updateContact,
   getContactById,
 } = contactOperations;
-console.log(listContacts);
-console.log(addContact);
-console.log(removeContact);
-console.log(updateContact);
-console.log(getContactById);
+// console.log(listContacts);
+// console.log(addContact);
+// console.log(removeContact);
+// console.log(updateContact);
+// console.log(getContactById);
 
 const Joi = require("joi");
 
