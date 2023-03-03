@@ -33,13 +33,11 @@ const signup = async (req, res) => {
   };
   await sendEmail(mail);
   res.status(201).json({
-    data: {
-      user: {
-        email,
-        subscription,
-        avatarURL,
-        verificationToken,
-      },
+    user: {
+      email,
+      subscription,
+      avatarURL,
+      verificationToken,
     },
   });
 };
