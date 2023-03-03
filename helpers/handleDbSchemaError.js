@@ -3,6 +3,7 @@ const errorStatus = ({ name, code }) =>
 
 const handleDbSchemaError = (error, data, next) => {
   error.status = errorStatus(error) ? 409 : 400;
+
   next();
 };
 

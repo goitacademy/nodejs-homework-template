@@ -21,6 +21,11 @@ const contactDbSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -29,14 +34,14 @@ contactDbSchema.post("save", handleDbSchemaError);
 
 const Contact = model("contact", contactDbSchema);
 
-const contactSchema = Joi.object({
+const joiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
 
-const contactSchemaFavorite = Joi.object({
+const joiSchemaFavorite = Joi.object({
   favorite: Joi.boolean().required().messages({
     message: "Should be email!",
   }),
@@ -44,6 +49,6 @@ const contactSchemaFavorite = Joi.object({
 
 module.exports = {
   Contact,
-  contactSchema,
-  contactSchemaFavorite,
+  joiSchema,
+  joiSchemaFavorite,
 };
