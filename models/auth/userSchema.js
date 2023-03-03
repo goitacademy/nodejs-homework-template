@@ -29,7 +29,15 @@ const userSchema = new Schema({
   avatarURL: {
     type: String,
     required: [true, "Is required"],
-  }
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, "Verify token is required"],
+  },
 });
 
 userSchema.post("save", (error, data, next) => {
@@ -61,13 +69,19 @@ const loginSchema = Joi.object({
 });
 
 const updateSubSchema = Joi.object({
-    subscription: Joi.string().valid('starter', 'pro', 'business').required()
-})
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+});
 
 module.exports = {
   User,
   registerSchema,
   loginSchema,
   updateSubSchema,
+  verifyEmailSchema,
 };

@@ -1,18 +1,21 @@
 const express = require("express");
 const {
   registerUser,
+  verifyMail,
+  mailToVerify,
   loginUser,
   logoutUser,
   updateSubUser,
-  updateAvatar
+  updateAvatar,
 } = require("../../models/auth/user");
 const {
   registerSchema,
   loginSchema,
   updateSubSchema,
+  verifyEmailSchema,
 } = require("../../models/auth/userSchema");
 const authenticate = require("../../middlewares/authMiddlewar");
-const upload = require("../../middlewares/upload")
+const upload = require("../../middlewares/upload");
 
 const router = express.Router();
 
@@ -36,6 +39,29 @@ router.post("/register", upload.single("avatar"), async (req, res, next) => {
     } else {
       next(error);
     }
+  }
+});
+
+router.get("/verify/:verificationToken", async (req, res, next) => {
+  try {
+    const verify = await verifyMail(req);
+    res.json(verify);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/verify", async (req, res, next) => {
+  try {
+    const { error } = verifyEmailSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: "Missing required field email" });
+    } else {
+      const verify = await mailToVerify(req);
+      res.json(verify);
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -85,13 +111,18 @@ router.patch("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.patch("/avatars", authenticate, upload.single("avatar"), async (req, res, next) => {
-  try {
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    try {
       const updateUser = await updateAvatar(req, res);
       res.json(updateUser);
-  } catch (error) {
-    next(error);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;
