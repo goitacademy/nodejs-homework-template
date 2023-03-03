@@ -1,6 +1,14 @@
+// Eua8gujQitTob8zI
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+// const mongoose = require("mongoose");
+
+// const DB_HOST = "mongodb+srv://Olena:Eua8gujQitTob8zI@cluster0.mglvrql.mongodb.net/db-contacts?retryWrites=true&w=majority"
+// mongoose.set("strictQuery", true);
+// mongoose.connect(DB_HOST)
+  // .then(() => console.log("Database connection successful"))
+  // .catch(error => console.log(error.message));
 
 const contactsRouter = require('./routes/api/contacts')
 
