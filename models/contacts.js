@@ -36,14 +36,19 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
-const updateContact = async (id, name, email, phone) => {
+const updateContact = async (id, body) => {
   const contactId = String(id);
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, name, email, phone };
+
+  const { name, email, phone } = body;
+  name && (parsedContacts[index].name = name);
+  email && (parsedContacts[index].email = email);
+  phone && (parsedContacts[index].phone = phone);
+
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
