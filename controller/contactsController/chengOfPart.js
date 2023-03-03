@@ -7,22 +7,28 @@ const chengOfPart= async (req, res, next) => {
   try {
     validate(req.body);
     // const contactById = await getContactById(contactId)
-    const result = await Contacts.findByIdAndUpdate({_id:contactId}, favorite, { new: true })
-    if (result) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contacts: result },
-      })
-    } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found task id: ${id}`,
-        data: 'Not Found',
-      })
+   
+      if (!Object.prototype.hasOwnProperty.call(req.body, 'favorite')) {
+        res.status(400).json({
+          status: 'Bad Request',
+          code: 400,
+          message: 'missing field favorite',
+        });
+      } else {
+        const contact = await Contacts.findByIdAndUpdate(
+          contactId,
+          { favorite },
+          { new: true },
+        );
+        res.json({
+          status: 'success',
+          code: 200,
+          message: 'contact status updated',
+          data: contact,
+        });
+      }
     }
-  } catch (e) {
+   catch (e) {
     console.error(e)
     next(e)
   }

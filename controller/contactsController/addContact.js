@@ -3,7 +3,13 @@ const validate = require("../../validator/ownValidate")
 const addContact = async (req, res, next) => {
     try {
       validate(req.body);
-      const entity = new Contacts(req.body);
+      const bodyValidation = () => {
+        if (!Object.prototype.hasOwnProperty.call(req.body, 'favorite')) {
+          return { ...req.body, favorite: 'false' };
+        }
+        return req.body;
+      };
+      const entity = new Contacts(bodyValidation());
   
       const record = await entity.save();
       res.status(201).json({

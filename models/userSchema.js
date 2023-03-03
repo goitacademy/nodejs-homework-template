@@ -21,10 +21,7 @@ const userSchema = new Schema({
           type: String,
           default: null,
         },
-        // owner: {
-        //     type: SchemaTypes.ObjectId,
-        //     ref: 'user',
-        //   }
+        
       
 })
 
