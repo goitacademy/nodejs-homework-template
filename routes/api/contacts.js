@@ -8,11 +8,6 @@ const {
   updateContact,
 } = require("../../controllers/contactsControllers");
 
- 
-
-
-
-
 router.get("/", getContacts);
 
 router.get("/:contactId", getContactById);

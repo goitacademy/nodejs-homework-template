@@ -4,9 +4,13 @@ require("dotenv").config();
 // const app = require("./app");
 const app = express();
 
+
+
 const { connectMongo } = require("./db/connection");
 const contactsRouter = require("./routes/api/contacts");
 
+// Servises
+// CustomErrors
 
 
 const PORT = process.env.PORT || 3000;

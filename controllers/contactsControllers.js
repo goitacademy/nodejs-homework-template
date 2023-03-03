@@ -1,25 +1,22 @@
-const contactsOperations = require("../models/contacts");
-const {
-  addPostsValidation,
-  updatePostValidation,
-} = require("../middleware/validationMiddleware");
-const createError = require("http-errors");
 
-const { connectMongo } = require("../db/connection");
+const { Contact } = require("../db/contactModel");
 
 const getContacts = async (req, res, next) => {
-  try {
-    const contacts = await req.db.Contacts.find({}).toArray();
-    res.json({
-      status: "successs",
-      code: 200,
-      data: {
-        result: contacts,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+  const contacts = await Contact.find({});
+  res.json({contacts})
+
+  // try {
+  //   const contacts = await req.db.Contacts.find({}).toArray();
+  //   res.json({
+  //     status: "successs",
+  //     code: 200,
+  //     data: {
+  //       result: contacts,
+  //     },
+  //   });
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 const getContactById = async (req, res, next) => {
