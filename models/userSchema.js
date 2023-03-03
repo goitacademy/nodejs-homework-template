@@ -19,20 +19,20 @@ const UserSchema = new mongoose.Schema({
           type: String,
           default: null,
         },
-        // owner: {
-        //     type: SchemaTypes.ObjectId,
-        //     ref: 'user',
-        //   }
+        owner: {
+            type: SchemaTypes.ObjectId,
+            ref: 'user',
+          }
       
 })
 
-// UserSchema.methods.setPassword = function(password){
-// this.password=bcrypt.hashSync(password,bcrypt,bcrypt.genSaltSync(6))
-// }
-// UserSchema.methods.validPassvord = function(password){
+UserSchema.methods.setPassword = function(password){
+this.password=bcrypt.hashSync(password,bcrypt,bcrypt.genSaltSync(6))
+}
+UserSchema.methods.validPassvord = function(password){
    
-//     return bcrypt.compareSync(password, this.password)
-// }
+    return bcrypt.compareSync(password, this.password)
+}
 
 const User= mongoose.model('User',UserSchema)
 module.exports=User;

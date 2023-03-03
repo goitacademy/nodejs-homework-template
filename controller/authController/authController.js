@@ -1,22 +1,13 @@
 const UserSchema = require("../../models/userSchema");
 const jwt = require("jsonwebtoken");
 class AuthController {
-    // const auth = (req, res, next) => {
-    //     passport.authenticate('jwt', { session: false }, (err, user) => {
-    //       if (!user || err) {
-    //         return res.status(401).json({
-    //           status: 'error',
-    //           code: 401,
-    //           message: 'Unauthorized',
-    //           data: 'Unauthorized',
-    //         })
-    //       }
-    //       req.user = user
-    //       next()
-    //     })(req, res, next)
-    //   }
+
       
   static async login(req, res, next) {
+    // const token = jwt.sing({ id, subscription }, process.env.SECRET, {
+    //   expiresIn: "1h",
+    // })
+    // console.log(token);
     const { email, password } = req.body
     const user = await UserSchema.findOne({ email })
   
@@ -30,26 +21,27 @@ class AuthController {
   
     const payload = {
       id: user.id,
-      username: user.subscription,
+      username: "my name is",
     }
   
-    const token = jwt.sign(payload, secret, { expiresIn: '1h' })
+    const token = jwt.sign(payload, secret, { expiresIn: '1d' })
+    // console.log(token)
+    const verify = jwt.verify(token, secret);
+
+console.log(verify);
     res.status(200).json({
         status: "OK",
-        token: `${token}`,
+        data:{token} ,
         code: 200,
         user: {
             email: "example@example.com",
             subscription: "starter",
           }
         
-      });
-
-
-
+      })
   }
   static async registration(req, res, next) {
-    const { email, subscription, password } = req.body;
+    const { email, subscription, password,owner } = req.body;
     const user = await UserSchema.findOne({ email });
 
     if (user) {
@@ -60,13 +52,10 @@ class AuthController {
         data: "Conflict",
       });
       try {
-        const newUser = new UserSchema({ subscription, email });
+        const newUser = new UserSchema({ subscription, email,owner });
         newUser.setPassword(password);
-        const { _id: id } = await newUser.save();
-        const token = jwt.sing({ id, subscription }, process.env.SECRET, {
-          expiresIn: "10h",
-        });
-        console.log(token);
+       await newUser.save();
+      
         res.status(201).json({
           status: "Created",
           code: 201,

@@ -7,7 +7,7 @@ const authRouter =require('./routes/api/auth')
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
-
+require('./config/config-passport')
 
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -18,7 +18,9 @@ app.use(express.json())
 
 
 // app.use('/api/contacts',  contactsRouter)
-app.use('/api',  routerApi)
+app.use('/api/auth', routerApi.auth)
+
+app.use('/api/contacts', auth, routerApi.contacts)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

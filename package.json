@@ -15,8 +15,10 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
     "morgan": "1.10.0",
+    "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "uid": "^2.0.1"
   },

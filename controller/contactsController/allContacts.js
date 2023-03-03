@@ -2,7 +2,7 @@ const Contacts = require("../../models/contactsSchema");
 const allContacts = async (req, res, next) => {
     try {
       const result = await Contacts.find({});
-      res.json({
+      res.json({user:req.user,
         status: "success",
         code: 200,
         data: {
