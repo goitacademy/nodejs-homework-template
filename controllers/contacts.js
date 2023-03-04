@@ -1,23 +1,20 @@
 const { Contact } = require("../models");
 
 const { HttpErorr, ctrlWrapper } = require("../helpers");
-const Joi = require("joi");
-// const {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// } = require("../models/contacts");
 
 const getAll = async (req, res) => {
-  //   const contacts = await listContacts();
-  const contacts = await Contact.find();
+  const { _id: owner } = req.user;
+  console.log(req.query);
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = await Contact.find({ owner }, "", {
+    skip,
+    limit,
+  }).populate("owner", "email");
   res.json({ contacts, status: "200" });
-};
+}; 
 
 const getById = async (req, res) => {
-  // const contact = await getContactById(req.params.contactId);
   const contact = await Contact.findById(req.params.contactId);
   if (!contact) {
     throw HttpErorr(404, "Not found");
@@ -26,8 +23,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const newContacts = await Contact.create(req.body);
-  console.log(req.body);
+  const { _id: owner } = req.user;
+  const newContacts = await Contact.create({ ...req.body, owner });
   res.status(201).json(newContacts);
 };
 
@@ -37,7 +34,6 @@ const updateById = async (req, res, next) => {
     req.body,
     { new: true }
   );
-  //  const updateContacts = await updateContact(req.params.contactId, req.body);
   if (!updateContacts) {
     res.json({ message: "Not found", status: "404" });
   }
@@ -57,7 +53,6 @@ const updateFavorite = async (req, res, next) => {
 };
 
 const deleteById = async (req, res, next) => {
-  // const contactDelete = await removeContact(req.params.contactId);
   const contactDelete = await Contact.findByIdAndRemove(req.params.contactId);
   if (!contactDelete) {
     throw HttpErorr(404, "found");

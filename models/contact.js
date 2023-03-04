@@ -3,10 +3,11 @@ const { handleMongooseError } = require('../helpers');
 
 const Joi = require("joi");
 
-const contactsSchema = new Schema({
+const contactsSchema = new Schema(
+  {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -17,8 +18,14 @@ const contactsSchema = new Schema({
     favorite: {
       type: Boolean,
       default: false,
-    }
-},
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
 );
 
 contactsSchema.post("save", handleMongooseError);
