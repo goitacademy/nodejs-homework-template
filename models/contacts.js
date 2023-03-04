@@ -61,15 +61,53 @@
 //   addContact,
 //   updateContact,
 // };
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
-const mongoose = require("mongoose");
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set e-mail for contact"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Set phone for contact"],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const DB_HOST =
-  "mongodb+srv://Slava:O2OZZX4wBjQy2n2S@cluster0.pmj6ulj.mongodb.net/db_contacts?retryWrites=true&w=majority";
+contactSchema.post("save", handleMongooseError);
 
-mongoose.set("strictQuery", true);
+const schemaJoi = Joi.object({
+  name: Joi.string().min(1).max(25).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  phone: Joi.string()
+    .min(3)
+    .trim()
+    .max(15)
+    .pattern(/^[0-9]+$/)
+    .messages({
+      "string.pattern.base": `Phone number can contain from 3 to 15 digits.`,
+    })
+    .required(),
+  favorite: Joi.bool(),
+});
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log("Database connect success"))
-  .catch((error) => console.log(error.message));
+const updatefavoriteSchema = Joi.object({
+  favorite: Joi.bool(),
+});
+
+const Contact = model("contact", contactSchema);
+
+module.exports = { Contact, schemaJoi, updatefavoriteSchema };
