@@ -13,7 +13,7 @@ const mail = require("../../helpers/mailVerify");
 const createTokens = require("../../helpers/createToken");
 dotenv.config();
 
-const { PORT = 3000, REFRESH_SECRET_KEY } = process.env;
+const { PORT = 3000, REFRESH_SECRET_KEY, BASE_URL } = process.env;
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
 const registerUser = async (req) => {
@@ -44,7 +44,7 @@ const registerUser = async (req) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: mail(PORT, verificationToken),
+    html: mail({BASE_URL, PORT, verificationToken }),
   };
 
   await sendEmail(verifyEmail);
@@ -80,7 +80,7 @@ const mailToVerify = async (req) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: mail(PORT, verificationToken),
+    html: mail({BASE_URL, PORT, verificationToken }),
   };
 
   await sendEmail(verifyEmail);
