@@ -5,17 +5,20 @@ const updateById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    await Contact.updateOne({ _id: contactId }, req.body);
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
 
-    const result = await Contact.findById(contactId);
-    if (!result) {
+    if (!updatedContact) {
       throw requestError(404, "Not found");
     }
 
     res.json({
       status: "success",
       code: 200,
-      data: { data: result },
+      data: updatedContact,
     });
   } catch (error) {
     next(error);
