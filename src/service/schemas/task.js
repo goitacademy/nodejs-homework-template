@@ -5,8 +5,7 @@ const conts = new Schema(
   {
     id: {
       type: String,
-      minlength: 1,
-      maxlength: 70,
+      required: true,
     },
     name: {
       type: String,
@@ -15,8 +14,8 @@ const conts = new Schema(
     },
     email: {
       type: String,
-      minlength: 1,
-      maxlength: 70,
+      required: true,
+      unique: true,
     },
     phone: {
       type: String,
