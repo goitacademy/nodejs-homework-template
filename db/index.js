@@ -1,7 +1,8 @@
-const connectDb = require('./connection');
-const Contacts = require('./schema');
+const connectDb = require("./connection");
+const { Contacts, User } = require("./schemas");
 
 module.exports = {
-    connectDb,
-    Contacts
+  connectDb,
+  Contacts,
+  User,
 };
