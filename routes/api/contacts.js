@@ -1,28 +1,32 @@
 const express = require("express");
+const { isValidId, validateBody } = require("../../middlewares");
 
 const router = express.Router();
-const Joi = require("joi");
 const ctrl = require("../../controllers/contacts");
 
-const addSchemaforPost = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-const addSchemaforPut = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-});
+const { schemas } = require("../../models/contact");
+const { addSchemaForFavorite, addSchemaforPut, addSchemaforPost } = schemas;
 
 router.get("/", ctrl.getAll);
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", isValidId, ctrl.getById);
 
-router.post("/", ctrl.add);
+router.post("/", validateBody(addSchemaforPost), ctrl.add);
 
-router.delete("/:contactId", ctrl.deleteById);
+router.delete("/:contactId", isValidId, ctrl.deleteById);
 
-router.put("/:contactId", ctrl.updateById);
+router.put(
+  "/:contactId",
+  isValidId,
+  validateBody(addSchemaforPut),
+  ctrl.updateById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(addSchemaForFavorite),
+  ctrl.updateStatusContact
+);
 
 module.exports = router;
