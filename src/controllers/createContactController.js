@@ -1,5 +1,5 @@
 const contactOperations = require("../models/contacts");
-const schema = require("../schemas/validation");
+const schema = require("../service/schemas/validation");
 
 const { addContact } = contactOperations;
 
