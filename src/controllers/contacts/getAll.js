@@ -1,19 +1,15 @@
-const { getAllContacts } = require("../../models/index");
+const { Contact } = require("../../models/contacts");
 
-const getAll = async (req, res) => {
+const getAll = async (_, res, next) => {
   try {
-    const contacts = await getAllContacts();
-    return res.status(200).json({
-      status: 'success',
+    const result = await Contact.find({}, "-createdAt -updatedAt");
+    res.json({
+      status: "success",
       code: 200,
-      data: { result: contacts },
+      data: { result: result },
     });
   } catch (error) {
-    return res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Something went wrong'
-    });
+    next(error);
   }
 };
 

@@ -1,21 +1,21 @@
-const {removeContact} = require('../../models/index');
-const createError = require('http-errors');
+const { Contact } = require("../../models/contacts");
+const { requestError } = require("../../helpers/requestError");
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
-      throw createError(404, `Product with ID=${contactId} not found`);
+      throw requestError(404, "Not found");
     }
     res.json({
-      status: 'success',
+      status: "success",
       code: 200,
-      message: 'contact deleted',
+      message: "Contact deleted successfully",
       data: { result },
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    next(error);
   }
 };
 
