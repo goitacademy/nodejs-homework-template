@@ -1,8 +1,6 @@
 const path = require('path');
 const fs = require('fs').promises;
 
-// const pathDataBase = `__dirname, '..', 'models', 'contacts.json`
-
 const listContacts = async () => {
   try {
     const contacts = await fs.readFile(path.join(__dirname, '..', 'models', 'contacts.json'));
@@ -28,7 +26,26 @@ const getContactById = async (contactId) => {
   }
 }
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {
+    try {
+    const contacts = await listContacts();
+      const delContact = contacts.filter(
+        contact => contact.id.toLowerCase().toString() === contactId.toLowerCase().toString());
+
+      const currentContacts = contacts.filter(contact => contact.id !== contactId)
+
+      await fs.writeFile(path.join(__dirname, '..', 'models', 'contacts.json'), JSON.stringify(currentContacts));
+      
+      if (!delContact) {
+        return null
+      }
+    return delContact;
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 const addContact = async (body) => {
   try {

@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+  const { contactId } = req.params;
   const findContactById = await getContactById(contactId)
   if (findContactById) {
     res.json({
@@ -53,7 +53,24 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params;
+  const delitedContact = removeContact(contactId)
+
+  if (delitedContact) {
+    res.status(200).json({
+    status: 'success',
+    code: 200,
+    message: `contact with ${contactId} id is deleted`
+    });
+    
+  } if (!delitedContact) {
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: `contact with ${contactId} is not in DataBase`
+    })
+  }
+
 })
 
 router.put('/:contactId', async (req, res, next) => {
