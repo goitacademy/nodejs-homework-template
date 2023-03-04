@@ -16,6 +16,7 @@ const login = async (contactId) => {
 
 module.exports = {
   registration,
-  login,
+    login,
+  
  
 };
