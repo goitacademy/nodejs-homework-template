@@ -1,17 +1,51 @@
-const express = require('express')
-
+const express = require('express');
+const { v4: uuidv4 } = require('uuid')
+const {listContacts, getContactById, removeContact, addContact, updateContact } = require('../../models/contacts')
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.json({
+    status: 'success',
+    code: 200,
+    data: await listContacts(),
+  });
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params;
+  const findContactById = await getContactById(contactId)
+  if (findContactById) {
+    res.json({
+      status: 'success',
+      code: 200,
+      data: findContactById,
+    });
+  } if (!findContactById) {
+    res.json({
+      status: 'error',
+      code: 404,
+      message: "Not found" 
+    })
+  }
+ 
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const {name, email, phone} = req.body
+  const newContact = {
+    id: uuidv4(),
+    name: name,
+    email,
+    phone
+  }
+ res.status(201).json({
+    status: 'success',
+    code: 201,
+    data: newContact,
+    
+ });
+  addContact(newContact)
+  
 })
 
 router.delete('/:contactId', async (req, res, next) => {
@@ -21,5 +55,6 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
+
 
 module.exports = router
