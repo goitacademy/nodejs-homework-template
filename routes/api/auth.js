@@ -4,6 +4,7 @@ const {
   verifyMail,
   mailToVerify,
   loginUser,
+  refreshUser,
   logoutUser,
   updateSubUser,
   updateAvatar,
@@ -13,6 +14,7 @@ const {
   loginSchema,
   updateSubSchema,
   verifyEmailSchema,
+  refreshTokenSchema,
 } = require("../../models/auth/userSchema");
 const authenticate = require("../../middlewares/authMiddlewar");
 const upload = require("../../middlewares/upload");
@@ -83,6 +85,20 @@ router.get("/current", authenticate, (req, res, next) => {
   try {
     const { subscription, email } = req.user;
     res.json({ subscription, email });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/refresh", async (req, res, next) => {
+  try {
+    const { error } = refreshTokenSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: `${error}` });
+    } else {
+      const user = await refreshUser(req);
+      res.json(user);
+    }
   } catch (error) {
     next(error);
   }

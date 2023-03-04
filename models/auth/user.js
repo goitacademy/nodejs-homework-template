@@ -9,10 +9,11 @@ const Jimp = require("jimp");
 const { nanoid } = require("nanoid");
 const HttpError = require("../../helpers/HttpError");
 const sendEmail = require("../../helpers/sendEmail");
-const mail = require("../../helpers/mailVerify")
+const mail = require("../../helpers/mailVerify");
+const createTokens = require("../../helpers/createToken");
 dotenv.config();
 
-const { SECRET_KEY, PORT = 3000 } = process.env;
+const { PORT = 3000, REFRESH_SECRET_KEY } = process.env;
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
 const registerUser = async (req) => {
@@ -57,8 +58,10 @@ const verifyMail = async (req) => {
   if (!user) {
     throw HttpError(404, "User not found");
   }
-  await User.findByIdAndUpdate(user._id,
-    { verify: true, verificationToken: "" });
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
   return {
     message: "Verification successful",
   };
@@ -70,7 +73,7 @@ const mailToVerify = async (req) => {
   if (!user) {
     throw HttpError(401, "Email not found");
   }
-  const {verificationToken} = user
+  const { verificationToken } = user;
   if (!verificationToken) {
     throw HttpError(400, "Verification has already been passed");
   }
@@ -93,19 +96,19 @@ const loginUser = async (req) => {
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
-  if (!user.varify) {
+  if (!user.verify) {
     throw HttpError(401, "Email isn't verify");
   }
   const compareResult = await bcrypt.compare(password, user.password);
   if (!compareResult) {
     throw HttpError(401, "Email or password is wrong");
   }
-  const payload = { id: user._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(user._id, { token });
+
+  const tokens = createTokens(user._id);
+  await User.findByIdAndUpdate(user._id, { ...tokens });
 
   return {
-    token: token,
+    ...tokens,
     user: {
       email: user.email,
       subscription: user.subscription,
@@ -113,9 +116,28 @@ const loginUser = async (req) => {
   };
 };
 
+const refreshUser = async (req) => {
+  const { refreshToken: currentToken } = req.body;
+  const { id } = jwt.verify(currentToken, REFRESH_SECRET_KEY);
+  const tokens = createTokens(id);
+
+  const user = await User.findByIdAndUpdate(id, { ...tokens });
+  if (!user || !user.refreshToken || user.refreshToken !== currentToken) {
+    throw HttpError(403, "Not authorized");
+  } else {
+    return {
+      ...tokens,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    };
+  }
+};
+
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate(_id, { refreshToken: "", accessToken: "" });
 };
 
 const updateSubUser = async (req, res) => {
@@ -162,6 +184,7 @@ module.exports = {
   verifyMail,
   mailToVerify,
   loginUser,
+  refreshUser,
   logoutUser,
   updateSubUser,
   updateAvatar,
