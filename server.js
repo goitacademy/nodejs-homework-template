@@ -9,7 +9,7 @@ const DB_URL = process.env.MONGO_URL;
 mongoose
   .connect(DB_URL)
   .then(() =>
-    app.listen(3238, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful");
       console.log(`Database works on PORT ${PORT}`);
     })
