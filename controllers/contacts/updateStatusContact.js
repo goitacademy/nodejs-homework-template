@@ -3,7 +3,7 @@ const {
   updateStatusContactById,
 } = require("../../service/contacts");
 
-const { updateStatusSchema } = require("../../schemas/joiValidate");
+const { updateStatusSchema } = require("../../middlewares/joiValidate");
 const updateStatusContact = async (req, res) => {
   const { error } = updateStatusSchema.validate(req.body);
 

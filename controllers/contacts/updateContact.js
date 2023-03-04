@@ -1,5 +1,5 @@
 const { listContacts, updateContactById } = require("../../service/contacts");
-const { updateContactSchema } = require("../../schemas/joiValidate");
+const { updateContactSchema } = require("../../middlewares/joiValidate");
 const updateContact = async (req, res) => {
   const { name, email, phone } = req.body;
   if (name || email || phone) {

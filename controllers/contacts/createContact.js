@@ -1,5 +1,5 @@
 const { addContact } = require("../../service/contacts");
-const { addContactSchema } = require("../../schemas/joiValidate");
+const { addContactSchema } = require("../../middlewares/joiValidate");
 
 const createContact = async (req, res) => {
   const { error, value } = addContactSchema.validate(req.body);
