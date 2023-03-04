@@ -1,40 +1,24 @@
-const express = require("express");
-const morgan = require("morgan");
+const mongoose  = require("mongoose");
+const app = require("./app");
 require("dotenv").config();
-// const app = require("./app");
-const app = express();
-
-
-
-const { connectMongo } = require("./db/connection");
-const contactsRouter = require("./routes/api/contacts");
-
-// Servises
-// CustomErrors
-
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(morgan("tiny"));
+const DB_URL = process.env.MONGO_URL;
 
-app.use("api/contacts", contactsRouter);
+mongoose
+  .connect(DB_URL)
+  .then(() =>
+    app.listen(3238, () => {
+      console.log("Database connection successful");
+      console.log(`Database works on PORT ${PORT}`);
+    })
+  )
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
-app.use((error, req, res, next) => {
-  res.status(500).json({ message: error.message });
-});
 
-const start = async () => {
-  try {
-    await connectMongo();
 
-    app.listen(PORT, (err) => {
-      if (err) console.log("Error at server launch", err);
-      console.log(`Server running. Use our API on port: ${PORT}`);
-    });
-  } catch (error) {
-    console.error(`Failed to launch application with error: ${err.message}`);
-  }
-};
 
-start();

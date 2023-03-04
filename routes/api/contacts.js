@@ -1,21 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getContacts,
-  getContactById,
-  deleteContact,
-  addContact,
-  updateContact,
+  getContactsController ,
+  getContactByIdController ,
+  deleteContactController ,
+  addContactController ,
+  updateContactController ,
 } = require("../../controllers/contactsControllers");
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 
-router.get("/", getContacts);
 
-router.get("/:contactId", getContactById);
 
-router.delete("/:contactId", deleteContact);
+router.get("/", asyncWrapper(getContactsController ));
 
-router.post("/", addContact);
+router.get("/:id", asyncWrapper(getContactByIdController) );
 
-router.put("/:contactId", updateContact);
+router.delete("/:id", deleteContactController );
+
+router.post("/", addContactController );
+
+router.put("/:id", updateContactController );
 
 module.exports = router;
