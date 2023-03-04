@@ -1,20 +1,21 @@
 const { Contact } = require("../../models/contacts");
-const { requestError } = require("../../helpers/requestError");
 
 const updateById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-      new: true,
-    });
-    if (!result) {
-      throw requestError(404, "Not found");
-    }
 
-    res.json({
+    // Enabling { new: true } will return modified document rather than original.
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true },
+    ).lean();
+
+    if (!result) throw new Error("Not found");
+
+    return res.json({
       status: "success",
-      code: 200,
-      data: { data: result },
+      data: { result },
     });
   } catch (error) {
     next(error);

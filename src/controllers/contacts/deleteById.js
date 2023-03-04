@@ -4,14 +4,14 @@ const { requestError } = require("../../helpers/requestError");
 const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+
     const result = await Contact.findByIdAndRemove(contactId);
-    if (!result) {
-      throw requestError(404, "Not found");
-    }
-    res.json({
+
+    if (!result) throw requestError(404, "Not found");
+
+    return res.json({
       status: "success",
-      code: 200,
-      message: "Contact deleted successfully",
+      message: "Contact deleted successfully", // changed from 'data' to 'message'
       data: { result },
     });
   } catch (error) {
