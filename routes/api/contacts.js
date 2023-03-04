@@ -12,7 +12,8 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
+  try {
+    const { contactId } = req.params;
   const findContactById = await getContactById(contactId)
   if (findContactById) {
     res.json({
@@ -24,11 +25,14 @@ router.get('/:contactId', async (req, res, next) => {
     res.json({
       status: 'error',
       code: 404,
-      message: "Not found" 
+      message: "Not found"
     })
   }
- 
+  } catch (err) {
+    console.log(err)
+  }
 })
+
 
 router.post('/', async (req, res, next) => {
   const {name, email, phone} = req.body
