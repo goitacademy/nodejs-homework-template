@@ -35,5 +35,10 @@ router.post(
   authenticate,
   ctrlWrapper(ctrl.logout)
 );
+router.patch(
+  "/",
+  authenticate,
+  ctrlWrapper(ctrl.updateUser)
+);
 
 module.exports = router;
