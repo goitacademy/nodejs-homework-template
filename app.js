@@ -5,10 +5,10 @@ const moment = require("moment");
 const fs = require("fs/promises");
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
-
-dotenv.config();
 
 const app = express();
 app.use(async (req, res, next) => {
