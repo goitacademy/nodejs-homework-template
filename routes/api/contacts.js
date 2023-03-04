@@ -1,25 +1,30 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const { contacts: ctrl } = require("../../controllers");
+const { validation, isValidation, authorization, } = require("../../middlewares");
+const { schemas } = require("../../models");
 
-const router = express.Router()
+// GET /api/contacts/
+router.get("/", authorization, ctrl.getAll);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// GET /api/contacts/:contactId
+router.get("/:contactId", isValidation, ctrl.getById);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// POST /api/contacts/
+router.post("/", authorization, validation(schemas.addContactSchema), ctrl.add);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// DELETE /api/contacts/:contactId
+router.delete("/:contactId", ctrl.remove);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// UPDATE All /api/contacts/:contactId
+router.put("/:contactId", validation(schemas.addContactSchema), ctrl.update);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// UPDATE a part of the object /api/contacts/:contactId/favorite
+router.patch(
+  "/:contactId/favorite",
+  isValidation,
+  validation(schemas.updateFavoriteFieldSchema),
+  ctrl.updateFavorite
+);
 
-module.exports = router
+module.exports = router;
