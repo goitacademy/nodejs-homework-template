@@ -1,31 +1,37 @@
-## GoIT Node.js Course Template Homework
+Приватна колекція контактів API
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Servers: 'https://privatcontacts.onrender.com/api'
 
-Додайте ментора до колаборації
+User: /users
 
-Для кожної домашньої роботи створюйте свою гілку.
+POST "/register" - create new user
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Request body - application/json
+Schema
+{
+"name": "Adrian Cross",
+"email": "across@mail.com",
+"password": "examplepwd12345",
+"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
+}
 
-Кожна нова гілка для др повинна робитися з master
+Responses:
+User created
+status: 201
+data: {
+email: "across@mail.com",
+subscription: "starter"
+}
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+User didn't created.
+status: 400
+data: {
+     message: `Error` 
+}
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+Server error.
+status: 500
+data: {
+     message: `Server error` 
+}
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
