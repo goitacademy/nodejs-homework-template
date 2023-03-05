@@ -1,25 +1,52 @@
 const express = require("express");
+const {
+	listContacts,
+	getContactById,
+	removeContact,
+	addContact,
+	updateContact,
+} = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-	res.json({ message: "template message" });
+	listContacts()
+		.then(contacts => res.json({ contacts }))
+		.catch(error =>
+			res.status(400).json({ contacts: [], message: error.message })
+		);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
+	getContactById(req.params.contactId)
+		.then(contact => res.json({ contact }))
+		.catch(error =>
+			res.status(400).json({ contact: {}, message: error.message })
+		);
 });
 
 router.post("/", async (req, res, next) => {
-	res.json({ message: "template message" });
+	addContact(req.body)
+		.then(contacts => res.json({ contacts }))
+		.catch(error =>
+			res.status(400).json({ contacts: [], message: error.message })
+		);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
+	removeContact(req.params.contactId)
+		.then(contacts => res.json({ contacts }))
+		.catch(error =>
+			res.status(400).json({ contacts: [], message: error.message })
+		);
 });
 
 router.put("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
+	updateContact(req.params.contactId, req.body)
+		.then(contacts => res.json({ contacts }))
+		.catch(error =>
+			res.status(400).json({ contacts: [], message: error.message })
+		);
 });
 
 module.exports = router;
