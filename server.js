@@ -1,17 +1,14 @@
-require('dotenv').config();
-
-const mongoose = require("mongoose");
+require("dotenv").config();
 const app = require("./src/app");
+const db = require("./src/db");
 
-const { DB_HOST, PORT = 3000 } = process.env;
+const PORT = process.env.PORT || 3000;
 
-mongoose
-  .connect(DB_HOST, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => app.listen(PORT, () => console.log("Database connect success")))
-  .catch((error) => {
-    console.log(error.message);
+db.connectMongo()
+  .then(() =>
+    app.listen(PORT, () => console.log("Database connection successful"))
+  )
+  .catch((err) => {
+    console.error(`Failed to start server. Error: ${err.message}`);
     process.exit(1);
   });
