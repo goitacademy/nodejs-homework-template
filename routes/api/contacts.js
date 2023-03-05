@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid')
 const {listContacts, getContactById, removeContact, addContact, updateContact } = require('../../models/contacts')
 const router = express.Router()
+const {contactValidation} = require('../../validation/contacts')
 
 router.get('/', async (req, res, next) => {
   res.json({
@@ -75,6 +76,17 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
+  const { error } = contactValidation(req.body);
+
+  
+  if (error) {
+    res.json({
+      status: 'error',
+      code: 400,
+      message: error.details[0].message,
+    });
+  }
+
   const { contactId } = req.params;
   const updatedContact = await updateContact(contactId, req.body)
   console.log(updateContact)
