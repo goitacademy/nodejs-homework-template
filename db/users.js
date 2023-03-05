@@ -1,7 +1,6 @@
-const { model, Schema } = require('mongoose');
-const bCrypt = require('bcrypt')
-
-
+const { model, Schema } = require("mongoose");
+const bCrypt = require("bcrypt");
+const Joi = require('joi');
 
 const usersSchema = new Schema({
   password: {
@@ -22,14 +21,13 @@ const usersSchema = new Schema({
     type: String,
     default: null,
   },
-  
 });
 
-usersSchema.pre('save', async function () {
-    if (this.isNew) {
-        this.password = await bCrypt.hash(this.password,10)
-    }
-})
+usersSchema.pre("save", async function () {
+  if (this.isNew) {
+    this.password = await bCrypt.hash(this.password, 10);
+  }
+});
 
 // usersSchema.method.setPassword = function (password) {
 //     this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6))
@@ -39,8 +37,11 @@ usersSchema.pre('save', async function () {
 //   return bCrypt.compareSync(password, this.password);
 // };
 
+
+
 const User = model("User", usersSchema);
 
 module.exports = {
   User,
+ 
 };

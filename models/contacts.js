@@ -1,7 +1,7 @@
 const { Contact } = require("../db/collections");
 
-async function getContacts() {
-  const contacts = await Contact.find({});
+async function getContacts(owner) {
+  const contacts = await Contact.find({owner});
   return contacts;
 }
 
@@ -15,13 +15,19 @@ async function removeContact(contactId) {
   return deletedContact;
 }
 
-async function addContact({ name, email, phone, favorite }) {
-  const newContact = await new Contact({ name, email, phone, favorite });
+async function addContact({ name, email, phone, favorite },owner) {
+  const newContact = await new Contact({
+    name,
+    email,
+    phone,
+    favorite,
+    owner
+  });
   await newContact.save();
   return newContact;
 }
 
-const updateContact = async (contactId, { name, email, phone, favorite }) => {
+const updateContact = async (contactId, { name, email, phone, favorite}) => {
   const contactsUpdate = await Contact.updateOne(
     { _id: contactId },
     { name, email, phone, favorite },

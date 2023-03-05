@@ -3,7 +3,9 @@ const { Contacts } = require("../db/collections");
 
 const getContactsList = async (req, res) => {
   try {
-    const contacts = await getContacts();
+    const {_id}=req.user
+
+    const contacts = await getContacts(_id);
 
     res.status(200).json({ contacts });
   } catch (error) {

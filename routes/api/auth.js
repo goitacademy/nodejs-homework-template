@@ -6,6 +6,8 @@ const {
 } = require("../../controllers/Auth/AuthController");
 
 
+
+
 router.post("/signup", registrationController);
 router.post("/login", loginController);
 

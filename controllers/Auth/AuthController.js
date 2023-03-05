@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
-const Users = require("../../db/users");
-const {registration,login} = require('../../services/authService')
+const User = require("../../db/users");
+const { registration, login, findUser } = require('../../services/authService')
+const { joiRegisterSchema } = require("../../schema/joiRegisterSchema");
+const bCrypt = require("bcrypt");
 
 const registrationController = async(req, res) => {
     const { email, password } = req.body
@@ -9,7 +11,48 @@ const registrationController = async(req, res) => {
     
     res.json({status:'success'})
  }
-const loginController = (req, res) => { };
+// const loginController = async (req, res) => {
+//     const { error } = joiRegistrationSchema.validate(req.body);
+//     if (error) {
+//       return res.status(400).json({ message: "Missing fields" });
+//     }
+//     const { email, password } = req.body;
+
+//     const token = await login(email, password)
+
+//     res.json({status:'success', token})
+
+//  };
+
+const loginController = async (req,res) => {
+  const { error } = joiRegisterSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+    const { email, password } = req.body;
+  const user = await findUser({ email });
+
+  if (!user) {
+    return res.status(409).json({ message: "Email in use" });
+  }
+
+  if (!(await bCrypt.compare(password, user.password))) {
+    return res.status(409).json({ message: "Wrong password" });
+  }
+
+  const token = jwt.sign(
+    { _id: user._id, cratedAt: user.subscription },
+    process.env.JWT_SECRET
+  );
+  // return token
+  return res.status(200).json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
 
 module.exports = {
   registrationController,
