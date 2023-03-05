@@ -1,5 +1,14 @@
-const app = require('./app')
+require("dotenv").config();
+const app = require("./src/app");
+const db = require("./src/db");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const PORT = process.env.PORT || 3000;
+
+db.connectMongo()
+  .then(() =>
+    app.listen(PORT, () => console.log("Database connection successful"))
+  )
+  .catch((err) => {
+    console.error(`Failed to start server. Error: ${err.message}`);
+    process.exit(1);
+  });
