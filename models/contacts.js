@@ -14,9 +14,9 @@ const getAllContacts = async () => {
 const listContacts = async (req, res, some) => {
   try {
     const contacts = await getAllContacts();
-    return res.status(201).json({
+    return res.status(200).json({
       status: 'success',
-      code: 201,
+      code: 200,
       data: { contacts },
     })
   
@@ -32,14 +32,14 @@ const getContactById = async (req, res, next) => {
     const contactById = await contacts.find((i) => i.id === contactId);
     if (!contactById) {
       return res.status(401).json({
-        status: 'error',
+        status: '401',
         code: 401,
         message: "Not found"
       })
     }
-    return res.status(201).json({
+    return res.status(200).json({
       status: 'success',
-      code: 201,
+      code: 200,
       data: { contactById },
     })
   } catch (error) {
@@ -49,8 +49,9 @@ const getContactById = async (req, res, next) => {
 
 
 const removeContact = async (req, res, next) => {
-  const contacts = getAllContacts();
+  const contacts = await getAllContacts();
   const { contactId } = req.params;
+  console.log(contactId, contacts);
   const contactById = contacts.filter((i) => i.id !== contactId);
   if (contacts.length === contactById.length) {
     return res.status(404).json(
@@ -88,10 +89,7 @@ const addContact = async (req, res, next) => {
         data: { newContact },
       })
     }
-    return res.status(404).json({
-      code: 401,
-      message: "missing required name field"
-    })
+    throw HttpError(error)
   }
   catch (error) {
     console.log(error);
