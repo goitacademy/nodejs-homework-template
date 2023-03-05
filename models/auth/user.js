@@ -44,7 +44,7 @@ const registerUser = async (req) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: mail({BASE_URL, PORT, verificationToken }),
+    html: mail({ BASE_URL, PORT, verificationToken }),
   };
 
   await sendEmail(verifyEmail);
@@ -80,7 +80,7 @@ const mailToVerify = async (req) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: mail({BASE_URL, PORT, verificationToken }),
+    html: mail({ BASE_URL, PORT, verificationToken }),
   };
 
   await sendEmail(verifyEmail);
@@ -121,19 +121,22 @@ const loginUser = async (req) => {
 const refreshUser = async (req) => {
   const { refreshToken: currentToken } = req.body;
   const { id } = jwt.verify(currentToken, REFRESH_SECRET_KEY);
-  const tokens = createTokens(id);
 
-  const user = await User.findByIdAndUpdate(id, { ...tokens });
+  const user = await User.findById(id);
   if (!user || !user.refreshToken || user.refreshToken !== currentToken) {
     throw HttpError(403, "Not authorized");
   } else {
+    const tokens = createTokens(id);
+
+    const userUpdate = await User.findByIdAndUpdate(id, { ...tokens });
+
     return {
       ...tokens,
       user: {
-      email: user.email,
-      subscription: user.subscription,
-      name: user.name,
-      avatarURL: user.avatarURL,
+        email: userUpdate.email,
+        subscription: userUpdate.subscription,
+        name: userUpdate.name,
+        avatarURL: userUpdate.avatarURL,
       },
     };
   }
