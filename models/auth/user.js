@@ -49,7 +49,7 @@ const registerUser = async (req) => {
 
   await sendEmail(verifyEmail);
 
-  return { email, subscription };
+  return { name, avatarURL, email, subscription };
 };
 
 const verifyMail = async (req) => {
@@ -112,6 +112,8 @@ const loginUser = async (req) => {
     user: {
       email: user.email,
       subscription: user.subscription,
+      name: user.name,
+      avatarURL: user.avatarURL,
     },
   };
 };
@@ -128,8 +130,10 @@ const refreshUser = async (req) => {
     return {
       ...tokens,
       user: {
-        email: user.email,
-        subscription: user.subscription,
+      email: user.email,
+      subscription: user.subscription,
+      name: user.name,
+      avatarURL: user.avatarURL,
       },
     };
   }
