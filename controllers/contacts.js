@@ -4,7 +4,16 @@ const { HttpErorr, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  console.log(req.query);
+  console.log("3333");
+  console.log("favorite.req.query", req.query.favorite);
+ 
+  if (req.query.favorite) {
+    console.log("444");
+    const contacts = await Contact.find(
+      { owner, favorite: req.query.favorite });
+    res.json({ contacts, status: "200" });
+  }
+
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
   const contacts = await Contact.find({ owner }, "", {
@@ -12,11 +21,15 @@ const getAll = async (req, res) => {
     limit,
   }).populate("owner", "email");
   res.json({ contacts, status: "200" });
-}; 
+};
 
 const getById = async (req, res) => {
-  const contact = await Contact.findById(req.params.contactId);
-  if (!contact) {
+  const { _id: owner } = req.user;
+  const { contactId } = req.params;
+
+  const contact = await Contact.find({ _id: contactId, owner: owner });
+
+  if (contact.length === 0) {
     throw HttpErorr(404, "Not found");
   }
   res.json({ contact, status: "200" });
@@ -44,7 +57,8 @@ const updateFavorite = async (req, res, next) => {
   const updateContacts = await Contact.findByIdAndUpdate(
     req.params.contactId,
     req.body,
-    { new: true }
+    { new: true },
+  
   );
   if (!updateContacts) {
     throw HttpErorr(404, "Not found");
@@ -60,6 +74,7 @@ const deleteById = async (req, res, next) => {
     res.json({ message: "contact deleted", status: "200" });
   }
 };
+
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
