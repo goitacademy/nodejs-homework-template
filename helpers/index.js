@@ -3,6 +3,7 @@ const ControllersHelper = require('./ControllersHelper');
 const MongooseError = require('./MongooseError');
 const isValidId = require('./isValidID');
 const optimizationImg = require('./optimizationImg');
+const sendEmail = require('./sendEmail');
 
 module.exports = {
   HttpError,
@@ -10,4 +11,5 @@ module.exports = {
   MongooseError,
   isValidId,
   optimizationImg,
+  sendEmail,
 };
