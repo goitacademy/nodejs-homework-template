@@ -1,2 +1,0 @@
-DB_HOST=
-PORT=
