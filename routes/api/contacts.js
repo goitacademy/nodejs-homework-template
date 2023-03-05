@@ -36,6 +36,17 @@ router.get('/:contactId', async (req, res, next) => {
 
 
 router.post('/', async (req, res, next) => {
+  try {
+    const { error } = contactValidation(req.body);
+
+  if (error) {
+    res.json({
+      status: 'error',
+      code: 400,
+      message: error.details[0].message,
+    });
+  }
+
   const {name, email, phone} = req.body
   const newContact = {
     id: uuidv4(),
@@ -50,12 +61,17 @@ router.post('/', async (req, res, next) => {
     
  });
   addContact(newContact)
+  } catch (error) {
+    console.log(error)
+  }
+
   
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const delitedContact = await removeContact(contactId)
+  try {
+    const { contactId } = req.params;
+    const delitedContact = await removeContact(contactId)
 
   if (delitedContact.length > 0) {
     res.status(200).json({
@@ -72,13 +88,17 @@ router.delete('/:contactId', async (req, res, next) => {
       message: `contact with ${contactId} is not in DataBase`
     })
   }
+  } catch (error) {
+    console.log(error)
+  }
+  
 
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  const { error } = contactValidation(req.body);
+  try {
+    const { error } = contactValidation(req.body);
 
-  
   if (error) {
     res.json({
       status: 'error',
@@ -104,6 +124,10 @@ router.put('/:contactId', async (req, res, next) => {
       message: 'Not found',
     });
   }
+  } catch (error) {
+    console.log(error)
+  }
+ 
 })
 
 
