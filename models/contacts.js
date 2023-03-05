@@ -6,7 +6,6 @@ const contactPath = path.join("models","contacts.json" )
 const getAllContacts = async () => {
   const data = await fs.readFile(contactPath);
   const contacts = JSON.parse(data);
-  console.log(contacts);
   return contacts
 };
 
@@ -51,7 +50,6 @@ const getContactById = async (req, res, next) => {
 const removeContact = async (req, res, next) => {
   const contacts = await getAllContacts();
   const { contactId } = req.params;
-  console.log(contactId, contacts);
   const contactById = contacts.filter((i) => i.id !== contactId);
   if (contacts.length === contactById.length) {
     return res.status(404).json(
@@ -89,7 +87,7 @@ const addContact = async (req, res, next) => {
         data: { newContact },
       })
     }
-    throw HttpError(error)
+    return
   }
   catch (error) {
     console.log(error);
@@ -101,7 +99,6 @@ const updateContact = async (req,res,next) => {
   try {
     const {contactId} = req.params;
     const { name, email, phone } = req.body;
-    console.log(req.body, 1)
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({
         code: 400,

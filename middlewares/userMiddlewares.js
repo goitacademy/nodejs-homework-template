@@ -1,6 +1,3 @@
-const userSchema = require('../schema/userschema');
-
-
 const checkUserDate = (schema) => {
     return (req, res, next) => {
         const { error } = schema.validate(req.body);
