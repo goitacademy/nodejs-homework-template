@@ -1,3 +1,4 @@
-const contactValidation = require('./validationMiddleware');
+const contactValidation = require("./contactsValidation");
+const userValidation = require("./userValidation");
 
-module.exports = contactValidation;
+module.exports = { contactValidation, userValidation };

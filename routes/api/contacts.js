@@ -9,7 +9,7 @@ const {
   addContactController,
   updateContactController,
   updateStatusContactController,
-} = require("../../controllers");
+} = require("../../controllers/contacts");
 
 const {controllerWrapper} = require('../../helpers');
 

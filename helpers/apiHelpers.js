@@ -21,4 +21,4 @@ const errorHandler = (err, _, res, next) => {
     })
 }
 
-module.exports = { contactsPath, isEmpty, controllerWrapper, errorHandler };
+module.exports = { isEmpty, controllerWrapper, errorHandler };

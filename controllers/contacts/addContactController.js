@@ -1,5 +1,5 @@
-const { addContact } = require("../services");
-const contactValidation = require("../middlewares");
+const { addContact } = require("../../services");
+const contactValidation = require("../../middlewares");
 
 const addContactController = async (req, res) => {
   const { error } = contactValidation.validate(req.body);
@@ -26,6 +26,6 @@ const addContactController = async (req, res) => {
   }
 
   return res.status(201).json(newContact);
-};
+}; 
 
 module.exports = addContactController;
