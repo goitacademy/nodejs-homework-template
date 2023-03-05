@@ -25,4 +25,4 @@ const contactValidation = Joi.object({
   favorite: Joi.boolean(),
 });
 
-module.exports = contactValidation;
+module.exports = contactValidation; 
