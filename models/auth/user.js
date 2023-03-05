@@ -144,7 +144,8 @@ const refreshUser = async (req) => {
 
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { refreshToken: "", accessToken: "" });
+  const user = await User.findByIdAndUpdate(_id, { refreshToken: "", accessToken: "" });
+  return user||"Not found"
 };
 
 const updateSubUser = async (req, res) => {

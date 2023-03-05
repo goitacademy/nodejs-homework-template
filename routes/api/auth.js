@@ -106,8 +106,12 @@ router.post("/refresh", async (req, res, next) => {
 
 router.post("/logout", authenticate, async (req, res, next) => {
   try {
-    await logoutUser(req);
-    res.status(204);
+    const user = await logoutUser(req);
+    if (user==="Not found") {
+    res.status(404).json({ message: user });
+    } else {
+    res.status(204).json({ message: "Logout." });
+    }
   } catch (error) {
     next(error);
   }
