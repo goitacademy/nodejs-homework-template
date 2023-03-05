@@ -11,7 +11,14 @@ const addNewUser = async (body) => {
     await newUser.save();
 };
 
+const updateUser = async (userId, data) => {
+    return await User.findByIdAndUpdate({ _id: userId }, data, {
+        new: true,
+      });
+}
+
 module.exports = {
   findUserInDb,
   addNewUser,
+  updateUser,
 };
