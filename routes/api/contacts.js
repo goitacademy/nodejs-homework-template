@@ -11,9 +11,11 @@ const {
   updateStatusContactController,
 } = require("../../controllers/contacts");
 
+const {auth} =require('../../middlewares');
+
 const {controllerWrapper} = require('../../helpers');
 
-router.get("/", controllerWrapper(listContactsController));
+router.get("/", auth, controllerWrapper(listContactsController));
 
 router.get("/:contactId", controllerWrapper(getContactByIdController));
 

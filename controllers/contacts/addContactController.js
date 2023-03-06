@@ -4,6 +4,7 @@ const contactValidation = require("../../middlewares/contactsValidation");
 const addContactController = async (req, res) => {
   const { error } = contactValidation.validate(req.body);
   const { name, email, phone, favorite = false } = req.body;
+  const {id: owner} = req.user;
 
   const missing = !name || !email || !phone;
   const word = !name ? "name" : !email ? "email" : "phone";
@@ -19,7 +20,7 @@ const addContactController = async (req, res) => {
     return errorHandling(400, error.details[0].message);
   }
 
-  const newContact = await addContact({name, email, phone, favorite});
+  const newContact = await addContact({name, email, phone, favorite, owner});
 
   if (!newContact) {
     return errorHandling(400, "contact with same data already exists");

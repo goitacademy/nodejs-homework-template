@@ -6,13 +6,13 @@ const contactValidation = Joi.object({
     .trim()
     .messages({
       "string.pattern.base":
-        "The name should consist of a first and a last name",
+        "The name should consist of a first and a last name and numbers are not allowed",
     }),
 
   email: Joi.string()
     .email()
     .trim()
-    .messages({ "string.email": "The string is not a valid e-mail" }),
+    .messages({ "string.email": "Invalid email" }),
 
   phone: Joi.string()
     .trim()
@@ -25,4 +25,4 @@ const contactValidation = Joi.object({
   favorite: Joi.boolean(),
 });
 
-module.exports = contactValidation; 
+module.exports = contactValidation;

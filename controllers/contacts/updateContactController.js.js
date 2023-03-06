@@ -1,10 +1,11 @@
 const { updateContact } = require("../../services");
 
 const { isEmpty } = require("../../helpers");
-const contactValidation = require("../../middlewares");
+const contactValidation = require("../../middlewares/contactsValidation");
 
 const updateContactController = async (req, res) => {
   const { contactId: id } = req.params;
+  const {id: owner} = req.user;
   const { error } = contactValidation.validate(req.body);
 
   if (isEmpty(req.body)) {
@@ -17,7 +18,7 @@ const updateContactController = async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const updatedContact = await updateContact(id, req.body);
+  const updatedContact = await updateContact(id, owner, req.body);
   if (!updatedContact) {
     return res.status(404).json({
       message: "Not found",

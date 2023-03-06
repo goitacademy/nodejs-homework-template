@@ -5,7 +5,7 @@ const userValidation = Joi.object({
     .email()
     .trim()
     .required()
-    .messages({ "string.email": "The string is not a valid e-mail" }),
+    .messages({ "string.email": "Invalid e-mail" }),
 
   password: Joi.string().alphanum().trim().min(7).strip().required(),
 });

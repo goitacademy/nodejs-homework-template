@@ -28,6 +28,10 @@ const userSchema = new Schema({
     this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6));
   };
 
+  userSchema.methods.validPassword = function(password) {
+    return bCrypt.compareSync(password, this.password);
+  };
+
   const User = model("user", userSchema);
 
   module.exports = User;
