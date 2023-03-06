@@ -27,6 +27,7 @@ const createContact = async (req, res, next) => {
     } catch (error) {
       res.status(400).json({ message: error.message });
       console.log(error.message);
+      next(error);
     }
   }
 };

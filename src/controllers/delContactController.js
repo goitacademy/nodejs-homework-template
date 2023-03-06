@@ -10,6 +10,7 @@ const delContact = async (req, res, next) => {
         message: "Not found",
         status: 404,
       });
+      next();
     };
   } else {
     const contacts = await removeContact(contactId);

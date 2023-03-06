@@ -3,24 +3,19 @@ const Schema = mongoose.Schema;
 
 const conts = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
-      minlength: 2,
-      maxlength: 170,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
     },
     phone: {
       type: String,
-      minlength: 7,
-      maxlength: 15,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }

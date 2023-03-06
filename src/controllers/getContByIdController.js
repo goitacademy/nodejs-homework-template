@@ -13,6 +13,7 @@ const getContById = async (req, res, next) => {
         message: "Not found",
         status: 404,
       });
+      next();
     };
   } else {
     const contactById = await getContactById(contactId);
