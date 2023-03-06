@@ -40,7 +40,7 @@ const addContact = async (name, email, phone) => {
   try{
     const text = await fs.readFile(contactsPath, "utf-8");
   let contacts = JSON.parse(text);
-  let id=JSON.stringify(Number(contacts[contacts.length -1].id)+1) ;
+  let id=JSON.stringify(Math.max(...contacts.map(e =>Number(e.id)))+1);
   contacts.push({
     id: id,
     name: name,

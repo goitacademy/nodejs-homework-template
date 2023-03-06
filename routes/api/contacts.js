@@ -1,41 +1,16 @@
 const express = require('express')
-const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../models/contacts')
+const { getContacts, getContact, deleteContact, createContact, updateContact } = require('../../controllers/controllers')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  const contacts = await listContacts();
-  res.status(200).json(contacts);
-})
+router.get('/', getContacts);
 
-router.get('/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  console.log(contactId);
-  const contact = await getContactById(contactId);
-  console.log(contact)
-  contact.length ? res.status(200).json(contact) : res.status(404).json("Not found!") 
-})
+router.get('/:contactId', getContact)
 
-router.post('/', async (req, res) => {
-  const { name, email, phone } = req.body;
-  const id =  await addContact(name, email, phone);
-  res.status(201).json(await getContactById(id))
-})
+router.post('/', createContact)
 
-router.delete('/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const isSuccess = await removeContact(contactId);
-  isSuccess ? res.status(200).json("Contact deleted") : res.status(404).json("Not found!")
-})
+router.delete('/:contactId', deleteContact)
 
-router.put('/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).json("Missing fields");
-    return;
-  }
- const updatedContact = await updateContact(contactId, req.body)
- updatedContact ? res.status(200).json(await getContactById(contactId)) : res.status(404).json("Not found!")
-})
+router.put('/:contactId', updateContact)
 
 module.exports = router
