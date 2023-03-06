@@ -3,12 +3,12 @@ const { listContacts, getContactById, removeContact, addContact, updateContact }
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', async (req, res) => {
   const { contactId } = req.params;
   console.log(contactId);
   const contact = await getContactById(contactId);
@@ -16,19 +16,19 @@ router.get('/:contactId', async (req, res, next) => {
   contact.length ? res.status(200).json(contact) : res.status(404).json("Not found!") 
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   const { name, email, phone } = req.body;
   const id =  await addContact(name, email, phone);
   res.status(201).json(await getContactById(id))
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params;
   const isSuccess = await removeContact(contactId);
   isSuccess ? res.status(200).json("Contact deleted") : res.status(404).json("Not found!")
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', async (req, res) => {
   const { contactId } = req.params;
   if (Object.keys(req.body).length === 0) {
     res.status(400).json("Missing fields");
