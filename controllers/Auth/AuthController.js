@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../db/users");
-const { registration, login, findUser } = require('../../services/authService')
+const { registration, login, findUser,logout } = require('../../services/authService')
 const { joiRegisterSchema } = require("../../schema/joiRegisterSchema");
 const bCrypt = require("bcrypt");
 
@@ -54,9 +54,19 @@ const loginController = async (req,res) => {
   });
 };
 
+const logoutController = async (req, res) => {
+  
+  const { _id } = req.user;
+    await logout({ _id });
+    res.status(204).json('No Content');
+
+  
+};
+
 module.exports = {
   registrationController,
-  loginController,
+    loginController,
+  logoutController
 };
 
 // async function register(req, res, next) {

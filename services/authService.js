@@ -12,6 +12,13 @@ async function login(_id, token) {
   await User.findByIdAndUpdate(_id, { token });
 };
 
+async function logout(_id) {
+  await User.findByIdAndUpdate(_id, { token:null });
+};
+
+
+
+
 async function findUser({ email }) {
   const user = await User.findOne({ email });
   return user;
@@ -47,5 +54,5 @@ async function findUser({ email }) {
 module.exports = {
   registration,
     login,
-  findUser
+  findUser,logout
 };
