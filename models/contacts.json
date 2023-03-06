@@ -58,5 +58,23 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "1690ead1-a6a0-4758-b4bd-bdb734290ad8",
+    "name": "Walter D`est",
+    "email": "dest@gmail.com",
+    "phone": "(098) 765-4321"
+  },
+  {
+    "id": "e1ff413d-0448-4562-98d3-f96684fbfc2f",
+    "name": "Walter Maier",
+    "email": "catcher@mail.com",
+    "phone": "(123) 456-789"
+  },
+  {
+    "id": "3f741d79-b9a2-4d34-b49f-918afb066f19",
+    "name": "Catcher Erano",
+    "email": "erano@mail.com",
+    "phone": "(432) 189-0541"
   }
 ]
