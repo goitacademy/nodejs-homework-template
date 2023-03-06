@@ -1,6 +1,6 @@
 <h1>Приватна колекція контактів API</h1>
 
-<h2 background-color="yellow">Servers: 'https://privatcontacts.onrender.com/api'</h2>
+<h2 color="yellow">Servers: 'https://privatcontacts.onrender.com/api'</h2>
 
 <h3 background-color="orange">User: /users</h3>
 
