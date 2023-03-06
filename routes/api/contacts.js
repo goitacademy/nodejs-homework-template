@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const Joi = require("joi");
 
 const contactSchema = Joi.object({
@@ -7,11 +7,10 @@ const contactSchema = Joi.object({
 	phone: Joi.string().min(1).required()
 })
 
-const router = express.Router()
+const router = express.Router();
 
-// router.get('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+const { listContacts, getContactById, removeContact, addContact, updateContact, } = require("../../models/contacts");
+
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await listContacts();
@@ -27,9 +26,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// router.get('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -51,9 +47,6 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 router.post("/", async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
@@ -75,9 +68,6 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -98,9 +88,6 @@ router.delete("/:id", async (req, res, next) => {
   } catch (error) {}
 });
 
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 router.put("/:id", async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
@@ -128,4 +115,4 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-module.exports = router
+module.exports = router;
