@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
+const Joi = require("joi");
 
 const contactsFuncPath = path.resolve("models/contacts.js");
 
@@ -36,6 +37,10 @@ router.get("/:contactId", async (req, res, next) => {
 
     const contactById = await getContactById(contactId);
 
+    if (contactById === undefined) {
+      res.status(404).json({ message: "Not found" });
+    }
+
     res.status(200).json({
       status: "success",
       code: "200",
@@ -53,10 +58,21 @@ router.post("/", async (req, res, next) => {
   try {
     const { body } = req;
 
-    const { name, email, phone } = body;
+    const joiSchema = Joi.object({
+      name: Joi.string().min(3).max(30).required(),
+      phone: Joi.string().min(10).max(15).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net", "uk", "ua", "org"] },
+        })
+        .required(),
+    });
 
-    if (!name & !email & !phone) {
-      return res.status(400).json({ message: "missing fields" });
+    const validationResult = joiSchema.validate(body);
+
+    if (validationResult.error) {
+      return res.status(400).json({ status: validationResult.error.details });
     }
 
     await addContact(body);
@@ -97,10 +113,21 @@ router.put("/:contactId", async (req, res, next) => {
       return res.status(400).json({ message: "missing id" });
     }
 
-    const { name, email, phone } = body;
+    const joiSchema = Joi.object({
+      name: Joi.string().min(3).max(30).optional(),
+      phone: Joi.string().min(10).max(15).optional(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net", "uk", "ua", "org"] },
+        })
+        .optional(),
+    });
 
-    if (!name & !email & !phone) {
-      return res.status(400).json({ message: "missing fields" });
+    const validationResult = joiSchema.validate(body);
+
+    if (validationResult.error) {
+      return res.status(400).json({ status: validationResult.error.details });
     }
 
     await updateContact(contactId, body);
@@ -117,9 +144,3 @@ router.put("/:contactId", async (req, res, next) => {
 });
 
 module.exports = router;
-
-// {
-//   "name": "Walter Maier",
-//   "email": "catcher@mail.com",
-//   "phone": "(123) 456-789"
-// }

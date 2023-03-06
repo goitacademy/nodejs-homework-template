@@ -20,7 +20,8 @@ const getContactById = async (contactId) => {
     const contactById = contacts.find((el) => el.id === contactId);
 
     if (!contactById) {
-      return console.log(`Contact with id:${contactId} not found!`);
+      console.log(`Contact with id:${contactId} not found!`);
+      return undefined;
     }
 
     console.log("contactById: ", contactById);
@@ -95,9 +96,15 @@ const updateContact = async (contactId, body) => {
 
     await contacts.forEach((contact) => {
       if (contact.id === contactId) {
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
+        if (name) {
+          contact.name = name;
+        }
+        if (email) {
+          contact.email = email;
+        }
+        if (phone) {
+          contact.phone = phone;
+        }
       }
     });
 
