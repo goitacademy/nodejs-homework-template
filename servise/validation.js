@@ -9,6 +9,7 @@ const validationPost = Joi.object({
     })
     .required(),
   phone: Joi.number().integer().required(),
+  favorite: Joi.boolean(),
 });
 
 const validationPut = Joi.object({
@@ -20,7 +21,12 @@ const validationPut = Joi.object({
   phone: Joi.number().integer(),
 });
 
+const validationPatch = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 module.exports = {
   validationPost,
   validationPut,
+  validationPatch,
 };
