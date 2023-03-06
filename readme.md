@@ -323,19 +323,3 @@ status: 500
 data: {
      message: `Server error` 
 }
-
-
-@ PUT /api/contacts/:id
-Отримує параметр id
-Отримує body в json-форматі c оновленням будь-яких полів name, email и phone
-Якщо body немає, повертає json з ключем {"message": "missing fields"} і статусом 400
-Якщо з body всі добре, викликає функцію updateContact(contactId, body). (Напиши її) для поновлення контакту в файлі contacts.json
-За результатом роботи функції повертає оновлений об'єкт контакту і статусом 200. В іншому випадку, повертає json з ключем "message": "Not found" і статусом 404
-
-
-@ PATCH / api / contacts /: contactId / favorite
-Отримує параметр contactId
-Отримує body в json-форматі c оновленням поля favorite
-Якщо body немає, повертає json з ключем {"message": "missing field favorite"}і статусом 400
-Якщо з body все добре, викликає функцію updateStatusContact (contactId, body) (напиши її) для поновлення контакту в базі
-За результатом роботи функції повертає оновлений об'єкт контакту і статусом 200. В іншому випадку, повертає json з ключем " message ":" Not found " і статусом 404
