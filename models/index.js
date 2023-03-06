@@ -1,5 +1,7 @@
-const ContactLeaveSchema = require('./contact');
+const Contact = require("./contact");
+const User = require("./user");
 
 module.exports = {
-    ContactLeaveSchema,
-}
+  Contact,
+  User,
+};
