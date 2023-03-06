@@ -2,7 +2,7 @@
 
 <h2 color="yellow">Servers: 'https://privatcontacts.onrender.com/api'</h2>
 
-https://img.shields.io/badge/label-User:/users-orange
+https://img.shields.io/badge/User%3A-%2Fusers-orange
        
 <h3 background-color="orange">User: /users</h3>
 
