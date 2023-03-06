@@ -12,26 +12,25 @@
 
 // module.exports = sendEmail;
 
-// Nodemailer with meta.ua service
+// Nodemailer with mailtrap.io service
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const { META_PASSWORD } = process.env;
+const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 const sendEmail = async (data) => {
     const nodemailerConfig = {
-        host: "smtp.meta.ua",
-        port: 465, // 25, 465 и 2255
-        secure: true,
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
         auth: {
-            user: "antifishka.goit@meta.ua",
-            pass: META_PASSWORD
+            user: EMAIL_USER,
+            pass: EMAIL_PASS,
         }
     }
 
     const transporter = nodemailer.createTransport(nodemailerConfig);
 
-    const email = { ...data, from: "antifishka.goit@meta.ua" };
+    const email = { ...data, from: "antifishka.zp@gmail.com" };
 
     try {
         await transporter.sendMail(email);

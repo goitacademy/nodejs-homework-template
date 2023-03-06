@@ -29,10 +29,10 @@ const signup = async (email, password, subscription, avatarURL) => {
         verificationToken,
     });
     
-    await sendEmail({
+    sendEmail({
         to: email,
         subject: 'Mail confirmation',
-        html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">Please, confirm your email address</a>`,
+        html: `Please, confirm your email by clicking on <a target="_blank" href="${BASE_URL}/api/auth/users/verify/${verificationToken}">this link</a>`,
     });
     
     return newUser;
@@ -65,7 +65,7 @@ const resendEmail = async (email) => {
     await sendEmail({
         to: user.email,
         subject: 'Mail confirmation',
-        html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${user.verificationToken}">Please, confirm your email address</a>`,
+        html: `Please, confirm your email by clicking on <a target="_blank" href="${BASE_URL}/api/auth/users/verify/${user.verificationToken}">this link</a>`,
     });
 };
 
