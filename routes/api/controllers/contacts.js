@@ -5,15 +5,15 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require("../../models/contacts.js");
+} = require("../../../models/contacts.js");
 
 const router = express.Router();
 
-const { validationForPost, validationForPut } = require("./validation");
+const { validationForPost, validationForPut } = require("../schemas/validation");
 
 // GET all contacts (http://localhost:3000/api/contacts/)
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const contacts = await listContacts();
     if (contacts) {
@@ -27,7 +27,7 @@ router.get("/", async (req, res, next) => {
 
 // Find contact by id (e.g. http://localhost:3000/api/contacts/1)
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", async (req, res) => {
   try {
     const data = await getContactById(req.params.contactId);
     if (data) {
@@ -41,7 +41,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 // Add new contact (Postman: Body -> select: raw, JSON)
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   try {
     const validatePost = validationForPost(req.body).error;
     console.log(validatePost);
@@ -61,7 +61,7 @@ router.post("/", async (req, res, next) => {
 
 // Remove contact by id from the list (e.g. http://localhost:3000/api/contacts/5)
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const deleteContact = await removeContact(contactId);
@@ -77,7 +77,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 // PUT - Contact update (e.g. http://localhost:3000/api/contacts/1)
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", async (req, res) => {
   try {
     const { error } = validationForPut(req.body);
     console.log(error);
@@ -95,7 +95,7 @@ router.put("/:contactId", async (req, res, next) => {
     }
     return res.status(404).json({ message: "Not Found" });
   } catch (error) {
-    next(error);
+    return res.status(500).json({ message: error.message });
   }
 });
 
