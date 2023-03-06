@@ -1,11 +1,11 @@
 <h1>Приватна колекція контактів API</h1>
 
 
-Servers: 'https://privatcontacts.onrender.com/api'
+<h2>Servers: 'https://privatcontacts.onrender.com/api'</h2>
 
-User: /users
+<h3>User: /users</h3>
 
-Registration request
+<p>Registration request</p>
 POST /register
 Content-Type: application/json
 RequestBody: {
@@ -44,9 +44,7 @@ ResponseBody: {
     "avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
 }
 
-
-
-Login request
+<p>Login request</p>
 GET /login
 Content-Type: application/json
 RequestBody: {
@@ -79,8 +77,7 @@ ResponseBody: {
     },
   }
 
-
-Logout request
+<p>Logout request</p>
 POST /logout
 Authorization: "Bearer {{token}}"
 
@@ -94,8 +91,7 @@ ResponseBody: {
 Logout success response
 Status: 204 No Content
 
-
-Current user request
+<p>Current user request</p>
 GET /current
 Authorization: "Bearer {{token}}"
 
@@ -114,8 +110,7 @@ ResponseBody: {
   "subscription": "starter"
 }
 
-
-Update user avatar request
+<p>Update user avatar request</p>
 PATCH /avatars
 Content-Type: multipart/form-data
 Authorization: "Bearer {{token}}"
@@ -135,8 +130,7 @@ ResponseBody: {
   "message": "Not authorized"
 }
 
-
-Verification request
+<p>Verification request</p>
 GET /verify/:verificationToken
 
 Verification user Not Found
@@ -151,8 +145,7 @@ ResponseBody: {
   message: 'Verification successful',
 }
 
-
-Resending a email request
+<p>Resending a email request</p>
 POST /verify
 Content-Type: application/json
 RequestBody: {
@@ -179,10 +172,9 @@ ResponseBody: {
 }
 
 
-Contacts: /contacts
+<h3>Contacts: /contacts</h3>
 
-GET "/" - get list of contacts
-
+<p>GET "/" - get list of contacts</p>
 Authorization - The accessToken issued to the current user.
 Parameters: page, limit; defoult(page=1, limit=5)
 
@@ -214,9 +206,7 @@ data: {
      message: `Server error` 
 }
 
-
-POST "/" - add contact to user contacts list
-
+<p>POST "/" - add contact to user contacts list</p>
 Authorization - The accessToken issued to the current user.
 Request body - application/json
 Schema
@@ -254,9 +244,7 @@ data: {
      message: `Server error` 
 }
 
-
-GET "/:id" - get contact by id
-
+<p>GET "/:id" - get contact by id</p>
 Authorization - The accessToken issued to the current user.
 Parameters: id;
 
@@ -294,9 +282,7 @@ data: {
      message: `Server error` 
 }
 
-
-DELETE "/:id" - delete contact by id
-
+<p>DELETE "/:id" - delete contact by id</p>
 Authorization - The accessToken issued to the current user.
 Parameters: id;
 
