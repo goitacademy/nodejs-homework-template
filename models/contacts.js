@@ -7,7 +7,7 @@ const handleMongooseError = require("../helpers/handleMongooseError");
 const contactsShema = new Schema(
   {
     name: {
-      type: String,
+      type: Number,
       required: [true, "Set name for contact"],
     },
     email: {
