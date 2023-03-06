@@ -44,6 +44,7 @@ ResponseBody: {
 }
 
 
+
 Login request
 GET /login
 Content-Type: application/json
@@ -76,6 +77,105 @@ ResponseBody: {
     "avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
     },
   }
+
+
+Logout request
+POST /logout
+Authorization: "Bearer {{token}}"
+
+Logout unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+Logout success response
+Status: 204 No Content
+
+
+Current user request
+GET /current
+Authorization: "Bearer {{token}}"
+
+Current user unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+Current user success response
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "email": "example@example.com",
+  "subscription": "starter"
+}
+
+
+Update user avatar request
+PATCH /avatars
+Content-Type: multipart/form-data
+Authorization: "Bearer {{token}}"
+RequestBody: download file
+
+Success response
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "avatarURL": "link"
+}
+
+User unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+
+Verification request
+GET /verify/:verificationToken
+
+Verification user Not Found
+Status: 404 Not Found
+ResponseBody: {
+  message: 'User not found'
+}
+
+Verification success response
+Status: 200 OK
+ResponseBody: {
+  message: 'Verification successful',
+}
+
+
+Resending a email request
+POST /verify
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com"
+}
+
+Resending a email validation error
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {"message": `Error`}
+
+Resending a email success response
+Status: 200 Ok
+Content-Type: application/json
+ResponseBody: {
+  "message": "Verification email sent"
+}
+
+Resend email for verified user
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {
+  message: "Verification has already been passed"
+}
 
 
 Contacts: /contacts
@@ -223,19 +323,3 @@ status: 500
 data: {
      message: `Server error` 
 }
-
-
-@ PUT /api/contacts/:id
-Отримує параметр id
-Отримує body в json-форматі c оновленням будь-яких полів name, email и phone
-Якщо body немає, повертає json з ключем {"message": "missing fields"} і статусом 400
-Якщо з body всі добре, викликає функцію updateContact(contactId, body). (Напиши її) для поновлення контакту в файлі contacts.json
-За результатом роботи функції повертає оновлений об'єкт контакту і статусом 200. В іншому випадку, повертає json з ключем "message": "Not found" і статусом 404
-
-
-@ PATCH / api / contacts /: contactId / favorite
-Отримує параметр contactId
-Отримує body в json-форматі c оновленням поля favorite
-Якщо body немає, повертає json з ключем {"message": "missing field favorite"}і статусом 400
-Якщо з body все добре, викликає функцію updateStatusContact (contactId, body) (напиши її) для поновлення контакту в базі
-За результатом роботи функції повертає оновлений об'єкт контакту і статусом 200. В іншому випадку, повертає json з ключем " message ":" Not found " і статусом 404
