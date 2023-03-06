@@ -9,8 +9,10 @@ const {
 
 const {
   findUserInDb,
+  findUserById,
   addNewUser,
   updateUser,
+  removeToken,
 } = require('./usersService');
 
 
@@ -22,6 +24,8 @@ const {
     updateContact,
     updateStatusContact,
     findUserInDb,
+    findUserById,
     addNewUser,
     updateUser,
+    removeToken,
   };
