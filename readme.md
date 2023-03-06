@@ -2,6 +2,8 @@
 
 <h2 color="yellow">Servers: 'https://privatcontacts.onrender.com/api'</h2>
 
+https://img.shields.io/badge/ -User: /users-orange
+       
 <h3 background-color="orange">User: /users</h3>
 
 <p background-color="green">Registration request</p>
