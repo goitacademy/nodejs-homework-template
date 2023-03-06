@@ -23,14 +23,14 @@ POST /register
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Email in use"
-<br>}
+}
 
 <br>Server error.
 <br>Status: 500
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": `Server error`
-<br>}
+}
 
 <br>Registration success response
 <br>Status: 201 Created
@@ -40,7 +40,7 @@ POST /register
 <br>"email": "example@example.com",
 <br>"subscription": "starter",
 <br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-<br>}
+}
 
 <p>Login request</p>
 GET /login
@@ -48,7 +48,7 @@ GET /login
 <br>RequestBody: {
 <br>  "email": "example@example.com",
 <br>  "password": "examplepassword"
-<br>}
+}
 
 <br>Login validation error
 <br>Status: 400 Bad Request
@@ -58,8 +58,7 @@ GET /login
 <br>Login auth error
 <br>Status: 401 Unauthorized
 <br>ResponseBody: {
-<br>"message": "Email or password is wrong"
-<br>}
+<br>"message": "Email or password is wrong"}
 
 <br>Login success response
 <br>Status: 200 OK
@@ -71,8 +70,7 @@ GET /login
 <br>"name": "Adrian Cross",
 <br>"email": "example@example.com",
 <br>"subscription": "starter",
-<br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-<br>},
+<br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"},
 }
 
 <p>Logout request</p>
@@ -84,7 +82,7 @@ POST /logout
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Not authorized"
-<br>}
+}
 
 <br>Logout success response
 <br>Status: 204 No Content
@@ -98,15 +96,14 @@ GET /current
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Not authorized"
-<br>}
+}
 
 <br>Current user success response
 <br>Status: 200 OK
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"email": "example@example.com",
-<br>"subscription": "starter"
-<br>}
+<br>"subscription": "starter"}
 
 <p>Update user avatar request</p>
 PATCH /avatars
@@ -118,15 +115,13 @@ PATCH /avatars
 <br>Status: 200 OK
 <br>Content-Type: application/json
 <br>ResponseBody: {
-<br>"avatarURL": "link"
-<br>}
+<br>"avatarURL": "link"}
 
 <br>User unauthorized error
 <br>Status: 401 Unauthorized
 <br>Content-Type: application/json
 <br>ResponseBody: {
-<br>"message": "Not authorized"
-<br>}
+<br>"message": "Not authorized"}
 
 <p>Verification request</p>
 GET /verify/:verificationToken
@@ -134,21 +129,18 @@ GET /verify/:verificationToken
 <br>Verification user Not Found
 <br>Status: 404 Not Found
 <br>ResponseBody: {
-<br>message: 'User not found'
-<br>}
+<br>message: 'User not found'}
 
 <br>Verification success response
 <br>Status: 200 OK
 <br>ResponseBody: {
-<br>message: 'Verification successful',
-<br>}
+<br>message: 'Verification successful',}
 
 <p>Resending a email request</p>
 POST /verify
 <br>Content-Type: application/json
 <br>RequestBody: {
-<br>  "email": "example@example.com"
-<br>}
+<br>"email": "example@example.com"}
 
 <br>Resending a email validation error
 <br>Status: 400 Bad Request
@@ -159,15 +151,13 @@ POST /verify
 <br>Status: 200 Ok
 <br>Content-Type: application/json
 <br>ResponseBody: {
-<br>"message": "Verification email sent"
-<br>}
+<br>"message": "Verification email sent"}
 
 <br>Resend email for verified user
 <br>Status: 400 Bad Request
 <br>Content-Type: application/json
 <br>ResponseBody: {
-<br>message: "Verification has already been passed"
-<br>}
+<br>message: "Verification has already been passed"}
 
 <h3>Contacts: /contacts</h3>
 
