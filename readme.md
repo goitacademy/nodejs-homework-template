@@ -4,15 +4,15 @@
        
 <h3 background-color="orange">User: /users</h3>
 
-<p background-color="green">Registration request
-POST /register
-Content-Type: application/json
-RequestBody: {
-"name": "Adrian Cross",
-"email": "across@mail.com",
-"password": "examplepwd12345",
-"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-}
+<p background-color="green">Registration request</p>
+<br>POST /register
+<br>Content-Type: application/json
+<br>RequestBody: {
+<br>"name": "Adrian Cross",
+<br>"email": "across@mail.com",
+<br>"password": "examplepwd12345",
+<br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
+<br>}
 
 Registration validation error
 Status: 400 Bad Request
@@ -41,7 +41,7 @@ ResponseBody: {
 "email": "example@example.com",
 "subscription": "starter",
 "avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-}</p>
+}
 
 <p background-color="green">Login request</p>
 GET /login
