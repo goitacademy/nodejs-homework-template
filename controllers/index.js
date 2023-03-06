@@ -11,12 +11,14 @@ const {
   registrationController,
   loginController,
   logoutController,
+  currentUserControler,
 } = require("./users");
 
 module.exports = {
   registrationController,
   loginController,
   logoutController,
+  currentUserControler,
   listContactsController,
   getContactByIdController,
   addContactController,
