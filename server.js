@@ -17,12 +17,14 @@ app.use(cors());
 const contactsRouter = require("./src/routes/api/contacts");
 app.use("/api", contactsRouter);
 
+// catch 404 and forward to error handler
 app.use((req, res, next) => {
   console.log("404: Not found");
   res.status(404).json({ status: "error", code: 404, message: "Not found" });
   next();
 });
 
+// error handler
 app.use((err, req, res, next) => {
   console.log("status 500");
   res.status(500).json({
@@ -37,7 +39,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, async () => {
   console.log("db connecting...");
   await connectDB();
-  console.log("db connected on port: " + PORT);
+  console.log("Database connection successful on port: " + PORT);
 });
 
 // const PORT = process.env.PORT || 5050;

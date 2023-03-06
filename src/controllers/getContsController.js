@@ -1,15 +1,12 @@
-const contactOperations = require("../models/contacts");
-
-const { listContacts } = contactOperations;
+const service = require("../service/index");
 
 const getConts = async (req, res, next) => {
   res.send("Это главный роутер");
   try {
-    const contacts = await listContacts();
+    const contacts = await service.getAllcontacts();
     res.json({
       status: 200,
       data: contacts,
-      contacts,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

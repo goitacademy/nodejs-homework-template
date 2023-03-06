@@ -1,7 +1,5 @@
-const contactOperations = require("../models/contacts");
+const service = require("../service/index");
 const schema = require("../service/schemas/validation");
-
-const { updateContact } = contactOperations;
 
 const updateCont = async (req, res, next) => {
   const contactId = req.params.id;
@@ -17,9 +15,11 @@ const updateCont = async (req, res, next) => {
   } else if (contactId) {
     try {
       const value = await schema.validateAsync({ name, email, phone });
-      const updatedContact = await updateContact(contactId, value);
+
+      const updatedContact = await service.updateCont(contactId, value);
       return res.status(200).json({
-        status: 200,
+        status: "success",
+        code: 200,
         data: {
           updatedContact,
         },
@@ -27,12 +27,14 @@ const updateCont = async (req, res, next) => {
     } catch (error) {
       res.status(500).json({ message: error.message });
       console.log(error.message);
+      next();
     }
   } else {
     return () => {
       res.status(404).json({
-        status: 404,
-        message: "Not found",
+        status: "error",
+        code: 404,
+        message: `Not found `,
       });
     };
   }

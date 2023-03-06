@@ -1,29 +1,32 @@
-const contactOperations = require("../models/contacts");
-
-const { getContactById } = contactOperations;
+const service = require("../service/index");
 
 const getContById = async (req, res, next) => {
   const contactId = req.params.id;
   console.log("ID=", contactId);
   res.send("Это роутер контакта c ID=" + contactId);
-  if (!contactId) {
-    return () => {
+  try {
+    const contactById = await service.getContById(contactId);
+    console.log(contactById);
+    if (contactById) {
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contactById,
+        },
+      });
+    } else {
       console.log("Contact not found");
       res.status(404).json({
-        message: "Not found",
-        status: 404,
+        message: `Not found contact with id ${contactId}`,
+        status: "error",
+        code: 404,
+        data: "Not found",
       });
-      next();
-    };
-  } else {
-    const contactById = await getContactById(contactId);
-    console.log(contactById);
-    return res.status(200).json({
-      status: 200,
-      data: {
-        contactById,
-      },
-    });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
