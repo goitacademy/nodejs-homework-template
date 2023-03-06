@@ -11,29 +11,28 @@ POST /register
 <br>"name": "Adrian Cross",
 <br>"email": "across@mail.com",
 <br>"password": "examplepwd12345",
-<br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-<br>}
+<br>"avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"}
 
-Registration validation error
-<br><br>Status: 400 Bad Request
+<br>Registration validation error
+<br>Status: 400 Bad Request
 <br>Content-Type: application/json
 <br>ResponseBody: {"message": `Error`}
 
-Registration conflict error
+<br>Registration conflict error
 <br>Status: 409 Conflict
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Email in use"
 <br>}
 
-Server error.
+<br>Server error.
 <br>Status: 500
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": `Server error`
 <br>}
 
-Registration success response
+<br>Registration success response
 <br>Status: 201 Created
 <br>Content-Type: application/json<br>
 <br>ResponseBody: {
@@ -51,18 +50,18 @@ GET /login
 <br>  "password": "examplepassword"
 <br>}
 
-Login validation error
+<br>Login validation error
 <br>Status: 400 Bad Request
 <br>Content-Type: application/json
 <br>ResponseBody: {"message": `Error`}
 
-Login auth error
+<br>Login auth error
 <br>Status: 401 Unauthorized
 <br>ResponseBody: {
 <br>"message": "Email or password is wrong"
 <br>}
 
-Login success response
+<br>Login success response
 <br>Status: 200 OK
 <br>Content-Type: application/json
 <br>ResponseBody: {
@@ -80,28 +79,28 @@ Login success response
 POST /logout
 <br>Authorization: "Bearer {{token}}"
 
-Logout unauthorized error
+<br>Logout unauthorized error
 <br>Status: 401 Unauthorized
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Not authorized"
 <br>}
 
-Logout success response
+<br>Logout success response
 <br>Status: 204 No Content
 
 <p>Current user request</p>
 GET /current
 <br><br>Authorization: "Bearer {{token}}"
 
-Current user unauthorized error
+<br>Current user unauthorized error
 <br>Status: 401 Unauthorized
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Not authorized"
 <br>}
 
-Current user success response
+<br>Current user success response
 <br>Status: 200 OK
 <br>Content-Type: application/json
 <br>ResponseBody: {
@@ -115,14 +114,14 @@ PATCH /avatars
 <br>Authorization: "Bearer {{token}}"
 <br>RequestBody: download file
 
-Success response
+<br>Success response
 <br>Status: 200 OK
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"avatarURL": "link"
 <br>}
 
-User unauthorized error
+<br>User unauthorized error
 <br>Status: 401 Unauthorized
 <br>Content-Type: application/json
 <br>ResponseBody: {
@@ -132,13 +131,13 @@ User unauthorized error
 <p>Verification request</p>
 GET /verify/:verificationToken
 
-Verification user Not Found
+<br>Verification user Not Found
 <br>Status: 404 Not Found
 <br>ResponseBody: {
 <br>message: 'User not found'
 <br>}
 
-Verification success response
+<br>Verification success response
 <br>Status: 200 OK
 <br>ResponseBody: {
 <br>message: 'Verification successful',
@@ -151,19 +150,19 @@ POST /verify
 <br>  "email": "example@example.com"
 <br>}
 
-Resending a email validation error
+<br>Resending a email validation error
 <br>Status: 400 Bad Request
 <br>Content-Type: application/json
 <br>ResponseBody: {"message": `Error`}
 
-Resending a email success response
+<br>Resending a email success response
 <br>Status: 200 Ok
 <br>Content-Type: application/json
 <br>ResponseBody: {
 <br>"message": "Verification email sent"
 <br>}
 
-Resend email for verified user
+<br>Resend email for verified user
 <br>Status: 400 Bad Request
 <br>Content-Type: application/json
 <br>ResponseBody: {
@@ -177,6 +176,7 @@ Authorization - The accessToken issued to the current user.
 <br>Parameters: page, limit; defoult(page=1, limit=5)
 
 Responses:
+
 <br>Get list
 <br>status: 200
 <br>Content-Type: application/json
@@ -189,20 +189,20 @@ Responses:
 <br>owner: {
 <br>"name": "Sofia",
 <br>"_id": "cf57abc012c1661a001bd2f914c1aa24"
-<br>}
-<br>}]
+}
+}]
 
 User didn't find or autorization.
 <br>status: 401
 <br>data: {
 <br>message: `Error`
-<br>}
+}
 
 Server error.
 <br>status: 500
 <br>data: {
 <br>message: `Server error`
-<br>}
+}
 
 <p>POST "/" - add contact to user contacts list</p>
 Authorization - The accessToken issued to the current user.
@@ -212,7 +212,7 @@ Schema
 <br>"name": "Adrian Cross",
 <br>"email": "across@mail.com",
 <br>"phone": "526-569-589",
-<br>}
+}
 
 Responses:
 <br>Contact created
@@ -227,22 +227,22 @@ Responses:
 <br>owner: {
 <br>"name": "Sofia",
 <br>"\_id": "cf57abc012c1661a001bd2f914c1aa24"
-<br>}
-<br>}
+}
+}
 
 Contact didn't created.
 <br>status: 400
 <br>data: {
 <br>message: `Error`
-<br>}
+}
 
 Server error.
 <br>status: 500
 <br>data: {
 <br>message: `Server error`
-<br>}
+}
 
-<p background-color="green">GET "/:id" - get contact by id</p>
+<p>GET "/:id" - get contact by id</p>
 Authorization - The accessToken issued to the current user.
 <br>Parameters: id;
 
@@ -259,28 +259,28 @@ Responses:
 <br>owner: {
 <br>"name": "Sofia",
 <br>"\_id": "cf57abc012c1661a001bd2f914c1aa24"
-<br>}
-<br>}
+}
+}
 
 Contact didn't find.
 <br>status: 404
 <br>data: {
 <br>message: `Not found`
-<br>}
+}
 
 No autorization.
 <br>status: 401
 <br>data: {
 <br>message: `Error`
-<br>}
+}
 
 Server error.
 <br>status: 500
 <br>data: {
 <br>message: `Server error`
-<br>}
+}
 
-<p background-color="green">DELETE "/:id" - delete contact by id</p>
+<p>DELETE "/:id" - delete contact by id</p>
 Authorization - The accessToken issued to the current user.
 <br>Parameters: id;
 
@@ -289,22 +289,22 @@ Responses:
 <br>status: 200
 <br>data: {
 <br>"message": "Contact deleted"
-<br>}
+}
 
 Contact didn't find.
 <br>status: 404
 <br>data: {
 <br>message: `Not found`
-<br>}
+}
 
 No autorization.
 <br>status: 401
 <br>data: {
 <br>message: `Error`
-<br>}
+}
 
 Server error.
 <br>status: 500
 <br>data: {
 <br>message: `Server error`
-<br>}
+}
