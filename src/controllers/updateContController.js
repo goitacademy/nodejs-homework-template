@@ -15,7 +15,7 @@ const updateCont = async (req, res, next) => {
   } else if (contactId) {
     try {
       const value = await schema.validateAsync({ name, email, phone });
-
+      console.log(" value", value);
       const updatedContact = await service.updateCont(contactId, value);
       return res.status(200).json({
         status: "success",

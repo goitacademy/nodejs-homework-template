@@ -37,9 +37,11 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, async () => {
-  console.log("db connecting...");
+  console.log("db connecting...".bgGray.bold.italic);
   await connectDB();
-  console.log("Database connection successful on port: " + PORT);
+  console.log(
+    `Database connection successful on port: ${PORT}`.bgGreen.bold.italic
+  );
 });
 
 // const PORT = process.env.PORT || 5050;
