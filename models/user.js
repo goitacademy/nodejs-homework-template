@@ -1,7 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-const Joi = require("joi");
-
 const { handleMangooseError } = require("../utils");
 
 const userSchema = new Schema({
