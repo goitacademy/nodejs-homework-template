@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.SECRET;
 const controllerLoginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, verify: true });
     if (!user) {
       return res.status(401).json({
         message: 'Email or password is wrong',

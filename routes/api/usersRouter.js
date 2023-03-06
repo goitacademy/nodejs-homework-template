@@ -11,6 +11,7 @@ const {
   controllerLogoutUser,
   controllerGetUser,
   controllerUpdateAvatarUser,
+  controllerVerifyUser,
 } = require('../../controllers/users');
 
 router.post('/users/signup', validateUser(schemaAddUser), controllerSingUpUser);
@@ -23,5 +24,6 @@ router.patch(
   uploadMiddleware.single('avatar'),
   controllerUpdateAvatarUser
 );
+router.get('/users/verify/:verificationToken', controllerVerifyUser);
 
 module.exports = router;
