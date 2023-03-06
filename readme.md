@@ -1,12 +1,10 @@
 <h1>Приватна колекція контактів API</h1>
 
 <h2 color="yellow">Servers: 'https://privatcontacts.onrender.com/api'</h2>
-
-https://img.shields.io/badge/User%3A-%2Fusers-orange
        
 <h3 background-color="orange">User: /users</h3>
 
-<p background-color="green">Registration request</p>
+<p background-color="green">Registration request
 POST /register
 Content-Type: application/json
 RequestBody: {
@@ -43,7 +41,7 @@ ResponseBody: {
 "email": "example@example.com",
 "subscription": "starter",
 "avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
-}
+}</p>
 
 <p background-color="green">Login request</p>
 GET /login
