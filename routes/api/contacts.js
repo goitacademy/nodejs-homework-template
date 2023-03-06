@@ -1,6 +1,6 @@
 const express = require('express');
 const {checkUserDate} = require('../../middlewares/userMiddlewares')
-const {userSchema} = require('../../schema/userschema')
+const {userSchema,userUpdateSchema} = require('../../schema/userschema')
 const { listContacts, getContactById, addContact, updateContact, removeContact } = require('../../models/contacts');
 
 
@@ -14,13 +14,8 @@ router
 router
     .route('/:contactId')
     .get(getContactById)
-    .put(checkUserDate(userSchema),updateContact)
+    .put(checkUserDate(userUpdateSchema),updateContact)
     .delete(removeContact);
 
-// router.get('/', listContacts);
-// router.get('/:contactId', getContactById);
-// router.post('/', addContact);
-// router.delete('/:contactId', removeContact);
-// router.put('/:contactId', updateContact);
 
 module.exports = router
