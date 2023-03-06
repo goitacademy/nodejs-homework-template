@@ -21,6 +21,7 @@ const register = async (req, res) => {
   res.status(201).json({
     email: newUser.email,
     name: newUser.name,
+    subscription: newUser.subscription,
   });
 };
 
@@ -40,11 +41,53 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  res.json({ token });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  await User.findByIdAndUpdate(user._id, { token });
+  res.json({
+    code: 200,
+    data: {
+      token,
+      user: {
+        email,
+        subscription: user.subscription,
+      },
+    },
+  });
+};
+
+const getCurrent = async (req, res) => {
+  const { name, email, subscription } = req.user;
+  res.json({
+    code: 200,
+    name,
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({ code: 204, message: "User logout success" });
+};
+
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+  const result = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+
+  res.json({ code: 200, result });
 };
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };

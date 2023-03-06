@@ -6,20 +6,24 @@ const { handleMongooseError } = require("../helpers");
 const contactSchema = new Schema(
   {
     name: {
-      type: String,
       required: [true, "Set name for contact"],
+      type: String,
     },
     email: {
-      type: String,
       required: true,
+      type: String,
     },
     phone: {
-      type: String,
       required: true,
+      type: String,
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
