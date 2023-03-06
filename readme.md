@@ -44,6 +44,7 @@ ResponseBody: {
 }
 
 
+
 Login request
 GET /login
 Content-Type: application/json
@@ -76,6 +77,105 @@ ResponseBody: {
     "avatarURL": "//www.gravatar.com/avatar/cf57abc012c1661a001bd2f914c1aa24"
     },
   }
+
+
+Logout request
+POST /logout
+Authorization: "Bearer {{token}}"
+
+Logout unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+Logout success response
+Status: 204 No Content
+
+
+Current user request
+GET /current
+Authorization: "Bearer {{token}}"
+
+Current user unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+Current user success response
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "email": "example@example.com",
+  "subscription": "starter"
+}
+
+
+Update user avatar request
+PATCH /avatars
+Content-Type: multipart/form-data
+Authorization: "Bearer {{token}}"
+RequestBody: download file
+
+Success response
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "avatarURL": "link"
+}
+
+User unauthorized error
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+
+
+Verification request
+GET /verify/:verificationToken
+
+Verification user Not Found
+Status: 404 Not Found
+ResponseBody: {
+  message: 'User not found'
+}
+
+Verification success response
+Status: 200 OK
+ResponseBody: {
+  message: 'Verification successful',
+}
+
+
+Resending a email request
+POST /verify
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com"
+}
+
+Resending a email validation error
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {"message": `Error`}
+
+Resending a email success response
+Status: 200 Ok
+Content-Type: application/json
+ResponseBody: {
+  "message": "Verification email sent"
+}
+
+Resend email for verified user
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: {
+  message: "Verification has already been passed"
+}
 
 
 Contacts: /contacts
