@@ -1,10 +1,10 @@
 const HttpError = ({ status = 404, message = '', details = null }) => {
-  const error = new Error(message);
-  error.status = status;
+  // const error = new Error(message);
+  // error.status = status;
 
-  error.details = details;
+  // error.details = details;
 
-  return error;
+  return { status, message, details };
 };
 
 module.exports = HttpError;
