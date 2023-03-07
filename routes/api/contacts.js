@@ -1,25 +1,38 @@
-const express = require('express')
+const express = require("express");
+const Joi = require("joi");
 
-const router = express.Router()
+const schemaContacts = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
+const contactsOperations = require("../../models/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contactsOperations.listContacts();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// router.get('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// router.post('/', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// router.delete('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
 
-module.exports = router
+// router.put('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' })
+// })
+
+module.exports = router;
