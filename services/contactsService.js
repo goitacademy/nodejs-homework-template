@@ -1,6 +1,6 @@
 const { Contacts } = require("../db");
 
-const listContacts = async (user, skip, limit, favorite=0) => {
+const listContacts = async (user, skip, limit, favorite) => {
   return await Contacts.find(favorite ? { owner: user, favorite } : { owner: user }).skip(skip).limit(limit);
 };
 
