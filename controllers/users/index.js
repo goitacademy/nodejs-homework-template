@@ -4,6 +4,9 @@ const { controllerLogoutUser } = require('./controllerLogoutUser');
 const { controllerGetUser } = require('./controllerGetUser');
 const { controllerUpdateAvatarUser } = require('./controllerUpdateAvatarUser');
 const { controllerVerifyUser } = require('./controllerVerifyUser');
+const {
+  controllerVerifyTwoSendMailUser,
+} = require('./controllerVerifyTwoSendMailUser');
 
 module.exports = {
   controllerSingUpUser,
@@ -12,4 +15,5 @@ module.exports = {
   controllerGetUser,
   controllerUpdateAvatarUser,
   controllerVerifyUser,
+  controllerVerifyTwoSendMailUser,
 };

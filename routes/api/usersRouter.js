@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { schemaAddUser } = require('../../schemas/validateshemasUser.js');
-const { validateUser } = require('../../middlewares/validateUser');
+const {
+  schemaAddUser,
+  schemaMailUser,
+} = require('../../schemas/validateshemasUser.js');
+const {
+  validateUser,
+  validateMailUser,
+} = require('../../middlewares/validateUser');
 const { authMiddleware } = require('../../middlewares/authMiddleware');
 const { uploadMiddleware } = require('../../middlewares/uploadMiddleware');
 const {
@@ -12,6 +18,7 @@ const {
   controllerGetUser,
   controllerUpdateAvatarUser,
   controllerVerifyUser,
+  controllerVerifyTwoSendMailUser,
 } = require('../../controllers/users');
 
 router.post('/users/signup', validateUser(schemaAddUser), controllerSingUpUser);
@@ -25,5 +32,10 @@ router.patch(
   controllerUpdateAvatarUser
 );
 router.get('/users/verify/:verificationToken', controllerVerifyUser);
+router.post(
+  '/users/verify',
+  validateMailUser(schemaMailUser),
+  controllerVerifyTwoSendMailUser
+);
 
 module.exports = router;

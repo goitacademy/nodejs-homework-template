@@ -16,4 +16,21 @@ const validateUser = schema => {
   };
 };
 
-module.exports = { validateUser };
+const validateMailUser = schema => {
+  return async function (req, res, next) {
+    try {
+      const result = await schema.validate(req.body);
+
+      if (result.error) {
+        res.status(400).json({ message: 'missing required field email' });
+        return;
+      }
+      next();
+    } catch (error) {
+      console.log('error validation user');
+      res.status(500).json({ message: error.message });
+    }
+  };
+};
+
+module.exports = { validateUser, validateMailUser };
