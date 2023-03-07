@@ -23,6 +23,13 @@ const userSchema = new Schema({
   },
 });
 
+// userSchema.pre('save', async function(){
+//   if(this.isNew){
+
+// this.password= await bcrypt.hash(this.password, 10)
+// const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+//   }
+// })
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt, bcrypt.genSaltSync(6));
 };

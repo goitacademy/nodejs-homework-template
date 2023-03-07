@@ -4,8 +4,9 @@ require("dotenv").config();
 const currentUser = async(req,res,next)=>{
     try{
         const { _id: id } = req.user;
-        const user = await UserSchema.findOne({ _id: id } ).select({
-       email: 1,
+        const user = await UserSchema.findOne({id} ).select({
+       
+            email: 1,
        subscription: 1,
        _id: 0,
      });

@@ -1,8 +1,7 @@
 const UserSchema = require("../../models/userSchema");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
-const secret = process.env.SECRET
+
 
 const  registration =async(req, res, next)=> {
     try {
