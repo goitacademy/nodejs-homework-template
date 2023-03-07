@@ -1,5 +1,5 @@
-const authController =require('./authController/authController')
-const contactsController =require('./contactsController/index.js')
+const authController =require('./authController/index')
+const contactsController =require('./contactsController/index')
 
 module.exports={
     authController,

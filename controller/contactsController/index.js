@@ -1,11 +1,11 @@
-const allContacts = require("./contactsController/allContacts");
-const updateContact=require("./contactsController/updateContact")
-const removeContact =require("./contactsController/removeContact")
-const addContact = require("./contactsController/addContact")
-const getById = require("./contactsController/getById")
-const chengOfPart = require("./contactsController/chengOfPart")
-const serchInContacts =require("./contactsController/serchInContacts")
-// import { exit } from 'node:process';
+const allContacts = require("./allContacts");
+const updateContact=require("./updateContact")
+const removeContact =require("./removeContact")
+const addContact = require("./addContact")
+const getById = require("./getById")
+const chengOfPart = require("./chengOfPart")
+const serchInContacts =require("./serchInContacts")
+//  import { exit } from 'node:process';
 
 
 module.exports = {
