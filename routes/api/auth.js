@@ -21,7 +21,7 @@ const upload = require("../../middlewares/upload");
 
 const router = express.Router();
 
-router.post("/register", upload.single("avatar"), async (req, res, next) => {
+router.post("/register", async (req, res, next) => {
   try {
     const { error } = registerSchema.validate(req.body);
     if (error) {

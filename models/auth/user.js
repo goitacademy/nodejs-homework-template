@@ -17,17 +17,10 @@ const { PORT = 3000, REFRESH_SECRET_KEY, BASE_URL } = process.env;
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
 const registerUser = async (req) => {
-  if (req.file) {
-    const { path: tempUpload, originalname } = req.file;
-    const resultUpload = path.join(avatarDir, originalname);
-    await fs.rename(tempUpload, resultUpload);
-    const image = await Jimp.read(resultUpload);
-    image.resize(250, 250).write(resultUpload);
-  }
   const { name, email, password, subscription } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
-  const avatarURL =(req.file && path.join("avatars", req.file.originalname)) || gravatar.url(email);
+  const avatarURL = gravatar.url(email);
   const verificationToken = nanoid();
 
   await User.create({
