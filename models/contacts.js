@@ -19,7 +19,7 @@ const getContactById = async (contactId) => {
     const contactById = contacts.find((el) => el.id === contactId);
 
     if (!contactById) {
-      return console.log(`Contact with id:${contactId} not found!`);
+      throw new Error(`Contact with id:${contactId} not found!`);
     }
 
     console.log("contactById: ", contactById);
