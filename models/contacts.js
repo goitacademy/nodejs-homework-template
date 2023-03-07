@@ -1,15 +1,14 @@
 const fs = require("fs/promises");
 const path = require("path");
-
 const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.resolve("models/contacts.json");
 
 const listContacts = async () => {
   try {
-    return JSON.parse(await fs.readFile(contactsPath, "utf8"));
+    JSON.parse(await fs.readFile(contactsPath, "utf8"));
   } catch (err) {
-    return console.err(err);
+    console.log(err);
   }
 };
 
@@ -20,8 +19,7 @@ const getContactById = async (contactId) => {
     const contactById = contacts.find((el) => el.id === contactId);
 
     if (!contactById) {
-      console.log(`Contact with id:${contactId} not found!`);
-      return undefined;
+      return console.log(`Contact with id:${contactId} not found!`);
     }
 
     console.log("contactById: ", contactById);

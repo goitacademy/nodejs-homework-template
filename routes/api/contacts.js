@@ -28,6 +28,7 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Not found" });
+    next(error);
   }
 });
 
@@ -37,7 +38,7 @@ router.get("/:contactId", async (req, res, next) => {
 
     const contactById = await getContactById(contactId);
 
-    if (contactById === undefined) {
+    if (!contactById) {
       res.status(404).json({ message: "Not found" });
     }
 
@@ -51,6 +52,7 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Not found" });
+    next(error);
   }
 });
 
@@ -85,6 +87,7 @@ router.post("/", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "missing required name field" });
+    next(error);
   }
 });
 
@@ -101,6 +104,7 @@ router.delete("/:contactId", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Not found" });
+    next(error);
   }
 });
 
@@ -140,6 +144,7 @@ router.put("/:contactId", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Not found" });
+    next(error);
   }
 });
 
