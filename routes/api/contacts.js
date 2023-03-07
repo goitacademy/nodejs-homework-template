@@ -1,25 +1,78 @@
-const express = require('express')
+const express = require("express");
+const { uuid } = require("uuid");
 
-const router = express.Router()
+const {
+  validNewContact,
+  validUpdateContact,
+} = require("../../middlewares/validateContacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  addContactSchema,
+  putContactShema,
+} = require("../../validation/validationSchemas");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const allContacts = await listContacts();
+  res.status(200).json(allContacts);
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const contactById = await getContactById(contactId);
 
-module.exports = router
+  if (!contactById) {
+    res.status(404).json({ message: "Not found!" });
+    return;
+  }
+
+  res.status(200).json(contactById);
+});
+
+router.post("/", validNewContact(addContactSchema), async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  const body = {
+    id: uuid(),
+    name: name,
+    email: email,
+    phone: phone,
+  };
+  addContact(body);
+  res.status(201).json(body);
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const response = await removeContact(contactId);
+
+  if (!response) {
+    res.status(404).json({ message: "Not found!" });
+  }
+
+  res.status(200).json({ message: "Your contact sucessfully deleted!" });
+});
+
+router.put(
+  "/:contactId",
+  validUpdateContact(putContactShema),
+  async (req, res, next) => {
+    const { contactId } = req.params;
+    const response = await updateContact(contactId, req.body);
+    if (!response) {
+      res.status(404).json({ message: "Not found!" });
+      return;
+    }
+    res.status(200).json(res);
+  }
+);
+
+module.exports = router;
