@@ -30,7 +30,7 @@ const schema = Joi.object({
 		.min(3)
 		.regex(/^[A-ZА-Я][a-zа-я]{2,}[\s][A-ZА-Я][a-zа-я]{2,}$/)
 		.messages({
-			"string.pattern.base": `Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan.`,
+			"string.pattern.base": `Name may contain only letters, apostrophe, dash and spaces. For example Jacob Mercer.`,
 		}),
 	email: Joi.string().email({
 		minDomainSegments: 2,
