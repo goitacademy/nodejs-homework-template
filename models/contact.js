@@ -47,11 +47,6 @@ const contactSchemaFavorite = Joi.object({
   favorite: Joi.boolean().required("missing field favorite"),
 });
 
-const schemas = {
-  contactSchemaJoi,
-  contactSchemaFavorite,
-};
-
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { Contact, contactSchemaJoi, contactSchemaFavorite };

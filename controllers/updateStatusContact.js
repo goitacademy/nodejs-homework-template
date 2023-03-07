@@ -4,8 +4,7 @@ const { Contact } = require("../models/contact");
 
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-
-  const contact = await Contact(contactId, req.body, {
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
     timestamps: true,
   });
