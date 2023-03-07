@@ -17,6 +17,6 @@ router.post("/signup", controllerWrapper(registrationController));
 router.post("/login", controllerWrapper(loginController));
 router.get("/logout", auth, controllerWrapper(logoutController));
 router.get("/current", auth, controllerWrapper(currentUserControler));
-router.patch("/:id/subscription", auth, controllerWrapper(subscriptionChangeController));
+router.patch("/subscription", auth, controllerWrapper(subscriptionChangeController));
 
 module.exports = router;

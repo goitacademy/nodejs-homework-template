@@ -3,6 +3,7 @@ const contactValidation = require("../../middlewares/contactsValidation");
 
 const addContactController = async (req, res) => {
   const { error } = contactValidation.validate(req.body);
+  
   const { name, email, phone, favorite = false } = req.body;
   const {id: owner} = req.user;
 

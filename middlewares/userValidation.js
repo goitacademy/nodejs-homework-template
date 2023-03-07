@@ -10,6 +10,4 @@ const userValidation = Joi.object({
   password: Joi.string().alphanum().trim().min(7).strip().required(),
 });
 
-
-
 module.exports = userValidation;

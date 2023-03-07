@@ -5,11 +5,11 @@ const {userValidation} = require('../../middlewares');
 const registrationController = async (req, res) => {
 
 const {error} = userValidation.validate(req.body);
-const {email, password} = req.body;
+const {email} = req.body;
 const userIsAlreadyInDb = await findUserInDb(email);
 
 if (error) {
-    return res.status(400).json('<Ошибка от Joi или другой библиотеки валидации>');
+    return res.status(400).json(error.details[0].message);
 };
 
 if (userIsAlreadyInDb) {

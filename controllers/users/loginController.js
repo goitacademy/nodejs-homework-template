@@ -5,24 +5,29 @@ const { findUserInDb, updateUser } = require("../../services");
 const { userValidation } = require("../../middlewares");
 require("dotenv").config();
 
+
 const loginController = async (req, res) => {
   const { error } = userValidation.validate(req.body);
 
+  const sendErrorResponse = (code, message) => {
+    return res.status(code).json({ message: message });
+  }
+
   if (error) {
-    return res.status(400).json({ message: "Validation error" });
+    return sendErrorResponse(400, error.details[0].message);
   }
 
   const registeredUser = await findUserInDb(req.body.email);
 
   if (!registeredUser) {
-    return res.status(401).json({ message: "Email or password is wrong" });
+    return sendErrorResponse(401, "Email or password is wrong");
   }
 
   const { id, email, password, subscription } = registeredUser;
   const rightUser = await bCrypt.compareSync(req.body.password, password);
 
   if (!rightUser) {
-    return res.status(401).json({ message: "Email or password is wrong" });
+    return sendErrorResponse(401, "Email or password is wrong");
   }
 
   const payload = {
