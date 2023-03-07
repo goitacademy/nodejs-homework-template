@@ -1,6 +1,6 @@
-const { Contacts } = require("../../db/contacts");
-const getContactById = async (contactId) => {
-  const data = await Contacts.findById({ _id: contactId });
+const { Contact } = require("../../models");
+const getContactById = async (contactId, owner) => {
+  const data = await Contact.findOne({ _id: contactId, owner });
   return data;
 };
 module.exports = getContactById;

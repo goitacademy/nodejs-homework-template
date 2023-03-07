@@ -1,6 +1,6 @@
-const { Contacts } = require("../../db/contacts");
-const removeContact = async (contactId) => {
-  const data = await Contacts.findByIdAndDelete({ _id: contactId });
+const { Contact } = require("../../models");
+const removeContact = async (contactId, owner) => {
+  const data = await Contact.findOneAndDelete({ _id: contactId, owner });
   return data;
 };
 module.exports = removeContact;
