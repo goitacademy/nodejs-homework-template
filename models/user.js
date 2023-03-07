@@ -21,6 +21,8 @@ const user = new Schema(
     },
 
     token: String,
+
+    avatarURL: String,
   },
 
   { versionKey: false }
