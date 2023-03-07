@@ -9,7 +9,7 @@ const listContacts = async () => {
     const data = await fs.readFile(contactsPath, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    throw new Error(error);
+    return error;
   }
 };
 
@@ -21,7 +21,7 @@ const getContactById = async (contactId) => {
       return contact;
     }
   } catch (error) {
-    throw new Error(error);
+    return error;
   }
 };
 
@@ -40,7 +40,7 @@ const removeContact = async (contactId) => {
       return contacts;
     }
   } catch (error) {
-    throw new Error(error);
+    return error;
   }
 };
 
@@ -57,7 +57,7 @@ const addContact = async (body) => {
     );
     return contacts;
   } catch (error) {
-    throw new Error(error);
+    return error;
   }
 };
 
@@ -86,7 +86,7 @@ const updateContact = async (contactId, body) => {
     });
     return contacts;
   } catch (error) {
-    throw new Error(error);
+    return error;
   }
 };
 

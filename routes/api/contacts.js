@@ -19,7 +19,7 @@ router.get("/", async (req, res, next) => {
     res.status(200).json(contacts);
   } catch (error) {
     res.status(500).send(error.message);
-    next();
+    next(error);
   }
 });
 
@@ -33,7 +33,7 @@ router.get("/:contactId", async (req, res, next) => {
     }
   } catch (error) {
     res.status(500).send(error.message);
-    next();
+    next(error);
   }
 });
 
@@ -47,7 +47,7 @@ router.post("/", addValidation, async (req, res, next) => {
     }
   } catch (error) {
     res.status(500).send(error.message);
-    next();
+    next(error);
   }
 });
 
@@ -61,7 +61,7 @@ router.delete("/:contactId", async (req, res, next) => {
     }
   } catch (error) {
     res.status(500).send(error.message);
-    next();
+    next(error);
   }
 });
 
@@ -75,7 +75,7 @@ router.put("/:contactId", updateValidation, async (req, res, next) => {
     }
   } catch (error) {
     res.status(500).send(error.message);
-    next();
+    next(error);
   }
 });
 
