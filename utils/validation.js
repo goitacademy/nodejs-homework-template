@@ -5,7 +5,7 @@ const schemaStrict = Joi.object({
 		.min(3)
 		.regex(/^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/)
 		.messages({
-			"string.pattern.base": `Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan.`,
+			"string.pattern.base": `Name may contain only letters, and spaces. For example Jacob Mercer.`,
 		})
 		.required(),
 	email: Joi.string()
