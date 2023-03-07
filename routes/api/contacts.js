@@ -1,84 +1,33 @@
 const express = require("express");
-const Joi = require("joi");
+
+const ctrl = require("../../controllers/contacts");
+
+const { validateBody, isValidId } = require("../../middlewares");
+
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
-const { HttpError } = require("../../helpers");
+router.get("/", ctrl.getAll);
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  phone: Joi.number().required(),
-});
+router.get("/:contactId", isValidId, ctrl.getById);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", isValidId, ctrl.deleteById);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put(
+  "/:contactId",
+  isValidId,
+  validateBody(schemas.addSchema),
+  ctrl.updateById
+);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    console.log("contactId:", contactId);
-    const result = await contacts.removeContact(contactId);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.status(200).json("Contact deleted");
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    console.log(req.body);
-    const result = await contacts.updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateSchema),
+  ctrl.updateStatusContact
+);
 
 module.exports = router;
