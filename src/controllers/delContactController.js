@@ -3,6 +3,7 @@ require("colors");
 
 const delContact = async (req, res, next) => {
   const contactId = req.params.id;
+  console.log(contactId);
   // if (!contactId) {
   //   return () => {
   //     res.status(400).json({
@@ -22,7 +23,7 @@ const delContact = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error.red.bold.italic);
+    console.log(error.message.red.italic);
     next();
   }
 };

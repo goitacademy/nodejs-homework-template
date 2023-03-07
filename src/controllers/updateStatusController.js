@@ -2,7 +2,7 @@ const service = require("../service/index");
 
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
-  const { favorite = false } = req.body;
+  const { favorite } = req.body;
 
   try {
     const contWithUpdatedStatus = await service.updateContStatus(id, {

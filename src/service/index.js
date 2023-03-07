@@ -12,8 +12,12 @@ const createCont = ({ name, email, phone }) => {
   return Cont.create({ name, email, phone });
 };
 
-const updateCont = (id, fields) => {
-  return Cont.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateCont = (id, { name, email, phone }) => {
+  return Cont.findByIdAndUpdate(
+    { _id: id },
+    { name, email, phone }
+    // { new: true }
+  );
 };
 
 const removeCont = (id) => {
