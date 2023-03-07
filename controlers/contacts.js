@@ -5,13 +5,11 @@ const { Contact } = require("../models/contacts");
 
 const getAll = async (req, res, next) => {
   const result = await Contact.find({}, "-createdAt -updatedAt");
-  console.log(result);
   return res.json(result);
 };
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  console.log(contactId);
   const result = await Contact.findById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
