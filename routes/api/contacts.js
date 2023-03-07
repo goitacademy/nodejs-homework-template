@@ -1,5 +1,4 @@
-const express = require('express')
-
+const express = require("express");
 const ctrl = require("../../controllers/contacts");
 const { validateBody } = require("../../midlewares");
 const { contactsSchema } = require("../../schemas/contactsSchema");
@@ -16,4 +15,4 @@ router.delete("/:contactId", ctrl.deleteById);
 
 router.put("/:contactId", validateBody(contactsSchema), ctrl.upDateById);
 
-module.exports = router
+module.exports = router;
