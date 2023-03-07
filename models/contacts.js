@@ -28,7 +28,7 @@ const getContactById = async contactId => {
 		const contact = JSON.parse(data).filter(
 			contact => contact.id === contactId
 		);
-		return contact;
+		return contact?.[0] || {};
 	} catch (error) {
 		return error;
 	}
@@ -37,17 +37,22 @@ const getContactById = async contactId => {
 /**
  * @description remove contact from database
  * @param {String} contactId
- * @returns {Promise<Array>} contacts
+ * @returns {Promise<Object>} removedContact
  */
 const removeContact = async contactId => {
 	try {
 		const data = await fs.readFile(dbPath, "utf-8");
-		const contacts = JSON.parse(data).filter(
-			contact => contact.id !== contactId
-		);
+		let removedContact = {};
+		const contacts = JSON.parse(data).filter(contact => {
+			if (contact.id !== contactId) {
+				return true;
+			} else {
+				removedContact = contact;
+				return false;
+			}
+		});
 		fs.writeFile(dbPath, JSON.stringify(contacts));
-		console.log(`Contact with id ${contactId} removed successfully!`);
-		return contacts;
+		return removedContact;
 	} catch (error) {
 		return error;
 	}
@@ -56,7 +61,7 @@ const removeContact = async contactId => {
 /**
  * @description add new contact to database
  * @param {Object} body
- * @returns {Promise<Array>} contacts
+ * @returns {Promise<Object>} newContact
  */
 const addContact = async body => {
 	try {
@@ -65,10 +70,7 @@ const addContact = async body => {
 		const newContact = { ...body, id: uuidv4() };
 		contacts.push(newContact);
 		fs.writeFile(dbPath, JSON.stringify(contacts));
-		console.log(
-			`Contact ${JSON.stringify(newContact)} added successfully!`
-		);
-		return contacts;
+		return newContact;
 	} catch (error) {
 		return error;
 	}
@@ -78,20 +80,21 @@ const addContact = async body => {
  * @description add new contact to database
  * @param {String} contactId
  * @param {Object} body
- * @returns {Promise<Array>} contacts
+ * @returns {Promise<Object>} updated contact
  */
 const updateContact = async (contactId, body) => {
 	try {
+		let updatedContact = {};
 		const data = await fs.readFile(dbPath, "utf-8");
-		const contacts = JSON.parse(data);
-		const newContacts = contacts.map(contact => {
+		const contacts = JSON.parse(data).map(contact => {
 			if (contact.id === contactId) {
-				return { ...contact, ...body };
+				updatedContact = { ...contact, ...body };
+				return updatedContact;
 			}
 			return contact;
 		});
-		fs.writeFile(dbPath, JSON.stringify(newContacts));
-		return contacts;
+		fs.writeFile(dbPath, JSON.stringify(contacts));
+		return updatedContact;
 	} catch (error) {
 		return error;
 	}
