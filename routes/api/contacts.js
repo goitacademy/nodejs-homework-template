@@ -1,5 +1,5 @@
 const controller = require('../../controllers/contacts');
-console.log(controller)
+
 const express = require('express');
 
 
