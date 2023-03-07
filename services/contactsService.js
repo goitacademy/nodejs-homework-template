@@ -1,7 +1,7 @@
 const { Contacts } = require("../db");
 
-const listContacts = async (user) => {
-  return await Contacts.find({ owner: user });
+const listContacts = async (user, skip, limit) => {
+  return await Contacts.find({ owner: user }).skip(skip).limit(limit);
 };
 
 const getContactById = async (contactId, user) => {
