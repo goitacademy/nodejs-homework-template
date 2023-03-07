@@ -1,3 +1,4 @@
+
 const { Contact } = require("../../models/contact");
 
 const deleteContact = async (req, res, next) => {
@@ -8,7 +9,7 @@ const deleteContact = async (req, res, next) => {
     throw error;
   }
   const result = await Contact.deleteOne({ _id: contactId });
-  console.log(result);
+
   res.json({
     status: "success",
     code: 200,

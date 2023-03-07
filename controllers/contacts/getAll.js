@@ -1,3 +1,4 @@
+
 const { Contact } = require("../../models/contact");
 
 const getAll = async (req, res, next) => {
@@ -9,6 +10,7 @@ const getAll = async (req, res, next) => {
     skip,
     limit: Number(limit),
   });
+
   res.json({
     status: "success",
     code: 200,
