@@ -1,7 +1,6 @@
 const handleMongooseError = (error, data, next) => {
-    error.status = 400;
-    next();
-  };
-  
-  module.exports = handleMongooseError;
-  
+  error.status = 400;
+  next();
+};
+
+module.exports = handleMongooseError;
