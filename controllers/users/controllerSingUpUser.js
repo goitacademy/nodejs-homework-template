@@ -3,6 +3,8 @@ const { addUser } = require('../../services/users');
 const gravatar = require('gravatar');
 const { v4: uuidv4 } = require('uuid');
 
+const { sendMail } = require('../../services/users/sendMail');
+
 const controllerSingUpUser = async (req, res) => {
   const { email, password } = req.body;
   const avatarURL = gravatar.url(email, { protocol: 'https' });
@@ -15,6 +17,9 @@ const controllerSingUpUser = async (req, res) => {
     }
 
     const user = await addUser(email, password, avatarURL, verificationToken);
+
+    await sendMail(email, verificationToken);
+
     res.json({
       status: 'success',
       code: 201,
