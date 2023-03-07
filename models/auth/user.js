@@ -27,9 +27,7 @@ const registerUser = async (req) => {
   const { name, email, password, subscription } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
-  const avatarURL =
-    (req.file && path.join("avatars", req.file.originalname)) ||
-    gravatar.url(email);
+  const avatarURL =(req.file && path.join("avatars", req.file.originalname)) || gravatar.url(email);
   const verificationToken = nanoid();
 
   await User.create({
