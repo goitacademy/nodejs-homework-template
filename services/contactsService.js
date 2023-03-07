@@ -8,6 +8,10 @@ const getContactById = async (contactId, user) => {
   return await Contacts.find({ _id: contactId, owner: user });
 };
 
+const findDuplicateContact = async (name, email, phone, user) => {
+  return await Contacts.findOne({name, email, phone, owner: user});
+}
+
 const addContact = async (body) => {
   return await Contacts.create(body);
 };
@@ -43,4 +47,5 @@ module.exports = {
   updateContact,
   removeContact,
   updateStatusContact,
+  findDuplicateContact,
 };

@@ -5,6 +5,7 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
+  findDuplicateContact,
 } = require('./contactsService');
 
 const {
@@ -19,6 +20,7 @@ const {
   module.exports = {
     listContacts,
     getContactById,
+    findDuplicateContact,
     removeContact,
     addContact,
     updateContact,
