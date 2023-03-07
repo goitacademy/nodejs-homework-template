@@ -20,12 +20,17 @@ const register = async (req, res) => {
 
   const newUser = await UserModel.create({ ...req.body });
   newUser.setPassword(password);
+  newUser.setAvatar(email);
   await newUser.save();
 
   res.json({
     status: "created",
     code: 201,
-    data: { email: newUser.email, subscription: newUser.subscription },
+    data: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      avatarUrl: newUser.avatarURL,
+    },
   });
 };
 

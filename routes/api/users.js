@@ -7,6 +7,7 @@ const {
   logout,
   currentUser,
   subscription,
+  setAvatar,
 } = require("../../controllers");
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.post("/login", addUserValidation, asyncHandler(login));
 router.get("/logout", auth, asyncHandler(logout));
 router.get("/current", auth, asyncHandler(currentUser));
 router.patch("/", auth, addUserValidation, asyncHandler(subscription));
+router.patch("/avatars", auth, addUserValidation, asyncHandler(setAvatar));
 
 module.exports = router;
