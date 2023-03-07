@@ -11,6 +11,8 @@ const {
   logoutUser,
   currentUser,
   avatarUser,
+  verificationTokenUser,
+  verifyUser,
 } = require("../../сontrollers/usersСontrollers");
 
 const controllerError = require("../../сontrollers/controllerError");
@@ -24,5 +26,9 @@ usersRouter.post("/logout", authorization, controllerError(logoutUser));
 usersRouter.get("/current", authorization, controllerError(currentUser));
 
 usersRouter.patch("/avatars", authorization, upload.single("avatar"), controllerError(avatarUser));
+
+usersRouter.get("/verify/:verificationToken", controllerError(verificationTokenUser));
+
+usersRouter.post("/verify", controllerError(verifyUser));
 
 module.exports = usersRouter;
