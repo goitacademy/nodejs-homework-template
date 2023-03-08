@@ -1,102 +1,127 @@
 const fs = require("fs").promises;
 const { v4: uuidv4 } = require("uuid");
+const dataValidation = require("../utils/validation");
 const dbPath = "./models/contacts.json";
 /**
+ *@param {Object} req
+ *@param {Object} res
  * @description get all contacts from database
- * @returns {Promise<Array>} contacts
  */
-const listContacts = async () => {
+const listContacts = async (req, res) => {
 	try {
 		const data = await fs.readFile(dbPath, "utf-8");
 		const contacts = JSON.parse(data);
-		console.log(data);
-		return contacts;
+		if (contacts.length > 0) {
+			res.json(contacts);
+		} else {
+			res.status(404).json({
+				message: "Not found contacts",
+			});
+		}
 	} catch (error) {
+		res.status(500).json({ contacts: [], message: error.message });
 		return error.message;
 	}
 };
 
 /**
  * @description get contact by id from database
- * @param {Number} contactId
- * @returns {Promise<Object>} contact
+ *@param {Object} req
+ *@param {Object} res
  */
-const getContactById = async contactId => {
+const getContactById = async (req, res) => {
 	try {
 		const data = await fs.readFile(dbPath, "utf-8");
 
 		const contact = JSON.parse(data).filter(
-			contact => contact.id === contactId
+			contact => contact.id === req.params.contactId
 		);
-		return contact?.[0] || {};
+		contact.length > 0
+			? res.json(contact[0])
+			: res.status(404).json({ message: "Not found" });
 	} catch (error) {
-		return error;
+		res.status(500).json({ contact: {}, message: error.message });
 	}
 };
 
 /**
  * @description remove contact from database
- * @param {String} contactId
- * @returns {Promise<Object>} removedContact
+ *@param {Object} req
+ *@param {Object} res
  */
-const removeContact = async contactId => {
+const removeContact = async (req, res) => {
 	try {
 		const data = await fs.readFile(dbPath, "utf-8");
-		let removedContact = {};
+		let removedContact;
 		const contacts = JSON.parse(data).filter(contact => {
-			if (contact.id !== contactId) {
+			if (contact.id !== req.params.contactId) {
 				return true;
 			} else {
 				removedContact = contact;
 				return false;
 			}
 		});
+		if (!removedContact) {
+			res.status(404).json({ message: "Not found" });
+			return;
+		}
 		fs.writeFile(dbPath, JSON.stringify(contacts));
-		return removedContact;
+		res.status(204).json(removedContact);
 	} catch (error) {
-		return error;
+		res.status(500).json({ contacts: {}, message: error.message });
 	}
 };
 
 /**
  * @description add new contact to database
- * @param {Object} body
- * @returns {Promise<Object>} newContact
+ *@param {Object} req
+ *@param {Object} res
  */
-const addContact = async body => {
+const addContact = async (req, res) => {
 	try {
+		const { error } = dataValidation(req.body);
+		if (error) {
+			return res.status(400).json({ message: error.message });
+		}
 		const data = await fs.readFile(dbPath, "utf-8");
 		const contacts = JSON.parse(data);
-		const newContact = { ...body, id: uuidv4() };
+		const newContact = { ...req.body, id: uuidv4() };
 		contacts.push(newContact);
 		fs.writeFile(dbPath, JSON.stringify(contacts));
-		return newContact;
+		res.status(201).json(newContact);
 	} catch (error) {
-		return error;
+		res.status(500).json({ contacts: {}, message: error.message });
 	}
 };
 
 /**
  * @description add new contact to database
- * @param {String} contactId
- * @param {Object} body
- * @returns {Promise<Object>} updated contact
+ *@param {Object} req
+ *@param {Object} res
  */
-const updateContact = async (contactId, body) => {
+const updateContact = async (req, res) => {
 	try {
-		let updatedContact = {};
+		const { error } = dataValidation(req.body, false);
+		if (error) {
+			return res.status(400).json({ message: error.message });
+		}
+		let updatedContact;
 		const data = await fs.readFile(dbPath, "utf-8");
 		const contacts = JSON.parse(data).map(contact => {
-			if (contact.id === contactId) {
-				updatedContact = { ...contact, ...body };
+			if (contact.id === req.params.contactId) {
+				updatedContact = { ...contact, ...req.body };
 				return updatedContact;
 			}
 			return contact;
 		});
+		if (!updatedContact) {
+			res.status(404).json({ message: "Not found" });
+			return;
+		}
 		fs.writeFile(dbPath, JSON.stringify(contacts));
-		return updatedContact;
+		res.status(202).json(updatedContact);
 	} catch (error) {
-		return error;
+		res.status(500).json({ contacts: {}, message: error.message });
 	}
 };
 
