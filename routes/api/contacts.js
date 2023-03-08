@@ -1,93 +1,33 @@
 const express = require("express");
-const Joi = require("joi");
+
+const ctrl = require("../../controllers/contacts");
+
+const { validateBody } = require("../../middlewares");
+
+const { schemas } = require("../../models/contact");
+
+const { ctrlWrapper } = require("../../helpers");
 
 const router = express.Router();
 
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+router.get("/", ctrlWrapper(ctrl.listContacts));
 
-const addSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().required(),
-  phone: Joi.string().min(3).max(30).required(),
-});
+router.get("/:id", ctrlWrapper(ctrl.getContactById));
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  console.log(contacts);
-  res.status(200).json({ contacts });
-});
+router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
 
-router.get("/:id", async (req, res, next) => {
-  const contact = await getContactById(req.params._id);
+router.put(
+  "/:id",
+  validateBody(schemas.addSchema),
+  ctrlWrapper(ctrl.updateContactById)
+);
 
-  if (!contact) {
-    return res
-      .status(404)
-      .json({ message: `Not found contact with id ${req.params._id}` });
-  } else {
-    res.status(200).json({ contact });
-  }
-});
+router.patch(
+  "/:id/favorite",
+  validateBody(schemas.updateStatusContactSchema),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:id", async (req, res, next) => {
-  const contact = await removeContact(req.params._id);
-
-  if (!contact) {
-    return res
-      .status(404)
-      .json({ message: `Not found contact with id ${req.params._id}` });
-  } else {
-    res.status(200).json({ message: "contact deleted" });
-  }
-});
-
-router.put("/:id", async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.message });
-
-  const contact = await updateContact(req.params._id, req.body);
-  console.log(contact);
-
-  if (!contact) {
-    return res
-      .status(404)
-      .json({ message: `Not found contact with id ${req.params._id}` });
-  } else {
-    res.status(200).json({ contact });
-  }
-});
-
-router.patch("/:id/favorite", async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.message });
-  const contact = await updateContact(req.params._id, req.body);
-  console.log(contact);
-  if (!contact) {
-    return res
-      .status(404)
-      .json({ message: `Not found contact with id ${req.params._id}` });
-  } else {
-    res.status(200).json({ contact });
-  }
-});
+router.delete("/:id", ctrlWrapper(ctrl.removeContactById));
 
 module.exports = router;
