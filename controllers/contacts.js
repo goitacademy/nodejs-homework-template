@@ -1,5 +1,5 @@
 // -----------------------------------------------------
-//                 Controllers
+//                CONTACTS Controller
 // -----------------------------------------------------
 const contacts = [];
 const { ctrlWrapper, HttpError } = require("../utils");

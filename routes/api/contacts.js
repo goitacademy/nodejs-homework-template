@@ -1,24 +1,33 @@
 // ----------------------------------------------------------------------------
-//                         Router
+//                         Router  /api/contacts
 // ----------------------------------------------------------------------------
 const express = require("express");
 const joi = require("joi");
 const ctrl = require("../../controllers/contacts");
 const { schema } = require("../../models/contact");
-
-const { validateBody } = require("../../middlewares");
+const { validateBody, authorization } = require("../../middlewares");
 
 const router = express.Router();
 
-router.get("/", ctrl.getAll);
+router.get("/", authorization, ctrl.getAll);
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/:contactId", authorization, ctrl.getContactById);
 
-router.post("/", validateBody(schema.addSchema), ctrl.addContact);
+router.post(
+  "/",
+  authorization,
+  validateBody(schema.addSchema),
+  ctrl.addContact
+);
 
-router.delete("/:contactId", ctrl.removeContact);
+router.delete("/:contactId", authorization, ctrl.removeContact);
 
-router.put("/:contactId", validateBody(schema.addSchema), ctrl.updateContact);
+router.put(
+  "/:contactId",
+  authorization,
+  validateBody(schema.addSchema),
+  ctrl.updateContact
+);
 
 router.patch(
   "/:contactId/favorite",
