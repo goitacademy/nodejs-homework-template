@@ -1,16 +1,22 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../db/users");
-const { registration, login, findUser,logout } = require('../../services/authService')
+const {
+  registration,
+  login,
+  findUser,
+  logout,
+  findUserId,
+} = require("../../services/authService");
 const { joiRegisterSchema } = require("../../schema/joiRegisterSchema");
 const bCrypt = require("bcrypt");
 
-const registrationController = async(req, res) => {
-    const { email, password } = req.body
-    
-    await registration(email, password)
-    
-    res.json({status:'success'})
- }
+const registrationController = async (req, res) => {
+  const { email, password } = req.body;
+
+  await registration(email, password);
+
+  res.json({ status: "success" });
+};
 // const loginController = async (req, res) => {
 //     const { error } = joiRegistrationSchema.validate(req.body);
 //     if (error) {
@@ -24,12 +30,12 @@ const registrationController = async(req, res) => {
 
 //  };
 
-const loginController = async (req,res) => {
+const loginController = async (req, res) => {
   const { error } = joiRegisterSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: "Missing fields" });
   }
-    const { email, password } = req.body;
+  const { email, password } = req.body;
   const user = await findUser({ email });
 
   if (!user) {
@@ -55,18 +61,28 @@ const loginController = async (req,res) => {
 };
 
 const logoutController = async (req, res) => {
-  
   const { _id } = req.user;
-    await logout({ _id });
-    res.status(204).json('No Content');
+  await logout(_id);
+    res.status(204).json({message: "No Content"});
+};
 
-  
+const currentUserController = async (req, res) => {
+  const { _id } = req.user;
+
+  const user = await findUserId(_id);
+  const { email, subscription } = user;
+
+  return res.status(200).json({
+    email: email,
+    subscription: subscription,
+  });
 };
 
 module.exports = {
   registrationController,
-    loginController,
-  logoutController
+  loginController,
+  logoutController,
+  currentUserController,
 };
 
 // async function register(req, res, next) {

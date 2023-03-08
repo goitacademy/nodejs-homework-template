@@ -2,7 +2,7 @@ const express = require("express");
 const { connectMongoose } = require("./db/connection");
 const logger = require("morgan");
 const cors = require("cors");
-
+require("./config/passport");
 
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/auth");

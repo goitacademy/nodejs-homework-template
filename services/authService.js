@@ -13,7 +13,17 @@ async function login(_id, token) {
 };
 
 async function logout(_id) {
-  await User.findByIdAndUpdate(_id, { token:null });
+ return await User.findByIdAndUpdate(
+   _id,
+   { token: null },
+   {
+     new: true,
+   }
+ );
+};
+
+async function findUserId(_id) {
+ return await User.findById(_id);
 };
 
 
@@ -24,35 +34,10 @@ async function findUser({ email }) {
   return user;
 };
 
-// const login = async (email, password) => {
-//     const { error } = joiRegistrationSchema.validate(req.body);
-//   if (error) {
-//     return res.status(400).json({ message: 'Missing fields' });
-//   }
-//     const user = await User.findOne({ email })
-    
-//     if (!user) {
-//         return res.status(409).json({ message: "Email in use"
-// });
-//     }
 
-//     if (!await bCrypt.compare(password, user.password)) {
-//        return res.status(409).json({ message: "Wrong password" });
-//     }
-
-//     const token = jwt.sign({ _id: user._id, cratedAt: user.subscription }, process.env.JWT_SECRET)
-//     // return token
-//     return res.status(200).json({
-//     token,
-//     user: {
-//       email: user.email,
-//       subscription: user.subscription,
-//     },
-//   });
-// };
 
 module.exports = {
   registration,
     login,
-  findUser,logout
+  findUser,logout,findUserId
 };
