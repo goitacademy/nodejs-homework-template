@@ -1,9 +1,16 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+var  Jimp  =  require ( "jimp" ) ;
 
 const { User } = require("../models/user");
 
 const { HttpErorr, ctrlWrapper } = require("../helpers");
+
+const avatarsDir
+  = path.join(__dirname, "../", "public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -13,7 +20,13 @@ const signup = async (req, res) => {
     throw HttpErorr(409, "Email in use");
   }
   const hasePassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hasePassword });
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hasePassword,
+    avatarURL,
+  });
 
   res.json({
     email: newUser.email,
@@ -87,6 +100,33 @@ const updateSubscription = async (req, res, next) => {
   res.json({ updateSubscriptionUser, status: "200" });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+
+  const resultUpload = path.join(avatarsDir, filename);
+  console.log("resultUpload42453543", resultUpload);
+
+  await fs.rename(tempUpload, resultUpload);
+
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  if (!_id) {
+    throw HttpErorr(401, "Not authorized");
+  }
+
+  const formatFile = async () => {
+    const image = await Jimp.read(resultUpload);
+    image.resize(250, 250);
+    image.write(resultUpload);
+  }
+  formatFile();
+
+  res.status(200).json({
+    avatarURL,
+  });
+}
 
 module.exports = {
   signup: ctrlWrapper(signup),
@@ -94,5 +134,19 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
 
+
+
+
+    // const name = file.originalname.split(".")[0];
+
+    // console.log("name", name);
+
+    // const formatFile = Jimp.read(file.originalname, (err, name) => {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   name.resize(250, 250);
+    // }); 
