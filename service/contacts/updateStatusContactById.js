@@ -1,7 +1,7 @@
-const { Contacts } = require("../../db/contacts");
-const updateStatusContactbyId = async (contactId, { favorite }) => {
-  const data = await Contacts.findOneAndUpdate(
-    { _id: contactId },
+const { Contact } = require("../../models");
+const updateStatusContactbyId = async (contactId, { favorite }, owner) => {
+  const data = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
     { $set: { favorite } },
     { new: true }
   );

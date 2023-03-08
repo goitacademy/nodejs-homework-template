@@ -1,11 +1,10 @@
-const { Contacts } = require("../../db/contacts");
-const updateContactById = async (contactId, body) => {
-  const data = await Contacts.findByIdAndUpdate(
-    { _id: contactId },
+const { Contact } = require("../../models");
+const updateContactById = async (contactId, body, owner) => {
+  const data = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
     { ...body },
     { new: true }
   );
-  console.log(data);
   return data;
 };
 module.exports = updateContactById;

@@ -16,5 +16,9 @@ const updateContactSchema = Joi.object({
 const updateStatusSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
-
-module.exports = { addContactSchema, updateContactSchema, updateStatusSchema };
+const contactSchema = {
+  addContactSchema,
+  updateContactSchema,
+  updateStatusSchema,
+};
+module.exports = contactSchema;
