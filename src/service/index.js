@@ -21,11 +21,11 @@ const updateCont = (id, { name, email, phone }) => {
 };
 
 const removeCont = (id) => {
-  return Cont.findByIdAndRemove({ _id: id });
+  return Cont.findOneAndRemove({ _id: id });
 };
 
-const updateContStatus = (id, status) => {
-  return Cont.findByIdAndUpdate({ _id: id }, { status }, { new: true });
+const updateContStatus = (id, favorite) => {
+  return Cont.findByIdAndUpdate({ _id: id }, { favorite }, { new: true });
 };
 
 module.exports = {
