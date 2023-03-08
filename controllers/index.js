@@ -79,7 +79,7 @@ const remove = async (req, res) => {
   res.status(202).json({
     staus: "success",
     code: 202,
-    message: `Delete success. Contact with id ${id} is removed`,
+    message: `Delete success.Contact with id ${id} is removed`,
     data: result
   });
 }
@@ -92,6 +92,8 @@ module.exports = {
   favorite: controllersWrapper(favorite),
   remove: controllersWrapper(remove)
 }
+
+
 
 
 
