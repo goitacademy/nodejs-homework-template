@@ -3,9 +3,18 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10, favorite } = req.query;
-  const params = favorite ? { owner, favorite } : { owner };
+  const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
+  let params = { owner };
+  if (req.query.favorite) {
+    params = { ...params, favorite: req.query.favorite };
+  }
+  if (req.query.name) {
+    params = { ...params, name: req.query.name };
+  }
+  if (req.query.email) {
+    params = { ...params, email: req.query.email };
+  }
   const result = await Contact.find(params, "", {
     skip,
     limit,
@@ -14,8 +23,9 @@ const listContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findOne({ _id: contactId, owner });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -23,8 +33,9 @@ const getContactById = async (req, res) => {
 };
 
 const removeContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove(contactId);
+  const result = await Contact.findOneAndRemove({ _id: contactId, owner });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -38,10 +49,15 @@ const addContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -49,10 +65,15 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
   if (!result) {
     throw HttpError(404, "Not found");
   }
