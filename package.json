@@ -16,6 +16,7 @@
     "joi": "^17.7.1",
     "mongoose": "^6.10.0",
     "morgan": "1.10.0"
+
   },
   "devDependencies": {
     "eslint": "7.19.0",
