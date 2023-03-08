@@ -13,7 +13,7 @@ const {
   logout,
   currentUser,
   subscription,
-  setAvatar,
+  avatars,
 } = require("./users");
 
 module.exports = {
@@ -28,5 +28,5 @@ module.exports = {
   logout,
   currentUser,
   subscription,
-  setAvatar,
+  avatars,
 };
