@@ -11,16 +11,20 @@ const updateAvatar = async (req, res, next) => {
   const imageName = `${id}_${originalname}`;
 
   try {
-    const fileName = path.join(storeImage, originalname);
+    const fileName = path.join(storeImage, imageName);
     await fs.rename(temporaryName, fileName);
-    const avatarUrl = path.join("public", "avatars", imageName);
+    const avatarURL = path.join("public", "avatars", imageName);
 
-    Jimp.read(avatarUrl).then((avatar) => {
-      return avatar.resize(250, 250).write(avatarUrl);
-    });
+    Jimp.read(avatarURL)
+      .then((avatar) => {
+        return avatar.resize(250, 250).write(avatarURL);
+      })
+      .catch((err) => {
+        next(err);
+      });
 
-    await User.findByIdAndUpdate(req.user._id, { avatarUrl });
-    res.json({ avatarUrl });
+    await User.findByIdAndUpdate(id, { avatarURL });
+    res.json({ avatarURL });
   } catch (err) {
     await fs.unlink(temporaryName);
     return next(err);
