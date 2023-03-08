@@ -3,13 +3,16 @@ const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 
+
 const signup = async (req, res, next) => {
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw createError(409, "Email in use");
   }
+
   const avatarURL = gravatar.url(email);
+
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   await User.create({
     email,
