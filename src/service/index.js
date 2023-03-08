@@ -1,11 +1,11 @@
 const Cont = require("./schemas/cont");
 
 const getAllcontacts = async () => {
-  return Cont.find();
+  return Cont.find({});
 };
 
 const getContById = (id) => {
-  return Cont.findOne({ _id: id });
+  return Cont.findById(id);
 };
 
 const createCont = ({ name, email, phone }) => {
@@ -14,8 +14,8 @@ const createCont = ({ name, email, phone }) => {
 
 const updateCont = (id, { name, email, phone }) => {
   return Cont.findByIdAndUpdate(
-    { _id: id },
-    { name, email, phone }
+    id,
+    { $set: { name, email, phone } }
     // { new: true }
   );
 };

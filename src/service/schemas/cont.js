@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const conts = new Schema(
   {
-    // id: { type: Number, required: true },
+    id: { type: String, required: true },
     name: {
       type: String,
       required: [true, "Set name for contact"],
