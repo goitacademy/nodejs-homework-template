@@ -1,34 +1,16 @@
 import express from 'express';
-import {
-  getContactByIdValidation,
-  addContactValidation,
-  updateContactValidation,
-  updateFavoriteValidation,
-  getContactsValidation,
-} from 'middlewares/contacts.validation.middleware';
-import {
-  getContactsController,
-  getContactByIdController,
-  addContactController,
-  deleteContactByIdController,
-  updateContactByIdController,
-  updateFavoriteByIdController,
-} from 'controllers/contacts.controller';
-import { asyncWrapper } from 'helpers/apiHelpers';
+import mdlw from 'middlewares/contacts.validation';
+import ctrl from 'controllers/contacts.controller';
 
 const router = express.Router();
 
-router.get('/', getContactsValidation, asyncWrapper(getContactsController));
-router.post('/', addContactValidation, asyncWrapper(addContactController));
+router.get('/', mdlw.getContacts, ctrl.getContacts);
+router.post('/', mdlw.addContact, ctrl.addContact);
 router
   .route('/:contactId')
-  .get(getContactByIdValidation, asyncWrapper(getContactByIdController))
-  .delete(getContactByIdValidation, asyncWrapper(deleteContactByIdController))
-  .put([getContactByIdValidation, updateContactValidation], asyncWrapper(updateContactByIdController));
-router.patch(
-  '/:contactId/favorite',
-  [getContactByIdValidation, updateFavoriteValidation],
-  asyncWrapper(updateFavoriteByIdController)
-);
+  .get(mdlw.getContactById, ctrl.getContactById)
+  .delete(mdlw.getContactById, ctrl.deleteContactById)
+  .put([mdlw.getContactById, mdlw.updateContact], ctrl.updateContactById);
+router.patch('/:contactId/favorite', [mdlw.getContactById, mdlw.updateFavorite], ctrl.updateFavoriteById);
 
 export default router;

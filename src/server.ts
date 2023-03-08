@@ -4,16 +4,15 @@ import { connectToDatabase } from 'db/connection';
 
 dotenv.config();
 
-const PORT = process.env.SERVER_PORT || 3000;
-const DB_URI = process.env.DB_URI!;
+const { SERVER_PORT = 8001, DB_URI } = process.env;
 
 const start = async () => {
   try {
-    await connectToDatabase(DB_URI);
+    await connectToDatabase(DB_URI!);
     console.log('Database connection successful');
 
-    app.listen(PORT, () => {
-      console.log(`Server running. Use our API on port: ${PORT}`);
+    app.listen(SERVER_PORT, () => {
+      console.log(`Server running. Use our API on port: ${SERVER_PORT}`);
     });
   } catch (err) {
     console.error(`Failed to launch application with error: ${(err as Error).message}`);

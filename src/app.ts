@@ -2,15 +2,14 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import contactsRouter from 'routes/api/contacts.route';
+import path from 'path';
 import usersRouter from 'routes/api/users.route';
-import { errorMiddleware } from './middlewares/errors.middleware';
+import { errorMiddleware } from './middlewares/errors';
 import { responseError } from 'helpers/apiHelpers';
 import { RouteNotFoundError } from 'helpers/errors';
-import { authMiddleware } from './middlewares/auth.middleware';
-import path from 'path';
+import { authMiddleware } from './middlewares/auth';
 
 const app = express();
-
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));

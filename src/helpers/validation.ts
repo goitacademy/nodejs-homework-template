@@ -1,10 +1,20 @@
+import { isValidObjectId } from 'mongoose';
 import joi from 'joi';
 import { ESubscription } from 'types/User.type';
 
+const idValidation = (value: any, helpers: joi.CustomHelpers) => {
+  // Use error to return an existing error code
+  if (!isValidObjectId(value)) {
+    return helpers.error('ObjectId.invalid');
+  }
+
+  // Return the value unchanged
+  return value;
+};
 export const phonePattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
 
 export const validationFields = {
-  contactId: joi.string().pattern(/^[0-9a-fA-F]{24}$/, 'Invalid id.'),
+  contactId: joi.string().custom(idValidation, 'Invalid id'),
   name: joi.string().min(3).max(30),
   email: joi.string().email(),
   phone: joi.string().pattern(phonePattern),

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+import multer from 'multer';
 import { responseError } from 'helpers/apiHelpers';
 import { BaseError, ServerError, ValidationError } from 'helpers/errors';
-import multer from 'multer';
 
 export const errorMiddleware = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
   if (error instanceof BaseError) {

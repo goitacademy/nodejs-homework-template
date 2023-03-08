@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import crypto from 'crypto';
 import gavatar from 'gravatar';
-import { responseData } from 'helpers/apiHelpers';
+import { asyncWrapper, responseData } from 'helpers/apiHelpers';
 import { DatabaseError, NotFoundError, ValidationError } from 'helpers/errors';
 import {
   getUserByEmail,
@@ -18,7 +18,8 @@ import { IRequest } from 'types/Request.interface';
 import { removeFile, resizeImageService } from 'services/file.service';
 
 dotenv.config();
-sgMail.setApiKey(process.env.MAIL_API_KEY!);
+const { MAIL_API_KEY, SERVER_URL } = process.env;
+sgMail.setApiKey(MAIL_API_KEY!);
 
 const sendVerificationMail = async (email: string, verificationToken: string) => {
   try {
@@ -26,8 +27,8 @@ const sendVerificationMail = async (email: string, verificationToken: string) =>
       to: email,
       from: 'dev.andrii.zaimak@ukr.net',
       subject: 'Thank you for registration!',
-      text: `Please, confirm your email address  http://localhost:3000/api/users/verify/${verificationToken}`,
-      html: `Please, confirm your email address  http://localhost:3000/api/users/verify/${verificationToken}`,
+      text: `Please, confirm your email address ${SERVER_URL}/api/users/verify/${verificationToken}`,
+      html: `Please, confirm your email address ${SERVER_URL}/api/users/verify/${verificationToken}`,
     };
     await sgMail.send(msg);
   } catch (error) {
@@ -35,7 +36,7 @@ const sendVerificationMail = async (email: string, verificationToken: string) =>
   }
 };
 
-export const registerController = async (req: Request, res: Response) => {
+const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const candidate = await getUserByEmail(email);
 
@@ -52,30 +53,30 @@ export const registerController = async (req: Request, res: Response) => {
   res.status(201).json(responseData({ user }, 201));
 };
 
-export const loginController = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   const data = await loginService(req.body);
 
   res.status(200).json(responseData(data, 200));
 };
 
-export const logoutController = async (req: IRequest, res: Response) => {
+const logout = async (req: IRequest, res: Response) => {
   await logoutService(req.user!._id!);
 
   res.sendStatus(204);
 };
 
-export const currentUserController = async (req: IRequest, res: Response) => {
+const currentUser = async (req: IRequest, res: Response) => {
   const { email, subscription, avatarURL } = req.user!;
   res.status(200).json(responseData({ email, subscription, avatarURL }, 200));
 };
 
-export const updateUserSubscriptionController = async (req: IRequest, res: Response) => {
+const updateUserSubscription = async (req: IRequest, res: Response) => {
   const user = await updateSubscriptionService(req.user?._id!, req.body.subscription);
 
   res.status(200).json(responseData(user, 200));
 };
 
-export const updateUserAvatarController = async (req: IRequest, res: Response) => {
+const updateUserAvatar = async (req: IRequest, res: Response) => {
   const { path, filename } = req.file!;
   await resizeImageService(path, filename);
   await removeFile(path);
@@ -84,7 +85,7 @@ export const updateUserAvatarController = async (req: IRequest, res: Response) =
   res.status(200).json(responseData(user, 200));
 };
 
-export const verifyController = async (req: IRequest, res: Response) => {
+const verify = async (req: IRequest, res: Response) => {
   const { verificationToken } = req.params;
   const user = await getUserByVerificationToken(verificationToken as string);
 
@@ -97,7 +98,7 @@ export const verifyController = async (req: IRequest, res: Response) => {
   res.status(200).json(responseData({ message: 'Verification successful' }, 200));
 };
 
-export const sendVerifyMailController = async (req: IRequest, res: Response) => {
+const sendVerifyMail = async (req: IRequest, res: Response) => {
   const { email } = req.body;
 
   const user = await getUserByEmail(email as string);
@@ -115,4 +116,15 @@ export const sendVerifyMailController = async (req: IRequest, res: Response) => 
   sendVerificationMail(user.email, verificationToken);
 
   res.status(200).json(responseData({ message: `Verification email sent` }, 200));
+};
+
+export default {
+  login: asyncWrapper(login),
+  register: asyncWrapper(register),
+  logout: asyncWrapper(logout),
+  currentUser: asyncWrapper(currentUser),
+  updateUserSubscription: asyncWrapper(updateUserSubscription),
+  updateUserAvatar: asyncWrapper(updateUserAvatar),
+  verify: asyncWrapper(verify),
+  sendVerifyMail: asyncWrapper(sendVerifyMail),
 };
