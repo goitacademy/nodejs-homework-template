@@ -5,6 +5,7 @@ const getContact = require("./getContact");
 const cantactAdd = require("./contactAdd");
 const deleteContact = require("./deleteContact");
 const updateContactById = require("./updateContactById");
+const updateStatusContact = require("./updateStatusContact");
 
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
@@ -12,4 +13,5 @@ module.exports = {
   contactAdd: ctrlWrapper(cantactAdd),
   deleteContact: ctrlWrapper(deleteContact),
   updateContactById: ctrlWrapper(updateContactById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
