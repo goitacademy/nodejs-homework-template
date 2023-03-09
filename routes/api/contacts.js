@@ -1,5 +1,5 @@
 const express = require("express");
-const { addValidation, addFavValidation, auth } = require("../../middlevares");
+const { addValidation, addFavValidation, auth } = require("../../middlewares");
 const {
   getContacts,
   getContactById,

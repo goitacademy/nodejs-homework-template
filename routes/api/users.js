@@ -1,6 +1,6 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
-const { addUserValidation, auth, upload } = require("../../middlevares");
+const { addUserValidation, auth, upload } = require("../../middlewares");
 const {
   register,
   login,
