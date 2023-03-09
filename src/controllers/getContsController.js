@@ -1,7 +1,6 @@
 const service = require("../service/index");
 
 const getConts = async (req, res, next) => {
-  res.send("Это главный роутер");
   try {
     const contacts = await service.getAllcontacts();
     res.json({

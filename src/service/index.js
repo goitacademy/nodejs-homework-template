@@ -1,31 +1,35 @@
-const Cont = require("./schemas/cont");
+const Cont = require("../models/contactModel");
+console.log(Cont);
 
 const getAllcontacts = async () => {
-  return Cont.find({});
+  const contacts = await Cont.find();
+  console.log(contacts);
+  return contacts;
 };
 
-const getContById = (id) => {
-  return Cont.findById(id);
+const getContById = async (id) => {
+  // console.log(id);
+  const contact = await Cont.findById(id);
+  return contact;
 };
 
-const createCont = ({ name, email, phone }) => {
-  return Cont.create({ name, email, phone });
+const createCont = async ({ name, email, phone }) => {
+  const contact = await Cont.create({ name, email, phone });
+  return contact;
 };
 
-const updateCont = (id, { name, email, phone }) => {
-  return Cont.findByIdAndUpdate(
-    id,
-    { $set: { name, email, phone } }
-    // { new: true }
-  );
+const updateCont = async (id, { name, email, phone }) => {
+  const contact = await Cont.findByIdAndUpdate(id, { name, email, phone });
+  return contact;
 };
 
-const removeCont = (id) => {
-  return Cont.findOneAndRemove({ _id: id });
+const removeCont = async (id) => {
+  return await Cont.findOneAndRemove({ _id: id });
 };
 
-const updateContStatus = (id, favorite) => {
-  return Cont.findByIdAndUpdate({ _id: id }, { favorite }, { new: true });
+const updateContStatus = async (id, body) => {
+  const contact = await Cont.findByIdAndUpdate(id, body, { new: true });
+  return contact;
 };
 
 module.exports = {

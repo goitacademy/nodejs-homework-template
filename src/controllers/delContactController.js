@@ -13,13 +13,13 @@ const delContact = async (req, res, next) => {
     };
   } else {
     try {
-      const contacts = await service.removeCont(contactId);
+      const deletedContact = await service.removeCont(contactId);
       return res.status(200).json({
         message: "contact deleted",
         status: "success",
         code: 200,
         data: {
-          contacts,
+          deletedContact,
         },
       });
     } catch (error) {
