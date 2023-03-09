@@ -10,7 +10,7 @@ const {
   updateContact,
 } = require(contactsFuncPath);
 
-const controllerGetContacts = async (req, res, next) => {
+const getContactsController = async (req, res, next) => {
   try {
     const contacts = await listContacts();
     console.log("contacts: ", contacts);
@@ -27,7 +27,7 @@ const controllerGetContacts = async (req, res, next) => {
   }
 };
 
-const controllerGetContactById = async (req, res, next) => {
+const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
@@ -49,7 +49,7 @@ const controllerGetContactById = async (req, res, next) => {
   }
 };
 
-const controllerPostNewContact = async (req, res, next) => {
+const postNewContactController = async (req, res, next) => {
   try {
     const { body } = req;
 
@@ -65,7 +65,7 @@ const controllerPostNewContact = async (req, res, next) => {
   }
 };
 
-const controllerDeleteContact = async (req, res, next) => {
+const deleteContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     await removeContact(contactId);
@@ -80,7 +80,7 @@ const controllerDeleteContact = async (req, res, next) => {
   }
 };
 
-const contollerPutContact = async (req, res, next) => {
+const putContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { body } = req;
@@ -102,9 +102,9 @@ const contollerPutContact = async (req, res, next) => {
 };
 
 module.exports = {
-  controllerGetContacts,
-  controllerGetContactById,
-  controllerPostNewContact,
-  controllerDeleteContact,
-  contollerPutContact,
+  getContactsController,
+  getContactByIdController,
+  postNewContactController,
+  deleteContactController,
+  putContactController,
 };
