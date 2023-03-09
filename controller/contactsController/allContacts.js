@@ -1,7 +1,12 @@
 const Contacts = require("../../models/contactsSchema");
 const allContacts = async (req, res, next) => {
     try {
-      const result = await Contacts.find({});
+  const {offset, limit}=req.query
+  // const{favorite}=req.params  
+      const result = await Contacts.find({})
+      .skip(offset)
+      .limit(limit)
+      // .populate()
       res.json({user:req.user,
         status: "success",
         code: 200,
