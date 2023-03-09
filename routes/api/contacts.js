@@ -6,21 +6,30 @@ const {
 } = require("../../middlewares/validation/validationMiddleware");
 
 const {
+  joiSchemaRequired,
+  joiSchemaOptional,
+} = require("../../middlewares/validation/validationSchema");
+
+const {
   getContactsController,
-  getContactByIdController,
-  postNewContactController,
+  getContactController,
+  createContactController,
   deleteContactController,
-  putContactController,
+  updateContactController,
 } = require("../../controllers/contactsController");
 
 router.get("/", getContactsController);
 
-router.get("/:contactId", getContactByIdController);
+router.get("/:contactId", getContactController);
 
-router.post("/", validation, postNewContactController);
+router.post("/", validation(joiSchemaRequired), createContactController);
 
 router.delete("/:contactId", deleteContactController);
 
-router.put("/:contactId", validation, putContactController);
+router.put(
+  "/:contactId",
+  validation(joiSchemaOptional),
+  updateContactController
+);
 
 module.exports = router;

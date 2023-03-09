@@ -27,7 +27,7 @@ const getContactsController = async (req, res, next) => {
   }
 };
 
-const getContactByIdController = async (req, res, next) => {
+const getContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
@@ -49,7 +49,7 @@ const getContactByIdController = async (req, res, next) => {
   }
 };
 
-const postNewContactController = async (req, res, next) => {
+const createContactController = async (req, res, next) => {
   try {
     const { body } = req;
 
@@ -80,7 +80,7 @@ const deleteContactController = async (req, res, next) => {
   }
 };
 
-const putContactController = async (req, res, next) => {
+const updateContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { body } = req;
@@ -103,8 +103,8 @@ const putContactController = async (req, res, next) => {
 
 module.exports = {
   getContactsController,
-  getContactByIdController,
-  postNewContactController,
+  getContactController,
+  createContactController,
   deleteContactController,
-  putContactController,
+  updateContactController,
 };
