@@ -2,11 +2,11 @@ const service = require("../service/index");
 
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
-  const { body } = req.body;
+  const { favorite } = req.body;
   console.log(id);
-  console.log(body);
+  console.log(favorite);
   try {
-    const contWithUpdatedStatus = await service.updateContStatus(id, body);
+    const contWithUpdatedStatus = await service.updateContStatus(id, favorite);
     res.json({
       status: "success",
       code: 200,
