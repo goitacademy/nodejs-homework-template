@@ -1,25 +1,22 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const controllerContact = require('../../controller/contactsController/index')
+const auth= require('../../middlewares/auth')
 
-const router = express.Router()
+// router.use(auth)
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/",auth, controllerContact.allContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId",auth, controllerContact.getById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/search",controllerContact.serchInContacts);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", controllerContact.addContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", controllerContact.removeContact);
 
-module.exports = router
+router.put("/:contactId", controllerContact.updateContact);
+
+router.patch("/:contactId",controllerContact.chengOfPart);
+
+module.exports = router;

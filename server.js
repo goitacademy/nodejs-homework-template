@@ -1,5 +1,12 @@
+require('dotenv').config();
+
+const getConection = require('./mongoose/mongoose')
 const app = require('./app')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
+
+
+
+app.listen(4005, async() => {
+  await getConection()
+  console.log("Server running. Use our API on port: 4005")
 })
