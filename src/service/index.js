@@ -27,8 +27,12 @@ const removeCont = async (id) => {
   return await Cont.findOneAndRemove({ _id: id });
 };
 
-const updateContStatus = async (id, body) => {
-  const contact = await Cont.findByIdAndUpdate(id, body, { new: true });
+const updateContStatus = async (contactId, { favorite }) => {
+  const contact = await Cont.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
   return contact;
 };
 
