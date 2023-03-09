@@ -1,25 +1,34 @@
-const express = require('express')
+import express, { Router } from 'express';
+import authMiddleware from '../../middlewares/authMiddleware.js';
+import {
+  getAllContacts,
+  getIdOfContact,
+  postNewContact,
+  deleteContactById,
+  changeContact,
+  changeContactByPatch
+} from '../../controllers/contactsControllers.js'
 
-const router = express.Router()
+const router = Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use(authMiddleware);
+//GET "api/posts"
+router.get('/', getAllContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//GET "api/posts/1"
+router.get('/:contactId', getIdOfContact);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+//POST "/api/contacts => [newPost, ...posts]"
+router.post('/', postNewContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// DELETE by contactId
+router.delete('/:contactId', deleteContactById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+/// PUT by contactId
+router.put('/:contactId', changeContact);
 
-module.exports = router
+//Patch
+router.patch('/:contactId/favourite', changeContactByPatch)
+
+
+export default router;

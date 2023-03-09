@@ -1,0 +1,2 @@
+DB_URI = mongodb+srv://user:user@cluster0.slwvyqw.mongodb.net/contacts
+DB_PORT = 3000
