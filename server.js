@@ -10,7 +10,6 @@ app.listen(3000, () => {
 app.use(express.json())
 app.use(cors())
 
-
 const PORT = process.env.PORT || 3001
 const uriDb = 'mongodb+srv://marina:Passw0rd123@cluster0.67bq4qo.mongodb.net/db-contacts?retryWrites=true&w=majority'
 
