@@ -4,10 +4,10 @@ import {
   addContact,
   updateContact,
   removeContact,
-} from "../models/contacts.mjs";
+} from "../models/contacts.js";
 
-import { ctrlWrapper } from '../helpers/ctrlWrapper.mjs';
-import { HttpError } from "../helpers/HttpError.mjs";
+import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
+import { HttpError } from "../helpers/HttpError.js";
 
 const getAll = async (_, res, next) => {
   try {

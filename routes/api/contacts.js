@@ -7,9 +7,9 @@ import {
   ctrlAdd,
   ctrlDeleteById,
   ctrlUpdateById,
-} from "../../controllers/contacts.mjs";
-import validateBody from "../../middlewares/validateBody.mjs";
-import {addSchema} from "../../schemas/contacts.mjs";
+} from "../../controllers/contacts.js";
+import validateBody from "../../middlewares/validateBody.js";
+import {addSchema} from "../../schemas/contacts.js";
 
 router.get("/", ctrlGetAll);
 
