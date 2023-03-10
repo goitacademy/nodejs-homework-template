@@ -13,7 +13,9 @@ const updateAvatar = async (req, res) => {
 
   const resultUpload = path.join(avatarsDir, filename);
 
-  await fs.rename(tempUpload, resultUpload);
+  await fs.rename(tempUpload, resultUpload, () => {
+    console.log("\nFile Renamed!\n");
+  });
 
   const avatarURL = path.join("avatars", filename);
 
