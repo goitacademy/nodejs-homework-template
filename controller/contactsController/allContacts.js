@@ -4,8 +4,9 @@ const allContacts = async (req, res, next) => {
   const {offset, limit}=req.query
   // const{favorite}=req.params  
       const result = await Contacts.find({})
-      .skip(offset)
-      .limit(limit)
+      console.log(result)
+      // .skip(offset)
+      // .limit(limit)
       // .populate()
       res.json({user:req.user,
         status: "success",

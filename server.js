@@ -6,7 +6,7 @@ const app = require('./app')
 
 
 
-app.listen(4005, async() => {
+app.listen(4040, async() => {
   await getConection()
-  console.log("Server running. Use our API on port: 4005")
+  console.log("Server running. Use our API on port: 4040")
 })

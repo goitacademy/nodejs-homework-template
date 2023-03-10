@@ -5,7 +5,7 @@ const auth= require('../../middlewares/auth')
 
 // router.use(auth)
 
-router.get("/",auth, controllerContact.allContacts);
+router.get("/", controllerContact.allContacts);
 
 router.get("/:contactId",auth, controllerContact.getById);
 

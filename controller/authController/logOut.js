@@ -5,6 +5,7 @@ require("dotenv").config();
 const logout = async(req,res,next)=>{
     try {
          const { _id: id } = req.params;
+         console.log('req.body',req.body)
         const token = null;
         const user = await UserSchema.findOneAndUpdate({id }, { $set: { token } });
   if(!user){

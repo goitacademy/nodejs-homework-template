@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const  registration =async(req, res, next)=> {
     try {
       const { email, password } = req.body;
+      console.log(req.body)
       const user = await UserSchema.findOne({ email });
       if (user) {
         res.status(409).json({
@@ -20,6 +21,7 @@ const  registration =async(req, res, next)=> {
         email,
         password: hashPassword,
       });
+      console.log(res)
       res.status(201).json({
         status: "Created",
         code: 201,
