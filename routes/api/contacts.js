@@ -19,3 +19,4 @@ router
   .patch(updateContact)
   .delete(removeContact);
 
+module.exports = router;

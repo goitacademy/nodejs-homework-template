@@ -58,7 +58,9 @@ const { contactId } = req.params;
 
 const contacts = await listContacts();
 const newContactList = contacts.filter(item => item.id !== contactId); 
-fs.writeFile(contactsPath, JSON.stringify(newContactList));
+    fs.writeFile(contactsPath, JSON.stringify(newContactList));
+    console.log(contacts);
+    console.log(newContactList);
     res.status(200).json({
       msg: "contact deleted"
     });
