@@ -1,4 +1,4 @@
-const service = require("../service/index");
+const service = require("../../service/index");
 require("colors");
 
 const delContact = async (req, res, next) => {

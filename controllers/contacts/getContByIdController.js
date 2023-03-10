@@ -1,4 +1,4 @@
-const service = require("../service/index");
+const service = require("../../service/index");
 
 const getContById = async (req, res, next) => {
   const contactId = req.params.id;

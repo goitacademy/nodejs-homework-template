@@ -4,7 +4,7 @@ const cors = require("cors");
 require("colors");
 require("dotenv").config();
 
-const connectDB = require("./src/database/connection");
+const connectDB = require("./database/connection");
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.json());
 // cors
 app.use(cors());
 
-const contactsRouter = require("./src/routes/api/contacts");
+const contactsRouter = require("./routes/api/contacts");
 app.use("/api", contactsRouter);
 
 // catch 404 and forward to error handler
@@ -44,24 +44,3 @@ app.listen(PORT, async () => {
     `Database connection successful on port: ${PORT}`.bgGreen.bold.italic
   );
 });
-
-// const PORT = process.env.PORT || 5050;
-// const uriDb = process.env.DB_HOST;
-
-// const connection = mongoose.connect(uriDb, {
-//   promiseLibrary: global.Promise,
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false,
-// });
-
-// connection
-//   .then(() => {
-//     app.listen(PORT, function () {
-//       console.log(`Server running. Use our API on port: ${PORT}`);
-//     });
-//   })
-//   .catch((err) =>
-//     console.log(`Server not running. Error message: ${err.message}`)
-//   );

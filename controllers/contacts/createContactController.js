@@ -1,5 +1,5 @@
-const service = require("../service/index");
-const schema = require("../service/schemas/validation");
+const service = require("../../service/index");
+const schema = require("../../service/schemas/validation");
 
 const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;

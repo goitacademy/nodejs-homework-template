@@ -1,4 +1,4 @@
-const service = require("../service/index");
+const service = require("../../service/index");
 
 const getConts = async (req, res, next) => {
   try {

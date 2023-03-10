@@ -1,5 +1,5 @@
-const service = require("../service/index");
-const schema = require("../service/schemas/validation");
+const service = require("../../service/index");
+const schema = require("../../service/schemas/validation");
 
 const updateCont = async (req, res, next) => {
   const contactId = req.params.id;
