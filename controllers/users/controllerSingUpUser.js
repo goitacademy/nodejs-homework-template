@@ -3,7 +3,7 @@ const { addUser } = require('../../services/users');
 const gravatar = require('gravatar');
 const { v4: uuidv4 } = require('uuid');
 
-const { sendMail } = require('../../services/users/sendMail');
+const { sendMail } = require('../../services/email/sendMail');
 
 const controllerSingUpUser = async (req, res) => {
   const { email, password } = req.body;

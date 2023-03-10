@@ -1,5 +1,5 @@
 const { User } = require('../../schemas/modelUser');
-const { sendMail } = require('../../services/users/sendMail');
+const { sendMail } = require('../../services/email/sendMail');
 
 const controllerVerifyTwoSendMailUser = async (req, res) => {
   const { email } = req.body;
