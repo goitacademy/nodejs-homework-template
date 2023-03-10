@@ -19,14 +19,14 @@ const updateAvatar = async (req, res) => {
   });
 
   const avatarURL = path.join("public", "avatars", filename);
-  Jimp.read(avatarURL, (err, name) => {
-    if (err) throw err;
+  await Jimp.read(avatarURL)
+    .then((name) => {
+      return name.resize(250, 250).write(avatarURL); // save
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
-    name
-      .resize(250, 250) // resize
-      .quality(60) // set JPEG quality// set greyscale
-      .write(avatarURL); // save
-  });
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
