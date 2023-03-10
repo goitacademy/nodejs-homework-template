@@ -8,6 +8,7 @@ const {
 } = require("../../models/contacts.js");
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router()
+const {contactValidate} = require('../../utils/contactValidator.js')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -55,10 +56,20 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const body = req.body;
-  body.id = uuidv4()
+    const { error, value } = contactValidate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "missing required name field"
+    });
+  }
+
+  value.id = uuidv4();
   try {
-    const newContact = await addContact(body);
+    const newContact = await addContact(value);
+    
     
     res.json({
       code: 201,
@@ -99,10 +110,17 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  const body = req.body
+  const { error, value } = contactValidate(req.body);
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "missing required name field"
+    });
+  }
   const contactId = req.params.contactId
   try {
-    const updated = await updateContact(contactId, body)
+    const updated = await updateContact(contactId, value)
     res.json({
       code: 200,
       data: {

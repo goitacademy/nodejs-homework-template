@@ -57,8 +57,8 @@ const addContact = async ({id,name,email,phone}) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
-  const { id,name, email, phone } = body;
+const updateContact = async (contactId, value) => {
+  const { id,name, email, phone } = value;
   try {
       const lists = await listContacts()
       const contact = await getContactById(contactId)
