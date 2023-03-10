@@ -1,25 +1,20 @@
-const express = require('express')
+const express = require("express");
+const ctrlWrapper = require("../../middlewares/ctrlWrapper");
+const auth = require("../../middlewares/auth");
+const { contacts: ctrl } = require("../../controllers");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(auth), ctrlWrapper(ctrl.getAll));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", ctrlWrapper(auth), ctrlWrapper(ctrl.addCont));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", ctrlWrapper(ctrl.putCont));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch("/:contactId/favorite", ctrlWrapper(ctrl.patchFav));
 
-module.exports = router
+router.delete("/:contactId", ctrlWrapper(ctrl.delCont));
+
+module.exports = router;
