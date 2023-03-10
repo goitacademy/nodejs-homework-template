@@ -55,31 +55,31 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const body = req.body
-  
+  const body = req.body;
+  body.id = uuidv4()
   try {
-    const addedContact = await addContact(body)
+    const newContact = await addContact(body);
+    
     res.json({
       code: 201,
       data: {
-        addedContact
+        newContact
       }
-    })
+    });
   } catch (error) {
     res.status(500).json({
       status: "error",
       code: 500,
       message: "Internal Server Error"
-    })
+    });
   }
-})
+});
 
 router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.body;
+  const { contactId } = req.params;
   try {
-    const contacts = await listContacts()
-    await removeContact(contactId)
-    contacts.id.value === contactId ? 
+    const contacts = await removeContact(contactId)
+    contacts.filter(contact => contact.id !== contactId) ?  
       res.json({
         message: "contact deleted"
       })
@@ -100,8 +100,9 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   const body = req.body
+  const contactId = req.params.contactId
   try {
-    const updated = await updateContact(body.id, body)
+    const updated = await updateContact(contactId, body)
     res.json({
       code: 200,
       data: {
