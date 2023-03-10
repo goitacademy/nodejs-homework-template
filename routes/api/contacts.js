@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const response = JSON.parse(await listContacts());
+  const response = await listContacts();
   res.json({
     status: "success",
     code: 200,
@@ -20,37 +20,36 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
-  const response = JSON.parse(await getContactById(id));
+  const response = await getContactById(id);
   if (response === "undefined") {
     res.json({
-      status: "failed",
+      message: "Not found",
       code: 404,
-      data: 1,
     });
   }
   res.json({
-    status: "success",
+    status: "Success",
     code: 200,
-    data: response,
+    data: JSON.parse(response),
   });
 });
 
 router.post("/", async (req, res, next) => {
+  const keys = Object.keys(req.body);
   try {
-    const { id, email, name, phone } = req.body;
-    const response = await addContact({
-      id,
-      name,
-      email,
-      phone,
-    });
+    const response = await addContact(req.body);
+    const rawElement = response.slice(1, response.length - 1);
+    const missingElement = keys.find((el) => el === rawElement);
+    if (missingElement) {
+      res.status(400).send(`Something wrong with "${missingElement}" field`);
+    }
     res.json({
-      status: "success",
-      code: 200,
+      status: "Success",
+      code: 201,
       data: JSON.parse(response),
     });
   } catch {
-    res.status(404).send("something went wrong");
+    res.status(404).send(`Not found`);
   }
 });
 
@@ -58,22 +57,24 @@ router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   try {
     await removeContact(id);
-    return res.status(204).send();
+    return res.status(200).send("Contact deleted");
   } catch {
     res.json({
-      status: "failed",
-      code: 404,
-      data: "contact not found!",
+      status: 404,
+      message: "Not found!",
     });
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).send("Missing fields!");
+  }
   try {
     const response = await updateContact(req.params.contactId, req.body);
-    res.status(201).send(response);
+    res.status(200).send(response);
   } catch {
-    res.status(400).send("something went wrong");
+    res.status(404).send("Not found!");
   }
 });
 

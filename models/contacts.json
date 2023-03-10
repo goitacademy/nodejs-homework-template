@@ -12,12 +12,10 @@
     "phone": "(294) 840-6685"
   },
   {
-    "value": {
-      "id": 3,
-      "name": "Test",
-      "email": "cscsd@o2.pl",
-      "phone": 13123
-    }
+    "id": 3,
+    "name": "Test",
+    "email": "cscsd@o2.pl",
+    "phone": 13123
   },
   {
     "id": "4",
@@ -36,12 +34,6 @@
     "name": "Abbot Franks",
     "email": "scelerisque@magnis.org",
     "phone": "(186) 568-3720"
-  },
-  {
-    "id": "7",
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
   },
   {
     "id": "8",

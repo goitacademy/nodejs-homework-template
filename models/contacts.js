@@ -1,14 +1,26 @@
 const fs = require("fs/promises");
 const Joi = require("joi");
 
+const schema = Joi.object({
+  id: Joi.number().required(),
+  name: Joi.string().min(2).max(40).required(),
+  phone: Joi.number().required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net", "pl", "org"] },
+    })
+    .required(),
+});
+
 const listContacts = async () => {
   const res = await fs.readFile("./models/contacts.json");
-  return res.toString();
+  return JSON.parse(res.toString());
 };
 
 const getContactById = async (contactId) => {
   const list = await listContacts();
-  const searchedElement = JSON.parse(list).find(
+  const searchedElement = list.find(
     (el) => el.id.toString() === contactId.toString()
   );
   const response = JSON.stringify(searchedElement);
@@ -17,48 +29,35 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const list = await listContacts(contactId);
-  const response = JSON.parse(list);
-  const tabIndex = response.findIndex((el) => el.id === contactId);
-  response.splice(tabIndex, 1);
+  const tabIndex = list.findIndex((el) => el.id === contactId);
+  list.splice(tabIndex, 1);
   if (tabIndex === -1) {
-    return JSON.parse(response);
+    return JSON.parse(list);
   }
-  await fs.writeFile("./models/contacts.json", JSON.stringify(response));
+  await fs.writeFile("./models/contacts.json", JSON.stringify(list));
 };
 
 const addContact = async (body) => {
   const list = await listContacts();
-  const contacts = JSON.parse(list);
   const response = JSON.stringify(body);
-  const forbiddenID = contacts.find((el) => el.id === JSON.parse(response).id);
+  const forbiddenID = list.find((el) => el.id === JSON.parse(response).id);
   if (forbiddenID) {
     return;
   }
-  const schema = Joi.object({
-    id: Joi.number().required(),
-    name: Joi.string().min(2).max(40).required(),
-    phone: Joi.number().required(),
-    email: Joi.string()
-      .email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net", "pl", "org"] },
-      })
-      .required(),
-  });
   const validatedContact = schema.validate(body);
   if (validatedContact.error) {
-    return;
+    const messageArr = validatedContact.error.message.split(" ");
+    return messageArr[0];
   }
-  const newList = contacts.concat([validatedContact]);
+  const newList = list.concat([validatedContact]);
   fs.writeFile("./models/contacts.json", JSON.stringify(newList));
   return response;
 };
 
 const updateContact = async (contactId, body) => {
   const list = await listContacts();
-  const contactsList = JSON.parse(list);
-  const contactToUpdate = contactsList.find((el) => el.id === contactId);
-  const tabIndex = contactsList.findIndex((el) => el.id === contactId);
+  const contactToUpdate = list.find((el) => el.id === contactId);
+  const tabIndex = list.findIndex((el) => el.id === contactId);
   if (tabIndex === -1) {
     return;
   }
@@ -81,8 +80,8 @@ const updateContact = async (contactId, body) => {
   if (validatedContact.error) {
     return;
   }
-  contactsList.splice(tabIndex, 1, validatedContact);
-  fs.writeFile("./models/contacts.json", JSON.stringify(contactsList));
+  list.splice(tabIndex, 1, validatedContact.value);
+  fs.writeFile("./models/contacts.json", JSON.stringify(list));
   return validatedContact.value;
 };
 
