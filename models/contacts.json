@@ -12,10 +12,12 @@
     "phone": "(294) 840-6685"
   },
   {
-    "id": "3",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
+    "value": {
+      "id": 3,
+      "name": "Test",
+      "email": "cscsd@o2.pl",
+      "phone": 13123
+    }
   },
   {
     "id": "4",
