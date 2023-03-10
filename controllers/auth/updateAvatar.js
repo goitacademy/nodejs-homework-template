@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const { User } = require("../../models/user");
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
@@ -17,7 +17,7 @@ const updateAvatar = async (req, res) => {
     console.log("\nFile Renamed!\n");
   });
 
-  const avatarURL = path.join("avatars", filename);
+  const avatarURL = path.join("public", "avatars", filename);
 
   await User.findByIdAndUpdate(_id, { avatarURL });
 
