@@ -9,11 +9,12 @@ const { schemas } = require("../../models/user");
 const router = express.Router();
 
 router.patch(
-  "/:id",
+  "/subscribe",
   authenticate,
   validateBody(schemas.subscriptionSchema),
   ctrl.updateSubscription
 );
+
 router.patch(
   "/avatars",
   authenticate,
