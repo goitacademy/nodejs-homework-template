@@ -12,7 +12,7 @@ const contactsJoiSchema = Joi.object({
     .required(),
 });
 
-const contactsPath = path.resolve(__dirname, "./models/contacts.json");
+const contactsPath = path.resolve(__dirname, './contacts.json');
 
 
 
