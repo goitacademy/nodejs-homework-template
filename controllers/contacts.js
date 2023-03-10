@@ -1,5 +1,5 @@
 
-const Contact = require('../models/contact')
+const { Contact } = require('../models/contact')
 
 const { HttpError, ctrlWrapper } = require('../helpers');
 
@@ -7,7 +7,7 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const result = await Contact.find();
   res.json(result);
  }
 
