@@ -2,8 +2,10 @@ const express = require("express");
 const { connectMongoose } = require("./db/connection");
 const logger = require("morgan");
 const cors = require("cors");
+require("./config/passport");
 
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/auth");
 
 const app = express();
 
@@ -16,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 connectMongoose()
 
 app.use((req, res) => {

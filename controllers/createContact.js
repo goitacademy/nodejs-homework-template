@@ -15,7 +15,8 @@ const createContact = async (req, res) => {
     }
 
     // const contact = req.body;
-    const newContact = await addContact({ name, email, phone, favorite });
+    const { _id } = req.user;
+    const newContact = await addContact({ name, email, phone, favorite }, _id);
 
     res.status(201).json(newContact);
   } catch (error) {

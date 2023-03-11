@@ -9,13 +9,14 @@ const updateStatusController = async (req, res) => {
     }
 
     const { contactId } = req.params;
-    const { favorite } = req.body;
+  const { favorite } = req.body;
+  const { _id: owner } = req.user;
 
     
 
     const updatedStatus = await updateStatusContact(contactId, {
       favorite,
-    });
+    },owner);
 
     if (favorite === null) {
       return res.status(400).json({ message: "Missing field favorite" });

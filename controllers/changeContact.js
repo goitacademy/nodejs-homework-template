@@ -10,12 +10,13 @@ const changeContact = async (req, res) => {
 
     const { contactId } = req.params;
     const { name, email, phone, favorite } = req.body;
+    const { _id:owner } = req.user;
     const updatedContact = await updateContact(contactId, {
       name,
       email,
       phone,
       favorite
-    });
+    },owner);
 
     !updatedContact
       ? res

@@ -2,8 +2,9 @@ const { getContactById } = require("../models/contacts");
 
 const getContactsById = async (req, res) => {
   try {
+    const { _id:owner } = req.user;
     const { contactId } = req.params;
-    const contactById = await getContactById(contactId);
+    const contactById = await getContactById(contactId,owner);
 
     contactById.length !== 0
       ? res.status(200).json(contactById)
