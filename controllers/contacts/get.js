@@ -3,8 +3,9 @@ const {HttpError} = require('../../helpers')
 
 const get = async (req, res) => {
   const { __id: owner } = req.user;
-  // const {page, qu}
-  const result = await Contact.find({owner} ).populate("owner", "name email")
+  const { page = 1, limit = 5 } = req.query;
+  const skip =(page -1) * limit
+  const result = await Contact.find({owner}, {skip, limit} ).populate("owner", "name email")
   if (!result) {
     throw HttpError(404, "Not found");
   }

@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { handleMongooseError } = require('../helpers');
 const {emailPattern} = require("../pattern")
 
-
+const subscriptionList = ['starter', 'pro', 'business']
 
 const userSchema = new Schema({
     name: {
@@ -20,6 +20,16 @@ const userSchema = new Schema({
         type: String,
         minlength: 6,
         require: true,
+    },
+    subscription: {
+        type: String,
+        enum: subscriptionList,
+        default: "starter",
+        require: true
+    },
+    token: {
+        type: String,
+        default: ""
     }
 
 
@@ -30,7 +40,8 @@ userSchema.post("save", handleMongooseError);
 const registerSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().pattern(emailPattern).required(),
-    password: Joi.string().min(6).required()
+    password: Joi.string().min(6).required(),
+    subscription: Joi.string().valid(...subscriptionList).required()
 })
 
 const loginSchema = Joi.object({
