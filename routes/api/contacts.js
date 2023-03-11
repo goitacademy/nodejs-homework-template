@@ -1,7 +1,12 @@
 const express = require('express');
-const joi = require('joi');
+const createError = require('http-errors');
+const Joi = require('joi');
 
 const contactsOperations = require('../../models/contacts');
+
+const schema = Joi.object({
+  name: Joi.
+});
 
 const router = express.Router();
 
@@ -15,11 +20,12 @@ router.get('/', async (req, res, next) => {
       data: { result: contactsList },
     });
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error',
-    });
+    next(err);
+    // res.status(500).json({
+    //   status: 'error',
+    //   code: 500,
+    //   message: 'Server error',
+    // });
   }
 });
 
@@ -29,12 +35,13 @@ router.get('/:contactId', async (req, res, next) => {
     const result = await contactsOperations.getContactById(contactId);
 
     if (!result) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: 'Not found',
-      });
-      return;
+      throw createError(404, 'Not found');
+      // res.status(404).json({
+      //   status: 'error',
+      //   code: 404,
+      //   message: 'Not found',
+      // });
+      // return;
     }
 
     res.json({
@@ -43,11 +50,12 @@ router.get('/:contactId', async (req, res, next) => {
       data: { result },
     });
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error',
-    });
+    next(err);
+    // res.status(500).json({
+    //   status: 'error',
+    //   code: 500,
+    //   message: 'Server error',
+    // });
   }
 });
 
@@ -61,12 +69,13 @@ router.post('/', async (req, res, next) => {
       body.email === undefined ||
       body.phone === undefined
     ) {
-      res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: 'missing required name field',
-      });
-      return;
+      throw createError(400, 'missing required name field');
+      // res.status(400).json({
+      //   status: 'error',
+      //   code: 400,
+      //   message: 'missing required name field',
+      // });
+      // return;
     }
 
     const result = await contactsOperations.addContact(req.body);
@@ -77,11 +86,12 @@ router.post('/', async (req, res, next) => {
       data: { result },
     });
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error',
-    });
+    next(err);
+    // res.status(500).json({
+    //   status: 'error',
+    //   code: 500,
+    //   message: 'Server error',
+    // });
   }
 });
 
@@ -92,12 +102,13 @@ router.delete('/:contactId', async (req, res, next) => {
     const result = await contactsOperations.removeContact(contactId);
 
     if (result === undefined) {
-      res.status(404).json({
-        status: 'succes',
-        code: 404,
-        message: 'Not found',
-      });
-      return;
+      throw createError(404, 'Not found');
+      // res.status(404).json({
+      //   status: 'succes',
+      //   code: 404,
+      //   message: 'Not found',
+      // });
+      // return;
     }
     res.status(200).json({
       status: 'succes',
@@ -105,11 +116,12 @@ router.delete('/:contactId', async (req, res, next) => {
       message: 'contact deleted',
     });
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error',
-    });
+    next(err);
+    // res.status(500).json({
+    //   status: 'error',
+    //   code: 500,
+    //   message: 'Server error',
+    // });
   }
 });
 
@@ -120,22 +132,24 @@ router.put('/:contactId', async (req, res, next) => {
     const { name, email, phone } = req.body;
 
     if (name === undefined || email === undefined || phone === undefined) {
-      res.status(400).json({
-        status: 'succes',
-        code: 400,
-        message: 'missing fields',
-      });
-      return;
+      throw createError(400, 'missing fields');
+      // res.status(400).json({
+      //   status: 'succes',
+      //   code: 400,
+      //   message: 'missing fields',
+      // });
+      // return;
     }
 
     const result = await contactsOperations.updateContact(contactId, req.body);
 
     if (!result) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: 'Not found',
-      });
+      throw createError(404, 'Not found');
+      // res.status(404).json({
+      //   status: 'error',
+      //   code: 404,
+      //   message: 'Not found',
+      // });
       return;
     } else {
       res.json({
@@ -145,11 +159,12 @@ router.put('/:contactId', async (req, res, next) => {
       });
     }
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error',
-    });
+    next(err);
+    // res.status(500).json({
+    //   status: 'error',
+    //   code: 500,
+    //   message: 'Server error',
+    // });
   }
 });
 
