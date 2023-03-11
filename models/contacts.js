@@ -30,8 +30,8 @@ const getContactById = async (contactId) => {
 const addContact = async (body) => {
   try {
     const newContact = {
-      ...body,
       id: uuidv4(),
+      ...body,
     };
 
     const contacts = await listContacts();
@@ -50,14 +50,14 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
 
-    const indexContact = contacts.filter((contact) => contact.id === contactId);
+    const index = contacts.findIndex((contact) => contact.id === contactId);
 
-    const deletedContact = contacts[indexContact];
+    const deletedContact = contacts[index];
 
-    if (indexContact !== -1) {
-      contacts.splice(indexContact, 1);
+    if (deletedContact !== -1) {
+      contacts.splice(index, 1);
 
-      await fs.writeFile(contactsPath, JSON.stringify(indexContact));
+      await fs.writeFile(contactsPath, JSON.stringify(contacts));
 
       return deletedContact;
     } else {
@@ -74,7 +74,10 @@ const updateContact = async (contactId, body) => {
 
     const contacts = await listContacts();
 
-    const indexContact = contacts.find((person) => person.id === contactId);
+    const indexContact = contacts.findIndex(
+      (person) => person.id === contactId
+    );
+    console.log('---> ~ updateContact ~ indexContact:', indexContact);
 
     if (indexContact !== -1) {
       contacts[indexContact].name = name;
@@ -82,6 +85,9 @@ const updateContact = async (contactId, body) => {
       contacts[indexContact].phone = phone;
 
       await fs.writeFile(contactsPath, JSON.stringify(contacts));
+      return contacts[indexContact];
+    } else {
+      return null;
     }
   } catch (err) {
     console.log('Something went wrong: ', err.message);
