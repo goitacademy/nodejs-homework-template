@@ -19,7 +19,25 @@ const listContacts = async () => {
 
 const addContact = async (body) => {}
 
-const updateContact = async (contactId, body) => {}
+    const newContact = {
+      id: uuidv4(),
+      name,
+      email,
+      phone,
+    };
+
+    const contacts = await listContacts();
+
+    contacts.push(newContact);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+
+    return newContact;
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
+
 
 module.exports = {
   listContacts,
