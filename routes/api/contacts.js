@@ -1,25 +1,17 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
+const {
+  getContactsList,
+  getContactById,
+  createContact,
+  deleteContactById,
+  putUpdateContact
+} = require('../../controller/cotactController');
 
-const router = express.Router()
+router.get('/',getContactsList);
+router.get('/:contactId',getContactById);
+router.post('/',createContact);
+router.delete('/:contactId',deleteContactById);
+router.put('/:contactId',putUpdateContact);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
