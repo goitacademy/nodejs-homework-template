@@ -1,7 +1,7 @@
 const fs = require('fs/promises')
 const path = require('path');
 
-
+const {v4} = require ('uuid');
 const contactsPath = path.resolve(__dirname, 'contacts.json');
 
 
@@ -18,7 +18,7 @@ const getById = async (id) => {
     try {
         const contacts = await listContacts();
         const result = contacts.filter(contact => contact.id === id); // find возвращает первый успешно найденный обект  //filter создаёт новый массив со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции
-        console.log(result)
+
         if (result.length === 0) {
             return null;
         }
@@ -29,10 +29,22 @@ const getById = async (id) => {
 };
 
 
-const removeContact = async (contactId) => {
-}
+
 
 const addContact = async (body) => {
+try {
+
+    const contacts = await listContacts();
+    const newContact = {...body, id: v4()}
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+
+} catch (error) {
+console.log(error.message);
+}
+}
+
+const removeContact = async (contactId) => {
 }
 
 const updateContact = async (contactId, body) => {
