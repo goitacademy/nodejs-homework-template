@@ -41,7 +41,17 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const result = await contacts.addContact(req.body);
+
+    res.status(201).json({
+      status: 'added',
+      code: 201,
+      data: { result },
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
