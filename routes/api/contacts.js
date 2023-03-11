@@ -4,6 +4,7 @@ const router = express.Router()
 
 
 const contactsOperations = require('../../models/contacts')
+const createError = require("http-errors");
 
 router.get('/', async (req, res, next) => {
   try {
@@ -16,11 +17,7 @@ router.get('/', async (req, res, next) => {
       }
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error'
-    })
+    next(error);
   }
 
 })
@@ -31,27 +28,21 @@ router.get('/:id', async (req, res, next) => {
     const result = await contactsOperations.getById(id);
 
     if(!result) {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: "Not found"
-      });
-      return;
+      throw createError(404,"Not found");
+      // const error = new Error("Not found"); // создаем ошибку
+      // error.status = 404; // присваиваем ей статус
+      // throw error; // выбрасываем ошибку
     }
 
     res.json({
       status: 'success',
       code: 200,
       data : {
-        result: result
+        result
       }
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: 'Server error'
-    })
+    next(error);
   }
 })
 
