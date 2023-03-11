@@ -19,7 +19,15 @@ const getContactById = async (contactId) => {
   return contact || null;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) return null;
+
+  const [removeContact] = contacts.splice(index, 1);
+  await update(contacts);
+  return removeContact;
+};
 
 const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts();
