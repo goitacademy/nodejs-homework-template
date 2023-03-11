@@ -36,7 +36,8 @@ const getContactById = async (req, res, next) => {
     
 const { contactId } = req.params;
     
-const contacts = await listContacts();
+const data = await fs.readFile(contactsPath);
+const contacts = JSON.parse(data);
 const result = contacts.find(item => item.id === contactId);
     if (!result) {
       const error = new Error("Not found");
@@ -58,7 +59,8 @@ const removeContact = async (req, res, next) => {
   try {
 const { contactId } = req.params;
 
-const contacts = await listContacts();
+const data = await fs.readFile(contactsPath);
+const contacts = JSON.parse(data);
 const newContactList = contacts.filter(item => item.id !== contactId); 
 fs.writeFile(contactsPath, JSON.stringify(newContactList));
     if (!newContactList) {
@@ -89,7 +91,8 @@ throw error;
 }
     
 const { name, email, phone } = req.body;
-const contacts = await listContacts();
+const data = await fs.readFile(contactsPath);
+const contacts = JSON.parse(data);
 const newContacts = { id: v4(), name, email, phone};
 
 contacts.push(newContacts);
@@ -124,7 +127,8 @@ const updateContact = async (req, res, next) => {
     }
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
-  const contacts = await listContacts();
+ const data = await fs.readFile(contactsPath);
+const contacts = JSON.parse(data);
 
   const contact = contacts.find(item => item.id === contactId); 
 
