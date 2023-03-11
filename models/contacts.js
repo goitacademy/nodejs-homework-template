@@ -18,6 +18,27 @@ const listContacts = async () => {
 };
 
 const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+
+    const indexContact = contacts.filter((contact) => contact.id === contactId);
+
+    const deletedContact = contacts[indexContact];
+
+    if (indexContact !== -1) {
+      contacts.splice(indexContact, 1);
+
+      await fs.writeFile(contactsPath, JSON.stringify(indexContact));
+
+      return deletedContact;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
 
     const newContact = {
       id: uuidv4(),
