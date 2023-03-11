@@ -5,84 +5,88 @@ const { v4 } = require('uuid');
 const Joi = require("joi");
 
 const contactsJoiSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
-    .required(),
+name: Joi.string().required(),
+email: Joi.string().email().required(),
+phone: Joi.string()
+.regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
+.required(),
 });
 
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 
 const listContacts = async (req, res, next) => {
-  try {
+try {
 const data = await fs.readFile(contactsPath);
 const contacts = JSON.parse(data);
  res.json({
-      status: "success",
-      code: 200,
-      data: { contacts },
-    });
-  } catch (error) {
-    next(error);
-  }
+status: "success",
+code: 200,
+data: { contacts },
+});
+} catch (error) {
+next(error);
+}
 };
 
 
 
 const getContactById = async (req, res, next) => {
-  try {
+try {
     
 const { contactId } = req.params;
     
 const data = await fs.readFile(contactsPath);
 const contacts = JSON.parse(data);
 const result = contacts.find(item => item.id === contactId);
-    if (!result) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
+if (!result) {
+const error = new Error("Not found");
+error.status = 404;
+throw error;
 }
-    res.json({
-      status: "success",
-      code: 200,
-      data: { result },
-    });
-  } catch (error) {
-    next(error);
-  }
+res.json({
+status: "success",
+code: 200,
+data: { result },
+});
+} catch (error) {
+next(error);
+}
 };
 
 
 const removeContact = async (req, res, next) => {
-  try {
+try {
 const { contactId } = req.params;
 
 const data = await fs.readFile(contactsPath);
 const contacts = JSON.parse(data);
+const removedContact = contacts.find(item => item.id === contactId); 
+    
+if (!removedContact) {
+const error = new Error("Not found");
+error.status = 404;
+throw error;
+}    
+    
 const newContactList = contacts.filter(item => item.id !== contactId); 
 fs.writeFile(contactsPath, JSON.stringify(newContactList));
-    if (!newContactList) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
-    }
-    res.json({
-      status: "success",
-      code: 200,
-      message: "contact deleted",
-      data: { newContactList },
-    });
-  } catch (error) {
-    next(error);
-  }
+
+res.json({
+status: "success",
+code: 200,
+message: "contact deleted",
+data: { newContactList },
+});
+} catch (error) {
+next(error);
+}
 };
 
 
 
 const addContact = async (req, res, next) => {
-  try {
+try {
 const { error } = contactsJoiSchema.validate(req.body);
 if (error) {
 error.message = "missing required name field";
@@ -99,62 +103,64 @@ contacts.push(newContacts);
 
 await fs.writeFile(contactsPath, JSON.stringify(contacts));
 
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      data: { newContacts },
-    });
-  } catch (error) {
-    next(error);
-  }
+res.status(201).json({
+status: "success",
+code: 201,
+data: { newContacts },
+});
+} catch (error) {
+next(error);
+}
 };
 
 
 
 const updateContact = async (req, res, next) => {
-  try {
-    if (!req.body) {
-      const error = new Error('missing fields');
-      error.status = 400;
-      throw error;
-    }
+try {
+if (!req.body) {
+const error = new Error('missing fields');
+error.status = 400;
+throw error;
+}
     
-    const {error}  = contactsJoiSchema.validate(req.body);
-    if (error) {
-      error.message = "missing required name field";
-      error.status = 400;
-      throw error;
-    }
-  const { contactId } = req.params;
-  const { name, email, phone } = req.body;
- const data = await fs.readFile(contactsPath);
+const {error}  = contactsJoiSchema.validate(req.body);
+if (error) {
+error.message = "missing required name field";
+error.status = 400;
+throw error;
+}
+const { contactId } = req.params;
+const { name, email, phone } = req.body;
+const data = await fs.readFile(contactsPath);
 const contacts = JSON.parse(data);
 
-  const contact = contacts.find(item => item.id === contactId); 
+const contact = contacts.find(item => item.id === contactId); 
 
-  if (name) contact.name = name;
-  if (email) contact.email = email;
-  if (phone) contact.phone = phone;
+if (!contact) {
+const error = new Error('Not found');
+error.status = 404;
+throw error;
+}
 
-  const contactIdx = contacts.findIndex(item => item.id === contactId);
-  contacts[contactIdx] = contact;
+contact.name = name;
+contact.email = email;
+contact.phone = phone;
+
+const contactIdx = contacts.findIndex(item => item.id === contactId);
+contacts[contactIdx] = contact;
 
 fs.writeFile(contactsPath, JSON.stringify(contacts));
-    if (!contact) {
-      const error = new Error('Not found');
-      error.status = 404;
-      throw error;
-}
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        contact,
-      },
-    });
-  } catch (error) {
+
+res.json({
+status: "success",
+code: 200,
+data: {
+contact,
+},
+});
+} catch (error) {
 next(error)
-  }
+}
 };
 
 
