@@ -1,5 +1,5 @@
 const express = require('express');
-const { controllerWrapper, validation, isValidId } = require('../../middlewares');
+const { controllerWrapper, validation, isValidId, auth } = require('../../middlewares');
 const { contactJoiSchema, contactFavoriteSchema } = require('../../models');
 
 const {
@@ -15,14 +15,15 @@ const {
 
 const router = express.Router();
 
-router.post('/', validation(contactJoiSchema), controllerWrapper(addContact));
+router.post('/', auth, validation(contactJoiSchema), controllerWrapper(addContact));
 
-router.get('/', controllerWrapper(getAllContacts));
+router.get('/', auth, controllerWrapper(getAllContacts));
 
-router.get('/:contactId', isValidId, controllerWrapper(getContact));
+router.get('/:contactId', auth, isValidId, controllerWrapper(getContact));
 
 router.put(
   '/:contactId',
+  auth,
   isValidId,
   validation(contactJoiSchema),
   controllerWrapper(updateContactById)
@@ -30,6 +31,7 @@ router.put(
 
 router.patch(
   '/:contactId/favorite',
+  auth,
   isValidId,
   validation(contactFavoriteSchema),
   controllerWrapper(updateStatusContact)
