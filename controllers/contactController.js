@@ -1,7 +1,9 @@
 const fs = require('fs').promises;
 const uuid = require('uuid').v4;
 
-const { catchAsync } = require('../utils/catchAsync') 
+const { catchAsync } = require('../utils') 
+const pathToContacts = '../models/contacts.json'
+console.log('pathToContacts: ', pathToContacts);
 
 /**
  * Create contact.
@@ -9,7 +11,7 @@ const { catchAsync } = require('../utils/catchAsync')
 exports.createContact = catchAsync(async (req, res) => {
     const { name, email, phone } = req.body;
 
-    const dataFromDB = await fs.readFile('./models/contacts.json');
+    const dataFromDB = await fs.readFile(pathToContacts);
 
     const contacts = JSON.parse(dataFromDB);
     const newContact = {
@@ -20,7 +22,7 @@ exports.createContact = catchAsync(async (req, res) => {
     };
     contacts.push(newContact);
 
-    await fs.writeFile('./models/contacts.json', JSON.stringify(contacts));
+    await fs.writeFile(pathToContacts, JSON.stringify(contacts));
 
     res.status(201).json({
         contact: newContact,
@@ -31,7 +33,7 @@ exports.createContact = catchAsync(async (req, res) => {
  * Get contacts list.
  */
 exports.getContacts = catchAsync(async (req, res) => {
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  const contacts = JSON.parse(await fs.readFile(pathToContacts));
 
   res.status(200).json({
     contacts,
@@ -44,7 +46,7 @@ exports.getContacts = catchAsync(async (req, res) => {
 exports.getContactById = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  const contacts = JSON.parse(await fs.readFile(pathToContacts));
 
   const contact = contacts.find((c) => c.id === id);
 
@@ -60,7 +62,7 @@ exports.updateContactById = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
 
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  const contacts = JSON.parse(await fs.readFile(pathToContacts));
 
   const contact = contacts.find((c) => c.id === id);
 
@@ -72,7 +74,7 @@ exports.updateContactById = catchAsync(async (req, res) => {
 
   contacts[userIdx] = contact;
 
-  await fs.writeFile('./models/contacts.json', JSON.stringify(contacts));
+  await fs.writeFile(pathToContacts, JSON.stringify(contacts));
 
   res.status(200).json({
     contact,
@@ -85,11 +87,11 @@ exports.updateContactById = catchAsync(async (req, res) => {
 exports.deleteContactById = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  const contacts = JSON.parse(await fs.readFile(pathToContacts));
 
   const updatedContactsList = contacts.filter((c) => c.id !== id);
 
-  await fs.writeFile('./models/contacts.json', JSON.stringify(updatedContactsList));
+  await fs.writeFile(pathToContacts, JSON.stringify(updatedContactsList));
 
   res.sendStatus(204);
 });
