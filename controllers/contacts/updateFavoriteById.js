@@ -1,9 +1,10 @@
 const { NotFound } = require('http-errors');
 const { Contact } = require('../../models');
 
-const getById = async (req, res) => {
+const updateFavoriteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const { favorite } = req.body;
+  const result = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
 
   if (!result) {
     throw new NotFound();
@@ -14,9 +15,8 @@ const getById = async (req, res) => {
     code: 200,
     data: {
       result,
-    }
-  });
-
+    },
+  })
 };
 
-module.exports = getById;
+module.exports = updateFavoriteById
