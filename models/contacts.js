@@ -15,8 +15,6 @@ const contactsJoiSchema = Joi.object({
 const contactsPath = path.resolve(__dirname, './contacts.json');
 
 
-
-
 const listContacts = async (req, res, next) => {
   try {
 const data = await fs.readFile(contactsPath);
@@ -26,7 +24,7 @@ const contacts = JSON.parse(data);
       contacts,
     });
   } catch (error) {
-next(error)
+    next(error);
   }
 };
 
@@ -34,8 +32,9 @@ next(error)
 
 const getContactById = async (req, res, next) => {
   try {
-const { contactId  } = req.params;
-
+    
+const { contactId } = req.params;
+    
 const contacts = await listContacts();
 const result = contacts.find(item => item.id === contactId);
     if (!result) {
@@ -47,7 +46,7 @@ const result = contacts.find(item => item.id === contactId);
       result,
     });
   } catch (error) {
-next(error)
+    next(error);
   }
 };
 
@@ -63,6 +62,7 @@ const newContactList = contacts.filter(item => item.id !== contactId);
     console.log(newContactList);
     
     res.status(200).json({
+      newContactList,
       msg: "contact deleted"
     });
   } catch (err) {
@@ -95,7 +95,7 @@ res.status(201).json({
       contact: newContacts,
     });
   } catch (error) {
-next(error)
+    next(error);
   }
 };
 
