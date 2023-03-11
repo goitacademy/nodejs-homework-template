@@ -1,11 +1,21 @@
-const asyncWrapper = (Ctrl) => {
+const RequestError = require("./RequestError");
+
+const asyncWrapper = (controller) => {
   return (req, res, next) => {
-    Ctrl(req, res).catch(next);
+    controller(req, res).catch(next);
   };
 };
 
-const errorHandler = (error, req, res, next) => {
-  res.status(500).json({ message: error.message });
+const errorHandler = (schema) => {
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      next(RequestError(400, error.message));
+    }
+    next();
+  };
+
+  return func;
 };
 
 const isEmpty = (obj) => {

@@ -6,17 +6,13 @@ const connectMongo = async () => {
 
   const uri = getConnectionURI();
 
-  try {
-    await mongoose.connect(uri, {
+  return (
+    mongoose.connect(uri),
+    {
+      promiseLibrary: global.Promise,
       useUnifiedTopology: true,
-      useNewUrlParser: true,
-      retryWrites: true,
-      w: "majority",
-    });
-    console.info(`Successfully connected to the database`);
-  } catch (error) {
-    throw new Error(`Error connecting to the database: ${error.message}`);
-  }
+    }
+  );
 };
 
 module.exports = connectMongo;

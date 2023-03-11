@@ -1,30 +1,29 @@
-const { Contacts } = require("../db");
+const { Contacts } = require("../models");
 
-const listContacts = async () => {
-  return await Contacts.find({});
+const listContacts = async (owner) => {
+  return await Contacts.find({ owner });
 };
 
-const getContactById = async (contactId) => {
-  return await Contacts.findById(contactId);
+const getContactById = async (contactId, owner) => {
+  return await Contacts.findById({ _id: contactId, owner });
 };
 
 const addContact = async (body) => {
-  if (!body.favorite) body.favorite = false;
   return await Contacts.create(body);
 };
 
-const removeContact = async (contactId) => {
-  return await Contacts.findByIdAndDelete(contactId);
+const removeContact = async (contactId, owner) => {
+  return await Contacts.findByIdAndDelete({ _id: contactId, owner });
 };
 
-const updateContact = async (contactId, body) => {
-  return await Contacts.findByIdAndUpdate(contactId, body, {
+const updateContact = async (contactId, body, owner) => {
+  return await Contacts.findByIdAndUpdate({ _id: contactId, owner }, body, {
     new: true,
   });
 };
 
-const updateStatusContact = async (contactId, body) => {
-  return await Contacts.findByIdAndUpdate(contactId, { favorite: body.favorite }, {
+const updateStatusContact = async (contactId, body, owner) => {
+  return await Contacts.findByIdAndUpdate({ _id: contactId, owner }, body, {
     new: true,
   });
 };
