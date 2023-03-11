@@ -1,4 +1,3 @@
-// const fs = require('fs/promises')
 const fs = require('fs').promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -17,7 +16,18 @@ const listContacts = async () => {
   }
 };
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+
+    return contacts.find((person) => {
+      if (person.id === contactId) return console.log(person);
+    });
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
+
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
@@ -39,6 +49,10 @@ const removeContact = async (contactId) => {
     console.log('Something went wrong: ', err.message);
   }
 };
+
+const addContact = async (body) => {
+  try {
+    const { name, email, phone } = body;
 
     const newContact = {
       id: uuidv4(),
@@ -85,4 +99,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
