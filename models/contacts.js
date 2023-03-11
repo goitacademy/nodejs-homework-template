@@ -1,19 +1,71 @@
-// const fs = require('fs/promises')
+const fs = require("fs").promises;
+const shortid = require("shortid");
 
-const listContacts = async () => {}
+try {
+  async function updateListContacts(newContent) {
+    return await fs.writeFile(
+      "./models/contacts.json",
+      JSON.stringify(newContent),
+      "utf8"
+    );
+  }
 
-const getContactById = async (contactId) => {}
+  async function readContactsFile() {
+    return await fs.readFile("./models/contacts.json", "utf8");
+  }
 
-const removeContact = async (contactId) => {}
+  async function listContacts() {
+    const contacts = await readContactsFile().then(JSON.parse);
+    return contacts;
+  }
 
-const addContact = async (body) => {}
+  async function getById(id) {
+    const contacts = await readContactsFile().then(JSON.parse);
+    const contact = contacts.find((item) => item.id === id);
+    return contact;
+  }
 
-const updateContact = async (contactId, body) => {}
+  async function removeContact(id) {
+    const contacts = await readContactsFile().then(JSON.parse);
+    const idx = contacts.findIndex((item) => item.id === id);
+    if (idx === -1) {
+      return null;
+    }
+    const deletedContact = contacts.splice(idx, 1);
+    await updateListContacts(contacts);
+    return deletedContact;
+  }
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  async function addContact({ name, email, phone }) {
+    const contacts = await readContactsFile().then(JSON.parse);
+    const newContact = {
+      id: shortid.generate(),
+      name,
+      email,
+      phone,
+    };
+    updateListContacts([...contacts, newContact]);
+    return newContact;
+  }
+
+  async function updateContact(id, data) {
+    const contacts = await readContactsFile().then(JSON.parse);
+    const idx = contacts.findIndex((item) => item.id === id);
+    if (idx === -1) {
+      return null;
+    }
+    contacts[idx] = { id, ...data };
+    await updateListContacts(contacts);
+    return contacts[idx];
+  }
+
+  module.exports = {
+    listContacts,
+    getById,
+    removeContact,
+    addContact,
+    updateContact,
+  };
+} catch (error) {
+  console.error(error);
 }
