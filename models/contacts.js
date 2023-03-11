@@ -59,6 +59,25 @@ const removeContact = async (contactId) => {
   }
 };
 
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, email, phone } = body;
+
+    const contacts = await listContacts();
+
+    const indexContact = contacts.find((person) => person.id === contactId);
+
+    if (indexContact !== -1) {
+      contacts[indexContact].name = name;
+      contacts[indexContact].email = email;
+      contacts[indexContact].phone = phone;
+
+      await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    }
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
 
 module.exports = {
   listContacts,
