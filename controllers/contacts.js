@@ -1,4 +1,4 @@
-const contacts = require("../models/contacts.json");
+const contacts = require("../models/contacts.js");
 const schema = require("../schemas/schema");
 
 const getListContacts = async (req, res, next) => {
