@@ -1,21 +1,21 @@
 const express = require('express');
-const { validateBody } = require('../../middlewares');
+const { validateBody, authenticate } = require('../../middlewares');
 const ctrl = require('../../controllers/contacts');
 const { isValidId } = require('../../middlewares');
 const { newContSchema, updateFaviriteChema } = require('../../models/contact');
 
 const router = express.Router();
 
-router.get('/', ctrl.getList);
+router.get('/', authenticate, ctrl.getList);
 
-router.get('/:contactId', isValidId, ctrl.getById);
+router.get('/:contactId', authenticate, isValidId, ctrl.getById);
 
-router.post('/', validateBody(newContSchema), ctrl.add);
+router.post('/', authenticate, validateBody(newContSchema), ctrl.add);
 
-router.delete('/:contactId', isValidId, ctrl.del);
+router.delete('/:contactId', authenticate, isValidId, ctrl.del);
 
-router.put('/:contactId', isValidId, validateBody(newContSchema), ctrl.update);
+router.put('/:contactId', authenticate, isValidId, validateBody(newContSchema), ctrl.update);
 
-router.patch('/:contactId/favorite', isValidId, validateBody(updateFaviriteChema), ctrl.updateFavorite);
+router.patch('/:contactId/favorite', authenticate, isValidId, validateBody(updateFaviriteChema), ctrl.updateFavorite);
 
 module.exports = router;
