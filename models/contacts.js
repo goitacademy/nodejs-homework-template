@@ -29,8 +29,6 @@ const getContactById = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    // const { name, email, phone } = body;
-
     const newContact = {
       ...body,
       id: uuidv4(),
