@@ -49,9 +49,14 @@ const loginSchema = Joi.object({
     password: Joi.string().min(6).required()
 })
 
+const updateSubscriptionJoiSchema = Joi.object({
+    subscription: Joi.string().valid(...subscriptionList)
+})
+
 const schemas = {
     registerSchema,
     loginSchema,
+    updateSubscriptionJoiSchema
 }
 
 const User = model("user", userSchema);
