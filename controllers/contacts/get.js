@@ -2,7 +2,9 @@ const {Contact} = require('../../model/contactSchema');
 const {HttpError} = require('../../helpers')
 
 const get = async (req, res) => {
-  const result = await Contact.find()
+  const { __id: owner } = req.user;
+  // const {page, qu}
+  const result = await Contact.find({owner} ).populate("owner", "name email")
   if (!result) {
     throw HttpError(404, "Not found");
   }

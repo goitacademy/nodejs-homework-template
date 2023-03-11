@@ -24,6 +24,11 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true
+    }
   }, { versionKey: false, timestamps: true }
   // когда создан и обновлён контакт, также убирает версию файла
 );
@@ -42,7 +47,7 @@ const updateFovoriteJoiSchema = Joi.object({
    favorite: Joi.boolean().required()
 })
 
-const allSchemas = {
+const schemas = {
   addJoiSchema,
   updateFovoriteJoiSchema
 }
@@ -52,5 +57,5 @@ const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
-  allSchemas
+  schemas
 };
