@@ -8,9 +8,9 @@ const listContacts = async () => {
   return JSON.parse(contacts);
 };
 
-const updateContacts = async (contacts) => {
-  await fs.writeFile(contactsPath, "utf-8");
-  return JSON.parse(contacts);
+const update = async (contacts) => {
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf-8");
+  return contacts;
 };
 
 const getContactById = async (contactId) => {
@@ -25,17 +25,17 @@ const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts();
   const newContact = { id: String(contacts.length + 1), name, email, phone };
   contacts.push(newContact);
-  updateContact(contacts);
+  await update(contacts);
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, { name, email, phone }) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) return null;
 
-  contacts[index] = { body };
-  await updateContacts(contacts);
+  contacts[index] = { id: contactId, name, email, phone };
+  await update(contacts);
   return contacts[index];
 };
 
