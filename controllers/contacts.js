@@ -22,10 +22,12 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-    const result = await Contact.create(req.body);
-    res.status(201).json(result);
-  
+  const result = await Contact.create(req.body);
+  if (!result) {
+  return res.status(400).json({code: 400, message:"Unable to save in data base"});
 }
+  res.status(201).json(result);
+  }
 
 const removeContact = async (req, res) => {
    const { id } = req.params;
