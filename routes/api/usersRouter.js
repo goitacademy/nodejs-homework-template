@@ -7,8 +7,13 @@ const {
   currentUserController,
   logoutUserController,
   userSubscriptionController,
+  avatarUpdateController,
 } = require("../../controllers/users");
-const { userAuthMiddleware, validateBody } = require("../../middlewares");
+const {
+  userAuthMiddleware,
+  validateBody,
+  upload,
+} = require("../../middlewares");
 const { userSchema } = require("../../schemas");
 
 router.post(
@@ -24,19 +29,25 @@ router.post(
 
 router.get(
   "/current",
-  controllerWrapper(userAuthMiddleware),
+  userAuthMiddleware,
   controllerWrapper(currentUserController)
 );
 router.get(
   "/logout",
-  controllerWrapper(userAuthMiddleware),
+  userAuthMiddleware,
   controllerWrapper(logoutUserController)
 );
 router.patch(
-  "/subscription/",
-  controllerWrapper(userAuthMiddleware),
+  "/subscription",
+  userAuthMiddleware,
   validateBody(userSchema.userSubscription),
   controllerWrapper(userSubscriptionController)
+);
+router.patch(
+  "/avatars",
+  userAuthMiddleware,
+  upload.single("avatar"),
+  controllerWrapper(avatarUpdateController)
 );
 
 module.exports = router;

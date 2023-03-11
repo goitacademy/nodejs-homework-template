@@ -12,28 +12,37 @@ const {
   updateStatusContactController,
 } = require("../../controllers/contacts");
 
-router.use(controllerWrapper(userAuthMiddleware));
+router.get("/", userAuthMiddleware, controllerWrapper(getContactsController));
 
-router.get("/", controllerWrapper(getContactsController));
-
-router.get("/:contactId", controllerWrapper(getOneContactController));
+router.get(
+  "/:contactId",
+  userAuthMiddleware,
+  controllerWrapper(getOneContactController)
+);
 
 router.post(
   "/",
+  userAuthMiddleware,
   validateBody(contactSchema.addContactSchema),
   controllerWrapper(addContactController)
 );
 
-router.delete("/:contactId", controllerWrapper(removeContactController));
+router.delete(
+  "/:contactId",
+  userAuthMiddleware,
+  controllerWrapper(removeContactController)
+);
 
 router.put(
   "/:contactId",
+  userAuthMiddleware,
   validateBody(contactSchema.updateContactSchema),
   controllerWrapper(updateContactController)
 );
 
 router.patch(
   "/:contactId/favorite",
+  userAuthMiddleware,
   validateBody(contactSchema.updateStatusSchema),
   controllerWrapper(updateStatusContactController)
 );

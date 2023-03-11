@@ -1,3 +1,4 @@
 const userAuthMiddleware = require("./userAuthMiddleware");
 const validateBody = require("./validateBody");
-module.exports = { userAuthMiddleware, validateBody };
+const upload = require("./upload");
+module.exports = { userAuthMiddleware, validateBody, upload };

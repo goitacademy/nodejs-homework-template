@@ -5,6 +5,7 @@ const getOneContactController = async (req, res) => {
   const { _id: owner } = req.user;
 
   const data = await getContactById(contactId, owner);
+
   if (!data || data.length === 0) {
     throw RequestError(404, "Not found");
   }
