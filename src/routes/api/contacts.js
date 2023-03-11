@@ -1,23 +1,29 @@
 const express = require("express");
-
 const router = express.Router();
 
+//Import packages
+const { authenticate } = require("../../middleware");
+
+//Import modules
 const {
   getContactsListController,
   getContactByIdController,
   createContactController,
   removeContactController,
   updateContactController,
-  updateStatusContactController,
+  updateStatusContactController
 } = require("../../controllers");
 
 const { asyncWrapper } = require("../../helpers");
 
-const { authenticate } = require("../../middleware");
-
+//Define routes
 router.get("/", authenticate, asyncWrapper(getContactsListController));
 
-router.get("/:contactId", authenticate, asyncWrapper(getContactByIdController));
+router.get(
+  "/:contactId",
+  authenticate,
+  asyncWrapper(getContactByIdController)
+);
 
 router.post("/", authenticate, asyncWrapper(createContactController));
 

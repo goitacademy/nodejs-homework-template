@@ -5,12 +5,13 @@ const removeContactController = async (req, res) => {
   const { contactId } = req.params;
   const { _id: owner } = req.user;
 
-  const contactToRemove = await removeContact(contactId, owner);
+  const { deletedCount } = await removeContact(contactId, owner);
 
-  if (!contactToRemove) {
+  if (!deletedCount) {
     throw RequestError(404, "Contact with this ID not found");
   }
-  return res.status(200).json({ message: "Contact successfully deleted" });
+
+  return res.status(200).json({ status: "success", message: "Contact successfully deleted" });
 };
 
 module.exports = removeContactController;
