@@ -20,8 +20,8 @@ const userShema = new Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
-
     token: String,
+    avatarURL: String,
   },
   { versioncey: false, timestamps: true }
 );
