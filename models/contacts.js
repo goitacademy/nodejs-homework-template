@@ -19,10 +19,30 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
+    const contact = contacts.find((person) => person.id === contactId);
 
-    return contacts.find((person) => {
-      if (person.id === contactId) return console.log(person);
-    });
+    return contact;
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
+
+const addContact = async (body) => {
+  try {
+    // const { name, email, phone } = body;
+
+    const newContact = {
+      ...body,
+      id: uuidv4(),
+    };
+
+    const contacts = await listContacts();
+
+    contacts.push(newContact);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+
+    return newContact;
   } catch (err) {
     console.log('Something went wrong: ', err.message);
   }
@@ -45,29 +65,6 @@ const removeContact = async (contactId) => {
     } else {
       return null;
     }
-  } catch (err) {
-    console.log('Something went wrong: ', err.message);
-  }
-};
-
-const addContact = async (body) => {
-  try {
-    const { name, email, phone } = body;
-
-    const newContact = {
-      id: uuidv4(),
-      name,
-      email,
-      phone,
-    };
-
-    const contacts = await listContacts();
-
-    contacts.push(newContact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-    return newContact;
   } catch (err) {
     console.log('Something went wrong: ', err.message);
   }
