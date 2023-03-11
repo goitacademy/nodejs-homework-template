@@ -24,7 +24,7 @@ const getContactById = async (contactId) => {
     (el) => el.id.toString() === contactId.toString()
   );
   const response = JSON.stringify(searchedElement);
-  return !response ? JSON.stringify("undefined") : response;
+  return !response ? undefined : response;
 };
 
 const removeContact = async (contactId) => {
@@ -40,17 +40,22 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const list = await listContacts();
   const response = JSON.stringify(body);
-  const forbiddenID = list.find((el) => el.id === JSON.parse(response).id);
+  const forbiddenID = list.find(
+    (el) => el.id.toString() === JSON.parse(response).id.toString()
+  );
   if (forbiddenID) {
-    return;
+    return forbiddenID.id.toString();
   }
   const validatedContact = schema.validate(body);
   if (validatedContact.error) {
     const messageArr = validatedContact.error.message.split(" ");
     return messageArr[0];
   }
+
   const newList = list.concat([validatedContact.value]);
-  fs.writeFile("./models/contacts.json", JSON.stringify(newList));
+  if (!forbiddenID) {
+    fs.writeFile("./models/contacts.json", JSON.stringify(newList));
+  }
   return response;
 };
 
