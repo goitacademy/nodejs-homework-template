@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('fs/promises')
 const path = require('path');
 const { v4 } = require('uuid');
 
@@ -12,16 +12,17 @@ const contactsJoiSchema = Joi.object({
     .required(),
 });
 
-const contactsPath = path.resolve(__dirname, './contacts.json');
+const contactsPath = path.resolve(__dirname, "contacts.json");
 
 
 const listContacts = async (req, res, next) => {
   try {
 const data = await fs.readFile(contactsPath);
 const contacts = JSON.parse(data);
-
-    res.status(200).json({
-      contacts,
+ res.json({
+      status: "success",
+      code: 200,
+      data: { contacts },
     });
   } catch (error) {
     next(error);
@@ -42,8 +43,10 @@ const result = contacts.find(item => item.id === contactId);
       error.status = 404;
       throw error;
 }
-    res.status(200).json({
-      result,
+    res.json({
+      status: "success",
+      code: 200,
+      data: { result },
     });
   } catch (error) {
     next(error);
@@ -51,24 +54,26 @@ const result = contacts.find(item => item.id === contactId);
 };
 
 
-const removeContact = async (req, res) => {
+const removeContact = async (req, res, next) => {
   try {
 const { contactId } = req.params;
 
 const contacts = await listContacts();
 const newContactList = contacts.filter(item => item.id !== contactId); 
-    fs.writeFile(contactsPath, JSON.stringify(newContactList));
-    console.log(contacts);
-    console.log(newContactList);
-    
-    res.status(200).json({
-      newContactList,
-      msg: "contact deleted"
+fs.writeFile(contactsPath, JSON.stringify(newContactList));
+    if (!newContactList) {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "contact deleted",
+      data: { newContactList },
     });
-  } catch (err) {
-    res.status(404).json({
-      msg: "Not found",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -91,8 +96,10 @@ contacts.push(newContacts);
 
 await fs.writeFile(contactsPath, JSON.stringify(contacts));
 
-res.status(201).json({
-      contact: newContacts,
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { newContacts },
     });
   } catch (error) {
     next(error);
@@ -134,9 +141,12 @@ fs.writeFile(contactsPath, JSON.stringify(contacts));
       error.status = 404;
       throw error;
 }
-    
-    res.status(200).json({
-      contact,
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contact,
+      },
     });
   } catch (error) {
 next(error)
