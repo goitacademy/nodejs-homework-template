@@ -1,11 +1,13 @@
-const contacts = require('../../models/contacts');
 const express = require('express');
+const joi = require('joi');
+
+const contactsOperations = require('../../models/contacts');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const contactsList = await contacts.listContacts();
+    const contactsList = await contactsOperations.listContacts();
 
     res.status(200).json({
       status: 'success',
@@ -13,14 +15,18 @@ router.get('/', async (req, res, next) => {
       data: { result: contactsList },
     });
   } catch (err) {
-    console.log(err.message);
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error',
+    });
   }
 });
 
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await contactsOperations.getContactById(contactId);
 
     if (!result) {
       res.status(404).json({
@@ -28,6 +34,7 @@ router.get('/:contactId', async (req, res, next) => {
         code: 404,
         message: 'Not found',
       });
+      return;
     }
 
     res.json({
@@ -36,7 +43,11 @@ router.get('/:contactId', async (req, res, next) => {
       data: { result },
     });
   } catch (err) {
-    console.log(err.message);
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error',
+    });
   }
 });
 
@@ -50,14 +61,15 @@ router.post('/', async (req, res, next) => {
       body.email === undefined ||
       body.phone === undefined
     ) {
-      return res.status(400).json({
+      res.status(400).json({
         status: 'error',
         code: 400,
         message: 'missing required name field',
       });
+      return;
     }
 
-    const result = await contacts.addContact(req.body);
+    const result = await contactsOperations.addContact(req.body);
 
     res.status(201).json({
       status: 'added',
@@ -65,7 +77,11 @@ router.post('/', async (req, res, next) => {
       data: { result },
     });
   } catch (err) {
-    console.log(err.message);
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error',
+    });
   }
 });
 
@@ -73,14 +89,15 @@ router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    const result = await contacts.removeContact(contactId);
+    const result = await contactsOperations.removeContact(contactId);
 
     if (result === undefined) {
-      return res.status(404).json({
+      res.status(404).json({
         status: 'succes',
         code: 404,
         message: 'Not found',
       });
+      return;
     }
     res.status(200).json({
       status: 'succes',
@@ -88,7 +105,11 @@ router.delete('/:contactId', async (req, res, next) => {
       message: 'contact deleted',
     });
   } catch (err) {
-    console.log(err.message);
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error',
+    });
   }
 });
 
@@ -99,14 +120,15 @@ router.put('/:contactId', async (req, res, next) => {
     const { name, email, phone } = req.body;
 
     if (name === undefined || email === undefined || phone === undefined) {
-      return res.status(400).json({
+      res.status(400).json({
         status: 'succes',
         code: 400,
         message: 'missing fields',
       });
+      return;
     }
 
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await contactsOperations.updateContact(contactId, req.body);
 
     if (!result) {
       res.status(404).json({
@@ -114,6 +136,7 @@ router.put('/:contactId', async (req, res, next) => {
         code: 404,
         message: 'Not found',
       });
+      return;
     } else {
       res.json({
         status: 'success',
@@ -122,7 +145,11 @@ router.put('/:contactId', async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err.message);
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Server error',
+    });
   }
 });
 
