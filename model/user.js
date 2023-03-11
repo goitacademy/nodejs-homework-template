@@ -8,18 +8,18 @@ const subscriptionList = ['starter', 'pro', 'business']
 const userSchema = new Schema({
     name: {
         type: String,
-        require: true
+        require: [true, 'Name is required']
     },
     email: {
         type: String,
         require: true,
         match: emailPattern,
-        unique: true
+        unique: [true, 'Email is required']
     },
     password: {
         type: String,
         minlength: 6,
-        require: true,
+        require: [true, 'Password is required']
     },
     subscription: {
         type: String,
