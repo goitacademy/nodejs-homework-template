@@ -29,19 +29,19 @@ const getById = async (id) => {
 };
 
 
-
-
 const addContact = async (body) => {
-try {
+    try {
 
-    const contacts = await listContacts();
-    const newContact = {...body, id: v4()}
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+        const contacts = await listContacts();
+        const newContact = {...body, id: v4()}
+        contacts.push(newContact);
 
-} catch (error) {
-console.log(error.message);
-}
+        await fs.writeFile(contactsPath, JSON.stringify(contacts));
+        return newContact;
+
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 const removeContact = async (contactId) => {
