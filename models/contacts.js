@@ -11,7 +11,11 @@ const listContacts = async () => {
     const result = await fs.readFile(contactsPath, 'utf8');
     const contacts = JSON.parse(result);
 
-const removeContact = async (contactId) => {}
+    return contacts;
+  } catch (err) {
+    console.log('Something went wrong: ', err.message);
+  }
+};
 
 const addContact = async (body) => {}
 
