@@ -3,7 +3,7 @@ const app = require("./app");
 // const DB_HOST =
 //   "mongodb+srv://antonina:H3haUc58aGmRSj4@cluster0.ukw0xzd.mongodb.net/contacts-reader?retryWrites=true&w=majority";
 
-const { DB_HOST } = require("./config");
+const { DB_HOST } = process.env;
 
 const mongoose = require("mongoose");
 
