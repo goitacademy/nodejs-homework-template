@@ -8,9 +8,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  console.log(contactId);
   const result = await Contact.findById(contactId);
-  console.log(result);
   if (!result) {
     throw HttpError(404, "Not found");
   }
