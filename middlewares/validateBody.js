@@ -12,3 +12,4 @@ const validateBody = shema => {
 }
 
 module.exports = validateBody
+
