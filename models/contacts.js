@@ -6,7 +6,10 @@ const { v4: uuidv4 } = require('uuid');
 // const contactsPath = path.resolve('contacts.json');
 const contactsPath = path.join(__dirname, 'contacts.json');
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const result = await fs.readFile(contactsPath, 'utf8');
+    const contacts = JSON.parse(result);
 
 const removeContact = async (contactId) => {}
 
