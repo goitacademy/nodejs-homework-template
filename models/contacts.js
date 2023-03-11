@@ -29,7 +29,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const list = await listContacts(contactId);
-  const tabIndex = list.findIndex((el) => el.id === contactId);
+  const tabIndex = list.findIndex((el) => el.id.toString() === contactId);
   list.splice(tabIndex, 1);
   if (tabIndex === -1) {
     return JSON.parse(list);
@@ -49,7 +49,7 @@ const addContact = async (body) => {
     const messageArr = validatedContact.error.message.split(" ");
     return messageArr[0];
   }
-  const newList = list.concat([validatedContact]);
+  const newList = list.concat([validatedContact.value]);
   fs.writeFile("./models/contacts.json", JSON.stringify(newList));
   return response;
 };
