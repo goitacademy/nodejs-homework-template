@@ -8,8 +8,8 @@ const schema = Joi.object({
       tlds: { allow: ['com', 'net'] },
     })
     .required(),
-  phone: Joi.string()
-    .regex(/^[0-9]{10}$/)
+  phone:
+    Joi.string()
     .required(),
 });
 
