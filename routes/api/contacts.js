@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { validation } = require('../../middlewares');
-const { contactSchema } = require('../../schemas');
+const { joiSchema: contactSchema, favoriteJoiSchema } = require('../../models/contact');
 const { ctrlWrap } = require('../../helpers');
 const { contacts: ctrl } = require('../../controllers');
 
@@ -11,10 +11,12 @@ router.get('/', ctrlWrap(ctrl.getContacts));
 
 router.get('/:contactId', ctrlWrap(ctrl.getById));
 
-router.post('/', validation({ schema: contactSchema, message: "missing required name field" }), ctrlWrap(ctrl.add));
-
-router.delete('/:contactId', ctrlWrap(ctrl.removeById));
+router.post('/', validation({ schema: contactSchema, message: "missing required field" }), ctrlWrap(ctrl.add));
 
 router.put('/:contactId', validation({ schema: contactSchema, message: "missing fields" }), ctrlWrap(ctrl.updateById));
+
+router.patch('/:contactId/favorite', validation({ schema: favoriteJoiSchema, message: "missing field favorite" }), ctrlWrap(ctrl.updateFavoriteById));
+
+router.delete('/:contactId', ctrlWrap(ctrl.removeById));
 
 module.exports = router;
