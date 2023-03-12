@@ -8,10 +8,12 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema({
   password: {
     type: String,
+    minlenght:6,
     required: [true, 'Password is required'],
   },
   email: {
     type: String,
+    mach:emailRegexp,
     required: [true, 'Email is required'],
     unique: true,
   },
