@@ -1,6 +1,4 @@
-const fs = require('fs/promises')
-const path = require("path");
-const contactsPath =("./models/contacts.json")
+
 const Contact = require("../schemas/contact")
 
 const listContacts = async () => {
