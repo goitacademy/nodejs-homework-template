@@ -2,8 +2,8 @@ const {Contact} = require('../../model/contactSchema');
 const {HttpError} = require('../../helpers')
 
 const create = async (req, res) => {
-  const { name, email, phone, favorite } = req.body;
-  const result = await Contact.create({ name, email, phone, favorite });
+  const {_id: owner} = req.user
+  const result = await Contact.create({...req.body, owner });
     if (!result) {
       throw HttpError(404, `Not created`);
   }
