@@ -69,12 +69,13 @@ const logout = async (req, res) => {
 
 const updateSubscriptionUser = async (req, res) => {
   const { token } = req.user;
+  const subscription = req.body.subscription;
   const user = await User.findOneAndUpdate(
     { token },
-    { subscription: req.body.subscription }
+    { subscription: subscription }
   );
   const email = user.email;
-  const subscription = req.body.subscription;
+
   res.json({
     email,
     subscription,
