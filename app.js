@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const { contactsRouter, authRouter } = require('./routes/api')
+const { contactsRouter, authRouter } = require("./routes/api");
 
 const app = express();
 
@@ -14,6 +14,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);

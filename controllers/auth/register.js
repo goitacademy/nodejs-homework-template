@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 
 require("dotenv").config();
 
+const gravatar = require("gravatar");
+
 const { User } = require("../../models");
 
 const { HttpError } = require("../../utils");
@@ -15,10 +17,12 @@ const register = async (request, response) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
   const user = await User.create({
     ...request.body,
     password: hashPassword,
+    avatarURL,
   });
 
   response.status(201).json({
