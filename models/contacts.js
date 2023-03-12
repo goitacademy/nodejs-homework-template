@@ -23,8 +23,7 @@ const getContactById = async (contactId) => {
   const searchedElement = list.find(
     (el) => el.id.toString() === contactId.toString()
   );
-  const response = JSON.stringify(searchedElement);
-  return !response ? undefined : response;
+  return searchedElement;
 };
 
 const removeContact = async (contactId) => {
