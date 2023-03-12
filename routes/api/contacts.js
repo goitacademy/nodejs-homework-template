@@ -1,21 +1,9 @@
 const express = require('express');
 const createError = require('http-errors');
-const Joi = require('joi');
 
 const contactsOperations = require('../../models/contacts');
 
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
-    })
-    .required(),
-  phone: Joi.string()
-    .regex(/^[0-9]{10}$/)
-    .required(),
-});
+const schema = require('../../schemas/contactSchema');
 
 const router = express.Router();
 
