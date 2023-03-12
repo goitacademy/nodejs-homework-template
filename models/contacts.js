@@ -1,6 +1,5 @@
 const fs = require("fs").promises;
 const path = require("path");
-// const colors = require("colors");
 const uuid = require("uuid").v4;
 
 const contactsPath = path.join(__dirname, "/contacts.json");
