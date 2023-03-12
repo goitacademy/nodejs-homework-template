@@ -14,10 +14,10 @@ const listContacts = async () => {
 }
 
 
-const getById = async (id) => {
+const getById = async (contactId) => {
     try {
         const contacts = await listContacts();
-        const result = contacts.filter(contact => contact.id === id); // find возвращает первый успешно найденный обект  //filter создаёт новый массив со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции
+        const result = contacts.filter(contact => contact.id === contactId); // find возвращает первый успешно найденный обект  //filter создаёт новый массив со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции
 
         if (result.length === 0) {
             return null;
@@ -43,12 +43,25 @@ const addContact = async (body) => {
         console.log(error.message);
     }
 }
+const updateContact = async (contactId, body) => {
+    const contacts = await listContacts();
+
+    const idx = contacts.findIndex(item => item.id === contactId);
+
+    if (idx === -1) {
+        return null;
+    }
+    contacts[idx] = {...body, contactId};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return contacts[idx];
+}
+
+
 
 const removeContact = async (contactId) => {
 }
 
-const updateContact = async (contactId, body) => {
-}
+
 
 module.exports = {
     listContacts,
