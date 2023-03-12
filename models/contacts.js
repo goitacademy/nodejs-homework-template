@@ -42,7 +42,6 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     const { name, email, phone } = body;
-
     const contacts = await listContacts();
     contacts.push({
       id: randomBytes(10).toString("hex"),
