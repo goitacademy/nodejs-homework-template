@@ -78,8 +78,11 @@ router.put('/:id', async (req, res, next) => {
             throw createError(400, "missing fields");
         }
 
-        const { id } = req.params;
+        const {id} = req.params;
         const result = await contactsOperations.updateContact(id, req.body);
+        if (!result) {
+            throw createError(404, "Not found");
+        }
         res.json({
             status: 'success',
             code: 200,
@@ -94,9 +97,24 @@ router.put('/:id', async (req, res, next) => {
 
 
 router.delete('/:contactId', async (req, res, next) => {
-    res.json({message: 'template message'})
+    try {
+        const {contactId} = req.params;
+        const result = await contactsOperations.removeContact(contactId);
+        if (!result) {
+            throw createError(404, "Not found");
+        }
+        res.json({
+            status: "success",
+            code: 200,
+            message: "contact deleted",
+            data: {
+                result
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
 })
-
 
 
 module.exports = router
