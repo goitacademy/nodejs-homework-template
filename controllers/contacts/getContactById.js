@@ -1,7 +1,7 @@
 const contactsOperations = require('../../models/contacts');
 const createError = require('http-errors');
 
-const getById = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contactsOperations.getContactById(contactId);
@@ -20,4 +20,4 @@ const getById = async (req, res, next) => {
   }
 };
 
-module.exports = getById;
+module.exports = getContactById;
