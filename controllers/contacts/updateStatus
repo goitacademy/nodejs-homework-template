@@ -1,0 +1,39 @@
+const contactsModel = require('../../models/contact')
+
+
+
+const updateStatus = async (req, res, next) => {
+    console.log('Proper patch');
+    const { contactId } = req.params;
+    const { favorite = false } = req.body;
+    if (req.body.length === 0) {
+        res.json ({
+            status:error,
+            code:400,
+            message : "Missing field favorite"
+        })
+    }
+    try{
+        const result = await contactsModel.updateContact(contactId, {favorite});
+        if (result) {
+            res.json({
+              status: 'success',
+              code: 200,
+              data: { status: result },
+            })
+          } else {
+            res.status(404).json({
+              status: 'error',
+              code: 404,
+              message: `Not found id: ${contactId}`,
+              data: 'Not Found',
+            })
+          }
+        } catch (e) {
+          console.error(e)
+          next(e)
+        }
+    }
+
+    module.exports = {updateStatus};
+
