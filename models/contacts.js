@@ -19,7 +19,7 @@ const listContacts = async () => {
 const getContactById = async id => {
   const data = await listContacts();
   const contactById = data.find(contact => contact.id === id);
-  return contactById ? contactById : null;
+  return contactById || null;
 };
 
 /**
