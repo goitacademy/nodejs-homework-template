@@ -4,7 +4,11 @@ const validation = ({ schema, message = null }) => {
 
     if (error) {
       error.status = 400;
-      error.message = message;
+
+      if (message) {
+        error.message = message;
+      }
+
       next(error);
     }
 
