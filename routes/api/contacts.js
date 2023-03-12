@@ -10,19 +10,7 @@ const router = express.Router();
 
 router.get('/', ctrl.getAll);
 
-    if (!result) {
-      throw createError(404, 'Not found');
-    }
-
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { result },
-    });
-  } catch (err) {
-    next(err);
-  }
-});
+router.get('/:contactId', ctrl.getById);
 
 router.post('/', async (req, res, next) => {
   try {
