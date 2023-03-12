@@ -30,6 +30,10 @@ const userSchema = new Schema({
     token: {
         type: String,
         default: ""
+    },
+    avatarUrl: {
+        type: String,
+        require: true
     }
 
 
