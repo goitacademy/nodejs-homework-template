@@ -1,25 +1,20 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
+const controllers = require("../../controllers/contacts/index");
+const contactValidator = require("../../middleWares/joiContactValidator.js");
+router
+  .route("/")
+  .get(controllers.listContacts)
+  .post(contactValidator(), controllers.addContact);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router
+  .route("/:contactId")
+  .get(controllers.getContactById)
+  .delete(controllers.removeContact)
+  .put(contactValidator(), controllers.updateContact);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ================ПРИКЛАД========================
+// router.get("/",controllers.listContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
