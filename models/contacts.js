@@ -8,8 +8,7 @@ const contactsPath = path.resolve(__dirname, 'contacts.json');
 const listContacts = async () => {
     const data = await fs.readFile(contactsPath);
 
-    const contacts = JSON.parse(data);
-    return contacts;
+    return JSON.parse(data);
 
 }
 
@@ -58,9 +57,7 @@ const updateContact = async (contactId, body) => {
 
 const removeContact = async (contactId) => {
     const contacts = await listContacts();
-    const newContact = contacts.filter(item => item.id !== contactId);
-    return newContact;
-
+    return contacts.filter(item => item.id !== contactId);
 }
 
 
