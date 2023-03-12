@@ -12,6 +12,7 @@ const schema = (body) =>
         tlds: { allow: ["com", "net"] },
       })
       .required(),
+    id: Joi.string(),
   }).validate(body);
 
 module.exports = schema;

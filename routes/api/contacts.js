@@ -1,5 +1,9 @@
 const express = require("express");
-const { checkId } = require("../../middlewares/contactsMiddleware");
+const {
+  checkId,
+  checkContactData,
+  checkUpdateContactData,
+} = require("../../middlewares/contactsMiddleware");
 const {
   listContacts,
   getContactById,
@@ -11,31 +15,54 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ contacts });
+  try {
+    const contacts = await listContacts();
+    res.status(200).json({ contacts });
+  } catch (error) {
+    return error;
+  }
 });
 
 router.use("/:contactId", checkId);
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
+  try {
+    const contact = await getContactById(req.params.contactId);
 
-  res.status(200).json(contact);
-});
-
-router.post("/", async (req, res, next) => {
-  const newContact = await addContact(req.body);
-  res.status(201).json(newContact);
+    res.status(200).json(contact);
+  } catch (error) {
+    return error;
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  await removeContact(req.params.contactId);
-  res.status(200).json({ message: "contact deleted" });
+  try {
+    await removeContact(req.params.contactId);
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    return error;
+  }
 });
 
+router.use("/:contactId", checkUpdateContactData);
+
 router.put("/:contactId", async (req, res, next) => {
-  const updatedContact = await updateContact(req.params.contactId, req.body);
-  res.status(200).json(updatedContact);
+  console.log(req);
+  try {
+    const updatedContact = await updateContact(req.params.contactId, req.body);
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    return error;
+  }
+});
+
+router.use("/", checkContactData);
+
+router.post("/", async (req, res, next) => {
+  try {
+    const newContact = await addContact(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {}
 });
 
 module.exports = router;
