@@ -1,30 +1,14 @@
 const express = require('express');
 const createError = require('http-errors');
 
+const { contacts: ctrl } = require('../../controllers/index');
 const contactsOperations = require('../../models/contacts');
 
 const schema = require('../../schemas/contactSchema');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contactsList = await contactsOperations.listContacts();
-
-    res.status(200).json({
-      status: 'success',
-      code: 200,
-      data: { result: contactsList },
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.getContactById(contactId);
+router.get('/', ctrl.getAll);
 
     if (!result) {
       throw createError(404, 'Not found');
