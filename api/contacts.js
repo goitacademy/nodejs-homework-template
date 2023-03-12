@@ -1,39 +1,22 @@
 const express = require("express");
-
 const router = express.Router();
-const Joi = require("joi");
-const Contacts = require("../../models/contacts");
 const { CastError } = require("mongoose");
+const {
+  getContactById,
+  listContacts,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("./utils");
+const { auth } = require("../middlewares/auth");
+const {
+  PostContactShema,
+  UpdateContactShema,
+  UpdateStatusContactShema,
+} = require("../validation/validation");
 
-const PostContactShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/)
-    .required(),
-  favorite: Joi.boolean().default(false),
-});
-
-const UpdateContactShema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string().pattern(
-    /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
-  ),
-  favorite: Joi.boolean().default(false),
-}).or("name", "email", "phone", "favorite");
-
-const UpdateStatusContactShema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string().pattern(
-    /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/
-  ),
-  favorite: Joi.boolean().default(false).required(),
-}).or("name", "email", "phone", "favorite");
-
-router.get("/", async (req, res, next) => {
-  const getContact = await Contacts.find({});
+router.get("/", auth, async (req, res, next) => {
+  const getContact = await listContacts();
   try {
     getContact !== []
       ? res.json({
@@ -54,15 +37,24 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", auth, async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const getContactById = await Contacts.findById({ _id: contactId });
-    res.json({
-      status: "success",
-      code: 200,
-      contact: getContactById,
-    });
+    const { _id: owner } = req.user;
+
+    const contact = await getContactById(req.params.contactId, owner);
+    if (contact != null) {
+      res.json({
+        status: "success",
+        code: 200,
+        contact,
+      });
+    } else {
+      res.status(404).json({
+        status: "undefined",
+        code: 404,
+        message: "Not found",
+      });
+    }
   } catch (error) {
     if (error instanceof CastError) {
       return res.status(404).json({
@@ -70,29 +62,31 @@ router.get("/:contactId", async (req, res, next) => {
         code: 404,
         message: "Not found",
       });
+    } else {
+      res.status(500).json({
+        error: "500 Internal Server Error",
+      });
     }
-
-    return res.status(500).json({
-      error: "500 Internal Server Error",
-    });
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const { error } = PostContactShema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: 400,
-        message: "missing required name field",
+        message: error.message,
       });
     }
-    const addContact = await Contacts.insertMany([req.body]);
+    const { name, email, phone } = req.body;
+    const { _id: owner } = req.user;
+    const Contacts = await addContact({ name, email, phone, owner });
 
     res.status(201).json({
       message: "contact added",
       status: 201,
-      data: addContact,
+      data: Contacts,
     });
   } catch (error) {
     console.log(error);
@@ -102,15 +96,25 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", auth, async (req, res, next) => {
+  const { _id: owner } = req.user;
+
   try {
     const { contactId } = req.params;
-    const deleteContact = await Contacts.deleteOne({ _id: contactId });
-    res.status(200).json({
-      status: 200,
-      message: `Contact was deleted`,
-      contact: deleteContact,
-    });
+    const deleteContact = await removeContact(contactId, owner);
+    if (deleteContact !== null) {
+      res.status(200).json({
+        status: 200,
+        message: `Contact was deleted`,
+        contact: deleteContact,
+      });
+    } else {
+      res.status(404).json({
+        status: "undefined",
+        code: 404,
+        message: "Contact not found",
+      });
+    }
   } catch (error) {
     if (error instanceof CastError) {
       return res.status(404).json({
@@ -126,28 +130,23 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", auth, async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const { _id: owner } = req.user;
+
     const { error } = UpdateContactShema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: 400,
-        message: "missing fields",
+        message: error.message,
       });
     }
-    const updateContact = await Contacts.updateOne(
-      { _id: contactId },
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const update = await updateContact(req.params.contactId, req.body, owner);
 
     res.status(200).json({
       message: "contact updated",
       status: 200,
-      data: updateContact,
+      data: update,
     });
   } catch (error) {
     if (error instanceof CastError) {
@@ -163,9 +162,12 @@ router.put("/:contactId", async (req, res, next) => {
     });
   }
 });
-router.patch("/:contactId/favorite", async (req, res, next) => {
+
+router.patch("/:contactId/favorite", auth, async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    // const { favorite } = req.body;
+    const { _id: owner } = req.user;
+
     const { error } = UpdateStatusContactShema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -173,12 +175,10 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
         message: "missing field favorite",
       });
     }
-    const updateStatusContact = await Contacts.updateOne(
-      { _id: contactId },
+    const updateStatusContact = await updateContact(
+      req.params.contactId,
       req.body,
-      {
-        new: true,
-      }
+      owner
     );
 
     res.status(200).json({
