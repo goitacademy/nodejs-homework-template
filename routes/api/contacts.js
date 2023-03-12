@@ -77,7 +77,6 @@ router.put('/:id', async (req, res, next) => {
         if (error) {
             throw createError(400, "missing fields");
         }
-
         const {id} = req.params;
         const result = await contactsOperations.updateContact(id, req.body);
         if (!result) {
