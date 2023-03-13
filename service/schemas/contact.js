@@ -5,21 +5,17 @@ const contact = new Schema(
     {
         name: {
             type: String,
-            minlength: 2,
-            maxlength: 15,
+            minlength: 5,
+            maxlength: 30,
             required: [true, 'Name is required'],
         },
         email: {
             type: String,
-            minlength: 8,
-            maxlength: 30,
-            required: [true, 'Email is required'],
         },
         phone: {
             type: String,
-            minlength: 6,
-            maxlength: 40,
-            required: [true, 'Phone is required'],
+            minlength: 7,
+            maxlength: 30,
         },
         favorite: {
             type: Boolean,
