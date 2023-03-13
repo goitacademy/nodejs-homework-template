@@ -9,11 +9,14 @@ const {
 } = require("../../services/authService");
 const { joiRegisterSchema } = require("../../schema/joiRegisterSchema");
 const bCrypt = require("bcrypt");
+const gravatar = require('gravatar')
 
 const registrationController = async (req, res) => {
   const { email, password } = req.body;
 
-  await registration(email, password);
+  const avatarUrl = gravatar.url(email)
+
+  await registration(email, password,avatarUrl);
 
   res.json({ status: "success" });
 };
