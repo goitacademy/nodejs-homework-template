@@ -10,10 +10,8 @@ const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 const updateAvatar = async (req, res) => {
 
     const { _id: id } = req.user
-    const { path: tempUpload, originalname, mimetype } = req.file;
-    if (mimetype !== "image/png" && mimetype !== "image/jpeg" && mimetype !== "image/jpg") {
-        throw HttpError(400, "Avatar must be jpeg, jpg or png format")
-    }
+    const { path: tempUpload, originalname} = req.file;
+
 
     const filename = `${id}_${originalname}`;
 
