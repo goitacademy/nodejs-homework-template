@@ -7,7 +7,7 @@ exports.addContact = async (req, res, next) => {
 
     if (!name) {
       return res.status(400).json({
-        message: `missing required ${Object.keys(body)} field`,
+        message: `missing required name field`,
       });
     }
     if (!email) {
@@ -22,7 +22,6 @@ exports.addContact = async (req, res, next) => {
     }
     res.status("201").json(await addContact(body));
   } catch (error) {
-    // res.status(500).json({ error: error.message });
     next(error);
   }
 };
