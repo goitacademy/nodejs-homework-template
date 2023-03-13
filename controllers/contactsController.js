@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
  */
 const listContacts = async (req, res) => {
   try {
-    const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+    const contacts = JSON.parse(await fs.readFile('./models/contacts.json', 'utf8'));
     res.status(200).json({
       contacts,
     });
@@ -42,7 +42,7 @@ const getContactById = async (req, res) => {
 const removeContact = async (req, res) => {
   try {
     const { id } = req.params;
-    const dataFromDB = await fs.readFile('./models/contacts.json');
+    const dataFromDB = await fs.readFile('./models/contacts.json', 'utf8');
     const contacts = JSON.parse(dataFromDB);
     const updateContactsList = contacts.filter((item) => item.id !== id);
 
@@ -61,7 +61,7 @@ const removeContact = async (req, res) => {
 const addContact = async (req, res) => {
   try {
     const { name, email, phone } = req.body;
-    const dataFromDB = await fs.readFile('./models/contacts.json');
+    const dataFromDB = await fs.readFile('./models/contacts.json', 'utf8');
     const contacts = JSON.parse(dataFromDB);
     const newContact = {
       id: uuidv4(),
@@ -88,7 +88,7 @@ const updateContact = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, phone } = req.body;
-    const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+    const contacts = JSON.parse(await fs.readFile('./models/contacts.json', 'utf8'));
     const contact = contacts.find((item) => item.id === id);
 
     if (name) contact.name = name;

@@ -10,6 +10,14 @@ router
   .post(contactMiddlewares.checkContactData, contactController.addContact)
   .get(contactController.listContacts);
 
+router
+  .route('/:id')
+  .get(contactController.getContactById)
+  .put(contactMiddlewares.checkContactId, contactController.updateContact)
+  .delete(contactController.removeContact);
+
+module.exports = router;
+
 // router.get('/', async (req, res, next) => {
 //   res.json({ message: 'template message' });
 //   next();
@@ -18,12 +26,6 @@ router
 // router.post('/', async (req, res, next) => {
 //   res.json({ message: 'template message' });
 // });
-
-router
-  .route('/:id')
-  .get(contactController.getContactById)
-  .put(contactController.updateContact)
-  .delete(contactController.removeContact);
 
 // router.get('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' });
@@ -36,5 +38,3 @@ router
 // router.put('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' });
 // });
-
-module.exports = router;
