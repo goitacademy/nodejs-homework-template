@@ -1,10 +1,7 @@
 const express = require("express");
 const { uuid } = require("uuid");
 
-const {
-  validNewContact,
-  validUpdateContact,
-} = require("../../middlewares/validateContacts");
+const { validationMiddleware } = require("../../middlewares/validateContacts");
 
 const {
   listContacts,
@@ -38,17 +35,21 @@ router.get("/:contactId", async (req, res, next) => {
   res.status(200).json(contactById);
 });
 
-router.post("/", validNewContact(addContactSchema), async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const body = {
-    id: uuid(),
-    name: name,
-    email: email,
-    phone: phone,
-  };
-  addContact(body);
-  res.status(201).json(body);
-});
+router.post(
+  "/",
+  validationMiddleware(addContactSchema),
+  async (req, res, next) => {
+    const { name, email, phone } = req.body;
+    const body = {
+      id: uuid(),
+      name: name,
+      email: email,
+      phone: phone,
+    };
+    await addContact(body);
+    res.status(201).json(body);
+  }
+);
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
@@ -63,7 +64,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put(
   "/:contactId",
-  validUpdateContact(putContactShema),
+  validationMiddleware(putContactShema),
   async (req, res, next) => {
     const { contactId } = req.params;
     const response = await updateContact(contactId, req.body);
