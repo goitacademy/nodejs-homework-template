@@ -1,7 +1,18 @@
-const dotenv = require("dotenv");
-dotenv.config({ path: "./.env" });
+require("dotenv").config({ path: "./.env" });
 const app = require("./app");
+const mongoose = require("mongoose");
+const connection = mongoose.connect(
+	process.env.MONGO_URL || "mongodb://localhost:27017/contacts"
+);
 
-app.listen(process.env.PORT, () => {
-	console.log(`Server running. Use our API on port: ${process.env.PORT}`);
-});
+connection
+	.then(() => {
+		app.listen(process.env.PORT, function () {
+			console.log(
+				`Server running. Use our API on port: ${process.env.PORT}`
+			);
+		});
+	})
+	.catch(err =>
+		console.log(`Server not running. Error message: ${err.message}`)
+	);
