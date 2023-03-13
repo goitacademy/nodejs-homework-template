@@ -17,7 +17,6 @@ router.post('/',validateMiddleware, ctrl.addContact);
 
 router.put('/:id', validateMiddleware, ctrl.updateContact);
 
-
 router.delete('/:contactId', ctrl.removeContact);
 
 

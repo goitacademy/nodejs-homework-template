@@ -6,22 +6,16 @@ const contactsOperations = require("../../models/contacts");
 
 const updateContact = async (req, res, next) => {
     try {
-        // const {error} = schema.validate(req.body);
-        // if (error) {
-        //     throw createError(400, "missing fields");
-        // }
         const {id} = req.params;
         const result = await contactsOperations.updateContact(id, req.body);
         if (!result) {
             throw createError(404, "Not found");
         }
-        res.json({
-            status: 'success',
-            code: 200,
+        res.status(200).json({
             data: {
-                result
+                result: result
             }
-        })
+        });
     } catch (error) {
         next(error);
     }
