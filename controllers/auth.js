@@ -49,11 +49,12 @@ const login = async(req, res)=> {
 }
 
 const getCurrent = async(req, res)=> {
-    const {email, name} = req.user;
+    const {email, name, subscription} = req.user;
 
     res.json({
         email,
         name,
+        subscription,
     })
 }
 
