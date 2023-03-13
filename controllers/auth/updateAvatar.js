@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
 const { User } = require("../../model/user");
+const { HttpError } = require("../../helpers");
 
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
@@ -9,7 +10,10 @@ const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 const updateAvatar = async (req, res) => {
 
     const { _id: id } = req.user
-    const { path: tempUpload, originalname } = req.file;
+    const { path: tempUpload, originalname, mimetype } = req.file;
+    if (mimetype !== "image/png" && mimetype !== "image/jpeg" && mimetype !== "image/jpg") {
+        throw HttpError(400, "Avatar must be jpeg, jpg or png format")
+    }
 
     const filename = `${id}_${originalname}`;
 
