@@ -5,11 +5,9 @@ const {
   addContact,
   updateContact,
 } = require("../models/contacts");
-const Joi = require("joi");
 
 const getlistContacts = async (req, res, next) => {
   const users = await listContacts();
-
   res.status(200).json(users.body);
 };
 
@@ -20,20 +18,6 @@ const getContact = async (req, res, next) => {
     return res.status(404).json({ message: "Not found" });
   }
   res.status(200).json(contact.body);
-};
-
-const createContactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.number().required(),
-});
-const validateContact = async (req, res, next) => {
-  const { error } = createContactSchema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: error.details[0].message });
-    return;
-  }
-  next();
 };
 
 const createContact = async (req, res) => {
@@ -68,7 +52,6 @@ const changeContact = async (req, res, next) => {
 module.exports = {
   getlistContacts,
   getContact,
-  validateContact,
   createContact,
   changeContact,
   deleteContact,
