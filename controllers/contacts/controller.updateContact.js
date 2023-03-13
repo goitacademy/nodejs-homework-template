@@ -16,7 +16,7 @@ exports.updateContact = async (req, res, next) => {
         msg: "Not Found!",
       });
     }
-    res.status("201").json(contact);
+    res.status("200").json(contact);
   } catch (error) {
     // res.status(500).json({ error: error.message });
     next(error);

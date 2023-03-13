@@ -8,7 +8,6 @@ const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath, "utf8");
     const contactsList = JSON.parse(contacts);
-    // const contactsList = contacts.toString();
 
     return contactsList;
   } catch (error) {
@@ -66,7 +65,7 @@ const addContact = async (body) => {
 
     fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
 
-    return contacts;
+    return newContact;
   } catch (error) {
     console.log(error.message);
   }
