@@ -1,35 +1,34 @@
-const { HttpError } = require("../../helpers/HttpError");
-const { User } = require("../../models/user");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = process.env;
+const { User } = require('../../models/user');
+const { HttpError } = require('../../helpers');
 
-const { JWT_SECRET } = process.env;
-const bcrypt = require("bcrypt");
-
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
-  const storedUser = await User.findOne({
-    email,
-  });
-  if (!storedUser) {
-    throw new HttpError(401, "Email is wrong ");
+  const user = await User.findOne({ email });
+  const passCompare = bcrypt.compareSync(password, user.password);
+
+  if (!user || !passCompare) {
+    throw HttpError(401, 'Email or password is wrong');
   }
 
-  const isPasswordValid = await bcrypt.compare(password, storedUser.password);
-
-  if (!isPasswordValid) {
-    throw new HttpError(401, "Password is wrong ");
-  }
-
-  const payload = { id: storedUser._id };
-  const token = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "15h",
-  });
-  return res.json({
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '48h' });
+  await User.findByIdAndUpdate(user._id, { token });
+  res.status(200).json({
+    status: 'success',
+    code: 200,
     data: {
-      token: token,
+      token,
+      user: {
+        email,
+        subscription: user.subscription,
+      },
     },
   });
 };
-
 module.exports = login;
