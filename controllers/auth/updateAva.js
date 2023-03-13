@@ -7,7 +7,7 @@ const avatarsDir = path.join(__dirname, '../../', 'public', 'avatars');
 
 const updateAva = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
-  await resize(tempUpload, 250);
+  await resize(tempUpload);
   const filename = `${req.user._id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
