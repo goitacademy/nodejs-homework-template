@@ -1,14 +1,25 @@
 const fs = require('fs').promises;
+const path = require('path');
 const uuid = require('uuid').v4;
 
 const { catchAsync } = require('../utils') 
-const pathToContacts = '../models/contacts.json'
-console.log('pathToContacts: ', pathToContacts);
+const pathToContacts = path.resolve('models/contacts.json');
+
+/**
+ * Get contacts list.
+ */
+exports.listContacts = catchAsync(async (req, res) => {
+  const contacts = JSON.parse(await fs.readFile(pathToContacts));
+
+  res.status(200).json(
+    contacts
+  );
+});
 
 /**
  * Create contact.
  */
-exports.createContact = catchAsync(async (req, res) => {
+exports.addContact = catchAsync(async (req, res) => {
     const { name, email, phone } = req.body;
 
     const dataFromDB = await fs.readFile(pathToContacts);
@@ -24,41 +35,31 @@ exports.createContact = catchAsync(async (req, res) => {
 
     await fs.writeFile(pathToContacts, JSON.stringify(contacts));
 
-    res.status(201).json({
-        contact: newContact,
-    });
-});
-
-/**
- * Get contacts list.
- */
-exports.getContacts = catchAsync(async (req, res) => {
-  const contacts = JSON.parse(await fs.readFile(pathToContacts));
-
-  res.status(200).json({
-    contacts,
-  });
+    res.status(201).json(
+        newContact
+    );
 });
 
 /**
  * Get contact by id.
  */
-exports.getContactById = catchAsync(async (req, res) => {
+exports.getById = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   const contacts = JSON.parse(await fs.readFile(pathToContacts));
 
+  console.log(contacts)
   const contact = contacts.find((c) => c.id === id);
 
-  res.status(200).json({
-    contact,
-  });
+  res.status(200).json(
+    contact
+  );
 });
 
 /**
  * Update contact by id.
  */
-exports.updateContactById = catchAsync(async (req, res) => {
+exports.updateContact = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
 
@@ -76,15 +77,15 @@ exports.updateContactById = catchAsync(async (req, res) => {
 
   await fs.writeFile(pathToContacts, JSON.stringify(contacts));
 
-  res.status(200).json({
-    contact,
-  });
+  res.status(200).json(
+    contact
+  );
 });
 
 /**
  * Delete contact by id.
  */
-exports.deleteContactById = catchAsync(async (req, res) => {
+exports.removeContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   const contacts = JSON.parse(await fs.readFile(pathToContacts));
@@ -93,5 +94,7 @@ exports.deleteContactById = catchAsync(async (req, res) => {
 
   await fs.writeFile(pathToContacts, JSON.stringify(updatedContactsList));
 
-  res.sendStatus(204);
+  res.status(200).json({
+    "message": "contact deleted"
+  });
 });
