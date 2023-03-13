@@ -1,3 +1,5 @@
 {
+  "watch": ["./"],
+  "exec": "node server.js",
   "ignore": ["node_modules", "models/contacts.json"]
 }

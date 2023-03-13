@@ -1,19 +1,19 @@
-// const fs = require('fs/promises')
+const Joi = require("joi");
 
-const listContacts = async () => {}
-
-const getContactById = async (contactId) => {}
-
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+class Contact {
+  constructor(id, name, email, phone) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.phone = phone;
+  }
 }
+
+const contactSchema = Joi.object({
+  id: Joi.number().required(),
+  name: Joi.string().min(2).max(50).required(),
+  email: Joi.string().email().required(),
+  phone: Joi.number().required(),
+});
+
+module.exports = { Contact, contactSchema };
