@@ -4,12 +4,11 @@ const { contacts: ctrl } = require('../../controllers/index');
 
 const router = express.Router();
 
-router.route('/').post(ctrl.postContact).get(ctrl.getAllContacts);
+router.get('/', ctrl.getAllContacts);
+router.post('/', ctrl.postContact);
 
-router
-  .route('/:contactId')
-  .get(ctrl.getContactById)
-  .put(ctrl.putContactUpdate)
-  .delete(ctrl.deleteContactById);
+router.get('/:contactId', ctrl.getContactById);
+router.put('/:contactId', ctrl.putContactUpdate);
+router.delete('/:contactId', ctrl.deleteContactById);
 
 module.exports = router;
