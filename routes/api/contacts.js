@@ -2,12 +2,11 @@ const express = require("express");
 const {
   getlistContacts,
   getContact,
-  validateContact,
   createContact,
   changeContact,
   deleteContact,
 } = require("../../controlers/contactControler");
-
+const {validateContact}=require("../../middlewares/contactMiddlewares")
 
 const router = express.Router();
 
