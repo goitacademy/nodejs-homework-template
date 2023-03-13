@@ -8,6 +8,7 @@ const uriDb = process.env.DB_HOST
 const connectDb = async () => {
   try {
     const db = await connect(uriDb);
+    console.log('Database connection successful');
     console.log(`Connected Mongo port: ${db.connection.port}, host:${db.connection.host}, name:${db.connection.name}`)
 
     if (db.connection.port) {
@@ -17,7 +18,9 @@ const connectDb = async () => {
     }
 
   } catch (error) {
+
     console.log(`Server not running. Error message: ${error.message}`)
+    process.exit(1);
   }
 };
 
