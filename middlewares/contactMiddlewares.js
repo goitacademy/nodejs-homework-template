@@ -5,9 +5,23 @@ const { AppError, catchAsync, validators } = require('../utils');
 /**
  * Check new contact data.
  */
-exports.checkContactData = (req, res, next) => {
+exports.checkNewContactData = (req, res, next) => {
   // Check new contact data.
-  const { error, value } = validators.createUserValidator(req.body);
+  const { error, value } = validators.createContactValidator(req.body);
+
+  if (error) return next(new AppError(400, error.details[0].message));
+
+  req.body = value;
+
+  next();
+};
+
+/**
+ * Check changed contact data.
+ */
+exports.checkChangedContactData = (req, res, next) => {
+  // Check changed contact data.
+  const { error, value } = validators.patchContactValidator(req.body);
 
   if (error) return next(new AppError(400, error.details[0].message));
 
@@ -23,7 +37,7 @@ exports.checkContactId = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   // check if contact ID is invalid => send 'bad request' error
-  if (id.length < 10) {
+  if (id.length < 1) {
      return next(new AppError(400, 'Invalid contact id.......'));
   }
 
