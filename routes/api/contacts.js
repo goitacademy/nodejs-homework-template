@@ -7,6 +7,7 @@ const {
   updateSchema,
   updateFavoriteSchema,
 } = require("../../schema/contacts");
+const upload = require("../../middlewares/upload");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.post(
   "/",
   authenticate,
   validateBody(addSchema),
+  upload.single("avatar"),
   ctrlWrapper(controllers.add)
 );
 
