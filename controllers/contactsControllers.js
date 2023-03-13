@@ -1,7 +1,8 @@
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../models/contacts')
+const { getListContacts, getContactById, addContact, removeContact, updateContact } = require('../service')
+
 
 const getContacts = async (req, res, next) => {
-    const data = await listContacts();
+    const data = await getListContacts();
     res.json({
         status: 'success',
         code: 200,
