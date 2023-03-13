@@ -12,6 +12,9 @@ userRouter.patch(
     validation(subscriptionSchema),
     ctrlWrapper(ctrl.updateSubscription)
 );
+
+
+
 userRouter.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
 module.exports = { userRouter };

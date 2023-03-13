@@ -1,10 +1,5 @@
 const ctrlWrapper = require("./ctrlWrapper");
 const HttpError = require("./HttpError");
-const createToken = require("./createToken")
+const handleMongooseError = require("./handleMongooseError");
 
-
-module.exports = {
-    ctrlWrapper,
-    HttpError,
-    createToken
-};
+module.exports = { ctrlWrapper, HttpError, handleMongooseError };

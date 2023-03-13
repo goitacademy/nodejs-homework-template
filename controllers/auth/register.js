@@ -1,32 +1,19 @@
+const bcrypt = require("bcrypt");
 const { User } = require("../../models/user");
-const { Conflict } = require("http-errors");
-const { bcrypt } = require("bcrypt");
+const { HttpError } = require("../../helpers");
 
-const register = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  try {
-    const savedUser = await User.create({
-      email,
-      password: hashedPassword,
-    });
-    res.status(201).json({
-      data: {
-        user: {
-          email,
-          id: savedUser._id,
-        },
-      },
-    });
-  } catch (error) {
-    if (error.message.includes("E11000 duplicate key error")) {
-      throw Conflict("Email in use");
-    }
-    throw error;
+const register = async (req, res) => {
+  const { name, email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, "Email already in use");
   }
+  const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = await User.create({ name, email, password: hashPassword });
+  res.status(201).json({
+    name: newUser.name,
+    email: newUser.email,
+  });
 };
 
 module.exports = register;
