@@ -17,10 +17,10 @@ const connectMongo = async () => {
    
 };
 
-connectMongo()
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());
+// connectMongo()
+//   .then(console.log)
+//   .catch(console.error)
+//   .finally(() => client.close());
 
 
 module.exports = { connectMongo };
