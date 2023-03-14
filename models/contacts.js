@@ -10,10 +10,9 @@ class Contact {
 }
 
 const contactSchema = Joi.object({
-  id: Joi.number().required(),
   name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
 });
 
 module.exports = { Contact, contactSchema };

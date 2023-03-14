@@ -3,6 +3,6 @@ const contactRouter = require("./contacts");
 
 const router = express.Router();
 
-router.use("/contacts", contactRouter);
+router.use("/api/contacts", contactRouter);
 
 module.exports = router;
