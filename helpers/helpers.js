@@ -1,3 +1,14 @@
+function ctrlhWrapper(endpointFn) {
+  return async (req, res, next) => {
+    try {
+      await endpointFn(req, res, next);
+    }
+    catch (error) {
+      return next(error);
+    }
+  };
+}
+
 const messages = {
     400: "Bad Request",
     401: "Unauthorized",
@@ -12,4 +23,7 @@ function HttpError(status, message = messages[status]) {
   return err;
 }
 
-module.exports = HttpError;
+module.exports = {
+  ctrlhWrapper,
+  HttpError,
+};
