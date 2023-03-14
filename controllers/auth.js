@@ -5,17 +5,25 @@ const { ctrlWrapper, HttpError } = require("../utils");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
 require("dotenv").config();
 
-// --------------- signup ----------------------------------------
+// --------------- signup ------------------------------------------
 const signup = async (req, res) => {
   const { email, password } = req.body;
+  const avatarURL = gravatar.url(email);
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const result = await User.create({ ...req.body, password: hashPassword });
+  const result = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     email: result.email,
@@ -23,7 +31,7 @@ const signup = async (req, res) => {
   });
 };
 
-// ------------------ login ---------------------------------------
+// ------------------ login ----------------------------------------
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -54,7 +62,7 @@ const login = async (req, res) => {
   });
 };
 
-// --------------------------- logout --------------------------------
+// --------------------------- logout ------------------------------
 const logout = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findByIdAndUpdate(_id, { token: null });
@@ -66,7 +74,7 @@ const logout = async (req, res) => {
   });
 };
 
-// -------------------------- current -----------------------------
+// -------------------------- current ------------------------------
 const current = async (req, res) => {
   const { email, subscription } = req.user;
   res.status(201).json({
@@ -75,9 +83,28 @@ const current = async (req, res) => {
   });
 };
 
+// -------------------------- updateAvatar -------------------------
+const updateAvatar = async (req, res) => {
+  const avatarDir = path.join(__dirname, "../", "public", "avatars");
+  const { _id } = req.user;
+
+  const { path: tempUpload, originalname } = req.file;
+  const resultUpload = path.join(avatarDir, `${_id}_${originalname}`);
+
+  fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", `${_id}_${originalname}`);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
