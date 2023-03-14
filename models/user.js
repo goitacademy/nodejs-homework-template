@@ -23,7 +23,10 @@ const userSchema = new Schema({
     enum: ["starter", "pro", "business"],
     default: "starter"
   },
-  token: String
+  token: {
+    type: String,
+    default: null
+  }
 }, { versionKey: false, timestamps: true })
 
 userSchema.methods.setPassword = function (password) {
@@ -37,7 +40,7 @@ userSchema.methods.comparePassword = function (password) {
 const joiRegisterSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().lowercase().trim().pattern(mailRegexp).required(),
-  subscription: Joi.string().default("starter"),
+  subscription: Joi.string().valid('starter', 'pro', 'business').default("starter"),
   token: Joi.string().token(),
 })
 
@@ -46,10 +49,15 @@ const joiLoginSchema = Joi.object({
   email: Joi.string().lowercase().trim().pattern(mailRegexp).required(),
 })
 
+const joiSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid('starter', 'pro', 'business').default("starter"),
+})
+
 const User = model('user', userSchema)
 
 module.exports = {
   User,
   joiRegisterSchema,
   joiLoginSchema,
+  joiSubscriptionSchema,
 }
