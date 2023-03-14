@@ -1,32 +1,22 @@
 const { updateStatusContact } = require("../../services");
-const { isEmpty, RequestError } = require("../../helpers");
-const contactValidator = require("../../middleware");
 
-const updateStatusContactController = async (req, res) => {
+const updateStatusContactCtrl = async (req, res) => {
   const { contactId } = req.params;
-  const { _id: owner } = req.user;
-  const body = req.body;
-  const { error } = contactValidator.validate(req.body);
+  const { favorite } = req.body;
 
-  if (error) {
-    throw RequestError(400, error.details[0].message);
+  if (favorite === undefined || typeof favorite !== "boolean") {
+    return res
+      .status(400)
+      .json({ message: "Invalid or missing field: favorite" });
   }
 
-  if (isEmpty(body)) {
-    throw RequestError(400, "missing fields");
+  const updatedContact = await updateStatusContact(contactId, { favorite });
+
+  if (!updatedContact) {
+    return res.status(404).json({ message: "Contact not found" });
   }
 
-  const contactStatusToUpdate = await updateStatusContact(
-    contactId,
-    body,
-    owner
-  );
-
-  if (!contactStatusToUpdate) {
-    throw RequestError(404, "Not found");
-  }
-
-  return res.status(200).json(contactStatusToUpdate);
+  return res.status(200).json(updatedContact);
 };
 
-module.exports = updateStatusContactController;
+module.exports = updateStatusContactCtrl;

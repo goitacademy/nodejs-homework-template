@@ -1,17 +1,15 @@
-const { RequestError } = require("../../helpers");
 const { removeContact } = require("../../services");
 
-const removeContactController = async (req, res) => {
+const removeContactCtrl = async (req, res) => {
   const { contactId } = req.params;
-  const { _id: owner } = req.user;
 
-  const { deletedCount } = await removeContact(contactId, owner);
+  const deleted = await removeContact(contactId);
 
-  if (!deletedCount) {
-    throw RequestError(404, "Contact with this ID not found");
+  if (!deleted) {
+    return res.status(404).json({ message: "Not found" });
   }
 
-  return res.status(200).json({ status: "success", message: "Contact successfully deleted" });
+  return res.status(200).json({ message: "Contact deleted" });
 };
 
-module.exports = removeContactController;
+module.exports = removeContactCtrl;

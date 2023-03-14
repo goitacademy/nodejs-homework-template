@@ -1,20 +1,18 @@
+const mongoose = require("mongoose");
 const { getContactById } = require("../../services");
-const { RequestError } = require("../../helpers");
 
-const getContactByIdController = async (req, res) => {
-  const owner = req.user._id;
+const getContactByIdCtrl = async (req, res, next) => {
   const { contactId } = req.params;
-  
-  const contact = await getContactById(contactId, owner);
 
-  if (!contact || !contact.length) {
-    throw new RequestError(404, "Not found");
+  if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    return res.status(400).json({ message: "Invalid contact ID" });
   }
 
-  res.status(200).json({
-    status: "success",
-    contact,
-  });
+  const contact = await getContactById(contactId);
+
+  return contact
+    ? res.status(200).json(contact)
+    : res.status(404).json({ message: "Not found" });
 };
 
-module.exports = getContactByIdController;
+module.exports = getContactByIdCtrl;
