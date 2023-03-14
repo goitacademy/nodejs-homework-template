@@ -2,17 +2,9 @@ const fs = require("fs").promises;
 const path = require("node:path");
 
 const { v4: uuidv4 } = require("uuid");
+const { errorCatcher } = require("../utils/errorCatcherWrapper");
 
 const contactsPath = path.join("models", "contacts.json");
-
-const errorCatcher = (fn) => {
-  try {
-    return fn;
-  } catch (error) {
-    console.log("======error=====");
-    console.log(error);
-  }
-};
 
 const contactList = async () => {
   const result = await errorCatcher(await fs.readFile(contactsPath));
@@ -88,4 +80,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  contactList,
 };
