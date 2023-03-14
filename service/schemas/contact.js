@@ -19,7 +19,7 @@ const contact = new Schema(
         },
         favorite: {
             type: Boolean,
-            default: false
+            default: false,
         }
     },
     { versionKey: false, timestamps: false },

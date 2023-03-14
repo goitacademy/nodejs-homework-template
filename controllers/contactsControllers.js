@@ -1,16 +1,18 @@
 const { getListContacts, getContactById, addContact, removeContact, updateContact } = require('../service')
 
+const { catchAsync } = require('../utils')
 
-const getContacts = async (req, res, next) => {
+
+const getContacts = catchAsync(async (req, res, next) => {
     const data = await getListContacts();
     res.json({
         status: 'success',
         code: 200,
         data,
     })
-}
+});
 
-const getContactsById = async (req, res, next) => {
+const getContactsById = catchAsync(async (req, res, next) => {
     const { contactId } = req.params
     const data = await getContactById(contactId);
 
@@ -25,9 +27,9 @@ const getContactsById = async (req, res, next) => {
         data,
     })
 
-}
+});
 
-const addNewContact = async (req, res, next) => {
+const addNewContact = catchAsync(async (req, res, next) => {
     const { name, email, phone } = req.body
     if (!name) {
         res.status(400).json({ message: 'missing required name field' })
@@ -46,9 +48,9 @@ const addNewContact = async (req, res, next) => {
         code: 201,
         data,
     })
-}
+})
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = catchAsync(async (req, res, next) => {
     const { contactId } = req.params
     const result = await removeContact(contactId);
 
@@ -60,9 +62,9 @@ const deleteContact = async (req, res, next) => {
     res.status(200).json({
         message: 'contact deleted'
     })
-}
+})
 
-const changeContact = async (req, res, next) => {
+const changeContact = catchAsync(async (req, res, next) => {
     const { contactId } = req.params
     const { name, email, phone } = req.body
 
@@ -82,7 +84,35 @@ const changeContact = async (req, res, next) => {
         code: 200,
         data,
     })
-}
+});
+
+const updateStatus = catchAsync(async (req, res, next) => {
+    const { contactId } = req.params
+    const { favorite = false } = req.body
+
+    if (!favorite) {
+        res.status(400).json({ message: 'missing field favorite' })
+        return
+    }
+
+    const data = await updateContact(contactId, { favorite })
+
+    if (data) {
+        res.json({
+            status: 'success',
+            code: 200,
+            data,
+        })
+    } else {
+        res.status(404).json({
+            status: 'error',
+            code: 404,
+            message: `Not found contact id: ${contactId}`,
+            data: 'Not Found',
+        })
+    }
+
+});
 
 
 module.exports = {
@@ -90,5 +120,6 @@ module.exports = {
     getContactsById,
     addNewContact,
     deleteContact,
-    changeContact
+    changeContact,
+    updateStatus
 }
