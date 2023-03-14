@@ -1,21 +1,21 @@
-const express = require("express");
-const contactsController = require("../../controllers/contactsController");
-const { ctrlWrapper } = require("../../helpers");
-const router = express.Router();
+const express = require('express');
+const contactsController = require('../../controllers/contactsController');
+const {ctrlWrapper} = require('../../helpers');
+const router = express.router();
 
-router.get("/", ctrlWrapper(contactsController.getAll));
+router.get('/', ctrlWrapper(contactsController.getAll));
 
-router.get("/:contactId", ctrlWrapper(contactsController.getById));
+router.get('/:contactId', ctrlWrapper(contactsController.getById));
 router.post(
-  "/",
+    '/',
 
-  ctrlWrapper(contactsController.getPost)
+    ctrlWrapper(contactsController.getPost),
 );
-router.delete("/:contactId", ctrlWrapper(contactsController.deleteById));
+router.delete('/:contactId', ctrlWrapper(contactsController.deleteById));
 router.put(
-  "/:contactId",
+    '/:contactId',
 
-  ctrlWrapper(contactsController.updateById)
+    ctrlWrapper(contactsController.updateById),
 );
 
 module.exports = router;
