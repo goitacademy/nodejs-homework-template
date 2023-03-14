@@ -3,7 +3,7 @@
 // const { v4 } = require('uuid');
 
 const { connectMongo } = require('../db/connection');
-const { collection } =  connectMongo();
+
 
 // const Joi = require("joi");
 
@@ -20,6 +20,7 @@ const { collection } =  connectMongo();
 
 
 const listContacts = async (req, res) => {
+  const { collection } =  connectMongo();
   const contacts = await collection.find({}).toArray();
   res.json({contacts})
 };
