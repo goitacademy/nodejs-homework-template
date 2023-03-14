@@ -22,7 +22,7 @@ const contact = new Schema(
             default: false
         }
     },
-    { versionKey: false, timestamps: true }
+    { versionKey: false, timestamps: false },
 );
 
 const Contact = mongoose.model("contact", contact);
