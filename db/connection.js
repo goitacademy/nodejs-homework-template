@@ -8,19 +8,20 @@ const dbName = 'db-contacts';
 
 
 const connectMongo = async () => {
-    await client.connect();
-    console.log('Database connection successful');
-    const db = client.db(dbName);
-    
-    const collection = db.collection('contacts');
+  await client.connect();
+  console.log('Database connection successful');
+  
+  const db = client.db(dbName);
+  
+  const collection = db.collection('contacts');
   return { collection };
    
 };
 
-// connectMongo()
-//   .then(console.log)
-//   .catch(console.error)
-//   .finally(() => client.close());
+connectMongo()
+  .then(console.log)
+  .catch(console.error)
+  .finally(() => client.close());
 
 
 module.exports = { connectMongo };
