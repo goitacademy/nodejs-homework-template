@@ -13,14 +13,14 @@ const connectMongo = async () => {
     const db = client.db(dbName);
     
     const collection = db.collection('contacts');
-    return collection;
+  return { collection };
    
 };
 
-connectMongo()
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());
+// connectMongo()
+//   .then(console.log)
+//   .catch(console.error)
+//   .finally(() => client.close());
 
 
 module.exports = { connectMongo };
