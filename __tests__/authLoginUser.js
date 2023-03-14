@@ -14,12 +14,8 @@ describe("Test auth routes ", () => {
 
   beforeEach(async () => {
     mongoose.set("strictQuery", false);
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(DB_TEST_HOST, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-    }
+    await mongoose.connect(DB_TEST_HOST);
+
     user = await User.create({
       email: "testuser@test.com",
       password: await bcrypt.hash("password", 10),
@@ -29,9 +25,7 @@ describe("Test auth routes ", () => {
 
   afterEach(async () => {
     await User.deleteMany({});
-    if (mongoose.connection.readyState !== 0) {
-      await mongoose.connection.close();
-    }
+    await mongoose.disconnect();
   });
 
   test("Test login route status code 200", async () => {
