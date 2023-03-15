@@ -1,13 +1,5 @@
 const { Router } = require('express');
 
-// const { 
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact, 
-// } = require('../../models/contacts');
-
 const { 
   listContactsController,
   getContactByIdController, 
