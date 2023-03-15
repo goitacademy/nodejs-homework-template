@@ -6,7 +6,8 @@ const url = 'mongodb+srv://mirzakhanovamari:testcluster@cluster0.icwx1gn.mongodb
 
 
 const connectMongo = async () => {
-return mongoose.connect(url); 
+  return mongoose.connect(url);
+  // console.log("Database connection successful");
 };
 
 // connectMongo()

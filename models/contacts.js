@@ -42,15 +42,16 @@ const removeContact = async (req, res) => {
 
 
 const addContact = async (req, res) => {
-  const { error } = contactsJoiSchema.validate(req.body);
-  if (error) {
-    error.message = "missing required name field";
-    error.status = 400;
-    throw error;
-  }
+  // const { error } = contactsJoiSchema.validate(req.body);
+  // if (error) {
+  //   error.message = "missing required name field";
+  //   error.status = 400;
+  //   throw error;
+  // }
     
-  const { name, email, phone } = req.body;
-  await req.db.Contacts.insertOne({ name, email, phone });
+  const { name, email, phone, favorite } = req.body;
+  const contact = new Contact({name, email, phone, favorite})
+  await contact.save();
   res.json({ status: 'success' });
 };
 
