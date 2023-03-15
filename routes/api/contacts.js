@@ -1,6 +1,5 @@
 const express = require('express')
 
-const modelsMiddleware = require('../../middlewares/models');
 
 // const validation = require("../../middlewares/validation");
 // const contactSchema = require("../../schemas/contactSchemas");
@@ -13,7 +12,6 @@ const {listContacts, getContactById, removeContact, addContact, updateContact} =
 
 const router = express.Router();
 
-router.use(modelsMiddleware);
 
 router.route('/')
   .post(asyncWrapper(addContact))

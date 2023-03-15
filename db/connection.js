@@ -1,26 +1,12 @@
-const { MongoClient } = require('mongodb');
-const  collections  = {};
-
-const getCollections = () => {
-  return collections;
-}
+const mongoose = require('mongoose');
 
 
 const url = 'mongodb+srv://mirzakhanovamari:testcluster@cluster0.icwx1gn.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(url);
 
-const dbName = 'db-contacts';
 
 
 const connectMongo = async () => {
-  await client.connect();
-  console.log('Database connection successful');
-  
-  const db = client.db(dbName);
-  
-  collections.Contacts = db.collection('contacts');
-  
-   
+return mongoose.connect(url); 
 };
 
 // connectMongo()
@@ -30,6 +16,5 @@ const connectMongo = async () => {
 
 
 module.exports = {
-  connectMongo,
-  getCollections
+  connectMongo
 };
