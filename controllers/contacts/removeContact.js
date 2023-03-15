@@ -9,10 +9,9 @@ const removeContact = async (req, res, next) => {
             throw createError(404, "Not found");
         }
         res.status(200).json({
-            data: {
-                message: "contact deleted",
+            message: "contact deleted",
             }
-        });
+            );
 
     } catch (error) {
         next(error);

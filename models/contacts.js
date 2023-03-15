@@ -9,7 +9,6 @@ const listContacts = async () => {
     const data = await fs.readFile(contactsPath);
 
     return JSON.parse(data);
-
 }
 
 
@@ -21,7 +20,7 @@ const getById = async (contactId) => {
         if (result.length === 0) {
             return null;
         }
-        return result;
+        return result[0];
     } catch (error) {
         console.log(error.message);
     }

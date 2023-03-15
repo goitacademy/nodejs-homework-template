@@ -11,11 +11,11 @@ const updateContact = async (req, res, next) => {
         if (!result) {
             throw createError(404, "Not found");
         }
-        res.status(200).json({
-            data: {
-                result: result
-            }
-        });
+        res.status(200).json(
+
+               result
+
+        );
     } catch (error) {
         next(error);
     }
