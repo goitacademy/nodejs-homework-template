@@ -11,8 +11,7 @@ const logout = async(req,res,next)=>{
         res.status(200).json({
           status: "OK",
           code: 200,
-         message:`sucsess logout`
-        
+         message:`sucsess logoutt`
         });
         return user
       }catch (err) {
