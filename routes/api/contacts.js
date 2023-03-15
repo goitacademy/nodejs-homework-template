@@ -20,7 +20,7 @@ router.route('/')
 router
   .route('/:contactId')
   .get(asyncWrapper(getContactById))
-  .patch(asyncWrapper(updateContact))
+  .put(asyncWrapper(updateContact))
   .delete(asyncWrapper(removeContact));
 
 module.exports = router;

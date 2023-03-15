@@ -1,14 +1,14 @@
 const { Contact} = require('../db/contactModel')
 
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const contactsJoiSchema = Joi.object({
-// name: Joi.string().required(),
-// email: Joi.string().email().required(),
-// phone: Joi.string()
-// .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
-// .required(),
-// });
+const contactsJoiSchema = Joi.object({
+name: Joi.string().required(),
+email: Joi.string().email().required(),
+phone: Joi.string()
+.regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
+.required(),
+});
 
 
 
@@ -20,34 +20,34 @@ const listContacts = async (req, res) => {
 
 
 const getContactById = async (req, res) => {
-//   const {contactId} = req.params;
-//   const contact = await req.db.Contacts.findOne({_id: new ObjectId(contactId)});
+  const {contactId} = req.params;
+  const contact = await Contact.findById(contactId);
   
-//   if (!contact) {
-//     return res.status(400).json({
-//       status: 'failure, no contacts found!', 
-//     });
-// }
+  if (!contact) {
+    return res.status(400).json({
+      status: 'failure, no contacts found!', 
+    });
+}
   
-//   res.json({ contact, status: 'success' });
+  res.json({ contact, status: 'success' });
 };
 
 
 const removeContact = async (req, res) => {
-  // const { contactId } = req.params;
-  // await req.db.Contacts.deleteOne({ _id: new ObjectId(contactId) });
-  // res.json({ status: 'success' })
+  const { contactId } = req.params;
+  await Contact.findByIdAndRemove(contactId);
+  res.json({ status: 'success' })
 };
 
 
 
 const addContact = async (req, res) => {
-  // const { error } = contactsJoiSchema.validate(req.body);
-  // if (error) {
-  //   error.message = "missing required name field";
-  //   error.status = 400;
-  //   throw error;
-  // }
+  const { error } = contactsJoiSchema.validate(req.body);
+  if (error) {
+    error.message = "missing required name field";
+    error.status = 400;
+    throw error;
+  }
     
   const { name, email, phone, favorite } = req.body;
   const contact = new Contact({name, email, phone, favorite})
@@ -58,19 +58,18 @@ const addContact = async (req, res) => {
 
 
 const updateContact = async (req, res) => {
-  // const { error } = contactsJoiSchema.validate(req.body);
-  // if (error) {
-  //   error.message = "missing required name field";
-  //   error.status = 400;
-  //   throw error;
-  // }
-  // const { contactId } = req.params;
-  // const { name, email, phone} = req.body;
-  // await req.db.Contacts.updateOne(
-  //   { _id: new ObjectId(contactId) },
-  //   { $set: { name, email, phone} }
-  // );
-  // res.json({ status: 'success' });
+  const { error } = contactsJoiSchema.validate(req.body);
+  if (error) {
+    error.message = "missing required name field";
+    error.status = 400;
+    throw error;
+  }
+  const { contactId } = req.params;
+  const { name, email, phone, favorite} = req.body;
+  await Contact.findByIdAndUpdate(contactId,
+    { $set: { name, email, phone, favorite} }
+  );
+  res.json({ status: 'success' });
 };
 
 
