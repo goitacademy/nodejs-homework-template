@@ -1,4 +1,5 @@
 const { Contact } = require("../schemas/schemas");
+const { NotFound } = require("http-errors");
 
 const addContact = async (req, res, next) => {
   try {
@@ -35,8 +36,7 @@ const getContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await Contact.findById(contactId);
     if (!result) {
-      const error = new Error(`Contact with id:${contactId} not found`);
-      throw error;
+      throw new NotFound(`Contacts with id: ${contactId} wasn't found`);
     }
     res.status(200).json({
       status: "success",
@@ -55,8 +55,7 @@ const deleteContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
-      const error = new Error(`Contact with id:${contactId} not found`);
-      throw error;
+      throw new NotFound(`Contacts with id: ${contactId} wasn't found`);
     }
     res.status(200).json({
       status: "success",
@@ -73,8 +72,7 @@ const updateContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId);
     if (!result) {
-      const error = new Error(`Contact with id:${contactId} not found`);
-      throw error;
+      throw new NotFound(`Contacts with id: ${contactId} wasn't found`);
     }
     res.status(200).json({
       status: "success",
@@ -96,8 +94,7 @@ const updateStatusById = async (req, res, next) => {
       { new: true }
     );
     if (!result) {
-      const error = new Error(`Contact with id:${contactId} not found`);
-      throw error;
+      throw new NotFound(`Contacts with id: ${contactId} wasn't found`);
     }
     res.status(200).json({
       status: "success",
