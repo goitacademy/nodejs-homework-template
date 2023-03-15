@@ -28,7 +28,7 @@ router.get('/', async (req, res, next) => {
  
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', async (req, res) => {
   const data = await getContactById(req.params.contactId)
  
   res.send(data)
