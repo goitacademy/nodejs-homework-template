@@ -1,8 +1,10 @@
 const Users = require("../schemas/users")
+const gravatar = require('gravatar')
 
 const addUser = async ( email, password) => {
   const newUser = new Users({ email, password })
   newUser.setPassword(password);
+  newUser.setUrl(gravatar)
   await newUser.save()
     
   }
@@ -24,4 +26,8 @@ const addUser = async ( email, password) => {
     return user;
   }
 
-  module.exports = {addUser, findUser, findUserById, currentUser}
+  const findUserByToken = async (token) => {
+    return await Users.findOne({token});
+  }
+
+  module.exports = {addUser, findUser, findUserById, currentUser, findUserByToken}

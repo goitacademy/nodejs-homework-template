@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const gravatar = require('gravatar')
 
 
 const bcrypt = require('bcryptjs');
@@ -21,6 +22,10 @@ const users = new Schema (
           type: String,
           enum: ["starter", "pro", "business"],
           default: "starter"
+        },
+         avatar:{
+          avatarURL: String,
+          
         },
 
         token: String
@@ -46,6 +51,11 @@ users.methods.setToken = function (token) {
 users.methods.deleteToken = function () {
   console.log('delete token')
   this.token = null;
+}
+
+users.methods.setUrl = function (email) {
+  const httpUrl = gravatar.url(email);
+  console.log('setUrl' + httpUrl)
 }
 
 const Users = mongoose.model("users" , users);
