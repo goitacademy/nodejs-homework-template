@@ -1,7 +1,3 @@
-const { asyncWrapper, errorHandler, isEmpty } = require("./apiHelpers");
+const { contactsPath, isEmpty, controllerWrapper, errorHandler } = require('./apiHelpers');
 
-module.exports = {
-  asyncWrapper,
-  errorHandler,
-  isEmpty,
-};
+module.exports = { contactsPath, isEmpty, controllerWrapper, errorHandler };

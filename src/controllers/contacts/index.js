@@ -1,12 +1,12 @@
-const getContactsListCtrl = require("./getContactsListCtrl");
+const listContactsCtrl = require("./listContactsCtrlr");
 const getContactByIdCtrl = require("./getContactByIdCtrl");
 const addContactCtrl = require("./addContactCtrl");
-const removeContactCtrl = require("./removeContactsCtrl");
-const updateContactCtrl = require("./updateContactCtrl");
+const removeContactCtrl = require("./removeContactCtrl");
+const updateContactCtrl = require("./updateContactCtrl.js");
 const updateStatusContactCtrl = require("./updateStatusContactCtrl");
 
 module.exports = {
-  getContactsListCtrl,
+  listContactsCtrl,
   getContactByIdCtrl,
   addContactCtrl,
   removeContactCtrl,

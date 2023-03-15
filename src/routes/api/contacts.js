@@ -3,28 +3,31 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getContactsListCtrl,
+  listContactsCtrl,
   getContactByIdCtrl,
-  addContactCtrl,
   removeContactCtrl,
+  addContactCtrl,
   updateContactCtrl,
   updateStatusContactCtrl,
 } = require("../../controllers/contacts");
 
-const { asyncWrapper } = require("../../helpers");
+const { auth } = require("../../middlewares");
 
-router.get("/", asyncWrapper(getContactsListCtrl));
+const { controllerWrapper } = require("../../helpers");
 
-router.get("/:contactId", asyncWrapper(getContactByIdCtrl));
+router.get("/", auth, controllerWrapper(listContactsCtrl));
 
-router.post("/", asyncWrapper(addContactCtrl));
+router.get("/:contactId", controllerWrapper(getContactByIdCtrl));
 
-router.delete("/:contactId", asyncWrapper(removeContactCtrl));
+router.post("/", controllerWrapper(addContactCtrl));
 
-router.put("/:contactId", asyncWrapper(updateContactCtrl));
+router.delete("/:contactId", controllerWrapper(removeContactCtrl));
 
-router.patch("/:contactId", asyncWrapper(updateStatusContactCtrl));
+router.put("/:contactId", controllerWrapper(updateContactCtrl));
 
-router.patch("/:contactId/favorite", asyncWrapper(updateStatusContactCtrl));
+router.patch(
+  "/:contactId/favorite",
+  controllerWrapper(updateStatusContactCtrl)
+);
 
 module.exports = router;

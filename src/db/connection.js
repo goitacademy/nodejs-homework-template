@@ -1,22 +1,12 @@
 const mongoose = require("mongoose");
-const { getConnectionURI } = require("./utils");
 
-const connectMongo = async () => {
+const connectDb = async () => {
   mongoose.set("strictQuery", false);
-
-  const uri = getConnectionURI();
-
-  try {
-    await mongoose.connect(uri, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      retryWrites: true,
-      w: "majority",
-    });
-    console.info(`Successfully connected to the database`);
-  } catch (error) {
-    throw new Error(`Error connecting to the database: ${error.message}`);
-  }
+  mongoose.Promise = global.Promise;
+  await mongoose.connect(process.env.DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 };
 
-module.exports = connectMongo;
+module.exports = connectDb;

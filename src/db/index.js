@@ -1,9 +1,5 @@
-const connectMongo = require("./connection");
-const Contacts = require("./contactsSchema");
-const getConnectionURI = require("./utils");
+const connectDb = require("./connection");
 
 module.exports = {
-  connectMongo,
-  Contacts,
-  getConnectionURI,
+  connectDb,
 };

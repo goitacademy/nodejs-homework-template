@@ -1,17 +1,33 @@
 const {
   listContacts,
   getContactById,
-  addContact,
   removeContact,
+  addContact,
   updateContact,
   updateStatusContact,
-} = require("./contactsService");
+  findDuplicateContact,
+} = require('./contactsService');
 
-module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-  updateStatusContact,
-};
+const {
+  findUserInDb,
+  findUserById,
+  addNewUser,
+  updateUser,
+  removeToken,
+} = require('./usersService');
+
+
+  module.exports = {
+    listContacts,
+    getContactById,
+    findDuplicateContact,
+    removeContact,
+    addContact,
+    updateContact,
+    updateStatusContact,
+    findUserInDb,
+    findUserById,
+    addNewUser,
+    updateUser,
+    removeToken,
+  };
