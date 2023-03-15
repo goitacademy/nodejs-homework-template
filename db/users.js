@@ -33,6 +33,7 @@ const usersSchema = new Schema({
 //   }
 // });
 
+
 usersSchema.method.setPassword = function (password) {
     this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6))
 }
