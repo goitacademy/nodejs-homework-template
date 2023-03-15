@@ -1,14 +1,14 @@
 const express=require('express');
 const router = express.Router();
-const uploadController = require('../../controller/filesController/filesController')
+const uploadController = require('../../controller/filesController/uploadController')
 // const userAvatarController =  require('../../controller/filesController/userAvatarController')
-const filesController =require('../../controller/filesController/filesController')
+const userAvatarPutch =require('../../controller/filesController/userAvatarPutch')
 const multer = require('multer')
 const path= require('path')
 const { v4: uuidv4 } = require('uuid');
 
 const FILE_DIR=path.resolve('./tmp')
-
+console.log('FILE_DIR',FILE_DIR)
 const storage = multer.diskStorage({
     destination:(req,file, cb)=>{
 cb(null,FILE_DIR )
@@ -21,10 +21,10 @@ const [, extension]= file.originalname.split('.');
 })//инийц
 
 const uploadMiddlware = multer({storage})
-// router.post('/',uploadMiddlware.single('avatar'), uploadController)
-  router.post('/upload',uploadMiddlware.single('avatar'), uploadController)
+router.post('/',uploadMiddlware.single('avatar'), uploadController)
+  //router.post('/upload',uploadMiddlware.single('avatar'), uploadController)
 router.use('/download', express.static(FILE_DIR))
 //router.post('/users/avatars', login)
-// router.patch('/users/avatars',uploadMiddlware.single('avatar'), uploadController)
+router.patch('/users/avatars',uploadMiddlware.single('avatar'), userAvatarPutch)
 
 module.exports = router;

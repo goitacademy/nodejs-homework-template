@@ -13,7 +13,7 @@ const registration = async (req, res, next) => {
         code: 201,
         message: `create ${email} and ${password}sucsess`
       });
-   
+   return user 
   } catch (error) {
     next(error);
   }

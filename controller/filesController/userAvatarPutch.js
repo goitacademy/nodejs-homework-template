@@ -1,6 +1,6 @@
 const UserSchema =require('../../models/userSchema')
 
-const userAvatarController=async(req,res,next)=>{
+const userAvatarPutch=async(req,res,next)=>{
     console.log('req.body',req.avatarURL)
     
 
@@ -28,4 +28,4 @@ const userAvatarController=async(req,res,next)=>{
         next(err);
       }
 }
-module.exports= userAvatarController
+module.exports= userAvatarPutch
