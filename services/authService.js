@@ -1,9 +1,11 @@
 const { User } = require("../db/users");
 const bCrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 async function registration(email, password) {
-  const user = new User({ email, password });
+  const avatarURL = gravatar.url(email);
+  const user = new User({ email, password,avatarURL});
   await user.save();
 }
 
@@ -30,10 +32,23 @@ async function findUser({ email }) {
   return user;
 }
 
+const updateUserAvatar = async (_id, avatarURL) => {
+  const updatedAvatar = await User.findByIdAndUpdate(
+    _id,
+    { avatarURL },
+    {
+      new: true,
+    }
+  );
+
+  return updatedAvatar;
+};
+
 module.exports = {
   registration,
   login,
   findUser,
   logout,
   findUserId,
+  updateUserAvatar
 };

@@ -6,7 +6,7 @@ const {
   logoutController,
   currentUserController,
 } = require("../../controllers/Auth/AuthController");
-const updateAvatar = require('../../controllers/Auth/updateAvatar')
+const {updateAvatar} = require('../../controllers/Auth/updateAvatar')
 
 const { authMiddleware } = require("../../middlewares/authMiddleware");
 const  uploadMiddlewar  = require("../../middlewares/uploadMiddlewar");
