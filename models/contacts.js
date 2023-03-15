@@ -2,7 +2,7 @@
 // const path = require('path');
 // const { v4 } = require('uuid');
 
-const { connectMongo } = require('../db/connection');
+// const { connectMongo } = require('../db/connection');
 
 
 // const Joi = require("joi");
@@ -17,39 +17,30 @@ const { connectMongo } = require('../db/connection');
 
 // const contactsPath = path.resolve(__dirname, "contacts.json");
 
-
+const ObjectId = require('mongodb').ObjectId;
 
 const listContacts = async (req, res) => {
-  const { collection } =  await connectMongo();
-  const contacts = await collection.find({}).toArray();
+  const contacts = await req.db.Contacts.find({}).toArray();
   res.json({contacts})
 };
 
 
 
-const getContactById = async (req, res, next) => {
-  // try {
-  //   const { contactId } = req.params;
-  //   const data = await fs.readFile(contactsPath);
-  //   const contacts = JSON.parse(data);
-  //   const result = contacts.find(item => item.id === contactId);
-  //   if (!result) {
-  //     const error = new Error("Not found");
-  //     error.status = 404;
-  //     throw error;
-  //   }
-  //   res.json({
-  //     status: "success",
-  //     code: 200,
-  //     data: { result },
-  //   });
-  // } catch (error) {
-  //   next(error);
-  // }
+const getContactById = async (req, res) => {
+  const { id } = req.params;
+  const contact = await req.db.Contacts.findOne({_id: new ObjectId(id)});
+  
+  if (!contact) {
+    return res.status(400).json({
+      status: 'failure, no contacts found!', 
+    });
+}
+  
+  res.json({ contact, status: 'success' });
 };
 
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req, res) => {
   // try {
   //   const { contactId } = req.params;
   //   const data = await fs.readFile(contactsPath);
@@ -77,7 +68,7 @@ const removeContact = async (req, res, next) => {
 
 
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   // try {
   //   const { error } = contactsJoiSchema.validate(req.body);
   //   if (error) {
@@ -106,7 +97,7 @@ const addContact = async (req, res, next) => {
 
 
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   // try {
   //   if (!req.body) {
   //     const error = new Error('missing fields');
