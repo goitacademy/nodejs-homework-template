@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  listContacts,
+  getContacts,
   getContactById,
   addContact,
   removeContact,
@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await getContacts();
     res.status(200).json(contacts);
   } catch (error) {
     res.status(500).send(error.message);
@@ -39,17 +39,11 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", addValidation, async (req, res, next) => {
-  try {
-    const contact = await addContact(req.body);
-    if (contact) {
-      res.status(201).json(contact);
-    } else {
-      res.status(500).send("Write error");
-    }
-  } catch (error) {
-    res.status(500).send(error.message);
-    next(error);
+  const contact = await addContact(req.body);
+  if (!contact) {
+    return res.status(500).send("Write error");
   }
+  res.status(201).json(contact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
