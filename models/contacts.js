@@ -1,5 +1,24 @@
-const ContacModel = require("../services/shema");
-const checkContactById = require("../services/checkContactById");
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+const ContactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const ContacModel = mongoose.model("Contact", ContactSchema, "contacts");
 
 const listContacts = async () => {
   const data = await ContacModel.find({});
@@ -7,71 +26,36 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  const isExist = await checkContactById(contactId);
-  if (isExist) {
-    const data = await ContacModel.findById(contactId);
-    return data;
-  } else {
-    return `There is not exist contact with id: ${contactId}`;
-  }
+  const data = await ContacModel.findById(contactId);
+  return data;
 };
 
 const removeContact = async (contactId) => {
-  const data = await ContacModel.deleteOne({ _id: contactId })
-    .then((result) => {
-      if (result.deletedCount) {
-        console.log("The contact was deleted successfully");
-      } else {
-        console.log("There is not such contact");
-        return `There is not exist contact with id: ${contactId}`;
-      }
-      return result.deletedCount;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const data = await ContacModel.deleteOne({ _id: contactId });
   return data;
 };
 
 const addContact = async (body) => {
   const contact = new ContacModel(body);
-  const data = await contact
-    .save()
-    .then(() => {
-      console.log("Contact added to the database!");
-      return "Contact added to the database!";
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const data = await contact.save();
   return data;
 };
 
 const updateContact = async (contactId, body) => {
-  const isExist = await checkContactById(contactId);
-  if (isExist) {
-    const data = await ContacModel.findOneAndUpdate({ _id: contactId }, body, {
-      new: true,
-    });
-    return data;
-  } else {
-    return `There is not exist contact with id: ${contactId}`;
-  }
+  const data = await ContacModel.findOneAndUpdate({ _id: contactId }, body, {
+    new: true,
+  });
+  return data;
 };
 
 const toggleFavoriteContact = async (contactId) => {
-  const isExist = await checkContactById(contactId);
-  if (isExist) {
-    const contact = await ContacModel.findById(contactId);
-    const data = await ContacModel.findOneAndUpdate(
-      { _id: contactId },
-      { favorite: !contact.favorite },
-      { new: true }
-    );
-    return data;
-  } else {
-    return `There is not exist contact with id: ${contactId}`;
-  }
+  const contact = await ContacModel.findById(contactId);
+  const data = await ContacModel.findOneAndUpdate(
+    { _id: contactId },
+    { favorite: !contact.favorite },
+    { new: true }
+  );
+  return data;
 };
 
 module.exports = {

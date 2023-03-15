@@ -40,9 +40,9 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", addValidation, async (req, res, next) => {
   try {
-    const contacts = await addContact(req.body);
-    if (contacts.length) {
-      res.status(201).json(contacts);
+    const contact = await addContact(req.body);
+    if (contact) {
+      res.status(201).json(contact);
     } else {
       res.status(500).send("Write error");
     }
