@@ -1,4 +1,5 @@
-const { addContact } = require("../../models/contacts");
+// const { addContact } = require("../../models/contacts");
+const { Contact } = require("../../models");
 
 exports.addContact = async (req, res, next) => {
   // try {
@@ -20,7 +21,9 @@ exports.addContact = async (req, res, next) => {
   //     message: `missing required phone  field`,
   //   });
   // }
-  res.status("201").json(await addContact(body));
+  // res.status("201").json(await addContact(body));
+  res.status("201").json(await Contact.create(body));
+
   // } catch (error) {
   //   next(error);
   // }
