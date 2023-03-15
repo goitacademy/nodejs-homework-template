@@ -1,23 +1,21 @@
-const Contacts = require("../../models/contactsSchema");
+//  const Contacts = require("../../models/contactsSchema");
+ const getByIdContactServices=require('../../services/contactServices/getByIdContactServices')
+// const mongoose = require('mongoose');
+
 const getById = async (req, res, next) => {
     const { contactId } = req.params;
-  
+    console.log('contactId',contactId)
+    //  const { _id: owner } = req.user;
+    // mongoose.ObjectId(id)
     try {
-      const result = await Contacts.findById({ _id: contactId });
-      if (result) {
-        res.json({
+      const result = await getByIdContactServices(contactId);
+     
+ res.json({
           status: "success",
           code: 200,
           data: { contact: result },
         });
-      } else {
-        res.status(404).json({
-          status: "error",
-          code: 404,
-          message: `Not found task id: ${id}`,
-          data: "Not Found",
-        });
-      }
+        
     } catch (e) {
       console.error(e);
       next(e);

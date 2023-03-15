@@ -15,12 +15,11 @@ const params = {
 passport.use(
   new Strategy(params, function (payload, done) {
     User.find({ _id: payload.id })
-      .then(([user]) => {
+      try{([user]) => {
         if (!user) {
           return done(new Error('User not found'))
         }
         return done(null, user)
-      })
-      .catch((err) => done(err))
+      }}catch{(err) => done(err)}
   }),
 )

@@ -1,10 +1,11 @@
-const Contacts = require("../../models/contactsSchema");
-
+// const Contacts = require("../../models/contactsSchema");
+const serchInContactServices=require('../../services/contactServices/serchInContactServices')
 const serchInContacts = async () => {
-    const { name, email, phone, favorite } = req.query;
-    console.log("name", name);
+    const {  favorite=false } = req.query;
+    console.log("favorite",favorite);
     try {
-      const result = await Contacts.find({ name });
+      const result = await serchInContactServices(favorite)
+      // const result = await Contacts.find({ name });
       if (result) {
         res.json({
           status: "success",
@@ -15,7 +16,7 @@ const serchInContacts = async () => {
         res.status(404).json({
           status: "error",
           code: 404,
-          message: `Not found : ${name}||${email}||${phone}||${favorite}`,
+          message: `Not found :${favorite}`,
           data: "Not Found",
         });
       }

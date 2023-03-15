@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 const controllerContact = require('../../controller/contactsController/index')
 const auth= require('../../middlewares/auth')
-
+const authNewMiddlware =require('../../middlewares/authNewMiddware')
 // router.use(auth)
 
+ router.use(authNewMiddlware)
+//router.use(auth)
 router.get("/", controllerContact.allContacts);
 
-router.get("/:contactId",auth, controllerContact.getById);
+router.get("/:contactId", controllerContact.getById);
 
 router.get("/search",controllerContact.serchInContacts);
 

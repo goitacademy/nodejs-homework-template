@@ -12,8 +12,6 @@ function validate(contact) {
     if (!contact.phone) {
       throw new Error("phone is required");
     }
-    if (!contact.favorite) {
-      throw new Error("age is required");
-    }
+  
   }
   module.exports=validate

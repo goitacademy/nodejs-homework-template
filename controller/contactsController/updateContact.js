@@ -1,21 +1,26 @@
-const Contacts = require("../../models/contactsSchema");
-const validate = require("../../validator/ownValidate")
+// const Contacts = require("../../models/contactsSchema");
+const validate = require("../../validator/ownValidate");
+const updateContactServices = require("../../services/contactServices/updateContactServices");
+const{putContactsValidationJoi}=require('../../middlewares/validator')
+
 const updateContact = async (req, res, next) => {
-    const { contactId } = req.params;
-  
-    try {
-      validate(req.body);
-    } catch (e) {
-      return next(e);
-    }
-  
-    console.log("contactId", contactId);
-  
-    const record = await Contacts.updateOne({ _id: contactId }, req.body, {
-      new: true,
+  const { contactId} = req.params;
+
+  const body = req.body;
+  try {
+     putContactsValidationJoi(req.body)
+    //  validate(req.body);
+    const record = await updateContactServices(contactId, body);
+    return res.json({
+      status: "success",
+      code: 201,
+      message: "Contact updated successfully",
+      data: { contacts:record },
     });
-    console.log("record", record);
-  
-    res.json(record);
-  };
-  module.exports=updateContact;
+     
+  } catch (e) {
+    return next(e);
+  }
+
+};
+module.exports = updateContact;

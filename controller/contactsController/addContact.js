@@ -1,25 +1,23 @@
-const Contacts = require("../../models/contactsSchema");
-const validate = require("../../validator/ownValidate")
+//  const Contacts = require("../../models/contactsSchema");
+//const validate = require("../../validator/ownValidate");
+const addContactServices = require("../../services/contactServices/addContactServices");
+const { addContactsValidationJoi } = require("../../middlewares/validator");
+const userSchema = require("../../models/userSchema");
+const gravatar = require('gravatar');
+
 const addContact = async (req, res, next) => {
-    try {
-      validate(req.body);
-      const bodyValidation = () => {
-        if (!Object.prototype.hasOwnProperty.call(req.body, 'favorite')) {
-          return { ...req.body, favorite: 'false' };
-        }
-        return req.body;
-      };
-      const entity = new Contacts(bodyValidation());
-  
-      const record = await entity.save();
-      res.status(201).json({
-        status: "success",
-        code: 201,
-        data: { contact: record },
-      });
-      //
-    } catch (e) {
-      return next(e);
-    }
-  };
-  module.exports=addContact;
+  try {
+    const { _id } = req.user;
+   
+    addContactsValidationJoi(req.body);
+    const result = await addContactServices(req.body, _id);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { contacts: result },
+    });
+  } catch (e) {
+    return next(e);
+  }
+};
+module.exports = addContact;

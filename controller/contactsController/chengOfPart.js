@@ -1,32 +1,35 @@
-const Contacts = require("../../models/contactsSchema");
-const validate = require("../../validator/ownValidate")
-const chengOfPart= async (req, res, next) => {
-    const { contactId } = req.params;
-    const { favorite } = req.body;
+//  const validate = require("../../validator/ownValidate")
+const chengOfPartContactServices=require('../../services/contactServices/chengOfPartContactServices')
+const {putchContactsValidationJoi}=require('../../middlewares/validator')
 
+const chengOfPart= async (req, res, next) => {
+    const {contactId } = req.params;
+    const { favorite } = req.body;
+console.log('req.body',req.body)
   try {
-    validate(req.body);
-    // const contactById = await getContactById(contactId)
-   
+     putchContactsValidationJoi(req.body)
+    // validate(req.body);
       if (!Object.prototype.hasOwnProperty.call(req.body, 'favorite')) {
         res.status(400).json({
           status: 'Bad Request',
           code: 400,
           message: 'missing field favorite',
         });
-      } else {
-        const contact = await Contacts.findByIdAndUpdate(
-          contactId,
-          { favorite },
-          { new: true },
-        );
+      } 
+      if (!favorite) {
+        res.json({
+          message: 'Missing field favorite!'   
+        });
+      }
+      const result = await chengOfPartContactServices(contactId,favorite)
+
         res.json({
           status: 'success',
           code: 200,
           message: 'contact status updated',
-          data: contact,
+          data: result,
         });
-      }
+      
     }
    catch (e) {
     console.error(e)

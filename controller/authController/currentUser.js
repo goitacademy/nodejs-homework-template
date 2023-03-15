@@ -1,9 +1,11 @@
-const UserSchema = require("../../models/userSchema");
+// const UserSchema = require("../../models/userSchema");
 require("dotenv").config();
-
+// const currentUserServices = require('../../services/authServise/currentServices')
+const UserSchema = require('../../models/userSchema')
 const currentUser = async(req,res,next)=>{
     try{
         const { _id: id } = req.user;
+        // const user= await currentUser(id)
         const user = await UserSchema.findOne({id} ).select({
        
             email: 1,
@@ -31,4 +33,4 @@ const currentUser = async(req,res,next)=>{
        next(err);
      }
      }  
-module.exports=currentUser
+ module.exports=currentUser

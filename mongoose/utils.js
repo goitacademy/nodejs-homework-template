@@ -6,7 +6,7 @@
       process.exit(1);
     }
   else{
-    const connectionUrl = `${DB_PROTOCOL}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/?retryWrites=true&w=majority`;
+    const connectionUrl = `${DB_PROTOCOL}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/bdContacts?retryWrites=true&w=majority`;
     console.log('Database connection successful');
     return connectionUrl;
   }

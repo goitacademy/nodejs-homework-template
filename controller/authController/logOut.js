@@ -1,21 +1,20 @@
-const UserSchema = require("../../models/userSchema");
-require("dotenv").config();
-
+// const UserSchema = require("../../models/userSchema");
+// require("dotenv").config();
+const logoutServices =require('../../services/authServise/logoutServices')
 
 const logout = async(req,res,next)=>{
     try {
-         const { _id: id } = req.params;
-         console.log('req.body',req.body)
-        const token = null;
-        const user = await UserSchema.findOneAndUpdate({id }, { $set: { token } });
-  if(!user){
-    res.status(401).json({
-      status: "Unauthorized",
-      code: 401,
-      data: { message: `Not authorized` },
-    });
-  }
-    return user
+      const { contactId } = req.params;
+        const user =logoutServices(contactId)
+        // const token = null;
+        // const user = await UserSchema.findOneAndUpdate({id }, { $set: { token } });
+        res.status(200).json({
+          status: "OK",
+          code: 200,
+         message:`sucsess logout`
+        
+        });
+        return user
       }catch (err) {
         next(err);
       }
