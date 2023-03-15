@@ -90,7 +90,7 @@ const updateStatus = catchAsync(async (req, res, next) => {
     const { contactId } = req.params
     const { favorite = false } = req.body
 
-    if (!favorite) {
+    if (favorite.length === 0) {
         res.status(400).json({ message: 'missing field favorite' })
         return
     }
