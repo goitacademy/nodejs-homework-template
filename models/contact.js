@@ -21,16 +21,21 @@ const contactSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-const joiSchema = Joi.object({
+const ContactjoiSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string(),
   favorite: Joi.boolean(),
 });
 
+const StatusjoiSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
-  joiSchema,
+  ContactjoiSchema,
+  StatusjoiSchema,
 };
