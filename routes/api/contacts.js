@@ -5,6 +5,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  toggleFavoriteContact,
 } = require("../../models/contacts");
 const {
   addValidation,
@@ -55,7 +56,7 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const contacts = await removeContact(req.params.contactId);
     if (contacts) {
-      res.status(200).json(contacts);
+      res.status(200).json({ message: "The contact was deleted successfully" });
     } else {
       res.status(404).json({ message: "Not found" });
     }
@@ -74,7 +75,22 @@ router.put("/:contactId", updateValidation, async (req, res, next) => {
       res.status(404).json({ message: "Not found" });
     }
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send(error);
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const contacts = await toggleFavoriteContact(req.params.contactId);
+    if (contacts) {
+      res.status(200).json(contacts);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+
     next(error);
   }
 });

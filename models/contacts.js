@@ -1,69 +1,77 @@
-const fs = require("fs/promises");
-const path = require("path");
-const crypto = require("crypto");
-
-const contactsPath = path.resolve("models", "contacts.json");
+const ContacModel = require("../services/shema");
+const checkContactById = require("../services/checkContactById");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  return JSON.parse(data);
+  const data = await ContacModel.find({});
+  return data;
 };
 
 const getContactById = async (contactId) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const [contact] = JSON.parse(data).filter((cont) => cont.id === contactId);
-  if (contact) {
-    return contact;
+  const isExist = await checkContactById(contactId);
+  if (isExist) {
+    const data = await ContacModel.findById(contactId);
+    return data;
+  } else {
+    return `There is not exist contact with id: ${contactId}`;
   }
 };
 
 const removeContact = async (contactId) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const contacts = JSON.parse(data).filter(
-    (contact) => contact.id !== contactId
-  );
-  if (JSON.parse(data).length > contacts.length) {
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(contacts, null, 2),
-      "utf-8"
-    );
-    return contacts;
-  }
+  const data = await ContacModel.deleteOne({ _id: contactId })
+    .then((result) => {
+      if (result.deletedCount) {
+        console.log("The contact was deleted successfully");
+      } else {
+        console.log("There is not such contact");
+        return `There is not exist contact with id: ${contactId}`;
+      }
+      return result.deletedCount;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return data;
 };
 
 const addContact = async (body) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  body.id = crypto.randomUUID();
-  const contacts = JSON.parse(data);
-  contacts.push(body);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf-8");
-  return contacts;
+  const contact = new ContacModel(body);
+  const data = await contact
+    .save()
+    .then(() => {
+      console.log("Contact added to the database!");
+      return "Contact added to the database!";
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return data;
 };
 
 const updateContact = async (contactId, body) => {
-  const data = await fs.readFile(contactsPath, "utf8");
-  const contacts = JSON.parse(data);
-  contacts.forEach(async (contact) => {
-    if (contact.id === contactId) {
-      if (body.name) {
-        contact.name = body.name;
-      }
-      if (body.email) {
-        contact.email = body.email;
-      }
-      if (body.phone) {
-        contact.phone = body.phone;
-      }
-      await fs.writeFile(
-        contactsPath,
-        JSON.stringify(contacts, null, 2),
-        "utf-8"
-      );
-      return contacts;
-    }
-  });
-  return contacts;
+  const isExist = await checkContactById(contactId);
+  if (isExist) {
+    const data = await ContacModel.findOneAndUpdate({ _id: contactId }, body, {
+      new: true,
+    });
+    return data;
+  } else {
+    return `There is not exist contact with id: ${contactId}`;
+  }
+};
+
+const toggleFavoriteContact = async (contactId) => {
+  const isExist = await checkContactById(contactId);
+  if (isExist) {
+    const contact = await ContacModel.findById(contactId);
+    const data = await ContacModel.findOneAndUpdate(
+      { _id: contactId },
+      { favorite: !contact.favorite },
+      { new: true }
+    );
+    return data;
+  } else {
+    return `There is not exist contact with id: ${contactId}`;
+  }
 };
 
 module.exports = {
@@ -72,4 +80,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  toggleFavoriteContact,
 };

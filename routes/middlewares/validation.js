@@ -11,6 +11,7 @@ module.exports = {
         })
         .required(),
       phone: Joi.string().min(13).max(13).required(),
+      favorite: Joi.boolean(),
     });
 
     const valRes = schema.validate(req.body);
@@ -28,6 +29,7 @@ module.exports = {
         tlds: { allow: ["com", "net"] },
       }),
       phone: Joi.string().min(13).max(13),
+      favorite: Joi.boolean(),
     });
 
     if (Object.keys(req.body).length < 1) {
