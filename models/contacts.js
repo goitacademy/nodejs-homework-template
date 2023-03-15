@@ -1,19 +1,57 @@
-// const fs = require('fs/promises')
+// const fs = require("fs/promises");
+// const path = require("path");
+// const { nanoid } = require("nanoid");
+// const Contact = require("./contact");
 
-const listContacts = async () => {}
+// const listContacts = async () => {
+//   const data = await fs.readFile(contactsPath);
+//   return JSON.parse(data);
+// };
 
-const getContactById = async (contactId) => {}
+// const getContactById = async (id) => {
+//   const contacts = await listContacts();
+//   const result = contacts.find((item) => item.id === id);
+//   return result || null;
+// };
 
-const removeContact = async (contactId) => {}
+// const removeContact = async (contactId) => {
+//   const contacts = await listContacts();
+//   const index = contacts.findIndex((item) => item.contactId === contactId);
+//   if (index === -1) {
+//     return null;
+//   }
+//   const [result] = contacts.splice(index, 1);
+//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return result;
+// };
 
-const addContact = async (body) => {}
+// const addContact = async (body) => {
+//   const contacts = await listContacts();
+//   const newContact = {
+//     id: nanoid(),
+//     ...body,
+//   };
 
-const updateContact = async (contactId, body) => {}
+//   contacts.push(newContact);
+//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return newContact;
+// };
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+// const updateContact = async (id, data) => {
+//   const contacts = await listContacts();
+//   const index = contacts.findIndex((item) => item.id === id);
+//   if (index === -1) {
+//     return null;
+//   }
+//   contacts[index] = { id, ...data };
+//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return contacts[index];
+// };
+
+// module.exports = {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };
