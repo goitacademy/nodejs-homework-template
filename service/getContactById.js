@@ -1,6 +1,7 @@
 const Contact = require('./schemas/contact')
 
-module.exports = (id) => {
+const getContactById = (id) => {
     return Contact.findOne({ _id: id })
 }
 
+module.exports = getContactById

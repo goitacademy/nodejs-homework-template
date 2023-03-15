@@ -1,7 +1,8 @@
 const Contact = require('./schemas/contact')
 
 
-module.exports = (id) => {
+const removeContact = (id) => {
     return Contact.findByIdAndRemove({ _id: id })
 }
 
+module.exports = removeContact

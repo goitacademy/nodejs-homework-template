@@ -1,7 +1,7 @@
 const Contact = require('./schemas/contact')
 
-module.exports = () => {
+const getListContacts = () => {
     return Contact.find()
 }
 
-
+module.exports = getListContacts
