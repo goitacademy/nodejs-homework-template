@@ -5,15 +5,15 @@
 // const { connectMongo } = require('../db/connection');
 
 
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const contactsJoiSchema = Joi.object({
-// name: Joi.string().required(),
-// email: Joi.string().email().required(),
-// phone: Joi.string()
-// .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
-// .required(),
-// });
+const contactsJoiSchema = Joi.object({
+name: Joi.string().required(),
+email: Joi.string().email().required(),
+phone: Joi.string()
+.regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
+.required(),
+});
 
 // const contactsPath = path.resolve(__dirname, "contacts.json");
 
@@ -41,6 +41,11 @@ const getContactById = async (req, res) => {
 
 
 const removeContact = async (req, res) => {
+
+  const {contactId} = req.params;
+  await req.db.Contacts.deleteOne({ _id: new ObjectId(contactId) });
+  
+  res.json({status: 'success'})
   // try {
   //   const { contactId } = req.params;
   //   const data = await fs.readFile(contactsPath);
@@ -69,50 +74,40 @@ const removeContact = async (req, res) => {
 
 
 const addContact = async (req, res) => {
-  // try {
-  //   const { error } = contactsJoiSchema.validate(req.body);
-  //   if (error) {
-  //     error.message = "missing required name field";
-  //     error.status = 400;
-  //     throw error;
-  //   }
+  const { error } = contactsJoiSchema.validate(req.body);
+  if (error) {
+    error.message = "missing required name field";
+    error.status = 400;
+    throw error;
+  }
     
-  //   const { name, email, phone } = req.body;
-  //   const data = await fs.readFile(contactsPath);
-  //   const contacts = JSON.parse(data);
-  //   const newContacts = { id: v4(), name, email, phone };
-    
-  //   contacts.push(newContacts);
-  //   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    
-  //   res.status(201).json({
-  //     status: "success",
-  //     code: 201,
-  //     data: { newContacts },
-  //   });
-  // } catch (error) {
-  //   next(error);
-  // }
+  const { name, email, phone } = req.body;
+  await req.db.Contacts.insert({ name, email, phone });
+  res.json({ status: 'success' });
 };
 
 
 
 const updateContact = async (req, res) => {
-  // try {
   //   if (!req.body) {
   //     const error = new Error('missing fields');
   //     error.status = 400;
   //     throw error;
   //   }
     
-  //   const { error } = contactsJoiSchema.validate(req.body);
-  //   if (error) {
-  //     error.message = "missing required name field";
-  //     error.status = 400;
-  //     throw error;
-  //   }
-  //   const { contactId } = req.params;
-  //   const { name, email, phone } = req.body;
+    const { error } = contactsJoiSchema.validate(req.body);
+    if (error) {
+      error.message = "missing required name field";
+      error.status = 400;
+      throw error;
+    }
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  await req.db.Contacts.updateOne(
+    { _id: new ObjectId(contactId) },
+    { $set: { name, email, phone } }
+  );
+  res.json({ status: 'success' });
   //   const data = await fs.readFile(contactsPath);
   //   const contacts = JSON.parse(data);
     
