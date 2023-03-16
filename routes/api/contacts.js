@@ -7,9 +7,8 @@ const {
   updateContact,
 } = require("../../models/contacts");
 const {
-  newContactSchema,
-  contactUpdateSchema,
   validateContact,
+  validateUpdateContact
 } = require("../../models/validation");
 const router = express.Router()
 
@@ -28,10 +27,7 @@ router.get('/:contactId', async (req, res) => {
   res.json(data);
 });
 
-
-router.use(validateContact);
-
-router.post('/',async (req, res) => {
+router.post('/', validateContact, async (req, res) => {
   if (req.error) {
     res.status(400).json({ message: req.error });
     return;
@@ -50,15 +46,9 @@ router.delete('/:contactId', async (req, res) => {
   res.json({ message: "Contact deleted" });
 });
 
-router.put('/:contactId', async (req, res) => {
+router.put('/:contactId', validateUpdateContact, async (req, res) => {
   const { contactId } = req.params;
 
-  const { error, value } = validateContact(contactUpdateSchema, req.body);
-
-  if (error) {
-    res.status(400).json({ message: error });
-    return;
-  }
   const data = await updateContact(contactId, value);
 
   if (!data) {
