@@ -35,4 +35,14 @@ const validateContact = (req, res, next) => {
   next();
 };
 
-module.exports = { newContactSchema, contactUpdateSchema, validateContact };
+const validateUpdateContact = (req, res, next) => {
+  const { error, value } = validateContact(contactUpdateSchema, req.body);
+
+  if (error) {
+    res.status(400).json({ message: error });
+    return;
+  }
+  next()
+};
+
+module.exports = { validateContact, validateUpdateContact };
