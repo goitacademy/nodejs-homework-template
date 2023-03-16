@@ -1,16 +1,31 @@
 const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  // removeContact,
+  // addContact,
+  // updateContact,
+} = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const contactsList = await listContacts();
+  res.json(contactsList);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "tempate message" });
+  const foundContact = await getContactById(req.params.contactId);
+  if (foundContact === undefined) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.json(foundContact);
+  }
 });
 
 router.post("/", async (req, res, next) => {
+  console.log(req.body);
+  // await addContact(req.body);
   res.json({ message: "template message" });
 });
 
