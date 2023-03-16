@@ -3,12 +3,16 @@ const { Contact} = require('../db/contactModel')
 const Joi = require("joi");
 
 const contactsJoiSchema = Joi.object({
-name: Joi.string().required(),
-email: Joi.string().email().required(),
-phone: Joi.string()
-.regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/)
-.required(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
+
+const favoriteContactsJoiSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 
 
 
@@ -72,7 +76,20 @@ const updateContact = async (req, res) => {
   res.json({ status: 'success' });
 };
 
-
+const updateStatusContact = async (req, res) => {
+  const { error } = favoriteContactsJoiSchema.validate(req.body);
+  if (error) {
+    error.message = "missing required name field";
+    error.status = 400;
+    throw error;
+  }
+  const { contactId } = req.params;
+  const { favorite} = req.body;
+  await Contact.findByIdAndUpdate(contactId,
+    { $set: { favorite} }
+  );
+  res.json({ status: 'success' });
+};
 
 module.exports = {
   listContacts,
@@ -80,4 +97,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 }

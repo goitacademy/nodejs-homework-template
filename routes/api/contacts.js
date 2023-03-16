@@ -6,7 +6,7 @@ const express = require('express')
 // const validateMiddleware = validation(contactSchema);
 const {asyncWrapper} = require('../../helpers/apihelpers')
 
-const {listContacts, getContactById, removeContact, addContact, updateContact} = require('../../models/contacts');
+const {listContacts, getContactById, removeContact, addContact, updateContact, updateStatusContact} = require('../../models/contacts');
 
 
 
@@ -23,4 +23,6 @@ router
   .put(asyncWrapper(updateContact))
   .delete(asyncWrapper(removeContact));
 
+router.route('/:contactId/favorite')
+  .patch(asyncWrapper(updateStatusContact));
 module.exports = router;
