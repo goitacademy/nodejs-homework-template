@@ -1,16 +1,13 @@
-const { HttpError } = require("../helpers/helpers");
-
-function validation(schema) {
+const validation = (scheme) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = scheme.validate(req.body);
     if (error) {
-      return next(HttpError(400, error.message));
+      error.status = 400;
+      error.message = 'missing required field';
+      next(error);
     }
-
-    return next();
+    next();
   };
-}
-
-module.exports = {
-  validation,
 };
+
+module.exports = validation;
