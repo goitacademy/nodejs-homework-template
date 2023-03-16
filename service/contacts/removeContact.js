@@ -1,4 +1,4 @@
-const Contact = require('../../schemas/contact')
+const Contact = require('../../models/contact')
 
 
 const removeContact = (id) => {

@@ -1,4 +1,4 @@
-const { removeContact } = require('../../service/operations/contacts')
+const { removeContact } = require('../../service/contacts')
 
 const { catchAsync } = require('../../utils')
 

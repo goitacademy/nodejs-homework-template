@@ -1,4 +1,4 @@
-const { getContactById } = require('../../service/operations/contacts')
+const { getContactById } = require('../../service/contacts')
 const { catchAsync } = require('../../utils')
 
 const getContactsById = catchAsync(async (req, res, next) => {
