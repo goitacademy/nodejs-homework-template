@@ -2,18 +2,18 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
 const contactsRouter = require("./routes/api/contacts");
-const { DB_HOST } = process.env;
+// const { DB_HOST } = process.env;
 
-mongoose
-  .connect(DB_HOST)
-  .then(console.log("Database connection successful"))
-  .catch((e) => {
-    console.log(e.message);
-    process.exit(1);
-  });
+// mongoose
+//   .connect(DB_HOST)
+//   .then(console.log("Database connection successful"))
+//   .catch((e) => {
+//     console.log(e.message);
+//     process.exit(1);
+//   });
 
 const app = express();
 

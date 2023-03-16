@@ -19,7 +19,12 @@ router
     validator.updContactValidator(),
     validator.ctrlWrapper(controllers.updateContact)
   );
-
+router
+  .route("/:contactId/favorite")
+  .patch(
+    validator.favoriteValidator(),
+    validator.ctrlWrapper(controllers.updateStatusContact)
+  );
 // ================ПРИКЛАД========================
 // router.get("/",controllers.listContacts);
 

@@ -1,23 +1,19 @@
-const { updateContact } = require("../../models/contacts");
+// const { updateContact } = require("../../models/contacts");
+const { Contact } = require("../../models");
 
 exports.updateContact = async (req, res, next) => {
-  // try {
   const contactId = req.params.contactId;
   const body = req.body;
 
-  // const { name, phone, email } = req.body;
+  // const contact = await updateContact(contactId, body);
+  const contact = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
 
-  // if (!name && !phone && !email) {
-  //   return res.status(400).json({ message: "missing fields" });
-  // }
-  const contact = await updateContact(contactId, body);
   if (!contact) {
     return res.status("404").json({
       msg: "Not Found!",
     });
   }
   res.status("200").json(contact);
-  // } catch (error) {
-  //   next(error);
-  // }
 };
