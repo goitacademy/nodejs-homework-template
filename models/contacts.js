@@ -1,14 +1,37 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+const uuid = require("uuid");
 
-const listContacts = async () => {}
+const contactsPath = path.resolve("./models/contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(data);
+  return contacts;
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const allContacts = await listContacts();
+  const contact = allContacts.find((item) => item.id === contactId);
+  return contact;
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async ({ name, email, phone }) => {
+  const newContact = {
+    id: uuid.v4(),
+    name,
+    email,
+    phone,
+  };
+  const allContacts = await listContacts();
+  allContacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +39,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
