@@ -5,13 +5,18 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateFavorite,
 } = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const response = await listContacts();
-  return res.status(200).json({ message: response });
+  try {
+    const response = await listContacts();
+    return res.status(200).json({ message: response });
+  } catch {
+    return res.status(404).json({ message: "Not found" });
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
@@ -20,35 +25,31 @@ router.get("/:contactId", async (req, res, next) => {
   if (!response) {
     return res.status(404).json({ message: "Not found" });
   }
-  return res.status(200).json({ message: JSON.parse(response) });
+  return res.status(200).json({ message: response });
 });
 
 router.post("/", async (req, res, next) => {
-  const keys = Object.keys(req.body);
+  const body = req.body;
+  const bodyKeys = Object.keys(body);
+  if (!bodyKeys.includes("favorite")) {
+    body.favorite = false;
+  }
   try {
-    const response = await addContact(req.body);
-    if (req.body.id.toString() === JSON.parse(response).toString()) {
-      return res.status(404).json({
-        message: `Contact of id ${req.body.id} is already in database`,
-      });
-    }
-    const rawElement = response.slice(1, response.length - 1);
-    const missingElement = keys.find((el) => el === rawElement);
-    if (missingElement) {
-      return res
-        .status(400)
-        .json({ message: `Something wrong with "${missingElement}" field` });
-    }
-    return res.status(201).json({
-      message: `succesfully posted user id ${JSON.parse(response).id}`,
+    const response = await addContact(body);
+    return res.status(201).send({
+      message: `succesfully posted user id ${response.id}`,
     });
   } catch {
-    return res.status(404).send();
+    return res.status(400).send({ message: "Something went wrong" });
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
+  const contact = await getContactById(id);
+  if (contact === undefined) {
+    return res.status(404).json({ message: "Contact not found!" });
+  }
   try {
     await removeContact(id);
     return res.status(200).json({ message: `Contact with id ${id} deleted` });
@@ -58,14 +59,28 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
+  const id = req.params.contactId;
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: "Missing fields!" });
   }
   try {
-    const response = await updateContact(req.params.contactId, req.body);
-    return res.status(200).json({ message: response });
+    await updateContact(id, req.body);
+    return res.status(200).send({ message: "success" });
   } catch {
-    return res.status(404).json({ message: "Not found!" });
+    return res.status(404).json({ message: "Not foussdnd!" });
+  }
+});
+
+router.put("/:contactId/favorite", async (req, res, next) => {
+  const id = req.params.contactId;
+  if (typeof req.body.favorite !== "boolean") {
+    return res.status(400).send({ message: "Something went wrong" });
+  }
+  try {
+    await updateFavorite(id, req.body);
+    return res.status(200).json({ message: "success" });
+  } catch {
+    return res.status(404).send({ message: "ccc" });
   }
 });
 
