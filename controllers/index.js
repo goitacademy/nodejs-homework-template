@@ -16,9 +16,10 @@ const getContacts = async (req, res) => {
     console.error(e)
   }
 }
-const getContactById = async (req, res) => {
-  const { id } = req.params
-  if (!id) {
+const getContactsById = async (req, res) => {
+  console.log(req.params)
+  const { ContactId }  = req.params
+  if (!ContactId) {
     return res.status(400).json({
       status: 'error',
       code: 400,
@@ -26,7 +27,7 @@ const getContactById = async (req, res) => {
     })
   }
   try {
-    const contact = await service.getContactById(id)
+    const contact = await service.getContactById(ContactId)
     if (!contact) {
       return res.status(404).json({
         status: 'error',
@@ -169,7 +170,7 @@ const updatedStatusContact = async (req, res) => {
 }
 module.exports = {
     getContacts,
-    getContactById,
+    getContactsById,
     createdContact,
     updateContactById,
     deletedContact,

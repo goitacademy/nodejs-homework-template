@@ -5,14 +5,13 @@ const getAllContacts = async () => {
   return contacts
 }
 
-const getContactById = async(id) => {
-  /* return Contact.findOne({ _id: id }) */
+const getContactById = async (id) => {
   const contact = await Contact.findOne({ _id: String(id) });
   if (!contact) {
     throw new Error(`Contact with id=${id} not found`);
   }
   return contact;
-}
+};
 
 const createContact = ({ name,email,phone }) => {
   return Contact.create({ name,email,phone })
