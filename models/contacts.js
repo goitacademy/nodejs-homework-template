@@ -1,9 +1,7 @@
 const fs = require("fs/promises");
 const uuid = require("uuid").v4;
 const path = require("path");
-
-// const { checkContactData } = require("../middlewares/userMiddlevares");
-// const { AppError } = require("../utils/appError.js");
+// const { Contact } = require("../models/contactModel");
 
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
@@ -27,13 +25,6 @@ const listContacts = async () => {
 };
 
 const createContact = async (body) => {
-  // const { error, value } = checkContactData(req.body);
-
-  // if (error) {
-  //   return next(new AppError(400, error.details[0]).message);
-  // }
-  //
-  //   const { name, email, phone } = value;
   try {
     const { name, email, phone } = body;
     const contacts = await getContacts();
@@ -51,18 +42,19 @@ const createContact = async (body) => {
   }
 };
 
-const recieveContactById = async (contactId) => {
-  try {
-    const contacts = await getContacts();
+// const recieveContactById = async (contactId) => {
+//   try {
+//     const contacts = await getContacts();
 
-    const contact = contacts.filter(
-      (item) => String(item.id) === String(contactId)
-    );
-    return contact;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+//     const contact = Contact.findById(contactId);
+//     // const contact = contacts.filter(
+//     //   (item) => String(item.id) === String(contactId)
+//     // );
+//     return contact;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
 const removeContact = async (contactId) => {
   try {
@@ -106,7 +98,7 @@ const updateContact = async (contactId, body) => {
 
 module.exports = {
   listContacts,
-  recieveContactById,
+  // recieveContactById,
   removeContact,
   createContact,
   updateContact,
