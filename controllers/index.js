@@ -3,7 +3,8 @@ const { contactValidate } = require("../utils/contactValidator")
 
 const getContacts = async (req, res) => {
     try {
-    const contacts = await service.getAllContacts()
+      const contacts = await service.getAllContacts()
+      console.log(contacts)
     res.json({
       status: 'success',
       code: 200,
@@ -157,7 +158,7 @@ const updatedStatusContact = async (req, res) => {
       res.status(404).json({
         status: 'error',
         code: 404,
-        message: `Not found task id: ${id}`,
+        message: `Not found contact id: ${id}`,
         data: 'Not Found',
       })
     }

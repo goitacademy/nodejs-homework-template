@@ -7,7 +7,7 @@ const getAllContacts = async () => {
 
 const getContactById = async(id) => {
   /* return Contact.findOne({ _id: id }) */
-  const contact = await Contact.findById(id);
+  const contact = await Contact.findOne({ _id: String(id) });
   if (!contact) {
     throw new Error(`Contact with id=${id} not found`);
   }
