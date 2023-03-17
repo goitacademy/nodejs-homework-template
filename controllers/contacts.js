@@ -2,45 +2,30 @@ const fs = require("fs").promises;
 // const { Contact } = require("./contact.js");
 
 const path = require("path");
-const contactsPath = path.resolve("./contacts.json");
+const contactsPath = path.resolve("models/contacts.json");
 
+// wyswietla kontakty uzytkownikow
 const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
-  } catch (err) {
-    return err;
-  }
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
 };
 
-// const getContactById = async (id) => {
-//   try {
-//     const data = await fs.readFile(contactsPath);
-//     const parseData = JSON.parse(data);
-//     return parseData.map((data) => {
-//       if (Number(data.id) === Number(id)) {
-//         return data;
-//       }
-//       return data;
-//     });
-//   } catch (err) {
-//     return err;
-//   }
-// };
+// szuka po ID
+const getContactById = async (id) => {
+  const data = await fs.readFile(contactsPath);
+  const parseData = JSON.parse(data);
+  return parseData.find((contact) => contact.id === id);
+};
 
-// const removeContact = async (id) => {
+// elimunuje contact
+// const removeContact = async (contactId) => {
 //   try {
 //     const data = await fs.readFile(contactsPath);
 //     const filterContacts = JSON.parse(data).filter(
-//       (data) => Number(data.id) !== Number(id)
+//       (data) => Number(data.id) !== Number(contactId)
 //     );
 //     await fs.writeFile(contactsPath, JSON.stringify(filterContacts));
 //     return listContacts();
-
-//     // for (let i = 0; i < data.length; i++) {
-//     //   if (data[i].id === id) {
-//     //     data.splice(i, 1);
-//     //     return;
 //   } catch (err) {
 //     return err;
 //   }
@@ -81,7 +66,7 @@ const listContacts = async () => {
 
 module.exports = {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   // addContact,
   // updateContact,

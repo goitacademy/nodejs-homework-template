@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   // addContact,
   // updateContact,
@@ -11,7 +11,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/contacts", async (req, res, next) => {
   try {
     const contacts = await listContacts();
     res.status(200).json(contacts);
@@ -20,18 +20,19 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// router.get("/:contactId", (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const contact = getContactById(id);
-//     if (!contact) {
-//       return res.status(404).send("Contact not found");
-//     }
-//     res.status(200).json(contact);
-//   } catch {
-//     return res.status(500).send("Something went wrong");
-//   }
-// });
+// szukanie po ID
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const contact = await getContactById(id);
+    if (!contact) {
+      return res.status(404).send("Contact not found");
+    }
+    return res.status(200).json(contact);
+  } catch {
+    return res.status(500).send("Something went wrong");
+  }
+});
 
 // router.post("/", (req, res, next) => {
 //   const { error } = contactSchema.validate(req.body);
@@ -48,10 +49,11 @@ router.get("/", async (req, res, next) => {
 //   }
 // });
 
-// router.delete("/:contactId", (req, res, next) => {
+// eliminuje kontakt
+// router.delete("/:contactId", async (req, res, next) => {
 //   const { id } = req.params;
 //   if (!id) {
-//     return res.status(400).send("ID is required to perform delete");
+//     return res.status(404).send("Not found");
 //   }
 //   try {
 //     removeContact(id);
