@@ -17,15 +17,15 @@ const getContacts = async (req, res) => {
   }
 }
 const getContactById = async (req, res) => {
+  const { id } = req.params
+  if (!id) {
+    return res.status(400).json({
+      status: 'error',
+      code: 400,
+      message: 'Invalid contact ID',
+    })
+  }
   try {
-    const { id } = req.params
-    if (!id) {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: 'Invalid contact ID',
-      })
-    }
     const contact = await service.getContactById(id)
     if (!contact) {
       return res.status(404).json({
