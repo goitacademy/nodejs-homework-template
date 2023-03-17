@@ -15,30 +15,39 @@ const getContacts = async (req, res) => {
     console.error(e)
   }
 }
-const getContactsById = async (req, res) => {
-   const { contactId }  = req.params
+const getContactById = async (req, res) => {
   try {
-    const contact = await service.getContactById(contactId)
-    contact ?
-      res.json({
-        status: "success",
-        code: 200,
-        data: {
-          contact
-        }
+    const { id } = req.params
+    if (!id) {
+      return res.status(400).json({
+        status: 'error',
+        code: 400,
+        message: 'Invalid contact ID',
       })
-      :
-      res.json({
+    }
+    const contact = await service.getContactById(id)
+    if (!contact) {
+      return res.status(404).json({
+        status: 'error',
         code: 404,
-        message: "Not Found"
+        message: 'Contact not found',
       })
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      code: 500,
-      message: "Internal Server Error"
+    }
+    res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        contact,
+      },
     })
-  } 
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: 'Internal server error',
+    })
+  }
 }
 const createdContact = async (req, res) => {
   const { error, value } = contactValidate(req.body);
@@ -69,29 +78,38 @@ const createdContact = async (req, res) => {
   }  
 }
 
-const updatedContact = async (req, res) => {
-    const { error, value } = contactValidate(req.body);
-  if (error) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: "missing required name field"
-    });
-  }
-  const contactId = req.params.contactId
+const updateContactById = async (req, res) => {
   try {
-    const updated = await service.updateContact(contactId, value)
+    const { id } = req.params
+    if (!id) {
+      return res.status(400).json({
+        status: 'error',
+        code: 400,
+        message: 'Invalid contact ID',
+      })
+    }
+    const contact = await service.getContactById(id)
+    if (!contact) {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Contact not found',
+      })
+    }
+    const updatedContact = await service.updateContactById(id, req.body)
     res.json({
+      status: 'success',
       code: 200,
       data: {
-        updated
-      }
+        contact: updatedContact,
+      },
     })
-  }  catch (error) {
+  } catch (e) {
+    console.error(e)
     res.status(500).json({
-      status: "error",
+      status: 'error',
       code: 500,
-      message: "Internal Server Error"
+      message: 'Internal server error',
     })
   }
 }
@@ -150,9 +168,9 @@ const updatedStatusContact = async (req, res) => {
 }
 module.exports = {
     getContacts,
-    getContactsById,
+    getContactById,
     createdContact,
-    updatedContact,
+    updateContactById,
     deletedContact,
     updatedStatusContact
 }
