@@ -5,14 +5,14 @@ const controller = require("../../controllers/index")
 
 router.get('/', controller.getContacts)
 
-router.get('/:contactId', controller.getContactById)
+router.get('/:contactId', controller.getContactsById)
 
-router.post('/', controller.createContact);
+router.post('/', controller.createdContact);
 
-router.delete('/:contactId', controller.deleteContact)
+router.delete('/:contactId', controller.deletedContact)
 
-router.put('/:contactId', controller.updateContact)
+router.put('/:contactId', controller.updatedContact)
 
-router.patch('/:contactId/favorite', controller.updateStatusContact)
+router.patch('/:contactId/favorite', controller.updatedStatusContact)
 
 module.exports = router

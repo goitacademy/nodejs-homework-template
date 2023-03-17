@@ -1,5 +1,6 @@
-const service = require("../service")
+const service = require("../service/index")
 const { contactValidate } = require("../utils/contactValidator")
+
 const getContacts = async (req, res) => {
     try {
     const contacts = await service.getAllContacts()
@@ -14,7 +15,7 @@ const getContacts = async (req, res) => {
     console.error(e)
   }
 }
-const getContactById = async (req, res) => {
+const getContactsById = async (req, res) => {
    const { contactId }  = req.params
   try {
     const contact = await service.getContactById(contactId)
@@ -39,7 +40,7 @@ const getContactById = async (req, res) => {
     })
   } 
 }
-const createContact = async (req, res) => {
+const createdContact = async (req, res) => {
   const { error, value } = contactValidate(req.body);
 
   if (error) {
@@ -68,7 +69,7 @@ const createContact = async (req, res) => {
   }  
 }
 
-const updateContact = async (req, res) => {
+const updatedContact = async (req, res) => {
     const { error, value } = contactValidate(req.body);
   if (error) {
     return res.status(400).json({
@@ -95,7 +96,7 @@ const updateContact = async (req, res) => {
   }
 }
 
-const deleteContact = async (req, res) => {
+const deletedContact = async (req, res) => {
    const { contactId } = req.params;
   try {
     const contacts = await service.removeContact(contactId)
@@ -116,10 +117,9 @@ const deleteContact = async (req, res) => {
     })
   } 
 }
-const updateStatusContact = async (req, res) => {
+const updatedStatusContact = async (req, res) => {
   const { id } = req.params
-  const { favorite } = req.body
-    
+  const { favorite } = req.body 
     if (!favorite) {
         return res.status(400).json({
             status: "error",
@@ -128,7 +128,7 @@ const updateStatusContact = async (req, res) => {
         });
     }
   try {
-    const result = await service.updateContact(id, { favorite })
+    const result = await service.updateStatusContact(id, { favorite })
     if (result) {
       res.json({
         status: 'success',
@@ -150,9 +150,9 @@ const updateStatusContact = async (req, res) => {
 }
 module.exports = {
     getContacts,
-    getContactById,
-    createContact,
-    updateContact,
-    deleteContact,
-    updateStatusContact
+    getContactsById,
+    createdContact,
+    updatedContact,
+    deletedContact,
+    updatedStatusContact
 }
