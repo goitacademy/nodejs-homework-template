@@ -9,5 +9,6 @@ exports.contactValidate=(data) => Joi.object({
     }),
   phone: Joi.string().min(6).required().messages({
         "any.required": "Поле phone является обязательным"
-    })
+  }),
+ favorite: Joi.boolean().required()
 }).validate(data);
