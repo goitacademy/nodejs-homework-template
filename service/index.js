@@ -1,11 +1,17 @@
 const Contact = require("../service/schemas/contact");
 
 const getAllContacts = async () => {
-  return Contact.find()
+  const contacts = await Contact.find()
+  return contacts
 }
 
-const getContactById = (id) => {
-  return Contact.findOne({ _id: id })
+const getContactById = async(id) => {
+  /* return Contact.findOne({ _id: id }) */
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw new Error(`Contact with id=${id} not found`);
+  }
+  return contact;
 }
 
 const createContact = ({ name,email,phone }) => {
@@ -13,7 +19,7 @@ const createContact = ({ name,email,phone }) => {
 }
 
 const updateContact = (id, body) => {
-  return Contact.findByIdAndUpdate({ _id: id },{ $set: body },{ new: true })
+  return Contact.findByIdAndUpdate(id,body,{ new: true })
 }
 
 const removeContact = (id) => {
