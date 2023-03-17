@@ -9,18 +9,20 @@ const secret = process.env.JWT_SECRET
 
 
 const loginUser = async (req, res) => {
-    const {email, password} = req.body;
+  const {email, password} = req.body;
     if (!email || !password) {
-        res.json({
+      console.log('aaaaa');
+        return res.json({
             status: "error",
             code:  400,
             data:{
                 message: "Bad Request"
             }
         });
-        return;
     } 
-        const user = await findUser(email);
+    const user = await findUser(email);
+    console.log(email === undefined,  password===undefined);
+    console.log(user);
     if (!user || !user.validPassword(password)) {
         return res.status(401).json({
           status: 'error',
@@ -37,15 +39,16 @@ const loginUser = async (req, res) => {
       console.log('secret', secret)
     
       const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-      res.json({
+
+      user.setToken(token);
+      await user.save();
+      return res.json({
         status: 'success',
         code: 200,
         data: {
           token
         },
       });
-      user.setToken(token);
-      await user.save();
     };
 
     
