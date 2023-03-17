@@ -1,5 +1,4 @@
-const { catchAsync } = require("../utils/catchAsync");
-const uuid = require("uuid").v4;
+const catchAsync = require("../utils/catchAsync");
 const {
   listContacts,
   getContactById,
@@ -8,25 +7,23 @@ const {
   updateContact,
 } = require("../models/contactsModels");
 
-const getContactsController = catchAsync(async (req, res) => {
+
+const getListContactsController = catchAsync(async (req, res) => {
+  console.log("==>getListContactsController");
   const contacts = await listContacts();
 
   res.status(200).json(contacts);
 });
 
-const createContactController = catchAsync(async (req, res) => {
-  const { name, email, phone } = req.body;
-  const newContact = {
-    id: uuid(),
-    name,
-    email,
-    phone,
-  };
 
-  await addContact(newContact);
+const addContactController = catchAsync(async (req, res) => {
+  const { body } = req;
 
-  res.status(201).json(newContact);
+  const addedContact = await addContact(body);
+
+  res.status(201).json(addedContact);
 });
+
 
 const getByIdController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
@@ -35,6 +32,7 @@ const getByIdController = catchAsync(async (req, res) => {
 
   res.status(200).json(contact);
 });
+
 
 const putContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
@@ -47,18 +45,20 @@ const putContactController = catchAsync(async (req, res) => {
   res.status(200).json(updatedContact);
 });
 
-const deleteContactController = catchAsync(async (req, res) => {
+
+const removeContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
 
   await removeContact(contactId);
 
-  res.status(200).json({ message: "contact deleted" });
+  res.status(200).json({ message: "Deleted successfully" });
 });
 
+
 module.exports = {
-  getContactsController,
+  getListContactsController,
   getByIdController,
-  createContactController,
-  deleteContactController,
+  addContactController,
+  removeContactController,
   putContactController,
 };

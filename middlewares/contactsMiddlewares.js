@@ -1,51 +1,51 @@
-const fsPromises = require("fs").promises;
+const fs = require("fs").promises;
 const Joi = require("joi");
+const catchAsync = require("../utils/catchAsync");
 
-exports.checkContactData = (req, res, next) => {
+const CONTACTS_FILE_PATH = "./models/contacts.json";
+
+const validateContactBody = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
+    name: Joi.string().min(3).max(20).required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
     phone: Joi.string().required(),
   });
-
-  const errorValidation = schema.validate(req.body).error;
-  if (errorValidation) {
-    const fieldName = errorValidation.details[0].context.key;
-
-    return res
-      .status(400)
-      .json({ message: `missing required '${fieldName}' field` });
+  console.log(req.body);
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const { details } = error;
+    const errorMessage = details
+      .map((i) => {
+        if (i.type === "any.required") {
+          return `missing ${i.context.label} field`;
+        }
+        return i.message;
+      })
+      .join(", ");
+    return res.status(422).json({ error: errorMessage });
   }
 
   next();
 };
 
-exports.checkContactBody = (req, res, next) => {
-  if (!Object.keys(req.body).length) {
-    return res.status(400).json({ message: "missing fields" });
+const validateContactId = catchAsync(async (req, res, next) => {
+  const { contactId } = req.params;
+
+  const contacts = JSON.parse(await fs.readFile(CONTACTS_FILE_PATH, "utf-8"));
+  const isContactFound = contacts.find(({ id }) => id === contactId);
+
+  if (!isContactFound) {
+    const err = new Error(`User not found for ID: ${contactId}`);
+    err.status = 404; // установить свойство "status" ошибки
+    return next(err); // передать ошибку дальше по цепочке middleware
   }
 
   next();
-};
+});
 
-exports.checkContactId = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const bufferData = await fsPromises.readFile("./models/contacts.json");
-    const contacts = JSON.parse(bufferData);
-
-    const contact = contacts.find((item) => item.id === id);
-
-    if (contact) {
-      req.contact = contact;
-      return next();
-    }
-
-    return res.status(404).json({ message: "Not found" });
-  } catch (err) {
-    next(err);
-  }
+module.exports = {
+  validateContactId,
+  validateContactBody,
 };
