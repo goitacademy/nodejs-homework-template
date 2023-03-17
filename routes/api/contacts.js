@@ -67,7 +67,7 @@ router.delete("/:id", async (req, res, next) => {
 
 // updated contact
 router.put("/:id", (req, res, next) => {
-  const { id } = req.params;
+  const { id, name, email, phone } = req.query;
   if (!id) {
     return res.status(400).send("ID is required to perform delete");
   }
@@ -81,7 +81,7 @@ router.put("/:id", (req, res, next) => {
   }
 
   try {
-    updateContact(id, req.body);
+    updateContact(id, name, email, phone, req.body);
     return res.status(200).send("Contact successfully updated");
   } catch {
     return res.status(500).send("Something went wrong");

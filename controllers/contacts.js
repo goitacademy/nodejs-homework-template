@@ -60,7 +60,8 @@ const updateContact = async (id, newContact) => {
   for (let i = 0; i < dataParse.length; i++) {
     if (dataParse[i].id === id) {
       dataParse[i] = newContact;
-      return newContact;
+      // console.log(newContact);
+      return dataParse;
     }
   }
 };
