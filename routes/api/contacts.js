@@ -6,30 +6,39 @@ const {
 } = require("../../middlewares/validation/validationMiddleware");
 
 const {
-  joiSchemaRequired,
-  joiSchemaOptional,
+  contactJoiSchema,
+  favoriteJoiSchema,
 } = require("../../middlewares/validation/validationSchema");
+
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 
 const {
   getContactsController,
   getContactController,
   createContactController,
-  deleteContactController,
   updateContactController,
+  updateStatusContactController,
+  deleteContactController,
 } = require("../../controllers/contactsController");
 
-router.get("/", getContactsController);
+router
+  .route("/")
+  .get(asyncWrapper(getContactsController))
+  .post(validation(contactJoiSchema), asyncWrapper(createContactController));
 
-router.get("/:contactId", getContactController);
+router
+  .route("/:contactId")
+  .get(asyncWrapper(getContactController))
+  .put(validation(contactJoiSchema), asyncWrapper(updateContactController))
+  .delete(asyncWrapper(deleteContactController));
 
-router.post("/", validation(joiSchemaRequired), createContactController);
+router
+  .route("/:contactId/favorite")
+  .patch(
+    validation(favoriteJoiSchema),
+    asyncWrapper(updateStatusContactController)
+  );
 
-router.delete("/:contactId", deleteContactController);
-
-router.put(
-  "/:contactId",
-  validation(joiSchemaOptional),
-  updateContactController
-);
-
-module.exports = router;
+module.exports = {
+  router,
+};

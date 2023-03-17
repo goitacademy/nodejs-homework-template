@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const joiSchemaRequired = Joi.object({
+const contactJoiSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   phone: Joi.string().min(10).max(15).required(),
   email: Joi.string()
@@ -9,20 +9,17 @@ const joiSchemaRequired = Joi.object({
       tlds: { allow: ["com", "net", "uk", "ua", "org"] },
     })
     .required(),
+  favorite: Joi.boolean(),
 });
 
-const joiSchemaOptional = Joi.object({
-  name: Joi.string().min(3).max(30).optional(),
-  phone: Joi.string().min(10).max(15).optional(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "uk", "ua", "org"] },
-    })
-    .optional(),
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .valid(true, false)
+    .messages({ "any.required": "missing field favorite" }),
 });
 
 module.exports = {
-  joiSchemaRequired,
-  joiSchemaOptional,
+  contactJoiSchema,
+  favoriteJoiSchema,
 };
