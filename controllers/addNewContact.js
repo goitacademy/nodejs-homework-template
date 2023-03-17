@@ -1,5 +1,5 @@
 const { schema } = require('../helpers/validations');
-const { addContact } = require('../models/contacts')
+const {Contact} = require('./../models/contactModel');
 
 const addNewContact = async (req, res) => {
     try {
@@ -8,10 +8,11 @@ const addNewContact = async (req, res) => {
             return res.status(400).json({error});
         }
 
-        const { name, email, phone } = req.body;
-        const newContacts = await addContact({name, email, phone,});
+        const { name, email, phone, favorite } = req.body;
+        const newContact = await Contact.create({name, email, phone, favorite});
+        await newContact.save(); 
 
-        res.status(201).json(newContacts);
+        res.status(201).json(newContact);
     } catch (err) {
         res.status(404).json('Not found');
     }

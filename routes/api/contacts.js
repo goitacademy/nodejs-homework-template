@@ -5,18 +5,9 @@ const {getContactsList} = require('../../controllers/getContactsList');
 const {addNewContact} = require('../../controllers/addNewContact');
 const {getContactId} = require('../../controllers/getContactId');
 const {updateContactById} = require('../../controllers/updateContactById');
+const {updateStatus} = require('./../../controllers/updateStatus');
 
 const router = express.Router();
-
-// router.route('/')
-//   .post(addNewContact)
-//   .get(getContactsList);
-
-
-//   router.route('/:contactId')
-//   .delete(deleteContact)
-//   .get(getContactId)
-//   .put(updateContactById);
 
 router.get('/', getContactsList)
 
@@ -27,6 +18,8 @@ router.post('/', addNewContact)
 router.delete('/:contactId', deleteContact)
 
 router.put('/:contactId', updateContactById)
+
+router.patch('/:contactId/favorite', updateStatus)
 
 module.exports = router;
 
