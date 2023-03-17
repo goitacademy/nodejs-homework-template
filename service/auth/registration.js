@@ -1,11 +1,11 @@
-const User = require('../../schemas/auth')
-const AutorizedError = require('../../helpers/AutorizedError')
+const User = require('../../models/auth')
 
 
-const registration = async ({ email, password }) => {
+
+const registration = async (email, password) => {
     const user = new User({
         email,
-        password,
+        password
     })
 
     await user.save();

@@ -1,8 +1,28 @@
-const User = require('../../schemas/auth')
-const AutorizedError = require('../../helpers/AutorizedError')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const login = ({ name, email, phone, favorite = false }) => {
-    return User.create({ name, email, phone, favorite })
+const User = require('../../models/auth')
+const { NotAutorizedError } = require('../../helpers/errors')
+
+
+const login = async (email, password) => {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new NotAutorizedError('Email or password is wrong')
+
+    }
+
+    if (!await bcrypt.compare(password, user.password)) {
+        throw new NotAutorizedError('Email or password is wrong')
+    }
+
+    const token = jwt.sign({
+        _id: user._id,
+    }, process.env.JWT_SECRET)
+
+    return token;
+
 }
 
 module.exports = login
