@@ -5,10 +5,10 @@ const getAllContacts = async () => {
   return contacts
 }
 
-const getContactById = async (id) => {
-  const contact = await Contact.findOne({ _id: String(id) });
+const getContactById = async (ContactId) => {
+  const contact = await Contact.findOne({ _id: String(ContactId) });
   if (!contact) {
-    throw new Error(`Contact with id=${id} not found`);
+    throw new Error(`Contact with id=${ContactId} not found`);
   }
   return contact;
 };

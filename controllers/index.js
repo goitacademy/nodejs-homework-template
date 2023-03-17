@@ -18,7 +18,8 @@ const getContacts = async (req, res) => {
 }
 const getContactsById = async (req, res) => {
   console.log(req.params)
-  const { ContactId }  = req.params
+  try {
+    const { ContactId }  = req.params
   if (!ContactId) {
     return res.status(400).json({
       status: 'error',
@@ -26,7 +27,6 @@ const getContactsById = async (req, res) => {
       message: 'Invalid contact ID',
     })
   }
-  try {
     const contact = await service.getContactById(ContactId)
     if (!contact) {
       return res.status(404).json({
