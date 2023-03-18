@@ -19,15 +19,15 @@ const getContacts = async (req, res) => {
 const getContactsById = async (req, res) => {
   console.log(req.params)
   try {
-    const { ContactId }  = req.params
-  if (!ContactId) {
+    const { contactId }  = req.params
+  if (!contactId) {
     return res.status(400).json({
       status: 'error',
       code: 400,
       message: 'Invalid contact ID',
     })
   }
-    const contact = await service.getContactById(ContactId)
+    const contact = await service.getContactById(contactId)
     if (!contact) {
       return res.status(404).json({
         status: 'error',
@@ -81,37 +81,28 @@ const createdContact = async (req, res) => {
 }
 
 const updateContactById = async (req, res) => {
+  const { error, value } = contactValidate(req.body);
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "missing required name field"
+    });
+  }
+  const contactId = req.params.contactId
   try {
-    const { id } = req.params
-    if (!id) {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: 'Invalid contact ID',
-      })
-    }
-    const contact = await service.getContactById(id)
-    if (!contact) {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: 'Contact not found',
-      })
-    }
-    const updatedContact = await service.updateContactById(id, req.body)
+    const updated = await service.updateContactById(contactId, value)
     res.json({
-      status: 'success',
       code: 200,
       data: {
-        contact: updatedContact,
-      },
+        updated
+      }
     })
-  } catch (e) {
-    console.error(e)
+  }  catch (error) {
     res.status(500).json({
-      status: 'error',
+      status: "error",
       code: 500,
-      message: 'Internal server error',
+      message: "Internal Server Error"
     })
   }
 }
@@ -120,7 +111,7 @@ const deletedContact = async (req, res) => {
    const { contactId } = req.params;
   try {
     const contacts = await service.removeContact(contactId)
-    contacts.filter(contact => contact.id !== contactId) ?  
+    contacts ?  
       res.json({
         message: "contact deleted"
       })
@@ -138,9 +129,16 @@ const deletedContact = async (req, res) => {
   } 
 }
 const updatedStatusContact = async (req, res) => {
-  const { id } = req.params
-  const { favorite } = req.body 
-    if (!favorite) {
+  const { error, value } = contactValidate(req.body);
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "missing required name field"
+    });
+  }
+  const { contactId } = req.params 
+    if (!value.favorite) {
         return res.status(400).json({
             status: "error",
             code: 400,
@@ -148,7 +146,7 @@ const updatedStatusContact = async (req, res) => {
         });
     }
   try {
-    const result = await service.updateStatusContact(id, { favorite })
+    const result = await service.updateStatusContact(contactId, value)
     if (result) {
       res.json({
         status: 'success',
@@ -159,7 +157,7 @@ const updatedStatusContact = async (req, res) => {
       res.status(404).json({
         status: 'error',
         code: 404,
-        message: `Not found contact id: ${id}`,
+        message: `Not found contact id: ${contactId}`,
         data: 'Not Found',
       })
     }
