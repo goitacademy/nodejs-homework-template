@@ -3,6 +3,7 @@ const createId = require('./createId');
 const ctrlWrapper = require('./ctrlWrapper');
 const handleMongooseError = require('./hendleMongooseError');
 const resize = require('./resize');
+const sendEmail = require('./sendEmail');
 
 module.exports = {
   HttpError,
@@ -10,4 +11,5 @@ module.exports = {
   ctrlWrapper,
   handleMongooseError,
   resize,
+  sendEmail,
 };
