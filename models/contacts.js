@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const uuid = require("uuid").v4;
+
 const listContacts = async () => {
   try {
     const dataFromDB = await fs.readFile("./models/contacts.json");
