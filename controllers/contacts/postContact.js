@@ -1,5 +1,6 @@
-const contactsOperations = require('../../models/contacts');
 const createError = require('http-errors');
+
+const { Contact } = require('../../models/index');
 
 const { catchAsync } = require('../../utils/index');
 
@@ -15,12 +16,13 @@ const postContact = catchAsync(async (req, res, next) => {
   if (
     body.name === undefined ||
     body.email === undefined ||
-    body.phone === undefined
+    body.phone === undefined ||
+    body.favorite === undefined
   ) {
     throw createError(400, 'missing required name field');
   }
 
-  const result = await contactsOperations.addContact(req.body);
+  const result = await Contact.create(req.body);
 
   res.status(201).json({
     status: 'added',
