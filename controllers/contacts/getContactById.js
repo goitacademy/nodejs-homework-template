@@ -5,10 +5,10 @@ const { catchAsync } = require('../../utils/index');
 
 const getContactById = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.find({ _id: contactId });
+  const result = await Contact.findById(contactId);
 
   if (!result) {
-    throw createError(404, 'Not found');
+    throw createError(404, `Contact with id ${contactId} not found`);
   }
 
   res.json({
