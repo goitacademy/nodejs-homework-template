@@ -4,7 +4,6 @@ const PORT = 3000;
 
 const connection = mongoose.connect(process.env.DB_HOST, {
   useNewUrlParser: true,
-  // useCreateIndex: true,
   useUnifiedTopology: true,
 });
 

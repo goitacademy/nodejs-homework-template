@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 mongoose.Promise = global.Promise;
 
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/api/contactsRoute");
 
 const app = express();
 
