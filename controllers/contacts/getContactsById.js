@@ -1,7 +1,7 @@
 const { getContactById } = require('../../service/contacts')
-const { catchAsync } = require('../../utils')
 
-const getContactsById = catchAsync(async (req, res, next) => {
+
+const getContactsById = async (req, res, next) => {
     const { contactId } = req.params
     const data = await getContactById(contactId);
 
@@ -16,6 +16,6 @@ const getContactsById = catchAsync(async (req, res, next) => {
         data,
     })
 
-});
+};
 
 module.exports = getContactsById

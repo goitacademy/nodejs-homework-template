@@ -1,9 +1,7 @@
 const { updateContact } = require('../../service/contacts')
 
-const { catchAsync } = require('../../utils')
 
-
-const updateStatus = catchAsync(async (req, res, next) => {
+const updateStatus = async (req, res, next) => {
     const { contactId } = req.params
     const { favorite = false } = req.body
 
@@ -29,6 +27,6 @@ const updateStatus = catchAsync(async (req, res, next) => {
         })
     }
 
-});
+};
 
 module.exports = updateStatus

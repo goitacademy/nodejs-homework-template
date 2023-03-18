@@ -1,7 +1,7 @@
-const { catchAsync } = require('../../utils')
+
 const { login } = require('../../service/auth')
 
-const loginController = catchAsync(async (req, res, next) => {
+const loginController = async (req, res, next) => {
     const { email, password } = req.body
 
     const token = await login(email, password)
@@ -13,6 +13,6 @@ const loginController = catchAsync(async (req, res, next) => {
             "subscription": "starter"
         }
     })
-})
+}
 
 module.exports = loginController

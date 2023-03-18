@@ -8,6 +8,7 @@ const { NotAutorizedError } = require('../../helpers/errors')
 const login = async (email, password) => {
     const user = await User.findOne({ email });
 
+
     if (!user) {
         throw new NotAutorizedError('Email or password is wrong')
 

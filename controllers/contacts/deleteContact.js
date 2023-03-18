@@ -1,8 +1,7 @@
 const { removeContact } = require('../../service/contacts')
 
-const { catchAsync } = require('../../utils')
 
-const deleteContact = catchAsync(async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
     const { contactId } = req.params
     const result = await removeContact(contactId);
 
@@ -14,6 +13,6 @@ const deleteContact = catchAsync(async (req, res, next) => {
     res.status(200).json({
         message: 'contact deleted'
     })
-})
+}
 
 module.exports = deleteContact

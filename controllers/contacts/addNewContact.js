@@ -1,8 +1,7 @@
 const { addContact } = require('../../service/contacts')
-const { catchAsync } = require('../../utils')
 
 
-const addNewContact = catchAsync(async (req, res, next) => {
+const addNewContact = async (req, res, next) => {
     const { name, email, phone } = req.body
     if (!name) {
         res.status(400).json({ message: 'missing required name field' })
@@ -21,6 +20,6 @@ const addNewContact = catchAsync(async (req, res, next) => {
         code: 201,
         data,
     })
-})
+}
 
 module.exports = addNewContact

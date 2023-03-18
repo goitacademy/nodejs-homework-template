@@ -1,5 +1,9 @@
-const catchAsync = require('./catchAsync')
+const asyncWrapper = require('./asyncWrapper')
+const errorHandler = require('./errorHandler')
+
+
 
 module.exports = {
-    catchAsync,
+    asyncWrapper,
+    errorHandler
 };

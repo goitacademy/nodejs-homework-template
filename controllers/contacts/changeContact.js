@@ -1,10 +1,10 @@
 const { updateContact } = require('../../service/contacts')
 
-const { catchAsync } = require('../../utils')
 
 
 
-const changeContact = catchAsync(async (req, res, next) => {
+
+const changeContact = async (req, res, next) => {
     const { contactId } = req.params
     const { name, email, phone } = req.body
 
@@ -24,6 +24,6 @@ const changeContact = catchAsync(async (req, res, next) => {
         code: 200,
         data,
     })
-});
+};
 
 module.exports = changeContact

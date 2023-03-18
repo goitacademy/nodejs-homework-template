@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-// const { addContactValid, changeContactValid } = require('../../middlewares/validationMiddleware');
+const { asyncWrapper } = require('../../utils');
+const { addNewUserMiddleware } = require('../../middlewares');
 const { loginController, registarationController } = require('../../controllers/auth');
 
 
-router.post('/register', registarationController)
-router.post('/login', loginController)
+router.post('/register', addNewUserMiddleware, asyncWrapper(registarationController))
+router.post('/login', addNewUserMiddleware, asyncWrapper(loginController))
 
 
 
