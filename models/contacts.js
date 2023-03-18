@@ -58,6 +58,7 @@ const updateContact = async (contactId, body) => {
     }
   });
   fs.writeFile(contactsPath, JSON.stringify(editedContactList));
+
   return editedContactList[contactId - 1];
 };
 
