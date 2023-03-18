@@ -11,7 +11,6 @@ const { contactSchema } = require("../../models/contact");
 
 const router = express.Router();
 
-// all contact view
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await listContacts();
@@ -21,7 +20,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// find contact by ID
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -35,7 +33,6 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// add contact
 router.post("/", (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
   if (error) {
@@ -51,7 +48,6 @@ router.post("/", (req, res, next) => {
   }
 });
 
-// delete contact
 router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
@@ -66,7 +62,7 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 // updated contact
-router.put("/:id", (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   const { id, name, email, phone } = req.query;
   if (!id) {
     return res.status(400).send("ID is required to perform delete");
@@ -81,8 +77,8 @@ router.put("/:id", (req, res, next) => {
   }
 
   try {
-    updateContact(id, name, email, phone, req.body);
-    return res.status(200).send("Contact successfully updated");
+    await updateContact(id, name, email, phone);
+    return res.status(200).send(updateContact);
   } catch {
     return res.status(500).send("Something went wrong");
   }

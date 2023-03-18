@@ -1,23 +1,19 @@
 const fs = require("fs").promises;
-// const { Contact } = require("./contact.js");
 
 const path = require("path");
 const contactsPath = path.resolve("models/contacts.json");
 
-// wyswietla kontakty uzytkownikow
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, "utf-8");
   return JSON.parse(data);
 };
 
-// szuka po ID
 const getContactById = async (id) => {
   const data = await fs.readFile(contactsPath);
   const parseData = JSON.parse(data);
   return parseData.find((contact) => contact.id === id);
 };
 
-// elimunuje contact
 const removeContact = async (contactId) => {
   try {
     const data = await fs.readFile(contactsPath);
@@ -60,8 +56,7 @@ const updateContact = async (id, newContact) => {
   for (let i = 0; i < dataParse.length; i++) {
     if (dataParse[i].id === id) {
       dataParse[i] = newContact;
-      // console.log(newContact);
-      return dataParse;
+      console.log(newContact);
     }
   }
 };
