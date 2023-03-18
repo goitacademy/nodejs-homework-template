@@ -1,31 +1,42 @@
 const UserSchema = require('../../models/userSchema')
-// const{}=require('../../helpers/errors')
+ const{ConflictErrors}=require('../../helpers/errors')
 const bcrypt = require("bcryptjs");
 const gravatar = require('gravatar');
 
 
-const registrationServices=async( email, password)=>{
-    // const { email, password } = req.body;
-    //  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    // console.log(hashPassword)
-    let avatarURL = gravatar.url(UserSchema.email, {
+const registrationServices=async( email, password,body)=>{
+ try{
+  const user = await UserSchema.findOne({ email });
+  if(user){
+throw new ConflictErrors('Email in use')
+  }
+  const parole= await bcrypt.hashSync(password, 10);
+  //const avatarURL = gravatar.url(email);
+  
+const gravatarURL = gravatar.url(UserSchema.email, {
       s: "200",
       r: "x",
       d: "404",
     });
-    // let updatedUser = {
-    //   ...UserSchema,
-    //   avatarURL: avatarURL,
-    // };
-    const newUser = new UserSchema({
-          email,
-          password:bcrypt.hashSync(password, 10),
-          avatarURL
+     console.log('gravatarURL',gravatarURL)
+   
+ const userCreate= await UserSchema.create({
+          ...body,
+          password:parole,
+          avatarURL:gravatarURL
         });
+        console.log('userCreate registrat',userCreate)
+        // const userNew= await userCreate.findOne({ email }).select({
+        //   email: 1,
+        //   subscription:[1]
+        //   _id: 0,
+        // });
+     //console.log('userNew',userNew)
         
-      console.log('newUser',newUser)
-        
-      await newUser.save()
-       return newUser
+     // await userCreate.save()
+       return userCreate
+ }catch{(err) 
+    next(err);
+ } 
 }
 module.exports=registrationServices

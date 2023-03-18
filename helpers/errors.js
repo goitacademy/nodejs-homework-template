@@ -36,6 +36,8 @@ class NotAutorisate extends Error{
         this.status=401; 
       }
 }
+
+
 module.exports= {
     BadRequestError,
     ValidationJoiError,

@@ -1,30 +1,22 @@
-const express=require('express');
-const router = express.Router();
-const uploadController = require('../../controller/filesController/uploadController')
-// const userAvatarController =  require('../../controller/filesController/userAvatarController')
-const userAvatarPutch =require('../../controller/filesController/userAvatarPutch')
-const multer = require('multer')
-const path= require('path')
-const { v4: uuidv4 } = require('uuid');
+// const express=require('express');
+// const router = express.Router();
+// const uploadAvatar = require('../../controller/filesController/uploadAvatar')
+// const multerFunction = require('../../middlewares/multer')
+// const multer = require('multer')
+// // const userAvatarController =  require('../../controller/filesController/userAvatarController')
+// //const auth= ewquire('../../middlewares/auth.js')
+// // const multer = require('multer')
+//  const path= require('path')
 
-const FILE_DIR=path.resolve('./tmp')
-console.log('FILE_DIR',FILE_DIR)
-const storage = multer.diskStorage({
-    destination:(req,file, cb)=>{
-cb(null,FILE_DIR )
- },
-    filename:(req,file, cb)=>{
-const [, extension]= file.originalname.split('.');
-   cb(null,`${uuidv4()}.${extension}`)
-},
-    
-})//инийц
+// // const { v4: uuidv4 } = require('uuid');
 
-const uploadMiddlware = multer({storage})
-router.post('/',uploadMiddlware.single('avatar'), uploadController)
-  //router.post('/upload',uploadMiddlware.single('avatar'), uploadController)
-router.use('/download', express.static(FILE_DIR))
-//router.post('/users/avatars', login)
-router.patch('/users/avatars',uploadMiddlware.single('avatar'), userAvatarPutch)
+// const FILE_DIR=path.resolve("./public/avatars")
 
-module.exports = router;
+// const uploadMiddlware = multer({multerFunction})
+
+// //router.patch('/users/avatars',uploadMiddlware.single('avatar'), uploadController)
+// router.patch('/users/avatars',uploadMiddlware.single('avatar'), uploadAvatar)
+// router.use('/download', express.static(FILE_DIR))
+
+
+// module.exports = router;

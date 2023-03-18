@@ -22,9 +22,12 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
-  avatarURL: String,
+  avatarURL: { type: String },
+  token: {
+    type: String,
+    default: null,
+  },
 });
-
 
 // userSchema.pre('save', async function(){
 //   if(this.isNew){
@@ -39,7 +42,6 @@ userSchema.methods.setPassword = function (password) {
 userSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
-
 
 const UserSchema = mongoose.model("user", userSchema);
 module.exports = UserSchema;

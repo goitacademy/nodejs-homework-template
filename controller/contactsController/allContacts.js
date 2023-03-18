@@ -1,7 +1,8 @@
 
 const getAllContactsServices =require("../../services/contactServices/getAllContactsServices")
 const allContacts = async (req, res, next) => {
-    try {
+
+  try {
       const{_id: owner}=req.user;
   const {skip=0, 
     limit=5}=req.query

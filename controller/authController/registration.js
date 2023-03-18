@@ -6,8 +6,9 @@ const registrationServices = require("../../services/authServise/registrationSer
 const registration = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await registrationServices(email, password);
-    
+     const body = req.body;
+    const user = await registrationServices(email, password, body);
+   
     res.status(201).json({
         status: "Created",
         code: 201,
