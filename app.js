@@ -6,7 +6,7 @@ const cors = require("cors");
 const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
 // const { errorHandler}= require('./helpers/api-helpers')
-const filesRouter = require("./routes/api/files");
+//const filesRouter = require("./routes/api/files");
 
 const app = express();
 require("./config/config-passport");

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controllerContact = require('../../controller/contactsController/index')
-const auth= require('../../middlewares/auth')
+// const auth= require('../../middlewares/auth')
 const authenticate =require('../../middlewares/authenticate')
 // router.use(auth)
 

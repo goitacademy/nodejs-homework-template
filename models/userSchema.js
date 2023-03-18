@@ -23,10 +23,11 @@ const userSchema = new Schema({
     default: null,
   },
   avatarURL: { type: String },
-  token: {
-    type: String,
-    default: null,
-  },
+  // token: {
+  //   type: String,
+  //   default: null,
+  // },
+  
 });
 
 // userSchema.pre('save', async function(){

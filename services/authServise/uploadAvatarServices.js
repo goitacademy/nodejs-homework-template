@@ -11,14 +11,13 @@ console.log('FILE_DIR',FILE_DIR)
 // const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
 //  console.log('avatarsDir',avatarsDir)
 
-const uploadAvatarServices = async(_id,path,body)=>{
+const uploadAvatarServices = async(_id,path)=>{
   // console.log('UserSchema',{user})
     const [name, extension]= originalname.split('.');
     const newName= `${_id}-${name}-${extension}`
     const newPath = path.join(FILE_DIR,newName)   
   
     const jimpPath = Jimp.read(newPath, async(err, userAvatar) => {
-  
         if (err) throw err;
         userAvatar
           .resize(250, 250) // resize
@@ -28,7 +27,6 @@ const uploadAvatarServices = async(_id,path,body)=>{
           await fs.unlink(path);
       });
   console.log('jimpPath',jimpPath)
-  
   
     const avatar = await UserSchema.findByIdAndUpdate(  { _id: id },
     { avatarURL:jimpPath},
