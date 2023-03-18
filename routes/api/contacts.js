@@ -18,7 +18,12 @@ const {
 router.get("/", getListContactsController);
 router.post("/", validateContactBody, addContactController);
 router.get("/:contactId", getByIdController);
-router.put("/:contactId", validateContactId, putContactController);
-router.delete("/:contactId", removeContactController);
+router.put(
+  "/:contactId",
+  validateContactBody,
+  validateContactId,
+  putContactController
+);
+router.delete("/:contactId", validateContactId, removeContactController);
 
 module.exports = router;

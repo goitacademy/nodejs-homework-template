@@ -19,12 +19,14 @@ const validateContactBody = (req, res, next) => {
     const errorMessage = details
       .map((i) => {
         if (i.type === "any.required") {
-          return `missing ${i.context.label} field`;
+          return i.context.label;
         }
         return i.message;
       })
       .join(", ");
-    return res.status(422).json({ error: errorMessage });
+    return res
+      .status(400)
+      .json({ message: `Missing required ${errorMessage} field.` });
   }
 
   next();
@@ -37,9 +39,9 @@ const validateContactId = catchAsync(async (req, res, next) => {
   const isContactFound = contacts.find(({ id }) => id === contactId);
 
   if (!isContactFound) {
-    const err = new Error(`User not found for ID: ${contactId}`);
-    err.status = 404; // установить свойство "status" ошибки
-    return next(err); // передать ошибку дальше по цепочке middleware
+    const err = new Error("Not found");
+    err.status = 404;
+    return next(err);
   }
 
   next();

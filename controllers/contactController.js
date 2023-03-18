@@ -7,14 +7,12 @@ const {
   updateContact,
 } = require("../models/contactsModels");
 
-
 const getListContactsController = catchAsync(async (req, res) => {
   console.log("==>getListContactsController");
   const contacts = await listContacts();
 
   res.status(200).json(contacts);
 });
-
 
 const addContactController = catchAsync(async (req, res) => {
   const { body } = req;
@@ -24,15 +22,16 @@ const addContactController = catchAsync(async (req, res) => {
   res.status(201).json(addedContact);
 });
 
-
 const getByIdController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
 
   const contact = await getContactById(contactId);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   res.status(200).json(contact);
 });
-
 
 const putContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
@@ -45,7 +44,6 @@ const putContactController = catchAsync(async (req, res) => {
   res.status(200).json(updatedContact);
 });
 
-
 const removeContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
 
@@ -53,7 +51,6 @@ const removeContactController = catchAsync(async (req, res) => {
 
   res.status(200).json({ message: "Deleted successfully" });
 });
-
 
 module.exports = {
   getListContactsController,
