@@ -1,23 +1,18 @@
-const { Contact } = require("../../models");
+const { Contact } = require('../../model/contactSchema');
+const { HttpError } = require('../../helpers')
 
 const getById = async (req, res) => {
-   const { contactId } = req.params;
-   const contact = await Contact.findById(contactId);
-   if (!contact) {
-      res.status(404).json({
-         status: "ERROR",
-         code: 404,
-         massage: `Contact with ID=${contactId} not found`,
-      });
-      return;
+   const { id } = req.params;
+   const result = await Contact.findById(id);
+   if (!result) {
+      throw HttpError(404, `Not found contact by ${id} id`);
    }
    res.json({
-      status: "Success",
+      status: 'success',
       code: 200,
-      data: {
-         result: contact,
-      },
+      message: `we find contact with ${id} id`,
+      data: result,
    });
-};
+}
 
-module.exports = getById;
+module.exports = getById
