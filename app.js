@@ -10,7 +10,10 @@ const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
-const { DB_HOST } = require('./example');
+const  dotenv = require('dotenv');
+dotenv.config();
+
+const {DB_HOST} = process.env;
 
 app.use(logger(formatsLogger))
 app.use(cors())
