@@ -9,7 +9,7 @@ const {
   updateContact,
   getContactsAll,
   updateStatusContact,
-} = require("../../controllers/contacts.controler");
+} = require("../../controllers/contactsControlers");
 
 const {
   addContactSchema,
@@ -18,7 +18,7 @@ const {
 } = require("../../validation/validationSchemas");
 
 const router = express.Router();
-const { tryCatchWrapper } = require("../../helpers/helpers");
+const { tryCatchWrapper } = require("../../utils/tryCatchWrapper");
 
 router.get("/", tryCatchWrapper(getContactsAll));
 
