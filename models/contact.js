@@ -8,6 +8,7 @@ const contact = new Schema(
             minlength: 5,
             maxlength: 30,
             required: [true, 'Name is required'],
+            unique: true,
         },
         email: {
             type: String,

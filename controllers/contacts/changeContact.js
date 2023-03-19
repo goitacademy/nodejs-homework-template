@@ -2,8 +2,6 @@ const { updateContact } = require('../../service/contacts')
 
 
 
-
-
 const changeContact = async (req, res, next) => {
     const { contactId } = req.params
     const { name, email, phone } = req.body
