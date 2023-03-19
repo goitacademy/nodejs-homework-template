@@ -1,5 +1,5 @@
 {
-  "name": "goit-nodejs-hw-rest-api",
+  "name": "template",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,12 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cjs": "^0.0.11",
-    "cjs-loader": "^0.1.0",
-    "cjs-module": "^1.5.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
-    "express": "^4.17.1",
-    "joi": "^17.8.4",
-    "mongoose": "^7.0.2",
+    "express": "4.17.1",
+    "joi": "^17.8.3",
+    "mongoose": "^7.0.0",
     "morgan": "1.10.0",
     "uuid": "^9.0.0"
   },
@@ -28,6 +25,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "^2.0.21"
+    "nodemon": "2.0.15"
   }
 }
