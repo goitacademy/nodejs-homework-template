@@ -1,16 +1,17 @@
-const contactsOperation = require('../../models/contacts');
+const Contact = require('../../models/contactModel');
+
 const { AppError } = require('../../utils');
-const { contactSchema } = require('../../utils');
+const { createContactValidator } = require('../../utils');
 
 const add = async (req, res, next) => {
     try {
-        const { error, value } = contactSchema(req.body);
+        const { error, value } = createContactValidator(req.body);
 
         if (error) {
             return next(new AppError(404, error.details[0].message));
         }
 
-        const addContact = await contactsOperation.addContact(value);
+        const addContact = await Contact.create(value);
 
         res.status(201).json({
             result: addContact,

@@ -1,16 +1,22 @@
-const { AppError } = require('../../utils');
-const contactsOperation = require('../../models/contacts');
+const { AppError, updateContactValidator } = require('../../utils');
+const Contact = require('../../models/contactModel');
 
 const update = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const { body } = req;
+        const { error, value } = updateContactValidator(req.body);
 
-        if (Object.keys(body).length === 0) {
+        if (error) {
+            return next(new AppError(404, error.details[0].message));
+        }
+
+        if (Object.keys(value).length === 0) {
             return next(new AppError(400, 'Missing fields'));
         }
 
-        const contact = await contactsOperation.updateContact(contactId, body);
+        const contact = await Contact.findByIdAndUpdate(contactId, value, {
+            new: true,
+        });
 
         if (!contact) {
             return res.status(404).json({ message: 'Not found' });
