@@ -4,7 +4,7 @@ const {UnauthorizedError}=require('../helpers/errors')
 require("dotenv").config();
 const secret = process.env.SECRET
 
-const authenticate=async(req,res,next)=>{
+const authenticate=(req,res,next)=>{
   const [tokenType, token] = req.headers['authorization'].split(' ')
   // console.log(tokenType, token)
   if(!token){

@@ -20,6 +20,7 @@ if (!await bcryptjs.compare(password, user.password)){
 throw new NotAutorisate ('wrong password')
 }
  const token = jwt.sign( {_id:user._id,createdAt:user.createdAt} , secret, { expiresIn: "3h" });
+
  return token
  }
  module.exports= loginServices
