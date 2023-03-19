@@ -26,9 +26,14 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async ({ name, email, phone, favorite }) => {
   try {
-    return await Contact.create({ name, email, phone });
+    return await Contact.create({
+      name,
+      email,
+      phone,
+      favorite: favorite || false,
+    });
   } catch (error) {
     return new AppError(500, error);
   }
@@ -47,10 +52,25 @@ const updateContact = async (contactId, body) => {
   }
 };
 
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const { favorite } = body;
+
+    return await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { favorite },
+      { new: true }
+    );
+  } catch (error) {
+    return new AppError(500, error);
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

@@ -35,6 +35,18 @@ const checkContactData = async (req, res, next) => {
     next(error);
   }
 };
+const checkContactFildFavorite = async (req, res, next) => {
+  try {
+    const { favorite } = req.body;
+
+    if (favorite === undefined) {
+      return next(new AppError(400, "missing field favorite"));
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 // const checkUpdateContactData = async (req, res, next) => {
 //   try {
@@ -44,7 +56,7 @@ const checkContactData = async (req, res, next) => {
 //       return next(new AppError(400, "missing fields"));
 //     }
 
-//     const contactsList = await Contact.find().select("-__v");
+//     const contactsList = await Contact.find().select(["-__v", "-favorite"]);
 
 //     const idx = contactsList.findIndex(
 //       (contact) => contact.id === req.params.contactId
@@ -55,7 +67,6 @@ const checkContactData = async (req, res, next) => {
 //     if (name) changedContact.name = name;
 //     if (email) changedContact.email = email;
 //     if (phone) changedContact.phone = phone;
-//     if (favorite) changedContact.favorite = favorite;
 
 //     const { error } = schema(changedContact);
 //     console.log(changedContact);
@@ -72,4 +83,5 @@ const checkContactData = async (req, res, next) => {
 module.exports = {
   checkId,
   checkContactData,
+  checkContactFildFavorite,
 };
