@@ -1,7 +1,7 @@
 const service = require("../../service/index")
 const { contactValidate } = require("../../utils/contactValidator")
 
-export const createdContact = async (req, res) => {
+ const createdContact = async (req, res) => {
   const { error, value } = contactValidate(req.body);
 
   if (error) {
@@ -28,4 +28,8 @@ export const createdContact = async (req, res) => {
       message: "Internal Server Error"
     });
   }  
+}
+
+module.exports = {
+  createdContact
 }

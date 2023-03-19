@@ -1,7 +1,7 @@
 const service = require("../../service/index")
 const { contactValidate } = require("../../utils/contactValidator")
 
-export const updateContactById = async (req, res) => {
+ const updateContactById = async (req, res) => {
   const { error, value } = contactValidate(req.body);
   if (error) {
     return res.status(400).json({
@@ -29,7 +29,7 @@ export const updateContactById = async (req, res) => {
 }
 
 
-export const updatedStatusContact = async (req, res) => {
+ const updatedStatusContact = async (req, res) => {
   const { error, value } = contactValidate(req.body);
   if (error) {
     return res.status(400).json({
@@ -66,4 +66,8 @@ export const updatedStatusContact = async (req, res) => {
     console.error(e)
     
   }
+}
+module.exports = {
+  updateContactById,
+  updatedStatusContact
 }
