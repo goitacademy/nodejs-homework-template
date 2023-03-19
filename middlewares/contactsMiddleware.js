@@ -1,12 +1,12 @@
-const { listContacts } = require("../models/contacts");
 const AppError = require("../utils/appError");
+const Contact = require("../service/shemas/contact");
 const schema = require("../utils/contactsValidator");
 
 const checkId = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    const contactsList = await listContacts();
+    const contactsList = await Contact.find();
 
     const contact = contactsList.find((contact) => contact.id === contactId);
 
@@ -36,38 +36,40 @@ const checkContactData = async (req, res, next) => {
   }
 };
 
-const checkUpdateContactData = async (req, res, next) => {
-  try {
-    const { name, email, phone } = req.body;
+// const checkUpdateContactData = async (req, res, next) => {
+//   try {
+//     const { name, email, phone, favorite } = req.body;
 
-    if (!name && !email && !phone) {
-      return next(new AppError(400, "missing fields"));
-    }
+//     if (!name && !email && !phone && !favorite) {
+//       return next(new AppError(400, "missing fields"));
+//     }
 
-    const contactsList = await listContacts();
+//     const contactsList = await Contact.find().select("-__v");
 
-    const idx = contactsList.findIndex(
-      (contact) => contact.id === req.params.contactId
-    );
+//     const idx = contactsList.findIndex(
+//       (contact) => contact.id === req.params.contactId
+//     );
 
-    const changedContact = contactsList[idx];
+//     const changedContact = contactsList[idx];
 
-    if (name) changedContact.name = name;
-    if (email) changedContact.email = email;
-    if (phone) changedContact.phone = phone;
+//     if (name) changedContact.name = name;
+//     if (email) changedContact.email = email;
+//     if (phone) changedContact.phone = phone;
+//     if (favorite) changedContact.favorite = favorite;
 
-    const { error } = schema(changedContact);
+//     const { error } = schema(changedContact);
+//     console.log(changedContact);
+//     console.log(error);
 
-    if (error) return next(new AppError(400, error.details[0].message));
+//     if (error) return next(new AppError(400, error.details[0].message));
 
-    return next();
-  } catch (error) {
-    next(error);
-  }
-};
+//     return next();
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 module.exports = {
   checkId,
   checkContactData,
-  checkUpdateContactData,
 };

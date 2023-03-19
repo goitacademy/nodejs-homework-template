@@ -35,7 +35,6 @@ const deleteController = async (req, res) => {
 };
 
 const changeContactController = async (req, res) => {
-  console.log(req);
   try {
     const updatedContact = await updateContact(req.params.contactId, req.body);
     res.status(200).json(updatedContact);

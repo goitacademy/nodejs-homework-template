@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 
 const {
   getAllController,
@@ -11,10 +12,7 @@ const {
 const {
   checkId,
   checkContactData,
-  checkUpdateContactData,
 } = require("../../middlewares/contactsMiddleware");
-
-const router = express.Router();
 
 router
   .route("/")
@@ -25,6 +23,6 @@ router
   .route("/:contactId")
   .get(checkId, getByIdController)
   .delete(checkId, deleteController)
-  .put(checkUpdateContactData, changeContactController);
+  .put(changeContactController);
 
 module.exports = router;
