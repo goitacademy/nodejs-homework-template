@@ -4,9 +4,13 @@ const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
 
+const  mongoose  = require('mongoose') ;
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
+const DB_HOST = "mongodb+srv://gortenzia1987:wUclAsFxkR8s2mUs@cluster0.gmqhz9g.mongodb.net/db-contacts?retryWrites=true&w=majority"
 
 app.use(logger(formatsLogger))
 app.use(cors())
@@ -23,6 +27,8 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message })
 })
 
-
+mongoose.connect(DB_HOST)
+    .then(()=> console.log("Database connection successful"))
+    .catch(error => console.log(error.message))
 
 module.exports = app
