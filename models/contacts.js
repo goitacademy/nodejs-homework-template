@@ -2,11 +2,6 @@ const fs = require("fs/promises");
 const uuid = require("uuid").v4;
 const path = require("path");
 
-// const {Contact} = require('./contactsModel')
-
-// const { checkContactData } = require("../middlewares/userMiddlevares");
-// const { AppError } = require("../utils/appError.js");
-
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 async function getContacts() {
