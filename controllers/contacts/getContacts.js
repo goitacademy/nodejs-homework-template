@@ -3,7 +3,10 @@ const { getListContacts } = require('../../service/contacts')
 
 
 const getContacts = async (req, res, next) => {
-    const data = await getListContacts();
+    const { _id } = req.user
+    console.log(req.user)
+
+    const data = await getListContacts(_id);
     res.json({
         status: 'success',
         code: 200,

@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
-const { NotAutorizedError } = require('../helpers/errors')
+// const { login } = require('../../service/auth')
+const { NotAutorizedError } = require('../../helpers/errors')
 
-const authMiddleware = (req, res, next) => {
+const User = require('../../models/auth')
+
+const getUserController = async (req, res, next) => {
     const authorization = req.headers.authorization;
 
     if (!authorization) {
@@ -18,17 +21,30 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const user = jwt.decode(token, process.env.JWT_SECRET)
+        const { _id } = user;
+
+        const { email, subscription } = await User.findOne({ _id });
+
+
         if (!user) {
             next(new NotAutorizedError('Not authorized'))
             return;
         }
-        req.token = token;
-        req.user = user;
-        next();
+
+        res.status(200).json({
+            "user": {
+                email,
+                subscription,
+            }
+        })
+
+
     } catch (error) {
         next(new NotAutorizedError('Not authorized'))
     }
-};
 
 
-module.exports = authMiddleware
+
+}
+
+module.exports = getUserController

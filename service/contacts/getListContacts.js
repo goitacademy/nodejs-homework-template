@@ -1,7 +1,8 @@
 const Contact = require('../../models/contact')
 
-const getListContacts = () => {
-    return Contact.find()
+const getListContacts = (owner) => {
+    // console.log(owner)
+    return Contact.find({ owner })
 }
 
 module.exports = getListContacts

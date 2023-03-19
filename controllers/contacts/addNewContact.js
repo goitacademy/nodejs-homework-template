@@ -3,6 +3,9 @@ const { addContact } = require('../../service/contacts')
 
 const addNewContact = async (req, res, next) => {
     const { name, email, phone } = req.body
+
+    const { _id } = req.user
+
     if (!name) {
         res.status(400).json({ message: 'missing required name field' })
         return
@@ -14,7 +17,7 @@ const addNewContact = async (req, res, next) => {
         return
     }
 
-    const data = await addContact({ name, email, phone });
+    const data = await addContact({ name, email, phone }, _id);
     res.status(201).json({
         status: 'success',
         code: 201,
