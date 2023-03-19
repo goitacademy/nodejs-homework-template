@@ -3,7 +3,13 @@ const { RequestError } = require("../helpers");
 const { addSchema, updateFavoriteSchema } = require("../schemas/contacts");
 
 const getAll = async (req, res, next) => {
-  const result = await Contact.find({}, "name email phone");
+  const { id: owner } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit: Number(limit),
+  }).populate("owner", "email subscription");
   res.json(result);
 };
 
@@ -17,11 +23,12 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
+  const { id: owner } = req.user;
   const { error } = addSchema.validate(req.body);
   if (error) {
     throw RequestError(400, error.message);
   }
-  const result = await Contact.create(req.body);
+  const result = await Contact.create({ ...req.body, owner });
   return res.status(201).json(result);
 };
 
