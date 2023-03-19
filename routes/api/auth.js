@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { auth, validation } = require('../../middlewares');
+const { auth, upload, validation } = require('../../middlewares');
 const { joiRegisterSchema, joiLoginSchema, joiSubscriptionSchema } = require('../../models/user');
 const { ctrlWrap } = require('../../helpers');
 const { auth: ctrl } = require('../../controllers');
@@ -17,5 +17,6 @@ router.post('/logout', auth, ctrlWrap(ctrl.logout))
 
 router.patch('/', auth, validation({ schema: joiSubscriptionSchema }), ctrlWrap(ctrl.updateSubscriptionById))
 
+router.patch('/avatars', auth, upload.single('avatar'), ctrlWrap(ctrl.updateAvatarById))
 
 module.exports = router;
