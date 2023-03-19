@@ -71,14 +71,10 @@ const updateStatusContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
 
-  if (!contactId) {
-    throw new HttpError(404, "Not found");
-  }
-
   const updateStatusContact = await updateContact(contactId, { favorite });
 
   if (!updateStatusContact) {
-    throw new HttpError(400, "missing field favorite");
+    throw new HttpError(404, "Not found");
   }
 
   res.status(200).json({
