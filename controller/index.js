@@ -76,7 +76,7 @@ const update = async (req, res, next) => {
 const updateFavorite = async (req, res, next) => {
   const { id } = req.params;
   const { favorite = false } = req.body;
-  
+
   try {
     if (req.body) {
       const result = await service.update(id, { favorite });
@@ -91,9 +91,9 @@ const updateFavorite = async (req, res, next) => {
         });
       }
     } else {
-       res.status(400).json({
-         message: "missing field favorite",
-       });
+      res.status(400).json({
+        message: "missing field favorite",
+      });
     }
   } catch (e) {
     console.error(e);
