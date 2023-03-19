@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const validateBody = require("../../middlewares/validateBody");
-const isValidId = require("../../middlewares/isValidId");
+const { validateBody, isValidId } = require("../../middlewares/index");
 const { schema, updateFavoriteSchema } = require("../../schemas/schema");
 
-const controller = require("../../controllers/contacts");
+const controller = require("../../controllers/index");
 
 router.get("/", controller.getListContacts);
 
