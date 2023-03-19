@@ -27,6 +27,15 @@ const users = new Schema (
           avatarURL: String,
           
         },
+          verify: {
+            type: Boolean,
+            default: false,
+            required: false
+          },
+          verificationToken: {
+            type: String,
+            required: [false, 'Verify token is required'],
+          },
 
         token: String
       }
@@ -36,6 +45,11 @@ const users = new Schema (
 users.methods.setPassword = function (password) {
   console.log('salting')
     this.password = bcrypt.hashSync(password, salt);
+}
+
+users.methods.setVerificationToken = function (verificationToken) {
+  console.log('setting up verification token');
+  this.verificationToken = verificationToken;
 }
 
 users.methods.validPassword = function (password) {
@@ -56,6 +70,12 @@ users.methods.deleteToken = function () {
 users.methods.setUrl = function (email) {
   const httpUrl = gravatar.url(email);
   console.log('setUrl' + httpUrl)
+}
+
+users.methods.setVerify = function () {
+  this.verify = true;
+  console.log('verify')
+
 }
 
 const Users = mongoose.model("users" , users);

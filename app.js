@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
 const userRouter = require('./routes/api/users')
+const authVerification = require('./routes/api/authVerify')
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -17,6 +18,8 @@ app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', userRouter)
+app.use('/api/auth/verify', authVerification)
+
 
 app.use(express.static('public'));
 

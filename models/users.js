@@ -1,11 +1,17 @@
 const Users = require("../schemas/users")
 const gravatar = require('gravatar')
+const { v4: uuidv4 } = require('uuid');
+
 
 const addUser = async ( email, password) => {
   const newUser = new Users({ email, password })
   newUser.setPassword(password);
-  newUser.setUrl(gravatar)
+  newUser.setUrl(gravatar);
+  const verificationToken = uuidv4();
+  newUser.setVerificationToken(verificationToken);
+  
   await newUser.save()
+  return verificationToken;
     
   }
 
@@ -30,4 +36,10 @@ const addUser = async ( email, password) => {
     return await Users.findOne({token});
   }
 
-  module.exports = {addUser, findUser, findUserById, currentUser, findUserByToken}
+  const findUserByVerificationToken = async (verificationToken) => {
+    return await Users.findOne({verificationToken});
+  }
+
+  
+
+  module.exports = {addUser, findUser, findUserById, currentUser, findUserByToken, findUserByVerificationToken}
