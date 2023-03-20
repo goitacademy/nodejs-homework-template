@@ -7,10 +7,10 @@ const ctrlWrapper = require("../helpers/ctrlWrapper");
 
 const HttpError = require("../helpers/HttpError");
 
-const { SECRET_KEY } = "91pYyiJ4jOFAq2v5";
+const SECRET_KEY = "91pYyiJ4jOFAq2v5";
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
@@ -22,6 +22,7 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
+    name: newUser.name,
     email: newUser.email,
     password: newUser.password,
   });
