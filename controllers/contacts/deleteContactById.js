@@ -8,9 +8,10 @@ const deleteContactById = catchAsync(async (req, res, next) => {
 
   const result = await Contact.findByIdAndDelete(contactId);
 
-  if (result === undefined) {
+  if (!result) {
     throw createError(404, 'Not found');
   }
+
   res.status(200).json({
     status: 'succes',
     code: 200,
