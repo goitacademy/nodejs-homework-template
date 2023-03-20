@@ -43,4 +43,13 @@ const logout = async (req, res, next) => {
   });
 };
 
-module.exports = { register, login, logout };
+const current = async (req, res, next) => {
+  const { email } = req.user;
+  const user = await User.findOne({ email });
+  res.status(200).json({
+    email: user.email,
+    subscription: user.subscription,
+  });
+};
+
+module.exports = { register, login, logout, current };
