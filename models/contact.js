@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose')
-const Joi = require("joi")
+const Joi = require('joi')
 
 const {handleMongooseError} = require("../helpers")
 
@@ -27,9 +27,15 @@ const contactSchema = new Schema({
         match: [phonePattern, 'Invalid phone format'],
     },
     favorite: {
-        type: Boolean,
+        type: [Boolean, 'Favorite must be true or false'],
         default: false,
-    },  
+        required: true,
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+    },
 },
 {versionKey: false, timestamps: true})
 
@@ -51,7 +57,7 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required(),
 })
 
-const shemas = {
+const schemas = {
     addContactSchema,
     updateContactSchema,
     updateFavoriteSchema,
@@ -61,5 +67,5 @@ const Contact = model("contact", contactSchema)
 
 module.exports = {
     Contact, 
-    shemas,
+    schemas,
 }

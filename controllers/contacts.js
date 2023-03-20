@@ -3,7 +3,10 @@ const {Contact} = require("../models/contact")
 const {HttpError, ctrlWrapper} = require("../helpers")
 
 const getListContacts = async (req, res) => {
-    const result = await Contact.find({}, "-createAt, -updateAt")
+    const {_id: owner} = req.user
+    const {page = 1, limit = 20} = req.query
+    const skip = (page - 1) * limit
+    const result = await Contact.find({owner}, "-createAt, -updateAt", {skip, limit}).populate("owner", "name email");
     res.json(result)
 }
 
@@ -17,7 +20,9 @@ const findContactById = async (req, res) => {
   }
 
 const addNewContact = async (req, res) => {
-      const result = await Contact.create(req.body)
+      const {_id: owner} = req.user
+      console.log(req.query)
+      const result = await Contact.create({...req.body, owner})
       res.status(201).json(result)
   }
 
@@ -57,3 +62,4 @@ module.exports = {
     updateContactById: ctrlWrapper(updateContactById),
     updateStatusContact: ctrlWrapper(updateStatusContact),
 }
+

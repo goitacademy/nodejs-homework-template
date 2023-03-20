@@ -1,9 +1,11 @@
-const validateBody = require('../middlewares/validateBody')
-const isValidId = require('../middlewares/isValidId')
-const validateFavorite = require('../middlewares/validateFavorite')
+const validateBody = require("./validateBody")
+const isValidId = require("./isValidId")
+const validateFavorite = require("./validateFavorite")
+const authenticate = require("./authenticate")
 
 module.exports = {
     validateBody,
     isValidId,
     validateFavorite,
+    authenticate,
 }
