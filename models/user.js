@@ -28,8 +28,10 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: String,
-    default: null,
+    token: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

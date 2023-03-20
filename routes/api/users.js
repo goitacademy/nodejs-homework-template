@@ -4,14 +4,14 @@ const { updateSubscriptionSchemaJoi } = require("../../models");
 
 const ctrl = require("../../controllers/users");
 
-const { validatebody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
 router.patch(
   "/",
   authenticate,
-  validatebody(updateSubscriptionSchemaJoi),
+  validateBody(updateSubscriptionSchemaJoi),
   ctrl.updateSubscription
 );
 
