@@ -7,7 +7,7 @@ const {
   updateContact
 } = require("../controllers/contacts");
 
-const { userSchema } = require("../models/user.js");
+const { userSchema } = require("../models/contacts.js");
 
 const router = express.Router();
 
