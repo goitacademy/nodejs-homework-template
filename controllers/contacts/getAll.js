@@ -1,6 +1,6 @@
-const { Contact } = require("../../models");
+const { Contact } = require('../../models');
 
-const getListContacts = async (req, res) => {
+const getAll = async (req, res) => {
   const { _id } = req.user;
   const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
@@ -20,4 +20,4 @@ const getListContacts = async (req, res) => {
   });
 };
 
-module.exports = getListContacts;
+module.exports = getAll;

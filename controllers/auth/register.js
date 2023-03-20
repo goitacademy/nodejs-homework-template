@@ -1,18 +1,39 @@
-const bcrypt = require("bcrypt");
-const { User } = require("../../models/user");
-const { HttpError } = require("../../helpers");
+const { Conflict } = require('http-errors');
+
+const { User } = require('../../models');
+
+const bcrypt = require('bcryptjs');
+
+const gravatar = require('gravatar');
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
+
   if (user) {
-    throw HttpError(409, "Email already in use");
+    throw new Conflict(`User with ${email} already exist`);
   }
-  const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ name, email, password: hashPassword });
+
+  const avatarURL = gravatar.url(email);
+
+  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(11));
+  await User.create({
+    email,
+    password: hashPassword,
+    subscription,
+    avatarURL,
+  });
+
   res.status(201).json({
-    name: newUser.name,
-    email: newUser.email,
+    status: 'success',
+    code: 201,
+    data: {
+      user: {
+        avatarURL,
+        email,
+        subscription,
+      },
+    },
   });
 };
 
