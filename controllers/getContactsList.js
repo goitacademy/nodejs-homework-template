@@ -1,14 +1,10 @@
-const {Contact} = require('./../models/contactModel');
+const { catchAsync } = require('../helpers/catchAsync');
+const { getContacts } = require('../models/contacts');
 
-const getContactsList = async (req, res) => {
-    try {
-        const contacts = await Contact.find();
-        
-        res.status(200).json(contacts);
-    } catch (err) {
-        res.status(400).json({msg: err.msg,});
-    }
-};
+const getContactsList =  catchAsync(async (req, res) => {
+    const contacts = await getContacts();
+    res.status(200).json({contacts});
+});
 
 module.exports = {
     getContactsList,

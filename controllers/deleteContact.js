@@ -1,14 +1,12 @@
-const {Contact} = require('./../models/contactModel');
+const { catchAsync } = require('../helpers/catchAsync');
+const { removeContact } = require('../models/contacts');
 
-const deleteContact = async (req, res) => {
-    try {
+
+const deleteContact = catchAsync(async (req, res) => {
         const { contactId } = req.params;
-        await Contact.findByIdAndDelete({_id: contactId})
+        await removeContact({_id: contactId})
         res.status(200).json(`Contact ${contactId} deleted`);
-    } catch (err) {
-        res.status(404).json('Not found');
-    }
-};
+});
 
 module.exports = {
     deleteContact,

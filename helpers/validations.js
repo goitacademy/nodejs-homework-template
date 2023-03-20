@@ -13,7 +13,8 @@ const schema = Joi.object({
         .min(6)
         .max(15)
         .required(),
-    })
+    favorite: Joi.boolean(),
+})
 
 
 module.exports = {
