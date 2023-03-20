@@ -14,7 +14,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const list = await listContacts(contactId);
-  const findIndex = list.find((el) => el.id.toString() == contactId);
+  const findIndex = list.find((el) => el.id.toString() === contactId);
   list.splice(findIndex, 1);
 
   if (findIndex === -1) {
