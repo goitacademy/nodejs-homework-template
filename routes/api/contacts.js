@@ -79,7 +79,6 @@ router.put("/:id", async (req, res, next) => {
     return res.status(404).send("Contact not found");
   }
 
-  // const newContact = { id, name, email, phone };
   try {
     const updatedContact = await updateContact(id, { name, email, phone });
     return res.status(200).json(updatedContact);

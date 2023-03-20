@@ -4,7 +4,7 @@ const path = require("path");
 const contactsPath = path.resolve("models/contacts.json");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
+  const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 
@@ -54,13 +54,13 @@ const updateContact = async (id, newContact) => {
   const dataParse = JSON.parse(data);
 
   let found = false;
-  for (let i = 0; i < dataParse.length; i++) {
-    if (dataParse[i].id === id) {
-      dataParse[i] = { id: id, ...newContact };
-      found = true;
-      break;
-    }
+
+  const index = dataParse.findIndex((contact) => contact.id === id);
+  if (index !== -1) {
+    dataParse[index] = { id: id, ...newContact };
+    found = true;
   }
+
   if (!found) {
     const nextId = parseInt(dataParse[dataParse.length - 1].id) + 1;
     const newContactWithId = { id: nextId, ...newContact };
