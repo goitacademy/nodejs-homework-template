@@ -3,23 +3,17 @@ const createError = require('http-errors');
 const { Contact } = require('../../models/index');
 const { catchAsync } = require('../../utils/index');
 
-// const schema = require('../../schemas/contactSchema');
-const { contactDataValidator } = require('../../utils/ContactValidation');
+const { contactDataValidator } = require('../../utils/contactValidation');
 
 const postContact = catchAsync(async (req, res, next) => {
-  const { name, email, phone, favorite } = req.body;
+  const { name, email, phone } = req.body;
 
   const { error } = contactDataValidator(req.body);
   if (error) {
     throw createError(400, error.message);
   }
 
-  if (
-    name === undefined ||
-    email === undefined ||
-    phone === undefined ||
-    favorite === undefined
-  ) {
+  if (!name || !email || !phone) {
     throw createError(400, 'missing required name field');
   }
 
