@@ -1,63 +1,39 @@
 const express = require("express");
 const router = express.Router();
-
-const contactSchema  = require("../../schema/contactsSchema");
+const tryCatchWrapper = require("../../helpers");
 const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+  contactsSchema,
+  updateStatusSchema,
+} = require("../../schema/contactsSchema");
 const validate = require("../../middleware/validationWare");
 
-router.get("/", async (req, res, next) => {
-  const data = await listContacts();
-  res.json({
-    status: "success",
-    code: 200,
-    data,
-  });
-});
+const {
+  listContacts,
+  getContact,
+  createContact,
+  deleteContact,
+  updateContact,
+  updateStatusContact,
+} = require("../../controllers/contacsControllers");
 
-router.get("/:contactId", async (req, res, next) => {
- const { contactId } = req.params;
- const data = await getContactById(contactId);
- res.json({
-   status: "success",
-   code: 200,
-   data,
- });
-});
+router.get("/", tryCatchWrapper(listContacts));
 
-router.post("/", validate(contactSchema), async (req, res, next) => {
-  const body = req.body;
-  const data = await addContact(body);
-  res.json({
-    status: "success",
-    code: 200,
-    data,
-  });
-});
+router.get("/:contactId", tryCatchWrapper(getContact));
 
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const data = await removeContact(contactId);
-  res.json({
-    status: "success",
-    code: 200,
-    data,
-  });
-});
+router.post("/", validate(contactsSchema), tryCatchWrapper(createContact));
 
-router.put("/:contactId", validate(contactSchema), async (req, res, next) => {
-  const { contactId } = req.params;
-  const data = await updateContact(contactId, req.body);
-  res.json({
-    status: "success",
-    code: 200,
-    data,
-  });
-});
+router.delete("/:contactId", tryCatchWrapper(deleteContact));
+
+router.put(
+  "/:contactId",
+  validate(contactsSchema),
+  tryCatchWrapper(updateContact)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validate(updateStatusSchema),
+  tryCatchWrapper(updateStatusContact)
+);
 
 module.exports = router;
