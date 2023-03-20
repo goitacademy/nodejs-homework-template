@@ -1,15 +1,6 @@
 const contactsOperation = require("../../models/contacts");
 
-const {
-  createContactValidation,
-  checkContactValidation,
-} = require("../../utils");
-
 const updateById = async (req, res, next) => {
-  const { error } = createContactValidation(req.body);
-  if (error) {
-    checkContactValidation(req, res);
-  }
 
   const { contactId } = req.params;
   const result = await contactsOperation.updateContact(contactId, req.body);

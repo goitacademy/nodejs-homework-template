@@ -2,6 +2,7 @@ const contactsOperation = require("../../models/contacts");
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
+  // console.log("Hi!", contactId);
   const result = await contactsOperation.getContactById(contactId);
   if (!result) {
     res.json({

@@ -1,29 +1,28 @@
 const express = require("express");
 
 const { catchAsync } = require("../../utils");
-const contactsController = require('../../controllers');
+const contactsController = require("../../controllers");
+const {
+  checkContactId,
+  checkCreateContactData,
+  checkUpdateContactData,
+} = require("../../middlewares");
 const router = express.Router();
 
-router.get(
-  "/",
-  catchAsync(contactsController.getAll)
-);
+router
+  .route("/")
+  .get(catchAsync(contactsController.getAll)) // +
+  .post(checkCreateContactData, catchAsync(contactsController.addItem)); // +
 
-router.get(
-  "/:contactId",
-  catchAsync(contactsController.getById)
-);
+router.use("/:contactId", checkContactId);
+router
+  .route("/:contactId")
+  .get(catchAsync(contactsController.getById)) // +
+  .delete(catchAsync(contactsController.deleteById)) // +
+  .put(checkUpdateContactData, catchAsync(contactsController.updateById)); // +
 
-router.post(
-  "/",
-  catchAsync(contactsController.addItem)
-);
-
-router.delete(
-  "/:contactId",
-  catchAsync(contactsController.deleteById)
-);
-
-router.put("/:contactId", contactsController.updateById);
+router
+  .route("/:contactId/favorite")
+  .patch(checkContactId, catchAsync(contactsController.updateFavoriteById));// +
 
 module.exports = router;
