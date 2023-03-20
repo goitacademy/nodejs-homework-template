@@ -47,7 +47,7 @@ exports.updateContact = catchAsync(async (req, res) => {
 
   const updatedContact = await Contact.findByIdAndUpdate(id, {
     name, email, phone, favorite
-  }, { new: true });
+  }, { new: true }).select('-__v');
 
   res.status(200).json(
     updatedContact
@@ -65,4 +65,20 @@ exports.removeContact = catchAsync(async (req, res) => {
   res.status(200).json({
     "message": "contact deleted"
   });
+});
+
+/**
+ * Update contact's status by id
+ */
+exports.updateStatusContact = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+
+  const updatedContactStatus = await Contact.findByIdAndUpdate(id, {
+    favorite
+  }, { new: true }).select('-__v');
+
+  res.status(200).json(
+    updatedContactStatus
+  );
 });
