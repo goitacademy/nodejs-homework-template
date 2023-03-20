@@ -7,4 +7,4 @@ const userSchema = Joi.object({
     email: Joi.email().required(),
 })
 
-module.exports = { Contact, userSchema };
+module.exports = { userSchema };
