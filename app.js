@@ -4,16 +4,16 @@ const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
 
-const  mongoose  = require('mongoose') ;
+const  dotenv = require('dotenv');
+dotenv.config();
 
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
-const  dotenv = require('dotenv');
-dotenv.config();
 
-const {DB_HOST} = process.env;
+
+
 
 app.use(logger(formatsLogger))
 app.use(cors())
@@ -30,11 +30,6 @@ app.use((req, res) => {
 //   res.status(status).json({ message: err.message })
 // })
 
-mongoose.connect(DB_HOST)
-    .then(()=> console.log("Database connection successful"))
-    .catch(error => {
-        console.log(error.message);
-        process.exit(1);
-    });
+
 
 module.exports = app
