@@ -1,5 +1,18 @@
 const express = require("express");
 
+const Joi = require("joi");
+const myCustomJoi = Joi.extend(require("joi-phone-number"));
+
+const contactScheme = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30).required(),
+  phone: myCustomJoi.string().required().phoneNumber(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+});
 const router = express.Router();
 
 const {
@@ -48,6 +61,11 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { error } = contactScheme.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
     const contact = await addContact(req.body);
     res.status(201).json({
       status: "success",
