@@ -25,5 +25,3 @@ router
   .delete(contactController.removeContact);
 
 module.exports = router;
-
-module.exports = router
