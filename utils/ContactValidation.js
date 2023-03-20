@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const contactDataValidator = (data) => {
   const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
+    name: Joi.string().trim().min(3).max(30).required(),
     email: Joi.string()
       .email({
         minDomainSegments: 2,
