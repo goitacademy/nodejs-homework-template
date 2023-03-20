@@ -9,7 +9,7 @@ exports.createContactValidator = (data) => Joi.object()
     name: Joi.string().alphanum().min(2).max(22).required(),
     email: Joi.string().email().required(),
     phone: myCustomJoi.string().phoneNumber({ defaultCountry: 'UA', format: 'e164' }).required(),
-    favorite: Joi.boolean().required()
+    favorite: Joi.boolean().optional()
   }).validate(data);
 
 exports.patchContactValidator = (data) => Joi.object()
@@ -19,4 +19,10 @@ exports.patchContactValidator = (data) => Joi.object()
     email: Joi.string().email().optional(),
     phone: myCustomJoi.string().phoneNumber({ defaultCountry: 'UA', format: 'e164' }).optional(),
     favorite: Joi.boolean().optional()
+  }).validate(data);
+
+  exports.patchStatusValidator = (data) => Joi.object()
+  .options({ abortEarly: false })
+  .keys({
+    favorite: Joi.boolean().required()
   }).validate(data);
