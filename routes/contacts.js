@@ -45,6 +45,12 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:contactId', async (req, res) => {
+  const { error } = userSchema.validate(req.body);
+
+  if (error) {
+  return res.status(400).send(error.details[0].message);
+  }
+  
   const contactId = req.params.contactId;
   try {
     const contactRemove = removeContact(contactId);

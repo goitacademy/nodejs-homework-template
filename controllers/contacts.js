@@ -1,13 +1,13 @@
 const fs = require("fs/promises");
 
 const listContacts = async () => {
-  const response = await fs.readFile("./controllers/contacts.json");
-  return JSON.parse(response.toString());
+  const response = await fs.readFile("./models/contacts.json");
+  return JSON.parse(data);
 };
 
 const getContactById = async (contactId) => {
   const list = await listContacts();
-  const findIndex = list.find((el) => el.id.toString() === contactId.toString());
+  const findIndex = list.find((u) => u.id == contactId);
 
   return findIndex;
 };
@@ -21,7 +21,7 @@ const removeContact = async (contactId) => {
     return JSON.parse(list);
   }
 
-  await fs.writeFilte("./contacts.json", JSON.stringify(list));
+  await fs.writeFile('models/contacts.json', JSON.stringify(list));
 };
 
 const addContact = async (body) => {
@@ -29,7 +29,7 @@ const addContact = async (body) => {
   const newList = { id: list.length + 1, ...body };
   list.push(newList);
 
-  await fs.writeFilte("./contacts.json", JSON.stringify(list));
+  await fs.writeFile('models/contacts.json', JSON.stringify(list));
 
   return newList;
 };
@@ -44,7 +44,7 @@ const updateContact = async (contactId, body) => {
 
   list[findIndex] = { ...list[findIndex], ...body };
 
-  await fs.writeFilte("./contacts.json", JSON.stringify(list));
+  await fs.writeFile('models/contacts.json', JSON.stringify(list));
 
   return list[findIndex];
 };
