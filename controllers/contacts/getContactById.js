@@ -1,12 +1,12 @@
 const contactsOperations = require("../../models/contacts");
 
+const { IdError } = require("../../errorHandlers/");
+
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await contactsOperations.getContactById(contactId);
   if (!contact) {
-    const error = new Error(`Contact with id: ${contactId} is not found`);
-    error.status = 404;
-    throw error;
+    throw new IdError(contactId);
   }
   res.json({
     status: "success",

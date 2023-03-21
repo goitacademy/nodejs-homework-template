@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const myCustomJoi = Joi.extend(require("joi-phone-number"));
-console.log(myCustomJoi);
+
 const contactScheme = Joi.object({
   name: Joi.string()
     .min(3)

@@ -1,5 +1,7 @@
 const contactsOperations = require("../../models/contacts");
 
+const { IdError } = require("../../errorHandlers/");
+
 const updateContact = async (req, res) => {
   if (!req.body) {
     const error = new Error(`Missing fields`);
@@ -10,9 +12,7 @@ const updateContact = async (req, res) => {
   const contact = await contactsOperations.updateContact(contactId, req.body);
 
   if (!contact) {
-    const error = new Error(`Contact with id: ${contactId} is not found`);
-    error.status = 404;
-    throw error;
+    throw new IdError(contactId);
   }
   res.json({
     status: "success",
