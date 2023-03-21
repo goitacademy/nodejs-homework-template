@@ -7,25 +7,26 @@ const contacts = new Schema({
   name: {
     type: String,
     required: true,
-    default: "Uknown User",
   },
   email: {
     type: String,
-    required: true,
   },
   phone: {
     type: String,
-    required: true,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
   },
 });
 
-
 const Contact = mongoose.model("contact", contacts);
 
-const contactSchema = Joi.object({
+const contactValidationSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
-module.exports = { Contact, contactSchema };
+module.exports = { Contact, contactValidationSchema };

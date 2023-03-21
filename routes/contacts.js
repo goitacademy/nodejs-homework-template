@@ -7,13 +7,13 @@ const {
   removeContact,
   updateContact,
 } = require("../controllers/contacts");
-const { contactSchema } = require("../models/contacts");
+const { contactValidationSchema } = require("../models/contacts");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const contacts = listContacts();
+    const contacts = await listContacts();
     res.status(200).json(contacts);
   } catch {
     return res.status(500).send("Something went wrong");
@@ -34,7 +34,7 @@ router.get("/:contactId", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { error } = contactSchema.validate(req.body);
+  const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
@@ -66,7 +66,7 @@ router.put("/:contactId", (req, res) => {
   if (!contactId) {
     return res.status(400).send("Id is required to perform update");
   }
-  const { error } = contactSchema.validate(req.body);
+  const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }

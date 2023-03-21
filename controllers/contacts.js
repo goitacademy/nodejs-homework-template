@@ -2,8 +2,9 @@ const { Contact } = require("../models/contacts.js");
 
 const contactStorage = require("../startup/database.js");
 
-const listContacts = () => {
-  return contactStorage;
+const listContacts = async () => {
+  const contacts = await Contact.find();
+  return contacts;
 };
 const getContactById = (contactId) => {
   return contactStorage.find((u) => u.id == contactId);
