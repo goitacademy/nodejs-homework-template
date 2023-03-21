@@ -12,4 +12,4 @@ const getCurrent = (req, res) => {
   });
 };
 
-module.exports = { getCurrent };
+module.exports = getCurrent;
