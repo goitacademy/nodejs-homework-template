@@ -1,15 +1,15 @@
 const { Contact } = require("../../models");
 
 const getContacts = async (req, res) => {
-  const { sort, order, page, limit, search } = req.query;
+  const { sort, order, page = 1, limit = 20, search } = req.query;
 
   const findOptions = search
     ? { email: { $regex: search, $options: "i" } }
     : {};
   const contactsQuery = Contact.find(findOptions);
 
-  const paginationPage = +page || 1;
-  const paginationLimit = +limit || 20;
+  const paginationPage = +page;
+  const paginationLimit = +limit;
   const skip = (paginationPage - 1) * paginationLimit;
 
   contactsQuery

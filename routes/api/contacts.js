@@ -6,7 +6,7 @@ const {
   ctrlWrapper,
   isValidId,
 } = require("../../middlewares");
-const { joiSchema, updateFavorite } = require("../../models/contact");
+const { joiSchema, updateFavorite } = require("../../utils/validation");
 const { contacts: ctrl } = require("../../controllers");
 
 const router = express.Router();
