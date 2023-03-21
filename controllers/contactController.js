@@ -5,7 +5,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("../models/contactsModels");
+} = require("../models/contactsModel");
 
 const getListContactsController = catchAsync(async (req, res) => {
   console.log("==>getListContactsController");
