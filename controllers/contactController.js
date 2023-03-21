@@ -1,5 +1,5 @@
 const catchAsync = require("../utils/catchAsync");
-const Contact = require("../models/contactModel");
+const Contact = require("../models/contactsModel");
 
 const getListContactsController = catchAsync(async (req, res) => {
   console.log("==>getListContactsController");
@@ -45,10 +45,29 @@ const removeContactController = catchAsync(async (req, res) => {
   res.status(200).json({ message: "Deleted successfully" });
 });
 
+const updateStatusContact = catchAsync(async (req, res) => {
+  const { contactId } = req.params;
+  const favorite = req.body;
+
+  console.log("==>contactId", contactId);
+  console.log("==>favorite", favorite);
+
+  const updatedStatusContact = await Contact.findByIdAndUpdate(
+    contactId,
+    favorite,
+    {
+      new: true,
+    }
+  ).select("-__v");
+
+  res.status(200).json(updatedStatusContact);
+});
+
 module.exports = {
   getListContactsController,
   getByIdController,
   addContactController,
   removeContactController,
   putContactController,
+  updateStatusContact,
 };

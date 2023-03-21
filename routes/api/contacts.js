@@ -14,6 +14,7 @@ const {
   addContactController,
   removeContactController,
   putContactController,
+  updateStatusContact,
 } = require("../../controllers/contactController");
 
 router
@@ -23,18 +24,18 @@ router
 
 router
   .route("/:contactId")
-  .get("/:contactId", getByIdController)
-  .put(
-    "/:contactId",
-    validateContactBody,
-    validateContactId,
-    putContactController
-  )
+  .get(getByIdController)
+  .put(validateContactBody, validateContactId, putContactController)
   .delete(validateContactId, removeContactController);
 
 router
   .route("/:contactId/favorite")
-  .patch(validateContactId, validateFavorite, validateContactBody);
+  .patch(
+    validateContactId,
+    validateFavorite,
+    validateContactBody,
+    updateStatusContact
+  );
 
 // router.get("/", getListContactsController);
 // router.post("/", validateContactBody, addContactController);
