@@ -1,11 +1,10 @@
-const { Schema, model } = require('mongoose');
+const {Schema, model} = require('mongoose');
 
 const Joi = require("joi");
 
 
-
 // Схема модели для коллекции
-const contactSchema = Schema({
+const contactSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Set name for contact'],
@@ -23,13 +22,19 @@ const contactSchema = Schema({
 }, {versionKey: false, timestamps: true});
 
 
-const joiSchema = ({
+const joiSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string().required(),
     favorite: Joi.bool()
 })
-const Contact = model("contact", contactSchema)
+
+
+
+
+
+const Contact = model("Contact", contactSchema);
+
 
 module.exports = {
     Contact,
