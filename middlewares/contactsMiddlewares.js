@@ -47,7 +47,21 @@ const validateContactId = catchAsync(async (req, res, next) => {
   next();
 });
 
+const validateFavorite = (req, res, next) => {
+  const { favorite } = req.body;
+  console.log("==>favorite", favorite);
+
+  if (typeof favorite !== "boolean") {
+    const err = new Error("missing field favorite");
+    err.status = 400;
+    return next(err);
+  }
+
+  next();
+};
+
 module.exports = {
   validateContactId,
   validateContactBody,
+  validateFavorite,
 };
