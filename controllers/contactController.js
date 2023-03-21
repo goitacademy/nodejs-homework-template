@@ -1,15 +1,9 @@
 const catchAsync = require("../utils/catchAsync");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contactsModel");
+const Contact = require("../models/contactModel");
 
 const getListContactsController = catchAsync(async (req, res) => {
   console.log("==>getListContactsController");
-  const contacts = await listContacts();
+  const contacts = await Contact.find().select("-__v");
 
   res.status(200).json(contacts);
 });
@@ -17,15 +11,15 @@ const getListContactsController = catchAsync(async (req, res) => {
 const addContactController = catchAsync(async (req, res) => {
   const { body } = req;
 
-  const addedContact = await addContact(body);
+  const addedContact = await Contact.create(body);
 
   res.status(201).json(addedContact);
 });
 
 const getByIdController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
+  const contact = await Contact.findById(contactId).select("-__v");
 
-  const contact = await getContactById(contactId);
   if (!contact) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -37,17 +31,16 @@ const putContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
   const { body } = req;
 
-  await updateContact(contactId, body);
-
-  const updatedContact = await getContactById(contactId);
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  }).select("-__v");
 
   res.status(200).json(updatedContact);
 });
 
 const removeContactController = catchAsync(async (req, res) => {
   const { contactId } = req.params;
-
-  await removeContact(contactId);
+  await Contact.findByIdAndDelete(contactId);
 
   res.status(200).json({ message: "Deleted successfully" });
 });
