@@ -1,5 +1,5 @@
 const validation = (schema, msg) => {
-  return (req, res, next) => {
+  return (req, _, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
       error.status = 400;

@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const { handleSchemaValidationErrors } = require("../middlewares");
 
 const phoneRegexp = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
 const contactSchema = new Schema(
@@ -20,11 +19,14 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
-
-contactSchema.post("save", handleSchemaValidationErrors);
 
 const joiSchema = Joi.object({
   name: Joi.string().required(),
