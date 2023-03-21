@@ -10,7 +10,7 @@ const HttpError = require("../helpers/HttpError");
 const SECRET_KEY = "91pYyiJ4jOFAq2v5";
 
 const register = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
