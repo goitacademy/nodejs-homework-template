@@ -50,9 +50,11 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
-  if (!id) {
-    return res.status(404).send("Not found");
+  const contact = await getContactById(id);
+  if (!contact) {
+    return res.status(404).send("Contact not found");
   }
+
   try {
     removeContact(id);
     return res.status(204).send();
