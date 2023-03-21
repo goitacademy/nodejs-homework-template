@@ -1,6 +1,6 @@
 const { Contact } = require("../models/contacts.js");
 
-const contactStorage = require("../db/contacts.json");
+const contactStorage = require("../startup/database.js");
 
 const listContacts = () => {
   return contactStorage;

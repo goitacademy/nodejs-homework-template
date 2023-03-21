@@ -4,6 +4,9 @@ const cors = require("cors");
 
 const router = require("./routes/routes");
 
+const { connectDatabase } = require("./startup/database.js");
+connectDatabase();
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
