@@ -26,11 +26,13 @@ const joiSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string().required(),
-    favorite: Joi.bool()
-})
+    favorite: Joi.boolean()
+});
 
 
-
+const joiSchemaFavorite = Joi.object({
+    favorite: Joi.boolean().required()
+});
 
 
 const Contact = model("Contact", contactSchema);
@@ -38,5 +40,6 @@ const Contact = model("Contact", contactSchema);
 
 module.exports = {
     Contact,
-    joiSchema
+    joiSchema,
+    joiSchemaFavorite
 }
