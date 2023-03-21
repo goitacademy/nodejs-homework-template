@@ -38,18 +38,18 @@ const userSchema = new Schema({
 
 userSchema.post("save", handleMongooseError)
 
-const registerSchema = ({
+const registerSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().pattern(passwordRegexp).required(),
     password: Joi.string().pattern(passwordRegexp).min(8).required(),
 })
 
-const loginSchema = ({
+const loginSchema = Joi.object({
     email: Joi.string().pattern(passwordRegexp).required(),
     password: Joi.string().pattern(passwordRegexp).min(8).required(),
 })
 
-const subscriptionSchema = ({
+const subscriptionSchema = Joi.object({
     subscription: Joi.string().valid(...subscriptionList).required(),
 })
 
