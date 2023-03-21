@@ -1,10 +1,10 @@
 const express = require("express");
 
-const { updateSubscriptionSchemaJoi } = require("../../models");
-
 const ctrl = require("../../controllers/users");
 
 const { validateBody, authenticate } = require("../../middlewares");
+
+const { updateSubscriptionSchemaJoi } = require("../../models/user");
 
 const router = express.Router();
 
