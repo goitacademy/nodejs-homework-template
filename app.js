@@ -6,8 +6,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const router = require("./routes/routes");
-
 const { connectDatabase } = require("./startup/database.js");
+
 connectDatabase();
 
 const app = express();

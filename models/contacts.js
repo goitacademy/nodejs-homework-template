@@ -1,13 +1,26 @@
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
-class Contact {
-  constructor(id, name, email, phone) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.phone = phone;
-  }
-}
+const Schema = mongoose.Schema;
+
+const contacts = new Schema({
+  name: {
+    type: String,
+    required: true,
+    default: "Uknown User",
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+});
+
+
+const Contact = mongoose.model("contact", contacts);
 
 const contactSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),

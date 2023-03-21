@@ -9,7 +9,7 @@ if (!dbpath) {
 const connectDatabase = async () => {
   await mongoose
     .connect(dbpath)
-    .then(() => console.log("Connected to mongo db..."))
+    .then(() => console.log("Database connection successful"))
     .catch((err) => console.log("Error to connect to db" + err));
 };
 
