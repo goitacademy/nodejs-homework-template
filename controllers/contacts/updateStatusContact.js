@@ -6,8 +6,8 @@ const updateStatusContact = async (req, res, next) => {
     try {
         const {contactId} = req.params;
         const {favorite} = req.body;
-        const result = await Contact.findByIdAndUpdate(contactId, {favorite} , {new: true});
-         console.log("patch");
+        const result = await Contact.findByIdAndUpdate(contactId, {favorite}, {new: true});
+        console.log("patch");
         if (!result) {
             throw createError(404, "Not found");
         }
