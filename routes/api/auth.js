@@ -4,7 +4,7 @@ const ctrl = require("../../controllers/auth");
 
 const { validateBody, authenticate } = require("../../middlewares");
 
-const { registerSchemaJoi, loginSchemaJoi } = "../../models/user";
+const { registerSchemaJoi, loginSchemaJoi } = "../../models";
 
 const router = express.Router();
 
