@@ -32,18 +32,16 @@ const addContact = async (name, email, phone) => {
     const data = await fs.readFile(contactsPath);
     const dataParse = JSON.parse(data);
     const contactIndex = Number(dataParse[dataParse.length - 1].id) + 1;
-    const addData = [
-      ...dataParse,
-      {
-        id: `${contactIndex}`,
-        name,
-        email,
-        phone,
-      },
-    ];
+    const newContact = {
+      id: `${contactIndex}`,
+      name,
+      email,
+      phone,
+    };
+    const addData = [...dataParse, newContact];
     await fs.writeFile(contactsPath, JSON.stringify(addData));
 
-    return data;
+    return newContact;
   } catch (err) {
     return err;
   }

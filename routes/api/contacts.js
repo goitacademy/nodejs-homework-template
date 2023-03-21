@@ -33,14 +33,14 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
   try {
     const { name, email, phone } = req.body;
-    const contact = addContact(name, email, phone);
+    const contact = await addContact(name, email, phone);
 
     return res.status(201).json(contact);
   } catch {
