@@ -45,9 +45,10 @@ const removeContactController = catchAsync(async (req, res) => {
   res.status(200).json({ message: "Deleted successfully" });
 });
 
+// PATCH
 const updateStatusContact = catchAsync(async (req, res) => {
   const { contactId } = req.params;
-  const favorite = req.body;
+  const { favorite } = req.body;
 
   console.log("==>contactId", contactId);
   console.log("==>favorite", favorite);

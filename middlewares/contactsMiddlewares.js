@@ -1,8 +1,9 @@
-const fs = require("fs").promises;
+// const fs = require("fs").promises;
 const Joi = require("joi");
 const catchAsync = require("../utils/catchAsync");
+const Contact = require("../models/contactsModel");
 
-const CONTACTS_FILE_PATH = "./models/contacts.json";
+// const CONTACTS_FILE_PATH = "./models/contacts.json";
 
 const validateContactBody = (req, res, next) => {
   const schema = Joi.object({
@@ -11,6 +12,7 @@ const validateContactBody = (req, res, next) => {
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean(),
   });
   console.log(req.body);
   const { error } = schema.validate(req.body, { abortEarly: false });
@@ -26,7 +28,7 @@ const validateContactBody = (req, res, next) => {
       .join(", ");
     return res
       .status(400)
-      .json({ message: `Missing required ${errorMessage} field.` });
+      .json({ message: `Missing required ${errorMessage} field(s).` });
   }
 
   next();
@@ -34,9 +36,9 @@ const validateContactBody = (req, res, next) => {
 
 const validateContactId = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
+  const isContactFound = await Contact.exists({ _id: contactId });
 
-  const contacts = JSON.parse(await fs.readFile(CONTACTS_FILE_PATH, "utf-8"));
-  const isContactFound = contacts.find(({ id }) => id === contactId);
+  console.log("==>isContactFound", isContactFound);
 
   if (!isContactFound) {
     const err = new Error("Not found");
@@ -51,7 +53,9 @@ const validateFavorite = (req, res, next) => {
   const { favorite } = req.body;
   console.log("==>favorite", favorite);
 
-  if (typeof favorite !== "boolean") {
+  if (typeof JSON.parse(favorite) !== "boolean") {
+    console.log("==>not boolean", typeof favorite);
+
     const err = new Error("missing field favorite");
     err.status = 400;
     return next(err);
