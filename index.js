@@ -17,6 +17,11 @@ const argv = program.opts();
 
 function handleSuccess(data) {
   console.log("OK");
+  if (data instanceof Array) {
+    console.table(data);
+    return;
+  }
+
   console.log(data);
 }
 
