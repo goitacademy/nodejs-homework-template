@@ -15,16 +15,17 @@ const favoriteContactsJoiSchema = Joi.object({
 
 
 
-
 const listContacts = async (req, res) => {
-  const contacts = await Contact.find({});
+  const { _id } = req.user;
+  const contacts = await Contact.find({owner: _id });
   res.json({contacts})
 };
 
 
 
 const getContactById = async (req, res) => {
-  const {contactId} = req.params;
+  const { contactId } = req.params;
+  
   const contact = await Contact.findById(contactId);
   
   if (!contact) {
@@ -52,9 +53,10 @@ const addContact = async (req, res) => {
     error.status = 400;
     throw error;
   }
-    
+  
   const { name, email, phone, favorite } = req.body;
-  const contact = new Contact({name, email, phone, favorite})
+  const { _id } = req.user; 
+  const contact = new Contact({name, email, phone, favorite, owner: _id})
   await contact.save();
   res.json({ status: 'success' });
 };
