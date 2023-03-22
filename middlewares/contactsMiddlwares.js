@@ -1,21 +1,21 @@
-const { Types } = require("mongoose");
+// const { Types } = require("mongoose");
 
-const { catchAsync } = require("../utils/index");
+// const { catchAsync } = require("../utils/index");
 
-const checkContactId = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+// const checkContactId = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
 
-  const idIsValid = Types.ObjectId.isValid(id);
+//   const idIsValid = Types.ObjectId.isValid(id);
 
-  if (!idIsValid) return next(new AppError(404, "User does not exist"));
+//   if (!idIsValid) return next(new AppError(404, "User does not exist"));
 
-  const userExists = await User.exists({ _id: id });
+//   const userExists = await User.exists({ _id: id });
 
-  if (!userExists) {
-    return next(new AppError(404, "User does not exist"));
-  }
+//   if (!userExists) {
+//     return next(new AppError(404, "User does not exist"));
+//   }
 
-  next();
-});
+//   next();
+// });
 
-module.exports = { checkContactId };
+// module.exports = { checkContactId };
