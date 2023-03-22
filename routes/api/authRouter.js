@@ -10,13 +10,14 @@ const {registrationController,
 const router = express.Router();
 
 
-router.route('/users/register')
-    .post(asyncWrapper(registrationController));
+router.
+  route('/register')
+  .post(asyncWrapper(registrationController));
 
 
 router
-  .route('/users/login')
-  .post(asyncWrapper(loginController))
+  .route('/login')
+  .post(asyncWrapper(loginController));
 
 
 

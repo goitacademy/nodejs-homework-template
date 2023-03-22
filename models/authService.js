@@ -1,24 +1,14 @@
 const { User } = require('../db/userModel');
-// const {NotAuthorizedError} = require ('../helpers/errors')
-
-// const Joi = require("joi");
-
-// const contactsJoiSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-//   favorite: Joi.boolean(),
-// });
+// const { NotAuthorizedError } = require('../helpers/errors');
+const bcrypt = require('bcryptjs');
 
 
-const registration = async (req, res) => {
-    const { email, password } = req.body;
-    const user = new User({
-        email, password
+const registration = async (email, password) => {
+     
+  const user = new User({
+        email, password: await bcrypt.hash(password,10)
     });
     await user.save();
-
-  res.json({})
 };
 
 
