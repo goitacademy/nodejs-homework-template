@@ -1,0 +1,26 @@
+const Joi = require("joi");
+
+const userRegisterValidator = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().trim().min(3).max(30).required(),
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      })
+      .required(),
+    password: Joi.string().required(),
+  });
+
+  return schema.validate(data);
+};
+
+// const updateContactStatusValidator = (data) => {
+//   const schema = Joi.object({
+//     favorite: Joi.boolean().required(),
+//   });
+
+//   return schema.validate(data);
+// };
+
+module.exports = { userRegisterValidator };
