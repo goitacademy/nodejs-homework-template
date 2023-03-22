@@ -29,17 +29,3 @@ connection
   .catch((err) =>
     console.log(`Server not running. Error message: ${err.message}`)
   );
-
-// const MONGO_URL = process.env.MONGO_URL;
-
-// // if (NODE_ENV === "development") app.use(morgan("dev"));
-// mongoose
-//   .connect(MONGO_URL)
-//   .then((connection) => {
-//     console.log(connection);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-
-//     process.exit(1);
-//   });
