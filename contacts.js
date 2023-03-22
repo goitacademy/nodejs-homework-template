@@ -51,9 +51,32 @@ async function addContact(name, email = "", phone = "") {
   return newContact;
 }
 
+async function updateContact(contactId, name, email = "", phone = "") {
+  if (!name) {
+    throw new Error("Name is required.");
+  }
+
+  if (!email && !phone) {
+    throw new Error("Enter at least an email or a phone number");
+  }
+
+  const contacts = await listContacts();
+  const index = contacts.findIndex(({ id }) => id === contactId);
+  if (index < 0) {
+    return null;
+  }
+  const updatedContact = { id: contactId, name, email, phone };
+  contacts[index] = updatedContact;
+
+  await storeContacts(contacts);
+
+  return updatedContact;
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };

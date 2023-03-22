@@ -39,6 +39,10 @@ function invokeAction({ action, id, name, email, phone }) {
       contactsApi.addContact(name, email, phone).then(handleSuccess).catch(handleError);
       break;
 
+    case "update":
+      contactsApi.updateContact(id, name, email, phone).then(handleSuccess).catch(handleError);
+      break;
+
     case "remove":
       contactsApi.removeContact(id).then(handleSuccess).catch(handleError);
       break;
