@@ -1,24 +1,25 @@
 import express from "express";
 const router = express.Router();
+import{ctrlAdd, ctrlDeleteById, ctrlGetAll, ctrlGetById, ctrlUpdateById, ctrlUpdateFavorite} from '../../controllers/contacts.js'
 
-import {
-  ctrlGetAll,
-  ctrlGetById,
-  ctrlAdd,
-  ctrlDeleteById,
-  ctrlUpdateById,
-} from "../../controllers/contacts.js";
-import validateBody from "../../middlewares/validateBody.js";
-import {addSchema} from "../../schemas/contacts.js";
+import { validateAdd, validateUpdateFavorite } from "../../schemas/contacts.js";
 
+import { validateId } from "../../middlewares/validateId.js";
+import { validateBody } from "../../middlewares/validateBody.js";
 router.get("/", ctrlGetAll);
 
-router.get("/:contactId", ctrlGetById);
+router.get("/:contactId", validateId, ctrlGetById);
 
-router.post("/", validateBody(addSchema), ctrlAdd);
+router.post("/", validateBody(validateAdd), ctrlAdd);
 
 router.delete("/:contactId", ctrlDeleteById);
 
-router.put("/:contactId", validateBody(addSchema), ctrlUpdateById);
+router.put("/:contactId", validateBody(validateAdd), ctrlUpdateById);
+
+router.patch(
+  "/:contactId/favorite",
+  validateBody(validateUpdateFavorite),
+  ctrlUpdateFavorite
+);
 
 export default router;

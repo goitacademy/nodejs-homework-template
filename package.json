@@ -2,9 +2,9 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
-  "type":"module",
+  "type": "module",
   "scripts": {
-   "start": "node --experimental-modules server.js",
+    "start": "node --experimental-modules server.js",
     "dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
@@ -12,9 +12,12 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "fs-extra": "^11.1.0",
+    "helmet": "^6.0.1",
     "joi": "^17.8.3",
+    "mongoose": "^7.0.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
