@@ -1,10 +1,6 @@
 const fs = require("fs/promises");
 const uuid = require("uuid").v4;
 const path = require("path");
-
-// const { checkContactData } = require("../middlewares/userMiddlevares");
-// const { AppError } = require("../utils/appError.js");
-
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 async function getContacts() {
@@ -27,13 +23,6 @@ const listContacts = async () => {
 };
 
 const createContact = async (body) => {
-  // const { error, value } = checkContactData(req.body);
-
-  // if (error) {
-  //   return next(new AppError(400, error.details[0]).message);
-  // }
-  //
-  //   const { name, email, phone } = value;
   try {
     const { name, email, phone } = body;
     const contacts = await getContacts();
