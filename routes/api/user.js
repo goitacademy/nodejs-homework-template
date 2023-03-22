@@ -9,7 +9,9 @@ const { schemas } = require("../../models/user");
 const router = express.Router();
 
 router.patch(
-  "/:id",
+
+  "/subscription",
+
   authenticate,
   validateBody(schemas.subscriptionSchema),
   ctrl.updateSubscription
