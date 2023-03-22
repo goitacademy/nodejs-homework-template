@@ -2,10 +2,14 @@ const path = require("path");
 const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 
-const contactsPath = path.resolve("./db/contacts.json");
+const contactsPath = path.resolve("db/contacts.json");
+
+function storeContacts(contacts) {
+  return fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+}
 
 async function listContacts() {
-  const data = await fs.readFile(contactsPath, "utf8");
+  const data = await fs.readFile(contactsPath);
 
   return JSON.parse(data);
 }
@@ -14,31 +18,35 @@ async function getContactById(contactId) {
   const contacts = await listContacts();
   const contact = contacts.find(({ id }) => id === contactId);
 
-  if (!contact) {
-    throw new Error(`There is no contact with id = ${contactId}`);
-  }
-
-  return contact;
+  return contact ?? null;
 }
 
 async function removeContact(contactId) {
   const contacts = await listContacts();
   const index = contacts.findIndex(({ id }) => id === contactId);
   if (index < 0) {
-    throw new Error(`There is no contact with id = ${contactId}`);
+    return null;
   }
-  const deletedContact = contacts[index];
-  contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  const [deletedContact] = contacts.splice(index, 1);
+
+  await storeContacts(contacts);
   return deletedContact;
 }
 
-async function addContact(name, email, phone) {
+async function addContact(name, email = "", phone = "") {
+  if (!name) {
+    throw new Error("Name is required.");
+  }
+
+  if (!email && !phone) {
+    throw new Error("Enter at least an email or a phone number");
+  }
+
   const contacts = await listContacts();
   const newContact = { id: nanoid(), name, email, phone };
   contacts.push(newContact);
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  await storeContacts(contacts);
 
   return newContact;
 }
