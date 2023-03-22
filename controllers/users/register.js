@@ -2,7 +2,7 @@ const { User } = require("../../models");
 const { Conflict } = require("http-errors");
 
 const register = async (req, res) => {
-  const { email, password, subscription } = req.body;
+  const { email, password, subscription = "starter" } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
