@@ -15,12 +15,18 @@ const userRegisterValidator = (data) => {
   return schema.validate(data);
 };
 
-// const updateContactStatusValidator = (data) => {
-//   const schema = Joi.object({
-//     favorite: Joi.boolean().required(),
-//   });
+const userLoginValidator = (data) => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      })
+      .required(),
+    password: Joi.string().required(),
+  });
 
-//   return schema.validate(data);
-// };
+  return schema.validate(data);
+};
 
-module.exports = { userRegisterValidator };
+module.exports = { userRegisterValidator, userLoginValidator };
