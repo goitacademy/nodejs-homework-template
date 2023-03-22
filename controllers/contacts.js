@@ -19,18 +19,16 @@ const removeContact = (contactId) => {
   return false;
 };
 
-const addContact = (body) => {
-  const existingIds = contactStorage.map((contact) => parseInt(contact.id));
-  const newId = Math.max(...existingIds) + 1;
-  const contact = new Contact(
-    newId.toString(),
-    body.name,
-    body.email,
-    body.phone
-  );
-  contactStorage.push(contact);
-  return contact;
+const addContact = async (name, email, phone, favorite) => {
+  try {
+    const contact = new Contact({ name, email, phone, favorite });
+    contact.save;
+    return contact;
+  } catch (err) {
+    throw err;
+  }
 };
+
 const updateContact = (contactId, body) => {
   for (var i = 0; i < contactStorage.length; i++) {
     if (contactStorage[i].id == contactId) {

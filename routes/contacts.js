@@ -33,14 +33,14 @@ router.get("/:contactId", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
   try {
-    const contact = addContact(req.body);
-    return res.status(201).json(contact);
+    const contact = await addContact(req.body);
+    return res.status(200).json(contact);
   } catch (err) {
     console.error(err);
     return res.status(500).send("Something went wrong!");
