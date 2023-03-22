@@ -1,26 +1,23 @@
-const contactsOperations = require('../../models/contacts');
 const createError = require('http-errors');
 
+const { Contact } = require('../../models/index');
 const { catchAsync } = require('../../utils/index');
 
-const schema = require('../../schemas/contactSchema');
+const { contactDataValidator } = require('../../utils/contactValidation');
 
 const postContact = catchAsync(async (req, res, next) => {
-  const body = req.body;
+  const { name, email, phone } = req.body;
 
-  const { error } = schema.validate(body);
+  const { error } = contactDataValidator(req.body);
   if (error) {
     throw createError(400, error.message);
   }
-  if (
-    body.name === undefined ||
-    body.email === undefined ||
-    body.phone === undefined
-  ) {
+
+  if (!name || !email || !phone) {
     throw createError(400, 'missing required name field');
   }
 
-  const result = await contactsOperations.addContact(req.body);
+  const result = await Contact.create(req.body);
 
   res.status(201).json({
     status: 'added',
