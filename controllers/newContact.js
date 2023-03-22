@@ -1,7 +1,9 @@
 const { Contact } = require("../models/contact");
 
 const newContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  // * Извлекаем id пользователя в переменную owner
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

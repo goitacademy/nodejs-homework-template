@@ -26,6 +26,14 @@ const contactSchema = Schema({
     // default: "All",
     // ? По дефолту можеть быть только Boolean?
   },
+  owner: {
+    // * Проверяем пользователя по id для возврата только той информации которую он добавил
+    type: Schema.Types.ObjectId,
+    // * id из базы не может быть строкой, для этого сушествует Schema.Types.ObjectId
+    ref: "user",
+    // * В ref пишем название колекции из которой это id
+    required: true,
+  },
 });
 
 const addContactSchema = Joi.object({
