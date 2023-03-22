@@ -1,6 +1,9 @@
 const fs = require("fs/promises");
 const uuid = require("uuid").v4;
 const path = require("path");
+
+// const { Contact } = require("../models/contactModel");
+
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 async function getContacts() {
@@ -40,18 +43,19 @@ const createContact = async (body) => {
   }
 };
 
-const recieveContactById = async (contactId) => {
-  try {
-    const contacts = await getContacts();
+// const recieveContactById = async (contactId) => {
+//   try {
+//     const contacts = await getContacts();
 
-    const contact = contacts.filter(
-      (item) => String(item.id) === String(contactId)
-    );
-    return contact;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+//     const contact = Contact.findById(contactId);
+//     // const contact = contacts.filter(
+//     //   (item) => String(item.id) === String(contactId)
+//     // );
+//     return contact;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
 const removeContact = async (contactId) => {
   try {
@@ -95,7 +99,7 @@ const updateContact = async (contactId, body) => {
 
 module.exports = {
   listContacts,
-  recieveContactById,
+  // recieveContactById,
   removeContact,
   createContact,
   updateContact,
