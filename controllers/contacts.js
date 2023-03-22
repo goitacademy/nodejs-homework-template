@@ -1,7 +1,5 @@
 const { Contact } = require("../models/contacts.js");
 
-const contactStorage = require("../startup/database.js");
-
 const listContacts = async () => {
   const contacts = await Contact.find();
   return contacts;
@@ -22,7 +20,7 @@ const removeContact = (contactId) => {
 const addContact = async (name, email, phone, favorite) => {
   try {
     const contact = new Contact({ name, email, phone, favorite });
-    contact.save;
+    contact.save();
     return contact;
   } catch (err) {
     throw err;

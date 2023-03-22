@@ -39,7 +39,8 @@ router.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   try {
-    const contact = await addContact(req.body);
+    const { name, email, phone, favorite } = req.body;
+    const contact = await addContact(name, email, phone, favorite);
     return res.status(200).json(contact);
   } catch (err) {
     console.error(err);
