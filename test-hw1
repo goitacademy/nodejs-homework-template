@@ -1,0 +1,16 @@
+#!/bin/bash
+echo Starting contacts API test:
+set -x
+node index.js --action list
+# Get a non-existent contact by id:
+node index.js --action get --id 5
+# Get a contact by id:
+node index.js --action get --id 05olLMgyVQdWRwgKfg5J6
+# Add new contact:
+node index.js --action add --name Mango --email mango@gmail.com --phone 322-22-22
+# Delete a non-existent contact by id:
+node index.js --action remove --id=3
+# Delete a contact by id:
+node index.js --action remove --id=drsAJ4SHPYqZeG-83QTVW
+# Get contacts list:
+node index.js --action list
