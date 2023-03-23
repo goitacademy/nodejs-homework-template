@@ -20,10 +20,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:contactId", (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const contact = getContactById(contactId);
+    const { id } = req.params;
+    if (id.length !== 24) {
+      return res.status(400).send("Wrong id provided");
+    }
+    const contact = await getContactById(id);
     if (!contact) {
       return res.status(404).send("Contact not found");
     }

@@ -4,8 +4,9 @@ const listContacts = async () => {
   const contacts = await Contact.find();
   return contacts;
 };
-const getContactById = (contactId) => {
-  return contactStorage.find((u) => u.id == contactId);
+const getContactById = async (_id) => {
+  const contact = await Contact.findOne({ _id });
+  return contact;
 };
 
 const removeContact = (contactId) => {
