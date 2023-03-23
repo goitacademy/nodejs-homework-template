@@ -15,6 +15,7 @@
     "dotenv": "^16.0.3",
     "express": "4.17.1",
     "fs": "^0.0.1-security",
+    "http-errors": "^2.0.0",
     "joi": "^17.8.3",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.1.0",

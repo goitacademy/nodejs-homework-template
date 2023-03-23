@@ -10,7 +10,8 @@ const registration = async (email, password) => {
      
   const user = new User({
         email, password
-    });
+  });
+
     await user.save();
 };
 
@@ -33,9 +34,17 @@ const login = async (email, password) => {
   return token;
 };
 
+const logout = async (_id) => {
+  const user = await User.findByIdAndUpdate(_id, { token: null });
+  if (!user) {
+    throw new NotAuthorizedError(`No user with such email`);
+  }
+};
+
 
 
 module.exports = {
   registration,
   login,
+  logout
 }
