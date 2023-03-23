@@ -17,7 +17,7 @@ const authentificate = async (req, res, next) => {
     const user = await User.findById(id);
     // * Проверки на наличие пользователя в базе по id
 
-    if (!user) {
+    if (!user || !user.token || user.token !== token) {
       throw RequestError(401);
     }
     req.user = user;
