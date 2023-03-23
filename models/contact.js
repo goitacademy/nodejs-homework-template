@@ -42,4 +42,6 @@ module.exports = {
     Contact,
     joiSchema,
     joiSchemaFavorite
+
+
 }
