@@ -30,7 +30,12 @@ router
 
 router
   .route("/:contactId/favorite")
-  .patch(validateContactId, validateFavorite, updateStatusContact);
+  .patch(
+    validateContactId,
+    validateContactBody,
+    validateFavorite,
+    updateStatusContact
+  );
 
 // router.get("/", getListContactsController);
 // router.post("/", validateContactBody, addContactController);
