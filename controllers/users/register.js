@@ -30,7 +30,8 @@ const register = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'added',
     code: 201,
-    data: { result: { email, subscription } },
+    token: 'exampletoken',
+    data: { user: { email, subscription } },
   });
 });
 

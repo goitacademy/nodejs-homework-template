@@ -28,7 +28,8 @@ const login = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'ok',
     code: 201,
-    data: { result: { email: user.email, subscription: user.subscription } },
+    token: 'exampletoken',
+    data: { user: { email: user.email, subscription: user.subscription } },
   });
 });
 
