@@ -10,6 +10,7 @@ const userRegisterValidator = (data) => {
       })
       .required(),
     password: Joi.string().required(),
+    subscription: Joi.string().valid('starter', 'pro', 'business'),
   });
 
   return schema.validate(data);
