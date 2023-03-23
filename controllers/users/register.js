@@ -5,9 +5,14 @@ const { userRegisterValidator } = require('../../utils');
 const { User } = require('../../models/index');
 
 const register = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, subscription } = req.body;
 
-  const { error } = userRegisterValidator({ name, email, password });
+  const { error } = userRegisterValidator({
+    name,
+    email,
+    password,
+    subscription,
+  });
   if (error) {
     throw createError(400, error.message);
   }
@@ -25,7 +30,7 @@ const register = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'added',
     code: 201,
-    data: { result: newUser },
+    data: { result: { email, subscription } },
   });
 });
 
