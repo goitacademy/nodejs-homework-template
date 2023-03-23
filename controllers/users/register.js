@@ -18,12 +18,12 @@ const register = catchAsync(async (req, res, next) => {
   }
 
   // check if entered email alreaddy exists
-  const isUserExist = await User.findOne({ email });
-  if (isUserExist) {
+  const user = await User.findOne({ email });
+  if (user) {
     throw createError(409, `User with email ${email} already exist`);
   }
 
-  const newUser = await User.create({ name, email, password });
+  const newUser = await User.create({ name, email, password, subscription });
 
   newUser.password = undefined;
 
