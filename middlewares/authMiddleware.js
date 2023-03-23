@@ -1,20 +1,25 @@
-const { decode } = require("jsonwebtoken");
+const { verify } = require("jsonwebtoken");
 const { HttpError } = require("../helpers/httpError");
+const { User } = require("../models/userModel");
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
+
+  if (bearer !== "Bearer") next(new HttpError(401, "Not authorized"));
+
+  if (!token) next(new HttpError(401, "Please, provide a token"));
+
   try {
-    const [tokenType, token] = req.headers.authorization.split(" ");
+    const user = await User.findOne({ token });
 
-    if (!token) {
-      next(new HttpError(401, "Please, provide a token"));
-    }
+    const verifiedToken = verify(user.token, process.env.JWT_SECRET);
 
-    const user = decode(token, process.env.JWT_SECRET);
-    req.token = token;
-    req.user = user;
+    req.user = verifiedToken;
+
     next();
   } catch (err) {
-    next(new HttpError(401, "Invalid token"));
+    next(new HttpError(401, "Not authorized"));
   }
 };
 
