@@ -23,6 +23,10 @@ const userSchema = new Schema(
       minlenght: 6,
       required: [true, "Set password for user"],
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
     token: {
       type: String,
       default: "",
