@@ -1,4 +1,4 @@
-const { Contact } = require("../models/contacts.js");
+const { Contact, contactValidationSchema } = require("../models/contacts.js");
 
 const listContacts = async () => {
   const contacts = await Contact.find();
@@ -33,10 +33,26 @@ const updateContact = async (_id, newContact) => {
   return updatedContact;
 };
 
+const updateStatusContact = async (_id, body) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(_id, body, {
+      new: true,
+    });
+    if (updatedContact) {
+      return updatedContact;
+    } else {
+      throw new Error();
+    }
+  } catch (error) {
+    throw new Error("Not found");
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

@@ -6,6 +6,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../controllers/contacts");
 const { contactValidationSchema } = require("../models/contacts");
 
@@ -83,6 +84,22 @@ router.put("/:id", async (req, res) => {
     return res.status(200).send("Contact sucessfully updated!");
   } catch {
     return res.status(500).send("Something went wrong!");
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res) => {
+  const { contactId } = req.params;
+
+  const { error } = contactValidationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send("missing field favorite");
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, req.body);
+    return res.status(200).send(updatedContact);
+  } catch (err) {
+    return res.status(404).send("Contact not found");
   }
 });
 
