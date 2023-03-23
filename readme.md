@@ -1,31 +1,23 @@
-## GoIT Node.js Course Template Homework
+## GOIT Node.js homework #1
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+### How to use it
 
-Додайте ментора до колаборації
+node index --action typeOfAction [option=value]...
 
-Для кожної домашньої роботи створюйте свою гілку.
+Mandatory arguments:
+-a --action = list | get | add | update | remove
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Other options, depends on action:
+-i, --id - mandatory for actions: get, update, delete
+-n --name - mandotory for actions: add, update
+-e, --email
+-p, --phone
+At least an email or a phone number is needed for add and update action.
 
-Кожна нова гілка для др повинна робитися з master
+### How to try all at once
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+If you use a bash similar to git bash, you can just run ./test-hw1
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+The results of that run would be like this:
+./test-hw1.jpg
+https://monosnap.com/file/91z4QbxEPMSG8QIrAoP1PL272WlrDo
