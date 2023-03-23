@@ -4,6 +4,17 @@ const listContacts = async () => {
   const contacts = await Contact.find();
   return contacts;
 };
+
+const addContact = async (name, email, phone, favorite) => {
+  try {
+    const contact = new Contact({ name, email, phone, favorite });
+    contact.save();
+    return contact;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getContactById = async (_id) => {
   const contact = await Contact.findOne({ _id });
   return contact;
@@ -17,26 +28,9 @@ const removeContact = async (_id) => {
   }
 };
 
-const addContact = async (name, email, phone, favorite) => {
-  try {
-    const contact = new Contact({ name, email, phone, favorite });
-    contact.save();
-    return contact;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const updateContact = (contactId, body) => {
-  for (var i = 0; i < contactStorage.length; i++) {
-    if (contactStorage[i].id == contactId) {
-      contactStorage[i] = Object.assign({}, contactStorage[i], {
-        ...body,
-        id: contactStorage[i].id,
-      });
-      return;
-    }
-  }
+const updateContact = async (_id, newContact) => {
+  const updatedContact = await Contact.findByIdAndUpdate(_id, newContact);
+  return updatedContact;
 };
 
 module.exports = {

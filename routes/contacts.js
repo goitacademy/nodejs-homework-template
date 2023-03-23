@@ -20,6 +20,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  const { error } = contactValidationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+  try {
+    const { name, email, phone, favorite } = req.body;
+    const contact = await addContact(name, email, phone, favorite);
+    return res.status(200).json(contact);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Something went wrong!");
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -33,21 +48,6 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(contact);
   } catch {
     return res.status(500).send("Something went wrong");
-  }
-});
-
-router.post("/", async (req, res) => {
-  const { error } = contactValidationSchema.validate(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-  try {
-    const { name, email, phone, favorite } = req.body;
-    const contact = await addContact(name, email, phone, favorite);
-    return res.status(200).json(contact);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Something went wrong!");
   }
 });
 
@@ -65,21 +65,21 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:contactId", (req, res) => {
-  const { contactId } = req.params;
-  if (!contactId) {
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
     return res.status(400).send("Id is required to perform update");
   }
   const { error } = contactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const contact = getContactById(contactId);
+  const contact = getContactById(id);
   if (!contact) {
     return res.status(404).send("Contact not found");
   }
   try {
-    updateContact(contactId, req.body);
+    updateContact(id, req.body);
     return res.status(200).send("Contact sucessfully updated!");
   } catch {
     return res.status(500).send("Something went wrong!");
