@@ -9,13 +9,12 @@ const getContactById = async (_id) => {
   return contact;
 };
 
-const removeContact = (contactId) => {
-  const index = contactStorage.findIndex((u) => u.id == contactId);
-  if (index > -1) {
-    contactStorage.splice(index, 1);
-    return true;
+const removeContact = async (_id) => {
+  try {
+    return Contact.findByIdAndDelete({ _id });
+  } catch (err) {
+    console.log(err);
   }
-  return false;
 };
 
 const addContact = async (name, email, phone, favorite) => {

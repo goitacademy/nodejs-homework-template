@@ -51,10 +51,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:contactId", (req, res) => {
-  const contactId = req.params.contactId;
+router.delete("/:id", async (req, res) => {
+  const contactId = req.params.id;
   try {
-    const removed = removeContact(contactId);
+    const removed = await removeContact(contactId);
     if (removed) {
       return res.status(200).send("Contact deleted");
     } else {
