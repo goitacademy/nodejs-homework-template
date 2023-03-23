@@ -16,12 +16,8 @@ const login = catchAsync(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select('+password');
-  console.log('---> ~ login ~ user:', user);
-  if (!user) {
-    throw createError(401, `"Email or password is wrong"`);
-  }
-  const passwordIsValid = await user.checkPassword(password, user.password);
-  if (!passwordIsValid) {
+
+  if (!user || !(await user.checkPassword(password))) {
     throw createError(401, `"Email or password is wrong"`);
   }
 

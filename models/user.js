@@ -37,8 +37,9 @@ userSchema.pre('save', async function (next) {
 });
 
 // Custom method
-userSchema.methods.checkPassword = (candidate, hash) =>
-  bcrypt.compare(candidate, hash);
+userSchema.methods.checkPassword = function (candidate) {
+  return bcrypt.compare(candidate, this.password);
+};
 
 const User = model('user', userSchema);
 
