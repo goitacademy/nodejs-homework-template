@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
 const contact = new Schema({
   name: {
     type: String,
@@ -16,7 +15,12 @@ const contact = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "users",
+  },
 });
+
 
 const Contacts = mongoose.model("contact", contact);
 
@@ -41,6 +45,5 @@ module.exports = {
   createContact,
   deleteContact,
   updateContact,
+  Contacts,
 };
-
-module.exports = Contacts;
