@@ -18,15 +18,32 @@ app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
 
+
+
+//  app.use((err, req, res, next) => {
+//     const { status = 500 } = err; // считываю error
+//     res.status(status).json({ message: 'Server error' })
+//  })
+//
+// app.use((req, res) => {
+//     res.status(404).json({ message: 'Not found' })
+// })
+
+app.use((err, req, res, next) => {
+    const isNotFound = err.message.indexOf('not found')
+
+    if (err.message && isNotFound ) {
+        return next()
+    }
+
+    console.log(err.stack)
+
+    res.status(500).json({error: err.stack})
+})
+
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+    res.status(404).json({ message: 'Not found' })
 })
-
-app.use((err, req, res, _) => {
-    const { status = 500 } = err; // считываю error
-    res.status(status).json({ message: 'Server error' })
-})
-
 
 
 

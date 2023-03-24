@@ -6,6 +6,7 @@ const updateContact = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+
         if (!result) {
             throw createError(404, "Not found");
         }
@@ -13,6 +14,7 @@ const updateContact = async (req, res, next) => {
             result
         );
     } catch (error) {
+
         next(error);
     }
 }
