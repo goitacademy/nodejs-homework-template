@@ -4,10 +4,14 @@ const { Contact } = require("../../models/contact");
 
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-    timestamps: true,
-  });
+  const contact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorute: req.body.favorite },
+    {
+      new: true,
+      timestamps: true,
+    }
+  );
 
   if (!contact) {
     throw HttpError(404, `Contact with id=${contactId} was not found`);

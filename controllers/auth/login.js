@@ -12,7 +12,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  
+
   if (!user) {
     throw HttpError(401, "Email or password invalid");
   }
@@ -26,10 +26,12 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const { name, email: userEmail, subscription, avatarURL } = user;
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
+    user: { name, email: userEmail, subscription, avatarURL },
   });
 };
 
