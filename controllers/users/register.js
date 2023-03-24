@@ -31,7 +31,7 @@ const register = catchAsync(async (req, res, next) => {
     status: 'added',
     code: 201,
     token: 'exampletoken',
-    data: { user: { email, subscription } },
+    data: { user: { email, subscription: subscription || 'starter' } },
   });
 });
 
