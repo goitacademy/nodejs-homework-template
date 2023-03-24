@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", ctrl.getAllContacts);
 router.post("/", ctrl.postContact);
+router.get('/', auth, ctrl.getAllContacts);
 router.post('/', auth, ctrl.postContact);
 
 // router.use("/:contactId", checkContactId);
