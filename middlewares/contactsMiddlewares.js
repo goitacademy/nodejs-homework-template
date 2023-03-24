@@ -50,12 +50,7 @@ const validateContactId = catchAsync(async (req, res, next) => {
 });
 
 const validateFavorite = (req, res, next) => {
-  const { favorite } = req.body;
-  console.log("==>favorite", favorite);
-
-  if (typeof JSON.parse(favorite) !== "boolean") {
-    console.log("==>not boolean", typeof favorite);
-
+  if (!Object.keys(req.body).includes("favorite")) {
     const err = new Error("missing field favorite");
     err.status = 400;
     return next(err);
