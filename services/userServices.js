@@ -44,9 +44,21 @@ const currentUser = async (_id) => {
   return await User.findOne({ _id }, { _id: 0, email: 1, subscription: 1 });
 };
 
+const changeUserSubscription = async (_id, subscription) => {
+  return await User.findByIdAndUpdate({ _id }, subscription, {
+    new: true,
+    fields: {
+      _id: 0,
+      password: 0,
+      token: 0,
+    },
+  });
+};
+
 module.exports = {
   registration,
   logIn,
   logOut,
   currentUser,
+  changeUserSubscription,
 };

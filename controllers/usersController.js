@@ -3,6 +3,7 @@ const {
   logIn,
   logOut,
   currentUser,
+  changeUserSubscription,
 } = require("../services/userServices");
 
 const registrationController = async (req, res) => {
@@ -55,9 +56,25 @@ const currentUserController = async (req, res) => {
   });
 };
 
+const subscriptionUserController = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+
+  await changeUserSubscription(_id, { subscription });
+
+  res.status(200).json({
+    status: "success",
+    code: "200",
+    user: {
+      subscription,
+    },
+  });
+};
+
 module.exports = {
   registrationController,
   logInController,
   logOutController,
   currentUserController,
+  subscriptionUserController,
 };
