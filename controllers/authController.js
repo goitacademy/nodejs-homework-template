@@ -24,7 +24,7 @@ const registrationController = async (req, res) => {
         message: "created",
         code: 201,
         user: {
-            email: email,
+            email,
             subscription: "starter",
         },
     });
@@ -46,10 +46,12 @@ const loginController = async (req, res) => {
 };
 
 const logoutController = async (req, res) => {
-  const { _id } = req.user;
+    const { _id } = req.user;
     await logout(_id);
-  res.status(204).json();
-}
+    res.status(204).json();
+};
+
+
 
 module.exports = {
     registrationController,

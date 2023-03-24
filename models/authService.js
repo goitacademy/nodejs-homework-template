@@ -41,10 +41,18 @@ const logout = async (_id) => {
   }
 };
 
+const currentUser = async (token) => {
+const user = await User.findOne({ token });
+  if (!user) {
+    throw new NotAuthorizedError(`No user with such email`);
+  }
+}
+
 
 
 module.exports = {
   registration,
   login,
-  logout
+  logout,
+  currentUser
 }
