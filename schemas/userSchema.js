@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const bcrypt = require("bcryptjs");
 
 const userSchema = Schema(
   {
@@ -21,6 +20,9 @@ const userSchema = Schema(
     token: {
       type: String,
       default: null,
+    },
+    avaUrl: {
+      type: String,
     },
   },
   { versionKey: false, timestamps: true }
