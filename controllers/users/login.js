@@ -1,8 +1,11 @@
-const { catchAsync } = require('../../utils/index');
 const createError = require('http-errors');
+const jwt = require('jsonwebtoken');
 
+const { catchAsync } = require('../../utils/index');
 const { userLoginValidator } = require('../../utils');
 const { User } = require('../../models/index');
+
+const { SECRET_KEY } = process.env;
 
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -21,11 +24,19 @@ const login = catchAsync(async (req, res, next) => {
     throw createError(401, `"Email or password is wrong"`);
   }
 
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1d' });
+
   res.status(200).json({
     status: 'ok',
     code: 201,
-    token: 'exampletoken',
-    data: { user: { email: user.email, subscription: user.subscription } },
+    token,
+    data: {
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    },
   });
 });
 
