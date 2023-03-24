@@ -2,19 +2,41 @@ const express = require("express");
 const router = express.Router();
 
 const { contacts: ctrl } = require("../../controllers");
-const { validation, ctrlWrapper } = require("../../middlewares");
-const { contactSchema } = require("../../schemas");
-
-const validateMiddleware = validation(contactSchema);
+const { ctrlWrapper } = require("../../middlewares");
+const {
+  validationBody,
+  validationParams,
+} = require("../../middlewares/validation");
+const { schemas } = require("../../models/contact");
 
 router.get("/", ctrlWrapper(ctrl.getListContacts));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
+router.get(
+  "/:id",
+  validationParams(schemas.verifyMongoId),
+  ctrlWrapper(ctrl.getContactById)
+);
 
-router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
+router.post("/", validationBody(schemas.add), ctrlWrapper(ctrl.addContact));
 
-router.delete("/:contactId", ctrlWrapper(ctrl.removeContactById));
+router.put(
+  "/:id",
+  validationParams(schemas.verifyMongoId),
+  validationBody(schemas.add),
+  ctrlWrapper(ctrl.updateContactById)
+);
 
-router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateContactById));
+router.patch(
+  "/:id/favorite",
+  validationParams(schemas.verifyMongoId),
+  validationBody(schemas.updateStatus),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
+
+router.delete(
+  "/:id",
+  validationParams(schemas.verifyMongoId),
+  ctrlWrapper(ctrl.removeContactById)
+);
 
 module.exports = router;
