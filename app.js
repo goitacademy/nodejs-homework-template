@@ -1,12 +1,18 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import dotenv from "dotenv";
+import helmet from "helmet";
 import contactsRouter from "./routes/api/contacts.js";
+
 
 const app = express();
 
+dotenv.config();
+
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
