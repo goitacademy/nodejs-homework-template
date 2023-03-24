@@ -1,20 +1,22 @@
-// const contactsOperations = require("../../models/contacts");
+const { Contact } = require("../../models/contact");
 
-// const { IdError } = require("../../errorHandlers/");
+const { IdError } = require("../../errorHandlers/");
 
-// const getContactById = async (req, res) => {
-//   const { contactId } = req.params;
-//   const contact = await contactsOperations.getContactById(contactId);
-//   if (!contact) {
-//     throw new IdError(contactId);
-//   }
-//   res.json({
-//     status: "success",
-//     code: 200,
-//     data: {
-//       result: contact,
-//     },
-//   });
-// };
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
 
-// module.exports = getContactById;
+  const contact = await Contact.findById(contactId);
+
+  if (!contact) {
+    throw new IdError(contactId);
+  }
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result: contact,
+    },
+  });
+};
+
+module.exports = getContactById;
