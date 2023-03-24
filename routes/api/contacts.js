@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 
-const { contacts: ctrl } = require("../../controllers/index");
-// const { checkContactId } = require("../../middlewares/index");
+const { contacts: ctrl } = require('../../controllers');
+const { auth } = require('../../middlewares');
 
 const router = express.Router();
 
