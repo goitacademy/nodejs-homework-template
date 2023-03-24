@@ -33,19 +33,12 @@ const updateContact = async (_id, newContact) => {
   return updatedContact;
 };
 
-const updateStatusContact = async (_id, body) => {
-  try {
-    const updatedContact = await Contact.findByIdAndUpdate(_id, body, {
-      new: true,
-    });
-    if (updatedContact) {
-      return updatedContact;
-    } else {
-      throw new Error();
-    }
-  } catch (error) {
-    throw new Error("Not found");
-  }
+const updateStatusContact = async (_id, favorite) => {
+  const update = { favorite };
+  const updatedContact = await Contact.findByIdAndUpdate(_id, update, {
+    new: true,
+  });
+  return updatedContact;
 };
 
 module.exports = {

@@ -26,7 +26,7 @@ const contactValidationSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean().optional(),
 });
 
 module.exports = { Contact, contactValidationSchema };

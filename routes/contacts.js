@@ -88,15 +88,14 @@ router.put("/:id", async (req, res) => {
 });
 
 router.patch("/:contactId/favorite", async (req, res) => {
-  const { contactId } = req.params;
-
-  const { error } = contactValidationSchema.validate(req.body);
-  if (error) {
-    return res.status(400).send("missing field favorite");
-  }
-
   try {
-    const updatedContact = await updateStatusContact(contactId, req.body);
+    const { contactId: _id } = req.params;
+    const { favorite } = req.body;
+    if (favorite === undefined) {
+      return res.status(400).send("Missing field favorite");
+    }
+    const favoriteValue = Boolean(favorite);
+    const updatedContact = await updateStatusContact(_id, favoriteValue);
     return res.status(200).send(updatedContact);
   } catch (err) {
     return res.status(404).send("Contact not found");
