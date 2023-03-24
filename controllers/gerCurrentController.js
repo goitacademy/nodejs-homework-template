@@ -1,17 +1,20 @@
-const { currentUser } = require('../models/authService');
+// const { currentUser } = require('../models/authService');
 
 const currentController = async (req, res) => {
-currentUser
-    res.status(200).json({
-        data: {
-            user: {
-                email,
-                subscription: "starter",
-            },
-        },
+  const { email, subscription } = req.user;
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      user: {
+        email,
+        subscription,
+      },
+    },
   });
 };
 
 module.exports = {
     currentController
 }
+
