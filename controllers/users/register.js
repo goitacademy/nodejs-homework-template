@@ -1,8 +1,8 @@
-const { catchAsync } = require('../../utils/index');
+const { catchAsync } = require('../../utils');
 const createError = require('http-errors');
 
 const { userRegisterValidator } = require('../../utils');
-const { User } = require('../../models/index');
+const { User } = require('../../models');
 
 const register = catchAsync(async (req, res, next) => {
   const { name, email, password, subscription } = req.body;
