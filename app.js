@@ -20,19 +20,11 @@ app.use('/api/contacts', contactsRouter)
 
 
 
-//  app.use((err, req, res, next) => {
-//     const { status = 500 } = err; // считываю error
-//     res.status(status).json({ message: 'Server error' })
-//  })
-//
-// app.use((req, res) => {
-//     res.status(404).json({ message: 'Not found' })
-// })
 
 app.use((err, req, res, next) => {
     const isNotFound = err.message.indexOf('not found')
-
-    if (err.message && isNotFound ) {
+    const isCastError = err.message.indexOf('Cast to ObjectId failed')
+    if (err.message && (isNotFound || isCastError)) {
         return next()
     }
 
@@ -44,7 +36,6 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
 })
-
 
 
 module.exports = app
