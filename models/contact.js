@@ -5,8 +5,6 @@ Joi.objectId = require("joi-objectid")(Joi);
 const phoneRegexp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
 const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
-
-
 const contactSchema = new Schema(
   {
     name: {
@@ -26,6 +24,10 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
