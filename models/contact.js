@@ -7,7 +7,7 @@ const contactSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "Set name for contact"],
       unique: true,
     },
     email: {
@@ -51,7 +51,7 @@ const addSchema = Joi.object({
   favorite: myCustomJoi.boolean(),
 });
 const toggleFavoriteSchema = Joi.object({
-  favorite: myCustomJoi.boolean().required(),
+  favorite: myCustomJoi.boolean(),
 });
 
 const schemas = {

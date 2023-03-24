@@ -3,8 +3,10 @@ const { Contact } = require("../../models/contact");
 const { IdError, MissingFieldsError } = require("../../errorHandlers/");
 
 const toggleFavorite = async (req, res) => {
-  if (!req.body) {
-    throw new MissingFieldsError();
+  console.log(req.body);
+
+  if (Object.keys(req.body).length === 0) {
+    throw new MissingFieldsError(400, "missing field favorite");
   }
   const { contactId } = req.params;
   const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
