@@ -1,6 +1,6 @@
 .vscode/
 .idea/
-
+secret.js
 # dependencies
 /node_modules
 /.pnp
