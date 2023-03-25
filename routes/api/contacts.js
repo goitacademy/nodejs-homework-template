@@ -1,4 +1,5 @@
-const express = require('express');
+const express = require('express')
+const contacts = require("../../models/contacts")
 
 const {
   getContactsList,
@@ -9,6 +10,7 @@ const {
 } = require('../../controllers/index');
 
 const router = express.Router();
+
 
 router.get('/', getContactsList);
 
