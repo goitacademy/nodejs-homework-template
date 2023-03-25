@@ -17,13 +17,12 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-        const result = await contacts.getContactById(id);
+    const result = await contacts.getContactById(id);
     if (!result) {
-      throw HttpError(404, 'Not found');
+      throw HttpError(404, `Not found`);
     }
     res.json(result);
-  }
-  catch (error) {
+  } catch (error) {
     next(error);
   }
 })
