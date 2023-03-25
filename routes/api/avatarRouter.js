@@ -5,6 +5,7 @@ import jimp from "jimp";
 import upload from "../middlewares/upload.js";
 import authenticate from "../middlewares/authenticate.js";
 import { UserModel } from "../../schemas/user.js";
+import { ctrlWrapper } from "../../helpers/ctrlWrapper.js";
 
 const router = express.Router();
 
@@ -47,4 +48,6 @@ router.patch(
   }
 );
 
-export default router;
+const ctrlAvatar = ctrlWrapper(router);
+ export default ctrlAvatar;
+
