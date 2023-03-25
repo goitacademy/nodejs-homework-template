@@ -10,6 +10,8 @@ const {
   favoriteJoiSchema,
 } = require("../../middlewares/validation/validationSchema");
 
+const { authMiddleware } = require("../../middlewares/authMiddleware");
+
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
 const {
@@ -20,6 +22,8 @@ const {
   updateStatusContactController,
   deleteContactController,
 } = require("../../controllers/contactsController");
+
+router.use(authMiddleware);
 
 router
   .route("/")
@@ -40,5 +44,5 @@ router
   );
 
 module.exports = {
-  router,
+  contactsRouter: router,
 };
