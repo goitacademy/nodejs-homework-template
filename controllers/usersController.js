@@ -38,7 +38,7 @@ const logOutController = async (req, res) => {
 
   await logOut(_id);
 
-  res.status(204).json({ message: "Came out" });
+  res.status(200).json({ message: "Logout successful" });
 };
 
 const currentUserController = async (req, res) => {
