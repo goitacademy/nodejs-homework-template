@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const { id } = reg.params;
+    const { id } = req.params;
         const result = await contacts.getContactById(id);
     if (!result) {
       throw HttpError(404, 'Not found');
