@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const JoiPhoneNumber = Joi.extend(require("joi-phone-number"));
 
-const userValidator = (data) => {
+exports.contactValidator = (data) => {
   const result = Joi.object({
     name: Joi.string().min(2).max(12).required(),
     email: Joi.string().email().required(),
@@ -9,8 +9,4 @@ const userValidator = (data) => {
   });
 
   return result.validate(data);
-};
-
-module.exports = {
-  userValidator,
 };
