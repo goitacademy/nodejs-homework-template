@@ -1,6 +1,8 @@
+import gravatar from "gravatar";
 import bcrypt from "bcryptjs";
 import { UserModel } from "../../schemas/user.js";
 import { HttpError } from "../../helpers/HttpError.js";
+import { ctrlWrapper } from "../../helpers/ctrlWrapper.js";
 
 const register = async (req, res, next) => {
   try {
@@ -14,7 +16,14 @@ const register = async (req, res, next) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = await UserModel.create({ email, password: hashedPassword });
+  
+    const avatarURL = gravatar(email);
+
+    const newUser = await UserModel.create({
+      email,
+      password: hashedPassword,
+      avatarURL,
+    });
 
     const { subscription } = newUser;
     res.status(201).json({ user: { email, subscription } });
@@ -22,6 +31,7 @@ const register = async (req, res, next) => {
     next(error);
   }
 };
-import { ctrlWrapper } from "../../helpers/ctrlWrapper.js";
+
+
 const ctrlRegister = ctrlWrapper(register);
 export default ctrlRegister;
