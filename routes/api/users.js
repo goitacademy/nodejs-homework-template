@@ -4,9 +4,16 @@ const ctrl = require("../../controllers/users");
 
 const { validateBody, authenticate, upload } = require("../../middlewares");
 
-const { updateSubscriptionSchemaJoi } = require("../../models/user");
+const {
+  updateSubscriptionSchemaJoi,
+  verifyEmailJoiSchema,
+} = require("../../models/user");
 
 const router = express.Router();
+
+router.post("/verify", validateBody(verifyEmailJoiSchema), ctrl.resendVerify);
+
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
 
 router.patch(
   "/",

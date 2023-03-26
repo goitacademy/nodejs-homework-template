@@ -9,6 +9,7 @@ const {
   registerSchemaJoi,
   loginSchemaJoi,
   updateSubscriptionSchemaJoi,
+  verifyEmailJoiSchema,
 } = require("./user");
 
 module.exports = {
@@ -19,4 +20,5 @@ module.exports = {
   registerSchemaJoi,
   loginSchemaJoi,
   updateSubscriptionSchemaJoi,
+  verifyEmailJoiSchema,
 };
