@@ -59,4 +59,7 @@ const User = model('user', userSchema);
 module.exports = {
   User,
   schemas,
+  registerSchema,
+  loginSchema,
+  subscriptionSchema,
 };
