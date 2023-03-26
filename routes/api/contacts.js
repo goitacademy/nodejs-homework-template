@@ -1,27 +1,74 @@
+
 const express = require('express')
 const contacts = require("../../models/contacts")
 
-const router = express.Router()
+
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../controller/contacts");
+
+
+const { addValidate, putValidate } = require("../../helpers/schema");
+
 
 router.get('/', async (req, res, next) => {
   const result = await contacts.listContacts();
   res.json(result)
 })
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contactsList = await listContacts();
+  res.json(contactsList);
+});
 
-module.exports = router
+router.get("/:contactId", async (req, res, next) => {
+  const foundContact = await getContactById(req.params.contactId);
+  if (!foundContact) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.json(foundContact);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  if (addValidate.validate(req.body).error) {
+    res.status(400).json({
+      message: addValidate.validate(req.body).error.details[0].message,
+    });
+  } else {
+    const message = await addContact(req.body);
+    res.status(201).json(message);
+  }
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const foundContact = await getContactById(req.params.contactId);
+  if (!foundContact) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    await removeContact(req.params.contactId);
+    res.json({ message: "contact deleted" });
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  const foundContact = await getContactById(req.params.contactId);
+  const error = putValidate.validate(req.body).error;
+  if (!error) {
+    const editedContact = await updateContact(req.params.contactId, req.body);
+    res.json(editedContact);
+  } else if (!foundContact) {
+    res.status(404).json({ message: "Not found" });
+  } else if (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+module.exports = router;
