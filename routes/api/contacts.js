@@ -6,7 +6,11 @@ const {
   addContact,
   updateContact,
 } = require("../../controllers/contacts");
-const { postValidate, putValidate } = require("../../models/contacts.js");
+const {
+  postValidate,
+  putValidate,
+  patchValidate,
+} = require("../../models/contacts.js");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -28,15 +32,17 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.patch("/:id/favorite", async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) {
+  if (!req.params.id) {
     return res.status(404).json({ message: "Not found" });
   }
+  if (patchValidate.validate(req.body).error) {
+    console.log(patchValidate.validate(req.body).error.details[0].message);
+    return res.status(400).send({
+      message: patchValidate.validate(req.body).error.details[0].message,
+    });
+  }
   try {
-    if (typeof req.body.favorite !== "boolean") {
-      return res.status(400).send({ message: "missing field favorite" });
-    }
-    const favoritetUpdate = await updateContact(id, req.body);
+    const favoritetUpdate = await updateContact(req.params.id, req.body);
     return res.status(200).json(favoritetUpdate);
   } catch (error) {
     next(error);
@@ -67,17 +73,17 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const foundContact = await getContactById(req.params.contactId);
   const error = putValidate.validate(req.body).error;
-  if (!error) {
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+  if (!foundContact) {
+    res.status(404).json({ message: "Not found" });
+  }
+  try {
     const editedContact = await updateContact(req.params.contactId, req.body);
     res.json(editedContact);
-  } else if (!foundContact) {
-    res.status(404).json({ message: "Not found user" });
-  } else if (error.details[0].type === "object.missing") {
-    res.status(400).json({ message: "missing fields" });
-  } else if (error.details[0].type === "object.unknown") {
-    res.status(404).json({
-      message: error.details[0].message,
-    });
+  } catch (error) {
+    res.json(error);
   }
 });
 
