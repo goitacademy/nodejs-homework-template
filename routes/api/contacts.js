@@ -1,5 +1,5 @@
 const express = require('express');
-const Joi = require('joi')
+const Joi = require('joi');
 const contacts = require("../../models/contacts");
 const HttpError = require('../../helpers/HttpError');
 
@@ -26,7 +26,7 @@ const addContactsSchema = Joi.object({
 router.get('/', async (req, res, next) => {
   try {
   const result = await contacts.listContacts();
-    res.json(result)
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -43,14 +43,14 @@ router.get('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+});
 
 router.post('/', async (req, res, next) => {
   // res.json({ message: 'template message' })
   try {
     const { error } = addContactsSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message)
+      throw HttpError(400, error.message);
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+});
 
 router.put('/:id', async (req, res, next) => {
   try {
@@ -87,13 +87,13 @@ router.put('/:id', async (req, res, next) => {
     const { id } = req.params;
     const result = await contacts.updateContact(id, req.body);
     if (!result) {
-      throw HttpError(400, error.message);
+      throw HttpError(400, `Not found`);
     }
     res.json(result);
   } catch (error){
     next(error);
   }
-  res.json({ message: 'template message' })
+  // res.json({ message: 'template message' })
 })
 
 module.exports = router
