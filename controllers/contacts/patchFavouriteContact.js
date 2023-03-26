@@ -10,6 +10,7 @@ const {
 const patchFavouriteContact = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+  const { _id } = req.user;
 
   const { error } = updateContactStatusValidator(req.body);
   if (error) {
@@ -19,7 +20,8 @@ const patchFavouriteContact = catchAsync(async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(
     contactId,
     { favorite },
-    { new: true }
+    { new: true },
+    _id
   );
 
   if (!result) {

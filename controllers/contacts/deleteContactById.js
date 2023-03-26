@@ -5,8 +5,9 @@ const { catchAsync } = require('../../utils/index');
 
 const deleteContactById = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
+  const { _id } = req.user;
 
-  const result = await Contact.findByIdAndDelete(contactId);
+  const result = await Contact.findByIdAndDelete(contactId, _id);
 
   if (!result) {
     throw createError(404, 'Not found');
