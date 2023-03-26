@@ -1,7 +1,6 @@
-const auth = require("./auth");
 const ctrlWrapper = require("./ctrlWrapper");
+const upload = require("./upload");
+const auth = require("./auth");
 
-module.exports = {
-  auth, 
-  ctrlWrapper
-};
+
+module.exports = { ctrlWrapper, auth, upload };
