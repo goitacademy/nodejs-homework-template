@@ -3,6 +3,7 @@ const app = require("./app");
 
 const { DB_HOST, PORT = 3000 } = process.env;
 
+// connect to base and run server
 const connection = mongoose.connect(DB_HOST, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

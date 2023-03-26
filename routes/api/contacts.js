@@ -1,18 +1,21 @@
 const express = require("express");
+
+const { auth } = require("../../middlewares");
 const { contacts: ctrl } = require("../../controllers");
-const router = express.Router();
 const { ctrlWrapper } = require("../../helpers");
 
-router.get("/", ctrlWrapper(ctrl.get));
+const router = express.Router();
 
-router.get("/:id", ctrlWrapper(ctrl.getById));
+router.get("/", auth, ctrlWrapper(ctrl.get));
 
-router.post("/", ctrlWrapper(ctrl.create));
+router.get("/:id", auth, ctrlWrapper(ctrl.getById));
 
-router.put("/:id", ctrlWrapper(ctrl.update));
+router.post("/", auth, ctrlWrapper(ctrl.create));
 
-router.patch("/:id/favorite", ctrlWrapper(ctrl.updateFavorite));
+router.put("/:id", auth, ctrlWrapper(ctrl.update));
 
-router.delete("/:id", ctrlWrapper(ctrl.remove));
+router.patch("/:id/favorite", auth, ctrlWrapper(ctrl.updateFavorite));
+
+router.delete("/:id", auth, ctrlWrapper(ctrl.remove));
 
 module.exports = router;
