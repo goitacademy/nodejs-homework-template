@@ -1,13 +1,19 @@
 const { contactList } = require("../controllers");
 const AppError = require("../utils/appError");
-const { contactValidator, sameContact, catchAsync } = require("../utils");
+const { sameContact, catchAsync } = require("../utils");
 
 const checkCreateContactData = catchAsync((req, res, next) => {
-  const { error, value } = contactValidator(req.body);
+  console.log("===========BEGIN=of=MIDDLEWARE========");
+  // const { error, value } = contactValidator(req.body);
+  // console.log("=========ERROR=======");
+  // console.log(error);
 
-  if (error) return next(new AppError(400, error.details[0].message));
+  // if (error) return next(new AppError(400, error.details[0].message));
 
-  req.body = value;
+  // req.body = value;
+
+  console.log("=========END=of=MIDDLEWARE=========");
+  // console.log(value);
 
   next();
 });
