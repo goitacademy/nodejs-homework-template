@@ -11,4 +11,6 @@ router.get('/logout', auth, ctrl.logout);
 
 router.get('/current', auth, ctrl.current);
 
+router.patch('/', auth, ctrl.updateSubscribtion);
+
 module.exports = router;
