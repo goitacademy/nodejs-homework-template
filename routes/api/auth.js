@@ -4,6 +4,7 @@ const validateBody = require("../../middlewares/validateBody");
 const CtrlWrapper = require("../../helpers/ctrlWrapper");
 const { schemas } = require("../../models/userAuth");
 const authentificate = require("../../middlewares/authentificate");
+const upload = require("../../middlewares/upload");
 const ctrl = require("../../controllers");
 router.post(
   "/register",
@@ -20,5 +21,12 @@ router.post(
 router.get("/current", authentificate, CtrlWrapper(ctrl.getCurrent));
 
 router.get("/logout", authentificate, CtrlWrapper(ctrl.logout));
+
+router.patch(
+  "/avatars",
+  authentificate,
+  upload.single("avatar"),
+  CtrlWrapper(ctrl.updateAvatar)
+);
 
 module.exports = router;

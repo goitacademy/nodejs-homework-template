@@ -8,6 +8,7 @@ const register = require("./auth/register");
 const login = require("./auth/login");
 const getCurrent = require("./auth/getCurrent");
 const logout = require("./auth/logout");
+const updateAvatar = require("./auth/updateAvatar");
 module.exports = {
   newContact,
   getContacts,
@@ -19,4 +20,5 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  updateAvatar,
 };
