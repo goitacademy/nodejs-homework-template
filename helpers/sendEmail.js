@@ -4,11 +4,11 @@ require("dotenv").config();
 const { META_PASSWORD } = process.env;
 
 const nodemailerConfig = {
-  host: "smtp.ukr.net",
+  host: "smtp.meta.ua",
   port: 465,
   secure: true,
   auth: {
-    user: "ishen3@ukr.net",
+    user: "ishen3@meta.ua",
     pass: META_PASSWORD,
   },
 };
@@ -16,7 +16,7 @@ const nodemailerConfig = {
 const transporter = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-    const email = { ...data, from: "ishen3@ukr.net" };
+    const email = { ...data, from: "ishen3@meta.ua" };
     try {
         await transporter.sendMail(email);
         return true;
@@ -27,7 +27,7 @@ const sendEmail = async (data) => {
 
 // const email = {
 //   to: "ishen3@ukr.net",
-//   from: "ishen3@ukr.net",
+//   from: "ishen3@meta.ua",
 //   subject: "Перевірка працювання пошти",
 //   html: "<p>Новая заявка на підтвердження</p>",
 // };
