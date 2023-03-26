@@ -10,10 +10,10 @@ router.post('/', auth, ctrl.postContact);
 
 // router.use("/:contactId", checkContactId);
 
-router.get('/:contactId', ctrl.getContactById);
-router.put('/:contactId', ctrl.putContactUpdate);
-router.delete('/:contactId', ctrl.deleteContactById);
+router.get('/:contactId', auth, ctrl.getContactById);
+router.put('/:contactId', auth, ctrl.putContactUpdate);
+router.delete('/:contactId', auth, ctrl.deleteContactById);
 
-router.patch('/:contactId/favorite', ctrl.patchFavouriteContact);
+router.patch('/:contactId/favorite', auth, ctrl.patchFavouriteContact);
 
 module.exports = router;
