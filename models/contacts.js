@@ -30,7 +30,7 @@ const removeContact = async (id) => {
 
 const addContact = async (body) => {
   const contacts = await listContacts();
-  const newContact = {id: v4(), ...body};
+  const newContacts = {id: v4(), ...body};
   contacts.push(newContacts);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return newContacts;
