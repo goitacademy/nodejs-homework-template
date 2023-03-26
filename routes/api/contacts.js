@@ -21,7 +21,7 @@ router.get("/", async (req, res, next) => {
     return res.status(500).json({ error });
   }
 });
-
+//
 router.get("/:contactId", async (req, res, next) => {
   const foundContact = await getContactById(req.params.contactId);
   if (!foundContact) {
