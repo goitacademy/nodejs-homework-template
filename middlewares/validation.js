@@ -49,10 +49,25 @@ const validationUpStatusContact = (schema) => {
     }
 };
 
+const validation = (schema) => {
+    return (req, res, next) => {
+        const {error} = schema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({
+                message: "missing fields"
+            });
+
+        } else {
+            next()
+        }
+    }
+};
 
 module.exports = {
     validationAddContact,
     validationUpDateContact,
-    validationUpStatusContact
+    validationUpStatusContact,
+    validation
 
 };
