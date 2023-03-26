@@ -46,7 +46,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  // res.json({ message: 'template message' })
+  
   try {
     const { error } = addContactsSchema.validate(req.body);
     if (error) {
@@ -54,7 +54,7 @@ router.post('/', async (req, res, next) => {
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
-    // console.log(error);
+    
   }
   catch (error) {
     next(error);
@@ -62,7 +62,7 @@ router.post('/', async (req, res, next) => {
 });
 
 router.delete('/:id', async (req, res, next) => {
-  // res.json({ message: 'template message' })
+  
   try {
     const { id } = req.params;
     const result = await contacts.removeContact(id);
@@ -93,7 +93,7 @@ router.put('/:id', async (req, res, next) => {
   } catch (error){
     next(error);
   }
-  // res.json({ message: 'template message' })
+  
 })
 
 module.exports = router
