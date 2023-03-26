@@ -1,6 +1,6 @@
-const Contact = require("../models/contact.js");
+const { Contact } = require("../models/contact.js");
 
-const controllersWraper = require("../helpers/contollersWraper");
+const { controllersWraper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const contacts = await Contact.find();
@@ -17,9 +17,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const body = req.body;
+  const { _id: owner } = req.user._conditions;
 
-  const addedContact = await Contact.create(body);
+  const addedContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(addedContact);
 };
 
