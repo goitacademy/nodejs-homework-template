@@ -30,7 +30,7 @@ const login = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'ok',
-    code: 201,
+    code: 200,
     token,
     data: {
       user: {
