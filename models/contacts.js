@@ -17,12 +17,21 @@ const getContactById = async (id) => {
   return result || null;
 };
 
-const removeContact = async (contactId) => {
-
+const removeContact = async (id) => {
+  const contacts = await listContacts();
+  const idx = contacts.findIndex((item) => item.id === id);
+  
 };
 
-const addContact = async (body) => {
-
+const addContact = async ({name, email, phone}) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: uuid(),
+    name,
+    email,
+    phone
+  };
+  
 };
 
 const updateContact = async (contactId, body) => {
