@@ -23,6 +23,10 @@ const auth = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) return next(createError(401, 'Not authorized'));
 
+  if (currentUser.token == null) {
+    return next(createError(401, 'Not authorized'));
+  }
+
   req.user = currentUser;
 
   next();
