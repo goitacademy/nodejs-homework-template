@@ -1,30 +1,28 @@
 const { contactList } = require("../controllers");
 const AppError = require("../utils/appError");
-const { sameContact, catchAsync } = require("../utils");
+const { catchAsync, contactValidator } = require("../utils");
+const Contact = require("../models/contactsModel");
 
-const checkCreateContactData = catchAsync((req, res, next) => {
-  console.log("===========BEGIN=of=MIDDLEWARE========");
-  // const { error, value } = contactValidator(req.body);
-  // console.log("=========ERROR=======");
-  // console.log(error);
+// todo check the function, causes an error
+const checkCreateContactData = catchAsync(async (req, res, next) => {
+  const { error, value } = contactValidator(req.body);
 
-  // if (error) return next(new AppError(400, error.details[0].message));
+  if (error) return next(new AppError(400, error.details[0].message));
 
-  // req.body = value;
-
-  console.log("=========END=of=MIDDLEWARE=========");
-  // console.log(value);
+  req.body = value;
 
   next();
 });
 
 const checkSameContact = catchAsync(async (req, res, next) => {
-  const contacts = await contactList();
-  const contact = req.body;
+  const { name, email, phone } = req.body;
 
-  if (sameContact(contacts, contact)) {
-    next(new AppError(400, "contact already exist"));
-    return;
+  if (
+    (await Contact.exists({ name: name })) ||
+    (await Contact.exists({ email: email })) ||
+    (await Contact.exists({ phone: phone }))
+  ) {
+    return next(new AppError(400, "contact already exists"));
   }
 
   next();

@@ -7,17 +7,17 @@ const {
   updateContact,
 } = require("../../controllers");
 
-// const {
-//   checkContactId,
-//   checkCreateContactData,
-//   checkSameContact,
-// } = require("../../middlewares");
+const {
+  // checkContactId,
+  checkCreateContactData,
+  checkSameContact,
+} = require("../../middlewares");
 
 const router = express.Router();
 
 router.get("/", listContacts);
 
-router.post("/", addContact);
+router.post("/", checkCreateContactData, checkSameContact, addContact);
 
 // router.use("/:contactId", checkContactId);
 router.get("/:contactId", getContactById);

@@ -21,12 +21,7 @@ exports.getContactById = catchAsync(async (req, res) => {
 exports.addContact = catchAsync(async (req, res) => {
   const { name, email, phone, favorite } = req.body;
 
-  console.log("========CONTROLLEER=======");
-  console.log("req.body", req.body);
-
   const newContact = await Contact.create({ name, email, phone, favorite });
-
-  console.log("newContact from DB", newContact);
 
   res.status(201).json({
     newContact,
