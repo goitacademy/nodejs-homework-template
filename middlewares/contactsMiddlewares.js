@@ -6,7 +6,7 @@ const { catchAsync, contactValidator } = require("../utils");
 const Contact = require("../models/contactsModel");
 
 // todo check the function, causes an error
-const checkCreateContactData = catchAsync(async (req, res, next) => {
+exports.checkCreateContactData = catchAsync(async (req, res, next) => {
   const { error, value } = contactValidator(req.body);
 
   if (error) return next(new AppError(400, error.details[0].message));
@@ -16,7 +16,7 @@ const checkCreateContactData = catchAsync(async (req, res, next) => {
   next();
 });
 
-const checkSameContact = catchAsync(async (req, res, next) => {
+exports.checkSameContact = catchAsync(async (req, res, next) => {
   const { name, email, phone } = req.body;
 
   if (
@@ -30,7 +30,7 @@ const checkSameContact = catchAsync(async (req, res, next) => {
   next();
 });
 
-const checkContactId = catchAsync(async (req, res, next) => {
+exports.checkContactId = catchAsync(async (req, res, next) => {
   const id = req.params.contactId.toString();
 
   if (!ObjectId.isValid(id)) {
@@ -44,8 +44,14 @@ const checkContactId = catchAsync(async (req, res, next) => {
   next();
 });
 
-module.exports = {
-  checkSameContact,
-  checkContactId,
-  checkCreateContactData,
-};
+exports.checkStatusContactBody = catchAsync(async (req, res, next) => {
+  const { favorite } = req.body;
+
+  console.log("==========CHECK=STAUS===========");
+  console.log(typeof favorite);
+
+  if (favorite === undefined)
+    return next(new AppError(400, "missing body field favorite "));
+
+  next();
+});

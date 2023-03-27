@@ -31,9 +31,24 @@ exports.addContact = catchAsync(async (req, res) => {
 exports.removeContact = catchAsync(async (req, res) => {
   const { contactId } = req.params;
 
-  await Contact.findByIdAndRemove({ _id: contactId });
+  await Contact.findByIdAndDelete({ _id: contactId });
 
   res.sendStatus(204);
+});
+
+exports.updateStatusContact = catchAsync(async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  const updatedStatus = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  ).select("-__v");
+
+  res.status(200).json({
+    updatedStatus,
+  });
 });
 
 exports.updateContact = catchAsync(async (req, res) => {

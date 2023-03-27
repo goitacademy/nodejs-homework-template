@@ -5,12 +5,14 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../controllers");
 
 const {
   checkContactId,
   checkCreateContactData,
   checkSameContact,
+  checkStatusContactBody,
 } = require("../../middlewares");
 
 const router = express.Router();
@@ -23,5 +25,6 @@ router.use("/:contactId", checkContactId);
 router.get("/:contactId", getContactById);
 router.delete("/:contactId", removeContact);
 router.put("/:contactId", updateContact);
+router.patch("/:contactId", checkStatusContactBody, updateStatusContact);
 
 module.exports = router;
