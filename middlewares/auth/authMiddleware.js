@@ -1,6 +1,6 @@
 const { verify } = require("jsonwebtoken");
-const { HttpError } = require("../helpers/httpError");
-const { User } = require("../models/userModel");
+const { HttpError } = require("../../helpers/httpError");
+const { User } = require("../../models/userModel");
 
 const authMiddleware = async (req, res, next) => {
   const { authorization = "" } = req.headers;

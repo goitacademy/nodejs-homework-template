@@ -10,7 +10,7 @@ const {
   favoriteJoiSchema,
 } = require("../../middlewares/validation/validationSchema");
 
-const { authMiddleware } = require("../../middlewares/authMiddleware");
+const { authMiddleware } = require("../../middlewares/auth/authMiddleware");
 
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
