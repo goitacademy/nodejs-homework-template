@@ -7,7 +7,7 @@ const getAll = async (req, res, next) => {
   // console.log(_id)
   // console.log(req.query);
 
-  const { limit, page, sort, order, search } = req.query;
+  const { limit, page, sort, order, search, favorite } = req.query;
 
   const findOptions = search
     ? {
@@ -15,7 +15,6 @@ const getAll = async (req, res, next) => {
           { name: { $regex: search, $options: "i" } },
           { email: { $regex: search, $options: "i" } },
           { phone: { $regex: search } },
-
         ],
       }
     : {};
@@ -32,6 +31,15 @@ const getAll = async (req, res, next) => {
   const contactsQuery = Contact.find(findOptions);
 
   contactsQuery.sort(`${order === "DESC" ? "-" : ""}${sort}`);
+
+  /** Favorite =====>>>> */
+  // console.log(favorite);
+
+  if (favorite) {
+    contactsQuery.find({favorite: true});
+  }
+
+  /** <<<======== */
 
   const paginationPage = +Number(page) || 1;
   const paginationLimit = +Number(limit) || 4;
