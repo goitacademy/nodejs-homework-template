@@ -3,8 +3,9 @@ const express = require("express");
 const { auth } = require("../../middlewares");
 const { contacts: ctrl } = require("../../controllers");
 const { validation, ctrlWrapper } = require("../../helpers");
-const { addSchema, updateStatusSchema } = require("../../models/contact");
-const validateMiddleware = validation(addSchema);
+const { schemas, addSchema, updateStatusSchema } = require("../../models/contact");
+
+const validateMiddleware = validation(schemas.addSchema);
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.put("/:id", auth, validateMiddleware, ctrlWrapper(ctrl.update));
 router.patch(
   "/:id/favorite",
   auth,
-  validation(updateStatusSchema),
+  validation(schemas.updateStatusSchema),
   ctrlWrapper(ctrl.updateFavorite)
 );
 
