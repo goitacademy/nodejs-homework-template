@@ -8,7 +8,7 @@ const {
 } = require("../../controllers");
 
 const {
-  // checkContactId,
+  checkContactId,
   checkCreateContactData,
   checkSameContact,
 } = require("../../middlewares");
@@ -19,7 +19,7 @@ router.get("/", listContacts);
 
 router.post("/", checkCreateContactData, checkSameContact, addContact);
 
-// router.use("/:contactId", checkContactId);
+router.use("/:contactId", checkContactId);
 router.get("/:contactId", getContactById);
 router.delete("/:contactId", removeContact);
 router.put("/:contactId", updateContact);

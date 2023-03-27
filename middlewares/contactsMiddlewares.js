@@ -1,4 +1,6 @@
-const { contactList } = require("../controllers");
+const {
+  Types: { ObjectId },
+} = require("mongoose");
 const AppError = require("../utils/appError");
 const { catchAsync, contactValidator } = require("../utils");
 const Contact = require("../models/contactsModel");
@@ -30,14 +32,16 @@ const checkSameContact = catchAsync(async (req, res, next) => {
 
 const checkContactId = catchAsync(async (req, res, next) => {
   const id = req.params.contactId.toString();
-  const contacts = await contactList();
 
-  if (contacts.find((contact) => contact.id === id)) {
-    next();
-    return;
+  if (!ObjectId.isValid(id)) {
+    return next(new AppError(400, "Invalid contact id.."));
   }
 
-  next(new AppError(404, "User with this id does not exist.."));
+  const contactExists = await Contact.exists({ _id: id });
+
+  if (!contactExists) return next(new AppError(404, "Contact not found.."));
+
+  next();
 });
 
 module.exports = {
