@@ -1,16 +1,11 @@
-const path = require("node:path");
-const fs = require("fs/promises");
-const shortid = require("shortid");
-// const { json } = require("express");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
-console.log(contactsPath);
+const shortid = require("shortid");
+const { Contact } = require("../routes/api/contacts.model");
+
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf8");
-    const result = JSON.parse(data);
-    return result;
+    return Contact.find();
   } catch (error) {
     console.log(error);
   }
@@ -18,12 +13,11 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const data = await listContacts();
-    const contId = data.find((el) => el.id === String(contactId));
-    if (!contId) {
+    const data = Contact.findById(contactId);
+    if (!data) {
       return null;
     }
-    return contId;
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -31,25 +25,27 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const data = await listContacts();
-    const newContArray = data.filter((el) => el.id !== String(contactId));
-    if (data.length === newContArray.length) {
-      return null;
-    }
-    await fs.writeFile(contactsPath, JSON.stringify(newContArray, null, "\t"));
-    return data;
+    return Contact.findByIdAndRemove(contactId);
   } catch (error) {
     console.log(error);
   }
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (name, email, phone, favorite) => {
   try {
-    const data = await listContacts();
-    const newCont = { name, email, phone, id: shortid.generate() };
-    data.push(newCont);
-    await fs.writeFile(contactsPath, JSON.stringify(data, null, "\t"));
-    return newCont;
+    const newCont = {
+      name,
+      email,
+      phone,
+      favorite,
+      id: shortid.generate(),
+    };
+
+    const existingCont = await Contact.findOne({ email });
+    if (existingCont) {
+      throw new Error("Contact already posted");
+    }
+    return Contact.create(newCont);
   } catch (error) {
     console.log(error);
   }
@@ -57,20 +53,15 @@ const addContact = async (name, email, phone) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const data = await listContacts();
-    const index = data.findIndex(
-      (el) => el.id.toString() === contactId.toString()
-    );
-    if (index === -1) {
-      return null;
-    }
-    data[index] = {
-      ...data[index],
-      ...body,
-    };
+    return Contact.findOneAndUpdate(contactId, body);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    await fs.writeFile(contactsPath, JSON.stringify(data));
-    return data;
+const updateStatusContact = async (contactId,  body) => {
+  try {
+    return Contact.findByIdAndUpdate(contactId, body, { new: true });
   } catch (error) {
     console.log(error);
   }
@@ -81,5 +72,6 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
+  updateStatusContact,
   updateContact,
 };

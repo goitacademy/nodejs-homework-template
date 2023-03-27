@@ -1,1 +1,2 @@
 PORT= 3000
+MONGODB_URL=mongodb+srv://natalinardikh:<password>@cluster0.48dfbeo.mongodb.net/test
