@@ -14,6 +14,10 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 const userSchema = new Schema(
   {
     password: {
@@ -33,13 +37,22 @@ const userSchema = new Schema(
     },
     token: String,
     avatarURL: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
 
 userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
-const schemas = { loginSchema, registerSchema };
+const schemas = { loginSchema, registerSchema, emailSchema };
 
 module.exports = { User, schemas };
