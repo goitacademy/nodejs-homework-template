@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/users");
 
 const app = express();
 
@@ -27,6 +28,7 @@ const connectToMongoDB = async () => {
 
 connectToMongoDB();
 
+app.use("/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.all("*", (req, res) => {
