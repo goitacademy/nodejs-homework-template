@@ -1,7 +1,7 @@
 const { addContact, findDuplicateContact } = require("../../services");
-const contactValidation = require("../../../src/middlewares/contactsValidation");
+const contactValidation = require("../../middlewares/contactsValidation");
 
-const addContactController = async (req, res) => {
+const addContactCtrl = async (req, res) => {
   const { error } = contactValidation.validate(req.body);
 
   const { name, email, phone, favorite = false } = req.body;
@@ -32,4 +32,4 @@ const addContactController = async (req, res) => {
   return res.status(201).json(newContact);
 };
 
-module.exports = addContactController;
+module.exports = addContactCtrl;

@@ -1,11 +1,7 @@
 const { Contacts } = require("../schemas");
 
 const listContacts = async (user, skip, limit, favorite) => {
-  return await Contacts.find(
-    favorite ? { owner: user, favorite } : { owner: user }
-  )
-    .skip(skip)
-    .limit(limit);
+  return await Contacts.find(favorite ? { owner: user, favorite } : { owner: user }).skip(skip).limit(limit);
 };
 
 const getContactById = async (contactId, user) => {
@@ -13,8 +9,8 @@ const getContactById = async (contactId, user) => {
 };
 
 const findDuplicateContact = async (name, email, phone, user) => {
-  return await Contacts.findOne({ name, email, phone, owner: user });
-};
+  return await Contacts.findOne({name, email, phone, owner: user});
+}
 
 const addContact = async (body) => {
   return await Contacts.create(body);

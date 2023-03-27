@@ -12,8 +12,10 @@ const {
   loginCtrl,
   logoutCtrl,
   currentUserCtrl,
-  subscriptionCtrl,
+  subscriptionChangeCtrl,
   AvatarCtrl,
+  verificationCtrl,
+  repeatVerificationCtrl,
 } = require("./users");
 
 module.exports = {
@@ -21,7 +23,7 @@ module.exports = {
   loginCtrl,
   logoutCtrl,
   currentUserCtrl,
-  subscriptionCtrl,
+  subscriptionChangeCtrl,
   listContactsCtrl,
   getContactByIdCtrl,
   addContactCtrl,
@@ -29,4 +31,6 @@ module.exports = {
   updateContactController,
   updateStatusContactCtrl,
   AvatarCtrl,
+  verificationCtrl,
+  repeatVerificationCtrl,
 };

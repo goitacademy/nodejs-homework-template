@@ -1,11 +1,11 @@
 const { updateContact } = require("../../services");
 
-const { isEmpty } = require("../../../src/helpers");
-const contactValidation = require("../../../src/middlewares/contactsValidation");
+const { isEmpty } = require("../../helpers");
+const contactValidation = require("../../middlewares/contactsValidation");
 
 const updateContactController = async (req, res) => {
   const { contactId: id } = req.params;
-  const { id: owner } = req.user;
+  const {id: owner} = req.user;
   const { error } = contactValidation.validate(req.body);
 
   if (isEmpty(req.body)) {

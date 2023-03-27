@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const connectDb = async () => {
   mongoose.set("strictQuery", false);
-  mongoose.Promise = global.Promise;
-  await mongoose.connect(process.env.DB_HOST, {
-    useNewUrlParser: true,
+  mongoose.connect(process.env.DB_HOST, {
+    promiseLibrary: global.Promise,
     useUnifiedTopology: true,
   });
 };

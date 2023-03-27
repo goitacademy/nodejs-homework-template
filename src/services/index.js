@@ -8,12 +8,15 @@ const {
   findDuplicateContact,
 } = require("./contactsService");
 
+const { createEmail, sendEmail } = require("../email");
+
 const {
   findUserInDb,
   findUserById,
   addNewUser,
   updateUser,
   removeToken,
+  findUserToVerify,
 } = require("./usersService");
 
 module.exports = {
@@ -29,4 +32,7 @@ module.exports = {
   addNewUser,
   updateUser,
   removeToken,
+  findUserToVerify,
+  createEmail,
+  sendEmail,
 };

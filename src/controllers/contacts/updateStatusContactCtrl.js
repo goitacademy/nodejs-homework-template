@@ -1,8 +1,8 @@
 const { updateStatusContact } = require("../../services");
-const { isEmpty } = require("../../../src/helpers");
-const contactValidation = require("../../../src/middlewares/contactsValidation");
+const { isEmpty } = require("../../helpers");
+const contactValidation = require("../../middlewares/contactsValidation");
 
-const updateStatusContactController = async (req, res) => {
+const updateStatusContactCtrl = async (req, res) => {
   const { contactId: id } = req.params;
   const { id: owner } = req.user;
   const { error } = contactValidation.validate(req.body);
@@ -27,4 +27,4 @@ const updateStatusContactController = async (req, res) => {
   return res.status(200).json(updateStatus);
 };
 
-module.exports = updateStatusContactController;
+module.exports = updateStatusContactCtrl;

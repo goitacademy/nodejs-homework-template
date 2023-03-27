@@ -2,10 +2,10 @@ const bCrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const { findUserInDb, updateUser } = require("../../services");
-const { userValidation } = require("../../../src/middlewares");
+const { userValidation } = require("../../middlewares");
 require("dotenv").config();
 
-const loginController = async (req, res) => {
+const loginCtrl = async (req, res) => {
   const { error } = userValidation.validate(req.body);
 
   const sendErrorResponse = (code, message) => {
@@ -22,11 +22,15 @@ const loginController = async (req, res) => {
     return sendErrorResponse(401, "Email or password is wrong");
   }
 
-  const { id, email, password, subscription } = registeredUser;
+  const { id, email, password, subscription, verify } = registeredUser;
   const rightUser = await bCrypt.compareSync(req.body.password, password);
 
   if (!rightUser) {
     return sendErrorResponse(401, "Email or password is wrong");
+  }
+
+  if (!verify) {
+    return sendErrorResponse(403, "Email address is unconfirmed");
   }
 
   const payload = {
@@ -45,4 +49,4 @@ const loginController = async (req, res) => {
   });
 };
 
-module.exports = loginController;
+module.exports = loginCtrl;

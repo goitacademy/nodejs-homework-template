@@ -2,7 +2,7 @@ const { updateUser } = require("../../services");
 
 const SUBSCRIPTION_TYPE = ["starter", "pro", "business"];
 
-const subscriptionChangeController = async (req, res) => {
+const subscriptionChangeCtrl = async (req, res) => {
   const { id } = req.user;
   const { subscription } = req.body;
 
@@ -21,4 +21,4 @@ const subscriptionChangeController = async (req, res) => {
   return res.status(200).json({ message: "Subscription updated" });
 };
 
-module.exports = subscriptionChangeController;
+module.exports = subscriptionChangeCtrl;

@@ -1,6 +1,6 @@
 const { removeContact } = require("../../services");
 
-const removeContactController = async (req, res) => {
+const removeContactCtrl = async (req, res) => {
   const { contactId: id } = req.params;
   const { id: owner } = req.user;
 
@@ -15,4 +15,4 @@ const removeContactController = async (req, res) => {
   });
 };
 
-module.exports = removeContactController;
+module.exports = removeContactCtrl;

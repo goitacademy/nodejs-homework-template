@@ -1,6 +1,6 @@
 const { getContactById } = require("../../services");
 
-const getContactByIdController = async (req, res) => {
+const getContactByIdCtrl = async (req, res) => {
   const { id: owner } = req.user;
   const { contactId: id } = req.params;
 
@@ -14,4 +14,4 @@ const getContactByIdController = async (req, res) => {
   res.status(200).json(contact);
 };
 
-module.exports = getContactByIdController;
+module.exports = getContactByIdCtrl;

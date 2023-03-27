@@ -1,6 +1,9 @@
 const contactValidation = require("./contactsValidation");
-const userValidation = require("./userValidation");
-const auth = require('./auth');
-const upload = require('./upload');
+const {
+  userValidation,
+  userVerificationValidation,
+} = require("./userValidation");
+const auth = require("./auth");
+const upload = require("./upload");
 
-module.exports = { contactValidation, userValidation, auth, upload };
+module.exports = { contactValidation, userValidation, auth, upload, userVerificationValidation };

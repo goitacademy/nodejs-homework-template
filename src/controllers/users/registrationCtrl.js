@@ -1,8 +1,13 @@
-const { findUserInDb, addNewUser } = require("../../services");
-const { userValidation } = require("../../../src/middlewares");
+const {
+  findUserInDb,
+  addNewUser,
+  sendEmail,
+  createEmail,
+} = require("../../services");
+const { userValidation } = require("../../middlewares");
 const { v4: uuidv4 } = require("uuid");
 
-const registrationController = async (req, res) => {
+const registrationCtrl = async (req, res) => {
   const { error } = userValidation.validate(req.body);
   const { email } = req.body;
   const userIsAlreadyInDb = await findUserInDb(email);
@@ -30,4 +35,4 @@ const registrationController = async (req, res) => {
   });
 };
 
-module.exports = registrationController;
+module.exports = registrationCtrl;

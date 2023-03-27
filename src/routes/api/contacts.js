@@ -11,9 +11,9 @@ const {
   updateStatusContactCtrl,
 } = require("../../controllers/contacts");
 
-const { auth } = require("../../../src/middlewares");
+const { auth } = require("../../middlewares");
 
-const { controllerWrapper } = require("../../../src/helpers");
+const { controllerWrapper } = require("../../helpers");
 
 router.get("/", auth, controllerWrapper(listContactsCtrl));
 

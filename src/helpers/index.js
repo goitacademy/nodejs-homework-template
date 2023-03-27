@@ -1,3 +1,13 @@
-const { contactsPath, isEmpty, controllerWrapper, errorHandler } = require('./apiHelpers');
+const {
+  contactsPath,
+  isEmpty,
+  controllerWrapper,
+  errorHandler,
+} = require("./apiHelpers");
 
-module.exports = { contactsPath, isEmpty, controllerWrapper, errorHandler };
+module.exports = {
+  contactsPath,
+  isEmpty,
+  controllerWrapper,
+  errorHandler,
+};
