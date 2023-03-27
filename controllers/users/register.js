@@ -1,5 +1,5 @@
 const {User} = require("../../models/users");
-
+const bcrypt = require('bcryptjs');
 
 
 const register = async (req, res) => {
@@ -12,8 +12,8 @@ const register = async (req, res) => {
             message: 'Email is used'
         });
     }
-
-   const result =  await User.create({email,password});
+    const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const result =  await User.create({email,password: hashPassword});
     console.log(result)
 
     res.status(201).json({
