@@ -1,5 +1,5 @@
 // const User = require("../models/contactModal");
-const bcrypt = require('bcrypt');
+const User = require("../models/contactModal");
 const { addContact } = require("../models/contacts");
 const uservalidator = require("../utils/uservalidator");
 const createContact = async (req, res, next) => {
@@ -22,17 +22,16 @@ const createContact = async (req, res, next) => {
     
 
     if (!subscription || !email || !token || !password) {
-      res.status(400).json({
-        message : "missing required name field"  
-      })    
-      return
+      const err = new Error("missing required name field")
+      err.status = 40
+      return next(err)
+    
     }
     
-    // const userExist = await User.exists({email}) //! вернуть проверку
-    const userExist = true
+    const userExist = await User.exists({email}) //! changed here
     
     
-    if (userExist) {
+    if (!userExist) {
       const newContact = await addContact(email,subscription,token, password)
       res.status(201).json({
        newContact
