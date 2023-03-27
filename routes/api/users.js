@@ -9,5 +9,6 @@ const {joiSchema} = require("../../models/users");
 
 
 router.post('/register', validation(joiSchema),ctrl.register);
+router.post('/login', validation(joiSchema),ctrl.login);
 
 module.exports = router;

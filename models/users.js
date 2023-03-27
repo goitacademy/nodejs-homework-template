@@ -1,4 +1,5 @@
 const {Schema, model } = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const Joi = require("joi");
 
@@ -30,6 +31,9 @@ const joiSchema = Joi.object({
 
 });
 
+userSchema.methods.comparePassword = function (password){
+    return bcrypt.compareSync(password, this.password);
+}
 
 const User = model("user", userSchema);
 
