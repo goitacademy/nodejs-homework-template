@@ -4,6 +4,7 @@ const schema = Joi.object({
   name: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().required(),
+  favorite: Joi.bool(),
 });
 
 const schemaUpdate = Joi.object({
@@ -12,4 +13,8 @@ const schemaUpdate = Joi.object({
   phone: Joi.string(),
 }).min(1);
 
-module.exports = { schema, schemaUpdate };
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
+module.exports = { schema, schemaUpdate, updateFavoriteSchema };
