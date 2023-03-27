@@ -38,8 +38,6 @@ const validateContactId = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
   const isContactFound = await Contact.exists({ _id: contactId });
 
-  console.log("==>isContactFound", isContactFound);
-
   if (!isContactFound) {
     const err = new Error("Not found");
     err.status = 404;
