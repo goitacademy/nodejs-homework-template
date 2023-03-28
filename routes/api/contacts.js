@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express')
 
 const { validation } = require('../../middlewares/validation');
 const { control } = require('../../middlewares/control');
