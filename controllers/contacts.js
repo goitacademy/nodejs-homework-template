@@ -19,8 +19,6 @@ async function getContact(req, res, next) {
 
 async function createContact(req, res, next) {
   const { name, email, phone } = req.body;
-  console.log("name :", name);
-
   const newContact = await models.addContact(name, email, phone);
   res.status(201).json(newContact);
 }
@@ -28,7 +26,6 @@ async function createContact(req, res, next) {
 async function deleteContact(req, res, next) {
   const { contactId } = req.params;
   const contact = await models.getContactById(contactId);
-  console.log("contact :", contact);
 
   if (!contact) {
     return next(HttpError(404, "Not found"));
@@ -49,14 +46,6 @@ async function changeContact(req, res, next) {
 
   res.status(200).json(changeContact);
 }
-// router.put("/users/:userId", (req, res) => {
-//   const user = getUser(req.params.userId);
-
-//   if (!user) return res.status(404).json({});
-
-//   user.name = req.body.name;
-//   res.json(user);
-// });
 
 module.exports = {
   getContacts,

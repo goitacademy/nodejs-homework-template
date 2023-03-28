@@ -4,7 +4,6 @@ const { validateBody } = require("../../middlewares/index");
 const { addContactSchema } = require("../../schemas/contacts");
 const router = express.Router();
 
-// const models = require("../../models/contacts");
 const {
   getContacts,
   getContact,
