@@ -40,6 +40,7 @@ const updateById = async (req, res, next) => {
         throw RequestError(400, "Missing fields")
     }
     const { contactId } = req.params
+    
     const result = await Сontact.findByIdAndUpdate(contactId, req.body, { new: true })
     if (!result) {
         throw RequestError(404, 'Not found')
