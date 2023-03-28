@@ -19,6 +19,7 @@ const errorHandler = (err, req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
+    console.log(contacts)
     res.json(contacts);
   } catch (err) {
     next(err);
@@ -30,7 +31,8 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
     if (!contact) {
-      return res.status(404).json({ error: 'Contact not found' });
+      res.status(404).json({ message: 'Contact not found' });
+      return;
     }
     res.json(contact);
   } catch (err) {

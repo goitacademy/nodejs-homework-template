@@ -1,33 +1,39 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const addContactSchema = Joi.object({
-  name: Joi.string().min(3).max(20).pattern(/^[\w\s]+$/).trim().required().label('Name'),
-  email: Joi.string().email().trim().min(3).max(20).required().label('Email'),
-  phone: Joi.string().min(3).max(20).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).trim().required().label('Phone Number')
-}).unknown(false);
+  name: Joi.string().min(3).max(30).trim().required().label('Name'),
+  email: Joi.string().min(3).max(30).trim().email().required().label('Email'),
+  phone: Joi.string().min(6).max(30).trim().required().label('Phone Number'),
+});
 
 const updateContactSchema = Joi.object({
-  name: Joi.string().min(3).max(20).pattern(/^[\w\s]+$/).trim().label('Name'),
-  email: Joi.string().min(3).max(20).email().trim().label('Email'),
-  phone: Joi.string().min(3).max(20).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).trim().label('Phone Number')
-}).min(1);
+  name: Joi.string().min(3).max(30).trim().label('Name'),
+  email: Joi.string().min(3).max(30).trim().email().label('Email'),
+  phone: Joi.string().min(6).max(30).trim().label('Phone Number'),
+}).min(6);
 
-const validator = schema => (req, res, next) => {
-  const { error, value } = schema.validate(req.body, { abortEarly: false });
+const addContactValidator = (req, res, next) => {
+  const { error } = addContactSchema.validate(req.body, { abortEarly: false });
+
   if (error) {
-    const message = error.details.map(detail => {
-      if (detail.type === 'object.missing') {
-        return `missing required '${detail.path[0]}' field`;
-      }
-      return detail.message;
-    }).join(', ');
-    return res.status(400).json({ message });
+    const missingField = error.details[0].context.key;
+    return res.status(400).json({ message: `Missing required '${missingField}' field` });
   }
-  req.body = value;
+
   next();
 };
 
-const addContactValidator = validator(addContactSchema);
-const updateContactValidator = validator(updateContactSchema);
+const updateContactValidator = (req, res, next) => {
+  if (!Object.keys(req.body).length)
+    return res.status(400).json({ message: "missing fields" });
+
+  const { error } = updateContactSchema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message});
+  }
+
+  next();
+};
 
 module.exports = { addContactValidator, updateContactValidator };
