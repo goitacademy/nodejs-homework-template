@@ -2,8 +2,13 @@ const catchAsync = require("../utils/catchAsync");
 const Contact = require("../models/contactsModel");
 
 const getListContactsController = catchAsync(async (req, res) => {
-  console.log("==>getListContactsController");
-  const contacts = await Contact.find().select("-__v");
+  const { _id } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = limit * (page - 1);
+  const contacts = await Contact.find({ owner: _id }, "", {
+    skip,
+    limit: Number(limit),
+  }).select("-__v");
 
   res.status(200).json(contacts);
 });

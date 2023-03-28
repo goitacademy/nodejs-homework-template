@@ -2,12 +2,13 @@ const express = require("express");
 const { users } = require("../controllers");
 const { joiRegisterSchema, joiLoginSchema } = require("../models");
 const validation = require("../middlewares/validation");
-const auth = require("../middlewares/authMiddleware");
+const checkAuthMiddleware = require("../middlewares/checkAuthMiddleware");
 
 const router = express.Router();
 
 router.route("/register").post(validation(joiRegisterSchema), users.register);
 router.route("/login").post(validation(joiLoginSchema), users.login);
-router.route("/current").get(auth, users.getCurrent);
+router.route("/current").get(checkAuthMiddleware, users.getCurrent);
+router.route("/logout").get(checkAuthMiddleware, users.logout);
 
 module.exports = router;

@@ -19,7 +19,7 @@ const registerController = catchAsync(async (req, res) => {
     data: {
       user: {
         email,
-        subscription: user.subscription,
+        subscription: "starter",
       },
     },
   });

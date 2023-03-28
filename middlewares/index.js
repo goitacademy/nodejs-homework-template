@@ -1,3 +1,3 @@
-const authMiddleware = require("./authMiddleware");
+const checkAuthMiddleware = require("./checkAuthMiddleware");
 
-module.exports = { authMiddleware };
+module.exports = { checkAuthMiddleware };
