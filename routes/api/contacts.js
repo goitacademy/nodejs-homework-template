@@ -3,6 +3,7 @@ const { ctrlWrapper } = require("../../helpers")
 const contactsController = require('../../controllers/contactsController')
 
 const router = express.Router()
+router.patch('/:contactId/favorite', ctrlWrapper(contactsController.updateFavoriteById))
 
 router.get('/', ctrlWrapper(contactsController.getAll))
 
