@@ -53,11 +53,13 @@ const addContact = async body => {
 const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
-    const contact = contacts.find(contact => contact.id === contactId);
-    const newContact = { ...contact, ...body };
-    const contactsAll = [...contacts, newContact];
-    await fs.writeFile(contactsPath, JSON.stringify(contactsAll));
-    return newContact;
+    const idx = contacts.findIndex(item => item.id === contactId);
+    if (idx === -1) {
+      return null;
+    }
+    contacts[idx] = {id: contactId, ...body, };
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return contacts[idx];
   } catch (error) {
     console.log(`Error: ${error.message}`);
   }
