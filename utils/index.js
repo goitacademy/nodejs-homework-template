@@ -3,6 +3,7 @@ const catchAsync = require("./catchAsync");
 const checkContactValidation = require("./checkContactValidation");
 const updateContactValidation = require('./updateContactValidation');
 const AppError = require("./appError");
+const userValidator = require('./userValidation');
 
 module.exports = {
   createContactValidation,
@@ -10,4 +11,5 @@ module.exports = {
   checkContactValidation,
   AppError,
   updateContactValidation,
+  userValidator
 };

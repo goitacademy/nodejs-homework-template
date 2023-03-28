@@ -1,9 +1,11 @@
 const Contact = require("./contactModel");
 
 const listContacts = async (req, res) => {
-  // const contacts = JSON.parse(await fs.readFile(contactsPath));
-  // console.log(contacts);
-  const contacts = await Contact.find().select("-__v");
+  // список контактов только owner
+  const { _id } = req;
+  // console.log(_id);
+  const contacts = await Contact.find({owner: _id}).populate('owner', '_id email subscription').select("-__v");
+  // const contacts = await Contact.find().select("-__v");
   return contacts;
 };
 
@@ -39,7 +41,6 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-
   const newContact = await Contact.create(body);
 
   return newContact;
