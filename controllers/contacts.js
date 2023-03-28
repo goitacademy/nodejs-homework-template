@@ -35,9 +35,13 @@ const updateContact = async (id, newContact) => {
 };
 
 const updateStatusContact = async (id, favorite) => {
-  const updatedContact = await Contact.findByIdAndUpdate(id, favorite, {
-    new: true,
-  });
+  const updatedContact = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    {
+      new: true,
+    }
+  );
   return updatedContact;
 };
 
