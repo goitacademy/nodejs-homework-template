@@ -1,5 +1,3 @@
-console.log("toot");
-
 const { Unauthorized } = require("http-errors");
 const { User } = require("../../models");
 const bcrypt = require("bcryptjs");
