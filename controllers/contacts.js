@@ -1,6 +1,5 @@
-const { HttpError } = require("../helpers");
+const { HttpError } = require("../helpers/index");
 const models = require("../models/contacts");
-// const Joi = require("joi");
 
 async function getContacts(req, res, next) {
   const { limit } = req.query;
@@ -11,41 +10,58 @@ async function getContacts(req, res, next) {
 async function getContact(req, res, next) {
   const { contactId } = req.params;
   const contact = await models.getContactById(contactId);
-  console.log("HttpError", HttpError(404, "Not found"));
 
   if (!contact) {
     return next(HttpError(404, "Not found"));
-    // return res.status(404).json("Not found");
   }
   return res.json(contact);
 }
 
-async function createContact(req, res) {
-  const { title } = req.body;
-  console.log("title :", title);
-  console.log("body :", req.body);
+async function createContact(req, res, next) {
+  const { name, email, phone } = req.body;
+  console.log("name :", name);
 
-  const newContact = await models.addContact({ title: "fff" });
-
+  const newContact = await models.addContact(name, email, phone);
   res.status(201).json(newContact);
 }
 
 async function deleteContact(req, res, next) {
   const { contactId } = req.params;
   const contact = await models.getContactById(contactId);
+  console.log("contact :", contact);
 
   if (!contact) {
     return next(HttpError(404, "Not found"));
-    // return res.status(404).json("Not found");
   }
 
   await models.removeContact(contactId);
-
-  return res.status(200).json(contact);
+  return res.status(200).json({ message: "contact deleted" });
 }
 
-// router.put("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
+async function changeContact(req, res, next) {
+  const { contactId } = req.params;
+  const body = req.body;
+  const changeContact = await models.updateContact(contactId, body);
+
+  if (!changeContact) {
+    return next(HttpError(400, "missing fields"));
+  }
+
+  res.status(200).json(changeContact);
+}
+// router.put("/users/:userId", (req, res) => {
+//   const user = getUser(req.params.userId);
+
+//   if (!user) return res.status(404).json({});
+
+//   user.name = req.body.name;
+//   res.json(user);
 // });
 
-module.exports = { getContacts, getContact, createContact, deleteContact };
+module.exports = {
+  getContacts,
+  getContact,
+  createContact,
+  deleteContact,
+  changeContact,
+};
