@@ -25,7 +25,7 @@ const Contact = mongoose.model("contact", contacts);
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  phone: Joi.string().required(),
+  phone: Joi.number().required(),
 });
 
 module.exports = { contactSchema, Contact };
