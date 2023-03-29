@@ -11,7 +11,7 @@ const listContacts = async() => {
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
-  return contacts.filter(({ id }) => id === contactId) ?? null;
+  return contacts.find(({ id }) => id === contactId) ?? null;
 }
 
 const removeContact = async(contactId) =>{
@@ -22,14 +22,19 @@ const removeContact = async(contactId) =>{
       return null;
     }
 
-    const [deletedContact] = contacts.splice(index, 1);
+    const newContacts = contacts.filter((contact) => contact.id !== contactId);
     
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return deletedContact;
+    await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
+    return { message: "contact deleted" };
 }
 
 const addContact = async body => {
     const contacts = await listContacts();
+    const contactExists = Boolean(
+      contacts.find((contact) => contact.name === body.name)
+    );
+    if (contactExists) return null;
+  
     const newContact = { id: nanoid(), ...body };
     contacts.push(newContact);
 

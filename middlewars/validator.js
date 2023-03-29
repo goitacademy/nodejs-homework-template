@@ -10,7 +10,7 @@ const updateContactSchema = Joi.object({
   name: Joi.string().min(3).max(30).trim().label('Name'),
   email: Joi.string().min(3).max(30).trim().email().label('Email'),
   phone: Joi.string().min(6).max(30).trim().label('Phone Number'),
-}).min(6);
+});
 
 const addContactValidator = (req, res, next) => {
   const { error } = addContactSchema.validate(req.body, { abortEarly: false });
