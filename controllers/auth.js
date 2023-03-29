@@ -51,13 +51,13 @@ const getCurrent = async (req, res) => {
   const { email, name } = req.user;
   console.log(req.user);
   res.json({
-    email: email,
+    email,
     name,
   });
 };
 
 const logout = async (req, res) => {
-  const { _id } = req.user._conditions;
+  const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
   res.json("logout success");

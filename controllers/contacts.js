@@ -3,7 +3,7 @@ const { Contact } = require("../models/contact.js");
 const { controllersWraper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const { _id: owner } = req.user._conditions;
+  const { _id: owner } = req.user;
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
   const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {
@@ -23,7 +23,7 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { _id: owner } = req.user._conditions;
+  const { _id: owner } = req.user;
 
   const addedContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(addedContact);
