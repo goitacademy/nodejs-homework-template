@@ -3,7 +3,11 @@ const { addSchema , updateFavoriteSchema } = require('../schemas/contacts')
 const { RequestError } = require('../helpers')
 
 const getAll = async (req, res, next) => {
-    const result = await Сontact.find({}, "-__v")
+    const { id: owner } = req.user
+    const result = await Contact.find({ owner }, "-__v").populate(
+        "owner",
+        "email subscription"
+    )
     res.json(result)
 }
 
@@ -17,11 +21,12 @@ const getById = async (req, res, next) => {
 }
 
 const addContact = async (req, res, next) => {
+    const { id: owner } = req.user
     const { error } = addSchema.validate(req.body)
     if (error) {
         throw RequestError(400, "Missing required name field")
     }
-    const result = await Сontact.create(req.body)
+    const result = await Contact.create({ ...req.body, owner })
     return res.status(201).json(result)
 }
 
