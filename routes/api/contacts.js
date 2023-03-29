@@ -11,7 +11,7 @@ const {auth} = require("../../middlewares/auth");
 
 
 
-router.get('/', ctrl.listContacts);
+router.get('/', auth, ctrl.listContacts);
 
 router.get('/:id', ctrl.getById);
 
