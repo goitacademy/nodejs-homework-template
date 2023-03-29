@@ -11,12 +11,13 @@ const listContacts = async () => {
   return JSON.parse(contacts);
 };
 
-// const getContactById = async (contactId) => {
-//   const contacts = await listContacts();
-//   const contact = contacts.find((item) => item.id === contactId);
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.find((item) => item.id === contactId);
+  console.log(contact);
 
-//   return contact ? contact : null;
-// };
+  return contact ? contact : null;
+};
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
@@ -55,7 +56,7 @@ const updateContact = async (contactId, body) => {
 
 module.exports = {
   listContacts,
-  // getContactById,
+  getContactById,
   removeContact,
   addContact,
   updateContact,
