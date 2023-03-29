@@ -37,7 +37,6 @@ const login = async (req, res, next) => {
   const storedUser = await User.findOne({
     email,
   });
-  console.log(storedUser);
   if (!storedUser) {
     throw new HttpError(401, "Email or password is wrong");
   }
@@ -47,9 +46,11 @@ const login = async (req, res, next) => {
   if (!isPasswordValid) {
     throw new HttpError(401, "Password is not valid");
   }
-  console.log(JWT_SECRET);
 
-  const token = jwt.sign({ id: storedUser.id }, JWT_SECRET);
+  const token = jwt.sign({ id: storedUser.id }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  await User.findByIdAndUpdate(storedUser._id, { token });
   res.status(200).json({
     data: {
       token,
@@ -58,13 +59,23 @@ const login = async (req, res, next) => {
 };
 
 const getCurrentUser = async (req, res, next) => {
-  res.json({
-    ok: true,
+  const { email, subscription } = req.user;
+
+  return res.status(200).json({
+    email,
+    subscription,
   });
+};
+
+const logout = async (req, res, next) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: null });
+  return res.status(204).json();
 };
 
 module.exports = {
   register,
   login,
   getCurrentUser,
+  logout,
 };

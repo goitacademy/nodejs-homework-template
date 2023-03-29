@@ -10,32 +10,35 @@ const {
   updateStatusContact,
 } = require("../../controllers/contactsController");
 const { tryCatchWrapper } = require("../../helpers");
-const { validateBody } = require("../../middlewares/index");
+const { validateBody, auth } = require("../../middlewares/index");
 const {
   addContactSchema,
   addContactStatusSchema,
 } = require("../../schemas/contactSchema.js");
 
-contactsRouter.get("/", tryCatchWrapper(getContacts));
+contactsRouter.get("/", auth, tryCatchWrapper(getContacts));
 
-contactsRouter.get("/:contactId", tryCatchWrapper(getContact));
+contactsRouter.get("/:contactId", auth, tryCatchWrapper(getContact));
 
 contactsRouter.post(
   "/",
+  auth,
   validateBody(addContactSchema),
   tryCatchWrapper(postContact)
 );
 
-contactsRouter.delete("/:contactId", tryCatchWrapper(deleteContact));
+contactsRouter.delete("/:contactId", auth, tryCatchWrapper(deleteContact));
 
 contactsRouter.put(
   "/:contactId",
+  auth,
   validateBody(addContactSchema),
   tryCatchWrapper(putContact)
 );
 
 contactsRouter.patch(
   "/:contactId/favorite",
+  auth,
   validateBody(addContactStatusSchema),
   tryCatchWrapper(updateStatusContact)
 );

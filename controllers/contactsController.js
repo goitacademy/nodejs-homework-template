@@ -2,7 +2,13 @@ const { HttpError } = require("../helpers/index");
 const { Contacts } = require("../models/contacts");
 
 const getContacts = async (req, res, next) => {
-  const contacts = await Contacts.find({});
+  const { _id } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = await Contacts.find({ owner: _id }, "", {
+    skip,
+    limit: Number(limit),
+  }).populate("owner", "_id email");
   res.status(200).json(contacts);
 };
 
@@ -18,7 +24,8 @@ const getContact = async (req, res, next) => {
 
 const postContact = async (req, res, next) => {
   const body = req.body;
-  const contact = await Contacts.create(body);
+  const { _id } = req.user;
+  const contact = await Contacts.create({ ...body, owner: _id });
   res.status(201).json(contact);
 };
 
