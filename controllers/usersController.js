@@ -1,12 +1,10 @@
-const { join, resolve } = require("path");
+const { join } = require("path");
 
 const {
   currentUser,
   changeUserSubscription,
   changeUserAvatar,
 } = require("../services/userServices");
-
-const avatarsDir = resolve("./public/avatars");
 
 const currentUserController = async (req, res) => {
   const { _id } = req.user;
@@ -40,16 +38,13 @@ const subscriptionUserController = async (req, res) => {
 };
 
 const changeUserAvatarController = async (req, res) => {
-  const { path, originalname } = req.file;
   const { _id } = req.user;
+  const { originalname } = req.file;
 
   const userAvatarName = `${_id}_${originalname}`;
+  const avatarURL = join("avatars/", userAvatarName).replace(/\\/g, "/");
 
-  const publicPath = join(avatarsDir, userAvatarName);
-
-  const avatarURL = join("avatars", userAvatarName).replace(/\\/g, "/");
-
-  await changeUserAvatar(_id, path, publicPath, avatarURL);
+  await changeUserAvatar(_id, avatarURL);
 
   res.status(200).json({
     status: "success",

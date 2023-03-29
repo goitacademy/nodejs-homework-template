@@ -1,10 +1,11 @@
 const multer = require("multer");
 const { resolve, join } = require("path");
 const Jimp = require("jimp");
-const fs = require("fs");
+const fs = require("fs/promises");
 const { HttpError } = require("../../helpers/httpError");
 
 const tempDir = resolve("./tmp");
+const avatarsDir = resolve("./public/avatars");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -18,20 +19,28 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploadMiddleware = multer({ storage });
+const upload = multer({ storage });
 
-const cropImageMiddleware = async (req, res, next) => {
+const uploadMiddleware = async (req, res, next) => {
   if (!req.file) next(HttpError(415, "File not provided"));
 
-  const { path, filename } = req.file;
-  console.log(req.file);
+  const { _id } = req.user;
+  const { path, originalname } = req.file;
+
+  await Jimp.read(path)
+    .then((img) => {
+      return img.resize(250, 250).quality(60).write(path);
+    })
+    .catch((err) => {
+      console.error(err);
+      throw new HttpError(400, err.message);
+    });
 
   try {
-    const cropImgDir = join(tempDir, filename);
+    const userAvatarName = `${_id}_${originalname}`;
+    const publicPath = join(avatarsDir, userAvatarName);
 
-    const cropImg = await Jimp.read(path);
-
-    cropImg.resize(250, 250).quality(60).write(cropImgDir);
+    await fs.rename(path, publicPath);
 
     next();
   } catch (error) {
@@ -42,4 +51,7 @@ const cropImageMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = { uploadMiddleware, cropImageMiddleware };
+module.exports = {
+  upload,
+  uploadMiddleware,
+};
