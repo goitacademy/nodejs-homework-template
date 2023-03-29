@@ -1,5 +1,15 @@
 const express = require("express");
 
+const createError = require("http-errors");
+
+const Joi = require("joi");
+
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
 const contactsOperations = require("../../models/contacts");
 
 const router = express.Router();
@@ -24,9 +34,7 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactsOperations.getContactById(contactId);
     if (!result) {
-      const error = new Error(`Contact with id=${contactId} not found`);
-      error.status = 404;
-      throw error;
+      throw createError(404, `Contact with id=${contactId} not found`);
     }
 
     res.json({
@@ -41,9 +49,23 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-// router.post("/", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
+    const result = await contactsOperations.addContact(req.body);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { result },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // router.delete("/:contactId", async (req, res, next) => {
 //   res.json({ message: "template message" });
