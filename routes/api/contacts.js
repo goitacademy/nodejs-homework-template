@@ -6,18 +6,20 @@ const {contacts: ctrl} = require('../../controllers')
 
 
 const {joiSchema, joiSchemaFavorite} = require('../../models/contact');
-const {validationAddContact, validationUpDateContact, validationUpStatusContact} = require("../../middlewares/validation");
+const { validationAddContact, validationUpDateContact, validationUpStatusContact} = require("../../middlewares/validation");
+const {auth} = require("../../middlewares/auth");
+
 
 
 router.get('/', ctrl.listContacts);
 
 router.get('/:id', ctrl.getById);
 
-router.post('/', validationAddContact(joiSchema), ctrl.addContact);
+router.post('/', auth, validationAddContact(joiSchema), ctrl.addContact);
 
 router.put('/:id', validationUpDateContact(joiSchema), ctrl.updateContact);
 
- router.patch('/:contactId/favorite', validationUpStatusContact(joiSchemaFavorite), ctrl.updateStatusContact);
+router.patch('/:contactId/favorite', validationUpStatusContact(joiSchemaFavorite), ctrl.updateStatusContact);
 
 router.delete('/:contactId', ctrl.removeContact);
 
