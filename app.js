@@ -19,13 +19,6 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-// app.get("/contacts", listContacts);
-
-// app.use((req, res) => {
-//   const allContacts = contacts.listContacts();
-//   res.json(allContacts);
-// });
-
 app.use((req, res) => {
   // res.send({ message: "home work 02 done!!! MaryDan" });
   res.status(404).json({ message: "Not found" });
