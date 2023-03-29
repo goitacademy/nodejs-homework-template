@@ -7,7 +7,7 @@ const {contacts: ctrl} = require('../../controllers')
 
 const {joiSchema, joiSchemaFavorite} = require('../../models/contact');
 const { validationAddContact, validationUpDateContact, validationUpStatusContact} = require("../../middlewares/validation");
-const {auth} = require("../../middlewares/auth");
+const auth = require("../../middlewares/auth");
 
 
 
