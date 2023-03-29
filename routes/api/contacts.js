@@ -71,8 +71,28 @@ router.post("/", async (req, res, next) => {
 //   res.json({ message: "template message" });
 // });
 
-// router.put("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      throw error;
+    }
+    const { contactId } = req.params;
+    const result = await contactsOperations.updateContact(contactId, req.body);
+    // if (!result) {
+    //   throw createError(404, `Contact with id=${contactId} not found`);
+    // }
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
