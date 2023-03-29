@@ -16,7 +16,12 @@ const signup = async (req, res, next) => {
 
     const avaUrl = gravatar.url(email);
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const result = await User.create({ name, email, password: hashPassword });
+    const result = await User.create({
+      name,
+      email,
+      password: hashPassword,
+      avaUrl,
+    });
     res.status(201).json({
       status: "succses",
       code: 201,
