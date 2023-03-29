@@ -1,4 +1,6 @@
 const express = require('express');
+const router = express.Router();
+
 const {
   listContacts,
   getContactById,
@@ -6,107 +8,115 @@ const {
   removeContact,
   updateContact,
 } = require('../../models/contacts');
-const Joi = require('joi');
-const CustomJoi = Joi.extend(require('joi-phone-number'));
 
-const router = express.Router();
+const HttpError = require('../../helpers/httpError');
+const {
+  contactAddValidation,
+  contactUpdateValidation,
+} = require('../../helpers/validation');
 
 /**
  * ============================ Получение всех контакта
  */
 router.get('/', async (req, res, next) => {
-  const result = await listContacts();
-  res.status(200).json(result);
+  try {
+    const result = await listContacts();
+
+    if (!result) {
+      throw HttpError(404, 'Contacts not found');
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 /**
  * ============================ Получение контакта по ID
  */
 router.get('/:contactId', async (req, res, next) => {
-  const contactId = req.params.contactId;
-  const contact = await getContactById(contactId);
+  try {
+    const contactId = req.params.contactId;
+    const contact = await getContactById(contactId);
 
-  if (!contact) {
-    return res.status(404).json({ message: 'Not found' });
+    if (!contact) {
+      throw HttpError(404, `Contact with id ${contactId} Not found`);
+    }
+
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).json(contact);
 });
 
 /**
  * ============================ Добавление контакта
  */
 router.post('/', async (req, res, next) => {
-  const validationSchema = CustomJoi.object({
-    name: CustomJoi.string().min(3).max(30).required(),
+  try {
+    const { error: validationError, value: contact } =
+      contactAddValidation.validate(req.body);
 
-    email: CustomJoi.string()
-      .email({
-        minDomainSegments: 2,
-      })
-      .required(),
+    if (validationError) {
+      throw HttpError(400, `${validationError.message}`);
+    }
 
-    phone: CustomJoi.string()
-      .phoneNumber({ format: 'international' })
-      .required(),
-  });
+    const createdContact = await addContact(contact);
 
-  const { error: validationError, value: validContact } =
-    validationSchema.validate(req.body);
+    if (!createdContact) {
+      throw HttpError(500, 'Create contact error');
+    }
 
-  if (validationError) {
-    return res.status(400).json({ message: validationError.message });
+    res.status(201).json(createdContact);
+  } catch (error) {
+    next(error);
   }
-
-  const contact = await addContact(validContact);
-  res.status(201).json(contact);
 });
 
 /**
  * ============================ Удаление контакта
  */
 router.delete('/:contactId', async (req, res, next) => {
-  const contactId = req.params.contactId;
+  try {
+    const contactId = req.params.contactId;
 
-  const removed = await removeContact(contactId);
+    const removed = await removeContact(contactId);
 
-  if (removed) {
-    return res.status(200).json({ message: 'contact deleted' });
+    if (!removed) {
+      throw HttpError(404, `Contact with id ${contactId} not found`);
+    }
+
+    res.status(200).json({ message: 'contact deleted' });
+  } catch (error) {
+    next(error);
   }
-
-  res.status(404).json({ message: 'Not found' });
 });
 
 /**
  * ============================ Обновление контакта
  */
 router.put('/:contactId', async (req, res, next) => {
-  const contactId = req.params.contactId;
+  try {
+    const contactId = req.params.contactId;
 
-  const validationSchema = CustomJoi.object({
-    name: CustomJoi.string().min(3).max(30),
+    const { error: validationError, value: update } =
+      contactUpdateValidation.validate(req.body);
 
-    email: CustomJoi.string().email({
-      minDomainSegments: 2,
-    }),
+    if (validationError) {
+      throw HttpError(400, `${validationError.message}`);
+    }
 
-    phone: CustomJoi.string().phoneNumber({ format: 'international' }),
-  }).min(1);
+    const updatedContact = await updateContact(contactId, update);
 
-  const { error: validationError, value: validUpdate } =
-    validationSchema.validate(req.body);
+    if (!updatedContact) {
+      throw HttpError(404, `Contact with id ${contactId} not found`);
+    }
 
-  if (validationError) {
-    return res.status(400).json({ message: validationError.message });
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
   }
-
-  const updatedContact = await updateContact(contactId, validUpdate);
-
-  if (!updatedContact) {
-    return res.status(404).json({ message: 'Contact not found' });
-  }
-
-  return res.status(200).json(updatedContact);
 });
 
 module.exports = router;
