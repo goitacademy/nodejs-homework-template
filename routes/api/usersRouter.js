@@ -3,8 +3,8 @@ const router = express.Router();
 
 const { authMiddleware } = require("../../middlewares/auth/authMiddleware");
 const {
+  upload,
   uploadMiddleware,
-  cropImageMiddleware,
 } = require("../../middlewares/upload/uploadMiddleware");
 
 const {
@@ -33,8 +33,8 @@ router.patch(
 router.patch(
   "/avatars",
   authMiddleware,
-  uploadMiddleware.single("avatar"),
-  cropImageMiddleware,
+  upload.single("avatar"),
+  uploadMiddleware,
   asyncWrapper(changeUserAvatarController)
 );
 
