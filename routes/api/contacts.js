@@ -8,6 +8,8 @@ const {
   validateFavorite,
 } = require("../../middlewares/contactsMiddlewares");
 
+const checkAuthMiddleware = require("../../middlewares/checkAuthMiddleware");
+
 const {
   getListContactsController,
   getByIdController,
@@ -31,16 +33,5 @@ router
 router
   .route("/:contactId/favorite")
   .patch(validateContactId, validateFavorite, updateStatusContact);
-
-// router.get("/", getListContactsController);
-// router.post("/", validateContactBody, addContactController);
-// router.get("/:contactId", getByIdController);
-// router.put(
-//   "/:contactId",
-//   validateContactBody,
-//   validateContactId,
-//   putContactController
-// );
-// router.delete("/:contactId", validateContactId, removeContactController);
 
 module.exports = router;
