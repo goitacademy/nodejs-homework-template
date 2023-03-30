@@ -2,19 +2,19 @@ const fs = require("fs/promises");
 const contactsPath = require("../contactsPath");
 
 const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const allContacts = JSON.parse(data);
-    if (allContacts.length !== 0) {
-      return allContacts;
-    }
-    return null;
-  } catch (error) {
-    console.error(error);
+  const data = await fs.readFile(contactsPath, "utf-8");
+  const allContacts = JSON.parse(data);
+  if (allContacts.length !== 0) {
+    return allContacts;
   }
+  return null;
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const result = contacts.find((item) => item.id === contactId);
+  return result || null;
+};
 
 const removeContact = async (contactId) => {};
 
