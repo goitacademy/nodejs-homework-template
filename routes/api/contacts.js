@@ -1,11 +1,14 @@
+
 const express = require('express');
 const { contactsController } = require('../../controllers');
 const validation = require('../../middlewares');
 const contactsSchema = require('../../schemas');
 
+
 const router = express.Router();
 
 router.get('/', contactsController.getContactsList);
+
 
 router.get('/:contactId', contactsController.getContactById);
 
