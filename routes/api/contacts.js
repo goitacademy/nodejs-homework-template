@@ -20,7 +20,7 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, `Not found`);
+      throw HttpError(404, `Not found contact`);
     }
     res.json(result);
   } catch (error) {
@@ -29,7 +29,13 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try{
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
+  }
+  catch(error){
+    next(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
