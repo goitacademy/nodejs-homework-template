@@ -74,7 +74,7 @@ router.put("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.updateById(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Book with ${contactId} not found`);
+      throw HttpError(404, `Ther's no ${contactId} in phonebook`);
     }
     res.json(result);
   } catch (error) {
@@ -87,7 +87,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.deleteById(contactId);
     if (!result) {
-      throw HttpError(404, `Book with ${contactId} not found`);
+      throw HttpError(404, `Ther's no ${contactId} in phonebook`);
     }
     res.json({
       message: "Delete success",
