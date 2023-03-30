@@ -51,11 +51,16 @@ const validationUpStatusContact = (schema) => {
 
 const validation = (schema) => {
     return (req, res, next) => {
+        if (!Object.keys(req.body).length) {
+            res.status("400").json({message: "missing fields"});
+            return;
+        }
+
         const {error} = schema.validate(req.body);
 
         if (error) {
             return res.status(400).json({
-                message: "missing fields"
+                message: {message: error.details}
             });
 
         } else {
