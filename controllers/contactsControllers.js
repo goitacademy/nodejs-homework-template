@@ -67,11 +67,6 @@ const deleteItem = () => async (req, res, next) => {
 
 const updateItem = () => async (req, res, next) => {
   try {
-    // const { error } = contactSchema.validate(req.body);
-    // if (error) {
-    //   error.status = 400;
-    //   throw error;
-    // }
     const { contactId } = req.params;
     const result = await contactsOperations.updateContact(contactId, req.body);
     if (!result) {
@@ -80,9 +75,7 @@ const updateItem = () => async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      data: {
-        result,
-      },
+      data: result,
     });
   } catch (error) {
     next(error);
