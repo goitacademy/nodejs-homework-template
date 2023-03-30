@@ -46,11 +46,20 @@ const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
   const id = contactId;
   const newContact = { id, name, email, phone };
+
   const contacts = await listContacts();
   const updateContact = contacts.find((contact) => contact.id === contactId);
-  updateContact.name = newContact.name;
-  updateContact.email = newContact.email;
-  updateContact.phone = newContact.phone;
+
+  if (newContact.name !== undefined) {
+    updateContact.name = newContact.name;
+  }
+  if (newContact.email !== undefined) {
+    updateContact.email = newContact.email;
+  }
+  if (newContact.phone !== undefined) {
+    updateContact.phone = newContact.phone;
+  }
+
   await writeContacts(contacts);
 
   return updateContact;

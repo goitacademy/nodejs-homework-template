@@ -19,7 +19,9 @@ async function getContact(req, res, next) {
 
 async function createContact(req, res, next) {
   const { name, email, phone } = req.body;
+
   const newContact = await models.addContact(name, email, phone);
+
   res.status(201).json(newContact);
 }
 
@@ -44,7 +46,7 @@ async function changeContact(req, res, next) {
     return next(HttpError(400, "missing fields"));
   }
 
-  res.status(200).json(changeContact);
+  return res.status(200).json(changeContact);
 }
 
 module.exports = {
