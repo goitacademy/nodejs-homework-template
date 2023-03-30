@@ -1,11 +1,6 @@
-// const fs = require("fs/promises");
-
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-
-// const contacts = require("./models/contacts");
-// const listContacts = require("./models/contacts");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -20,7 +15,6 @@ app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
-  // res.send({ message: "home work 02 done!!! MaryDan" });
   res.status(404).json({ message: "Not found" });
 });
 
