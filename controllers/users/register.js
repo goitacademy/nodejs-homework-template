@@ -1,6 +1,5 @@
 const { catchAsync } = require('../../utils');
 const createError = require('http-errors');
-const gravatar = require('gravatar');
 
 const { userRegisterValidator } = require('../../utils');
 const { User } = require('../../models');
@@ -24,13 +23,14 @@ const register = catchAsync(async (req, res, next) => {
     throw createError(409, `User with email ${email} already exist`);
   }
 
-  const avatarURL = gravatar.url(email);
+  // const avatarURL = gravatar.url(email);
+
   const newUser = await User.create({
     name,
     email,
     password,
     subscription,
-    avatarURL,
+    // avatarURL,
   });
 
   newUser.password = undefined;
@@ -40,7 +40,6 @@ const register = catchAsync(async (req, res, next) => {
     code: 201,
     data: {
       user: { email, subscription: subscription || 'starter' },
-      avatarURL,
     },
   });
 });
