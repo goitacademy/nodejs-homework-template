@@ -1,7 +1,7 @@
 const {User} = require("../models");
 const jwt = require("jsonwebtoken");
-//
-// const createError = require('http-errors');
+
+
 
 // извлекаем заголовок авторизации
 // разделяем на 2 части с помощью split
