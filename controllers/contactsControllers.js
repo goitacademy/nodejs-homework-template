@@ -5,11 +5,7 @@ const createError = require("http-errors");
 const getAllItems = () => async (req, res, next) => {
   try {
     const contacts = await contactsOperations.listContacts();
-    res.json({
-      status: "success",
-      code: 200,
-      data: contacts,
-    });
+    res.json(contacts);
   } catch (error) {
     next(error);
   }
@@ -23,11 +19,7 @@ const getItemById = () => async (req, res, next) => {
       throw createError(404, "Not found");
     }
 
-    res.json({
-      status: "success",
-      code: 200,
-      data: result,
-    });
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -36,11 +28,7 @@ const getItemById = () => async (req, res, next) => {
 const addItem = () => async (req, res, next) => {
   try {
     const result = await contactsOperations.addContact(req.body);
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      data: result,
-    });
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -53,12 +41,8 @@ const deleteItem = () => async (req, res, next) => {
     if (!result) {
       throw createError(404, "Not found");
     }
-
     res.json({
-      status: "success",
-      code: 200,
       message: "contact deleted",
-      data: result,
     });
   } catch (error) {
     next(error);
@@ -72,11 +56,7 @@ const updateItem = () => async (req, res, next) => {
     if (!result) {
       throw createError(404, "Not found");
     }
-    res.json({
-      status: "success",
-      code: 200,
-      data: result,
-    });
+    res.json(result);
   } catch (error) {
     next(error);
   }
