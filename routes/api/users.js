@@ -10,7 +10,7 @@ const auth = require('../../middlewares/auth');
 
 
 router.post('/register', validation(joiSchema),ctrl.register);
-router.post('/login', validation(joiSchema),ctrl.login);
+router.post('/login',  validation(joiSchema),ctrl.login);
 router.post('/logout', auth, validation(joiSchema), ctrl.logout);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const {User} = require("../models");
 const jwt = require("jsonwebtoken");
-
-const createError = require('http-errors');
+//
+// const createError = require('http-errors');
 
 // извлекаем заголовок авторизации
 // разделяем на 2 части с помощью split
@@ -16,7 +16,7 @@ const auth = async (req, res, next) => {
 
     try {
         if (bearer !== "Bearer") {
-            return res.json({message: "Not authorized"});
+            return res.status(401).json({message: "Not authorized"});
         }
         const {id} = jwt.verify(token, process.env.SECRET_KEY);
 
@@ -24,7 +24,7 @@ const auth = async (req, res, next) => {
 
 
         if (!user || !user.token) {
-            throw createError(401, "Not authorized");
+            return res.status(401).json({message: "Not authorized"});
         }
         req.user = user;
         next();
