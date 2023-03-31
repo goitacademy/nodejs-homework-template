@@ -4,7 +4,6 @@ const errorMessages = {
   403: "Forbidden",
   404: "Not Found",
   409: "Conflict",
-  500: "Not Found",
 };
 
 const HttpError = (status, message = errorMessages[status]) => {
@@ -13,4 +12,4 @@ const HttpError = (status, message = errorMessages[status]) => {
   return error;
 };
 
-module.exports = HttpError;
+module.exports = { HttpError };
