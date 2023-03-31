@@ -4,6 +4,7 @@ const { Conflict } = require("http-errors");
 
 const { userSchema } = require('../helpers/validation');
 
+const { ImageService } = require('../services/imageService');
 
 const registrationController = async (req, res) => {
     const { email, password } = req.body;
@@ -51,11 +52,29 @@ const logoutController = async (req, res) => {
     res.status(204).json();
 };
 
+const updateUser = async (req, res) => {
+    const { file, user } = await req;
+
+ if (file) {
+    user.avatar = await ImageService.save(file, { width: 250, height: 250 }, 'public', 'avatars', user.id);
+  }
+    Object.keys(req.body).forEach((key) => {
+        user[key] = req.body[key]
+    });
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+        user: updatedUser,
+    })
+};
+
 
 
 module.exports = {
     registrationController,
     loginController,
-    logoutController
+    logoutController,
+    updateUser 
 }
 
