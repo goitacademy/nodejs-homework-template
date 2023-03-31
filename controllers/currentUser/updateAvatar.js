@@ -1,7 +1,7 @@
 const { User } = require("../../schemas/userSchema");
 const path = require("path");
 const fs = require("fs/promises");
-// const Jimp = require("jimp");
+const Jimp = require("jimp");
 
 const avatarDir = path.join(__dirname, "../../", "public", "avatars");
 
@@ -15,9 +15,9 @@ const updateAvatar = async (req, res) => {
     await fs.rename(tempUpload, resultUpload);
     const avaUrl = path.join("public", "avatars", imageName);
 
-    // const image = await Jimp.read(resultUpload);
-    // await image.resize(250, 250);
-    // await image.write(resultUpload);
+    const image = await Jimp.read(resultUpload);
+    await image.resize(250, 250);
+    await image.write(resultUpload);
 
     await User.findByIdAndUpdate(req.user._id, { avaUrl });
     res.json({ avaUrl });
