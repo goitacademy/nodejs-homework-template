@@ -4,7 +4,7 @@ const { Conflict } = require("http-errors");
 
 const { userSchema } = require('../helpers/validation');
 
-const gravatar = require('gravatar');
+// const gravatar = require('gravatar');
 
 const registrationController = async (req, res) => {
     const { email, password } = req.body;
@@ -19,16 +19,15 @@ const registrationController = async (req, res) => {
     if (user) {
         throw new Conflict("Email in use");
     };
-    
-    const avatarURL = gravatar.url(email);
     await registration(email, password);
+    // const avatarURL = gravatar.url(email);
     res.status(201).json({
         message: "created",
         code: 201,
         user: {
             email,
             subscription: "starter",
-            avatarURL,
+
         },
     });
 };
