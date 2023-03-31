@@ -12,7 +12,7 @@ const addSchema = Joi.object({
   email: Joi.string().required().messages({
     "any.required": `missing required "email" field`,
   }),
-  phone: Joi.number().required().messages({
+  phone: Joi.string().required().messages({
     "any.required": `missing required "phone" field`,
   }),
 });
@@ -28,13 +28,10 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId);
     if (!result) {
       throw HttpError(404, "Not found");
-      // const error = new Error("Not found");
-      // error.status = 404;
-      // throw error;
     }
     res.json(result);
   } catch (error) {
