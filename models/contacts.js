@@ -1,4 +1,4 @@
-const fs = require('fs/promises')
+const fs = require('fs/promises');
 const path = require("path");
 const shortid = require("shortid");
 const contactsPath = path.resolve("./models/contacts.json");
