@@ -3,14 +3,15 @@ const express = require('express')
 const {asyncWrapper} = require('../../helpers/apihelpers')
 
 const {registrationController,
-  loginController, logoutController, updateUser } = require('../../controllers/authController');
+  loginController, logoutController} = require('../../controllers/authController');
   
 const { currentController} = require('../../controllers/gerCurrentController');
 
-
+const { updateAvatarController} = require('../../controllers/uploadController');
 
 const { authMiddleware } = require('../../middlewares/authMiddleware');
-const {uploadUserPhoto} = require('../../middlewares/uploadMiddleware');
+
+const {upload} = require('../../middlewares/uploadMiddleware');
 
 const router = express.Router();
 
@@ -35,10 +36,10 @@ router
   .route('/current')
   .post(asyncWrapper(currentController));
 
-router.use(uploadUserPhoto);
+router.use(authMiddleware, upload.single("avatar"));
 router
   .route('/avatars')
-  .patch(asyncWrapper(updateUser));
+  .patch(asyncWrapper(updateAvatarController));
 
 
 module.exports = router;
