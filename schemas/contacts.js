@@ -21,8 +21,14 @@ const addSchema = Joi.object({
       "string.pattern.base": `"phone" must be 10 digit number`,
       "any.required": `"phone" is a required field`,
     }),
+  favorite: Joi.boolean()
 });
 
+updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
+
 module.exports = {
-    addSchema
-}
+  addSchema,
+  updateFavoriteSchema,
+};
