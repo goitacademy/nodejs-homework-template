@@ -9,18 +9,18 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const data = await listContacts();
-  const contactIndex = data.findIndex((item) => item.id === contactId);
+  const contactIndex = data.findIndex((item) => item.id === id);
   if (contactIndex === -1) {
     return null;
   }
   return data[contactIndex];
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const data = await listContacts();
-  const contactIndex = data.findIndex((item) => item.id === contactId);
+  const contactIndex = data.findIndex((item) => item.id === id);
   if (contactIndex === -1) {
     console.log("There is no contact with such id !");
   }
@@ -37,13 +37,13 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   const data = await listContacts();
-  const contactIndex = data.findIndex((item) => item.id === contactId);
+  const contactIndex = data.findIndex((item) => item.id === id);
   if (contactIndex === -1) {
     console.log("There is no contact with such id !");
   }
-  const newContact = { ...body, contactId };
+  const newContact = { ...data[contactIndex], ...body };
   data.splice(contactIndex, 1, newContact);
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 1));
   return newContact;
