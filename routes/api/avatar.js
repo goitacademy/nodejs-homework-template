@@ -1,10 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const {avatar: ctrl} = require('../../controllers');
+const {users: ctrl} = require('../../controllers');
 const auth = require("../../middlewares/auth");
 const upload = require("../../middlewares/upload");
 
-router.patch('/avatars', auth, upload, ctrl.updateAvatar);
+router.patch('/avatars', auth, upload.single("avatar"), ctrl.updateAvatar);
 
 module.exports = router;

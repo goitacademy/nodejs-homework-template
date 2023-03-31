@@ -5,6 +5,7 @@ const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
 const usersRouter = require('./routes/api/users');
 const currentRouter = require("./routes/api/curentuser");
+const avatarRouter = require("./routes/api/avatar");
 
 const  dotenv = require('dotenv');
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(express.static("public"))
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
 app.use("/api/users",currentRouter);
+app.use("/api/users", avatarRouter);
 
 
 
