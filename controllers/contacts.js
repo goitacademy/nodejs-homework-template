@@ -1,4 +1,3 @@
-// const contacts = require("../models/contacts");
 const ctrlWrapper = require('../utils/ctrlWrapper')
 const Contact = require('../models/contact')
 const { addSchema, updateFavoriteSchema } = require('../schemas/contacts')
