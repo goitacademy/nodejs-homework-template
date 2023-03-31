@@ -21,17 +21,27 @@ const {
 
 router
   .route("/")
-  .get(getListContactsController)
-  .post(validateContactBody, addContactController);
+  .get(checkAuthMiddleware, getListContactsController)
+  .post(checkAuthMiddleware, validateContactBody, addContactController);
 
 router
   .route("/:contactId")
-  .get(getByIdController)
-  .put(validateContactBody, validateContactId, putContactController)
-  .delete(validateContactId, removeContactController);
+  .get(checkAuthMiddleware, getByIdController)
+  .put(
+    checkAuthMiddleware,
+    validateContactBody,
+    validateContactId,
+    putContactController
+  )
+  .delete(checkAuthMiddleware, validateContactId, removeContactController);
 
 router
   .route("/:contactId/favorite")
-  .patch(validateContactId, validateFavorite, updateStatusContact);
+  .patch(
+    checkAuthMiddleware,
+    validateContactId,
+    validateFavorite,
+    updateStatusContact
+  );
 
 module.exports = router;

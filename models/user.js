@@ -26,13 +26,13 @@ const userSchema = new Schema(
 );
 
 const joiRegisterSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().required(),
+  password: Joi.string().min(8).required(),
+  email: Joi.string().email().required(),
 });
 
 const joiLoginSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().required(),
+  password: Joi.string().min(8).required(),
+  email: Joi.string().email().required(),
 });
 
 const User = model("user", userSchema);

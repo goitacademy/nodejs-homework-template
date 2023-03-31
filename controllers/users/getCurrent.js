@@ -1,5 +1,5 @@
 const catchAsync = require("../../utils/catchAsync");
-console.log("getcurrent--------------------------------");
+
 const getCurrent = catchAsync(async (req, res, next) => {
   const { email, subscription } = req.user;
 
