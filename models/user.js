@@ -1,16 +1,21 @@
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
-class User {
-  constructor(id, name, email, phone) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.phone = phone;
-  }
-}
+const Schema = mongoose.Schema;
 
-const userSchema = Joi.object({
-  id: Joi.string().required(),
+const contacts = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: { type: String },
+  phone: { type: String },
+  favorite: { type: Boolean, default: false },
+});
+
+const User = mongoose.model("contacts", contacts);
+
+const userValidationSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string()
     .required()
@@ -18,7 +23,12 @@ const userSchema = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ["com", "net", "pl", "uk"] },
     }),
-  phone: Joi.number().required().min(9),
+  phone: Joi.string().required().min(9),
+  favorite: Joi.boolean().required(),
 });
 
-module.exports = { User, userSchema };
+const favoriteValidationSchema = Joi.object({
+  favorite: Joi.boolean().required().default(false),
+});
+
+module.exports = { User, userValidationSchema, favoriteValidationSchema };
