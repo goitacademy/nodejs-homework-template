@@ -1,6 +1,6 @@
 const operations = require("../models/contacts");
 const { NotFound, BadRequest } = require("http-errors");
-const contactSchema = require("../validation/contactsSchema");
+const { contactSchema } = require("../validation/contactsSchema");
 const listContacts = async (req, res, next) => {
   try {
     const contacts = await operations.listContacts();
@@ -12,11 +12,6 @@ const listContacts = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
-    }
     const newContact = await operations.addContact(req.body);
     res.status(201).json(newContact);
   } catch (error) {
@@ -55,12 +50,6 @@ const updateContact = async (req, res, next) => {
     const { id } = req.params;
     if (Object.keys(req.body).length === 0) {
       throw new BadRequest("Missing fields");
-    }
-
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      error.status = 400;
-      throw error;
     }
     const newContact = await operations.updateContact(id, req.body);
     if (!newContact) {
