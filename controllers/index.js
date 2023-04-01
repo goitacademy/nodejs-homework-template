@@ -1,15 +1,15 @@
 const {
-  getAllContacts,
-  getOneContact,
-  addContact,
-  deleteContact,
+  getContacts,
+  getContact,
+  createContact,
   updateContact,
+  deleteContact,
 } = require("./controllers");
 
 module.exports = {
-  getAllContacts,
-  getOneContact,
-  addContact,
-  deleteContact,
+  getContacts,
+  getContact,
+  createContact,
   updateContact,
+  deleteContact,
 };
