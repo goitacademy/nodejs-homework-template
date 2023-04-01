@@ -23,6 +23,14 @@ const addSchema = Joi.object({
     }),
 })
 
+const putSchema = Joi.object({
+  email: Joi.string().email().allow(''),
+  phone: Joi.string().pattern(/^[0-9+() -]+$/).allow(''),
+  name: Joi.string().allow(''),
+}).or('email', 'phone', 'name').required().messages({
+  'object.missing': 'missing required name field',
+});
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -82,7 +90,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const {error} = addSchema.validate(req.body);
+    const {error} = putSchema.validate(req.body);
     if(error) {
       throw HttpError(400, error.message);
     }
