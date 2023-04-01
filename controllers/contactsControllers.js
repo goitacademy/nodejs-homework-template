@@ -50,6 +50,9 @@ const deleteContact = async (req, res, next) => {
 
 const changeContact = async (req, res, next) => {
   try {
+    if (!Object.keys(req.body).length) {
+      return res.status(400).json({ message: "missing fields" });
+    }
     const { id } = req.params;
     const result = await contacts.updateContact(id, req.body);
     if (!result) {

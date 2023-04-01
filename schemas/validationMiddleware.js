@@ -1,7 +1,5 @@
 const Joi = require("joi");
 
-const { HttpError } = require("../helpers");
-
 module.exports = {
   addContactValidation: async (req, res, next) => {
     const addSchema = Joi.object({
@@ -9,9 +7,9 @@ module.exports = {
       email: Joi.string().required(),
       phone: Joi.string().required(),
     });
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      console.log(error);
+    const validationResult = addSchema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({ status: validationResult.error.details });
     }
 
     next();
@@ -22,9 +20,9 @@ module.exports = {
       email: Joi.string(),
       phone: Joi.string(),
     });
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
+    const validationResult = addSchema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({ status: validationResult.error.details });
     }
     next();
   },
