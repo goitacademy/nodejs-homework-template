@@ -2,37 +2,30 @@ const { User } = require("../models/user");
 const contacts = require("../models/contacts.json");
 const userStorage = contacts;
 
-const listContacts = () => {
-  return userStorage;
+const listContacts = async () => {
+  const contacts = await User.find();
+  return contacts;
 };
 
-const getContactById = (id) => {
-  return userStorage.find((u) => u.id == id);
+const getContactById = async (_id) => {
+  const contact = await User.findById(_id);
+  return contact;
 };
 
-const removeContact = (id) => {
-  for (var i = 0; i < userStorage.length; i++) {
-    if (userStorage[i].id == id) {
-      userStorage.splice(i, 1);
-      return;
-    }
-  }
+const removeContact = async (_id) => {
+  const contact = User.findByIdAndRemove(_id);
+  return contact;
 };
 
-const addContact = (id, name, phone, email) => {
-  const user = new User(id, name, phone, email);
-  userStorage.push(user);
+const addContact = async (name, phone, email, favorite) => {
+  const user = new User({ name, phone, email, favorite });
+  user.save();
   return user;
 };
 
-const updateContact = (id, newUser) => {
-  for (var i = 0; i < userStorage.length; i++) {
-    if (userStorage[i].id == id) {
-      userStorage[i] = newUser;
-
-      return;
-    }
-  }
+const updateContact = async (id, newUser) => {
+  const contact = await User.findByIdAndUpdate(id, newUser);
+  return contact;
 };
 
 module.exports = {
