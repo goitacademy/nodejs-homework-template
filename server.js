@@ -14,9 +14,8 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 
-const contactsRouter = require("./routes/api/contacts");
-app.use("/api/contacts", contactsRouter);
-
+const router = require("./routes/api/routes.js");
+app.use("/api", router);
 
 
  app.use((req, res) => {
