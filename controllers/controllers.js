@@ -1,19 +1,19 @@
 const contacts = require("../models/contacts");
 const { HttpError } = require("../helpers");
 
-const getAllContacts = async (req, res, next) => {
+const getContacts = async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await contacts.getContactsService();
     res.json(result);
   } catch (error) {
     next(error);
   }
 };
 
-const getOneContact = async (req, res, next) => {
+const getContact = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await contacts.getContactService(id);
     if (!result) {
       throw HttpError(404); /* при прокиданні помилки try  переривається */
     }
@@ -23,13 +23,30 @@ const getOneContact = async (req, res, next) => {
   }
 };
 
-const addContact = async (req, res, next) => {
+const createContact = async (req, res, next) => {
   try {
-    const result = await contacts.addContact(req.body);
+    const result = await contacts.createContactService(req.body);
     if (!result) {
       throw HttpError(400, `Contact with phone ${req.body.phone}  is exist`);
     }
     res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+const updateContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.updateContactService(id, req.body);
+    if (!result) {
+      throw HttpError(404);
+    }
+    if (Object.keys(req.body).length === 0) {
+      console.log("length:", Object.keys(req.body).length);
+      return res.status(400).json({ message: "missing fields" });
+    }
+
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -39,7 +56,7 @@ const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const result = await contacts.removeContact(id);
+    const result = await contacts.deleteContactService(id);
     if (!result) {
       throw HttpError(404);
     }
@@ -49,23 +66,10 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-const updateContact = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.updateContact(id, req.body);
-    if (!result) {
-      throw HttpError(404);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
-  getAllContacts,
-  getOneContact,
-  addContact,
-  deleteContact,
+  getContacts,
+  getContact,
+  createContact,
   updateContact,
+  deleteContact,
 };
