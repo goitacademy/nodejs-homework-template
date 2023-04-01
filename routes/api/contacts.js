@@ -2,9 +2,21 @@
 const express = require("express");
 
 const router = express.Router();
-const { HttpError } = require("../../helpers");
-
 const contactsOperation = require("../../models/contacts");
+const { HttpError } = require("../../helpers");
+const Joi = require("joi");
+
+const addSchema = Joi.object({
+  name: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required name field" }),
+  email: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required email field" }),
+  phone: Joi.string()
+    .required()
+    .messages({ "any.required": "Missing required phone field" }),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -20,7 +32,7 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactsOperation.getContactById(contactId);
     if (!result) {
-      throw HttpError();
+      throw HttpError(404);
     }
     res.json(result);
   } catch (error) {
@@ -29,15 +41,50 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.details[0].message);
+    }
+    const result = await contactsOperation.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, "Missing fields");
+    }
+    const { id } = req.params;
+    const result = await contactsOperation.updateContact(id, req.body);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsOperation.removeContact(id);
+    if (!result) {
+      throw HttpError(404);
+    }
+
+    res.status(200).json({
+      result,
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

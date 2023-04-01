@@ -1,3 +1,4 @@
 const HttpError = require("./HttpError");
+const withTryCatch = require("./withTryCatch");
 
-module.exports = { HttpError };
+module.exports = { HttpError, withTryCatch };
