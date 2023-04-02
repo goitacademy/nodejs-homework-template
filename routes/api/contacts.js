@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body;
   const { error } = schema.validate(req.body);
   if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+    return res.status(400).json({ message: 'missing required name field' });
   } else {
     const newContact = {
       id: nanoid(),
@@ -44,7 +44,7 @@ router.post('/', async (req, res, next) => {
 
     const contact = await contacts.addContact(newContact);
     if (contact) {
-      res.status(201).send(contact);
+      res.status(201).json(contact);
     }
   }
 });
@@ -76,7 +76,7 @@ router.put('/:contactId', async (req, res, next) => {
         res.json({ message: contact });
       }
     } catch (err) {
-      res.status(404).send({ message: err.message });
+      res.status(404).json({ message: err.message });
     }
   }
 });
