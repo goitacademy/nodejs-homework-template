@@ -12,7 +12,7 @@ const {
 const {
   userValidationSchema,
   favoriteValidationSchema,
-} = require("../../models/user");
+} = require("../../models/validation");
 
 router.get("/", async (req, res) => {
   try {
@@ -90,7 +90,7 @@ router.put("/:id", (req, res) => {
   }
 });
 
-router.put("/:id/favorite", (req, res) => {
+router.patch("/:id/favorite", (req, res) => {
   const { id } = req.params;
   if (!req.body) {
     return res.status(400).send("Missing favorite");
@@ -108,6 +108,7 @@ router.put("/:id/favorite", (req, res) => {
 
   try {
     updateContact(id, req.body);
+    console.log(req.body);
     return res.status(200).send("User sucessfully updated");
   } catch {
     return res.status(500).send("Something went wrong");

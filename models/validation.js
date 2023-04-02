@@ -1,19 +1,4 @@
 const Joi = require("joi");
-const mongoose = require("mongoose");
-
-const Schema = mongoose.Schema;
-
-const contacts = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: { type: String },
-  phone: { type: String },
-  favorite: { type: Boolean, default: false },
-});
-
-const User = mongoose.model("contacts", contacts);
 
 const userValidationSchema = Joi.object({
   name: Joi.string().required(),
@@ -31,4 +16,4 @@ const favoriteValidationSchema = Joi.object({
   favorite: Joi.boolean().required().default(false),
 });
 
-module.exports = { User, userValidationSchema, favoriteValidationSchema };
+module.exports = { userValidationSchema, favoriteValidationSchema };

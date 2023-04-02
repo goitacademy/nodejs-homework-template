@@ -6,7 +6,7 @@ const dbpath =
 const connectDatabase = async () => {
   await mongoose
     .connect(dbpath)
-    .then(() => console.log("Connected to mango db..."))
+    .then(() => console.log("Connected to mongo db..."))
     .catch(
       (err) => console.log("Error to connect db" + err) && process.exit(1)
     );
