@@ -15,18 +15,18 @@ const router = express.Router();
 
 router.get('/', ctrl.getAll)
 
-router.get('/:id', ctrl.getById);
+router.get('/:id', isValidId, ctrl.getById);
 
 router.post('/', validateBody(addContactsSchema), ctrl.add);
 
-// router.delete('/:id', ctrl.removeContact);
+// router.delete('/:id', isValidId, ctrl.removeContact);
 
-// router.put('/:id', validateBody(schemas.addContactsSchema), ctrl.updateContact)
+router.put('/:id', isValidId, validateBody(addContactsSchema), ctrl.updateById)
 router.patch(
   "/:id/favorite",
-  isValidId,
+  // isValidId,
   // validateBody(updateFavoriteSchema),
-  // ctrl.updateStatusContact
+  ctrl.updateStatusContact
 );
 
 module.exports = router;
