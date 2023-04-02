@@ -28,14 +28,11 @@ const validateUpdContact = (req, res, next) => {
     return res.status(400).json({ message: "missing fields" });
 
   const { error } = addSchemaUpd.validate(req.body);
-  const missingField = error.details[0].message;
   if (error) {
-    return res
-      .status(400)
-      .json({ message: `missing required ${missingField} field` });
+    return res.status(400).json({ message: error.details[0].message });
   }
 
-  next(error);
+  next();
 };
 
 module.exports = {
