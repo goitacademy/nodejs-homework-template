@@ -15,10 +15,10 @@ const authentificate = async (req, res, next) => {
     // * Проверки на наличие пользователя в базе по id
 
     if (!user || !user.token || user.token !== token) {
-      throw RequestError(401);
+      throw RequestError(401, "AUTHENTIFICATE");
     }
     if (bearer !== "Bearer") {
-      throw RequestError(401);
+      throw RequestError(401, "AUTHENTIFICATE");
     }
     req.user = user;
     // * Если token валидный, в req.user записываем всю информацию о пользователи который сделал запрос
