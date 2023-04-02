@@ -11,6 +11,7 @@ connectDatabase();
 
 const router = require("./routes/api/routes.js");
 
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -19,10 +20,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// albo ten
-// app.use("/api", contactsRouter);
-
 app.use("/api", router);
+
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

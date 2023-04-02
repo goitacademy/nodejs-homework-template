@@ -8,6 +8,7 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../controllers/contacts");
+
 const { contactSchema } = require("../../models/contact");
 
 const auth = require("../../auth/auth");
@@ -15,6 +16,7 @@ const auth = require("../../auth/auth");
 const router = express.Router();
 
 router.get("/", auth, async (req, res, next) => {
+
   try {
     const contacts = await listContacts();
     res.status(200).json(contacts);
@@ -53,6 +55,7 @@ router.delete("/:id", async (req, res, next) => {
   if (!contact) {
     return res.status(404).send("Contact not found");
   }
+
   try {
     removeContact(id);
     return res.status(204).send();
