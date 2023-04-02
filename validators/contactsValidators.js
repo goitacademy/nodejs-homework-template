@@ -13,9 +13,12 @@ const addSchemaUpd = Joi.object({
 });
 
 const validateAddContact = (req, res, next) => {
+  if (!Object.keys(req.body).length)
+    return res.status(400).json({ message: "missing fields" });
   const { error } = addSchemaAdd.validate(req.body);
-  const missingField = error.details[0].context.key;
+
   if (error) {
+    const missingField = error.details[0].context.key;
     return res
       .status(400)
       .json({ message: `missing required ${missingField} field` });
