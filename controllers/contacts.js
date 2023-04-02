@@ -1,20 +1,13 @@
-
 const Contact = require("../models/contact");
-
 const HttpError = require('../helpers/HttpError');
-
 const ctrlWrapper = require('../helpers/ctrlWrapper');
-
-
 
 const getAll = async (req, res) => {
     const result = await Contact.find();
     res.json(result);
 };
     
-
 const getById = async (req, res) => {
-    
         const { id } = req.params;
         const result = await Contact.findById(id);
         if (!result) {
@@ -28,7 +21,6 @@ const add = async (req, res) => {
   
     const result = await Contact.create(req.body);
     res.status(201).json(result);
-  
     
 };
 
