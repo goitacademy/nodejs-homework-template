@@ -3,20 +3,28 @@ const { getListContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,} = require("../../models/contacts")
+  updateContact,
+updateStatusContact,} = require("../../controllers/contactsControllers")
+const { checkUpdateContactsData, checkCreateContactsData, checkUpdateFavoriteContactsData } = require('../../middlewares/contactMiddleware');
 
 const router = express.Router()
 
 
-router.route('/').post(addContact).get(getListContacts);
+router
+  .route('/')
+  .post(checkCreateContactsData, addContact)
+  .get(getListContacts);
 
-// router.use('/:id', checkUserId);
+
 router
   .route('/:contactId')
   .get(getContactById)
-  .patch(updateContact)
+  .patch(checkUpdateContactsData, updateContact)
   .delete(removeContact);
 
+router
+  .route('/:contactId/favorite')
+  .patch(checkUpdateFavoriteContactsData, updateStatusContact)
 
 module.exports = router
 
