@@ -6,18 +6,33 @@ const addSchemaAdd = Joi.object({
   phone: Joi.string().trim().required(),
 });
 
+const addSchemaUpd = Joi.object({
+  name: Joi.string().trim(),
+  email: Joi.string().trim().email(),
+  phone: Joi.string().trim(),
+});
+
 const validateAddContact = (req, res, next) => {
   const { error } = addSchemaAdd.validate(req.body);
+  const missingField = error.details[0].context.key;
   if (error) {
-    return res.status(400).json({ message: "missing required name field" });
+    return res
+      .status(400)
+      .json({ message: `missing required ${missingField} field` });
   }
   next();
 };
 
 const validateUpdContact = (req, res, next) => {
-  const { error } = addSchemaAdd.validate(req.body);
+  if (!Object.keys(req.body).length)
+    return res.status(400).json({ message: "missing fields" });
+
+  const { error } = addSchemaUpd.validate(req.body);
+  const missingField = error.details[0].message;
   if (error) {
-    return res.status(400).json({ message: "missing required name field" });
+    return res
+      .status(400)
+      .json({ message: `missing required ${missingField} field` });
   }
 
   next(error);
