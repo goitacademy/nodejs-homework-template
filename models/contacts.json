@@ -60,14 +60,8 @@
     "phone": "(748) 206-2688"
   },
   {
-    "id": "EJ6xlkpYV9NgofKl19BKW",
-    "name": "Glebas Kniaziev",
-    "email": "gleb@gmail.com",
-    "phone": "(923) 55-4532"
-  },
-  {
-    "id": "krot_Hi655zkOb2mB5TZX",
-    "name": "Olga Kniazieva",
+    "contactId": "krot_Hi655zkOb2mB5TZX",
+    "name": "helga Kniazieva",
     "email": "olga@gmail.com",
     "phone": "(675) 66-7644"
   },
@@ -76,5 +70,11 @@
     "name": "Verynia Dogi",
     "email": "vera@gmail.com",
     "phone": "(123) 45-6789"
+  },
+  {
+    "id": "bfTduLfcncnen73hcWtgb",
+    "name": "Billi Bom",
+    "email": "billi@bom.com",
+    "phone": "(987) 76-5432 "
   }
 ]
