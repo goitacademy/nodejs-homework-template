@@ -8,4 +8,4 @@ const withTryCatch =
     }
   };
 
-module.exports = { withTryCatch };
+module.exports = withTryCatch;

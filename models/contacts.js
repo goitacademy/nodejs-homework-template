@@ -2,17 +2,7 @@ const fs = require("fs/promises");
 const contactsPath = require("../contactsPath");
 const { v4 } = require("uuid");
 
-// const { withTryCatch } = require("../helpers/");
-
-const withTryCatch =
-  (fn) =>
-  async (...args) => {
-    try {
-      return await fn(...args);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const { withTryCatch } = require("../helpers/");
 
 const listContacts = withTryCatch(async () => {
   const data = await fs.readFile(contactsPath, "utf-8");
