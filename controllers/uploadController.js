@@ -2,7 +2,7 @@ const { User } = require("../db/userModel");
 const path = require("path");
 const fs = require("fs/promises");
 
-const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const updateAvatarController = async (req, res) => {
     const { path: tempUpload, originalname } = req.file;
