@@ -1,4 +1,4 @@
-const service = require("../service/index");
+const service = require("../service/index.js");
 const {
   validateAddContact,
   validateUpdateContact,
@@ -9,7 +9,7 @@ const get = async (req, res, next) => {
   try {
     const contactsList = await service.getAllContacts();
     console.log(contactsList);
-    res.json({ status: 200, body: contactsList });
+    res.status(200).json({ body: contactsList });
   } catch (e) {
     console.error(e);
     next(e);
@@ -22,9 +22,9 @@ const getById = async (req, res, next) => {
     const getContact = await service.getContactById(contactId);
     console.log(getContact);
     if (getContact) {
-      return res.json({ status: 200, data: getContact });
+      return res.status(200).json({ data: getContact });
     } else {
-      return res.json({ status: 404, msg: `Not found contact id: ${contactId}` });
+      return res.status(404).json({msg: `Not found contact id: ${contactId}` });
     }
   } catch (e) {
     console.error(e);
@@ -39,7 +39,7 @@ const createContact = async (req, res, next) => {
   try {
     if (error) {
       console.log(error);
-      return res.json({ status: 400, msg: "Missing fields" });
+      return res.status(400).json({msg: "Missing fields" });
     }
     const newContact = await service.createContact({
       name,
@@ -47,7 +47,7 @@ const createContact = async (req, res, next) => {
       phone,
       favorite,
     });
-    res.json({ status: 201, msg: "Add new contact", data: newContact });
+    res.status(201).json({ msg: "Add new contact", data: newContact });
   } catch (e) {
     console.error(e);
     next(e);
@@ -60,13 +60,12 @@ const removeContact = async (req, res, next) => {
   try {
     const contactToRemove = await service.removeContact(contactId);
     if (contactToRemove) {
-      res.json({
-        status: 200,
+      res.status(200).json({
         msg: "Contact deleted",
         data: contactToRemove,
       });
     } else {
-      res.json({ status: 404, msg: `Not found contact id: ${contactId}` });
+      res.status(404).json({ msg: `Not found contact id: ${contactId}` });
     }
   } catch (e) {
     console.error(e);
@@ -82,13 +81,13 @@ const updateContact = async (req, res, next) => {
   try {
     if (error) {
       console.log(error);
-      return res.json({ status: 400, msg: "Missing fields" });
+      return res.status(400).json({ msg: "Missing fields" });
     }
     const renameContact = await service.updateContact(contactId, body);
     if (renameContact) {
-      res.json({ status: 200, msg: "Contact update", data: renameContact });
+      res.status(200).json({ msg: "Contact update", data: renameContact });
     } else {
-      res.json({ status: 404, msg: `Not found contact id: ${contactId}` });
+      res.status(404).json({ msg: `Not found contact id: ${contactId}` });
     }
   } catch (e) {
     console.error(e);
@@ -104,13 +103,13 @@ const updateFavorite = async (req, res, next) => {
   try {
     if (error) {
       console.log(error);
-      return res.json({ status: 400, msg: "Missing field favorite" });
+      return res.status(400).json({ msg: "Missing field favorite" });
     }
     const update = await service.updateContact(contactId, { favorite });
     if (update) {
-      res.json({ status: 200, msg: "Update favorite", data: update });
+      res.status(200).json({ msg: "Update favorite", data: update });
     } else {
-      res.json({ status: 404, msg: `Not found contact id: ${contactId}` });
+      res.status(404).json({ msg: `Not found contact id: ${contactId}` });
     }
   } catch (e) {
     console.error(e);
