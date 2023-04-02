@@ -24,7 +24,7 @@ const getAll = async (req, res) => {
     
 //     };
 
-const addContact = async (req, res) => {
+const add = async (req, res) => {
   
     const result = await Contact.create(req.body);
     res.status(201).json(result);
@@ -60,7 +60,7 @@ const addContact = async (req, res) => {
 module.exports = {
     getAll: ctrlWrapper(getAll),
     // getContactById: ctrlWrapper(getContactById),
-    addContact: ctrlWrapper(addContact),
+    add: ctrlWrapper(add),
     // removeContact: ctrlWrapper(removeContact),
     // updateContact: ctrlWrapper(updateContact),
 
