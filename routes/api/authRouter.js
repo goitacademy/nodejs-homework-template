@@ -36,10 +36,10 @@ router
   .route('/current')
   .post(asyncWrapper(currentController));
 
-router.use(authMiddleware, upload.single("avatar"));
+router.use(authMiddleware);
 router
   .route('/avatars')
-  .patch(asyncWrapper(updateAvatarController));
+  .patch(upload.single("avatar"), asyncWrapper(updateAvatarController));
 
 
 module.exports = router;
