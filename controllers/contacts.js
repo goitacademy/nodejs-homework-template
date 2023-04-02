@@ -9,7 +9,6 @@ const getContactById = async (_id) => {
   const contacts = await Contact.find({ _id });
   return contacts;
 };
-
 const removeContact = async (_id) => {
   try {
     return Contact.findByIdAndDelete({ _id });

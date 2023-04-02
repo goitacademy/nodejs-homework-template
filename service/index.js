@@ -7,7 +7,6 @@ const listContacts = async () => {
 const getContactById = (id) => {
   return Contact.findOne({ _id: id });
 };
-
 const addContact = ({ name, email, phone }) => {
   return Contact.create({ name, email, phone });
 };

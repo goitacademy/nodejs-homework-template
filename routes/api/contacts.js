@@ -8,6 +8,7 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../controllers/contacts");
+
 const { contactSchema } = require("../../models/contact");
 
 const router = express.Router();
