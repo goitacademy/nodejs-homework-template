@@ -29,10 +29,14 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const list = await listContacts();
-  const newList = { id: list.length + 1, ...body };
-  list.push(newList);
-  await fs.writeFile("./contacts.json", JSON.stringify(list));
-
+  const newList = [
+    ...list, {
+      id: (Number(list[list.length - 1].id) + 1).toString(),
+      ...body,
+    },
+  ];
+  
+  await fs.writeFile("./models/contacts.json", JSON.stringify(newList));
   return newList;
 };
 

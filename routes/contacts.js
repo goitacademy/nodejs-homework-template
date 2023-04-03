@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
     }
   try {
     const { name, email, phone } = req.body;
-    const user = await addContact(name, email, phone);
+    const user = await addContact({name, email, phone});
        
     return res.status(201).json(user);
   } catch (err) {
@@ -82,7 +82,7 @@ router.put('/:contactId', async (req, res, next) => {
     return res.status(404).send("contact not found");
   }
   try {
-    updateContact(contactId, { name, email, phone });
+    updateContact(contactId, req.body);
     return res.status(200).send("contact sucesfully update");
   } catch {
     return res.status(500).send("Something went wrong");
