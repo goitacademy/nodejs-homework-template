@@ -16,7 +16,6 @@ const auth = require("../../auth/auth");
 const router = express.Router();
 
 router.get("/", auth, async (req, res, next) => {
-
   try {
     const contacts = await listContacts();
     res.status(200).json(contacts);

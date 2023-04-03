@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+// const { listContacts } = require("../controllers/contacts");
 // const { getUserById } = require("../controllers/users");
 // const { get } = require("mongoose");
 
@@ -7,46 +8,35 @@ require("dotenv").config();
 const jwtSecret = process.env.JWT_SECRET;
 
 const auth = (req, res, next) => {
-  const token = req.handlers.authorization;
+  const token = req.headers.authorization;
 
   // const decode = jwt.decode(token);
   // console.log(decode);
 
   if (!token) {
-    return res.status(401).send("No token provided");
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
   }
 
   try {
     const decoded = jwt.verify(token, jwtSecret);
-
-    console.log(decoded);
+    req.user = decoded;
+    // console.log(decoded);
     // const { id } = decoded;
 
-    // const user = await getUserById(id);
+    // const user = await listContacts();
 
     // if (user.token === token) {
     //   req.body = user;
     next();
-    // } else {
-    //   return res.status(401).json({ message: "Not authorized" });
-    // }
-    // const { role } = user;
-
-    // const isAllowed = allowedRoles.includes(role);
-
-    //     if (user) {
-    //       if (isAllowed) {
-    //         next();
-    //       } else {
-    //         return res
-    //           .status(403)
-    //           .send("You don't have permission to this resource");
-    //       }
-    //     } else {
-    //       return res.status(401).send("Access denied");
-    //     }
   } catch (error) {
-    return res.status(401).send({ message: "Acces denided", error });
+    return res.status(401).json({
+      success: false,
+      message: "Acces denided",
+      error,
+    });
   }
 };
 

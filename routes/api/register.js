@@ -8,7 +8,7 @@ const router = express.Router();
 const { User, userValidationSchema } = require("../../models/user");
 const { createUser } = require("../../controllers/users");
 
-const secret = process.env.SECRET;
+const secret = process.env.JWT_SECRET;
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;

@@ -22,4 +22,9 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-module.exports = { createUser, getUserByEmail };
+const updateUser = async (token) => {
+  const updatedUser = await User.findByIdAndUpdate(token);
+  return updatedUser;
+};
+
+module.exports = { createUser, getUserByEmail, updateUser };
