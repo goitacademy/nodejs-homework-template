@@ -1,5 +1,5 @@
 const getCurrent = (req, res, next) => {
-  const { email, subscription, token } = req.user;
+  const { email, subscription, token, avatarUrl } = req.user;
   //   console.log(email, subscription);
 
   res.json({
@@ -9,6 +9,7 @@ const getCurrent = (req, res, next) => {
       user: {
         email,
         subscription,
+        avatarUrl,
         token
       },
     },
