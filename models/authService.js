@@ -4,14 +4,16 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../db/userModel');
 const { NotAuthorizedError } = require('../helpers/errors');
 
+const gravatar = require('gravatar');
+
 
 
 const registration = async (email, password) => {
-     
+  const avatarURL = gravatar.url(email);   
   const user = new User({
-        email, password
+        email, password, avatarURL
   });
-
+  
     await user.save();
 };
 
