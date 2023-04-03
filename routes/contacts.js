@@ -77,7 +77,7 @@ router.put('/:contactId', async (req, res, next) => {
     return res.status(400).send(error.details[0].message);
   }
 
-  const contact = getContactById(contactId);
+  const contact = await getContactById(contactId);
   if (!contact) {
     return res.status(404).send("contact not found");
   }
