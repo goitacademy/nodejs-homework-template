@@ -4,21 +4,30 @@ const {
   getById,
   addNewContact,
   deleteContact,
-  updateContactById,
+  updateStatusContact,
 } = require('../../controllers/contactController');
-const { bodyValidation } = require('../../middliwares');
+const {
+  bodyValidation,
+  checkUserId,
+  checkFavorite,
+} = require('../../middliwares');
 const { asyncCatch } = require('../../utils');
 
 const router = express.Router();
 
 router.get('/', asyncCatch(getContactsList));
 
-router.get('/:contactId', asyncCatch(getById));
+router.get('/:contactId', checkUserId, asyncCatch(getById));
 
 router.post('/', bodyValidation, asyncCatch(addNewContact));
 
-router.delete('/:contactId', asyncCatch(deleteContact));
+router.delete('/:contactId', checkUserId, asyncCatch(deleteContact));
 
-router.put('/:contactId', bodyValidation, asyncCatch(updateContactById));
+router.patch(
+  '/:contactId/favorite',
+  checkUserId,
+  checkFavorite,
+  asyncCatch(updateStatusContact)
+);
 
 module.exports = router;

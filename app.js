@@ -1,10 +1,22 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const contactsRouter = require('./routes/api/contacts');
 
+dotenv.config({ path: './.env' });
+
 const app = express();
+
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(con => console.log('Database connection successful'))
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+    process.exit(1);
+  });
+
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));

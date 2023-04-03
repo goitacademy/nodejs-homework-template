@@ -1,4 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
+const Contact = require('../models/contactsModel');
+const { AppError } = require('../utils');
+
 const {
   listContacts,
   getContactById,
@@ -6,7 +8,6 @@ const {
   removeContact,
   updateContact,
 } = require('../models/contacts');
-const { AppError } = require('../utils');
 
 const getContactsList = async (_, res) => {
   const contacts = await listContacts();
@@ -14,35 +15,25 @@ const getContactsList = async (_, res) => {
 };
 
 const getById = async (req, res, next) => {
-  const contactId = req.params.contactId.toString();
+  const { contactId } = req.params;
   const contact = await getContactById(contactId);
-  if (contact === null) {
-    return next(new AppError(404, 'Not found'));
-  }
   res.status(200).json({ contact });
 };
 
 const addNewContact = async (req, res) => {
-  const contactToAdd = { id: uuidv4(), ...req.body };
-  const addedContact = await addContact(contactToAdd);
-  res.status(201).json({ contact: addedContact });
+  const newContact = await addContact(req.body);
+  res.status(201).json({ contact: newContact });
 };
 
 const deleteContact = async (req, res, next) => {
-  const contactId = req.params.contactId.toString();
-  const contact = await removeContact(contactId);
-  if (contact === null) {
-    return next(new AppError(404, 'Not found'));
-  }
+  const { contactId } = req.params;
+  await removeContact(contactId);
   res.status(200).json({ message: 'contact deleted' });
 };
 
-const updateContactById = async (req, res, next) => {
-  const contactId = req.params.contactId.toString();
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
   const contact = await updateContact(contactId, req.body);
-  if (contact === null) {
-    return next(new AppError(404, 'Not found'));
-  }
   res.status(200).json({ contact });
 };
 
@@ -51,5 +42,5 @@ module.exports = {
   getById,
   addNewContact,
   deleteContact,
-  updateContactById,
+  updateStatusContact,
 };

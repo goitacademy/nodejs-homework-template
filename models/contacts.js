@@ -1,25 +1,20 @@
-const fs = require('fs/promises');
-const path = require('path');
-const contactsPath = path.join('models', 'contacts.json');
+const Contact = require('./contactsModel');
 
 /**
  * read all contacts
  * @returns {Array}
  */
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, 'utf-8');
-  return JSON.parse(data);
+const listContacts = () => {
+  return Contact.find().select('-_id');
 };
 
 /**
  * get contact by contact ID
  * @param {String } - id
- * @returns {Object | Null }
+ * @returns {Object }
  */
-const getContactById = async id => {
-  const data = await listContacts();
-  const contactById = data.find(contact => contact.id === id);
-  return contactById || null;
+const getContactById = id => {
+  return Contact.findById(id).select('-_id');
 };
 
 /**
@@ -27,50 +22,26 @@ const getContactById = async id => {
  * @param {Object} - body
  * @returns {Object}
  */
-const addContact = async body => {
-  const data = await listContacts();
-  data.push(body);
-  await fs.writeFile(contactsPath, JSON.stringify(data));
-  return body;
+const addContact = body => {
+  return Contact.create(body);
 };
 
 /**
  * delete contact by contact ID
  * @param {String} - id
- * @returns {Object | Null }
  */
-const removeContact = async id => {
-  const data = await listContacts();
-  const contactToRemove = data.find(contact => contact.id === id);
-  if (!contactToRemove) {
-    return null;
-  }
-
-  const filteredContacts = data.filter(contact => contact.id !== id);
-  await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
-  return contactToRemove;
+const removeContact = id => {
+  return Contact.findByIdAndDelete(id);
 };
 
 /**
  * update contact by contact ID
  * @param {String} - id,
  * @param {Object} - body
- * @returns {Object | Null }
+ * @returns {Object }
  */
-const updateContact = async (id, body) => {
-  const data = await listContacts();
-  const contactToUpdate = data.find(contact => contact.id === id);
-  if (!contactToUpdate) {
-    return null;
-  }
-
-  const { name, email, phone } = body;
-  contactToUpdate.name = name;
-  contactToUpdate.email = email;
-  contactToUpdate.phone = phone;
-
-  await fs.writeFile(contactsPath, JSON.stringify(data));
-  return contactToUpdate;
+const updateContact = (id, body) => {
+  return Contact.findByIdAndUpdate(id, body, { new: true });
 };
 
 module.exports = {
