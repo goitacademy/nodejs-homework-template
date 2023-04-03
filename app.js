@@ -8,10 +8,12 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+// Middleware
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+// Routes
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {

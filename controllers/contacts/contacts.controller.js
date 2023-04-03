@@ -1,10 +1,7 @@
 const contacts = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
-const {
-  addSchema,
-  updateSchema,
-} = require("../middlewares/contactsValidation");
 
+// Get all contacts
 const getAll = async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -14,6 +11,7 @@ const getAll = async (req, res, next) => {
   }
 };
 
+// Get a single contact by id
 const getById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
@@ -27,12 +25,9 @@ const getById = async (req, res, next) => {
   }
 };
 
+// Create a new contact
 const addNewContact = async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -40,6 +35,7 @@ const addNewContact = async (req, res, next) => {
   }
 };
 
+// Delete a contact
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
@@ -53,12 +49,9 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
+// Update a contact
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = updateSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
