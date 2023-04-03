@@ -6,7 +6,10 @@ const {
   validateContactId,
   validateContactBody,
   validateFavorite,
+  checkIsExistInDB,
 } = require("../../middlewares/contactsMiddlewares");
+
+const checkAuthMiddleware = require("../../middlewares/checkAuthMiddleware");
 
 const {
   getListContactsController,
@@ -17,30 +20,32 @@ const {
   updateStatusContact,
 } = require("../../controllers/contactController");
 
+// add to all routes, check auth
+router.use(checkAuthMiddleware);
+
 router
   .route("/")
   .get(getListContactsController)
-  .post(validateContactBody, addContactController);
+  .post(checkIsExistInDB, validateContactBody, addContactController);
 
 router
   .route("/:contactId")
   .get(getByIdController)
-  .put(validateContactBody, validateContactId, putContactController)
+  .put(
+    checkAuthMiddleware,
+    validateContactBody,
+    validateContactId,
+    putContactController
+  )
   .delete(validateContactId, removeContactController);
 
 router
   .route("/:contactId/favorite")
-  .patch(validateContactId, validateFavorite, updateStatusContact);
-
-// router.get("/", getListContactsController);
-// router.post("/", validateContactBody, addContactController);
-// router.get("/:contactId", getByIdController);
-// router.put(
-//   "/:contactId",
-//   validateContactBody,
-//   validateContactId,
-//   putContactController
-// );
-// router.delete("/:contactId", validateContactId, removeContactController);
+  .patch(
+    checkAuthMiddleware,
+    validateContactId,
+    validateFavorite,
+    updateStatusContact
+  );
 
 module.exports = router;

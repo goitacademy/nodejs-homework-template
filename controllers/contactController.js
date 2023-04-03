@@ -2,16 +2,22 @@ const catchAsync = require("../utils/catchAsync");
 const Contact = require("../models/contactsModel");
 
 const getListContactsController = catchAsync(async (req, res) => {
-  console.log("==>getListContactsController");
-  const contacts = await Contact.find().select("-__v");
+  const { _id } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = limit * (page - 1);
+  const contacts = await Contact.find({ owner: _id }, "", {
+    skip,
+    limit: Number(limit),
+  }).populate("owner", "_id email");
 
   res.status(200).json(contacts);
 });
 
 const addContactController = catchAsync(async (req, res) => {
   const { body } = req;
+  const { _id } = req.user;
 
-  const addedContact = await Contact.create(body);
+  const addedContact = await Contact.create({ ...body, owner: _id });
 
   res.status(201).json(addedContact);
 });
@@ -49,9 +55,6 @@ const removeContactController = catchAsync(async (req, res) => {
 const updateStatusContact = catchAsync(async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
-
-  console.log("==>contactId", contactId);
-  console.log("==>favorite", favorite);
 
   const updatedStatusContact = await Contact.findByIdAndUpdate(
     contactId,

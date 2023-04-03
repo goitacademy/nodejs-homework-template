@@ -38,8 +38,6 @@ const validateContactId = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
   const isContactFound = await Contact.exists({ _id: contactId });
 
-  console.log("==>isContactFound", isContactFound);
-
   if (!isContactFound) {
     const err = new Error("Not found");
     err.status = 404;
@@ -59,8 +57,37 @@ const validateFavorite = (req, res, next) => {
   next();
 };
 
+const checkIsExistInDB = catchAsync(async (req, res, next) => {
+  const { name, email, phone } = req.body;
+
+  const contactWithNameExists = await Contact.exists({ name });
+  const contactWithEmailExists = await Contact.exists({ email });
+  const contactWithPhoneExists = await Contact.exists({ phone });
+
+  if (
+    contactWithNameExists ||
+    contactWithEmailExists ||
+    contactWithPhoneExists
+  ) {
+    const err = new Error(
+      `Contact with this ${
+        contactWithNameExists
+          ? "name"
+          : contactWithEmailExists
+          ? "email"
+          : "phone"
+      } already exists`
+    );
+    err.status = 409;
+    return next(err);
+  }
+
+  next();
+});
+
 module.exports = {
   validateContactId,
   validateContactBody,
   validateFavorite,
+  checkIsExistInDB,
 };
