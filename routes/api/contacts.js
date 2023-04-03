@@ -9,21 +9,24 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
-const { userSchema } = require("../../models/user");
+const {
+  userValidationSchema,
+  favoriteValidationSchema,
+} = require("../../models/validation");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const users = listContacts();
+    const users = await listContacts();
     res.status(200).json(users);
   } catch {
     return res.status(500).send("Something went wrong");
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = getContactById(id);
+    const user = await getContactById(id);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -33,7 +36,7 @@ router.get("/:id", (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
@@ -42,21 +45,21 @@ router.delete("/:id", (req, res) => {
     return res.status(404).send("User not found");
   }
   try {
-    removeContact(id);
+    await removeContact(id);
     return res.status(200).send("Contact deleted");
   } catch {
     return res.status(500).send("Something went wrong");
   }
 });
 
-router.post("/", (req, res) => {
-  const { error } = userSchema.validate(req.body);
+router.post("/", async (req, res) => {
+  const { error } = userValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
   try {
-    const { name, email, phone, id } = req.body;
-    const user = addContact(id, name, email, phone);
+    const { name, email, phone, favorite } = req.body;
+    const user = await addContact(name, email, phone, favorite);
     return res.status(201).json(user);
   } catch {
     return res.status(500).send("Something went wrong");
@@ -65,10 +68,11 @@ router.post("/", (req, res) => {
 
 router.put("/:id", (req, res) => {
   const { id } = req.params;
+  console.log(id);
   if (!id) {
-    return res.status(400).send("Id is required to perform delete");
+    return res.status(400).send("Id is required to update");
   }
-  const { error } = userSchema.validate(req.body);
+  const { error } = userValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
@@ -80,6 +84,31 @@ router.put("/:id", (req, res) => {
 
   try {
     updateContact(id, req.body);
+    return res.status(200).send("User sucessfully updated");
+  } catch {
+    return res.status(500).send("Something went wrong");
+  }
+});
+
+router.patch("/:id/favorite", (req, res) => {
+  const { id } = req.params;
+  if (!req.body) {
+    return res.status(400).send("Missing favorite");
+  }
+  const { error } = favoriteValidationSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  const user = getContactById(id);
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  try {
+    updateContact(id, req.body);
+    console.log(req.body);
     return res.status(200).send("User sucessfully updated");
   } catch {
     return res.status(500).send("Something went wrong");
