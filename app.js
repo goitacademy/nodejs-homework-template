@@ -14,7 +14,8 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-console.log(process.env.DB_HOST);
+app.use(express.static("public"));
+
 const connectToMongoDB = async () => {
   try {
     await mongoose.connect(process.env.DB_HOST);
