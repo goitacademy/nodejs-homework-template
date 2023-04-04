@@ -40,6 +40,11 @@ async function deleteContact(req, res, next) {
 async function changeContact(req, res, next) {
   const { contactId } = req.params;
   const body = req.body;
+
+  if (!body.name & !body.email & !body.phone) {
+    return next(HttpError(400, "missing fields"));
+  }
+
   const changeContact = await models.updateContact(contactId, body);
 
   if (!changeContact) {
