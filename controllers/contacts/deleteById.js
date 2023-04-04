@@ -15,9 +15,7 @@ const deleteById = async (req, res, next) => {
     res.json({
       status: "success",
       code: 204,
-      // data: {
-      //   result,
-      // },
+      
       message: `Contact with id=${contactId} was deleted successfully`,
     });
   }

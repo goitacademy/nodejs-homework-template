@@ -1,8 +1,10 @@
 const contactsOperation = require("../../models/contacts");
 
 const addItem = async (req, res, next) => {
+    const { _id } = req.user;
+    
 
-    const result = await contactsOperation.addContact(req.body);
+    const result = await contactsOperation.addContact({ ...req.body, owner: _id });
     res.json({
         status: "success",
         code: 201,
