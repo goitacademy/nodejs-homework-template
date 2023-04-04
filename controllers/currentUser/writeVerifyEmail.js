@@ -5,7 +5,7 @@ const writeVerifyEmail = async (req,res) => {
     const {email} = req.body;
     const user = await User.findOne({email});
     if(!user) {
-        res.status(404).json({message: "User not found"});
+        res.status(400).json({message: "User not found"});
     }
     if (user.verify) {
         res.status(400).json({message: "Verification has already been passed"});

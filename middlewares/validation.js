@@ -68,10 +68,31 @@ const validation = (schema) => {
     }
 };
 
+const validationVerify = (schema) => {
+    return (req, res, next) => {
+        if (!Object.keys(req.body).length) {
+            res.status("400").json({message: "missing required field email"});
+            return;
+        }
+
+        const {error} = schema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({
+                message: {message: error.details}
+            });
+
+        } else {
+            next()
+        }
+    }
+};
+
 module.exports = {
     validationAddContact,
     validationUpDateContact,
     validationUpStatusContact,
-    validation
+    validation,
+    validationVerify
 
 };
