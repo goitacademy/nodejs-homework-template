@@ -15,9 +15,6 @@ app.use(express.json());
 app.use(cors());
 
 
-// const router = require('./routes/api/routes.js');
-// app.use('/api', router);
-
 app.use((req, res) => {
   res.status(404).json({
     message: 'Use api on routes: /api/contacts',
