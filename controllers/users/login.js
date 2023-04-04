@@ -20,6 +20,9 @@ const login = async (req, res) => {
                     message: "Email or password is wrong"
                 });
     }
+    if (!user.verify) {
+        res.status(400).json({message: "Email is not verify"});
+    }
 
     const payload = {
         id: user._id
