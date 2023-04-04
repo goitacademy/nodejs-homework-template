@@ -3,7 +3,7 @@ const express = require('express')
 const {asyncWrapper} = require('../../helpers/apihelpers')
 
 const {registrationController,
-  loginController, logoutController} = require('../../controllers/authController');
+  loginController, logoutController, verificationController, resendVerificationController} = require('../../controllers/authController');
   
 const { currentController} = require('../../controllers/gerCurrentController');
 
@@ -24,6 +24,14 @@ router.
 router
   .route('/login')
   .post(asyncWrapper(loginController));
+
+router
+  .route('/verify/')
+  .post(asyncWrapper(resendVerificationController));
+
+router
+  .route('/verify/:verificationToken')
+  .get(asyncWrapper(verificationController));
 
 router.use(authMiddleware);
 router

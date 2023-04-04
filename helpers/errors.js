@@ -12,11 +12,18 @@ class AppError extends Error {
     super(msg);
     this.status = status;
   }
-}
+};
+
+const RequestError = (status, message) => {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+};
 
 
 
 module.exports = {
-    NotAuthorizedError,
-    AppError
+  NotAuthorizedError,
+  AppError,
+  RequestError 
 };
