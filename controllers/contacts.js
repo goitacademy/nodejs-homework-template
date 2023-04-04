@@ -3,6 +3,7 @@ const contacts = require('../models/contacts');
 const createHttpError = require('../helpers/HttpError');
 const Joi = require('joi');
 
+
 const schema = {
   add: Joi.object({
     name: Joi.string().required(),
@@ -77,6 +78,9 @@ const delContact = async (req, res, next) => {
 
 const putContact = async (req, res, next) => {
   try { 
+    if (!Object.keys(req.body).length) {
+      throw createHttpError(400, 'missing fields');
+    }
     const {error} = schema.update.validate(req.body);
     if (error) {
       throw createHttpError(400, error.message);
