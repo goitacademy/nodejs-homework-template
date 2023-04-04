@@ -1,7 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const { HttpError } = require("./helpers/index");
 
 const { contactsRouter } = require("./routes/api/contacts");
 const { authRouter } = require("./routes/api/auth");

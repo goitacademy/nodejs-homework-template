@@ -1,3 +1,4 @@
+const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const { HttpError } = require("../helpers/index");
 const { User } = require("../models/user");
@@ -9,7 +10,7 @@ const { JWT_SECRET } = process.env;
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
-
+  const url = gravatar.url(email);
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -17,6 +18,7 @@ const register = async (req, res, next) => {
     await User.create({
       email,
       password: hashedPassword,
+      avatarURL: url,
     });
 
     res.status(201).json({
