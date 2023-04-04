@@ -1,14 +1,43 @@
-// const fs = require('fs/promises')
+const { error } = require("console");
+const { randomUUID } = require("crypto");
+const fs = require("fs/promises");
+const path = require("path");
 
-const listContacts = async () => {}
+const pathDb = path.resolve("./models/contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(pathDb);
+  const result = JSON.parse(data);
+  return result;
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const data = await fs.readFile(pathDb);
+  const result = JSON.parse(data);
+  const filter = result.find((contact) => contact.id === contactId);
+  return filter;
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {
+  const data = await fs.readFile(pathDb);
+  const result = JSON.parse(data);
+  if (!body.email || !body.name || !body.phone) {
+    return error.json({ message: "Invalid params" });
+  }
+  const addNew = {
+    id: randomUUID(),
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+  result.push(addNew);
+  await fs.writeFile(pathDb, JSON.stringify(result));
+  return result;
+};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +45,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
