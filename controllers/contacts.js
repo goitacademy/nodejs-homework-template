@@ -3,12 +3,19 @@ const contacts = require('../models/contacts');
 const createHttpError = require('../helpers/HttpError');
 const Joi = require('joi');
 
-const schema = Joi.object({
+const schema = {
+  add: Joi.object({
     name: Joi.string().required(),
-  phone: Joi.string().required(),
-  email: Joi.string().required(),
+    phone: Joi.string().required(),
+    email: Joi.string().required(),
     
-});
+  }),
+  update: Joi.object({
+    name: Joi.string(),
+    phone: Joi.string(),
+    email: Joi.string(),
+  }).or("name", "phone", "email"),
+};
 
 const getContact =  async (req, res, next) => {
   try {
@@ -69,18 +76,16 @@ const delContact = async (req, res, next) => {
 };
 
 const putContact = async (req, res, next) => {
-    try {
-      if (!req.body) {
-      throw createHttpError(400, 'Missing fields');
-    }
-    const {error} = schema.validate(req.body);
+  try { 
+    const {error} = schema.update.validate(req.body);
     if (error) {
       throw createHttpError(400, error.message);
-   }
+      }
+      
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, 'Not found');
+      throw createHttpError(404, 'Not found');
     }
     res.json(result);
   }
