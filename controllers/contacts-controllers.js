@@ -1,11 +1,8 @@
-const express = require("express");
 const Joi = require("joi");
 
-const contacts = require("../../models/contacts");
+const contacts = require("../models/contacts");
 
-const { HttpError } = require("../../helpers");
-
-const router = express.Router();
+const { HttpError } = require("../helpers");
 
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -25,16 +22,16 @@ const addSchema = Joi.object({
   }),
 });
 
-router.get("/", async (req, res, next) => {
+const getAllContacts = async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.get("/:contactId", async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
@@ -45,9 +42,9 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post("/", async (req, res, next) => {
+const addContact = async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
@@ -59,9 +56,9 @@ router.post("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.delete("/:contactId", async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
@@ -76,9 +73,9 @@ router.delete("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.put("/:contactId", async (req, res, next) => {
+const updateContactById = async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
@@ -95,6 +92,12 @@ router.put("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getAllContacts,
+  getContactById,
+  addContact,
+  deleteContact,
+  updateContactById,
+};
