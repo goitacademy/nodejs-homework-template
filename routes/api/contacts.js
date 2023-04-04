@@ -51,7 +51,6 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
-
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
