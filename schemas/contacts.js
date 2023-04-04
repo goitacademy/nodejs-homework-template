@@ -11,7 +11,6 @@ const addSchema = Joi.object({
     "any.required": `missing required "phone" field`,
   }),
 });
-
 module.exports = {
   addSchema,
 };
