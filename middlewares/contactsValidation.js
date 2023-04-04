@@ -10,12 +10,18 @@ const validation = (schema) => {
       return;
     }
 
+    if (req.method === "PATCH" && !req.body.favorite) {
+      res.status(400).json({
+        message: "missing field favorite",
+      });
+      return;
+    }
+
     if (
       req.method === "PUT" &&
       !req.body.name &&
       !req.body.phone &&
-      !req.body.email &&
-      !req.body.id
+      !req.body.email
     ) {
       res.status(400).json({
         message: "missing fields",
