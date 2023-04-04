@@ -21,7 +21,7 @@ const contactSchema = new mongoose.Schema({
             default: null,
           },
           avatarURL : { 
-            
+            type: String
           }
 });
 contactSchema.pre('save', async function (next) {

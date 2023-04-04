@@ -3,10 +3,11 @@ const uuid = require('uuid');
 const fse = require('fs-extra');
 const sharp = require('sharp');
 const path = require('path');
-class imageService { 
+class ImageService { 
     static upload(name) { 
         const multerStorage = multer.memoryStorage()
         const multerFilter = (req, file, callbackFn) => {
+            
             
             if (file.mimetype.startsWith('image/')) {
                 callbackFn(null, true);
@@ -37,4 +38,4 @@ class imageService {
     }
 }
 
-module.exports = imageService;
+module.exports = ImageService;

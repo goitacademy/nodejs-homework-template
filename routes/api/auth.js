@@ -5,11 +5,11 @@ const authControllerLogout = require('../../controllers/authControllerLogout');
 const CurrentConrtoller = require('../../controllers/currentController');
 const currentUpdate = require('../../controllers/currentUpdate');
 const { protectMiddleware } = require('../../middleware/authMiddleware');
-const imageService = require('../../services/imageService');
+const ImageService = require('../../services/imageService');
 
 const router = express.Router();
 
-router.post('/update-current', protectMiddleware, imageService.upload('image'), currentUpdate)
+router.patch('/update-current', protectMiddleware, ImageService.upload('image'), currentUpdate)
 router.post('/register', authControllerRegister)
 
 router.post('/login', protectMiddleware, authControllerLogin)
