@@ -22,9 +22,17 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-const updateUser = async (token) => {
-  const updatedUser = await User.findByIdAndUpdate(token);
-  return updatedUser;
+const logout = async (token) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: token._id },
+      { $set: { tokens: [] } },
+      { new: true }
+    );
+    return user;
+  } catch (err) {
+    throw new Error(err.message);
+  }
 };
 
-module.exports = { createUser, getUserByEmail, updateUser };
+module.exports = { createUser, getUserByEmail, logout };

@@ -11,7 +11,7 @@ const router = express.Router();
 router.use("/contacts", contactRouter);
 router.use("/users", loginRouter);
 router.use("/users", registrationRouter);
-router.use("/logout", logoutRouter);
-router.use("/current", currentRouter);
+router.use("/users", logoutRouter);
+router.use("/users", currentRouter);
 
 module.exports = router;
