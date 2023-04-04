@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const { HttpError } = require("./helpers/index");
 
 const { contactsRouter } = require("./routes/api/contacts");
 const { authRouter } = require("./routes/api/auth");
@@ -23,6 +24,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.log(err);
   console.log(err.name, err.message);
+
   if (err.name === "ValidationError") {
     return res.status(400).json({
       message: err.message,

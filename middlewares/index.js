@@ -28,7 +28,7 @@ const auth = async (req, res, next) => {
     const user = await User.findById(id);
 
     if (!user || !user.token) {
-      throw new HttpError(401, "Not authorized!!!");
+      throw new HttpError(401, "Not authorized");
     }
 
     req.user = user;
@@ -38,7 +38,9 @@ const auth = async (req, res, next) => {
       error.name === "TokenExpiredError" ||
       error.name === "JsonWebTokenError"
     ) {
-      throw new HttpError(401, "Not authorized");
+      // throw new HttpError(401, "Not authorized!");
+
+      return res.status(401).json({ error: "Not authorized!" });
     }
     next(error);
   }
