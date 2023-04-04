@@ -2,7 +2,7 @@ const express = require("express");
 
 const crtl = require("../../controllers/auth");
 
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
 const router = express.Router();
@@ -24,5 +24,12 @@ router.post("/login", validateBody(schemas.loginSchema), crtl.login);
 router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  crtl.updateAvatar
+);
 
 module.exports = router;
