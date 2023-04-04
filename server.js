@@ -9,7 +9,7 @@ const { connectDatabase } = require('./startup/database.js');
 connectDatabase();
 const app = express();
 const router = require('./routes/api/routes.js');
-app.use('/', router);
+app.use(router);
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));
 app.use(express.json());
