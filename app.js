@@ -15,7 +15,7 @@ app.use(express.json())
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Something wrong . Not found' })
+  res.status(404).json({ message: 'Something went wrong . Not found' })
 })
 
 app.use((err, req, res, next) => {
