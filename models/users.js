@@ -50,6 +50,10 @@ const joiSchema = Joi.object({
 
 });
 
+const verifyEmailSchema = Joi.object({
+    email: Joi.string().required()
+})
+
 userSchema.methods.comparePassword = function (password){
     return bcrypt.compareSync(password, this.password);
 }
@@ -58,5 +62,6 @@ const User = model("user", userSchema);
 
 module.exports ={
     User,
-    joiSchema
+    joiSchema,
+    verifyEmailSchema
 }
