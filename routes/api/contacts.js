@@ -6,6 +6,7 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const { isObjectId } = require("../../middlewares/joi");
 const validate = require("express");
+const { authorize } = require("../../middlewares/authorize");
 
 async function main() {
   try {
@@ -22,8 +23,8 @@ main();
 
 const addContactsShema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string(),
+  phone: Joi.string(),
   favorite: Joi.boolean(),
 });
 const schemaUpdate = Joi.object({
@@ -45,7 +46,7 @@ const {
   contactPatch,
 } = require("./contacts.controller");
 
-router.get("/", contactList);
+router.get("/", authorize, contactList);
 
 router.get(
   "/:contactId",
@@ -53,12 +54,25 @@ router.get(
   asyncWrapper(contactById)
 );
 
-router.post("/", validateBody(addContactsShema), asyncWrapper(contactPost));
+router.post(
+  "/",
+  authorize,
+  validateBody(addContactsShema),
+  asyncWrapper(contactPost)
+);
 
-router.delete("/:contactId", contsctDelete);
+router.delete("/:contactId", 
+authorize,
+contsctDelete)
 
-router.put("/:contactId", validateBody(schemaUpdate), contactPut);
+router.put("/:contactId", authorize, validateBody(schemaUpdate), contactPut)
 
-router.patch("/:contactId/favorite", validateBody(schemaUpdate), contactPatch);
+router.patch(
+  "/:contactId/favorite",
 
-module.exports = router;
+  validateBody(schemaUpdate),
+  authorize,
+  contactPatch
+);
+
+module.exports = router
