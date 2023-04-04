@@ -1,87 +1,123 @@
-## Node.js
+#  Node.js REST API for Phone Book
 
-- REST API for Phone book
-https://phonebook-node.up.railway.app
+This is a Node.js REST API for managing phone book contacts. It uses Express.js, MongoDB, Mongoose, Jest, and several other libraries.
+The application also integrates SendGrid for email verification and sending.
 
-- Stack: Node.js, Express.js, MongoDB, Mongoose, Jest
+It provides endpoints for user authentication, managing contacts, and sending email notifications using SendGrid.
 
-- SendGrid - email verification
-- Libs: bcrypt, jsonwebtoken, morgan, multer, http-errors, joi validation,
-  gravatar + jimp
+# Deployment
+The app is deployed at https://phonebook-node.up.railway.app.
 
-- SendGrid - email sending
+# Stack
 
-AUTH:
-* SIGNUP: /api/users/signup 
-  * POST
+  * Node.js
+  * Express.js
+  * MongoDB
+  * Mongoose
+  * Jest
+  
+# Libraries
+
+  * bcrypt
+  * jsonwebtoken
+  * morgan
+  * multer
+  * http-errors
+  * joi validation
+  * gravatar + jimp
+  
+  
+# Features
+   * Email verification using SendGrid
+   * Email sending using SendGrid
+   * User authentication (signup, login, logout)
+   * Current user retrieval
+   * User subscription updating
+   * User avatar updating
+   * Contact management (add, update, delete, get all, get by ID, get with pagination, get favorite)
+
+# Installation
+
+  * Clone this repository:
+          
+          git clone https://github.com/<your-github-username>/phonebook-node.git
+
+  * Install the dependencies:
+  
+          npm install
+
+  * Create a .env file and add the necessary environment variables:
+      
+          PORT=<port>
+          BASE_URL=<base url>
+          MONGO_URL=<mongodb-uri>
+          JWT_SECRET=<jwt-secret>
+          SEND_GRID_API_KEY=<sendgrid-api-key>
+
+  * Start the server:
+  
+          npm start
+
+# Main endpoints
+
+# Authentication
+
+* Signup: POST /api/users/signup
   * Body: {
      "email": "example@mail.com",
      "password": "password"
     }
 
-* LOGIN: /api/users/login 
-  * POST
+* Login: POST /api/users/login
   * Body: {
      "email": "example@mail.com",
      "password": "password"
     }
  
-* RESEND EMAIL VERIFICATION: /api/users/verify
-   * POST
+* Resend email verification: POST /api/users/verify
    * Body: {
        "email": "example@mail.com"
       }
  
- * LOGOUT: /api/users/logout
-    * GET
+ * Logout: GET /api/users/logout
     * Headers: 
         * "Authorization": "Bearer {token}"
         
- * CURRENT USER: /api/users/current
-    * GET
+ * Current user: GET /api/users/current
     * Headers: 
         * "Authorization": "Bearer {token}"
         
- * UPDATE USER SUBSCRIPTION: /api/users/
-    * PATCH
+ * Update user subscription: PATCH /api/users/
     * Headers: 
         * "Authorization": "Bearer {token}"
     * Body: {
         * "subscription" : "business"
       }
       
- * UPDATE USER AVATAR: /api/users/avatars
-    * PATCH
-    * Headers: 
-        * "Authorization": "Bearer {token}"
-    * [Content-Type: multipart/form-data]
-    * Body: 
-        * "avatar": ["file.jpg"]
+ * Update user avatar: PATCH /api/users/avatars
+      * Headers: { "Authorization": "Bearer {token}" }
+      * Body: Content-Type: multipart/form-data
+      * Body: "avatar": ["file.jpg"]
 
 
-CONTACTS:
-* GET ALL CONTACTS: /api/contacts/
-  * GET
+# Contacts
+* Get all contacts: GET /api/contacts/
   * Headers: 
     * "Authorization": "Bearer {token}"
     
-* GET CONTACTS WITH PAGINATION: /api/contacts/?page={number}&limit={perPage}
-  * GET
+* Get contacts with pagination: GET /api/contacts/?page={number}&limit={perPage}
   * Headers: 
     * "Authorization": "Bearer {token}"
 
-* GET FAVORITE CONTACTS:  /api/contacts?favorite=true
-  * GET
+* Get favorite contacts: GET /api/contacts?favorite=true
   * Headers: 
     * "Authorization": "Bearer {token}"
 
-* GET CONTACT BY ID:  /api/contacts/{contactId}
-  * GET
+* Get contact by ID: GET /api/contacts/{contactId}
   * Headers: 
     * "Authorization": "Bearer {token}"
 
-* ADD CONTACT: /api/contacts/
-   * POST
+* Add contact: POST /api/contacts/
    * Headers: 
      * "Authorization": "Bearer {token}"   
    * Body: {   
@@ -91,8 +127,7 @@ CONTACTS:
      ["favorite": false] // default
      }
     
-* UPDATE CONTACT: /api/contacts/{id}
-   * PUT
+* Update contact: PUT /api/contacts/{id}
    * Headers: 
       * "Authorization": "Bearer {token}"   
    * Body: {   
@@ -102,16 +137,14 @@ CONTACTS:
        "favorite": true
      }
 
-* UPDATE CONTACT STATUS: /api/contacts/{id}
-   * PATCH
+* Update contact status: PATCH /api/contacts/{id}
    * Headers: 
       * "Authorization": "Bearer {token}"   
    * Body: {   
        "favorite": true
      }
      
-* DELETE CONTACT: /api/contacts/{id}
-   * DELETE
+* Delete contact: DELETE /api/contacts/{id}
    * Headers: 
       * "Authorization": "Bearer {token}"   
 
