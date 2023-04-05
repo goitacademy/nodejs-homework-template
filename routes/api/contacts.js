@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const validation = require("../../helpers/validation");
-const controllers = require("../../helpers/controllers");
+const controllers = require("../../controllers/controllers");
 
 router.get('/', controllers.getContacts)
 router.get('/:contactId', controllers.getContactId)

@@ -1,6 +1,5 @@
-const contacts = require("./../models/contacts");
-const httpError = require("./httpError");
-// const validation = require("./validation");
+const contacts = require("../models/contacts");
+const httpError = require("../helpers/httpError");
 
 async function getContacts(req, res, next) {
     try {
