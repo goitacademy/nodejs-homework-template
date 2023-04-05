@@ -17,7 +17,7 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 
-require("./config/config-passport");
+require("./config/passport");
 
 const router = require('./routes/api/routes.js');
 app.use("/api", router);
