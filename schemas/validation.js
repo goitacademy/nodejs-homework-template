@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const httpError = require("./httpError");
+const httpError = require("../helpers/httpError");
 
 const addSchema = Joi.object({
     name: Joi.string().label('name'),
