@@ -1,5 +1,4 @@
 const express = require("express");
-const joi = require("joi");
 
 const contacts = require("../../models/contacts");
 
@@ -7,11 +6,7 @@ const { HttpError } = require("../../helpers");
 
 const router = express.Router();
 
-const addSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().required(),
-  phone: joi.string().required(),
-});
+const schema = require("../../utils/validate/validate");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -38,7 +33,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = schema.addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, "missing required name field");
     }
@@ -52,7 +47,7 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = schema.updateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, "missing field");
     }
