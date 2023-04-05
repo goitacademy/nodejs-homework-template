@@ -2,10 +2,27 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
+// const mongoose = require("mongoose");
+
+const DB_HOST =
+  "mongodb+srv://MaryDan:4W3dbq1I6FNwX1DA@cluster0.0qilsj8.mongodb.net/phonebook?retryWrites=true&w=majority";
+
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => {
+//     app.listen(3000, () => {
+//       console.log("Database connection successful");
+//     });
+//   })
+//   .catch((error) => console.log(error.message));
+
+// const app = require("./app");
+
 const contactsPath = path.join(__dirname, "./contacts.json");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
+  const data = await fs.readFile(DB_HOST, { encoding: "utf-8" });
+  // const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
   return JSON.parse(data);
 };
 
