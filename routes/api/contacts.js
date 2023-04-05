@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 
-const contacts = require("../../models/contacts");
+const contacts =  require('../../models/contacts')
 const { HttpError } = require("../../helpers");
 
 const router = express.Router();
@@ -23,11 +23,11 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const {id} = req.params
-    contactId = id
+    const { contactId } = req.params;
+    // contactId = id;
     const result = await contacts.getContactById(contactId);
-    if(!result) {
-      throw HttpError(404, `Contact with ${id} not found`)
+    if (!result) {
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result);
   } catch (error) {
@@ -37,12 +37,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const {error} = addSchema.validate(req.body)
-    if(error){
-      throw HttpError(400, error.message)
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
-    const result = await contacts.addContact();
-    res.json(result);
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -50,8 +50,12 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
+    const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
-    res.json(result);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
@@ -59,11 +63,12 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const {error} = addSchema.validate(req.body)
-    if(error){
-      throw HttpError(404, `Contact with ${id} not found`)
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
-    const result = await contacts.updateContact(contactId);
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
     res.json(result);
   } catch (error) {
     next(error);
