@@ -1,6 +1,5 @@
 const {
-  asyncMiddleware,
-  notFoundMessage
+  asyncMiddleware
 } = require('../helpers/controller-helpers');
 
 const {
@@ -21,13 +20,14 @@ const getById = async ({params}, res) => {
     const { contactId } = params;
     const contact = await getContactById(contactId);
     if (!contact) {
-      res.status(404).json(notFoundMessage);
+      res.status(404).json({message: 'Not found'});
       return;
     }
     res.status(200).json(contact);
 };
 
 const add = async (req, res) => {
+  
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
 };
@@ -36,7 +36,7 @@ const remove = async (req, res) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) {
-      return res.status(404).json(notFoundMessage);
+      return res.status(404).json({message: 'Not found'});
     }
     res.status(200).json({ message: 'contact deleted' });
 };
@@ -45,7 +45,7 @@ const update = async (req, res) => {
     const { contactId } = req.params;
     const updatedContact = await updateContact(contactId, req.body);
     if (!updatedContact) {
-      return res.status(404).json(notFoundMessage);
+      return res.status(404).json({message: 'Not found'});
     }
     res.status(200).json(updatedContact);
 };
@@ -57,7 +57,7 @@ async function updateStatus(req, res) {
   const contact = await updateStatusContact(contactId, { favorite });
 
   if (!contact) {
-    res.status(404).json(notFoundMessage);
+    res.status(404).json({message: 'Not found'});
     return;
   }
 

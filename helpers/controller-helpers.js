@@ -22,5 +22,4 @@ const HTTPError = (status, message) => {
 module.exports = {
   asyncMiddleware,
   HTTPError,
-  notFoundMessage: HTTPError(404, 'Not found'),
 };
