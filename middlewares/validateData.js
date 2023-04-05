@@ -12,7 +12,7 @@ const updateContactsSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string(),
-});
+}).or("name", "email", "phone");
 
 const addContactsValidation = (req, _, next) => {
   const { error } = addContactsSchema.validate(req.body);
@@ -26,7 +26,7 @@ const addContactsValidation = (req, _, next) => {
 const updateContactsValidation = (req, _, next) => {
   const { error } = updateContactsSchema.validate(req.body);
   if (error) {
-    throw HttpError(400, "Missing field");
+    throw HttpError(400, "Missing fields");
   }
   next();
 };
