@@ -35,4 +35,17 @@ const logout = async (token) => {
   }
 };
 
-module.exports = { createUser, getUserByToken, logout };
+const currentUser = async (req, res) => {
+  try {
+    const { token } = req.user;
+    const user = await User.getUserByToken({ token });
+
+    if (!user) {
+      res.status(401).send("Not authorized");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { createUser, getUserByToken, logout, currentUser };
