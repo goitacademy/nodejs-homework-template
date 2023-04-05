@@ -42,19 +42,17 @@ const updateContact = async (contactId, body) => {
   if (idx === -1) {
     return null;
   }
-  await allContacts.forEach((cont) => {
-    if (cont.id === contactId) {
-      if (name) {
-        cont.name = name;
-      }
-      if (email) {
-        cont.email = email;
-      }
-      if (phone) {
-        cont.phone = phone;
-      }
+  if (allContacts[idx].id === contactId) {
+    if (name) {
+      allContacts[idx].name = name;
     }
-  });
+    if (email) {
+      allContacts[idx].email = email;
+    }
+    if (phone) {
+      allContacts[idx].phone = phone;
+    }
+  }
   await contactsAction.updateContacts(allContacts);
   return allContacts[idx];
 };
