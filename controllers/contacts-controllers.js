@@ -25,13 +25,20 @@ const add = async (req, res) => {
 };
 
 const update = async (req, res) => {
+  const contactsList = await listContacts();
   const { contactId } = req.params;
+
+  const neddyContact = contactsList.find(it => it.id === contactId);
+  // console.log("neddyContact!",neddyContact);
+  const createdContact = {...neddyContact, ...req.body };
+  // console.log("createdContact!",createdContact);
+
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ "message": "missing fields" });
     // throw HttpError(400, "missing fields");
   }
-  const result = await updateContact(contactId, req.body);
-  console.log("ITS ME RESULT", result);
+  const result = await updateContact(contactId, createdContact);
+  // console.log("ITS ME RESULT", result);
   if (!result) {
     return res.status(404).json({ "message": "Not found" });
     // throw HttpError(404, "Not found");
