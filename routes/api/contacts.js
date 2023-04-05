@@ -26,6 +26,7 @@ const addSchema = Joi.object({
 
 router.get('/', async (req, res, next) => {
 
+  
 try {
   const result = await contacts.listContacts();
   res.json(result)
@@ -69,7 +70,7 @@ router.delete('/:contactId', async (req, res, next) => {
   if(!result){
     throw HttpError(404, `Book with ${contactId} not found`);
   }
-  res.json({ message: 'template message' })
+  res.json({ message: 'Complete' })
 })
 
 router.put('/:contactId', async (req, res, next) => {
