@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 require("./config/config-passport");
+
 const router = require('./routes/api/routes.js');
 app.use("/api", router);
 
@@ -32,8 +33,8 @@ app.use((err, req, res, next) => {
     message: err.message
   });
 });
-
 const port = 3000;
+
 app.listen(port, () => {
   console.log('Server is listening on port ' + port)
 });
