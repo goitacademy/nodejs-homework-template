@@ -1,8 +1,11 @@
-const { contactSchema } = require("../validation/contactsSchema");
+const {
+  contactSchema,
+  contactSchemaRequired,
+} = require("../validation/contactsSchema");
 
-const validation = (schema) => {
+const validation = (contactSchema) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = contactSchema.validate(req.body);
     if (error) {
       error.status = 400;
       error.message = `missing required ${error.details[0].path[0]} field`;
@@ -12,4 +15,16 @@ const validation = (schema) => {
   };
 };
 
-module.exports = validation;
+const validationRequired = (contactSchemaRequired) => {
+  return (req, res, next) => {
+    const { error } = contactSchemaRequired.validate(req.body);
+    if (error) {
+      error.status = 400;
+      error.message = `missing required ${error.details[0].path[0]} field`;
+      next(error);
+    }
+    next();
+  };
+};
+
+module.exports = { validation, validationRequired };
