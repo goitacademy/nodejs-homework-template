@@ -2,10 +2,14 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
+const dataBasePath = "https://phonebook-rest-api-zezp.onrender.com";
+
 // const DB_HOST =
 //   "mongodb+srv://MaryDan:4W3dbq1I6FNwX1DA@cluster0.0qilsj8.mongodb.net/phonebook?retryWrites=true&w=majority";
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+// const contactsPath = path.join(__dirname, "./contacts.json");
+
+const contactsPath = path.join(dataBasePath, "./api/contacts");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
