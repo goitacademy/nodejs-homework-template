@@ -1,4 +1,4 @@
-const { User } = require("../models/usersSchema");
+const  User = require("../models/usersSchema");
 
 const signUpNewUser = async (email, password) => {
     const newUser = new User({ email });
@@ -15,7 +15,7 @@ const findUserByIdAndUpdate = async (id, token) => {
 };
 
 module.exports = {
-    signUpNewUser,
-    findUserByEmail,
-    findUserByIdAndUpdate,
-}
+  signUpNewUser,
+  findUserByEmail,
+  findUserByIdAndUpdate,
+};
