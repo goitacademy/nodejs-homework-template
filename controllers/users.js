@@ -1,4 +1,4 @@
-const service = require("../service/userService");
+const service = require("../service/userService.js");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secret = process.env.SECRET;
