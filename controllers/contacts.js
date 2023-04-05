@@ -2,7 +2,6 @@ const { Contact } = require("../models/contact");
 
 const { hashPassword } = require("../models/user.js");
 
-
 const listContacts = async () => {
   const contacts = await Contact.find();
   return contacts;
@@ -13,11 +12,6 @@ const getContactById = async (_id) => {
   return contacts;
 };
 
-// const getContactByEmail = async (email) => {
-//   const contact = await Contact.findOne({ email });
-//   return contact;
-// };
-
 const removeContact = async (_id) => {
   try {
     return Contact.findByIdAndDelete({ _id });
@@ -25,7 +19,6 @@ const removeContact = async (_id) => {
     console.log(err);
   }
 };
-
 
 const addContact = async (name, email, phone, password) => {
   const hashedPassword = hashPassword(password);
@@ -43,16 +36,6 @@ const addContact = async (name, email, phone, password) => {
     console.log(err);
     throw err;
   }
-
-  // eslint-disable-next-line no-useless-catch
-  // try {
-  //   const contact = new Contact({ name, email, phone });
-  //   contact.save();
-  //   return contact;
-  // } catch (err) {
-  //   throw err;
-  // }
-
 };
 
 const updateContact = async (id, newContact) => {
@@ -74,7 +57,6 @@ const updateStatusContact = async (id, favorite) => {
 module.exports = {
   listContacts,
   getContactById,
-  // getContactByEmail,
   removeContact,
   addContact,
   updateContact,

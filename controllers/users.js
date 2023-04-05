@@ -17,8 +17,8 @@ const createUser = async (email, password) => {
   }
 };
 
-const getUserByEmail = async (email) => {
-  const user = await User.findOne({ email });
+const getUserByToken = async (token) => {
+  const user = await User.findOne({ token });
   return user;
 };
 
@@ -35,4 +35,4 @@ const logout = async (token) => {
   }
 };
 
-module.exports = { createUser, getUserByEmail, logout };
+module.exports = { createUser, getUserByToken, logout };

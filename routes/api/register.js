@@ -1,5 +1,3 @@
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
 const express = require("express");
 require("dotenv").config();
 
@@ -7,28 +5,6 @@ const router = express.Router();
 
 const { User, userValidationSchema } = require("../../models/user");
 const { createUser } = require("../../controllers/users");
-
-const secret = process.env.JWT_SECRET;
-
-const ExtractJWT = passportJWT.ExtractJwt;
-const Strategy = passportJWT.Strategy;
-const params = {
-  secretOrKey: secret,
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-};
-
-passport.use(
-  new Strategy(params, function (payload, done) {
-    User.find({ _id: payload.id })
-      .then(([user]) => {
-        if (!user) {
-          return done(new Error("User not found"));
-        }
-        return done(null, user);
-      })
-      .catch((err) => done(err));
-  })
-);
 
 router.post("/signup", async (req, res, next) => {
   const { error } = userValidationSchema.validate(req.body);
