@@ -1,5 +1,6 @@
 const Joi = require('joi');
-const { HttpError, contactSchema } = require('../helpers/');
+const { HttpError } = require('../helpers');
+const { contactSchema } = require('../schemas');
 const service = require('../models/contacts');
 
 const addSchema = Joi.object(contactSchema);
