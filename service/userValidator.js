@@ -11,9 +11,9 @@ const userSchema = Joi.object({
     })
     .required(),
 
-  password: Joi.string()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
-    .required(),
+  password: Joi.string().required(),
 });
 
 exports.validateUser = validator(userSchema);
+
+
