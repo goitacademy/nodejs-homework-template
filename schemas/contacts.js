@@ -2,7 +2,6 @@ const Joi = require("joi");
 
 const addSchema =  Joi.object({
     name: Joi.string()
-      .alphanum()
       .required()
       .messages({
           "any.required": `missing required name`,
@@ -16,22 +15,19 @@ const addSchema =  Joi.object({
           "string.empty": `email cannot be empty`,
           "string.email": `email cannot be a valid email address`
       }),
-    phone: Joi.number()
+    phone: Joi.string()
       .required()
-      .positive()
+      .regex(/^[0-9]{10}$/)
       .messages({
           "any.required": `missing required phone`,
-          "number.empty": `phone cannot be empty`,
-          "number.base": `phone must be valid phone number`,
-          "number.positive": `phone cannot be negative`
+          "string.empty": `phone cannot be empty`,
+          'string.pattern.base': `Phone number must have 10 digits.`
       }),
 })
 
 const updateSchema =  Joi.object({
   name: Joi.string()
-    .alphanum()
     .messages({
-      "any.required": `missing required name`,
       "string.empty": `name cannot be empty`,
     }),
   email: Joi.string()
@@ -40,12 +36,10 @@ const updateSchema =  Joi.object({
       "string.empty": `email cannot be empty`,
       "string.email": `email cannot be a valid email address`
     }),
-  phone: Joi.number()
-    .positive()
-    .messages({
-      "number.base": `phone must be valid phone number`,
-      "number.positive": `phone cannot be negative`
-    }),
+  phone: Joi.string()
+    .regex(/^[0-9]{10}$/)
+    .messages({'string.pattern.base': `Phone number must have 10 digits.`})
+
 })
 
 module.exports = {
