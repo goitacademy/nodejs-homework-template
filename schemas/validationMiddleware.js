@@ -26,4 +26,14 @@ module.exports = {
     }
     next();
   },
+  updateFavoriteSchema: (req, res, next) => {
+    const addSchema = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+    const validationResult = addSchema.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+    next();
+  },
 };
