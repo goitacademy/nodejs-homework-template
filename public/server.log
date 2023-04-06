@@ -1,0 +1,18 @@
+
+GET / 04-04-2023_12:22:19
+GET /contacts 04-04-2023_12:22:27
+GET /contacts/hgfd 04-04-2023_12:24:05
+GET http://localhost:3000/api/contacts 06-04-2023_06:26:02
+GET http://localhost:3000/api/contacts/ICzm1xErdfFOJgGccDWAt 06-04-2023_06:26:41
+POST http://localhost:3000/api/contacts/ICzm1xErdfFOJgGccDWAt 06-04-2023_06:27:02
+GET http://localhost:3000/api/contacts/AeHIrLTr6JkxGE6SN-0Rw 06-04-2023_06:27:39
+GET http://localhost:3000/api/contacts/vza2RIzNGIwutCVCs4mCL 06-04-2023_06:28:02
+GET http://localhost:3000/api/contacts/05olLMgyVQdWRwgKfg5J6 06-04-2023_06:28:23
+POST http://localhost:3000/api/contacts/05olLMgyVQdWRwgKfg5J6 06-04-2023_06:29:03
+POST http://localhost:3000/api/contacts/1DEXoP8AuCGYc1YgoQ6hw 06-04-2023_06:29:22
+DELETE http://localhost:3000/api/contacts/1DEXoP8AuCGYc1YgoQ6hw 06-04-2023_06:30:19
+DELETE http://localhost:3000/api/contacts/1DEXoP8A 06-04-2023_06:30:24
+PUT http://localhost:3000/api/contacts/05olLMgyVQdWRwgKfg5J6 06-04-2023_06:30:49
+PUT http://localhost:3000/api/contacts/05olLMgyVQdWRwgKfg5J6 06-04-2023_06:30:53
+PUT http://localhost:3000/api/contacts/05olLMgyVQdWRwgKfg5J6 06-04-2023_06:31:15
+POST http://localhost:3000/api/contacts/ 06-04-2023_06:31:39
