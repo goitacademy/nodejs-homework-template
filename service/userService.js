@@ -1,13 +1,13 @@
-const  User = require("../models/usersSchema");
+const { User } = require("../models/usersSchema");
 
 const signUpNewUser = async (email, password) => {
-    const newUser = new User({ email });
-    newUser.setPassword(password);
-    return await newUser.save();
+  const newUser = new User({ email });
+  newUser.setPassword(password);
+  return await newUser.save();
 };
 
 const findUserByEmail = async (email) => {
-  return await User.findOne(email);
+  return await User.findOne({ email: email });
 };
 
 const findUserByIdAndUpdate = async (id, token) => {
