@@ -18,7 +18,13 @@ const getContactById = async (contactId) => {
   return filter;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const data = await fs.readFile(pathDb);
+  const result = JSON.parse(data);
+  const del = result.filter((contact) => contact.id !== contactId);
+  await fs.writeFile(pathDb, JSON.stringify(del));
+  return del;
+};
 
 const addContact = async (body) => {
   const data = await fs.readFile(pathDb);
@@ -37,7 +43,21 @@ const addContact = async (body) => {
   return result;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const data = await fs.readFile(pathDb);
+  const result = JSON.parse(data);
+  const change = result.filter((contact) => contact.id !== contactId);
+  const update = {
+    id: contactId,
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+
+  change.push(update);
+  await fs.writeFile(pathDb, JSON.stringify(change));
+  return change;
+};
 
 module.exports = {
   listContacts,
