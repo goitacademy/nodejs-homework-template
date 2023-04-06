@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "node-rest-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -22,5 +22,23 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Домашні завдання 02-06 з Node.js",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuriy-o/nodejs_restApi_02-06.git"
+  },
+  "keywords": [
+    "node",
+    "rest",
+    "api",
+    "homework"
+  ],
+  "author": "Yuriy Orekhov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuriy-o/nodejs_restApi_02-06/issues"
+  },
+  "homepage": "https://github.com/yuriy-o/nodejs_restApi_02-06#readme"
 }
