@@ -1,65 +1,60 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+// const fs = require("fs/promises");
+// const path = require("path");
+// const { nanoid } = require("nanoid");
 
-// const dataBasePath = "https://phonebook-rest-api-zezp.onrender.com";
+// const contactsPath = path.join(__dirname, "./contacts.json");
 
-// const DB_HOST =
-//   "mongodb+srv://MaryDan:4W3dbq1I6FNwX1DA@cluster0.0qilsj8.mongodb.net/phonebook?retryWrites=true&w=majority";
+// const listContacts = async () => {
+//   const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
+//   return JSON.parse(data);
+// };
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+// const getContactById = async (contactId) => {
+//   const contacts = await listContacts();
+//   const result = contacts.find((item) => item.id === contactId);
+//   return result || null;
+// };
 
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
-  return JSON.parse(data);
-};
+// const removeContact = async (contactId) => {
+//   const contacts = await listContacts();
+//   const index = contacts.findIndex((item) => item.id === contactId);
+//   if (index === -1) {
+//     return null;
+//   }
+//   const [result] = contacts.splice(index, 1);
+//   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return result;
+// };
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const result = contacts.find((item) => item.id === contactId);
-  return result || null;
-};
+// const addContact = async (body) => {
+//   const contacts = await listContacts();
+//   const newContact = {
+//     id: nanoid(),
+//     ...body,
+//   };
+//   contacts.push(newContact);
+//   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return newContact;
+// };
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return result;
-};
+// const updateContact = async (contactId, body) => {
+//   const contacts = await listContacts();
+//   const index = contacts.findIndex(({ id }) => id === contactId);
 
-const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: nanoid(),
-    ...body,
-  };
-  contacts.push(newContact);
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-};
+//   if (index < 0) {
+//     return null;
+//   }
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(({ id }) => id === contactId);
+//   const updatedContact = { ...contacts[index], ...body };
+//   contacts[index] = updatedContact;
+//   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return updatedContact;
+// };
 
-  if (index < 0) {
-    return null;
-  }
-
-  const updatedContact = { ...contacts[index], ...body };
-  contacts[index] = updatedContact;
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return updatedContact;
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+// module.exports = {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };
