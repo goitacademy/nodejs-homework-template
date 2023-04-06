@@ -10,13 +10,21 @@ const Contact = require("../models/contact");
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await Contact.fined();
-    // const contacts = await listContacts();
-    res.json(contacts);
+    const result = await Contact.find();
+    res.json(result);
   } catch (error) {
     next(error);
   }
 };
+
+// const getAllContacts = async (req, res, next) => {
+//   try {
+//     const contacts = await listContacts();
+//     res.json(contacts);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // const getById = async (req, res, next) => {
 //   try {

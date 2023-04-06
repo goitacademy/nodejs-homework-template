@@ -1,6 +1,6 @@
-// const MongooseError = (error, data, next) => {
-//   error.status = 400;
-//   next();
-// };
+const MongooseError = (error, data, next) => {
+  error.status = 400;
+  next();
+};
 
-// module.exports = MongooseError;
+module.exports = MongooseError;

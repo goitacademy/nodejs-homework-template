@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+// const Joi = require("joi");
 
 // const { MongooseError } = require("../helpers");
 
@@ -27,30 +27,27 @@ const contactSchema = new Schema(
 
 // contactSchema.post("save", MongooseError);
 
-const addSchema = Joi.object({
-  title: Joi.string().required().messages({
-    "any.required": `"title" is required`,
-  }),
-  author: Joi.string().required().messages({
-    "any.required": `"author" is required`,
-    "string.empty": `"author" cannot be empty`,
-    "string.base": `"author" must be string`,
-  }),
-  favorite: Joi.boolean(),
-});
+// const addSchema = Joi.object({
+//   name: Joi.string().trim().required(),
+//   email: Joi.string().trim().email().required(),
+//   phone: Joi.string().trim().required(),
+//   favorite: Joi.boolean(),
+// });
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
+// const updateFavoriteSchema = Joi.object({
+//   favorite: Joi.boolean().required(),
+// });
 
-const schemas = {
-  addSchema,
-  updateFavoriteSchema,
-};
+// const schemas = {
+//   addSchema,
+//   updateFavoriteSchema,
+// };
 
 const Contact = model("contact", contactSchema);
 
-module.exports = {
-  Contact,
-  schemas,
-};
+// module.exports = {
+//   Contact,
+//     schemas,
+// };
+
+module.exports = Contact;
