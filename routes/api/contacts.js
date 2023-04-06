@@ -28,14 +28,14 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const { id } = req.params;
     console.log(req.params);
-    const result = await contactsOperations.getContactById(contactId);
+    const result = await contactsOperations.getContactById(id);
 
     if (!result) {
-      throw createError(404, `contact with id: ${contactId} not found`);
+      throw createError(404, `contact with id: ${id} not found`);
     }
 
     res.json({
@@ -72,13 +72,13 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await contactsOperations.removeContact(contactId);
+    const { id } = req.params;
+    const result = await contactsOperations.removeContact(id);
 
     if (!result) {
-      throw createError(404, `contact with id: ${contactId} not found`);
+      throw createError(404, `contact with id: ${id} not found`);
     }
 
     res.json({
@@ -94,24 +94,24 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { error } = contuctSchema.validate(req.body);
     if (error) {
       error.status = 400;
       throw error;
     }
-    const { contactId } = req.params;
+    const { id } = req.params;
     const { name, email, phone } = req.body;
     const result = await contactsOperations.updateContact(
-      contactId,
+      id,
       name,
       email,
       phone
     );
 
     if (!result) {
-      throw createError(404, `contact with id: ${contactId} not found`);
+      throw createError(404, `contact with id: ${id} not found`);
     }
 
     res.status(201).json({
