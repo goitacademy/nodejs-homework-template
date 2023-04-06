@@ -6,7 +6,7 @@ const { validateUser } = require("../service/userValidator");
 
 const signUp = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await service.findUserByEmail({email});
+  const user = await service.findUserByEmail(email);
   const { error } = await validateUser({ email, password });
   if (error) {
     console.log(error);
@@ -41,7 +41,7 @@ const logIn = async (req, res, next) => {
       console.log(error);
       return res.json({ status: 400, msg: "Missing fields" });
     }
-    const user = await service.findUserByEmail({email});
+    const user = await service.findUserByEmail({ email });
 
     if (!user || !user.validPassword(password)) {
       return res.status(400).json({
@@ -68,9 +68,9 @@ const logIn = async (req, res, next) => {
       },
       msg: `Login successful. ${user.email}`,
     });
-    } catch(error) {
-      next(error);
-    }  
+  } catch (error) {
+    next(error);
+  }
 };
 
 const logOut = async (req, res, next) => {
@@ -94,7 +94,6 @@ const current = async (req, res, next) => {
     next(error);
   }
 };
-
 
 module.exports = {
   signUp,
