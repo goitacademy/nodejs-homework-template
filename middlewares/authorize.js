@@ -6,7 +6,7 @@ const { User } = require("../modules/auth/auth.model");
 
 const authorize = async (req, res, next) => {
   const authHeader = req.headers.authorization || "";
-  const token = authHeader.replace("Bearer ", "");
+  const token = authHeader.replace("Bearer ", "")
 
   const { jwt: jwtConfig } = getConfig();
   try {

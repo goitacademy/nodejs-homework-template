@@ -4,7 +4,7 @@ const singUpShema = Joi.object({
   email: Joi.string().required(),
   subscription: Joi.string(),
   password: Joi.string().required(),
-
+  avatarURL: Joi.string()
 });
 
  const singInShchema = Joi.object({
@@ -12,4 +12,4 @@ const singUpShema = Joi.object({
    password: Joi.string().required(),
  });
 
-module.exports = { singUpShema, singInShchema };
+module.exports = { singUpShema, singInShchema }

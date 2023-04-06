@@ -17,8 +17,12 @@ const authShema = new Schema({
   },
   token: {
     type: String,
-    default:null
+    default: null,
+  },
+  avatarURL: {
+    type: String,
+    required: true
   },
 });
 
-exports.User = model("user", authShema);
+exports.User = model("user", authShema)

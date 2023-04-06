@@ -3,7 +3,9 @@ const {
   serializeUserResponse,
 } = require("./auth.serializers");
 
-const { singIn, singUp, deleteToken } = require("./auth.service");
+
+const { singIn, singUp, deleteToken, createAvatar } = require("./auth.service");
+
 
 const register = async (req, res, next) => {
   const user = await singUp(req.body);
@@ -21,7 +23,14 @@ const currentUser = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   await deleteToken(req);
-  res.status(204).send()
+  res.status(204).send();
 };
 
-module.exports = { register, login, currentUser, logout };
+
+const changeAvatar = async (req, res, next) => {
+   await createAvatar(req)
+  res.status(200).send("OK");
+
+};
+
+module.exports = { register, login, currentUser, logout, changeAvatar }

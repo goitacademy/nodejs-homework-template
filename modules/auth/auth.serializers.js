@@ -5,7 +5,8 @@ const srializeUser=(user)=>{
       id: user._id,
       passwordHash: user.passwordHash,
       subscription: user.subscription,
-      token:user.token
+      token: user.token,
+      avatarURL: user.avatarURL
     };
 }
 
