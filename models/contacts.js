@@ -1,14 +1,28 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const path = require('path');
 
-const listContacts = async () => {}
+// const fs = require('fs').promises;
 
-const getContactById = async (contactId) => {}
+const contactsPath = path.resolve('./models/contacts.json'); //! Виводить абсолютний шлях до файлу contacts.json
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath, 'utf8');
+    return JSON.parse(data);
+    // const contacts = JSON.parse(data);
+    // return console.table(contacts);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-const addContact = async (body) => {}
+const getContactById = async contactId => {};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async contactId => {};
+
+const addContact = async body => {};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +30,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
