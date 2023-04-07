@@ -7,15 +7,13 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "name must be exist"],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      required: [true, "email must be exist"],
     },
     phone: {
       type: String,
-      required: [true, "phone must be exist"],
     },
     favorite: {
       type: Boolean,
@@ -47,7 +45,7 @@ const Contact = model("contact", contactSchema);
 
 // module.exports = {
 //   Contact,
-//     schemas,
+//   schemas,
 // };
 
 module.exports = Contact;
