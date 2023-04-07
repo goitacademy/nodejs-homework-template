@@ -12,7 +12,7 @@ const listContacts = async () => {
 }
 
 
-const addContact = async (name, email, phone) => {
+const addContact = async ({ name, email, phone }) => {
     const contacts = await listContacts()
     const newContact = {
         id: nanoid(),
@@ -51,7 +51,7 @@ const updateContact = async (contactId, data) => {
     if (index === -1) {
         return null;
     }
-    contacts[index] = { contactId, ...data }
+    contacts[index] = { id:contactId, ...data }
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
     return contacts[index]
 }
