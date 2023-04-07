@@ -1,17 +1,16 @@
-const express = require('express');
-const { NotFound } = require('http-errors');
+const express = require("express");
+const { NotFound } = require("http-errors");
 const router = express.Router();
-const Joi = require('joi');
-const contactsOperations = require('../../models/contacts');
-
+const Joi = require("joi");
+const contactsOperations = require("../../models/contacts");
 
 const contactsSchema = Joi.object({
   name: Joi.string().required,
   email: Joi.number().required,
   phone: Joi.string().required,
-})
+});
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
@@ -24,13 +23,12 @@ router.get('/', async (req, res, next) => {
       error.status = 404;
       throw error;
     }
-    ;
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const contact = await contactsOperations.getContactById(id);
@@ -42,16 +40,14 @@ router.get('/:id', async (req, res, next) => {
       code: 200,
       data: {
         result: contact,
-      }
+      },
     });
   } catch (error) {
     next(error);
   }
 });
 
-
-
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const result = await contactsOperations.add(req.body);
     res.status(201).json({
@@ -59,14 +55,14 @@ router.post('/', async (req, res, next) => {
       code: 201,
       data: {
         result,
-      }
-    })
+      },
+    });
   } catch (error) {
     next(error);
   }
-})
+});
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contactsOperations.removeContact(id);
@@ -78,22 +74,15 @@ router.delete('/:contactId', async (req, res, next) => {
       code: 200,
       message: "contact deleted",
       data: {
-        result
-      }
-    })
+        result,
+      },
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
+});
 
-
-
-
-
-
-
-
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
@@ -109,10 +98,10 @@ router.put('/:contactId', async (req, res, next) => {
       status: "succes",
       code: 200,
       data: {
-        result
-      }
-    })
-  } catch { }
-})
+        result,
+      },
+    });
+  } catch {}
+});
 
-module.exports = router
+module.exports = router;
