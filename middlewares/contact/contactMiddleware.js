@@ -1,5 +1,5 @@
-const { createContactsDataValidator, updateContactsDataValidator, updateFavoriteContactsDataValidator } = require('../utils/contactValidator');
-const Contacts = require('../models/contactsSchema');
+const { createContactsDataValidator, updateContactsDataValidator, updateFavoriteContactsDataValidator } = require('../../utils/contactValidator');
+const Contacts = require('../../models/contact/contactsSchema');
 
 exports.checkCreateContactsData = async (req, res, next) => {
     try {
