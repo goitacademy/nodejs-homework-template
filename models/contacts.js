@@ -32,8 +32,7 @@ const removeContact = async (contactId) => {
     }
     const newContacts = contacts.filter(({ id }) => id !== contactId);
     await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2), {
-      encoding: 'utf-8',
-    });
+      encoding: 'utf-8'});
 
     return newContacts;
   } catch (error) {
@@ -56,8 +55,7 @@ const addContact = async (body) => {
     };
     const updatedContacts = [newContact, ...contacts];
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2), {
-      encoding: 'utf-8',
-    });
+      encoding: 'utf-8'});
     return newContact;
   } catch (error) {
     console.log(`Error: ${error.message}`.red);
@@ -79,8 +77,7 @@ const updateContact = async (contactId, body) => {
 
   const contactsToSave = [...otherContacts, updatedContact];
   await fs.writeFile(contactsPath, JSON.stringify(contactsToSave, null, 2), {
-    encoding: 'utf-8',
-  });
+    encoding: 'utf-8'});
   return updatedContact;
 };
 
