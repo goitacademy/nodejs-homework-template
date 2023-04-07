@@ -43,6 +43,7 @@ const currentUser = async (req, res) => {
     if (!user) {
       res.status(401).send("Not authorized");
     }
+    res.json({ token });
   } catch (err) {
     console.log(err);
   }
