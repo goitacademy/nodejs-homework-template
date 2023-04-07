@@ -2,7 +2,7 @@ const shortid = require('shortid');
 const fs = require("fs").promises;
 const path = require("node:path");
 
-const contactsPath = path.join(__dirname, "db/contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 async function listContacts() {
   const data = await fs.readFile(contactsPath, "UTF8");
@@ -31,12 +31,26 @@ async function removeContact(contactId) {
     return contacts[idx]  
 }
 
-async function addContact(name, email, phone) {
+const addContact = async(data) => {
     const contacts = await listContacts();
-    const newContact = {id:shortid .generate(), name, email, phone }
-    contacts.push(newContact)
-    await fs.writeFile(contactsPath, JSON.stringify(contacts))
-    return newContact
+    const newContact = {
+        id: shortid.generate(),
+        ...data,
+    }
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
 }
 
-module.exports = { listContacts, getContactById, removeContact, addContact, };
+const updateById = async (id, data) => {
+    const contacts = await listContacts();
+    const index = contacts.findIndex(item => item.id === id);
+    if(index === -1){
+        return null;
+    }
+    contacts[index] = {id, ...data};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
+}
+
+module.exports = { listContacts, getContactById, removeContact, addContact,updateById };
