@@ -15,6 +15,7 @@ const {
   registrationController,
   logInController,
   logOutController,
+  verificationController,
 } = require("../../controllers/authController");
 
 router.post(
@@ -28,6 +29,7 @@ router.post(
   asyncWrapper(logInController)
 );
 router.post("/logout", authMiddleware, asyncWrapper(logOutController));
+router.get("/verify/:verificationToken", asyncWrapper(verificationController));
 
 module.exports = {
   authRouter: router,

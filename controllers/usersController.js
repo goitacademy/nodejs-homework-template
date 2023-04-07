@@ -4,6 +4,7 @@ const {
   currentUser,
   changeUserSubscription,
   changeUserAvatar,
+  reVerification,
 } = require("../services/userServices");
 
 const currentUserController = async (req, res) => {
@@ -55,8 +56,18 @@ const changeUserAvatarController = async (req, res) => {
   });
 };
 
+const reVerificationController = async (req, res) => {
+  await reVerification(req.body);
+
+  res.status(200).json({
+    status: "200 Ok",
+    message: "Verification email sent",
+  });
+};
+
 module.exports = {
   currentUserController,
   subscriptionUserController,
   changeUserAvatarController,
+  reVerificationController,
 };

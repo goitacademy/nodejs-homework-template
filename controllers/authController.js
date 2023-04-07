@@ -1,4 +1,9 @@
-const { registration, logIn, logOut } = require("../services/authServices");
+const {
+  registration,
+  logIn,
+  logOut,
+  verification,
+} = require("../services/authServices");
 
 const registrationController = async (req, res) => {
   const { email, subscription, avatarURL } = await registration(req.body);
@@ -36,8 +41,18 @@ const logOutController = async (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 };
 
+const verificationController = async (req, res) => {
+  await verification(req.params);
+
+  res.status(200).json({
+    status: "200 OK",
+    message: "Verification successful",
+  });
+};
+
 module.exports = {
   registrationController,
   logInController,
   logOutController,
+  verificationController,
 };
