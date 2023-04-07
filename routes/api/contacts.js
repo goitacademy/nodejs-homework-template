@@ -22,7 +22,7 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   validateBody(schemas.updateFavoriteSchema),
-  ctrl.updateFavoriteById
+  ctrl.updateStatusContact
 );
 
 module.exports = router;
