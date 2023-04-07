@@ -2,6 +2,11 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+require("dotenv").config();
+
+// const DB_HOST =
+//   "mongodb+srv://zeeper90:Zeeperbernard90@cluster0.wdllc6e.mongodb.net/noteBook?retryWrites=true&w=majority";
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
