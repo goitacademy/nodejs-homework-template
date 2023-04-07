@@ -1,6 +1,6 @@
-const { addContact } = require("../../models/contacts");
-const { addSchema } = require("../../schemas/contacts");
-const createError = require("../../helpers/createError");
+const { addContact } = require("../models/contacts");
+const { addSchema } = require("../middleware/validation");
+const createError = require("../helpers/createError");
 
 const add = async (req, res, next) => {
   const contact = req.body;
