@@ -42,10 +42,11 @@ const removeContact = async (id) => {
   }
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (name,email,phone) => {
   try {
+    
     const contacts = await listContacts();
-    const NewContact = { ...name, ...email, ...phone, id: v4() };
+    const NewContact = { ...name,...email,...phone, id: v4() } ;
     contacts.push(NewContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf-8");
     return NewContact;
@@ -55,26 +56,17 @@ const addContact = async (name, email, phone) => {
 };
 
 const updateContact = async (id, body) => {
-  // const { name, email, phone } = body;
+  
   const contacts = await listContacts();
   const idx = contacts.findIndex((item) => item.id === id);
   if (idx === -1) {
     return null;
-  }
-  // if (contacts[idx].id === id) {
-  //   if (name) {
-  //     contacts[idx].name = name;
-  //   }
-  //   if (email) {
-  //     contacts[idx].email = email;
-  //   }
-  //   if (phone) {
-  //     contacts[idx].phone = phone;
-  //   }
-  // }
-  contacts[idx] = { id, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf-8");
-  return contacts[idx];
+  };
+ 
+ const updatedContact = { ...contacts[idx], ...body };
+  contacts.splice(idx, 1, updatedContact);
+  fs.writeFile(contactsPath, JSON.stringify(contacts), "utf8");
+  return updatedContact;
 };
 
 module.exports = {
