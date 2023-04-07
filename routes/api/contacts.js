@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   getAllContacts,
-  // updateStatusContact,
+  updateStatusContact,
   // getById,
   add,
   // update,
@@ -17,7 +17,7 @@ const {
 const router = express.Router();
 
 router.get("/", getAllContacts);
-// router.patch("/:contactId/favorite", updateStatusContact);
+router.patch("/:contactId/favorite", updateStatusContact);
 router.post("/", add);
 // router.get("/:contactId", getById);
 // router.post("/", validateAddContact, add);

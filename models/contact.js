@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const { MongooseError } = require("../helpers");
+// const MongooseError = require("../helpers");
 
 const contactSchema = new Schema(
   {
@@ -23,29 +23,39 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// contactSchema.post("save", MongooseError);
+contactSchema.post("save", (error, data, next) => {
+  error.status = 400;
+  next();
+});
 
-// const addSchema = Joi.object({
-//   name: Joi.string().trim().required(),
-//   email: Joi.string().trim().email().required(),
-//   phone: Joi.string().trim().required(),
-//   favorite: Joi.boolean(),
-// });
+const addSchema = Joi.object({
+  name: Joi.string().trim().required(),
+  email: Joi.string().trim().email().required(),
+  phone: Joi.string().trim().required(),
+  favorite: Joi.boolean(),
+});
 
-// const updateFavoriteSchema = Joi.object({
-//   favorite: Joi.boolean().required(),
-// });
+const addSchemaUpd = Joi.object({
+  name: Joi.string().trim(),
+  email: Joi.string().trim().email(),
+  phone: Joi.string().trim(),
+});
 
-// const schemas = {
-//   addSchema,
-//   updateFavoriteSchema,
-// };
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  addSchema,
+  addSchemaUpd,
+  updateFavoriteSchema,
+};
 
 const Contact = model("contact", contactSchema);
 
-// module.exports = {
-//   Contact,
-//   schemas,
-// };
+module.exports = {
+  Contact,
+  schemas,
+};
 
-module.exports = Contact;
+// module.exports = Contact;

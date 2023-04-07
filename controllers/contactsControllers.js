@@ -6,33 +6,18 @@
 //   updateContact,
 // } = require("../models/contacts");
 
-const Contact = require("../models/contact");
+const { Contact } = require("../models/contact");
 
 const getAllContacts = async (req, res, next) => {
-  try {
-    const result = await Contact.find();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await Contact.find({}, "-createdAt -updatedAt");
+  res.json(result);
+  // try {
+  //   const result = await Contact.find({}, "-createdAt -updatedAt");
+  //   res.json(result);
+  // } catch (error) {
+  //   next(error);
+  // }
 };
-
-// const updateStatusContact = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const { body } = req.body;
-//     const updContact = await Contact.update(contactId, body);
-//     // if (!body) {
-//     //   res.status(400).json({ message: "missing field favorite" });
-//     // }
-//     // if (!updContact) {
-//     //   res.status(404).json({ message: "Not found" });
-//     // }
-//     res.status(200).json(updContact);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 const add = async (req, res, next) => {
   const result = await Contact.create(req.body);
@@ -43,6 +28,17 @@ const add = async (req, res, next) => {
   // } catch (error) {
   //   res.status(404).json({ message: error.message });
   // }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    res.status(400).json({ message: "missing field favorite" });
+  }
+  res.status(200).json(result);
 };
 
 // const getAllContacts = async (req, res, next) => {
@@ -104,7 +100,7 @@ const add = async (req, res, next) => {
 
 module.exports = {
   getAllContacts,
-  // updateStatusContact,
+  updateStatusContact,
   // getById,
   add,
   // update,
