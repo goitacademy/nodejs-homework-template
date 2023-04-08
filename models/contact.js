@@ -40,13 +40,17 @@ contactSchema.post("save", handleMongooseError)
   phone: Joi.string().pattern(phoneRegular).required().messages({
     "any.required": `"phone" is required`,
     "number.empty": `"phone" cannot be empty`,
-    "number.base": `"phone" must be string, example: (###) -###-####`
+    "number.base": `"phone" must be string, example: (###) ###-####`
   }),
   favorite: Joi.boolean(),
 })
+const updateSchemaContact = Joi.object({
+  favorite: Joi.boolean().required()
+})
 
 const schemas = {
-addShema,
+  addShema,
+  updateSchemaContact
 }
 const Contact = model("contact", contactSchema)
 

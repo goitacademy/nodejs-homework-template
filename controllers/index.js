@@ -2,7 +2,8 @@ const { listContacts,
     getContactById,
     addContact,
     removeContact,
-    updateContact } = require("./contacts-controllers")
+    updateContact,
+updateStatusContact} = require("./contacts-controllers")
 
 module.exports = {
     listContacts,
@@ -10,4 +11,5 @@ module.exports = {
     addContact,
     removeContact,
     updateContact,
+    updateStatusContact,
 }
