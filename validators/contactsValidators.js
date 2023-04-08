@@ -17,7 +17,7 @@ const { schemas } = require("../models/contact");
 const validateAddContact = (req, res, next) => {
   if (!Object.keys(req.body).length)
     return res.status(400).json({ message: "missing fields" });
-  const { error } = schemas.addSchemaAdd.validate(req.body);
+  const { error } = schemas.addSchema.validate(req.body);
 
   if (error) {
     const missingField = error.details[0].context.key;
@@ -40,7 +40,20 @@ const validateUpdContact = (req, res, next) => {
   next();
 };
 
+const validateUpdStatusContact = (req, res, next) => {
+  if (!Object.keys(req.body).length)
+    return res.status(400).json({ message: "missing fields" });
+
+  const { error } = schemas.updateFavoriteSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  next();
+};
+
 module.exports = {
   validateAddContact,
   validateUpdContact,
+  validateUpdStatusContact,
 };

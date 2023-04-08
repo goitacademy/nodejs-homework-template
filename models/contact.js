@@ -57,5 +57,3 @@ module.exports = {
   Contact,
   schemas,
 };
-
-// module.exports = Contact;
