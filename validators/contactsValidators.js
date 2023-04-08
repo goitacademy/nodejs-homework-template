@@ -46,9 +46,9 @@ const validateUpdStatusContact = (req, res, next) => {
 
   const { error } = schemas.updateFavoriteSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+    const missingField = error.details[0].context.key;
+    return res.status(400).json({ message: `missing field ${missingField}` });
   }
-
   next();
 };
 
