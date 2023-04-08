@@ -1,25 +1,23 @@
 const express = require('express')
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'HW-02 message' })
-})
+const ctrl = require('../../controllers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'HW-02 message' })
-})
+const {validateBody} = require("../../middlewares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'HW-02 message' })
-})
+const schemas = require("../../schemas/contacts");
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'HW-02 message' })
-})
+const {ctrlWrapper} = require("../../helpers");
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'HW-02 message' })
-})
+router.get('/', ctrlWrapper(ctrl.getAll));
 
-module.exports = router
+router.get('/:id', ctrlWrapper(ctrl.getById));
+
+router.post('/', validateBody(schemas.schemaAdd),ctrlWrapper(ctrl.addContact));
+
+router.put('/:id',validateBody(schemas.schemaAdd),ctrlWrapper(ctrl.updateById));
+
+router.delete('/:id', ctrlWrapper(ctrl.removeById));
+
+module.exports = router;
