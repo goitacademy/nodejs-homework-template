@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
 
-const app = require('./app')
-// xDVS8o8JCXOUmW6H
+const app = require("./app");
 
-const DB_HOST = "mongodb+srv://ira:xDVS8o8JCXOUmW6H@cluster0.qsijuzb.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const { DB_HOST } = process.env;
 
-mongoose.connect(DB_HOST)
-.then(() => app.listen(3000))
-.catch(error => console.log(error.message));
-
-
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  // .then(() => app.listen(3000))
+  .catch((error) => console.log(error.message));
