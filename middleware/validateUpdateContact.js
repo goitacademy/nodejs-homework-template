@@ -1,4 +1,4 @@
-const { HttpError } = require("../helpers");
+const HttpError = require("../helpers/HttpError");
 const { schemaUpdateContact } = require("../models/contact");
 
 const validateUpdateContact = (req, res, next) => {
@@ -10,4 +10,4 @@ const validateUpdateContact = (req, res, next) => {
   next();
 };
 
-module.exports = { validateUpdateContact };
+module.exports = validateUpdateContact;
