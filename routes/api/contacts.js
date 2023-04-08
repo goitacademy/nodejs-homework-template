@@ -12,7 +12,7 @@ const {
 const {
   userValidationSchema,
   favoriteValidationSchema,
-} = require("../../models/validation");
+} = require("../../models/user");
 
 router.get("/", async (req, res) => {
   try {

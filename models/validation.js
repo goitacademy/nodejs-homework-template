@@ -16,4 +16,13 @@ const favoriteValidationSchema = Joi.object({
   favorite: Joi.boolean().required().default(false),
 });
 
-module.exports = { userValidationSchema, favoriteValidationSchema };
+const registrationSchema = Joi.object({
+  email: Joi.string().required().email(),
+  password: Joi.string().required().min(6),
+});
+
+module.exports = {
+  userValidationSchema,
+  favoriteValidationSchema,
+  registrationSchema,
+};
