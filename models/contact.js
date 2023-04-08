@@ -1,8 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-// const MongooseError = require("../helpers");
-
 const contactSchema = new Schema(
   {
     name: {

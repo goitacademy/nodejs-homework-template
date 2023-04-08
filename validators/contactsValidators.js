@@ -1,18 +1,4 @@
-// const Joi = require("joi");
-
 const { schemas } = require("../models/contact");
-
-// const addSchemaAdd = Joi.object({
-//   name: Joi.string().trim().required(),
-//   email: Joi.string().trim().email().required(),
-//   phone: Joi.string().trim().required(),
-// });
-
-// const addSchemaUpd = Joi.object({
-//   name: Joi.string().trim(),
-//   email: Joi.string().trim().email(),
-//   phone: Joi.string().trim(),
-// });
 
 const validateAddContact = (req, res, next) => {
   if (!Object.keys(req.body).length)
