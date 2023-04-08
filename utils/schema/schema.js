@@ -9,6 +9,13 @@ const addSchema = joi.object({
     .required(),
 });
 
+const updateSchema = joi.object({
+  name: joi.string(),
+  email: joi.string().email(),
+  phone: joi.string(),
+});
+
 module.exports = {
   addSchema,
+  updateSchema,
 };
