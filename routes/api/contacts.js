@@ -8,14 +8,14 @@ const addSchema = require("../../schemas");
 
 const validateMiddleware = validation(addSchema);
 
-router.get("/", ctrlWrapper(ctrl.listContacts));
+// router.get("/", ctrlWrapper(ctrl.listContacts));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
+// router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 
-router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
+router.post("/", ctrlWrapper(ctrl.addContact));
 
-router.put("/:id", validateMiddleware, ctrlWrapper(ctrl.updateContact));
+// router.put("/:id", validateMiddleware, ctrlWrapper(ctrl.updateContact));
 
-router.delete("/:id", ctrlWrapper(ctrl.removeContact));
+// router.delete("/:id", ctrlWrapper(ctrl.removeContact));
 
 module.exports = router;
