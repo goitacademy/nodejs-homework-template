@@ -12,4 +12,4 @@ const validator = (schema) => (body) => {
 
 const contactValidator = validator(contactSchema);
 
-module.exports = { contactValidator };
+module.exports = { contactValidator }
