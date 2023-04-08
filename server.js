@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 
 const app = require("./app");
-// Bb4UJCjdP79TGDOV
-const DB_CONTACTS =
-  "mongodb+srv://Olena:Bb4UJCjdP79TGDOV@cluster0.qj82cn3.mongodb.net/db-contacts?retryWrites=true&w=majority";
+
+const { DB_CONTACTS, PORT } = process.env;
 
 mongoose
   .connect(DB_CONTACTS)
   .then(() => {
-    app.listen(3000);
+    app.listen(PORT);
     console.log("Database connection successful");
   })
   .catch((error) => {
