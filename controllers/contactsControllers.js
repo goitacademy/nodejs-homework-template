@@ -25,7 +25,7 @@ const updateContactById = async (req, res, next) => {
     new: true,
   });
   if (!result) {
-    res.status(400).json({ message: "missing field favorite" });
+    res.status(400).json({ message: "missing fields" });
   }
   res.status(200).json(result);
 };
@@ -58,4 +58,3 @@ module.exports = {
   updateContactById,
   deleteContact,
 };
-
