@@ -1,33 +1,33 @@
-// const {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// } = require("../models/contacts");
-
 const { Contact } = require("../models/contact");
 
 const getAllContacts = async (req, res, next) => {
   const result = await Contact.find({}, "-createdAt -updatedAt");
   res.json(result);
-  // try {
-  //   const result = await Contact.find({}, "-createdAt -updatedAt");
-  //   res.json(result);
-  // } catch (error) {
-  //   next(error);
-  // }
 };
 
-const add = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   const result = await Contact.create(req.body);
   res.status(201).json(result);
-  // try {
-  //   const newContact = await Contact.create(req.body);
-  //   res.status(201).json(newContact);
-  // } catch (error) {
-  //   res.status(404).json({ message: error.message });
-  // }
+};
+
+const getContactById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
+  if (!contact) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.json(contact);
+};
+
+const updateContactById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    res.status(400).json({ message: "missing field favorite" });
+  }
+  res.status(200).json(result);
 };
 
 const updateStatusContact = async (req, res, next) => {
@@ -41,14 +41,31 @@ const updateStatusContact = async (req, res, next) => {
   res.status(200).json(result);
 };
 
-// const getAllContacts = async (req, res, next) => {
-//   try {
-//     const contacts = await listContacts();
-//     res.json(contacts);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const deleteContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json({ message: `contact deleted` });
+};
+
+module.exports = {
+  getAllContacts,
+  updateStatusContact,
+  getContactById,
+  addContact,
+  updateContactById,
+  deleteContact,
+};
+
+// const {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// } = require("../models/contacts");
 
 // const getById = async (req, res, next) => {
 //   try {
@@ -97,12 +114,3 @@ const updateStatusContact = async (req, res, next) => {
 //     next(error);
 //   }
 // };
-
-module.exports = {
-  getAllContacts,
-  updateStatusContact,
-  // getById,
-  add,
-  // update,
-  // remove,
-};

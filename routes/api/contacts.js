@@ -3,10 +3,10 @@ const express = require("express");
 const {
   getAllContacts,
   updateStatusContact,
-  // getById,
-  add,
-  // update,
-  // remove,
+  getContactById,
+  addContact,
+  updateContactById,
+  deleteContact,
 } = require("../../controllers/contactsControllers");
 
 // const {
@@ -17,11 +17,13 @@ const {
 const router = express.Router();
 
 router.get("/", getAllContacts);
+router.post("/", addContact);
+router.get("/:contactId", getContactById);
+router.put("/:contactId", updateContactById);
 router.patch("/:contactId/favorite", updateStatusContact);
-router.post("/", add);
-// router.get("/:contactId", getById);
-// router.post("/", validateAddContact, add);
-// router.put("/:contactId", validateUpdContact, update);
-// router.delete("/:contactId", remove);
+router.delete("/:contactId", deleteContact);
 
 module.exports = router;
+
+// validateUpdContact,
+// router.post("/", validateAddContact, add);
