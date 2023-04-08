@@ -7,4 +7,5 @@ const handleMongooseError = require("./handleMongooseErrore");
 module.exports = {
   ctrlWrapper,
   validateBody,
+  handleMongooseError
 };

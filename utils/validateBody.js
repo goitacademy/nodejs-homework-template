@@ -1,3 +1,5 @@
+const { HttpError } = require("../helpers");
+
 const validateBody = (schema) => {
   const fun = async (req, res, next) => {
     const { error } = schema.validate(req.body);
