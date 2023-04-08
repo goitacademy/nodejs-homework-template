@@ -33,7 +33,6 @@ const User = mongoose.model("users", user);
 
 const registerContact = async (email, password) => {
   const hashedPassword = hashPassword(password);
-
   const user = new User({ email, password: hashedPassword });
   user.save();
   return user;

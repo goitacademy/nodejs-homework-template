@@ -7,6 +7,7 @@ connectDatabase();
 
 const contactsRouter = require("./routes/api/contacts");
 const registerRouter = require("./routes/api/user");
+const loginRouter = require("./routes/api/login");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users/signup", registerRouter);
+app.use("/api/users/login", loginRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
