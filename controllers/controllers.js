@@ -1,4 +1,4 @@
-// const { HttpError } = require("../helpers");
+// const  HttpError = require("../helpers/HttpError");
 
 const { Contact } = require("../models/contact");
 
@@ -65,7 +65,7 @@ const updateStatusContact = async (req, res, next) => {
     }
     if (Object.keys(req.body).length === 0) {
       console.log("length:", Object.keys(req.body).length);
-      console.log("2222");
+
       return res.status(400).json({ message: "missing field favorite" });
     }
 
@@ -82,6 +82,8 @@ const deleteContact = async (req, res, next) => {
     const result = await Contact.findByIdAndDelete(id);
     if (!result) {
       // throw HttpError(404);
+      console.log("error:", res.status);
+
       return res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "Contact deleted" });
