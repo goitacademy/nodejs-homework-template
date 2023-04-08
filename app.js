@@ -3,7 +3,7 @@ const logger = require('morgan')
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const {validateBody} = require('./utils');
+// const {validateBody} = require('./utils');
 const contactsRouter = require('./routes/api/contacts-routes')
 
 const app = express()

@@ -1,7 +1,7 @@
 const express = require('express')
 const ctrl = require('../../controllers');
 const { validateBody } = require('../../utils');
-const schemas = require('../../schemas');
+const {schemas} = require('../../models');
 
 
 const router = express.Router()
@@ -9,13 +9,14 @@ const router = express.Router()
 
 router.get('/', ctrl.listContacts)
 
-// router.get('/:contactId', ctrl.getContactById)
+router.get('/:contactId', ctrl.getContactById)
 
-router.post('/', ctrl.addContact)
+router.post('/',validateBody(schemas.schemas), ctrl.addContact)
 
-// router.delete('/:contactId', ctrl.removeContact)
+router.put("/:contactId", validateBody(schemas.schemas), ctrl.updateContact)
 
-// router.put("/:contactId", validateBody(schemas.addSchema), ctrl.updateContact)
+router.patch("/:id/favorite", validateBody(schemas.updateStatusContact), ctrl.updateStatusContact);
 
+router.delete('/:contactId', ctrl.removeContact)
 
 module.exports = router
