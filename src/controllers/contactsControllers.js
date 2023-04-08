@@ -20,7 +20,7 @@ const getContactController = async (req, res, next) => {
     const contact = await service.getContactById(contactId);
 
     if (!contact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw new HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.status(200).json(contact);
@@ -34,7 +34,7 @@ const addContactController = async (req, res, next) => {
     const validationResult = addSchema.validate(req.body);
 
     if (validationResult.error) {
-      throw HttpError(400, validationResult.error.message);
+      throw new HttpError(400, validationResult.error.message);
     }
 
     const createdContact = await service.addContact(req.body);
@@ -51,15 +51,15 @@ const updateContactController = async (req, res, next) => {
     const validationResult = addSchema.validate(req.body);
 
     if (Object.keys(req.body).length === 0) {
-      throw HttpError(400, 'missing fields');
+      throw new HttpError(400, 'missing fields');
     }
 
     if (validationResult.error) {
-      throw HttpError(400, validationResult.error.message);
+      throw new HttpError(400, validationResult.error.message);
     }
 
     if (!updatedContact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw new HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.status(200).json(updatedContact);
@@ -74,7 +74,7 @@ const removeContactController = async (req, res, next) => {
     const deletedContact = await service.removeContact(contactId);
 
     if (!deletedContact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw new HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.status(200).json({

@@ -40,7 +40,7 @@ const updateContact = async (contactId, body) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id: contactId, ...body };
+  contacts[index] = Object.assign(contacts[index], { ...body });
 
   await fs.writeFile(db, JSON.stringify(contacts, null, 2));
   return contacts[index];
