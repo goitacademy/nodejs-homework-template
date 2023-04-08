@@ -1,24 +1,21 @@
 /* eslint-disable no-unused-vars */
 const express = require("express");
-
 const router = express.Router();
 
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
-} = require("../../controllers");
+const { contacts: ctrl } = require("../../controllers");
+const { validation, ctrlWrapper } = require("../../middlewares");
+const addSchema = require("../../schemas");
 
-router.get("/", listContacts);
+const validateMiddleware = validation(addSchema);
 
-router.get("/:contactId", getContactById);
+router.get("/", ctrlWrapper(ctrl.listContacts));
 
-router.post("/", addContact);
+router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
 
-router.put("/:id", updateContact);
+router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
 
-router.delete("/:id", removeContact);
+router.put("/:id", validateMiddleware, ctrlWrapper(ctrl.updateContact));
+
+router.delete("/:id", ctrlWrapper(ctrl.removeContact));
 
 module.exports = router;
