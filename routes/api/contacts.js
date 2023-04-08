@@ -11,6 +11,12 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
+const updateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
+
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -65,6 +71,10 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const { id } = req.params;
     const result = await contacts.updateById(id, req.body);
     if (!result) {
