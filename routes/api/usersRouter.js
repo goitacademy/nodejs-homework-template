@@ -11,10 +11,7 @@ const {
   validation,
 } = require("../../middlewares/validation/validationMiddleware");
 
-const {
-  joiUserSubscriptionSchema,
-  joiUserReVerefySchema,
-} = require("../../models/userModel");
+const { joiUserSubscriptionSchema } = require("../../models/userModel");
 
 const { asyncWrapper } = require("../../helpers/apiHelpers");
 
@@ -39,11 +36,7 @@ router.patch(
   uploadMiddleware,
   asyncWrapper(changeUserAvatarController)
 );
-router.post(
-  "/verify",
-  validation(joiUserReVerefySchema),
-  asyncWrapper(reVerificationController)
-);
+router.post("/verify", asyncWrapper(reVerificationController));
 
 module.exports = {
   usersRouter: router,

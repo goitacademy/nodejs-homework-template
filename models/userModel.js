@@ -27,15 +27,6 @@ const joiUserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-const joiUserReVerefySchema = Joi.object({
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "uk", "ua", "org"] },
-    })
-    .required(),
-});
-
 const userSchema = new Schema(
   {
     password: {
@@ -82,5 +73,4 @@ module.exports = {
   joiRegisterSchema,
   joiLoginSchema,
   joiUserSubscriptionSchema,
-  joiUserReVerefySchema,
 };

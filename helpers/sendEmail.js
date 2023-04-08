@@ -14,7 +14,7 @@ const sendEmail = async (userEmail, verificationToken) => {
   };
   try {
     const response = await sgMail.send(msg);
-    console.log("statusCode: ", response[0].statusCode, "Email sent");
+    console.log(`statusCode: ${response[0].statusCode}. Email sent!`);
   } catch (error) {
     console.error(error);
   }
