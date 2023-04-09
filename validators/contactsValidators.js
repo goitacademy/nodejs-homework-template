@@ -27,13 +27,12 @@ const validateUpdContact = (req, res, next) => {
 };
 
 const validateUpdStatusContact = (req, res, next) => {
-  if (!Object.keys(req.body).length)
-    return res.status(400).json({ message: "missing field favorite" });
+  // if (!Object.keys(req.body).length)
+  //   return res.status(400).json({ message: "missing field favorite" });
 
   const { error } = schemas.updateFavoriteSchema.validate(req.body);
   if (error) {
-    const missingField = error.details[0].context.key;
-    return res.status(400).json({ message: `missing field ${missingField}` });
+    return res.status(400).json({ message: "missing field favorite" });
   }
   next();
 };
