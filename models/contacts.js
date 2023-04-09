@@ -3,29 +3,18 @@ const { nanoid } = require("nanoid");
 const path = require("path");
 
 const contactsPath = path.join(__dirname, "contacts.json");
-// console.log(contactsPath);
+
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
-  const contactsId = String(contactId);
+const getById = async (id) => {
+  const contactsId = String(id);
   const contacts = await listContacts();
   const result = contacts.find((item) => item.id === contactsId);
 
   return result || null;
-};
-
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.find((item) => item.contactId === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return result;
 };
 
 const addContact = async (body) => {
@@ -40,21 +29,33 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const removeContact = async (id) => {
   const contacts = await listContacts();
-  const result = contacts.find((item) => item.contactId === contactId);
+  const index = contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return result;
+};
+
+const updateContact = async (id, body) => {
+  const contacts = await listContacts();
+  const result = contacts.findIndex((item) => item.id === id);
   if (result === -1) {
     return null;
   }
-  contacts[result] = { contactId, ...body };
+
+  contacts[result] = { id, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[result];
 };
 
 module.exports = {
   listContacts,
-  getContactById,
-  removeContact,
+  getById,
   addContact,
+  removeContact,
   updateContact,
 };
