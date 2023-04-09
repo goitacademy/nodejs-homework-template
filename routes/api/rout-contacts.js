@@ -17,16 +17,22 @@ const {
   validateUpdateStatusContact,
 } = require("../../middleware");
 
+const isValidId = require("../../helpers/validatinId");
 router.get("/", getContacts);
 
-router.get("/:id", getContact);
+router.get("/:id", isValidId, getContact);
 
 router.post("/", validateCreateContact, createContact);
 
-router.put("/:id", validateUpdateContact, updateContact);
+router.put("/:id", isValidId, validateUpdateContact, updateContact);
 
-router.patch("/:id/favorite", validateUpdateStatusContact, updateStatusContact);
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateUpdateStatusContact,
+  updateStatusContact
+);
 
-router.delete("/:id", deleteContact);
+router.delete("/:id", isValidId, deleteContact);
 
 module.exports = router;

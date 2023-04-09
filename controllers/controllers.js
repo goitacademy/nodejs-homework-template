@@ -16,18 +16,12 @@ const getContact = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const isValidId = isValidObjectId(id);
-
-    if (isValidId) {
-      const result = await Contact.findById(id);
-      if (!result) {
-        return res.status(404).json({ message: "Not found" });
-        // throw HttpError(404, "Not Faund");
-      }
-      res.status(200).json(result);
+    const result = await Contact.findById(id);
+    if (!result) {
+      return res.status(404).json({ message: "Not found" });
+      // throw HttpError(404, "Not Faund");
     }
-    console.log(isValidId);
-    return res.status(400).json({ message: "ID is not valide" });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
