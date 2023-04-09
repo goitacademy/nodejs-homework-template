@@ -18,8 +18,6 @@ const contactSchema = new Schema(
     },
     favorite: {
       type: Boolean,
-      required: [true, "Set phone for contact"],
-
       default: false,
     },
   },
@@ -29,14 +27,32 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean().required(),
+  name: Joi.string().required().messages({
+    "any.required": `"name" is required`,
+    "string.empty": `"name" cannot be empty`,
+    "string.base": `"name" must be string`,
+  }),
+  email: Joi.string().required().messages({
+    "any.required": `"email" is required`,
+    "string.empty": `"email" cannot be empty`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `"phone" is required`,
+    "string.empty": `"phone" cannot be empty`,
+    "number.base": `"phone" must be number`,
+  }),
+  favorite: Joi.boolean(),
+});
+
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "missing field favorite" }),
 });
 
 const schemas = {
   addSchema,
+  updateStatusSchema,
 };
 
 const Contact = model("contact", contactSchema);

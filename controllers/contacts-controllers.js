@@ -43,7 +43,7 @@ const updateStatusContact = async (req, res) => {
 
 const deleteContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.deleteOne(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, "Not found!");
   }
