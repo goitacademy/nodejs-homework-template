@@ -1,3 +1,4 @@
+const {HttpError} = require("../helpers")
 
 const validateBody = shema => {
     const func = async(req, res, next) => {
