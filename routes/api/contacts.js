@@ -1,25 +1,35 @@
-const express = require('express')
+/* eslint-disable no-unused-vars */
+const express = require("express");
+const router = express.Router();
 
-const router = express.Router()
+const { contacts: ctrl } = require("../../controllers");
+const { validation, ctrlWrapper, isValidId } = require("../../middlewares");
+const { addSchema, updateFavorite } = require("../../models/contact");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const validateMiddleware = validation(addSchema);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(ctrl.listContacts));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getContactById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:id",
+  isValidId,
+  validateMiddleware,
+  ctrlWrapper(ctrl.updateContact)
+);
 
-module.exports = router
+router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getContactById));
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validation(updateFavorite),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
+
+router.delete("/:id", isValidId, ctrlWrapper(ctrl.removeContact));
+
+module.exports = router;
