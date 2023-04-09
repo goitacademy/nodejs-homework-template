@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose')
 const Joi = require('joi');
 const {handleMongooseError} = require('../utils');
-
-const phoneRegular = /^\d{3} \d{3}-\d{4}$/
+const phoneRegular = /^\?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/
+// const phoneRegular = /^\d{3} \d{3}-\d{4}$/
 const contactSchema = new Schema(
       {
     name: {
@@ -45,7 +45,9 @@ contactSchema.post("save", handleMongooseError)
   favorite: Joi.boolean(),
 })
 const updateSchemaContact = Joi.object({
-  favorite: Joi.boolean().required()
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field "favorite"`,
+  }),
 })
 
 const schemas = {
