@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const {ValidationError} = require("../helpers/errors");
 
 module.exports = {
   putValidation: (req, res, next) => {
@@ -11,20 +12,17 @@ module.exports = {
         })
         .required(),
       phone: Joi.number().integer(),
+      favorite: Joi.boolean(),
     });
 
     const validationResult = schema.validateAsync(req.body);
 
     if (validationResult.error) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Validation error: check syntax of input text or missing fields",
-        });
+      next(new ValidationError(validationResult.error.message));
     }
-    next();
-  },
+     next(); 
+    },
+    
 
   patchValidation: (req, res, next) => {
     const schema = Joi.object({
@@ -34,17 +32,24 @@ module.exports = {
         tlds: { allow: ["com", "net"] },
       }),
       phone: Joi.number().integer(),
+      favorite: Joi.boolean(),
     });
 
     const validationResult = schema.validateAsync(req.body);
 
     if (validationResult.error) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Validation error: check syntax of input text or missing fields",
-        });
+        next(new ValidationError(validationResult.error.message));
+      }
+    next();
+  },
+
+  patchFavoriteValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+    const validationResult = schema.validate(req.body);
+    if(validationResult.error) {
+      next(new ValidationError(validationResult.error.message));
     }
     next();
   },
