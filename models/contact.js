@@ -10,14 +10,17 @@ const contactSchema = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
+      unique: true,
     },
     email: {
       type: String,
       required: [true, "Email is required"],
+      unique: true,
     },
     phone: {
       type: String,
       required: [true, "Phone is reqired, use tamplate (111) 11-1111"],
+      unique: true,
       match: phoneRegExp,
     },
     favorite: {
