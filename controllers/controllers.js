@@ -1,4 +1,4 @@
-// const  HttpError = require("../helpers/HttpError");
+// const HttpError = require("../helpers/HttpError");
 
 const { Contact } = require("../models/contact");
 
@@ -17,6 +17,7 @@ const getContact = async (req, res, next) => {
     const result = await Contact.findById(id);
     if (!result) {
       return res.status(404).json({ message: "Not found" });
+      // throw HttpError(404, "Not Faund");
     }
     res.status(200).json(result);
   } catch (error) {
@@ -27,11 +28,7 @@ const getContact = async (req, res, next) => {
 const createContact = async (req, res, next) => {
   try {
     const result = await Contact.create(req.body);
-    if (!result) {
-      return res
-        .status(400)
-        .json({ message: `Contact with phone ${req.body.phone}  is exist` });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
