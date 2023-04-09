@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../middleware/handleMongooseError");
+// const { handleMongooseError } = require("../middleware/handleMongooseError");
 
 const phoneRegExp = /\(\d{3}\)\s\d{3}-\d{4}/;
 
@@ -28,7 +28,7 @@ const contactSchema = new Schema(
   { versionKey: false }
 );
 // не працює, в запиті все одно status 500
-contactSchema.post("save", handleMongooseError);
+// contactSchema.post("save", handleMongooseError);
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().required().messages({
