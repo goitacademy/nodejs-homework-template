@@ -7,8 +7,6 @@ const contactsPath = path.join(__dirname, "contacts.json");
 const readContacts = async () => {
 	try {
 		const contacts = await fs.readFile(contactsPath, "utf-8");
-		console.log(contacts);
-
 		return JSON.parse(contacts);
 	} catch (err) {
 		console.error(err);
@@ -22,6 +20,7 @@ const updateContacts = (contacts) => {
 
 const listContacts = () => readContacts();
 
+// Read contact by id
 const getContactById = async (contactId) => {
 	try {
 		const contacts = await readContacts();
@@ -31,7 +30,7 @@ const getContactById = async (contactId) => {
 		console.error(err);
 	}
 };
-// Remove contact by ID
+// Remove contact by id
 const removeContact = async (contactId) => {
 	try {
 		const contacts = await readContacts();
@@ -67,7 +66,7 @@ const updateContact = async (contactId, body) => {
 		const contacts = await readContacts();
 		const idx = contacts.findIndex((contact) => contact.id === contactId);
 		if (idx === -1) {
-			return undefined;
+			return null;
 		}
 		const updatedContact = { ...contacts[idx], ...body };
 		contacts[idx] = updatedContact;
