@@ -11,4 +11,6 @@ mongoose
       console.log("Database connection successful");
     })
   )
-  .catch((error) => console.log(error.massage));
+  .catch((error) =>
+    console.log(`Server not running. Error message: ${error.message}`)
+  );
