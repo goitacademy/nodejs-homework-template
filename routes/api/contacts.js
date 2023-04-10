@@ -39,7 +39,11 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
-    if (error) res.status(400).json({ message: "missing required field" });
+    const [errorLable] = validationDataReq.error.details;
+    if (error)
+      res.status(400).json({
+        message: `missing required ${errorLable.context.label} field`,
+      });
 
     const contact = await addContact(req.body);
     res.status(201).json(contact);
@@ -51,21 +55,21 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const contact = await removeContact(req.params.contactId);
-    if (!contact) return res.status(404).json({ message: "Contact not found" });
+    if (!contact) return res.status(404).json({ message: "Not found" });
 
-    res.status(200).json({ message: "Contact successfully deleted" });
+    return res.status(200).json({ message: "contact deleted" });
   } catch (err) {
     next(err);
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ message: "missing fields" });
   try {
-    const { error } = schema.validate(req.body);
-    if (error) res.status(400).json({ message: "missing required field" });
-
     const contact = await updateContact(req.params.contactId, req.body);
-    res.status(200).json(contact);
+    if (!contact) return res.status(404).json({ message: "Not found" });
+    return res.status(200).json(contact);
   } catch (err) {
     next(err);
   }
