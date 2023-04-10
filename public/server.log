@@ -62,3 +62,4 @@ GET http://localhost:3000/api/contacts/qdggE76Jtbfd9eWJHrssH 07-04-2023_11:10:31
 PUT http://localhost:3000/api/contacts/qdggE76Jtbfd9eWJHrssH 07-04-2023_11:11:01
 PUT http://localhost:3000/api/contacts/qdggE76Jtbfd9eWJHrssH 07-04-2023_11:11:10
 PUT http://localhost:3000/api/contacts/qdggE76Jtbfd9eWJHrssH 07-04-2023_11:11:17
+GET /api/contacts 08-04-2023_10:16:00
