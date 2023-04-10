@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
     const contacts = await listContacts();
     res.status(200).json(contacts);
   } catch (error) {
-    next(error);
+    next(res.status(404).json({ message: "Not found" }));
   }
 });
 
@@ -22,50 +22,38 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contacts = await getContactById(contactId);
-    if (!contacts) {
-      throw new Error(`Contact with id=${contactId} not found!`);
-    }
     res.status(200).json(contacts);
   } catch (error) {
-    next(res.status(500).json(error));
+    next(res.status(404).json({ message: "Not found" }));
   }
 });
 
 router.post("/", async (req, res, next) => {
   try {
-    if (!req.body.email) {
-      throw new Error(`Error`);
-    }
     const contacts = await addContact(req.body);
-    res.status(200).json(contacts);
+    res.status(201).json(contacts);
   } catch (error) {
-    next(res.status(500).json({ message: "Invalid params" }));
+    next(res.status(400).json({ message: "missing required name field" }));
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contacts = await removeContact(contactId);
-    if (!contacts) {
-      throw new Error(`Contact with id=${contactId} not found!`);
-    }
-    res.status(200).json(contacts);
+    await removeContact(contactId);
+    res.status(200).json({ message: "contact deleted" });
   } catch (error) {
-    next(res.status(500).json(error));
+    next(res.status(404).json({ message: "Not found" }));
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    if (!req.body.email) {
-      throw new Error(`Error`);
-    }
     const { contactId } = req.params;
-    const contacts = await updateContact(contactId, req.body);
-    res.status(200).json(contacts);
+    await updateContact(contactId, req.body);
+    res.status(200).json({ message: "contact Updatet" });
   } catch (error) {
-    next(res.status(500).json({ message: "Invalid params" }));
+    next(res.status(404).json({ message: "Not found" }));
   }
 });
 
