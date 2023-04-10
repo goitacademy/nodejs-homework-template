@@ -1,0 +1,1 @@
+// const HttpError = (code, message) => {};
