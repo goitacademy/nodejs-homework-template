@@ -13,16 +13,11 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
-<<<<<<< Updated upstream
     "http-errors": "^2.0.0",
     "joi": "^17.9.1",
     "mongoose": "^7.0.3",
     "morgan": "1.10.0",
     "nanoid": "^3.3.4"
-=======
-    "mongoose": "^7.0.3",
-    "morgan": "1.10.0"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "7.19.0",
