@@ -49,7 +49,6 @@ const add = async (req, res) => {
 //
 const removeById = async (req, res) => {
   const result = await removeContact(req.params.contactId);
-  console.log(result);
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
@@ -65,7 +64,7 @@ const updateById = async (req, res) => {
   }
   const id = req.params.contactId;
   const result = await updateContact(id, req.body);
-  res.status(200).json({ result });
+  res.status(200).json(result);
 };
 
 module.exports = {

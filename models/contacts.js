@@ -41,11 +41,15 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await readContacts();
-  const result = contacts.find((contact) => contact.id === contactId);
-  if (!result) {
+  const contact = contacts.find((contact) => contact.id === contactId);
+  console.log(contact);
+  if (!contact) {
     throw HttpError(404, "Contact not found");
   }
-  const updatedContact = { ...result, ...body };
+  const updatedContact = { ...contact, ...body };
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  contacts.splice(index, 1, updatedContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return updatedContact;
 };
 
