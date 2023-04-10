@@ -1,35 +1,30 @@
 const express = require('express')
-const { contact } = require("../../../controllers");
-const { add,
-  getById,
-  getList,
-  remove,
-  update,
-  updateStatus } = contact;
-const { checkUpdateContactsData, checkCreateContactsData, checkUpdateFavoriteContactsData } = require('../../../middlewares/contact/contactMiddleware');
-const { protect } = require("../../../middlewares/user/userMiddleware");
-
+const {users} = require("../../../controllers")
+const { register, login, logout, current } = users;
+const { checkRegisterData, protect } = require("../../../middlewares/user/userMiddleware");
 const router = express.Router()
 
-router.use(protect);
 
 router
-  .route('/')
-  .post(checkCreateContactsData, add)
-  .get(getList);
+  .route('/register')
+  .post(checkRegisterData, register)
+  
+router
+  .route('/login')
+  .post(login)
 
+router.use(protect)
+  
+router
+  .route('/logout')
+  .post( logout)
 
 router
-  .route('/:contactId')
-  .get(getById)
-  .patch(checkUpdateContactsData, update)
-  .delete(remove);
-
-router
-  .route('/:contactId/favorite')
-  .patch(checkUpdateFavoriteContactsData, updateStatus)
+  .route('/current')
+  .get(current) 
 
 module.exports = router
+
 
 
 

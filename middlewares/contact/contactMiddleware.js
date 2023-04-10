@@ -1,9 +1,14 @@
-const { createContactsDataValidator, updateContactsDataValidator, updateFavoriteContactsDataValidator } = require('../../utils/contactValidator');
+const { contact } = require("../../utils/index");
+const {
+  createDataValidator,
+  updateDataValidator,
+  updateFavoriteDataValidator
+} = contact;
 const Contacts = require('../../models/contact/contactsSchema');
 
 exports.checkCreateContactsData = async (req, res, next) => {
     try {
-          const { error, value } = createContactsDataValidator(req.body); 
+          const { error, value } = createDataValidator(req.body); 
 
         if (error) {
   return res.status(400).json({ message: error.details[0].message})
@@ -25,7 +30,7 @@ return res.status(409).json({ message: 'User with this name already exists..' })
 
 exports.checkUpdateContactsData = async (req, res, next) => {
     try {
-          const { error, value } = updateContactsDataValidator(req.body); 
+          const { error, value } = updateDataValidator(req.body); 
 
         if (error) {
   return res.status(400).json({ message: error.details[0].message})
@@ -45,7 +50,7 @@ return res.status(409).json({ message: 'User with this name already exists..' })
 
 exports.checkUpdateFavoriteContactsData = async (req, res, next) => {
     try {
-          const { error, value } = updateFavoriteContactsDataValidator(req.body); 
+          const { error, value } = updateFavoriteDataValidator(req.body); 
 
         if (error) {
   return res.status(400).json({ message: error.details[0].message})
