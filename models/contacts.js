@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+const HttpError = require("../helpers/HttpError");
 const encoding = "utf8";
 const contactsPath = path.join(__dirname, "./contacts.json");
 const readContacts = async () => {
@@ -20,8 +21,11 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await readContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (!~index) {
+    throw HttpError(404, "Contact not found");
+  }
   const [deletedContact] = contacts.splice(index, 1);
-  console.log(deletedContact);
+
   return deletedContact;
 };
 
