@@ -58,7 +58,6 @@ const putchById = async (req, res, next) => {
   const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
-  console.log(updatedContact);
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
