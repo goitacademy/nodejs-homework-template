@@ -4,7 +4,11 @@ const createError = require("http-errors");
 
 const getAllItems = async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { _id: owner } = req.user;
+    const contacts = await Contact.find({ owner }).populate(
+      "owner",
+      "name email"
+    );
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -26,7 +30,8 @@ const getItemById = async (req, res, next) => {
 
 const addItem = async (req, res, next) => {
   try {
-    const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);

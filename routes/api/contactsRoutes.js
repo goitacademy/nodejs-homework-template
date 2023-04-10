@@ -1,10 +1,10 @@
 const express = require("express");
 
-const authenticate = require("../../middlewares/authenticate");
+const authenticate = require("../../middlewares/authorization");
 
 const isValidId = require("../../middlewares/isValidId");
 
-const validation = require("../../middlewares/contactsValidation");
+const validation = require("../../middlewares/validationContacts");
 
 const schema = require("../../schemas/contactsSchema");
 

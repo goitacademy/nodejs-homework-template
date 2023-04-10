@@ -2,46 +2,40 @@ const { Schema, model } = require("mongoose");
 
 const Joi = require("joi");
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       match: emailRegex,
+      required: [true, "Email is required"],
       unique: true,
-      required: true,
     },
     password: {
       type: String,
-      minlength: 6,
-      required: true,
+      required: [true, "Set password for user"],
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: {
+      type: String,
     },
   },
   { versionKey: false }
 );
 
-// userSchema.post("save", (error, data, next) => {
-//   const { name, code } = error;
-//   const status = name === "MongoServerError" && code === 11000 ? 409 : 400;
-//   error.status = status;
-//   next();
-// });
-
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
   email: Joi.string().pattern(emailRegex).required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().required(),
 });
 
 const loginSchema = Joi.object({
-  name: Joi.string().required(),
   email: Joi.string().pattern(emailRegex).required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().required(),
 });
 
 const authSchemas = {
