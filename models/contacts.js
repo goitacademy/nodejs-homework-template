@@ -21,7 +21,7 @@ const contactsSchema = new Schema ({
         type: String,
         match: phoneRegexp,
     },
-});
+}, { versionKey: false });
 
 contactsSchema.post("save", handleMongooseError);
 
