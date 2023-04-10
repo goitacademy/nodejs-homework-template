@@ -1,5 +1,6 @@
 const { Contact } = require('../models/contact');
 const { HttpError, ctrlWrapper } = require('../helpers');
+const checkContactExists = require('../utils/checkContactExists');
 
 const getContactsController = async (_, res) => {
   const contacts = await Contact.find();
@@ -10,9 +11,7 @@ const getContactController = async (req, res) => {
   const { contactId } = req.params;
   const contact = await Contact.findOne({ _id: contactId });
 
-  if (!contact) {
-    throw new HttpError(404, `Contact with ${contactId} not found`);
-  }
+  checkContactExists(contact, contactId);
 
   res.status(200).json(contact);
 };
@@ -28,9 +27,7 @@ const updateContactController = async (req, res) => {
     new: true,
   });
 
-  if (!updatedContact) {
-    throw new HttpError(404, `Contact with ${contactId} not found`);
-  }
+  checkContactExists(updatedContact, contactId);
 
   res.status(200).json(updatedContact);
 };
@@ -39,9 +36,7 @@ const removeContactController = async (req, res) => {
   const { contactId } = req.params;
   const deletedContact = await Contact.findByIdAndDelete(contactId);
 
-  if (!deletedContact) {
-    throw new HttpError(404, `Contact with ${contactId} not found`);
-  }
+  checkContactExists(deletedContact, contactId);
 
   res.status(200).json({
     message: 'contact deleted',
@@ -58,10 +53,7 @@ const updateStatusContact = async (req, res) => {
       new: true,
     }
   );
-
-  if (!updatedFavoritContact) {
-    throw new HttpError(404, `Contact with ${contactId} not found`);
-  }
+  checkContactExists(updatedFavoritContact, contactId);
 
   res.status(200).json(updatedFavoritContact);
 };
