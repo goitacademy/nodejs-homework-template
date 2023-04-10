@@ -1,7 +1,7 @@
 const express = require("express");
 const contactsController = require("../../controllers/contacts/contacts.controller");
 const { validator } = require("../../middlewares/index");
-const schemas = require("../../schemas/contacts.schemas");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
@@ -26,6 +26,13 @@ router.put(
   "/:contactId",
   validator(schemas.updateSchema),
   contactsController.updateContact
+);
+
+// Update contact status
+router.patch(
+  "/:contactId/favorite",
+  validator(schemas.updateContactStatus),
+  contactsController.updateStatusContact
 );
 
 module.exports = router;
