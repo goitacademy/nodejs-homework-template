@@ -1,94 +1,76 @@
-const Joi = require('joi');
-const { HttpError, contactSchema } = require('../helpers/');
-const service = require('../models/contacts');
+const { Contact } = require('../models/contact');
+const { HttpError, ctrlWrapper } = require('../helpers');
 
-const addSchema = Joi.object(contactSchema);
-
-const getContactsController = async (req, res, next) => {
-  try {
-    const contacts = await service.getContacts();
-    res.status(200).json(contacts);
-  } catch (error) {
-    next(error);
-  }
+const getContactsController = async (_, res) => {
+  const contacts = await Contact.find();
+  res.status(200).json(contacts);
 };
 
-const getContactController = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await service.getContactById(contactId);
+const getContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await Contact.findOne({ _id: contactId });
 
-    if (!contact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
-    }
-
-    res.status(200).json(contact);
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw new HttpError(404, `Contact with ${contactId} not found`);
   }
+
+  res.status(200).json(contact);
 };
 
-const addContactController = async (req, res, next) => {
-  try {
-    const validationResult = addSchema.validate(req.body);
-
-    if (validationResult.error) {
-      throw HttpError(400, validationResult.error.message);
-    }
-
-    const createdContact = await service.addContact(req.body);
-    res.status(201).json(createdContact);
-  } catch (error) {
-    next(error);
-  }
+const addContactController = async (req, res) => {
+  const createdContact = await Contact.create(req.body);
+  res.status(201).json(createdContact);
 };
 
-const updateContactController = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const updatedContact = await service.updateContact(contactId, req.body);
-    const validationResult = addSchema.validate(req.body);
+const updateContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
 
-    if (Object.keys(req.body).length === 0) {
-      throw HttpError(400, 'missing fields');
-    }
-
-    if (validationResult.error) {
-      throw HttpError(400, validationResult.error.message);
-    }
-
-    if (!updatedContact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
-    }
-
-    res.status(200).json(updatedContact);
-  } catch (error) {
-    next(error);
+  if (!updatedContact) {
+    throw new HttpError(404, `Contact with ${contactId} not found`);
   }
+
+  res.status(200).json(updatedContact);
 };
 
-const removeContactController = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const deletedContact = await service.removeContact(contactId);
+const removeContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const deletedContact = await Contact.findByIdAndDelete(contactId);
 
-    if (!deletedContact) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
-    }
-
-    res.status(200).json({
-      message: 'contact deleted',
-      contact: deletedContact,
-    });
-  } catch (error) {
-    next(error);
+  if (!deletedContact) {
+    throw new HttpError(404, `Contact with ${contactId} not found`);
   }
+
+  res.status(200).json({
+    message: 'contact deleted',
+    contact: deletedContact,
+  });
+};
+
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const updatedFavoritContact = await Contact.findByIdAndUpdate(
+    contactId,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  if (!updatedFavoritContact) {
+    throw new HttpError(404, `Contact with ${contactId} not found`);
+  }
+
+  res.status(200).json(updatedFavoritContact);
 };
 
 module.exports = {
-  getContactsController,
-  getContactController,
-  addContactController,
-  updateContactController,
-  removeContactController,
+  getContactsController: ctrlWrapper(getContactsController),
+  getContactController: ctrlWrapper(getContactController),
+  addContactController: ctrlWrapper(addContactController),
+  updateContactController: ctrlWrapper(updateContactController),
+  removeContactController: ctrlWrapper(removeContactController),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
