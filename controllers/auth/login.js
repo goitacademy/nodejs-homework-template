@@ -1,7 +1,7 @@
 const { Unauthorized } = require('http-errors');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
-const { User } = require('../../models/user');
+const { User } = require('../../models/users');
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {

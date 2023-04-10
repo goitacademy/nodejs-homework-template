@@ -1,7 +1,7 @@
 const express = require('express');
 
-const { auth, validation, control } = require('../../middlewares');
-const { auth: ctrl } = require('../../controllers');
+const { auth, validation, control } = require('../../middlewares/');
+const { auth: ctrl } = require('../../controllers/');
 const { joiLoginSchema, joiRegisterSchema } = require('../../models/users');
 const router = express.Router();
 

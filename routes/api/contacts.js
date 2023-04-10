@@ -1,8 +1,6 @@
 const express = require('express');
 
-const { validation } = require('../../middlewares/validation');
-const { auth } = require('../../middlewares/auth');
-const { control } = require('../../middlewares/control');
+const { validation, control, auth } = require('../../middlewares');
 const { schema, schemaUpdate, updateFavoriteSchema } = require('../../schemas/joiSchema');
 const {
   getContactsList,

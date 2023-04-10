@@ -1,6 +1,6 @@
-const validation = require('./validation');
-const control = require('./control');
-const auth = require('./auth');
+const { validation } = require('./validation');
+const { control } = require('./control');
+const { auth } = require('./auth');
 
 module.exports = {
   validation,
