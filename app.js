@@ -1,3 +1,4 @@
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
@@ -19,7 +20,10 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
+  const code = err.code || 500
   res.status(500).json({ message: err.message })
 })
 
 module.exports = app
+
+console.log('hello')
