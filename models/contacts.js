@@ -1,4 +1,5 @@
 const fs = require("fs/promises");
+const { nanoid } = require("nanoid");
 const path = require("path");
 const HttpError = require("../helpers/HttpError");
 const encoding = "utf8";
@@ -15,6 +16,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await readContacts();
+
   return contacts.find((contact) => contact.id === contactId);
 };
 
@@ -22,16 +24,30 @@ const removeContact = async (contactId) => {
   const contacts = await readContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (!~index) {
-    throw HttpError(404, "Contact not found");
+    return false;
   }
-  const [deletedContact] = contacts.splice(index, 1);
-
-  return deletedContact;
+  contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return true;
 };
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  const contacts = await readContacts();
+  const newContact = { id: nanoid(), ...body };
+  contacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return newContact;
+};
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await readContacts();
+  const result = contacts.find((contact) => contact.id === contactId);
+  if (!result) {
+    throw HttpError(404, "Contact not found");
+  }
+  const updatedContact = { ...result, ...body };
+  return updatedContact;
+};
 
 module.exports = {
   listContacts,
