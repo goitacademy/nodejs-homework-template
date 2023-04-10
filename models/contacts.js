@@ -1,69 +1,68 @@
-const fs = require("fs/promises");
-const path = require("path");
-const contactsPath = path.resolve("db", "contacts.json");
-const  {nanoid}  = require("nanoid");
+import fs from "fs/promises";
+import path from "path";
+import { nanoid } from "nanoid";
 
-const listContacts = async () => {
-    try {
-        const contacts = await fs.readFile(contactsPath, "utf8", (e, d) => {
-          if (e) {
-            console.log("error", e);
-          }
-          console.log("data", d);
-        });
-        return JSON.parse(contacts);
-      } catch {
-        return (error) => console.log(error);
-      }
-}
-listContacts();
-const getContactById = async (contactId) => {try {
+const contactsPath = path.resolve("models", "contacts.json");
+
+export const listContacts = async () => {
+  try {
+    const contacts = await fs.readFile(contactsPath, "utf8");
+   return  JSON.parse(contacts);
+  } catch(error) {
+    return `${error.message}`;
+  }
+};
+
+export const getContactById = async (contactId) => {
+  try {
     const contacts = await listContacts();
     const contactById = contacts.find((contact) => contact.id === contactId);
     return contactById || null;
-  } catch {
-    return (error) => console.log(error);
-  }}
+  } catch(error) {
+    console.log(error);
+  }
+};
 
-const removeContact = async (contactId) => {
-    try {
-        const contacts = await listContacts();
-        const deleteContact = contacts.findIndex((contact) => contact.id === contactId);
-          console.log('Contact deleted succefull',contacts[deleteContact])
-          contacts.splice(deleteContact, 1);
-          await fs.writeFile(contactsPath,JSON.stringify(contacts,null,2));
-          return contacts;
-       
-      
-       
-      } catch {
-        return (error) => console.log(error);
-      }
-}
-
-const addContact = async ({name,email,phone}) => {
+export const removeContact = async (contactId) => {
   try {
-        const contacts = await listContacts();
-        const newContact = {
-          id: nanoid(),
-          name,
-          email,
-          phone,
-        };
-        contacts.push(newContact);
-        await fs.writeFile(contactsPath,JSON.stringify(contacts,null,2))
-        return newContact;
-      } catch {
-        return (error) => console.log(error);
-      }
-}
+    const contacts = await listContacts();
+    const deleteContact = contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+    console.log("Contact deleted succefull", contacts[deleteContact]);
+    contacts.splice(deleteContact, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts;
+  } catch(error) {
+    console.log(error);
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+export const addContact = async ({ name, email, phone }) => {
+  try {
+    const contacts = await listContacts();
+    const newContact = {
+      id: nanoid(),
+      name,
+      email,
+      phone,
+    };
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  } catch(error) {
+    console.log(error);
+  }
+};
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+export const updateContact = async (contactId, body) => {
+const contacts = await listContacts();
+const index = contacts.findIndex(item=>item.id === contactId);
+if(index===-1){
+  return null
 }
+contacts[index]={contactId,...body};
+await fs.writeFile(contactsPath,JSON.stringify(contacts,null,2));
+return contacts[index]
+};
+

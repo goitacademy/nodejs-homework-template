@@ -1,29 +1,88 @@
-const express = require('express')
-
-const router = express.Router()
-const {listContacts,
+import express from "express";
+import  {HttpError} from '../../helpers/HttpError.js';
+import Joi from 'joi';
+// const {HttpError} =require('../../helpers/HttpError.js')
+import {
+  listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact} = require('../../models/contacts')
-router.get('/', async (req, res, next) => {
-  res.json(listContacts())
+  updateContact,
+} from "../../models/contacts.js";
+
+const addScheme = Joi.object({
+  name:Joi.string().required(),
+  email:Joi.string().required(),
+  phone:Joi.number().required(),
 })
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json(getContactById())
-})
+const router = express.Router();
+router.get("/", async (req, res, next) => {
+  try {
+    res.json(await listContacts());
+  } catch(error){
+    
+    next(error);
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json(updateContact())
-})
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result =await getContactById(contactId);
+    if(!result){
+      throw (HttpError(404,`Contact with id ${contactId} not found:()`));
+    };
+    res.json(result);
+  } catch(error){
+    console.log(error)
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json(removeContact())
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const {error}=addScheme.validate(req.body)
+    if(error){
+      throw (HttpError(400,error.message));
+    }
+    const {name,email,phone}= req.body;
+    res.status(201).json(await addContact(req.body));
+    console.table(listContacts());
+  } catch(error){
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json(addContact())
-})
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await removeContact(contactId);
+    if(!result){
+      throw (HttpError(404,`Contact with id ${contactId} not found:()`));
+    }
+    res.json({message:"Delete successed"});
+  } catch(error){
+    next(error);
+  }
+});
 
-module.exports = router
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const {error}=addScheme.validate(req.body)
+    if(error){
+      throw (HttpError(400,error.message));
+    }
+
+    const { contactId } = req.params;
+    const result = await updateContact(contactId,req.body);
+    if(!result){
+      throw (HttpError(404,`Contact with id ${contactId} not found:()`));
+    }
+    res.json(result);
+  } catch(error){
+    next(error);
+  }
+});
+
+export default router;
