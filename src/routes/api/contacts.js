@@ -1,7 +1,10 @@
 const { Router } = require('express');
 const validateId = require('../../middlewares/validateId');
 const validateBody = require('../../middlewares/validateBody');
-const { contactJoiSchema, favoritJoiSchema } = require('../../models/contact');
+const {
+  contactJoiSchema,
+  favoritJoiSchema,
+} = require('../../utils/validation/contactValidationSchemas');
 
 const ctrl = require('../../controllers/contactsControllers');
 
