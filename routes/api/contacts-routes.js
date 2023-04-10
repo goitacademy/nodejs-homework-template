@@ -14,7 +14,7 @@ router.get("/:id", ctrl.getContactById);
 
 router.post("/", validateBody(schemas.addSchema), ctrl.addNewContact);
 
-// router.delete("/:contactId", ctrl.deleteContactById);
+router.delete("/:id", ctrl.deleteContactById);
 
 router.put("/:id", validateBody(schemas.addSchema), ctrl.updateOneContact);
 
