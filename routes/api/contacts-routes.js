@@ -18,4 +18,6 @@ router.post("/", validateBody(schemas.addSchema), ctrl.addNewContact);
 
 router.put("/:id", validateBody(schemas.addSchema), ctrl.updateOneContact);
 
+router.patch("/:id/favorite", validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite);
+
 module.exports = router;
