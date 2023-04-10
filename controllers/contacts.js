@@ -1,11 +1,10 @@
-const contactsOperations = require("../models/contacts");
-
+const { Contact } = require("../models/contact");
 const { HttpError } = require("../helpers");
 
 const { controllerWrapper } = require("../helpers");
 
 const getAll = async (req, res, next) => {
-  const contacts = await contactsOperations.listContacts();
+  const contacts = await Contact.find();
   res.json({
     contacts,
   });
@@ -13,7 +12,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await contactsOperations.getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     throw HttpError(404, "Not found");
   }
@@ -23,7 +22,7 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const newContact = await contactsOperations.addContact(req.body);
+  const newContact = await Contact.create(req.body);
   res.status(201).json({
     newContact,
   });
@@ -31,7 +30,7 @@ const add = async (req, res, next) => {
 
 const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
-  const remoteContact = await contactsOperations.removeContact(contactId);
+  const remoteContact = await Contact.findByIdAndRemove(contactId);
   if (!remoteContact) {
     throw HttpError(404, "Not found");
   }
@@ -43,10 +42,9 @@ const deleteById = async (req, res, next) => {
 
 const putById = async (req, res, next) => {
   const { contactId } = req.params;
-  const updatedContact = await contactsOperations.updateContact(
-    contactId,
-    req.body
-  );
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
@@ -56,14 +54,10 @@ const putById = async (req, res, next) => {
 };
 
 const putchById = async (req, res, next) => {
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, "missing fields");
-  }
   const { contactId } = req.params;
-  const updatedContact = await contactsOperations.updateContact(
-    contactId,
-    req.body
-  );
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
