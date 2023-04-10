@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const {handleMongooseError} = require("../utils")
+const { handleMongooseError } = require("../utils");
 
 const contactSchema = new Schema(
   {
@@ -33,8 +33,8 @@ const addSchema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-    favorite: Joi.boolean().required(),
-})
+  favorite: Joi.boolean().required(),
+});
 
 const schemas = {
   addSchema,

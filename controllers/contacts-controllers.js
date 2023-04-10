@@ -1,6 +1,4 @@
-// const contacts = require("../models/contacts");
-
-const {Contact} = require("../models/contact")
+const { Contact } = require("../models/contact");
 
 const { ctrlWrapper } = require("../utils");
 
@@ -36,7 +34,7 @@ const deleteContactById = async (req, res) => {
 
 const updateOneContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -44,13 +42,13 @@ const updateOneContact = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
-    if (!result) {
-      throw HttpError(404, `Not found`);
-    }
-    res.json(result);
-  };
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContactById: ctrlWrapper(getContactById),
