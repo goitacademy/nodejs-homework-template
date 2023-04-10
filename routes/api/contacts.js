@@ -1,6 +1,7 @@
-const express = require('express')
+const express = require('express');
 
 const { validation } = require('../../middlewares/validation');
+const { auth } = require('../../middlewares/auth');
 const { control } = require('../../middlewares/control');
 const { schema, schemaUpdate, updateFavoriteSchema } = require('../../schemas/joiSchema');
 const {
@@ -13,10 +14,10 @@ const {
 } = require('../../controllers/index');
 const router = express.Router();
 
-router.get('/', control(getContactsList));
+router.get('/', auth, control(getContactsList));
 
 router.get('/:contactId', control(getContact));
-router.post('/', validation(schema), control(addContact));
+router.post('/', auth, validation(schema), control(addContact));
 router.delete('/:contactId', control(deleteContact));
 router.put('/:contactId', validation(schemaUpdate), control(changeContact));
 router.patch('/:contactId/favorite', validation(updateFavoriteSchema), control(updateStatus));
