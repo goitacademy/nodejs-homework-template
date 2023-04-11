@@ -4,17 +4,17 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/controllers");
 
-const { updateSchema } = require("../../utils/schema/schema");
-const { updateContactValidate } = require("../../middlewars/validate");
+const { updateSchema, addSchema } = require("../../utils/schema/schema");
+const { validateBody } = require("../../middlewars/validate");
 
 router.get("/", ctrl.getContacts);
 
 router.get("/:id", ctrl.getContactById);
 
-router.post("/", ctrl.addContact);
+router.post("/", validateBody(addSchema), ctrl.addContact);
 
-router.put("/:id", ctrl.updateContact);
+router.put("/:id", validateBody(updateSchema), ctrl.updateContact);
 
-router.delete("/:id", updateContactValidate(updateSchema), ctrl.deleteContact);
+router.delete("/:id", ctrl.deleteContact);
 
 module.exports = router;
