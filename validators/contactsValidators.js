@@ -28,7 +28,7 @@ const validateUpdContact = (req, res, next) => {
 
 const validateUpdStatusContact = (req, res, next) => {
   const { error } = schemas.updateFavoriteSchema.validate(req.body);
-  if (error) throw HttpError(400, "missing field favorite");
+  if (error) throw HttpError(400, "Missing field favorite");
   next();
 };
 
