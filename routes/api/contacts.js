@@ -1,14 +1,17 @@
 const express = require('express')
-
-const router = express.Router()
+// express для маршрутизації
+const router = express.Router();
+// створюємо сторінку записної книжки
+const contacts = require("../../models/contacts.json");
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.json(contacts)
+})
+ 
+router.get('/:contactId', async (req, res, next) => {
+  res.json(contacts[0])
 })
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
 router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' })
@@ -22,4 +25,4 @@ router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-module.exports = router
+module.exports = router;
