@@ -10,7 +10,7 @@ const listContacts = async () => {
   return JSON.parse(allContacts);
 };
 
-const getContactById = async (contactId) => {
+const getById = async (contactId) => {
   const allContacts = await listContacts();
   const contactById = allContacts.find((contact) => contact.id === contactId);
   return contactById || null;
@@ -60,7 +60,7 @@ const removeContact = async (contactId) => {
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   addContact,
   updateContact,
   removeContact,
