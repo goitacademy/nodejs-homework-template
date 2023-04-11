@@ -1,25 +1,14 @@
-const schemas = require("../controllers/contacts/validationSchema/contacts");
 const { HttpError } = require("../helpers");
 
-// Create a new contact validator
-const addValidator = (req, res, next) => {
-  const { error } = schemas.addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-  next();
+const validator = (schema) => {
+  const func = async (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      next(HttpError(400, error.message));
+    }
+    next();
+  };
+  return func;
 };
 
-// Update contact validator
-const updateValidator = (req, res, next) => {
-  const { error } = schemas.updateSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-  next();
-};
-
-module.exports = {
-  addValidator,
-  updateValidator,
-};
+module.exports = validator;

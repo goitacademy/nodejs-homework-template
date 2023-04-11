@@ -1,6 +1,7 @@
 const express = require("express");
 const contactsController = require("../../controllers/contacts/contacts.controller");
-const contactsValidator = require("../../middlewares/validator.middleware");
+const { validator } = require("../../middlewares/index");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get("/:contactId", contactsController.getById);
 // Create a new contact
 router.post(
   "/",
-  contactsValidator.addValidator,
+  validator(schemas.addSchema),
   contactsController.addNewContact
 );
 
@@ -23,8 +24,15 @@ router.delete("/:contactId", contactsController.deleteContact);
 // Update a contact
 router.put(
   "/:contactId",
-  contactsValidator.updateValidator,
+  validator(schemas.updateSchema),
   contactsController.updateContact
+);
+
+// Update contact status
+router.patch(
+  "/:contactId/favorite",
+  validator(schemas.updateContactStatus),
+  contactsController.updateStatusContact
 );
 
 module.exports = router;
