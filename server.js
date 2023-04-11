@@ -15,7 +15,7 @@ mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Server running. Use our API on port: 3001");
+      console.log("Server1 running. Use our API on port: 3001");
     });
   })
   .catch((error) => {
