@@ -6,7 +6,9 @@ const ctrl = require("../../controllers/contacts")
 
 const validateBody = require("../../middlewares/validateBody")
 
-const schema  = require("../../schemas/contacts");
+const schema  = require("../../schemas");
+
+console.log(schema)
 
 router.get('/', ctrl.getAll );
 
@@ -16,7 +18,7 @@ router.post('/',validateBody(schema.addSchema), ctrl.addContact);
 
 router.delete('/:contactId', ctrl.deleteContact);
 
-router.put('/:contactId', validateBody(schema.updateSchema), ctrl.updateContact );
+router.put('/:contactId',validateBody(schema.updateSchema), ctrl.updateContact );
 
 
 module.exports = router;

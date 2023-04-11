@@ -46,27 +46,16 @@ const deleteContact = async (req, res) => {
     
 }
 
-const updateContact =async (req, res, next) => {
-      try {
-          const keys = Object.keys(req.body);
-          if (keys.length === 0) {
-              throw HttpError(400, "missing fields");
-          }
-  
-          const { error } = updateSchema.validate(req.body);
-          if (error) {
-              throw HttpError(400, error.message)
-          }
-  
-          const { id } = req.params;
+const updateContact =async (req, res) => {
+     
+    
+          const { contactId } = req.params;
           const body = req.body
-          const result = await contacts.updateContact(id, body);
+          const result = await contacts.updateContact(contactId, body);
           res.json(result)
   
-      } catch (error) {
-          next(error)
-      }
-  }
+     
+}
 
 
 

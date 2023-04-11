@@ -12,4 +12,4 @@ const updateSchema =  Joi.object().keys({
   phone: Joi.string(),
 })
 
-module.exports = {addSchema, updateSchema}
+module.exports = {addSchema, updateSchema};
