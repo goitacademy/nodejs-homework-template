@@ -1,7 +1,9 @@
-const HttpError = require("./HttpError");
+const httpError = require("./httpError");
 const ctrlWrapper = require("./ctrlWrapper");
+const objectFieldsChecker = require("./objectFieldsChecker");
 
 module.exports = {
-  HttpError,
+  httpError,
   ctrlWrapper,
+  objectFieldsChecker,
 };
