@@ -1,4 +1,4 @@
-const { User } = require("../models/userModel");
+const User = require("../models/userModel");
 
 const bcrypt = require("bcrypt");
 
@@ -84,9 +84,32 @@ const logout = async (req, res, next) => {
   }
 };
 
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { subscription } = req.body;
+    const { _id } = req.user;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      { subscription },
+      { new: true }
+    );
+
+    res.status(200).json({
+      user: {
+        email: updatedUser.email,
+        subscription: updatedUser.subscription,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getCurrent,
   logout,
+  updateSubscription,
 };
