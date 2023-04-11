@@ -3,7 +3,6 @@ const path = require("path");
 const {nanoid} = require("nanoid");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
-console.log("contactsPath", contactsPath);
 
 async function listContacts() {
   try {
@@ -42,15 +41,13 @@ async function removeContact(contactId) {
   }
 }
 
-async function addContact(name, email, phone) {
+async function addContact(data) {
     try {
         const contacts = await listContacts();
         const newContact = {
             // yarn add nanoid@3.3.4
             id:nanoid(),
-            ...name, 
-            ...email, 
-            ...phone,
+            ...data,
         };
         contacts.push(newContact);
         await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
