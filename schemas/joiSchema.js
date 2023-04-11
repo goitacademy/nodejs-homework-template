@@ -17,4 +17,15 @@ const updateFavoriteSchema = Joi.object({
   favorite: Joi.bool().required(),
 });
 
-module.exports = { schema, schemaUpdate, updateFavoriteSchema };
+const registerSchema = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string().min(3).required(),
+  email: Joi.string().required(),
+});
+
+const loginSchema = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().min(3).required(),
+});
+
+module.exports = { schema, schemaUpdate, updateFavoriteSchema, registerSchema, loginSchema };
