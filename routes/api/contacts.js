@@ -12,11 +12,11 @@ router.get('/', ctrl.getAll );
 
 router.get('/:contactId',ctrl.getContact);
 
-router.post('/',validateBody(schema.joiSchema), ctrl.addContact);
+router.post('/',validateBody(schema.addSchema), ctrl.addContact);
 
 router.delete('/:contactId', ctrl.deleteContact);
 
-router.put('/:contactId', ctrl.updateContact );
+router.put('/:contactId', validateBody(schema.updateSchema), ctrl.updateContact );
 
 
 module.exports = router;
