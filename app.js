@@ -18,8 +18,14 @@ app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
+app.all("*", (req, res) => {
+  res.status(404).json({
+    msg: "Nothing founded",
+  });
+});
+
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  res.status(err.status || 500).json({ message: err.message });
 });
 
 module.exports = app;
