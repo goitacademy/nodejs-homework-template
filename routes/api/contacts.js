@@ -1,22 +1,38 @@
 const express = require("express");
-
-const getContacts = require("../../controllers/getContacts");
-const createContact = require("../../controllers/createContact");
-const deleteContact = require("../../controllers/deleteContact");
-const changeContact = require("../../controllers/changeContact");
-const checkByID = require("../../controllers/checkByID");
-const checkMid = require("../../middlewares/checkMid");
+const {
+  validation,
+  controllerShell,
+  IdValidation,
+} = require("../../middlewares");
+const { schemas } = require("../../models");
+const { contacts: controller } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", getContacts);
+router.get("/", controllerShell(controller.getContacts));
 
-router.get("/:id", checkMid, checkByID);
+router.get("/:id", IdValidation, controllerShell(controller.checkByID));
 
-router.post("/", createContact);
+router.post(
+  "/",
+  validation(schemas.contactsSchema),
+  controllerShell(controller.createContact)
+);
 
-router.delete("/:id", checkMid, deleteContact);
+router.delete("/:id", IdValidation, controllerShell(controller.deleteContact));
 
-router.put("/:id", checkMid, changeContact);
+router.put(
+  "/:id",
+  IdValidation,
+  validation(schemas.updateAfterChangeContact),
+  controllerShell(controller.changeContact)
+);
+
+router.patch(
+  "/:id/favorite",
+  IdValidation,
+  validation(schemas.favoriteSchema),
+  controllerShell(controller.updateFavoriteContact)
+);
 
 module.exports = router;

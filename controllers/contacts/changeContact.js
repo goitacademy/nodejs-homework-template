@@ -1,0 +1,15 @@
+const { Contact } = require("../../models");
+const { RequestError } = require("../../services");
+
+const changeContact = async (req, res) => {
+  const { id } = req.params;
+  const data = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
+  if (!data) {
+    throw RequestError(404, `id ${id} not found`);
+  }
+
+  res.status(200).json(data);
+};
+
+module.exports = changeContact;
