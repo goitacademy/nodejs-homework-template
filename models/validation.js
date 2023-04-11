@@ -9,5 +9,4 @@ function validation(schema) {
     next();
   };
 }
-
 module.exports = validation;

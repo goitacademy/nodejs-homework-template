@@ -12,5 +12,4 @@ const contactsSchema = Joi.object({
     .length(14)
     .required(),
 });
-
 module.exports = contactsSchema;
