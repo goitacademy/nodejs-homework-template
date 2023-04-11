@@ -9,13 +9,20 @@ const getAll = async (req, res) => {
 };
 
 // Get a single contact by id
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
-  if (!result) {
-    throw HttpError(404);
+  try {
+    const result = await Contact.findById(contactId);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    if (error.name === "CastError") {
+      return next(HttpError(404));
+    }
+    next(error);
   }
-  res.json(result);
 };
 
 // Create a new contact
