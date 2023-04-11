@@ -18,7 +18,7 @@ app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, req, res, next) => {app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {
   if (err.status) {
     return res.status(err.status).json({ message: err.message });
   }
@@ -30,4 +30,4 @@ app.use((err, req, res, next) => {app.use((err, req, res, next) => {
   return res.status(500).json({ message: "Internal error message" });
 });
 
-module.exports = app;
+module.exports = { app };
