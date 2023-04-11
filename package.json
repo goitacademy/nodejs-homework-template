@@ -16,7 +16,7 @@
     "mongoose": "^7.0.3",
     "morgan": "1.10.0",
     "nanoid": "^3.3.4",
-    "node": "14.20.1",
+    "node": ">=14 <15",
     "yarn": "^1.22.19"
   },
   "devDependencies": {
@@ -28,4 +28,5 @@
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
   }
+  
 }
