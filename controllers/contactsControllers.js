@@ -1,39 +1,29 @@
 const { Contact } = require("../models/contact");
+const { ctrlWrapper } = require("../helpers");
+// const { HttpError } = require("../helpers");
 
 const getAllContacts = async (req, res, next) => {
-  try {
-    const result = await Contact.find();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await Contact.find();
+  res.json(result);
 };
 
 const addContact = async (req, res, next) => {
-  try {
-    const result = await Contact.create(req.body);
-    if (!result) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
+  const result = await Contact.create(req.body);
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
+  res.status(201).json(result);
 };
 
 const getContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await Contact.findById(contactId);
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-    res.status(200).json(contact);
-  } catch (error) {
-    next(res.status(404).json({ message: "Not found" }));
+  const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
+  if (!contact) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
+  res.status(200).json(contact);
 };
 
 const updateContactById = async (req, res, next) => {
@@ -80,10 +70,10 @@ const deleteContact = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllContacts,
-  updateStatusContact,
-  getContactById,
-  addContact,
-  updateContactById,
-  deleteContact,
+  getAllContacts: ctrlWrapper(getAllContacts),
+  addContact: ctrlWrapper(addContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
+  getContactById: ctrlWrapper(getContactById),
+  updateContactById: ctrlWrapper(updateContactById),
+  deleteContact: ctrlWrapper(deleteContact),
 };

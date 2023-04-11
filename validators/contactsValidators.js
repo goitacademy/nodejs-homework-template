@@ -1,9 +1,10 @@
 const { schemas } = require("../models/contact");
+const { HttpError } = require("../helpers");
 
 const validateAddContact = (req, res, next) => {
-  if (!Object.keys(req.body).length)
-    return res.status(400).json({ message: "missing fields" });
-  const { error } = schemas.addSchema.validate(req.body);
+  const { error } = schemas.addSchema.validate(req.body, {
+    abortEarly: false,
+  });
 
   if (error) {
     const missingField = error.details[0].context.key;
@@ -15,24 +16,19 @@ const validateAddContact = (req, res, next) => {
 };
 
 const validateUpdContact = (req, res, next) => {
-  if (!Object.keys(req.body).length)
-    return res.status(400).json({ message: "missing fields" });
+  if (!Object.keys(req.body).length) throw HttpError(400, "missing fields");
 
-  const { error } = schemas.addSchemaUpd.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
+  const { error } = schemas.addSchemaUpd.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) throw HttpError(400, error.details[0].message);
 
   next();
 };
 
 const validateUpdStatusContact = (req, res, next) => {
-  // if (!Object.keys(req.body).length)
-  //   return res.status(400).json({ message: "missing field favorite" });
   const { error } = schemas.updateFavoriteSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: "missing field favorite" });
-  }
+  if (error) throw HttpError(400, "missing field favorite");
   next();
 };
 
