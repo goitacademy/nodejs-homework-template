@@ -16,6 +16,6 @@ router.post("/", validateBody(schema.contactsAddSchema), contactsController.addC
 
 router.delete("/:id", contactsController.deleteContact);
 
-router.put("/:id", contactsController.updateContact);
+router.put("/:id", validateBody(schema.contactsPutSchema), contactsController.updateContact);
 
 module.exports = router;
