@@ -14,7 +14,9 @@ const {
   favoriteValidationSchema,
 } = require("../../models/user");
 
-router.get("/", async (req, res) => {
+const auth = require("../../auth/auth");
+
+router.get("/", auth, async (req, res) => {
   try {
     const users = await listContacts();
     res.status(200).json(users);
@@ -23,7 +25,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await getContactById(id);
@@ -36,7 +38,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
@@ -52,7 +54,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = userValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -66,7 +68,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", auth, (req, res) => {
   const { id } = req.params;
   console.log(id);
   if (!id) {
@@ -90,7 +92,7 @@ router.put("/:id", (req, res) => {
   }
 });
 
-router.patch("/:id/favorite", (req, res) => {
+router.patch("/:id/favorite", auth, (req, res) => {
   const { id } = req.params;
   if (!req.body) {
     return res.status(400).send("Missing favorite");

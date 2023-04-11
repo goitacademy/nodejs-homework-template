@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
-const dbpath =
-  "mongodb+srv://admin:hLmJx7Vx2RWpFXr6@cluster0.cxlpqra.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const dbpath = process.env.MONGO_SECRET;
+
+if (!dbpath) {
+  throw "No dbSecret";
+}
 
 const connectDatabase = async () => {
   await mongoose

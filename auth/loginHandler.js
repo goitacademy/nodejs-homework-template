@@ -1,27 +1,26 @@
 const bcrypt = require("bcrypt");
 
-const { checkEmail } = require("../models/user");
+const { checkEmail, checkUserByIdAndUpdate } = require("../models/user");
+const issueToken = require("./issueToken");
 
 const loginHandler = async (email, incomingPassword) => {
   const user = await checkEmail({ email });
 
-  if (incomingPassword === user.password) {
-    console.log("Hasła ok");
-  } else {
-    console.log("Hasła złe");
+  if (user === null) {
+    return res.status(404).send("User not found");
   }
-
-  if (!user) {
-    throw "User not found";
-  }
-
   const userPassword = user.password;
+  const result = bcrypt.compareSync(incomingPassword, userPassword);
+  if (result) {
+    const token = issueToken(user);
+    const findAndUpdate = await checkUserByIdAndUpdate(user.id, {
+      token: token,
+    });
 
-  const result = bcrypt.compareSync(incomingPassword, user.password);
-
-  console.log(result);
-
-  return result;
+    return token;
+  } else {
+    return res.status(401).send("Invalid credentials");
+  }
 };
 
 module.exports = loginHandler;

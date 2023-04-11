@@ -9,6 +9,9 @@ const {
 
 const { registrationSchema } = require("../../models/validation");
 
+const auth = require("../../auth/auth");
+const { checkUserById } = require("../../models/user");
+
 routerRegister.post("/", async (req, res) => {
   const { error } = registrationSchema.validate(req.body);
   if (error) {
@@ -30,7 +33,7 @@ routerRegister.post("/", async (req, res) => {
   }
 });
 
-routerRegister.get("/", async (req, res) => {
+routerRegister.get("/", auth, async (req, res) => {
   try {
     const users = await listContact();
     res.status(200).json(users);
@@ -39,7 +42,7 @@ routerRegister.get("/", async (req, res) => {
   }
 });
 
-routerRegister.get("/email", async (req, res) => {
+routerRegister.get("/email", auth, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -47,6 +50,23 @@ routerRegister.get("/email", async (req, res) => {
     res.status(200).json(users);
   } catch {
     return res.status(500).send("Something went wrong");
+  }
+});
+
+routerRegister.get("/current", auth, async (req, res) => {
+  try {
+    const id = req.user.id;
+
+    const users = await checkUserById(id);
+
+    const payload = {
+      email: users.email,
+      subscription: users.subscription,
+    };
+
+    res.status(200).json(payload);
+  } catch {
+    return res.status(401).send("Not authorized");
   }
 });
 
