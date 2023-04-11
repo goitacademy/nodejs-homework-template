@@ -9,7 +9,7 @@ router.get('/', async (req, res, next) => {
 })
  
 router.get('/:contactId', async (req, res, next) => {
-  res.json(contacts[0])
+  res.json(contacts[1])
 })
 
 
