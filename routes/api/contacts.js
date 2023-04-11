@@ -1,25 +1,59 @@
-const express = require('express')
+import express from 'express';
+import { listContacts, getContactById, removeContact, addContact, updateContact } from '../../db/contacts.js';
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+    const contacts = await listContacts();
+    res.json(contacts);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', async (req, res, next) => {
+  try {
+    const contact = await getContactById(req.params.id);
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    await removeContact(req.params.id);
+    res.status(200).json({ message: 'Contact deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+    const newContact = await addContact(req.body);
+    res.json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch('/:id', async (req, res, next) => {
+  const contactId = req.params.id;
+  const body = req.body;
+  try {
+    const updatedContact = await updateContact(contactId, body);
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+export default router;
 
-module.exports = router
+
+
+
