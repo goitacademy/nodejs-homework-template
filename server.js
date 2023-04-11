@@ -1,7 +1,8 @@
-const app = require("./app");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+mongoose.set("debug", true);
+const app = require("./app");
 
+const dotenv = require("dotenv");
 dotenv.config();
 
 const { HOST_URI } = process.env;

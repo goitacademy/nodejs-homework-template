@@ -22,10 +22,12 @@ app.use((err, req, res, next) => {
   if (err.status) {
     return res.status(err.status).json({ message: err.message });
   }
-
+  if (err.message.includes("Cast to ObjectId failed for value")) {
+    return res.status(400).json({ message: "ID is invalid" });
+  }
   console.error("API Error", err.message);
 
-  res.status(500).json({ message: "Internal error message" });
+  return res.status(500).json({ message: "Internal error message" });
 });
 
 module.exports = app;

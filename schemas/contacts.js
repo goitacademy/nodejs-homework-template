@@ -1,9 +1,16 @@
 const Joi = require("joi");
+const { HttpError } = require("../helpers");
 
 const addContactSchema = Joi.object({
-  name: Joi.string().min(3).required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string()
+    .required()
+    .error(HttpError(400, "missing required name field")),
+  email: Joi.string()
+    .required()
+    .error(HttpError(400, "missing required email field")),
+  phone: Joi.string()
+    .required()
+    .error(HttpError(400, "missing required phone field")),
 });
 
 module.exports = { addContactSchema };
