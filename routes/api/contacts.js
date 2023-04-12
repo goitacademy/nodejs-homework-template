@@ -43,7 +43,7 @@ const putSchema = Joi.object({
       "string.empty": "'phone' must contain value",
       "any.required": "missing required field 'phone'",
     }),
-}).or("name", "email", "phone");;
+}).or("name", "email", "phone");
 
 const contacts = require("../../models/contacts");
 
@@ -90,7 +90,7 @@ router.delete("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not Found");
     }
-    res.json({message:"Delete success contact", result});
+    res.json({ message: "Delete success contact", result });
   } catch (error) {
     next(error);
   }
@@ -102,13 +102,9 @@ router.put("/:contactId", async (req, res, next) => {
     if (error) {
       throw HttpError(404, error.message);
     }
+
     const id = req.params.contactId;
     const result = await contacts.updateContact(id, req.body);
-    // console.log('====================================');
-    // console.log("id put", id, req.body);
-    // console.log('====================================');
-    // console.log("result put", result);
-    
     if (!result) {
       throw HttpError(404, "Not Found");
     }

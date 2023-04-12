@@ -60,21 +60,15 @@
     "phone": "322-22-22"
   },
   {
-    "id": "jTNJyFdFlt78LSubRjsx4",
+    "contactId": "jTNJyFdFlt78LSubRjsx4",
     "name": "Alona",
-    " email": "myshko@mail.com",
-    "phone": "(093) 522-45-90"
+    "email": "myshko@mail.com",
+    "phone": "(000)00-00-000"
   },
   {
-    "id": "6heyyNROETyWF0TXRWK08",
-    "name": "Alona Myshko",
-    " email": "alona@mail.com",
-    "phone": "(093) 52-24-590"
-  },
-  {
-    "contactId": "SdFBuKljeSGa8rvSkniMP",
-    "name": "Bogdan",
-    "email": "bogdan@mail.com",
-    "phone": "(093)52-24-590"
+    "id": "nupVd4H331UgKJOMplcJW",
+    "name": "Allen Raymond",
+    "email": "a@mail.com",
+    "phone": "(083)52-24-000"
   }
 ]
