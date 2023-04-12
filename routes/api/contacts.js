@@ -16,8 +16,8 @@ const addShema = Joi.object({
 		.messages({
 			"any.required": `"email" is required`,
 		}),
-	phone: Joi.string().required().messages({
-		"any.required": `"email" is required`,
+	phone: Joi.string().min(1).max(15).required().messages({
+		"any.required": `"phone" is required`,
 	}),
 });
 
