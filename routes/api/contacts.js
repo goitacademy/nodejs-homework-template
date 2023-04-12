@@ -1,75 +1,24 @@
 const express = require('express')
-const contactsAPI = require('../../models/contacts')
-const Joi = require('joi')
+const { schemas } = require('../../models/contacts')
+const validateBody = require('../../utils/validateBody')
 
+const ctrl = require('../../controllers/contacts-controllers')
 const contactsRouter = express.Router()
 
-const contactSchema = Joi.object({
-	name: Joi.string().required(),
-	email: Joi.string().required(),
-	phone: Joi.string().required(),
-})
+contactsRouter.get('/', ctrl.listContacts)
 
-contactsRouter.get('/', async (req, res, next) => {
-	const contactsList = await contactsAPI.listContacts()
-	res.json(contactsList)
-})
+contactsRouter.post('/', validateBody(schemas.addSchema), ctrl.addContact)
 
-contactsRouter.get('/:contactId', async (req, res, next) => {
-	try {
-		const id = req.params.contactId
-		const contact = await contactsAPI.getContactById(id)
-		if (!contact) {
-			return res.status(404).json({ message: 'Not found' })
-		}
-		res.json(contact)
-	} catch (error) {
-		next(error)
-	}
-})
+contactsRouter.get('/:contactId', ctrl.getContactById)
 
-contactsRouter.post('/', async (req, res, next) => {
-	try {
-		const { error } = contactSchema.validate(req.body)
-		if (error) {
-			return res.status(400).json({ message: error.message })
-		}
-		const newContact = await contactsAPI.addContact(req.body)
-		res.status(201).json(newContact)
-	} catch (error) {
-		next(error)
-	}
-})
+contactsRouter.delete('/:contactId', ctrl.removeContact)
 
-contactsRouter.delete('/:contactId', async (req, res, next) => {
-	try {
-		const id = req.params.contactId
-		const contact = await contactsAPI.removeContact(id)
-		if (!contact) {
-			return res.status(404).json({ message: 'Not found' })
-		}
-		res.json({ message: 'contact deleted' })
-	} catch (error) {
-		next(error)
-	}
-})
+contactsRouter.put('/:contactId', validateBody(schemas.addSchema), ctrl.updateContact)
 
-contactsRouter.put('/:contactId', async (req, res, next) => {
-	try {
-		const id = req.params.contactId
-		const contact = req.body
-		const { error } = contactSchema.validate(req.body)
-		if (error) {
-			return res.status(400).json({ message: error.message })
-		}
-		const updatedContact = await contactsAPI.updateContact(id, contact)
-		if (!updatedContact) {
-			return res.status(404).json({ message: 'Not found' })
-		}
-		res.json(updatedContact)
-	} catch (error) {
-		next(error)
-	}
-})
+contactsRouter.patch(
+	'/:contactId/favorite',
+	validateBody(schemas.updateFavoriteSchema),
+	ctrl.updateStatusContact
+)
 
 module.exports = contactsRouter
