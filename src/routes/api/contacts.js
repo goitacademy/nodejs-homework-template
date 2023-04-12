@@ -42,7 +42,7 @@ router.post("/", async (req, res, next) => {
     if (validationResult.error) {
       throw HttpError(400, `missing required name field`);
     }
-    const result = await contacts.removeContact(req.body);
+    const result = await contacts.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);

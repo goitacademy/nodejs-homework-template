@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join(__dirname, "../db", "contacts.json");
 
 // TODO: задокументувати кожну функцію
 const listContacts = async () => {
@@ -16,15 +16,15 @@ const getById = async (contactId) => {
   return contactById || null;
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   // дістаємо всі контакти
   const allContacts = await listContacts();
   // створюємо новий контакт
   const newContact = {
     id: nanoid(),
-    name,
-    email,
-    phone,
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
   };
   // пушимо в контакти новий контакт
   allContacts.push(newContact);
