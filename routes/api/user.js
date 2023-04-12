@@ -5,14 +5,16 @@ const {
   registerContact,
   listContact,
   checkEmail,
+  checkUserById,
+  checkUserByIdAndUpdate,
 } = require("../../models/user");
 
+const loginHandler = require("../../auth/loginHandler");
 const { registrationSchema } = require("../../models/validation");
 
 const auth = require("../../auth/auth");
-const { checkUserById } = require("../../models/user");
 
-routerRegister.post("/", async (req, res) => {
+routerRegister.post("/signup", async (req, res) => {
   const { error } = registrationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -33,7 +35,7 @@ routerRegister.post("/", async (req, res) => {
   }
 });
 
-routerRegister.get("/", auth, async (req, res) => {
+routerRegister.get("/signup", auth, async (req, res) => {
   try {
     const users = await listContact();
     res.status(200).json(users);
@@ -42,7 +44,7 @@ routerRegister.get("/", auth, async (req, res) => {
   }
 });
 
-routerRegister.get("/email", auth, async (req, res) => {
+routerRegister.get("/signup/email", auth, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -67,6 +69,45 @@ routerRegister.get("/current", auth, async (req, res) => {
     res.status(200).json(payload);
   } catch {
     return res.status(401).send("Not authorized");
+  }
+});
+
+routerRegister.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const { error } = registrationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  try {
+    const token = await loginHandler(email, password);
+    if (token) {
+      return res.status(200).send(token);
+    } else {
+      return res.status(401).send("Wrong user credentials");
+    }
+  } catch (err) {
+    return res.status(404).send(err);
+  }
+});
+
+routerRegister.get("/logout", auth, async (req, res) => {
+  if (req.headers && req.headers.authorization) {
+    const token = req.headers.authorization.split(" ");
+    if (!token) {
+      res.status(401).send("Not authorized");
+    }
+
+    const tokens = req.user.token;
+    if (tokens !== token) {
+      const newToken = tokens;
+      await checkUserByIdAndUpdate(req.user.id, { token: newToken });
+      res.status(204).send("No content");
+    } else if (tokens === token) {
+      const newToken = null;
+      await checkUserByIdAndUpdate(req.user.id, { token: newToken });
+      res.status(204).send("No content");
+    } else res.status(401).send("Not authorized");
   }
 });
 
