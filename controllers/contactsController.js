@@ -3,7 +3,7 @@ const {listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact} =require("../../../models/contacts");
+  updateContact} =require("../models/contacts");
 
 // const {contactValidation,putContactValidation} = require ("../../../validationSchema/validation")
 

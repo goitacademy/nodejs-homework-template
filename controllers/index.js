@@ -1,5 +1,3 @@
 const contactsCtrl = require('./contactsController');
 
-module.exports = {
-    contactsCtrl,
-};
+module.exports =  contactsCtrl;
