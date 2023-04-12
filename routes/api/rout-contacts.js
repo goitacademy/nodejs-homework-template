@@ -17,7 +17,7 @@ const {
   validateUpdateStatusContact,
 } = require("../../middleware");
 
-const isValidId = require("../../helpers/validatinId");
+const isValidId = require("../../middleware/validateId");
 router.get("/", getContacts);
 
 router.get("/:id", isValidId, getContact);
