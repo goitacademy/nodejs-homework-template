@@ -12,7 +12,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({ message: validationResult.error });
+      return res.status(400).json({ message: `missing required ${validationResult.error}field`});
     }
 
     next();
@@ -28,7 +28,7 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({ message: validationResult.error });
+      return res.status(400).json({ message: "missing fields" });
     }
     next();
   },
