@@ -61,7 +61,7 @@ const updateFavoriteById = async (req, res) => {
     { new: true }
   );
   if (error) {
-    throw new AppError(400, "missing field favorite");
+    throw new AppError(400, "Missing field favorite");
   }
   if (!result) {
     throw HttpError(404, "Not found");
