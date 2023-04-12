@@ -1,7 +1,7 @@
 const { connectMongo } = require("./src/database/connections");
 const app = require("./src/app");
 require("dotenv").config();
-//123Qweasdyxc
+
 
 const PORT = process.env.PORT || 8081;
 const start = async () => {
