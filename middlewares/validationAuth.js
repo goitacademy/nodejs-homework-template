@@ -3,8 +3,9 @@ const validationAuth = (schema) => {
     const { error } = schema.validate(req.body);
 
     if (req.method === "POST" && error) {
+      const missingField = error.details[0].path[0];
       res.status(400).json({
-        message: `Помилка від Joi або іншої бібліотеки валідації`,
+        message: `missing required ${missingField} field`,
       });
       return;
     }
