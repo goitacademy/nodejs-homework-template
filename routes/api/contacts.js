@@ -1,25 +1,27 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const {
+  getAllContacts,
+  getById,
+  addContact,
+  updateById,
+  deleteById,
+} = require("../../controllers");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const bodyValidator = require("../../middlewares/bodyValidator");
+const addBodyValidator = require("../../middlewares/addBodyValidator");
+const { addSchema, changeSchema } = require("../../schemas/contactsSchema");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getAllContacts);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", addBodyValidator(addSchema), addContact);
 
-module.exports = router
+router.put("/:contactId", bodyValidator(changeSchema), updateById);
+
+router.delete("/:contactId", deleteById);
+
+module.exports = router;
