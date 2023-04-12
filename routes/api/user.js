@@ -1,12 +1,13 @@
 const express = require("express");
 const routerRegister = express.Router();
 
+
 const {
   registerContact,
   listContact,
   checkEmail,
   checkUserById,
-  checkUserByIdAndUpdate,
+  checkUserByIdAndUpdate
 } = require("../../models/user");
 
 const loginHandler = require("../../auth/loginHandler");
@@ -110,5 +111,7 @@ routerRegister.get("/logout", auth, async (req, res) => {
     } else res.status(401).send("Not authorized");
   }
 });
+
+
 
 module.exports = routerRegister;
