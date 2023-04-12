@@ -1,14 +1,15 @@
 const { json } = require('express')
 const express = require('express')
+const { ContactModel } = require('../../database/models/contacts.models')
 
 const router = express.Router()
 const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../models/contacts')
-const { addContactSchema } = require('../../shemas/add-contact.shema')
-const { updateContactSchema } = require('../../shemas/update-contact.schema')
+const { addContactSchema, updateContactSchema } = require('../../shemas')
+
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await listContacts()
+    const contacts = await ContactModel.find()
     res.json({ message: 'Here is all contacts', contacts, })
     res.status(200)
   } catch {
@@ -17,8 +18,9 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
+  const id = req.params.contactId
   try {
-    const contact = await getContactById(req.params.contactId)
+    const contact = await ContactModel.findOne({ _id: id })
     if (!contact) {
       res.status(404)
       res.json({ message: 'Not found' })
@@ -32,37 +34,52 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const body = req.body
-  const { name, email, phone } = body
-  const valid = addContactSchema.validate({ name, email, phone })
-  if (valid.error) {
-  res.status(400).json({message: "missing required name field", error: valid.error});
-} else {
-    await addContact(body)
+  try {
+    const { name, email, phone } = req.body
+  
+    const newContact = await ContactModel.create({ name, email, phone })
     res.status(200).json({ message: "Your contact was successfully added" })
-}
+  } catch {
+    next(error)
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  const isSuccess = await removeContact(req.params.contactId)
-  if (isSuccess === true) {
-  res.status(200).json({message: "contact deleted"})
+  const id = req.params.contactId
+  const delContact = await ContactModel.findByIdAndRemove({ _id: id })
+  if (delContact) {
+  res.status(200).json({message: "contact deleted", delContact})
   } else {
     res.status(404).json({message: "Not found"})
   }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  const contactId = req.params.contactId
+  const id = req.params.contactId
   const body = req.body
   const { name, email, phone } = body
-  const valid = updateContactSchema.validate({ name, email, phone })
   if (!body) {
     res.status(404).json({ message: "missing fields" })
   } else {
-    const isSuccess = await updateContact(contactId, body)
-    if (isSuccess === true) {
+    const isSuccess = await ContactModel.findByIdAndUpdate({ _id: id }, { name, email, phone }, { new: true });
+    if (isSuccess) {
       res.status(200).json({ message: "contact updated" })
+    } else {
+      res.status(404).json({ message: "Not found" })
+    }
+  }
+})
+
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const id = req.params.contactId
+  const body = req.body
+  const { favorite } = body
+  if (!body) {
+    res.status(404).json({ message: "missing fields favorite" })
+  } else {
+    const changedContact = await ContactModel.findByIdAndUpdate({ _id: id }, { favorite }, { new: true });
+    if (changedContact) {
+      res.status(200).json({ message: "Now is favorite", changedContact})
     } else {
       res.status(404).json({ message: "Not found" })
     }
