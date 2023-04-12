@@ -1,7 +1,7 @@
 const express = require("express");
 
 //імпортуємо контроллери з окремого файлу який ми створили і винесли їх туди
-const ctrl = require("../../controllers/contacts-controllers");
+const ctrl = require("../../controllers/contacts/");
 
 const { validateBody } = require("../../utils");
 
