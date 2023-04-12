@@ -1,5 +1,5 @@
 const httpError = require("../helpers/httpError");
-const objectFieldsChecker = require("../helpers/objectFieldsChecker");
+const { objectFieldsChecker } = require("../helpers");
 const addBodyValidator = (schema) => {
 	const valid = (req, res, next) => {
 		const { error } = schema.validate(req.body);
