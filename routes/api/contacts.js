@@ -10,12 +10,12 @@ const schema = require("../../schema/contacts")
 
 router.get("/", contactsController.getAllContacts);
 
-router.get("/:id", contactsController.getContactById);
+// router.get("/:id", contactsController.getContactById);
 
-router.post("/", validateBody(schema.contactsAddSchema), contactsController.addContact);
+// router.post("/", validateBody(schema.contactsAddSchema), contactsController.addContact);
 
-router.delete("/:id", contactsController.deleteContact);
+// router.delete("/:id", contactsController.deleteContact);
 
-router.put("/:id", validateBody(schema.contactsPutSchema), contactsController.updateContact);
+// router.put("/:id", validateBody(schema.contactsPutSchema), contactsController.updateContact);
 
 module.exports = router;
