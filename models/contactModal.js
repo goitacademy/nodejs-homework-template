@@ -22,7 +22,15 @@ const contactSchema = new mongoose.Schema({
           },
           avatarURL : { 
             type: String
-          }
+          },
+          verify: {
+            type: Boolean,
+            default: false,
+          },
+          verificationToken: {
+            type: String,
+            // required: [true, 'Verify token is required'],
+          },
 });
 contactSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10)
