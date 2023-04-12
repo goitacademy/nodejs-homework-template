@@ -27,9 +27,11 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.getById(contactId);
+
     if (!result) {
       throw HttpError(404, `Not found`);
     }
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -53,9 +55,11 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
+
     if (!result) {
       throw HttpError(404, "Not found");
     }
+
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);
@@ -64,15 +68,19 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    const { contactId } = req.params;
+
     const validationResult = addSchema.validate(req.body);
     if (validationResult.error) {
       throw HttpError(400, `missing required name field`);
     }
-    const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId);
+
+    const result = await contacts.updateContact(contactId, req.body);
+
     if (!result) {
       throw HttpError(404, "Not found");
     }
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
