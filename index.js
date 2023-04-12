@@ -17,16 +17,25 @@ async function invokeAction({ action, id, name, email, phone }) {
       return console.log(allContacts);
 
     case "get":
-        const contactById = await contacts.getContactById(id);
-        return console.log(contactById);
+      const contactById = await contacts.getContactById(id);
+      return console.log(contactById);
 
     case "add":
-        const newContact = await contacts.addContact({name, email, phone});
-        return console.log(newContact);
+      const newContact = await contacts.addContact({ name, email, phone });
+      return console.log(newContact);
 
     case "remove":
-        const spliceContacts = await contacts.removeContact(id);
-        return console.log(spliceContacts);
+      const spliceContacts = await contacts.removeContact(id);
+      return console.log(spliceContacts);
+
+    case "update":
+      const updateContact = await contacts.updateContact({
+        id,
+        name,
+        email,
+        phone,
+      });
+      return console.log(updateContact);
 
     default:
       console.warn("\x1B[31m Unknown action type!");
@@ -46,4 +55,3 @@ program.parse(process.argv);
 const argv = program.opts();
 
 invokeAction(argv);
-
