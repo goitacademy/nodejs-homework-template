@@ -1,5 +1,5 @@
 const objectFieldsChecker = (object) => {
-	const FIELDS = ["name", "email", "phone"];
+	const FIELDS = ["name", "email", "phone", "favorite"];
 	const allowFields = FIELDS.filter((field) => object[field] === undefined);
 	if (allowFields.length > 1) {
 		return `missing required ${allowFields.join(", ")} fields`;
