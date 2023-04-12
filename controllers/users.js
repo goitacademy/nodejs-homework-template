@@ -10,7 +10,7 @@ const signUp = async (req, res, next) => {
   const { error } = await validateUser({ email, password })
   if (error) {
     console.log(error)
-    return res.json({ status: 400, msg: 'Missing fields' })
+    return res.status(400).json({ status: 400, msg: 'Missing fields' })
   }
 
   if (user) {
