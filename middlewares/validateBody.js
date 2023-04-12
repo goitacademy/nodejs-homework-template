@@ -7,7 +7,7 @@ const isBody = (req, res, next) => {
     }
     next(HttpError(400, "Missing fields"));
   }
-  if (!Object.keys(req.body).includes("favorite")) {
+  if ((req.method !== "PUT") & !Object.keys(req.body).includes("favorite")) {
     next(HttpError(400, "Missing field <favorite>"));
   }
   next();
@@ -20,17 +20,18 @@ const validateBody = schema => {
     if (error) {
       console.log(error);
       const fields = [];
-      const patchFields = [];
+      const fieldsToPatch = [];
       error.details.map(el => {
         if (el.context.label !== "value") {
           fields.push(el.context.label);
         }
         if (el.context.label !== "favorite") {
-          patchFields.push(el.context.label);
+          fieldsToPatch.push(el.context.label);
         }
         return null;
       });
       const errorFields = fields.join(", ");
+      const patchFields = fieldsToPatch.join(", ");
       const isPluralError = fields.length > 1 ? "s" : "";
       const isPluralPatchError = patchFields.length > 1 ? "s" : "";
       const errorMessage = () => {
