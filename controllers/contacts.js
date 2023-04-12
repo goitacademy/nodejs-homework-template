@@ -5,7 +5,7 @@ const { ctrlWrapper } = require('../helpers');
 
 const getContacts = async (req, res) => {
       const result = await contacts.listContacts()
-      res.json(result)
+      return res.status(200).json(result);
 }
 
 const getById = async (req, res) => {
@@ -14,12 +14,12 @@ const getById = async (req, res) => {
     if (!result) {
       throw HttpError(404, 'Not found');
     }
-    res.json(result);
+    return res.status(200).json(result);
 }
 
 const add =  async (req, res) => {
-   const result = await contacts.addContact(req.body);
-   res.status(201).json(result);
+  const result = await contacts.addContact(req.body);
+   return res.status(201).json(result);
 }
 
 const updateById = async (req, res) => {
@@ -27,8 +27,11 @@ const updateById = async (req, res) => {
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
       throw HttpError(404, 'Not found');
-    }
-    res.json(result);
+  }
+    if (!Object.keys(req.body).length) {
+    throw HttpError(400, "Missing fields");
+  }
+    return res.json(result);
 }
 
 const deleteByID = async (req, res) => {
@@ -37,7 +40,7 @@ const deleteByID = async (req, res) => {
     if (!result) {
       throw HttpError(404, 'Not found');
     }
-    res.status(200).json({message: 'Contact deleted'});
+    return res.status(200).json({message: 'Contact deleted'});
 }
 
 module.exports = {
