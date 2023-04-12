@@ -1,6 +1,7 @@
-const fs = require('fs/promises');
+const fs = require("fs/promises");
 const path = require("path");
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
+const { log } = require("console");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 
@@ -30,6 +31,7 @@ async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
     const index = contacts.findIndex((contact) => contact.id === contactId);
+    console.log("====>", index);
     if (index === -1) {
       return null;
     }
@@ -42,33 +44,33 @@ async function removeContact(contactId) {
 }
 
 async function addContact(data) {
-    try {
-        const contacts = await listContacts();
-        const newContact = {
-            // yarn add nanoid@3.3.4
-            id:nanoid(),
-            ...data,
-        };
-        contacts.push(newContact);
-        await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-        return newContact;
-      } catch (error) {
-        console.log(error);
-      }
+  try {
+    const contacts = await listContacts();
+    const newContact = {
+      // yarn add nanoid@3.3.4
+      id: nanoid(),
+      ...data,
+    };
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  } catch (error) {
+    console.log(error);
+  }
 }
-  
+
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex(({ id }) => id === contactId);
+  console.log("updateContact id", index);
+
   if (index === -1) {
     return null;
   }
-  console.log('====================================');
-  console.log("updateContact id", index);
-  console.log('updateContact=====>', contactId);
-  contacts[index]={contactId, ...body}
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
+  contacts[index] = { contactId, ...body };
+
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
 
@@ -78,4 +80,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
+
+updateContact("SdFBuKljeSGa8rvSkniMP");
