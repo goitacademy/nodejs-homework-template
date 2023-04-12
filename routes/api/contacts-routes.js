@@ -1,11 +1,11 @@
 const express = require("express");
 
 //імпортуємо контроллери з окремого файлу який ми створили і винесли їх туди
-const ctrl = require("../../controllers/contacts-controllers");
+const ctrl = require("../../controllers/contacts/");
 
 const { validateBody } = require("../../utils");
 
-const schemas = require("../../schemas/contacts");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
@@ -14,6 +14,12 @@ router.get("/", ctrl.getAllContacts);
 router.get("/:contactId", ctrl.getContactById);
 
 router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
+
+router.patch(
+  "/:contactId/favorite",
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateStatusContact
+);
 
 router.delete("/:contactId", ctrl.deleteContact);
 
