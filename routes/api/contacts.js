@@ -5,17 +5,26 @@ const {
   add,
   removeById,
   updateById,
-} = require("../../controllers/contacts");
+} = require("../../controllers/index");
+const validateBody = require("../../middlewares/validateBody");
+const {
+  addingSchema,
+  updatingSchema,
+} = require("../../schemas/contactsSchema");
 const router = express.Router();
 
 router.get("/", getList);
 
 router.get("/:contactId", getById);
 
-router.post("/", add);
+router.post("/", validateBody(addingSchema, 400), add);
 
 router.delete("/:contactId", removeById);
 
-router.put("/:contactId", updateById);
+router.put(
+  "/:contactId",
+  validateBody(updatingSchema, 400, "missing fields"),
+  updateById
+);
 
 module.exports = router;
