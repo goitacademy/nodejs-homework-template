@@ -1,5 +1,3 @@
-// const contacts = require("../models/contacts");
-
 const { ctrlWrapper } = require("../utils");
 
 const Contact = require("../models/contact");
