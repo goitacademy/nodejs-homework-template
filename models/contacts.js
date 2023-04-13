@@ -20,16 +20,14 @@ async function getContactById(contactId) {
   return contactByID || null;
 }
 
-async function addContact({ name, email, phone }) {
-  const allContacts = await listContacts();
+async function addContact(body) {
+  const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
-    name,
-    email,
-    phone,
+    ...body,
   };
-  allContacts.push(newContact);
-  await updateList(allContacts);
+  contacts.push(newContact);
+  await updateList(contacts);
   return newContact;
 }
 
