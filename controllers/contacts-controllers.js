@@ -4,7 +4,6 @@ const { Contact } = require("../models/contacts");
 
 const { HttpError } = require("../helpers/HttpError");
 
-
 const {
   addSchema,
   updateFavoriteSchema,
@@ -75,7 +74,6 @@ const removeContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-
   res.status(200).json({ result, message: "Contact deleted" });
 };
 
