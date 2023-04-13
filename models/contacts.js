@@ -42,7 +42,7 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const contacts = await readContacts();
   const contact = contacts.find((contact) => contact.id === contactId);
-  console.log(contact);
+  // console.log(contact);
   if (!contact) {
     throw HttpError(404, "Contact not found");
   }
