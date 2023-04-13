@@ -1,5 +1,7 @@
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs/promises");
 const { HttpError } = require("../helpers/index");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
@@ -75,9 +77,32 @@ const logout = async (req, res, next) => {
   return res.status(204).json();
 };
 
+const updateAvatar = async (req, res, next) => {
+  const { path: tempUpload, originalname } = req.file;
+
+  try {
+    const resultUpload = path.join(
+      __dirname,
+      "../",
+      "public",
+      "avatars",
+      originalname
+    );
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join("public", "avatars", originalname);
+    await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
+    res.status(200).json({ avatarURL });
+  } catch (error) {
+    await fs.unlink(tempUpload);
+    throw error;
+  }
+};
+
 module.exports = {
   register,
   login,
   getCurrentUser,
   logout,
+  updateAvatar,
 };

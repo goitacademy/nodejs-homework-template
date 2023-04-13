@@ -22,7 +22,7 @@ authRouter.get("/logout", auth, tryCatchWrapper(logout));
 
 authRouter.get("/current", auth, tryCatchWrapper(getCurrentUser));
 authRouter.post(
-  "//users/avatars",
+  "/avatars",
   auth,
   upload.single("avatar"),
   tryCatchWrapper(updateAvatar)
