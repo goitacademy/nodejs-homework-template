@@ -6,7 +6,7 @@ const changeContact = async (req, res) => {
   const data = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
   if (!data) {
-    throw RequestError(404, `id ${id} not found`);
+    throw RequestError(404, `Not found`);
   }
 
   res.status(200).json(data);
