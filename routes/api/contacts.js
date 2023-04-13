@@ -1,5 +1,7 @@
 const express = require("express");
 
+// const ctrl = require('../../models/contacts')
+
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
