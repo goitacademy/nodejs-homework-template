@@ -1,13 +1,12 @@
 const express = require("express");
 const routerRegister = express.Router();
 
-
 const {
   registerContact,
   listContact,
   checkEmail,
   checkUserById,
-  checkUserByIdAndUpdate
+  checkUserByIdAndUpdate,
 } = require("../../models/user");
 
 const loginHandler = require("../../auth/loginHandler");
@@ -50,7 +49,12 @@ routerRegister.get("/signup/email", auth, async (req, res) => {
     const { email } = req.body;
 
     const users = await checkEmail({ email: email });
-    res.status(200).json(users);
+    const payload = {
+      id: users._id,
+      email: users.email,
+      subscription: users.subscription,
+    };
+    res.status(200).json(payload);
   } catch {
     return res.status(500).send("Something went wrong");
   }
@@ -59,7 +63,6 @@ routerRegister.get("/signup/email", auth, async (req, res) => {
 routerRegister.get("/current", auth, async (req, res) => {
   try {
     const id = req.user.id;
-
     const users = await checkUserById(id);
 
     const payload = {
@@ -93,25 +96,15 @@ routerRegister.post("/login", async (req, res) => {
 });
 
 routerRegister.get("/logout", auth, async (req, res) => {
-  if (req.headers && req.headers.authorization) {
-    const token = req.headers.authorization.split(" ");
-    if (!token) {
-      res.status(401).send("Not authorized");
-    }
-
-    const tokens = req.user.token;
-    if (tokens !== token) {
-      const newToken = tokens;
-      await checkUserByIdAndUpdate(req.user.id, { token: newToken });
-      res.status(204).send("No content");
-    } else if (tokens === token) {
-      const newToken = null;
-      await checkUserByIdAndUpdate(req.user.id, { token: newToken });
-      res.status(204).send("No content");
-    } else res.status(401).send("Not authorized");
+  const id = req.user.id;
+  const token = req.headers.authorization.split(" ");
+  const newToken = null;
+  try {
+    await checkUserByIdAndUpdate(id, { token: newToken });
+    return res.status(204).send("No content");
+  } catch (err) {
+    return res.status(500).send(err);
   }
 });
-
-
 
 module.exports = routerRegister;
