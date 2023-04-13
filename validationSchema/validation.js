@@ -12,9 +12,10 @@ module.exports = {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      return res.status(400).json({ message: `missing required ${validationResult.error}field`});
+    return res.status(400).json({ message: `missing required ${validationResult.error.details[0].context.label} field`});
+      
     }
-
+ 
     next();
   },
   putContactValidation: (req, res, next) => {

@@ -42,7 +42,7 @@ const add = async (req, res) => {
     //   res.status(400).json({ message: "missing + req.params + required field" });
     //   return;
     // }
-    res.status(201).json({contact });
+    res.status(201).json(contact);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -72,7 +72,7 @@ const update = async (req, res, next) => {
       res.status(400).json({ message: "missing fields" });
       return;
     }
-    res.status(200).json({contact: updatedContact });
+    res.status(200).json(updatedContact);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
