@@ -31,19 +31,33 @@ async function addContact(body) {
   return newContact;
 }
 
-async function removeContact(contactId) {
+async function removeContactById(contactId) {
   const allContacts = await listContacts();
-  const newContactsList = allContacts.filter(
-    (contact) => contact.id !== contactId
-  );
-  await updateList(newContactsList);
-  return newContactsList;
+  const index = allContacts.findIndex((el) => el.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = allContacts.splice(index, 1);
+  await updateList(allContacts);
+  return result;
+}
+
+async function updateContactById(contactId, body) {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((el) => el.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  allContacts[index] = { contactId, ...body };
+  await updateList(allContacts);
+  return allContacts[index];
 }
 
 module.exports = {
   listContacts,
   getContactById,
   addContact,
-  removeContact,
+  removeContactById,
+  updateContactById,
   updateList,
 };
