@@ -5,7 +5,7 @@ const {
   deleteContact,
   changeContact,
   updateStatusContact,
-} = require("./contactsControllers");
+} = require("./contacts");
 
 module.exports = {
   getContacts,
