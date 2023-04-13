@@ -1,4 +1,4 @@
-const { controllerWrp, httpError } = require("../helpers");
+const { controllerWrp } = require("../helpers");
 const { Contact } = require("../models/contactSchema");
 
 const getAllContacts = async (req, res) => {
@@ -9,9 +9,7 @@ const getAllContacts = async (req, res) => {
 const getById = async (req, res) => {
 	const { contactId } = req.params;
 	const contact = await Contact.findById(contactId);
-	if (!contact) {
-		throw httpError(404, "Not found");
-	}
+
 	res.status(200).json(contact);
 };
 
@@ -22,26 +20,20 @@ const addContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
 	const { contactId } = req.params;
-	const contact = await Contact.findByIdAndRemove(contactId);
-	if (!contact) {
-		throw httpError(404, "Not found");
-	}
+	await Contact.findByIdAndRemove(contactId);
+
 	res.status(200).json({ message: "contact deleted" });
 };
 
 const changeContact = async (req, res) => {
 	const contact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
-	if (!contact) {
-		throw httpError(404, "Not found");
-	}
+
 	res.status(200).json(contact);
 };
 
-const updateContactFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
 	const contact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
-	if (!contact) {
-		throw httpError(404, "Not found");
-	}
+
 	res.status(200).json(contact);
 };
 module.exports = {
@@ -50,5 +42,5 @@ module.exports = {
 	addContact: controllerWrp(addContact),
 	deleteContact: controllerWrp(deleteContact),
 	changeContact: controllerWrp(changeContact),
-	updateContactFavorite: controllerWrp(updateContactFavorite),
+	updateStatusContact: controllerWrp(updateStatusContact),
 };

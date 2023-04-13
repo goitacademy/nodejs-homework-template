@@ -1,9 +1,9 @@
 const httpError = require("../helpers/httpError");
 
-const bodyValidator = (schema) => {
+const updateFavoriteStatus = (schema) => {
 	const valid = (req, res, next) => {
 		if (!Object.keys(req.body).length) {
-			next(httpError(400, "missing fields"));
+			next(httpError(400, "missing field favorite"));
 		}
 		const { error } = schema.validate(req.body);
 		if (error) {
@@ -14,4 +14,4 @@ const bodyValidator = (schema) => {
 	return valid;
 };
 
-module.exports = bodyValidator;
+module.exports = updateFavoriteStatus;

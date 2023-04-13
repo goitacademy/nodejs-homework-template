@@ -1,12 +1,17 @@
 const router = require("express").Router();
-const { isValidId, bodyValidator, addBodyValidator } = require("../../middlewares");
+const {
+	isValidId,
+	bodyValidator,
+	addBodyValidator,
+	updateFavoriteStatus,
+} = require("../../middlewares");
 const {
 	getAllContacts,
 	getById,
 	addContact,
 	deleteContact,
 	changeContact,
-	updateContactFavorite,
+	updateStatusContact,
 } = require("../../controllers/contacts");
 
 const { schemas } = require("../../models/contactSchema");
@@ -22,8 +27,8 @@ router.put("/:contactId", isValidId, bodyValidator(schemas.changeSchema), change
 router.patch(
 	"/:contactId/favorite",
 	isValidId,
-	bodyValidator(schemas.changeFavoriteSchema),
-	updateContactFavorite,
+	updateFavoriteStatus(schemas.changeFavoriteSchema),
+	updateStatusContact,
 );
 
 router.delete("/:contactId", isValidId, deleteContact);
