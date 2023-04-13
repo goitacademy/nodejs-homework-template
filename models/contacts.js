@@ -21,6 +21,11 @@ const contactsSchema = new Schema ({
         type: String,
         match: phoneRegexp,
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+    }
 }, { versionKey: false });
 
 contactsSchema.post("save", handleMongooseError);
