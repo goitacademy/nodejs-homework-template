@@ -20,4 +20,6 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.post("/logout", authenticate, ctrl.logout);
 
+router.patch("/", validateBody(schemas.validateJoiUserSubscription), ctrl.updateSubscription);
+
 module.exports = router;
