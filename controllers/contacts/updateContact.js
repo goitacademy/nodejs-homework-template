@@ -5,8 +5,8 @@ const { updateContact } = require("../../models/contacts");
 
 const validateSchema = require('../../utils/schema');
 
-const updateControllers = async (req, res, next) => {
-  try {
+const updateControllers = async (req, res) => {
+  
     const { error } = validateSchema.validate(req.body);
     if (error) {
       error.status = 400;
@@ -25,9 +25,6 @@ const updateControllers = async (req, res, next) => {
         contact,
       },
     });
-  } catch (error) {
-    next(error);
   }
-};
 
 module.exports = updateControllers;

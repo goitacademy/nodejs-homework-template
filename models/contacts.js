@@ -3,36 +3,28 @@ const {v4} =require('uuid')
 const path = require('path');
 
 const contactsPath = path.join(__dirname, '/contacts.json');
-console.log('====>', contactsPath);
 
 
 const listContacts = async () => {
 		const data = await fs.readFile(contactsPath)
 		const contacts = JSON.parse(data);
-		// console.log('DATA ====>',contacts);
 		return contacts;
 }
 
 const getContactById = async (id) => {
-	console.log('ID-2--->',id);
 	const contacts = await listContacts();
-	console.log("DATA3===>", contacts);
 	const userId = contacts.find(itme => itme.id === id)
-	console.log('CONTACT-ID====>', id);
 	return userId;
 }
 
 const removeContact = async (id) => {
 	const contacts = await listContacts();
-	console.log('GetAll====>', contacts);
 	const idx = contacts.findIndex(item => item.id === id.toString());
-	console.log("IDX===>", idx);
 	if(idx === -1){
 		return null;
 	}
 	const [delUser] = contacts.splice(idx, 1);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  console.log("remove====>", delUser);
   return delUser;
 
 }
@@ -55,7 +47,6 @@ const updateContact = async (id, body) => {
 	}
 	contacts[idx] = {...body, id};
 	await fs.writeFile(contactsPath, JSON.stringify(contacts));
-	console.log('CONTACT-IDX====>',contacts[idx]);
 	return contacts[idx];
 
 }

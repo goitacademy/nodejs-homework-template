@@ -9,14 +9,16 @@ const {
   updateControllers,
 } = require("../../controllers/contacts");
 
-router.get("/", listController);
+const ctrlWrapper = require('../../middlewares/ctrWrapper');
 
-router.get("/:id", getByIdController);
+router.get("/", ctrlWrapper(listController));
 
-router.post("/", addController);
+router.get("/:id", ctrlWrapper(getByIdController));
 
-router.delete("/:id", removeController);
+router.post("/", ctrlWrapper(addController));
 
-router.put("/:id", updateControllers);
+router.delete("/:id", ctrlWrapper(removeController));
+
+router.put("/:id", ctrlWrapper(updateControllers));
 
 module.exports = router;

@@ -1,9 +1,9 @@
 
-const {listContacts} = require('../../models/contacts');
+const {listContacts } = require('../../models/contacts');
 
 const listController = async (req, res, next) => {
 
-	try{
+
 		const contacts = await listContacts();
 console.log("DATA2===>",contacts);
   res.json({
@@ -13,11 +13,6 @@ console.log("DATA2===>",contacts);
 			result: contacts,
 		}
   });
-	}catch(error){
-		next(error)
-	
-	}
-
 }
 
 

@@ -2,8 +2,8 @@
 const createError = require('http-errors');
 const {getContactById} = require('../../models/contacts')
 
-const getByIdController = async (req, res, next) => {
-	try {
+const getByIdController = async (req, res) => {
+	
 		const {id} = req.params;
 		console.log('ID',req.params);
 		const contact = await getContactById(id);
@@ -22,11 +22,6 @@ const getByIdController = async (req, res, next) => {
 					result: contact,
 				}
 	  })
-	} catch (error) {
-		next(error);
-
-		
-	}
 
 }
 
