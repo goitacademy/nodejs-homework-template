@@ -1,8 +1,13 @@
-const { register, login, getCurrent, logout } = require("./auth-controllers");
+const { ctrlWrapper } = require("../../utils");
+
+const register = require("./register");
+const login = require("./login");
+const getCurrent = require("./getCurrent");
+const logout = require("./logout");
 
 module.exports = {
-  register,
-  login,
-  getCurrent,
-  logout,
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };
