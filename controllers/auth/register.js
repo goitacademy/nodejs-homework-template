@@ -25,6 +25,7 @@ const register = async (req, res) => {
   //Отримуємо выдповідь з бази про створення нового користувача та повертаємо email новоствореного користувача
   res.status(201).json({
     email: result.email,
+    subscription: result.subscription,
   });
 };
 
