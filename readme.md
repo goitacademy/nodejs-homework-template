@@ -1,26 +1,26 @@
 ## GoIT Node.js Course Template Homework
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6) Форк створить репозиторій на вашому http://github.com
+Fork this repository for homework (2-6) The fork will create a repository on your http://github.com
 
-Додайте ментора до колаборації
+Add a mentor to a collaboration
 
-Для кожної домашньої роботи створюйте свою гілку.
+Create your own branch for each homework.
 
 hw02
 hw03
 hw04
 hw05
 hw06
-Кожна нова гілка для др повинна робитися з master
+Each new branch for dr must be made from master
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+Once you've done your homework on your branch, you need to make a pull request (PR). Then add a mentor for code review. Only after the mentor approves the PR, you can merge the branch with the homework in the master.
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github Після виправлення знову додайте ментора на рев'ю коду.
+Read the mentor's comments carefully. Fix the comments and commit to the branch with the homework. Changes will be pulled into PR automatically after you send a commit with fixes to github After the fix, add the mentor to the code review again.
 
-При здачі домашньої роботи є посилання на PR
-JS-код чистий та зрозумілий, для форматування використовується Prettier
-Команди:
-npm start — старт сервера в режимі production
-npm run start:dev — старт сервера в режимі розробки (development)
-npm run lint — запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-npm lint:fix — та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+When submitting homework, there is a link to PR
+JS code is clean and clear, Prettier is used for formatting
+Teams:
+npm start — start the server in production mode
+npm run start:dev — start the server in development mode
+npm run lint — run code check execution with eslint, must be performed before each PR and fix all linter errors
+npm lint:fix - Same linter check, but with automatic fixes for simple errors
