@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../utils");
+const { handleMongooseError } = require("../../utils");
 
 const categories = ["work", "family", "hobby", "rest", "other"];
 const emailRegexp = /^\d{2}-\d{2}-\d{4}$/;
@@ -32,6 +32,11 @@ const contactSchema = new Schema(
       type: String,
       match: emailRegexp,
       required: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
