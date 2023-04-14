@@ -1,16 +1,17 @@
-const { ctrlWrapper, AppError } = require("../utils");
+const { ctrlWrapper } = require("../utils");
 
 const { Contact } = require("../models/contacts");
 
 const { HttpError } = require("../helpers/HttpError");
 
-const {
-  updateFavoriteSchema,
-  isValidationBody,
-} = require("../utils/validation");
-
 const getContacts = async (req, res) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "name email");
   res.json(result);
 };
 
@@ -24,18 +25,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  if (isValidationBody) {
-    throw new AppError(400, "Missing required name field");
-  }
-  const result = await Contact.create(req.body);
-  res.status(201).json({ result });
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
+  res.status(201).json(result);
 };
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  if (isValidationBody) {
-    throw new AppError(400, "Missing fields");
-  }
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
@@ -47,10 +43,6 @@ const updateContactById = async (req, res) => {
 
 const updateFavoriteById = async (req, res) => {
   const { contactId } = req.params;
-  const { error } = updateFavoriteSchema.validate(req.body);
-  if (error) {
-    throw new AppError(400, "Missing field favorite");
-  }
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
