@@ -38,13 +38,28 @@ const loginUser = async (req, res, next) => {
   const payload = { id: user._id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
   });
 };
 
+const getCurrent = async (req, res, next) => {
+  try {
+    const { email, subscription } = req.user;
+
+    res.json({
+      email,
+      subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
+  getCurrent: ctrlWrapper(getCurrent),
 };

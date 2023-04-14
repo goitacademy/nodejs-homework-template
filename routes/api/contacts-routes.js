@@ -4,7 +4,7 @@ const router = express.Router();
 const ctrl = require("../../controllers/contacts-controllers.js");
 const { validateBody } = require("../../utils");
 const schemas = require("../../schemas");
-const { authenticate } = require("../../middlwares");
+const { authenticate } = require("../../middlwares/");
 
 router.get("/", authenticate, ctrl.listContacts);
 
