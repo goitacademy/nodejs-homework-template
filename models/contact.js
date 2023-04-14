@@ -31,7 +31,7 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const changeFavoriteSchema = Joi.object({
+const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
@@ -44,7 +44,7 @@ const changeSchema = Joi.object({
 
 const schemas = {
   addSchema,
-  changeFavoriteSchema,
+  updateFavoriteSchema,
   changeSchema,
 };
 
