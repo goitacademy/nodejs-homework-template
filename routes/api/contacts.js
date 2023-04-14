@@ -8,15 +8,19 @@ const {
   deleteById,
 } = require("../../controllers");
 
-const bodyValidator = require("../../middlewares/bodyValidator");
-const addBodyValidator = require("../../middlewares/addBodyValidator");
+const {
+  bodyValidator,
+  addBodyValidator,
+  isValidId,
+} = require("../../middlewares");
+
 const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
 router.get("/", getAllContacts);
 
-router.get("/:contactId", getById);
+router.get("/:contactId", isValidId, getById);
 
 router.post("/", addBodyValidator(schemas.addSchema), addContact);
 
