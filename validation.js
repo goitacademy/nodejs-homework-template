@@ -26,3 +26,7 @@ export const validationSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string().pattern(/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/),
 });
+
+export const validationFavorite = Joi.object({
+  favorite: Joi.boolean(),
+});

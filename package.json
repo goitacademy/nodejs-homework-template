@@ -13,8 +13,12 @@
     "colors": "^1.4.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
     "joi": "^17.9.1",
+    "mongodb": "^5.2.0",
+    "mongoose": "^7.0.3",
+    "moongose": "^1.0.0",
     "morgan": "1.10.0",
     "nanoid": "^4.0.2"
   },
