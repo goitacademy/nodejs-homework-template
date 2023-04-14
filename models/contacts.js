@@ -1,80 +1,57 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { Schema, model } = require("mongoose");
 
-const contactsPath = path.resolve("models", "contacts.json");
+const Joi = require("joi");
 
-class ContactsAction {
-  constructor(pathToFile) {
-    this.pathToFile = pathToFile;
-  }
+const { handleMongooseError } = require("../utils");
 
-  async listContacts() {
-    try {
-      const data = await fs.readFile(contactsPath);
-      return JSON.parse(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  async getContactById(contactId) {
-    try {
-      const contacts = await this.listContacts();
-      const result = contacts.find((contact) => contact.id === contactId);
-      return result || null;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+contactSchema.post("save", handleMongooseError);
 
-  async removeContact(contactId) {
-    try {
-      const contacts = await this.listContacts();
-      const index = contacts.findIndex((contact) => contact.id === contactId);
-      if (index === -1) {
-        return null;
-      }
-      const [result] = contacts.splice(index, 1);
-      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+const addSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": `"name" is required`,
+    "string.empty": `"name" cannot be empty`,
+  }),
+  email: Joi.string().required().messages({
+    "any.required": `"email" is required`,
+    "string.empty": `"email" cannot be empty`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `"phone" is required`,
+    "string.empty": `"phone" cannot be empty`,
+  }),
+  favorite: Joi.boolean(),
+});
+const changeStatusSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": `missing filed "favorite"` }),
+});
 
-  async addContact({ name, email, phone }) {
-    try {
-      const contacts = await this.listContacts();
-      const newContact = {
-        id: nanoid(),
-        name,
-        email,
-        phone,
-      };
-      contacts.push(newContact);
-      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-      return newContact;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+const schemas = {
+  addSchema,
+  changeStatusSchema,
+};
 
-  async updateContact(id, body) {
-    try {
-      const contacts = await this.listContacts();
-      const index = contacts.findIndex((item) => item.id === id);
-      if (index === -1) {
-        return null;
-      }
-      contacts[index] = { id, ...body };
-      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-      return contacts[index];
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}
+const Contact = model("contact", contactSchema);
 
-const contacts = new ContactsAction(contactsPath);
-module.exports = contacts;
+module.exports = {
+  Contact,
+  schemas,
+};
