@@ -2,9 +2,10 @@ const Joi = require("joi");
 
 const contacts = require("../models/contacts");
 
-const { HttpError, contactSchema } = require("../helpers");
+const { HttpError, addContactSchema, updateContactSchema } = require("../helpers");
 
-const addSchema = Joi.object(contactSchema);
+const addSchema = Joi.object(addContactSchema);
+const updateSchema = Joi.object(updateContactSchema);
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -66,7 +67,7 @@ const updateContactById = async (req, res, next) => {
       throw HttpError(400, "missing fields");
     }
 
-    const validationResult = addSchema.validate(req.body);
+    const validationResult = updateSchema.validate(req.body);
 
     if (validationResult.error) {
       throw HttpError(400, `missing required name field`);

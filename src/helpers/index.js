@@ -1,7 +1,8 @@
 const HttpError = require("./HttpError");
-const contactSchema = require("./contactSchema");
+const {addContactSchema, updateContactSchema} = require("./contactSchema");
 
 module.exports = {
   HttpError,
-  contactSchema,
+  addContactSchema,
+  updateContactSchema,
 };
