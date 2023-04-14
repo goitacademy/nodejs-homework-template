@@ -1,25 +1,19 @@
-const express = require('express')
+const express = require("express");
+// express для маршрутизації
+const router = express.Router();
+// створюємо сторінку записної книжки
 
-const router = express.Router()
+const ctrl = require("../../controllers/contactsBook.js")
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// отримання всіх контактів
+router.get("/", ctrl.getAll);
+// отримання 1 контакта по id
+router.get("/:contactId", ctrl.getContactById);
+//добавлення контакта
+router.post("/", ctrl.addContact);
+//видалення контакта по id
+router.delete("/:contactId", ctrl.deleteContact);
+//зміна чогось в контакті по id
+router.put("/:contactId", ctrl.updateContact);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
