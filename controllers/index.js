@@ -1,11 +1,11 @@
 const {
-  changeContactbyId,
-  changeStatusContact,
-  deleteContact,
   getContacts,
   getContactById,
   postContact,
-} = require("./contactsControllers");
+  deleteContact,
+  changeContactbyId,
+  changeStatusContact,
+} = require("./contacts");
 
 module.exports = {
   getContacts,

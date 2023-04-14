@@ -11,7 +11,7 @@ const {
 const { validateBody } = require("../../utils");
 
 const router = express.Router();
-const { schemas } = require("../../models/contacts");
+const { schemas } = require("../../models");
 
 router.get("/", getContacts);
 
