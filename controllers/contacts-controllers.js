@@ -15,33 +15,30 @@ const getContactsById = async (req, res) => {
 	if (!result) {
 		throw HttpError(404, `Not found`);
 	}
-	res.json({
-		message: `Contact with Id: ${req.params.contactId}`,
-		result,
-	});
+	res.json({ message: `Contact with Id: ${contactId}`, result });
 };
 
 const addContact = async (req, res) => {
 	const result = await contacts.addContact(req.body);
-	res.status(201).json(result);
+	res.status(201).json({ message: "new contact added", result });
 };
 
 const deleteContact = async (req, res) => {
 	const { contactId } = req.params;
 	const result = await contacts.removeContact(contactId);
 	if (!result) {
-		throw HttpError(404, `Contact with ${contactId} not found`);
+		throw HttpError(404, "Not found");
 	}
-	res.status(200).json({ message: "contact deleted" });
+	res.status(200).json({ message: "contact deleted", result });
 };
 
 const updateContact = async (req, res) => {
 	const { contactId } = req.params;
 	const result = await contacts.updateContact(contactId, req.body);
 	if (!result) {
-		throw HttpError(404, `Contact with ${contactId} not found`);
+		throw HttpError(404, "Not found");
 	}
-	res.json(result);
+	res.json({ message: "contact with new fields", result });
 };
 
 module.exports = {
