@@ -31,7 +31,7 @@ function validatePatchContact(req, res, next) {
 function validateRegistration(req, res, next) {
     const {error} = authSchemas.registerSchema.validate(req.body);
     if(error) {
-    throw httpError.HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
+    throw httpError.HttpError(400, error.message);
 }
     next(); 
 }
@@ -39,7 +39,7 @@ function validateRegistration(req, res, next) {
 function validateLogin(req, res, next) {
     const {error} = authSchemas.loginSchema.validate(req.body);
     if(error) {
-    throw httpError.HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
+    throw httpError.HttpError(400, error.message);
 }
     next(); 
 }
@@ -47,7 +47,7 @@ function validateLogin(req, res, next) {
 function validateSubscription(req, res, next) {
     const {error} = authSchemas.subscriptionSchema.validate(req.body);
     if(error) {
-    throw httpError.HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
+    throw httpError.HttpError(400, error.message);
 }
     next(); 
 }
