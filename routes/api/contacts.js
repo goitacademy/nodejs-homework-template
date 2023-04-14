@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   validation,
+  validateStatus,
   controllerShell,
   IdValidation,
 } = require("../../middlewares");
@@ -13,11 +14,7 @@ router.get("/", controllerShell(controller.getContacts));
 
 router.get("/:id", IdValidation, controllerShell(controller.checkByID));
 
-router.post(
-  "/",
-  validation(schemas.contactsSchema),
-  controllerShell(controller.createContact)
-);
+router.post("/", controllerShell(controller.createContact));
 
 router.delete("/:id", IdValidation, controllerShell(controller.deleteContact));
 
@@ -31,7 +28,7 @@ router.put(
 router.patch(
   "/:id/favorite",
   IdValidation,
-  validation(schemas.favoriteSchema),
+  validateStatus(schemas.favoriteSchema),
   controllerShell(controller.updateFavoriteContact)
 );
 

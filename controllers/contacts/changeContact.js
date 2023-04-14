@@ -3,6 +3,7 @@ const { RequestError } = require("../../services");
 
 const changeContact = async (req, res) => {
   const { id } = req.params;
+
   const data = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 
   if (!data) {
