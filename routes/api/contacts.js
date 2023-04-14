@@ -24,8 +24,13 @@ router.get("/:contactId", isValidId, getById);
 
 router.post("/", addBodyValidator(schemas.addSchema), addContact);
 
-router.put("/:contactId", bodyValidator(schemas.changeSchema), updateById);
+router.put(
+  "/:contactId",
+  isValidId,
+  bodyValidator(schemas.changeSchema),
+  updateById
+);
 
-router.delete("/:contactId", deleteById);
+router.delete("/:contactId", isValidId, deleteById);
 
 module.exports = router;
