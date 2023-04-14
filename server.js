@@ -3,10 +3,6 @@ const app = require("./app");
 
 const { PORT = 3000, DB_HOST } = process.env;
 
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000");
-// });
-
 mongoose.set("strictQuery", true);
 
 mongoose
