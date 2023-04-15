@@ -17,9 +17,13 @@ const updateContact = async (contactId, body) =>
   });
 
 const updateStatusContact = async (contactId, body) =>
-  Contact.findOneAndUpdate({ _id: new ObjectId(contactId) }, body, {
-    new: true,
-  });
+  Contact.findOneAndUpdate(
+    { _id: new ObjectId(contactId) },
+    { favorite: body },
+    {
+      new: true,
+    }
+  );
 
 export {
   getAllContacts,

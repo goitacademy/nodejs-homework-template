@@ -1,20 +1,17 @@
-import express from "express";
 import { Router } from "express";
-
 import * as ctrl from "../../controller/contacts.js";
-
 const router = Router();
 
-router.get("/", ctrl.get);
+router.get("/", ctrl.getContacts);
 
-router.get("/:contactId", ctrl.getByID);
+router.get("/:contactId", ctrl.getContactByID);
 
-router.post("/", ctrl.create);
+router.post("/", ctrl.createContact);
 
-router.delete("/:contactId", ctrl.remove);
+router.delete("/:contactId", ctrl.removeContact);
 
-router.put("/:contactId", ctrl.update);
+router.put("/:contactId", ctrl.updateContact);
 
-router.patch("/:contactId/favorite", ctrl.patch);
+router.patch("/:contactId/favorite", ctrl.updateContactFavoriteField);
 
 export { router };

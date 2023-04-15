@@ -6,7 +6,7 @@ import {
   validationSchema,
 } from "../validation.js";
 
-export const get = async (req, res, next) => {
+export const getContacts = async (req, res, next) => {
   try {
     const contacts = await services.getAllContacts();
     return res.json(contacts);
@@ -15,7 +15,7 @@ export const get = async (req, res, next) => {
   }
 };
 
-export const getByID = async (req, res, next) => {
+export const getContactByID = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contacts = await services.getContactById(contactId);
@@ -26,11 +26,11 @@ export const getByID = async (req, res, next) => {
   }
 };
 
-export const create = async (req, res, next) => {
+export const createContact = async (req, res, next) => {
   try {
     const checkBody = isReqPostBodyOk(req.body);
 
-    const { value, error } = validationSchema.validate(req.body);
+    const { error } = validationSchema.validate(req.body);
 
     if (!checkBody)
       return res.status(400).json({ message: "missing required name - field" });
@@ -45,22 +45,22 @@ export const create = async (req, res, next) => {
   }
 };
 
-export const remove = async (req, res, next) => {
+export const removeContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const isExist = await services.getContactById(contactId);
     if (!isExist) return res.status(404).json({ message: "Not found" });
-    const deleteContact = await services.removeContact(contactId);
+    await services.removeContact(contactId);
     res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
 };
-export const update = async (req, res, next) => {
+export const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
-    const { value, error } = validationSchema.validate(req.body);
+    const { error } = validationSchema.validate(req.body);
     if (!(name || email || phone))
       return res.status(400).json({ message: "missing fields" });
 
@@ -73,19 +73,20 @@ export const update = async (req, res, next) => {
   }
 };
 
-export const patch = async (req, res, next) => {
+export const updateContactFavoriteField = async (req, res, next) => {
   try {
+    const favorite = req.body?.favorite;
+    console.log(favorite);
     const { contactId } = req.params;
-    console.log(contactId);
     const isExist = await services.getContactById(contactId);
     if (!isExist) return res.status(404).json({ message: "Not found" });
-    const { value, error } = validationFavorite.validate(req.body);
+    const { error } = validationFavorite.validate(req.body);
     if (error)
       return res.status(400).json({ message: "missing field favorite" });
 
     const patchContact = await services.updateStatusContact(
       contactId,
-      req.body
+      favorite
     );
     return res.json(patchContact);
   } catch (error) {
