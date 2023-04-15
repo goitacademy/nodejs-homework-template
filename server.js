@@ -1,9 +1,7 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://Alona:eCJDTRm8VPV5aLZ2@cluster0.ck2mily.mongodb.net/contacts_reader?retryWrites=true&w=majority";
-// перед ? вставляэмо назву бд (contacts_reader), якщо ны, то створиться нова
+const {DB_HOST} =require('./config.js');
 
 mongoose.set("strictQuery", true);
 
