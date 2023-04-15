@@ -28,7 +28,11 @@ module.exports = {
     });
     
     const validationResult = schema.validate(req.body);
-    if (validationResult.error|| !req.body) {
+    if (
+      validationResult.error ||
+      !req.body ||
+      Object.keys(req.body).length === 0
+    ) {
       return res.status(400).json({ message: "missing fields" });
     }
     next();
