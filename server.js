@@ -21,4 +21,4 @@ connection
   .catch((error) => {
     console.log(`${colors.green("[database]")} ${colors.red(error.message)}`);
     process.exit(1);
-  }git );
+  });
