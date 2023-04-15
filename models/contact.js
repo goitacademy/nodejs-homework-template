@@ -29,7 +29,7 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const updateFavoriteSchema = Joi.object({
+const changeFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
@@ -42,8 +42,8 @@ const changeSchema = Joi.object({
 
 const schemas = {
   addSchema,
-  updateFavoriteSchema,
   changeSchema,
+  changeFavoriteSchema,
 };
 
 contactSchema.post("save", handleMongooseError);
