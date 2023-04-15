@@ -1,13 +1,12 @@
 const express = require("express");
 
 const {
-  getAllContacts,
+  getAll,
   getById,
   addContact,
   updateById,
-  deleteById,
   updateFavorite,
-} = require("../../controllers");
+} = require("../../controllers/contacts");
 
 const {
   bodyValidator,
@@ -20,7 +19,7 @@ const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", getAllContacts);
+router.get("/", getAll);
 
 router.get("/:contactId", isValidId, getById);
 
@@ -36,10 +35,10 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   isValidId,
-  updateFavoriteStatus(schemas.updateFavoriteSchema),
+  updateFavoriteStatus(schemas.changeFavoriteSchema),
   updateFavorite
 );
 
-router.delete("/:contactId", isValidId, deleteById);
+// router.delete("/:contactId", isValidId, deleteById);
 
 module.exports = router;
