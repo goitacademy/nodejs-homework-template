@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const {DB_HOST} = process.env;
-const LocalHostNumber=4000;
+const LocalHostNumber=5000;
 
 mongoose.connect(DB_HOST)
 .then(()=>app.listen(LocalHostNumber, () => {

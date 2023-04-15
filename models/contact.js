@@ -8,13 +8,22 @@ const contactSchema = new Schema({
     favorite:{type:Boolean,default:false},
 },{versionKey:false,timestamps:true});
 
+// middlewar of  mongoose застосовувати для виведення помилки якщо не виконалась схема contactSchema 
+// contactSchema.post("save",(error,data,next)=>{
+//     error.status=400;
+//     next();
+// })
+
 export const Contact = model("contact",contactSchema);
 
-export const addScheme = Joi.object({
+const updateFavoriteLineScheme=Joi.object({
+favorite:Joi.boolean().required(),
+});
+ const addScheme = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.number().required(),
     favorite:Joi.boolean(),
   });
-//   створюємо обєкт з схемами і експортуємо
-// const schems = {addScheme,...інші схеми}
+
+export const schems = {addScheme,updateFavoriteLineScheme};

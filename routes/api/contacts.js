@@ -6,8 +6,9 @@ import {
   ctrlGetAllContacts,
   ctrlGetContactById,
   ctrlAddContact,
-  // ctrlDeleteContacById,
-  // ctrlChangeContactById,
+  ctrlDeleteContacById,
+  ctrlUpdateFavoriteLine,
+  ctrlChangeContactById,
 } from "../../controllers/contacts-controllers.js";
 
 const router = express.Router();
@@ -17,8 +18,10 @@ router.get("/:contactId", ctrlWrapper(ctrlGetContactById));
 
 router.post("/", ctrlWrapper(ctrlAddContact));
 
-// router.delete("/:contactId", ctrlWrapper(ctrlDeleteContacById));
+router.delete("/:contactId", ctrlWrapper(ctrlDeleteContacById));
 
-// router.put("/:contactId", ctrlWrapper(ctrlChangeContactById));
+router.put("/:contactId", ctrlWrapper(ctrlChangeContactById));
+
+router.patch("/:contactId/favorite",ctrlWrapper(ctrlUpdateFavoriteLine));
 
 export default router;
