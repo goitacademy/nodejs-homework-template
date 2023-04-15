@@ -6,16 +6,16 @@ import {
   ctrlGetAllContacts,
   ctrlGetContactById,
   ctrlAddContact,
-  ctrlDeleteContacById,
-  ctrlChangeContactById,
+  // ctrlDeleteContacById,
+  // ctrlChangeContactById,
 } from "../../controllers/contacts-controllers.js";
 
 const router = express.Router();
 router.get("/", ctrlWrapper(ctrlGetAllContacts));
 
-// router.get("/:contactId", ctrlWrapper(ctrlGetContactById));
+router.get("/:contactId", ctrlWrapper(ctrlGetContactById));
 
-// router.post("/", ctrlWrapper(ctrlAddContact));
+router.post("/", ctrlWrapper(ctrlAddContact));
 
 // router.delete("/:contactId", ctrlWrapper(ctrlDeleteContacById));
 

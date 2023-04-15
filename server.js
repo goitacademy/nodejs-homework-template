@@ -5,10 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const {DB_HOST} = process.env;
+const LocalHostNumber=4000;
 
 mongoose.connect(DB_HOST)
-.then(()=>app.listen(8080, () => {
-  console.log("Server running. Use our API on port: 3000")
+.then(()=>app.listen(LocalHostNumber, () => {
+  console.log(`Server running. Use our API on port: ${LocalHostNumber}`)
 }))
 .catch(error=>console.log(error.message));
 
