@@ -4,7 +4,7 @@ const validateAuthBody = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      throw HttpError(400, "Bad Request");
+      throw HttpError(error.status, error.message);
     }
     next();
   };
