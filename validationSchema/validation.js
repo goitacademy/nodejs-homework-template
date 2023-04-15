@@ -26,9 +26,9 @@ module.exports = {
         .optional(),
       phone: Joi.number().optional(),
     });
-
+    
     const validationResult = schema.validate(req.body);
-    if (validationResult.error) {
+    if (validationResult.error|| !req.body) {
       return res.status(400).json({ message: "missing fields" });
     }
     next();

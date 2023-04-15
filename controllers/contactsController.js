@@ -67,11 +67,10 @@ const update = async (req, res, next) => {
     const { contactId } = req.params;
     const newData = req.body;
     const updatedContact = await updateContact(contactId, newData);
-
-    if (!updatedContact) {
-      res.status(400).json({ message: "missing fields" });
-      return;
-    }
+    //   if (newData.length === 0) {
+    //   res.status(400).json({ message: "Missing fields" });
+    //   return;
+    // }
     res.status(200).json(updatedContact);
   } catch (err) {
     res.status(500).json({ error: err.message });
