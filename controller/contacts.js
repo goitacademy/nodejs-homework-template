@@ -76,7 +76,6 @@ export const updateContact = async (req, res, next) => {
 export const updateContactFavoriteField = async (req, res, next) => {
   try {
     const favorite = req.body?.favorite;
-    console.log(favorite);
     const { contactId } = req.params;
     const isExist = await services.getContactById(contactId);
     if (!isExist) return res.status(404).json({ message: "Not found" });
