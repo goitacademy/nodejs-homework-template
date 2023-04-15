@@ -10,8 +10,8 @@ const userSchema = new Schema(
     email: {
       type: String,
       match: emailRegexp,
-      required: [true, "Email is required"],
       unique: true,
+      required: [true, "Email is required"],
     },
     password: {
       type: String,
