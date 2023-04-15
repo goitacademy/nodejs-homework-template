@@ -10,7 +10,7 @@ const {
   updateStatusContactController,
 } = require('../../controllers/contacts/index');
 
-const { asyncWrapper } = require("../../helpers/index");
+const { asyncWrapper } = require("../../helper/index");
 
 const {addContactValidation, updateStatusContactValidation, updateContactValidation } = require('../../middlewares/index');
 

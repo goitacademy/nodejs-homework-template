@@ -6,7 +6,6 @@ const addNewContactController = async (req, res, next) => {
 
     const newContact = await addContact(req.body, owner);
     
-
     res.status(201).json(newContact);
 };
 

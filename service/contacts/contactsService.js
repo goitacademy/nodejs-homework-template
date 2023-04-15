@@ -2,7 +2,11 @@ const { Contacts } = require('./contactsSchema');
 
 const getListContacts = async (owner, page, limit) => {
   const skip = (page - 1) * limit;
-  return Contacts.find({ owner }, "-createdAt -updatedAt", {skip, limit} );
+  return Contacts.find({ owner })
+    .select({ createdAt: 0, updatedAt: 0 })
+    .skip(skip)
+    .limit(limit)
+    .sort({ favorite: -1 });
     
 }
 

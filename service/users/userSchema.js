@@ -16,7 +16,18 @@ const userSchema = new mongoose.Schema({
         enum: ["starter", "pro", "business"],
         default: "starter"
     },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+       
+    },
     token: String,
+    avatarURL: String,
+    
+
 },
     { versionKey: false, timestamps: true},
 
@@ -28,4 +39,3 @@ const User = mongoose.model('user', userSchema);
 module.exports = {
     User
 };
-
