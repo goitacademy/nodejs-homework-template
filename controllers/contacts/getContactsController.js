@@ -1,4 +1,4 @@
-const { Contacts } = require("../../service/contacts/contactsSchema");
+
 const { getListContacts } = require("../../service/contacts/contactsService");
 
 
