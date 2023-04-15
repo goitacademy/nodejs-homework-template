@@ -14,7 +14,11 @@ const contactsSchema = new mongoose.Schema( {
     favorite: {
       type: Boolean,
       default: false,
-  },
+    },
+    owner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "user",
+    }
 },
     { versionKey: false, timestamps: true},
 

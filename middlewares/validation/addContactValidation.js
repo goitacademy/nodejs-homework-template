@@ -15,28 +15,13 @@ module.exports = {
                 .min(13)
                 .pattern(
                     /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
-                    )
+                )
                 .required(),
             favorite: Joi.boolean()
         });
         const validationResult = schema.validate(req.body);
         if (validationResult.error) {
-            return res.status(400).json({"message":` ${validationResult.error}`});
-        }
-        next();
-    },
-    updateStatusContactValidation: (req, res, next) => {
-        if (!req.body) {
-            return res.status(400).json({"message": "missing field favorite"});
-        }
-        
-        const schema = Joi.object({
-            favorite: Joi.boolean()
-            .required(),
-        });
-        const validationResult = schema.validate(req.body);
-        if (validationResult.error) {
-            return res.status(400).json({"message":` ${validationResult.error}`});
+            return res.status(400).json({ "message": ` ${validationResult.error}` });
         }
         next();
     }
