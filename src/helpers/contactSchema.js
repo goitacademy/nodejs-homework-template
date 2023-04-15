@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const addCcontactSchema = {
+const addContactSchema = {
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
     "string.empty": `name cannot be an empty field`,
@@ -35,4 +35,4 @@ const updateContactSchema = {
       "string.empty": `phone cannot be an empty field`,
     }),
 };
-module.exports = { addCcontactSchema, updateContactSchema };
+module.exports = { addContactSchema, updateContactSchema };
