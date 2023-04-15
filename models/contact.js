@@ -47,14 +47,11 @@ const addSchema = Joi.object({
       "string.empty": `"email" must not be empty`,
       "string.pattern.base": `"email" does not have a right format`,
     }),
-  phone: Joi.string()
-    .required()
-    .pattern(/^\(\d{3}\)\s\d{3}-\d{4}$/)
-    .messages({
-      "any.required": `missing required "phone" field`,
-      "string.empty": `"phone" must not be empty`,
-      "string.pattern.base": `"phone number" must be in the format (XXX) XXX-XXXX`,
-    }),
+  phone: Joi.string().required().messages({
+    "any.required": `missing required "phone" field`,
+    "string.empty": `"phone" must not be empty`,
+    "string.pattern.base": `"phone number" must be in the format (XXX) XXX-XXXX`,
+  }),
   favorite: Joi.boolean().default(false),
 });
 

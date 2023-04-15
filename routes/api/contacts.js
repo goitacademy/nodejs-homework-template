@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrl = require("../../controllers/contacts-controller");
-const { authenticate } = require("../../middelwares");
+const { authenticate, isValidId } = require("../../middelwares");
 const { validateBody } = require("../../utils");
 const { schemas } = require("../../models/contact");
 
@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", authenticate, ctrl.getAllContacts);
 
-router.get("/:contactId", authenticate, ctrl.getContactById);
+router.get("/:contactId", authenticate, isValidId, ctrl.getContactById);
 
 router.post(
   "/",
