@@ -2,9 +2,12 @@ const express = require('express');
 // express для маршрутизації
 const cors = require('cors');
 // cors для обміну між доменами
+const dotevn = require("dotenv");
 // const logger = require('morgan');
 
 const contactsRouter = require('./routes/api/contacts');
+dotevn.config();
+// шукає данні в текстовому файлі .env і додає змінні оточення
 
 const app = express();
 // app як записна книга, а листок до неї робимо в routes/api/contacts
