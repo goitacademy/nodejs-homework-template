@@ -8,7 +8,7 @@ const validateBody = require("../../middlewares/validateBody")
 
 const schema  = require("../../schemas");
 
-console.log(schema)
+
 
 router.get('/', ctrl.getAll );
 
