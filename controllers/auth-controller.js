@@ -22,9 +22,8 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    user: {
-      email: newUser.email,
-    },
+    email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
@@ -48,28 +47,39 @@ const login = async (req, res) => {
 
   await User.findOneAndUpdate(user._ud, { token });
 
-  res.status(200).json({
+  res.json({
     token,
     user: {
       email: email,
+      subscription: user.subscription,
     },
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { email } = req.user;
+  const { email, subscription } = req.user;
 
   res.status(200).json({
     email,
+    subscription,
   });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({
+  res.status(204).json({
     message: "Logout success",
   });
+};
+
+const updateSubUser = async (req, res, next) => {
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(_id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
 };
 
 module.exports = {
@@ -77,4 +87,5 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubUser: ctrlWrapper(updateSubUser),
 };
