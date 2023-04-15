@@ -14,6 +14,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+const dotenv = require('dotenv');
+dotenv.config()
+
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
