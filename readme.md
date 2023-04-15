@@ -29,3 +29,7 @@
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+
+
+// eCJDTRm8VPV5aLZ2   password in Atlas
+// mongodb+srv://Alona:eCJDTRm8VPV5aLZ2@cluster0.ck2mily.mongodb.net/test
