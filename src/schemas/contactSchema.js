@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const addContactSchema = {
+const addContactSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
     "string.empty": `name cannot be an empty field`,
@@ -18,9 +18,9 @@ const addContactSchema = {
       "string.pattern.base": `phone must be in the format (xxx) xxx-xxxx`,
       "string.empty": `phone cannot be an empty field`,
     }),
-};
+});
 
-const updateContactSchema = {
+const updateContactSchema = Joi.object({
   name: Joi.string().messages({
     "string.empty": `name cannot be an empty field`,
   }),
@@ -34,5 +34,9 @@ const updateContactSchema = {
       "string.pattern.base": `phone must be in the format (xxx) xxx-xxxx`,
       "string.empty": `phone cannot be an empty field`,
     }),
+});
+
+module.exports = {
+  addContactSchema,
+  updateContactSchema,
 };
-module.exports = { addContactSchema, updateContactSchema };

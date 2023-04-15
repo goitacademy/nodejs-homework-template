@@ -1,0 +1,34 @@
+const { HttpError } = require("../helpers");
+
+const validatePostBody = (schema) => {
+  const middlewareFunc = async (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      next(HttpError(400, `missing required name field`));
+    }
+    next();
+  };
+
+  return middlewareFunc;
+};
+
+const validatePutBody = (schema) => {
+  const middlewareFunc = async (req, res, next) => {
+    if (Object.keys(req.body).length === 0) {
+      next(HttpError(400, "missing fields"));
+    }
+
+    const { error } = schema.validate(req.body);
+    if (error) {
+      next(HttpError(400, `missing required name field`));
+    }
+    next();
+  };
+
+  return middlewareFunc;
+};
+
+module.exports = {
+  validatePostBody,
+  validatePutBody,
+};
