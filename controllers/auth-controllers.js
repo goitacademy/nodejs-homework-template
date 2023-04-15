@@ -45,6 +45,12 @@ const loginUser = async (req, res, next) => {
   });
 };
 
+const logoutUser = async (req, res, next) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: " " });
+  res.json({ message: "Logout success" });
+};
+
 const getCurrent = async (req, res, next) => {
   try {
     const { email, subscription } = req.user;
@@ -61,5 +67,6 @@ const getCurrent = async (req, res, next) => {
 module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
+  logoutUser: ctrlWrapper(logoutUser),
   getCurrent: ctrlWrapper(getCurrent),
 };
