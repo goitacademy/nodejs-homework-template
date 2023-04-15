@@ -9,19 +9,28 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
     "express": "4.17.1",
-<<<<<<< Updated upstream
-    "morgan": "1.10.0"
-=======
+    "fs-extra": "^11.1.1",
+    "gravatar": "^1.8.2",
+    "html-to-text": "^9.0.5",
     "http-errors": "^2.0.0",
+    "jest": "^29.5.0",
+    "jimp": "^0.22.7",
     "joi": "^17.8.4",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
     "path": "^0.12.7",
+    "pug": "^3.0.2",
     "uuid": "^9.0.0"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "7.19.0",
