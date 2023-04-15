@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "author": "Alona_Myshko",
+  "engines": {
+    "node": "19.7.0"
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
