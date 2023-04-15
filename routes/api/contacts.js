@@ -6,6 +6,7 @@ const {
   addContact,
   updateById,
   updateFavorite,
+  deleteById,
 } = require("../../controllers/contacts");
 
 const {
@@ -39,6 +40,6 @@ router.patch(
   updateFavorite
 );
 
-// router.delete("/:contactId", isValidId, deleteById);
+router.delete("/:contactId", isValidId, deleteById);
 
 module.exports = router;
