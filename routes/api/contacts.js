@@ -1,25 +1,27 @@
-const express = require('express')
+import express from "express";
 
-const router = express.Router()
+import { ctrlWrapper } from "../../utils/ctrlWrapper.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import {
+  ctrlGetAllContacts,
+  ctrlGetContactById,
+  ctrlAddContact,
+  ctrlDeleteContacById,
+  ctrlUpdateFavoriteLine,
+  ctrlChangeContactById,
+} from "../../controllers/contacts-controllers.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
+router.get("/", ctrlWrapper(ctrlGetAllContacts));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", ctrlWrapper(ctrlGetContactById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", ctrlWrapper(ctrlAddContact));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", ctrlWrapper(ctrlDeleteContacById));
 
-module.exports = router
+router.put("/:contactId", ctrlWrapper(ctrlChangeContactById));
+
+router.patch("/:contactId/favorite",ctrlWrapper(ctrlUpdateFavoriteLine));
+
+export default router;
