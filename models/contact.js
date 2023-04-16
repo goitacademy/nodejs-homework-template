@@ -81,10 +81,15 @@ const putSchema = Joi.object({
   favorite: Joi.boolean(),
 }).or("name", "email", "phone", "favorite");
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const Contact = model("contact", contactSchema); // модель що працює з колекцією
 
 module.exports = {
   Contact,
   addSchema,
   putSchema,
+  updateFavoriteSchema,
 };
