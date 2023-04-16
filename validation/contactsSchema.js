@@ -12,4 +12,12 @@ const contactSchemaRequired = Joi.object({
   phone: Joi.string().min(10).max(15).required(),
 });
 
-module.exports = { contactSchema, contactSchemaRequired };
+const contactSchemaFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = {
+  contactSchema,
+  contactSchemaRequired,
+  contactSchemaFavorite,
+};
