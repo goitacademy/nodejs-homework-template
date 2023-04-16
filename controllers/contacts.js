@@ -42,7 +42,26 @@ async function deleteContact(req, res, next) {
 async function changeContact(req, res, next) {
   const { contactId } = req.params;
   const body = req.body;
+
+  if (!body.name & !body.email & !body.phone & !body.favorite) {
+    return next(HttpError(400, "missing fields"));
+  }
+
   const changeContact = await Contacts.findByIdAndUpdate(contactId, body);
+
+  if (
+    body.name === changeContact.name ||
+    body.email === changeContact.email ||
+    body.phone === changeContact.phone ||
+    body.favorite === changeContact.favorite
+  ) {
+    return next(
+      HttpError(
+        400,
+        "One of the fields has outdated information. Please update the data."
+      )
+    );
+  }
 
   if (!changeContact) {
     return next(HttpError(400, "missing fields"));
