@@ -9,13 +9,13 @@ const ctrl = require("../../controllers/contactsBook.js");
 router.get("/", ctrl.getAll);
 // отримання 1 контакта по id
 router.get("/:contactId", ctrl.getContactById);
-//добавлення контакта
+// добавлення контакта
 router.post("/", ctrl.addContact);
-//видалення контакта по id
+// видалення контакта по id
 router.delete("/:contactId",  ctrl.deleteContact);
-//зміна чогось в контакті по id
+// зміна чогось в контакті по id
 router.put("/:contactId",  ctrl.updateContact);
-//зміна контакта на улюблений по id
+// зміна контакта на улюблений по id
 router.patch("/:contactId/favorite",  ctrl.updateFavorite);
 
 module.exports = router;

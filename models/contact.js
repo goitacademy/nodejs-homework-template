@@ -37,7 +37,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleMongooseError);
-//помилка з неправельним форматом
+// помилка з неправельним форматом
 
 const addSchema = Joi.object({
   name: Joi.string().required(),

@@ -1,12 +1,12 @@
 const contacts = require("./models/contacts");
-//імпортую файл contacts.js
+// імпортую файл contacts.js
 const { Command } = require("commander");
 
 /// 2 метод  ======>
 // const yargs = require("yargs");
 // const argv = require("yargs").argv;
 /// argv щоб в ктермінал виводилася потрібна операція
-///yarn    //yarn add yargs
+/// yarn    //yarn add yargs
 /// node index --action get --id 1     в терміналі
 ///   ==============>
 

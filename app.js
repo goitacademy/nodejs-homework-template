@@ -12,7 +12,7 @@ dotevn.config();
 const app = express();
 // app як записна книга, а листок до неї робимо в routes/api/contacts
 app.use(express.json());
-//перевіряє чи є тіло і розпізнає тип
+// перевіряє чи є тіло і розпізнає тип
 app.use(cors());
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
