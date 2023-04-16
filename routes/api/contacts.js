@@ -8,12 +8,12 @@ const ctrl = require("../../controllers/contactsBook.js")
 // отримання всіх контактів
 router.get("/", ctrl.getAll);
 // отримання 1 контакта по id
-router.get("/:contactId", ctrl.getContactById);
+// router.get("/:contactId", ctrl.getContactById);
 //добавлення контакта
 router.post("/", ctrl.addContact);
-//видалення контакта по id
-router.delete("/:contactId", ctrl.deleteContact);
-//зміна чогось в контакті по id
-router.put("/:contactId", ctrl.updateContact);
+// //видалення контакта по id
+// router.delete("/:contactId", ctrl.deleteContact);
+// //зміна чогось в контакті по id
+// router.put("/:contactId", ctrl.updateContact);
 
 module.exports = router;
