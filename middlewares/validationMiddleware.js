@@ -1,6 +1,5 @@
 const Joi = require('joi');
 
-
 module.exports = {
     addContactValidation: (req, res, next) => {
         const schema = Joi.object({
