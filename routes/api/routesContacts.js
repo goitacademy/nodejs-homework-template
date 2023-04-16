@@ -15,24 +15,34 @@ const {
   validateCreateContact,
   validateUpdateContact,
   validateUpdateStatusContact,
+  isValidId,
+  authenticate,
 } = require("../../middleware");
 
-const isValidId = require("../../middleware/validateId");
-router.get("/", getContacts);
+// const isValidId = require("../../middleware/validateId");
 
-router.get("/:id", isValidId, getContact);
+router.get("/", authenticate, getContacts);
 
-router.post("/", validateCreateContact, createContact);
+router.get("/:id", authenticate, getContact);
 
-router.put("/:id", isValidId, validateUpdateContact, updateContact);
+router.post("/", authenticate, validateCreateContact, createContact);
+
+router.put(
+  "/:id",
+  authenticate,
+  isValidId,
+  validateUpdateContact,
+  updateContact
+);
 
 router.patch(
   "/:id/favorite",
+  authenticate,
   isValidId,
   validateUpdateStatusContact,
   updateStatusContact
 );
 
-router.delete("/:id", isValidId, deleteContact);
+router.delete("/:id", authenticate, isValidId, deleteContact);
 
 module.exports = router;
