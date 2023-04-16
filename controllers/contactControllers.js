@@ -1,4 +1,5 @@
 // const operations = require("../models/contacts");
+const ObjectId = require("mongoose").Types.ObjectId;
 const Contact = require("../models/contact");
 const { NotFound, BadRequest } = require("http-errors");
 
@@ -23,6 +24,9 @@ const addContact = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    if (ObjectId.isValid(id) == false) {
+      throw new NotFound("Not Found");
+    }
     const contact = await Contact.findById(id);
     if (!contact) {
       throw new NotFound("Not Found");
