@@ -1,15 +1,15 @@
-const Joi = require("joi");
+import { object, string } from "joi";
 
 const validationAddContact = (req, res, next) => {
   const { name, email, phone } = req.body;
 
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
+  const schema = object({
+    name: string().alphanum().min(3).max(30).required(),
 
-    email: Joi.string()
+    email: string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .required(),
-    phone: Joi.string().required(),
+    phone: string().required(),
   });
 
   const { error } = schema.validate({ name, email, phone });
@@ -32,15 +32,15 @@ const validationUpdContact = (req, res, next) => {
     return;
   }
 
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30),
+  const schema = object({
+    name: string().alphanum().min(3).max(30),
 
-    email: Joi.string().email({
+    email: string().email({
       minDomainSegments: 2,
       tlds: { allow: ["com", "net"] },
     }),
 
-    phone: Joi.string(),
+    phone: string(),
   });
 
   const { error } = schema.validate(req.body);
@@ -54,4 +54,4 @@ const validationUpdContact = (req, res, next) => {
   next();
 };
 
-module.exports = { validationAddContact, validationUpdContact };
+export default { validationAddContact, validationUpdContact };
