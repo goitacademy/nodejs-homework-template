@@ -4,7 +4,7 @@ const validatePostBody = (schema) => {
   const middlewareFunc = async (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(HttpError(400, `missing required name field`));
+      next(HttpError(400, error.message));
     }
     next();
   };
@@ -20,7 +20,7 @@ const validatePutBody = (schema) => {
 
     const { error } = schema.validate(req.body);
     if (error) {
-      next(HttpError(400, `missing required name field`));
+      next(HttpError(400, error.message));
     }
     next();
   };
