@@ -4,7 +4,7 @@ const cors = require('cors');
 // cors для обміну між доменами
 const dotevn = require("dotenv");
 const logger = require('morgan');
-const contactsRouter = require('./routes/api/contacts');
+const contactsRouter = require('./routes/api');
 
 dotevn.config();
 // шукає данні в текстовому файлі .env і додає змінні оточення

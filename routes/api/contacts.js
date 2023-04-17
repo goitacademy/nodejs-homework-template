@@ -2,8 +2,7 @@ const express = require("express");
 // express для маршрутизації
 const router = express.Router();
 // створюємо сторінку записної книжки
-
-const ctrl = require("../../controllers/contactsBook.js");
+const { ctrl} = require("../../controllers");
 
 // отримання всіх контактів
 router.get("/", ctrl.getAll);

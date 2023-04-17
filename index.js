@@ -1,4 +1,4 @@
-const contacts = require("./models/contacts");
+const contacts = require("./models");
 // імпортую файл contacts.js
 const { Command } = require("commander");
 
