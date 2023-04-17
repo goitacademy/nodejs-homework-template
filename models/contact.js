@@ -1,5 +1,44 @@
+const { Schema, model } = require("mongoose");
+const {handleMongooseError} = require("../helpers");
 const Joi = require("joi");
 // для валідації при додавані до json
+
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      minlength: 3,
+      maxlength: 15,
+      required: true,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+      min: 8,
+      max: 30,
+      match: /^\(\d{3}\)\d{2}-\d{2}-\d{3}$/,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false }
+);
+
+contactSchema.post("save", handleMongooseError);
+// помилка з неправельним форматом
+
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string()
@@ -19,6 +58,7 @@ const addSchema = Joi.object({
       "string.empty": "'phone' must contain value",
       "any.required": "missing required field 'phone'",
     }),
+  favorite: Joi.boolean(),
 });
 
 const putSchema = Joi.object({
@@ -38,9 +78,18 @@ const putSchema = Joi.object({
       "string.empty": "'phone' must contain value",
       "any.required": "missing required field 'phone'",
     }),
-}).or("name", "email", "phone");
+  favorite: Joi.boolean(),
+}).or("name", "email", "phone", "favorite");
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const Contact = model("contact", contactSchema); // модель що працює з колекцією
 
 module.exports = {
-    addSchema,
-    putSchema,
-}
+  Contact,
+  addSchema,
+  putSchema,
+  updateFavoriteSchema,
+};
