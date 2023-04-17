@@ -50,7 +50,13 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { token } = req.user;
+  res.json({ message: `Bearer ${token}` });
+};
+
 module.exports = {
   register: controllerWrap(register),
   login: controllerWrap(login),
+  getCurrent: controllerWrap(getCurrent),
 };
