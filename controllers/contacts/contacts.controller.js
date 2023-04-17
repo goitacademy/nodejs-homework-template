@@ -4,10 +4,17 @@ const { controllerWrap } = require("../../utils");
 
 // Get all contacts
 const getAll = async (req, res) => {
+  // Pagination
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner })
+
+  // Filter by favorite
+  const query = { owner };
+  if (favorite) {
+    query.favorite = favorite;
+  }
+  const result = await Contact.find(query)
     .populate("owner", "email")
     .skip(skip)
     .limit(parseInt(limit));
