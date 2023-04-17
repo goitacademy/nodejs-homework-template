@@ -1,10 +1,21 @@
 const { Contact } = require("../models/contact");
+
 const { HttpError } = require("../helpers");
 
 const { controllerWrapper } = require("../helpers");
 
 const getAll = async (req, res, next) => {
-  const contacts = await Contact.find();
+  const { id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = [true, false] } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = await Contact.find(
+    {
+      owner,
+      favorite: { $in: favorite },
+    },
+    "-createdAt -updatedAt",
+    { skip, limit }
+  ).populate("owner", "name email");
   res.json({
     contacts,
   });
@@ -22,7 +33,9 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const newContact = await Contact.create(req.body);
+  const { id: owner } = req.user;
+
+  const newContact = await Contact.create({ ...req.body, owner });
   res.status(201).json({
     newContact,
   });
@@ -53,7 +66,7 @@ const putById = async (req, res, next) => {
   });
 };
 
-const putchById = async (req, res, next) => {
+const favoriteUpdate = async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -72,5 +85,5 @@ module.exports = {
   add: controllerWrapper(add),
   deleteById: controllerWrapper(deleteById),
   putById: controllerWrapper(putById),
-  putchById: controllerWrapper(putchById),
+  favoriteUpdate: controllerWrapper(favoriteUpdate),
 };
