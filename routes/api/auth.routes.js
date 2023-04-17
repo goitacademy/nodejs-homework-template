@@ -18,4 +18,7 @@ router.post("/login", validator(schemas.loginSchema), authController.login);
 // Get current User
 router.get("/current", authenticate, authController.getCurrent);
 
+// Log out
+router.post("/logout", authenticate, authController.logout);
+
 module.exports = router;
