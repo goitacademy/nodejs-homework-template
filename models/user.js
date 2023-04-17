@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 
-const userSchema = Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
@@ -22,7 +22,18 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-    avatarURL: { type: String, required: true },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
   },
   { versionKey: false, timestamps: true }
 );
