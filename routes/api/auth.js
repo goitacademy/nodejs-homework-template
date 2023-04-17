@@ -8,7 +8,7 @@ const router = Router();
 router
     .post('/register', validateBody(schemas.registerSchema), ctrl.register)
     .post('/login', validateBody(schemas.loginSchema), ctrl.login)
-    .post('logout', authenticate, ctrl.logout)
+    .post('/logout', authenticate, ctrl.logout)
     .get('/current', authenticate, ctrl.getCurrent)
     .patch('/', authenticate, validateBody(schemas.subscriptionSchema), ctrl.updateSubscription);
 
