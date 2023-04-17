@@ -7,9 +7,13 @@ const validateBodyPost = (schema) => {
     const requiredField = namesFields.filter(
       (field) => req.body[field] === undefined
     );
+    const objectFields = namesFields.filter((field) => req.body[field]);
 
     if (error) {
-      next(HttpError(400, `missing required ${requiredField} field`));
+      if (objectFields.length < 3) {
+        next(HttpError(400, `missing required ${requiredField} field`));
+      }
+      next(HttpError(400, error.message));
     }
 
     next();
