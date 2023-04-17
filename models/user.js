@@ -3,23 +3,29 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../utils");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const subList = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
   {
-    name: {
+    subscription: {
       type: String,
-      require: true,
+      enum: subList,
+      default: "starter",
     },
     email: {
       type: String,
       match: emailRegexp,
       unique: true,
-      require: true,
+      require: [true, "Email is required"],
     },
     password: {
       type: String,
       minlength: 6,
-      require: true,
+      require: [true, "Set password for user"],
+    },
+    token: {
+      type: String,
+      default: "",
     },
   },
   { versionKey: false }
@@ -28,7 +34,8 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  subscription: Joi.string().valid(...subList),
+
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
@@ -38,9 +45,17 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subList)
+    .required()
+    .messages({ "any.required": "missing field subscription" }),
+});
+
 const schemas = {
   loginSchema,
   registerSchema,
+  updateSubscriptionSchema,
 };
 
 const User = model("user", userSchema);
