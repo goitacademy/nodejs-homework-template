@@ -12,4 +12,7 @@ router.post(
   authController.register
 );
 
+// Log in
+router.post("/login", validator(schemas.loginSchema), authController.login);
+
 module.exports = router;
