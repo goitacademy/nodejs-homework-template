@@ -67,7 +67,10 @@ const update = async (req, res, next) => {
     const { contactId } = req.params;
     const newData = req.body;
     const updatedContact = await updateContact(contactId, newData);
-    
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
     res.status(200).json(updatedContact);
   } catch (err) {
     res.status(500).json({ error: err.message });
