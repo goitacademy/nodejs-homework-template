@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./models/contacts.json");
+const contactsRouter = require("./routes/api/contacts.js");
 
 const app = express();
 

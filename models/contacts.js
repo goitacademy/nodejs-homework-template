@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
-const contactsPath = path.resolve("contacts");
+const contactsPath = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
