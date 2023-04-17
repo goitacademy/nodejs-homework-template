@@ -1,14 +1,13 @@
 const app = require('./app')
 const mongoose = require('mongoose');
 
-require('dotenv').config();
-
 const PORT = process.env.PORT || 3000;
 const DB_URI = process.env.DB_HOST;
 
 mongoose.set('strictQuery', true);
 
-mongoose.connect(DB_URI)
+mongoose
+  .connect(DB_URI)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`)
