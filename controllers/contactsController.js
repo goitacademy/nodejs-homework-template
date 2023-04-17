@@ -5,7 +5,6 @@ const {listContacts,
   addContact,
   updateContact} =require("../models/contacts");
 
-// const {contactValidation,putContactValidation} = require ("../../../validationSchema/validation")
 
 
 const getAll = async (_, res) => {
@@ -38,10 +37,7 @@ const add = async (req, res) => {
   try {
     const { name, email, phone } = req.body;
     const contact = await addContact({ name, email, phone });
-    // if (!contact) {
-    //   res.status(400).json({ message: "missing + req.params + required field" });
-    //   return;
-    // }
+    
     res.status(201).json(contact);
   } catch (err) {
     res.status(500).json({ error: err.message });
