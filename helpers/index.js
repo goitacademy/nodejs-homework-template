@@ -1,3 +1,4 @@
-const  HttpError  = require('./HttpError');
+const HttpError = require("./HttpError");
+const handelMongooseError = require("./handelMongooseError");
 
-module.exports = HttpError;
+module.exports = { HttpError, handelMongooseError };
