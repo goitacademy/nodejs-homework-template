@@ -6,7 +6,7 @@ const ctrl = require("../../controllers/contacts")
 
 // const validateBody = require("../../middlewares/validateBody")
 
-const schema  = require("../../schemas");
+// const schema  = require("../../schemas");
 
 
 
