@@ -8,6 +8,8 @@ const {
   validatePatchBody,
 } = require("../../utils/validateBody");
 
+const validateId = require("../../utils/validateId");
+
 const {
   addContactSchema,
   updateContactSchema,
@@ -18,18 +20,24 @@ const router = express.Router();
 
 router.get("/", controller.getAllContacts);
 
-router.get("/:contactId", controller.getContactById);
+router.get("/:contactId", validateId, controller.getContactById);
 
 router.post("/", validatePostBody(addContactSchema), controller.addNewContact);
 
-router.delete("/:contactId", controller.deleteContactById);
+router.delete("/:contactId", validateId, controller.deleteContactById);
 
 router.put(
   "/:contactId",
+  validateId,
   validatePutBody(updateContactSchema),
   controller.updateContactById
 );
 
-router.patch("/:contactId/favorite", validatePatchBody(updateStatusSchema), controller.updateContactStatus)
+router.patch(
+  "/:contactId/favorite",
+  validateId,
+  validatePatchBody(updateStatusSchema),
+  controller.updateContactStatus
+);
 
 module.exports = router;
