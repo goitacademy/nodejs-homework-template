@@ -44,9 +44,7 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const contactToUpdate = contacts.filter(
-    (contact) => contact.id === contactId
-  );
+  const contactToUpdate = contacts.find((contact) => contact.id === contactId);
   if (!contactToUpdate)
     return console.error("This contact doesn't exist in your phonebook");
   const updatedContact = { ...contactToUpdate, ...body };
