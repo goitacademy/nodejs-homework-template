@@ -7,7 +7,7 @@ const validateBy = (schima) => {
     }
     const { error } = schima.validate(req.body);
     if (error) {
-      throw HttpError(404, error.message);
+      throw HttpError(400, error.message);
     }
     next();
   };
