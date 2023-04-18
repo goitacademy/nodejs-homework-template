@@ -63,9 +63,29 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { subscription } = req.body;
+    const { _id } = req.user;
+
+    if (!["starter", "pro", "business"].includes(subscription)) {
+      throw HttpError(400, "Invalid subscription value");
+    }
+    const updatedUser = await User.findByIdAndUpdate(_id, { subscription });
+
+    if (!updatedUser) {
+      throw HttpError(404, "User not found");
+    }
+    res.status(200).json(updatedUser);
+  } catch {
+    next(HttpError(404));
+  }
+};
+
 module.exports = {
   register: controllerWrap(register),
   login: controllerWrap(login),
   getCurrent: controllerWrap(getCurrent),
   logout: controllerWrap(logout),
+  updateSubscription: controllerWrap(updateSubscription),
 };

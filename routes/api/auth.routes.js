@@ -21,4 +21,7 @@ router.get("/current", authenticate, authController.getCurrent);
 // Log out
 router.post("/logout", authenticate, authController.logout);
 
+// Update subscription
+router.patch("/:id/subscription", authController.updateSubscription);
+
 module.exports = router;
