@@ -18,6 +18,7 @@ const register = async (req, res) => {
   const result = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
     user: {
+      _id: result._id,
       email: result.email,
       subscription: "starter",
     },
@@ -45,6 +46,7 @@ const login = async (req, res) => {
   res.json({
     token,
     user: {
+      _id: user._id,
       email,
       subscription: "starter",
     },
@@ -52,8 +54,8 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { token } = req.user;
-  res.json({ message: `Bearer ${token}` });
+  const { _id, token } = req.user;
+  res.json({ _id, message: `Bearer ${token}` });
 };
 
 const logout = async (req, res) => {
@@ -63,23 +65,23 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
-const updateSubscription = async (req, res, next) => {
-  try {
-    const { subscription } = req.body;
-    const { _id } = req.user;
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { id } = req.params;
 
-    if (!["starter", "pro", "business"].includes(subscription)) {
-      throw HttpError(400, "Invalid subscription value");
-    }
-    const updatedUser = await User.findByIdAndUpdate(_id, { subscription });
-
-    if (!updatedUser) {
-      throw HttpError(404, "User not found");
-    }
-    res.status(200).json(updatedUser);
-  } catch {
-    next(HttpError(404));
+  if (!["starter", "pro", "business"].includes(subscription)) {
+    throw HttpError(400, "Invalid subscription value");
   }
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    { subscription },
+    { new: true }
+  );
+
+  if (!updatedUser) {
+    throw HttpError(404, "User not found");
+  }
+  res.status(200).json(updatedUser);
 };
 
 module.exports = {
