@@ -5,11 +5,15 @@ const { httpError } = require('../helpers');
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20, ...favorite } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find({ owner, ...favorite }, undefined, { skip, limit })
-    .populate('owner', 'email subsciption');
-    res.status(200).json(contacts);
+  const query = { owner };
+  if (favorite !== undefined) {
+    query.favorite = favorite;
+  }
+  const contacts = await Contact.find(query, undefined, { skip, limit })
+    .populate('owner', 'email subscription');
+  res.status(200).json(contacts);
 };
 
 const getById = async (req, res) => {
