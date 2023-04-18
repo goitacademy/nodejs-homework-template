@@ -29,6 +29,8 @@ const contactsSchema = new Schema(
 
 contactsSchema.post('save', handleMongooseError);
 
+const Contact = model('contact', contactsSchema);
+
 const addContactSchema = Joi.object({
     name: Joi.string().min(3).max(30).trim().required()
         .messages({ 'any.required': 'missing required "name" field' }),
@@ -52,5 +54,5 @@ const updateStatusSchema = Joi.object({
 
 const schemas = {addContactSchema, updateContactSchema, updateStatusSchema}
 
-const Contact = model('contacts', contactsSchema);
+
 module.exports = {Contact, schemas}

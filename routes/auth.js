@@ -1,8 +1,8 @@
 const { Router } = require('express');
-const {authenticate, validateBody} = require('../../middlewars');
+const {authenticate, validateBody} = require('../middlewars');
 
-const ctrl = require('../../controllers/auth');
-const { schemas } = require('../../models/users');
+const ctrl = require('../controllers/auth');
+const { schemas } = require('../models/users');
 const router = Router();
 
 router

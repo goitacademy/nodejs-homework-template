@@ -8,7 +8,7 @@ const getAllContacts = async (req, res) => {
   const { page = 1, limit = 20, ...favorite } = req.query;
   const skip = (page - 1) * limit;
   const contacts = await Contact.find({ owner, ...favorite }, undefined, { skip, limit })
-  .populate('owner', 'email subsciption')
+    .populate('owner', 'email subsciption');
     res.status(200).json(contacts);
 };
 
