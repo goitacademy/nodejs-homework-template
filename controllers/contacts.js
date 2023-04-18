@@ -5,11 +5,22 @@ const { Contact } = require("../models");
 const { HttpError } = require("../helpers");
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find();
-  if (!result) {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = false } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = favorite
+    ? await Contact.find({ owner, favorite: true }, "", {
+        skip,
+        limit,
+      }).populate("owner", "name email")
+    : await Contact.find({ owner }, "", { skip, limit }).populate(
+        "owner",
+        "name email"
+      );
+  if (!contacts) {
     throw HttpError(404, `Request failed`);
   }
-  res.json(result);
+  res.json(contacts);
 };
 
 const getContactById = async (req, res) => {
@@ -22,7 +33,9 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  console.log(owner);
+  const result = await Contact.create({ ...req.body, owner });
   if (!result) {
     throw HttpError(404, `Creation failed`);
   }
