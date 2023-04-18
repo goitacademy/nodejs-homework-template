@@ -4,7 +4,7 @@ const {
   validation,
   validationRequired,
   validationFavorite,
-} = require("../../middlewares/contactsValidate");
+} = require("../../middlewares/validate");
 
 const router = express.Router();
 

@@ -1,4 +1,3 @@
-// const operations = require("../models/contacts");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Contact = require("../models/contact");
 const { NotFound, BadRequest } = require("http-errors");
