@@ -4,10 +4,7 @@ const {
   contactSchemaFavorite,
 } = require("../validation/contactsSchema");
 
-const {
-  registerSchema,
-  loginSchema,
-} = require("../validation/registerSchema.js");
+const { registerSchema, loginSchema } = require("../validation/authSchema.js");
 
 const validator = (Schema) => {
   return (req, res, next) => {
