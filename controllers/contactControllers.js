@@ -7,7 +7,7 @@ const listContacts = async (req, res, next) => {
     const { _id: owner } = req.body;
     const { page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit;
-    const contacts = await Contact.find({ owner }, _, { skip, limit });
+    const contacts = await Contact.find({ owner }, "", { skip, limit });
     res.json(contacts);
   } catch (error) {
     next(error);
