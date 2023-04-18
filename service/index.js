@@ -23,7 +23,11 @@ const removeContact = (contactId) => {
   return contactList.findByIdAndRemove({ _id: contactId });
 };
 
-//const favorite...
+const updateStatusContact = (contactId, favorite) => {
+  return contactList.findByIdAndUpdate({ _id: contactId }, favorite, {
+    new: true,
+  });
+};
 
 module.exports = {
   getAllContacts,
@@ -31,5 +35,5 @@ module.exports = {
   addContact,
   updateContact,
   removeContact,
-  //favorite
+  updateStatusContact,
 };

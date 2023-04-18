@@ -19,7 +19,7 @@ const get = async (req, res, next) => {
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const result = await service.getContactById();
+    const result = await service.getContactById(contactId);
     if (result) {
       res.json({
         status: "success",
@@ -110,7 +110,30 @@ const remove = async (req, res, next) => {
   }
 };
 
-//napisz jeszcze kod do favorite
+const favorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite = false } = req.body;
+
+  try {
+    const result = await service.updateStatusContact(contactId, { favorite });
+    if (result) {
+      res.json({
+        status: "succcess",
+        code: 200,
+        data: { contact: result },
+      });
+    } else {
+      res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Missing field favorite",
+      });
+    }
+  } catch (e) {
+    res.status(404).json({ message: "Not found" });
+    next(e);
+  }
+};
 
 module.exports = {
   get,
@@ -118,5 +141,5 @@ module.exports = {
   add,
   update,
   remove,
-  //favorite,
+  favorite,
 };
