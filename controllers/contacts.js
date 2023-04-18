@@ -12,9 +12,9 @@ const getAll = async (req, res, next) => {
 };
 const getById = async (req, res, next) => {
   try {
-    
-    const { id } = req.params;    
-    const result = await Contact.findById(id);
+    const { contactId } = req.params;
+      
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -34,8 +34,8 @@ const add = async (req, res, next) => {
 };
 const deleteById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndRemove (id);
+   const { contactId } = req.params;
+    const result = await Contact.findByIdAndRemove (contactId);
 
     if (!result) {
       throw HttpError(404, "Not found");
@@ -52,8 +52,8 @@ const updateById = async (req, res, next) => {
     if (JSON.stringify(req.body) === "{}") {
       throw HttpError(400, "Missing fields");
     }
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body,{new:true});
+   const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true});
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -65,11 +65,13 @@ const updateById = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    if (JSON.stringify(req.body) === "{}") {
-      throw HttpError(400, "missing field favorite");
-    }
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body,{new:true});
+ 
+    // if (!Object.keys(req.body).includes('favorite')) {
+    //   throw HttpError(400, "missing field favorite");
+   
+    // }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true});
     if (!result) {
       throw HttpError(404, "Not found");
     }
