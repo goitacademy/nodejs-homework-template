@@ -11,7 +11,7 @@ const addContactSchema = Joi.object({
     })
     .required(),
   phone: Joi.string()
-    // .regex(phoneRegex, "Phone number must be in the format (123) 456-7890")
+    .regex(phoneRegex, "Phone number must be in the format (123) 456-7890")
     .required(),
 });
 
@@ -21,11 +21,10 @@ const updateContactSchema = Joi.object({
   email: Joi.string().email({
     minDomainSegments: 2,
   }),
-  phone: Joi.string() /**delete this comma, when activate regex 👉*/,
-  //   .regex(
-  //   phoneRegex,
-  //   "Phone number must be in the format (123) 456-7890"
-  // ),
+  phone: Joi.string().regex(
+    phoneRegex,
+    "Phone number must be in the format (123) 456-7890"
+  ),
 });
 
 module.exports = { addContactSchema, updateContactSchema };
