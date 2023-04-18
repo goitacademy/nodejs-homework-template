@@ -54,6 +54,8 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
+const contactsSchemas = { addSchema, updSchema, updStatusSchema };
+
 const Contact = model("contact", contactSchema);
 
-module.exports = { addSchema, updSchema, updStatusSchema, Contact };
+module.exports = { contactsSchemas, Contact };
