@@ -1,6 +1,8 @@
 const Joi = require("joi");
 
-// Validates sent data for POST & PUT methods
+const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+
+// Validates sent data for POST method
 const addContactSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
   email: Joi.string()
@@ -8,19 +10,22 @@ const addContactSchema = Joi.object({
       minDomainSegments: 2,
     })
     .required(),
-  phone: Joi.string().required(),
-  /**no phone validation just yet ^\(\d{3}\) \d{3}-\d{4}$
-   */
+  phone: Joi.string()
+    // .regex(phoneRegex, "Phone number must be in the format (123) 456-7890")
+    .required(),
 });
 
+// Validates sent data for PUT method
 const updateContactSchema = Joi.object({
   name: Joi.string().min(3).max(20),
   email: Joi.string().email({
     minDomainSegments: 2,
   }),
-  phone: Joi.string(),
-  /**no phone validation just yet ^\(\d{3}\) \d{3}-\d{4}$
-   */
+  phone: Joi.string() /**delete this comma, when activate regex 👉*/,
+  //   .regex(
+  //   phoneRegex,
+  //   "Phone number must be in the format (123) 456-7890"
+  // ),
 });
 
 module.exports = { addContactSchema, updateContactSchema };
