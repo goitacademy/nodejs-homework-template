@@ -7,6 +7,10 @@ const {
   updateFavorite
 } = require("./contactsBook/index");
 
+const {
+  register,
+} = require("./users/index");
+
 const ctrl = {
   getAll,
   getContactById,
@@ -16,6 +20,11 @@ const ctrl = {
   updateFavorite,
 };
 
+const ctrlUser = {
+  register,
+}
+
 module.exports = {
   ctrl,
+  ctrlUser
 };

@@ -7,7 +7,7 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      minlength: 3,
+      minlength: 2,
       maxlength: 15,
       required: true,
       trim: true,
@@ -32,6 +32,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
   },
   { versionKey: false }
 );
