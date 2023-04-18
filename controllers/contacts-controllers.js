@@ -1,16 +1,10 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
-
 const HttpError = require("../helpers/HttpError");
+
+const { Contact } = require("../models/contact");
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const result = await listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -20,7 +14,8 @@ const getAllContacts = async (req, res, next) => {
 const getOneContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    // const result = await Contact.findOne({ _id: contactId });
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw HttpError(404);
     }
@@ -32,7 +27,7 @@ const getOneContact = async (req, res, next) => {
 
 const addNewContact = async (req, res, next) => {
   try {
-    const result = await addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -42,7 +37,7 @@ const addNewContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw HttpError(404);
     }
@@ -59,7 +54,28 @@ const changeContact = async (req, res, next) => {
       throw HttpError(400, "missing fields");
     }
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const changeFavorite = async (req, res, next) => {
+  try {
+    const isBody = Object.keys(req.body);
+    if (isBody.length === 0) {
+      throw HttpError(400, "missing field favorite");
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404);
     }
@@ -75,4 +91,5 @@ module.exports = {
   addNewContact,
   deleteContact,
   changeContact,
+  changeFavorite,
 };
