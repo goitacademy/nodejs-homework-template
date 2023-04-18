@@ -8,9 +8,11 @@ const {ctrlUser} = require("../../controllers")
 const router = express.Router();
 // створюємо сторінку записної книжки
 
-
 //singnup
 router.post("/register", validateBody(schemas.registerSchema), ctrlUser.register);
+//signin
+router.post("/login", validateBody(schemas.loginSchema), ctrlUser.login);
+
 
 module.exports = router;
 

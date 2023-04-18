@@ -9,6 +9,7 @@ const {
 
 const {
   register,
+  login
 } = require("./users/index");
 
 const ctrl = {
@@ -22,6 +23,7 @@ const ctrl = {
 
 const ctrlUser = {
   register,
+  login,
 }
 
 module.exports = {
