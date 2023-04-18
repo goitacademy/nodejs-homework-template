@@ -4,7 +4,10 @@ const { NotFound, BadRequest } = require("http-errors");
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { _id: owner } = req.body;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({ owner }, _, { skip, limit });
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -13,7 +16,8 @@ const listContacts = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const newContact = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const newContact = await Contact.create({ ...req.body, owner });
     res.status(201).json(newContact);
   } catch (error) {
     next(error);

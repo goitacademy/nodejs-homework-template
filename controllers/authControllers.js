@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { Conflict, NotFound, BadRequest, Unauthorized } = require("http-errors");
+const { Conflict, Unauthorized } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -38,6 +38,7 @@ const loginUser = async (req, res, next) => {
     }
     const payload = { id: user.id };
     const token = jwt.sign(payload, SECRET_KEY);
+    await User.findByIdAndUpdate(user._id, { token });
     res.json({
       token,
       user: {
@@ -50,4 +51,23 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const getCurrent = async (req, res) => {
+  try {
+    const { email, subscription } = req.user;
+    res.json({ email, subscription });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getLogout = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+    res.status(204).json("No Content");
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { registerUser, loginUser, getCurrent, getLogout };
