@@ -5,12 +5,14 @@ const controller = require("../../controllers/contacts-controllers");
 const {
   validatePostBody,
   validatePutBody,
+  validatePatchBody,
 } = require("../../utils/validateBody");
 
 const {
   addContactSchema,
   updateContactSchema,
-} = require("../../schemas/contactSchema");
+  updateStatusSchema,
+} = require("../../models/contact");
 
 const router = express.Router();
 
@@ -27,5 +29,7 @@ router.put(
   validatePutBody(updateContactSchema),
   controller.updateContactById
 );
+
+router.patch("/:contactId/favorite", validatePatchBody(updateStatusSchema), controller.updateContactStatus)
 
 module.exports = router;
