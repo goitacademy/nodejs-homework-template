@@ -55,23 +55,14 @@ const updateContact = async (contactId, body) => {
   const result = JSON.parse(data);
   const checkId = result.findIndex((contact) => contact.id === contactId);
   if (checkId === -1) {
-    return error.status(404).json({ message: "missing fields" });
+    return null;
   }
 
-  if (!body.email || !body.name || !body.phone) {
-    return error.status(400).json({ message: "missing fields" });
-  }
-  const change = result.filter((contact) => contact.id !== contactId);
+  const update = { ...result[checkId], ...body };
+  result[checkId] = update;
 
-  const update = {
-    id: contactId,
-    name: body.name,
-    email: body.email,
-    phone: body.phone,
-  };
-  change.push(update);
-  await fs.writeFile(pathDb, JSON.stringify(change));
-  return change;
+  await fs.writeFile(pathDb, JSON.stringify(result));
+  return result;
 };
 
 module.exports = {
