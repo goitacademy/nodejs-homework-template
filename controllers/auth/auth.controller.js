@@ -52,8 +52,11 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { token } = req.user;
-  res.json({ message: `Bearer ${token}` });
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
 };
 
 const logout = async (req, res) => {
