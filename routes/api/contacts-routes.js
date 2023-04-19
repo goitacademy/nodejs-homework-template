@@ -25,7 +25,7 @@ router.get('/:id', async (req, res, next) => {
     const { id } = req.params;
     const result = await contactsService.getContactById(id);
     if (!result) {
-      throw HttpError(404, `Contact with ${id} not found`);
+      throw HttpError(404, `Contact with id: ${id} not found`);
     }
     res.json(result);
   } catch (error) {
@@ -70,7 +70,7 @@ router.delete('/:id', async (req, res, next) => {
     const { id } = req.params;
     const result = await contactsService.removeContact(id);
     if (!result) {
-      throw HttpError(404, `Contact with ${id} not found`);
+      throw HttpError(404, `Contact with id: ${id} not found`);
     }
     // res.json(result);
     // res.status(204).send();
