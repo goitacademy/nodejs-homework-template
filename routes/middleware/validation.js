@@ -21,6 +21,7 @@ function validate(schema) {
 
       if (errorType === "any.required") {
         res.status(400).json({
+          
           message: `missing required ${errorField.path[1]} field`,
         });
       }
