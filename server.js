@@ -4,7 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const PORT = 3000;
-const DB_HOST = `mongodb+srv://admin:240188Lusiy@cluster0.gwfkspe.mongodb.net/test`;
+const DB_HOST = `mongodb+srv://admin:240188Lusiy@cluster0.gwfkspe.mongodb.net/db-contacts?retryWrites=true&w=majority`;
 
 const contactsRouter = require("./routes/api/contacts");
 
