@@ -1,0 +1,2 @@
+DB_HOST="mongodb+srv://sofiagakalo1:uxni25zjuqy9jaqQ@cluster0.6uoxn5p.mongodb.net/my-contacts?retryWrites=true&w=majority";
+PORT=3000;
