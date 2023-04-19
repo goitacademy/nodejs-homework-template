@@ -1,3 +1,4 @@
 const validator = require("./validator.middleware");
+const upload = require("./upload.middleware");
 
-module.exports = { validator };
+module.exports = { validator, upload };
