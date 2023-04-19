@@ -1,4 +1,5 @@
 const { HttpError } = require("../helpers");
+const { authSchemas } = require("../models");
 
 const isBody = (req, res, next) => {
   if (JSON.stringify(req.body) === "{}") {
@@ -18,7 +19,6 @@ const validateBody = schema => {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      console.log(error);
       const fields = [];
       const fieldsToPatch = [];
       error.details.map(el => {
@@ -34,18 +34,27 @@ const validateBody = schema => {
       const patchFields = fieldsToPatch.join(", ");
       const isPluralError = fields.length > 1 ? "s" : "";
       const isPluralPatchError = patchFields.length > 1 ? "s" : "";
-      const errorMessage = () => {
-        switch (req.method) {
-          case "POST":
-            return `Missing required <${errorFields}> field${isPluralError}`;
-          case "PUT":
-            return errorFields === "favorite" ? `Field <${errorFields}> not allowed` : `Invalid value on <${errorFields}> field${isPluralError}`;
-          case "PATCH":
-            return `Field${isPluralPatchError} <${patchFields}> not allowed`;
-          default:
-        }
-      };
-      next(HttpError(400, errorMessage()));
+      let errorMessage = null;
+      switch (req.method) {
+        case "POST":
+          errorMessage = `Missing required <${errorFields}> field${isPluralError}`;
+          break;
+        case "PUT":
+          errorMessage =
+            errorFields === "favorite" ? `Field <${errorFields}> not allowed` : `Invalid value on <${errorFields}> field${isPluralError}`;
+          break;
+        case "PATCH":
+          errorMessage = `Field${isPluralPatchError} <${patchFields}> not allowed`;
+          break;
+        default:
+      }
+      if (schema === authSchemas.registerSchema || schema === authSchemas.loginSchema) {
+        errorMessage = "<Помилка від Joi або іншої бібліотеки валідації>";
+      }
+      if (schema === authSchemas.updateSubSchema) {
+        errorMessage = "Field <subscription> must be one of 'starter', 'pro' or 'business' values";
+      }
+      next(HttpError(400, errorMessage));
     }
     next();
   };

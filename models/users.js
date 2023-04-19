@@ -2,24 +2,29 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
-const emailRegepx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegepx = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const subLevel = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
   {
-    name: {
+    subscription: {
       type: String,
-      required: true,
+      enum: subLevel,
+      default: "starter",
     },
     email: {
       type: String,
       match: emailRegepx,
       unique: true,
-      required: true,
+      required: [true, "Email is required"],
     },
     password: {
       type: String,
-      minLength: 6,
-      required: true,
+      min: 6,
+      required: [true, "Set password for user"],
+    },
+    token: {
+      type: String,
     },
   },
   { versionKey: false, timestamps: true }
@@ -28,7 +33,7 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  subscription: Joi.string().valid(...subLevel),
   email: Joi.string().pattern(emailRegepx).required(),
   password: Joi.string().min(6).required(),
 });
@@ -38,7 +43,13 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-const authSchemas = { registerSchema, loginSchema };
+const updateSubSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subLevel)
+    .required(),
+});
+
+const authSchemas = { registerSchema, loginSchema, updateSubSchema };
 
 const User = model("user", userSchema);
 
