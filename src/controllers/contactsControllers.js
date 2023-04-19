@@ -1,9 +1,23 @@
 const { Contact } = require('../models/contact');
-const { HttpError, ctrlWrapper } = require('../helpers');
+const { ctrlWrapper } = require('../helpers');
 const checkContactExists = require('../utils/checkContactExists');
 
-const getContactsController = async (_, res) => {
-  const contacts = await Contact.find();
+const getContactsController = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = undefined } = req.query;
+  const skip = (page - 1) * limit;
+
+  /// реалізований пошук по  &favorite=true та false здається працює.
+  const filter = { owner };
+  if (favorite) {
+    filter.favorite = favorite;
+  }
+  /// лишіть якийсь коментар, а то я не впевнений в цьому рішенні.
+
+  const contacts = await Contact.find(filter, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'name email');
   res.status(200).json(contacts);
 };
 
@@ -17,7 +31,8 @@ const getContactController = async (req, res) => {
 };
 
 const addContactController = async (req, res) => {
-  const createdContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const createdContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(createdContact);
 };
 
