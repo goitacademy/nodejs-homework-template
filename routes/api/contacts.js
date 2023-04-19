@@ -1,4 +1,6 @@
 const express = require('express');
+const { httpErrorFunc } = require('../..//helpers/httpErrorFunc');
+const Joi = require('joi');
 
 const {
   listContacts,
@@ -8,43 +10,75 @@ const {
   updateContact,
 } = require('../..//models/contacts');
 
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string()
+    .pattern(/^380\d{9}$/)
+    .required(),
+});
+
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  res.status(200).json(listContacts());
+  try {
+    const contacts = await listContacts();
+
+    if (!contacts) {
+      throw httpErrorFunc(404, 'No contacts found');
+    }
+    res.status(200).json(contacts);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/:contactId', async (req, res, next) => {
   try {
     res.status(200).json(await getContactById(req.params.contactId));
   } catch (err) {
-    res.status(404).json({ message: 'Not found' });
+    throw httpErrorFunc(404, 'Not found');
   }
 });
 
 router.post('/', async (req, res, next) => {
-  console.log(req.query);
   try {
-    res.status(201).json(await addContact(req.body));
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw httpErrorFunc(400, error.message);
+    }
+    const result = await addContact(req.body);
+    res.status(201).json(result);
   } catch (err) {
-    res.status(400).json({ message: 'missing required name field' });
+    next(err);
   }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const result = await removeContact(req.params.contactId);
-    result ?? res.status(200).json({ message: 'contact deleted' });
+    if (!result) {
+      throw httpErrorFunc(404, 'Not found');
+    }
+    res.status(200).json({ message: 'contact deleted' });
   } catch (err) {
-    res.status(404).json({ message: 'missing required name field' });
+    next(err);
   }
 });
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    res.status(200).json(await updateContact(req.params.contactId, req.body));
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw httpErrorFunc(400, error.message);
+    }
+    const result = await updateContact(req.params.contactId, req.body);
+    if (!result) {
+      throw httpErrorFunc(404, 'Not found');
+    }
+    res.status(200).json(result);
   } catch (err) {
-    res.status(err.status).json(err.message);
+    next(err);
   }
 });
 

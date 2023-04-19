@@ -64,7 +64,7 @@ async function removeContact(contactId) {
   const index = contacts.findIndex((contact) => contact.id === contactId);
 
   if (index === -1) {
-    throw new Error();
+    return null;
   }
 
   const [result] = contacts.splice(index, 1);
@@ -104,27 +104,15 @@ async function addContact({ name, email, phone }) {
  * @returns {Object|null} The updated contact object, or null if no such contact exists.
  */
 async function updateContact(contactId, { name, email, phone }) {
-  console.log('Updating contact', contactId, name, email, phone);
-  if (!name && !email && !phone) {
-    const err = new Error('{"message": "missing fields"}');
-    err.status = 400;
-    throw err;
-  }
-
   const contacts = await readFromFile(contactsPath);
   const index = contacts.findIndex((contact) => contact.id === contactId);
 
-  if (index === -1) {
-    const err = new Error('{"message": "Not found"}');
-    err.status = 404;
-    throw err;
-  }
-
   const updatedContact = { ...contacts[index], name, email, phone };
-  const [result] = contacts.splice(index, 1, updatedContact);
+  contacts.splice(index, 1, updatedContact);
+
   await writeToFile(contactsPath, contacts);
 
-  return result;
+  return updatedContact;
 }
 
 module.exports = {
