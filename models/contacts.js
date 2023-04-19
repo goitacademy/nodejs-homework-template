@@ -80,10 +80,6 @@ async function removeContact(contactId) {
  * @throws {Error} If the name, email, or phone properties are missing from the request body.
  */
 async function addContact({ name, email, phone }) {
-  if (!name || !email || !phone) {
-    throw new Error();
-  }
-
   const contact = {
     id: nanoid(),
     name,

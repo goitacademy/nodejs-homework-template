@@ -4,4 +4,4 @@ const httpErrorFunc = (status, message) => {
   throw err;
 };
 
-module.exports = { httpErrorFunc };
+module.exports = httpErrorFunc;
