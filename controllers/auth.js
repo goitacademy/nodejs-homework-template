@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const { controllerWrapper, HttpError } = require("../helpers");
 
@@ -69,12 +68,11 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  const { email } = req.user;
+  const { _id } = req.user;
   const { subscription } = req.body;
-  await User.findOneAndUpdate(email, { subscription });
+  await User.findByIdAndUpdate(_id, { subscription });
   res.json({
-    email,
-    subscription,
+    message: `Subscription level change to <${subscription}>`,
   });
 };
 
