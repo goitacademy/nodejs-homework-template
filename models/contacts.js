@@ -33,7 +33,7 @@ async function addContact(name, email, phone) {
     phone,
   };
   if (!name || !email || !phone) {
-    return console.log(`enter the information`.red);
+    return 
   }
 
   contacts.push(newContact);
