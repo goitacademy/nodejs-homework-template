@@ -12,12 +12,12 @@ const addSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   const allContacts = await contacts.listContacts();
   res.status(200).json(allContacts);
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
   console.log(contactId);
   const contact = await contacts.getContactById(contactId);
@@ -27,7 +27,7 @@ const getById = async (req, res, next) => {
   res.status(200).json(contact);
 };
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const body = req.body;
   const { error } = addSchema.validate(body);
   console.log(error);
@@ -38,7 +38,7 @@ const addContact = async (req, res, next) => {
   res.status(201).json(contact);
 };
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { contactId } = req.params;
   const contact = await contacts.removeContact(contactId);
   if (!contact) {
@@ -47,7 +47,7 @@ const deleteContact = async (req, res, next) => {
   res.status(200).json({ message: "contact deleted" });
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const body = req.body;
   const { error } = addSchema.validate(body);
   console.log(error);
