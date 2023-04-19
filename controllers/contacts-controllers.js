@@ -42,9 +42,6 @@ const updateContact = async (req, res) => {
   if (!result) {
     throw HttpError(404);
   }
-  if(JSON.stringify(req.body) === "{}") {
-    throw HttpError(400, "missing fields")
-  }
 
   res.json(result);
 };
@@ -56,9 +53,7 @@ const updateFavorite = async (req, res) => {
   if (!result) {
     throw HttpError(404);
   }
-  if(JSON.stringify(req.body) === "{}") {
-    throw HttpError(400, "missing fields")
-  }
+
 
   res.json(result);
 };
