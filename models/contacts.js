@@ -48,7 +48,10 @@ const updateContact = async (contactId, body) => {
     (item) => item.id === contactId.toString()
   );
   if (ucindex === -1) return null;
-  contactList[ucindex] = { id: contactId, ...body };
+  console.log(ucindex);
+  console.log(contactList[ucindex]);
+
+  contactList[ucindex] = { ...contactList[ucindex], ...body };
 
   await fs.writeFile(contactsPath, JSON.stringify(contactList, null, 2));
   return contactList[ucindex];
