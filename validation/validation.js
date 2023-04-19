@@ -26,7 +26,7 @@ function validatePostData (req, res, next) {
     const {error} = addSchema.validate(req.body);
     if(error) {
         return res.status(400).json({
-            message: "missing required name field"
+            message: error.message,
         })
     }
 

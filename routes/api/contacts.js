@@ -10,8 +10,8 @@ router.get('/:id', getContactById)
 
 router.delete('/:id', removeContact)
 
-router.post('/', addContact, validatePostData)
+router.post('/', validatePostData, addContact)
 
-router.put('/:id', updateContact, validatePutData)
+router.put('/:id', validatePutData, updateContact)
 
 module.exports = router

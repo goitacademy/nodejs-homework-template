@@ -45,10 +45,21 @@ const updateContact = async (id, data) => {
   if(index === -1){
       return null;
   }
-  contacts[index] = {id, ...data};
+  contacts[index] = {...contacts[index], ...data};
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 }
+
+// const updateContact = async (id, data) => {
+//   const contacts = await listContacts();
+//   const contact = contacts.find(item => item.id === id);
+//   if(contact === undefined){
+//       return null;
+//   }
+//   contacts[contact] = {...contact, ...data};
+//   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return contacts[contact];
+// }
 
 module.exports = {
   listContacts,
