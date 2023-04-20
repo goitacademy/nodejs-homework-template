@@ -1,10 +1,9 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config();
 
-const contactsRouter = require('./routes/api/contacts')
-
-
+const contactsRouter = require('./routes/api/contacts');
 const app = express() // to create our app express server
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -25,3 +24,5 @@ app.use((err, req, res, next) => {
 
 
 module.exports = app;
+
+
