@@ -44,18 +44,22 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const contactToUpdate = contacts.find((contact) => contact.id === contactId);
-  if (!contactToUpdate)
+  const contactIndex = contacts.findIndex((obj) => obj.id === contactId);
+
+  if (contactIndex === -1) {
     return console.error("This contact doesn't exist in your phonebook");
-  const updatedContact = { ...contactToUpdate, ...body };
-  const filteredContacts = contacts.filter(
-    (contact) => contact.id !== contactId
-  );
-  const updatedContacts = [...filteredContacts, updatedContact];
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2), {
+  }
+
+  contacts[contactIndex] = {
+    ...contacts[contactIndex],
+    ...body,
+  };
+
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), {
     encoding: "utf-8",
   });
-  return updatedContact;
+
+  return contacts[contactIndex];
 };
 
 module.exports = {
