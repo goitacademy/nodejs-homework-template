@@ -4,6 +4,7 @@ const validateUpdateStatusContact = require("./validateUpdateStatusContact");
 const isValidId = require("./validateId");
 const authenticate = require("./authenticate");
 const validateAuthBody = require("./validateAuthBody");
+const upload = require("./upload");
 
 module.exports = {
   validateCreateContact,
@@ -12,4 +13,5 @@ module.exports = {
   isValidId,
   authenticate,
   validateAuthBody,
+  upload,
 };
