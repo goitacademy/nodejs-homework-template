@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const {authenticate, validateBody} = require('../middlewars');
+const {authenticate, validateBody, upload} = require('../middlewars');
 
 const ctrl = require('../controllers/auth');
 const { schemas } = require('../models/users');
@@ -10,6 +10,7 @@ router
     .post('/login', validateBody(schemas.loginSchema), ctrl.login)
     .post('/logout', authenticate, ctrl.logout)
     .get('/current', authenticate, ctrl.getCurrent)
-    .patch('/', authenticate, validateBody(schemas.subscriptionSchema), ctrl.updateSubscription);
+    .patch('/', authenticate, validateBody(schemas.subscriptionSchema), ctrl.updateSubscription)
+    .patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar)
 
 module.exports = router;

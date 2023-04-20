@@ -1,10 +1,15 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const gravatar = require('gravatar')
+const path = require('path');
+const fs = require('fs/promises');
+ 
 const { User } = require('../models/users');
 const { asyncMiddleware } = require('../middlewars');
 const { httpError } = require('../helpers');
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.resolve('public', 'avatars');
 
 const registerUser = async (req, res) => {
     const { email, password } = req.body;
@@ -15,7 +20,9 @@ const registerUser = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
     res.status(201).json({
         user: { email: newUser.email, subscription: newUser.subscription }
     });
@@ -68,6 +75,18 @@ const updateSubscription = async (req, res) => {
     res.json({ email, subscription });
 };
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, filename } = req.file;
+    const avatarName = `${_id}_${filename}`;
+    const resultUpload = path.resolve(avatarsDir, avatarName);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join('avatars', avatarName)
+    await User.findOneAndUpdate(_id, { avatarURL });
+
+
+    res.json({ avatarURL });
+}
 
 module.exports = {
     register: asyncMiddleware(registerUser),
@@ -75,4 +94,5 @@ module.exports = {
     logout: asyncMiddleware(logoutUser),
     getCurrent: asyncMiddleware(getCurrentUser),
     updateSubscription: asyncMiddleware(updateSubscription),
+    updateAvatar: asyncMiddleware(updateAvatar)
 }

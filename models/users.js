@@ -22,6 +22,10 @@ const userSchema = new Schema({
         enum: SUBSCRIPTIONS,
         default: "starter"
     },
+    avatarURL: {
+        type: String,
+        required: [true, 'Please upload your avatar'],
+    },
     token: {
         type: String,
         default: '',
