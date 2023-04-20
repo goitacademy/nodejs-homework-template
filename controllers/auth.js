@@ -3,13 +3,16 @@ const bcrypt = require('bcrypt');
 const gravatar = require('gravatar')
 const path = require('path');
 const fs = require('fs/promises');
- 
+const Jimp = require('jimp');
+
 const { User } = require('../models/users');
 const { asyncMiddleware } = require('../middlewars');
 const { httpError } = require('../helpers');
 const { SECRET_KEY } = process.env;
 
 const avatarsDir = path.resolve('public', 'avatars');
+
+const AVATAR_SIZE = 250;
 
 const registerUser = async (req, res) => {
     const { email, password } = req.body;
@@ -79,8 +82,20 @@ const updateAvatar = async (req, res) => {
     const { _id } = req.user;
     const { path: tempUpload, filename } = req.file;
     const avatarName = `${_id}_${filename}`;
-    const resultUpload = path.resolve(avatarsDir, avatarName);
-    await fs.rename(tempUpload, resultUpload);
+
+    try {
+        const resultUpload = path.join(avatarsDir, avatarName);
+        const image = await Jimp.read(tempUpload);
+        await image
+            .cover(AVATAR_SIZE, AVATAR_SIZE)
+            .quality(75)
+            .writeAsync(resultUpload);
+    } catch (error) {        
+        throw httpError(500, 'Failed to update avatar')
+    }
+    finally {
+        await fs.unlink(tempUpload)
+    }
     const avatarURL = path.join('avatars', avatarName)
     await User.findOneAndUpdate(_id, { avatarURL });
 
