@@ -1,11 +1,16 @@
-// const operations = require("../models/contacts");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Contact = require("../models/contact");
 const { NotFound, BadRequest } = require("http-errors");
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({ owner }, "", {
+      skip,
+      limit,
+    }).populate("owner", "email");
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -14,7 +19,8 @@ const listContacts = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const newContact = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const newContact = await Contact.create({ ...req.body, owner });
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
