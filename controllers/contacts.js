@@ -3,35 +3,43 @@ const { controllerWrapper, checkId } = require("../helpers");
 const { Contact } = require("../models");
 
 const listContacts = async (req, res, next) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, ...params } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner, ...params }, "-createdAt -updatedAt", { skip, limit }).populate("owner", "email subscription -_id");
   res.json(result);
 };
 
 const getById = async (req, res, next) => {
-  const result = await Contact.findById(req.params.contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOne({ _id: req.params.contactId, owner });
   checkId(result);
   res.json(result);
 };
 
 const addContact = async (req, res, next) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const deleteContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndRemove(req.params.contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id: req.params.contactId, owner });
   checkId(result);
   res.json({ message: "Contact deleted" });
 };
 
 const updateContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id: req.params.contactId, owner }, req.body, { new: true });
   checkId(result);
   res.json(result);
 };
 
 const updateStatusContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id: req.params.contactId, owner }, req.body, { new: true });
   checkId(result);
   res.json(result);
 };

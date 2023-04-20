@@ -48,12 +48,19 @@ const contactSchema = new Schema(
       enum: favoriteOptions,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 contactSchema.post("save", handleMongooseError);
 
+const contactsSchemas = { addSchema, updSchema, updStatusSchema };
+
 const Contact = model("contact", contactSchema);
 
-module.exports = { addSchema, updSchema, updStatusSchema, Contact };
+module.exports = { contactsSchemas, Contact };
