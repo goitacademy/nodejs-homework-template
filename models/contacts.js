@@ -1,14 +1,38 @@
-// const fs = require('fs/promises')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const listContacts = async () => {}
+const contact = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const getContactById = async (contactId) => {}
+const Contacts = mongoose.model('contact', contact);
 
-const removeContact = async (contactId) => {}
+const listContacts = () => Contacts.find();
 
-const addContact = async (body) => {}
+const getContactById = id => Contacts.findById(id);
 
-const updateContact = async (contactId, body) => {}
+const removeContact = id => Contacts.findByIdAndDelete(id);
+
+const addContact = body => Contacts.create(body);
+
+const updateContact = (contactId, body) =>
+  Contacts.findByIdAndUpdate(contactId, body, { new: true });
+
+const updateStatusContact = (contactId, body) =>
+  Contacts.findByIdAndUpdate(contactId, body, { new: true });
 
 module.exports = {
   listContacts,
@@ -16,4 +40,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+  updateStatusContact,
+};
