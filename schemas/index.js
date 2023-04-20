@@ -1,7 +1,8 @@
 const addShema = require("./contacts");
-const contactShema = require("./contactShema");
-
+const contactsShema = require("./contactsShema");
+const updateFavoriteSchema = require("./updateFavoriteSchema");
 module.exports = {
   addShema,
-  contactShema,
+  contactsShema,
+  updateFavoriteSchema,
 };
