@@ -1,7 +1,6 @@
 const { Contact } = require('../models/contact');
 
-const { HttpError } = require('../helpers');
-const { ctrlWrapper } = require('../helpers');
+const { HttpError, ctrlWrapper } = require('../helpers');
 
 const getContacts = async (req, res) => {
   const result = await Contact.find();
@@ -41,7 +40,7 @@ const updateFavorite = async (req, res) => {
       throw HttpError(404, 'Not found');
   }
     if (!Object.keys(req.body).length) {
-    throw HttpError(400, "Missing fields");
+    throw HttpError(400, "missing field favorite");
   }
     return res.json(result);
 }
