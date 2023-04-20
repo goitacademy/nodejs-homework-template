@@ -12,7 +12,7 @@ const listContacts = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ _id: req.params.contactId, owner });
+  const result = await Contact.findOne({ _id: req.params.contactId, owner });
   checkId(result);
   res.json(result);
 };
