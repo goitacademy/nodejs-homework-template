@@ -63,11 +63,20 @@ const getCurrent = async (req, res) => {
   res.json({ name, email });
 };
 
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+
+  await User.findByIdAndUpdate(_id, { subscription });
+  res
+    .status(201)
+    .json({ message: `subscription upgraded to ${subscription} version` });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
-  // removeContactController: ctrlWrapper(removeContactController),
-  // updateStatusContact: ctrlWrapper(updateStatusContact),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
