@@ -20,8 +20,7 @@ function validate(schema) {
       const errorType = error.details[0].type;
 
       if (errorType === "any.required") {
-        res.status(400).json({
-          
+       return res.status(400).json({
           message: `missing required ${errorField.path[1]} field`,
         });
       }
