@@ -1,9 +1,9 @@
 const httpError = require("../helpers/httpError");
 
-const updateFavoriteStatus = (schema) => {
+const updateStatus = (schema, fieldName) => {
 	const valid = (req, res, next) => {
 		if (!Object.keys(req.body).length) {
-			next(httpError(400, "missing field favorite"));
+			next(httpError(400, `missing field ${fieldName}`));
 		}
 		const { error } = schema.validate(req.body);
 		if (error) {
@@ -14,4 +14,4 @@ const updateFavoriteStatus = (schema) => {
 	return valid;
 };
 
-module.exports = updateFavoriteStatus;
+module.exports = updateStatus;

@@ -3,7 +3,8 @@ const {
 	isValidId,
 	bodyValidator,
 	addBodyValidator,
-	updateFavoriteStatus,
+	updateStatus,
+	authenticate,
 } = require("../../middlewares");
 const {
 	getAllContacts,
@@ -16,21 +17,28 @@ const {
 
 const { schemas } = require("../../models/contactSchema");
 
-router.get("/", getAllContacts);
+router.get("/", authenticate, getAllContacts);
 
-router.get("/:contactId", isValidId, getById);
+router.get("/:contactId", authenticate, isValidId, getById);
 
-router.post("/", addBodyValidator(schemas.addSchema), addContact);
+router.post("/", authenticate, addBodyValidator(schemas.addSchema), addContact);
 
-router.put("/:contactId", isValidId, bodyValidator(schemas.changeSchema), changeContact);
+router.put(
+	"/:contactId",
+	authenticate,
+	isValidId,
+	bodyValidator(schemas.changeSchema),
+	changeContact,
+);
 
 router.patch(
 	"/:contactId/favorite",
+	authenticate,
 	isValidId,
-	updateFavoriteStatus(schemas.changeFavoriteSchema),
+	updateStatus(schemas.changeFavoriteSchema, "favorite"),
 	updateStatusContact,
 );
 
-router.delete("/:contactId", isValidId, deleteContact);
+router.delete("/:contactId", authenticate, isValidId, deleteContact);
 
 module.exports = router;
