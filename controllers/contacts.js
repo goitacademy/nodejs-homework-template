@@ -11,7 +11,8 @@ const listContacts = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  const result = await Contact.findById(req.params.contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ _id: req.params.contactId, owner });
   checkId(result);
   res.json(result);
 };
@@ -23,19 +24,22 @@ const addContact = async (req, res, next) => {
 };
 
 const deleteContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndRemove(req.params.contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id: req.params.contactId, owner });
   checkId(result);
   res.json({ message: "Contact deleted" });
 };
 
 const updateContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id: req.params.contactId, owner }, req.body, { new: true });
   checkId(result);
   res.json(result);
 };
 
 const updateStatusContact = async (req, res, next) => {
-  const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, { new: true });
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id: req.params.contactId, owner }, req.body, { new: true });
   checkId(result);
   res.json(result);
 };
