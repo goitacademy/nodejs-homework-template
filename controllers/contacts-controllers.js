@@ -1,17 +1,17 @@
-const contactsService = require("../models/contacts");
+const Contact = require("../models/contact")
 
 const { HttpError } = require("../helpers");
 
 const { ctrlWrapper } = require("../utils");
 
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.getContactById(id);
+  const result = await Contact.findById(id)
   if (!result) {
     throw HttpError(404);
   }
@@ -19,13 +19,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await contactsService.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, "Not Found");
   }
@@ -38,13 +38,22 @@ const deleteContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
 
-  const result = await contactsService.updateContactById(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true})
   if (!result) {
     throw HttpError(404);
   }
-  if(JSON.stringify(req.body) === "{}") {
-    throw HttpError(400, "missing fields")
+
+  res.json(result);
+};
+
+const updateFavorite = async (req, res) => {
+  const { id } = req.params;
+
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true})
+  if (!result) {
+    throw HttpError(404);
   }
+
 
   res.json(result);
 };
@@ -55,4 +64,6 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
+
