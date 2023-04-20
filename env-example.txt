@@ -1,3 +1,4 @@
 DB_HOST=mongodb+srv://Hanna:d.s6JegcTG5CDXt@cluster0.5ntxckj.mongodb.net/ContactBook?retryWrites=true&w=majority
+DB_HOST_TEST=mongodb+srv://Hanna:d.s6JegcTG5CDXt@cluster0.5ntxckj.mongodb.net/ContactBook_test?retryWrites=true&w=majority
 PORT=3000
 SECRET_KEY=19opGty67msgTkk90
