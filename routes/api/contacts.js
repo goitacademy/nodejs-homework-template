@@ -4,6 +4,7 @@ const ctrl = require("../../controllers/contacts");
 
 const { validateAdd } = require("../../middlewares");
 const { validateUpdate } = require("../../middlewares");
+const { schemaUpd } = require("../../schemas/schemaUpd");
 
 const schemas = require("../../schemas/contacts");
 
@@ -15,7 +16,7 @@ router.get("/:id", ctrl.getById);
 
 router.post("/", validateAdd(schemas.addSchema), ctrl.add);
 
-router.put("/:id", validateUpdate(schemas.addSchema), ctrl.updateById);
+router.put("/:id", validateUpdate(schemaUpd), ctrl.updateById);
 
 router.delete("/:id", ctrl.deleteById);
 
