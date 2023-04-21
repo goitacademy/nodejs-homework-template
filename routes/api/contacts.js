@@ -70,15 +70,8 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.patch("/:contactId", async (req, res, next) => {
   try {
-
-    const validationResult = bodySchema.validate(req.body)
-
-    if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details })
-    }
-
     const contactId = req.params.contactId;
     const body = req.body;
 
@@ -86,15 +79,17 @@ router.put("/:contactId", async (req, res, next) => {
       throw RequestError(400, "Missing fields");
     }
 
-    const contactUpdate = await updateContact(contactId, body);
-    if (!contactUpdate) {
+    const contactToUpdate = await getContactById(contactId);
+    if (!contactToUpdate) {
       throw RequestError(404, "Not found");
     }
-    
-    res.status(200).json(contactUpdate);
+
+    const updatedContact = await updateContact(contactId, { ...contactToUpdate, ...body });
+    res.status(200).json(updatedContact);
   } catch (error) {
     next(error);
   }
 });
+
 
 module.exports = router;
