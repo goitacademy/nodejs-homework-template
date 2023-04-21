@@ -76,7 +76,7 @@ router.put("/:contactId", async (req, res, next) => {
     const validationResult = bodySchema.validate(req.body)
 
     if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details})
+      return res.status(400).json({ status: validationResult.error.details })
     }
 
     const contactId = req.params.contactId;
