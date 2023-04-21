@@ -8,7 +8,9 @@ import {
 
 export const getContacts = async (req, res, next) => {
   try {
-    const contacts = await services.getAllContacts();
+    const { page, limit, favorite } = req.query;
+
+    const contacts = await services.getAllContacts(page, limit, favorite);
     return res.json(contacts);
   } catch (error) {
     next(error);
@@ -18,6 +20,7 @@ export const getContacts = async (req, res, next) => {
 export const getContactByID = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    console.log(contactId);
     const contacts = await services.getContactById(contactId);
     if (!contacts) return res.status(404).json({ message: "Not found" });
     else return res.json(contacts);
@@ -30,11 +33,12 @@ export const createContact = async (req, res, next) => {
   try {
     const checkBody = isReqPostBodyOk(req.body);
 
-    const { error } = validationSchema.validate(req.body);
-
     if (!checkBody)
       return res.status(400).json({ message: "missing required name - field" });
+
+    const { error } = validationSchema.validate(req.body);
     if (error) return res.status(400).json({ message: `${error}` });
+
     const contactslist = await services.getAllContacts();
     isContactTaken(req.body, contactslist);
 

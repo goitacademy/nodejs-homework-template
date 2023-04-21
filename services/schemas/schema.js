@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-
-const Schema = mongoose.Schema;
+import bcrypt from "bcryptjs";
+import { Schema, model } from "mongoose";
 
 const contacts = new Schema(
   {
@@ -18,8 +17,52 @@ const contacts = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
   },
   { versionKey: false }
 );
 
-export const Contact = mongoose.model("contact", contacts);
+const userSchema = new Schema(
+  {
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+  },
+  { versionKey: false }
+);
+
+userSchema.methods.setHashPassword = function (password) {
+  const hashPassword = bcrypt.hashSync(
+    password,
+    bcrypt.genSaltSync(Number(process.env.SALT))
+  );
+
+  return (this.password = hashPassword);
+};
+
+userSchema.methods.validatePassword = function (password) {
+  const checkPassword = bcrypt.compareSync(password, this.password);
+  return checkPassword;
+};
+
+export const Contact = model("contact", contacts);
+export const User = model("user", userSchema);

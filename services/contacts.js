@@ -2,7 +2,17 @@ import mongoose from "mongoose";
 import { Contact } from "./schemas/schema.js";
 import { ObjectId } from "mongodb";
 
-const getAllContacts = async () => Contact.find();
+const getAllContacts = async (page = 1, limit = Infinity, favorite) => {
+  const paginationPage = page == 1 ? 0 : limit * page - 5;
+
+  if (favorite !== undefined) {
+    if (favorite === "true") return Contact.find().sort({ favorite: -1 });
+
+    if (favorite === "false") return Contact.find().sort({ favorite: 1 });
+  }
+
+  return Contact.find().skip(paginationPage).limit(limit);
+};
 
 const getContactById = async (contactId) => Contact.findOne({ _id: contactId });
 

@@ -1,17 +1,33 @@
 import { Router } from "express";
-import * as ctrl from "../../controller/contacts.js";
-const router = Router();
+import * as ctrlContact from "../../controller/contacts.js";
+import * as ctrlAuth from "../../controller/auth.js";
 
-router.get("/", ctrl.getContacts);
+export const contactRouter = Router();
 
-router.get("/:contactId", ctrl.getContactByID);
+contactRouter.get("/", ctrlAuth.authorization, ctrlContact.getContacts);
 
-router.post("/", ctrl.createContact);
+contactRouter.get(
+  "/:contactId",
+  ctrlAuth.authorization,
+  ctrlContact.getContactByID
+);
 
-router.delete("/:contactId", ctrl.removeContact);
+contactRouter.post("/", ctrlAuth.authorization, ctrlContact.createContact);
 
-router.put("/:contactId", ctrl.updateContact);
+contactRouter.delete(
+  "/:contactId",
+  ctrlAuth.authorization,
+  ctrlContact.removeContact
+);
 
-router.patch("/:contactId/favorite", ctrl.updateContactFavoriteField);
+contactRouter.put(
+  "/:contactId",
+  ctrlAuth.authorization,
+  ctrlContact.updateContact
+);
 
-export { router };
+contactRouter.patch(
+  "/:contactId/favorite",
+  ctrlAuth.authorization,
+  ctrlContact.updateContactFavoriteField
+);

@@ -9,7 +9,6 @@ const connection = mongoose.connect(process.env.DB_HOST, {
   useNewUrlParser: true,
   retryWrites: true,
 });
-
 connection
   .then(() => {
     app.listen(3000, () => {
