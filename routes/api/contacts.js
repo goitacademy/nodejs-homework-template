@@ -10,6 +10,7 @@ const {
   createContact,
   deleteContact,
   changeContact,
+  changeStatus,
 } = require("../../controllers/contacts");
 
 router.get("/", tryCatchWrapper(getContacts));
@@ -21,5 +22,6 @@ router.post(
 );
 router.delete("/:contactId", tryCatchWrapper(deleteContact));
 router.put("/:contactId", tryCatchWrapper(changeContact));
+router.patch("/:contactId/favorite", tryCatchWrapper(changeStatus));
 
 module.exports = router;

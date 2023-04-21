@@ -11,6 +11,7 @@ const addContactSchema = Joi.object({
   phone: Joi.string()
     .required()
     .error(HttpError(400, "missing required phone field")),
+  favorite: Joi.boolean(),
 });
 
 module.exports = { addContactSchema };
