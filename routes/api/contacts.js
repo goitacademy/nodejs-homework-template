@@ -70,22 +70,28 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId", async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const body = req.body;
+    const currentContact = await getContactById(contactId);
 
-    if (body === null) {
-      throw RequestError(400, "Missing fields");
+    if (!currentContact) {
+      throw RequestError(404, "Contact not found");
     }
 
-    const contactToUpdate = await getContactById(contactId);
-    if (!contactToUpdate) {
+    const updatedContact = {
+      ...currentContact,
+      ...body,
+    };
+
+    const contactUpdate = await updateContact(contactId, updatedContact);
+
+    if (!contactUpdate) {
       throw RequestError(404, "Not found");
     }
 
-    const updatedContact = await updateContact(contactId, { ...contactToUpdate, ...body });
-    res.status(200).json(updatedContact);
+    res.status(200).json(contactUpdate);
   } catch (error) {
     next(error);
   }
