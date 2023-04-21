@@ -8,6 +8,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
@@ -43,8 +44,8 @@ router.post("/", validation, async (req, res, next) => {
         .json({ message: "missing required name/email/phone field" });
     }
     const contact = { name, email, phone };
-    await addContact(contact);
-    res.status(201).json(contact);
+    const result = await addContact(contact);
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -53,15 +54,17 @@ router.post("/", validation, async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
-  const isContactRemoved = removeContact(contactId);
+  const isContactRemoved = await removeContact(contactId);
   if (isContactRemoved) {
-    res.status(200).json({ message: "contact deleted" });
+    res
+      .status(200)
+      .json({ message: `contact ${isContactRemoved.name} deleted` });
   } else {
     res.status(404).json({ message: "Not found" });
   }
 });
 
-router.put("/:contactId", validation, async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
@@ -69,6 +72,26 @@ router.put("/:contactId", validation, async (req, res, next) => {
       return res.status(400).json({ message: "missing fields" });
     }
     const updatedContact = await updateContact(contactId, body);
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Not found" });
+    } else {
+      return res.status(200).json(updatedContact);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    console.log(req.body);
+    if (favorite === undefined) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+    const updatedContact = await updateStatusContact(contactId, { favorite });
     if (!updatedContact) {
       return res.status(404).json({ message: "Not found" });
     } else {

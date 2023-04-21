@@ -1,9 +1,10 @@
 const Joi = require("joi");
 
 const contactSchema = Joi.object({
-  name: Joi.string().min(3),
+  name: Joi.string().min(3).required(),
   email: Joi.string().email(),
   phone: Joi.string().pattern(/^\d{9}$/),
+  favorite: Joi.boolean().default(false),
 });
 
 const validateContact = (req, res, next) => {
