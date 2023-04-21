@@ -4,12 +4,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const { SECRET_KEY } = process.env;
-// config = {
-//   JWT: {
-//     SECRET: process.env.JWT_SECRET || 'secret',
-//     LIFETIME: process.env.JWT_LIFE_TIME || '1h',
-//   },
-// };
 
 const login = async (req, res, next) => {
   try {
