@@ -24,7 +24,7 @@ const userSchema = new Schema({
     },
     avatarURL: {
         type: String,
-        required: [true, 'Please upload your avatar'],
+        // required: [true, 'Please upload your avatar'],
     },
     token: {
         type: String,
