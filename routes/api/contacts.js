@@ -1,7 +1,8 @@
+
 const express = require('express');
 const Joi = require('joi');
 
-const{
+const {
   listContacts,
   getContactById,
   removeContact,
@@ -9,101 +10,83 @@ const{
   updateContact,
 } = require("../../models/contacts");
 
-const {HttpError} = require("../../helpers");
+const { HttpError } = require("../../helpers/index");
 
-const addPosts = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `"name" is required`,
-    "string.empty": `"name" cannot be empty`,
-    "string.base": `"name" must be string`,
-  }),
 
-  email: Joi.string().required().messages({
-    "any.required": `"email" is required`,
-    "string.empty": `"email" cannot be empty`,
-    "string.base": `"email" must be string`,
-  }),
-  phone: Joi.number().required().messages({
-    "any.required": `"phone" is required`,
-  }),
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
-})
+const router = express.Router();
 
-const router = express.Router()
-
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const result = await listContacts()
+    const result = await listContacts();
     res.json(result);
   } catch (error) {
     next(error);
   }
-  
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
-    const {contactId} = req.params;
-    const result = await getContactById(contactId)
+    const { contactId } = req.params;
+    const result = await getContactById(contactId);
+
     if (!result) {
-      throw HttpError (404, `Контакт с ${contactId}не найден`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result);
   } catch (error) {
     next(error);
   }
-  
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    const {error} = addPosts.validate(req.body);
+    const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError (400, error.message);
+      throw HttpError(400, error.message);
     }
     const result = await addContact(req.body);
-
-    res.status (201).json(result)
-    } 
-    catch (error) {
+    res.status(201).json(result);
+  } catch (error) {
     next(error);
   }
-  
-})
+});
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   try {
-    const {contactId} = req.params;
+    const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) {
-      throw HttpError (404, `Контакт с ${contactId}не найден`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
-
     res.json({
-      message: "Видалено повністю"
+      message: "Delete success"
     })
   } catch (error) {
     next(error);
   }
-  
-})
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const {error} = addPosts.validate(req.body);
-    
-    if (error) {
-      throw HttpError (400, error.message);
-    }
-    const {contactId} = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError (404, 'Контакт не знайдено');
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+router.put("/:contactId", async (req, res, next) => {
+try {
+  const { error } = addSchema.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
   }
-})
+  const { contactId } = req.params;
+  const result = await updateContact(contactId, req.body);
+  if (!result) {
+    throw HttpError(404, 'Contact not found')
+  }
+  res.json(result);
+} catch (error) {
+  next(error);
+}
+});
 
-module.exports = router
+module.exports = router;
