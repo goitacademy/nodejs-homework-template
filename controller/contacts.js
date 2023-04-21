@@ -8,9 +8,11 @@ import {
 
 export const getContacts = async (req, res, next) => {
   try {
+    const id = req.user._id;
+    console.log(id.valueOf());
     const { page, limit, favorite } = req.query;
 
-    const contacts = await services.getAllContacts(page, limit, favorite);
+    const contacts = await services.getAllContacts(id, page, limit, favorite);
     return res.json(contacts);
   } catch (error) {
     next(error);
@@ -19,9 +21,10 @@ export const getContacts = async (req, res, next) => {
 
 export const getContactByID = async (req, res, next) => {
   try {
+    const id = req.user._id;
     const { contactId } = req.params;
     console.log(contactId);
-    const contacts = await services.getContactById(contactId);
+    const contacts = await services.getContactById(contactId, id);
     if (!contacts) return res.status(404).json({ message: "Not found" });
     else return res.json(contacts);
   } catch (error) {
@@ -31,18 +34,18 @@ export const getContactByID = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
+    const id = req.user._id;
     const checkBody = isReqPostBodyOk(req.body);
-
     if (!checkBody)
       return res.status(400).json({ message: "missing required name - field" });
 
     const { error } = validationSchema.validate(req.body);
     if (error) return res.status(400).json({ message: `${error}` });
 
-    const contactslist = await services.getAllContacts();
+    const contactslist = await services.getAllContacts(id);
     isContactTaken(req.body, contactslist);
 
-    const addedContact = await services.addContact(req.body);
+    const addedContact = await services.addContact(req.body, id);
     res.status(201).json(addedContact);
   } catch (error) {
     next(error);
