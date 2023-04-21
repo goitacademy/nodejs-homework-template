@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
       user: { email: newUser.email, subscription: newUser.subscription },
     });
   } catch (error) {
-    console.log(...req.body);
+    console.log("register, req.body--->", ...req.body);
     console.log("error");
     next(error);
   }

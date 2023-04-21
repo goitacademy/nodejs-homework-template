@@ -12,18 +12,20 @@ const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
     const { path: temporaryUpload, filename } = req.file;
-
+    console.log("temporaryUpload--->", temporaryUpload);
     const isResizeImg = await resizeImg(temporaryUpload);
     if (!isResizeImg) {
       throw new Error("Failed to resize image");
     }
-    console.log(isResizeImg);
+    console.log("isResizeImg--->", isResizeImg);
     const avatarName = `${_id}_${filename}`;
 
     const resultUpload = path.join(avatarsDir, avatarName);
 
     await fs.rename(temporaryUpload, resultUpload);
     const avatarURL = path.join("avatars", avatarName);
+    console.log("avatarURL--->", avatarURL);
+
     await User.findByIdAndUpdate(_id, { avatarURL });
 
     res.status(200).json({ avatarURL });
