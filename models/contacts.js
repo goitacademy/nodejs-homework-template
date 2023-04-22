@@ -42,7 +42,10 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const updatedContact = await Contact.findByIdAndUpdate(contactId, body);
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
+    console.log(updatedContact);
     console.log(`Contact with ID ${contactId} updated`);
     return updatedContact;
   } catch (error) {
