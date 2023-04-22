@@ -18,15 +18,17 @@ const contactSchema = new Schema(
     phone: {
       type: String,
     },
+    // if this field is not submitted, default value will be false
     favorite: {
       type: Boolean,
-      default: false /**if this field is not submitted, default value will be false */,
+      default: false,
     },
   },
   {
+    // removes "_v" and adds creation and changing timestamps to document
     versionKey: false,
     timestamps: true,
-  } /** removes "_v" and adds creation and changing timestamps to document */
+  }
 );
 
 // Validates body for POST method
@@ -61,10 +63,8 @@ const updateStatusContactSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-contactSchema.post(
-  "save",
-  handleMongooseError
-); /**if during saving we have an error, this middleware is set, otherwise mongoose error doesn't set error.status */
+// if during saving we have an error, this middleware is set, otherwise mongoose error doesn't set error.status
+contactSchema.post("save", handleMongooseError);
 
 // model() method creates a model of the Schema. It is a Class, so we use capital letter. 1st argument - name of the collection of DB in a single form, 2nd - schema
 const Contact = model("contact", contactSchema);

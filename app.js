@@ -1,4 +1,4 @@
-require("dotenv").config(); /**config() method searches .env file in the project, reads variables and adds them to process.env */
+require("dotenv").config(); /** config() method searches .env file in the project, reads variables and adds them to process.env */
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
