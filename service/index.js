@@ -1,4 +1,5 @@
 const contactList = require("./schema/contact");
+const User = require("./schema/user");
 
 const getAllContacts = async () => {
   return contactList.find();
@@ -29,6 +30,27 @@ const updateStatusContact = (contactId, favorite) => {
   });
 };
 
+const existingUser = async (query) => {
+  const existingUser = await User.findOne(query);
+  return existingUser;
+};
+
+const saveNewUser = async (newUser) => {
+  const user = new User(newUser);
+  const savedUser = await user.save();
+  return savedUser;
+};
+
+const loginResponse = (res, token, email, subscription) => {
+  return res.status(200).json({
+    token,
+    user: {
+      email,
+      subscription,
+    },
+  });
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
@@ -36,4 +58,7 @@ module.exports = {
   updateContact,
   removeContact,
   updateStatusContact,
+  existingUser,
+  saveNewUser,
+  loginResponse,
 };
