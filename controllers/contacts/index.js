@@ -4,11 +4,10 @@ const add = require("./add");
 const updateById = require("./updateById");
 const deleteById = require("./deleteById");
 
-
 module.exports = {
-    listContacts,
-    getById,
-    add,
-    updateById,
-    deleteById,
-}
+  listContacts,
+  getById,
+  add,
+  updateById,
+  deleteById,
+};

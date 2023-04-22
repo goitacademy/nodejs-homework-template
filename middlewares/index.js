@@ -1,7 +1,7 @@
 const validation = require("./validation");
-const ctrlWrapper = require("./ctrlWrapper")
+const ctrlWrapper = require("./ctrlWrapper");
 
 module.exports = {
-    validation,
-    ctrlWrapper,
-}
+  validation,
+  ctrlWrapper,
+};
