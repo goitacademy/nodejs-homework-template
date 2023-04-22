@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router()
 const ctrl = require('../../controllers/contacts');
-const { validateBody } = require('../../middlewars');
 const schemas = require('../../schemas/contacts');
-
+const { validateBody } = require('../../middlewars');
 
 router.get('/', ctrl.listContacts);
 
