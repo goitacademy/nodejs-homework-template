@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const contactShema = Joi.object({
+const contactsShema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).optional(),
 
   phone: Joi.string().min(10).max(15).optional(),
@@ -11,6 +11,8 @@ const contactShema = Joi.object({
       tlds: { allow: ["com", "net", "uk", "ua", "org"] },
     })
     .optional(),
+
+  favorite: Joi.boolean().optional(),
 });
 
-module.exports = contactShema;
+module.exports = contactsShema;
