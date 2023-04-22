@@ -7,6 +7,7 @@ const addSchema = Joi.object({
     .pattern(/^[0-9]+$/)
     .required(),
   email: Joi.string().email().required(),
+  favorite: Joi.boolean().default(false),
 });
 
 const updateSchema = Joi.object({
@@ -15,9 +16,15 @@ const updateSchema = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/),
   email: Joi.string().email(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   addSchema,
   updateSchema,
+  updateFavoriteSchema,
 };
