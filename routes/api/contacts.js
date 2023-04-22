@@ -2,9 +2,8 @@ const express = require("express");
 
 const ctrl = require("../../controllers/contacts");
 
-const { validateAdd } = require("../../middlewares");
-const { validateUpdate } = require("../../middlewares");
-const { schemaUpd } = require("../../schemas/schemaUpd");
+const { validateAdd, validateUpdate } = require("../../middlewares");
+const { addSchemaUpd } = require("../../schemas/contactsUpd");
 
 const schemas = require("../../schemas/contacts");
 
@@ -16,7 +15,7 @@ router.get("/:id", ctrl.getById);
 
 router.post("/", validateAdd(schemas.addSchema), ctrl.add);
 
-router.put("/:id", validateUpdate(schemaUpd), ctrl.updateById);
+router.put("/:id", validateUpdate(addSchemaUpd), ctrl.updateById);
 
 router.delete("/:id", ctrl.deleteById);
 
