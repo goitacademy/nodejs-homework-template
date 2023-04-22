@@ -2,8 +2,14 @@ const User = require("../models/user");
 const { Conflict, Unauthorized } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Jimp = require("jimp");
+const gravatar = require("gravatar");
+const fs = require("fs").promises;
+const path = require("path");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
+
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 const registerUser = async (req, res, next) => {
   try {
@@ -13,7 +19,12 @@ const registerUser = async (req, res, next) => {
       throw new Conflict("Email in use");
     }
     const hashPassword = await bcrypt.hash(password, 12);
-    const result = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const result = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL,
+    });
     res.status(201).json({
       user: {
         email: result.email,
@@ -70,4 +81,27 @@ const getLogout = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getCurrent, getLogout };
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { path: tempUpload, filename } = req.file;
+    const avatar = await Jimp.read(`${tempUpload}`);
+    avatar.resize(250, 250);
+    const avatarName = `${_id}_${filename}`;
+    const resultUpload = path.join(avatarDir, avatarName);
+    avatar.write(`${resultUpload}`);
+    const avatarURL = path.join("avatars", avatarName);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getCurrent,
+  getLogout,
+  updateAvatar,
+};
