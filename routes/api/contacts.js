@@ -74,6 +74,13 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const body = req.body;
+
+    const validationResult = bodySchema.validate(body);
+
+    if (validationResult.error) {
+      throw RequestError(400, validationResult.error.details[0].message);
+    }
+
     const currentContact = await getContactById(contactId);
 
     if (!currentContact) {
