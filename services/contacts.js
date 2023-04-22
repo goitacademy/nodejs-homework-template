@@ -1,9 +1,8 @@
-import mongoose from "mongoose";
 import { Contact } from "./schemas/schema.js";
 import { ObjectId } from "mongodb";
 
 const getAllContacts = async (id, page = 1, limit = Infinity, favorite) => {
-  const paginationPage = page == 1 ? 0 : limit * page - limit;
+  const paginationPage = Number(page) === 1 ? 0 : limit * page - limit;
 
   if (favorite !== undefined) {
     if (favorite === "true")

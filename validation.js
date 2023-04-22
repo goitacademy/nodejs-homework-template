@@ -33,7 +33,9 @@ export const validationFavorite = Joi.object({
 
 export const validationLogAndPass = Joi.object({
   email: Joi.string().required().email(),
-  password: Joi.string().required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+  password: Joi.string()
+    .required()
+    .pattern(/^[a-zA-Z0-9]{3,30}$/),
 });
 
 export const validationSubscription = Joi.object({

@@ -1,5 +1,3 @@
-import { token } from "morgan";
-import { User } from "../services/schemas/schema.js";
 import { validationLogAndPass, validationSubscription } from "../validation.js";
 import jwt from "jsonwebtoken";
 import * as authServices from "../services/auth.js";
@@ -79,7 +77,7 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const user = await authServices.logoutUser(userId);
+    await authServices.logoutUser(userId);
 
     return res.sendStatus(204);
   } catch (error) {
