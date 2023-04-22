@@ -87,10 +87,11 @@ router.put("/:contactId", async (req, res, next) => {
       throw RequestError(404, "Contact not found");
     }
 
-    const updatedContact = {
-      ...currentContact,
-      ...body,
-    };
+     let updatedContact = currentContact;
+
+    for (const prop in body) {
+      updatedContact[prop] = body[prop];
+    }
 
     const contactUpdate = await updateContact(contactId, updatedContact);
 
