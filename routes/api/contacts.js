@@ -1,4 +1,32 @@
 const express = require("express");
+
+const ctrl = require("../../controllers/contacts");
+const { validateBody, isValidId } = require("../../middlewares");
+const { schemas } = require("../../models/contact");
+const router = express.Router();
+
+router.get("/", ctrl.getAll);
+
+router.get("/:contactId", isValidId, ctrl.getById);
+
+router.post("/", validateBody(schemas.addSchema), ctrl.add);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateFavorite
+);
+
+router.delete("/:contactId", isValidId, ctrl.deleteById);
+
+router.put(
+  "/:contactId",
+  isValidId,
+  validateBody(schemas.addSchema),
+  ctrl.updateById
+);
+
 const operations = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
 const Joi = require("joi");
@@ -88,5 +116,4 @@ router.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-
 module.exports = router;
