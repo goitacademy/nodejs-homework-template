@@ -3,4 +3,14 @@ const bodyValidator = require("./bodyValidator");
 const isValidId = require("./isValidId");
 const updateStatus = require("./updateFavoriteStatus");
 const authenticate = require("./authenticate");
-module.exports = { updateStatus, addBodyValidator, bodyValidator, isValidId, authenticate };
+const upload = require("./upload");
+const uploadChecker = require("./uploadChecker");
+module.exports = {
+	uploadChecker,
+	updateStatus,
+	addBodyValidator,
+	bodyValidator,
+	isValidId,
+	authenticate,
+	upload,
+};
