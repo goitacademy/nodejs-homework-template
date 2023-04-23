@@ -1,19 +1,17 @@
 module.exports = class HttpError extends Error {
   status;
-  errors;
 
-  constructor(status, message, errors = []) {
+  constructor(status, message) {
     super(message);
     this.status = status;
-    this.errors = errors;
   }
 
   static UnauthorizedError() {
     return new HttpError(401, "Missing authorization token.");
   }
 
-  static BadRequest(message = "Bad Request", errors = []) {
-    return new HttpError(400, message, errors);
+  static BadRequest(message = "Bad Request") {
+    return new HttpError(400, message);
   }
 
   static ForbiddenError() {
@@ -22,9 +20,5 @@ module.exports = class HttpError extends Error {
 
   static NotFoundError() {
     return new HttpError(404, "Not Found.");
-  }
-
-  static ServerError() {
-    return new HttpError(500, "Server error.");
   }
 };
