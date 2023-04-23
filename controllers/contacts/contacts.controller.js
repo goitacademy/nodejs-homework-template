@@ -4,7 +4,20 @@ const { controllerWrap } = require("../../utils");
 
 // Get all contacts
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  // Pagination
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  // Filter by favorite
+  const query = { owner };
+  if (favorite) {
+    query.favorite = favorite;
+  }
+  const result = await Contact.find(query)
+    .populate("owner", "email")
+    .skip(skip)
+    .limit(parseInt(limit));
   res.json(result);
 };
 
@@ -27,7 +40,8 @@ const getById = async (req, res, next) => {
 
 // Create a new contact
 const addNewContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
