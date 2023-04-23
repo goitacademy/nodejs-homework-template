@@ -31,7 +31,7 @@ router.get("/:contactId", async (req, res, next) => {
     const contact = await getContactById(contactId);
 
     if (!contact) {
-      throw HttpError(404);
+      throw HttpError.NotFoundError();
     }
 
     res.status(200).json(contact);
@@ -45,7 +45,7 @@ router.post("/", async (req, res, next) => {
     const { body } = req;
     const { error } = addSchema.validate(body);
     if (error) {
-      throw HttpError(400, error.message);
+      throw HttpError.BadRequest(error.message);
     }
 
     const newContact = await addContact(body);
@@ -60,7 +60,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const deleteContact = await removeContact(contactId);
     if (!deleteContact) {
-      throw HttpError(404);
+      throw HttpError.NotFoundError();
     }
 
     res.status(200).json({ message: "contact deleted" });
@@ -74,14 +74,14 @@ router.put("/:contactId", async (req, res, next) => {
     const { body } = req;
     const { error } = addSchema.validate(body);
     if (error) {
-      throw HttpError(400, error.message);
+      throw HttpError.BadRequest(error.message);
     }
 
     const { contactId } = req.params;
 
     const contact = await updateContact(contactId, body);
     if (!contact) {
-      throw HttpError(404);
+      throw HttpError.NotFoundError();
     }
     res.status(200).json(contact);
   } catch (error) {

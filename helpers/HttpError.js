@@ -1,15 +1,30 @@
-const errorMessages = {
-  400: "Bad Request",
-  401: "Unauthorized",
-  403: "Forbidden",
-  404: "Not Found",
-  409: "Conflict",
-};
+module.exports = class HttpError extends Error {
+  status;
+  errors;
 
-const HttpError = (status, message = errorMessages[status]) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-};
+  constructor(status, message, errors = []) {
+    super(message);
+    this.status = status;
+    this.errors = errors;
+  }
 
-module.exports = HttpError;
+  static UnauthorizedError() {
+    return new HttpError(401, "Missing authorization token.");
+  }
+
+  static BadRequest(message = "Bad Request", errors = []) {
+    return new HttpError(400, message, errors);
+  }
+
+  static ForbiddenError() {
+    return new HttpError(403, "Forbidden.");
+  }
+
+  static NotFoundError() {
+    return new HttpError(404, "Not Found.");
+  }
+
+  static ServerError() {
+    return new HttpError(500, "Server error.");
+  }
+};
