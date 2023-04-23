@@ -48,12 +48,11 @@ const loginSchema = Joi.object({
 });
 
 const updateSubscriptionSchema = Joi.object()
-  .options({ abortEarly: false })
-  .keys({
-    subscription: Joi.string()
-      .valid(...Object.values(USER_ROLES))
-      .required(),
-  });
+.keys({
+  subscription: Joi.string()
+    .valid(...Object.values(USER_ROLES))
+    .required(),
+});
 
 const schemas = {
   registerSchema,
