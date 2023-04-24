@@ -16,7 +16,11 @@ router.post(
   controllersContacts.addContact
 );
 
-router.put("/:contactId", controllersContacts.updateContactById);
+router.put(
+  "/:contactId",
+  validateBody(schemas.contactAddSchema),
+  controllersContacts.updateContactById
+);
 
 router.delete("/:contactId", controllersContacts.removeContact);
 
