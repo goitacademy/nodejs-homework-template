@@ -1,17 +1,12 @@
 const Joi = require("joi");
+const { regName, regPhone, regEmail } = require("../regexp");
 
 const updateContactSchema = Joi.object({
   // eslint-disable-next-line prefer-regex-literals
-  name: Joi.string().pattern(new RegExp(`^[a-zA-Z]+ [a-zA-Z]+$`)).required(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    })
-    .required(),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
-    .required(),
+  name: Joi.string().pattern(new RegExp(regName)).required(),
+  email: Joi.string().email(regEmail).required(),
+  phone: Joi.string().pattern(regPhone).required(),
+  favorite: Joi.bool().required(),
 });
 
 module.exports = {
