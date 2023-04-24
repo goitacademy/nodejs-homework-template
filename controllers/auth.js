@@ -81,7 +81,7 @@ const updateSubscription = async (req, res) => {
   if (!result) {
     throw HttpError(404);
   }
-  res.json({user: {result}});
+  res.json({ user: { result } });
 };
 
 module.exports = {
