@@ -1,4 +1,4 @@
-const { HttpError } = require("../helpers/HttpError");
+const { HttpError } = require("../helpers/index");
 const contacts = require("../models/contacts");
 const Joi = require("joi");
 const { ctrlWrapper } = require("../helpers/index");
@@ -49,9 +49,7 @@ const deleteContacts = async (req, res) => {
 };
 
 const changeContact = async (req, res) => {
-  const { error } = contactsSchema.validate(req.body);
-
-  if (error) {
+  if (!req.body) {
     throw HttpError(400, "missing fields");
   }
 
