@@ -55,7 +55,7 @@ async function loginUser (req, res) {
         {"email": result.email,
         "subscription": result.subscription,}
    });
-
+  
 };
 
 async function logoutUser (req, res) {
