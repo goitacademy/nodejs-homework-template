@@ -25,7 +25,7 @@ const validationSchema = Joi.object({
 	phone: Joi.string()
 		.pattern(phoneRegexp)
 		.messages({
-			"string.pattern.base": "Invalid phone number format. The format should be (XXX) XXX-XX-XX.",
+			"string.pattern.base": "Invalid phone number format. The format should be (XXX) XXX-XXXX.",
 			"any.required": `"phone" is a required field`,
 		})
 		.required(),
@@ -43,7 +43,7 @@ const contactSchema = new Schema(
 		name: {
 			type: String,
 			match: nameRegexp,
-			required: true,
+			required: [true, "Set name for contact"],
 		},
 		email: {
 			type: String,
