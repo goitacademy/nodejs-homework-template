@@ -13,12 +13,28 @@ async function listContacts() {
   return JSON.parse(allContacts);
 }
 
-// Contacts update
+//  Update contacts
 
 function updateContacts(contacts) {
   fs.writeFile(contactsPath, JSON.stringify(contacts), "utf-8");
 }
 
+// Update contacts by Id
+async function updateById(id, data) {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...data };
+  await updateContacts(contacts);
+
+  console.log(
+    contacts[index],
+    chalk.greenBright("Contact was successfully updated!")
+  );
+  return contacts[index];
+}
 // Add contact
 
 async function addContact({ name, email, phone }) {
@@ -60,11 +76,12 @@ async function removeContact(contactId) {
   const contactById = contacts.find((contact) => contact.id === contactId);
   if (!contactById) {
     console.log(chalk.redBright(`Contact with id:${contactId} is not found!`));
-    return;
+    return null;
   }
   const newContacts = contacts.filter((contact) => contact.id !== contactId);
   updateContacts(newContacts);
-  console.log(chalk.greenBright("Contact has  been successfully deleted!"));
+  console.log(chalk.greenBright("Contact has been successfully deleted!"));
+  return contactById;
 }
 
 module.exports = {
@@ -72,4 +89,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
+  updateById,
 };
