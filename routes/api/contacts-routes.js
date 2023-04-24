@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const contactControllers = require("../../controllers/contacts-controllers");
+const authentificate = require("../../middlewares/authentificate");
 
 const { validateAddContact, validateBody } = require("../../utils/validateBody");
 
@@ -11,6 +12,8 @@ const isValiId = require("../../middlewares/isValidId");
 /**
   Routes ----------------------------------------------------------------------
 */
+
+router.use(authentificate);
 
 router.get("/", contactControllers.getAllContacts);
 

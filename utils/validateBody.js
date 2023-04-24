@@ -26,4 +26,19 @@ const validateBody = (schema) => {
     return func;
 };
 
-module.exports = { validateAddContact, validateBody };
+const validateRegister = (schema) => {
+    const func = (req, res, next) => {
+        const { error } = schema.validate(req.body);
+        if (error) {
+            const value = error.details[0];
+            const message = value.path[0] === "email" ? "Email must be a valid email" : value.message;
+            console.log(error.details);
+            next(HttpError(400, message));
+        }
+        next();
+    };
+
+    return func;
+};
+
+module.exports = { validateAddContact, validateBody, validateRegister };

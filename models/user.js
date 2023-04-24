@@ -1,5 +1,7 @@
 const { Schema, model } = require("mongoose");
+const { customAlphabet } = require("nanoid");
 
+const randomId = customAlphabet("1234567890", 4);
 const handlerMogoosError = require("../helpers/handlerMogoosError");
 
 const Joi = require("joi");
@@ -10,7 +12,7 @@ const userSchema = new Schema(
     {
         name: {
             type: String,
-            require: true,
+            default: `user_${randomId()}`,
         },
         email: {
             type: String,
@@ -30,7 +32,7 @@ const userSchema = new Schema(
         },
         token: {
             type: String,
-            default: "",
+            default: null,
         },
     },
     { versionKey: false }
@@ -41,7 +43,7 @@ userSchema.post("save", handlerMogoosError);
 const User = model("user", userSchema);
 
 const userRegisterSchema = Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(7).required(),
 });
