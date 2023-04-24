@@ -32,7 +32,6 @@ const validateRegister = (schema) => {
         if (error) {
             const value = error.details[0];
             const message = value.path[0] === "email" ? "Email must be a valid email" : value.message;
-            console.log(error.details);
             next(HttpError(400, message));
         }
         next();
