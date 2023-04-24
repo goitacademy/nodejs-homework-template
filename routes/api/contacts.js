@@ -3,7 +3,7 @@ const express = require("express");
 const ctrl = require("../../controllers/contactsController");
 
 // const { validationSchema } = require("../../schemas");
-const { validationSchema } = require("../../models/contact");
+const { validationSchema, updateFavoriteSchema } = require("../../models/contact");
 
 const { validateBody, isValidId } = require("../../middlewares");
 
@@ -17,6 +17,8 @@ router.post("/", validateBody(validationSchema), ctrl.addNewContact);
 
 router.put("/:contactId", isValidId, validateBody(validationSchema), ctrl.updateById);
 
-// router.delete("/:contactId",isValidId,  ctrl.deleteContact);
+router.patch("/:contactId/favorite", isValidId, validateBody(updateFavoriteSchema), ctrl.updateFavorite);
+
+router.delete("/:contactId", isValidId, ctrl.deleteContact);
 
 module.exports = router;

@@ -32,6 +32,10 @@ const validationSchema = Joi.object({
 	favorite: Joi.boolean(),
 });
 
+const updateFavoriteSchema = Joi.object({
+	favorite: Joi.boolean().required(),
+});
+
 module.exports = validationSchema;
 
 const contactSchema = new Schema(
@@ -62,4 +66,4 @@ contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, validationSchema };
+module.exports = { Contact, validationSchema, updateFavoriteSchema };
