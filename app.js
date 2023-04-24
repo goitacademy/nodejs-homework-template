@@ -1,8 +1,14 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const path = require("path");
+const envPath = path.join(__dirname, "config", ".env");
+console.log(envPath);
 
-const contactsRouter = require("./routes/api/contacts");
+dotenv.config({ path: envPath });
+
+const contactsRouter = require("./routes/api/contacts-routes");
 
 const app = express();
 
