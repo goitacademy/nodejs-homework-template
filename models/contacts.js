@@ -61,9 +61,9 @@ const updateContact = async (contactId, data) => {
   const currentContactData = contactsList[contactIndex];
 
   contactsList[contactIndex] = {
-    id: contactId,
     ...currentContactData,
     ...data,
+    id: contactId,
   };
 
   await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
