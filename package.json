@@ -16,7 +16,8 @@
     "joi": "^17.9.1",
     "mongoose": "^7.0.4",
     "morgan": "^1.10.0",
-    "nanoid": "^3.3.4"
+    "nanoid": "^3.3.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",

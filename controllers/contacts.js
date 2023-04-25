@@ -10,6 +10,12 @@ const getAll = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
+  if (Object.keys(req.body).length === 0) {
+      const error = new Error('missing fields');
+      error.status = 400;
+      throw error;
+    }
+  
   const contact = await contacts.getContactById(contactId);
   if (!contact) {
     throw HttpError(404, "Not found");
