@@ -20,6 +20,7 @@ const contactShema = joi.object({
     .required(),
 });
 
+
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
