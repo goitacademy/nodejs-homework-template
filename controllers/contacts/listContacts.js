@@ -1,4 +1,3 @@
-// const contactsOperation = require("../../models/contacts");
 const {Contact} = require("../../models");
 
 const listContacts = async (req, res) => {

@@ -34,12 +34,19 @@ const joiSchema = Joi.object({
           "Invalid phone number format. The format should be (XXX) XXX-XXXX.",
       })
       .required(),
+
+    favorite: Joi.boolean(),      
   });
+
+  const updateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+  })
 
 
 const Contact = model('contact', contactSchema);
 
 module.exports = {
     Contact, 
-    joiSchema
+    joiSchema,
+    updateFavoriteSchema,
 }
