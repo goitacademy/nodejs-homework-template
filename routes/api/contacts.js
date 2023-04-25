@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {contacts: ctrl} = require("../../controllers");
-const {joiSchema} = require("../../models/contact");
-const {validation, ctrlWrapper} = require("../../middlewares");
+// const {joiSchema} = require("../../models/contact");
+// const {validation, ctrlWrapper} = require("../../middlewares");
+ const { ctrlWrapper} = require("../../middlewares");
 
 // const validateMiddleware = validation(contactsSchema); 
 
