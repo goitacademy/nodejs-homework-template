@@ -55,4 +55,3 @@ async function updateById(contactId, body) {
 };
 
 module.exports = { listContacts, addContact, updateContacts,updateById, removeContact, getContactById };
-

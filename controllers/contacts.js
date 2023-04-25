@@ -36,40 +36,40 @@ const addContact = async (req, res) => {
   });
 };
 
-const removeContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json({
-    message: "Contact deleted",
-  });
-};
+// const removeContact = async (req, res) => {
+//   const { contactId } = req.params;
+//   const result = await contacts.removeContact(contactId);
+//   if (!result) {
+//     throw HttpError(404, "Not found");
+//   }
+//   res.json({
+//     message: "Contact deleted",
+//   });
+// };
 
-const upDateById = async (req, res) => {
-  const { contactId } = req.params;
-  if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, 'missing fields');
-  }
+// const upDateById = async (req, res) => {
+//   const { contactId } = req.params;
+//   if (Object.keys(req.body).length === 0) {
+//     throw HttpError(400, 'missing fields');
+//   }
  
-  const result = await contacts.updateById(contactId, req.body);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json({
-    status: 'success',
-    code: 201,
-    data: { result },
-  });
-};
+//   const result = await contacts.updateById(contactId, req.body);
+//   if (!result) {
+//     throw HttpError(404, "Not found");
+//   }
+//   res.json({
+//     status: 'success',
+//     code: 201,
+//     data: { result },
+//   });
+// };
 
 
 
-module.exports = {
-  getAll: ctrlWrapper(getAll),
-  getContactById: ctrlWrapper(getContactById),
-  addContact: ctrlWrapper(addContact),
-  removeContact: ctrlWrapper(removeContact),
-  upDateById: ctrlWrapper(upDateById),
-};
+// module.exports = {
+//   getAll: ctrlWrapper(getAll),
+//   getContactById: ctrlWrapper(getContactById),
+//   addContact: ctrlWrapper(addContact),
+//   removeContact: ctrlWrapper(removeContact),
+//   upDateById: ctrlWrapper(upDateById),
+// };
