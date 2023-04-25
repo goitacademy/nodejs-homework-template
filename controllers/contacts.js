@@ -1,6 +1,5 @@
 const contacts = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
-const dataValidator = require("../helpers/dataValidator");
 const ctrlWraper = require("../helpers/ctrlWrapper");
 
 const getAll = async (req, res) => {
@@ -18,10 +17,6 @@ const getById = async (req, res) => {
 };
 
 const post = async (req, res) => {
-  const { error } = dataValidator(req.body);
-  if (error) {
-    throw HttpError(404, error.message);
-  }
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
@@ -38,11 +33,6 @@ const deleteById = async (req, res) => {
 };
 
 const put = async (req, res) => {
-  const { error } = dataValidator(req.body);
-  if (error) {
-    throw HttpError(404, error.message);
-  }
-
   const { contactId } = req.params;
   const result = await contacts.updateById(contactId, req.body);
 
