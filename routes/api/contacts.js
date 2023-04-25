@@ -28,7 +28,7 @@ router.delete("/:id", contactsController.deleteContact);
 router.put(
   "/:id",
   validateUpdateContact(contactsEditSchema),
-  contactsController.updateContactById
+  contactsController.updateContact
 );
 
 module.exports = router;
