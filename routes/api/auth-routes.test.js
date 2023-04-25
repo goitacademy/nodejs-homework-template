@@ -6,16 +6,18 @@ const { User } = require("../../models");
 
 const { DB_HOST_TEST, PORT = 3000 } = process.env;
 
-describe("test /api/users/register route", () => {
+describe("test /api/auth/register route", () => {
   let server = null;
   beforeAll(async () => {
     server = app.listen(PORT);
     await mongoose.connect(DB_HOST_TEST);
+    console.log("Выполнить в начале тестов");
   });
 
   afterAll(async () => {
     server.close();
     await mongoose.connection.close();
+    console.log("Выполнить после тестов");
   });
 
   beforeEach(() => {});
@@ -33,7 +35,7 @@ describe("test /api/users/register route", () => {
     };
 
     const res = await request(app)
-      .post("/api/users/register")
+      .post("/api/auth/register")
       .send(registerData);
 
     expect(res.statusCode).toBe(201);
