@@ -8,7 +8,7 @@ console.log(envPath);
 
 dotenv.config({ path: envPath });
 
-const contactsRouter = require("./routes/api/contacts-routes");
+const contactsRouter = require("./routes/api/");
 
 const app = express();
 

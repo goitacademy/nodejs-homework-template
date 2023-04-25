@@ -6,7 +6,7 @@ const { validateBody } = require("../../utils");
 
 const { schemas } = require("../../models/");
 
-const ctrl = require("../../controllers/contacts-controlers");
+const ctrl = require("../../controllers");
 
 router.get("/", ctrl.listContacts);
 
