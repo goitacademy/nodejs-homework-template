@@ -11,13 +11,13 @@ async function listContacts() {
 }
 
 function updateContacts(contacts) {
-   return fs.writeFile(contactsPath, JSON.stringify(contacts), 'utf8');
+   return fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), 'utf8');
 }
 
 async function getContactById(contactId) {
-    const contacts = await listContacts();
-    const contact = contacts.find(({id}) => contactId === id);
-    return contact;
+  const contacts = await listContacts();
+  const result = contacts.find(({ id }) => contactId === id);
+  return result || null;
 }
 
 async function addContact(name, email, phone) {

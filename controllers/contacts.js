@@ -2,6 +2,7 @@ const contacts = require("../models/contacts");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
+
 const getAll = async (req, res) => {
   const result = await contacts.listContacts();
   res.json(result);
@@ -9,16 +10,24 @@ const getAll = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
-  if (!result) {
+  const contact = await contacts.getContactById(contactId);
+  if (!contact) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    data: { result: contact },
+  });
 };
 
 const addContact = async (req, res) => {
   const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
+  res.status(201).json({
+    status: 'success',
+    code: 201,
+    data: { result },
+  });
 };
 
 const removeContact = async (req, res) => {
@@ -29,22 +38,27 @@ const removeContact = async (req, res) => {
   }
   res.json({
     message: "Contact deleted",
-    // res.status(204).send()
   });
 };
 
 const upDateById = async (req, res) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const { contactId } = req.params;
+  if (Object.keys(req.body).length === 0) {
+    throw HttpError(400, 'missing fields');
+  }
+ 
   const result = await contacts.updateById(contactId, req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.json({
+    status: 'success',
+    code: 201,
+    data: { result },
+  });
 };
+
+
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
