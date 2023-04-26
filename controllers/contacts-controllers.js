@@ -2,7 +2,7 @@ const { ctrlWrapper } = require("../utils");
 
 const { HttpError } = require("../helpers");
 
-const { Contact } = require("../models");
+const { Contact } = require("../models/contact");
 
 const listContacts = async (req, res) => {
   const result = await Contact.find();

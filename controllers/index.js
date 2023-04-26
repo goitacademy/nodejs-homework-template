@@ -1,3 +1,3 @@
-const ctrl = require('./contacts-controlers');
+const ctrl = require('./contacts-controllers');
 
 module.exports = ctrl
