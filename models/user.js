@@ -7,7 +7,7 @@ const handlerMogoosError = require("../helpers/handlerMogoosError");
 const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+const subscriptionList = ["starter", "pro", "business"];
 const userSchema = new Schema(
     {
         name: {
@@ -27,7 +27,7 @@ const userSchema = new Schema(
         },
         subscription: {
             type: String,
-            enum: ["starter", "pro", "business"],
+            enum: subscriptionList,
             default: "starter",
         },
         token: {
@@ -53,9 +53,16 @@ const userLoginSchema = Joi.object({
     password: Joi.string().min(7).required(),
 });
 
+const userSubscriptionShema = Joi.object({
+    subscription: Joi.string()
+        .valid(...subscriptionList)
+        .required(),
+});
+
 const schemas = {
     userLoginSchema,
     userRegisterSchema,
+    userSubscriptionShema,
 };
 
 module.exports = {

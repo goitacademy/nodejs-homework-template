@@ -58,7 +58,7 @@ const editContactSchema = Joi.object({
 });
 
 const editFavoriteSchema = Joi.object({
-    favorite: Joi.boolean(),
+    favorite: Joi.boolean().required(),
 });
 
 const schemas = {

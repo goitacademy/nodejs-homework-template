@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const HttpError = require("../helpers/HttpError");
 
 const { Contact } = require("../models/contact");
@@ -5,14 +6,20 @@ const { Contact } = require("../models/contact");
 const ctrlWrapper = require("../utils/ctrlWrapper");
 
 const getAllContacts = async (req, res, next) => {
-    const { _id: owner } = req.user;
-    const { page = 1, limit = 5 } = req.query;
+    const { _id } = req.user;
+    const { page = 1, limit = 5, favorite = false } = req.query;
     const skip = (page - 1) * limit;
+    const query = {
+        owner: _id,
+    };
+    if (favorite) {
+        query.favorite = favorite;
+    }
     //в Contact.find:
-    //первый аргумент - показать контакты в котором есть данное поле / значение
+    //первый аргумент (долже быть объект) - показать контакты в котором есть данное поле / значение
     // второй аргумент - string какие поля показать или исключить если со знаком -
-    // третий аргумент - пагинация. skip и limit зарезервированные слова
-    const result = await Contact.find({ owner }, "", { skip, limit });
+    // третий аргумент (должен быть объект) - пагинация. skip и limit зарезервированные слова
+    const result = await Contact.find(query, "-createdAt -updatedAt", { skip, limit });
     res.json(result);
 };
 
