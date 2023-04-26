@@ -7,9 +7,12 @@ require("dotenv").config();
 const path = require("path");
 const fs = require("fs").promises;
 const { jimpResizer } = require("../helpers");
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const { nanoid } = require("nanoid");
+const mailSender = require("../services/mailSender");
+const mailTemplate = require("../services/mailTemplate");
 
-const { SECRET_KEY } = process.env;
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const { SECRET_KEY: key, LOCAL_URL: localUrl, MAIL_USER: mailUser } = process.env; /// localUrl for local, BACK_URL: backUrl for render
 
 const createUser = async (req, res) => {
 	const { email, password } = req.body;
@@ -19,13 +22,62 @@ const createUser = async (req, res) => {
 	}
 	const hashPassword = await bcrypt.hash(password, 10);
 	const avatarURL = gravatar.url(email);
-	const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
+	const verificationToken = nanoid(30);
+
+	const newUser = await User.create({
+		...req.body,
+		password: hashPassword,
+		avatarURL,
+		verificationToken,
+	});
+
+	const verifyEmail = {
+		from: mailUser,
+		to: email,
+		subject: "Verify email",
+		html: mailTemplate(localUrl, verificationToken),
+	};
+
+	await mailSender(verifyEmail);
+
 	res.status(201).json({
 		user: {
 			email: newUser.email,
 			subscription: newUser.subscription,
 		},
 	});
+};
+
+const verifyEmail = async (req, res) => {
+	const { verificationToken } = req.params;
+	const user = await User.findOne({ verificationToken });
+	if (!user) {
+		throw httpError(404, "User not found");
+	}
+	await User.findByIdAndUpdate(user._id, { verificationToken: null, verify: true });
+	res.status(200).json({
+		message: "Verification successful",
+	});
+};
+
+const resendVerify = async (req, res) => {
+	const { email } = req.body;
+	const user = await User.findOne({ email });
+	if (!user) {
+		throw httpError(404, "User not found");
+	}
+	if (user.verify) {
+		throw httpError(400, "Verification has already been passed");
+	}
+	const verifyEmail = {
+		from: mailUser,
+		to: email,
+		subject: "Verify email",
+		html: mailTemplate(localUrl, user.verificationToken),
+	};
+	await mailSender(verifyEmail);
+
+	res.status(200).json({ message: "Verification email sent" });
 };
 
 const userLogin = async (req, res) => {
@@ -40,9 +92,13 @@ const userLogin = async (req, res) => {
 		throw httpError(401, "Email or password is wrong");
 	}
 
+	if (!registeredUser.verify) {
+		throw httpError(401, "Email not verified");
+	}
+
 	const payload = { id: registeredUser._id };
 
-	const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+	const token = jwt.sign(payload, key, { expiresIn: "1d" });
 	await User.findByIdAndUpdate(registeredUser._id, { token });
 	res.status(200).json({
 		token,
@@ -93,6 +149,8 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
 	createUser: controllerWrp(createUser),
+	verifyEmail: controllerWrp(verifyEmail),
+	resendVerify: controllerWrp(resendVerify),
 	userLogin: controllerWrp(userLogin),
 	getCurrent: controllerWrp(getCurrent),
 	logout: controllerWrp(logout),
