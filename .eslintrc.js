@@ -11,5 +11,12 @@ module.exports = {
 	},
 	rules: {},
 	plugins: ["jest"],
-	files: ["**/*.test.js"],
+	overrides: [
+		{
+			files: ["**/*.test.js"],
+			env: {
+				jest: true,
+			},
+		},
+	],
 };

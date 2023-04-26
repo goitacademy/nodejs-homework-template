@@ -1,8 +1,6 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const cors = require("cors");
 const app = require("../app");
-const { userLogin } = require("../controllers/auth");
 require("dotenv").config();
 
 /* Connecting to the database before each test. */
@@ -30,7 +28,7 @@ beforeEach(async () => {
 afterEach(async () => {
 	await mongoose.connection.close();
 });
-let server;
+
 describe("test getCurrent controller", () => {
 	const user = {
 		email: "anton@vebul.co.uk",

@@ -4,7 +4,7 @@ const { MAIL_PASS: pass, MAIL_HOST: host, MAIL_PORT: port, MAIL_USER: user } = p
 
 const mailerConfig = {
 	host,
-	port, // 587 from google recommendation
+	port,
 	secure: true,
 	auth: {
 		user,
@@ -15,7 +15,7 @@ const mailerConfig = {
 };
 
 const mailSender = async (data) => {
-	const transporter = nodemailer.createTransport(mailerConfig); //initialize
+	const transporter = nodemailer.createTransport(mailerConfig);
 
 	transporter.sendMail(data, (error, info) => {
 		if (error) {
