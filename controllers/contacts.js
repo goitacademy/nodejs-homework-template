@@ -51,13 +51,15 @@ const deleteContacts = async (req, res) => {
 const changeContact = async (req, res) => {
   const { error } = changeContactSchema.validate(req.body);
 
+  console.log(req.body);
+
   if (error) {
     throw HttpError(400, "missing required name field");
   }
 
   const { contactId } = req.params;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.params, {
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
 
@@ -71,13 +73,15 @@ const changeContact = async (req, res) => {
 const updateFavorite = async (req, res) => {
   const { error } = updateFavoriteSchema.validate(req.body);
 
+  console.log(req.body);
+
   if (error) {
     throw HttpError(400, "missing field favorite");
   }
 
   const { contactId } = req.params;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.params, {
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
 
