@@ -10,7 +10,7 @@ router.get("/:contactId", isValidId, ctrl.getContactById);
 
 router.post("/", ctrl.addContact);
 
-// router.delete("/:contactId", isValidId, ctrl.deleteContacts);
+router.delete("/:contactId", isValidId, ctrl.deleteContacts);
 
 router.put("/:contactId", isValidId, ctrl.changeContact);
 
