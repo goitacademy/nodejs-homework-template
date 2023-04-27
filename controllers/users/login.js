@@ -9,7 +9,7 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || user.verify) {
       throw new Unauthorized(401, 'Email or password invalid');
     }
 
