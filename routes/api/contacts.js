@@ -20,6 +20,14 @@ const contactShema = joi.object({
     .required(),
 });
 
+const contactsUpdateSchema =  joi.object({
+  name: joi.string().min(1).max(30).optional(),
+  email: joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .optional(),
+  phone: joi.string().min(1).max(30).optional(),
+});
+
 
 router.get("/", async (req, res, next) => {
   try {
@@ -71,14 +79,14 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = contactShema.validate(req.body);
+    const { error } = contactsUpdateSchema.validate(req.body);
     if (error) {
       throw RequestError(400, error.message);
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      throw RequestError(404, "Not found");
+      throw RequestError(404, `Not found contact ${contactId}`);
     }
     res.json(result);
   } catch (error) {
