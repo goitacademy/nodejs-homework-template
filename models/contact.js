@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../helpers/handleMongooseError');
 
-const emailRegExp = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
-const phoneRegExp = /^380d{9}$/;
+const emailRegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const phoneRegExp = /^380\d{9}$/;
 
 const Joi = require('joi');
 
@@ -42,7 +42,12 @@ const contactSchema = new Schema(
       default: false,
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
+
   { versionKey: false, timestamps: true }
 );
 
