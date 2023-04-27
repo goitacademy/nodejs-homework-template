@@ -4,10 +4,10 @@ const HttpError = require("../helpers/HttpError");
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contacts.removeContact(contactId);
-  if (!result) {
+  if (!result.includes(contactId)) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).json({ message: "Success deleted" });
+  res.status(200).json({ message: "Contact deleted" });
 };
 
 module.exports = deleteById;

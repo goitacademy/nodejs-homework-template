@@ -2,7 +2,7 @@ const httpError = require("../helpers/HttpError");
 const objectContactsChecker = require("../helpers/objectContactsChecker");
 
 const addValidator = (schema) => {
-  const valid = (req, res, next) => {
+  const valid = async (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
       const alertMessage = objectContactsChecker(req.body);

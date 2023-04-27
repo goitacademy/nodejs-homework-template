@@ -14,18 +14,18 @@ const bodyParser = require('body-parser');
 router.use(cors());
 router.use(bodyParser.json());
 
-const bodyValidator = require("../../middleWares/bodyValidator");
-const addValidator =  require("../../middleWares/addValidator");
+const bodyValidator = require("../../middle/bodyValidator");
+const addValidator =  require("../../middle/addValidator");
 const { addSchema, changeSchema } = require("../../schemas/schema");
 
 router.get('/', getAllContacts);
 
 router.get('/:contactId', getById);
 
-router.post('/', addContact, addValidator(addSchema));
+router.post('/', addValidator(addSchema), addContact);
 
 router.delete('/:contactId', deleteById);
 
-router.put('/:contactId', updateById, bodyValidator(changeSchema));
+router.put('/:contactId', bodyValidator(changeSchema), updateById);
 
 module.exports = router;
