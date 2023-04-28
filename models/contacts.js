@@ -58,13 +58,12 @@ const addContact = async ({name, email, phone}) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const { name, email, phone } = body;
     const contacts = await listContacts();
     const index = contacts.findIndex((item) => item.id === contactId);
     if (index !== -1) {
-      contacts[index].name = name;
-      contacts[index].email = email;
-      contacts[index].phone = phone;
+      Object.entries(body).forEach(([key,value])=>{
+        contacts[index][key]=value;
+      })
       await updateContacts(contacts);
       return contacts[index];
     } else {
