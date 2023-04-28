@@ -8,33 +8,33 @@ const { validateBody } = require("../../utils");
 
 const { schemas } = require("../../models/contact");
 
-const ctrl = require("../../controllers");
+const {ctrlC} = require("../../controllers");
 
-router.get("/", authenticate, ctrl.listContacts);
+router.get("/", authenticate, ctrlC.listContacts);
 
-router.get("/:contactId", authenticate, ctrl.getContactById);
+router.get("/:contactId", authenticate, ctrlC.getContactById);
 
 router.post(
   "/",
   authenticate,
   validateBody(schemas.addSchema),
-  ctrl.addContact
+  ctrlC.addContact
 );
 
-router.delete("/:contactId", authenticate, ctrl.removeContact);
+router.delete("/:contactId", authenticate, ctrlC.removeContact);
 
 router.put(
   "/:contactId",
   authenticate,
   validateBody(schemas.addSchema),
-  ctrl.updateContact
+  ctrlC.updateContact
 );
 
 router.patch(
   "/:contactId/favorite",
   authenticate,
   validateBody(schemas.updateFavoritSchema),
-  ctrl.updateStatusContact
+  ctrlC.updateStatusContact
 );
 
 module.exports = router;
