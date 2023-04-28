@@ -3,73 +3,126 @@ const jwt = require("jsonwebtoken");
 
 // const { ctrlWrapper } = require("../utils");
 
-const {User} = require("../models/user");
+const {User} = require("../models/contacts/users");
 
 // const { HttpError } = require("../helpers");
 
 const {SECRET_KEY} = process.env;
 
-const register = async(req, res)=> {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
-    if(user) {
-        throw HttpError(409, "Email already in use");
-    }
-
-    const hashPassword = await bcrypt.hash(password, 10);
+async function register (req, res, next) {
+    try {
+        const {email, password} = req.body;
+        const user = await User.findOne({email});
+        if(user) {
+            return res.status(409).json({
+                message: "Email in use"
+            })
+        }
     
-    const result = await User.create({...req.body, password: hashPassword});
-
-    res.status(201).json({
-        name: result.name,
-        email: result.email,
-    })
+        const hashPassword = await bcrypt.hash(password, 10);
+        
+        const result = await User.create({...req.body, password: hashPassword});
+    
+        res.status(201).json({
+            // name: result.name,
+            email: result.email,
+            subscription: result.subscription,
+        })
+    }
+    catch(error) {
+        next(error);
+    }
 }
 
-const login = async(req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
-    if(!user) {
-        throw HttpError(401, "Email or password invalid");
-    }
-    const passwordCompare = await bcrypt.compare(password, user.password);
-    if(!passwordCompare) {
-        throw HttpError(401, "Email or password invalid");
-    }
+async function login (req, res, next) {
+    try {
+        const {email, password} = req.body;
+        const user = await User.findOne({email});
+        if(!user) {
+            return res.status(401).json({
+                message: "Email or password is wrong"
+        })
+        }
+        const passwordCompare = await bcrypt.compare(password, user.password);
+        if(!passwordCompare) {
+            return res.status(401).json({
+            message: "Email or password is wrong"
+        })
+        }
 
-    const payload = {
-        id: user._id,
+        const payload = {
+            id: user._id,
+        }
+
+        const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
+        await User.findByIdAndUpdate(user._id, {token});
+
+        // res.json({
+        //     token,
+        // })
+        res.status(201).json({
+            token,
+            
+            email,
+            // subscription,
+
+        })
     }
-
-    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
-    await User.findByIdAndUpdate(user._id, {token});
-
-    res.json({
-        token,
-    })
+    catch(error) {
+        next(error);
+    }
 }
 
-const getCurrent = async(req, res)=> {
-    const {name, email} = req.user;
+async function getCurrent (req, res, next) {
+    try {
+        const {email, subscription} = req.user;
+        // const user = await User.findOne({_id});
+        // if(!user) {
+        //     return res.status(401).json({
+        //     message: "Not authorized"
+        // })
+        // }
 
-    res.json({
-        name,
-        email,
-    })
+        // res.json({
+        //     name,
+        //     email,
+        // })
+        res.status(200).json({
+            // name: result.name,
+            email,
+            subscription,
+        })
+    }
+    catch(error) {
+        next(error);
+    }
 }
 
-const logout = async(req, res)=> {
-    const {_id} = req.user;
-    await User.findByIdAndUpdate(_id, {token: ""});
+async function logout (req, res, next) {
+    try {
+        const {_id} = req.user;
 
-    res.json({
-        message: "Logout success"
-    })
+        // const user = await User.findOne({_id});
+        // if(!user) {
+        //     return res.status(401).json({
+        //     message: "Not authorized"
+        // })
+        // }
+
+        await User.findByIdAndUpdate(_id, {token: ""});
+
+        res.status(204).json({
+            message: "Logout success"
+        })
+    }
+    catch(error) {
+        next(error);
+    }
 }
 
 module.exports = {
-    register: ctrlWrapper(register),
-    login: ctrlWrapper(login),
-    getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout),
+    register,
+    login,
+    getCurrent,
+    logout,
 }

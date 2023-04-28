@@ -2,7 +2,10 @@ const {Contact} = require("../models/contacts/contacts")
 
 async function listContacts ( req, res, next) {
     try {
-        const result = await Contact.find({});
+        const {_id: owner} = req.user;
+        const {page = 1, limit = 20} = req.query;
+        const skip = (page - 1) * limit;
+        const result = await Contact.find({owner}, {skip, limit}).populate("owner", "name email");
         res.status(200).json(result);
     }
     catch(error) {
@@ -46,7 +49,8 @@ async function removeContact (req, res, next) {
 
 async function addContact (req, res, next) {
     try {
-        const result = await Contact.create(req.body);
+        const {_id: owner} = req.user;
+        const result = await Contact.create({...req.body, owner});
         res.status(201).json(result);
     }
     catch(error) {
