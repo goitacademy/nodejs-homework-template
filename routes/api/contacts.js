@@ -6,9 +6,11 @@ const contactsController = require("../../controllers/contacts-controllers")
 
 const {validateBody} = require("../../utils")
 
-const {isValidId} = require("../../middlewares")
+const {isValidId, authenticate} = require("../../middlewares")
 
 const schema = require("../../schema/contacts")
+
+router.use(authenticate)
 
 router.get("/", contactsController.getAllContacts);
 
