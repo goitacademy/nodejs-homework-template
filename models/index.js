@@ -1,3 +1,5 @@
 const Contact = require("./contact.js");
 
-module.exports = Contact;
+const User = require("./user.js");
+
+module.exports = { Contact, User }
