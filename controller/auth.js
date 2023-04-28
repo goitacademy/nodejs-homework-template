@@ -1,10 +1,15 @@
+import path from "node:path";
+import fs from "node:fs/promises";
 import { validationLogAndPass, validationSubscription } from "../validation.js";
 import jwt from "jsonwebtoken";
 import * as authServices from "../services/auth.js";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 export const singup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const avatar = gravatar.url(email, { d: "mp", protocol: "http" });
 
     const { error } = validationLogAndPass.validate({ email, password });
     if (error)
@@ -19,7 +24,7 @@ export const singup = async (req, res, next) => {
         message: "Email in use",
       });
 
-    const user = await authServices.createUser(email, password);
+    const user = await authServices.createUser(email, password, avatar);
 
     res.status(201).json({
       id: user._id,
@@ -118,6 +123,28 @@ export const updateSubscription = async (req, res, next) => {
       subscription: updatedUser.subscription,
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAvatar = async (req, res, next) => {
+  const userId = req.user._id;
+  const avatarURL = `/avatars/${req.file.filename}`;
+  const avatarPath = path.join(
+    process.cwd(),
+    "public",
+    "avatars",
+    `${req.file.filename}`
+  );
+
+  try {
+    const imageToResize = await Jimp.read(req.file.path);
+    await imageToResize.resize(250, 250).write(req.file.path);
+    await fs.rename(req.file.path, avatarPath);
+    const updateAvatar = await authServices.updateAvatar(userId, avatarURL);
+    return res.json({ avatarURL: updateAvatar.avatarURL });
+  } catch (error) {
+    await fs.unlink(req.file.path);
     next(error);
   }
 };

@@ -9,7 +9,7 @@ import {
 export const getContacts = async (req, res, next) => {
   try {
     const id = req.user._id;
-    console.log(id.valueOf());
+
     const { page, limit, favorite } = req.query;
 
     const contacts = await services.getAllContacts(id, page, limit, favorite);

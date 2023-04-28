@@ -2,8 +2,8 @@ import { User } from "./schemas/schema.js";
 
 export const checkingUserExist = (email) => User.findOne({ email });
 
-export const createUser = (email, pwd) => {
-  const user = new User({ email });
+export const createUser = (email, pwd, avatarURL) => {
+  const user = new User({ email, avatarURL });
   user.setHashPassword(pwd);
   user.save();
   return user;
@@ -19,3 +19,6 @@ export const logoutUser = (id) =>
 
 export const updateUserSubscription = (id, sub) =>
   User.findByIdAndUpdate({ _id: id }, { subscription: sub }, { new: true });
+
+export const updateAvatar = (id, avatarURL) =>
+  User.findByIdAndUpdate({ _id: id }, { avatarURL }, { new: true });
