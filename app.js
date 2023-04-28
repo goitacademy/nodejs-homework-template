@@ -2,12 +2,18 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const  multer = require('multer');
+const path = require('path');
+
 
 const contactsRouter = require('./routes/api/contacts');
 dotenv.config();
 
 const app = express();
 
+const tempDir = path.join(__dirname, "temp");
+
+const multerConfig = multer.diskStorage({destination: tempDir,})
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 
