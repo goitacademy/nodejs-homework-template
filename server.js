@@ -6,8 +6,20 @@ const app = require("./app");
 dotenv.config();
 
 const PORT = 3000;
-app.listen(PORT, async () => {
-  console.log("Connecting to MongoDB...");
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log("Database connection successful");
-});
+
+const connectDB = async () => {
+  await mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => console.log("Connecting to MongoDB..."));
+};
+
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log("Database connection successful");
+    });
+  })
+  .catch(() => {
+    console.log("Server not working. Error: " + error);
+    process.exit(1);
+  });
