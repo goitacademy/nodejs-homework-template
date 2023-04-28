@@ -12,7 +12,7 @@ const mailSender = require("../services/mailSender");
 const mailTemplate = require("../services/mailTemplate");
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
-const { SECRET_KEY: key, LOCAL_URL: localUrl, MAIL_USER: mailUser } = process.env; /// localUrl for local, BACK_URL: backUrl for render
+const { SECRET_KEY: key, BACK_URL: backUrl, MAIL_USER: mailUser } = process.env; /// localUrl for local, BACK_URL: backUrl for render
 
 const createUser = async (req, res) => {
 	const { email, password } = req.body;
@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
 		from: mailUser,
 		to: email,
 		subject: "Verify email",
-		html: mailTemplate(localUrl, verificationToken),
+		html: mailTemplate(backUrl, verificationToken),
 	};
 
 	await mailSender(verifyEmail);
@@ -73,7 +73,7 @@ const resendVerify = async (req, res) => {
 		from: mailUser,
 		to: email,
 		subject: "Verify email",
-		html: mailTemplate(localUrl, user.verificationToken),
+		html: mailTemplate(backUrl, user.verificationToken),
 	};
 	await mailSender(verifyEmail);
 
