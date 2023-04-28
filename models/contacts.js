@@ -1,12 +1,8 @@
-const fs = require("fs/promises");
-const path = require("path");
-
-const contactsPath = path.join(__dirname, "contacts.json");
+const Contact = require("./model");
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf8");
-    const contacts = JSON.parse(data);
+    const contacts = await Contact.find();
     return contacts;
   } catch (error) {
     console.error(error);
@@ -14,42 +10,34 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
+  const contact = await Contact.findOne({ _id: contactId });
   return contact;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const updatedContacts = contacts.filter(
-    (contact) => contact.id !== contactId
-  );
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
-  console.log(`Contact with id: ${contactId} deleted`);
-  const deletedContact = await getContactById(contactId);
+  const deletedContact = Contact.findOneAndDelete({ _id: contactId });
   return deletedContact;
 };
 
 const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = { id: `${Date.now()}`, ...body };
-  const updatedContacts = [...contacts, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
-  console.log("Added new contact");
+  const newContact = Contact.create(body);
   return newContact;
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const updatePayload = body;
-  const contactToUpdate = await getContactById(contactId);
-  const updatedContact = { ...contactToUpdate, ...updatePayload };
-  const updatedContactsList = contacts.map((contact) =>
-    contact.id === contactId ? updatedContact : contact
-  );
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContactsList));
-  console.log(`Contact with id: ${contactId} changed`);
+  const updatedContact = Contact.findOneAndUpdate({ _id: contactId }, body, {
+    new: true,
+  });
   return updatedContact;
+};
+
+const updateFavorite = async (contactId, body) => {
+  const updatedFavoriteContact = Contact.findOneAndUpdate(
+    { _id: contactId },
+    body,
+    { new: true }
+  );
+  return updatedFavoriteContact;
 };
 
 module.exports = {
@@ -58,4 +46,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite,
 };
