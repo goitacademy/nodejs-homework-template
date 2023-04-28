@@ -8,7 +8,7 @@ const connectDB = require("./config");
 const app = require("./app");
 
 const {
-  DB_HOST = "mongodb+srv://userDB:WF2tKF2wY5l0ML8O@cluster0.wifylhl.mongodb.net/db-contacts?retryWrites=true&w=majority",
+  // DB_HOST = "mongodb+srv://userDB:WF2tKF2wY5l0ML8O@cluster0.wifylhl.mongodb.net/db-contacts?retryWrites=true&w=majority",
   PORT = 5000,
 } = process.env;
 
