@@ -6,7 +6,7 @@ const { Contact } = require("../models/contact");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
   const result = await Contact.find({ owner }, "-createdAt, -updatedAt", {
     skip,
@@ -16,7 +16,12 @@ const listContacts = async (req, res) => {
     res.status(400);
     throw new Error("Controller: Unnable to fetch contacts");
   }
-  res.json(result);
+  if (!favorite) {
+    return res.json(result);
+  } else {
+    const favoriteContact = result.filter((contact) => {if(contact.favorite.toString() === favorite){return contact}});
+    return res.json(favoriteContact);
+  }
 };
 
 const getContactById = async (req, res) => {
