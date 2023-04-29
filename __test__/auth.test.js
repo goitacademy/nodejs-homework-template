@@ -4,6 +4,10 @@ import { app } from "../app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { User } from "../services/schemas/schema";
+import * as authServices from "../services/auth.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const tempDb = await MongoMemoryServer.create();
 const tempDbUri = tempDb.getUri();
@@ -81,8 +85,13 @@ describe("Test POST Method  singup", () => {
 describe("Test POST Method  login", () => {
   beforeAll(async () => {
     await connectToTempDb();
-    await User.create({ email: "test@gmail.com", password: "test" });
-    await User.create({ email: "Admin@gmail.com", password: "Admin" });
+
+    await request(app)
+      .post("/api/users/singup")
+      .send({ email: "test@gmail.com", password: "test" });
+    await request(app)
+      .post("/api/users/singup")
+      .send({ email: "Admin@gmail.com", password: "Admin" });
   });
 
   afterAll(async () => {
@@ -90,15 +99,28 @@ describe("Test POST Method  login", () => {
   });
 
   test.each([
-    { email: "test@gmail.com", password: "test", expected: 401 },
-    { email: "Admin@gmail.com", password: "Admin", expected: 401 },
-  ])("Should login", async ({ email, password, expected }) => {
-    const response = await request(app)
-      .post("/api/users/login")
-      .send({ email, password });
-    expect(response.statusCode).toBe(expected);
-    expect(response.body.message).toBe("Email or password is wrong ");
-  });
+    {
+      email: "testgmail.com",
+      password: "test",
+      expected: 400,
+      expectedMessage: `\"email\" must be a valid email`,
+    },
+    {
+      email: "Admin@gmail.com",
+      password: "A",
+      expected: 400,
+      expectedMessage: `\"password\" with value \"A\" fails to match the required pattern: /^[a-zA-Z0-9]{3,30}$/`,
+    },
+  ])(
+    "Should  validate password or login",
+    async ({ email, password, expected, expectedMessage }) => {
+      const response = await request(app)
+        .post("/api/users/login")
+        .send({ email, password });
+      expect(response.statusCode).toBe(expected);
+      expect(response.body.message).toBe(expectedMessage);
+    }
+  );
 
   test.each([
     {
@@ -113,13 +135,16 @@ describe("Test POST Method  login", () => {
       expected: 400,
       expectedMessage: "The user does not exist ",
     },
-  ])("Should login", async ({ email, password, expected, expectedMessage }) => {
-    const response = await request(app)
-      .post("/api/users/login")
-      .send({ email, password });
-    expect(response.statusCode).toBe(expected);
-    expect(response.body.message).toBe(expectedMessage);
-  });
+  ])(
+    "Should retrun unauthorization",
+    async ({ email, password, expected, expectedMessage }) => {
+      const response = await request(app)
+        .post("/api/users/login")
+        .send({ email, password });
+      expect(response.statusCode).toBe(expected);
+      expect(response.body.message).toBe(expectedMessage);
+    }
+  );
 
   test.each([
     {
@@ -136,6 +161,10 @@ describe("Test POST Method  login", () => {
     const response = await request(app)
       .post("/api/users/login")
       .send({ email, password });
+    expect(response.body.user.email).toBe(email);
+    expect(response.body.user.subscription).toBe("starter");
+    expect(response.body.user.id).toHaveLength(24);
+    expect(response.body.token).toBeTruthy();
     expect(response.statusCode).toBe(expected);
   });
 });

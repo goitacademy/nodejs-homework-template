@@ -50,8 +50,8 @@ export const login = async (req, res, next) => {
       return res.status(400).json({
         message: "The user does not exist ",
       });
-
     const authorization = user.validatePassword(password);
+
     if (!authorization)
       return res.status(401).json({
         message: "Email or password is wrong ",
