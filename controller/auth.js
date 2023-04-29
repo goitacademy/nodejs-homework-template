@@ -18,7 +18,7 @@ export const singup = async (req, res, next) => {
       });
 
     const isUserExist = await authServices.checkingUserExist(email);
-    console.log(isUserExist);
+
     if (isUserExist)
       return res.status(409).json({
         message: "Email in use",
@@ -39,7 +39,6 @@ export const singup = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const { error } = validationLogAndPass.validate({ email, password });
     if (error)
       return res.status(400).json({
