@@ -22,7 +22,7 @@ const userSchema = new Schema({
         type: String,
         default: ""
     }
-}, {versionKey: false, timestamps: true});
+}, {versionKey: false});
 
 // userSchema.post("save", handleMongooseError);
 

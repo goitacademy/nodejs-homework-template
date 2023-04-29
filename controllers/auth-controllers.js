@@ -24,7 +24,6 @@ async function register (req, res, next) {
         const result = await User.create({...req.body, password: hashPassword});
     
         res.status(201).json({
-            // name: result.name,
             email: result.email,
             subscription: result.subscription,
         })
@@ -37,6 +36,7 @@ async function register (req, res, next) {
 async function login (req, res, next) {
     try {
         const {email, password} = req.body;
+        // const {subscription} = req.user;
         const user = await User.findOne({email});
         if(!user) {
             return res.status(401).json({
@@ -57,12 +57,8 @@ async function login (req, res, next) {
         const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
         await User.findByIdAndUpdate(user._id, {token});
 
-        // res.json({
-        //     token,
-        // })
         res.status(201).json({
             token,
-            
             email,
             // subscription,
 
@@ -75,20 +71,11 @@ async function login (req, res, next) {
 
 async function getCurrent (req, res, next) {
     try {
-        const {email, subscription} = req.user;
-        // const user = await User.findOne({_id});
-        // if(!user) {
-        //     return res.status(401).json({
-        //     message: "Not authorized"
-        // })
-        // }
-
-        // res.json({
-        //     name,
-        //     email,
-        // })
+        const { _id } = req.user;
+        // const {email, subscription} = req.user;
+        const{ email, subscription } = await User.findById(_id);
+        
         res.status(200).json({
-            // name: result.name,
             email,
             subscription,
         })

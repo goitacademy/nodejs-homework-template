@@ -28,7 +28,6 @@ const patchSchema = Joi.object({
 })
 
 const registerSchema = Joi.object({
-    name: Joi.string().required(),
     email: Joi.string().required().messages({
         "any.required": `missing required email field`,
         "string.empty": `email cannot be empty`,
