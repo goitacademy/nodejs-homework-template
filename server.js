@@ -1,5 +1,16 @@
-const app = require("./app");
+const mongoose = require("mongoose");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
+const uri = "mongodb+srv://wiola:Janczura99@cluster0.cyhix7v.mongodb.net/test";
+
+const db = mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoose.connection.on("connected", () => {
+  console.log("Database connection successful");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log(`Database connection error: ${err.message}`);
 });

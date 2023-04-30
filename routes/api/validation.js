@@ -4,11 +4,16 @@ const schemaContact = Joi.object({
   name: Joi.string().min(1).max(100).required(),
   email: Joi.string().min(1).max(100).required(),
   phone: Joi.string().min(10).max(20).required(),
+  favorite: Joi.boolean()
 });
 
 const schemaId = Joi.object({
   contactId: Joi.string().required(),
 });
+
+const schemaFavorite = Joi.object({
+  favorite: Joi.boolean().required()
+})
 
 const validate = async (schema, obj, res, next) => {
   try {
@@ -27,3 +32,7 @@ module.exports.validateContact = async (req, res, next) => {
 module.exports.validateId = async (req, res, next) => {
   return await validate(schemaId, req.params, res, next);
 };
+
+module.exports.validateFavorite = async (req, res, next) => {
+  return await validate(schemaFavorite, req.body, res, next)
+}
