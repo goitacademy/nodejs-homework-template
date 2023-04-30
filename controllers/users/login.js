@@ -10,10 +10,10 @@ const { User } = require("../../models");
 const { ctrlWrapper, HttpError } = require("../../helpers");
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
   const comparePassword = await bcrypt.compare(password, user.password);
   // беремо хешований пароль і введений користувачем при логінізації та перевіряємо
   if (!user || !comparePassword) {
@@ -26,11 +26,10 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   // npm i jsonwebtoken
-  res.status(200).json({
+  await User.findByIdAndUpdate(user._id, { token });
+ return res.status(200).json({
     token,
   });
-
-  console.log("token login ===>", token);
 };
 
 module.exports = {
