@@ -3,6 +3,7 @@ const httpError = require("../helpers/HttpError");
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
+  console.log(contactId);
   const result = await contacts.updateContacts(contactId, req.body);
   if (!result) {
     throw httpError(404, "Not found");
