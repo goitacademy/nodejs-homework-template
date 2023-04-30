@@ -16,6 +16,8 @@ const path = require("path");
 
 const fs = require("fs/promises");
 
+const resizeAvatar = require("../utils/resizeAvatar");
+
 const register = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -93,10 +95,12 @@ const updateAvatar = async (req, res) => {
     }
     const { path: temporaryPath, filename } = req.file;
     const { _id } = req.user;
+    //Изменяет размер картинки
+    await resizeAvatar(temporaryPath);
     const newPath = path.join(avatarsDir, filename);
     await fs.rename(temporaryPath, newPath);
     const avatarURL = path.join("avatars", filename);
-    const result = await User.findByIdAndUpdate(_id, { avatarURL });
+    await User.findByIdAndUpdate(_id, { avatarURL });
     res.json({ avatarURL });
 };
 
