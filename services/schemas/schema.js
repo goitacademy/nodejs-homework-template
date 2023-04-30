@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { verify } from "jsonwebtoken";
 import { Schema, model } from "mongoose";
 
 const contacts = new Schema(
@@ -47,6 +48,14 @@ const userSchema = new Schema(
     },
     avatarURL: {
       type: String,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false }

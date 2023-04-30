@@ -1,9 +1,10 @@
 import { User } from "./schemas/schema.js";
+import { v4 as uuidv4 } from "uuid";
 
 export const checkingUserExist = (email) => User.findOne({ email });
 
 export const createUser = (email, pwd, avatarURL) => {
-  const user = new User({ email, avatarURL });
+  const user = new User({ email, avatarURL, verificationToken: uuidv4() });
   user.setHashPassword(pwd);
   user.save();
   return user;
@@ -22,3 +23,16 @@ export const updateUserSubscription = (id, sub) =>
 
 export const updateAvatar = (id, avatarURL) =>
   User.findByIdAndUpdate({ _id: id }, { avatarURL }, { new: true });
+
+export const verify = (email) => User.findOne({ email });
+
+export const setVerified = (verificationToken) => {
+  console.log(verificationToken);
+  return User.findOneAndUpdate(
+    { verificationToken },
+    { verificationToken: null, verify: true },
+    { new: true }
+  );
+};
+
+export const checkVerify = (email) => User.findOne({ email });

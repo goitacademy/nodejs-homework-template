@@ -5,9 +5,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { dirExist } from "./utils/storage.js";
 import { temDir, updateDir } from "./constant.js";
+import { User } from "./services/schemas/schema.js";
+import sgMail from "@sendgrid/mail";
 
 dotenv.config();
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const connection = mongoose.connect(process.env.DB_HOST, {
   useNewUrlParser: true,
   retryWrites: true,

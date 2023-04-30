@@ -31,6 +31,10 @@ export const validationFavorite = Joi.object({
   favorite: Joi.boolean(),
 });
 
+export const validationEmail = Joi.object({
+  email: Joi.string().required().email(),
+});
+
 export const validationLogAndPass = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string()
