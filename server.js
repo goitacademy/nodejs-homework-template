@@ -2,12 +2,12 @@ const app = require('./app')
 const dotenv = require('dotenv')
 dotenv.config()
 const mongoose = require("mongoose");
-const {DB_HOST} = process.env
+const {DB_HOST, PORT} = process.env
 
 mongoose
   .connect(DB_HOST)
   .then(() =>
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful");
     })
   )
