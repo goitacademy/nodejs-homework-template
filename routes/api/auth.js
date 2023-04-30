@@ -3,6 +3,7 @@ const {
   bodyValidator,
   authenticate,
   updateFavoriteStatus,
+  upload,
 } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
@@ -12,6 +13,7 @@ const {
   getCurrent,
   logoutUser,
   updateSubscription,
+  updateAvatar,
 } = require("../../controllers/auth");
 
 router.post("/register", bodyValidator(schemas.registerSchema), registerUser);
@@ -28,5 +30,7 @@ router.patch(
   updateFavoriteStatus(schemas.updateSubscriptionSchema, "subscription"),
   updateSubscription
 );
+
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
