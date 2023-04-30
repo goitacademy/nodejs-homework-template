@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { contactValidation } = require("../../validator");
+const {
+  contactValidation,
+  contactFavoriteValidation,
+} = require("../../validator");
 const {
   listContacts,
   getContactById,
@@ -56,18 +59,21 @@ router.put("/:contactId", contactValidation, async (req, res, next) => {
   res.status(200).json(updatedContact);
 });
 
-router.patch("/:contactID/favorite", async (req, res, next) => {
-  const id = req.params.contactID;
-  console.log(req.params);
-  if (req.body.favorite === undefined) {
-    res.status(400).json({ message: "missing field favorite" });
+router.patch(
+  "/:contactId/favorite",
+  contactFavoriteValidation,
+  async (req, res, next) => {
+    const id = req.params.contactId;
+    if (req.body.favorite === undefined) {
+      res.status(400).json({ message: "missing field favorite" });
+    }
+    const updatedFavoriteContact = await updateFavorite(id, req.body);
+    if (!updatedFavoriteContact) {
+      return res.status(404).json({ message: "Not found" });
+    } else {
+      return res.status(200).json(updatedFavoriteContact);
+    }
   }
-  const updatedFavoriteContact = await updateFavorite(id, req.body);
-  if (!updatedFavoriteContact) {
-    return res.status(404).json({ message: "Not found" });
-  } else {
-    return res.status(200).json(updatedFavoriteContact);
-  }
-});
+);
 
 module.exports = router;

@@ -7,6 +7,10 @@ const schema = Joi.object({
   favorite: Joi.boolean(),
 });
 
+const schemaFavorite = Joi.object({
+  favorite: Joi.boolean(),
+});
+
 const contactValidation = (req, res, next) => {
   const { output } = schema.validate(req.body);
   if (output) {
@@ -15,4 +19,12 @@ const contactValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { contactValidation };
+const contactFavoriteValidation = (req, res, next) => {
+  const { favoriteOutput } = schemaFavorite.validate(req.body);
+  if (favoriteOutput) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
+
+module.exports = { contactValidation, contactFavoriteValidation };

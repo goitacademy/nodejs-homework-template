@@ -19,7 +19,7 @@ connectDB()
       console.log("Database connection successful");
     });
   })
-  .catch(() => {
+  .catch((error) => {
     console.log("Server not working. Error: " + error);
     process.exit(1);
   });
