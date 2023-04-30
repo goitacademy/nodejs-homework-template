@@ -8,7 +8,13 @@ const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
 
+const gravatar = require("gravatar");
+
 const { SECRET_KEY } = process.env;
+
+const path = require("path");
+
+const fs = require("fs/promises");
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -16,9 +22,9 @@ const register = async (req, res) => {
     if (user) {
         throw HttpError(409, "Email in use");
     }
-
+    const avatarURL = gravatar.url(email, { protocol: "https" });
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
     res.status(201).json({
         user: {
@@ -79,10 +85,26 @@ const updateSubcription = async (req, res) => {
     res.json(result);
 };
 
+const avatarsDir = path.resolve("public", "avatar");
+
+const updateAvatar = async (req, res) => {
+    if (!req.file) {
+        throw HttpError(404, "File is required");
+    }
+    const { path: temporaryPath, filename } = req.file;
+    const { _id } = req.user;
+    const newPath = path.join(avatarsDir, filename);
+    await fs.rename(temporaryPath, newPath);
+    const avatarURL = path.join("avatars", filename);
+    const result = await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({ avatarURL });
+};
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateSubcription: ctrlWrapper(updateSubcription),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };
