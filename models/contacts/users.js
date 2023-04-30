@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
-// const Joi = require("joi");
 
-// const {handleMongooseError} = require("../utils");
+const {handleMongooseError} = require("../utils");
 
 const userSchema = new Schema({
     password: {
@@ -24,16 +23,10 @@ const userSchema = new Schema({
     }
 }, {versionKey: false});
 
-// userSchema.post("save", handleMongooseError);
-
-// const schemas = {
-//     registerSchema,
-//     loginSchema,
-// };
+userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
 
 module.exports = {
     User,
-    // schemas,
 }
