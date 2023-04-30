@@ -1,18 +1,26 @@
 const {
   listContacts,
-  getContactById,
   addContact,
+  getContactById,
   removeContact,
   updateById,
   updateStatusContact,
 } = require("./contacts");
 
-const { register, login, getCurrent, logout } = require("./auth");
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+  resendVerifyEmail,
+  updateAvatar,
+  verifyEmail,
+} = require("./auth");
 
 module.exports = {
   listContacts,
-  getContactById,
   addContact,
+  getContactById,
   removeContact,
   updateById,
   updateStatusContact,
@@ -20,4 +28,7 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  resendVerifyEmail,
+  updateAvatar,
+  verifyEmail,
 };

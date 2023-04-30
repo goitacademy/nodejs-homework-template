@@ -1,13 +1,12 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/auth");
+const ctrl = require("../../controllers");
 
 const { validateBody } = require("../../utils");
 
 const { authenticate, upload } = require("../../midlleware");
 
 const { userSchemas } = require("../../models");
-const { Router } = require("express");
 
 const router = express.Router();
 
