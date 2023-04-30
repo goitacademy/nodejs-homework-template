@@ -1,7 +1,7 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const {DB_HOST} = process.env;   // require('./config.js'); додали в render.com => enviranment
+const DB_HOST = process.env.DB_HOST;   // require('./config.js'); додали в render.com => enviranment
 
 mongoose.set("strictQuery", true);
 

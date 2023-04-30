@@ -1,11 +1,15 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
+//dotenv завантажує змінні середовища з файлу .env, Після ми підключаємо модуль у нашому додатку 
+//і він додає змінні оточення в об'єкт process.envмо
+//.env ми повинні додати до .gitignore
 
 const { User } = require("../../models");
 const { ctrlWrapper, HttpError } = require("../../helpers");
 
-const { SECRET_KEY } = process.env;
-
+const SECRET_KEY = process.env.SECRET_KEY;
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -19,12 +23,14 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-console.log("SECRET_KEY ====>", SECRET_KEY);
+
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   // npm i jsonwebtoken
   res.status(200).json({
     token,
   });
+
+  console.log("token login ===>", token);
 };
 
 module.exports = {

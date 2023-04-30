@@ -4,6 +4,7 @@ const router = express.Router();
 // створюємо сторінку записної книжки
 const { ctrl} = require("../../controllers");
 const {authenticate} = require("../../middlewares");
+//перевіряємо чи видавати інформацію на запит, чи залогінений юзер
 
 // отримання всіх контактів
 router.get("/", authenticate, ctrl.getAll);
