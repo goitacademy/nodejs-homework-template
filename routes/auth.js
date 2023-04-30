@@ -7,6 +7,8 @@ const router = Router();
 
 router
     .post('/register', validateBody(schemas.registerSchema), ctrl.register)
+    .get('/verify/:verificationToken', ctrl.verify)
+    .post('/verify', validateBody(schemas.verificationSchema), ctrl.resendVerificationMail)
     .post('/login', validateBody(schemas.loginSchema), ctrl.login)
     .post('/logout', authenticate, ctrl.logout)
     .get('/current', authenticate, ctrl.getCurrent)
