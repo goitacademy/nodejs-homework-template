@@ -1,22 +1,16 @@
+/* eslint-disable no-undef */
 const request = require("supertest");
 const mongoose = require("mongoose");
-const {
-  describe,
-  expect,
-  test,
-  beforeAll,
-  afterAll,
-} = require("@jest/globals");
 const app = require("../app");
 
-const { DB_HOST, PORT = 3000 } = process.env;
+const { DB_HOST_TEST, PORT = 3000 } = process.env;
 
 let server = null;
 
 describe("test for login controller", () => {
   beforeAll(() => {
     mongoose
-      .connect(DB_HOST)
+      .connect(DB_HOST_TEST)
       .then(() => {
         server = app.listen(PORT, () => {
           console.log("Database connection successful");
@@ -40,6 +34,7 @@ describe("test for login controller", () => {
     expect(typeof user.email).toBe("string");
     expect(typeof user.subscription).toBe("string");
   });
+
   afterAll(() => {
     server.close();
     mongoose.connection.close();
