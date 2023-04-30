@@ -50,9 +50,6 @@ const joiLoginSchema = Joi.object({
     password: Joi.string().min(6).required(),
 });
 
-
-
-
 const User = model("user", userSchema);
 
 module.exports = {
