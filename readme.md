@@ -30,6 +30,5 @@
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
 
-6CvOkgQ0ZUFvdtiG
-
-mongodb+srv://Taras:6CvOkgQ0ZUFvdtiG@db-contacts.vcilqda.mongodb.net/test
+4chq4f6r1AHkzJpW
+mongodb+srv://Taras:4chq4f6r1AHkzJpW@cluster0.pcjdbsp.mongodb.net/test

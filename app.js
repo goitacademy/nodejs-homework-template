@@ -2,12 +2,9 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
-// const DB_HOST = "mongodb+srv://Taras:6CvOkgQ0ZUFvdtiG@db-contacts.vcilqda.mongodb.net/test"
-// mongoose.connect()
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
