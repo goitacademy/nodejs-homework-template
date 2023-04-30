@@ -18,10 +18,9 @@ const login = async(req, res) => {
     // if(!passCompare){
     //     throw new Unauthorized(`Password is wrong`);
     // }
-    const payload = {
-        id: user._id
-    };
-    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "1h"});
+    const payload = { id: user._id };
+    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "10d"});
+    await User.findByIdAndUpdate(user._id, { token }); 
     res.json({
         status: "success",
         code: 200,

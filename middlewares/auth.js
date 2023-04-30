@@ -18,11 +18,10 @@ const {Unautorized} = require("http-errors");
 const jwt = require("jsonwebtoken");
 const {User} = require("../models");
 
-const {SECRET_KEY} = process.env;
-
 const auth = async (req, res, next) => {
    const {authorization = ""} = req.headers;
-   const [bearer, token] = authorization.split(" ");   
+   const [bearer, token] = authorization.split(" ");  
+   const {SECRET_KEY} = process.env; 
    
     if(bearer !== "Bearer") {
       throw new Unautorized("Not authorized");
@@ -30,15 +29,17 @@ const auth = async (req, res, next) => {
      try {
     const {id} = jwt.verify(token, SECRET_KEY);  
     const user = await User.findById(id);
-    if(!user){
+    if(!user || !user.token){
       throw new Unautorized("Not authorized");
     } 
     req.user = user;
     next();
    } catch (error) {
-    // if(error.message = "Invalid sugnature") {
-    //   error.status = 401;    
-    // }
+    if(error.message === "Invalid sugnature") {
+      // error.status = 401;    
+      res.status(401).json( {"message": "Not authorized"})
+    }
+    
    next(error);
    }
 }
