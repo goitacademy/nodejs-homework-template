@@ -1,5 +1,5 @@
 const ctrlWrapper = require("../utils/ctrlWrapper");
-const HttpError = require("../helpers/HttpError");
+const HttpError = require("../helpers");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
