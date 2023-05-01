@@ -1,7 +1,5 @@
 const Joi = require('joi')
 
-// const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
 const addSchema = Joi.object({
     name: Joi.string().required().messages({
         "any.required": `missing required name field`,
@@ -44,6 +42,10 @@ const loginSchema = Joi.object({
     }),
     password: Joi.string().min(6).required(),
 });
+
+const updSubscriptSchema = Joi.object({
+    subscription: Joi.any().valid('starter', 'pro', 'business').required(),
+}).required();
 
 function validatePostData (req, res, next) {
 
@@ -89,7 +91,7 @@ function validateRegister (req, res, next) {
     const {error} = registerSchema.validate(req.body);
     if(error) {
         return res.status(400).json({
-            message: "Помилка від Joi"
+            message: error.message,
         })
     }
 
@@ -102,7 +104,7 @@ function validateLogin (req, res, next) {
     const {error} = loginSchema.validate(req.body);
     if(error) {
         return res.status(400).json({
-            message: "Помилка від Joi"
+            message: error.message,
         })
     }
 
@@ -110,10 +112,25 @@ function validateLogin (req, res, next) {
 
 }
 
+function validateUpdSubscrip (req, res, next) {
+
+    const {error} = updSubscriptSchema.validate(req.body);
+
+    if(error) {
+        return res.status(400).json({
+            message: error.message,
+        })
+    };
+
+    next();
+
+};
+
 module.exports = {
     validatePostData,
     validatePutData,
     validatePatchData,
     validateRegister,
     validateLogin,
+    validateUpdSubscrip,
 }

@@ -1,11 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// const { ctrlWrapper } = require("../utils");
-
 const {User} = require("../models/contacts/users");
-
-// const { HttpError } = require("../helpers");
 
 const {SECRET_KEY} = process.env;
 
@@ -36,7 +32,6 @@ async function register (req, res, next) {
 async function login (req, res, next) {
     try {
         const {email, password} = req.body;
-        // const {subscription} = req.user;
         const user = await User.findOne({email});
         if(!user) {
             return res.status(401).json({
@@ -60,8 +55,6 @@ async function login (req, res, next) {
         res.status(201).json({
             token,
             email,
-            // subscription,
-
         })
     }
     catch(error) {
@@ -72,7 +65,6 @@ async function login (req, res, next) {
 async function getCurrent (req, res, next) {
     try {
         const { _id } = req.user;
-        // const {email, subscription} = req.user;
         const{ email, subscription } = await User.findById(_id);
         
         res.status(200).json({
@@ -100,9 +92,23 @@ async function logout (req, res, next) {
     }
 }
 
+async function updateUserSubscript (req, res) {
+
+    const { _id } = req.user;
+
+    const result = await User.findByIdAndUpdate( _id, req.body, { new: true } );
+
+    res.status(200).json({
+        "email": result.email,
+        "subscription": result.subscription
+    });
+
+};
+
 module.exports = {
     register,
     login,
     getCurrent,
     logout,
+    updateUserSubscript,
 }

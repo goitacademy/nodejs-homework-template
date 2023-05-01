@@ -1,7 +1,7 @@
 const express = require("express");
-const { validateRegister, validateLogin } = require('../../utils/validation')
+const { validateRegister, validateLogin, validateUpdSubscrip } = require('../../utils/validation')
 const authenticate = require("../../utils/authenticate")
-const { register, login, getCurrent, logout, } = require('../../controllers/auth-controllers')
+const { register, login, getCurrent, logout, updateUserSubscript } = require('../../controllers/auth-controllers')
 
 const router = express.Router();
 
@@ -14,5 +14,7 @@ router.post("/login", validateLogin, login);
 router.get("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
+
+router.patch("/", authenticate, validateUpdSubscrip, updateUserSubscript);
 
 module.exports = router;
