@@ -6,7 +6,7 @@ async function listContacts ( req, res, next) {
         const { page = 1, limit = 5} = req.query;
         const skip = (page - 1) * limit;
         const query = { owner: _id };
-        const contacts = await Contact.find(query, {
+        const contacts = await Contact.find(query, '', {
             skip,
             limit: Number(limit),
         });
