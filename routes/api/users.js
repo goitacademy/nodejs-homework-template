@@ -4,6 +4,7 @@ const {
   authenticate,
   isUserValidId,
   updateSubscriptionValidation,
+  upload,
 } = require("../../middlewares");
 const ctrlWrapper = require("../../helpers/ctrlWrapper");
 const {
@@ -32,6 +33,13 @@ router.patch(
   isUserValidId,
   updateSubscriptionValidation(updateSubscriptionSchema),
   ctrlWrapper(ctrl.updateSubscriptionUser)
+);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
 );
 
 module.exports = router;

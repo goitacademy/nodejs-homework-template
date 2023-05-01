@@ -5,6 +5,7 @@ const isValidId = require("./isValidId");
 const authenticate = require("./authenticate");
 const updateSubscriptionValidation = require("./updateSubscriptionValidation");
 const isUserValidId = require("./isUserValidId");
+const upload = require("./upload");
 module.exports = {
   validation,
   updateContactValidation,
@@ -13,4 +14,5 @@ module.exports = {
   authenticate,
   updateSubscriptionValidation,
   isUserValidId,
+  upload,
 };
