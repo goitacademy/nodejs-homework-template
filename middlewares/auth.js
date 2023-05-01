@@ -23,7 +23,7 @@ const auth = async (req, res, next) => {
    const [bearer, token] = authorization.split(" ");  
    const {SECRET_KEY} = process.env; 
    
-    if(bearer !== "Bearer") {
+    if(bearer !== "Bearer" || !token) {
       throw new Unautorized("Not authorized");
      }
      try {
