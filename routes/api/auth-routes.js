@@ -1,10 +1,10 @@
 const express = require("express");
 
-const {ctrlA} = require("../../controllers");
+const { ctrlA } = require("../../controllers");
 
 const { validateBody } = require("../../utils");
 
-const {authenticate, upload} = require("../../middlewares");
+const { authenticate, upload } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
@@ -18,6 +18,11 @@ router.get("/current", authenticate, ctrlA.getCurrent);
 
 router.post("/logout", authenticate, ctrlA.logout);
 
-router.patch('/avatars' , authenticate, upload.single('avatar'), ctrlA.updateAvatar)
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlA.updateAvatar
+);
 
 module.exports = router;
