@@ -1,8 +1,8 @@
-const contactsController = require("./contacts");
+// const contactsController = require("../controllers/contacts");
 
-module.exports = {
-  contacts: contactsController,
-};
+// module.exports = {
+//   contacts: contactsController,
+// };
 
 // controllers/index.js
 
