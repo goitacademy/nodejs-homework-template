@@ -30,7 +30,7 @@
 
 hw3
 https://monosnap.com/file/zK9jMR8nnV2FdHoZFwMrdKTI64KhkX
-<<<<<<< HEAD
+
 https://monosnap.com/file/vlmbyanoiv9ETivy5EhAoXoHksmw46
 
 hw4
@@ -39,6 +39,4 @@ hw4
 "email":"bogdan@mail.com"
 }
 цей юзер має 12 контактів, на ньому можна перевірити пагінацію, по 3 контакти на сторінці
-=======
-https://monosnap.com/file/vlmbyanoiv9ETivy5EhAoXoHksmw46
->>>>>>> 22513394b068499e24accb9e01491fc86a886f58
+
