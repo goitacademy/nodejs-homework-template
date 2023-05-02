@@ -32,7 +32,11 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+<<<<<<< HEAD
     token: { type: String, default: "" },
+=======
+    token: String,
+>>>>>>> 22513394b068499e24accb9e01491fc86a886f58
   },
   { versionKey: false, timestamps: true }
 );

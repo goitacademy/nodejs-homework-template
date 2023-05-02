@@ -1,5 +1,9 @@
 const { Schema, model } = require("mongoose");
+<<<<<<< HEAD
 const { handleMongooseError } = require("../helpers");
+=======
+const {handleMongooseError} = require("../helpers");
+>>>>>>> 22513394b068499e24accb9e01491fc86a886f58
 const Joi = require("joi");
 // для валідації при додавані до json
 
@@ -32,6 +36,7 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+<<<<<<< HEAD
     subscription: {
       type: String,
       enum: ['starter', 'pro', 'business'],
@@ -44,6 +49,12 @@ const contactSchema = new Schema(
       //з якої колекції Id
       required: true,
     },
+=======
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
+>>>>>>> 22513394b068499e24accb9e01491fc86a886f58
   },
   { versionKey: false }
 );
