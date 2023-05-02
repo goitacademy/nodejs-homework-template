@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ValidationError } = require("../helpers/errors");
 
 const addContactValidation = async (req, res, next) => {
   const schema = Joi.object({
@@ -15,8 +16,7 @@ const addContactValidation = async (req, res, next) => {
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    console.log(validationResult.error);
-    return res.status(400).json({ message: "missing required name field" });
+    next(new ValidationError(validationResult.error.details[0].message));
   }
 
   next();
@@ -37,8 +37,7 @@ const updateContactValidation = async (req, res, next) => {
 
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    console.log(validationResult.error);
-    return res.status(400).json({ message: "missing fields" });
+    next(new ValidationError(validationResult.error.details[0].message));
   }
 
   next();
