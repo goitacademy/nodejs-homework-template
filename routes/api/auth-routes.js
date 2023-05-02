@@ -15,6 +15,7 @@ router.get("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
 
+// subscription
 router.patch("/", authenticate, validateUpdSubscrip, updateUserSubscript);
 
 module.exports = router;
