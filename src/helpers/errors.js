@@ -33,10 +33,18 @@ class ConflictdError extends ContactsApiError {
   }
 }
 
+class ResizeError extends ContactsApiError {
+  constructor(message) {
+    super(message);
+    this.status = 500;
+  }
+}
+
 module.exports = {
   ContactsApiError,
   ValidationError,
   WrongParametersError,
   NotAuthorizedError,
   ConflictdError,
+  ResizeError,
 };
