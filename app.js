@@ -4,7 +4,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const envPath = path.join(__dirname, "config", ".env");
-console.log(envPath);
 
 dotenv.config({ path: envPath });
 
