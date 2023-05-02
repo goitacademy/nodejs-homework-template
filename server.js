@@ -1,16 +1,18 @@
 const mongoose = require("mongoose");
+const app = require("./app");
+const dotenv = require("dotenv");
 
-const uri = "mongodb+srv://wiola:Janczura99@cluster0.cyhix7v.mongodb.net/test";
+dotenv.config();
 
-const db = mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const uri = process.env.MONGODB_URI;
 
-mongoose.connection.on("connected", () => {
-  console.log("Database connection successful");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.log(`Database connection error: ${err.message}`);
-});
+mongoose
+  .connect(uri)
+  .then(() => {
+    console.log("Database connection successful");
+    app.listen(PORT);
+  })
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
