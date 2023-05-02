@@ -10,7 +10,7 @@ const {
   validateUpdateFavoriteContact,
 } = require("../../utils/validateBody.js");
 
-const { schemas } = require("../../models/contact");
+const { schemas } = require("../../models/contacts");
 
 const router = express.Router();
 
