@@ -39,6 +39,19 @@ class ResizeError extends ContactsApiError {
     this.status = 500;
   }
 }
+class NotFoundError extends ContactsApiError {
+  constructor(message) {
+    super(message);
+    this.status = 404;
+  }
+}
+
+class MessageSendError extends ContactsApiError {
+  constructor(message) {
+    super(message);
+    this.status = 503;
+  }
+}
 
 module.exports = {
   ContactsApiError,
@@ -47,4 +60,6 @@ module.exports = {
   NotAuthorizedError,
   ConflictdError,
   ResizeError,
+  NotFoundError,
+  MessageSendError,
 };

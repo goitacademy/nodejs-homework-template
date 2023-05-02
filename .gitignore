@@ -1,3 +1,4 @@
 node_modules/
 .env
 gcp.json
+google-storage-demo.js
