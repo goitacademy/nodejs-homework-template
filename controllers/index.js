@@ -5,6 +5,7 @@ const {
   deleteContact,
   updateContact,
   updateFavorite,
+  getFavorite
 } = require("./contactsBook/index");
 
 const {
@@ -22,6 +23,7 @@ const ctrl = {
   deleteContact,
   updateContact,
   updateFavorite,
+  getFavorite
 };
 
 const ctrlUser = {

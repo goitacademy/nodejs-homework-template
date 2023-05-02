@@ -21,3 +21,10 @@ const updateFavorite = async (req, res, next) => {
     updateFavorite: ctrlWrapper(updateFavorite),
   };
   
+
+
+
+
+
+
+
