@@ -1,3 +1,4 @@
+
 const { Contact } = require("../../models");
 
 const listContacts = async (req, res) => {
@@ -10,6 +11,7 @@ const listContacts = async (req, res) => {
     limit: Number(limit),
   }).populate("owner", "_id name email subscription");
   //  const contacts = await Contact.find({})
+
   res.json({
     status: "success",
     code: 200,
