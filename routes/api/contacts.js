@@ -1,5 +1,12 @@
 import { Router } from "express";
 import { listContacts, getContactById, addContact, removeContact, updateContact } from "../../models/contacts.js";
+import Joi from "joi";
+
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }).required(),
+  phone: Joi.number().integer().required()
+})
 
 export const contactsRouter = Router();
 
@@ -16,9 +23,17 @@ contactsRouter.get('/:contactId', async (req, res, next) => {
 })
 
 contactsRouter.post('/', async (req, res, next) => {
+
   const user = req.body;
-  const newUser = await addContact(user);
-  res.status(201).json({ newUser })
+
+  try {
+    Joi.attempt(user, schema);
+    const newUser = await addContact(user);
+    return res.status(201).json({ newUser })
+  } catch (error) {
+    return res.status(400).send(error.details[0].message)
+  }
+
 })
 
 contactsRouter.delete('/:contactId', async (req, res, next) => {
