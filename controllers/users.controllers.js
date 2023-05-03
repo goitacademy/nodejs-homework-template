@@ -23,6 +23,28 @@ const register = async (req, res) => {
   });
 };
 
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError.UnauthorizedError("Email or password is wrong");
+  }
+
+  const passwordCompare = await bcrypt.compare(password, user.password);
+
+  if (!passwordCompare) {
+    throw HttpError.UnauthorizedError("Email or password is wrong");
+  }
+
+  res.status(200).json({
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
 };

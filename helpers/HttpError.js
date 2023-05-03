@@ -6,8 +6,8 @@ module.exports = class HttpError extends Error {
     this.status = status;
   }
 
-  static UnauthorizedError() {
-    return new HttpError(401, "Missing authorization token.");
+  static UnauthorizedError(message = "Missing authorization token.") {
+    return new HttpError(401, message);
   }
 
   static BadRequest(message = "Bad Request") {
