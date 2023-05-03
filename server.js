@@ -3,13 +3,12 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://Serhiy:zAGvUUxi8E4DA9uY@cluster0.1gpmswf.mongodb.net/db-contacts?retryWrites=true&w=majority";
-// console.log("Database connection successful");
+const { DB_HOST, PORT = 3000 } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful");
     });
   })
