@@ -11,7 +11,8 @@ export const listContacts = async () => {
         const contacts = await readFile(contactsPath, { encoding: "utf-8" });
         return JSON.parse(contacts)
     } catch (error) {
-        throw new Error(error);
+        throw new Error(`Something went wrong: ${error.message}`);
+
     }
 }
 
@@ -25,7 +26,7 @@ export const getContactById = async (contactId) => {
             throw new Error(`There is no contact with this id: ${contactId}`)
         }
     } catch (error) {
-        throw new Error(error)
+        throw new Error(`Something went wrong: ${error.message}`);
     }
 }
 
@@ -62,4 +63,21 @@ export const addContact = async (body) => {
 
 }
 
-export const updateContact = async (contactId, body) => { }
+export const updateContact = async (contactId, body) => {
+    try {
+        const parsedContacts = await listContacts();
+        const contactToUpdate = parsedContacts.find(contact => contact.id === contactId)
+
+        if (!contactToUpdate) {
+            throw new Error(`There is no contact with this id ${contactId}`)
+        } else {
+            const updatedContact = { ...contactToUpdate, ...body };
+            const newContactList = parsedContacts.filter((contact) => contact.id !== contactId)
+            newContactList.push(updatedContact)
+            await writeFile(contactsPath, JSON.stringify(newContactList, null, 2))
+            return updatedContact
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
