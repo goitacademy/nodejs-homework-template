@@ -5,17 +5,25 @@ const phoneRegExp =
 
 const adding = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(phoneRegExp)
-    .message('"phone" must be a valid phone number')
-    .required(),
+  email: Joi.string().email().required().messages({
+    'string.email': '{#key} is not valid',
+  }),
+  phone: Joi.string().pattern(phoneRegExp).required().messages({
+    'string.pattern.base': '{#key} is not valid',
+  }),
+})
+.messages({
+  'any.required': 'missing required {#key}',
 });
 
 const updating = Joi.object({
   name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string().pattern(phoneRegExp).message('"phone" must be a valid phone number'),
-}).or('name', 'email', 'phone');
+  email: Joi.string().email().message('{#key} is not valid'),
+  phone: Joi.string().pattern(phoneRegExp).message('{#key} is not valid'),
+})
+  .or('name', 'email', 'phone')
+  .messages({
+    'object.missing': 'missing fields',
+  });
 
 module.exports = { adding, updating };
