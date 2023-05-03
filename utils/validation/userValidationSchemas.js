@@ -4,6 +4,11 @@ const addSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
 module.exports = {
   addSchema,
+  updateSubscriptionSchema,
 };
