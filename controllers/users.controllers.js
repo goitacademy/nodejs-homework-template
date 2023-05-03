@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { ctrlWrapper } = require("../utils");
 const User = require("../models/user");
 const HttpError = require("../helpers/HttpError");
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -36,7 +38,13 @@ const login = async (req, res) => {
     throw HttpError.UnauthorizedError("Email or password is wrong");
   }
 
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   res.status(200).json({
+    token,
     user: {
       email: user.email,
       subscription: user.subscription,
