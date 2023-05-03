@@ -21,4 +21,7 @@ module.exports = class HttpError extends Error {
   static NotFoundError() {
     return new HttpError(404, "Not Found.");
   }
+  static ConflictError(message = "Conflict.") {
+    return new HttpError(409, message);
+  }
 };
