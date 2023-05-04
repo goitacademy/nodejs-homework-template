@@ -34,5 +34,23 @@ const validateBodyPut = (datavalidator) => {
   };
   return func;
 };
+const validateBodyPatch = (datavalidator) => {
+  const func = (req, res, next) => {
+    const { error } = datavalidator(req.body);
 
-module.exports = { validateBodyPost, validateBodyPut };
+    if (error) {
+      next(
+        HttpError(
+          400,
+          Object.keys(req.body).length === 0
+            ? "missing field favorite"
+            : error.message
+        )
+      );
+    }
+    next();
+  };
+  return func;
+};
+
+module.exports = { validateBodyPost, validateBodyPut, validateBodyPatch };
