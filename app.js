@@ -10,10 +10,11 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use('/api/contacts', contactsRouter);
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/contacts', contactsRouter);
 
 // ведем записи лога в файле Server.log
 // app.use(async (req, res, next) => {

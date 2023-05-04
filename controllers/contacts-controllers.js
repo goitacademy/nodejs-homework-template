@@ -3,7 +3,7 @@ const { HttpError } = require('../helpers');
 const { ctrlWrapper } = require('../utils');
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, '-createdAt -updatedAp');
   res.json(result);
 };
 
@@ -23,32 +23,43 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 
-// const updateContactById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.updateContact(id, req.body);
-//   if (!result) {
-//     throw HttpError(404, `Contact with id ${id} not found`);
-//   }
-//   res.json(result);
-// };
+const updateContactById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Contact with id ${id} not found`);
+  }
+  res.json(result);
+};
 
-// const deleteContactById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.removeContact(id);
-//   if (!result) {
-//     throw HttpError(404, `Contact with id ${id} not found`);
-//   }
-//   // res.json(result);
-//   // res.status(204).send();
-//   res.json({
-//     message: `contact deleted`,
-//   });
-// };
+const updateContactFavorite = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Contact with id ${id} not found`);
+  }
+  res.json(result);
+};
+
+const deleteContactById = async (req, res) => {
+  const { id } = req.params;
+  // const result = await Contact.findByIdAndDelete(id);
+  const result = await Contact.findByIdAndRemove(id);
+  if (!result) {
+    throw HttpError(404, `Contact with id ${id} not found`);
+  }
+  // res.json(result);
+  // res.status(204).send();
+  res.json({
+    message: `contact deleted`,
+  });
+};
 
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
-  // updateContactById: ctrlWrapper(updateContactById),
-  // deleteContactById: ctrlWrapper(deleteContactById),
+  updateContactById: ctrlWrapper(updateContactById),
+  updateContactFavorite: ctrlWrapper(updateContactFavorite),
+  deleteContactById: ctrlWrapper(deleteContactById),
 };
