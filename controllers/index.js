@@ -14,6 +14,7 @@ const {
   currentUser,
   logout,
   subscription,
+  updateAvatar
 } = require("./users/index");
 
 const ctrl = {
@@ -32,6 +33,7 @@ const ctrlUser = {
   currentUser,
   logout,
   subscription,
+  updateAvatar,
 };
 
 module.exports = {

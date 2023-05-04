@@ -1,9 +1,9 @@
 const express = require("express");
 // express для маршрутизації
-const {validateBody, authenticate} = require("../../middlewares");
+const {validateBody, authenticate, upload} = require("../../middlewares");
 const { schemas} = require("../../models");
 
-const {ctrlUser} = require("../../controllers")
+const {ctrlUser, ctrl} = require("../../controllers")
 
 const router = express.Router();
 // створюємо сторінку записної книжки
@@ -18,6 +18,8 @@ router.get("/current", authenticate, ctrlUser.currentUser);
 router.post("/logout", authenticate, ctrlUser.logout);
 
 router.patch('/subscription', authenticate, ctrlUser.subscription);
+
+router.patch("/avatars",  authenticate, upload.single("avatar"), ctrlUser.updateAvatar);
 
 module.exports = router;
 
