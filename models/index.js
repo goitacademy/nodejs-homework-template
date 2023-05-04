@@ -8,6 +8,11 @@ const {
   updateContact,
 } = require("./contacts");
 
+const  {
+  User,
+  schemas,
+} = require("./user");
+
 module.exports = {
   Contact,
   addSchema,
@@ -18,4 +23,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  User,
+  schemas,
 };

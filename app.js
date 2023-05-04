@@ -4,7 +4,9 @@ const cors = require('cors');
 // cors для обміну між доменами
 const dotevn = require("dotenv");
 const logger = require('morgan');
-const contactsRouter = require('./routes/api');
+
+const {contactsRouter} = require('./routes/api');
+const {authRouter} = require("./routes/api");
 
 dotevn.config();
 // шукає данні в текстовому файлі .env і додає змінні оточення
@@ -18,6 +20,7 @@ app.use(cors());
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))   // виводимо повну інформацію чи ні
 
+app.use("/api/auth", authRouter);   //б-я запит на api оброблюємо роутом
 app.use('/api/contacts', contactsRouter); 
 
 app.use((req, res) => {

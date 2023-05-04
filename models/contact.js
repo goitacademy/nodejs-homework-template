@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const {handleMongooseError} = require("../helpers");
+const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 // для валідації при додавані до json
 
@@ -7,7 +7,7 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      minlength: 3,
+      minlength: 2,
       maxlength: 15,
       required: true,
       trim: true,
@@ -31,6 +31,18 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    subscription: {
+      type: String,
+      enum: ['starter', 'pro', 'business'],
+      default: 'starter',
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      //зберігається Id яку генерує mongodb
+      ref: "user",
+      //з якої колекції Id
+      required: true,
     },
   },
   { versionKey: false }

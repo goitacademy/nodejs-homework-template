@@ -30,4 +30,13 @@
 
 hw3
 https://monosnap.com/file/zK9jMR8nnV2FdHoZFwMrdKTI64KhkX
+
 https://monosnap.com/file/vlmbyanoiv9ETivy5EhAoXoHksmw46
+
+hw4
+{
+"password":"16081986",
+"email":"bogdan@mail.com"
+}
+цей юзер має 12 контактів, на ньому можна перевірити пагінацію, по 3 контакти на сторінці
+
