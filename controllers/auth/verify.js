@@ -4,8 +4,6 @@ const { User } = require("../../models/user");
 const verify = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
-  console.log(user);
-
   if (!user) {
     throw HttpError(404, "TNot found");
   }
