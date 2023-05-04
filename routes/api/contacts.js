@@ -7,9 +7,9 @@ const removeContact = require("../../controllers/removeContact");
 const updateContact = require("../../controllers/updateContact");
 const updateStatusContact = require("../../controllers/updateStatusContact");
 
-const validateData = require("../../middlewares/addValidator");
-const validateUpdateData = require("../../middlewares/updateValidator");
-const validateStatusData = require("../../middlewares/updateStatusValidator");
+const validateData = require("../../middleWares/addValidator");
+const validateUpdateData = require("../../middleWares/updateValidator");
+const validateStatusData = require("../../middleWares/updateStatusValidator");
 
 const asyncWrapper = require("../../helpers/asyncWrapper");
 

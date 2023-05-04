@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const httpError = require("./helpers/httpError");
+const HttpError = require("../helpers/HttpError");
 
 const validateStatusData = (req, __, next) => {
   const { error } = updateStatusValidate(req.body);
@@ -9,13 +9,13 @@ const validateStatusData = (req, __, next) => {
     const errorType = error.details[0].type;
     switch (errorType) {
       case "any.required":
-        next(httpError(400, `missing field ${fieldWithError}`));
+        next(HttpError(400, `missing field ${fieldWithError}`));
         break;
       case "object.unknown":
-        next(httpError(400, `${fieldWithError} is not allowed`));
+        next(HttpError(400, `${fieldWithError} is not allowed`));
         break;
       case "boolean.base":
-        next(httpError(400, `${fieldWithError} must be a boolean`));
+        next(HttpError(400, `${fieldWithError} must be a boolean`));
         break;
       default:
         break;

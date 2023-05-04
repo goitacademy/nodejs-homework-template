@@ -9,6 +9,7 @@ const startServer = async () => {
       if (error) {
         console.log("Server launch error", error);
       }
+      console.log("Server running. Use our API on port:", process.env.PORT)
       console.log("Database connection successful");
     });
   } catch (err) {

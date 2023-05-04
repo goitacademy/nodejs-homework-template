@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const httpError = require("./helpers/httpError");
+const HttpError = require("../helpers/HttpError");
 
 const validateUpdateData = (req, res, next) => {
   const { error } = updateContactValidate(req.body);
@@ -9,16 +9,16 @@ const validateUpdateData = (req, res, next) => {
 
     switch (errorType) {
       case "string.min":
-        next(httpError(400, `${fieldWithError} must be at least 3 characters`));
+        next(HttpError(400, `${fieldWithError} must be at least 3 characters`));
         break;
       case "string.pattern.base":
-        next(httpError(400, `please enter a valid ${fieldWithError}`));
+        next(HttpError(400, `please enter a valid ${fieldWithError}`));
         break;
       case "object.unknown":
-        next(httpError(400, `property ${fieldWithError} is not allowed`));
+        next(HttpError(400, `property ${fieldWithError} is not allowed`));
         break;
       case "boolean.base":
-        next(httpError(400, `${fieldWithError} must be a boolean`));
+        next(HttpError(400, `${fieldWithError} must be a boolean`));
         break;
       default:
         break;
