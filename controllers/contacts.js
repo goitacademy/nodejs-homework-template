@@ -1,7 +1,6 @@
 const Contact = require("../models/contact");
 const { HTTPError } = require("../helpers");
-const { ctrlWrapper } = require("../helpers");
-
+const { cntrlWrapper } = require("../helpers");
 const getAll = async (requirement, response) => {
   const allContacts = await Contact.find();
   response.status(200).json(allContacts);
@@ -57,10 +56,10 @@ const updateStatusContact = async (requirement, response) => {
 };
 
 module.exports = {
-  getAll: ctrlWrapper(getAll),
-  getById: ctrlWrapper(getById),
-  addContact: ctrlWrapper(addContact),
-  deleteContact: ctrlWrapper(deleteContact),
-  updateContact: ctrlWrapper(updateContact),
-  updateStatusContact: ctrlWrapper(updateStatusContact),
+  getAll: cntrlWrapper(getAll),
+  getById: cntrlWrapper(getById),
+  addContact: cntrlWrapper(addContact),
+  deleteContact: cntrlWrapper(deleteContact),
+  updateContact: cntrlWrapper(updateContact),
+  updateStatusContact: cntrlWrapper(updateStatusContact),
 };
