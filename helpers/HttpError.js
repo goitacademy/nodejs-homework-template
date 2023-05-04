@@ -6,8 +6,8 @@ module.exports = class HttpError extends Error {
     this.status = status;
   }
 
-  static UnauthorizedError() {
-    return new HttpError(401, "Missing authorization token.");
+  static UnauthorizedError(message = "Not authorized") {
+    return new HttpError(401, message);
   }
 
   static BadRequest(message = "Bad Request") {
@@ -20,5 +20,8 @@ module.exports = class HttpError extends Error {
 
   static NotFoundError() {
     return new HttpError(404, "Not Found.");
+  }
+  static ConflictError(message = "Conflict.") {
+    return new HttpError(409, message);
   }
 };
