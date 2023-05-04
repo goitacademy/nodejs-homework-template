@@ -1,23 +1,30 @@
 const Joi = require("joi");
 
-const bodySchema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string().required(),
-
-  email: Joi.string()
-    .required(),
-
   phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/)
     .required(),
-  
-  favorite: Joi.boolean()
+  email: Joi.string().email().required(),
+  favorite: Joi.boolean().default(false),
 });
 
-const updateByFavoriteSchema = Joi.object({
-  favorite: Joi.boolean()
-  .required()
-})
+const updateSchema = Joi.object({
+  name: Joi.string(),
+  phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/),
+  email: Joi.string().email(),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 module.exports = {
-  bodySchema,
-  updateByFavoriteSchema
+  addSchema,
+  updateSchema,
+  updateFavoriteSchema,
 };
