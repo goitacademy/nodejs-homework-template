@@ -4,7 +4,7 @@ const { ctrlWrapper, HttpError } = require("../../helpers");
 const getFavorite = async (req, res) => {
   const { favorite } = req.query;
   const { _id: owner } = req.user;
-  const { page = 1, limit = 3 } = req.query;
+  const { page = 1, limit = 20  } = req.query;
   const skip = (page - 1) * limit;
 
   try {
