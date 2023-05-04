@@ -11,6 +11,7 @@ const authenticate = async (req, res, next) => {
         next(res.status(401).json({
             message: "Not authorized"
         }));
+        return;
     }
 
     try {
@@ -20,6 +21,7 @@ const authenticate = async (req, res, next) => {
             next(res.status(401).json({
                 message: "Not authorized"
             }));
+            return;
         }
         req.user = user;
         next();
