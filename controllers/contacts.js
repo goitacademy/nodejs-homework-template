@@ -1,4 +1,4 @@
-const { HttpError } = require("../helpers/index");
+const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 const {
   Contact,
@@ -6,8 +6,6 @@ const {
   changeContactSchema,
   updateFavoriteSchema,
 } = require("../models/contact");
-
-const { ctrlWrapper } = require("../helpers/index");
 
 const getContacts = async (req, res) => {
   const result = await Contact.find();
@@ -51,8 +49,6 @@ const deleteContacts = async (req, res) => {
 const changeContact = async (req, res) => {
   const { error } = changeContactSchema.validate(req.body);
 
-  console.log(req.body);
-
   if (error) {
     throw HttpError(400, "missing required name field");
   }
@@ -72,8 +68,6 @@ const changeContact = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { error } = updateFavoriteSchema.validate(req.body);
-
-  console.log(req.body);
 
   if (error) {
     throw HttpError(400, "missing field favorite");
