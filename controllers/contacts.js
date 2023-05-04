@@ -35,11 +35,14 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { name, email, phone } = req.body;
+    const { error } = addSchema.validate({ name, email, phone });
+    console.log(error);
     if (error) {
       throw HttpError(400, "Missing required name field");
     }
-    const result = await contacts.addContact(req.body);
+    const result = await contacts.addContact({ name, email, phone });
+    console.log(result);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -63,12 +66,17 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { name, email, phone } = req.body;
+    const { error } = addSchema.validate({ name, email, phone });
     if (error) {
       throw HttpError(400, "Missing fields");
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await contacts.updateContact(contactId, {
+      name,
+      email,
+      phone,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
