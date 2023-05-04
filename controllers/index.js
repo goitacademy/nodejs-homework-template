@@ -1,4 +1,4 @@
-const ctrlC = require("./contacts-controllers");
+const ctrlC = require("./contacts");
 
-const ctrlA = require("./auth-controllers");
+const ctrlA = require("./auth");
 module.exports = { ctrlC, ctrlA };
