@@ -5,7 +5,7 @@ import Joi from "joi";
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }).required(),
-  phone: Joi.number().integer().required()
+  phone: Joi.string().pattern((/^(\(\d{3}\) \d{3}\-\d{4}|\d{3}\-\d{3}\-\d{4}|\d{9}|\d{10})$/)).required()
 })
 
 export const contactsRouter = Router();
@@ -49,7 +49,19 @@ contactsRouter.delete('/:contactId', async (req, res, next) => {
 })
 
 contactsRouter.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const updateSchema = Joi.object({
+    name: Joi.string().min(3).max(30),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }),
+    phone: Joi.string().pattern((/^(\(\d{3}\) \d{3}\-\d{4}|\d{3}\-\d{3}\-\d{4}|\d{9}|\d{10})$/))
+  })
+  try {
+    const id = req.params.contactId;
+    const body = req.body;
 
-//module.exports = router
+    Joi.attempt(body, updateSchema)
+    const updatedContact = await updateContact(id, body);
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    return res.status(400).send(error.details[0].message)
+  }
+})
