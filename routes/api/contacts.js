@@ -15,6 +15,7 @@ router.post('/', authenticate, validatePostData, addContact)
 
 router.put('/:id', authenticate, validatePutData, updateContact)
 
+// favorite
 router.patch('/:id/favorite', authenticate, validatePatchData, updateStatusContact)
 
 module.exports = router
