@@ -72,9 +72,24 @@ const logout = async (req, res) => {
   res.status(204);
 };
 
+const updateSubscription = async (req, res) => {
+  const { error } = schemas.updateSubscriptionSchema.validate(req.body);
+
+  if (error) {
+    throw HttpError(400, "missing field subscription or invalid value");
+  }
+
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, req.body);
+
+  res.json(req.body);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
