@@ -5,6 +5,7 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const {User} = require("../models/contacts/users");
+const {ScalePhoto} = require("../helpers");
 
 const {SECRET_KEY} = process.env;
 
@@ -119,7 +120,7 @@ async function updateAvatar (req, res) {
     const avatarName = `${_id}_${filename}`;
     const resultUpload = path.join(avatarsDir, avatarName);
     await fs.rename(tempUpload, resultUpload);
-
+    ScalePhoto(resultUpload);
     const avatarURL = path.join("avatars", avatarName);
     const user = await User.findByIdAndUpdate(_id, {avatarURL});
 
