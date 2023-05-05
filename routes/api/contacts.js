@@ -10,7 +10,6 @@ const router = express.Router();
 router.get('/', authenticate, ctrl.listContacts );
 router.get('/:contactId',  authenticate, isValidId, ctrl.getContactById );
 router.post('/',  authenticate, validateBody(schemas.addSchema), ctrl.addContact);
-console.log("authenticate"+authenticate)
 router.delete('/:contactId',  authenticate,  isValidId, ctrl.removeContact);
 router.put('/:contactId',  authenticate, isValidId, validateBody(schemas.addSchema), ctrl.updateContact);
 router.patch('/:contactId',  authenticate, isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
