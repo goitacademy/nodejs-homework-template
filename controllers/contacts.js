@@ -1,5 +1,15 @@
 const { HttpError, ctrlWrapper } = require("../helpers/index");
 
+const checkPermissonsToChange = async (currentUser, contactToChangeId) => {
+  const { _id: owner } = currentUser;
+
+  const contactToChange = await Contact.findById(contactToChangeId);
+
+  if (contactToChange.owner.toString() !== owner.toString()) {
+    throw HttpError(403);
+  }
+};
+
 const {
   Contact,
   addContactSchema,
@@ -51,6 +61,9 @@ const addContact = async (req, res) => {
 
 const deleteContacts = async (req, res) => {
   const { contactId } = req.params;
+
+  checkPermissonsToChange(req.user, contactId);
+
   const result = await Contact.findByIdAndRemove(contactId);
 
   if (!result) {
@@ -69,6 +82,8 @@ const changeContact = async (req, res) => {
   }
 
   const { contactId } = req.params;
+
+  checkPermissonsToChange(req.user, contactId);
 
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -89,6 +104,8 @@ const updateFavorite = async (req, res) => {
   }
 
   const { contactId } = req.params;
+
+  checkPermissonsToChange(req.user, contactId);
 
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
