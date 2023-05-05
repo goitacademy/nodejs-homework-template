@@ -4,11 +4,7 @@ const contacts = require("../models/contacts");
 
 const HttpError = require("../utils/HttpError");
 
-const addSchema = Joi.object({
-  name: Joi.string().min(2).max(40).required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required().min(13),
-});
+const addSchema = Joi.object().min(1).required();
 
 const listContacts = async (req, res, next) => {
   try {
@@ -66,17 +62,13 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    const { error } = addSchema.validate({ name, email, phone });
+    // const { name, email, phone } = req.body;
+    const { error } = addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, "Missing fields");
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, {
-      name,
-      email,
-      phone,
-    });
+    const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
       throw HttpError(404, "Not found");
     }
