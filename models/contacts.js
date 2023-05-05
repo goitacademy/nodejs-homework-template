@@ -1,6 +1,8 @@
-/* const fs = require("fs").promises;
+const fs = require("fs").promises;
 const path = require("path");
-const {nanoid} = require("nanoid");
+
+const { v4: uuidv4 } = require('uuid');
+
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -16,9 +18,11 @@ const getContactById = async (contactId) => {
   return contact || null;
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   const contacts = await listContacts();
-  const newContact = { id: nanoid(), name, email, phone };
+  const newContact = {
+    id: uuidv4(), ...body,
+  };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
@@ -30,7 +34,7 @@ const updateContact = async (contactId, body) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { ...contacts[index], ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
@@ -47,27 +51,6 @@ const removeContact = async (contactId) => {
   return result;
 };
 
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
- */
-
-// const fs = require('fs/promises')
-
-const listContacts = async () => {}
-
-const getContactById = async (contactId) => {}
-
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
 
 module.exports = {
   listContacts,
