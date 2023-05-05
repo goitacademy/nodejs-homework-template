@@ -13,7 +13,7 @@ const register = async (req, res) => {
 
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (user) throw HttpError(409, "Email already in use");
+  if (user) throw HttpError(409, "Email in use");
 
   const hashPassword = await bcrypt.hash(password, 10);
 
@@ -21,6 +21,7 @@ const register = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
@@ -33,10 +34,10 @@ const login = async (req, res) => {
 
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw HttpError(401, "Email or password invalid");
+  if (!user) throw HttpError(401, "Email or password is wrong");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
-  if (!passwordCompare) throw HttpError(401, "Email or password invalid");
+  if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
 
   const payload = {
     id: user._id,
@@ -46,25 +47,29 @@ const login = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name } = req.user;
+  const { email, subscription } = req.user;
   res.json({
     email,
-    name,
+    subscription,
   });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate(_id, { token: null });
 
-  res.json({
-    message: "Logout succes",
-  });
+  res.status(204);
 };
 
 module.exports = {
