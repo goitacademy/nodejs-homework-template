@@ -37,6 +37,9 @@ const getContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
+
+  checkPermissonsToChange(req.user, contactId);
+
   const result = await Contact.findById(contactId);
 
   if (!result) {
