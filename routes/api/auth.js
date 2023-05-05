@@ -17,6 +17,6 @@ router.post("/logout", authenticate, ctrl.logout);
 
 // changes in user profile
 
-router.patch("/subscription", authenticate, ctrl.updateSubscription);
+router.patch("/", authenticate, ctrl.updateSubscription);
 
 module.exports = router;
