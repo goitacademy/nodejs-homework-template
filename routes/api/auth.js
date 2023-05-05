@@ -14,9 +14,12 @@ const {
   logoutUser,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
 } = require("../../controllers/auth");
 
 router.post("/register", bodyValidator(schemas.registerSchema), registerUser);
+
+router.get("/verify/:verificationToken", verifyEmail);
 
 router.post("/login", bodyValidator(schemas.loginSchema), userLogin);
 
