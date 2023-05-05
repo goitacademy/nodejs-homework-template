@@ -1,9 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
 
 const {User} = require("../models/contacts/users");
 
 const {SECRET_KEY} = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 async function register (req, res, next) {
     try {
@@ -16,8 +21,9 @@ async function register (req, res, next) {
         }
     
         const hashPassword = await bcrypt.hash(password, 10);
-        
-        const result = await User.create({...req.body, password: hashPassword});
+        const avatarURL = gravatar.url(email);
+
+        const result = await User.create({...req.body, password: hashPassword, avatarURL});
     
         res.status(201).json({ "user":
         {"email": result.email,
@@ -107,10 +113,31 @@ async function updateUserSubscript (req, res) {
 
 };
 
+async function updateAvatar (req, res) {
+    const {_id} = req.user;
+    const {path: tempUpload, filename} = req.file;
+    const avatarName = `${_id}_${filename}`;
+    const resultUpload = path.join(avatarsDir, avatarName);
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join("avatars", avatarName);
+    const user = await User.findByIdAndUpdate(_id, {avatarURL});
+
+    if (!user) {
+        return res.status(401).json({
+            message: "Not authorized"
+    })
+    }
+
+    res.json({avatarURL});
+}
+
+
 module.exports = {
     register,
     login,
     getCurrent,
     logout,
     updateUserSubscript,
+    updateAvatar,
 }
