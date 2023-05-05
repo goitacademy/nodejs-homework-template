@@ -8,10 +8,17 @@ const {
 } = require("../models/contact");
 
 const getContacts = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
-  const skip = (page - 1) * limit;
+  const { page = 1, limit = 20, favorite } = req.query;
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+  const skip = (page - 1) * limit;
+
+  const contactsFilter = { owner };
+
+  if (favorite !== undefined) {
+    contactsFilter.favorite = favorite;
+  }
+
+  const result = await Contact.find(contactsFilter, "-createdAt -updatedAt", {
     skip,
     limit,
   }).populate("owner");
