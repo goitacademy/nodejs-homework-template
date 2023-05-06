@@ -47,7 +47,6 @@ router.post("/register", async (req, res, next) => {
 router.get("/verify/:verificationToken", async (req, res, next) => {
   try {
     const verify = await verifyMail(req);
-    window.location.replace("https://sofiiashevtsova.github.io/goit-react-hw-08-phonebook/");
     res.json(verify);
   } catch (error) {
     next(error);
