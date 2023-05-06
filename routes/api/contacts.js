@@ -8,13 +8,17 @@ contactsRouter.get("/", ctrl.listContactsWr);
 
 contactsRouter.get("/:contactId", ctrl.getContactByIdWr);
 
-contactsRouter.post("/", validateBody(schemas.addSchema), ctrl.addContactWr);
+contactsRouter.post(
+  "/",
+  validateBody(schemas.addSchema, "missing required name field"),
+  ctrl.addContactWr
+);
 
 contactsRouter.delete("/:contactId", ctrl.removeContactWr);
 
 contactsRouter.put(
   "/:contactId",
-  validateBody(schemas.updateSchema),
+  validateBody(schemas.updateSchema, "incorrect data"),
   ctrl.updateContactWr
 );
 

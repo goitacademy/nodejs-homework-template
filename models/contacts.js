@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
+const { checkOfDublicates } = require("../helpers");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -26,6 +27,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const data = await listContacts();
+  checkOfDublicates(body, data);
   const newContact = {
     id: nanoid(),
     ...body,
