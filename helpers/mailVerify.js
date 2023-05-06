@@ -230,10 +230,19 @@ body {font-family: 'Muli', sans-serif;}
       <script>
   
 document.querySelector("#verityfi").addEventListener("click", (e) => {
-  window.fetch('${
+function fetchUsers() {
+  return fetch("${
     BASE_URL || `http://localhost:${PORT}`
-  }/api/users/verify/${verificationToken}')
-  });
+  }/api/users/verify/${verificationToken}").then(
+    (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    }
+  );
+}
+fetchUsers()
 </script>
     </body>
   </html>`;
