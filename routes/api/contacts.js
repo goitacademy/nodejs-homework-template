@@ -1,7 +1,6 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-//const passportJWT = require('passport-jwt');
 const { getAll, getById, add, removeById, updateById, updateByFavorite } = require('../../controllers/contacts');
 const { validateBody, isValidId } = require('../../middlewares');
 const { bodySchema, updateByFavoriteSchema } = require('../../schemas/contacts.js');
