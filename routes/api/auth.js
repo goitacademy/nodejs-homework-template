@@ -52,6 +52,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+   window.location.href = "https://sofiiashevtsova.github.io/goit-react-hw-08-phonebook"
 });
 
 router.post("/verify", async (req, res, next) => {
