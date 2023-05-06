@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
     subject: "Verify email",
     html: `<a
         target="_blank"
-        href="${BASE_URL}/api/auth/verify/${verificationToken}"
+        href="${BASE_URL}/users/verify/${verificationToken}"
       >
         Click verify email
       </a>`,
@@ -60,9 +60,35 @@ const verifyEmail = async (req, res) => {
     verify: true,
     verificationToken: "",
   });
-  res.status(200).json({
+  res.json({
     message: "Verification successful",
   });
+};
+
+const resendVerify = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw httpError(404, "User not found");
+  }
+  if (user.verify) {
+    throw httpError(400, "Verification has already been passed");
+  }
+  const verifyEmail = {
+    from: "vadimkorobets@meta.ua",
+    to: email,
+    subject: "Verify email",
+    html: `<a
+        target="_blank"
+        href="${BASE_URL}/users/verify/${user.verificationToken}"
+      >
+        Click verify email
+      </a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.status(200).json({ message: "Verification email sent" });
 };
 
 const userLogin = async (req, res) => {
@@ -140,5 +166,6 @@ module.exports = {
   logoutUser: ctrlWrapper(logoutUser),
   updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
+  resendVerify: ctrlWrapper(resendVerify),
   verifyEmail: ctrlWrapper(verifyEmail),
 };
