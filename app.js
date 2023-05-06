@@ -16,6 +16,8 @@ const app = express();
 app.use(express.json());
 // перевіряє чи є тіло і розпізнає тип
 app.use(cors());
+app.use(express.static("public"));
+//якщо прийде запит за файлом, брати із папки public
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))   // виводимо повну інформацію чи ні

@@ -22,7 +22,7 @@ const getFavorite = async (req, res) => {
       contacts = await Contact.find();
     }
 
-    res.status(200).json({ contacts });
+  return  res.status(200).json({ contacts });
   } catch {
     next(HttpError(400));
   }
