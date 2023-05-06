@@ -5,7 +5,7 @@ const {
   getContactById,
   addContact,
   removeContact,
-  updateContact,
+  contactUpdate,
 } = require("../../models/contacts.js");
 const { RequestError } = require('../../helpers');
 const {
@@ -108,7 +108,7 @@ router.put("/:contactId", async (requirement, response, next) => {
       throw RequestError(404, "Not found update");
     }
 
-    res.status(200).json(contactUpdate);
+    response.status(200).json(contactUpdate);
   } catch (error) {
     next(error);
   }
