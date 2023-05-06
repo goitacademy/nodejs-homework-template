@@ -1,5 +1,7 @@
-const RequestError = require('./RequestError');
+const HttpError = require("./HttpError");
+const cntrlWrapper = require('./cntrlWrapper')
 
 module.exports = {
-    RequestError
+    HttpError,
+    cntrlWrapper
 }

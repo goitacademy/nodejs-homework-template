@@ -1,16 +1,22 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
-const bodySchema = Joi.object({
-  name: Joi.string().alphanum().min(3).required(),
-
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-
-  phone: Joi.string()
-    .required(),
-});
+const addSchema = Joi.object({
+    name: Joi.string()
+        .alphanum()
+        .min(2)
+		.max(30)
+		.pattern(/^[A-Za-z ]+$/)
+        .required(),
+    
+  email:Joi.string().email({ minDomainSegments: 2 }).required(),
+    phone: Joi.string()
+        .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+        .messages({
+			"string.pattern.base": "Invalid phone number format. The format should be (XXX) XXX-XX-XX.",
+		})
+        .required(),
+})
 
 module.exports = {
-    bodySchema,
+    addSchema,
 }

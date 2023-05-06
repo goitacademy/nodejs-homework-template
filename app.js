@@ -12,14 +12,15 @@ app.use(morgan(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use('/', contactsRouter)
 
 app.use((requirement, response) => {
-  response.status(404).json({ message: 'Not found contact' })
+  response.status(404).json({ message: 'Not found' })
 })
 
-app.use((error, requirement, response, next) => {
-  response.status(500).json({ message: error.message })
+app.use((erro, requirement, response, next) => {
+  const { status = 500, message = "Server error" } = erro;
+  response.status(status).json({ message })
 })
 
 module.exports = app
