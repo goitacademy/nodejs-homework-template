@@ -15,7 +15,7 @@ const updateContact = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "missing field favorite");
     }
-    res.status(200).json(result);
+  return  res.status(200).json(result);
 };
 
 module.exports = {

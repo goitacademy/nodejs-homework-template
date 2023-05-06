@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "name email");
-  res.status(200).json(result);
+ return  res.status(200).json(result);
 };
 
 module.exports = { getAll: ctrlWrapper(getAll) };

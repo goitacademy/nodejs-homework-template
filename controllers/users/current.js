@@ -1,7 +1,7 @@
 const currentUser = async (req, res) => {
     const {email, name} = req.user;
 
-    res.json({
+  return  res.json({
         email,
         name,
     })

@@ -14,7 +14,7 @@ const updateFavorite = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not Found");
     }
-    res.status(200).json(result);
+  return  res.status(200).json(result);
   };
   
   module.exports = {

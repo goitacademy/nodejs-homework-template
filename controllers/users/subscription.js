@@ -16,7 +16,7 @@ const subscription = async(req, res) => {
     throw HttpError(404, "User with id ${_id} not found");
   }
 
-  res.status(201, "subscription update").json({
+ return res.status(201, "subscription update").json({
     subscription: result.subscription,
   });
 }
