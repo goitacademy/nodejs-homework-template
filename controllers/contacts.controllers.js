@@ -9,7 +9,7 @@ const getAllContacts = async (req, res) => {
   const contactQuery = {
     owner,
   };
-  if (typeof favorite !== "undefined") {
+  if (favorite) {
     contactQuery.favorite = favorite;
   }
 
