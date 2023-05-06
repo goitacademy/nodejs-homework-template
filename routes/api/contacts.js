@@ -1,25 +1,25 @@
-const express = require('express')
+const express = require("express");
+const contactsRouter = express.Router();
+const ctrl = require("../../controllers/contacts");
+const { validateBody } = require("../../middlewares");
+const schemas = require("../../schemas/contacts");
 
-const router = express.Router()
+contactsRouter.get("/", ctrl.listContactsWr);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get("/:contactId", ctrl.getContactByIdWr);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post(
+  "/",
+  validateBody(schemas.addSchema, "missing required name field"),
+  ctrl.addContactWr
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete("/:contactId", ctrl.removeContactWr);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.put(
+  "/:contactId",
+  validateBody(schemas.updateSchema, "incorrect data"),
+  ctrl.updateContactWr
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = contactsRouter;
