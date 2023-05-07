@@ -1,13 +1,18 @@
 const express = require("express");
-const { validateRegister, validateLogin, validateUpdSubscrip } = require('../../utils/validation')
+const { validateRegister, validateLogin, validateEmail, validateUpdSubscrip } = require('../../utils/validation')
 const authenticate = require("../../utils/authenticate")
 const {upload} = require('../../middlewares')
-const { register, login, getCurrent, logout, updateUserSubscript, updateAvatar } = require('../../controllers/auth-controllers')
+const { register, verify, resendVerifyEmail, login, getCurrent, logout, updateUserSubscript, updateAvatar } = require('../../controllers/auth-controllers')
 
 const router = express.Router();
 
 // signup
 router.post("/register", validateRegister, register);
+
+router.get("/verify/:verificationToken", verify);
+
+router.post("/verify", validateEmail, resendVerifyEmail);
+
 
 // signin
 router.post("/login", validateLogin, login);

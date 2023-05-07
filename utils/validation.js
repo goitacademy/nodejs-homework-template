@@ -43,6 +43,13 @@ const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
 });
 
+const verifySchema = Joi.object({
+    email: Joi.string().email().required().messages({
+      "any.required": `missing required email field`,
+    }),
+  });
+
+
 const updSubscriptSchema = Joi.object({
     subscription: Joi.any().valid('starter', 'pro', 'business').required(),
 }).required();
@@ -112,6 +119,19 @@ function validateLogin (req, res, next) {
 
 }
 
+function validateEmail (req, res, next) {
+
+    const {error} = verifySchema.validate(req.body);
+    if(error) {
+        return res.status(400).json({
+            message: error.message,
+        })
+    }
+
+    next();
+
+}
+
 function validateUpdSubscrip (req, res, next) {
 
     const {error} = updSubscriptSchema.validate(req.body);
@@ -132,5 +152,6 @@ module.exports = {
     validatePatchData,
     validateRegister,
     validateLogin,
+    validateEmail,
     validateUpdSubscrip,
 }
