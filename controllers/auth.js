@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
     verificationToken,
   });
   const verifyEmail = {
-    from: "vadimkorobets@meta.ua",
+    from: "korobetsv2@meta.ua",
     to: email,
     subject: "Verify email",
     html: `<a
@@ -75,7 +75,7 @@ const resendVerify = async (req, res) => {
     throw httpError(400, "Verification has already been passed");
   }
   const verifyEmail = {
-    from: "vadimkorobets@meta.ua",
+    from: "korobetsv2@meta.ua",
     to: email,
     subject: "Verify email",
     html: `<a
