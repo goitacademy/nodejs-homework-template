@@ -1,5 +1,5 @@
 const Joi = require("joi");
-
+// add schema
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": "Missing required name field",
