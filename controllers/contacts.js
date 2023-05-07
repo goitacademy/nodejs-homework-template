@@ -1,15 +1,5 @@
 const { HttpError, ctrlWrapper } = require("../helpers/index");
 
-const checkPermissonsToChange = async (currentUser, contactToChangeId) => {
-  const { _id: owner } = currentUser;
-
-  const contactToChange = await Contact.findById(contactToChangeId);
-
-  if (contactToChange.owner.toString() !== owner.toString()) {
-    throw HttpError(403);
-  }
-};
-
 const {
   Contact,
   addContactSchema,
@@ -37,12 +27,11 @@ const getContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-
-  checkPermissonsToChange(req.user, contactId);
+  const { _id: owner } = req.user;
 
   const result = await Contact.findById(contactId);
 
-  if (!result) {
+  if (!result || result.owner.toString() !== owner.toString()) {
     throw HttpError(404, "Not found");
   }
 
@@ -62,16 +51,17 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 
-const deleteContacts = async (req, res) => {
+const deleteContacts = async (req, res, next) => {
   const { contactId } = req.params;
+  const { _id: owner } = req.user;
 
-  checkPermissonsToChange(req.user, contactId);
+  await Contact.findById(contactId).then((contact) => {
+    if (!contact || contact.owner.toString() !== owner.toString()) {
+      throw HttpError(404, "Not found");
+    }
 
-  const result = await Contact.findByIdAndRemove(contactId);
-
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
+    contact.deleteOne();
+  });
 
   res.json({ message: "contact deleted" });
   // res.status(204).send();
@@ -85,12 +75,15 @@ const changeContact = async (req, res) => {
   }
 
   const { contactId } = req.params;
+  const { _id: owner } = req.user;
 
-  checkPermissonsToChange(req.user, contactId);
-
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -107,12 +100,15 @@ const updateFavorite = async (req, res) => {
   }
 
   const { contactId } = req.params;
+  const { _id: owner } = req.user;
 
-  checkPermissonsToChange(req.user, contactId);
-
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   if (!result) {
     throw HttpError(404, "Not found");
