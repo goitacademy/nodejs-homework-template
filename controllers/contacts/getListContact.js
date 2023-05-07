@@ -5,4 +5,4 @@ const getListContact = async (req, res) => {
   res.json(result);
 };
 
-module.exports = {getListContact: ctrlWrapper(getListContact)}
+module.exports = { getListContact: ctrlWrapper(getListContact) };

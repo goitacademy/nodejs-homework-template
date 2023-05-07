@@ -1,3 +1,3 @@
-const {addShema, addShemaFavorite} = require('./JoiShems')
+const { addShema, addShemaFavorite, addShemaAuth } = require("./JoiShems");
 
-module.exports = { addShema, addShemaFavorite };
+module.exports = { addShema, addShemaFavorite, addShemaAuth };

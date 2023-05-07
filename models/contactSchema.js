@@ -15,6 +15,10 @@ const shema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -22,3 +26,4 @@ const shema = new Schema(
 const Contact = model('contact', shema)
 
 module.exports = Contact
+
