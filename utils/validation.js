@@ -45,9 +45,9 @@ const loginSchema = Joi.object({
 
 const verifySchema = Joi.object({
     email: Joi.string().email().required().messages({
-      "any.required": `missing required email field`,
+        "any.required": `missing required email field`,
     }),
-  });
+});
 
 
 const updSubscriptSchema = Joi.object({

@@ -51,15 +51,18 @@ async function verify (req, res) {
     const user = await User.findOne({verificationToken});
     if(!user) {
         return res.status(404).json({
-            message: "Email not found"
+            message: "User not found"
     })
     }
 
-    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: ""});
+    await User.findByIdAndUpdate(user._id, {
+        verify: true,
+        verificationToken: null,
+    });
     // res.redirect("sitename.com/?token=token")
-    res.json({
-        message: "Email verify success"
-    })
+    res.status(200).json({
+        message: "Verification successful",
+    });
 }
 
 async function resendVerifyEmail (req, res) {
@@ -67,9 +70,10 @@ async function resendVerifyEmail (req, res) {
     const user = await User.findOne({email});
     if(!user){
         return res.status(404).json({
-            message: "Email not found"
+            message: "User not found"
     })
     }
+
     if(user.verify){
         return res.status(400).json({
             message: "Verification has already been passed"
@@ -88,7 +92,6 @@ async function resendVerifyEmail (req, res) {
         message: "Verification email sent"
     })
 }
-
 
 async function login (req, res, next) {
     try {
