@@ -7,7 +7,7 @@ const {
   addContact,
   updateContact,
   updateContactFavorite,
-} = require("../../controllers/contacts");
+} = require("../../controllers/contacts/index");
 const router = express.Router();
 
 router.get("/", getListContact);
