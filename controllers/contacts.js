@@ -18,7 +18,7 @@ const getById = async (requirement, response) => {
   }
   
 
-const add = async (requirement, response) => {
+const addContact = async (requirement, response) => {
     const result = await contacts.addContact(requirement.body);
     response.status(201).json(result);
   }
@@ -49,7 +49,7 @@ const deleteById = async (requirement, response) => {
 module.exports = {
     getAll: cntrlWrapper(getAll),
     getById: cntrlWrapper(getById),
-    add: cntrlWrapper(add),
+    add: cntrlWrapper(addContact),
     updateById: cntrlWrapper(updateById),
     deleteById: cntrlWrapper(deleteById),
 };
