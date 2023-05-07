@@ -97,7 +97,7 @@ router.post("/logout", authenticate, async (req, res, next) => {
     res.json({
       email, 
       subscription, 
-      message: "logout success",
+      message: "logout successfull",
     })
   
     } 
