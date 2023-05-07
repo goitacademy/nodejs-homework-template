@@ -1,13 +1,8 @@
 // const express = require("express")
-// const {listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact} =require("../models/contacts");
 
 const Contact = require("../models/contact");
 
-const {ctrlWrapper} = require("../utils");
+const ctrlWrapper = require("../utils/ctrlWrapper");
 
 const getAll = async (_, res) => {
     const contacts = await Contact.find({},"-createdAt -updatedAt");
@@ -65,7 +60,7 @@ const updateFavoriteById = async (req, res) => {
 };
 module.exports = {
   getAll:ctrlWrapper(getAll),
-  getById:ctrlWrapper( getById),
+  getById:ctrlWrapper(getById),
   add:ctrlWrapper(add),
   remove:ctrlWrapper(remove),
   update:ctrlWrapper(update),
