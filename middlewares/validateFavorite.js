@@ -1,8 +1,8 @@
 const { HTTPError } = require("../helpers");
 
 const validateFavorite = (schema) => {
-  const func = (requirement, response, next) => {
-    const { error } = schema.validate(requirement.body);
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
     if (error) {
       next(HTTPError(400, "missing field favorite"));
     }

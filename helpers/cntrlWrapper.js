@@ -1,7 +1,7 @@
 const cntrlWrapper = (cntrl) => {
-  const func = async (requirement, response, next) => {
+  const func = async (req, res, next) => {
     try {
-      await cntrl(requirement, response, next);
+      await cntrl(req, res, next);
     } catch (error) {
       next(error);
     }
