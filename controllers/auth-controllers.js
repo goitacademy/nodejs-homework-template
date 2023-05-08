@@ -1,25 +1,39 @@
 const ctrlWrapper = require("../utils/ctrlWrapper");
-const {HttpError }= require("../helpers");
+const { HttpError, createToken } = require("../helpers");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = process.env;
+const fs = require("fs/promises");
+const path = require("path");
+const gravatar = require("gravatar");
+const userAvatarDir = path.resolve("public", "avatars");
+const Jimp = require("jimp");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
+
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const userAvatar = gravatar.url(email);
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL: userAvatar,
+  });
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const token = createToken(newUser);
+
+  await User.findByIdAndUpdate(newUser._id, { token, avatarURL: userAvatar });
 
   res.status(201).json({
+    token,
     user: {
       email: newUser.email,
-      subscription: newUser.subscription,
+      name: newUser.name,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -36,28 +50,27 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
 
-  const payload = {
-    id: user._id,
-  };
+  const token = createToken(user);
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
     user: {
       email: user.email,
-      subscription: user.subscription,
+      name: user.name,
     },
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { email, name, token, userAvatar } = req.user;
 
   res.json({
     email,
-    subscription,
+    name,
+    token,
+    userAvatar,
   });
 };
 
@@ -87,10 +100,40 @@ const subscriptionUpdate = async (req, res, next) => {
   }
 };
 
+const avatarUpdate = async (req, res, next) => {
+  try {
+    const { path: tempUpload, filename } = req.file;
+    const resultUpload = path.join(userAvatarDir, filename);
+    const avatar = await Jimp.read(tempUpload);
+    avatar.resize(250, 250).quality(60).write(resultUpload);
+    await fs.unlink(tempUpload);
+    const { _id } = req.user;
+
+    const avatarURL = path.join("avatars", filename);
+
+    const result = await User.findByIdAndUpdate(
+      { _id },
+      { avatarURL },
+      {
+        new: true,
+      }
+    );
+    if (!result) {
+      return res.status(401).json({ message: `Not authorized` });
+    }
+    res.json({
+      avatarURL,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   subscriptionUpdate: ctrlWrapper(subscriptionUpdate),
+  avatarUpdate: ctrlWrapper(avatarUpdate),
 };

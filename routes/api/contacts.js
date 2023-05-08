@@ -3,7 +3,7 @@ const contactsController = require("../../controllers/contacts");
 const router = express.Router();
 const { validateBody } = require("../../utils/validateBody");
 const { schemas } = require("../../models/contacts");
-const { isValidId, authenticate } = require("../../middlewares");
+const { isValidId, authenticate, upload } = require("../../middlewares");
 
 router.use(authenticate);
 
@@ -13,6 +13,7 @@ router.get("/:contactId", isValidId, contactsController.getContactById);
 
 router.post(
   "/",
+  upload.single("avatar"),
   validateBody(schemas.contactAddSchema),
   contactsController.addNewContact
 );
