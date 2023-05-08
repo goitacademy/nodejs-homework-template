@@ -3,7 +3,7 @@ const express = require("express")
 // const contactsController = require("./controllers/contactsController");
 const {contactValidation,putContactValidation,updFavContactValidation} = require ("../../validationSchema/validation")
 const router = express.Router();
-const contactsCtrl  = require('../../utils');
+const {contactsCtrl}  = require('../../utils');
 // const { getAll, getById, add, remove, update } = contactsCtrl;
 
 router.get("/", contactsCtrl.getAll);
