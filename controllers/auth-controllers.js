@@ -1,5 +1,5 @@
 const ctrlWrapper = require("../utils/ctrlWrapper");
-const HttpError = require("../helpers");
+const {HttpError }= require("../helpers");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -41,6 +41,7 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
@@ -51,7 +52,45 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).send();
+};
+
+const subscriptionUpdate = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    if (JSON.stringify(req.body) === "{}") {
+      return res.status(400).json({ message: `missing field "subscription"` });
+    }
+    const result = await User.findByIdAndUpdate({ _id: contactId }, req.body, {
+      new: true,
+    });
+    if (!result) {
+      return res.status(400).json({ message: `Not found` });
+    }
+    res.json(`Your subscription updated to ${req.body.subscription}`);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+  subscriptionUpdate: ctrlWrapper(subscriptionUpdate),
 };

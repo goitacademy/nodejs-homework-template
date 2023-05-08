@@ -22,5 +22,11 @@ router.get("/current", authenticate, authControllers.getCurrent);
 
 router.post("/logout", authenticate, authControllers.logout);
 
+router.patch(
+  "/:contactId/subscription",
+  authenticate,
+  validateBody(schemas.subscriptionUpdateSchema),
+  authControllers.subscriptionUpdate
+);
 
 module.exports = router;
