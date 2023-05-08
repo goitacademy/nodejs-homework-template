@@ -129,6 +129,7 @@ const avatarUpdate = async (req, res, next) => {
   }
 };
 
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
