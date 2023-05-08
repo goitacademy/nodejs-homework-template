@@ -1,38 +1,35 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  getAll,
-  getContact,
-  createContact,
-  removeContact,
-  updateContact,
-  updateFavoriteContact,
-} = require("../../controllers");
+const {basedir} = global
+const {auth} = require(`${basedir}/middlewares`)
+const {getAll, getContact, createContact, removeContact, updateContact, updateFavoriteContact} = require(`${basedir}/controllers/contacts`)
+
 const {
   validateContact,
   validateId,
   validateFavorite,
 } = require("./validation");
-const ctrlWrapper = require("../../helpers/ctrlWrapper.js");
 
-router.get("/", ctrlWrapper(getAll));
+const ctrlWrapper = require(`${basedir}/helpers/ctrlWrapper`)
 
-router.get("/:contactId", validateId, ctrlWrapper(getContact));
+router.get('/', auth, ctrlWrapper(getAll))
 
-router.post("/", validateContact, ctrlWrapper(createContact));
+router.get('/:contactId', auth, validateId, ctrlWrapper(getContact))
 
-router.delete("/:contactId", validateId, ctrlWrapper(removeContact));
+router.post("/", auth,  validateContact, ctrlWrapper(createContact));
+
+router.delete("/:contactId", auth, validateId, ctrlWrapper(removeContact));
 
 router.put(
-  "/:contactId",
+  "/:contactId", auth,
   validateId,
   validateContact,
   ctrlWrapper(updateContact)
 );
 
 router.patch(
-  "/:contactId/favorite",
+  "/:contactId/favorite", auth,
   validateId,
   validateFavorite,
   ctrlWrapper(updateFavoriteContact)
