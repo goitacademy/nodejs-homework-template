@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../../controller/auth");
+const controllerWrapper = require("../../helpers/controllerWrapper");
+const auth = require("../../middlewares/auth");
+router.post("/users/register", controllerWrapper(controller.registration));
+router.post("/users/login", controllerWrapper(controller.login));
+router.post("/users/logout",controllerWrapper(auth), controllerWrapper(controller.logout));
+router.get("/users/current",controllerWrapper(auth), controllerWrapper(controller.current));
+router.patch("/users/", controllerWrapper(auth), controllerWrapper(controller.updateSubscription));
+module.exports = router;

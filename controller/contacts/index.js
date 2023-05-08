@@ -1,16 +1,28 @@
-const service = require("../service");
-const { RequestError } = require("../helpers");
+const service = require("../../service/schemas/contact");
+const { RequestError } = require("../../helpers");
 const {
   addContactSchema,
   updateContactSchema,
   updateStatusSchema,
-} = require("../schemas/contacts");
+} = require("../../validationSchemas/contacts");
 const get = async (req, res, next) => {
   try {
-    res.json({
-      code: 200,
-      message: await service.getAllContacts(),
-    });
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const favorite = req.query.favorite.toLowerCase();
+    let result = await service.getAllContacts(page, limit);
+    if (favorite === "true" || favorite === "false") {
+      console.log(favorite);
+      result = await service.getAllContacts(page, limit, favorite);
+    }
+    result?.length > 1
+      ? res.json({
+          code: 200,
+          message: result,
+        })
+      : res.json({
+          message: "Not found",
+        });
   } catch (error) {
     next(error);
   }
