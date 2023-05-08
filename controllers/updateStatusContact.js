@@ -1,7 +1,7 @@
 const { toggleFavoriteContact } = require("../services/contactsServices");
 
-const updateStatusContact = async (res, req, __) =>  {
-    const { contactId } = req.pararms;
+const updateStatusContact = async (req, res, __) =>  {
+    const { contactId } = req.params;
     const body = req.body;
     const updatedContact = await toggleFavoriteContact(contactId, body);
     if (!updatedContact) {

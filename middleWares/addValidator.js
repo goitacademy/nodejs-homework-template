@@ -11,6 +11,9 @@ const addValidator = (req, res, next) => {
       case "string.min":
         next(HttpError(400, `${fieldWithError} must be at least 3 characters`));
         break;
+      case "any.required":
+        next(HttpError(400, `missing required ${fieldWithError} field`));
+        break;
       case "string.pattern.base":
         next(HttpError(400, `please enter a valid ${fieldWithError}`));
         break;

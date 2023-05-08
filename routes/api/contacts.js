@@ -25,8 +25,7 @@ router.delete("/:contactId", asyncWrapper(removeContact));
 
 router.put("/:contactId", validateUpdateData, asyncWrapper(updateContact));
 
-router.patch(
-  "/:contactId/favorite",
+router.patch("/:contactId/favorite",
   validateStatusData,
   asyncWrapper(updateStatusContact)
 );
