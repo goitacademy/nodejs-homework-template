@@ -1,6 +1,6 @@
 const { HttpError, ctrlWrapper } = require("../../helpers/index");
 const contactSchema = require("../../models/contactSchema");
-const {addShemaFavorite} = require('../../JoiShems/index')
+const { addShemaFavorite } = require("../../JoiShems/index");
 const updateContactFavorite = async (req, res) => {
   const { error } = addShemaFavorite.validate(req.body);
   if (error) {
@@ -17,4 +17,4 @@ const updateContactFavorite = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports = {updateContactFavorite: ctrlWrapper(updateContactFavorite)}
+module.exports = { updateContactFavorite: ctrlWrapper(updateContactFavorite) };

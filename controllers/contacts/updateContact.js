@@ -1,6 +1,6 @@
 const { HttpError, ctrlWrapper } = require("../../helpers/index");
 const contactSchema = require("../../models/contactSchema");
-const {addShema} = require('../../JoiShems/index')
+const { addShema } = require("../../JoiShems/index");
 const updateContact = async (req, res) => {
   const { error } = addShema.validate(req.body);
   if (error) {
@@ -17,4 +17,4 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-module.exports = {updateContact: ctrlWrapper(updateContact)}
+module.exports = { updateContact: ctrlWrapper(updateContact) };

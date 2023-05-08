@@ -22,8 +22,7 @@ const login = async (req, res) => {
   if (error) {
     throw HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
   }
-
-  const token = jwt.sign({ email, password }, JWT_SECRET);
+  const token = jwt.sign({ email, password, id: user._id }, JWT_SECRET);
   res.json({
     token: token,
     email: user.email,
