@@ -1,8 +1,8 @@
 const { Schema, model } = require("mongoose");
-const {handleMongooseError} = require("../helpers");
+const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
-const emailRegexp =  /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
+const emailRegexp = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
@@ -25,10 +25,17 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    avatarURL:{
+    avatarURL: {
       type: String,
-    }
-  
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -53,7 +60,6 @@ const subscriptionUpdateSchema = Joi.object({
       "any.only": "subscription must be one of 'starter', 'pro' or 'business'",
     }),
 });
-
 
 const schemas = {
   userLoginSchema,
