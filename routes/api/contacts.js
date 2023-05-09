@@ -5,8 +5,7 @@ const router = express.Router();
 
 const contacts = require("../../models/contacts");
 
-const ctrlWrapper = require("../../helpers/ctrlWrapper");
-const { HttpError } = require("../../helpers");
+const { HttpError, ctrlWrapper } = require("../../helpers");
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
