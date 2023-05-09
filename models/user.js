@@ -43,6 +43,7 @@ const userLoginSchema = Joi.object({
   password: Joi.string().required().min(6),
 });
 
+
 const subscriptionUpdateSchema = Joi.object({
   subscription: Joi.string()
     .valid("starter", "pro", "business")
