@@ -42,10 +42,22 @@ const updateContactById = async (req, res) => {
   res.json(result);
 };
 
+const updateFavoriteContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HtppError(404, "Not found");
+  }
+  res.json(result);
+};
+
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContactById: ctrlWrapper(getContactById),
   postContact: ctrlWrapper(postContact),
   deleteContactById: ctrlWrapper(deleteContactById),
   updateContactById: ctrlWrapper(updateContactById),
+  updateFavoriteContactById: ctrlWrapper(updateFavoriteContactById),
 };
