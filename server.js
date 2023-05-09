@@ -6,7 +6,7 @@ const {DB_HOST, PORT = 3000} = process.env;
 
 mongoose.set('strictQuery', true)
 
-mongoose.connect("mongodb+srv://Inna:19101974@cluster0.xeetnqb.mongodb.net/db-contacts?retryWrites=true&w=majority")
+mongoose.connect(DB_HOST)
 .then(() => {
   app.listen(PORT);
   console.log("Server is running on port 3000")
