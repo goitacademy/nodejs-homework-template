@@ -1,26 +1,85 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
+const { handleMongooseError, patterns } = require("../helpers");
 
-const usertSchema = new Schema({
-  password: {
-    type: String,
-    required: [true, "Set password for user"],
-  },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
-  },
-  token: String,
+const SUBSCRIPTION_TYPES = ["starter", "pro", "business"];
+
+
+const userSchema = new Schema(
+	{
+		password: {
+			type: String,
+			minlength: 6,
+			required: [true, "Password is required"],
+		},
+		email: {
+			type: String,
+			match: patterns.emailRegexp,
+			required: [true, "Email is required"],
+			unique: true,
+		},
+		subscription: {
+			type: String,
+			enum: SUBSCRIPTION_TYPES,
+			default: "starter",
+		},
+		token: {
+			type: String,
+			default: null,
+		},
+	},
+	{ versionKey: false, timestamps: true },
+);
+
+userSchema.post("save", handleMongooseError);
+
+const registerSchema = Joi.object(
+    {
+        password: Joi.string()
+            .min(6)
+            .messages({
+                "any.required": `"email" is a required field`,
+        })
+            .required(),
+            
+
+        email: Joi.string()
+		    .email({ minDomainSegments: 2 })
+            .pattern(patterns.emailRegexp)
+            .messages({
+			    "string.pattern.base": "Invalid email. The email must be valid.",
+                "any.required": `"email" is a required field`,
+            })
+            .required(),
+        subscription: Joi.string().valid(...SUBSCRIPTION_TYPES),
+        
+
+    }
+)
+
+const loginSchema = Joi.object({
+	password: Joi.string().min(6).required(),
+    email: Joi.string()
+        .email({ minDomainSegments: 2 })
+        .pattern(patterns.emailRegexp)
+        .required(),
+	subscription: Joi.string().valid(...SUBSCRIPTION_TYPES),
 });
 
-usertSchema.post("save", handleMongooseError);
+const updateSubcriptionSchema = Joi.object({
+	subscription: Joi.string().valid(...SUBSCRIPTION_TYPES),
+});
 
-const User = model("contact", usertSchema);
 
-module.exports = User;
+const schemas = {
+    registerSchema,
+    loginSchema,
+    updateSubcriptionSchema
+}
+
+const User = model("user", userSchema);
+
+module.exports = {
+  User,
+    schemas,
+};
