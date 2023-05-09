@@ -1,16 +1,9 @@
-const express = require('express');
-const { validateBody, authenticate } = require('../../middlewares');
-const { schemas } = require('../../models/user');
-const cntrl = require('../../controllers/auth');
-
+const express = require("express");
 const router = express.Router();
-
-router.post('/register', validateBody(schemas.registerSchema), cntrl.register);
-
-router.post('/login', validateBody(schemas.loginSchema), cntrl.login);
-
-router.get("/current", authenticate, cntrl.getCurrent);
-
-router.post("/logout", authenticate, cntrl.logout);
-
+//const cntrlContacts = require("../../controllers/contacts");
+//const { validateBody, validateFavorite } = require("../../middlewares");
+//const { addSchema, updateSchema, updateFavoriteSchema } = require("../../schemas");
+//const { isValidId } = require("../../middlewares");
+const { registrationSchema } = require("../../schemas/users.js");
+router.post('/register', registrationSchema);
 module.exports = router;
