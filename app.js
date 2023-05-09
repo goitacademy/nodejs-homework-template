@@ -1,6 +1,7 @@
 const express = require('express')
-const morgan = require('morgan')
+const logger = require('morgan')
 const cors = require('cors')
+require("dotenv").config();
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -8,12 +9,21 @@ const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
-app.use(morgan(formatsLogger))
+app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
 app.use('/', contactsRouter)
 
+<<<<<<< HEAD
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not found' })
+})
+
+app.use((erro, req, res, next) => {
+  const { status = 500, message = "Server error" } = erro;
+  res.status(status).json({ message })
+=======
 app.use((requirement, response) => {
   response.status(404).json({ message: 'Not found' })
 })
@@ -21,6 +31,7 @@ app.use((requirement, response) => {
 app.use((erro, requirement, response, next) => {
   const { status = 500, message = "Server error" } = erro;
   response.status(status).json({ message })
+>>>>>>> master
 })
 
 module.exports = app
