@@ -34,7 +34,16 @@ const updateContact = async (req, res) => {
    
     const { contactId } = req.params;
     
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body,
+        {
+            writeConcern: {
+                w: "majority",
+            },
+        },
+        {
+            new: true
+        }
+    );
 
     if (!result) {
         throw HttpError(404, "Contact not found");
@@ -48,7 +57,16 @@ const updateFavorite = async (req, res) => {
    
     const { contactId } = req.params;
     
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body,
+        {
+            writeConcern: {
+                w: "majority",
+            },
+        },
+        {
+            new: true
+        }
+    );
 
     if (!result) {
         throw HttpError(404, "Contact not found");  
@@ -62,7 +80,13 @@ const removeContact = async (req, res) => {
    
     const { contactId } = req.params;
     
-    const result = await Contact.findByIdAndRemove(contactId);
+    const result = await Contact.findByIdAndRemove(contactId,
+        {
+            writeConcern: {
+                w: "majority",
+            },
+        }
+    );
 
     if (!result) {
         throw HttpError(404, "Contact not found");
