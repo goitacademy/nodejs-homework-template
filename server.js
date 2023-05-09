@@ -15,3 +15,4 @@ mongoose.connect(DB_HOST)
   console.log(error);
   process.exit(1)
 })
+
