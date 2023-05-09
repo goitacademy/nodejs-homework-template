@@ -1,31 +1,33 @@
-const { 
-  getAllContacts,
-  getById,
-  addContact,
-  deleteById,
-  updateById
-} = require("../../controllers");
+const express = require("express");
 
+const listContacts = require("../../controllers/listContacts");
+const getById = require("../../controllers/getById");
+const addContact = require("../../controllers/addContact");
+const removeContact = require("../../controllers/removeContact");
+const updateContact = require("../../controllers/updateContact");
+const updateStatusContact = require("../../controllers/updateStatusContact");
 
-const cors = require('cors');
-const router = require('express').Router();
-const bodyParser = require('body-parser');
+const validateData = require("../../middleWares/addValidator");
+const validateUpdateData = require("../../middleWares/updateValidator");
+const validateStatusData = require("../../middleWares/updateStatusValidator");
 
-router.use(cors());
-router.use(bodyParser.json());
+const asyncWrapper = require("../../helpers/asyncWrapper");
 
-const bodyValidator = require("../../middle/bodyValidator");
-const addValidator =  require("../../middle/addValidator");
-const { addSchema, changeSchema } = require("../../schemas/schema");
+const router = express.Router();
 
-router.get('/', getAllContacts);
+router.get("/", asyncWrapper(listContacts));
 
-router.get('/:contactId', getById);
+router.get("/:contactId", asyncWrapper(getById));
 
-router.post('/', addValidator(addSchema), addContact);
+router.post("/", validateData, asyncWrapper(addContact));
 
-router.delete('/:contactId', deleteById);
+router.delete("/:contactId", asyncWrapper(removeContact));
 
-router.put('/:contactId', bodyValidator(changeSchema), updateById);
+router.put("/:contactId", validateUpdateData, asyncWrapper(updateContact));
+
+router.patch("/:contactId/favorite",
+  validateStatusData,
+  asyncWrapper(updateStatusContact)
+);
 
 module.exports = router;
