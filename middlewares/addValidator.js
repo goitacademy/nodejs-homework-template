@@ -1,26 +1,27 @@
 const Joi = require("joi");
+const httpError = require("../helpers/httpError");
 
-const validateData = (req, res, next) => {
-  const bodyIsValid = contactValidate(req.body);
-  if (bodyIsValid.error) {
-    const fieldWithError = bodyIsValid.error.details[0].path[0];
-    const errorType = bodyIsValid.error.details[0].type;
+const validateData = (req, __, next) => {
+  const { error } = contactValidate(req.body);
+  if (error) {
+    const fieldWithError = error.details[0].path[0];
+    const errorType = error.details[0].type;
 
     switch (errorType) {
       case "string.min":
-        res.status(400).json({
-          message: `${fieldWithError} must be at least 3 characters`,
-        });
+        next(httpError(400, `${fieldWithError} must be at least 3 characters`));
         break;
       case "any.required":
-        res.status(400).json({
-          message: `missing required ${fieldWithError} field`,
-        });
+        next(httpError(400, `missing required ${fieldWithError} field`));
         break;
       case "string.pattern.base":
-        res.status(400).json({
-          message: `please enter a valid ${fieldWithError}`,
-        });
+        next(httpError(400, `please enter a valid ${fieldWithError}`));
+        break;
+      case "object.unknown":
+        next(httpError(400, `property ${fieldWithError} is not allowed`));
+        break;
+      case "boolean.base":
+        next(httpError(400, `${fieldWithError} must be a boolean`));
         break;
       default:
         break;
@@ -46,6 +47,7 @@ const contactValidate = (data) => {
         /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
       )
       .required(),
+    favorite: Joi.boolean(),
   });
 
   return schema.validate(data);
