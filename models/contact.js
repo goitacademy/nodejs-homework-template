@@ -2,10 +2,11 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers/index");
+
 const contactSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Set name for contact'],
     },
     
     email: {
