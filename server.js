@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
-const app = require("./app");
-const { PORT = 3000 } = process.env;
+const app = require('./app')
 
-mongoose
-  .connect('mongodb+srv://dimas_zd:X32fCHGr6VWrtOXj@cluster13.ecufgwe.mongodb.net/contacts?retryWrites=true&w=majority')
-  .then(() => {
-    app.listen(PORT);
-    console.log("Database connection successful");
-  })
-  .catch((err) => {
-    console.log(err.message);
+const DB_HOST = "mongodb+srv://dimas_zd:X32fCHGr6VWrtOXj@cluster13.ecufgwe.mongodb.net/contacts?retryWrites=true&w=majority"
+
+const {PORT = 2900} = process.env;
+
+mongoose.set("strictQuery", true);
+
+mongoose.connect(DB_HOST)
+  .then(() =>
+    app.listen(PORT, () => {
+      console.log("Database connection successful");
+    })
+  )
+  .catch((error) => {
+    console.log(error.message);
     process.exit(1);
   });
-
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000");
-// });
