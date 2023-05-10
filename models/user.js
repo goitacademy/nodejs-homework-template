@@ -60,10 +60,16 @@ const subscriptionUpdateSchema = Joi.object({
     }),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+
 const schemas = {
   userLoginSchema,
   userRegisterSchema,
   subscriptionUpdateSchema,
+  emailSchema,
 };
 
 userSchema.post("save", handleMongooseError);
