@@ -1,9 +1,8 @@
 
-const express = require("express");
+const express = require("express")
 const {contactValidation,putContactValidation,updFavContactValidation} = require ("../../validationSchema/validation")
 const router = express.Router();
 const {contactsCtrl}  = require('../../utils');
-
 
 router.get("/", contactsCtrl.getAll);
 router.get("/:contactId", contactsCtrl.getById);

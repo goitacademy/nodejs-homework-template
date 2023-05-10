@@ -1,10 +1,10 @@
-// const express = require("express")
+
 
 const Contact = require("../models/contact");
 
 const ctrlWrapper = require("../utils/ctrlWrapper");
 
-const getAll = async (_, res) => {
+const getAll = async (req, res) => {
     const contacts = await Contact.find({},"-createdAt -updatedAt");
     res.status(200).json(contacts);
   
@@ -64,5 +64,5 @@ module.exports = {
   add:ctrlWrapper(add),
   remove:ctrlWrapper(remove),
   update:ctrlWrapper(update),
-  updateFavoriteById:ctrlWrapper(updateStatusContact),
+  updateStatusContact:ctrlWrapper(updateStatusContact),
 };
