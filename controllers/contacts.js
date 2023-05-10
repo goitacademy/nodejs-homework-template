@@ -24,7 +24,16 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
    
-    const result = await Contact(req.body);
+    const result = await Contact.create(req.body,
+        {
+            writeConcern: {
+                w: "majority",
+            },
+        },
+        {
+            new: true
+        }
+    );
     
     res.status(201).json(result);
    
