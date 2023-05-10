@@ -8,6 +8,8 @@ const {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
+  updateContact,
 } = require("../../models/contacts");
 
 const contactsSchema = Joi.object({
@@ -50,11 +52,35 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { contactId } = req.params;
+    const deletedContact = await  removeContact(contactId);
+    if (!deletedContact) {
+      throw HttpError(404, "Not found");
+    }
+    res.status({
+      message: "Delete success",
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = contactsSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const updatedContact = await updateContact(contactId, req.body);
+    if (!updatedContact) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
