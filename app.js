@@ -45,6 +45,11 @@ app.use((err, req, res, next) => {
       message: "Not authorized",
     });
   }
+  if (err.message==='Not Found') {
+    return res.status(404).json({
+      message: err.message,
+    });
+  }
   res.status(500).json({
     status: "fail",
     code: 500,
