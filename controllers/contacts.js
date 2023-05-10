@@ -1,9 +1,8 @@
-
-const {Contact, schemas} = require("../models/contact")
+const { Contact, schemas } = require("../models/contact");
 
 const HttpError = require("../utils/HttpError");
 
-// 
+//
 
 const listContacts = async (req, res, next) => {
   try {
@@ -64,7 +63,9 @@ const updateContact = async (req, res, next) => {
       throw HttpError(400, "Missing fields");
     }
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -81,7 +82,9 @@ const updateStatusContact = async (req, res, next) => {
       throw HttpError(400, "Missing field favorite");
     }
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -97,5 +100,5 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
-  updateStatusContact
+  updateStatusContact,
 };
