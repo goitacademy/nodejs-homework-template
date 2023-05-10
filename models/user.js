@@ -33,14 +33,18 @@ const registerValidator = (data) => {
   return registerSchema.validate(data);
 };
 
-// const loginSchema = Joi.object({
-//   password: Joi.string().min(6).required(),
-//   email: Joi.string().email().required(),
-// });
+const loginValidator = (data) => {
+  const loginSchema = Joi.object({
+    password: Joi.string().min(6).required(),
+    email: Joi.string().email().required(),
+  });
+  return loginSchema.validate(data);
+};
 
 const User = model("user", userSchema);
 
 module.exports = {
   User,
   registerValidator,
+  loginValidator,
 };
