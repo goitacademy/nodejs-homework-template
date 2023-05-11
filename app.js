@@ -12,8 +12,6 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 // The WAY TO CONTACT.JSON
 
-// const contactPath = path.join(__dirname, "../../models/contacts.json");
-
 const app = express();
 app.use(cors());
 
@@ -22,7 +20,7 @@ app.use(cors());
 //   res.json(contactPath);
 // });
 
-app.use("./api.books", bookRouter);
+app.use("/api/books", bookRouter);
 
 // MY CODE FINISH
 
