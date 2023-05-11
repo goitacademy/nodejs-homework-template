@@ -10,15 +10,11 @@ const HttpError = require("../../helper/HttpError.js");
 const addSchema = joi.object({
   name: joi.string().required(),
   email: joi.string().required(),
-  phone: joi.number().required(),
+  phone: joi.string().required(),
 });
 // Full listContacts
 router.get("/", async (req, res) => {
   try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const result = await contacts.listContacts();
     res.json(result);
   } catch (error) {
@@ -40,11 +36,24 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// ADD CONTACTS
 router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(404, message.error);
+    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// CHANG POST (PUT)
+
+router.put("/:id", async (req, res, next) => {
+  try {
   } catch (error) {}
 });
 module.exports = router;
