@@ -9,8 +9,7 @@ const {
   getContactById,
   addContact,
   removeContact,
-  updateById,
-//  updateContact,
+ updateContact,
 } = require("../../models/contacts");
 
 const contactsSchema = Joi.object({
@@ -19,9 +18,12 @@ const contactsSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
+module.exports = router;
+
+
 router.get("/", async (req, res, next) => {
   const allContacts = await listContacts();
-  res.json(allContacts);
+  res.status(200).json(allContacts);
 });
 
 router.get("/:contactId", async (req, res, next) => {
@@ -32,7 +34,7 @@ router.get("/:contactId", async (req, res, next) => {
     if (!oneContact) {
       throw HttpError(404, "Not found");
     }
-    res.json(oneContact);
+    res.status(200).json(oneContact);
   } catch (error) {
     next(error);
   }
@@ -74,17 +76,16 @@ try {
     if (error) {
       throw HttpError(400, error.message);
   }
-  const { contactId } = req.params;
-  const result = await updateById(contactId, req.body)
-  if (!result) {
+  const {contactId } = req.params;
+  const updatedContact = await updateContact(contactId, req.body)
+  if (!updatedContact) {
     throw HttpError(404, "not found")
   }
+  res.status(200).json(updatedContact)
 } catch (error) {
   next(error)
 }
-    
-   
- 
+
 });
 
 module.exports = router;
