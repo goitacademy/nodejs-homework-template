@@ -1,6 +1,6 @@
 const express = require("express");
 
-const contacts = require("../../models/db/");
+const contacts = require("../../models/contacts");
 const router = express.Router();
 
 router.get("./books.js", async (req, res) => {
