@@ -3,9 +3,12 @@ const {
   contactAddSchema,
   contactUpdateSchema,
 } = require("../service/schemas/contacts");
+
 const get = async (req, res, next) => {
+  const userId = req.user.id;
+
   try {
-    const results = await service.listContacts();
+    const results = await service.listContacts({ owner: userId });
     res.json({
       status: "success",
       code: 200,
@@ -18,10 +21,13 @@ const get = async (req, res, next) => {
     next(e);
   }
 };
+
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
+  const userId = req.user.id;
+
   try {
-    const result = await service.getContactById(contactId);
+    const result = await service.getContactById({ contactId, userId });
     if (result) {
       res.json({
         status: "success",
@@ -44,16 +50,21 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;
+  const userId = req.user.id;
 
   try {
     const { error } = contactAddSchema.validate(req.body);
-
     if (error) {
       error.status = 400;
       throw error;
     }
 
-    const result = await service.addContact({ name, email, phone });
+    const result = await service.addContact({
+      name,
+      email,
+      phone,
+      owner: userId,
+    });
     res.status(201).json({
       status: "success",
       code: 201,
@@ -150,6 +161,7 @@ const remove = async (req, res, next) => {
     next(e);
   }
 };
+
 module.exports = {
   get,
   getById,
