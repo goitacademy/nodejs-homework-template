@@ -5,10 +5,18 @@ const HttpError = require('../../helpers');
 
 const router = express.Router();
 
+/**
+ * Available formats:
+ * name: ordinary string,
+ * email: statdart email,
+ * phone: (012) 123 45 67, (012)-123-45-67, (012) 123-4567, (012)1234567
+ */
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string()
+    .pattern(/^\(\d{3}\)[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/)
+    .required(),
 });
 
 router.get('/', async (req, res, next) => {
