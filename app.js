@@ -3,11 +3,28 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+
+// IMPORT ALL ROUTS
+const bookRouter = require("./routes/api/books");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+// The WAY TO CONTACT.JSON
+
+// const contactPath = path.join(__dirname, "../../models/contacts.json");
 
 const app = express();
+app.use(cors());
+
+// MY CODE START
+// app.get("./models/contacts.", (res, req) => {
+//   res.json(contactPath);
+// });
+
+app.use("./api.books", bookRouter);
+
+// MY CODE FINISH
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
