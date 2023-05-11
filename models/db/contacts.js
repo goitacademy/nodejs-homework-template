@@ -4,7 +4,7 @@ const path = require("path");
 
 const { nanoid } = require("nanoid");
 
-const contactPath = path.join(__dirname, "./contacts.json");
+const contactPath = path.join(__dirname, "../contacts.json");
 
 const listContacts = async () => {
   const contacts = await fs.readFile(contactPath, isUtf8);
