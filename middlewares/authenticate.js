@@ -8,7 +8,7 @@ const authenticate = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
         const [bearer, token] = authorization.split(' ');
-        if (bearer !== "Bearer") {
+        if (bearer !== "Fox") {
             throw RequestError(401, "Not authorized");
         }
 
@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
         const { id } = jwt.verify(token, SECRET_KEY);
         const user = await User.findById(id);
         if (!user || !token) {
-            throw RequestError(401, "Not authorized");
+            throw RequestError(401, "Authorized");
         }
 
         req.user = user;
