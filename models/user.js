@@ -34,6 +34,16 @@ const userSchema = new Schema(
     },
     token: { type: String, default: "" },
     avatarURL: { type: String, required: true },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: "",
+      // required: [true, "Verify token is required"],
+    },
+    // verificationToken - код підтвердження який буде приходити на пошту
   },
   { versionKey: false, timestamps: true }
 );
@@ -52,9 +62,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(7).required(),
 });
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  verifyEmailSchema,
 };
 
 const User = model("user", userSchema); // модель що працює з колекцією
