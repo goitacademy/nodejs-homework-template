@@ -1,4 +1,4 @@
-const HttpError = (status, message) => {
+const HttpError = (status, message = messages[status]) => {
   const error = new Error(message);
   error.status = status;
   return error;

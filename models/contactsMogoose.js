@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
-const schema = new Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
@@ -16,10 +18,39 @@ const schema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model("contact", schema);
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required(),
+  phone: Joi.string()
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+    .required(),
+  favorite: Joi.boolean(),
+});
 
-module.exports = Contact;
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  updateFavoriteSchema,
+  addSchema,
+};
+
+contactSchema.post("save", handleMongooseError);
+
+const Contact = model("contact", contactSchema);
+
+module.exports = {
+  Contact,
+  schemas,
+};
