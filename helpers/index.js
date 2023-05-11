@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+const RequestError = require('./RequestError');
+const handleSaveErrors = require('./handleSaveErrors');
+
+module.exports = {
+    RequestError,
+    handleSaveErrors,
+=======
 const HttpError = require("./HttpError");
 <<<<<<< HEAD
 const cntrlWrapper = require('./cntrlWrapper');
@@ -13,5 +21,6 @@ const cntrlWrapper = require('./cntrlWrapper')
 module.exports = {
     HttpError,
     cntrlWrapper
+>>>>>>> master
 >>>>>>> master
 }
