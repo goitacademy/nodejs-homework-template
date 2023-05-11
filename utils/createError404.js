@@ -1,7 +1,8 @@
-const create404 = () => {
-  const error = new Error('Not found');
-  error.status = 404;
-  throw error;
-};
+class HttpError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.status = statusCode;
+  }
+}
 
-module.exports = create404;
+module.exports = HttpError;
