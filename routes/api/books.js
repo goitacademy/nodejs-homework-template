@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // contact ById
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contacts.getContactById(id);
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
     }
     res.json(result);
   } catch (error) {
-    res.status(error).json({ message: "id error" });
+    next(error);
   }
 });
 module.exports = router;
