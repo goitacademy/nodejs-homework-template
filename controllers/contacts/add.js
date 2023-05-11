@@ -1,12 +1,7 @@
-const contacts = require("../../models/contacts.js");
-const { RequestError } = require("../../helpers");
+const { Contact } = require("../../models/contacts.js");
 
 const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const result = await contacts.addContact(name, email, phone);
-  if (!result) {
-    throw RequestError(404, "Not found");
-  }
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 module.exports = addContact;
