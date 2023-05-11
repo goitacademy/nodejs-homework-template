@@ -9,7 +9,7 @@ const avatarExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff"];
 
 const updateAvatar = async (requirement, response) => {
   console.log(requirement.file);
-  const { _id } = req.user;
+  const { _id } = requirement.user;
   const { path: tempUpload, originalname } = requirement.file;
   const avatarName = `${_id}_${originalname}`;
 

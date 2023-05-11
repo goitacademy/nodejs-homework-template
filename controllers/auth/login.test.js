@@ -9,7 +9,7 @@ const { DB_HOST } = process.env;
 
 // create user for testing
 const testUser = {
-  email: "testuser@gmail.com",
+  email: "desheviyhasl@gmail.com",
   password: "q1qazsw2",
   subscription: "pro",
 };
@@ -72,7 +72,7 @@ describe("TEST: Login controller", () => {
   test("the response must return an error 401 when password is invalid", async () => {
     const response = await request(app)
       .post(pathLogin)
-      .send({ email: testUser.email, password: "11111111111" }) // send user with wrong password
+      .send({ email: testUser.email, password: "111111111111" }) // send user with wrong password
       .expect(401); // expect a response with status 401
 
     // check that the response body has the error message which was defined in original code
@@ -111,4 +111,11 @@ describe("TEST: Login controller", () => {
 
     expect(response.body).toHaveProperty("message", "The token is invalid");
   });
+});
+test("the response must return 305 compite when den token is valid", async() => {
+  const response = await request(app)
+  .get("/api/auth/current")
+  .set("Authorization", "Fox validToken")
+  .expect(305);
+  expect(response.body).toHaveProperty("message", "The token is valid");
 });

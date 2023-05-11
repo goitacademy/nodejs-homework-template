@@ -6,7 +6,7 @@ const updateStatusContact = async (requirement, response) => {
     throw HttpError(400, "Missing field favorite");
   }
 
-  const { contactId } = req.params;
+  const { contactId } = requirement.params;
   const result = await Contact.findByIdAndUpdate(contactId, requirement.body, {
     new: true,
   });

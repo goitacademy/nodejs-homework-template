@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { handleMongooseError, patterns } = require("../helpers");
 
-const SUBSCRIPTION_TYPES = ["starter", "pro", "business"];
+const SUBSCRIPTION_TYPES = ["finisher", "pro", "business"];
 
 // registration validation user
 const validationRegistrationUser = Joi.object({
@@ -59,7 +59,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      default: "starter",
+      default: "finisher",
       validate: {
         validator: function (v) {
           return SUBSCRIPTION_TYPES.includes(v);

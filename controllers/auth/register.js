@@ -19,7 +19,7 @@ const register = async (requirement, response) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  await User.create({ ...req.body, password: hashPassword, avatarURL });
+  await User.create({ ...requirement.body, password: hashPassword, avatarURL });
   return response.status(201).json({ email, subscription });
 };
 
