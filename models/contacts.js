@@ -68,7 +68,6 @@ const updateById = async (id, data) => {
   await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
-console.log(updateById());
 
 module.exports = {
   listContacts,
