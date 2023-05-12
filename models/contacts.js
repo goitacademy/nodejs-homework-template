@@ -44,7 +44,6 @@ const addContact = async (data) => {
   contacts.push(newContact);
   await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
   //   прописую лог для понятия ошибки
-
   return newContact;
 };
 const remove = async (id) => {
@@ -59,7 +58,7 @@ const remove = async (id) => {
   return contacts;
 };
 
-const updateById = async (id) => {
+const updateById = async (id, data) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
