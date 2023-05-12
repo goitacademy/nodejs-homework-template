@@ -5,17 +5,23 @@ const {
 } = require("../service/schemas/contacts");
 
 const get = async (req, res, next) => {
-  const userId = req.user.id;
-
+  const { _id: owner } = req.user;
   try {
-    const results = await service.listContacts({ owner: userId });
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        contacts: results,
-      },
-    });
+    const result = await service.listContacts({ owner });
+    if (result) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { contacts: result },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contacts`,
+        data: "Not Found",
+      });
+    }
   } catch (e) {
     console.error(e);
     next(e);
@@ -24,10 +30,10 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user.id;
+  const { _id: owner } = req.user;
 
   try {
-    const result = await service.getContactById({ contactId, userId });
+    const result = await service.getContactById({ contactId, owner });
     if (result) {
       res.json({
         status: "success",
@@ -50,7 +56,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;
-  const userId = req.user.id;
+  const { _id: owner } = req.user;
 
   try {
     const { error } = contactAddSchema.validate(req.body);
@@ -63,7 +69,7 @@ const create = async (req, res, next) => {
       name,
       email,
       phone,
-      owner: userId,
+      owner,
     });
     res.status(201).json({
       status: "success",
@@ -78,7 +84,7 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   const { contactId } = req.params;
-  const { name, email, phone } = req.body;
+  const { _id: owner } = req.user;
 
   try {
     const { error } = contactUpdateSchema.validate(req.body);
@@ -86,11 +92,7 @@ const update = async (req, res, next) => {
       error.status = 400;
       throw error;
     }
-    const result = await service.updateContact(contactId, {
-      name,
-      email,
-      phone,
-    });
+    const result = await service.updateContact({ contactId, owner }, req.body);
     if (result) {
       res.json({
         status: "success",
@@ -113,10 +115,10 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favorite } = req.body;
+  const { _id: owner } = req.user;
 
   try {
-    const result = await service.updateContact(contactId, { favorite });
+    const result = await service.updateContact({ contactId, owner }, req.body);
     if (result) {
       res.json({
         status: "success",
@@ -139,14 +141,15 @@ const updateStatus = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { contactId } = req.params;
+  const { _id: owner } = req.user;
 
   try {
-    const result = await service.updateContact(contactId);
+    const result = await service.removeContact({ contactId, owner });
     if (result) {
       res.json({
         status: "success",
         code: 200,
-        data: { contact: result },
+        message: "contact deleted",
       });
     } else {
       res.status(404).json({
