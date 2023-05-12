@@ -7,7 +7,7 @@ const contactsPath = path.join(__dirname, 'contacts.json');
 
 /**
  * Get the list of all contacts in database
- * @returns {array} - list of objects of contacts
+ * @returns {array} list of objects of contacts
  */
 const listContacts = async () => {
   const contacts = await fs.readFile(contactsPath);
@@ -16,8 +16,8 @@ const listContacts = async () => {
 
 /**
  * Get one contact according to its id
- * @param {string} contactId - id of contact
- * @returns {object} - contact or null, if no contact with such id in database
+ * @param {string} contactId id of contact
+ * @returns {object} contact or null, if no contact with such id in database
  */
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
@@ -27,8 +27,8 @@ const getContactById = async (contactId) => {
 
 /**
  * Remove contact from database by its id
- * @param {string} contactId - id of contact
- * @returns {object} - deleted contact or null, if no contact with such id in database
+ * @param {string} contactId id of contact
+ * @returns {object} deleted contact or null, if no contact with such id in database
  */
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
@@ -41,8 +41,8 @@ const removeContact = async (contactId) => {
 
 /**
  * Add new contact to database
- * @param {object} body - contact`s name, email, phone number
- * @returns {object} - new contact
+ * @param {object} body contact`s name, email, phone number
+ * @returns {object} new contact
  */
 const addContact = async (body) => {
   const contacts = await listContacts();
@@ -54,8 +54,8 @@ const addContact = async (body) => {
 
 /**
  *
- * @param {string} contactId - id of contact
- * @param {object} body - contact`s name, email, phone number
+ * @param {string} contactId id of contact
+ * @param {object} body contact`s name, email, phone number
  * @returns
  */
 const updateContact = async (contactId, body) => {
