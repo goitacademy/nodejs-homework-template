@@ -15,7 +15,6 @@ const getContacts = async (req, res) => {
 
 const getContact = async (req, res) => {
   const contact = await getContactService(req.params.contactId);
-  console.log(contact);
   res.status(200).json(contact);
 };
 
