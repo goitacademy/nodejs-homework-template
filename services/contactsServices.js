@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
 const { HttpError } = require("../utils/HttpError");
+const { validateSchema } = require("../schema");
 
 const contactsPath = path.join(process.cwd(), "models", "contacts.json");
 
@@ -16,6 +17,10 @@ const getContactService = async (id) => {
 };
 
 const createContactService = async (data) => {
+  const { error } = validateSchema.validate(data);
+    if (error) {
+    throw new HttpError(400, "missing required name field");
+  }
   const contacts = await getContactsService();
   const newContact = { id: crypto.randomUUID(), ...data };
   contacts.push(newContact);
@@ -24,6 +29,10 @@ const createContactService = async (data) => {
 };
 
 const updateContactService = async (id, data) => {
+    const { error } = validateSchema.validate(data);
+    if (error) {
+    throw new HttpError(400, "missing fields");
+  }
   const contacts = await getContactsService();
   const [editedContac] = contacts.filter((contact) => contact.id === id);
   if (!editedContac) {
