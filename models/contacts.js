@@ -44,10 +44,7 @@ const addContact = async (data) => {
   contacts.push(newContact);
   await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
   //   прописую лог для понятия ошибки
-  const logContacts = (contacts) => {
-    fs.appendFile("readMe.log", contacts());
-    console.log(logContacts);
-  };
+
   return newContact;
 };
 const remove = async (id) => {
@@ -62,6 +59,18 @@ const remove = async (id) => {
   return contacts;
 };
 
+const updateById = async (id) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...data };
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
+console.log(updateById());
+
 module.exports = {
   listContacts,
   getContactById,
@@ -70,4 +79,5 @@ module.exports = {
   getByEmail,
   addContact,
   remove,
+  updateById,
 };

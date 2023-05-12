@@ -54,6 +54,18 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-  } catch (error) {}
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(404, error.message);
+    }
+    const { id } = req.params;
+    const result = await contacts.updateById(id, req.body);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 module.exports = router;
