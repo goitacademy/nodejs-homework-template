@@ -2,8 +2,6 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const { HttpError } = require("../helpers");
-
 const contactsPath = path.join(__dirname, "contacts.json");
 
 async function listContacts() {
@@ -41,16 +39,13 @@ async function addContact(body) {
 }
 
 const updateContact = async (contactId, body) => {
-  if (Object.keys(body).length === 0) {
-    throw HttpError(400, "missing fields");
-  }
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
-    throw HttpError(404, "Not found !");
+    return null;
   }
   contacts[index] = {
-    ...contacts[index],
+    id: nanoid(),
     ...body,
   };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
