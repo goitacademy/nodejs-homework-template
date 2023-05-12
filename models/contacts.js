@@ -37,7 +37,7 @@ async function addContact(name, email, phone) {
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return newContact;
 }
-
+addContact('Dima', 'dimon_zd@i.ua', '0638036740');
 async function updateContact  (contactId, data)  {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId.toString());
