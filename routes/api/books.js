@@ -78,6 +78,8 @@ router.delete("/:id", async (req, res, next) => {
       throw HttpError(404, "Not found");
     }
     res.json({ message: "Delete contact" });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 });
 module.exports = router;
