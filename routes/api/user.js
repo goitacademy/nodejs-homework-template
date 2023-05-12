@@ -12,6 +12,10 @@ router.post("/register", validateBodyPost(registerValidator), ctrl.register);
 
 router.post("/login", validateBodyPost(loginValidator), ctrl.login);
 
+// Log out
+
+router.post("/logout", authenticate, ctrl.logout);
+
 // Current
 
 router.get("/current", authenticate, ctrl.getCurrent);

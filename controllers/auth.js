@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
+// Register
+
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -22,6 +24,8 @@ const register = async (req, res) => {
   });
 };
 
+// Login
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -38,8 +42,19 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
+  await User.findByIdAndUpdate(user._id, { token });
   res.json({ token });
 };
+
+// Logout
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).json({ message: "No Content" });
+};
+
+// Current
 
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
@@ -53,5 +68,6 @@ const getCurrent = async (req, res) => {
 module.exports = {
   register: ctrlWraper(register),
   login: ctrlWraper(login),
+  logout: ctrlWraper(logout),
   getCurrent: ctrlWraper(getCurrent),
 };
