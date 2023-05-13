@@ -2,24 +2,16 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-	res.json({ message: "home work №2 done" });
-});
+const { contacts: ctrl } = require("../../controllers");
 
-router.get("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
-});
+router.get("/", ctrl.getAll);
 
-router.post("/", async (req, res, next) => {
-	res.json({ message: "template message" });
-});
+router.get("/:contactId", ctrl.getById);
 
-router.delete("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
-});
+router.post("/", ctrl.createNew);
 
-router.put("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
-});
+router.delete("/:contactId", ctrl.deleteById);
+
+router.put("/:contactId", ctrl.editById);
 
 module.exports = router;
