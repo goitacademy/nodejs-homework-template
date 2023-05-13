@@ -1,87 +1,20 @@
 const express = require("express");
-const Joi = require("joi");
+// const Joi = require("joi");
 
-const contactsService = require("../../models/contacts");
-
+// const contactsService = require("../../models/contacts");
+const movieControlls = require("../../controllers/contacts-controller");
 const router = express.Router();
 
-const { HttpError } = require("../../helpers");
+// const { HttpError } = require("../../helpers");
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .required()
-    .pattern(/^\S+@\S+\.\S+$/),
-  phone: Joi.string()
-    .required()
-    .pattern(/^[\d()+\- ]+$/),
-});
+router.get("/", movieControlls.getAllMovies);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const results = await contactsService.listContacts();
-    res.json(results);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:contactId", movieControlls.gerById);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contactsService.getContactById(req.params.contactId);
-    console.log(`results222`, result);
-    if (!result) {
-      throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", movieControlls.addContact);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const results = await contactsService.addContact(req.body);
-    res.status(201).json(results);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", movieControlls.deleteContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contactsService.removeContact(req.params.contactId);
-    if (!result) {
-      throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-    }
-    res.json({ message: "Delete success" });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-
-    const result = await contactsService.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    if (!result) {
-      throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-    }
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:contactId", movieControlls.updateContact);
 
 module.exports = router;
