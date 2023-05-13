@@ -1,6 +1,8 @@
 // const fs = require('fs/promises')
 
-const listContacts = async () => {}
+const listContacts = async () => {
+  // new shange
+}
 
 const getContactById = async (contactId) => {}
 
