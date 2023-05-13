@@ -17,7 +17,6 @@ const contactSchema = new Schema(
 
         phone: {
             type: String,
-            required: true,
         },
 
         favorite: {
@@ -27,7 +26,7 @@ const contactSchema = new Schema(
         owner: {
             type: Schema.Types.ObjectId,
             ref: 'user',
-            required: true,    // pr
+            required: true,    
         },
     },
 
@@ -37,8 +36,6 @@ const contactSchema = new Schema(
     }
 );
 
-
-contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
@@ -51,10 +48,20 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required(),
 });
 
+const changeSchema = Joi.object({
+	name: Joi.string(),
+	email: Joi.string(),
+	phone: Joi.string(),
+	favorite: Joi.boolean(),
+}).min(1);
+
 const schemas = {
     addSchema,
     updateFavoriteSchema,
+    changeSchema,
 };
+
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 

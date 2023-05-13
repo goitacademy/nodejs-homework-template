@@ -5,12 +5,28 @@ const { HttpError,ctrlWrapper } = require("../helpers/index");
 const listContacts = async (req, res) => {
 
     const { _id: owner } = req.user;
-    const { page = 1, limit = 20 } = req.query;                                                              // pr
-    const skip = (page - 1) * limit;                                                                        // pr
-    const result = await Contact.find({owner}, "name email phone favorite", { skip, limit}).populate();     // pr
-    res.json(result);
+    const { page = 1, limit = 20 } = req.query;
+    const { favorite } = req.query;                                                             
+    const skip = (page - 1) * limit;                                                                      
+    if (!favorite) {
+		const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit });
+		res.json(contacts);
+    }
     
+	if (favorite) {
+		const boolValue = favorite === "true";
+		const contacts = await Contact.find(
+			{ owner, favorite: { $eq: boolValue } },
+			"-createdAt -updatedAt",
+			{
+				skip,
+				limit,
+			},
+		);
+		res.json(contacts);
+	}
 };
+    
 
 const getContactById = async (req, res) => {
 

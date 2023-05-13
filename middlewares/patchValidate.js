@@ -1,14 +1,15 @@
 const { HttpError } = require("../helpers");
 
-const patchValidate = (schema) => {
+const patchValidate = (schema,fieldName) => {
     const func = (req, res, next) => {
 
-        const { error } = schema.validate(req.body);
-        if (error) {
-            next(
-                HttpError(400, "missing field favorite")
-            );
-        }
+       if (!Object.keys(req.body).length) {
+			next(HttpError(400, `missing field ${fieldName}`));
+		}
+		const { error } = schema.validate(req.body);
+		if (error) {
+			next(HttpError(400, error.message));
+		}
 
         next();
     };
