@@ -9,10 +9,12 @@ const { HttpError } = require("../../helpers");
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string()
+    .required()
+    .pattern(/^\S+@\S+\.\S+$/),
   phone: Joi.string()
     .required()
-    .pattern(/^\+?\d{1,3}[- ]?\(?\d{2,3}\)?[- ]?\d{3}[- ]?\d{2}[- ]?\d{2}$/),
+    .pattern(/^[\d()+\- ]+$/),
 });
 
 router.get("/", async (req, res, next) => {
@@ -51,11 +53,35 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const result = await contactsService.removeContact(req.params.contactId);
+    if (!result) {
+      throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+    }
+    res.json({ message: "Delete success" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const result = await contactsService.updateContact(
+      req.params.contactId,
+      req.body
+    );
+    if (!result) {
+      throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+    }
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
