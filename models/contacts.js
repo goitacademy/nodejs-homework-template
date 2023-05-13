@@ -45,7 +45,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
   contacts[index] = {
-    id: nanoid(),
+    ...contacts[index],
     ...body,
   };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
