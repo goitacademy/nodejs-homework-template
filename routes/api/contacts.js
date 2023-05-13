@@ -6,16 +6,16 @@ const router = express.Router();
 
 const { HttpError } = require("../../helpers");
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const results = await contactsService.listContacts();
     res.json(results);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    next(error);
   }
 });
 
-router.get("/:contactId", async (req, res) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
     const result = await contactsService.getContactById(req.params.contactId);
     console.log(`results222`, result);
@@ -24,8 +24,7 @@ router.get("/:contactId", async (req, res) => {
     }
     res.json(result);
   } catch (error) {
-    const { status = 500, message = "Server error" } = error;
-    res.status(status).json({ message });
+    next(error);
   }
 });
 
