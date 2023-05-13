@@ -17,13 +17,16 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Email is required'],
         unique: true,
-    }/* ,
-    subscription: {
+    },
+    /* subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
     default: "starter"
-    },
-    token: String, */
+    }, */
+    token: {
+        type: String,
+        default : "", 
+    }                                          // pr
 },
 { versionKey: false, timestamps: false });
 

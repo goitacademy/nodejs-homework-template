@@ -7,43 +7,7 @@ const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 const { SECRET_KEY } = process.env;
 
-/* const createHashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10);
-  console.log(salt);
-  const result = await bcrypt.hash(password, 10);
-  console.log(result);
-  const compareResult1 = await bcrypt.compare(password, result);
-  console.log(compareResult1);
-  const compareResult2 = await bcrypt.compare('123457', result);
-  console.log(compareResult2);
-};
 
-createHashPassword("123456") */
-
-
-/* const jwt = require('jsonwebtoken');
-require("dotenv").config();
-
-const { SECRET_KEY } = process.env;
-
-const payload = {
-    id: "kbvaskdbvujfdvbsbjnoj"
-};
-
-const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-const decodeToken = jwt.decode(token);
-console.log(token);
-
-try {
-    const {id} = jwt.verify(token, SECRET_KEY);
-    cosole.log(id);
-    const invalidToken = "esempiomnvjidsfvbisebvsblnibhjsrnb";
-    const result = jwt.verify(invalidToken, SECRET_KEY);
-}
-catch(error) {
-    console.log(error.message);
-}
-*/
 
 const register = async(req, res) => {
 
@@ -86,7 +50,8 @@ const login = async(req, res) => {
         id: user._id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"}) ;
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    await User.findByIdAndUpdate(user._id, {token});
     /* .status(201) */
     res.json({
         token,
@@ -94,7 +59,31 @@ const login = async(req, res) => {
    
 };
 
+const getCurrent = async (req, res) => {
+    const { email, name } = req.user;
+
+    res.json({
+        email,
+        name,
+    })
+};
+
+
+
+const logout = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate( _id, {token: ""});
+
+    res.json({
+        message: "Logout completed",          // pr
+    })
+};
+
+
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
+    getCurrent: ctrlWrapper(getCurrent),
+    logout: ctrlWrapper(logout),
 };
