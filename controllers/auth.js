@@ -1,10 +1,16 @@
 const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { ctrlWraper } = require("../helpers");
+const path = require("path");
+const fs = require("fs/promises");
+const { jimpResizer } = require("../helpers");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 const gravatar = require("gravatar");
+
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 // Register
 
@@ -79,9 +85,24 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tmpUpload, originalname } = req.file;
+  await jimpResizer(tmpUpload);
+  const fileName = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarDir, fileName);
+  await fs.rename(tmpUpload, resultUpload);
+  const avatarURL = path.join("avatars", fileName);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   register: ctrlWraper(register),
   login: ctrlWraper(login),
   logout: ctrlWraper(logout),
   getCurrent: ctrlWraper(getCurrent),
+  updateAvatar: ctrlWraper(updateAvatar),
 };
