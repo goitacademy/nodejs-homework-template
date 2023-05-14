@@ -1,4 +1,4 @@
-const {listContacts, getContactById, addContact, removeContact, updateContact} = require("../models/contacts");
+const {listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact} = require("../models/contacts");
 const {nanoid} = require("nanoid");
 const HttpError = require("../helpers/HttpError");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
@@ -51,10 +51,22 @@ const update = async (req, res) => {
   res.status(200).json(result);
 };
 
+const favorite = async (req, res) => {
+  if (!req.body) {
+    throw HttpError(400, "missing field favorite");
+  }
+
+  const result = await updateStatusContact(req.params.contactId, req.body);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json(result);
+};
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   create: ctrlWrapper(create),
   remove: ctrlWrapper(remove),
   update: ctrlWrapper(update),
+  favorite: ctrlWrapper(favorite),
 };
