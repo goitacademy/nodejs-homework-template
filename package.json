@@ -6,7 +6,8 @@
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -14,12 +15,16 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.8",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.4.0",
     "mongoose": "^7.1.0",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^4.0.2",
+    "supertest": "^6.3.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
