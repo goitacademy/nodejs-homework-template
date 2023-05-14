@@ -6,10 +6,23 @@ const {HttpError} = require('../../helpers')
 
 const router = express.Router();
 
-const addSchema =Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+const schema =Joi.object({
+  name: Joi.string()
+       .alphanum()
+       .min(3)
+       .max(30)
+       .required(),
+
+  email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+      .required(),
+  
+  phone: Joi.string()
+      .min(13)
+      .pattern(
+            /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
+            )
+      .required(),
 })
 
 router.get('/', async (req, res, next) => {
@@ -37,7 +50,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-const {error} =addSchema.validate(req.body);
+const {error} =schema.validate(req.body);
 if(error){
   throw HttpError(400,  "missing required name field")
 }
@@ -65,7 +78,7 @@ try {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const {error} =addSchema.validate(req.body);
+    const {error} =schema.validate(req.body);
     if(error){
       throw HttpError(400, error.message)
     }
