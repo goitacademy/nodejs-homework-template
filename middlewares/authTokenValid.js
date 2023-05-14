@@ -6,9 +6,13 @@ const User = require("../models/userShema");
 const authTokenValid = async (req, res, next) => {
   const authHeaders = req.headers.authorization || "";
   const [type, token] = authHeaders.split(" ");
-  if (type !== "Bearer") {
+  const bearer = authHeaders.includes("Bearer");
+  if (!bearer) {
     throw HttpError(401, "Not authorized");
   }
+    if (type !== "Bearer") {
+      throw HttpError(401, "Not authorized");
+    }
   if (!token) {
     throw HttpError(401, "Not authorized");
   }
