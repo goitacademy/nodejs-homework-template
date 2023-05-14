@@ -8,5 +8,8 @@ const addShema = Joi.object({
 const addShemaFavorite = Joi.object({
   favorite: Joi.boolean().required(),
 });
-
-module.exports = {addShema,addShemaFavorite}
+const addShemaAuth = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+module.exports = { addShema, addShemaFavorite, addShemaAuth };
