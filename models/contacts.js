@@ -47,7 +47,6 @@ const updateContact = async (contactId, body) => {
   }
 
   const result = { ...allContacts[index], ...body };
-  console.log("result", result);
   allContacts[index] = result;
   await updateContacts(allContacts);
   return result;
