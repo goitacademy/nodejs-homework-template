@@ -1,12 +1,16 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+
 const path = require("path");
 const fs = require("fs").promises;
+
 require("dotenv").config();
 
 const {User} = require("../models/user");
 const { HttpError, ctrlWrapper, jimpResizer } = require("../helpers/index");
+
+
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -70,6 +74,7 @@ const login = async(req, res) => {
    
 };
 
+
 const getCurrent = async (req, res) => {
     const { email, subscription } = req.user;
 
@@ -85,6 +90,8 @@ const logout = async (req, res) => {
   res.status(204).json({ message: "No content" });
 };
 
+
+
 const updateSubscription = async (req, res) => {
 	const { authorization = "" } = req.headers;
 	const token = authorization.split(" ")[1];
@@ -93,25 +100,25 @@ const updateSubscription = async (req, res) => {
 	res.status(200).json(updatedUserSubscription);
 };
 
+
+
 const updateAvatar = async (req, res) => {
 
     const { _id } = req.user;
     const { path: tempUpload, originalname } = req.file;
     
     try {
-        
+
 		await jimpResizer(tempUpload);
 		const newName = `${_id}_${originalname}`;
 		const distUpload = path.join(avatarsDir, newName);
 
 		await fs.rename(tempUpload, distUpload);
 		const avatarURL = path.join("avatars", newName);
-        await User.findByIdAndUpdate(_id, { avatarURL });
+        await User.findByIdAndUpdate(_id, {avatarURL});
          
         res.json({
-            
             avatarURL,
-            
         });
         
     } catch (error) {
