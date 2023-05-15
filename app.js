@@ -15,23 +15,21 @@ app.use(express.json())
 
 app.use('/', contactsRouter)
 
-<<<<<<< HEAD
-app.use((req, res) => {
+app.use((request, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
-app.use((erro, req, res, next) => {
+app.use((erro, request, res, next) => {
   const { status = 500, message = "Server error" } = erro;
   res.status(status).json({ message })
-=======
+});
 app.use((requirement, response) => {
   response.status(404).json({ message: 'Not found' })
-})
+});
 
 app.use((erro, requirement, response, next) => {
   const { status = 500, message = "Server error" } = erro;
   response.status(status).json({ message })
->>>>>>> master
-})
+});
 
-module.exports = app
+module.exports = app;
