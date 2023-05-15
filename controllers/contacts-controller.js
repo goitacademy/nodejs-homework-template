@@ -2,7 +2,7 @@ const { HttpError } = require('../helpers');
 const { ctrlWrapper } = require('../decorators')
 
 const contactsService = require('../models/contacts')
-const addSchema = require('../schemas/contactsSchema')
+const addSchema = require('../schemas/contacts-schema')
 
 const getAllContacts = async (req, res, next) => {
     const result = await contactsService.listContacts();
