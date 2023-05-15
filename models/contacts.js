@@ -34,7 +34,7 @@ const contactsPath = path.join(__dirname, "contacts.json");
     return newContact;
   }
 
-    const updateContact = async (contactId, body) => {
+  const updateContact = async (contactId, body) => {
     const contacts = await listContacts();
     const index = contacts.findIndex(contact => contact.id === contactId);
     if (index === -1) {
