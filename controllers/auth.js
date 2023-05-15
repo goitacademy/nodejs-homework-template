@@ -94,21 +94,30 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-	const { _id } = req.user;
-	const { path: tempUpload, originalname } = req.file;
-	try {
+
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+    
+    try {
+        
 		await jimpResizer(tempUpload);
 		const newName = `${_id}_${originalname}`;
 		const distUpload = path.join(avatarsDir, newName);
 
 		await fs.rename(tempUpload, distUpload);
 		const avatarURL = path.join("avatars", newName);
-		await User.findByIdAndUpdate(_id, { avatarURL });
-		res.json({
-			avatarURL,
-		});
-	} catch (error) {
-		await fs.unlink(tempUpload);
+        await User.findByIdAndUpdate(_id, { avatarURL });
+         
+        res.json({
+            
+            avatarURL,
+            
+        });
+        
+    } catch (error) {
+        
+        await fs.unlink(tempUpload);
+        
 	}
 };
 
