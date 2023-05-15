@@ -7,13 +7,21 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../controllers/controllers");
 
-router.route("/").get(getContacts).post(addContact);
+const { validateBody, validateStatus, isValidId } = require("../middlewares");
+
+const { addSchema, statusSchema } = require("../utils/schemas");
+
+router.route("/").get(getContacts).post(validateBody(addSchema), addContact);
 router
   .route("/:contactId")
-  .get(getContact)
-  .put(updateContact)
-  .delete(removeContact);
+  .get(isValidId, getContact)
+  .put(isValidId, validateBody(addSchema), updateContact)
+  .delete(isValidId, removeContact);
+router
+  .route("/:contactId/favorite")
+  .patch(isValidId, validateStatus(statusSchema), updateStatusContact);
 
 module.exports = router;
