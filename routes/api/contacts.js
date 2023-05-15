@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/', async (req, res, next) => {
   const result = await contactsService.listContacts();
-  res.json(result);
+  res.status(200).json(result);
 })
 
 router.get('/:contactId', async (req, res, next) => {
@@ -16,7 +16,7 @@ router.get('/:contactId', async (req, res, next) => {
     if (!result) {
       throw HttpError(404);
     }
-    res.json(result);
+    res.status(200).json(result);
   }
   catch (error) {
     next(error);
@@ -25,6 +25,9 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    if ( !('name' in req.body && 'email' in req.body && 'phone' in req.body) ) {
+      throw HttpError('400', 'Missing required name field');
+    }
     const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
   }
@@ -38,10 +41,10 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactsService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404);
     }
-    res.json({
-      message: 'Delete success',
+    res.status(200).json({
+      message: 'contact deleted',
     });
   }
   catch (error) {
