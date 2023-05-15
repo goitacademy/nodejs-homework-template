@@ -25,12 +25,6 @@ const addContact = async (req, res, next) => {
         throw HttpError(400, 'Missing required name field');
     }
 
-    const { error } = addSchema.validate(req.body);
-
-    if (error) {
-        throw HttpError(400, error.message);
-    }
-
     const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
 };
@@ -50,19 +44,13 @@ const deleteContactById = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
     const { contactId } = req.params;
-    const { error } = addSchema.validate(req.body);
-
-    if (error) {
-        throw HttpError(400, error.message);
-    }
-
     const result = await contactsService.updateContact(contactId, req.body);
 
     if (!result) {
         throw HttpError(404, `Movie with ${contactId} not found`);
     }
 
-    res.json(result);
+    res.status(200).json(result);
 };
 
 module.exports = {
