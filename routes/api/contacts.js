@@ -14,8 +14,8 @@ router.get('/:contactId', ctrl.getById)
 
 router.post('/', validateBody(schemas.addSchema), ctrl.addContact)
 
-router.delete('/:contactId', validateBody(schemas.addSchema), ctrl.deleteContact)
+router.delete('/:contactId', ctrl.deleteContact)
 
-router.put('/:contactId', ctrl.updateContact)
+router.put('/:contactId', validateBody(schemas.changeSchema), ctrl.updateContact)
 
 module.exports = router
