@@ -19,8 +19,8 @@ router.delete("/:contactId", ctrl.removeContact);
 router.put(
   "/:contactId",
   jsonParser,
-  validateBody(schemas.addSchema),
+  validateBody(schemas.updateSchema),
   ctrl.updateContact
 );
 
-module.exports = router;``
+module.exports = router;

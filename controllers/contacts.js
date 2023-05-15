@@ -1,5 +1,5 @@
 const contacts = require('../models/contacts');
-const { HttpError, ctrlWrapper } = require('../utils');
+const { httpError, ctrlWrapper } = require('../utils');
 
 
 const listContacts = async (req, res) => {
@@ -23,7 +23,7 @@ const removeContact = async (req, res) => {
         const { id } = req.params;
         const result = await contacts.removeContact(id);
         if (!result) {
-            throw HttpError(404, 'Not found');
+            throw httpError(404, 'Not found');
         }
         res.status(204).json({
             message: 'Deleted'
@@ -34,7 +34,7 @@ const updateContact = async (req, res) => {
         const { id } = req.params;
         const result = await contacts.updateContact(id, req.body);
         if (!result) {
-            throw HttpError(404, 'Not found');
+            throw httpError(404, 'Not found');
         }
         res.json(result);
 };
