@@ -1,14 +1,8 @@
-const contactsService = require('../models/contacts')
 const { HttpError } = require('../helpers');
-const Joi = require('joi');
 const { ctrlWrapper } = require('../decorators')
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
-
+const contactsService = require('../models/contacts')
+const addSchema = require('../schemas/contactsSchema')
 
 const getAllContacts = async (req, res, next) => {
     const result = await contactsService.listContacts();
@@ -48,7 +42,7 @@ const deleteContactById = async (req, res, next) => {
     if (!result) {
         throw HttpError(404);
     }
-    
+
     res.status(200).json({
         message: 'Contact deleted',
     });
