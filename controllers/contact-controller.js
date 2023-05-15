@@ -1,13 +1,5 @@
 const contactsService = require("../models/contacts");
 const HttpError = require("../helper/HttpError");
-const Joi = require("joi");
-
-// валидация
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -34,12 +26,8 @@ const getContactByIdb = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
-    console.log(contactSchema.validate(req.body));
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await contactsService.addContact(req.body);
+    // валидация в декораторе
+     const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -60,10 +48,7 @@ const removeContact = async (req, res, next) => {
 };
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+       // валидация в декораторе
     const { id } = req.params;
     const result = await contactsService.updateContact(id, req.body);
     if (!result) {
