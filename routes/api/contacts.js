@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+// ROUTS
+
 router.get("/", async (req, res, next) => {
   res.json({ message: "template message" });
   next();
@@ -27,4 +29,4 @@ router.put("/:contactId", async (req, res, next) => {
   next();
 });
 
-module.exports = router;
+module.exports = { router, contactPath };
