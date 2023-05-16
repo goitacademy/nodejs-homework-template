@@ -1,3 +1,40 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const contacts = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+});
+
+const Contact = mongoose.model("contact", contacts);
+
+module.exports = { Contact };
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> master
+>>>>>>> b2b353669b449349822edecb08b428e80cfd37d8
 const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../helpers');
 const joi = require("joi");
@@ -68,3 +105,11 @@ const schemas = {
 const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, schemas };
+<<<<<<< HEAD
+=======
+>>>>>>> master
+<<<<<<< HEAD
+>>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master
+>>>>>>> b2b353669b449349822edecb08b428e80cfd37d8

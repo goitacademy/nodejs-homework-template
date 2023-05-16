@@ -9,6 +9,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -20,6 +21,67 @@
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nanoid": "^3.3.6"
+=======
+    "bcrypt": "^5.1.0",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+<<<<<<< HEAD
+=======
+>>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+    "bcryptjs": "^2.4.3",
+>>>>>>> master
+    "cors": "2.8.5",
+=======
+>>>>>>> 7fbc2ec0e540fff9d018902e98b5c3c4bfa5020e
+    "cors": "^2.8.5",
+    "cross-env": "7.0.3",
+
+    "dotenv": "^16.0.3",
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "express": "^4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.7",
+    "joi": "^17.8.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.2",
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0"
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> master
+    "express": "^4.18.2",
+>>>>>>> 7fbc2ec0e540fff9d018902e98b5c3c4bfa5020e
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^9.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+<<<<<<< HEAD
+    "nanoid": "^3.3.4",
+=======
+    "nanoid": "^3.3.4"
+=======
+    "express": "^4.17.1",
+    "joi": "^17.9.1",
+    "morgan": "^1.10.0",
+    "nanoid": "^3.3.6"
+>>>>>>> master
+<<<<<<< HEAD
+>>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master
+>>>>>>> 7fbc2ec0e540fff9d018902e98b5c3c4bfa5020e
+>>>>>>> b2b353669b449349822edecb08b428e80cfd37d8
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -29,8 +91,17 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
   },
   "engines": {
     "node": ">=14 <15"
+>>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+  },
+  "engines": {
+    "node": ">=14 <15"
+>>>>>>> master
   }
 }
