@@ -1,2 +1,7 @@
 node_modules/
 .env
+<<<<<<< HEAD
+=======
+.idea
+.vscode
+>>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
