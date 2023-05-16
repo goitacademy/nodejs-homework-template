@@ -4,7 +4,7 @@ const app = require("./app");
 mongoose.set("strictQwery", true);
 
 const DB_HOST =
-  "mongodb+srv://Minaht:gideon1983@cluster0.ccmrmnr.mongodb.net/db-contacts?retryWrites=true&w=majority";
+  "mongodb+srv://Minaht:GiDeOn1983@cluster0.ccmrmnr.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose.set("strictQwery", true);
 
