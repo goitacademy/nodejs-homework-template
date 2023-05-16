@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -29,6 +30,8 @@ const Contact = mongoose.model("contact", contacts);
 module.exports = { Contact };
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> master
 const { Schema, model } = require('mongoose');
 const { handleSaveErrors } = require('../helpers');
 const joi = require("joi");
@@ -153,4 +156,7 @@ const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, schemas };
 >>>>>>> master
+<<<<<<< HEAD
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master

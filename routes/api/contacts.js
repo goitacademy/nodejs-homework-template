@@ -1,5 +1,6 @@
 const express = require("express");
 <<<<<<< HEAD
+<<<<<<< HEAD
 const { auth } = require("../../auth/auth.js");
 const { schemaPut, schemaPost, schemaPatch } = require("../../schema.js");
 
@@ -114,6 +115,11 @@ const {Contact} = require("../../models/contact");
 const {addSchema, updateSchema, updateFavoriteSchema} = require("../../models/contact")
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
 
+=======
+const {Contact} = require("../../models/contact");
+const {addSchema, updateSchema, updateFavoriteSchema} = require("../../models/contact")
+
+>>>>>>> master
 <<<<<<< HEAD
 const {RequestError} = require("../../helpers");
 const {isValidId, authenticate} = require("../../middlewares")

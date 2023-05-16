@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
@@ -37,6 +38,8 @@ const User = mongoose.model("user", users);
 
 module.exports = { User, hashPassword };
 =======
+=======
+>>>>>>> master
 const {Schema, model } = require('mongoose');
 const { handleSaveErrors } = require('../helpers')
 const joi = require("joi");
@@ -86,5 +89,9 @@ userSchema.post("save", handleSaveErrors);
   module.exports = {
     schemas,
     User
+<<<<<<< HEAD
   }
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+  }
+>>>>>>> master

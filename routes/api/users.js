@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const express = require("express");
 const { userValidationSchema } = require("../../schema.js");
 const jwt = require("jsonwebtoken");
@@ -142,6 +143,8 @@ router.patch(
 
 module.exports = router;
 =======
+=======
+>>>>>>> master
 const express = require('express');
 const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
@@ -250,5 +253,9 @@ router.post("/logout", authenticate, async (req, res, next) => {
     }
 })
 
+<<<<<<< HEAD
 module.exports = router;
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+module.exports = router;
+>>>>>>> master

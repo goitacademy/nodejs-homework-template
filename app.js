@@ -15,13 +15,17 @@ require("dotenv").config();
 
 const contactsRouter = require('./routes/api/contacts')
 const usersRouter = require('./routes/api/users')
+<<<<<<< HEAD
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master
 
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
 
 const { connectDatabase } = require("./config/database.js");
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 connectDatabase();
 
@@ -51,6 +55,8 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 =======
+=======
+>>>>>>> master
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
@@ -82,4 +88,7 @@ app.use((erro, requirement, response, next) => {
 })
 
 module.exports = app
+<<<<<<< HEAD
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master

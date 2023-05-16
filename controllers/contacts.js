@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const { Contact } = require("../models/contact");
 
 const addContact = async (name, email, phone, favorite) => {
@@ -51,6 +52,8 @@ module.exports = {
   updateStatusContact,
 };
 =======
+=======
+>>>>>>> master
 const contacts = require('../models/contacts');
 
 const { HttpError, cntrlWrapper } = require("../helpers");
@@ -105,5 +108,9 @@ module.exports = {
     add: cntrlWrapper(addContact),
     updateById: cntrlWrapper(updateById),
     deleteById: cntrlWrapper(deleteById),
+<<<<<<< HEAD
 };
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+};
+>>>>>>> master

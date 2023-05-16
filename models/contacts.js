@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const fs = require("fs").promises;
 const path = require("path");
 const contactsPath = path.join(__dirname, "contacts.json");
@@ -48,6 +49,8 @@ const updateContact = async (contactId, body) => {
 
   return contactToUpdate;
 =======
+=======
+>>>>>>> master
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -97,7 +100,10 @@ async function updateContact  (contactId, data)  {
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
+<<<<<<< HEAD
 >>>>>>> 03ddca3ab856225ac93889b1ec630c997ac37fef
+=======
+>>>>>>> master
 };
 
 module.exports = {
