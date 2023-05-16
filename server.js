@@ -30,7 +30,7 @@ mongoose.set("strictQuery", true);
 
 mongoose.connect('mongodb+srv://dimas_zd:X32fCHGr6VWrtOXj@cluster13.ecufgwe.mongodb.net/contacts?retryWrites=true&w=majority')
   .then(() => {
-		app.listen(3000, () => {
+		app.listen(3650, () => {
 			console.log("Database connection successful");
 		});
 	})
