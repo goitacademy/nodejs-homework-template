@@ -2,8 +2,6 @@ const express = require("express");
 const contacts = require("../../models/contacts.js");
 const router = express.Router();
 const Schema = require("../../helper/validControl.js");
-const joi = require("joi");
-
 const HttpError = require("../../helper/HttpError.js");
 
 router.get("/", async (req, res) => {
