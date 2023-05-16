@@ -4,6 +4,7 @@ const cors = require('cors')
 require("dotenv").config();
 
 const contactsRouter = require('./routes/api/contacts')
+const usersRouter = require('./routes/api/users')
 
 const app = express()
 
@@ -13,7 +14,12 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+<<<<<<< HEAD
+app.use('/api/contacts', contactsRouter)
+app.use('/api/users', usersRouter)
+=======
 app.use('/', contactsRouter)
+>>>>>>> master
 
 app.use((request, res) => {
   res.status(404).json({ message: 'Not found' })
