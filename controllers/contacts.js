@@ -4,14 +4,18 @@ const { User } = require("../models/user");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }).populate("owner", "email");
+  const result = await Contact.find({ owner: owner }).populate("owner", "email");
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
-  res.json({ result });
+  const { _id: owner } = req.user;
+  const result = await Contact.findOne({ _id: contactId, owner: owner });
+  if (!result) {
+    return res.status(404).json({ message: "Contact not found" });
+  }
+  res.json(result);
 };
 
 const addContact = async (req, res) => {
