@@ -11,5 +11,6 @@ const addSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().pattern(phoneRegex).required(),
+  favourite: Joi.boolean(),
 });
 module.exports = addSchema;
