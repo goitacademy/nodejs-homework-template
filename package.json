@@ -8,6 +8,7 @@
     "start:dev": "nodemon index.js"
   },
   "dependencies": {
+    "@nestjs/mongoose": "^9.2.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
