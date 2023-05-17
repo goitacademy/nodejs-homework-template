@@ -4,6 +4,7 @@ const contactsAddSchema = require('../../schemas/index')
 const {validateBody} = require('../../utils/index')
 
 const contactsController =  require('../../controller/contact-controller');
+
 router.get('/', contactsController.getList);
 router.get('/:contactId', contactsController.getContactsbyId);
 router.post('/', validateBody(contactsAddSchema),contactsController.addContacts);
