@@ -4,6 +4,10 @@ const User = require("../service/schemas/user");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secret = process.env.JWT_SECRET;
+const gravatar = require("gravatar");
+const path = require("path");
+const Jimp = require("jimp");
+const fs = require("fs").promises;
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -186,7 +190,7 @@ const createUser = async (req, res, next) => {
     });
   }
   try {
-    const newUser = new User({ email });
+    const newUser = new User({ email, avatarURL: gravatar.url(email) });
     newUser.setPassword(password);
     await newUser.save();
     res.status(201).json({
@@ -272,6 +276,27 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const IMAGE_DIR = path.join(process.cwd(), "public", "avatars");
+
+const updateAvatar = async (req, res, next) => {
+  const { _id } = req.user;
+  const { path: temporaryName, originalname } = req.file;
+  const image = await Jimp.read(temporaryName);
+  image.resize(250, 250);
+  await image.writeAsync(temporaryName);
+  const targetFileName = path.join(IMAGE_DIR, [_id, originalname].join("_"));
+  try {
+    await fs.rename(temporaryName, targetFileName);
+    const newURL = await service.updateAvatar(_id, {
+      avatarURL: targetFileName,
+    });
+    res.json({ avatarURL: newURL, status: 200 });
+  } catch (err) {
+    await fs.unlink(temporaryName);
+    return next(err);
+  }
+};
+
 module.exports = {
   get,
   getById,
@@ -283,4 +308,5 @@ module.exports = {
   login,
   logout,
   getUser,
+  updateAvatar,
 };

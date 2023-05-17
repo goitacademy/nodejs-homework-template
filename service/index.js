@@ -33,6 +33,10 @@ const getUser = (email) => {
   return User.findOne({ email });
 };
 
+const updateAvatar = (id, fields) => {
+  return User.findByIdAndUpdate({ _id: id }, fields, { new: true });
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
@@ -42,4 +46,5 @@ module.exports = {
   checkUser,
   removeToken,
   getUser,
+  updateAvatar,
 };
