@@ -8,9 +8,9 @@ const listContacts = async (req, res) => {
   return contacts;
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const data = await listContacts();
-  const contact = await data.find((item) => item.id === contactId);
+  const contact = await data.find((item) => item.id === id);
   if (!contact) {
     return null;
   }
