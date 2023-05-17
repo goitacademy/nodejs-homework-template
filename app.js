@@ -5,6 +5,9 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 
+// Third module
+require("dotenv").config;
+
 // IMPORT ALL ROUTS
 const bookRouter = require("./routes/api/books");
 
