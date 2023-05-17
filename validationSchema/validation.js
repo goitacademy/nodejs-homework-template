@@ -37,4 +37,23 @@ module.exports = {
     }
     next();
   },
+
+  updFavContactValidation: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+    if (
+      validationResult.error ||
+      !req.body ||
+      Object.keys(req.body).length === 0
+    ) {
+      return res
+        .status(400)
+        .json({message: "missing field favorite"});
+    }
+    next();
+  },
+
 };

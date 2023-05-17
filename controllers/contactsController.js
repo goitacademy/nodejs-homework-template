@@ -1,76 +1,68 @@
-// const express = require("express")
-const {listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact} =require("../models/contacts");
 
 
+const Contact = require("../models/contact");
 
-const getAll = async (_, res) => {
-  try{
-    const contacts = await listContacts();
+const ctrlWrapper = require("../utils/ctrlWrapper");
+
+const getAll = async (req, res) => {
+    const contacts = await Contact.find({},"-createdAt -updatedAt");
     res.status(200).json(contacts);
-  }
-  catch(err){
-    res.status(500).json({ error: err.message });
-  }
   
 };
 
 const getById = async (req, res) => {
-  try {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-
+    const contact = await Contact.findOne({ _id: contactId},"-createdAt -updatedAt");
     if (!contact) {
       res.status(404).json({ message: "Not found" });
       return;
     }
     res.status(200).json(contact);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+
 };
 
 const add = async (req, res) => {
-  try {
     const { name, email, phone } = req.body;
-    const contact = await addContact({ name, email, phone });
-    
+    const contact = await Contact.create({ name, email, phone });
     res.status(201).json(contact);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
-const remove = async (req, res, next) => {
-  try {
+const remove = async (req, res) => {
     const { contactId } = req.params;
-    const isContactDeleted = await removeContact(contactId);
+    const isContactDeleted = await Contact.findByIdAndUpdate(contactId);
     if (!isContactDeleted) {
       res.status(404).json({ message: "Not found" });
       return;
     }
     res.status(200).json({ message: "contact deleted" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
-const update = async (req, res, next) => {
-  try {
+const update = async (req, res) => {
     const { contactId } = req.params;
-    const newData = req.body;
-    const updatedContact = await updateContact(contactId, newData);
-    if (!updatedContact) {
-      res.status(404).json({ message: "Not found" });
+    const result= await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true, });
+    if (!result) {
+      res.status(400).json({ message: "Not found" });
       return;
     }
-    res.status(200).json(updatedContact);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    res.status(200).json(result);
 };
 
-module.exports = {getAll,getById,add,remove,update };
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result= await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true, });
+  if (!result) {
+    res.status(404).json({ message: "Not found"});
+    return;
+  }
+  res.status(200).json(result);
+};
+module.exports = {
+  getAll:ctrlWrapper(getAll),
+  getById:ctrlWrapper(getById),
+  add:ctrlWrapper(add),
+  remove:ctrlWrapper(remove),
+  update:ctrlWrapper(update),
+  updateStatusContact:ctrlWrapper(updateStatusContact),
+};
