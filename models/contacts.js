@@ -1,6 +1,7 @@
 const { isUtf8 } = require("buffer");
 const fs = require("fs/promises");
 const path = require("path");
+const Contact = require("../../models/contact");
 
 const { nanoid } = require("nanoid");
 

@@ -18,14 +18,8 @@ const usersRouter = require("./routes/users");
 const app = express();
 app.use(cors());
 app.use(express.json());
-// MY CODE START
-// app.get("./models/contacts.", (res, req) => {
-//   res.json(contactPath);
-// });
 
 app.use("/api/books", bookRouter);
-
-// MY CODE FINISH
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
