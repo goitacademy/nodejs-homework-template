@@ -6,7 +6,7 @@ const Joi = require("joi");
 const { HttpError } = require("./helpers");
 
 const addSchema = Joi.object({
-  name: Joi.string().min(2).max(20).required(),
+  name: Joi.string().min(2).max(30).required(),
   email: Joi.string().email({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net", "org"] },
