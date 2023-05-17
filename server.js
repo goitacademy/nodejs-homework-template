@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 const app = require("./app");
+const DB_HOST = require("./config");
 require("dotenv").config();
 mongoose.Promise = global.Promise;
 
 mongoose.set("strictQuery", true);
-const DB_HOST =
-  "mongodb+srv://Minaht:GiDeOn1983@cluster0.ccmrmnr.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose
   .connect(DB_HOST)
