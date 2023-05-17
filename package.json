@@ -7,8 +7,8 @@
     "node": ">=14.20.1"
   },
   "scripts": {
-    "start": "node ./bin/www",
-    "start:dev": "node server.js"
+    "start": "node server.js",
+    "start:dev": "nodemon server.js"
   },
   "dependencies": {
     "@nestjs/mongoose": "^9.2.2",
