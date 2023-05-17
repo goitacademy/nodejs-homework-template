@@ -12,7 +12,7 @@ const getContactsbyId = async (req, res, next) => {
   const contact = await contactChange.getContactById(id);
 
   if (!contact) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.status(200).json(contact);
 };
@@ -33,7 +33,7 @@ const delContacts = async (req, res, next) => {
   const { id } = req.params;
   const removeContacts = await contactChange.removeContact(id);
   if (!removeContacts) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
   res.json("contact deleted");
 };
