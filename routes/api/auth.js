@@ -8,9 +8,10 @@ const {
   logout,
   currentUser,
   subscription,
+  updateAvatar,
 } = require("../../controlles/auth");
 const ctrl = require("../../controlles/auth");
-const { validateBody, auth } = require("../../middlewares");
+const { validateBody, auth, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
 router.post(
@@ -25,5 +26,7 @@ router.post("/users/logout", auth, logout);
 router.get("/users/current", auth, currentUser);
 
 router.patch("/users", auth, subscription);
+
+router.patch("/users/avatars", auth, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
