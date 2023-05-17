@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const app = require("./app");
+require("dotenv").config();
+mongoose.Promise = global.Promise;
 
 mongoose.set("strictQuery", true);
 const DB_HOST =
