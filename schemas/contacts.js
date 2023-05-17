@@ -5,7 +5,7 @@ const addSchema = Joi.object({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net", "org"] },
   }),
-  phone: Joi.string().required(),
+  phone: Joi.string().min(3).max(15).required(),
 });
 
 module.exports = { addSchema };
