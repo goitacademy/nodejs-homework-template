@@ -10,18 +10,18 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const data = await listContacts();
-  const contact = data.filter((el) => el.id === contactId);
+  const contact = data.filter((el) => el.id === id);
   if (contact.length === 0) {
     return null;
   }
   return contact;
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const data = await listContacts();
-  const getIndex = data.findIndex((el) => el.id === contactId);
+  const getIndex = data.findIndex((el) => el.id === id);
 
   if (getIndex === -1) {
     return null;
@@ -45,13 +45,13 @@ const addContact = async ({ id, name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
+const updateContact = async (id, { name, email, phone }) => {
   const data = await listContacts();
-  const getIndex = data.findIndex((el) => el.id === contactId);
+  const getIndex = data.findIndex((el) => el.id === id);
   if (getIndex === -1) {
     return null;
   }
-  const contact = { contactId, name, email, phone };
+  const contact = { id, name, email, phone };
   data[getIndex] = contact;
   await updateAllContacts(data);
   return contact;
