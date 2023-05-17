@@ -1,14 +1,14 @@
-const Contacts = require("../models/contacts");
+const { Contact } = require("../models/contacts");
 const { HttpErrors } = require("../helpers");
-const addSchema = require("../shemas/addShemas");
 
 const getAll = async (req, res) => {
+  console.log(Contact);
   const result = await Contact.find({});
   res.json(result);
 };
 
 const getById = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
   const result = await Contact.findById(id);
   if (!result) {
     throw HttpErrors(404);
@@ -23,7 +23,7 @@ const addContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
 
   const result = await Contact.findByIdAndRemove(id);
   if (!result) {
