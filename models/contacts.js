@@ -5,10 +5,10 @@ const Contact = require("../../models/contact");
 
 const { nanoid } = require("nanoid");
 
-const contactPath = path.join(__dirname, "./contacts.json");
+// const contactPath = path.join(__dirname, "./contacts.json");
 
 const listContacts = async () => {
-  const contacts = await fs.readFile(contactPath, isUtf8);
+  const contacts = await fs.readFile(Contact, isUtf8);
   return JSON.parse(contacts);
 };
 
