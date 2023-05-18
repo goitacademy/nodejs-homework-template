@@ -27,7 +27,6 @@ export const signUp = async (req, res, next) => {
             .send(error.details[0].message)
     }
     const isUserAlreadyinDB = await getUserByMail(email);
-    console.log("isUserAlreadyinDB:", isUserAlreadyinDB)
 
     if (isUserAlreadyinDB) {
         return res.status(409).send("Email in use");
@@ -55,8 +54,7 @@ export const login = async (req, res, next) => {
     }
 
     const user = await getUserByMail(email);
-    const isValidPassword = bcrypt.compare(password, user.password);
-    console.log(isValidPassword)
+    const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!user || !isValidPassword) {
         return res.status(401).send("Email or password is wrong")
@@ -76,4 +74,29 @@ export const login = async (req, res, next) => {
                     "subscription": user.subscription
                 }
             })
+}
+
+export const logout = async (req, res, next) => {
+    const userId = req.user._id;
+    try {
+        await updateToken(userId, null);
+        return res.status(204).send("No content")
+    } catch (error) {
+        return res.status(500)
+            .send(error)
+    }
+}
+
+export const current = async (req, res, next) => {
+    const userId = req.user._id;
+    try {
+        const currentUser = await getUserById(userId);
+
+        if (!currentUser) return res.status(401).json({ "message": "Not authorized" })
+
+        return res.status(200).json({ "email": currentUser.email, "subscription": currentUser.subscription })
+    } catch (error) {
+        return res.status(500)
+            .send(error)
+    }
 }
