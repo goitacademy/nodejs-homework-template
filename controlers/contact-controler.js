@@ -33,7 +33,7 @@ const getContactsById = async (req, res, next) => {
   }
 };
 
-const postContact = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
     const { error } = Schema.validate(req.body);
     if (error) {
@@ -78,7 +78,7 @@ const removeContacts = async (req, res, next) => {
 module.exports = {
   getAllContacts,
   getContactsById,
-  postContact,
+  updateContact,
   addContact,
   removeContacts,
 };
