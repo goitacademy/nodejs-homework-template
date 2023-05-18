@@ -1,5 +1,5 @@
 node_modules/
-.env
+# .env
 .idea
 .vscode
-config.js
+# config.js
