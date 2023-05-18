@@ -1,27 +1,39 @@
 const express = require("express");
 
-const contactsControllers = require("../../controllers/cintacts-controllers");
+const contactsControllers = require("../../controllers/contacts-controllers");
 
-const schema = require("../../shemas/contactsChema");
+const { schemas } = require("../../models/contact");
 
 const validateBody = require("../../utils/validateBody");
+
+const { isValidId } = require("../../middelewares");
+
 const router = express.Router();
 
 router.get("/", contactsControllers.getAllContacts);
 
-router.get("/:id", contactsControllers.getContactById);
+router.get("/:id", isValidId, contactsControllers.getContactById);
 
 router.post(
   "/",
-  validateBody(schema.addContactSchema),
+  isValidId,
+  validateBody(schemas.addContactSchema),
   contactsControllers.addContact
 );
 
-router.delete("/:id", contactsControllers.deleteContact);
+router.delete("/:id", isValidId, contactsControllers.deleteContact);
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchem),
+  contactsControllers.updateFavoritContact
+);
 
 router.put(
   "/:id",
-  validateBody(schema.addContactSchema),
+  isValidId,
+  validateBody(schemas.addContactSchema),
   contactsControllers.updateContact
 );
 
