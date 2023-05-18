@@ -6,7 +6,7 @@ const logger = require("morgan");
 const cors = require("cors");
 
 // Third module
-require("dotenv").config;
+require("dotenv").config();
 
 // IMPORT ALL ROUTS
 const bookRouter = require("./routes/api/books");
@@ -19,7 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/books", bookRouter);
+app.use("/api/book", bookRouter);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -41,8 +41,8 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use((err, req, res, next) => {
-  // const { status = 500, message = "Server error" } = err;
-  // res.status(status).json({ message });
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
   // set locals, only providing error in development
 
   res.locals.message = err.message;
