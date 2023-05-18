@@ -31,12 +31,12 @@ export const getContact = async (req, res, next) => {
 
 export const saveNewContact = async (req, res, next) => {
 
-    const user = req.body;
+    const contact = req.body;
 
     try {
-        Joi.attempt(user, schema);
-        const newUser = await addNewContact(user);
-        return res.status(201).json({ newUser })
+        Joi.attempt(contact, schema);
+        const newContact = await addNewContact(contact);
+        return res.status(201).json({ newContact })
     } catch (error) {
         return res.status(400).send(error.details[0].message)
     }

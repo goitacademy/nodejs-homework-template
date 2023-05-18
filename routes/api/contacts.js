@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { getAllContacts, getContact, saveNewContact, deleteContact, changeContact, updateStatusContact } from "../../controller/controller.js";
+import { getAllContacts, getContact, saveNewContact, deleteContact, changeContact, updateStatusContact } from "../../controller/contactsController.js";
 
 export const contactsRouter = Router();
 
