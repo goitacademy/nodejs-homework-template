@@ -2,7 +2,6 @@ import { writeFile, readFile } from "fs/promises";
 import { join } from "path";
 import { nanoid } from "nanoid";
 
-// const contactsPath = join(__dirname, "db", "contacts.json");
 const contactsPath = join(process.cwd(), "models", "contacts.json");
 
 const updateContacts = async (contacts) => {
