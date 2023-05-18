@@ -11,7 +11,8 @@ router.get("/:id", contactControler.getContactsById);
 
 router.post(
   "/",
-  contactControler.validateContacts(Schema.addContact).updateContact
+  contactControler.validateContacts(Schema.addContact),
+  updateContact
 );
 
 // CHANG POST (PUT)
