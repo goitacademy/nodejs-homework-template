@@ -7,6 +7,6 @@ const validateBody = (Schema) => {
       next(HttpError(404, message.error));
     }
   };
-  return;
+  return func;
 };
 module.exports = validateBody;

@@ -1,19 +1,15 @@
 const express = require("express");
-const Contact = require("../../models/contact");
+// const Contact = require("../../models/contact");
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
 const Schema = require("../../schemas/contact-schemas");
-const { validateContacts } = require("../../decorator/validateBody");
+// const validateBody = require("../../decorator/validateBody");
 
 router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", contactControler.getContactsById);
 
-router.post(
-  "/",
-  contactControler.validateContacts(Schema.addContact),
-  updateContact
-);
+router.post("/", contactControler.updateContact);
 
 // CHANG POST (PUT)
 
