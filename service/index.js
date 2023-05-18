@@ -37,6 +37,14 @@ const updateAvatar = (id, fields) => {
   return User.findByIdAndUpdate({ _id: id }, fields, { new: true });
 };
 
+const getUserByVerificationToken = (id) => {
+  return User.findOne({ verificationToken: id });
+};
+
+const updateVerificationStatus = (id, fields) => {
+  return User.findByIdAndUpdate({ _id: id }, fields);
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
@@ -47,4 +55,6 @@ module.exports = {
   removeToken,
   getUser,
   updateAvatar,
+  getUserByVerificationToken,
+  updateVerificationStatus,
 };

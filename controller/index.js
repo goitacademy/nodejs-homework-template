@@ -8,6 +8,10 @@ const gravatar = require("gravatar");
 const path = require("path");
 const Jimp = require("jimp");
 const fs = require("fs").promises;
+const { v4: uuidv4 } = require("uuid");
+const sgMail = require("@sendgrid/mail");
+
+sgMail.setApiKey(process.env.SENDGRID_MY2NDAPI);
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -190,9 +194,26 @@ const createUser = async (req, res, next) => {
     });
   }
   try {
-    const newUser = new User({ email, avatarURL: gravatar.url(email) });
+    const newUser = new User({
+      email,
+      avatarURL: gravatar.url(email),
+      verificationToken: uuidv4(),
+    });
     newUser.setPassword(password);
     await newUser.save();
+        const emailConfig = {
+          from: "krzysztof@kop-land.pl",
+          to: [newUser.email],
+          subject: "Verify your email",
+          text: `Hi, please verify your e-mail by clicking the following link: http://localhost:3000/api/users/verify/${newUser.verificationToken}`,
+        };
+
+        sgMail
+          .send(emailConfig)
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+
+
     res.status(201).json({
       status: "success",
       code: 201,
@@ -217,6 +238,15 @@ const login = async (req, res, next) => {
       status: "error",
       code: 401,
       message: "Email or password is wrong",
+      data: "Unauthorized",
+    });
+  }
+
+  if (user.verify === false) {
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "User is not verify",
       data: "Unauthorized",
     });
   }
@@ -297,6 +327,79 @@ const updateAvatar = async (req, res, next) => {
   }
 };
 
+const getUserVerification = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  try {
+    const user = await service.getUserByVerificationToken(verificationToken);
+    if (user) {
+      await service.updateVerificationStatus(user._id, {
+        verificationToken: null,
+        verify: true,
+      });
+      res.json({
+        status: "success",
+        code: 200,
+        message: "Verification successful",
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "User not found",
+        data: "Not Found",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+const sendVerificationEmail = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email)
+    return res.status(400).json({ message: "missing required field email" });
+
+  const { error } = userSchema.validate({ email });
+  if (error) return res.status(400).json({ message: error });
+
+  try {
+    const user = await service.checkUser(email);
+
+    if (user.verify === true)
+      return res
+        .status(400)
+        .json({ message: "Verification has already been passed" });
+
+    if (user.verify === false) {
+      const emailConfig = {
+        from: "krzysztof@kop-land.pl",
+        to: [user.email],
+        subject: "Verify your email",
+        text: `Hi, please verify your e-mail by clicking the following link: http://localhost:3000/api/users/verify/${newUser.verificationToken}`,
+      };
+
+      sgMail
+        .send(emailConfig)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          message: "Verification email sent",
+        },
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+
+
+
 module.exports = {
   get,
   getById,
@@ -309,4 +412,6 @@ module.exports = {
   logout,
   getUser,
   updateAvatar,
+  getUserVerification,
+  sendVerificationEmail,
 };
