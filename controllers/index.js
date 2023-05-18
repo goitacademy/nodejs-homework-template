@@ -5,7 +5,7 @@ const {
   deleteContact,
   updateContact,
   updateFavorite,
-  getFavorite
+  getFavorite,
 } = require("./contactsBook/index");
 
 const {
@@ -14,7 +14,9 @@ const {
   currentUser,
   logout,
   subscription,
-  updateAvatar
+  updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("./users/index");
 
 const ctrl = {
@@ -24,7 +26,7 @@ const ctrl = {
   deleteContact,
   updateContact,
   updateFavorite,
-  getFavorite
+  getFavorite,
 };
 
 const ctrlUser = {
@@ -34,6 +36,8 @@ const ctrlUser = {
   logout,
   subscription,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 };
 
 module.exports = {
