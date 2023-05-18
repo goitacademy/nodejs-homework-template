@@ -1,29 +1,30 @@
-const contacts = require('../models/contacts');
-const { HttpError, ctrlWrapper } = require('../helpers');
+const {Contact} = require('../models/contact')
+const {ctrlWrapper, HttpError } = require('../helpers');
 
 const getAll = async (req, res, next) => {
-        const result = await contacts.listContacts();
-        res.status(200).res.json(result)
+        const result = await Contact.find();
+        res.status(200).json(result)
 };
 
 const getById = async (req, res, next) => {
     const { id } = req.params;
-    console.log(id)
-    const result = await contacts.getById(id);
+    const result = await Contact.findById(id);
     if (!result) {
         throw HttpError(404, 'Not found');
     }
-    res.status(200).res.json(result);
+    res.status(200).json(result);
 };
 
 const addContact = async (req, res, next) => {
-        const result = await contacts.addContact(req.body);
+        const result = await Contact.create(req.body);
         res.status(201).json(result)
 };
 
 const updateById = async (req, res, next) => {
         const { contactId } = req.params;
-        const result = await contacts.updateContact(contactId, req.body);
+    const result = await Contact.findOneAndUpdate(contactId, req.body, {
+            new: true,
+        });
         if (!result) {
             HttpError(404, 'Not Found')
         }
@@ -32,7 +33,7 @@ const updateById = async (req, res, next) => {
 
 const deleteById = async (req, res, next) => {
         const { contactId } = req.params;
-        const result = await contacts.removeContact(contactId);
+        const result = await Contact.deleteOne(contactId);
         if (!result) {
             return HttpError(400, 'Not found')
         } 
@@ -41,10 +42,22 @@ const deleteById = async (req, res, next) => {
     });
 };
 
+const updateFavorite = async (req, res, next) => {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+        new: true,
+    });
+    if (!result) {
+        throw HttpError(404, "Not Found")
+    }
+    res.status(200).json(result)
+}
+
 module.exports = {
     getAll: ctrlWrapper(getAll),
     getById: ctrlWrapper(getById),
     addContact: ctrlWrapper(addContact),
     updateById : ctrlWrapper(updateById),
-    deleteById : ctrlWrapper(deleteById),
+    deleteById: ctrlWrapper(deleteById),
+    updateFavorite: ctrlWrapper(updateFavorite),
 }
