@@ -1,10 +1,17 @@
 const express = require('express');
+const Joi = require("joi");
 
 const contactsService = require('../../models/contacts');
 
 const router = express.Router();
 
 const {HttpError} = require("../../helpers");
+
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+})
 
 router.get('/', async (req, res, next) => {
   try {
@@ -21,7 +28,6 @@ router.get('/:contactId', async (req, res, next) => {
     const {contactId} = req.params;
     const result = await contactsService.getContactById(contactId);
     if (!result) {
-      res.status(404);
       throw HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result)
@@ -31,15 +37,50 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const {error} = contactSchema.validate(req.body);
+    if(error) {
+      throw HttpError(400, error.message)
+    }
+    const result = await contactsService.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const {contactId} = req.params;
+    const result = await contactsService.removeContact(contactId);
+    if (!result) {
+      throw HttpError(404, `Contact with ${contactId} not found`);
+    }
+    res.json({
+      message: "Delete success"
+  })
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const {error} = contactSchema.validate(req.body);
+    if(error) {
+        throw HttpError(400, error.message)
+    }
+    const { contactId } = req.params;
+    const result = await contactsService.updateContact(contactId, req.body);
+    if (!result) {
+        throw HttpError(404, `Movie with ${contactId} not found`);
+    }
+
+    res.json(result);
+}
+catch(error) {
+    next(error);
+}
 })
 
 module.exports = router
