@@ -1,7 +1,7 @@
 const contactServis = require("../models/contacts");
 const { HttpError } = require("../helper/HttpError");
 const ctrlWrapper = require("../decorator");
-const Schema = require("../schemas");
+const Schema = require("../schemas/contact-schemas");
 
 const getAllContacts = async (req, res) => {
   const result = await Contact.find();
