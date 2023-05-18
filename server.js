@@ -1,6 +1,6 @@
 const app = require('./app')
 const mongoose = require('mongoose')
-const {conectToBase } = require('./config')
+const {conectToBase } = process.env
 mongoose.connect(conectToBase)
   .then(() => {
   app.listen(3000)
