@@ -1,8 +1,8 @@
 const express = require("express");
-// const Contact = require("../../models/contact");
+
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
-const Schema = require("../../schemas/contact-schemas");
+// const Schema = require("../../schemas/contact-schemas");
 // const validateBody = require("../../decorator/validateBody");
 
 router.get("/", contactControler.getAllContacts);
