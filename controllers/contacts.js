@@ -33,11 +33,15 @@ const addCont = async (req, res, next) => {
 
 const updateCont = async (req, res, next) => {
   const { id } = req.params;
+  const { name, email, phone } = req.body;
 
-  const { error } = contactValidate(req.body);
-  if (error) {
+  if (!name && !email && !phone) {
     return res.status(400).json({ message: "missing fields" });
   } else {
+    const { error } = contactValidate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = await contactsOperations.updateContact(id, req.body);
     if (!result) {
       throw HttpError(404, "Not found");
