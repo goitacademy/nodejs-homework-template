@@ -38,6 +38,7 @@ const {ctrlWrapper} = require('../decorators');
 
   const updateContactById =  async (req, res) => {
       const {contactId} = req.params;
+
       const result = await contactsService.updateContact(contactId, req.body);
       if(!result){
         throw HttpError(404)
