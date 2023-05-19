@@ -4,6 +4,11 @@ const Schema = joi.object({
   name: joi.string().required(),
   email: joi.string().required(),
   phone: joi.string().required(),
+  favorite: joi.boolean(),
 });
 
-module.exports = Schema;
+const updateFavoretSchema = joi.object({
+  favorite: joi.boolean().required(),
+});
+
+module.exports = { Schema, updateFavoretSchema };
