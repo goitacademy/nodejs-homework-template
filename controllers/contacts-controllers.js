@@ -80,7 +80,7 @@ const updateStatusContact = async (req, res, next) => {
       throw HttpError(400, "Missing field favorite");
     }
     const { contactId } = req.params;
-    const result = await Movie.findByIdAndUpdate(contactId, req.body, {
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
     if (!result) {

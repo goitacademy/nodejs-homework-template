@@ -26,16 +26,17 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleMongooseError);
 
 const contactAddSchema = Joi.object({
+  _id: Joi.string(),
   name: Joi.string().required(),
-  email: Joi.string()
-    .required()
-    .pattern(/(^[a-zA-Z0-9_.]+[@]{1}[a-z0-9]+[\.][a-z]+$)/),
-  phone: Joi.string()
-    .required()
-    .pattern(
-      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
-    ),
+  email: Joi.string().required(),
+  // .pattern(/(^[a-zA-Z0-9_.]+[@]{1}[a-z0-9]+[\.][a-z]+$)/),
+  phone: Joi.string().required(),
+  // .pattern(
+  //   /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
+  // ),
   favorite: Joi.boolean(),
+  createdAt: Joi.string(),
+  updatedAt: Joi.string(),
 });
 
 const updateFavoriteContactSchema = Joi.object({

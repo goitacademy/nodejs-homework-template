@@ -15,7 +15,7 @@ router.delete("/:contactId", isValidId, contactsControllers.deleteContactById);
 router.put("/:contactId", isValidId, contactsControllers.updateContactById);
 
 router.patch(
-  ":contactId/favorite",
+  "/:contactId/favorite",
   isValidId,
   contactsControllers.updateStatusContact
 );
