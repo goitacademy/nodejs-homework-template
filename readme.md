@@ -1,5 +1,8 @@
 ## GoIT Node.js Course Template Homework
 
+login Pinkcream
+password Pinkcream84
+
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
 Форк створить репозиторій на вашому http://github.com
 
