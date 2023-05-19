@@ -1,32 +1,19 @@
 const express = require("express");
 
 const router = express.Router();
+const contactControler = require("../../controlers/contact-controler");
+// const Schema = require("../../schemas/contact-schemas");
+// const validateBody = require("../../decorator/validateBody");
 
-// ROUTS
+router.get("/", contactControler.getAllContacts);
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.get("/:id", contactControler.getContactsById);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.post("/", contactControler.updateContact);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+// CHANG POST (PUT)
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.put("/:id", contactControler.addContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
-
-module.exports = { router, contactPath };
+router.delete("/:id", contactControler.removeContacts);
+module.exports = router;
