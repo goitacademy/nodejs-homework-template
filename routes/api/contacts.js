@@ -9,7 +9,7 @@ router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", contactControler.getContactsById);
 
-router.post("/", contactControler.updateContact);
+router.put("/", contactControler.updateContact);
 
 // CHANG POST (PUT)
 
