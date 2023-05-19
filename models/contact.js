@@ -6,7 +6,7 @@ const contactShema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
-  favorite: { type: Boolean },
+  favorite: { type: Boolean, default: false },
 });
 
 const Contact = model("contact", contactShema);
