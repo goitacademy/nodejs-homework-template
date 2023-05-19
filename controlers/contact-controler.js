@@ -8,23 +8,22 @@ const getAllContacts = async (req, res, next) => {
   res.json(result);
 };
 
-const getContactsById = async (req, res, next) => {
+const getContactsById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findById(id);
+  const result = await Contact.find({ id: id });
   if (!result) {
     throw HttpError(404, "Not found");
   }
   res.json(result);
-  next();
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const { error } = Schema.validate(req.body);
   if (error) {
     throw HttpError(404, message.error);
   }
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const result = await Contact.find({ _id: id }, req.body, { new: true });
   res.status(201).json(result);
 };
 
@@ -34,21 +33,20 @@ const addContact = async (req, res) => {
     throw HttpError(404, error.message);
   }
   // const { id } = req.params;
-  const result = await Contact.create({ ...req.body });
+  const result = await Contact.Create(req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(201).json(result);
 };
 
-const removeContacts = async (req, res, next) => {
+const removeContacts = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.remove(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
   res.json({ message: "Delete contact" });
-  next();
 };
 
 module.exports = {
