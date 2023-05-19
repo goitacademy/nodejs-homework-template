@@ -2,34 +2,22 @@ const express = require("express");
 
 const router = express.Router();
 const controllers = require("../../controllers");
+const { isValidId } = require("../../helpers");
 
-router.get(
-  "/",
-  async (req, res, next) => await controllers.getListController(req, res, next)
-);
+router.get("/", controllers.getListController);
 
-router.get(
-  "/:contactId",
-  async (req, res, next) =>
-    await controllers.getContactController(req, res, next)
-);
+router.get("/:contactId", isValidId, controllers.getContactController);
 
-router.post(
-  "/",
-  async (req, res, next) =>
-    await controllers.postContactController(req, res, next)
-);
+router.post("/", controllers.postContactController);
 
-router.delete(
-  "/:contactId",
-  async (req, res, next) =>
-    await controllers.deleteContactController(req, res, next)
-);
+router.delete("/:contactId", isValidId, controllers.deleteContactController);
 
-router.put(
-  "/:contactId",
-  async (req, res, next) =>
-    await controllers.putContactController(req, res, next)
+router.put("/:contactId", isValidId, controllers.putContactController);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  controllers.patchFavContactController
 );
 
 module.exports = router;

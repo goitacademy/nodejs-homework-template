@@ -1,80 +1,78 @@
-const contacts = require("../models/contacts");
-const { HttpError } = require("../helpers");
-const addScheme = require("../schemes");
+const { Contact, addScheme, updateFavScheme } = require("../models/contact");
+const { ctrlWrapper, HttpError } = require("../helpers");
 
-async function getListController(req, res, next) {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+async function getListController(req, res) {
+  const result = await Contact.find();
+  res.json(result);
 }
 
 async function getContactController(req, res, next) {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    throw HttpError(404, "Not Found");
   }
+  res.json(result);
 }
 
 async function postContactController(req, res, next) {
-  try {
-    const { error } = addScheme.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { name, email, phone } = req.body;
-    const result = await contacts.addContact(name, email, phone);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
+  const { error } = addScheme.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
   }
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
 }
 
 async function deleteContactController(req, res, next) {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    throw HttpError(404, "Not found");
   }
+  res.json(result);
 }
 
 async function putContactController(req, res, next) {
-  try {
-    if (!req.body) {
-      throw HttpError(400, "missing fields");
-    }
-    const { error } = addScheme.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+  if (!req.body) {
+    throw HttpError(400, "missing fields");
   }
+  const { error } = addScheme.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+}
+
+async function patchFavContactController(req, res, next) {
+  const { error } = updateFavScheme.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+  const { contactId } = req.params;
+
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
 }
 
 module.exports = {
-  getListController,
-  getContactController,
-  postContactController,
-  deleteContactController,
-  putContactController,
+  getListController: ctrlWrapper(getListController),
+  getContactController: ctrlWrapper(getContactController),
+  postContactController: ctrlWrapper(postContactController),
+  deleteContactController: ctrlWrapper(deleteContactController),
+  putContactController: ctrlWrapper(putContactController),
+  patchFavContactController: ctrlWrapper(patchFavContactController),
 };
