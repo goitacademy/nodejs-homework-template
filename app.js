@@ -1,6 +1,17 @@
+// uPssv8O4N8JTjvtJ
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+
+const mongoose = require('mongoose');
+const DB_HOST = 'mongodb+srv://CherednikNataliia:uPssv8O4N8JTjvtJ@cluster0.ncfefrx.mongodb.net/contacts_reder?retryWrites=true&w=majority'
+
+mongoose.set('strictQuery', true);
+
+mongoose.connect(DB_HOST).then(()=>console.log('Database connect'))
+.catch(error => console.log(error.message));
+
 
 const contactsRouter = require('./routes/api/contacts')
 
