@@ -1,17 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const cntController = require("../../Controllers/contact-controller");
+const isValidId = require("../../middlewares/isValidId");
 
-const schema = require("../../schema/addContactSchema");
-const { validationDec } = require("../../decorators");
+const schema = require("../../models/schemas/joiContactsSchema");
+const { validationBody } = require("../../middlewares");
 
 router.get("/", cntController.getAllContacts);
 
-router.get("/:id", cntController.getContactById);
+router.get("/:id", isValidId, cntController.getContactById);
 
-router.post("/", validationDec(schema), cntController.addContact);
+router.post(
+  "/",
+  validationBody(schema.addContactSchema),
+  cntController.addContact
+);
 
-router.put("/:id", cntController.updateContact);
+router.put(
+  "/:id",
+  validationBody(schema.addContactSchema),
+
+  cntController.updateContact
+);
+
+router.patch(
+  "/:id/favorite",
+  validationBody(schema.setFaforitedSchema),
+
+  cntController.setFaforited
+);
 
 router.delete("/:id", cntController.removeContact);
 

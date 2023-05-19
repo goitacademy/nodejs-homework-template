@@ -1,6 +1,6 @@
-const cntMethod = require("../models/contacts");
+const cntMethod = require("../models/index");
 const HttpError = require("../Helpers/HttpError");
-const ctrlWrapper = require("../decorators/cntWrapper");
+const ctrlWrapper = require("../Helpers/cntWrapper");
 
 const getAllContacts = async (req, res) => {
   const contacts = await cntMethod.listContacts();
@@ -65,16 +65,26 @@ const updateContact = async (req, res, next) => {
   });
 };
 
+const setFaforited = async (req, res, next) => {
+  const { id } = req.params;
+
+  const setFaforited = await cntMethod.setFaforited(id, req.body);
+  if (!setFaforited) {
+    throw HttpError(404, `Contact with ${id} not found`);
+  }
+  res.json({
+    status: 200,
+    data: {
+      setFaforited,
+    },
+  });
+};
+
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   addContact: ctrlWrapper(addContact),
   getContactById: ctrlWrapper(getContactById),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  setFaforited: ctrlWrapper(setFaforited),
 };
-
-// getAllContacts: ctrlWrapper(getAllContacts),
-// addContact: ctrlWrapper(addContact),
-// getContactById: ctrlWrapper(getContactById),
-// removeContact: ctrlWrapper(removeContact),
-// updateContact: ctrlWrapper(updateContact),
