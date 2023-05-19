@@ -1,4 +1,4 @@
-const Contact = require("../models/modalContacts");
+const Contact = require("../models/contact");
 const HttpError = require("../helper/HttpError");
 const ctrlWrapper = require("../decorator/ctrlWrapper");
 const Schema = require("../schemas/contact-schemas");
@@ -33,7 +33,7 @@ const addContact = async (req, res) => {
     throw HttpError(404, error.message);
   }
   // const { id } = req.params;
-  const result = await Contact.Create(req.body);
+  const result = await Contact.create(req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
