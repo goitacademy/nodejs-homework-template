@@ -9,11 +9,11 @@ router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", contactControler.getContactsById);
 
-router.put("/", contactControler.updateContact);
+router.put("/:id", contactControler.updateContact);
 
 // CHANG POST (PUT)
 
-router.post("/:id", contactControler.addContact);
+router.post("/", contactControler.addContact);
 
 router.delete("/:id", contactControler.removeContacts);
 
