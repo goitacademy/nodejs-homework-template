@@ -10,7 +10,7 @@ const getAllContacts = async (req, res, next) => {
 
 const getContactsById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.find({ id: id });
+  const result = await Contact.find({ _id: id });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -20,10 +20,12 @@ const getContactsById = async (req, res) => {
 const updateContact = async (req, res) => {
   const { error } = Schema.validate(req.body);
   if (error) {
-    throw HttpError(404, message.error);
+    throw HttpError(404, error.message);
   }
   const { id } = req.params;
-  const result = await Contact.find({ _id: id }, req.body, { new: true });
+  const result = await Contact.findByIdAndUpdate({ _id: id }, req.body, {
+    new: true,
+  });
   res.status(201).json(result);
 };
 
@@ -42,11 +44,20 @@ const addContact = async (req, res) => {
 
 const removeContacts = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.remove(id);
+  const result = await Contact.findByIdAndRemove({ _id: id });
   if (!result) {
     throw HttpError(404, "Not found");
   }
   res.json({ message: "Delete contact" });
+};
+
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate({ _id: id }, { status: true });
+  if (!result) {
+    throw HttpError(404, "missing field favorite");
+  }
+  res.status(200).json({ message: "Status contact" });
 };
 
 module.exports = {
@@ -55,4 +66,5 @@ module.exports = {
   updateContact: ctrlWrapper(updateContact),
   addContact: ctrlWrapper(addContact),
   removeContacts: ctrlWrapper(removeContacts),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
