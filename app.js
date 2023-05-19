@@ -9,7 +9,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 // IMPORT ALL ROUTS
-const bookRouter = require("./routes/api/books");
+const contactRouter = require("./routes/api/contacts");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -19,7 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/book", bookRouter);
+app.use("/api/contact", contactRouter);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
