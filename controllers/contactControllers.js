@@ -5,7 +5,7 @@ const contactSchema = require("../schemas/contactValidationSchema")
 
 const getContacts = ctrlWrapper(async (_, res) => {
     const result = await contactsService.listContactsService();
-    res.json(result)
+    res.status(200).json(result)
 })
 
 const getContactById = ctrlWrapper(async (req, res) => {
@@ -28,7 +28,7 @@ const deleteContact = ctrlWrapper(async (req, res) => {
     if (!result) {
       throw HttpError(404, `Contact with ${contactId} not found`);
     }
-    res.json({ message: "Delete success" })
+    res.json({ message: "contact deleted" })
 })
 
 const updateContact = ctrlWrapper(async (req, res) => {
