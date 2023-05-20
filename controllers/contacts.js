@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const contacts = require("../models/contacts");
-const { HttpError } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
 const { addContact } = require("../models/contacts");
 
 
@@ -12,15 +12,13 @@ const addShema = Joi.object({
 });
 
 const getAll = async ( req, res, next) => { 
-  try {
+  
     const results = await contacts.listContacts();
     res.json(results);
-  } catch (error) {
-    next(error);
-  }
+  
 }
 const getById = async (req, res, next) => { 
-  try {
+  
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
@@ -28,38 +26,32 @@ const getById = async (req, res, next) => {
     }
 
     res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  
 }
 
 const add = async (req, res, next) => { 
-try {
+
     const { error } = addShema.validate(req.body);
     if (error) {
       throw HttpError(error, error.message);
     }
     const result = await addContact(req.body);
     res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
+  
 }
 
 const deleteById = async (req, res, next) => { 
-  try {
+  
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
     if (!result) {
       throw HttpError(404, "Not found");
     }
     res.json({ message: "Delete success" });
-  } catch (error) {
-    next(error);
-  }
+  
 }
 const updateById = async (req, res, next) => { 
-try {
+
     const { error } = addShema.validate(req.body);
     if (error) {
       throw HttpError(error, error.message);
@@ -70,15 +62,13 @@ try {
       throw HttpError(404, "Not found");
     }
     res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  
 }
 module.exports = {
-  getAll,
-  getById,
-  add,
-  deleteById,
-  updateById
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  deleteById: ctrlWrapper(deleteById),
+  updateById: ctrlWrapper(updateById)
 
 }
