@@ -15,8 +15,8 @@ const { HttpError } = require("../../helpers");
 
 const addSchema = Joi.object({
 	name: Joi.string().required(),
-	email: Joi.string().required(),
-	phone: Joi.string().required(),
+	email: Joi.string().email().required(),
+	phone: Joi.string().pattern(/^[0-9]+$/, "numbers"),
 });
 
 router.get("/", async (req, res, next) => {
@@ -66,10 +66,9 @@ router.delete("/:contactId", async (req, res, next) => {
 		if (!result) {
 			throw HttpError(404, "Not found");
 		}
-		res.status(200).json({"message": "contact deleted"});
-
+		res.status(200).json({ message: "contact deleted" });
 	} catch (error) {
-		next(error)
+		next(error);
 	}
 });
 
