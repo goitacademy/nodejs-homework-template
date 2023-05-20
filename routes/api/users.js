@@ -6,6 +6,8 @@ const { schema } = require('../../models/user');
 
 const router = express.Router();
 
+router.patch('/', authenticate, validateBody(schema.subscriptionSchema), ctrl.updateSubscription);
+
 router.post('/register', validateBody(schema.registerSchema), ctrl.register);
 
 router.post('/login', validateBody(schema.loginSchema), ctrl.login);
