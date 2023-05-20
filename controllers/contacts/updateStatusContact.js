@@ -1,15 +1,16 @@
-const { joiContactSchema } = require("../../validation/contacts");
-
+const {
+	joiToggleFavouriteContactSchema,
+} = require("../../validation/contacts");
 const Contact = require("../../models/contact");
 
-const editById = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
 	try {
-		const { error } = joiContactSchema.validate(req.body);
+		const { error } = joiToggleFavouriteContactSchema.validate(req.body);
 		if (error) {
 			res.json({
 				status: "error",
 				code: 400,
-				message: "Bad request",
+				message: "Missing field favorite",
 			});
 			return;
 		}
@@ -40,4 +41,4 @@ const editById = async (req, res, next) => {
 	}
 };
 
-module.exports = editById;
+module.exports = updateStatusContact;
