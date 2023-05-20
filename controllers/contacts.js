@@ -40,7 +40,11 @@ const updateCont = async (req, res, next) => {
   } else {
     const { error } = contactValidate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      const errorMessage = error.details[0].message.replace(/['"]/g, "");
+      const fieldName = errorMessage.split(" ")[0];
+      return res
+        .status(400)
+        .json({ message: `missing required ${fieldName} field` });
     }
     const result = await contactsOperations.updateContact(id, req.body);
     if (!result) {
