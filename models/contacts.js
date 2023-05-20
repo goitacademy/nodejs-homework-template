@@ -4,19 +4,19 @@ const {nanoid} = require("nanoid");
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
-const listContacts = async () => {
+const listContactsService = async () => {
   const contacts = await fs.readFile(contactsPath);
   return JSON.parse(contacts);
 }
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
+const getContactByIdService = async (contactId) => {
+  const contacts = await listContactsService();
   const currentContact = contacts.find(contact => contact.id === contactId);
   return currentContact || null;
 }
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
+const removeContactService = async (contactId) => {
+  const contacts = await listContactsService();
     const index = contacts.findIndex(contact => contact.id === contactId);
     if(index === -1){
         return null;
@@ -26,8 +26,8 @@ const removeContact = async (contactId) => {
     return result;
 }
 
-const addContact = async (body) => {
-  const contacts = await listContacts();
+const addContactService = async (body) => {
+  const contacts = await listContactsService();
     const newContact = {
         id: nanoid(),
         name: body.name,
@@ -39,21 +39,21 @@ const addContact = async (body) => {
     return newContact;
 }
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
+const updateContactService = async (contactId, body) => {
+  const contacts = await listContactsService();
     const index = contacts.findIndex(contact => contact.id === contactId);
     if(index === -1){
         return null;
     }
-    contacts[index] = {contactId, ...body};
+    contacts[index] = {...contacts[index], ...body};
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return contacts[index];
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  listContactsService,
+  getContactByIdService,
+  removeContactService,
+  addContactService,
+  updateContactService,
 }
