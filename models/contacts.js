@@ -20,10 +20,9 @@ const removeContact = async (id) => {
   if (contactIndex === -1) {
     return null;
   }
-  const [a] = contacts.splice(contactIndex, 1);
-
+  contacts.splice(contactIndex, 1);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 1));
-  return { id: a.id };
+  return true;
 };
 
 const addContact = async (body) => {
@@ -47,9 +46,9 @@ const updateContact = async (id, data) => {
   if (contactIndex === -1) {
     return null;
   }
-  console.log(contactIndex);
+
   contacts[contactIndex] = { id, ...data };
-  console.log(contacts);
+
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 1));
   return contacts[contactIndex];
 };
