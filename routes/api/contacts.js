@@ -3,7 +3,7 @@ const {getContacts, getContactById, addContact, deleteContact, updateContact} = 
 const router = express.Router();
 
 const validateBody = require('../../decorators/validateBody')
-const {contactValidationSchema} = require('../../schemas/contactValidationSchema')
+const {contactValidationSchema, updateContactValidationSchema} = require('../../schemas/contactValidationSchema')
 
 router
   .route('/')
@@ -14,6 +14,6 @@ router
   .route('/:contactId')
   .get(getContactById)
   .delete(deleteContact)
-  .put(updateContact)
+  .put(validateBody(updateContactValidationSchema), updateContact)
 
 module.exports = router
