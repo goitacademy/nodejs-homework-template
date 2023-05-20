@@ -1,5 +1,6 @@
 const express = require('express')
-const Contact = require("../../models/contact");
+const {Contact, addSchema} = require("../../models/contact");
+const isValidId = require("../../middlewares/isValidId");
 
 const router = express.Router();
 const {HttpError} = require("../../helpers");
@@ -14,18 +15,18 @@ router.get('/', async (req, res, next) => {
   
 })
 
-// router.get('/:id', async (req, res, next) => {
-//   try {
-//     const {id} = req.params;
-//     const result = await contacts.getContactById(id);
-//     if(!result) {
-//       throw HttpError(404, "Not found")
-//     }
-//   res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// })
+router.get('/:id', isValidId, async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    const result = await Contact.findById(id);
+    if(!result) {
+      throw HttpError(404, "Not found")
+    }
+  res.json(result);
+  } catch (error) {
+    next(error);
+  }
+})
 
 router.post('/', async (req, res, next) => {
   try {
