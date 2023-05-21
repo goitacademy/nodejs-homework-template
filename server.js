@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const {DB_HOST} =process.env;
 //const DB_HOST =
 //  "mongodb+srv://Yuliia:VlasiukYuliiaDataBaseUser@cluster0.84r98c6.mongodb.net/db-contacts?retryWrites=true&w=majority";
-console.log(first)
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
@@ -13,7 +13,7 @@ mongoose
   })
   .catch((error) => {
     console.log(error.message);
-    process.exit(1);
+    //process.exit(1);
   });
 
 const app = require("./app");
