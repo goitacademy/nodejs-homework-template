@@ -1,5 +1,5 @@
-const path = require('path');
 const multer = require('multer');
+const path = require('path');
 
 const temporaryDir = path.join(__dirname, '..', 'tmp');
 

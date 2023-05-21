@@ -1,8 +1,9 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
 const fs = require('fs/promises');
 const path = require('path');
+const jimp = require('jimp');
 
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { User } = require('../models/user');
@@ -92,8 +93,13 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarsDir, filename);
   const avatarURL = path.join('avatars', filename);
 
+  await jimp
+    .read(temporaryDir)
+    .then(img => img.resize(250, 250).write(temporaryDir))
+    .catch(err => console.error(err));
   await fs.rename(temporaryDir, resultUpload);
   await User.findByIdAndUpdate(_id, { avatarURL });
+
   res.json({ avatarURL });
 };
 
