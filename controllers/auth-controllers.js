@@ -10,6 +10,7 @@ const { SECRET_KEY } = process.env;
 
 // singup
 const register = async (req, res) => {
+
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) { 
@@ -27,6 +28,7 @@ const register = async (req, res) => {
 
 // signin
 const login = async (req, res) => {
+
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) { 
@@ -55,8 +57,8 @@ const login = async (req, res) => {
 
 // current
 const getCurrent = async (req, res) => {
-    const { name, email } = req.user;
 
+    const { name, email } = req.user;
     res.json({
         user: {
             name,
@@ -73,7 +75,6 @@ const logout = async (req, res) => {
         message:"Logout success"
     })
 };
-
 
 module.exports = {
     register: controllerWrapper(register),

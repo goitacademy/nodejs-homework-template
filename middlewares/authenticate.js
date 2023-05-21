@@ -4,6 +4,7 @@ const { HttpError } = require('../helpers');
 
 const { SECRET_KEY } = process.env;
 
+
 // !почему-то выкидывает ошибку!!! из user.js userSchema.post.....
 const { User}  = require('../models/user');
 
@@ -27,7 +28,5 @@ const authenticate = async (req, res, next) => {
         next(HttpError(401));
     }
 };
-
-
 
 module.exports = authenticate;

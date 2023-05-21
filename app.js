@@ -9,7 +9,6 @@ const app = express();
 // Authorization
 const authRouter = require('./routes/api/auth-routes');
 
-
 const formatsLogger =
   app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -22,6 +21,7 @@ app.use('/api/contacts', contactsRouter);
 
 // Authorization
 app.use('/api/auth', authRouter);
+
 
 
 app.use((req, res) => {

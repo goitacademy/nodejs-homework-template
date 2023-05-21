@@ -8,7 +8,6 @@ const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 const schemas = require('../../schemas/contacts-schemas');
 
-
 //на всі роути contacts вішаємо захист авторизації
 router.use(authenticate);
 
