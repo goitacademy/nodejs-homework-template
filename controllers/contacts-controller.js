@@ -4,6 +4,8 @@ const { ctrlWrapper } = require("../decorators");
 
 const { HttpError } = require("../helpers");
 
+const {contactAddSchema} = require('../schemas/contactsSchemas')
+
 const getAllContacts = async (req, res) => {
     const contacts = await contactsOperations.listContacts();
     res.json(contacts);
@@ -36,7 +38,18 @@ const removeContactById = async (req, res, next) => {
 
 const updateContactById = async (req, res) => {
     const {id} = req.params;
+    console.log(req.body);
+    if (Object.keys(req.body).length === 0) {
+        throw HttpError(400, `missing fields`);
+    }
+    
+    const {error} = contactAddSchema.validate(req.body);
+    if (error) {
+        throw HttpError(400, error.message)
+    };
+
     const result = await contactsOperations.updateContact(id, req.body);
+    
     if (!result) {
         throw HttpError(404, `Contact with id: ${id} not found`);
     }

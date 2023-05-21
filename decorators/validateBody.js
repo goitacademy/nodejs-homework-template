@@ -10,6 +10,6 @@ const validateBody = schema => {
         next();
     }
     return func;
-}; 
+};
 
 module.exports = validateBody;
