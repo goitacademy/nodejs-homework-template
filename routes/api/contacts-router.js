@@ -5,7 +5,7 @@ const { getAllContacts,
     addContact,
     deleteContact,
     updateContact,
-    updateStatusContact } = require('../../controllers/contacts-controllers');
+    updateStatusContact } = require('../../controllers/contacts');
 
 const { validateBody, isValidId } = require('../../decorators');
 const { schemas } = require('../../models/contact');
