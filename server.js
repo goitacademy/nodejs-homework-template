@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 
 const { DB_HOST } = process.env;
 
+mongoose.set("strictQuery", true);
+
 mongoose
   .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -13,5 +15,3 @@ mongoose
     console.log(err.message);
     process.exit(1);
   });
-
-// UKl39FTb9topkEUl npm i mongoose
