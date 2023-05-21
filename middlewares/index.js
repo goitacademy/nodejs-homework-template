@@ -1,5 +1,5 @@
-const validate = require("./validate");
+const validateBody = require("./validateBody");
 
 module.exports = {
-  validate,
+  validateBody,
 };
