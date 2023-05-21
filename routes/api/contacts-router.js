@@ -16,16 +16,16 @@ const router = express.Router();
 
 router.get("/", getAllMovies);
 
-router.get("/:contactId", getById);
+// router.get("/:contactId", getById);
 
 router.post("/", validateBody(schemas.contactAddSchema), addContact);
 
-router.delete("/:contactId", deleteContact);
+// router.delete("/:contactId", deleteContact);
 
-router.put(
-  "/:contactId",
-  validateBody(schemas.contactAddSchema),
-  updateContact
-);
+// router.put(
+//   "/:contactId",
+//   validateBody(schemas.contactAddSchema),
+//   updateContact
+// );
 
 module.exports = router;
