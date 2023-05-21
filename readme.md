@@ -5,8 +5,6 @@ It follows best practices and includes proper error handling, validation of inco
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-[TOC]
-
 ## Homework 2 - Express
 
 ### Endpoints

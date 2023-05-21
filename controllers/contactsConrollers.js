@@ -3,7 +3,7 @@ const HttpError = require("../helpers/HttpError");
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const result = await contactsService.getContacts();
   res.json(result);
 };
 
