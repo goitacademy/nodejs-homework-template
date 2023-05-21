@@ -11,7 +11,7 @@ router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", isValidId, contactControler.getContactsById);
 
-router.put("/:id", isValidId, contactControler.updateContact);
+router.patch("/:id", isValidId, contactControler.updateContact);
 
 // CHANG POST (PUT)
 
