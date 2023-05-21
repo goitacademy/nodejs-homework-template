@@ -1,3 +1,3 @@
 const authTokenValid = require("./authTokenValid");
-
-module.exports = authTokenValid;
+const upload = require('./upload')
+module.exports = { authTokenValid, upload };

@@ -1,6 +1,7 @@
 const user = require("../../models/userShema");
 const { HttpError } = require("../../helpers/index");
 const { addShemaAuth } = require("../../JoiShems/index");
+const gravatar = require("gravatar");
 const bcrypt = require("bcrypt");
 const registration = async (req, res) => {
   const { error } = addShemaAuth.validate(req.body);
@@ -9,9 +10,14 @@ const registration = async (req, res) => {
   }
   try {
     const { email, password } = req.body;
+    const avatarURL = gravatar.url(email);
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
-    const result = await user.create({ email, password: hashPassword });
+    const result = await user.create({
+      email,
+      password: hashPassword,
+      avatarURL,
+    });
     res
       .status(201)
       .json({ email: result.email, subscription: result.subscription });
