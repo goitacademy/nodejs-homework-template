@@ -1,21 +1,17 @@
-const mongoose = require("mongoose");
 const app = require("./app");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const DB_HOST =
-  "mongodb+srv://Minaht:GiDeOn1983@cluster0.ccmrmnr.mongodb.net/db-contacts?retryWrites=true&w=majority";
-
-mongoose.set("strictQwery", true);
+const { DB_HOST } = process.env;
+// const DB_HOST = require("./config");
 
 mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(3000);
+    console.log("Database connection successful");
   })
-  .catch(() => {
+  .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
-
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000");
-// });

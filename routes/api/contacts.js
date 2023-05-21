@@ -1,32 +1,24 @@
 const express = require("express");
-
+// const Schema = require("mongoose")
+// const updateFavoretSchema = require("../../schemas/contact-schemas)
 const router = express.Router();
+const contactControler = require("../../controlers/contact-controler");
+const isValidId = require("../../decorator/isValidid");
+// const Schema = require("../../schemas/contact-schemas");
+// const validateBody = require("../../decorator/validateBody");
 
-// ROUTS
+router.get("/", contactControler.getAllContacts);
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.get("/:id", isValidId, contactControler.getContactsById);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.patch("/:id", isValidId, contactControler.updateContact);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+// CHANG POST (PUT)
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.post("/", contactControler.addContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-  next();
-});
+router.delete("/:id", isValidId, contactControler.removeContacts);
 
-module.exports = { router, contactPath };
+router.patch("/:id/favorite", isValidId, contactControler.updateStatusContact);
+
+module.exports = router;
