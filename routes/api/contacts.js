@@ -6,7 +6,7 @@ const router = express.Router();
 
 module.exports = router;
 
-// обьект настроке валидации (схемы)
+// обьект настроки валидации (схемы)
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
