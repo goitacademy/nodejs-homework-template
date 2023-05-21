@@ -1,13 +1,15 @@
-const app = require('./app')
-const mongoose = require('mongoose')
-const {conectToBase } = process.env
-mongoose.connect(conectToBase)
+const app = require("./app");
+
+const mongoose = require("mongoose");
+
+const { DB_HOST } = process.env;
+
+mongoose
+  .connect(DB_HOST)
   .then(() => {
-  app.listen(3000)
-  }).catch(err => {
-    console.log(err.message)
-    process.exit(1)
-})
-
-
-// UKl39FTb9topkEUlnpm i mongoose
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(err.message);
+    process.exit(1);
+  });
