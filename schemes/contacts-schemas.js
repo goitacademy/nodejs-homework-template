@@ -1,15 +1,15 @@
-const Joi = require("joi");
+// const Joi = require("joi");
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .required()
-    .pattern(/^\S+@\S+\.\S+$/),
-  phone: Joi.string()
-    .required()
-    .pattern(/^[\d()+\- ]+$/),
-});
+// const contactAddSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string()
+//     .required()
+//     .pattern(/^\S+@\S+\.\S+$/),
+//   phone: Joi.string()
+//     .required()
+//     .pattern(/^[\d()+\- ]+$/),
+// });
 
-module.exports = {
-  contactAddSchema,
-};
+// module.exports = {
+//   contactAddSchema,
+// };

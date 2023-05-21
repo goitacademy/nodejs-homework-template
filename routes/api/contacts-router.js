@@ -8,7 +8,7 @@ const {
   updateContact,
 } = require("../../controllers/contacts-controller");
 
-const schemas = require("../../schemes/contacts-schemas");
+const schemas = require("../../models/contact");
 
 const { validateBody } = require("../../decorators");
 
