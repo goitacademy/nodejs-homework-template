@@ -4,7 +4,7 @@ const cors = require('cors')
 
 // const dotenv = require("dotenv")
 // dotenv.config()
-// аналог:
+// .config() ищет .env и добавляет информацию
 require("dotenv").config()
 
 const contactsRouter = require('./routes/api/contacts')
