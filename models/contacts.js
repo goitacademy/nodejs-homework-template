@@ -37,16 +37,17 @@ async function addContact(data) {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
 }
+
 async function updateContact(contactId, data) {
   const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === contactId);
-    if(index === -1){
-        return null;
-    }
-    contacts[index] = {contactId, ...data};
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
- }
+  const index = contacts.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { contactId, ...data };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+}
 
 module.exports = {
   listContacts,
@@ -54,4 +55,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
