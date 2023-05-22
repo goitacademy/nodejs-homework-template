@@ -1,4 +1,4 @@
-const { getAll, getById, add, deleteById, updateById } = require('./books');
+const { getAll, getById, add, deleteById, updateById } = require('./contacts');
 
 module.exports = {
   getAll,
