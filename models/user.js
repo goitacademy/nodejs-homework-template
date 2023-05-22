@@ -1,6 +1,6 @@
 const { Schema, model, Types } = require("mongoose");
 
-const schema = Schema({
+const schema = new Schema({
   password: {
     type: String,
     required: [true, "Set password for user"],
@@ -19,7 +19,15 @@ const schema = Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
-  token: String,
+  token: {
+    type: String,
+    default: null,
+  },
+  avatarURL: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = model("user", schema);

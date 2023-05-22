@@ -1,6 +1,10 @@
 const express = require("express");
 const { tryCatchWrapper } = require("../../helpers/index");
-const { validateBody } = require("../../middlewares/index");
+const {
+  validateBody,
+  upload,
+  resizeAvatar,
+} = require("../../middlewares/index");
 const { createUserSchema } = require("../../schemas/auth");
 const controller = require("../../controllers/user");
 const auth = require("../../middlewares/auth");
@@ -29,6 +33,13 @@ router.get(
   "/current",
   tryCatchWrapper(auth),
   tryCatchWrapper(controller.current)
+);
+router.patch(
+  "/avatar",
+  upload.single("avatar"),
+  tryCatchWrapper(resizeAvatar),
+  tryCatchWrapper(auth),
+  tryCatchWrapper(controller.uploadAvatar)
 );
 
 module.exports = router;
