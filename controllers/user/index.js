@@ -5,6 +5,7 @@ const current = require("./current");
 const getInfo = require("./getInfo");
 const getContacts = require("./getContacts");
 const addContact = require("./addContact");
+const uploadAvatar = require("./uploadAvatar");
 
 module.exports = {
   register,
@@ -14,4 +15,5 @@ module.exports = {
   getInfo,
   getContacts,
   addContact,
+  uploadAvatar,
 };
