@@ -3,19 +3,6 @@ const path = require('path')
 const contactsDirectory = path.join(__dirname, 'contacts.json')
 const Joi = require('joi')
 
-const createSchema = Joi.object({
-  id: Joi.string().required(),
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required()
-});
-
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string()
-});
-
 function listContacts() {
   const contactsData = fs.readFileSync(contactsDirectory);
   const contacts = JSON.parse(contactsData);
@@ -31,12 +18,6 @@ function getById(id) {
 }
 
 function addContact(contact) {
-  const { error } = createSchema.validate(contact);
-
-  if (error) {
-    throw new Error('Validation error: ' + error.details[0].message);
-  }
-
   const contactsData = fs.readFileSync(contactsDirectory);
   const contacts = JSON.parse(contactsData);
   contacts.push(contact);
@@ -55,12 +36,7 @@ function removeContact(id) {
   return null;
 }
 
-function updateContact(id, updatedFields) {
-  const { error, value } = updateSchema.validate(updatedFields);
-  if (error) {
-    throw new Error('Invalid data provided');
-  }
-
+function updateContact(id, value) {
   const contactsData = fs.readFileSync(contactsDirectory);
   let contacts = JSON.parse(contactsData);
   const contactIndex = contacts.findIndex((c) => c.id === id);
