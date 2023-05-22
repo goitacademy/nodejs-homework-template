@@ -61,5 +61,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
-  uupdateStatusContact: ctrlWrapper(updateStatusContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };

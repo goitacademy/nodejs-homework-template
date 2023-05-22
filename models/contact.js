@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../helpers");
 const { contactsAddSchema } = require("../schemas/contacts-schemas");
 
 const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
@@ -28,8 +27,6 @@ const contactSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-
-contactSchema.post("save", handleMongooseError);
 
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
