@@ -17,6 +17,7 @@ const contactsAddSchema = Joi.object({
     )
     .required()
     .messages({ "any.required": "missing required name fields" }),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
