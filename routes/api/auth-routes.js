@@ -7,6 +7,8 @@ const { validateRegister, validateBody } = require("../../utils/validateBody");
 const authController = require("../../controllers/auth-controllers");
 
 router.post("/register", validateRegister(schemas.userRegisterSchema), authController.register);
+router.get("/verify/:verificationToken", authController.verify);
+router.post("/verify", validateBody(schemas.userEmailSchema), authController.resendVerifyEmail);
 router.post("/login", validateRegister(schemas.userLoginSchema), authController.login);
 router.get("/current", authentificate, authController.getCurrent);
 router.post("/logout", authentificate, authController.logout);

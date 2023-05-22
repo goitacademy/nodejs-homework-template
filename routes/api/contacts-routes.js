@@ -13,7 +13,7 @@ const isValiId = require("../../middlewares/isValidId");
   Routes ----------------------------------------------------------------------
 */
 
-router.use(authentificate);
+// router.use(authentificate);
 
 router.get("/", contactControllers.getAllContacts);
 
