@@ -1,5 +1,13 @@
+const mongoose = require("mongoose")
 const app = require('./app')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+// 8aaMpO6XV5qkS9PF - project 1 password (rest-api-test)
+// K8izfGUTgBwRLSYN - project password (test-rest-api)
+
+const DB_HOST = "mongodb+srv://ttitarenkof:K8izfGUTgBwRLSYN@cluster0.jyqy8k4.mongodb.net/my-contact?retryWrites=true&w=majority"
+mongoose.set('strictQuery', true);
+
+mongoose.connect(DB_HOST)
+.then(() => app.listen(3000, () => {console.log("Database connection successful")}))
+.catch(error =>{console.log(error.message)
+process.exit(1)})
