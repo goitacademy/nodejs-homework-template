@@ -1,6 +1,9 @@
 const express = require("express");
 
-const { schemas } = require("../../models/contact");
+const {
+  contactsAddSchema,
+  updateFavoriteSchema,
+} = require("../../schemas/contacts-schemas");
 
 const { validateBody } = require("../../decorators");
 
@@ -19,20 +22,16 @@ router.get("/", getAllContacts);
 
 router.get("/:contactId", getContactsById);
 
-router.post("/", validateBody(schemas.contactsAddSchema), addContact);
+router.post("/", validateBody(contactsAddSchema), addContact);
 
 router.delete("/:contactId", removeContact);
 
 router.patch(
   "/:contactId/favorite",
-  validateBody(schemas.updateFavoriteSchema),
+  validateBody(updateFavoriteSchema),
   updateStatusContact
 );
 
-router.put(
-  "/:contactId",
-  validateBody(schemas.contactsAddSchema),
-  updateContact
-);
+router.put("/:contactId", validateBody(contactsAddSchema), updateContact);
 
 module.exports = { contactsRouter: router };
