@@ -35,7 +35,6 @@ const removeContact = async (contactId) => {
   const deletedContact = contacts[contactIndex]
   if (contactIndex === -1) {
     return null
-    // throw new Error(`Contact id: "${contactId}" not found`);
   }
   contacts.splice(contactIndex, 1)
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -49,7 +48,6 @@ const updateContact = async (contactId, body) => {
   const contactIndex = contacts.findIndex(item => item.id === contactId);
   if (contactIndex === -1) {
     return null
-    // throw new Error(`Contact "${contactId}" not found`);
   }
   const updatedContact = {...contacts[contactIndex], ...body}
   console.log("🚀 ~ file: contacts.js:55 ~ updateContact ~ updatedContact:", updatedContact)
