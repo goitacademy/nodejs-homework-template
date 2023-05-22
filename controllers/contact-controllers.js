@@ -1,10 +1,11 @@
 const { contactsSchema } = require("../schemas");
 const HttpError = require("../helpers");
 const contactsService = require("../models");
+const Contact = require("../models/Contact");
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -50,7 +51,7 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-const updeteContact = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { error } = contactsSchema.validate(req.body);
@@ -67,10 +68,24 @@ const updeteContact = async (req, res, next) => {
   }
 };
 
+const setFavorites = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsService.setFavorites(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, `not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
   createContact,
   deleteContact,
-  updeteContact,
+  updateContact,
+  setFavorites,
 };

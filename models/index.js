@@ -48,10 +48,20 @@ async function updateContact(id, { name, email, phone }) {
   return data[index];
 }
 
+async function setFavorite(id) {
+  const data = await listContacts();
+  const index = data.findIndex((contact) => contact.id === id);
+  if (index === -1) {
+    return null;
+  }
+  data[index] = { id };
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  setFavorite,
 };
