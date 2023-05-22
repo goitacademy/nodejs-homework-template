@@ -3,17 +3,20 @@ const Joi = require("joi");
 
 //const contactService = require("../../models");
 
+const  contactAddSchema = require("../../validation");
+
 const Contact=require("../../models/contact")
 
 const { HttpError } = require("../../helpers");
 
 const router = express.Router();
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+// const contactAddSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+//   favorite: Joi.boolean(),
+// });
 
 router.get("/", async (req, res, next) => {
   try {
@@ -38,20 +41,22 @@ router.get("/", async (req, res, next) => {
 //   }
 // });
 
-// router.post("/", async (req, res, next) => {
-//   try {
-//     const { error } = contactAddSchema.validate(req.body);
+router.post("/", async (req, res, next) => {
 
-//     const { name, email, phone } = req.body;
-//     if (error) {
-//       throw HttpError(400, error.message);
-//     }
-//     const newContact = await contactService.addContact(name, email, phone);
-//     res.status(201).json(newContact);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+  console.log(req.body);
+
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    const { name, email, phone } = req.body;
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+     next(error);
+  }
+});
 
 // router.delete("/:contactId", async (req, res, next) => {
 //   try {

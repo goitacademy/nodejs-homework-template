@@ -1,11 +1,29 @@
-const {Schema,model}=require("mongoose");
-const contactSchema=new Schema({
-    name:String,
-    email: String,
-    phone: String,
-    favorite: Boolean
-})
+const { Schema, model } = require("mongoose");
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String     
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const Contact=model("contact", contactSchema);
+contactSchema.post("save", (error, data, next) => {
+   error.status=400;
+   next()
 
-module.exports=Contact;
+});
+
+const Contact = model("contact", contactSchema);
+
+module.exports = Contact;
