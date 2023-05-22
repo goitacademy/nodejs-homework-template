@@ -76,9 +76,22 @@ const logout = async (req, res) => {
     })
 };
 
+// updateSubscription
+const updateSubscription = async (req, res) => {
+    const result = await User.findByIdAndUpdate(req.user._id, req.body, { new: true })
+res.json(result);
+//   const { id } = req.params;
+//   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+//   if (!result) {
+//     throw HttpError(404, `Contact with id=${id} not found`);
+//   }
+//   res.json(result);
+};
+
 module.exports = {
     register: controllerWrapper(register),
     login: controllerWrapper(login),
     getCurrent: controllerWrapper(getCurrent),
     logout: controllerWrapper(logout),
+    updateSubscription: controllerWrapper(updateSubscription),
 };
