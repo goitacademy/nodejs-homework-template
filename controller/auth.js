@@ -150,7 +150,6 @@ export const updateAvatar = async (req, res, next) => {
     "avatars",
     `${req.file.filename}`
   );
-
   try {
     const imageToResize = await Jimp.read(req.file.path);
     await imageToResize.resize(250, 250).write(req.file.path);

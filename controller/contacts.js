@@ -26,7 +26,7 @@ export const getContactByID = async (req, res, next) => {
     console.log(contactId);
     const contacts = await services.getContactById(contactId, id);
     if (!contacts) return res.status(404).json({ message: "Not found" });
-    else return res.json(contacts);
+    else return res.json(...contacts);
   } catch (error) {
     next(error);
   }
@@ -58,7 +58,7 @@ export const removeContact = async (req, res, next) => {
     const isExist = await services.getContactById(contactId);
     if (!isExist) return res.status(404).json({ message: "Not found" });
     await services.removeContact(contactId);
-    res.json({ message: "contact deleted" });
+    res.json({ message: "contact has been deleted" });
   } catch (error) {
     next(error);
   }

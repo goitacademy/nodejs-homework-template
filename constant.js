@@ -5,5 +5,5 @@ export const ERROR_TYPE = Object.freeze({
   UNAUTHORIZED: "invalid signature",
 });
 
-export const temDir = path.join(process.cwd(), "tremporaryUpload");
+export const temDir = path.join(process.cwd(), "temporaryUpload");
 export const updateDir = path.join(process.cwd(), "public", "avatars");
