@@ -11,7 +11,10 @@ require("dotenv").config();
 // IMPORT ALL ROUTS
 const contactRouter = require("./routes/api/contacts");
 
+const aurhRouter = require("./routes/api/auth");
+
 const indexRouter = require("./routes/index");
+
 const usersRouter = require("./routes/users");
 // The WAY TO CONTACT.JSON
 
@@ -19,7 +22,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("./routes");
+app.use("./api/auth", aurhRouter);
 app.use("/api/contact", contactRouter);
 
 // view engine setup
