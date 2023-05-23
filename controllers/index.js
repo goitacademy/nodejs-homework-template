@@ -1,4 +1,4 @@
-const { getAll, getById, add, deleteById, updateById } = require('./contacts');
+const { getAll, getById, add, deleteById, updateById, updateStatusContact } = require('./contacts');
 
 module.exports = {
   getAll,
@@ -6,4 +6,5 @@ module.exports = {
   add,
   deleteById,
   updateById,
+  updateStatusContact,
 };
