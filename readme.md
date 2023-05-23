@@ -1,11 +1,11 @@
 # REST API for Contact Collection
 
 This repository contains a RESTful API for managing a collection of contacts. The API is built using Node.js and Express, providing endpoints for performing CRUD operations on the contacts.
-It follows best practices and includes proper error handling, validation of incoming data using the Joi package, and the use of middleware packages such as Morgan for logging and CORS for handling cross-origin resource sharing.
+It uses MongoDB as the database for storing contact information. The API follows best practices and includes proper error handling, data validation using the Joi package, and integration with MongoDB using Mongoose.
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-## Homework 2 - Express
+## Homework 3 - MongoDB
 
 ### Endpoints
 
@@ -52,9 +52,18 @@ Updates a contact's information.
     If the body is missing, it returns JSON with the key {"message": "missing fields"} and a status code of 400 (Bad Request).
     Returns the updated contact object and a status code of 200 (OK) if the operation is successful, or JSON with the key {"message": "Not found"} and a status code of 404 if the specified id is not found.
 
+#### 6. PATCH /api/contacts/:id/favorite
+
+Updates the favorite status of a contact.
+
+    Receives the parameter id.
+    Receives the body in JSON format with the update for the favorite field.
+    If the body is missing, it returns JSON with the key {"message": "missing field favorite"} and a status code of 400 (Bad Request).
+    Returns the updated contact object and a status code of 200 (OK) if the operation is successful, or JSON with the key {"message": "Not found"} and a status code of 404 if the specified id is not found.
+
 ### Validation
 
-To ensure data integrity, the API performs validation on the incoming data. The validation rules are as follows:
+To ensure data integrity, the API performs validation on the incoming data.
 
     When adding a new contact (POST), all fields (name, email, phone) are required.
     When updating a contact (PUT), at least one field (name, email, phone) must be provided.
