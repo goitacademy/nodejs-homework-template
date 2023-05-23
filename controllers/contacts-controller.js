@@ -9,13 +9,13 @@ const getAllMovies = async (req, res) => {
   res.json(results);
 };
 
-// const getById = async (req, res) => {
-//   const result = await contactsService.getContactById(req.params.contactId);
-//   if (!result) {
-//     throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res) => {
+  const result = await Contact.findById(req.params.contactId);
+  if (!result) {
+    throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+  }
+  res.json(result);
+};
 
 const addContact = async (req, res) => {
   const results = await Contact.create(req.body);
@@ -43,7 +43,7 @@ const addContact = async (req, res) => {
 
 module.exports = {
   getAllMovies: ctrlWrapper(getAllMovies),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   // deleteContact: ctrlWrapper(deleteContact),
   // updateContact: ctrlWrapper(updateContact),

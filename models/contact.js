@@ -11,11 +11,11 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      //   match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+      match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     },
     phone: {
       type: String,
-      //   match: /^[\d()+\- ]+$/,
+      match: /^[\d()+\- ]+$/,
     },
     favorite: {
       type: Boolean,

@@ -14,17 +14,20 @@ const { validateBody } = require("../../decorators");
 
 const router = express.Router();
 
+const isValidId = require("../../middlewares/isValidId");
+
 router.get("/", getAllMovies);
 
-// router.get("/:contactId", getById);
+router.get("/:contactId", isValidId, getById);
 
 router.post("/", validateBody(schemas.contactAddSchema), addContact);
 
-// router.delete("/:contactId", deleteContact);
+// router.delete("/:contactId", isValidId, deleteContact);
 
 // router.put(
 //   "/:contactId",
 //   validateBody(schemas.contactAddSchema),
+//   isValidId,
 //   updateContact
 // );
 
