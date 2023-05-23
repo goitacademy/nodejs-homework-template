@@ -1,9 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../middlewares');
-
-
 // const sex = ['female', 'male'];
-
 const phoneRegexp =
   /^\(\d{3}\)[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
@@ -26,6 +23,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
     //   sex: {enum: sex},
   },
