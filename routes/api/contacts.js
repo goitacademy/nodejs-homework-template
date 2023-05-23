@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { Contact } = require("../../models/contact");
 
-const { schemas } = require("../../models/contact");
+const { schemas } = require("../../middlewares/validationJoi");
 
 const { HttpError } = require("../../helpers");
 
