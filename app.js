@@ -1,9 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const dotenv = require("dotenv");
 
 const contactsRouter = require("./routes/api/contacts");
-
+// берем данные с .env и добавляем в глобальную область видимости
+dotenv.config();
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
