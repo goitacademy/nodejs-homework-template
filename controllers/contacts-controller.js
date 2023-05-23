@@ -30,21 +30,22 @@ const addContact = async (req, res) => {
 //   res.json({ message: "Delete success" });
 // };
 
-// const updateContact = async (req, res, next) => {
-//   const result = await contactsService.updateContact(
-//     req.params.contactId,
-//     req.body
-//   );
-//   if (!result) {
-//     throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-//   }
-//   res.status(201).json(result);
-// };
+const updateContact = async (req, res, next) => {
+  const result = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    { new: true }
+  );
+  if (!result) {
+    throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+  }
+  res.status(201).json(result);
+};
 
 module.exports = {
   getAllMovies: ctrlWrapper(getAllMovies),
   getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   // deleteContact: ctrlWrapper(deleteContact),
-  // updateContact: ctrlWrapper(updateContact),
+  updateContact: ctrlWrapper(updateContact),
 };

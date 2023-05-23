@@ -24,11 +24,11 @@ router.post("/", validateBody(schemas.contactAddSchema), addContact);
 
 // router.delete("/:contactId", isValidId, deleteContact);
 
-// router.put(
-//   "/:contactId",
-//   validateBody(schemas.contactAddSchema),
-//   isValidId,
-//   updateContact
-// );
+router.put(
+  "/:contactId",
+  validateBody(schemas.contactAddSchema),
+  isValidId,
+  updateContact
+);
 
 module.exports = router;
