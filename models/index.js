@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const shortid = require("shortid");
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 
 
@@ -31,7 +31,7 @@ const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
     id: shortid.generate(),
-    ...data,
+    ...body,
   };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 1));
@@ -39,14 +39,14 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-  const books = await getAll();
-    const index = books.findIndex(item => item.id === id);
+  const contacts = await listContacts();
+    const index = contacts.findIndex(item => item.id === contactId);
     if(index === -1){
         return null;
     }
-    books[index] = {id, ...data};
-    await fs.writeFile(booksPath, JSON.stringify(books, null, 2));
-    return books[index];
+    contacts[index] = {contactId, ...body};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 1));
+    return contacts[index];
 }
 
 module.exports = {

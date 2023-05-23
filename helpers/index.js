@@ -1,5 +1,5 @@
-const HTTPError = require("./HTTPError")
+const HttpError = require("./HTTPError")
 
 module.exports = {
-    HTTPError,
+    HttpError,
 }
