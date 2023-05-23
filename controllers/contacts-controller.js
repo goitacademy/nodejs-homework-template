@@ -42,10 +42,25 @@ const updateContact = async (req, res, next) => {
   res.status(201).json(result);
 };
 
+const updateFavorite = async (req, res, next) => {
+  const result = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    { new: true }
+  );
+
+  console.log(result);
+  if (!result) {
+    throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+  }
+  res.status(201).json(result);
+};
+
 module.exports = {
   getAllMovies: ctrlWrapper(getAllMovies),
   getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   // deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
