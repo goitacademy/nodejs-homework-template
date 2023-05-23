@@ -22,13 +22,13 @@ const addContact = async (req, res) => {
   res.status(201).json(results);
 };
 
-// const deleteContact = async (req, res) => {
-//   const result = await contactsService.removeContact(req.params.contactId);
-//   if (!result) {
-//     throw HttpError(404, `Movie with ${req.params.contactId} not found`);
-//   }
-//   res.json({ message: "Delete success" });
-// };
+const deleteContact = async (req, res) => {
+  const result = await Contact.findByIdAndDelete(req.params.contactId);
+  if (!result) {
+    throw HttpError(404, `Movie with ${req.params.contactId} not found`);
+  }
+  res.json(result);
+};
 
 const updateContact = async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(
@@ -48,8 +48,6 @@ const updateFavorite = async (req, res, next) => {
     req.body,
     { new: true }
   );
-
-  console.log(result);
   if (!result) {
     throw HttpError(404, `Movie with ${req.params.contactId} not found`);
   }
@@ -60,7 +58,7 @@ module.exports = {
   getAllMovies: ctrlWrapper(getAllMovies),
   getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
-  // deleteContact: ctrlWrapper(deleteContact),
+  deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
 };
