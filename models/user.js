@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    refresh_token: {
+      type: String,
+    },
     // owner: {
     //   type: Schema.Types.ObjectId,
     //   ref: "user",

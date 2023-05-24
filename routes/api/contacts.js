@@ -5,7 +5,7 @@ const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
 const isValidId = require("../../decorator/isValidid");
 
-router.use("./auth.js", require("./auth"));
+router.use("./auth.js", require("./authRouter"));
 // const Schema = require("../../schemas/contact-schemas");
 // const validateBody = require("../../decorator/validateBody");
 

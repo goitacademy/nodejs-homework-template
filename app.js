@@ -11,7 +11,7 @@ require("dotenv").config();
 // IMPORT ALL ROUTS
 const contactRouter = require("./routes/api/contacts");
 
-const aurhRouter = require("./routes/api/auth");
+const aurhRouter = require("./routes/api/authRouter");
 
 const indexRouter = require("./routes/index");
 
