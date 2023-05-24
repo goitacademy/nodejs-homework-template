@@ -9,11 +9,17 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "joi": "^17.9.2",
+<<<<<<< Updated upstream
+=======
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.1",
+>>>>>>> Stashed changes
     "morgan": "^1.10.0",
     "path": "^0.12.7",
     "uuid": "^9.0.0"
