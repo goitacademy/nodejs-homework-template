@@ -60,18 +60,34 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { error } = updateContactSchema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: error.message });
-    return;
+  try {
+    const { error } = updateContactSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    const contact = await updateContact(req.params.contactId, req.body);
+    console.log(contact);
+    if (contact) {
+      res.status(200).json(contact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    next(error);
   }
 
-  const contact = await updateContact(req.params.contactId, req.body);
-  if (!contact) {
-    res.status(404).json({ message: "Not found" });
-  } else {
-    res.status(200).json(contact);
-  }
+  // const { error } = updateContactSchema.validate(req.body);
+  // const contact = await updateContact(req.params.contactId, req.body);
+  // if (error) {
+  //   res.status(400).json({ message: error.message });
+  //   return;
+  // }
+  // if () {
+  //   res.status(200).json(contact);
+  // } else {
+  //   res.status(404).json({ message: "Not found" });
+  // }
 });
 
 module.exports = router;
