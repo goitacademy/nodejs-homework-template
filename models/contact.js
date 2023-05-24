@@ -1,5 +1,6 @@
 const {Schema, model} = require("mongoose");
 const {  addSchema, updateFavoriteSchema} = require("../schemas/contacts")
+const {handleMongooseError} = require("../helpers");
 
 const contactSchema = new Schema ({
         name: {
@@ -18,7 +19,9 @@ const contactSchema = new Schema ({
           type: Boolean,
           default: false,
         },
-})
+}, {versionKey: false});
+
+contactSchema.post("save", handleMongooseError);
 
 const schemas = {
   addSchema,

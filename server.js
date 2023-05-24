@@ -1,9 +1,6 @@
 const mongoose = require("mongoose")
 const app = require('./app')
 
-// 8aaMpO6XV5qkS9PF - project 1 password (rest-api-test)
-// K8izfGUTgBwRLSYN - project password (test-rest-api)
-
 const DB_HOST = "mongodb+srv://ttitarenkof:K8izfGUTgBwRLSYN@cluster0.jyqy8k4.mongodb.net/my-contact?retryWrites=true&w=majority"
 mongoose.set('strictQuery', true);
 
