@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const express = require("express");
 const User = require("../../models/user");
 const router = express.Router();
@@ -15,6 +16,8 @@ router.post("/register", jsonParser, async (req, res, next) => {
     if (currentUser === null) {
       return res.status(409).json({ message: "User alredy exist" });
     }
+
+    const newUserPassword = await bcrypt.hash(newUser.password, 10);
     User.create(newUser);
     return res.status(201).end();
   } catch (error) {
