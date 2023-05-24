@@ -76,21 +76,11 @@ try {
 }
 })
 
-router.put('/:id', async (req, res, next) => {
-  try {
-    const {error} =schema.validate(req.body);
-    if(error){
-      throw HttpError(400, error.message)
-    }
-    const {id} = req.params;
-    const result =await contacts.updateById(id, req.body);
-    if(!result){
-      throw HttpError(400, 'Not found')
-    }
-    res.json(result);
-      } catch (error) {
-        next(error)
-      }
-})
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateStatusContact
+);
 
-module.exports = router
+module.exports = router;
