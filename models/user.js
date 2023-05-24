@@ -30,20 +30,19 @@ const userSchema = new Schema({
 
 userSchema.post("save", hendleMongooseError)
 
-const registerSchema = Joi.object({
+const userJoiSchema = Joi.object({
     password: Joi.string().pattern(passwordRegexp).required(),
     email: Joi.string().pattern(emailRegexp).required(),
     subscription: Joi.string(),
 });
 
-const loginSchema = Joi.object({
-    password: Joi.string().pattern(passwordRegexp).required(),
-    email: Joi.string().pattern(emailRegexp).required(),
-},{ versionKey: false, timestamps: true });
+const validateSubscription = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 
 const schemas = {
-    registerSchema,
-    loginSchema,
+    userJoiSchema,
+    validateSubscription,
 };
 
 const User = model('user', userSchema)
