@@ -1,14 +1,12 @@
 const express = require("express");
 const authControler = require("../../controlers/authControler");
-
+const router = express.Router();
 const {
   createUserValidasionSchema,
   loginValidationSchema,
 } = require("../../decorator/authValidationSchema");
 
 const validateBody = require("../../decorator/validateBody");
-
-const router = express.Router();
 
 const jsonParser = express.json();
 
