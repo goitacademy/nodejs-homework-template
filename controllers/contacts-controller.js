@@ -24,6 +24,7 @@ const add = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
+
   const { name, email, phone } = req.body;
   const contact = await contactsService.updateContact(id, {
     name,

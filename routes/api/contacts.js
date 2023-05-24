@@ -9,17 +9,17 @@ const {
   update,
 } = require("../../controllers");
 
-const { validateBody } = require("../../utils");
-const { contactAddSchema } = require("../../schemas");
+const { validateBody, checkBody } = require("../../middlewares");
+const { addSchema } = require("../../schemas/contacts");
 
 router.get("/", getAll);
 
 router.get("/:id", getById);
 
-router.post("/", validateBody(contactAddSchema), add);
+router.post("/", checkBody, validateBody(addSchema), add);
 
 router.delete("/:id", removeById);
 
-router.put("/:id", validateBody(contactAddSchema), update);
+router.put("/:id", checkBody, validateBody(addSchema), update);
 
 module.exports = router;
