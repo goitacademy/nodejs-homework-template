@@ -5,14 +5,11 @@ const contacts = require("../../models/contacts");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  	console.log('main');
-
 	res.json(await contacts.listContacts());
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  console.log(req.body)
-	res.json(await contacts.getContactById(req.body.id));
+	res.json(await contacts.getContactById(req.params.contactId));
 });
 
 router.post("/", async (req, res, next) => {
@@ -20,7 +17,7 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-	res.json(await contacts.removeContact(req.body.id));
+	res.json(await contacts.removeContact(req.params.contactId));
 });
 
 router.put("/:contactId", async (req, res, next) => {
