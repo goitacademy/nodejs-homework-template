@@ -13,7 +13,7 @@ router.post("/register", jsonParser, async (req, res, next) => {
   };
   try {
     const currentUser = await User.findOne({ email: newUser.email });
-    if (currentUser === null) {
+    if (currentUser) {
       return res.status(409).json({ message: "User alredy exist" });
     }
 
