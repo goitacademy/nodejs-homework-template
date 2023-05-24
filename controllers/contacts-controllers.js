@@ -38,9 +38,7 @@ const updateContact = async (req, res, next) => {
   const result = await contactsService.updateContact(contactId, req.body);
 
   if (!result) {
-    if (!result) {
-      throw HttpError(404, `Contact with id ${contactId} not found`);
-    }
+    throw HttpError(404, `Contact with id ${contactId} not found`);
   }
 
   res.json(result);
