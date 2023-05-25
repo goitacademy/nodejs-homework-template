@@ -8,7 +8,7 @@ const {
   validateBody,
   authenticate,
   validateSubsBody,
-} = require("../../decorators");
+} = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 

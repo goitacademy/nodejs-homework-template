@@ -2,7 +2,7 @@ const { HttpError } = require("../helpers");
 
 const { Contact } = require("../models/contacts");
 
-const { ctrlWrapper } = require("../decorators");
+const { ctrlWrapper } = require("../helpers");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;

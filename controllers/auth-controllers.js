@@ -7,7 +7,7 @@ const { HttpError } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 
-const { ctrlWrapper } = require("../decorators");
+const { ctrlWrapper } = require("../helpers");
 
 const register = async (req, res) => {
   const { email, password } = req.body;

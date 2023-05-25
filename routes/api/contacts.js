@@ -9,7 +9,7 @@ const {
   isValidId,
   validateFavBody,
   authenticate,
-} = require("../../decorators");
+} = require("../../middlewares");
 
 const jsonParser = express.json();
 
