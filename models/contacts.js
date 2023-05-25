@@ -30,6 +30,7 @@ const addContact = async (data) => {
   };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  console.log(`new contact`, newContact);
   return newContact;
 };
 

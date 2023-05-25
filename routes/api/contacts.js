@@ -1,8 +1,7 @@
+// const { HttpError } = require("../../helpers");
 const express = require("express");
 const router = express.Router();
-
 const contacts = require("../../models/contacts");
-const { HttpError } = require("../../helpers");
 const Joi = require("joi");
 
 const addSchema = Joi.object({
@@ -26,7 +25,7 @@ router.get("/:contactId", async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
 
     if (!result) {
-      throw HttpError(404, "404! Not found");
+      res.status(404).json({ message: "Not found" });
     }
     res.status(200).json(result);
   } catch (error) {
@@ -38,13 +37,13 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing required name field");
+      res.status(400).json({ message: "missing required name field" });
     }
     const result = await contacts.addContact(req.body);
     if (!result) {
-      throw HttpError(404, "404! Not found");
+      res.status(404).json({ message: "Not found" });
     }
-    console.log("Contact added! New lists of contacts: ");
+    console.log("Contact added! New lists of contacts");
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -56,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, "404! Not found");
+      res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
@@ -68,12 +67,13 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing fields");
+      res.status(400).json({ message: "missing fields" });
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, "404! Not found");
+      // throw HttpError(404, "404! Not found");
+      res.status(404).json({ message: "Not found" });
     }
     res.status(201).json(result);
   } catch (error) {}
