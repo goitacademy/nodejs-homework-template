@@ -29,7 +29,7 @@ const addContact = async ({ name, email, phone }) => {
   const data = await listContacts();
   const strPhone = String(phone);
 
-  const newContact = { id: nanoid(), name, email, strPhone };
+  const newContact = { id: nanoid(), name, email, phone: strPhone };
   data.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
   return newContact;
@@ -43,7 +43,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
     return null;
   }
   const strPhone = String(phone);
-  data[contactToUpdateIndex] = { id: nanoid(), name, email, strPhone };
+  data[contactToUpdateIndex] = { id: nanoid(), name, email, phone: strPhone };
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
   // console.log("data[contactToUpdateIndex]", data[contactToUpdateIndex]);
   return data[contactToUpdateIndex];
