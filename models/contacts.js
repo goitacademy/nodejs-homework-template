@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 const contactsPath = path.join(__dirname, "contacts.json");
 console.log(contactsPath);
 
@@ -10,13 +10,10 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-
-// console.log(cont)
-
 const getContactById = async (contactId) => {
   const data = await listContacts();
-  const contactById = data.find((contact) => contact.id === contactId) || null;
-  return contactById;
+  const contactById = data.find((contact) => contact.id === contactId);
+  return contactById || null;
 };
 
 const removeContact = async (contactId) => {
@@ -38,10 +35,9 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async (contactId, name, email, phone) => {
+const updateContact = async (contactId, { name, email, phone }) => {
   const data = await listContacts();
-  const contactToUpdateIndex = data.findIndex(
-    (contact) => contact.id === contactId
+  const contactToUpdateIndex = data.findIndex(contact => contact.id === contactId
   );
   if (contactToUpdateIndex === -1) {
     return null;
@@ -49,6 +45,7 @@ const updateContact = async (contactId, name, email, phone) => {
   const strPhone = String(phone);
   data[contactToUpdateIndex] = { id: nanoid(), name, email, strPhone };
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+  // console.log("data[contactToUpdateIndex]", data[contactToUpdateIndex]);
   return data[contactToUpdateIndex];
 };
 
