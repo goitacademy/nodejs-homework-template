@@ -71,9 +71,15 @@
     "phone": "123456789"
   },
   {
-    "id": "WKNIK7xuJbSZhjXAwo1rB",
-    "name": "nase",
-    "email": "email@mail.com",
-    "phone": "0000123456789"
+    "contactId": "WKNIK7xuJbSZhjXAwo1rB",
+    "name": "NewName",
+    "email": "newemail@mail.com",
+    "phone": "1111111111"
+  },
+  {
+    "contactId": "z8NotT-OUJypijPcqpnLN",
+    "name": "NewName",
+    "email": "newemail@mail.com",
+    "phone": "1111111111"
   }
 ]

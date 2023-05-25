@@ -10,41 +10,30 @@ const contactsPath = path.resolve('models/contacts.json');
 // console.log('contactsPath', contactsPath)
 
 const listContacts = async () => {
-  try{
-    const contactsList = (await fs.readFile(contactsPath)).toString();
-    return JSON.parse(contactsList);
-  } catch (error) {
-    console.log(error)
-  }
+  const contactsList = (await fs.readFile(contactsPath)).toString();
+  return JSON.parse(contactsList);
 }
 const getContactById = async (contactId) => {
-  try {
-    const contactsArr = await listContacts();
-    const findContact = contactsArr.find(elem => elem.id === contactId);
+  const contactsArr = await listContacts();
+  const findContact = contactsArr.find(elem => elem.id === contactId);
 
-    return findContact;
-  } catch (error) {
-      console.log(error);
-  }
+  return findContact;
+
 }
 
 const removeContact = async (contactId) => {
-  try{
-    const contactsArr = await listContacts();
-    const getContactIndex = contactsArr.findIndex(elem => elem.id === contactId);
-    let deletedContact;
-    
-    if(getContactIndex === -1){
-      throw HttpError()
-    }
-    deletedContact = contactsArr.splice(getContactIndex, 1);
-
-    await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
-    
-    return deletedContact;
-  } catch (error) {
-      console.log(error);
+  const contactsArr = await listContacts();
+  const getContactIndex = contactsArr.findIndex(elem => elem.id === contactId);
+  let deletedContact;
+  
+  if(getContactIndex === -1){
+    throw HttpError(404)
   }
+  deletedContact = contactsArr.splice(getContactIndex, 1);
+
+  await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
+  
+  return deletedContact;
 }
 
 const addContact = async ({name, email, phone}) => {
