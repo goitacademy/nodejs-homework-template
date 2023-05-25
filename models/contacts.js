@@ -17,7 +17,7 @@ const getContactById = async contactId => {
 	try {
 		const data = await listContacts();
 		const matchedContact = data.find(contact => contact.id === contactId);
-		if (!matchedContact) return `Contact with id: "${contactId}" was not found!`;
+		if (!matchedContact) return null;
 
 		return matchedContact;
 	} catch (err) {
@@ -49,7 +49,7 @@ const addContact = async body => {
 		const newContact = {id: uuidv4(), ...body};
 		await fs.writeFile(contactsPath, JSON.stringify([...data, newContact]));
 
-		return `Contact with name: "${body.name}" was succesfully created!`;
+		return newContact;
 	} catch (err) {
 		return err.message;
 	}
