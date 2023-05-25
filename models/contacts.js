@@ -20,6 +20,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -37,13 +41,9 @@ const contactAddSchema = Joi.object({
   email: Joi.string().min(3).email().required().messages({
     "any.required": `missing required email field`,
   }),
-  phone: Joi.string()
-    .min(10)
-    .required()
-    .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/)
-    .messages({
-      "any.required": `missing required phone field`,
-    }),
+  phone: Joi.string().min(10).required().messages({
+    "any.required": `missing required phone field`,
+  }),
   favorite: Joi.boolean().default(false),
 });
 
