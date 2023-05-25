@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs").promises;
 const {v4: uuidv4} = require("uuid");
 
-const contactsPath = path.join("models", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
 	try {
@@ -16,7 +16,6 @@ const listContacts = async () => {
 const getContactById = async contactId => {
 	try {
 		const data = await listContacts();
-
 		const matchedContact = data.find(contact => contact.id === contactId);
 		if (!matchedContact) return `Contact with id: "${contactId}" was not found!`;
 
@@ -29,12 +28,11 @@ const getContactById = async contactId => {
 const removeContact = async contactId => {
 	try {
 		const data = await listContacts();
+		const index = data.findIndex(contact => contact.id === contactId);
+		if (index === -1) return null;
 
-		const matchedContact = data.find(contact => contact.id === contactId);
-		if (!matchedContact) return `Contact with id: "${contactId}" was not found!`;
-
-		const modifiedContacts = data.filter(contact => contact.id !== contactId);
-		await fs.writeFile(contactsPath, JSON.stringify(modifiedContacts));
+		data.splice(index, 1);
+		await fs.writeFile(contactsPath, JSON.stringify(data));
 
 		return `Contact with id: "${contactId}" was succesfully removed!`;
 	} catch (err) {
@@ -43,36 +41,33 @@ const removeContact = async contactId => {
 };
 
 const addContact = async body => {
-	const {name, email, phone} = body;
-	if (!name || !email || !phone) return `"message": "missing required name field"`;
-
 	try {
 		const data = await listContacts();
+		const matchedName = data.find(contact => contact.name === body.name);
+		if (matchedName) return `Contact with name: "${body.name}" is exist!`;
 
-		const matchedName = data.find(contact => contact.name === name);
-		if (matchedName) return `Contact with name: "${name}" is exist!`;
-
-		const newContact = {id: uuidv4(), name, email, phone};
+		const newContact = {id: uuidv4(), ...body};
 		await fs.writeFile(contactsPath, JSON.stringify([...data, newContact]));
 
-		return `Contact with name: "${name}" was succesfully created!`;
+		return `Contact with name: "${body.name}" was succesfully created!`;
 	} catch (err) {
 		return err.message;
 	}
 };
 
-const updateContact = async body => {
-	const {id, name, email, phone} = body;
-	const data = await listContacts();
+const updateContact = async (id, body) => {
+	try {
+		const data = await listContacts();
+		const index = data.findIndex(contact => contact.id === id);
+		if (index === -1) return null;
 
-	let matchedContact = data.find(contact => contact.id === id);
-	if (!matchedContact) return `Contact with id: "${id}" was not found!`;
+		data[index] = {id, ...body};
 
-	matchedContact = {name, email, phone};
-	await fs
-		.writeFile(contactsPath, JSON.stringify([...data, matchedContact]))
-		.then(console.log(`Contact with name: "${name}" was succesfully updated!`))
-		.catch(err => console.log(err.message));
+		await fs.writeFile(contactsPath, JSON.stringify(data));
+		return data[index];
+	} catch (err) {
+		return err.message;
+	}
 };
 
 module.exports = {
