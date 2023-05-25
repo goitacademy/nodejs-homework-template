@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/user");
+const { User } = require("../models/user");
 // const { HttpError } = require("../helper/HttpError");
 
-const register = async (body) => {
+const register = async (body, res) => {
   const currentUser = await User.findOne({ email: body.email });
   if (currentUser) {
     // throw new HttpError(409, "User alredy exist");

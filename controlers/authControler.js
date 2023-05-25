@@ -1,8 +1,8 @@
-const register = require("../servises/authServices");
+const { register } = require("../servises/authServices");
 const ctrlWrapper = require("../decorator/ctrlWrapper");
 
 const singup = ctrlWrapper(async (req, res, next) => {
-  const newUser = await register(req.body);
+  const newUser = await register(req.body, res);
   return res.status(201).json(newUser);
 });
 

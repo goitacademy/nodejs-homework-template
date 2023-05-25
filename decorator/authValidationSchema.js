@@ -7,6 +7,8 @@ const createUserValidasionSchema = Joi.object({
     .email()
     .required(),
   password: Joi.string().required(),
+  name: Joi.string(),
+  phone: Joi.string(),
 });
 
 const loginValidationSchema = Joi.object({
