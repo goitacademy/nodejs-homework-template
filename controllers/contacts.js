@@ -28,11 +28,6 @@ const updateById = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
-  //   if (Object.keys(body).length === 0) {
-  //     res.status(400).json({ message: "missing fields" });
-  //     // throw HttpError(400, "missing fields");
-  //   }
-
   const result = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (!result) {
     res.status(404).json({ message: "Not found" });
@@ -44,7 +39,12 @@ const updateById = async (req, res) => {
 const updateFavorite = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  console.log(1);
+
+  if (Object.keys(body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    // throw HttpError(400, "missing fields");
+  }
+
   const result = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (!result) {
     res.status(404).json({ message: "Not found" });
@@ -56,12 +56,7 @@ const updateFavorite = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndRemove(id);
-
-  if (Object.keys(body).length === 0) {
-    res.status(400).json({ message: "missing fields" });
-    // throw HttpError(400, "missing fields");
-  }
+  const result = await Contact.findByIdAndDelete(id);
 
   if (!result) {
     res.status(404).json({ message: "Not found" });
