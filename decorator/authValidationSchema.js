@@ -14,5 +14,5 @@ const loginValidationSchema = Joi.object({
   password: createUserValidasionSchema.extract("password"),
 });
 
-module.export = { createUserValidasionSchema, loginValidationSchema };
+module.exports = { createUserValidasionSchema, loginValidationSchema };
 // .pattern(passwordPattern)

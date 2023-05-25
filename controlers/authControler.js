@@ -6,4 +6,6 @@ const singup = ctrlWrapper(async (req, res, next) => {
   return res.status(201).json(newUser);
 });
 
-module.exports = { singup };
+const login = ctrlWrapper(async (req, res, next) => {});
+
+module.exports = { singup, login };

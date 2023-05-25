@@ -11,7 +11,7 @@ const validateBody = require("../../decorator/validateBody");
 const jsonParser = express.json();
 
 router.post(
-  "/register",
+  "/singup",
   jsonParser,
   validateBody(createUserValidasionSchema),
   authControler.singup
