@@ -6,13 +6,7 @@ const createUserValidasionSchema = Joi.object({
   email: Joi.string()
     .email()
     .required(),
-  password: Joi.string()
-    // .pattern(passwordPattern)
-    .required()
-    .messages({
-      "string.pattern.base":
-        "Password must contain 8 simbol, at least on letter",
-    }),
+  password: Joi.string().required(),
 });
 
 const loginValidationSchema = Joi.object({
@@ -21,3 +15,4 @@ const loginValidationSchema = Joi.object({
 });
 
 module.export = { createUserValidasionSchema, loginValidationSchema };
+// .pattern(passwordPattern)

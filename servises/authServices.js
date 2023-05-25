@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
-const { HttpError } = require("../helper/HttpError");
+// const { HttpError } = require("../helper/HttpError");
 
 const register = async (body) => {
   const currentUser = await User.findOne({ email: body.email });
@@ -10,9 +10,9 @@ const register = async (body) => {
   }
   body.password = await bcrypt.hash(body.password, 10);
 
-  await User.create(body);
+  return await User.create(body);
 
-  return res.status(201).end();
+  //   return res.status(201).end();
 };
 
 module.exports = { register };
