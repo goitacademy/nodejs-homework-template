@@ -1,16 +1,13 @@
 const mongoose = require("mongoose");
 
-const DB_HOST = "mongodb+srv://antontsyrkunov:36LZaWDuhlriOuhj@workingcluster.h5ib1ni.mongodb.net/contscts_reader?retryWrites=true&w=majority"
+const {DB_HOST} = require("./config")
 
-mongoose.set('strictQuery', true)
+mongoose.set('strictQuery', true);
 
-const app = require('./app')
-
-const {PORT = 3000} = process.env;
 
 mongoose.connect(DB_HOST)
 .then(() => {
-  app.listen(PORT)
+  app.listen(3000)
   console.log("Server connected");
 })
 .catch(error =>  {
@@ -18,4 +15,4 @@ mongoose.connect(DB_HOST)
   process.exit(1);
 })
 
-
+const app = require('./app')
