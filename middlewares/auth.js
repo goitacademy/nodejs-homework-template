@@ -5,7 +5,6 @@ const User = require("../models/user");
 
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization || "";
-  console.log("authHeader :", authHeader);
 
   const [type, token] = authHeader.split(" ");
 

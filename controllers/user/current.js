@@ -2,7 +2,6 @@ const { HttpError } = require("../../helpers");
 
 async function current(req, res) {
   const { user } = req;
-  console.log("user :", user);
 
   if (!user) {
     throw HttpError(401, "Not authorized");

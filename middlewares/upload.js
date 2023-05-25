@@ -5,7 +5,6 @@ const Jimp = require("jimp");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dirPath = path.resolve(__dirname, "../tmp");
-    console.log("dirPath :", dirPath);
     cb(null, dirPath);
   },
   filename: function (req, file, cb) {

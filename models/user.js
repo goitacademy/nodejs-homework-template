@@ -28,6 +28,10 @@ const schema = new Schema({
     type: Boolean,
     default: false,
   },
+  verificationToken: {
+    type: String,
+    required: [true, "Verify token is required"],
+  },
 });
 
 const User = model("user", schema);
