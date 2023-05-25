@@ -1,4 +1,4 @@
-const contactsService = require('../models/contacts');
+const contactsService = require('../services/contactService');
 const {HttpError} = require("../helpers");
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
@@ -11,7 +11,7 @@ const getContactById = ctrlWrapper(async (req, res) => {
     const {contactId} = req.params;
     const result = await contactsService.getContactByIdService(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw new HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result)
 })
@@ -25,7 +25,7 @@ const deleteContact = ctrlWrapper(async (req, res) => {
     const {contactId} = req.params;
     const result = await contactsService.removeContactService(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw new HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json({ message: "contact deleted" })
 })
@@ -34,7 +34,7 @@ const updateContact = ctrlWrapper(async (req, res) => {
     const { contactId } = req.params;
     const result = await contactsService.updateContactService(contactId, req.body);
     if (!result) {
-        throw HttpError(404, `Contact with ${contactId} not found`);
+        throw new HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result);
 })
