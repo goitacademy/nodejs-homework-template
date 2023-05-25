@@ -1,10 +1,11 @@
 const express = require("express");
-const authControler = require("../../controlers/authControler");
+
 const router = express.Router();
 const {
   createUserValidasionSchema,
   loginValidationSchema,
 } = require("../../decorator/authValidationSchema");
+const { singup, login } = require("../../controlers/authControler");
 
 const validateBody = require("../../decorator/validateBody");
 
@@ -14,7 +15,7 @@ router.post(
   "/singup",
   jsonParser,
   validateBody(createUserValidasionSchema),
-  authControler.singup
+  singup
 );
 router.post("/login", validateBody(loginValidationSchema));
 router.post("/logout");
