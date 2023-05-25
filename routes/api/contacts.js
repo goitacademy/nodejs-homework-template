@@ -1,6 +1,8 @@
 const express = require("express");
+const isValidId = require("../middleware/isValidId")
 const getContactsList = require("../../controllers/getContactsList");
 const getContactById = require("../../controllers/getContactById");
+const putContactFildFavorite = require("../../controllers/putContactFildFavorite");
 const postContact = require("../../controllers/postContact");
 const putContact = require("../../controllers/putContact");
 const deleteContact = require("../../controllers/deleteContact")
@@ -9,12 +11,10 @@ const validate = require("../middleware/validation");
 const router = express.Router();
 
 router.get("/", getContactsList);
-
-router.get("/:contactId", getContactById);
-
+router.get("/:contactId",isValidId ,getContactById);
 router.post("/", validate(schemas.createContact), postContact);
-router.put("/:contactId", validate(schemas.updateContact), putContact);
-
-router.delete("/:contactId", deleteContact);
+router.put("/:contactId", isValidId, validate(schemas.updateContact), putContact);
+router.patch("/:contactId/favorite", isValidId,  putContactFildFavorite);
+router.delete("/:contactId",isValidId , deleteContact);
 
 module.exports = router;

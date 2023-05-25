@@ -1,3 +1,6 @@
+const HttpError = require("../../helpers/HttpError")
+
+
 function validate(schema) {
   return (req, res, next) => {
     const { error, value } = schema.validate(
@@ -20,9 +23,9 @@ function validate(schema) {
       const errorType = error.details[0].type;
 
       if (errorType === "any.required") {
-       return res.status(400).json({
-          message: `missing required ${errorField.path[1]} field`,
-        });
+       return HttpError(400, {
+        message: `missing required ${errorField.path[0]} field`,
+      });
       }
     }
 
