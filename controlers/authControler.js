@@ -1,4 +1,4 @@
-const register = require("../server");
+const register = require("../servises/authServices");
 const ctrlWrapper = require("../decorator/ctrlWrapper");
 
 const singup = ctrlWrapper(async (req, res, next) => {
