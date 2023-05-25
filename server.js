@@ -1,4 +1,5 @@
-const app = require("./app");
+const mongoose = require('mongoose');
+const app = require('./app');
 
 
 app.listen(3000, () => {
