@@ -3,11 +3,12 @@ const express = require("express");
 // const updateFavoretSchema = require("../../schemas/contact-schemas)
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
+const authRouter = require("../api/authRouter");
 const isValidId = require("../../decorator/isValidid");
 
-router.use("./auth.js", require("./authRouter"));
 // const Schema = require("../../schemas/contact-schemas");
 // const validateBody = require("../../decorator/validateBody");
+router.use("/auth", require("./authRouter"));
 
 router.get("/", contactControler.getAllContacts);
 
