@@ -4,11 +4,11 @@ const authControllers = require('../../controllers/auth-controllers');
 
 const { schemas } = require('../../models/user');
 
-const { validateBody, authenticate } = require('../../middlewares');
-
+const { validateBody, authenticate, upload } = require('../../middlewares');
 
 
 const router = express.Router();
+
 
 // signup
 router.post('/register', validateBody(schemas.userRegisterSchema), authControllers.register);
@@ -22,7 +22,12 @@ router.get('/current', authenticate, authControllers.getCurrent);
 // signout
 router.post('/logout', authenticate, authControllers.logout);
 
-// patch
+// patch subscription
 router.patch("/subscription", authenticate, validateBody(schemas.userUpdateSchema), authControllers.updateSubscription)
+
+// patch avatars
+router.patch("/avatars", authenticate, upload.single('avatar'), authControllers.updateAvatar)
+
+
 
 module.exports = router;
