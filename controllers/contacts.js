@@ -2,27 +2,9 @@ const {Contact} = require('../models/contact')
 const {ctrlWrapper, HttpError } = require('../helpers');
 
 const getAll = async (req, res, next) => {
-    const { _id: owner } = req.user;
-    const { page = 1, limit = 10, favorite } = req.query;
-    const skip = (page - 1) * limit;
-    const result = await Contact.find({ owner }, "", { skip, limit });
-    
-    let filterFavorite;
-    
-    if (favorite) {
-        filterFavorite= result.filter(item => item.favorite === true)
-    }
-    if (!favorite) {
-        filterFavorite= result.filter(item => item.favorite === false)
-    }
-    else {
-        filterFavorite = result;
-    }
-
-    res.status(200).json(favorite ? filterFavorite : result);
+        const result = await Contact.find();
+        res.status(200).json(result)
 };
-
-
 
 const getById = async (req, res, next) => {
     const { id } = req.params;
@@ -34,8 +16,7 @@ const getById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-    const { _id: owner } = req.user;
-    const result = await Contact.create({ ...req.body, owner});
+        const result = await Contact.create(req.body);
         res.status(201).json(result)
 };
 

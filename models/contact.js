@@ -17,15 +17,8 @@ const contactSchema = new Schema({
     favorite: {
       type: Boolean,
       default: false,
-  },
-     owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
     },
-}, { versionKey: false, timestamps: true });
-
-contactSchema.post("save", hendleMongooseError);
+}, {versionKey: false, timestamps: true});
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
@@ -43,6 +36,7 @@ const schemas = {
     updateFavoriteSchema
 }
 
+contactSchema.post("save", hendleMongooseError)
 
 const Contact = model("contact", contactSchema);
 
