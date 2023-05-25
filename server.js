@@ -5,9 +5,9 @@ const {DB_HOST} = process.env;
 mongoose.set('strictQuery', true);
 
 
-mongoose.connect(DB_HOST)
+mongoose.connect(DB_HOST, PORT=3000)
 .then(() => {
-  app.listen(3000)
+  app.listen(PORT)
   console.log("Server connected");
 })
 .catch(error =>  {
