@@ -14,11 +14,9 @@ router.post(
   "/register",
   jsonParser,
   validateBody(createUserValidasionSchema),
-  authControler.register
+  authControler.singup
 );
 router.post("/login", validateBody(loginValidationSchema));
 router.post("/logout");
 
-module.exports = {
-  authRouter: router,
-};
+module.exports = router;
