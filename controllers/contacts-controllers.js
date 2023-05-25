@@ -17,13 +17,13 @@ const getAllContacts = async (req, res) => {
         skip,
         limit,
       }
-    );
+    ).populate("owner", "email subscription");
     return res.json(favoriteContacts);
   } else {
     const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
       skip,
       limit,
-    });
+    }).populate("owner", "email subscription");
     return res.json(result);
   }
 };
