@@ -1,5 +1,4 @@
 const {Contact} = require("../models/contacts");
-const {HttpError} = require("../helpers/HttpError");
 
 const listContactsService = async (page, limit) => {
   const skip = (page - 1) * limit;
