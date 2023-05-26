@@ -7,10 +7,10 @@ const getListContacts = async (req, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-    console.log(req.query)
-    console.log(req.params)
+    // console.log(req.query)
+    // console.log(req.params)
   const contact = await contactsService.getContactById(req.params.contactId);
-  console.log('GET by ID', contact)
+//   console.log('GET by ID', contact)
   if (!contact) throw HttpError(404);
 
   res.status(200).json(contact);
@@ -24,7 +24,8 @@ const postContact = async (req, res, next) => {
 
 const deleteContactByid = async (req, res, next) => {
   const contact = await contactsService.removeContact(req.params.contactId);
-  if (contact === undefined) throw HttpError(404, "Not found");
+//   console.log('DELETE by id', contact)
+  if (!contact) throw HttpError(404);
 
   res.json({
     message: "Contact deleted",

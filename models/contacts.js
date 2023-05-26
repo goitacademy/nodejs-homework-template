@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
-const HttpError = require("../helpers/index");
+const { HttpError } = require("../helpers/index");
 
 const contactsPath = path.resolve("models/contacts.json");
 
