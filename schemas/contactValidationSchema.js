@@ -6,6 +6,7 @@ const contactValidationSchema = Joi.object({
   name: Joi.string().required("field name is required"),
   email: Joi.string().email().required("field email is required"),
   phone: Joi.string().regex(phoneRegexp).required("field phone is required"),
+  favorite: Joi.boolean(),
 })
 
 const updateContactValidationSchema = Joi.object()
@@ -13,8 +14,16 @@ const updateContactValidationSchema = Joi.object()
     name: contactValidationSchema.extract('name').optional(),
     email: contactValidationSchema.extract('email').optional(),
     phone: contactValidationSchema.extract('phone').optional(),
+    favorite: contactValidationSchema.extract('favorite').optional(),
   })
-  .or('name', 'email', 'phone');
+  .or('name', 'email', 'phone', 'favorite');
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required("missing field favorite"),
+})
 
-module.exports = {contactValidationSchema, updateContactValidationSchema}
+module.exports = {
+  contactValidationSchema, 
+  updateContactValidationSchema, 
+  updateFavoriteSchema
+}

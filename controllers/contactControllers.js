@@ -2,8 +2,9 @@ const contactsService = require('../services/contactService');
 const {HttpError} = require("../helpers");
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
-const getContacts = ctrlWrapper(async (_, res) => {
-    const result = await contactsService.listContactsService();
+const getContacts = ctrlWrapper(async (req, res) => {
+    const {page = 1, limit = 10} = req.query;
+    const result = await contactsService.listContactsService(page, limit);
     res.status(200).json(result)
 })
 
@@ -39,10 +40,20 @@ const updateContact = ctrlWrapper(async (req, res) => {
     res.json(result);
 })
 
+const updateStatusContact = ctrlWrapper(async (req, res) => {
+    const {contactId} = req.params;
+    const result = await contactsService.updateStatusContactService(contactId, req.body);
+    if (!result) {
+        throw new HttpError(404, `Contact with ${contactId} not found`);
+    }
+    res.json(result)
+})
+
 module.exports = {
     getContacts,
     getContactById,
     addContact,
     deleteContact,
     updateContact,
+    updateStatusContact,
 }

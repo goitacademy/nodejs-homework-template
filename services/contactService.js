@@ -1,57 +1,29 @@
-const fs = require("fs/promises");
-const path = require("path");
-const {nanoid} = require("nanoid");
-
 const {Contact} = require("../models/contacts");
 const {HttpError} = require("../helpers/HttpError");
 
-const contactsPath = path.join(__dirname, 'contacts.json');
-
-const listContactsService = async () => {
-    return await Contact.find();
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+const listContactsService = async (page, limit) => {
+  const skip = (page - 1) * limit;
+  return await Contact.find().skip(skip).limit(limit);
 }
 
 const getContactByIdService = async (contactId) => {
-  const contacts = await listContactsService();
-  const currentContact = contacts.find(contact => contact.id === contactId);
-  return currentContact || null;
+  return await Contact.findById(contactId) || null;
 }
 
 const removeContactService = async (contactId) => {
-  const contacts = await listContactsService();
-    const index = contacts.findIndex(contact => contact.id === contactId);
-    if(index === -1){
-        return null;
-    }
-    const [result] = contacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return result;
+  return Contact.findByIdAndDelete(contactId);
 }
 
 const addContactService = async (body) => {
-  const contacts = await listContactsService();
-    const newContact = {
-        id: nanoid(),
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-    }
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return newContact;
+  return await Contact.create(body)
 }
 
 const updateContactService = async (contactId, body) => {
-  const contacts = await listContactsService();
-    const index = contacts.findIndex(contact => contact.id === contactId);
-    if(index === -1){
-        return null;
-    }
-    contacts[index] = {...contacts[index], ...body};
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+  return Contact.findByIdAndUpdate(contactId, body, {new: true});
+}
+
+const updateStatusContactService = async (contactId, favorite) => {
+  return Contact.findByIdAndUpdate(contactId, favorite, {new: true});
 }
 
 module.exports = {
@@ -60,4 +32,5 @@ module.exports = {
     removeContactService,
     addContactService,
     updateContactService,
+    updateStatusContactService,
   }

@@ -9,7 +9,7 @@ const { PORT, DB_URI } = process.env;
   console.log(`Database connection established successfully`);
   app.listen(PORT, () => {
     console.log(
-      `Server is up and running on port 3030  http://localhost:${PORT}`
+      `Server is up and running on port 3000  http://localhost:${PORT}`
     );
   });
 })();
