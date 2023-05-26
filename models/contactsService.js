@@ -34,7 +34,7 @@ const removeContact = async contactId => {
 		data.splice(index, 1);
 		await fs.writeFile(contactsPath, JSON.stringify(data));
 
-		return `Contact with id: "${contactId}" was succesfully removed!`;
+		return true;
 	} catch (err) {
 		return err.message;
 	}
