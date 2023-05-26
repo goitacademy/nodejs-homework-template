@@ -24,10 +24,10 @@ async function login(body) {
   if (!user) {
     throw new HttpError(401, "User not found");
   }
-  // body.password = await bcrypt.hash(body.password, 10);
 
-  const passwordCompara = await bcrypt.compare(password, user.password);
+  const passwordCompara = await bcrypt.compare(body.password, user.password);
   if (!passwordCompara) {
+    console.log(password, user.password);
     throw new HttpError(401, "Password incorrect");
   }
   console.log(password, user.password);
