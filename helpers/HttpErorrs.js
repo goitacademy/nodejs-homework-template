@@ -1,6 +1,6 @@
 const messages = {
   400: "missing required name field",
-  401: "Unauthorized",
+  401: "Not authorized",
   403: "Forbbiden",
   404: "Not found",
   409: "Conflict",
