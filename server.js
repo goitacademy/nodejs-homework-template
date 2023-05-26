@@ -16,3 +16,4 @@ mongoose
     process.exit(1);
   });
 // XjoD3rvTrnfibDr0;
+// mongodb+srv://Vitalik:XjoD3rvTrnfibDr0@cluster0.34j6rru.mongodb.net/
