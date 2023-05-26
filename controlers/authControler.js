@@ -7,8 +7,8 @@ const singup = ctrlWrapper(async (req, res, next) => {
   return res.status(201).json(newUser);
 });
 
-const userLogin = ctrlWrapper(async (req, res, next) => {
-  const user = await login();
+const userLogin = ctrlWrapper(async (req, res) => {
+  const user = await login(req.body);
   return res.status(200).json(user);
 });
 

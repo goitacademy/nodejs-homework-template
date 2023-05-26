@@ -3,7 +3,7 @@ const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
-// const { HttpError } = require("../helper/HttpError");
+const HttpError = require("../helper/HttpError");
 
 const register = async (body, res) => {
   const currentUser = await User.findOne({ email: body.email });
@@ -18,17 +18,19 @@ const register = async (body, res) => {
   //   return res.status(201).end();
 };
 
-async function login(req, res, next) {
-  const { email, password } = req.body;
+async function login(body) {
+  const { email, password } = body;
   const user = await User.findOne({ email });
   if (!user) {
     throw new HttpError(401, "User not found");
   }
+  // body.password = await bcrypt.hash(body.password, 10);
+
   const passwordCompara = await bcrypt.compare(password, user.password);
   if (!passwordCompara) {
     throw new HttpError(401, "Password incorrect");
   }
-  S;
+  console.log(password, user.password);
   // token
   const { _id: id } = user;
   const payload = { id };
@@ -41,6 +43,6 @@ async function login(req, res, next) {
   //   console.log(error.message);
   // }
 
-  res.json({ token });
+  return { ...user, token };
 }
 module.exports = { register, login };
