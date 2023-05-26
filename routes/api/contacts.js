@@ -8,17 +8,23 @@ const contacts = require('../../models/contacts');
 
 const HttpError = require("../../helpers");
 
-const addSchema = Joi.object({
-  name: Joi.string().required().messages({
-    'any.required': `missing required name field`
-  }),
-  email: Joi.string().required().messages({
-    'any.required': `missing required email field`
-  }),
-  phone: Joi.string().required().messages({
-    'any.required': `missing required phone field`
-  }),
-})
+const addSchema = Joi.object().custom((value, helpers) => {
+  if (Object.keys(value).length === 0) {
+    return helpers.error('object.empty');
+  }
+  
+  const keys = ['name', 'email', 'phone'];
+  const missingKeys = keys.filter(key => !Object.prototype.hasOwnProperty.call(value, key));
+  
+  if (missingKeys.length > 0) {
+    return helpers.error('object.missingKeys', { missingKeys });
+  }
+  
+  return value;
+}).messages({
+  'object.empty': 'missing fields',
+  'object.missingKeys': 'missing required fields: {{#missingKeys}}',
+});
 
 
 router.get('/', async (req, res, next) => {
@@ -75,9 +81,6 @@ router.delete('/:id', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    if (Object.keys(req.body).length === 0) {
-      throw HttpError(400,'missing fields' );
-    }
     const {error} = addSchema.validate(req.body);
     if(error) {
       throw HttpError(400, error.message);
