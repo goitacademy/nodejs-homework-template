@@ -3,7 +3,13 @@ const { Contact } = require("../../models");
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findById(contactId);
+  const { _id } = req.user;
+
+  const contact = await Contact.findOne({
+    owner: _id,
+    _id: contactId,
+  }).populate("owner", "_id email subscription");
+
   if (!contact) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }

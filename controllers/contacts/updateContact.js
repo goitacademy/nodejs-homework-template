@@ -3,9 +3,19 @@ const { Contact } = require("../../models");
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const { _id } = req.user;
+
+  const contact = await Contact.findByIdAndUpdate(
+    {
+      owner: _id,
+      _id: contactId,
+    },
+    req.body,
+    {
+      new: true,
+    }
+  ).populate("owner", "_id email subscription");
+  
   if (!contact) {
     throw new NotFound( `Contact with id=${contactId} not found`);
   }
