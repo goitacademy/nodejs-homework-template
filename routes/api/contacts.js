@@ -1,4 +1,4 @@
-// const { HttpError } = require("../../helpers");
+
 const express = require("express");
 const router = express.Router();
 const contacts = require("../../models/contacts");
@@ -25,7 +25,7 @@ router.get("/:contactId", async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
 
     if (!result) {
-      res.status(404).json({ message: "Not found" });
+      throw res.status(404).json({ message: "Not found" });
     }
     res.status(200).json(result);
   } catch (error) {
@@ -37,11 +37,11 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      res.status(400).json({ message: "missing required name field" });
+      throw res.status(400).json({ message: "missing required name field" });
     }
     const result = await contacts.addContact(req.body);
     if (!result) {
-      res.status(404).json({ message: "Not found" });
+      throw res.status(404).json({ message: "Not found" });
     }
     console.log("Contact added! New lists of contacts");
     res.status(201).json(result);
@@ -55,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
     if (!result) {
-      res.status(404).json({ message: "Not found" });
+      throw res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
@@ -66,17 +66,22 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
+    if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      throw res.status(400).json({ message: "missing fields" });
+    }
+
     if (error) {
-      res.status(400).json({ message: "missing fields" });
+      throw res.status(400).json({message: "Please fill out all fields"});
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      // throw HttpError(404, "404! Not found");
-      res.status(404).json({ message: "Not found" });
+      throw res.status(404).json({ message: "Not found" });
     }
     res.status(201).json(result);
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
