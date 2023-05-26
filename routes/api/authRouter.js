@@ -5,7 +5,7 @@ const {
   createUserValidasionSchema,
   loginValidationSchema,
 } = require("../../decorator/authValidationSchema");
-const { singup, login } = require("../../controlers/authControler");
+const { singup, userLogin } = require("../../controlers/authControler");
 
 const validateBody = require("../../decorator/validateBody");
 
@@ -17,7 +17,7 @@ router.post(
   validateBody(createUserValidasionSchema),
   singup
 );
-router.post("/login", validateBody(loginValidationSchema));
+router.post("/login", validateBody(loginValidationSchema), userLogin);
 router.post("/logout");
 
 module.exports = router;
