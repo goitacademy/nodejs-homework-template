@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+require('dotenv').config();
+
 const {DB_HOST} = process.env;
 
 mongoose.set('strictQuery', true);
