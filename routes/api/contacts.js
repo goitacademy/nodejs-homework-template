@@ -5,10 +5,13 @@ const {
   validateBody,
   validateFavorite,
   isValidId,
+  authenticate,
 } = require('../../middlewares');
 const schemas = require('../../schemas/contacts');
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('/', ctrlContacts.getAll);
 
