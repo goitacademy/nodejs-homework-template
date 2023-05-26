@@ -3,9 +3,13 @@ const { HttpError } = require("../helper/HttpError");
 const ctrlWrapper = require("../decorator/ctrlWrapper");
 const Schema = require("../schemas/createContactSchema");
 
-const getAllContacts = async (req, res, next) => {
-  const result = await Contact.find();
-  res.json(result);
+const getAllContacts = async (req, res, next, page, limit) => {
+  const skip = (page - 1) * limit;
+  const result = await Contact.find(limit);
+  res
+    .json(result)
+    .skip(skip)
+    .limit(limit);
 };
 
 const getContactsById = async (req, res) => {
