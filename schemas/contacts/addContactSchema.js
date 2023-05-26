@@ -1,5 +1,7 @@
 const Joi = require('joi');
 
+const phoneRegExp = /^\(\d{3}\)[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/;
+
 /**
  * Required formats:
  * @param {string} name any characters available,
@@ -11,9 +13,7 @@ const Joi = require('joi');
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\)[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/)
-    .required(),
+  phone: Joi.string().pattern(phoneRegExp).required(),
   favorite: Joi.boolean(),
 });
 

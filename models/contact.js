@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const { handleMongooseError } = require('../middlewares');
+const { handleMongooseError } = require('../helpers');
 
 const contactDbSchema = new Schema(
   {
@@ -21,15 +21,16 @@ const contactDbSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  }
+  { versionKey: false, timestamps: true }
 );
 
 contactDbSchema.post('save', handleMongooseError);
 
 const Contact = model('Contact', contactDbSchema);
-
 module.exports = Contact;
