@@ -5,10 +5,15 @@ const validateBody = schema => {
         if (Object.keys(req.body).length === 0) throw HttpError(400, "Missing fields");
         
         const { error } = schema.validate(req.body);
-
         if (error) {
-            // throw HttpError(400, error.message.replace(/\"/g, ''))
-            throw HttpError(400, error.message);
+            // console.log('validateBody schema error ', error._original)
+            let errArr = [];
+            
+            for(let key in error._original){
+                if(error._original[key].length === 0) errArr.push(key);
+            }
+            
+            throw HttpError(400, `missing required ${errArr.join(', ')} field`);
         }
 
         next();
