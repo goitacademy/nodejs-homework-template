@@ -9,15 +9,21 @@ const authenticate = async (req, res, next) => {
   if (bearer !== "Bearer") {
     next(HttpErrors(401));
   }
+
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
-    if (!user || !user.token || user.token !== token) {
+    console.log(user);
+    console.log(user.token);
+    console.log(token);
+    if (!user || !user.token || user.token != token) {
       next(HttpErrors(401));
     }
     req.user = user;
+
     next();
-  } catch {
+  } catch (error) {
+    console.log(error);
     next(HttpErrors(401));
   }
 };
