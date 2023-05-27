@@ -4,13 +4,17 @@ const express = require("express");
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
 const authRouter = require("./authRouter");
-
-const isValidId = require("../../decorator/isValidid");
+const {
+  isValidId,
+  authindentity,
+  validateBody,
+} = require("../../decorator/index");
+// const isValidId = require("../../decorator/isValidid");
 
 // const Schema = require("../../schemas/contact-schemas");
-// const validateBody = require("../../decorator/validateBody");
 
-router.get("/", contactControler.getAllContacts);
+// router.use(authindentity);
+router.get("/", authindentity, contactControler.getAllContacts);
 
 router.get("/:id", isValidId, contactControler.getContactsById);
 

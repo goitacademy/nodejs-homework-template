@@ -37,11 +37,11 @@ async function login(body) {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   const decodeedToken = jwt.decode(token);
 
-  // try {
-  //   const { id } = jwt.verify(token, SECRET_KEY);
-  // } catch (error) {
-  //   console.log(error.message);
-  // }
+  try {
+    const { id } = jwt.verify(token, SECRET_KEY);
+  } catch (error) {
+    console.log(error.message);
+  }
 
   return { ...user, token };
 }
