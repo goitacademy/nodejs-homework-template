@@ -6,15 +6,15 @@ const contactControler = require("../../controlers/contact-controler");
 const authRouter = require("./authRouter");
 const {
   isValidId,
-  authindentity,
+  authidentify,
   validateBody,
 } = require("../../decorator/index");
 // const isValidId = require("../../decorator/isValidid");
 
 // const Schema = require("../../schemas/contact-schemas");
 
-// router.use(authindentity);
-router.get("/", authindentity, contactControler.getAllContacts);
+router.use(authidentify);
+router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", isValidId, contactControler.getContactsById);
 
