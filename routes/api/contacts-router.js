@@ -5,10 +5,10 @@ const { getAllContacts,
     addContact,
     deleteContact,
     updateContact,
-    updateStatusContact } = require('../../controllers/contacts');
+    updateStatusContact } = require('../../controllers');
 
 const { validateBody, isValidId } = require('../../decorators');
-const { schemas } = require('../../models/contact');
+const { schemas } = require('../../models');
 const router = express.Router();
 
 router.get('/', getAllContacts);
