@@ -1,7 +1,7 @@
 const Contact = require("../models/contact");
 
 function getContactsService() {
-  return Contact.find();
+  return Contact.find({}, "-createdAt -updatedAt");
 }
 
 const getContactService = (contactId) => {

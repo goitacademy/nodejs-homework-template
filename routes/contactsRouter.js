@@ -8,11 +8,18 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-} = require("../controllers/controllers");
+} = require("../controllers/contactsControllers");
 
-const { validateBody, validateStatus, isValidId } = require("../middlewares");
+const {
+  validateBody,
+  validateStatus,
+  isValidId,
+  authenticate,
+} = require("../middlewares");
 
 const { addSchema, statusSchema } = require("../utils/schemas");
+
+router.use(authenticate);
 
 router.route("/").get(getContacts).post(validateBody(addSchema), addContact);
 router
@@ -24,4 +31,4 @@ router
   .route("/:contactId/favorite")
   .patch(isValidId, validateStatus(statusSchema), updateStatusContact);
 
-module.exports = router;
+module.exports = { contactsRouter: router };
