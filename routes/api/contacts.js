@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 
-const { validateBody } = require("../../middlwares");
+const { validateBody } = require("../../middleWares");
 const schemas = require("../../schemas/contacts");
 
 router.get("/", ctrl.listContacts);
