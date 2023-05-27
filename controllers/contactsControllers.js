@@ -6,7 +6,10 @@ const {
   deleteContactService,
 } = require("../services/contactsServices");
 const HttpError = require("../utils/Errors");
-const contactsValidation = require("../utils/schema");
+const {
+  validateContact,
+  validateUpdateStatus,
+} = require("../middlewares/validation");
 
 const getContacts = async (req, res, next) => {
   try {
@@ -18,9 +21,9 @@ const getContacts = async (req, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const contact = await getContactService(id);
+    const contact = await getContactService(contactId);
     if (!contact) {
       throw new HttpError(404, `Contact not found`);
     }
@@ -32,10 +35,6 @@ const getContactById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
-    const { error } = contactsValidation.validate(req.body);
-    if (error) {
-      throw new HttpError(400, error.message);
-    }
     const body = req.body;
     const newContact = await createContactService(body);
     res.status(201).json(newContact);
@@ -45,26 +44,35 @@ const createContact = async (req, res, next) => {
 };
 
 const deleteContact = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const deleteContact = await deleteContactService(id);
+    const deleteContact = await deleteContactService(contactId);
     if (!deleteContact) {
       throw new HttpError(404, `Contact not found`);
     }
-    res.status(200).json({ message: "contact deleted" });
+    res.status(200).json({ message: "Contact deleted" });
   } catch (err) {
     next(err);
   }
 };
 
 const updateContact = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const { error } = contactsValidation.validate(req.body);
-    if (error) {
-      throw new HttpError(400, error.message);
+    const updatedContact = await updateContactService(contactId, req.body);
+    if (!updatedContact) {
+      throw new HttpError(404, `Contact not found`);
     }
-    const updatedContact = await updateContactService(id, req.body);
+    res.json(updatedContact);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const updatedContact = await updateContactService(contactId, req.body);
     if (!updatedContact) {
       throw new HttpError(404, `Contact not found`);
     }
@@ -77,7 +85,8 @@ const updateContact = async (req, res, next) => {
 module.exports = {
   getContacts,
   getContactById,
-  createContact,
-  updateContact,
+  createContact: [validateContact, createContact],
+  updateContact: [validateContact, updateContact],
   deleteContact,
+  updateStatusContact: [validateUpdateStatus, updateStatusContact],
 };

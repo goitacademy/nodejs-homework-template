@@ -1,50 +1,39 @@
-const fs = require("fs").promises;
-const path = require("path");
-const crypto = require("crypto");
-
-const contactsPath = path.join(process.cwd(), "db", "contacts.json");
+const Contact = require("../models/Contact");
 
 const getContactsService = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+  return await Contact.find();
 };
 
 const getContactService = async (id) => {
-  const contacts = await getContactsService();
-  return contacts.find((contact) => contact.id === id);
+  const contact = await Contact.findById(id);
+  return contact;
 };
 
 const createContactService = async (data) => {
-  const contacts = await getContactsService();
-  const newContact = { id: crypto.randomUUID(), ...data };
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
+  return await Contact.create(data);
 };
 
 const updateContactService = async (id, body) => {
-  const contacts = await getContactsService();
-  const contact = contacts.findIndex((el) => el.id === id);
+  const contact = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (contact === -1) {
     return null;
   }
-  const updatedContact = {
-    id: id,
-    ...body,
-  };
-  contacts.splice(contact, 1, updatedContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return updatedContact;
+  return contact;
+};
+
+const updateStatusContactService = async (id, body) => {
+  const contact = await Contact.findByIdAndUpdate(id, body, { new: true });
+  if (contact === -1) {
+    return null;
+  }
+  return contact;
 };
 
 const deleteContactService = async (id) => {
-  const contacts = await getContactsService();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index === -1) {
-    throw new Error("Cannot delete");
+  const contact = await Contact.findByIdAndDelete(id);
+  if (contact === -1) {
+    return null;
   }
-  contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return id;
 };
 
@@ -54,4 +43,5 @@ module.exports = {
   createContactService,
   updateContactService,
   deleteContactService,
+  updateStatusContactService,
 };

@@ -22,4 +22,10 @@ const contactsValidation = Joi.object({
   }),
 });
 
-module.exports = contactsValidation;
+const updateStatusValidation = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "missing field favorite" }),
+});
+
+module.exports = { contactsValidation, updateStatusValidation };
