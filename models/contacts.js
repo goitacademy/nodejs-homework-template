@@ -50,7 +50,6 @@ const updateContact = async (contactId, body) => {
     return null
   }
   const updatedContact = {...contacts[contactIndex], ...body}
-  console.log("🚀 ~ file: contacts.js:55 ~ updateContact ~ updatedContact:", updatedContact)
   
   contacts.splice(contactIndex, 1, updatedContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));

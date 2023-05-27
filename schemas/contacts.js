@@ -1,11 +1,11 @@
 const Joi = require("joi");
 
-const validateNewContact = Joi.object({
+const validateContact = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   phone: Joi.string().required(),
 });
 
 module.exports = {
-  validateNewContact,
+  validateContact,
 };

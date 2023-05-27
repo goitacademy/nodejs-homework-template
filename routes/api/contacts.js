@@ -6,17 +6,17 @@ const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 
 const {validateBody} = require("../../middlewares")
-const {validateNewContact} = require("../../schemas/newContacts")
-const {validateUpdateContact} = require("../../schemas/updateContact")
+const {validateContact} = require("../../schemas/contacts")
+
 
 router.get("/",ctrl.getAll );
 
 router.get("/:contactId", ctrl.getById);
 
-router.post("/",validateBody(validateNewContact),ctrl.add );
+router.post("/",validateBody(validateContact),ctrl.add );
 
 router.delete("/:contactId", ctrl.dellete);
 
-router.put("/:contactId", validateBody(validateUpdateContact), ctrl.updateById);
+router.put("/:contactId", validateBody(validateContact), ctrl.updateById);
 
 module.exports = router;
