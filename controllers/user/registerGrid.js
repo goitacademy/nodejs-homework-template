@@ -2,9 +2,9 @@ const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 const { v4 } = require("uuid");
 const User = require("../../models/user");
-const main = require("../../middlewares/sendMailGrid");
+const sendMail = require("../../middlewares/sendMailGrid");
 
-const register = async (req, res, next) => {
+const registerGrid = async (req, res, next) => {
   const { email, password } = req.body;
   const salt = await bcrypt.genSalt();
   const hashdPassword = await bcrypt.hash(password, salt);
@@ -19,10 +19,10 @@ const register = async (req, res, next) => {
       verificationToken,
     });
 
-    main({
+    await sendMail({
       to: email,
       subject: "Please confirm your email",
-      html: `<a href='http://localhost:3000/user/verify/${verificationToken}'>Confirm your email</a>`,
+      html: `<a href='http://localhost:3000/api/users/verify/${verificationToken}'>Confirm your email</a>`,
     });
 
     res.status(201).json({
@@ -39,4 +39,4 @@ const register = async (req, res, next) => {
   }
 };
 
-module.exports = register;
+module.exports = registerGrid;

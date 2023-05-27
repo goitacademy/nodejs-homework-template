@@ -3,6 +3,8 @@ const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 const sendMail = async ({ to, subject, html }) => {
   const from = "andryukhamelnyk@gmail.com";
+  // const from = "info@mycontacts.com";
+
   const email = {
     to,
     from,
@@ -11,16 +13,16 @@ const sendMail = async ({ to, subject, html }) => {
     html,
   };
 
-  const transporter = nodemailer.createTransport({
+  const transport = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    port: 25,
     auth: {
       user: EMAIL_USER,
       pass: EMAIL_PASS,
     },
   });
 
-  await transporter.sendMail(email);
+  await transport.sendMail(email);
 };
 
 module.exports = sendMail;
