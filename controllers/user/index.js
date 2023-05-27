@@ -1,5 +1,4 @@
 const register = require("./register");
-const registerGrid = require("./registerGrid");
 const login = require("../user/login");
 const logout = require("./logout");
 const current = require("./current");
@@ -12,7 +11,6 @@ const sendVerify = require("./sendVerify");
 
 module.exports = {
   register,
-  registerGrid,
   login,
   logout,
   current,

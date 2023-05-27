@@ -11,11 +11,6 @@ const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 router.post(
-  "/registerGrid",
-  validateBody(createUserSchema),
-  tryCatchWrapper(controller.registerGrid)
-);
-router.post(
   "/register",
   validateBody(createUserSchema),
   tryCatchWrapper(controller.register)

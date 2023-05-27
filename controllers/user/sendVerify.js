@@ -1,5 +1,5 @@
 const { HttpError } = require("../../helpers");
-const sendMail = require("../../middlewares/sendMailGrid");
+const sendMail = require("../../middlewares/sendMail");
 const User = require("../../models/user");
 
 async function sendVerify(req, res, next) {
