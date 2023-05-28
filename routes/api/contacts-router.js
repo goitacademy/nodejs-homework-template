@@ -1,5 +1,4 @@
 const { Router } = require("express");
-// const schema = require("../../schemas/contacts-schemas.js");
 const validateBody = require("../../decorators/validateBody.js");
 const ctrl = require("../../controllers/contacts-controllers.js");
 const isValidId = require("../../middleware/isValidId.js");
