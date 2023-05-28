@@ -2,7 +2,11 @@ const bcryt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { User } = require('../models/user');
-
+const fs = require('fs');
+const path = require("path");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const gravatar = require("gravatar");
+const jimp = require("jimp");
 
 const { SECRET_KEY } = process.env;
 
@@ -17,8 +21,9 @@ const register = async (req, res) => {
     };
 
     const createHashPass = await bcryt.hash(password, 10);
+    const avatarUrl = gravatar.create(email);
 
-    const newUser = await User.create({ ...req.body, password: createHashPass });
+    const newUser = await User.create({ ...req.body, avatarUrl, password: createHashPass });
     res.status(201).json({
         email: newUser.email,
         subscription: newUser.subscription,
@@ -72,6 +77,24 @@ const updateSubscription = async (req, res) => {
   res.status(200).json(result);
 };
 
+const updateAvatar = async (req, res) => {
+    const { id } = req.user;
+    const { path: tempUploud, originalName } = req.file;
+    const fileName = `${id}, ${originalName} `;
+    const result = path.join(avatarsDir, fileName);
+    await fs.rename(tempUploud, result);
+
+    const avatar = await jimp.readFile(result);
+    await avatar.resize(250, 250);
+    await avatar.writeAsync(result);
+    
+    const avatarUrl = path.join('avatars', fileName); 
+    await User.findByIdAndUpdate(id, { avatarUrl });
+
+    res.status(200).json({
+        avatarUrl,
+    });
+};
 
 module.exports = {
     register: ctrlWrapper(register),
@@ -79,4 +102,5 @@ module.exports = {
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateSubscription: ctrlWrapper(updateSubscription),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }
