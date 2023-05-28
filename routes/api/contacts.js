@@ -1,77 +1,17 @@
 const express = require("express");
-const Joi = require("joi");
-const { HttpError } = require("../../helpers");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
+const ctrl = require("../../controllers/contacts");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+router.get("/", ctrl.getAll);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contactsList = await contacts.listContacts();
-    res.json(contactsList);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:contactId", ctrl.getById);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const contact = await contacts.getContactById(req.params.contactId);
-    if (!contact) {
-      throw HttpError(404);
-    }
-    res.json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", ctrl.add);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const contact = await contacts.addContact(req.body);
-    res.status(201).json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:contactId", ctrl.updateById);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const contact = await contacts.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    res.status(200).json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const contact = await contacts.removeContact(req.params.contactId);
-    if (!contact) {
-      throw HttpError(404);
-    }
-    res.status(200).json({ message: "Contact deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:contactId", ctrl.deleteById);
 
 module.exports = router;
