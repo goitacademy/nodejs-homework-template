@@ -17,7 +17,7 @@ app.use(cors());
 
 app.use(express.json());
 
-// for express files from folder "public"
+// for express  FILES from folder "public"
 app.use(express.json("public"));
 
 
@@ -25,7 +25,6 @@ app.use('/api/contacts', contactsRouter);
 
 // Authorization
 app.use('/api/auth', authRouter);
-
 
 
 app.use((req, res) => {
@@ -36,6 +35,7 @@ app.use((err, req, res, next) => {
   const { status = 500, message = 'Server error' } = err;
   res.status(status).json({ message });
 });
+
 
 
 module.exports = app;
