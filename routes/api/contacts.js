@@ -18,6 +18,12 @@ router.put("/:id", isValidId, validateBody(schemas.newBody), ctrl.updateById);
 
 router.patch(
   "/:id/favorite",
+  (req, res, next) => {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "missing field favorite" });
+    }
+    next();
+  },
   isValidId,
   validateBody(schemas.updateFavorite),
   ctrl.updateFavorite
