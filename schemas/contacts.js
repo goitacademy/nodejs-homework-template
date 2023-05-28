@@ -1,28 +1,31 @@
 const Joi = require("joi");
 
-const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
+// const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({
-    "any.required": `"name" is a required field`,
-    "string.empty": `"name" cannot be an empty field`,
+    "any.required": `missing required name field`,
+    "string.empty": `missing required name field`,
   }),
-  email: Joi.string()
-    .required()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net", "co", "uk"] },
-    })
-    .messages({
-      "any.required": `"email" is a required field`,
-      "string.empty": `"email" cannot be an empty field`,
-    }),
-  phone: Joi.string().pattern(phoneRegexp).required().messages({
-    "any.required": `"phone" is a required field`,
-    "string.empty": `"phone" cannot be an empty field`,
+  email: Joi.string().required().email().messages({
+    "any.required": `missing required email field`,
+    "string.empty": `missing required email field`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `missing required phone field`,
+    "string.empty": `missing required phone field`,
   }),
 });
 
+const contactUpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+})
+  .min(1)
+  .message("missing fields");
+
 module.exports = {
   contactAddSchema,
+  contactUpdateSchema,
 };

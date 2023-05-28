@@ -22,7 +22,7 @@ router.delete("/:id", contactsControllers.removeContact);
 
 router.put(
   "/:id",
-  validateBody(schemas.contactAddSchema),
+  validateBody(schemas.contactUpdateSchema),
   contactsControllers.updateContactById
 );
 
