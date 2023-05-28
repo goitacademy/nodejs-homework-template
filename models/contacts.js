@@ -12,8 +12,12 @@ const getContactById = async (contactId) => {
   const contactById = await allContacts.find((item) => item.id === contactId);
   return contactById;
 };
-// getContactById("qdggE76Jtbfd9eWJHrssH");
-// const removeContact = async (contactId) => {};
+
+const removeContact = async (contactId) => {
+  const allContacts = await listContacts();
+  const removeById = await allContacts.filter((item) => item.id !== contactId);
+  const stringContacts = JSON.stringify(removeById);
+};
 
 // const addContact = async (body) => {};
 
