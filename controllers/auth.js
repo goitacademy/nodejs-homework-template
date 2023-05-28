@@ -61,9 +61,26 @@ const logout = async(req, res) => {
     })
 }
 
+const updateSubscription = async(req, res) => {
+    const {_id} = req.user;
+      const newSubscription = req.body.subscription;
+        try {
+        const result = await User.findByIdAndUpdate(_id, { subscription: newSubscription }, { new: true });
+    
+        if (!result) {
+          throw new HttpError(404, "Not found");
+        }
+    
+        return res.json(result);
+      } catch (error) {
+        return res.status(error.statusCode || 500).json({ error: error.message });
+      }
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout)
+    logout: ctrlWrapper(logout),
+    updateSubscription: ctrlWrapper(updateSubscription)
 }
