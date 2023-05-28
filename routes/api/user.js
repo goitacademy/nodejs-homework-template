@@ -16,6 +16,6 @@ router.post('/logout', authorization, ctrl.logout);
 
 router.patch('/', authorization, validateBody(schemas.validateSubscription), ctrl.updateSubscription);
 
-router.patch('/avatar', authorization, upload.single('avatar'), ctrl.updateAvatar);
+router.patch('/avatars', authorization, upload.single('avatar'), ctrl.updateAvatar);
 
 module.exports = router;
