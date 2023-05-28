@@ -1,15 +1,15 @@
 const express = require('express');
-
 const { getAllContacts,
     getContactById,
     addContact,
     deleteContact,
     updateContact,
     updateStatusContact } = require('../../controllers');
-
-const { validateBody, isValidId } = require('../../decorators');
+const { validateBody, isValidId, authenticate } = require('../../decorators');
 const { schemas } = require('../../models');
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('/', getAllContacts);
 
