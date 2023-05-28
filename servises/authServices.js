@@ -38,11 +38,10 @@ async function login(body) {
   const decodeedToken = jwt.decode(token);
 
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
-  } catch (error) {
-    console.log(error.message);
-  }
+    const token = jwt.verify(token, SECRET_KEY);
+    await User.findByIdAndUpdate(currentUser._id, { token });
+  } catch (error) {}
 
-  return { ...user, token };
+  return { token };
 }
 module.exports = { register, login };
