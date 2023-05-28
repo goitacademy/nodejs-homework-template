@@ -47,8 +47,14 @@ function validate(schema) {
         stripUnknown: false,
       }
     );
+    
     if (Object.keys(value.body).length === 0 || typeof value.body !== "object") {
-      return res.status(400).json({ message: "missing fields" });
+      console.log("req.params",req.route.path);
+      if (req.route.path === '/:contactId/favorite' ) {
+      return res.status(400).json({ "message": "missing field favorite" });
+        
+      }
+      return res.status(400).json({ "message": "missing fields" });
     }
     if (error) {
       const errorField = error.details[0];
