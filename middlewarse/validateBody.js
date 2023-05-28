@@ -25,6 +25,12 @@ const validateBodyPut = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
 
+    const bodyLength = Object.keys(req.body).length;
+
+    if (bodyLength === 0) {
+      throw HttpError(400, "missing fields");
+    }
+
     if (error) {
       const errorMesagge = error.message
         .split("is required")
