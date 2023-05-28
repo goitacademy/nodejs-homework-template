@@ -2,7 +2,6 @@ const {User} = require("../models/user");
 const {HttpError, ctrlWrapper} = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {SECRET_KEY} = process.env;
 
 const register = async(req, res) => {
     const {email, password} = req.body;
@@ -33,6 +32,7 @@ const login = async (req, res) => {
         throw HttpError(401, "Email or password is wrong");
     }
     
+    const {SECRET_KEY} = process.env;
     const payload = {
         id: user._id,
     };
