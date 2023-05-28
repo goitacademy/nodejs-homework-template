@@ -36,13 +36,13 @@ const updateContact = async (id, data) => {
     return null;
   }
   list[index] = { id, ...data };
-  await updateList();
+  await updateList(list);
   return list[index];
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const list = await listContacts();
-  const index = list.findIndex((item) => item.id === contactId);
+  const index = list.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }

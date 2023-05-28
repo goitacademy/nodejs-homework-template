@@ -46,26 +46,29 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const contact = await contacts.removeContact(req.params.contactId);
-    res.json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-    const contact = await contacts.updateContact(req.params.id, req.body);
+    const contact = await contacts.updateContact(
+      req.params.contactId,
+      req.body
+    );
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const contact = await contacts.removeContact(req.params.contactId);
     if (!contact) {
       throw HttpError(404);
     }
-    res.json(contact);
+    res.status(200).json({ message: "Contact deleted" });
   } catch (error) {
     next(error);
   }
