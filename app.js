@@ -33,24 +33,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// const avatarsDir = path.join(__dirname, "public ", "books");
-
-// const avatars = [];
-
-// app.post("app/avatars", upload.single("cover"), async (req, res) => {
-//   const { path: tempUpload, originalname } = req.file;
-//   const resultUpload = path.join(avatarsDir, originalname);
-//   await fs.rename(tempUpload, resultUpload);
-//   const cover = path.join("avatars", originalname);
-//   const newAvatars = {
-//     id: nanoid,
-//     ...req.body,
-//     cover,
-//   };
-//   res.status(201).json(newAvatars);
-// });
-
-// app.get("/api/avatars", async (req, res) => {
-//   res.json(avatars);
-// });
 module.exports = app;
