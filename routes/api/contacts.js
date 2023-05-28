@@ -1,35 +1,46 @@
 const express = require("express");
 const router = express.Router();
-const cntController = require("../../Controllers/contact-controller");
-const isValidId = require("../../middlewares/isValidId");
+const {
+  getAll,
+  getById,
+  addContact,
+  removeContact,
+  updateContact,
+  setFaforited,
+} = require("../../controllers/Contacts");
+const {
+  isValidId,
+  validationBody,
+  authenticate,
+} = require("../../middlewares");
 
-const schema = require("../../models/schemas/joiContactsSchema");
-const { validationBody } = require("../../middlewares");
+const { cntJoiSchema } = require("../../models/contacts");
 
-router.get("/", cntController.getAllContacts);
+router.get("/", authenticate, getAll);
 
-router.get("/:id", isValidId, cntController.getContactById);
+router.get("/:id", authenticate, isValidId, getById);
 
 router.post(
   "/",
-  validationBody(schema.addContactSchema),
-  cntController.addContact
+  validationBody(cntJoiSchema.addContactSchema),
+  authenticate,
+  addContact
 );
 
 router.put(
   "/:id",
-  validationBody(schema.addContactSchema),
-
-  cntController.updateContact
+  validationBody(cntJoiSchema.addContactSchema),
+  authenticate,
+  updateContact
 );
 
 router.patch(
   "/:id/favorite",
-  validationBody(schema.setFaforitedSchema),
-
-  cntController.setFaforited
+  validationBody(cntJoiSchema.setFaforitedSchema),
+  authenticate,
+  setFaforited
 );
 
-router.delete("/:id", cntController.removeContact);
+router.delete("/:id", authenticate, removeContact);
 
 module.exports = router;

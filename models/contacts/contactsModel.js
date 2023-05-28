@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const MongooseError = require("../../Helpers/MongooseError");
+const { MongooseError } = require("../../Helpers");
 
 const contacts = new Schema(
   {
@@ -17,6 +17,11 @@ const contacts = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
