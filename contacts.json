@@ -3,13 +3,15 @@
     "name": "Allen Raymond",
     "email": "nulla.ante@vestibul.co.uk",
     "phone": "(992) 914-3792",
-    "favorite": false
+    "favorite": false,
+    "owner": "647248453c757ccac1997057"
   },
   {
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
     "phone": "(294) 840-6685",
-    "favorite": true
+    "favorite": true,
+    "owner": "647248453c757ccac1997057"
   },
   {
     "name": "Kennedy Lane",
