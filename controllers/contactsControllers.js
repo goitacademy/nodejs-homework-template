@@ -17,16 +17,14 @@ const getListContacts = asyncWrapper(async (req, res, next) => {
 const getOneContact = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
   const oneContact = await getContactById(contactId);
-  console.log(req.params);
   if (!oneContact) {
-    throw HttpError(404, "Not found");
+    throw new HttpError(404);
   }
   res.status(200).json(oneContact);
 });
 
 const addNewContact = asyncWrapper(async (req, res, next) => {
   const newContact = await addContact(req.body);
-  console.log(req.body);
   res.status(201).json(newContact);
 });
 
@@ -34,7 +32,7 @@ const deleteContact = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
   const deletedContact = await removeContact(contactId);
   if (!deletedContact) {
-    throw HttpError(404, "Not found");
+    throw new HttpError(404);
   }
   res.status(200).json({
     message: "contact deleted",
@@ -45,7 +43,7 @@ const updateContact = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = await updateContactById(contactId, req.body);
   if (!updatedContact) {
-    throw HttpError(404, "not found");
+    throw new HttpError(404);
   }
   res.status(200).json(updatedContact);
 });
