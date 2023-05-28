@@ -7,7 +7,7 @@ const userRouter = express.Router();
 
 userRouter.get("/current", authenticate, usersCtrl.getCurrentUser);
 
-userRouter.post(
+userRouter.patch(
   "/",
   authenticate,
   validateBody(userSchemas.subscription),
