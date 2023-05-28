@@ -7,13 +7,24 @@ const router = express.Router();
 const contacts = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  const contactsList = await contacts.listContacts();
-  res.json(contactsList);
+  try {
+    const contactsList = await contacts.listContacts();
+    res.json(contactsList);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await contacts.getContactById(req.params.contactId);
-  res.json(contact);
+  try {
+    const contact = await contacts.getContactById(req.params.contactId);
+    if (!contact) {
+      throw HttpError(404);
+    }
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
