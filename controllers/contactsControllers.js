@@ -11,7 +11,10 @@ const { ctrlWrapper } = require("../utils/decorators");
 const { HttpError } = require("../utils/errors");
 
 const getContacts = async (req, res) => {
-  const contacts = await getContactsService();
+  const { page = 1, limit = 20, favorite } = req.query;
+  const { _id: owner } = req.user;
+
+  const contacts = await getContactsService(owner, page, limit, favorite);
 
   if (!contacts) {
     throw new HttpError(404, "Not found");
@@ -31,7 +34,9 @@ const getContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await addContactService(req.body);
+  const { id: owner } = req.user;
+
+  const newContact = await addContactService({ ...req.body, owner });
 
   if (!newContact) {
     throw new HttpError(404, "Not found");

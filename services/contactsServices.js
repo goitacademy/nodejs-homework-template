@@ -1,11 +1,28 @@
 const Contact = require("../models/contact");
 
-function getContactsService() {
-  return Contact.find({}, "-createdAt -updatedAt");
+function getContactsService(owner, page, limit, favorite) {
+  const skip = (page - 1) * limit;
+
+  const filter = {};
+
+  console.log(favorite);
+
+  if (favorite === "true") {
+    filter.favorite = true;
+    console.log(filter);
+  }
+
+  if (favorite === "false") {
+    filter.favorite = false;
+  }
+
+  return Contact.find({ owner, favorite }, "-createdAt -updatedAt")
+    .skip(skip)
+    .populate("owner", "email subscription");
 }
 
 const getContactService = (contactId) => {
-  return Contact.findOne({ _id: contactId });
+  return Contact.findOne({ _id: contactId }, "-createdAt -updatedAt");
 };
 
 const addContactService = (newContact) => {

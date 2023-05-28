@@ -1,9 +1,8 @@
 const { HttpError } = require("../utils/errors");
 
-const validateBody = (schema) => {
+const validateSubscription = (schema) => {
   return (req, _, next) => {
-    const { error } = schema.validate(req.body);
-
+    const { error } = schema.validate(req.query);
     if (error) {
       throw new HttpError(400, error.message);
     }
@@ -11,4 +10,4 @@ const validateBody = (schema) => {
   };
 };
 
-module.exports = validateBody;
+module.exports = validateSubscription;

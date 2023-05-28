@@ -9,6 +9,7 @@ const addSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(10).max(15).required(),
+  favorite: Joi.boolean(),
 });
 
 module.exports = addSchema;

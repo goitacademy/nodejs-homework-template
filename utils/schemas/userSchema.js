@@ -22,8 +22,12 @@ const userSchema = Joi.object({
     .pattern(emailPattern)
     .messages({ "string.pattern.base": emailErrorMessage })
     .required(),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
   token: Joi.string(),
 });
 
-module.exports = userSchema;
+const subscriptionUserValidationSchema = Joi.object().keys({
+  subscription: userSchema.extract("subscription").required(),
+});
+
+module.exports = { userSchema, subscriptionUserValidationSchema };

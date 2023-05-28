@@ -8,18 +8,22 @@ const authenticate = async (req, _, next) => {
 
   const [bearer, token] = authorization.split(" ");
 
-  try {
-    if (bearer !== "Bearer") {
-      throw new HttpError(401);
-    }
-    const { _id } = jwt.verify(token, SECRET_KEY);
-    const user = await User.findOne({ _id });
-    req.user = user;
-  } catch {
+  if (bearer !== "Bearer") {
     next(new HttpError(401));
   }
 
-  next();
+  try {
+    const { id } = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(id);
+
+    if (!user || !user.token) {
+      next(new HttpError(401));
+    }
+    req.user = user;
+    next();
+  } catch {
+    next(new HttpError(401));
+  }
 };
 
 module.exports = authenticate;
