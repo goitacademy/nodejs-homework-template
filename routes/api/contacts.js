@@ -3,10 +3,17 @@ const express = require("express");
 // const updateFavoretSchema = require("../../schemas/contact-schemas)
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
-const isValidId = require("../../decorator/isValidid");
-// const Schema = require("../../schemas/contact-schemas");
-// const validateBody = require("../../decorator/validateBody");
+const authRouter = require("./authRouter");
+const {
+  isValidId,
+  authidentify,
+  validateBody,
+} = require("../../decorator/index");
+// const isValidId = require("../../decorator/isValidid");
 
+// const Schema = require("../../schemas/contact-schemas");
+
+router.use(authidentify);
 router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", isValidId, contactControler.getContactsById);
@@ -14,6 +21,7 @@ router.get("/:id", isValidId, contactControler.getContactsById);
 router.patch("/:id", isValidId, contactControler.updateContact);
 
 // CHANG POST (PUT)
+router.post("/auth", authRouter);
 
 router.post("/", contactControler.addContact);
 
