@@ -7,8 +7,12 @@ const listContacts = async () => {
   return JSON.parse(bufer);
 };
 
-// const getContactById = async (contactId) => {};
-
+const getContactById = async (contactId) => {
+  const allContacts = await listContacts();
+  const contactById = await allContacts.find((item) => item.id === contactId);
+  return contactById;
+};
+// getContactById("qdggE76Jtbfd9eWJHrssH");
 // const removeContact = async (contactId) => {};
 
 // const addContact = async (body) => {};
@@ -17,7 +21,7 @@ const listContacts = async () => {
 
 module.exports = {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   // addContact,
   // updateContact,

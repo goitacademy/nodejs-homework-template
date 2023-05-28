@@ -6,14 +6,16 @@ const operations = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
   const result = await operations.listContacts();
-  console.log("🚀 ~ operations.listContacts():", operations.listContacts());
-
   res.json(result);
-  // res.json(operations.listContacts());
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const contactById = await operations.getContactById(contactId);
+  if (!contactById) {
+    res.status(404).json({ message: "Not found" });
+  }
+  res.json(contactById);
 });
 
 router.post("/", async (req, res, next) => {
