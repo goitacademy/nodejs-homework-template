@@ -5,8 +5,8 @@ const router = express.Router();
 const contactsService = require("../../models/contacts");
 
 router.get('/', async (req, res, next) => {
-  const result = contactsService.listContacts();
-  res.json(result);
+  const contacts  = await contactsService.listContacts();
+  res.json({result: contacts});
   
 })
 
