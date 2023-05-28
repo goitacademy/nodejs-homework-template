@@ -2,8 +2,14 @@ const express = require("express");
 
 const router = express.Router();
 
+const operations = require("../../models/contacts");
+
 router.get("/", async (req, res, next) => {
-  res.json({ message: "знову змінюєм щось" });
+  const result = await operations.listContacts();
+  console.log("🚀 ~ operations.listContacts():", operations.listContacts());
+
+  res.json(result);
+  // res.json(operations.listContacts());
 });
 
 router.get("/:contactId", async (req, res, next) => {
