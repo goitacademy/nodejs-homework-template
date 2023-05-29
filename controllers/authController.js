@@ -1,11 +1,19 @@
 const { User } = require("../models/users");
 const { ctrlWrapper } = require("../helpers/ctrlWrapper");
 const { RequestError } = require("../helpers/RequestError");
+const path = require("path");
+const fs = require("fs/promises");
 const bcrypt = require("bcrypt");
+const jimp = require("jimp");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const gravatar = require("gravatar");
+const { error } = require("console");
+
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -16,8 +24,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -71,9 +83,31 @@ const logout = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  try {
+    const resultUpload = path.join(avatarsDir, filename);
+    const image = await jimp.read(tempUpload);
+    await image.resize(250, 250).write(tempUpload);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join("avatars", filename);
+    const updateUserAvatar = await User.findByIdAndUpdate(_id, { avatarURL });
+    if (!updateUserAvatar) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+    return res.status(200).json({ avatarURL });
+  } catch (error) {
+    await fs.unlink(tempUpload);
+    throw error;
+  }
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
