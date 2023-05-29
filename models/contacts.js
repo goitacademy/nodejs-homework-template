@@ -16,7 +16,8 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const allContacts = await listContacts();
   const removeById = await allContacts.filter((item) => item.id !== contactId);
-  const stringContacts = JSON.stringify(removeById);
+  const stringContacts = await JSON.stringify(removeById, null, 2);
+  fs.writeFile(contactPath, stringContacts);
 };
 
 // const addContact = async (body) => {};
@@ -26,7 +27,7 @@ const removeContact = async (contactId) => {
 module.exports = {
   listContacts,
   getContactById,
-  // removeContact,
+  removeContact,
   // addContact,
   // updateContact,
 };
