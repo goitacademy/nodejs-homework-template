@@ -42,3 +42,4 @@ module.exports = {
     deleteContact: funcWrapper(deleteContact),
     updateContactById: funcWrapper(updateContactById),
 };
+
