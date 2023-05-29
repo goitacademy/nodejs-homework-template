@@ -8,7 +8,7 @@ const { httpError } = require("../../helpers");
 const contactPush = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
 });
 router.get("/", async (req, res, next) => {
   try {
@@ -62,6 +62,10 @@ router.put("/:contactId", async (req, res, next) => {
     }
     const { contactId } = req.params;
     const result = await operations.updateContact(contactId, req.body);
+    if (!result) {
+      throw httpError(404);
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
