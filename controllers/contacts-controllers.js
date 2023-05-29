@@ -7,10 +7,17 @@ const {HttpError,  controllerWrapper} = require('../helpers');
 // Отримати всі контакти
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 5 } = req.query;
+
+  const { page = 1, limit = 5, favorite } = req.query;
+  const query = { owner };
+  if (favorite !== undefined) { 
+    query.favorite = favorite;
+  }
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit }).populate("owner", "name email");
-  res.json(result);
+
+  const result = await Contact.find(query, "-createdAt -updatedAt", { skip, limit })
+    
+  await res.json(result);
 };
 
 // Отримати контакт за id
@@ -73,3 +80,4 @@ module.exports = {
   updateFavorite: controllerWrapper(updateFavorite),
   deleteById: controllerWrapper(deleteById),
 };
+
