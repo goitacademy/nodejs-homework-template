@@ -3,8 +3,13 @@ const express = require("express");
 const router = express.Router();
 
 const operations = require("../../models/contacts");
-
+const Joi = require("joi");
 const { httpError } = require("../../helpers");
+const contactPush = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.number().required(),
+});
 router.get("/", async (req, res, next) => {
   try {
     const result = await operations.listContacts();
@@ -29,8 +34,11 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { error } = contactPush.validate(req.body);
+    if (error) {
+      throw httpError(400, error.message);
+    }
     const result = await operations.addContact(req.body);
-    console.log(result);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -43,12 +51,20 @@ router.delete("/:contactId", async (req, res, next) => {
     await operations.removeContact(contactId);
     res.json({ message: "contact deleted" });
   } catch (error) {}
-  // res.json({ message: "template message" });
 });
 // ! доробити^^^
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactPush.validate(req.body);
+    if (error) {
+      throw httpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await operations.updateContact(contactId, req.body);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

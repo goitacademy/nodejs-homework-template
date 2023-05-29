@@ -31,12 +31,12 @@ const addContact = async (body) => {
   return body;
 };
 
-// const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 };
