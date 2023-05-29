@@ -1,17 +1,14 @@
 const { HttpError } = require("../../helpers");
-const { Contact } = require("../../models");
+const asyncHandler = require("express-async-handler");
+const { ContactServices } = require("../../services");
 
-const deleteContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await Contact.findOneAndDelete({ _id: contactId });
-    if (!result) {
-      throw HttpError(404, `Not found`);
-    }
-    res.json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
+const deleteContact = asyncHandler(async (req, res) => {
+  const { contactId } = req.params;
+  const result = await ContactServices.delete(contactId);
+  if (!result) {
+    throw HttpError(404, `Not found`);
   }
-};
+  res.json({ status: 200, message: "contact deleted" });
+});
 
 module.exports = deleteContact;

@@ -1,17 +1,14 @@
-const { Contact } = require("../../models");
 const { HttpError } = require("../../helpers");
+const asyncHandler = require("express-async-handler");
+const { ContactServices } = require("../../services");
 
-const getContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await Contact.findOne({ _id: contactId });
-    if (!result) {
-      throw HttpError(404, `not found`);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+const getContactById = asyncHandler(async (req, res) => {
+  const { contactId } = req.params;
+  const result = await ContactServices.getById(contactId);
+  if (!result) {
+    throw HttpError(404, `not found`);
   }
-};
+  res.json({ code: 200, message: "Success", data: result });
+});
 
 module.exports = getContactById;
