@@ -13,14 +13,14 @@ const getContactById = async (contactId) => {
   const contactById = await allContacts.find((item) => item.id === contactId);
   return contactById;
 };
-// ! доробити
+
 const removeContact = async (contactId) => {
   const allContacts = await listContacts();
   const removeById = await allContacts.filter((item) => item.id !== contactId);
   const stringContacts = await JSON.stringify(removeById, null, 2);
   fs.writeFile(contactPath, stringContacts);
+  return removeById || null;
 };
-// ! доробити^^^
 
 const addContact = async (body) => {
   body.id = nanoid();
@@ -38,7 +38,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
 
-  allContacts[index] = { contactId, ...body };
+  allContacts[index] = { id: contactId, ...body };
   const stringContacts = await JSON.stringify(allContacts, null, 2);
   fs.writeFile(contactPath, stringContacts);
   return allContacts[index];
