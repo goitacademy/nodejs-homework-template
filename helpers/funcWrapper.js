@@ -11,3 +11,4 @@ const funcWrapper = func => {
 
 module.exports = funcWrapper
 
+
