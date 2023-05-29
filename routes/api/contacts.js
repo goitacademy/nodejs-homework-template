@@ -49,8 +49,6 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await operations.removeContact(contactId);
-    console.log("🚀 ~ result:", result);
-
     if (!result) {
       throw httpError(404);
     }
