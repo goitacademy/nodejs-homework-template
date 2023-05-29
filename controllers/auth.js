@@ -5,9 +5,10 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const { SECRET_KEY } = process.env;
-const avatarsDir = path.join(__dirname, "public ", "books");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -94,16 +95,21 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+
   const extention = originalname.split(".").pop();
   const filename = `${_id}.${extention}`;
   const resultUpload = path.join(avatarsDir, originalname);
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
+
+  Jimp.read(`${resultUpload}`, (err, image) => {
+    if (err) throw err;
+    image.resize(250, 250).quality(100).write(`${resultUpload}`);
+  });
+
   await User.findByIdAndUpdate(_id, { avatarURL });
 
-  res.json({
-    avatarURL,
-  });
+  res.status(200).json({ avatarURL });
 };
 
 module.exports = {

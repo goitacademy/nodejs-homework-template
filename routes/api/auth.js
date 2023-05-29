@@ -3,10 +3,10 @@ const {
   validateBody,
   authenticate,
   validateSubscription,
+  upload,
 } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 const ctrl = require("../../controllers/auth");
-const upload = require("../../middlewares/upload");
 const { ctrlWrapper } = require("../../helpers");
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.patch(
   ctrl.updateSubscription
 );
 router.patch(
-  "/users/avatars",
+  "/avatars",
   authenticate,
   upload.single("avatar"),
   ctrlWrapper(ctrl.updateAvatar)
