@@ -1,25 +1,27 @@
 const express = require("express");
-
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "message" });
-});
+const schemas = require("../../schemas/contacts");
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "message" });
-});
+const controlers = require("../../controllers/contacts");
+const { bodyValidatorWrapper } = require("../../middlewares/bodyValidator");
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "message" });
-});
+router.get("/", controlers.getAllContacts);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "message" });
-});
+router.get("/:contactId", controlers.getContactById);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "message" });
-});
+router.post(
+  "/",
+  bodyValidatorWrapper(schemas.contactsSchema),
+  controlers.addContact
+);
+
+router.delete("/:contactId", controlers.deleteContact);
+
+router.put(
+  "/:contactId",
+  bodyValidatorWrapper(schemas.contactsSchema),
+  controlers.updateContactById
+);
 
 module.exports = router;
