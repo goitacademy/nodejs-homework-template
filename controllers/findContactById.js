@@ -1,8 +1,5 @@
 const contacts = require('../models/contacts');
 
-
-
-
   const findContactById = async(req,res,next) => {
     try {
         const { contactId } = req.params;
