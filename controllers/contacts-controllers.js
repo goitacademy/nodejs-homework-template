@@ -1,19 +1,15 @@
-const contactsService = require("../models/contacts");
-
 const HttpError = require("../helpers/HttpError");
-
 const ctrlWrapper = require("../decorators/ctrlWrapper");
-const contactsAddSchema = require("../schemas/contacts-schemas");
+const Contact = require("../models/contact-model");
 
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.listContacts();
-  res.json(result);
+  const result = await Contact.find();
+  res.status(200).json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  console.log(req);
-  const result = await contactsService.getContactById(contactId);
+  const result = await Contact.findOne({ _id: contactId });
   if (!result) {
     throw HttpError(404);
   }
@@ -21,19 +17,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const error = await contactsAddSchema.validate(req.body);
-  console.log(error);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-  const result = await contactsService.addContact(req.body);
-
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsService.updateContactById(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body);
   if (!result) {
     throw HttpError(400, `missing fields`);
   }
@@ -43,7 +33,8 @@ const updateContactById = async (req, res) => {
 
 const deleteContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsService.removeContactById(contactId);
+  const result = await Contact.findByIdAndRemove({ _id: contactId });
+
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -53,10 +44,21 @@ const deleteContactById = async (req, res) => {
   });
 };
 
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body);
+  if (!result) {
+    throw HttpError(400, `missing fields`);
+  }
+
+  res.json(result);
+};
+
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContactById: ctrlWrapper(updateContactById),
   deleteContactById: ctrlWrapper(deleteContactById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
