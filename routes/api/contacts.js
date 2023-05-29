@@ -96,7 +96,7 @@ router.put('/:contactId', async (req, res, next) => {
     console.log(id)
     const upDateContact = await updateContacts(id, req.body);
 
-    // console.log(upDateContact)
+    console.log(upDateContact)
 
     if (!upDateContact) {
       const error = new Error(`missing fields ${id}`);
