@@ -18,6 +18,10 @@ const contactSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 
 contactSchema.post("save", handleMongooseError);
@@ -45,21 +49,3 @@ module.exports = {
   Contact,
   schemas,
 };
-
-// const getAll = async () => {};
-
-// const getContactById = async (contactId) => {};
-
-// const removeContact = async (contactId) => {};
-
-// const addContact = async (body) => {};
-
-// const updateContact = async (contactId, body) => {};
-
-// module.exports = {
-//   getAll,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };

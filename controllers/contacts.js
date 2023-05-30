@@ -3,9 +3,18 @@ const { Contact } = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find({});
+  const { page = 1, limit = 10, favorite = false } = req.query;
+  const skip = (page - 1) * limit;
 
-  console.log(result);
+  const result = favorite
+    ? await Contact.find({ favorite }, null, {
+        skip,
+        limit,
+      })
+    : await Contact.find({}, null, {
+        skip,
+        limit,
+      });
 
   res.status(200).json(result);
 };
