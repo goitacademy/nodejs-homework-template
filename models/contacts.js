@@ -25,12 +25,10 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleMongooseError);
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().trim().min(2).max(50).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^\+\d{12}$/)
-    .required(),
-  favorite: Joi.boolean().required(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 }).options({
   messages: { "any.required": "missing required {{#label}} field" },
 });
