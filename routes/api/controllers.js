@@ -4,7 +4,7 @@ const { HttpError, isRequestEmpty } = require("../../helpers");
 const {
   validationSchema,
   updateContactValidation,
-} = require("../../helpers/validation");
+} = require("../../schemas/validation");
 const getAllContacts = async (req, res, next) => {
   try {
     const results = await contactsAPI.listContacts();
