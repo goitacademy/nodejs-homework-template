@@ -6,54 +6,58 @@ const {
   updateContact,
 } = require("../models/contacts");
 
-const getContacts = async (req, res, next) => {
-    try {
-        const contacts = await listContacts();
-        res.status(200).json(contacts)
-    }
-    catch (error) {
-        next (error)
-    }
-}
+const {catchAsync} = require("../utils/catchAsync");
 
-const getContact = async (req, res, next) => {
-    try {
-        const { contactId } = req.params;
-        const contact = await getContactById(contactId);
-        res.status(200).json(contact);
-    }
-    catch (error) {
-        next(error)
-    }
-}
+let getContacts = async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json(contacts);
+};
+getContacts = catchAsync(getContacts);
 
-const deleteContact = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const contact = await removeContact(contactId);
-      res.status(200).json(contactId);
-    } catch (error) {
-      next(error);
-    }
-}
+let getContact = async (req, res, next) => {
+    const { contactId } = req.params;
+    const contact = await getContactById(contactId);
+    res.status(200).json(contact);
+};
 
-const createContact = async (req, res, next) => {
-    try {
-      const newContact = await addContact(req.body);
-      res.status(201).json(newContact);
-    } catch (error) {
-      next(error);
-    }
-}   
+getContact = catchAsync(getContact);
 
-const refreshContact = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const contact = await updateContact(contactId, req.body);
-      res.status(200).json(contact);
-    } catch (error) {
-      next(error);
-    }
-}
+let deleteContact = async (req, res, next) => {
+    const { contactId } = req.params;
+    const contact = await removeContact(contactId);
+    res.status(200).json(contactId);
+};
 
-module.exports = {getContacts, getContact, deleteContact, createContact, refreshContact}
+deleteContact = catchAsync(deleteContact);
+
+let createContact = async (req, res, next) => {
+    const newContact = await addContact(req.body);
+    res.status(201).json(newContact);
+};
+
+createContact = catchAsync(createContact);
+
+let refreshContact = async (req, res, next) => {
+    const { contactId } = req.params;
+    const contact = await updateContact(contactId, req.body);
+    res.status(200).json(contact);
+};
+
+refreshContact = catchAsync(refreshContact);
+
+let updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await updateContact(contactId, req.body);
+  res.status(200).json(contact);
+};
+
+updateStatusContact = catchAsync(updateStatusContact);
+
+module.exports = {
+  getContacts,
+  getContact,
+  deleteContact,
+  createContact,
+  refreshContact,
+  updateStatusContact
+};
