@@ -5,8 +5,6 @@ const { nanoid } = require("nanoid");
 
 const dbPath = path.join(__dirname, "contacts.json");
 
-
-
 const listContacts = async () => {
   const allContacts = await fs.readFile(dbPath);
 
@@ -57,7 +55,6 @@ const updateContact = async (contactId, body) => {
 
   fs.writeFile(dbPath, JSON.stringify(allContacts, null, 2));
   return contactToUpdate;
-
 };
 
 module.exports = {
