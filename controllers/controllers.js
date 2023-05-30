@@ -24,7 +24,6 @@ async function postContactController(req, res, next) {
 async function deleteContactController(req, res, next) {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndRemove(contactId);
-
   if (!result) {
     throw HttpError(404, "Not found");
   }
