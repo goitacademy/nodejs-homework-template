@@ -7,12 +7,10 @@ mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(3000, () => {
-      console.log("Database connection established successfully");
+      console.log("Database connection successful");
     });
   })
   .catch((err) => {
     console.log(err);
     process.exit(1);
   });
-
-// hZIp9gbuJikkJkjU
