@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const hendleMongooseError = require("../helpers/handleMongooseError");
+const emailRegexp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 const contactSchema = new Schema(
   {
@@ -11,7 +12,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+      match: emailRegexp,
     },
     phone: {
       type: String,
@@ -29,9 +30,7 @@ contactSchema.post("save", hendleMongooseError);
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string()
-    .required()
-    .pattern(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/),
+  email: Joi.string().required().pattern(emailRegexp),
   phone: Joi.string()
     .required()
     .pattern(/^[\d()+\- ]+$/),
