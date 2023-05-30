@@ -1,35 +1,33 @@
 const express = require("express");
-// const contactsService = require("../../models/contacts");
+const { validateBody } = require("../../helpers");
+const { schemas } = require("../../models/contact");
 const router = express.Router();
 const controllers = require("../../controllers");
-// const { HtppError } = require("../../helpers");
-router.get(
-  "/",
-  async (req, res, next) => await controllers.getListController(req, res, next)
-);
+const isValidId = require("../../middlewares");
 
-router.get(
-  "/:contactId",
-  async (req, res, next) =>
-    await controllers.getContactController(req, res, next)
-);
+router.get("/", controllers.getListController);
+
+router.get("/:contactId", isValidId, controllers.getContactController);
 
 router.post(
   "/",
-  async (req, res, next) =>
-    await controllers.postContactController(req, res, next)
+  validateBody(schemas.addScheme),
+  controllers.postContactController
 );
 
-router.delete(
-  "/:contactId",
-  async (req, res, next) =>
-    await controllers.deleteContactController(req, res, next)
-);
+router.delete("/:contactId", isValidId, controllers.deleteContactController);
 
 router.put(
   "/:contactId",
-  async (req, res, next) =>
-    await controllers.putContactController(req, res, next)
+  isValidId,
+  validateBody(schemas.addScheme),
+  controllers.putContactController
+);
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavScheme),
+  controllers.updateStatusContact
 );
 
 module.exports = router;
