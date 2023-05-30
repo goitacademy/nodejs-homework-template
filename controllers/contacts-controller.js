@@ -5,7 +5,7 @@ const Contacts = require('../models/contacts.js')
 
 const getListContacts = async (req, res) => {
   const contacts = await Contacts.find();
-  res.json(contacts);
+  res.json(contacts); 
 };
 
 const getContactById = async (req, res) => {
