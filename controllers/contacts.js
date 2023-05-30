@@ -9,14 +9,14 @@ const getAllContacts = async (req, res) => {
 const getContact = async (req, res) => {
     const { id } = req.params;
     const contact = await getContactById(id);
-    if (contact) return res.status(201).json(contact);
+    if (contact) return res.status(200).json(contact);
     throw HttpError(404, 'not found');
 };
 
 const addNewContact = async (req, res) => {
     const { name, email, phone } = req.body;
     const contact = await addContact(name, email, phone);
-    res.status(201).json(contact);
+    res.status(200).json(contact);
 };
 
 const deleteContact = async (req, res) => {
