@@ -5,7 +5,7 @@ const cors = require('cors');
 const authRouter = require('./routes/api/auth')
 const contactsRouter = require('./routes/api/contacts');
 const app = express();
-require('dotenv').config()
+require('dotenv').config();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 

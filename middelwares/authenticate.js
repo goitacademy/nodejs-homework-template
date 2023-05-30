@@ -3,9 +3,11 @@ const jwt = require("jsonwebtoken");
 const { HttpError } = require("../helpers");
 const { User } = require("../models");
 
-// require("dotenv").config();
+require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
+
+// console.log(process.env)
 const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
@@ -18,6 +20,7 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       next(HttpError(401));
     }
+    req.user = user;
     next();
   } catch {
     next(HttpError(401));
