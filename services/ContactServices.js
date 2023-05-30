@@ -17,8 +17,12 @@ class ContactServices {
     return deletedContact;
   }
 
-  async getAll() {
-    const allContacts = await Contact.find();
+  async getAll(owner, page, limit) {
+    const skip = (page - 1) * limit;
+    const allContacts = await Contact.find({ owner }, "", {
+      skip,
+      limit,
+    }).populate("owner", "email");
     if (!allContacts) {
       return null;
     }

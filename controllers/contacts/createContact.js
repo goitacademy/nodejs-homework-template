@@ -5,7 +5,7 @@ const { ContactServices } = require("../../services");
 
 const createContact = asyncHandler(async (req, res) => {
   const { name } = req.body;
-  console.log(req.body);
+  const { _id: owner } = req.user;
   if (!name) {
     throw HttpError(400, "provide all required fields");
   }
@@ -13,7 +13,7 @@ const createContact = asyncHandler(async (req, res) => {
   if (error) {
     throw HttpError(400, error.message);
   }
-  const result = await ContactServices.add(req.body);
+  const result = await ContactServices.add({ ...req.body, owner });
   res.status(201).json({ code: 201, message: "Success", data: result });
 });
 
