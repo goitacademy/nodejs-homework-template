@@ -8,5 +8,6 @@ router.post("/register", jsonParser, userController.register);
 router.post("/login", jsonParser, userController.login);
 router.post("/logout", authenteficate, userController.logout);
 router.get("/current", authenteficate, userController.current);
+router.patch("/", authenteficate, userController.updateSubscription);
 
 module.exports = router;

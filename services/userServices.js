@@ -35,6 +35,11 @@ class UserServices {
   async logout(id) {
     await User.findByIdAndUpdate(id, { token: "" });
   }
+
+  async updateSubscriptionPlan(id, subscription) {
+    const user = await User.findByIdAndUpdate(id, { subscription });
+    return user;
+  }
 }
 
 module.exports = new UserServices();
