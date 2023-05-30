@@ -11,11 +11,11 @@ const {
 
 const schemas = require("../../models/contact");
 
-const { validateBody } = require("../../decorators");
+const { validateBody } = require("../../middlewares");
+
+const { isValidId } = require("../../middlewares");
 
 const router = express.Router();
-
-const isValidId = require("../../middlewares/isValidId");
 
 router.get("/", getAllMovies);
 
