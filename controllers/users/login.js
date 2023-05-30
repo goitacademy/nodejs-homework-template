@@ -19,14 +19,16 @@ const login = asyncHandler(async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
   const token = tokenGenerator(user.id);
+  await UserServices.updateUserToken(user.id, token);
   const resMesage = {
+    status: 200,
     token,
     user: {
       email: user.email,
       subcription: user.subscription,
     },
   };
-  res.json(resMesage);
+  res.status(200).json(resMesage);
 });
 
 module.exports = login;

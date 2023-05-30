@@ -27,6 +27,14 @@ class UserServices {
     const user = await User.findById(id);
     return user;
   }
+
+  async updateUserToken(id, token) {
+    await User.findByIdAndUpdate(id, { token });
+  }
+
+  async logout(id) {
+    await User.findByIdAndUpdate(id, { token: "" });
+  }
 }
 
 module.exports = new UserServices();
