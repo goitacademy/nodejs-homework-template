@@ -5,6 +5,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact
 } = require("../../models/contacts");
 const { nanoid } = require("nanoid");
 const { createSchema, updateSchema } = require("../../models/utils");
@@ -22,6 +23,22 @@ router.get("/:contactId", async (req, res, next) => {
     res.json(contact);
   } else {
     res.status(404).json({ message: "Contact with this id not found" });
+  }
+});
+
+router.patch('/api/contacts/:contactId/favorite', async (req, res) => {
+  const contactId = req.params.contactId;
+  const { favorite } = req.body;
+
+  if (favorite === undefined) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, favorite);
+    res.json(updatedContact);
+  } catch (error) {
+    res.status(404).json({ message: 'Not found' });
   }
 });
 
