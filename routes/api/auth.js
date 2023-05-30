@@ -4,6 +4,7 @@ const { validateBody, validateSub } = require("../../middlewares");
 const ctrl = require("../../controllers/auth");
 const { ctrlWrapper } = require("../../helpers");
 const { authenticate } = require("../../middlewares");
+const { uploud } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -20,7 +21,14 @@ router.post(
 );
 
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+
 router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
+router.patch(
+  "/avatars",
+  authenticate,
+  uploud.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
+);
 router.patch(
   "/",
   authenticate,

@@ -14,3 +14,4 @@ const validateSub = (schema) => {
 
   return func;
 };
+module.exports = validateSub;
