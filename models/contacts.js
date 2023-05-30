@@ -69,20 +69,36 @@ const addContact = async (body) => {
 
 const updateContacts = async (contactId, body) => {
  
-    const contacts = await fs.readFile(contactsPath);
-    const parseContacts = JSON.parse(contacts);
+    // const contacts = await fs.readFile(contactsPath);
+    // const parseContacts = JSON.parse(contacts);
 
-    const updateCon = parseContacts.map((contact) => {
-      if(contact.id === contactId){
-        return {...contact, ...{id: contactId, ...body}}
-      }
-      return contact
+    // const updateCon = parseContacts.map((contact) => {
+    //   if(contact.id === contactId){
+    //     return {...contact, ...{id: contactId, ...body}}
+    //   }
+    //   return contact
+    // })
+
+    // await fs.writeFile(contactsPath, JSON.stringify(updateCon, null, 2))
+
+    // const updatedContact = parseContacts.find((contact) => contact.id === contactId);
+    // return updatedContact;
+
+    const contacts = await listContacts();
+
+    const conId = contacts.findIndex((contact) => {
+      return contact.id === contactId;
     })
 
-    await fs.writeFile(contactsPath, JSON.stringify(updateCon, null, 2))
+    if (conId === -1) {
+      return null
+    }
 
-    const updatedContact = parseContacts.find((contact) => contact.id === contactId);
-    return updatedContact;
+    contacts[conId] = {id: contactId, ...body};
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+
+    return contacts[conId]
 }
 
 module.exports = {
