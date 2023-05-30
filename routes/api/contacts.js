@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ctrl = require("../../controllers/contacts");
-const { validateBody } = require("../../middlewares");
+const { validateBody, validateFavorite } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
 const { isValid } = require("../../middlewares");
 const { ctrlWrapper } = require("../../helpers");
@@ -31,7 +31,7 @@ router.patch(
   "/:id/favorite",
   authenticate,
   isValid,
-  validateBody(schemas.updateFavoriteSchema),
+  validateFavorite(schemas.updateFavoriteSchema),
   ctrlWrapper(ctrl.updateFavorite)
 );
 module.exports = router;

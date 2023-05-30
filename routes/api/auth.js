@@ -24,7 +24,7 @@ router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
 router.patch(
   "/",
   authenticate,
-  validateBody(schemas.updateFavoriteSchema),
+  validateSub(schemas.updateFavoriteSchema),
   ctrlWrapper(ctrl.updateSubscription)
 );
 module.exports = router;
