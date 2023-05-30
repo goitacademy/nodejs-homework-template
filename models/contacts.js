@@ -1,73 +1,102 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
-const { HttpError } = require("../helpers/index");
+const { HttpError, handleMongooseError } = require("../helpers/index");
 
 const contactsPath = path.resolve("models/contacts.json");
 
-const listContacts = async () => {
-  const contactsList = (await fs.readFile(contactsPath)).toString();
-  return JSON.parse(contactsList);
-};
+const {Schema, model} = require('mongoose');
 
-const getContactById = async (contactId) => {
-  const contactsArr = await listContacts();
-  const findContact = contactsArr.find(elem => elem.id === contactId);
-  return findContact;
-};
+const contactsSchema = new Schema ({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+} 
+// ,{
+//   versionKey: false,
+//   timestamps: true
+// }
+);
 
-const removeContact = async (contactId) => {
-  const contactsArr = await listContacts();
-  const getContactIndex = contactsArr.findIndex(
-    (elem) => elem.id === contactId
-  );
-  let deletedContact;
+const Contacts = model('contacts', contactsSchema);
 
-  if (getContactIndex === -1) {
-    throw HttpError(404);
-  }
-  deletedContact = contactsArr.splice(getContactIndex, 1);
+contactsSchema.post('save', handleMongooseError)
 
-  await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
+module.exports = Contacts;
+// const listContacts = async () => {
+//   const contactsList = (await fs.readFile(contactsPath)).toString();
+//   return JSON.parse(contactsList);
+// };
 
-  return deletedContact;
-};
+// const getContactById = async (contactId) => {
+//   const contactsArr = await listContacts();
+//   const findContact = contactsArr.find(elem => elem.id === contactId);
+//   return findContact;
+// };
 
-const addContact = async ({ name, email, phone }) => {
-  let contactsArr = await listContacts();
+// const removeContact = async (contactId) => {
+//   const contactsArr = await listContacts();
+//   const getContactIndex = contactsArr.findIndex(
+//     (elem) => elem.id === contactId
+//   );
+//   let deletedContact;
 
-  let newContact = {
-    id: nanoid(),
-    name: name,
-    email: email,
-    phone: phone,
-  };
+//   if (getContactIndex === -1) {
+//     throw HttpError(404);
+//   }
+//   deletedContact = contactsArr.splice(getContactIndex, 1);
 
-  contactsArr.push(newContact);
+//   await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
 
-  await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
+//   return deletedContact;
+// };
 
-  return newContact;
-};
+// const addContact = async ({ name, email, phone }) => {
+//   let contactsArr = await listContacts();
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  const contacts = await listContacts();
-  const getContactIndex = contacts.findIndex((elem) => elem.id === contactId);
-  const id = contactId;
+//   let newContact = {
+//     id: nanoid(),
+//     name: name,
+//     email: email,
+//     phone: phone,
+//   };
 
-  if (getContactIndex === -1) return null;
+//   contactsArr.push(newContact);
 
-  contacts[getContactIndex] = { id , name, email, phone };
+//   await fs.writeFile(contactsPath, JSON.stringify(contactsArr, null, 2));
 
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+//   return newContact;
+// };
 
-  return contacts[getContactIndex];
-};
+// const updateContact = async (contactId, { name, email, phone }) => {
+//   const contacts = await listContacts();
+//   const getContactIndex = contacts.findIndex((elem) => elem.id === contactId);
+//   const id = contactId;
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+//   if (getContactIndex === -1) return null;
+
+//   contacts[getContactIndex] = { id , name, email, phone };
+
+//   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
+//   return contacts[getContactIndex];
+// };
+
+// module.exports = {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };
