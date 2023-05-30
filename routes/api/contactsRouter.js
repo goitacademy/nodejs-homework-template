@@ -15,12 +15,12 @@ const router = express.Router();
 router
   .route("/")
   .get(getListContacts)
-  .post(validateBody(contactsSchema), addNewContact);
+  // .post(validateBody(contactsSchema), addNewContact);
 
-router
-  .route("/:contactId")
-  .get(getOneContact)
-  .delete(deleteContact)
-  .put(validateBody(contactsSchema), updateContact);
+// router
+//   .route("/:contactId")
+//   .get(getOneContact)
+//   .delete(deleteContact)
+//   .put(validateBody(contactsSchema), updateContact);
 
 module.exports = router;
