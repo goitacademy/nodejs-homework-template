@@ -22,6 +22,11 @@ class UserServices {
     const userCheck = await User.findOne({ email });
     return userCheck;
   }
+
+  async findUserById(id) {
+    const user = await User.findById(id);
+    return user;
+  }
 }
 
 module.exports = new UserServices();

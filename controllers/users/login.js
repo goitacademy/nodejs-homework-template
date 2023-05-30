@@ -1,4 +1,4 @@
-const { HttpError } = require("../../helpers");
+const { HttpError, tokenGenerator } = require("../../helpers");
 const { userSchema } = require("../../schemas");
 const bcrypt = require("bcrypt");
 const { UserServices } = require("../../services");
@@ -18,8 +18,9 @@ const login = asyncHandler(async (req, res) => {
   if (!isMatch) {
     throw HttpError(401, "Email or password is wrong");
   }
+  const token = tokenGenerator(user.id);
   const resMesage = {
-    token: "exampletoken",
+    token,
     user: {
       email: user.email,
       subcription: user.subscription,
