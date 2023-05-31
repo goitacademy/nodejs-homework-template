@@ -1,9 +1,6 @@
 const messagesList = {
   400: 'missing field',
-  401: 'Unauthorized',
-  403: 'Forbidden',
   404: 'Not Found',
-  409: 'Conflict',
 };
 
 const HttpError = (status, message = messagesList[status]) => {

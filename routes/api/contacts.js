@@ -7,74 +7,22 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require('../../models/contacts');
+} = require('../../controllers/contacts-controller');
 
-const HttpError = require('../../helpers/HttpError');
-
+const validateBody = require('../../decorators/validateBody');
 const {
   contactsAddSchema,
   contactsUpdateSchema,
 } = require('../../schemas/contacts');
 
-router.get('/', async (req, res, next) => {
-  try {
-    const result = await listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/', listContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
+router.get('/:contactId', getContactById);
 
-    const result = await getContactById(contactId);
-    if (!result) throw HttpError(404);
+router.post('/', validateBody(contactsAddSchema), addContact);
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete('/:contactId', removeContact);
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = contactsAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const newContacts = await addContact(req.body);
-    res.status(201).json(newContacts);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await removeContact(contactId);
-    if (!result) throw HttpError(404);
-    res.json({ message: 'contact deleted' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = contactsUpdateSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) throw HttpError(404);
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put('/:contactId', validateBody(contactsUpdateSchema), updateContact);
 
 module.exports = router;
