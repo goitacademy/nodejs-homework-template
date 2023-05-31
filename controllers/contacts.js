@@ -51,9 +51,6 @@ const getAll = async (req, res) => {
   }
     res.json(data);
   }
-  
-  
-
 
   module.exports = {
     getAll: ctrlWrapper(getAll),
