@@ -6,7 +6,7 @@ const uptadeContactById = async (req, res) => {
 
   const updatedСontact = await contactsOperations.updateContact(
     contactId,
-    req.body
+    req.query
   );
 
   if (!updatedСontact) {
