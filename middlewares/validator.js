@@ -14,6 +14,10 @@ const validate = (addSchema) => {
         next(error);
       }
 
+      // if (error) {
+      //   throw res.status(400).json({ message: `missing required ${error.details[0].context.label} field` });
+      //        } 
+
        else {
         next();
       }
