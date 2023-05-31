@@ -17,7 +17,11 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
-},{versionKey:false,timestamps:true});
+    owner:{
+        type:Schema.Types.ObjectId,
+        ref: 'user',
+    }
+},{versionKey:false, timestamps:true });
 
 
 contactSchema.post("save", handelMongooseError);

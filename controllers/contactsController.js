@@ -5,7 +5,12 @@ const Contact = require("../models/contact");
 const ctrlWrapper = require("../utils/ctrlWrapper");
 
 const getAll = async (req, res) => {
-    const contacts = await Contact.find({},"-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const {page = 1, limit = 10} = req.query;
+  const skip = (page - 1) * limit;
+  // const query = { owner };
+  
+    const contacts = await Contact.find({owner},"-createdAt -updatedAt",{skip,limit}).populate("owner", "email subscription");
     res.status(200).json(contacts);
   
 };
@@ -22,8 +27,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-    const { name, email, phone } = req.body;
-    const contact = await Contact.create({ name, email, phone });
+  const { _id: owner } = req.user;
+    // const { name, email, phone } = req.body;
+    const contact = await Contact.create({ ...req.body, owner });
     res.status(201).json(contact);
 };
 
