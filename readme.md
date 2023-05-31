@@ -1,20 +1,30 @@
 # REST API for Contact Collection
 
 This repository contains a RESTful API for managing a collection of contacts. The API is built using Node.js and Express, providing endpoints for performing CRUD operations on the contacts.
-It uses MongoDB as the database for storing contact information. The API follows best practices and includes proper error handling, data validation using the Joi package, and integration with MongoDB using Mongoose.
+It uses MongoDB as the database for storing contact information. The API follows best practices and includes proper error handling, data validation using the Joi package, and integration with MongoDB using Mongoose. This project also implements user authentication and authorization using JSON Web Tokens (JWT). It provides endpoints for user registration, login, token verification middleware, user logout, pagination, filtration by favorites, and subscription update.
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-## Homework 3 - MongoDB
+## Homework 4 - Authentication and Authorization
 
 ### Endpoints
 
 #### 1. GET /api/contacts
 
-Retrieves all contacts in the collection.
+Retrieves contacts from user's collection with pagination support.
 
     Does not receive a body or parameters.
-    Returns an array of all contacts in JSON format with a status code of 200 (OK).
+    Requires authentication (token in the Authorization header).
+    Returns a paginated contact list in JSON format with a status code of 200 (OK).
+
+##### GET /api/contacts?page=1&limit=5
+
+Query parameters: - page - Specifies the page number to retrieve (default: 1). - limit - Specifies the maximum number of contacts to return per page (default: 10).
+
+##### GET /api/contacts?favorite=true
+
+Retrieves contacts filtered by favorites.
+Query parameter: favorite=true
 
 #### 2. GET /api/contacts/:id
 
@@ -61,10 +71,79 @@ Updates the favorite status of a contact.
     If the body is missing, it returns JSON with the key {"message": "missing field favorite"} and a status code of 400 (Bad Request).
     Returns the updated contact object and a status code of 200 (OK) if the operation is successful, or JSON with the key {"message": "Not found"} and a status code of 404 if the specified id is not found.
 
+#### 7. POST /api/users/register
+
+Registers a new user.
+
+    Receives the body in the format {name, email, password} where all fields are required.
+    The "subscription" field is optional, can have the following values: "starter", "pro", or "business", and defaults to "starter" if not provided,
+    If any of the required fields are missing in the body, it returns JSON with the key {"message":     "missing required name field"} and a status code of 400 (Bad Request).
+    If the provided email is already in use, it throws an error with a status code of 409 (Conflict) and the message "Email already in use".
+    If all required fields are present in the body and the email is not already in use it hashes the password, creates a new user with the provided name, email, and hashed password.
+    Returns an object {name, email} and a status code of 201 (Created).
+
+#### 8. POST /api/users/login
+
+Logs in a user with the provided email and password.
+
+    Receives the body in the format {email, password} where both fields are required.
+    If the email or password is incorrect, it throws an error with a status code of 401 (Unauthorized) and the message "Email or password is incorrect".
+    If the email and password are correct, it generates a JWT (JSON Web Token) using the user's ID as the payload and signs it with a secret key. The generated token has an expiration time of 23 hours.
+    The generated token is then stored in the user's record in the database by updating the corresponding user document with the new token.
+    Returns the generated token in the response body with a status code of 200 (OK).
+
+#### 9. POST /api/users/logout
+
+Logs out the currently logged-in user.
+
+    Requires authentication (token in the Authorization header).
+    Clears the token field of the user's record in the database by updating the corresponding user document.
+    Returns a JSON response with a message indicating the successful logout, with a status code of 200 (OK).
+
+#### 10. GET /api/users/current
+
+Retrieves the information of the currently logged-in user.
+
+    Requires authentication (token in the Authorization header).
+    Returns the email and name of the currently logged-in user in JSON format with a status code of 200 (OK).
+    If the user is not found, it returns an error with a status code of 401 (Unauthorized).
+
+#### 11. PATCH /users
+
+Updates the subscription of the currently logged-in user.
+
+    Receives the body in the format { subscription } where the subscription field is required.
+    Requires authentication (token in the Authorization header).
+    Retrieves the user's document based on the user ID extracted from the token.
+    If the user is not found, it returns an error with a status code of 401 (Unauthorized).
+    Updates the user's subscription field with the provided subscription value.
+    Returns a JSON response indicating that the subscription was updated successfully, with a status code of 200 (OK).
+
 ### Validation
 
-To ensure data integrity, the API performs validation on the incoming data.
+To ensure data integrity, the API performs validation on the incoming data using the Joi and mongoose schema for model.
 
-    When adding a new contact (POST), all fields (name, email, phone) are required.
-    When updating a contact (PUT), at least one field (name, email, phone) must be provided.
+For adding a new contact:
+
+    All fields (name, email, phone) are required.
+    The email field must match the regular expression to ensure it is a valid email format.
+
+For updating a contact:
+
+    At least one field (name, email, phone) must be provided.
     If the data fails validation, JSON with the key {"message": "value must contain at least one of [name, email, phone]"} will be returned.
+
+For user registration:
+
+    All fields (name, email, phone) are required.
+    The email must match the email regular expression.
+    The password must have a minimum length of 6 characters.
+
+For user login:
+
+    The email field is required and must match the email regular expression.
+    The password field is required and must have a minimum length of 6 characters.
+
+For updating a user's subscription:
+
+    The subscription field is required and must be one of the values: "starter", "pro", or "business".
