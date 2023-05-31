@@ -46,11 +46,10 @@ router.post("/", async (req, res, next) => {
   const body = req.body;
   const { error } = createSchema.validate(body);
   if (error) {
+    console.log(error)
     res.status(400).json({ message: "missing required name field" });
   } else {
-    const id = nanoid();
     const contact = {
-      id: id,
       name: body.name,
       email: body.email,
       phone: body.phone,

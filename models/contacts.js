@@ -1,21 +1,25 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://vovichkyry:v0zcv0VpVgo59nKr@cluster0.gf7lsqq.mongodb.net/", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://vovichkyry:v0zcv0VpVgo59nKr@cluster0.gf7lsqq.mongodb.net/",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
+// Перевірка статусу підключення до бази даних
 const db = mongoose.connection;
-
-db.on("error", console.error.bind(console, "Database connection error:"));
-db.once("open", () => {
-  console.log("Database connection successful");
+db.on('error', console.error.bind(console, 'Database connection error:'));
+db.once('open', () => {
+  console.log('Database connection successful');
 });
 
+// Схема моделі для колекції contacts
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Set name for contact"],
+    required: [true, 'Set name for contact'],
   },
   email: {
     type: String,
@@ -29,81 +33,74 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
-const Contact = mongoose.model("Contact", contactSchema);
+// Модель для колекції contacts
+const Contact = mongoose.model('contacts', contactSchema);
 
+// Функція для додавання контакту
+async function addContact(contact) {
+  try {
+    const newContact = new Contact(contact);
+    await newContact.save();
+    console.log('Contact added successfully');
+  } catch (error) {
+    console.error('Error adding contact:', error.message);
+  }
+}
+
+// Функція для отримання всіх контактів
 async function listContacts() {
   try {
     const contacts = await Contact.find();
-    console.log(Contact)
-    return contacts;
+    console.log('Contacts:', contacts);
   } catch (error) {
-    throw new Error("Error retrieving contacts: " + error.message);
+    console.error('Error retrieving contacts:', error.message);
   }
 }
 
-async function getById(contactId) {
+// Функція для отримання контакту за ідентифікатором
+async function getById(id) {
   try {
-    const contact = await Contact.findById(contactId);
-    if (!contact) {
-      throw new Error("Contact not found");
+    const contact = await Contact.findById(id);
+    if (contact) {
+      console.log('Contact:', contact);
+    } else {
+      console.log('Contact not found');
     }
-    return contact;
   } catch (error) {
-    throw new Error("Error retrieving contact: " + error.message);
+    console.error('Error retrieving contact:', error.message);
   }
 }
 
-async function addContact(contact) {
+// Функція для видалення контакту за ідентифікатором
+async function removeContact(id) {
   try {
-    const newContact = await Contact.create(contact);
-    return newContact;
-  } catch (error) {
-    throw new Error("Error adding contact: " + error.message);
-  }
-}
-
-async function removeContact(contactId) {
-  try {
-    const result = await Contact.findByIdAndDelete(contactId);
-    if (!result) {
-      throw new Error("Contact not found");
+    const result = await Contact.findByIdAndDelete(id);
+    if (result) {
+      console.log('Contact deleted successfully');
+    } else {
+      console.log('Contact not found');
     }
-    return result;
   } catch (error) {
-    throw new Error("Error deleting contact: " + error.message);
+    console.error('Error deleting contact:', error.message);
   }
 }
 
-async function updateContact(contactId, update) {
+// Функція для оновлення контакту за ідентифікатором
+async function updateContact(id, updatedContact) {
   try {
-    const updatedContact = await Contact.findByIdAndUpdate(contactId, update, {
+    const result = await Contact.findByIdAndUpdate(id, updatedContact, {
       new: true,
     });
-    if (!updatedContact) {
-      throw new Error("Contact not found");
+    if (result) {
+      console.log('Contact updated successfully');
+      console.log('Updated Contact:', result);
+    } else {
+      console.log('Contact not found');
     }
-    return updatedContact;
   } catch (error) {
-    throw new Error("Error updating contact: " + error.message);
+    console.error('Error updating contact:', error.message);
   }
 }
-
-async function updateStatusContact(contactId, favorite) {
-  try {
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
-      { favorite },
-      { new: true }
-    );
-    if (!updatedContact) {
-      throw new Error('Contact not found');
-    }
-    return updatedContact;
-  } catch (error) {
-    throw new Error('Error updating contact status: ' + error.message);
-  }
-}
-
 
 module.exports = {
   listContacts,
@@ -111,5 +108,4 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
-  updateStatusContact
 };
