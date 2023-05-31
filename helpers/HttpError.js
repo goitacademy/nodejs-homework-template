@@ -11,4 +11,4 @@ const HttpError = (status, message = messages[status]) => {
   error.status = status;
   return error;
 };
-export default HttpError;
+module.exports = HttpError;

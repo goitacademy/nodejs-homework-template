@@ -1,8 +1,10 @@
-import express, { json } from "express";
-import logger from "morgan";
-import cors from "cors";
+const express = require("express");
+const { json } = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-import contactsRouter from "./routes/api/contacts-router.js";
+const contactsRouter = require("./routes/api/contacts-router.js");
+require("dotenv").config();
 
 const app = express();
 
@@ -23,4 +25,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-export default app;
+module.exports = app;
