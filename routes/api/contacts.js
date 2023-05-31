@@ -10,7 +10,11 @@ const {
 } = require('../../models/contacts');
 
 const HttpError = require('../../helpers/HttpError');
-const { contactsAddSchema } = require('../../schemas/contacts');
+
+const {
+  contactsAddSchema,
+  contactsUpdateSchema,
+} = require('../../schemas/contacts');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -52,7 +56,7 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) throw HttpError(404);
-    res.json(result);
+    res.json({ message: 'contact deleted' });
   } catch (error) {
     next(error);
   }
@@ -60,8 +64,11 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
+    const { error } = contactsUpdateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const { contactId } = req.params;
-    if (Object.keys(req.body).length === 0) throw HttpError(400);
     const result = await updateContact(contactId, req.body);
     if (!result) throw HttpError(404);
     res.json(result);
