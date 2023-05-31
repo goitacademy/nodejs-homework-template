@@ -19,8 +19,9 @@ const register = async(req, res) => {
     const newUser = await User.create({...req.body, password: hashPassword});
 
     res.status(201).json({
-        email: newUser.email,
-        subscription: 'starter'
+        "user": 
+        {email: newUser.email,
+        subscription: 'starter'}
     })
 };
 
@@ -63,20 +64,16 @@ const logout = async (req, res) => {
     const {_id} = req.user;
     await User.findByIdAndUpdate( _id, {token: ""});
 
-    res.json({
-        status: 204,
-        message: "No content"
-    })
+    res.json(
+        "status: 204, No content"
+    )
 };
 
 const updateSubscriptionUser = async (req, res) => {
-    const {id} = req.params;
-    
+    const {id} = req.user;
+    console.log(id)
+    console.log(req.body)
     const result = await User.findByIdAndUpdate(id, req.body, {new: true});
-    
-    // if (!result) {
-    //     throw HttpError(404, `Contact with id: ${id} not found`);
-    // }
     res.json(result);
 };
 

@@ -32,7 +32,6 @@ const userSchema = new Schema ({
 userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
-    name: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required()
 });
@@ -43,7 +42,7 @@ const loginSchema = Joi.object({
 });
 
 const updateSubscriptionSchema = Joi.object({
-    subscription: Joi.valid("starter", "pro", "business").required().messages({
+    subscription: Joi.string().valid("starter", "pro", "business").required().messages({
       "any.required": `missing field subscription`
     }),
   });

@@ -6,12 +6,15 @@ const { schemas } = require('../models/contact')
 
 const getAllContacts = async (req, res) => {
     const {_id: owner} = req.user;
-    const { page = 1, limit = 20} = req.query;
+    // const fav = {favourite: {$eq: true }}
+    console.log({owner, fav: {$eq: true}})
+
+    const { page = 1, limit = 20, favorite} = req.query;
     const skip = (page - 1) * limit;
-    const contacts = await Contact.find({owner}, "-createdAt -updatedAt", { skip, limit});
+    const contacts = await Contact.find({owner, favorite:  {$eq: favorite}}, "-createdAt -updatedAt", { skip, limit});
     res.json(contacts);
 };
-
+ 
 const getContactById = async (req, res) => {
     const {id} = req.params;
     const result = await Contact.findById(id);
@@ -20,6 +23,15 @@ const getContactById = async (req, res) => {
     };
     res.json(result);
 };
+
+// const getContactsFiltredFavorite = async (req, res) => {
+//     // const {_id: owner} = req.user;
+//     console.log(req.query)
+//     const { favorite } = req.query;
+    
+//     const result = await Contact.find({favorite: favorite}, );
+//     res.json(result);
+// }
 
 const addContact = async (req, res) => {
     console.log(req.user)
@@ -76,5 +88,6 @@ module.exports = {
     addContact: ctrlWrapper(addContact),
     removeContactById: ctrlWrapper(removeContactById),
     updateContactById: ctrlWrapper(updateContactById),
-    updateStatusContact: ctrlWrapper(updateStatusContact)
+    updateStatusContact: ctrlWrapper(updateStatusContact),
+    // getContactsFiltredFavorite: ctrlWrapper(getContactsFiltredFavorite)
 }
