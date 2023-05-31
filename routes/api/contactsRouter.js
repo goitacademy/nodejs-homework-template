@@ -15,6 +15,9 @@ const {
   contactUpdateSchema,
   contactUpdateFavoriteSchema,
 } = require("../../schemas/contactsSchemas");
+const authenticate = require("../../middlewares/authenticate");
+
+router.use(authenticate);
 
 router.get("/", getAllContacts);
 

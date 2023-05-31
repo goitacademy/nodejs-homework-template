@@ -1,12 +1,14 @@
 const Joi = require("joi");
 
+const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
 const contactAddSchema = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "any.required": "missing required name field" }),
   email: Joi.string()
     .required()
-    .pattern(/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/)
+    .pattern(emailRegExp)
     .messages({ "any.required": "missing required email field" }),
   phone: Joi.string()
     .required()
@@ -16,7 +18,7 @@ const contactAddSchema = Joi.object({
 
 const contactUpdateSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string().pattern(/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/),
+  email: Joi.string().pattern(emailRegExp),
   phone: Joi.string().pattern(/^(\+?\d{1,3}[- ]?)?\d{10}$/),
 })
   .or("name", "email", "phone")
