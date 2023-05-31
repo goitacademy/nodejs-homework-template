@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-
+require('dotenv').config()
 mongoose.connect(
-  "mongodb+srv://vovichkyry:v0zcv0VpVgo59nKr@cluster0.gf7lsqq.mongodb.net/",
+  process.env.DB_HOST,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -42,6 +42,7 @@ async function addContact(contact) {
     const newContact = new Contact(contact);
     await newContact.save();
     console.log('Contact added successfully');
+    return contact;
   } catch (error) {
     console.error('Error adding contact:', error.message);
   }
@@ -50,8 +51,7 @@ async function addContact(contact) {
 // Функція для отримання всіх контактів
 async function listContacts() {
   try {
-    const contacts = await Contact.find();
-    console.log('Contacts:', contacts);
+    return await Contact.find();
   } catch (error) {
     console.error('Error retrieving contacts:', error.message);
   }
@@ -62,9 +62,9 @@ async function getById(id) {
   try {
     const contact = await Contact.findById(id);
     if (contact) {
-      console.log('Contact:', contact);
+      return await Contact.findById(id);
     } else {
-      console.log('Contact not found');
+      return;
     }
   } catch (error) {
     console.error('Error retrieving contact:', error.message);
@@ -75,10 +75,11 @@ async function getById(id) {
 async function removeContact(id) {
   try {
     const result = await Contact.findByIdAndDelete(id);
+    console.log(result)
     if (result) {
-      console.log('Contact deleted successfully');
+      return result;
     } else {
-      console.log('Contact not found');
+      return;
     }
   } catch (error) {
     console.error('Error deleting contact:', error.message);
@@ -92,13 +93,24 @@ async function updateContact(id, updatedContact) {
       new: true,
     });
     if (result) {
-      console.log('Contact updated successfully');
-      console.log('Updated Contact:', result);
+      return updatedContact;
     } else {
-      console.log('Contact not found');
+      return;
     }
   } catch (error) {
     console.error('Error updating contact:', error.message);
+  }
+}
+
+async function updateStatusContact(contactId, favorite) {
+  try {
+    const contact = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true });
+    if (!contact) {
+      return;
+    }
+    return contact;
+  } catch (error) {
+    throw new Error('Failed to update contact: ' + error.message);
   }
 }
 
@@ -108,4 +120,5 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact
 };
