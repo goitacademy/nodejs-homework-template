@@ -8,17 +8,23 @@ const deleteContact = require("../../controllers/deleteContact");
 const updateContact = require("../../controllers/updateContact");
 const contactList = require("../../controllers/contactList");
 const validate = require('../../middlewares/validator');
-const addSchema = require("../../shemaJoi/shemaJoi");
+const isValidId = require("../../middlewares/isValidId");
+const updateFavorite = require("../../controllers/updateFavorite");
+const schemas = require("../../shemaJoi/shemaJoi");
 
 
 router.get("/", contactList);
 
-router.get("/:contactId", findContactById);
+router.get("/:contactId",isValidId , findContactById);
 
-router.post("/", validate(addSchema), addContact);
+router.post("/", validate(schemas.addSchema), addContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", isValidId , deleteContact);
 
-router.put("/:contactId",validate(addSchema), updateContact);
+router.put("/:contactId", isValidId , validate(schemas.addSchema), updateContact);
+
+router.patch("/:contactId/favorite", isValidId , validate(schemas.updateFavoriteSchema), updateFavorite);
+
+
 
 module.exports = router;

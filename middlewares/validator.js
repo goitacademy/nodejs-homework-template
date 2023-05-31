@@ -1,6 +1,8 @@
+
 const validate = (addSchema) => {
     return (req, res, next) => {
       const { error } = addSchema.validate(req.body);
+      
     
       if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
         console.log("error 400! missing fields")
@@ -24,4 +26,7 @@ const validate = (addSchema) => {
     };
   };
 
+
+
   module.exports = validate;
+  
