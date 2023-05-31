@@ -1,11 +1,7 @@
 const express = require("express");
 const isValidId = require("../middleware/isValidId")
-const getContactsList = require("../../controllers/getContactsList");
-const getContactById = require("../../controllers/getContactById");
-const putContactFildFavorite = require("../../controllers/putContactFildFavorite");
-const postContact = require("../../controllers/postContact");
-const putContact = require("../../controllers/putContact");
-const deleteContact = require("../../controllers/deleteContact")
+
+const {getContactsList,getContactById,putContactFildFavorite,postContact,putContact,deleteContact} = require("../../controllers")
 const schemas = require("../schemas");
 const validate = require("../middleware/validation");
 const router = express.Router();

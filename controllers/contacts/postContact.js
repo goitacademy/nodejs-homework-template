@@ -1,4 +1,4 @@
-const Contact = require("../models/contact")
+const Contact = require("../../models/contact")
 
 async function postContact(req, res, next) {
 try {
