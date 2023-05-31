@@ -1,5 +1,6 @@
 const { Module } = require("module");
 const { Schema, model } = require("mongoose");
+const {handleMongooseError} = require("../utils/")
 
 const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
 
@@ -23,6 +24,8 @@ const contactSchema = new Schema({
   },
 });
 
+contactSchema.post("save", handleMongooseError)
+
 const Contact = model("contact", contactSchema);
 
-module.exports = {Contact,};
+module.exports = { Contact };
