@@ -41,13 +41,6 @@ const PORT = process.env.PORT || 3000;
 const uriDb = 'mongodb+srv://iraakulova2019:Svastika-666@cluster0.ia47zme.mongodb.net/db-contacts?retryWrites=true&w=majority';
 // const uriDb = process.env.DB_HOST;
 
-// const connection = mongoose.connect(uriDb, {
-//   promiseLibrary: global.Promise,
-//   useCreateIndex: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false,
-// });
-
 const connection = mongoose.connect(uriDb);
 
 connection
