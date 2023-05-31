@@ -3,9 +3,16 @@ const { ctrlWrapper } = require("../helpers");
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  console.log(req.query);
+  const { page = 1, limit = 3, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  let filter = { owner };
+  if (favorite) {
+    filter = { favorite, owner };
+  }
+  const result = await Contact.find(filter, "", { skip, limit });
   res.status(200).json(result);
-  console.log(result);
 };
 
 const getById = async (req, res) => {
@@ -18,8 +25,8 @@ const getById = async (req, res) => {
 };
 
 const post = async (req, res) => {
-  console.log(req.body);
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
 
   res.status(201).json(result);
 };
@@ -38,7 +45,7 @@ const putById = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
-  console.log(req.body);
+
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
