@@ -10,5 +10,5 @@ const getCurrent = async (req, res) => {
 }
  
 module.exports = {
-    getCurrent: ctrlWrapper(getCurrent),
+    getCurrent: ctrlWrapper(getCurrent)
 }
