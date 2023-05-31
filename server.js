@@ -5,11 +5,7 @@ const app = require("./app");
 const { DB_HOST, PORT = 3000, } = process.env;
 
 
-mongoose.connect(String(DB_HOST), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true
-    }).then(() => {
+mongoose.connect(DB_HOST).then(() => {
     app.listen(PORT)
   })
   .catch((error) => {

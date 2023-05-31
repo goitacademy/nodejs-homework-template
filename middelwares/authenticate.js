@@ -7,7 +7,6 @@ require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
 
-// console.log(process.env)
 const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
