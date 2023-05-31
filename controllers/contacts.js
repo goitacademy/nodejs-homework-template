@@ -16,7 +16,7 @@ const getContact = async (req, res) => {
 const addNewContact = async (req, res) => {
     const { name, email, phone } = req.body;
     const contact = await addContact(name, email, phone);
-    res.status(200).json(contact);
+    res.status(201).json(contact);
 };
 
 const deleteContact = async (req, res) => {
