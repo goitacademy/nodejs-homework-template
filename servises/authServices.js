@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const path = require("path");
 const Jimp = require("jimp");
+const fs = require("fs/promises");
 const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -13,7 +14,7 @@ const avatarDir = path.join("__dirname", "../", "public", "avatars");
 async function resize(resultUpload) {
   const image = await Jimp.read(resultUload);
   await image.resize(250, 250);
-  image.write(resultUload);
+  image.write(resultUpload);
 }
 
 // реєстрація клієнта
