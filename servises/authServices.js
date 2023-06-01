@@ -12,7 +12,7 @@ const gravatar = require("gravatar");
 const avatarDir = path.join("__dirname", "../", "public", "avatars");
 
 async function resize(resultUpload) {
-  const image = await Jimp.read(resultUload);
+  const image = await Jimp.read(resultUpload);
   await image.resize(250, 250);
   image.write(resultUpload);
 }
@@ -76,9 +76,9 @@ const patchAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const fileName = `${_id}_${originalname}`;
-  const resultUload = path.join(avatarDir, fileName);
-  await fs.rename(tempUpload, resultUload);
-  resize(resultUload);
+  const resultUpload = path.join(avatarDir, fileName);
+  await fs.rename(tempUpload, resultUpload);
+  resize(resultUpload);
   const avatarURL = path.join("avatars", fileName);
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.status(200).json({ avatarURL });
