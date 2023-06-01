@@ -29,7 +29,7 @@ const register = async (body, res) => {
   body.password = await bcrypt.hash(body.password, 10);
   const avatarURL = gravatar.url(email);
 
-  return await User.create(body, avatarURL);
+  return await User.create({ ...body, avatarURL });
 
   //   return res.status(201).end();
 };
@@ -73,15 +73,15 @@ const logout = async (body) => {
 // };
 
 const patchAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarDir, fileName);
-  await fs.rename(tempUpload, resultUpload);
-  resize(resultUpload);
-  const avatarURL = path.join("avatars", fileName);
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  res.status(200).json({ avatarURL });
+  // const { _id } = req.user;
+  // const { path: tempUpload, originalname } = req.file;
+  // const fileName = `${_id}_${originalname}`;
+  // const resultUpload = path.join(avatarDir, fileName);
+  // await fs.rename(tempUpload, resultUpload);
+  // resize(resultUpload);
+  // const avatarURL = path.join("avatars", fileName);
+  // await User.findByIdAndUpdate(_id, { avatarURL });
+  // res.status(200).json({ avatarURL });
 };
 
 module.exports = { register, login, logout, patchAvatar };

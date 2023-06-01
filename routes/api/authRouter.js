@@ -21,10 +21,9 @@ router.post(
   "/singup",
   jsonParser,
   validateBody(createUserValidasionSchema),
-  patchAvatar,
   singup
 );
-// router.patch("/avatar", upload.single("avatar"), patchAvatar);
+router.patch("/avatar", upload.single("avatar"), patchAvatar);
 
 router.post(
   "/login",
