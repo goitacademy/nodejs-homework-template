@@ -10,14 +10,12 @@ const contactSchema = new Schema( {
     },
     phone: {
       type: String,
-    //   match: /^\d{3}-\d{3}-\d{4}$/,
     },
     favorite: {
       type: Boolean,
       default: false,
     },
   },{versionKey: false
-    // ,timestamps: true
 })
 
 const Contact = model('contact', contactSchema);

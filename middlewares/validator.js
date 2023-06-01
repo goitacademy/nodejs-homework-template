@@ -15,18 +15,24 @@ const validate = (addSchema) => {
           console.log(`error 400!`,error.message)
         next(error);
       }
-
-      // if (error) {
-      //   throw res.status(400).json({ message: `missing required ${error.details[0].context.label} field` });
-      //        } 
-
        else {
         next();
       }
     };
   };
 
+  const validateFavorite = () => {
+    return (req, res, next) => {
+      if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
+        throw res.status(400).json({ message: "missing field favorite" });
+      }
+       else {
+        next();
+      }
+    };
+  };
 
-
-  module.exports = validate;
+  module.exports = {
+    validate ,
+    validateFavorite, }
   
