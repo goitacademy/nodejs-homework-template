@@ -1,19 +1,33 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require('mongoose');
 
-const listContacts = async () => {}
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+      uniq: true,
+    },
+    phone: {
+      type: String,
+      match: /^(?:\+38)?(0\d{9})$/,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const getContactById = async (contactId) => {}
+contactsSchema.pre('save', (error, data, next) => {
+  const { code, name } = error;
+  error.status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
+  next();
+});
 
-const removeContact = async (contactId) => {}
+const Contacts = model('contact', contactsSchema);
 
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = { Contacts };
