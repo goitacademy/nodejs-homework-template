@@ -12,7 +12,7 @@ router.post("/register", userValidateBody(schemas.registerBody), ctrl.register);
 
 router.post("/login", userValidateBody(schemas.loginBody), ctrl.logIn);
 
-router.post("/current", authenticate, ctrl.userCurrent);
+router.get("/current", authenticate, ctrl.userCurrent);
 
 router.post("/logout", authenticate, ctrl.logOut);
 

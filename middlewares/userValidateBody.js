@@ -2,8 +2,9 @@ const userValidateBody = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
 
+    console.log(error);
     if (error) {
-      res.status(400).json("Помилка від Joi або іншої бібліотеки валідації");
+      res.status(400).json(error.message);
     }
 
     next();
