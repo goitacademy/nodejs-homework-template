@@ -49,7 +49,7 @@ const updateContact = asyncWrapper(async (req, res, next) => {
   res.status(200).json(updatedContact);
 });
 
-const updateFavourite = asyncWrapper(async (req, res, next) => {
+const updateFavorite = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
   if (!updatedContact) {
@@ -65,5 +65,5 @@ module.exports = {
   addNewContact,
   deleteContact,
   updateContact,
-  updateFavourite,
+ updateFavorite,
 };
