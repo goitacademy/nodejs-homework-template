@@ -1,6 +1,4 @@
 const express = require("express");
-// const Schema = require("mongoose")
-// const updateFavoretSchema = require("../../schemas/contact-schemas)
 const router = express.Router();
 const contactControler = require("../../controlers/contact-controler");
 const authRouter = require("./authRouter");
@@ -9,11 +7,12 @@ const {
   authidentify,
   validateBody,
 } = require("../../decorator/index");
+const upload = require("../../midleWares/upload");
 // const isValidId = require("../../decorator/isValidid");
 
 // const Schema = require("../../schemas/contact-schemas");
 
-router.use(authidentify);
+// router.use(authidentify);
 router.get("/", contactControler.getAllContacts);
 
 router.get("/:id", isValidId, contactControler.getContactsById);
@@ -21,7 +20,7 @@ router.get("/:id", isValidId, contactControler.getContactsById);
 router.patch("/:id", isValidId, contactControler.updateContact);
 
 // CHANG POST (PUT)
-router.post("/auth", authRouter);
+router.post("/auth", upload.single("avatar"), authRouter);
 
 router.post("/", contactControler.addContact);
 
