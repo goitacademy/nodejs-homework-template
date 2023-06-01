@@ -6,6 +6,7 @@ const DB_HOST = "mongodb+srv://Kateryna:6252532katya@cluster0.d0lof7f.mongodb.ne
 
 mongoose.connect(DB_HOST)
   .then(() => {
+    console.log('Database connection successful');
     app.listen(3000)
   })
   .catch(error => {
