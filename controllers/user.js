@@ -1,10 +1,15 @@
 const { ctrlWrapper } = require("../helpers");
 const { User } = require("../models/user");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const { SECRET_KEY } = process.env;
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -12,6 +17,7 @@ const register = async (req, res) => {
   const uniqueEmail = await User.findOne({ email });
 
   const hashPassword = await bcrypt.hash(password, saltRounds);
+  const avatarURL = gravatar.url(email);
 
   if (uniqueEmail) {
     res.status(409).json({
@@ -19,7 +25,11 @@ const register = async (req, res) => {
     });
   }
 
-  const result = await User.create({ email, password: hashPassword });
+  const result = await User.create({
+    email,
+    password: hashPassword,
+    avatarURL,
+  });
   const { email: createEmail, subscription } = result;
 
   res.status(201).json({ user: { email: createEmail, subscription } });
@@ -57,26 +67,15 @@ const logIn = async (req, res) => {
     user: {
       email: user.email,
       subscription: user.subscription,
+      avatarURL: user.avatarURL,
     },
   });
 };
 
 const userCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { email, subscription, avatarURL } = req.user;
 
-  console.log(111111111);
-
-  res.status(200).json({ email, subscription });
-};
-
-const logOut = async (req, res) => {
-  const { _id: id } = req.user;
-
-  await User.findByIdAndUpdate(id, { token: "" });
-
-  res.status(204).json({
-    message: "Logout success",
-  });
+  res.status(200).json({ email, subscription, avatarURL });
 };
 
 const updateSubscription = async (req, res) => {
@@ -93,10 +92,35 @@ const updateSubscription = async (req, res) => {
   res.status(200).json({ id, email, subscription });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({
+    avatarURL,
+  });
+};
+
+const logOut = async (req, res) => {
+  const { _id: id } = req.user;
+
+  await User.findByIdAndUpdate(id, { token: "" });
+
+  res.status(204).json({
+    message: "Logout success",
+  });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   logIn: ctrlWrapper(logIn),
   userCurrent: ctrlWrapper(userCurrent),
-  logOut: ctrlWrapper(logOut),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
+  logOut: ctrlWrapper(logOut),
 };
