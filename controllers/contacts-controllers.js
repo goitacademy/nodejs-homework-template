@@ -77,5 +77,5 @@ module.exports = {
     addContact: ctrlWrapper(addContact),
     removeContactById: ctrlWrapper(removeContactById),
     updateContactById: ctrlWrapper(updateContactById),
-    updateFavorite: ctrlWrapper(updateContactById),
+    updateFavorite: ctrlWrapper(updateFavorite),
 }
