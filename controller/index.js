@@ -1,8 +1,11 @@
-const service = require('../sevice')
+// const service = require('../sevice')
+// const schema = require('../sevice/schemas/validation')
+const Contact = require('../schemas/contact')
 
 const get = async (req, res, next) => {
   try {
-    const results = await service.getAllcontacts()
+    const results = await Contact.find()
+    // const results = await service.getAllcontacts()
     res.json({
       status: 'success',
       code: 200,
@@ -19,7 +22,7 @@ const get = async (req, res, next) => {
 const getById = async (req, res, next) => {
   const { id } = req.params
   try {
-    const result = await service.getContactById(id)
+    const result = await Contact.findOne({ _id: id })
     if (result) {
       res.json({
         status: 'success',
@@ -41,9 +44,15 @@ const getById = async (req, res, next) => {
 }
 
 const create = async (req, res, next) => {
-  const { name, email, phone } = req.body
+  const { name, email, phone } = req.body;
   try {
-    const result = await service.createContact({ name, email, phone })
+    // const { error } = schema.validate(req.body);
+    // if (error) {
+    //   res.status(400).json({
+    //   message: 'Missing required name field'
+    // });
+    // }
+    const result = await Contact.create({ name, email, phone})
 
     res.status(201).json({
       status: 'success',
@@ -60,7 +69,7 @@ const update = async (req, res, next) => {
   const { id } = req.params
   const { name, email, phone } = req.body
   try {
-    const result = await service.updateContact(id, { name, email, phone })
+    const result = await Contact.findByIdAndUpdate({ _id: id }, { name, email, phone }, { new: true })
     if (result) {
       res.json({
         status: 'success',
@@ -85,7 +94,7 @@ const updateFavorite = async (req, res, next) => {
   const { id } = req.params
 
   try {
-    const result = await service.updateContact(id, req.body)
+    const result = await Contact.findByIdAndUpdate({ _id: id }, req.body, { new: true })
     if (result) {
       res.json({
         status: 'success',
@@ -110,7 +119,7 @@ const remove = async (req, res, next) => {
   const { id } = req.params
 
   try {
-    const result = await service.removeContact(id)
+    const result = await Contact.findByIdAndRemove({ _id: id })
     if (result) {
       res.json({
         status: 'success',
