@@ -36,7 +36,20 @@ const putValidation = (schema) => {
   return validation;
 };
 
+const patchValidation = (schema) => {
+  const validation = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      next(HttpError(400, `missing field favorite`));
+    }
+    next();
+  };
+  return validation;
+};
+
 module.exports = {
   postValidation,
   putValidation,
+  patchValidation,
 };
