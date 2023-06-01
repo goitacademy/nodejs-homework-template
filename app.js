@@ -7,7 +7,8 @@ const fs = require("fs/promises");
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
-
+app.set("json spaces", 10);
+// налаштувати json
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(async (req, res, next) => {
