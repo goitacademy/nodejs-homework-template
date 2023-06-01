@@ -1,58 +1,124 @@
-const fs = require('fs');
-const path = require('path')
-const contactsDirectory = path.join(__dirname, 'contacts.json')
-const Joi = require('joi')
+const mongoose = require("mongoose");
+require('dotenv').config()
+mongoose.connect(
+  process.env.DB_HOST,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
-function listContacts() {
-  const contactsData = fs.readFileSync(contactsDirectory);
-  const contacts = JSON.parse(contactsData);
-  return contacts;
-}
+// Перевірка статусу підключення до бази даних
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Database connection error:'));
+db.once('open', () => {
+  console.log('Database connection successful');
+});
 
-function getById(id) {
-  const contactsData = fs.readFileSync(contactsDirectory);
-  const contacts = JSON.parse(contactsData);
-  
-  const contact = contacts.find((c) => c.id === id);
-  return contact;
-}
+// Схема моделі для колекції contacts
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-function addContact(contact) {
-  const contactsData = fs.readFileSync(contactsDirectory);
-  const contacts = JSON.parse(contactsData);
-  contacts.push(contact);
-  fs.writeFileSync(contactsDirectory, JSON.stringify(contacts));
-}
+// Модель для колекції contacts
+const Contact = mongoose.model('contacts', contactSchema);
 
-function removeContact(id) {
-  const contactsData = fs.readFileSync(contactsDirectory);
-  let contacts = JSON.parse(contactsData);
-  const contactIndex = contacts.findIndex((c) => c.id === id);
-  if (contactIndex !== -1) {
-    const contact = contacts.splice(contactIndex, 1)[0];
-    fs.writeFileSync(contactsDirectory, JSON.stringify(contacts));
+// Функція для додавання контакту
+async function addContact(contact) {
+  try {
+    const newContact = new Contact(contact);
+    await newContact.save();
+    console.log('Contact added successfully');
     return contact;
+  } catch (error) {
+    console.error('Error adding contact:', error.message);
   }
-  return null;
 }
 
-function updateContact(id, value) {
-  const contactsData = fs.readFileSync(contactsDirectory);
-  let contacts = JSON.parse(contactsData);
-  const contactIndex = contacts.findIndex((c) => c.id === id);
-  if (contactIndex !== -1) {
-    contacts[contactIndex] = { ...contacts[contactIndex], ...value };
-    fs.writeFileSync(contactsDirectory, JSON.stringify(contacts));
-    return contacts[contactIndex];
+// Функція для отримання всіх контактів
+async function listContacts() {
+  try {
+    return await Contact.find();
+  } catch (error) {
+    console.error('Error retrieving contacts:', error.message);
   }
-  return null;
 }
 
+// Функція для отримання контакту за ідентифікатором
+async function getById(id) {
+  try {
+    const contact = await Contact.findById(id);
+    if (contact) {
+      return await Contact.findById(id);
+    } else {
+      return;
+    }
+  } catch (error) {
+    console.error('Error retrieving contact:', error.message);
+  }
+}
 
+// Функція для видалення контакту за ідентифікатором
+async function removeContact(id) {
+  try {
+    const result = await Contact.findByIdAndDelete(id);
+    console.log(result)
+    if (result) {
+      return result;
+    } else {
+      return;
+    }
+  } catch (error) {
+    console.error('Error deleting contact:', error.message);
+  }
+}
 
+// Функція для оновлення контакту за ідентифікатором
+async function updateContact(id, updatedContact) {
+  try {
+    const result = await Contact.findByIdAndUpdate(id, updatedContact, {
+      new: true,
+    });
+    if (result) {
+      return updatedContact;
+    } else {
+      return;
+    }
+  } catch (error) {
+    console.error('Error updating contact:', error.message);
+  }
+}
 
+async function updateStatusContact(contactId, favorite) {
+  try {
+    const contact = await Contact.findByIdAndUpdate(contactId, {favorite}, { new: true });
+    if (!contact) {
+      return;
+    }
+    return contact;
+  } catch (error) {
+    throw new Error('Failed to update contact: ' + error.message);
+  }
+}
 
-
-
-
-module.exports = { listContacts, getById, addContact, removeContact, updateContact };
+module.exports = {
+  listContacts,
+  getById,
+  addContact,
+  removeContact,
+  updateContact,
+  updateStatusContact
+};
