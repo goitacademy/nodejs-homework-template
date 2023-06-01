@@ -11,10 +11,9 @@ const gravatar = require("gravatar");
 
 const avatarDir = path.join("__dirname", "../", "public", "avatars");
 
-async function resize(resultUpload) {
-  const image = await Jimp.read(resultUpload);
-  await image.resize(250, 250);
-  image.write(resultUpload);
+async function resize(publicLocation) {
+  const image = await Jimp.read(publicLocation);
+  image.resize(250, 250).write(publicLocation);
 }
 
 // реєстрація клієнта
@@ -73,15 +72,17 @@ const logout = async (body) => {
 // };
 
 const patchAvatar = async (req, res) => {
-  // const { _id } = req.user;
-  // const { path: tempUpload, originalname } = req.file;
-  // const fileName = `${_id}_${originalname}`;
-  // const resultUpload = path.join(avatarDir, fileName);
-  // await fs.rename(tempUpload, resultUpload);
-  // resize(resultUpload);
+  // console.log(req.file, req.body);
+  const { userId } = req.body;
+  const { path: tempLocation, originalname } = req.file;
+  const fileName = `${userId}_${originalname}`;
+  const publicLocation = path.join(avatarDir, fileName);
+  await fs.rename(tempLocation, publicLocation);
+  resize(publicLocation);
   // const avatarURL = path.join("avatars", fileName);
-  // await User.findByIdAndUpdate(_id, { avatarURL });
+  await User.findByIdAndUpdate({ _id: userId }, { avatarURL: publicLocation });
   // res.status(200).json({ avatarURL });
+  return res.status(200).json({ publicLocation });
 };
 
 module.exports = { register, login, logout, patchAvatar };
