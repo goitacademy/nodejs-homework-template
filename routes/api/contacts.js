@@ -9,14 +9,15 @@ router.get("/", tryCatchWrapper(ctrl.getAll));
 
 router.get("/:contactId", tryCatchWrapper(ctrl.getById));
 
-router.post("/", validateBody(schema.contactAddSchema), tryCatchWrapper(ctrl.add));
+router.post("/", validateBody(schema.addSchema), tryCatchWrapper(ctrl.add));
 
 router.delete("/:contactId", tryCatchWrapper(ctrl.remove));
 
 router.put(
   "/:contactId",
-  validateBody(schema.contactAddSchema),
+  validateBody(schema.updateSchema),
   tryCatchWrapper(ctrl.updateById)
 );
 
 module.exports = router;
+
