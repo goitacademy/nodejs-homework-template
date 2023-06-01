@@ -26,9 +26,17 @@ const schema = new Schema(
     refresh_token: {
       type: String,
     },
+    token: {
+      type: String,
+      default: "",
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
+    },
+    avatarURL: {
+      type: String,
+      required: true,
     },
   },
   {
