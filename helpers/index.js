@@ -1,5 +1,5 @@
-const HttpError = require('./HttpError');
-const funcWrapper = require('./funcWrapper');
-module.exports = { HttpError, funcWrapper };
+const HttpErrors = require("./HttpErrors")
 
-
+module.exports = {
+    HttpErrors
+}

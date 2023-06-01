@@ -1,66 +1,62 @@
-const fs = require('fs').promises;
-const path = require('path');
-const shortid = require('shortid');
-const contactsPath = path.join(__dirname, "contacts.json");
+const fs = require("fs/promises");
+const { nanoid } = require("nanoid");
+const path = require("path");
 
-async function listContacts() {
-  try {
-    const result = await fs.readFile(contactsPath);
-    console.table(JSON.parse(result));
-    return JSON.parse(result);
-  } catch (error) {
-    throw new Error('not found');
-  }
+const contactPath = path.join(__dirname, "contacts.json");
+
+
+const listContacts = async () => {
+  const data = await fs.readFile(contactPath);
+  return JSON.parse(data);
 }
 
-async function getContactById(contactId) {
-  try {
-    const contacts = await listContacts();
-    const contact = contacts.find(item => item.id === contactId);
-    if (!contact) throw new Error('not found');
-    return contact;
-  } catch (error) {
-    throw new Error('not found');
-  }
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contactById = contacts.find((contact) => contact.id === contactId);
+  return contactById || null;
 }
 
-async function removeContact(contactId) {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(value => value.id === contactId);
-    if (index === -1) return null;
-    contacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return index;
-  } catch (error) {
-    throw new Error('not found');
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return null;
   }
+  const [result] = contacts.splice(index, 1);
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
+  return result;
 }
 
-async function addContact(name, email, phone) {
-  try {
-    const contacts = await listContacts();
-    const contact = { id: shortid.generate(), name, email, phone };
-    contacts.push(contact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contact;
-  } catch (error) {
-    throw new Error('not found');
-  }
+const addContact = async (data) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: nanoid(),
+    ...data,
+  };
+  contacts.push(newContact);
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
+  return newContact;
 }
 
-async function updateContact(contactId, body) {
-  try {
-    const { name, number, email } = body;
-    const contacts = await listContacts();
-    const index = contacts.findIndex(contact => contact.id === contactId);
-    if (index === -1) throw new Error('not found');
-    contacts[index] = { id: contactId, name, number, email };
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
-  } catch (error) {
-    throw new Error('not found');
-  }
-}
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
 
-module.exports = { listContacts, getContactById, removeContact, addContact, updateContact };
+  const index = contacts.findIndex((contact) => {
+      return contact.id === contactId;
+  });
+
+  if (index === -1) {
+      return null;
+  }
+  contacts[index] = { id: contactId, ...body };
+  await fs.writeFile(contactPath, JSON.stringify(contacts, 0, 2));
+  return contacts[index];
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+}
