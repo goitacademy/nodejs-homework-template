@@ -8,12 +8,7 @@ const validateBody = (schema) => {
       const { error } = schema.validate(req.body);
 
       if (error) {
-        next(
-          HttpError(
-            400,
-            `missing required ${error.details[0].context.key} field`
-          )
-        );
+        next(HttpError(400, error.message));
       }
       next();
     }
