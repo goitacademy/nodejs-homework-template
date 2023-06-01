@@ -8,10 +8,15 @@ const {HttpError} = require('../../helpers')
 
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30).required().messages({
+    'any.required': `missing required name field`,
+    
+  }),
   email: Joi.string().required(),
   phone: Joi.string().required(),
 })
+
+
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -41,11 +46,13 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
 try {
+
   const {error} = contactAddSchema.validate(req.body)
   if(error){
-    throw HttpError(400, "missing required name field")
+    throw HttpError(400, error.message )
   }
-  const result = await contacts.addContact(req.body)
+  
+  const result = await contacts.addContact( req.body)
   res.status(201).json(result)
 } catch (error) {
   next(error)
@@ -56,12 +63,12 @@ router.put('/:id', async (req, res, next) => {
   try {
     const {error} = contactAddSchema.validate(req.body)
     if(error){
-      throw HttpError(400, "missing fields")
+      throw HttpError(404, `Not found`)
     }
-    const { id } = req.params;
-    const result = await contacts.updateContact(id, req.body)
+
+    const result = await contacts.updateContact( req.body)
     if (!result) {
-      throw HttpError(404, `Contact with ${id} not found`)
+      throw HttpError(400, `missing fields`)
       }
     res.json(result)
   } catch (error) {
@@ -75,9 +82,9 @@ router.delete('/:id', async (req, res, next) => {
       const { id } = req.params;
   const result = await contacts.removeContact(id)
   if (!result) {
-    throw HttpError(404, `Contact with ${id} not found`)
+    throw HttpError(404, `Not found`)
     }
-    res.json({
+    res.status(200).json({
       message: "contact deleted"
     })
     } catch (error) {
