@@ -6,10 +6,12 @@ const { isValidId } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
-const { register } = require("../../controllers/auth");
+const { register, login } = require("../../controllers/auth");
 
 const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), register);
+
+router.post("/login", validateBody(schemas.loginSchema), login);
 
 module.exports = router;
