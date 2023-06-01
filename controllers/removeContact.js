@@ -1,6 +1,6 @@
-const contactRemove = require('../services');
+const { contactRemove } = require('../services');
 
-const delateContact = async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     await contactRemove(contactId);
@@ -10,4 +10,4 @@ const delateContact = async (req, res, next) => {
   }
 };
 
-module.exports = delateContact;
+module.exports = deleteContact;
