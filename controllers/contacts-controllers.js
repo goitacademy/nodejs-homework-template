@@ -24,8 +24,8 @@ const addContact = async (req, res) => {
     if (error) {
         throw HttpError(400, "missing required field");
     }
-    const { name, email, phone } = req.body;
-    const result = await Contact.create(req.body);
+    // const { name, email, phone } = req.body;
+    const result = await Contact.create({...req.body});
 
     res.status(201).json(result);
 };
