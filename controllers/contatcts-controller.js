@@ -1,6 +1,6 @@
 const contatctsServices = require('../models/contacts');
 const { HttpError } = require('../helpers');
-
+const { addSchema } = require('../schemas/contactsSchema');
 const { ctrlWrapper } = require('../decorators');
 
 const getAllContacts = async (req, res) => {
@@ -17,16 +17,20 @@ const getContatctById = async (req, res) => {
   res.json(result);
 };
 
-const addContatct = async (req, res) => {
+const addContact = async (req, res) => {
+  const { error } = addSchema.validate(req.body);
+  if (error) {
+    throw HttpError(400, 'missing required name field');
+  }
   const result = await contatctsServices.addContact(req.body);
   res.status(201).json(result);
 };
 
 const deleteContatctById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contatctsServices.removeContact();
+  const result = await contatctsServices.removeContact(contactId);
   if (!result) {
-    throw HttpError(404, `Contact with ${contactId} not found`);
+    throw HttpError(404, 'Not found!');
   }
 
   res.json({
@@ -36,17 +40,22 @@ const deleteContatctById = async (req, res) => {
 
 const updateContatctById = async (req, res) => {
   const { contactId } = req.params;
+  const { error } = addSchema.validate(req.body);
   const result = await contatctsServices.updateContact(contactId, req.body);
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, 'Not found!');
   }
+  if (error) {
+    throw HttpError(400, 'missing fields');
+  }
+
   res.json(result);
 };
 
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContatctById: ctrlWrapper(getContatctById),
-  addContatct: ctrlWrapper(addContatct),
+  addContatct: ctrlWrapper(addContact),
   deleteContatctById: ctrlWrapper(deleteContatctById),
   updateContatctById: ctrlWrapper(updateContatctById),
 };
