@@ -18,4 +18,8 @@ router.patch('/', authorization, validateBody(schemas.validateSubscription), ctr
 
 router.patch('/avatars', authorization, upload.single('avatar'), ctrl.updateAvatar);
 
+router.get('/verify/:verificationToken', ctrl.verifyEmail);
+
+router.post('/verify/', validateBody(schemas.emailSchema), ctrl.resendVerifyEmail);
+
 module.exports = router;
