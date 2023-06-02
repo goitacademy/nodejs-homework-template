@@ -22,7 +22,7 @@ router
 router
   .route("/:contactId")
   .get(getOneContact)
-  .delete(deleteContact)
+  .delete(isValidId, deleteContact)
   .put(validateBody(contactsSchema), updateContact)
 
 
