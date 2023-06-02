@@ -21,7 +21,7 @@ const validate = (addSchema) => {
     };
   };
 
-  const validateFavorite = () => {
+  const validateFavorite = (updateFavoriteSchema) => {
     return (req, res, next) => {
       if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
         throw res.status(400).json({ message: "missing field favorite" });
