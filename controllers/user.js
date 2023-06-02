@@ -1,12 +1,13 @@
 const { ctrlWrapper, sendEmail } = require("../helpers");
 const { User } = require("../models/user");
 const { nanoid } = require("nanoid");
+const Jimp = require("jimp");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 
 const bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { log } = require("console");
 
 const saltRounds = 10;
@@ -162,6 +163,15 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
+
+  Jimp.read(`${resultUpload}`, (err, image) => {
+    if (err) throw err;
+    image
+      .resize(255, 255) // resize
+      .quality(100) // set JPEG quality
+      .write(`${resultUpload}`); // save
+  });
+
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({
