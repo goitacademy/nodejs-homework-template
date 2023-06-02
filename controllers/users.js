@@ -2,8 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const { httpError, ctrlWrapper } = require("../utils");
-// const { SECRET_KEY } = process.env;
-const SECRET_KEY = "secret";
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -57,7 +56,7 @@ const logout = async (req, res, next) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  register.json({ message: "Logout success" });
+  res.json({ message: "Logout success" });
 };
 
 module.exports = {

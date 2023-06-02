@@ -1,6 +1,7 @@
 const { httpError } = require("../utils");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "secret";
+// const SECRET_KEY = "secret";
+const { SECRET_KEY } = process.env;
 const { User } = require("../models/user");
 
 const authenticate = async (req, res, next) => {
