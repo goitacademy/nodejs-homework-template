@@ -37,11 +37,11 @@ app.use((err, _, res, __) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-const uriDb = 'mongodb+srv://iraakulova2019:Svastika-666@cluster0.ia47zme.mongodb.net/db-contacts?retryWrites=true&w=majority';
-// const uriDb = process.env.DB_HOST;
+const { DB_HOST } = process.env;
 
-const connection = mongoose.connect(uriDb);
+const PORT = process.env.PORT || 3000;
+
+const connection = mongoose.connect(DB_HOST);
 
 connection
   .then(() => {
