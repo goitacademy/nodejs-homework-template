@@ -1,6 +1,22 @@
-const contacts = require("../models/contacts");
-const { HttpError } = require("../helpers");
+const Contact = require("../models/contact");
+// const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../helpers");
+
+
+
+const getContacts = async (req, res) => {
+    // console.log(res)
+    const result = await Contact.find();
+    res.json(result);
+};
+
+
+const createNewContact = async (req, res) => {
+    // console.log(req.body)
+    const result = await Contact.create(req.body);
+    // console.log("response", res)
+    res.json(result);
+};
 
 // ---------------------------   G E T -----------------------------------------
 
@@ -14,10 +30,11 @@ const { ctrlWrapper } = require("../helpers");
 //   }
 // };
 
-const getContacts = async (req, res, next) => {
-  const result = await contacts.listContacts();
-  res.json(result);
-};
+// const getContacts = async (req, res, next) => {
+//   const result = await contacts.listContacts();
+//   res.json(result);
+// };
+
 
 // ----------------------------- GET  BY  ID------------------------------------------
 
@@ -41,19 +58,19 @@ const getContacts = async (req, res, next) => {
 //   }
 // };
 
-const getById = async (req, res, next) => {
-  const { contactId } = req.params;
+// const getById = async (req, res, next) => {
+//   const { contactId } = req.params;
 
-  const result = await contacts.getContactById(contactId);
-  if (!result) {
-    throw HttpError(404, "Not found");
-    // const error = new Error("Not found!");
-    // error.status = 404;
-    // throw error;
-    // return res.status(404).json({ message: "Not found!" });
-  }
-  res.json(result);
-};
+//   const result = await contacts.getContactById(contactId);
+//   if (!result) {
+//     throw HttpError(404, "Not found");
+//     // const error = new Error("Not found!");
+//     // error.status = 404;
+//     // throw error;
+//     // return res.status(404).json({ message: "Not found!" });
+//   }
+//   res.json(result);
+// };
 
 // -----------------------   P O S T   ------------------------------------------
 
@@ -69,14 +86,14 @@ const getById = async (req, res, next) => {
 //     next(error);
 //   }
 // };
-const createNewContact = async (req, res, next) => {
-  // console.log(req.body);
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) throw HttpError(400, error.message);
+// const createNewContact = async (req, res, next) => {
+//   // console.log(req.body);
+//   //   const { error } = addSchema.validate(req.body);
+//   //   if (error) throw HttpError(400, error.message);
 
-  const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
-};
+//   const result = await contacts.addContact(req.body);
+//   res.status(201).json(result);
+// };
 // --------------------------  D E L E T E  ------------------------------------------
 
 // const deleteContact = async (req, res, next) => {
@@ -92,14 +109,14 @@ const createNewContact = async (req, res, next) => {
 //   }
 // };
 
-const deleteContact = async (req, res, next) => {
-  const { contactId } = req.params;
+// const deleteContact = async (req, res, next) => {
+//   const { contactId } = req.params;
 
-  const result = await contacts.removeContact(contactId);
-  if (!result) throw HttpError(404, "Not found");
+//   const result = await contacts.removeContact(contactId);
+//   if (!result) throw HttpError(404, "Not found");
 
-  res.json({ message: "Delete success" });
-};
+//   res.json({ message: "Delete success" });
+// };
 // ---------------------------  P U T  ------------------------------------------
 
 // const changeContact = async (req, res, next) => {
@@ -118,24 +135,24 @@ const deleteContact = async (req, res, next) => {
 //   } catch (error) {}
 // };
 
-const changeContact = async (req, res, next) => {
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) throw HttpError(400, error.message);
-  const { contactId } = req.params;
-  // console.log("id", contactId);
-  const result = await contacts.updateContact(contactId, req.body);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  // console.log("req.body", req.body);
-  // console.log("result", result);
-  res.json(result);
-};
+// const changeContact = async (req, res, next) => {
+//   //   const { error } = addSchema.validate(req.body);
+//   //   if (error) throw HttpError(400, error.message);
+//   const { contactId } = req.params;
+//   // console.log("id", contactId);
+//   const result = await contacts.updateContact(contactId, req.body);
+//   if (!result) {
+//     throw HttpError(404, "Not found");
+//   }
+//   // console.log("req.body", req.body);
+//   // console.log("result", result);
+//   res.json(result);
+// };
 
 module.exports = {
   getContacts: ctrlWrapper(getContacts),
-  getById: ctrlWrapper(getById),
+//   getById: ctrlWrapper(getById),
   createNewContact: ctrlWrapper(createNewContact),
-  deleteContact: ctrlWrapper(deleteContact),
-  changeContact: ctrlWrapper(changeContact),
+//   deleteContact: ctrlWrapper(deleteContact),
+//   changeContact: ctrlWrapper(changeContact),
 };
