@@ -14,7 +14,7 @@ const getContactRoute = async (req, res, next) => {
 // const getContactRouteByID = async (req, res, next) => {
 //   try {
 //     const { contactId } = req.params;
-//     const contactById = await operations.getContactById(contactId);
+//     const contactById = await Contact.find();
 //     if (!contactById) {
 //       throw httpError(404);
 //     }
@@ -24,18 +24,18 @@ const getContactRoute = async (req, res, next) => {
 //   }
 // };
 
-// const postContactRoute = async (req, res, next) => {
-//   try {
-//     const { error } = contactPush.validate(req.body);
-//     if (error) {
-//       throw httpError(400, error.message);
-//     }
-//     const result = await operations.addContact(req.body);
-//     res.status(201).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const postContactRoute = async (req, res, next) => {
+  try {
+    const { error } = contactPush.validate(req.body);
+    if (error) {
+      throw httpError(400, error.message);
+    }
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 // const deleteContactRoute = async (req, res, next) => {
 //   try {
@@ -70,7 +70,7 @@ const getContactRoute = async (req, res, next) => {
 module.exports = {
   getContactRoute,
   getContactRouteByID,
-  postContactRoute,
-  deleteContactRoute,
-  putContactRoute,
+  // postContactRoute,
+  // deleteContactRoute,
+  // putContactRoute,
 };
