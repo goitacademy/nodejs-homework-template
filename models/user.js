@@ -5,10 +5,7 @@ const { handleMongooseError } = require('../helpers');
 const Joi = require("joi");
 
 const userSchema = new Schema ({
-    name: {
-        type: String,
-        requared: true,
-    },
+    
     email: {
         type: String,
         unique: true,
