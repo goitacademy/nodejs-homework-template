@@ -1,4 +1,6 @@
+
 const express = require("express");
+const router = express.Router();
 const {
   listContacts,
   getById,
@@ -7,10 +9,8 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../models/contacts");
-const { nanoid } = require("nanoid");
-const { createSchema, updateSchema } = require("../../models/utils");
 
-const router = express.Router();
+
 
 router.get("/", async (req, res, next) => {
   res.json(await listContacts());
