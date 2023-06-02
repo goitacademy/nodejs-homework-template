@@ -32,6 +32,7 @@ const userSchema = new Schema({
     default: 'starter',
   },
   token: String,
+  avatarURL: String,
 });
 
 const User = mongoose.model('User', userSchema);
