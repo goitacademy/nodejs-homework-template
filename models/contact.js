@@ -18,6 +18,11 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   {
     versionKey: false,
@@ -27,14 +32,13 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
-// обьект настроки валидации (схемы)
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
-// обьект настроки валидации (схемы) 2
+
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
