@@ -8,10 +8,10 @@ const getAll = async (req, res) => {
   const skip = (page - 1) * limit;
 
   const result = favorite
-    ? await Contact.find({ favorite }, null, {
+    ? await Contact.find({ favorite, owner }, null, {
         skip,
         limit,
-      })
+      }).populate("owner", "email subscription")
     : await Contact.find({ owner }, null, {
         skip,
         limit,

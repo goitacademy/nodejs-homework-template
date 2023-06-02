@@ -1,14 +1,16 @@
-const { ctrlWrapper } = require("../helpers");
+const { ctrlWrapper, sendEmail } = require("../helpers");
 const { User } = require("../models/user");
+const { nanoid } = require("nanoid");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
+const { log } = require("console");
 
 const saltRounds = 10;
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
@@ -16,23 +18,84 @@ const register = async (req, res) => {
 
   const uniqueEmail = await User.findOne({ email });
 
-  const hashPassword = await bcrypt.hash(password, saltRounds);
-  const avatarURL = gravatar.url(email);
-
   if (uniqueEmail) {
     res.status(409).json({
       message: "Email in use",
     });
   }
 
+  const hashPassword = await bcrypt.hash(password, saltRounds);
+  const avatarURL = gravatar.url(email);
+  const verificationToken = nanoid();
+
   const result = await User.create({
     email,
     password: hashPassword,
     avatarURL,
+    verificationToken,
   });
+
+  const verifyEm = {
+    to: email,
+    subject: "Verify Email",
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEm);
+
   const { email: createEmail, subscription } = result;
 
   res.status(201).json({ user: { email: createEmail, subscription } });
+};
+
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+  res.status(200).json({
+    message: "Verification successful",
+  });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(404).json({
+      message: "Email not found",
+    });
+    return;
+  }
+
+  if (user.verify) {
+    res.status(400).json({
+      message: "Verification has already been passed",
+    });
+    return;
+  }
+
+  const verifyEm = {
+    to: email,
+    subject: "Verify Email",
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEm);
+
+  res.status(200).json({
+    message: "Verification email sent",
+  });
 };
 
 const logIn = async (req, res) => {
@@ -118,6 +181,8 @@ const logOut = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   logIn: ctrlWrapper(logIn),
   userCurrent: ctrlWrapper(userCurrent),
   updateSubscription: ctrlWrapper(updateSubscription),
