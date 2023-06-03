@@ -9,11 +9,11 @@ const userSchema = new Schema ({
     email: {
         type: String,
         unique: true,
-        requared: [true, 'Email is required'],
+        required: [true, 'Email is required'],
     },
     password: {
         type: String,
-        requared: [true, 'Set password for user'],
+        required: [true, 'Set password for user'],
     },
     subscription: {
         type: String,
