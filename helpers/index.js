@@ -1,2 +1,3 @@
 const httpError = require("./httpError");
-module.exports = { httpError, };
+const heandleMongoosError =require("./heandleMongooseError");
+module.exports = { httpError,heandleMongoosError };
