@@ -1,8 +1,9 @@
-const contactSchema = require('./contactsSchema');
+const contactSchemaJoi = require('./contactsSchema');
+const contactUpdateFavorite = require("./contactUpdateFavorite");
 const HttpError = require("./HttpError");
 
-
 module.exports = {
-    contactSchema,
+    contactSchemaJoi,
+    contactUpdateFavorite,
     HttpError,
 };
