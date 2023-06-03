@@ -1,3 +1,5 @@
 const httpError = require("./httpError");
-const heandleMongoosError =require("./heandleMongooseError");
-module.exports = { httpError,heandleMongoosError };
+const heandleMongoosError = require("./heandleMongooseError");
+const ctrlWrapper = require("./ctrlWrapper");
+
+module.exports = { httpError, heandleMongoosError, ctrlWrapper };
