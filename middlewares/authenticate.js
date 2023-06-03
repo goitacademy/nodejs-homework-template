@@ -9,17 +9,17 @@ const authenticate = async (req, res, next) => {
   const [bearer, token] = authorization.split(" ");
   console.log("token", token);
   if (bearer !== "Bearer") {
-    next(HttpError(401, "Invalid"));
+    next(HttpError(401));
   }
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
     if (!user) {
-      next(HttpError(401, "Invalid"));
+      next(HttpError(401));
     }
     next();
   } catch {
-    next(HttpError(401, "Invalid"));
+    next(HttpError(401));
   }
 };
 
