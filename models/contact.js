@@ -29,7 +29,11 @@ const contactPush = Joi.object({
     phone: Joi.string().required(),
     favorite:Joi.boolean()
   });
-  const schemas={contactPush};
+  const updateFavoriteSchemas =Joi.object({
+    favorite:Joi.boolean().required
+  })
+
+  const schemas={contactPush,updateFavoriteSchemas};
 
 const Contact = model("contact", contactSchema);
 
