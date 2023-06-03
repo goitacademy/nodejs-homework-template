@@ -6,6 +6,4 @@ const getAllContacts = async (req, res) => {
     res.status(200).json(result);
 };
 
-module.exports = {
-    getAllContacts,
-}
+module.exports = getAllContacts;

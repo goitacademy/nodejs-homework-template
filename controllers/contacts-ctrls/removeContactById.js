@@ -12,6 +12,4 @@ const removeContactById = async (req, res) => {
     res.status(200).json({ "message": "contact deleted" });
 };
 
-module.exports = {
-    removeContactById,
-}
+module.exports = removeContactById; 
