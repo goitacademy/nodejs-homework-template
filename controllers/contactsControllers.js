@@ -1,6 +1,6 @@
 const { HttpError } = require("../utils");
 const { asyncWrapper } = require("../utils");
-const {Contact} = require("../models/contactMongooseSchema")
+const { Contact } = require("../models/contactMongooseSchema");
 
 // const {
 //   listContacts,
@@ -42,7 +42,9 @@ const deleteContact = asyncWrapper(async (req, res, next) => {
 
 const updateContact = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw new HttpError(404);
   }
@@ -51,13 +53,14 @@ const updateContact = asyncWrapper(async (req, res, next) => {
 
 const updateFavorite = asyncWrapper(async (req, res, next) => {
   const { contactId } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw new HttpError(404);
   }
   res.status(200).json(updatedContact);
 });
-
 
 module.exports = {
   getListContacts,
@@ -65,5 +68,5 @@ module.exports = {
   addNewContact,
   deleteContact,
   updateContact,
- updateFavorite,
+  updateFavorite,
 };

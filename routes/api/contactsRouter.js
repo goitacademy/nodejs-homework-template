@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBody, isValidId } = require("../../middlewares");
+const { validateBody} = require("../../middlewares");
 const { contactsSchema, updateFavoriteSchema } = require("../../schemas/contactsSchema");
 
 
@@ -22,7 +22,7 @@ router
 router
   .route("/:contactId")
   .get(getOneContact)
-  .delete(isValidId, deleteContact)
+  .delete(deleteContact)
   .put(validateBody(contactsSchema), updateContact)
 
 
