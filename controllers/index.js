@@ -9,6 +9,7 @@ const {login} = require('./auth');
 const {getCurrent} = require('./auth');
 const {logout} = require('./auth');
 const {updateUserSubscription} = require('./auth');
+const {updateAvatar} = require('./auth');
 
 
 module.exports = {
@@ -23,4 +24,5 @@ module.exports = {
     getCurrent,
     logout,
     updateUserSubscription,
+    updateAvatar,
 };
