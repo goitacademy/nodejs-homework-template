@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
+const Joi = require('joi');
+
+const { handleMongooseError } = require("../helpers");
 
 const contactsShema = new Schema({
   name: {
@@ -17,6 +20,20 @@ const contactsShema = new Schema({
   },
 });
 
+const contactsAddSchema = Joi.object({
+  name: Joi.string().required().messages({
+    'any.required': `missing required name field`,
+  }),
+  email: Joi.string().required().messages({
+    'any.required': `missing required email field`,
+  }),
+  phone: Joi.string().required().messages({
+    'any.required': `missing required phone field`,
+  }),
+});
+
+contactsShema.post('save', handleMongooseError);
+
 const Contacts = model('Contacts', contactsShema);
 
-module.exports = Contacts;
+module.exports = { Contacts, contactsAddSchema, };

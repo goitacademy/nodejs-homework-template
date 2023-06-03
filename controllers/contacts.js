@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const contactsAddSchema = require("../models/contacts");
 
 const Contacts = require('../models/contacts');
 
@@ -6,17 +6,7 @@ const { HttpError } = require('../helpers');
 
 const { ctrlWrapper } = require('../helpers');
 
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    'any.required': `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    'any.required': `missing required email field`,
-  }),
-  phone: Joi.string().required().messages({
-    'any.required': `missing required phone field`,
-  }),
-});
+
 
 const getAll = async (req, res, next) => {
   try {
@@ -41,7 +31,7 @@ const add = async (req, res, next) => {
   if (error) {
     throw HttpError(400, error.message);
   }
-  const result = await Contacts.create(req.body);
+  const result = await Contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
