@@ -90,7 +90,7 @@ router.put('/:id', isValidId, async (req, res, next) => {
     if (!result) {
       throw utils.HttpError(404, "Not Found");
     }
-    console.log(result);
+ 
     res.json(result);
       
   } catch (error) {
@@ -111,7 +111,6 @@ router.patch("/:id/favorite", isValidId, async (req, res, next) => {
     if (!result) {
       throw utils.HttpError(404, "Not Found");
     }
-    console.log(result);
     res.json(result);
       
   } catch (error) {
