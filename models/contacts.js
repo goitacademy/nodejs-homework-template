@@ -30,10 +30,13 @@ const contactsAddSchema = Joi.object({
   phone: Joi.string().required().messages({
     'any.required': `missing required phone field`,
   }),
+  favorite: Joi.boolean(),
 });
+
+const schemas = { contactsAddSchema };
 
 contactsShema.post('save', handleMongooseError);
 
 const Contacts = model('Contacts', contactsShema);
 
-module.exports = { Contacts, contactsAddSchema, };
+module.exports = { Contacts, schemas, };

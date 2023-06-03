@@ -1,12 +1,10 @@
-const contactsAddSchema = require("../models/contacts");
+// const contactsAddSchema = require('../models/contacts');
 
 const Contacts = require('../models/contacts');
 
-const { HttpError } = require('../helpers');
+// const { HttpError } = require('../helpers');
 
 const { ctrlWrapper } = require('../helpers');
-
-
 
 const getAll = async (req, res, next) => {
   try {
@@ -26,20 +24,12 @@ const getAll = async (req, res, next) => {
 //   res.json(result);
 // };
 
-const add = async (req, res, next) => {
-  const { error } = await contactsAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+const add = async (req, res) => {
   const result = await Contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
 // const updateById = async (req, res, next) => {
-//   const { error } = await contactsAddSchema.validate(req.body);
-//   if (error) {
-//     throw HttpError(400, 'Missing fields');
-//   }
 //   const { id } = req.params;
 //   const result = await contactsService.updateContactsById(id, req.body);
 //   if (!result) {
@@ -59,8 +49,8 @@ const add = async (req, res, next) => {
 
 module.exports = {
   getAll,
-//   getById: ctrlWrapper(getById),
+  //   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
-//   updateById: ctrlWrapper(updateById),
-//   deleteById: ctrlWrapper(deleteById),
+  //   updateById: ctrlWrapper(updateById),
+  //   deleteById: ctrlWrapper(deleteById),
 };
