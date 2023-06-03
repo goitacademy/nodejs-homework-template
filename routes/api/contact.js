@@ -1,7 +1,7 @@
 const express = require("express");
 
 const {
-  getAllMovies,
+  getAllContacts,
   getById,
   addContact,
   deleteContact,
@@ -15,7 +15,7 @@ const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
-router.get("/", authenticate, getAllMovies);
+router.get("/", authenticate, getAllContacts);
 
 router.get("/:contactId", authenticate, isValidId, getById);
 

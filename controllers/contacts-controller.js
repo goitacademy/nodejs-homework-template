@@ -4,8 +4,9 @@ const { HttpError } = require("../helpers");
 
 const { ctrlWrapper } = require("../decorators/");
 
-const getAllMovies = async (req, res) => {
-  const results = await Contact.find();
+const getAllContacts = async (req, res) => {
+  const { _id: owner } = req.user;
+  const results = await Contact.find({ owner }, "-createdAt -updatedAt");
   res.json(results);
 };
 
@@ -18,7 +19,8 @@ const getById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const results = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const results = await Contact.create({ ...req.body, owner });
   res.status(201).json(results);
 };
 
@@ -55,7 +57,7 @@ const updateFavorite = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllMovies: ctrlWrapper(getAllMovies),
+  getAllContacts: ctrlWrapper(getAllContacts),
   getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   deleteContact: ctrlWrapper(deleteContact),
