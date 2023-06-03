@@ -108,6 +108,7 @@ const logIn = async (req, res) => {
     res.status(401).json({
       message: "Email or password is wrong",
     });
+    return;
   }
 
   const comparePassword = await bcrypt.compare(password, user.password);
@@ -116,6 +117,14 @@ const logIn = async (req, res) => {
     res.status(401).json({
       message: "Email or password is wrong",
     });
+    return;
+  }
+
+  if (!user.verify) {
+    res.status(401).json({
+      message: "Email not verified",
+    });
+    return;
   }
 
   const payload = {
