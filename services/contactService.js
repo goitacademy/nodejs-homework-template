@@ -1,8 +1,8 @@
 const {Contact} = require("../models/contacts");
 
-const listContactsService = async (page, limit) => {
+const listContactsService = async (page, limit, owner) => {
   const skip = (page - 1) * limit;
-  return await Contact.find().skip(skip).limit(limit);
+  return await Contact.find({owner}).skip(skip).limit(limit);
 }
 
 const getContactByIdService = async (contactId) => {

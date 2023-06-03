@@ -9,8 +9,9 @@ const {HttpError} = require("../helpers");
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
 const getContacts = ctrlWrapper(async (req, res) => {
+    const {_id: owner} = req.user;
     const {page = 1, limit = 10} = req.query;
-    const result = await listContactsService(page, limit);
+    const result = await listContactsService(page, limit, owner);
     res.status(200).json(result)
 })
 
@@ -24,7 +25,8 @@ const getContactById = ctrlWrapper(async (req, res) => {
 })
 
 const addContact = ctrlWrapper(async (req, res) => {
-    const result = await addContactService(req.body);
+    const {_id: owner} = req.user;
+    const result = await addContactService({...req.body, owner});
     res.status(201).json(result);
 })
 

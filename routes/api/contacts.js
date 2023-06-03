@@ -12,6 +12,10 @@ const {contactValidationSchema,
   updateContactValidationSchema, 
   updateFavoriteSchema} = require('../../schemas/contactValidationSchema')
 
+const authenticate = require("../../middlewares/authenticate");
+
+router.use(authenticate)
+
 router
   .route('/')
   .get(getContacts)
