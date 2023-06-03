@@ -5,7 +5,8 @@ const { getAllContacts,
     deleteContact,
     updateContact,
     updateStatusContact } = require('../../controllers');
-const { validateBody, isValidId, authenticate } = require('../../decorators');
+const { validateBody, isValidId } = require('../../decorators');
+const { authenticate } = require('../../midlewares');
 const { schemas } = require('../../models');
 const router = express.Router();
 
