@@ -9,6 +9,23 @@ mongoose
   .then(() => {
     app.listen(PORT);
     console.log('Database connection successful');
+    // const contactsShema = new mongoose.Schema({
+    //   name: {
+    //     type: String,
+    //     required: [true, 'Set name for contact'],
+    //   },
+    //   email: {
+    //     type: String,
+    //   },
+    //   phone: {
+    //     type: String,
+    //   },
+    //   favorite: {
+    //     type: Boolean,
+    //     default: false,
+    //   },
+    // });
+    // const Contacts = mongoose.model("Contacts", contactsShema)
   })
   .catch(error => {
     console.log(error.message);
