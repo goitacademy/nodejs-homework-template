@@ -1,4 +1,4 @@
-const { Contact } = require("../models/contact");
+const { Contact } = require("../models");
 
 const { HttpError } = require("../helpers");
 
@@ -6,7 +6,12 @@ const { ctrlWrapper } = require("../decorators/");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const results = await Contact.find({ owner }, "-createdAt -updatedAt");
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const results = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email");
   res.json(results);
 };
 
