@@ -1,6 +1,6 @@
 const { Contact } = require("../models/contact");
 const { httpError } = require("../helpers");
-const contactPush = require("../schemas/joi");
+const { schemas } = require("../models/contact");
 const { ctrlWrapper } = require("../helpers");
 
 const getContactRoute = async (req, res) => {
@@ -18,7 +18,7 @@ const getContactRouteByID = async (req, res) => {
 };
 
 const postContactRoute = async (req, res) => {
-  const { error } = contactPush.validate(req.body);
+  const { error } = schemas.contactPush.validate(req.body);
   if (error) {
     throw httpError(400, error.message);
   }
@@ -36,7 +36,7 @@ const deleteContactRoute = async (req, res) => {
 };
 
 const putContactRoute = async (req, res) => {
-  const { error } = contactPush.validate(req.body);
+  const { error } = schemas.contactPush.validate(req.body);
   if (error) {
     throw httpError(400, error.message);
   }
@@ -51,7 +51,7 @@ const putContactRoute = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-  const { error } = contactPush.validate(req.body);
+  const { error } = schemas.updateFavoriteSchema.validate(req.body);
   if (error) {
     throw httpError(400, "missing field favorite");
   }
