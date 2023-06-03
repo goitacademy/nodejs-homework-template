@@ -18,10 +18,10 @@ const getContatctById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const { error } = contatctsSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, 'missing required name field');
-  }
+  // const { error } = contatctsSchema.validate(req.body);
+  // if (error) {
+  //   throw HttpError(400, 'missing required name field');
+  // }
   const result = await contatctsServices.addContact(req.body);
   res.status(201).json(result);
 };
@@ -40,14 +40,14 @@ const deleteContatctById = async (req, res) => {
 
 const updateContatctById = async (req, res) => {
   const { contactId } = req.params;
-  const { error } = contatctsSchema.validate(req.body);
+  // const { error } = contatctsSchema.validate(req.body);
   const result = await contatctsServices.updateContact(contactId, req.body);
   if (!result) {
     throw HttpError(404, 'Not found!');
   }
-  if (error) {
-    throw HttpError(400, 'missing fields');
-  }
+  // if (error) {
+  //   throw HttpError(400, 'missing fields');
+  // }
 
   res.json(result);
 };
