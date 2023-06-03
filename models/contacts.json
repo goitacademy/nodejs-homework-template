@@ -25,14 +25,8 @@
   },
   {
     "id": "gU78mMwdIZmAt2R7qxPVy",
-    "name": "Test",
-    "email": "test@gmail.com",
-    "phone": "380637986534"
-  },
-  {
-    "id": "rsKkOQUi80UsgVPCcLZZW",
     "name": "STAS",
-    "email": "test@gmail.com",
-    "phone": "(704) 398-7993"
+    "email": "testemail@mail.com",
+    "phone": "+1 (123) 456-7890"
   }
 ]
