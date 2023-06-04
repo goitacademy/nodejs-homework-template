@@ -6,7 +6,7 @@ const listContacts = async (_, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const getContactById = async (req, res) => {
@@ -15,7 +15,7 @@ const getContactById = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const addContact = async (req, res) => {
@@ -29,7 +29,7 @@ const updateContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const removeContact = async (req, res) => {
@@ -42,6 +42,7 @@ const removeContact = async (req, res) => {
     message: "Delete success",
     result,
   });
+  // or status 204
 };
 
 module.exports = {
