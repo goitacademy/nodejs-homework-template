@@ -19,15 +19,8 @@ const userSchema = new Schema(
     },
     token: String,
   },
-  {
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-  },
   { versionKey: false, timestamps: true }
 );
-
 
 const User = mongoose.model("user", userSchema);
 
