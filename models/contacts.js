@@ -2,7 +2,6 @@ const fs = require("fs/promises");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const contactsPath = path.join(__dirname, "contacts.json");
-const ID = uuidv4();
 
 const listContacts = async () => {
   try {
@@ -29,14 +28,13 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-
     if (contacts.some((contact) => contact.id === contactId)) {
       const newList = contacts.filter((contact) => contact.id !== contactId);
 
       fs.writeFile(contactsPath, JSON.stringify(newList));
       return "Contact deleted";
     } else {
-      throw new Error("Contact not found");
+      console.error("Contact can't be deleted because it doesn't exist.");
     }
   } catch (error) {
     console.error(error);
@@ -46,7 +44,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     const contacts = await listContacts();
-    const newContact = { id: ID, ...body };
+    const newContact = { id: uuidv4(), ...body };
     const newList = [...contacts, newContact];
 
     fs.writeFile(contactsPath, JSON.stringify(newList));
@@ -56,7 +54,24 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const contactIndex = contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+    if (contactIndex === -1) {
+      return console.error("Contact not found");
+    } else {
+      const updatedContact = { ...contacts[contactIndex], ...body };
+      contacts.splice(contactIndex, 1, updatedContact);
+      await fs.writeFile(contactsPath, JSON.stringify(contacts));
+      return updatedContact;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   listContacts,
