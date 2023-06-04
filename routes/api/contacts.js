@@ -1,25 +1,61 @@
-const express = require('express')
+const express = require("express");
+const Joi = require("joi").extend(require("joi-phone-number"));
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+} = require("../../models/contacts");
 
-const router = express.Router()
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().phoneNumber().required(),
+});
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Get contacts
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json({ message: contacts });
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Get contacts with id
+router.get("/:contactId", async (req, res, next) => {
+  const foundContact = await getContactById(req.params.contactId);
+  if (foundContact) {
+    res.status(200).json(foundContact);
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  const result = schema.validate(req.body);
+  console.log("res", result);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const add = await addContact(req.body);
+  console.log(add);
+  res.status(201).json({ message: add });
+});
 
-module.exports = router
+// Delete contact
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const response = await removeContact(req.params.contactId);
+    if (response) {
+      res.json({ message: "contact deleted" });
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  res.json({ message: "template message" });
+});
+
+module.exports = router;
