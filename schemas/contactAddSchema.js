@@ -16,6 +16,7 @@ const contactAddSchema = Joi.object({
       "string.pattern.base":
         "Invalid phone number format. The expected format is (XXX) XXX-XXXX.",
     }),
+  favorite: Joi.boolean(),
 });
 
 module.exports = contactAddSchema;
