@@ -1,4 +1,3 @@
-const contactsService = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
 const cntrlWrapper = require("../decorators/cntrlWrapper");
 const { Contact } = require("../schemas/contacts-schemas");
@@ -36,13 +35,15 @@ const addContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contactsService.updateContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
 
   if (!result) {
-    throw HttpError(404, `Contact with id ${contactId} not found`);
+    throw HttpError(404, `Not found`);
   }
 
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const removeContact = async (req, res, next) => {
