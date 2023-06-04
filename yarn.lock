@@ -2451,7 +2451,7 @@
     "@aws-sdk/credential-providers" "^3.186.0"
     "saslprep" "^1.0.3"
 
-"mongoose@6.10.5":
+"mongoose@^6.10.5":
   "integrity" "sha512-y4HL4/9EySec7L0gJ+pCm9heLSF45uIIvRS4fSeAFWDfe4vXW1vRZJwTz7OGkra3ZoSfRnFTo9bNZkuggDVlVA=="
   "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-6.10.5.tgz"
   "version" "6.10.5"

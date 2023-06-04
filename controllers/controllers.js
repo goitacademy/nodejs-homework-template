@@ -1,76 +1,67 @@
-const operations = require("../models/contacts");
+const { Contact } = require("../models/contact");
 const { httpError } = require("../helpers");
-const contactPush = require("../schemas/joi");
+const { schemas } = require("../models/contact");
+const { ctrlWrapper } = require("../helpers");
 
-const getContactRoute = async (req, res, next) => {
-  try {
-    const result = await operations.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+const getContactRoute = async (req, res) => {
+  const result = await Contact.find({}, "name email phone favorite");
+  res.json(result);
 };
 
-const getContactRouteByID = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contactById = await operations.getContactById(contactId);
-    if (!contactById) {
-      throw httpError(404);
-    }
-    res.json(contactById);
-  } catch (error) {
-    next(error);
+const getContactRouteByID = async (req, res) => {
+  const { contactId } = req.params;
+  const contactById = await Contact.findById(contactId);
+  if (!contactById) {
+    throw httpError(404);
   }
+  res.json(contactById);
 };
 
-const postContactRoute = async (req, res, next) => {
-  try {
-    const { error } = contactPush.validate(req.body);
-    if (error) {
-      throw httpError(400, error.message);
-    }
-    const result = await operations.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
+const postContactRoute = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
 };
 
-const deleteContactRoute = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await operations.removeContact(contactId);
-    if (!result) {
-      throw httpError(404);
-    }
-    res.json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
+const deleteContactRoute = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    throw httpError(404);
   }
+  res.json({ message: "contact deleted" });
 };
 
-const putContactRoute = async (req, res, next) => {
-  try {
-    const { error } = contactPush.validate(req.body);
-    if (error) {
-      throw httpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await operations.updateContact(contactId, req.body);
-    if (!result) {
-      throw httpError(404);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
+const putContactRoute = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw httpError(404);
   }
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res) => {
+  const { error } = schemas.updateFavoriteSchema.validate(req.body);
+  if (error) {
+    throw httpError(400, "missing field favorite");
+  }
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw httpError(404);
+  }
+  res.json(result);
 };
 
 module.exports = {
-  getContactRoute,
-  getContactRouteByID,
-  postContactRoute,
-  deleteContactRoute,
-  putContactRoute,
+  getContactRoute: ctrlWrapper(getContactRoute),
+  getContactRouteByID: ctrlWrapper(getContactRouteByID),
+  postContactRoute: ctrlWrapper(postContactRoute),
+  deleteContactRoute: ctrlWrapper(deleteContactRoute),
+  putContactRoute: ctrlWrapper(putContactRoute),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
