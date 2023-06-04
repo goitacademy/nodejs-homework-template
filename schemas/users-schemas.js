@@ -10,4 +10,8 @@ const newUserSchema = Joi.object({
   }),
 });
 
-module.exports = newUserSchema;
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
+module.exports = { newUserSchema, updateSubscriptionSchema };
