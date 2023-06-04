@@ -4,7 +4,7 @@ const { schemas } = require("../models/contact");
 const { ctrlWrapper } = require("../helpers");
 
 const getContactRoute = async (req, res) => {
-  const result = await Contact.find({}, "name email phone");
+  const result = await Contact.find({}, "name email phone favorite");
   res.json(result);
 };
 
@@ -18,10 +18,6 @@ const getContactRouteByID = async (req, res) => {
 };
 
 const postContactRoute = async (req, res) => {
-  const { error } = schemas.contactPush.validate(req.body);
-  if (error) {
-    throw httpError(400, error.message);
-  }
   const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
@@ -36,10 +32,6 @@ const deleteContactRoute = async (req, res) => {
 };
 
 const putContactRoute = async (req, res) => {
-  const { error } = schemas.contactPush.validate(req.body);
-  if (error) {
-    throw httpError(400, error.message);
-  }
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,

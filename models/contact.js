@@ -21,9 +21,6 @@ const contactSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-// default - дефолтне значення
-// enum:[] значення одне із
-// match: /\{2}-\{2}-\4$/ щоб записати дату
 contactSchema.post("save", heandleMongoosError);
 
 const contactPush = Joi.object({
@@ -41,3 +38,7 @@ const schemas = { contactPush, updateFavoriteSchema };
 const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, schemas };
+
+// default - дефолтне значення
+// enum:[] значення одне із
+// match: /\{2}-\{2}-\4$/ щоб записати дату
