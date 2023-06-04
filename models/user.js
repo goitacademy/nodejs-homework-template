@@ -26,7 +26,8 @@ const userSchema = new Schema({
     token: {
         type: String,
         default: ''
-    }
+    },
+    avatarURL: String,
 }, { versionKey: false, timestamps: true });
 
 userSchema.post('save', handleMongooseError);
