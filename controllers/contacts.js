@@ -1,13 +1,13 @@
+const { Contact } = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers");
-const contacts = require("../models/contacts");
 
 const getAll = async (req, res, next) => {
-  const contactsList = await contacts.listContacts();
+  const contactsList = await Contact.find();
   res.json(contactsList);
 };
 
 const getById = async (req, res, next) => {
-  const contact = await contacts.getContactById(req.params.contactId);
+  const contact = await Contact.findById(req.params.contactId);
   if (!contact) {
     throw HttpError(404);
   }
@@ -15,21 +15,34 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const contact = await contacts.addContact(req.body);
+  const contact = await Contact.create(req.body);
   res.status(201).json(contact);
 };
 
 const updateById = async (req, res, next) => {
-  const contact = await contacts.updateContact(req.params.contactId, req.body);
+  const contact = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    { new: true }
+  );
   res.status(200).json(contact);
 };
 
 const deleteById = async (req, res, next) => {
-  const contact = await contacts.removeContact(req.params.contactId);
+  const contact = await Contact.findByIdAndRemove(req.params.contactId);
   if (!contact) {
     throw HttpError(404);
   }
   res.status(200).json({ message: "Contact deleted" });
+};
+
+const updateFavorite = async (req, res, next) => {
+  const contact = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    { new: true }
+  );
+  res.status(200).json(contact);
 };
 
 module.exports = {
@@ -38,4 +51,5 @@ module.exports = {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deleteById: ctrlWrapper(deleteById),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
