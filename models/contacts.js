@@ -22,13 +22,17 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
     const contacts = await readContacts();
     const filteredContact = contacts.filter((contact) => contact.id !== contactId);
-    await fs.writeFile(contactsPath, JSON.stringify(filteredContact));
-    await readContacts();
+    if (contacts.length > filteredContact.length) {
+      await fs.writeFile(contactsPath, JSON.stringify(filteredContact));
+      return true;
+    }
+    return false;
 }
 
 const addContact = async (body) => {
+    const { name, email, phone } = body;
+    const newContact = { id: nanoid(), name, email, phone };
     const contacts = await readContacts();
-    const newContact = { id: nanoid(), ...body };
     await fs.writeFile(contactsPath, JSON.stringify([...contacts, newContact]));
     return newContact;
 }

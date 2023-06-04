@@ -19,7 +19,7 @@ const { listContacts,
         addContact, 
         removeContact, 
         updateContact, 
-      } = require("../../models/contacts.js");
+      } = require("../../models/contacts");
 
 router.get("/", async (req, res) => {
   const contacts = await listContacts();
@@ -27,9 +27,13 @@ router.get("/", async (req, res) => {
 })
 
 router.get('/:contactId', async (req, res) => {
-  const contactById = await getContactById(req.params.id);
-  contactById ? res.status(200).json(contactById) :
-  res.status(404).json({ message: "Not found" });
+  const { contactId } = req.params;
+  const contactById = await getContactById(contactId);
+  if (!contactById) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.status(200).json(contactById);
+  }
 })
 
 router.post('/', async (req, res) => {
@@ -47,7 +51,8 @@ router.post('/', async (req, res) => {
 })
 
 router.delete('/:contactId', async (req, res) => {
-  const deletedContact = await removeContact(req.params.id);
+  const { contactId } = req.params;
+  const deletedContact = await removeContact(contactId);
   if(deletedContact) {
     res.status(200).json({ message: "Contact deleted"});
   } else {
