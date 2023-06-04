@@ -1,13 +1,27 @@
 const bcrypt = require('bcrypt');
+
+const gravatar = require('gravatar');
+
 const jwt = require('jsonwebtoken');
+
+const fs = require('fs/promises');
+
+const Jimp = require('jimp');
+
+const path = require('path');
 
 const { User } = require('../models/user');
 
 const { HttpError, ctrlWrapper } = require('../helpers');
+
 const { SECRET_KEY } = process.env;
 
+const avatarPath = path.resolve('public', 'avatars');
+
 const register = async(req, res) => {
+    
     const { email, password } = req.body;
+    const avatarUrl = gravatar.url(email);
     const user = await User.findOne({email});
 
     if (user) {
@@ -16,7 +30,7 @@ const register = async(req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const newUser = await User.create({...req.body, password: hashPassword, avatarUrl});
 
     res.status(201).json({
         "user": 
@@ -75,10 +89,42 @@ const updateSubscriptionUser = async (req, res) => {
     res.json(result);
 };
 
+const updateAvatar = async(req, res) => {
+
+    const {_id} = req.user;
+    const { path: oldPath, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+
+    Jimp.read(oldPath)
+        .then((image) => {
+            console.log("Image Processing Completed");
+        return image
+      .resize(250, 250) 
+      .write(filename); 
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
+    const newPath = path.join(avatarPath, filename);
+    
+    await fs.rename(oldPath, newPath);
+    const avatarUrl = path.join('public', 'avatars', filename);
+    if (!_id) {
+        throw HttpError(401, 'Not authorized')
+    };
+    await User.findByIdAndUpdate(_id, {avatarUrl});
+
+    res.json({
+        avatarUrl,
+    })
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
-    updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser)
+    updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }
