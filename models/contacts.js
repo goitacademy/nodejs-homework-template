@@ -49,13 +49,18 @@ async function addContact({ email, name, phone }) {
 }
 
 async function updateContact(contactId, {name, email, phone}) {
-  await removeContact(contactId);
-  const data = await fs.readFile(contactsPath, "utf-8"); // add to const result the contact.json info
-  const newContact = { id: contactId, name, email, phone }; // create newContact obj with the id, name, email, phone params
-  const contacts = JSON.parse(data); // result from string to obj
-  contacts.push(newContact); // push newContact to contacts
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact; // write contacts string result to contactsPath file
+  const status = await removeContact(contactId);
+  if(!status){
+	return false
+  } else{
+	const data = await fs.readFile(contactsPath, "utf-8"); // add to const result the contact.json info
+	const newContact = { id: contactId, name, email, phone }; // create newContact obj with the id, name, email, phone params
+	const contacts = JSON.parse(data); // result from string to obj
+	contacts.push(newContact); // push newContact to contacts
+	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+	return newContact; // write contacts string result to contactsPath file
+  }
+
 }
 
 module.exports = {

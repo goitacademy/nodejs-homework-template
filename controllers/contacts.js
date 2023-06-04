@@ -39,10 +39,9 @@ const removeContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  console.log(req.body);
   try {
-    if (!req.body) {
-      return res.status(400).json({ message: "Not Found" });
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: "missing fields" });
     }
     const { error } = contactsAddSchema.validate(req.body);
     if (error) {
@@ -53,9 +52,13 @@ const updateContact = async (req, res, next) => {
       req.params.contactId,
       req.body
     );
+
+    if (!result) {
+      return res.status(404).json({ message: "Not Found" });
+    }
     res.status(200).json(result);
   } catch (error) {
-    return res.status(404).json({ message: "Not Found" });
+    return error;
   }
 };
 
