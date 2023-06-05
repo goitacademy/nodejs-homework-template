@@ -1,21 +1,21 @@
 const Joi = require("joi");
 
-const SCHEMAS = Joi.object().keys({
+
+const createContact = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean()
 });
 
-const createContact = Joi.object().keys({
-  body: SCHEMAS,
-});
-
-const updateContact = Joi.object().keys({
+const updateContact = Joi.object({
   params: Joi.object().keys({
     contactId: Joi.string().required(),
   }),
-  body: SCHEMAS,
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean()
 },)
 
 const updateFavoriteSchema = Joi.object({
