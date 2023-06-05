@@ -52,23 +52,27 @@ async function register(req, res, next) {
 }
 
 async function login(req, res, next) {
+  // const user = await User.findOne({ email: req.body.email });
   const { email, password } = req.body;
-  const { _id: id } = User;
-  const payload = {
-    id,
-  };
 
   try {
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23 h" });
     const user = await User.findOne({ email });
     if (user === null) {
       return res.status(401).json({ error: "Email or password is incorrect" });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(401).json({ error: "Email or password is incorrect" });
     }
-    res.json({ token });
+
+    const payload = {
+      userId: user.id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23 h" });
+
+    res.json({ token, user: {userId : user.id, email, subscription : user.subscription} });
   } catch (error) {
     return next(error);
   }

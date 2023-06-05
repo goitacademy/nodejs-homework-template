@@ -9,12 +9,13 @@ const { authenticate } = require("../../middlewares/authenticate");
 
 router.use(authenticate);
 
- router.get("/", jsonParser, AuthController.getAllUsers);
-// post запит на регістрвцію
-router.post("/register", jsonParser, AuthController.register);
+ router.get("/users", jsonParser, AuthController.getAllUsers);
+
+ // post запит на регістрвцію
+router.post("/users/register", jsonParser, AuthController.register);
 
 // запит на авторизацію
-router.post("/login", jsonParser, AuthController.login);
+router.post("/users/login", jsonParser, AuthController.login);
 
 
 module.exports = router;
