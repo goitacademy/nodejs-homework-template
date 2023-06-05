@@ -39,7 +39,9 @@ router.post('/', async (req, res, next) => {
   try{
     const {error} = addShema.validate(req.body);
     if(error) {
-      throw HttpError(400, 'missing required name field');
+      console.log(error.message)
+      const message= `missing ${error.message} field`; 
+      throw HttpError(400, message );
   }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
