@@ -78,4 +78,18 @@ async function login(req, res, next) {
   }
 }
 
-module.exports = { register, login, getAllUsers };
+async function logout(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ error: "Not authorized" });
+    }
+    res.json({ message: "Logout successful, no content" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, getAllUsers, logout };

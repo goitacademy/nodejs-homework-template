@@ -17,5 +17,7 @@ router.post("/users/register", jsonParser, AuthController.register);
 // запит на авторизацію
 router.post("/users/login", jsonParser, AuthController.login);
 
+router.post("/users/logout", jsonParser, AuthController.logout);
+
 
 module.exports = router;
