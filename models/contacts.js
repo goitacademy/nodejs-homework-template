@@ -14,18 +14,18 @@ async function getContactById(contactId) {
     const oneContact = allContacts.find(contact => contact.id === contactId);
     return oneContact || null ;
   };
+
+  async function removeContact(id)  {
+      const contacts = await getContacts();
+      const index = contacts.filter(item => item.id === id);
+      if(index === -1){
+          return null;
+      }
+      const [result] = contacts.splice(index, 1);
+      fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return result;
+  }
   
-async function removeContact(contactId) {
-    const allContacts = await getContacts();
-    const deletedContactIndex = allContacts.findIndex(contact => contact.id === contactId);
-    if(deletedContactIndex === -1) {
-      return null;
-    };
-    const deletedContact = allContacts[deletedContactIndex];
-    const newContactsList = allContacts.filter(contact => contact.id !== contactId);
-    fs.writeFile(contactsPath, JSON.stringify(newContactsList, null, 2));
-    return deletedContact;
-  };
   
   async function addContact({name, email, phone}) {
     const allContacts = await getContacts();
@@ -35,9 +35,21 @@ async function removeContact(contactId) {
     return newContact;
   };
 
+ async function updateById(id, data) {
+    const contacts = await getContacts();
+    const index = contacts.filter(item => item.id === id);
+    if(index === -1){
+        return null;
+    }
+    contacts[index] = {id, ...data};
+    fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
+}
+
 module.exports = {
     getContacts,
     getContactById,
     removeContact,
-    addContact
+    addContact,
+    updateById,
 }

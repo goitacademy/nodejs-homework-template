@@ -50,11 +50,39 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const {id} = req.params;
+    const result = await contacts.removeContact(id);
+    console.log(id);
+    if(!result) {
+        throw HttpError(404, "Not found");
+    }
+   
+    res.json({
+        message: "contact deleted"
+    })
+}
+catch(error) {
+    next(error);
+}
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try{
+    const {error} = addShema.validate(req.body);
+    if(error) {
+      throw HttpError(400, 'missing fields');
+  }
+  const {id}=req.params;
+const result = await contacts.updateById(id, req.body);
+if(!result){
+  throw HttpError(404, 'Not found');
+  }
+  res.json(result);
+  }
+  catch(error){
+    next(error);
+  }
 })
 
 module.exports = router
