@@ -11,26 +11,15 @@ const {
 const { v4: uuidv4 } = require('uuid');
 
 const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    })
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().min(3)
+    .email()
     .required(),
   phone: Joi.string()
-    .regex(/^[0-9]{10}$/)
-    .required(),
+  .pattern(/^[+]?[0-9 ()-]*$/)
+  .required(),
 });
 
-const delSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-  phone: Joi.string().regex(/^[0-9]{10}$/),
-});
 
 const router = express.Router();
 
@@ -126,7 +115,7 @@ try {
     error.status = 400;
     throw error;
   }
-  const {error} = delSchema.validate(req.body);
+  const {error} = schema.validate(req.body);
   if (error) {
     error.message = 'missing required name field';
     error.status = 400;

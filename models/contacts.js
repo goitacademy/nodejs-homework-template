@@ -49,7 +49,7 @@ const updateContact = async (contactId, body) => {
   try {
     const allContacts = await listContacts();
     const updatedContacts = allContacts.map((contact) => {
-      if (String(contact.id) === String(contactId)) {
+      if (contact.id === contactId) {
         return { ...contact, ...body };
       }
       return contact;
