@@ -23,9 +23,20 @@ const validate = (addSchema) => {
 
   const validateFavorite = (updateFavoriteSchema) => {
     return (req, res, next) => {
+
+      const {error} = updateFavoriteSchema.validate(req.body)
+
       if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
         throw res.status(400).json({ message: "missing field favorite" });
       }
+if (error) {
+          error.status = 400;
+          error.message = `Missing required ${error.details[0].context.label} field`;
+          console.log(`error 400!`,error.message)
+        next(error);
+      }
+
+
        else {
         next();
       }
