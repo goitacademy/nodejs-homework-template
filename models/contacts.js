@@ -1,7 +1,4 @@
-// // const fs = require('fs/promises')
-// const fs = require("fs").promises;
-// const path = require("path");
-// const { v4: uuidv4 } = require("uuid");
+const { boolean } = require("joi");
 const { Schema, model } = require("mongoose");
 
 const contactSchema = new Schema(
@@ -24,19 +21,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model("contact", contactSchema);
-
-// const contactsPath = path.join(__dirname, "./contacts.json");
-
-// const parsedData = async () => {
-//   try {
-//     const data = await fs.readFile(contactsPath, "utf-8");
-//     const contacts = JSON.parse(data);
-//     return contacts;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+const Contact = model("contacts", contactSchema);
 
 const listContacts = async () => {
   const contacts = await Contact.find();
@@ -70,7 +55,11 @@ const updateContactFavorite = async (contactId) => {
   if (!contact) {
     return null;
   }
-  if (contact.favorite !== undefined) {
+  if (
+    contact.favorite !== undefined ||
+    contact.favorite === boolean ||
+    contact.favorite !== ""
+  ) {
     const updateFavorite = await Contact.findByIdAndUpdate(
       contactId,
       { favorite: !contact.favorite },
