@@ -1,3 +1,4 @@
+const { required } = require('joi');
 const { HttpError } = require('../helpers');
 
 const validateBody = (schema) => {
@@ -7,7 +8,7 @@ const validateBody = (schema) => {
     if (error) {
       next(HttpError(400, error.message));
     }
-    next(error);
+    next();
   };
   return func;
 };
