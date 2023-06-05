@@ -1,31 +1,30 @@
-## GoIT Node.js Course Template Homework
+# Node.js module
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+It's a REST API built to work with a collection of contacts.
+To work with the REST API, I used Postman. For simple data validation I used Joi package https://joi.dev/
+In the next step, instead of working with a JSON file, I will use MongoDB and Mongoose.
 
-Додайте ментора до колаборації
+### The REST API supports the following routes
 
-Для кожної домашньої роботи створюйте свою гілку.
+GET /api/contacts
+GET /api/contacts/:id
+POST /api/contacts
+DELETE /api/contacts/:id
+PUT /api/contacts/:id
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+### Commands
 
-Кожна нова гілка для др повинна робитися з master
+- `npm start` &mdash; starts the server in production mode
+- `npm run start:dev` &mdash; starts the server in developer mode
+- `npm run lint` &mdash; runs a code check with ESLint
+- `npm lint:fix` &mdash; runs a code check with ESLint and also automatically corrects simple errors
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+### Technologies
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+<div align="middle" float="left">
+<p>JavaScript<p>
+<img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="30" height="30"/>
+<div>
+  
+- Node.js
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="60" height="60"/>
