@@ -1,16 +1,29 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const router = express.Router();
-const contactsRouter = require("./routes/api/contacts");
+
+const contactsRouter = require("./routes/api/contacts.js");
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+// app.get("/", (req, res) => {
+// 	res.send("xd");
+// });
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+
+app.get("/test-url", (req, res) => {
+	res.send("hi");
+});
+
+app.post("/test-url", (req, res) => {
+	console.log(req.body);
+	res.send("went well");
+});
 
 app.use("/api/contacts", contactsRouter);
 
@@ -18,14 +31,13 @@ app.use((req, res) => {
 	res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, req, res, next) => {
-	res.status(500).json({ message: err.message });
+app.use((req, res, next) => {
+	console.log("Nasze oprogramowanie pośredniczące");
+	next();
 });
 
-// Routing
-
-router.get("/", (req, res) => {
-	res.send("Witam");
+app.use((err, req, res, next) => {
+	res.status(500).json({ message: err.message });
 });
 
 module.exports = app;
