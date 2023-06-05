@@ -32,9 +32,6 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
   const { SECRET_KEY } = process.env;
-  // const payload = {
-  //   id: user._id,
-  // };
   const { _id: id } = user;
   const payload = { id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "180h" });
@@ -55,10 +52,10 @@ const getCurrent = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.status(204).json();
+  res.status(204).json({ message: "You have been logged out" });
 };
 
-const updateCurrent = async (req, res) => {
+const updateSubscription = async (req, res) => {
   const { id } = req.params;
   const result = await User.findByIdAndUpdate(id, req.body, {
     new: true,
@@ -69,10 +66,11 @@ const updateCurrent = async (req, res) => {
   res.status(200).json(result);
   console.log(result);
 };
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
-  updateCurrent: ctrlWrapper(updateCurrent),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };

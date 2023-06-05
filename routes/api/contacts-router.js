@@ -25,5 +25,6 @@ router.patch(
   validateStatusBody(schemas.updateFavoriteSchema),
   ctrl.updateStatusContact
 );
+router.get("/favorite=true", authenticate, ctrl.listContacts);
 
 module.exports = router;
