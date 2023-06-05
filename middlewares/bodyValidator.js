@@ -2,7 +2,7 @@ const { HttpError } = require("../helpers");
 
 function bodyValidatorWrapper(schema) {
   function bodyValidator(req, res, next) {
-    if (Object.keys(req.body).length === 0) {
+    if (!Object.keys(req.body).length) {
       return res.status(400).json({ message: "missing fields" });
     }
 
@@ -32,6 +32,4 @@ function bodyValidatorWrapper(schema) {
   return bodyValidator;
 }
 
-module.exports = {
-  bodyValidatorWrapper,
-};
+module.exports = bodyValidatorWrapper;

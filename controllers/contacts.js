@@ -1,15 +1,15 @@
+const ContactModel = require("../models/contactsModel");
 const { HttpError, controllerWrapper } = require("../helpers");
-const contacts = require("../models/contacts");
 
 async function getAllContacts(_, res) {
-  const allContacts = await contacts.listContacts();
+  const allContacts = await ContactModel.find();
 
   res.json(allContacts);
 }
 
 async function getContactById(req, res) {
   const { contactId } = req.params;
-  const contactById = await contacts.getContactById(contactId);
+  const contactById = await ContactModel.findById(contactId);
 
   if (!contactById) {
     throw HttpError(404, "Not found");
@@ -19,14 +19,14 @@ async function getContactById(req, res) {
 }
 
 async function addContact(req, res) {
-  const contactToAdd = await contacts.addContact(req.body);
+  const contactToAdd = await ContactModel.create(req.body);
 
   res.status(201).json(contactToAdd);
 }
 
 async function deleteContact(req, res) {
   const { contactId } = req.params;
-  const contactToRemove = await contacts.removeContact(contactId);
+  const contactToRemove = await ContactModel.findByIdAndDelete(contactId);
 
   if (!contactToRemove) {
     throw HttpError(404, "Not found");
@@ -37,7 +37,11 @@ async function deleteContact(req, res) {
 
 async function updateContactById(req, res) {
   const { contactId } = req.params;
-  const contactToUpdate = await contacts.updateContactById(contactId, req.body);
+  const contactToUpdate = await ContactModel.findByIdAndUpdate(
+    contactId,
+    req.body,
+    { new: true }
+  );
 
   if (!contactToUpdate) {
     throw HttpError(404, "Not found");
@@ -46,10 +50,26 @@ async function updateContactById(req, res) {
   res.json(contactToUpdate);
 }
 
+async function updateStatusContact(req, res) {
+  const { contactId } = req.params;
+  const contactStatusToUpdate = await ContactModel.findByIdAndUpdate(
+    contactId,
+    req.body,
+    { new: true }
+  );
+
+  if (!contactStatusToUpdate) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.json(contactStatusToUpdate);
+}
+
 module.exports = {
   getAllContacts: controllerWrapper(getAllContacts),
   getContactById: controllerWrapper(getContactById),
   addContact: controllerWrapper(addContact),
   deleteContact: controllerWrapper(deleteContact),
   updateContactById: controllerWrapper(updateContactById),
+  updateStatusContact: controllerWrapper(updateStatusContact),
 };

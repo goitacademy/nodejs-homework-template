@@ -1,15 +1,17 @@
 const Joi = require("joi");
 
 const contactsSchema = Joi.object({
-  name: Joi.string()
-    .pattern(/^[a-zA-Zа-яА-Я]+(?: [a-zA-Zа-яА-Я]+)?$/i)
-    .required(),
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\)-\d{3}-\d{2}-\d{2}$/)
-    .required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
+
+const contactStatus = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   contactsSchema,
+  contactStatus,
 };
