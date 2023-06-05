@@ -16,7 +16,10 @@ const Contact = mongoose.model("Contact", contactSchema);
 const getAllContacts = async (req, res, next) => {
   try {
     const { _id: owner } = req.user;
-    const contacts = await Contact.find(owner);
+    const { page = 1, limit = 5 } = req.query;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({owner}, {skip, limit});
+    // const contacts = await Contact.find({owner}, "-createdAt -updatedAt").populate("owner", "email");
     res.json(contacts);
   } catch (error) {
     next(error);
