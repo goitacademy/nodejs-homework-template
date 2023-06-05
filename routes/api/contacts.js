@@ -5,7 +5,7 @@ const { validateBody } = require("../../middelwares");
 const schema = require("../../schemas/");
 const router = express.Router();
 
-router.get("/", tryCatchWrapper(ctrl.getAll));
+router.get("/", tryCatchWrapper(ctrl.list));
 
 router.get("/:contactId", tryCatchWrapper(ctrl.getById));
 
