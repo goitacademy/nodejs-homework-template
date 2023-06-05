@@ -10,7 +10,7 @@ const ctrl = require('../../controllers/contacts');
 
 router.get('/', ctrl.getAll);
 
-router.get('/:contactId', isVlidId, ctrl.getById);
+router.get('/:contactId', isValidId, ctrl.getById);
 
 router.post('/', validateBody(schemas.addSchema) ,ctrl.add);
 
