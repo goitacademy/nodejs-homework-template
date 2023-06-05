@@ -1,6 +1,4 @@
-const { required } = require('joi');
 const app = require('./app')
-
 const mongoose = require("mongoose");
 
 const { DB_HOST } = require("./config");

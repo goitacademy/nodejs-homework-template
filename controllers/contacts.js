@@ -1,9 +1,9 @@
 const { HttpError, ctrlWrapper } = require('../helpers');
 
-const contacts = require('../models/contacts');
+const { Contact } = require('../models/contacts');
 
 const getAll = async (req, res) => {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json({
         status: 'success',
         code: 200,
@@ -15,7 +15,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
     const { contactId } = req.params;
-    const oneContact = await contacts.getContactById(contactId);
+    const oneContact = await Contact.findById(contactId);
     if (oneContact === null) {
       throw HttpError(404, "Not found");
     }
@@ -29,7 +29,7 @@ const getById = async (req, res) => {
 }
 
 const add = async (req, res) => {
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -39,7 +39,22 @@ const add = async (req, res) => {
 
 const updateById = async (req, res) => {
     const { contactId } = req.params;
-    const updatedContact = await contacts.updateContact(contactId, req.body);
+    const updatedContact = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, {new: true});
+    if (!updatedContact) {
+      throw HttpError(404, "Not found");
+    }
+    res.json({ 
+      status: 'success',
+      code: 200,
+      data: {
+        updatedContact
+      }
+    })
+}
+
+const updateStatusContact = async (req, res) => {
+    const { contactId } = req.params;
+    const updatedContact = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, {new: true});
     if (!updatedContact) {
       throw HttpError(404, "Not found");
     }
@@ -54,7 +69,7 @@ const updateById = async (req, res) => {
 
 const remove = async (req, res) => {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       throw HttpError(404, "Not found")
     }
@@ -66,5 +81,6 @@ module.exports = {
     getById: ctrlWrapper(getById),
     add: ctrlWrapper(add),
     updateById: ctrlWrapper(updateById),
+    updateStatusContact: ctrlWrapper(updateStatusContact),
     remove: ctrlWrapper(remove)
 }
