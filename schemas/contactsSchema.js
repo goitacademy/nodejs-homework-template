@@ -6,8 +6,13 @@ const addSchema = Joi.object({
   }),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
-  phone: Joi.string().required(),
+    .required()
+    .messages({
+      'any.required': 'missing required email field',
+    }),
+  phone: Joi.string().required().messages({
+    'any.required': 'missing required phone field',
+  }),
 });
 
 module.exports = {
