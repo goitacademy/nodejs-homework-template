@@ -9,8 +9,6 @@ const {
 	updateStatusContact 
 } = require('../../controllers/contacts-controller');
 
-const {addSchema} = require('../../schemas/contacts');
-
 const { isValidId } = require('../../helpers')
 
 const router = express.Router()
