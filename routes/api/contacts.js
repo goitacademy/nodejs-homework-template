@@ -7,6 +7,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  isBodyEmpty,
 } = require('../../controllers/contacts-controller');
 
 const validateBody = require('../../decorators/validateBody');
@@ -20,6 +21,11 @@ router.post('/', validateBody(contactsAddSchema), addContact);
 
 router.delete('/:contactId', removeContact);
 
-router.put('/:contactId', validateBody(contactsAddSchema), updateContact);
+router.put(
+  '/:contactId',
+  isBodyEmpty,
+  validateBody(contactsAddSchema),
+  updateContact
+);
 
 module.exports = router;
