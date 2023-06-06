@@ -9,9 +9,10 @@ const verifyEmail = async (req, res) => {
     throw HttpError(404, 'User not found');
   }
   await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
-  res.json({
-    message: 'Verification successful',
-  });
+  res.redirect('http://localhost:3001/goit-react-hw-08-phonebook/login');
+  // res.json({
+  //   message: 'Verification successful',
+  // });
 };
 
 module.exports = verifyEmail;
