@@ -1,25 +1,54 @@
-const express = require('express')
+const express = require("express");
+const isEmpty = require("lodash.isempty");
 
-const router = express.Router()
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  // addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json({ data: contacts });
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+  if (!contact) res.status(404).json({ message: "Not found" });
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json({ data: { ...contact } });
+});
 
-module.exports = router
+router.post("/", async (req, res, next) => {
+  const { body } = req;
+  res.json({ message: "template message" });
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await removeContact(contactId);
+
+  if (!result) res.status(404).json({ message: "Not found" });
+  res.json({ message: "contact deleted" });
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  const { body } = req;
+  const { contactId } = req.params;
+
+  if (isEmpty(body)) res.status(400).json({ message: "missing fields" });
+
+  const result = await updateContact(contactId, body);
+
+  if (!result) res.status(404).json({ message: "Not found" });
+
+  res.json({ data: { ...result } });
+});
+
+module.exports = router;
