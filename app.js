@@ -8,32 +8,35 @@ const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-// app.get("/", (req, res) => {
-// 	res.send("xd");
-// });
-
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.get("/test-url", (req, res) => {
-	res.send("hi");
+// Welcome page
+
+app.get("/", (req, res) => {
+	res.send('WELCOM TO THE MAIN PAGE. Path to contact is "/api/contacts"');
 });
 
-app.post("/test-url", (req, res) => {
-	console.log(req.body);
-	res.send("went well");
-});
+// Router
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((req, res) => {
-	res.status(404).json({ message: "Not found" });
-});
+// app.use((req, res) => {
+// 	res.status(404).json({ message: "Not found" });
+// });
+
+// Middleware
 
 app.use((req, res, next) => {
 	console.log("Nasze oprogramowanie pośredniczące");
 	next();
+});
+
+// Error response
+
+app.use((req, res) => {
+	res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, req, res, next) => {

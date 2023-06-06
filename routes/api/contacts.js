@@ -8,12 +8,11 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-	res.json({ message: "get message id" });
+	const id = req.params.contactId;
+	return res.send(await functions.getContactById(id));
 });
 
 router.post("/", async (req, res, next) => {
-	console.log("POST!!!!!!");
-
 	const body = req.body;
 	console.log(body);
 	res.send(await functions.addContact(body));
