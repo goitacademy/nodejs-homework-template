@@ -1,9 +1,7 @@
-const HttpError = require("./HttpError");
+const isIdValid = require("./isIdValid");
 const isRequestEmpty = require("./isRequestEmpty");
 
-
 module.exports = {
-  HttpError,
+  isIdValid,
   isRequestEmpty,
-
 };
