@@ -5,7 +5,7 @@ const { authValidation } = require('../../validation');
 
 const router = express.Router();
 
-router.post('/register', authValidation, ctrl.registeration);
+router.post('/register', authValidation, ctrl.registration);
 
 router.post('/login', authValidation, ctrl.login);
 
