@@ -7,11 +7,11 @@ const {
   removeContact,
   addContact,
   updateContact,
-  isBodyEmpty,
 } = require('../../controllers/contacts-controller');
 
 const validateBody = require('../../decorators/validateBody');
 const { contactsAddSchema } = require('../../schemas/contacts');
+const { isBodyEmpty } = require('../../helpers');
 
 router.get('/', listContacts);
 

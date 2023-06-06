@@ -41,18 +41,10 @@ const updateContactCtrl = async (req, res) => {
   res.json(result);
 };
 
-const isBodyEmpty = async (req, _, next) => {
-  if (Object.keys(req.body).length === 0) {
-    next(HttpError(400));
-  }
-  next();
-};
-
 module.exports = {
   listContacts: ctrlWrapper(listContactsCtrl),
   getContactById: ctrlWrapper(getContactByIdCtrl),
   addContact: ctrlWrapper(addContactCtrl),
   updateContact: ctrlWrapper(updateContactCtrl),
   removeContact: ctrlWrapper(removeContactCtrl),
-  isBodyEmpty,
 };
