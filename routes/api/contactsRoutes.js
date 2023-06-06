@@ -10,8 +10,8 @@ router.get("/:id", contactsController.oneContact);
 
 router.post("/", validateBody(schemas.contactSchema), contactsController.addOneContact);
 
-router.delete("/:id", validateBody(schemas.contactSchema),contactsController.deleteContact);
+router.delete("/:id",contactsController.deleteContact);
 
-router.put("/:id", contactsController.updateById);
+router.put("/:id", validateBody(schemas.contactSchema), contactsController.updateById);
 
 module.exports = router;
