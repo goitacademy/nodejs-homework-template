@@ -12,6 +12,9 @@ const authenticate = async (req, res, next) => {
   try {
     const { id } = jwt.verify(token, JWT_SECRET);
     const user = await usersModel.findById(id);
+    // console.log("user", user);
+    // console.log("user-token", user.token);
+    // console.log("token", token);
     if (!user || !user.token || user.token !== token) {
       next(HttpError(401, "unauthorized 2"));
     }

@@ -12,12 +12,15 @@ const login = async (req, res) => {
   if (!validPassword) {
     throw HttpError(401, "Invalid email or password");
   }
+  const { _id: id } = user;
+
   const payload = {
-    id: user.id,
+    id,
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "24h" });
-  await usersModel.findByIdAndUpdate(user.id, token);
+  console.log("token", token);
+  await usersModel.findByIdAndUpdate(id, { token });
   res.json({
     status: 200,
     message: "login successful",
