@@ -6,11 +6,13 @@ const schemas = require("../../schemas/contacts");
 
 const { validateBody } = require("../../decorators");
 
+const { isValidId } = require("../../middlewares");
+
 const router = express.Router();
 
 router.get("/", contactsController.getAllContacts);
 
-router.get("/:contactId", contactsController.getContactById);
+router.get("/:contactId", isValidId, contactsController.getContactById);
 
 router.post(
   "/",
@@ -18,10 +20,18 @@ router.post(
   contactsController.addContact
 );
 
-router.delete("/:contactId", contactsController.removeContactById);
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.contactUpdateFavoriteSchema),
+  contactsController.addContactFavorite
+);
+
+router.delete("/:contactId", isValidId, contactsController.removeContactById);
 
 router.put(
   "/:contactId",
+  isValidId,
   validateBody(schemas.contactAddSchema),
   contactsController.updateContactById
 );
