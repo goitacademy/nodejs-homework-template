@@ -38,9 +38,7 @@ app.use((err, _, res, __) => {
 });
 
 const { DB_HOST } = process.env;
-
 const PORT = process.env.PORT || 3000;
-
 const connection = mongoose.connect(DB_HOST);
 
 connection

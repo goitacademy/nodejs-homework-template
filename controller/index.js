@@ -1,7 +1,8 @@
-const Contact = require('../schemas/contact')
+const {Contact} = require('../schemas/contact');
+const {HttpError} = require("../helpers/httpError");
+const ctrlWrapper = require("../decorators/ctrlWrapper");
 
 const get = async (req, res, next) => {
-  try {
     const results = await Contact.find()
     res.json({
       status: 'success',
@@ -10,67 +11,42 @@ const get = async (req, res, next) => {
         contacts: results,
       },
     }) 
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 const getById = async (req, res, next) => {
   const { id } = req.params
-  try {
-    const result = await Contact.findOne({ _id: id })
-    if (result) {
+    const result = await Contact.findById(id);
+      if (result) {
       res.json({
         status: 'success',
         code: 200,
         data: { contact: result },
       })
     } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: 'Not Found',
-      })
+      throw HttpError(404, `Contact with ${id} not found`)
     }
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;
-  try {
     const { error } = req.body;
     if (error) {
-      res.status(400).json({
-      message: 'Missing required name field'
-    });
+      throw HttpError(400, `Missing required name field`)
     }
     const result = await Contact.create({ name, email, phone})
-
     res.status(201).json({
       status: 'success',
       code: 201,
       data: { contact: result },
     })
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 const update = async (req, res, next) => {
   const { id } = req.params
   const { name, email, phone } = req.body
-  try {
     const { error } = req.body;
     if (error) {
-      res.status(400).json({
-      message: 'Missing required name field'
-    });
+      throw HttpError(400, `Missing required name field`)
     }
     const result = await Contact.findByIdAndUpdate({ _id: id }, { name, email, phone }, { new: true })
     if (result) {
@@ -80,28 +56,15 @@ const update = async (req, res, next) => {
         data: { contact: result },
       })
     } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: 'Not Found',
-      })
+      throw HttpError(404, `Not found contact id: ${id}`)
     }
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 const updateFavorite = async (req, res, next) => {
   const { id } = req.params
-
-  try {
     const { error } = req.body;
-    if (error) {
-      res.status(400).json({
-      message: 'Missing required name field'
-    });
+  if (error) {
+      throw HttpError(400, 'Missing required name field')
     }
     const result = await Contact.findByIdAndUpdate({ _id: id }, req.body, { new: true })
     if (result) {
@@ -111,23 +74,12 @@ const updateFavorite = async (req, res, next) => {
         data: { contact: result },
       })
     } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: 'Not Found',
-      })
+      throw HttpError(404, `Not found contact id: ${id}`)
     }
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 const remove = async (req, res, next) => {
   const { id } = req.params
-
-  try {
     const result = await Contact.findByIdAndRemove({ _id: id })
     if (result) {
       res.json({
@@ -136,24 +88,15 @@ const remove = async (req, res, next) => {
         data: { contact: result },
       })
     } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: 'Not Found',
-      })
+      throw HttpError(404, `Not found contact id: ${id}`)
     }
-  } catch (e) {
-    console.error(e)
-    next(e)
-  }
 }
 
 module.exports = {
-  get,
-  getById,
-  create,
-  update,
-  updateFavorite,
-  remove,
+  get: ctrlWrapper(get),
+  getById: ctrlWrapper(getById),
+  create: ctrlWrapper(create),
+  update: ctrlWrapper(update),
+  updateFavorite: ctrlWrapper(updateFavorite),
+  remove: ctrlWrapper(remove),
 }
