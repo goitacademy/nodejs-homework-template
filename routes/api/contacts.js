@@ -14,16 +14,18 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
 	const body = req.body;
-	console.log(body);
-	res.send(await functions.addContact(body));
+	return res.send(await functions.addContact(body));
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-	res.json({ message: "delete message" });
+	const id = req.params.contactId;
+	return res.send(await functions.removeContact(id));
 });
 
 router.put("/:contactId", async (req, res, next) => {
-	res.json({ message: "put message" });
+	const body = req.body;
+	const id = req.params.contactId;
+	return res.send(await functions.updateContact(id, body));
 });
 
 module.exports = router;
