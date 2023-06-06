@@ -5,7 +5,7 @@ const {
   listContacts,
   getContactById,
   removeContact,
-  // addContact,
+  addContact,
   updateContact,
 } = require("../../models/contacts");
 
@@ -27,7 +27,8 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const { body } = req;
-  res.json({ message: "template message" });
+  const contact = await addContact(body);
+  res.status(201).json({ data: { ...contact } });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
