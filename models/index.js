@@ -23,7 +23,7 @@ const removeContact = async (contactId) => {
     return null;
   }
   const removedContact = contacts.splice(index, 1)[0];
-  await updateContact(contacts, contactsPath);
+  await updateContact(contacts);
   return removedContact;
 };
 
@@ -42,18 +42,18 @@ const addContact = async ({ name, email, phone }) => {
   }
   const newContact = { id: nanoid(), name, email, phone };
   contacts.push(newContact);
-  await updateContact(contacts, contactsPath);
+  await updateContact(contacts);
   return newContact;
 };
 
-const updateContact = async (id, data) => {
+const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === id);
+  const index = contacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     console.log("Contact not found.");
     return null;
   }
-  contacts[index] = { ...contacts[index], ...data };
+  contacts[index] = { ...contacts[index], ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf8");
   return contacts[index];
 };
