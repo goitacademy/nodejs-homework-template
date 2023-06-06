@@ -4,6 +4,8 @@ const { HttpError } = require("../helpers");
 
 const { ctrlWrapper } = require('../helpers');
 
+const { addSchema, favouriteSchema } = require("../schemas/contacts");
+
 const getAll = async (req, res) => {
 	const contacts = await Contact.find();
 	res.json(contacts);
@@ -19,6 +21,10 @@ const getById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
+    const {error} = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
 	const addedContact = await Contact.create(req.body);
 	res.status(201).json(addedContact);
 }
@@ -33,6 +39,10 @@ const deleteById = async (req, res) => {
 }
 
 const updateById = async (req, res) => {
+    const {error} = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
 	const { id } = req.params;
 	const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true})
 	if (!updatedContact) {
@@ -42,6 +52,10 @@ const updateById = async (req, res) => {
 }
 
 const updateStatusContact  = async (req, res) => {
+    const {error} = favouriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
 	const { id } = req.params;
 	const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true})
 	if (!updatedContact) {
