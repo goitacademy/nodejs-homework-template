@@ -7,7 +7,7 @@ const validation = (schema) => (req, res, next) => {
 
   if (error) {
     const err = new HttpError(400, error.message);
-    next(err);
+    return next(err);
   }
 
   next();
