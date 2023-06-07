@@ -4,9 +4,9 @@ const gravatar = require('gravatar');
 
 const jwt = require('jsonwebtoken');
 
-const fs = require('fs/promises');
-
 const Jimp = require('jimp');
+
+const fs = require('fs/promises');
 
 const path = require('path');
 
@@ -90,26 +90,25 @@ const updateSubscriptionUser = async (req, res) => {
 };
 
 const updateAvatar = async(req, res) => {
-
+        
     const {_id} = req.user;
     const { path: oldPath, originalname } = req.file;
-    const filename = `${_id}_${originalname}`;
+    console.log(req.file)
+    const filename = `${_id}_${originalname}`
 
-    Jimp.read(oldPath)
-        .then((image) => {
-            console.log("Image Processing Completed");
-        return image
-      .resize(250, 250) 
-      .write(filename); 
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
+    async function resizeFile() {
+        const image = await Jimp.read(oldPath);
+        await image.contain(250, 250);
+           
+        await image.writeAsync(oldPath);
+           console.log(oldPath)
+           return oldPath
+       }
+       await resizeFile()
     const newPath = path.join(avatarPath, filename);
     
     await fs.rename(oldPath, newPath);
-    const avatarUrl = path.join('public', 'avatars', filename);
+    const avatarUrl = path.join('avatars', filename);
     if (!_id) {
         throw HttpError(401, 'Not authorized')
     };

@@ -4,14 +4,6 @@ const path = require("path");
 
 const destination = path.resolve("tmp");
 
-// const resizeAvatar = (req, res) => {
-//     const {originalname} = req.file;
-//     const image = Jimp.read(destination)
-//     image.resize(250, 250)
-//         .write(originalname);
-//         console.log("Image Processing Completed");
-// };
-
 const storage = multer.diskStorage({
     destination,
     filename: (req, file, cb) => {
