@@ -1,6 +1,15 @@
 // const fs = require('fs/promises')
 const contacts = require("./contacts.json");
 const { nanoid } = require("nanoid");
+const mongoose = require("mongoose");
+
+const connection = mongoose.connect(
+  "mongodb+srv://mpawlowski98:kKElKCWK27OGHv14@cluster1.7s09txe.mongodb.net/",
+  {
+    userNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 const listContacts = async () => {
   return contacts;
