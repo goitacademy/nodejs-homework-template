@@ -1,5 +1,6 @@
 const express = require("express");
-const joi = require("joi");
+
+const contactAddSchema = require('../../schemas/contactSchema')
 const {
   listContacts,
   getContactById,
@@ -8,16 +9,6 @@ const {
   updateContact,
 } = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
-
-const contactAddSchema = joi
-  .object({
-    name: joi.string().required(),
-    phone: joi.string().required(),
-    email: joi.string().required(),
-  })
-  .messages({
-    "any.required": "missing required {#key} field",
-  });
 
 const router = express.Router();
 
