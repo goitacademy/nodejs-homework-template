@@ -5,7 +5,7 @@ const {
   getContact,
   add,
   updateContactById,
- 
+ remove
 } = require("../../controllers");
 
 const router = express.Router();
@@ -16,9 +16,7 @@ router.get("/:contactId", getContact);
 
 router.post("/", add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", remove);
 
 router.put("/:contactId", updateContactById);
 

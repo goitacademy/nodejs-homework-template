@@ -1,4 +1,4 @@
-const { dataValidator } = require("../helpers");
+const { dataValidator, HttpError } = require("../helpers");
 const { updateContact } = require("../models/contacts");
 
 const updateContactById = async (req, res, next) => {
@@ -6,23 +6,14 @@ const updateContactById = async (req, res, next) => {
     const { error } = await dataValidator(req.body);
 
     if (error) {
-      res.status(400).json({
-        message: "Missing fields",
-      });
-
-      return;
+      throw HttpError(400, "Missing fields");
     }
 
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
 
-
     if (!result) {
-      res.status(404).json({
-        message: "Not found",
-      });
-      
-      return;
+      throw HttpError(404, "Not found");
     }
 
     res.json(result);

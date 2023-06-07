@@ -8,13 +8,7 @@ const add = async (req, res, next) => {
     if (error) {
       const err = error.details[0].path[0];
 
-      res.status(400).json({
-        message: `Missing required '${err}' field`,
-      });
-
-      return;
-
-    //   throw HttpError(400, `Missing required '${err}' field`)
+      throw HttpError(400, `Missing required '${err}' field`);
     }
 
     const result = await addContact(req.body);
