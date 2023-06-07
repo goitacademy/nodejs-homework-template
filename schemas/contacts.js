@@ -28,6 +28,19 @@ const contactsSchema = Joi.object()
         'any.required': `missing required 'email' field`,
         'string.empty': `'email' cannot be an empty field`,
       }),
+    favorite: Joi.boolean().required().messages({
+      'any.required': `missing required 'favorite' field`,
+      'string.empty': `'favorite' cannot be an empty field`,
+    }),
   });
 
-module.exports = { contactsSchema };
+const contactsUpdateFavoriteSchema = Joi.object()
+  .min(1)
+  .keys({
+    favorite: Joi.boolean().required().messages({
+      'any.required': `missing required 'favorite' field`,
+      'string.empty': `'favorite' cannot be an empty field`,
+    }),
+  });
+
+module.exports = { contactsSchema, contactsUpdateFavoriteSchema };
