@@ -4,7 +4,6 @@ const cors = require("cors");
 const connedtDB = require("./db");
 
 const contactsRouter = require("./routes/api/contacts");
-
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
