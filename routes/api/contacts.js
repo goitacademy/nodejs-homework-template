@@ -1,6 +1,12 @@
 const express = require("express");
 
-const { getAllContacts, getContact, add } = require("../../controllers");
+const {
+  getAllContacts,
+  getContact,
+  add,
+  updateContactById,
+ 
+} = require("../../controllers");
 
 const router = express.Router();
 
@@ -14,8 +20,6 @@ router.delete("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", updateContactById);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { dataValidator } = require("../helpers");
+const { dataValidator, HttpError } = require("../helpers");
 const { addContact } = require("../models/contacts");
 
 const add = async (req, res, next) => {
@@ -13,6 +13,8 @@ const add = async (req, res, next) => {
       });
 
       return;
+
+    //   throw HttpError(400, `Missing required '${err}' field`)
     }
 
     const result = await addContact(req.body);
