@@ -18,9 +18,17 @@ router.get("/", getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", contactValidation(addContactSchema), add);
+router.post(
+  "/",
+  contactValidation(addContactSchema, "Missing required name field"),
+  add
+);
 
-router.put("/:contactId", contactValidation(editContactSchema), editById);
+router.put(
+  "/:contactId",
+  contactValidation(editContactSchema, "Missing fields"),
+  editById
+);
 
 router.delete("/:contactId", deleteById);
 

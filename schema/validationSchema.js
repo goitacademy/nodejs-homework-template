@@ -10,6 +10,6 @@ const editContactSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-});
+}).xor("name", "email", "phone");
 
 module.exports = { addContactSchema, editContactSchema };
