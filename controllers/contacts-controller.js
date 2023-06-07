@@ -1,8 +1,8 @@
 const Contact = require("../models/contact");
 
-const HttpError = require("../helpers/HttpError");
+const { HttpError } = require("../helpers");
 
-const ctrlWrapper = require('../helpers/ctrlWrapper');
+const {ctrlWrapper} = require('../helpers');
 
 const { addSchema, favouriteSchema } = require("../schemas/contacts");
 
