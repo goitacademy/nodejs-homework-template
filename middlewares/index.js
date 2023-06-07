@@ -1,5 +1,5 @@
-const validBody = require("./validateBody");
-const validId = require("./isValidId");
+const validBody = require("./validBody");
+const validId = require("./validId");
 
 module.exports = {
   validBody,

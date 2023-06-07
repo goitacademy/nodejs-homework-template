@@ -1,5 +1,5 @@
 const { Contact } = require("../../models");
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { HttpError, ctrlBox } = require("../../helpers");
 
 const deleteContactById = async (req, res) => {
   const { contactId } = req.params;
@@ -12,4 +12,4 @@ const deleteContactById = async (req, res) => {
   });
 };
 
-module.exports = ctrlWrapper(deleteContactById);
+module.exports = ctrlBox(deleteContactById);
