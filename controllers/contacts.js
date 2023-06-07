@@ -1,12 +1,6 @@
-// const Joi = require("joi");
 const contactsFetch = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../utils/index");
 
-// const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
 
 const getAllContacts = async (req, res, next) => {
   const result = await contactsFetch.listContacts();
