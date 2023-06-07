@@ -15,6 +15,7 @@ const addSchema = Joi.object({
 });
 
 router.get("/", async (req, res, next) => {
+  console.log("запит всіх контактів");
   try {
     const result = await contacts.listContacts();
     res.json(result);
