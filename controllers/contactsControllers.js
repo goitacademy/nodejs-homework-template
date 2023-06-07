@@ -34,11 +34,6 @@ const updateById = async (req, res) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
 
-  if (!name && !email && !phone) {
-    res.status(400).json({ message: "missing fields" });
-    return;
-  }
-
   const updatedFields = {};
   if (name) {
     updatedFields.name = name;
