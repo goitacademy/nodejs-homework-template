@@ -5,7 +5,7 @@ const { isValidId } = require("../../middlewares");
 
 const schemas = require("../../schemas/contacts");
 
-const ctrl = require("../../controllers/contacts");
+const ctrl = require("../../controllers");
 
 const router = express.Router();
 
