@@ -2,12 +2,11 @@ const fs = require("fs").promises;
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+const contactsPath = path.join(__dirname, "../models/contacts.json");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, "utf-8");
-  const result = JSON.pars;
-  return result;
+  return JSON.parse(data);
 };
 
 const getContactById = async (contactId) => {
@@ -49,7 +48,7 @@ const updateContact = async (contactId, name, email, phone) => {
   }
 
   contacts[index] = { contactId, ...data };
-  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
 
