@@ -1,46 +1,33 @@
-// const fs = require('fs/promises')
-const contacts = require("./contacts.json");
+const Contact = require("./contacts.model");
 const { nanoid } = require("nanoid");
-const mongoose = require("mongoose");
-
-const connection = mongoose.connect(
-  "mongodb+srv://mpawlowski98:kKElKCWK27OGHv14@cluster1.7s09txe.mongodb.net/",
-  {
-    userNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
 
 const listContacts = async () => {
-  return contacts;
+  return await Contact.find();
 };
 
 const getContactById = async (contactId) => {
-  return contacts.find((contact) => contact.id === contactId);
+  return await Contact.findById(contactId);
 };
-
 const removeContact = async (contactId) => {
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    contacts.splice(index, 1);
-    return true;
-  }
-  return false;
+  return await Contact.findByIdAndRemove(contactId);
 };
 
 const addContact = async (body) => {
   const newContact = { id: nanoid(), ...body };
-  contacts.push(newContact);
-  return newContact;
+  return await newContact.save();
 };
 
 const updateContact = async (contactId, body) => {
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    contacts[index] = { ...contacts[index], ...body };
-    return contacts[index];
+  return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+};
+
+const contactFavorite = async (contactId, favorite) => {
+  const contact = Contact.findById(contactId);
+  if (!contact) {
+    return null;
   }
-  return null;
+  contact.favorite = favorite;
+  return await contact.save();
 };
 
 module.exports = {
@@ -49,4 +36,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  contactFavorite,
 };

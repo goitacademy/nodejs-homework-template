@@ -1,8 +1,6 @@
-const { default: mongoose } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const { Schema } = mongoose;
-
-const connectM = new Schema({
+const contactSchema = new Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -19,6 +17,6 @@ const connectM = new Schema({
   },
 });
 
-const connect = mongoose.model("connect", connectM);
+const Contact = model("Contact", contactSchema);
 
-module.exports = connect;
+module.exports = Contact;
