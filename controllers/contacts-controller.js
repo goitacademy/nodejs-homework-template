@@ -31,9 +31,6 @@ const deleteContacts = async (req, res) => {
 };
 
 const updateContacts = async (req, res) => {
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    throw HttpError(400);
-  }
   const contactId = req.params.contactId;
   const updateContactResult = await contactsService.updateContact(
     contactId,
