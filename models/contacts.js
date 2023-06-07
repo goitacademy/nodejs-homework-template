@@ -13,55 +13,47 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  try {
-    const contacts = await listContacts();
+  const contacts = await listContacts();
 
-    return contacts.find((contact) => contact.id === contactId) || null;
-  } catch (err) {}
+  return contacts.find((contact) => contact.id === contactId) || null;
 };
 
 const removeContact = async (contactId) => {
-  try {
-    const contacts = await listContacts();
+  const contacts = await listContacts();
 
-    const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === contactId);
 
-    if (index === -1) return null;
-    const [result] = contacts.splice(index, 1);
+  if (index === -1) return null;
+  const [result] = contacts.splice(index, 1);
 
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return result;
-  } catch (err) {}
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return result;
 };
 
 const addContact = async ({ name, email, phone }) => {
-  try {
-    const contacts = await listContacts();
+  const contacts = await listContacts();
 
-    const newContact = { id: nanoid(), name, email, phone };
+  const newContact = { id: nanoid(), name, email, phone };
 
-    contacts.push(newContact);
+  contacts.push(newContact);
 
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-    return newContact;
-  } catch (err) {}
+  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
-  try {
-    const contacts = await listContacts();
-    const index = contacts.findIndex((contact) => contact.id === contactId);
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
 
-    if (index === -1) return null;
-    const [result] = contacts.splice(index, 1);
+  if (index === -1) return null;
+  const [result] = contacts.splice(index, 1);
 
-    const updatedContact = { ...result, ...body };
+  const updatedContact = { ...result, ...body };
 
-    contacts.push(updatedContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return updatedContact;
-  } catch (err) {}
+  contacts.push(updatedContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return updatedContact;
 };
 
 module.exports = {
