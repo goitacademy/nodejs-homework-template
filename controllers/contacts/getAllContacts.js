@@ -1,5 +1,5 @@
 const {Contact} = require('../../schemas/contact');
-const ctrlWrapper = require("../../decorators/ctrlWrapper");
+const {ctrlWrapper} = require("../../decorators");
 
 const get = async (req, res, next) => {
     const results = await Contact.find()

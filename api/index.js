@@ -7,8 +7,8 @@ const { get,
   update,
   updateFavorite,
   remove} = require('../controllers/contacts');
-const isValidId = require('../middlewares/isValidId');
-const validateBody = require('../decorators/validateBody');
+const {isValidId} = require('../middlewares');
+const {validateBody} = require('../decorators');
 const {schemas} = require('../schemas/contact')
 
 router.get('/contacts', get);

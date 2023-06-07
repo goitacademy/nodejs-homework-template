@@ -1,6 +1,6 @@
 const {Contact} = require('../../schemas/contact');
-const {HttpError} = require("../../helpers/httpError");
-const ctrlWrapper = require("../../decorators/ctrlWrapper");
+const {HttpError} = require("../../helpers");
+const {ctrlWrapper} = require("../../decorators");
 
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;

@@ -1,6 +1,6 @@
 const {Contact} = require('../../schemas/contact');
-const {HttpError} = require("../../helpers/httpError");
-const ctrlWrapper = require("../../decorators/ctrlWrapper");
+const {HttpError} = require("../../helpers");
+const {ctrlWrapper} = require("../../decorators");
 
 const updateFavorite = async (req, res, next) => {
   const { id } = req.params
