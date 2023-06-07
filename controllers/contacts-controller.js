@@ -61,7 +61,7 @@ const updateStatusContact  = async (req, res) => {
 	if (!updatedContact) {
 		throw HttpError(404);
 	}
-	res.json(updatedContact)
+	res.json(updatedContact);
 }
 
 module.exports = {
