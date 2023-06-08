@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const mongoUrl =
-  "mongodb+srv://mpawlowski98:kKElKCWK27OGHv14@cluster1.7s09txe.mongodb.net/";
+  "mongodb+srv://mpawlowski98:kKElKCWK27OGHv14@cluster1.7s09txe.mongodb.net/db-contacts";
 
 const connectMongo = async () => {
   try {

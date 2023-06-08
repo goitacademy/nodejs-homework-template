@@ -1,5 +1,4 @@
 const Contact = require("./contacts.model");
-const { nanoid } = require("nanoid");
 
 const listContacts = async () => {
   return await Contact.find();
@@ -13,8 +12,7 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const newContact = { id: nanoid(), ...body };
-  return await newContact.save();
+  return await Contact.create(body);
 };
 
 const updateContact = async (contactId, body) => {
@@ -22,7 +20,7 @@ const updateContact = async (contactId, body) => {
 };
 
 const contactFavorite = async (contactId, favorite) => {
-  const contact = Contact.findById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     return null;
   }
