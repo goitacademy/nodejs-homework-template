@@ -17,7 +17,7 @@ app.use("/api/contacts", contactsRouter);
 app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
 });
-
+// * err - параметр, який передається з попереднього next()
 app.use((err, _, res, next) => {
   const { status = 500 } = err;
   res.status(status).json({ message: err.message });
