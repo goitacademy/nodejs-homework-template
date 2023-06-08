@@ -1,5 +1,4 @@
-const { validateContactsBody } = require("./validateContactsBody");
+const ctrlWrapper = require('./ctrlWrapper');
+const validateBody = require('./validateBody');
 
-module.exports = {
-  validateContactsBody,
-};
+module.exports = { ctrlWrapper, validateBody };
