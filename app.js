@@ -2,8 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const contactsRouter = require("./routes/api/contacts");
 const mongoose = require("mongoose");
+
+const contactsRouter = require("./routes/api/contacts");
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
