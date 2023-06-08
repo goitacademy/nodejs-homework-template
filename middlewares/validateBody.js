@@ -8,7 +8,7 @@ const validateBody = (schema) => {
     }
     next();
   };
-  return func();
+  return func;
 };
 
 module.exports = validateBody;
