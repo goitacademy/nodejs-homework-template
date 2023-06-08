@@ -7,70 +7,59 @@ const {
   updateContact
 } = require('../../models/contacts');
 
+const {HttpError} = require('../../helpers')
+
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const result = await listContacts();
     res.json(result)
   } catch (error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error);
   }
 });
 
-router.get('/:contactId', async (req, res) => {
+router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await getContactById(contactId);
-    if (!result) {
-      const error = new Error('Not found');
-      error.status = 404;
-      throw error;
-    }
+    if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.json(result)
   } catch (error) {
-    const { status = 500, message = "Server error" } = error;
-    res.status(status).json({
-      message
-    })
+    next(error);
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   try {
-    console.log(req.body);
     const result = await addContact(req.body);
+    // if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error);
   }
 })
 
-router.delete('/:contactId', async (req, res) => {
+router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
+    if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.json(result)
   } catch (error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error);
   }
 })
 
-router.put('/:contactId', async (req, res) => {
+router.put('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
+    if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error"
-    })
+    next(error);
   }
 })
 

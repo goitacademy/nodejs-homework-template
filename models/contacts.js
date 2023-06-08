@@ -5,6 +5,7 @@ const { readFile, writeFile } = require('fs').promises;
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
+
 const listContacts = async () => {
     try {
         const contacts = await readFile(contactsPath);
