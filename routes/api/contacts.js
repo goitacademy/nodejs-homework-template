@@ -42,7 +42,10 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { error } = addScheme.validate(req.body);
-    if (error) throw HttpError(400, error.message);
+    if (error) {
+      console.log(error);
+      throw HttpError(400, `missing field ${error.message}`);
+    }
 
     const result = await addContact(req.body);
     res.status(201).json(result);
@@ -51,13 +54,13 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {a
+router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.json({
-      message: "Delete success",
+      message: "Contact deleted",
       result
     })
   } catch (error) {
@@ -68,7 +71,7 @@ router.delete('/:contactId', async (req, res, next) => {a
 router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = addScheme.validate(req.body);
-    if (error) throw HttpError(400, error.message);
+    if (error) throw HttpError(400, `missing field ${error.message}`);
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
