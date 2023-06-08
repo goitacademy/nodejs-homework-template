@@ -9,13 +9,14 @@ const {
 } = require("../../controllers/contactsControllers");
 
 const { validateBody } = require("../../decorators/validateBody");
-const { contactSchema } = require("../../schemas/contactSchema");
 const {
   addContactValidationSchema,
   updateContactValidationSchema,
 } = require("../../utils/validation/contactValidationSchemas");
+const {authentificate} = require('../../utils/authentficate')
 
 const router = express.Router();
+router.use(authentificate);
 
 router
   .route("/")
@@ -30,4 +31,4 @@ router
   .route("/:contactId/favorite")
   .patch(validateBody(updateContactValidationSchema), updateStatusContact);
 
-module.exports = router;
+module.exports = {contactsRouter: router};

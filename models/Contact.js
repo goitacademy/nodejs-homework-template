@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const schema = mongoose.Schema(
+const schema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -15,6 +15,10 @@ const schema = mongoose.Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { timestamps: true, versionKey: false }
