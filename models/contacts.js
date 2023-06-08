@@ -8,15 +8,15 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const data = await listContacts();
-  const contact = data.find((item) => item.id === contactId);
+  const contact = data.find((item) => item.id === id);
   return contact || null;
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const data = await listContacts();
-  const index = data.findIndex((item) => item.id === contactId);
+  const index = data.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
