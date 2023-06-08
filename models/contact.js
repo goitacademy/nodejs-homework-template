@@ -38,7 +38,6 @@ const schemas = { contactPush, updateFavoriteSchema };
 const Contact = model("contact", contactSchema);
 
 module.exports = { Contact, schemas };
-
 // default - дефолтне значення
 // enum:[] значення одне із
 // match: /\{2}-\{2}-\4$/ щоб записати дату
