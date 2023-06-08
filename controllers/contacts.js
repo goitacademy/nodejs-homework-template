@@ -1,65 +1,60 @@
 const { ctrlWrapper } = require("../helpers");
-const contactsService = require("../models/contacts");
-const contactsAddSchema = require("../schemas/contacts");
+const { Contact } = require("../models/contact");
 
-const getAll = async (req, res, next) => {
-  const result = await contactsService.listContacts();
+const getAll = async (req, res) => {
+  const result = await Contact.find();
   res.status(200).json(result);
+};
+
+const addContact = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
 };
 
 const getContactById = async (req, res, next) => {
-  const result = await contactsService.getById(req.params.contactId);
+  const id = req.params.contactId;
+  const result = await Contact.findById({_id: id});
   if (!result) {
     return res.status(404).json({ message: "Not Found" });
   }
   res.status(200).json(result);
 };
 
-const addContact = async (req, res, next) => {
-  try {
-    const { error } = contactsAddSchema.validate(req.body);
-    if (error) {
-      const path = error.details[0].path[0];
-      return res.status(400).json({ message: `missing required name ${path}` });
-    } else {
-      const result = await contactsService.addContact(req.body);
-      res.status(201).json(result);
-    }
-  } catch (error) {
-    next(error);
+const updateContact = async (req, res, next) => {
+  const id = req.params.contactId;
+  if (Object.keys(req.body).length === 0) {
+	return res.status(400).json({ message: "missing fields" });
   }
+  const result = await Contact.findByIdAndUpdate({_id: id}, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw res.status(404).json({ message: `Not found` });
+  }
+  res.json(result);
+};
+
+const updateFavorite = async (req, res, next) => {
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  console.log(!result);
+  if (!result) {
+    return res.status(404).json({ message: `Not found` });
+  }
+  res.json(result);
 };
 
 const removeContact = async (req, res, next) => {
-  const result = await contactsService.removeContact(req.params.contactId);
+  const id = req.params.contactId;
+  const result = await Contact.findByIdAndDelete(id, req.body, {
+    new: true,
+  });
   if (!result) {
-    return res.status(404).json({ message: "Not Found" });
+    throw res.status(404).json({ message: `Not found` });
   }
   res.status(200).json({ message: "contact deleted" });
-};
-
-const updateContact = async (req, res, next) => {
-  try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "missing fields" });
-    }
-    const { error } = contactsAddSchema.validate(req.body);
-    if (error) {
-      const path = error.details[0].path[0];
-      return res.status(400).json({ message: `missing required name ${path}` });
-    }
-    const result = await contactsService.updateContact(
-      req.params.contactId,
-      req.body
-    );
-
-    if (!result) {
-      return res.status(404).json({ message: "Not Found" });
-    }
-    res.status(200).json(result);
-  } catch (error) {
-    return error;
-  }
 };
 
 module.exports = {
@@ -68,4 +63,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
