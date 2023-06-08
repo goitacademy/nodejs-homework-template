@@ -28,13 +28,14 @@ const updateContacts = async (contacts) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
+
   const idx = contacts.findIndex((el) => el.id === contactId);
 
   if (idx === -1) {
     return null;
   }
 
-  const [contact] = contacts.slice(idx, 1);
+  const [contact] = contacts.splice(idx, 1);
   await updateContacts(contacts);
 
   return contact;
