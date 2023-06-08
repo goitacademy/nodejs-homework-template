@@ -8,9 +8,15 @@ const {
   current,
   logout,
   changeAvatar,
+  verifyUser,
+  resendVerify,
 } = require("../../controllers/Users");
 
 router.post("/register", validationBody(joiSchemas.register), register);
+
+router.get("/verify/:verificationCode", verifyUser);
+
+router.post("/verify", validationBody(joiSchemas.email), resendVerify);
 
 router.post("/login", validationBody(joiSchemas.login), login);
 

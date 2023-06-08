@@ -1,7 +1,8 @@
 const { usersModel } = require("../../models/users");
-const { HttpError } = require("../../Helpers");
+const { HttpError, sendEmail } = require("../../Helpers");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
+const { nanoid } = require("nanoid");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -11,12 +12,21 @@ const register = async (req, res) => {
     throw HttpError(409, "User already exists");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-
+  const verificationCode = nanoid();
   const newUser = {
     ...req.body,
     avatarURL,
     password: hashPassword,
+    verificationCode,
   };
+
+  const verificationData = {
+    to: email,
+    subject: `Verify Email`,
+    html: `<a target="_blank" href="${process.env.PROJECT_URL}/api/users/verify/${verificationCode}">Click to verify email</a>`,
+  };
+
+  await sendEmail(verificationData);
 
   const resp = await usersModel.create(newUser);
 
