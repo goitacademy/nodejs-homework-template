@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require('joi');
 const {
   listContacts,
   getContactById,
@@ -10,6 +11,13 @@ const {
 const {HttpError} = require('../../helpers')
 
 const router = express.Router();
+
+const addScheme = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required()
+});
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -33,20 +41,25 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    const { error } = addScheme.validate(req.body);
+    if (error) throw HttpError(400, error.message);
+
     const result = await addContact(req.body);
-    // if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
     res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', async (req, res, next) => {a
   try {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
-    res.json(result)
+    res.json({
+      message: "Delete success",
+      result
+    })
   } catch (error) {
     next(error);
   }
@@ -54,6 +67,8 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
+    const { error } = addScheme.validate(req.body);
+    if (error) throw HttpError(400, error.message);
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
