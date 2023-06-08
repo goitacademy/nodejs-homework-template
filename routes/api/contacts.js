@@ -4,7 +4,7 @@ const ctrl = require("../../controllers/contacts/contacts");
 
 const {validateBody} = require("../../middlewares");
 const {isValidId}= require("../../middlewares");
-const schemas = require("../../models/contact");
+const { schemas }= require("../../models/contact");
 
 const router = express.Router();
 
