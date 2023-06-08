@@ -1,8 +1,8 @@
 const messagesList = {
-  400: "Bad Request",
-  401: "Unauthorized",
-  403: "Forbidden",
-  404: "Not Found",
+  400: 'Bad Request',
+  401: 'Unauthorized',
+  403: 'Forbidden',
+  404: 'Not Found',
 };
 
 const HttpError = (status, message = messagesList[status]) => {
