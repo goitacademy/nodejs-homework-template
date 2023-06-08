@@ -65,8 +65,8 @@ router.delete('/:contactId', async (req, res) => {
 router.put('/:contactId', async (req, res) => {
   try {
     const { contactId } = req.params;
-    const result = await updateContact(contactId);
-    res.json(result)
+    const result = await updateContact(contactId, req.body);
+    res.json(result);
   } catch (error) {
     res.status(500).json({
       message: "Server error"

@@ -40,33 +40,32 @@ const removeContact = async (contactId) => {
     }  
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async (data) => {
     try {
-        const data = await listContacts();
+        const contacts = await listContacts();
         const newContact = {
             id: uuidv4(),
-            name,
-            email,
-            phone
+            ...data
         };
-        data.push(newContact);
-        await writeFile(contactsPath, JSON.stringify(data, null, 2));
+        contacts.push(newContact);
+        await writeFile(contactsPath, JSON.stringify(contacts, null, 2));
         return newContact;
     } catch (error) {
         console.log(error);
     }  
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, data) => {
     try {
-        const data = await listContacts();
-        const index = data.findIndex(contact => contact.id === contactId);
+        const contacts = await listContacts();
+        const index = contacts.findIndex(contact => contact.id === id);
         if (index === -1) {
             return null;
         }
 
-        data[index] = { contactId, ...body }
-        writeFile(contactsPath, JSON.stringify(data, null, 2))
+        contacts[index] = { id, ...data };
+        await writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+        return contacts[index];
     } catch (error) {
         console.log(error);
     }
