@@ -4,15 +4,17 @@ const {
   contacts: { getAll, getById, add, updateById, removeById },
 } = require("../../controllers");
 
+const {validateBody} = require('../../middlewares')
+
 const router = express.Router();
 
 router.get("/", getAll);
 
 router.get("/:contactId", getById);
 
-router.post("/", add);
+router.post("/", validateBody(), add);
 
-router.put("/:contactId", updateById);
+router.put("/:contactId", validateBody(), updateById);
 
 router.delete("/:contactId", removeById);
 
