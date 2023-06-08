@@ -28,10 +28,7 @@ const contactsSchema = Joi.object()
         'any.required': `missing required 'email' field`,
         'string.empty': `'email' cannot be an empty field`,
       }),
-    favorite: Joi.boolean().required().messages({
-      'any.required': `missing required 'favorite' field`,
-      'string.empty': `'favorite' cannot be an empty field`,
-    }),
+    favorite: Joi.boolean(),
   });
 
 const contactsUpdateFavoriteSchema = Joi.object()

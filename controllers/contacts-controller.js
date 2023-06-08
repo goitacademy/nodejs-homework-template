@@ -19,7 +19,7 @@ const getContactsById = async (req, res) => {
 };
 
 const addContacts = async (req, res) => {
-  const addContactResult = await Contact.create(req.body);
+  const addContactResult = await Contact.create(req.body, '-__v');
   res.status(201).json(addContactResult);
 };
 
