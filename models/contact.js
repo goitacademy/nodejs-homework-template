@@ -1,0 +1,29 @@
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../middlewares")
+const {emailRegexp,nameRegexp,phoneRegexp} = require("../constans/contacts")
+
+const contactShema = new Schema({
+  name: {
+    type: String,
+    match: nameRegexp,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+    match:emailRegexp,
+  },
+  phone: {
+    type: String,
+    match:phoneRegexp,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+}, { versionKey: false, timestamps: true });
+
+contactShema.post("save", handleMongooseError);
+
+const Contact = model("contact", contactShema);
+
+module.exports = Contact;
