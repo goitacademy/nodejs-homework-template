@@ -1,8 +1,31 @@
+require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-
 const contactsRouter = require("./routes/api/contacts");
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.once("open", function () {
+  console.log("Database connection successful");
+});
+
+db.on("error", function (err) {
+  console.error("Database connection error:", err);
+  process.exit(1);
+});
+
+process.on("exit", function (code) {
+  if (code === 1) {
+    console.error("Application exited with error");
+  }
+});
 
 const app = express();
 
