@@ -10,7 +10,7 @@ const router = Router();
 router.use(authenticate);
 
 router.get("/", ctrl.listContacts);
-router.get("/:id", authenticate, isValidId, ctrl.getContactById);
+router.get("/:id", isValidId, ctrl.getContactById);
 router.post("/", validateBody(schemas.contactAddSchema), ctrl.addContact);
 router.put(
   "/:id",
@@ -25,6 +25,6 @@ router.patch(
   validateStatusBody(schemas.updateFavoriteSchema),
   ctrl.updateStatusContact
 );
-router.get("/favorite=true", authenticate, ctrl.listContacts);
+router.get("/favorite=true", ctrl.listContacts);
 
 module.exports = router;
