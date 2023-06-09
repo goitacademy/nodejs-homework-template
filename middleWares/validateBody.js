@@ -1,15 +1,21 @@
 const { RequestError } = require("../helpers");
 
 const validateBody = (schema) => {
-  const func = (req, res, next) => {
+  return (req, res, next) => {
+    const bodyKeys = Object.keys(req.body);
+
+    if (bodyKeys.length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+
     const { error } = schema.validate(req.body);
 
     if (error) {
-      next(RequestError(400, error.message));
+      throw new RequestError(400, error.message);
     }
+
     next();
   };
-  return func;
 };
 
 module.exports = validateBody;
