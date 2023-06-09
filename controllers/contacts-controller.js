@@ -2,7 +2,7 @@ const Contact = require("../models/contact");
 
 const { HttpError } = require("../helpers");
 
-const {ctrlWrapper} = require('../helpers');
+const ctrlWrapper = require('../helpers/ctrlWrapper');
 
 const { addSchema, favouriteSchema } = require("../schemas/contacts");
 

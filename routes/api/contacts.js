@@ -1,6 +1,8 @@
 const express = require('express')
 
-const {getAll, getById, addContact, deleteById, updateById, updateStatusContact} = require('../../controllers')
+const {getAll, getById, addContact, deleteById, updateById, updateStatusContact} = require('../../controllers/contacts-controller');
+
+const isValidId = require('../../helpers/IsValidID')
 
 const router = express.Router()
 
