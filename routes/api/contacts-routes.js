@@ -4,7 +4,8 @@ const Joi = require("joi");
 
 const router = express.Router();
 
-const contactsService = require("../../models/contacts");
+const Contact = require('../../models/contact');
+
 const { HttpError } = require("../../helpers");
 
 const contactAddSchema = Joi.object({
@@ -17,11 +18,18 @@ const contactAddSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": `missing required phone field`,
   }),
+  favorite: Joi.boolean(),
+});
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  })
 });
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,7 +39,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.getContactById(contactId);
+    const result = await Contact.findById(contactId);
 
     if (!result) {
       throw HttpError(404, `Contact with id: '${contactId}' not found`);
@@ -50,7 +58,7 @@ router.post("/", async (req, res, next) => {
       throw HttpError(400, error.message);
     }
 
-    const result = await contactsService.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -61,7 +69,7 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
-    const result = await contactsService.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw HttpError(404, `Contact with id: '${contactId}' not found`);
     }
@@ -81,7 +89,7 @@ router.put("/:contactId", async (req, res, next) => {
 
     const { contactId } = req.params;
 
-    const result = await contactsService.updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) {
       throw HttpError(404, `Contact with id: '${contactId}' not found`);
     }
@@ -91,5 +99,26 @@ router.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { error } = contactUpdateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { contactId } = req.params;
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    if (!result) {
+      throw HttpError(404, `Contact with id: '${contactId}' not found`);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = router;
