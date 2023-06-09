@@ -1,17 +1,9 @@
-const Contact = require("../models/contactsModel");
-const Joi = require("joi").extend(require("joi-phone-number"));
-
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().phoneNumber().required(),
-  favorite: Joi.boolean(),
-});
+const contactsService = require("../services/contactsService");
 
 const contactsController = {
   getContacts: async (req, res, next) => {
     try {
-      const contacts = await Contact.find();
+      const contacts = await contactsService.getContacts();
       res.json(contacts);
     } catch (error) {
       next(error);
@@ -20,7 +12,7 @@ const contactsController = {
 
   getContactById: async (req, res, next) => {
     try {
-      const contact = await Contact.findById(req.params.id);
+      const contact = await contactsService.getContactById(req.params.id);
       if (!contact) {
         return res.status(404).json({ message: "Contact not found" });
       }
@@ -32,11 +24,7 @@ const contactsController = {
 
   addContact: async (req, res, next) => {
     try {
-      const { error } = schema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-      }
-      const newContact = await Contact.create(req.body);
+      const newContact = await contactsService.addContact(req.body);
       res.status(201).json(newContact);
     } catch (error) {
       next(error);
@@ -45,7 +33,7 @@ const contactsController = {
 
   removeContact: async (req, res, next) => {
     try {
-      const contact = await Contact.findByIdAndRemove(req.params.id);
+      const contact = await contactsService.removeContact(req.params.id);
       if (!contact) {
         return res.status(404).json({ message: "Contact not found" });
       }
@@ -57,15 +45,9 @@ const contactsController = {
 
   updateContact: async (req, res, next) => {
     try {
-      const { error } = schema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-      }
-      const { name, email, phone } = req.body;
-      const updatedContact = await Contact.findByIdAndUpdate(
+      const updatedContact = await contactsService.updateContact(
         req.params.id,
-        { name, email, phone },
-        { new: true }
+        req.body
       );
       if (!updatedContact) {
         return res.status(404).json({ message: "Contact not found" });
@@ -82,10 +64,9 @@ const contactsController = {
       return res.status(400).json({ message: "Missing field favorite" });
     }
     try {
-      const updatedContact = await Contact.findByIdAndUpdate(
+      const updatedContact = await contactsService.toggleFavorite(
         req.params.contactId,
-        { $set: { favorite } },
-        { new: true }
+        favorite
       );
       if (!updatedContact) {
         return res.status(404).json({ message: "Contact not found" });

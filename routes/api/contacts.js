@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Contact = require("../../models/contactsModel");
-const Joi = require("joi").extend(require("joi-phone-number"));
+const { validateContact } = require("../../validators/contactsValidator");
 
 const router = express.Router();
 
@@ -13,23 +13,16 @@ const validateObjectId = (req, res, next) => {
   next();
 };
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().phoneNumber().required(),
-  favorite: Joi.boolean(),
-});
-
-router.get("/", async (req, res, next) => {
+const getContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.get("/:id", validateObjectId, async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
     const contact = await Contact.findById(req.params.id);
     if (!contact) {
@@ -39,11 +32,11 @@ router.get("/:id", validateObjectId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post("/", async (req, res, next) => {
+const createContact = async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
@@ -52,9 +45,9 @@ router.post("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.delete("/:id", validateObjectId, async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
   try {
     const contact = await Contact.findByIdAndRemove(req.params.id);
     if (!contact) {
@@ -64,11 +57,11 @@ router.delete("/:id", validateObjectId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.put("/:id", validateObjectId, async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
@@ -85,9 +78,9 @@ router.put("/:id", validateObjectId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+const updateContactFavorite = async (req, res, next) => {
   const { favorite } = req.body;
   if (favorite === undefined) {
     return res.status(400).json({ message: "Missing field favorite" });
@@ -105,6 +98,13 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
+
+router.get("/", getContacts);
+router.get("/:id", validateObjectId, getContactById);
+router.post("/", createContact);
+router.delete("/:id", validateObjectId, deleteContact);
+router.put("/:id", validateObjectId, updateContact);
+router.patch("/:contactId/favorite", updateContactFavorite);
 
 module.exports = router;
