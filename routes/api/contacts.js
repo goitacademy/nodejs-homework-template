@@ -23,6 +23,12 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const result = await listContacts();
+    if (result === {}) {
+      console.log("There is no contact in the contact database yet.");
+    }
+
+    console.log(`There are ${result.length} contacts in the contact database`);
+
     res.json({
       status: "success",
       code: 200,
@@ -33,7 +39,6 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  next();
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -45,7 +50,9 @@ router.get("/:id", async (req, res, next) => {
       error.status = 404;
       throw error;
     }
-
+    console.log(
+      `Contact with id: ${id} was successfully found in the contact database.`
+    );
     res.json({
       status: "succes",
       code: 200,
@@ -68,6 +75,9 @@ router.post("/", async (req, res, next) => {
     }
     const newContacts = { id: uuidv4(), ...req.body };
     const result = await addContact(newContacts);
+    console.log(
+      `Contact with id: ${newContacts.id} has been successfully added to the contact database.`
+    );
     res.status(201).json({
       status: "success",
       code: 201,
@@ -89,6 +99,10 @@ router.delete("/:id", async (req, res, next) => {
       error.status = 404;
       throw error;
     }
+
+    console.log(
+      `Contact with id: ${id} has been successfully removed from the contact database.`
+    );
 
     res.json({
       status: "success",
@@ -123,6 +137,7 @@ router.put("/:id", async (req, res, next) => {
       error.status = 404;
       throw error;
     }
+    console.log(`Contact with id: ${id} has been successfully updated.`);
     res.json({
       status: "success",
       code: 200,
