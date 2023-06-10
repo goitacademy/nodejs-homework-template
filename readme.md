@@ -21,10 +21,9 @@ PUT /api/contacts/:id
 
 ### Technologies
 
-<div align="middle" float="left">
-<p>JavaScript<p>
-<img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="30" height="30"/>
-<div>
-  
+- JavaScript
+  <img align="left" src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="30" height="30"/>
 - Node.js
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="60" height="60"/>
+  <img align="left" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="60" height="60"/>
+- MongoDB
+  <img align="left" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-plain-wordmark.svg" title="MongoDB" alt="MongoDB" width="30" height="30"/>
