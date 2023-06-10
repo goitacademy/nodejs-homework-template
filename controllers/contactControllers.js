@@ -2,7 +2,19 @@ const { Contact } = require("../models/contact");
 const { HttpError, decorator } = require("../helpers");
 
 const getAllContacts = async (req, res, next) => {
-  const contactList = await Contact.find();
+  const { _id: owner } = req.user;
+
+  const { page = 1, limit = 20, ...query } = req.query;
+  const skip = (page - 1) * limit;
+
+  const contactList = await Contact.find(
+    { owner, ...query },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    }
+  ).populate("owner", "name");
 
   res.status(200).json(contactList);
 };
@@ -19,9 +31,10 @@ const getContact = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
+  const { _id: owner } = req.user;
   const body = req.body;
 
-  const contactToAdd = await Contact.create(body);
+  const contactToAdd = await Contact.create({ ...body, owner });
 
   res.status(201).json(contactToAdd);
 };

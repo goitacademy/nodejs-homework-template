@@ -48,8 +48,36 @@ const patchValidation = (schema) => {
   return validation;
 };
 
+const authValidation = (schema) => {
+  const validation = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      next(HttpError(400, error.message));
+    }
+
+    next();
+  };
+
+  return validation;
+};
+
+const userSubscrUpdate = (schema) => {
+  const validation = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      next(HttpError(400, `subscription invalid`));
+    }
+    next();
+  };
+  return validation;
+};
+
 module.exports = {
   postValidation,
   putValidation,
   patchValidation,
+  authValidation,
+  userSubscrUpdate,
 };

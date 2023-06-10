@@ -8,20 +8,27 @@ const {
 } = require("../../middlwares/bodyValidation");
 const { addSchema, toggleFavoriteSchema } = require("../../models/contact");
 const isValidId = require("../../middlwares/isValidId");
+const inspectToken = require("../../middlwares/inspectToken");
 
 const router = express.Router();
 
-router.get("/", contactCtrl.getAllContacts);
+router.get("/", inspectToken, contactCtrl.getAllContacts);
 
-router.get("/:id", isValidId, contactCtrl.getContact);
+router.get("/:id", isValidId, inspectToken, contactCtrl.getContact);
 
-router.post("/", postValidation(addSchema), contactCtrl.postContact);
+router.post(
+  "/",
+  inspectToken,
+  postValidation(addSchema),
+  contactCtrl.postContact
+);
 
-router.delete("/:id", isValidId, contactCtrl.deleteContact);
+router.delete("/:id", isValidId, inspectToken, contactCtrl.deleteContact);
 
 router.put(
   "/:id",
   isValidId,
+  inspectToken,
   putValidation(addSchema),
   contactCtrl.changeContactData
 );
@@ -29,6 +36,7 @@ router.put(
 router.patch(
   "/:id/favorite",
   isValidId,
+  inspectToken,
   patchValidation(toggleFavoriteSchema),
   contactCtrl.updateStatusContact
 );
