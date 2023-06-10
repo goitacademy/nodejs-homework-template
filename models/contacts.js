@@ -17,7 +17,7 @@ const getContactById = async (contactId) => {
   try {
     const data = await fs.readFile(contacts);
     const dataParse = JSON.parse(data);
-    return dataParse.map((data) => {
+    return dataParse.find((data) => {
       if (data.id === contactId) {
         return data
       }
@@ -34,16 +34,14 @@ const removeContact = async (contactId) => {
     const contactsWithout = dataParse.filter(
       (contact) => contact.id !== contactId
     );
-
     fs.writeFile(contacts, JSON.stringify(contactsWithout));
-    console.log(`Contact with id: ${contactId} was deleted.`);
-    listContacts();
   } catch (error) {
     return console.log(error);
   }
 };
 
-const addContact = async (body) => {
+const addContact = async ({name, phone, email}) => {
+  console.log(name)
   try {
     const data = await fs.readFile(contacts);
 
@@ -59,8 +57,6 @@ const addContact = async (body) => {
     dataParse.push(newContact);
 
     fs.writeFile(contacts, JSON.stringify(dataParse));
-    console.log(`Contact with id: ${newContact.id} was added.`);
-    listContacts();
   } catch (error) {
     return console.log(error);
   }
