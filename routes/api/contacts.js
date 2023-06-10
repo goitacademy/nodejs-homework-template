@@ -1,89 +1,110 @@
 const express = require("express");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
-const Joi = require("joi").extend(require("joi-phone-number"));
+const mongoose = require("mongoose");
+const Contact = require("../../models/contactsModel");
+const { validateContact } = require("../../validators/contactsValidator");
 
 const router = express.Router();
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().phoneNumber().required(),
-});
+const validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid ID" });
+  }
+  next();
+};
 
-router.get("/", async (req, res, next) => {
+const getContacts = async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.get("/:id", async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
-    const contact = await getContactById(req.params.id);
-    if (contact) {
-      res.json(contact);
-    } else {
-      res.status(404).json({ message: "Not found" });
+    const contact = await Contact.findById(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found" });
     }
+    res.json(contact);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.post("/", async (req, res, next) => {
+const createContact = async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-    const newContact = await addContact(req.body);
+    const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.delete("/:id", async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
   try {
-    const contact = await removeContact(req.params.id);
-    if (contact !== undefined) {
-      res.json({ message: "contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
+    const contact = await Contact.findByIdAndRemove(req.params.id);
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found" });
     }
+    res.json({ message: "Contact deleted" });
   } catch (error) {
     next(error);
   }
-});
+};
 
-router.put("/:id", async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
     const { name, email, phone } = req.body;
-    const updatedContact = await updateContact(req.params.id, {
-      name,
-      email,
-      phone,
-    });
-    if (updatedContact) {
-      res.json(updatedContact);
-    } else {
-      res.status(404).json({ message: "Not found" });
+    const updatedContact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { name, email, phone },
+      { new: true }
+    );
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Contact not found" });
     }
+    res.json(updatedContact);
   } catch (error) {
     next(error);
   }
-});
+};
+
+const updateContactFavorite = async (req, res, next) => {
+  const { favorite } = req.body;
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      req.params.contactId,
+      { $set: { favorite } },
+      { new: true }
+    );
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+router.get("/", getContacts);
+router.get("/:id", validateObjectId, getContactById);
+router.post("/", createContact);
+router.delete("/:id", validateObjectId, deleteContact);
+router.put("/:id", validateObjectId, updateContact);
+router.patch("/:contactId/favorite", updateContactFavorite);
 
 module.exports = router;
