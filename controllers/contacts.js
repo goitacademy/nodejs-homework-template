@@ -3,7 +3,6 @@ const Contact = require("../models/contact");
 const { ctrlWrapper } = require("../helpers");
 
 
-
 const getContacts = async (req, res) => {
     // console.log(res)
     const result = await Contact.find();

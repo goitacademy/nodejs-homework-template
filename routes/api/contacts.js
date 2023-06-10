@@ -2,7 +2,7 @@ const express = require("express");
 const ctrl = require("../../controllers/contacts");
 const { validateBody } = require("../../middlewares");
 const {addSchema} = require("../../schemas/contacts");
-console.log(ctrl);
+
 const router = express.Router();
 // ---------------------------   G E T -----------------------------------------
 
