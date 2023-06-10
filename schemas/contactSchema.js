@@ -18,8 +18,15 @@ const contactSchema = Joi.object({
     .pattern(/^[0-9()-]+$/)
     .required()
     .messages({ "any.required": "Missing required phone field" }),
+    favorite: Joi.boolean()
+    // .messages({ "any.required": "Missing required favorite field" }),
 });
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+})
 
 module.exports = {
   contactSchema,
+  contactUpdateFavoriteSchema,
 };
