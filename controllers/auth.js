@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -82,14 +83,23 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
+
   const filename = `${_id}_${originalname}`;
+  const image = await Jimp.read(tmpUpload);
+  await image
+    // .resize(250, 250)
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .write(tmpUpload);
+
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tmpUpload, resultUpload);
 
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.status(201).json({ avatarURL });
+  if (!avatarURL) {
+    throw HttpError(401, `Not authorized`);
+  }
+  res.status(200).json({ avatarURL });
   console.log({ avatarURL });
 };
 
