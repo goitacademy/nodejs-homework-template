@@ -4,6 +4,11 @@ const { ctrlWrapper } = require("../utils");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
+const gravatar = require('gravatar');
+const fs = require('fs/promises');
+const path = require('path');
+
+const avatarDir = path.resolve('public', 'avatars');
 
 const register = async (req, res) => {
     const {email, password} = req.body;
@@ -12,9 +17,13 @@ const register = async (req, res) => {
 
     if(user) throw HttpError(409, 'Email is already in use');
 
+    const avatarURL = gravatar.url(email);
+
+    console.log('GRAVATAR ', avatarURL);
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userCreate = await User.create({email, password: hashedPassword});
+    const userCreate = await User.create({email, password: hashedPassword, avatarURL});
 
     res.status(201).json({
         user: {
@@ -77,9 +86,27 @@ const logout = async (req, res) => {
     res.status(204).json();
 }
 
+const updateAvatar = async (req, res) => {
+    const { description } = req.body;
+    const { path: tempPath, originalname } = req.file;
+    console.log('REQ FILE ', req.file);
+    const resultDir = path.join(avatarDir, originalname);
+    const { _id } = req.user;
+    const avatarUrl = path.join('avatars', originalname);
+
+    fs.rename(tempPath, resultDir);
+    await User.findByIdAndUpdate(_id, { avatarUrl });
+
+    res.json({
+        // file: req.file,
+        avatarUrl
+    });
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout)
+    logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }

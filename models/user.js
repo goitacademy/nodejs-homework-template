@@ -32,7 +32,10 @@ const userSchema = new Schema ({
       type: Schema.Types.ObjectId,
       ref: 'user',
       // required: true
-    }
+    },
+    avatarURL: {
+      type: String
+    },
 },{
   versionKey: false,
   // timestamps: true
