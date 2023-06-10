@@ -9,11 +9,11 @@ const Jimp = require("jimp");
 
 const { User } = require("../models/user");
 
-const { HttpError, sendEmail } = require("../helpers");
+const { HttpError, sendEmail, cloudinary } = require("../helpers");
 
 const { SECRET_KEY, PROJECT_URL } = process.env;
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+// const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const { ctrlWrapper } = require("../helpers");
 
@@ -158,9 +158,16 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
+  const { path: tempUpload } = req.file;
+
+  // to store avatar inside the folder of the project
+  // const filename = `${_id}_${originalname}`;
+  // const { path: tempUpload, originalname } = req.file;
+  // const resultUpload = path.join(avatarsDir, filename);
+  // await fs.rename(tempUpload, resultUpload);
+  // const avatarURL = path.join("avatars", filename);
+  // await User.findByIdAndUpdate(_id, { avatarURL });
+  // res.json({ avatarURL });
 
   const avatar = await Jimp.read(`${tempUpload}`);
   avatar
@@ -169,12 +176,14 @@ const updateAvatar = async (req, res) => {
     })
     .write(`${tempUpload}`);
 
-  await fs.rename(tempUpload, resultUpload);
+  // using cloudinary for this purpose
+  const fileData = await cloudinary.uploader.upload(tempUpload, {
+    folder: "avatars",
+  });
+  await fs.unlink(tempUpload);
 
-  const avatarURL = path.join("avatars", filename);
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  res.json({ avatarURL });
+  await User.findByIdAndUpdate(_id, { avatarURL: fileData.url });
+  res.json({ avatarURL: fileData.url });
 };
 
 module.exports = {

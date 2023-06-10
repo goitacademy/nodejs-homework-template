@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "cloudinary": "^1.37.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
