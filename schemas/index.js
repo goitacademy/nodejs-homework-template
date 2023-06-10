@@ -1,6 +1,5 @@
-const addSchema = require("./add");
-const updateSchema = require("./update");
+const contactAddSchema = require("./joi");
+
 module.exports = {
-  addSchema,
-  updateSchema,
-};
+    contactAddSchema,
+}

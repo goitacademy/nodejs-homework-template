@@ -1,15 +1,13 @@
-const { requestError } = require("../utils/");
+const { HttpError } = require("../middelwares");
 
 const validateBody = (schema) => {
-  const func = (req, res, next) => {
+  const fn = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(requestError(400, error.message));
+      next(HttpError(400, error.message));
     }
-    next();
+    next(error);
   };
-
-  return func;
+  return fn;
 };
-
 module.exports = validateBody;

@@ -1,7 +1,5 @@
-const requestError = require("./requestError");
-const tryCatchWrapper = require("./tryCatchWrapper");
+const HttpError = require("./HttpError");
 
 module.exports = {
-  requestError,
-  tryCatchWrapper,
-};
+    HttpError,
+}
