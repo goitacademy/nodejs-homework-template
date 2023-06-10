@@ -5,7 +5,11 @@ const validateContactsBody = (schema) => {
       const { error } = schema.validate(req.body);
       if (error) {
 		const filedKey = error.details[0].context.key
-		return res.status(400).json({ message: `missing field ${filedKey}` });
+		if(filedKey === "favorite"){
+			console.log("favorite");
+			return res.status(400).json({ message: `missing field ${filedKey}` });
+		}
+		return res.status(400).json({ message: `missing fields` });
       }
       next();
    };
