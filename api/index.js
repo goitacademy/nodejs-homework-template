@@ -10,7 +10,7 @@ router.post("/contacts", ctrlTask.create);
 
 router.put("/contacts/:id", ctrlTask.update);
 
-router.patch("/contacts/:id/favourite", ctrlTask.updateStatus);
+router.patch("/contacts/:id/isFavourite", ctrlTask.updateStatus);
 
 router.delete("/contacts/:id", ctrlTask.remove);
 
