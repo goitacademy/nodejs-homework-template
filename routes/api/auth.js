@@ -23,6 +23,17 @@ router.post(
   ctrl.register
 );
 
+// verify email
+router.get("/verify/:verificationToken", ctrl.verify);
+
+// resend verify email
+router.post(
+  "/verify",
+  jsonParser,
+  validateBody(schemas.userEmailSchema),
+  ctrl.resendVerifyEmail
+);
+
 // signin
 router.post(
   "/login",
