@@ -7,7 +7,7 @@ const { HttpErrors } = require("../helpers");
 const addSchema = Joi.object({
   name: Joi.string().required(),
   phone: Joi.string().required().messages({
-    "any.required": `"phone" is a required field`,
+    "any.required": `"phone" is required field`,
     "string.empty": `"phone" cannot be an empty field`,
   }),
   email: Joi.string().required(),
