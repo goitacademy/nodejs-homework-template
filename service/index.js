@@ -1,6 +1,8 @@
 const Contact = require("./schemas/contacts");
 
 const getAllContacts = async () => {
+  // db.getCollection('contacts').find({});
+
   return Contact.find();
 };
 
@@ -8,8 +10,8 @@ const getContactById = (id) => {
   return Contact.findOne({ _id: id });
 };
 
-const createContact = ({ name, phone, email, isFavourite, description }) => {
-  return Contact.create({ name, phone, email, isFavourite, description });
+const createContact = ({ name, email, phone, favourite }) => {
+  return Contact.create({ name, email, phone, favourite });
 };
 
 const updateContact = (id, fields) => {
