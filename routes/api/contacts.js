@@ -9,7 +9,7 @@ const {
   removeContact,
   updateContact,
 } = require("../../models/contacts");
-const { validationPost, validationPut } = require("../../servises/validation");
+const { validationPost, validationPut } = require("../../services/validation");
 
 router.get("/", async (req, res, next) => {
   try {
