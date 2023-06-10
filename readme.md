@@ -2,7 +2,7 @@
 
 It's a REST API built to work with a collection of contacts.
 To work with the REST API, I used Postman. For simple data validation I used Joi package https://joi.dev/
-In the next step, instead of working with a JSON file, I will use MongoDB and Mongoose.
+In the previous version I was working with JSON file. In this version I'm using MongoDB and Mongoose manage data.
 
 ### The REST API supports the following routes
 
@@ -22,8 +22,8 @@ PUT /api/contacts/:id
 ### Technologies
 
 - JavaScript
-  <img align="left" src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="30" height="30"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="JavaScript" alt="JavaScript" width="30" height="30"/>
 - Node.js
-  <img align="left" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="60" height="60"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg" title="Node.js" alt="Node.js" width="60" height="60"/>
 - MongoDB
-  <img align="left" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-plain-wordmark.svg" title="MongoDB" alt="MongoDB" width="30" height="30"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-plain-wordmark.svg" title="MongoDB" alt="MongoDB" width="30" height="30"/>
