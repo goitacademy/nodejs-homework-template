@@ -1,9 +1,13 @@
 const express = require('express');
 const controllers = require("../../controllers/controllers");
 const { isValidId } = require("../../middlewares/index");
+const { authenticate } = require("../../middlewares/index");
+
+
 
 const router = express.Router();
 
+router.use(authenticate);
 
 router.get('/', controllers.getAll);
 

@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
-const contactMiddlewares = require("../middlewares/index");
-
+const {mongooseError} = require("../utils/index")
 
 
 const contactScheme = new Schema({
@@ -18,10 +17,15 @@ const contactScheme = new Schema({
         type: Boolean,
         default: false,
     },
+     owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    }
 });
 
 
-contactScheme.post("save", contactMiddlewares.mongooseError);
+contactScheme.post("save", mongooseError);
 
 
 const Contact = model("contact", contactScheme);

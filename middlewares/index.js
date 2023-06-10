@@ -1,9 +1,10 @@
-const mongooseError = require("./mongooseError");
+
 const isValidId = require('./isValidById');
+const authenticate = require("./authenticate");
 
 
 
-module.exports  = {
-    mongooseError,
+module.exports = {
     isValidId,
-}
+    authenticate
+};
