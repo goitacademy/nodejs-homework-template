@@ -46,12 +46,35 @@ const addContact = async ({ name, email, phone }) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contact, body, id) => {
+  const { name, email, phone } = body;
+  if (!name || !email || !phone) {
+    throw new Error("The required field is missing");
+  } else {
+    contact = {
+      id,
+      name,
+      email,
+      phone,
+    };
+    return contact;
+  }
+};
+
+const updateContacts = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contact = contacts.find((item) => item.id === contactId);
+  const index = contacts.findIndex((item) => item.id === contactId);
+  const changeContact = await updateContact(contact, body, contactId);
+  contacts.splice(index, 1, changeContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return contacts;
+};
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContacts,
 };
