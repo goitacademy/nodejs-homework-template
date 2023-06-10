@@ -5,7 +5,7 @@ It uses MongoDB as the database for storing contact information. The API follows
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-## Homework 4 - Authentication and Authorization
+## Homework 5 - Avatars
 
 ### Endpoints
 
@@ -79,7 +79,7 @@ Registers a new user.
     The "subscription" field is optional, can have the following values: "starter", "pro", or "business", and defaults to "starter" if not provided,
     If any of the required fields are missing in the body, it returns JSON with the key {"message":     "missing required name field"} and a status code of 400 (Bad Request).
     If the provided email is already in use, it throws an error with a status code of 409 (Conflict) and the message "Email already in use".
-    If all required fields are present in the body and the email is not already in use it hashes the password, creates a new user with the provided name, email, and hashed password.
+    If all required fields are present in the body and the email is not already in use it hashes the password, generates the avatar URL using Gravatar, creates a new user with the provided name, email, generated avatar and hashed password.
     Returns an object {name, email} and a status code of 201 (Created).
 
 #### 8. POST /api/users/login
@@ -108,7 +108,7 @@ Retrieves the information of the currently logged-in user.
     Returns the email and name of the currently logged-in user in JSON format with a status code of 200 (OK).
     If the user is not found, it returns an error with a status code of 401 (Unauthorized).
 
-#### 11. PATCH /users
+#### 11. PATCH /api/users
 
 Updates the subscription of the currently logged-in user.
 
@@ -118,6 +118,18 @@ Updates the subscription of the currently logged-in user.
     If the user is not found, it returns an error with a status code of 401 (Unauthorized).
     Updates the user's subscription field with the provided subscription value.
     Returns a JSON response indicating that the subscription was updated successfully, with a status code of 200 (OK).
+
+#### 12. PATCH /api/users/avatars
+
+Updates the avatar of the currently logged-in user.
+
+    Receives the body as multipart/form-data with the uploaded file.
+    Requires authentication (token in the Authorization header).
+    Saves the uploaded file to the "tmp" directory in the project root.
+    Processes the avatar using the "jimp" package, resizing it to 250x250 pixels.
+    Moves the user's avatar from the "tmp" directory to the "public/avatars" directory with a unique name for the specific user.
+    Updates the user's avatarURL field with the URL of the processed avatar image.
+    Returns a JSON response with the updated avatarURL and a status code of 200 (OK) if the operation is successful or JSON {"message": "Not authorized"} and a status code of 401 (Unauthorized) if the user is not authorized.
 
 ### Validation
 
@@ -147,3 +159,17 @@ For user login:
 For updating a user's subscription:
 
     The subscription field is required and must be one of the values: "starter", "pro", or "business".
+
+## Dependencies
+
+The API relies on the following dependencies:
+
+- Node.js (runtime environment)
+- Express.js (web framework)
+- MongoDB (database)
+- Mongoose (MongoDB object modeling)
+- Joi (data validation)
+- bcrypt.js (password hashing)
+- jsonwebtoken (JWT generation and verification)
+- multer (file upload handling)
+- jimp (image processing)
