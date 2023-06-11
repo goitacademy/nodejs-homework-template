@@ -8,9 +8,9 @@ const Joi = require("joi");
 const router = express.Router();
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string().min(2).max(30).required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().pattern(/^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/).required(),
 });
 
 router.get("/", async (req, res, next) => {
