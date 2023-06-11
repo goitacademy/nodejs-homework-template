@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Joi = require("joi").extend(require("joi-phone-number"));
 const {
   listContacts,
@@ -7,22 +8,23 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
+const router = express.Router();
 
 const schema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().phoneNumber().required(),
+  favorite: Joi.boolean().required(),
 });
 
-const router = express.Router();
-
-// Get contacts - works
+// Get contacts - works x2
 router.get("/", async (req, res, next) => {
   const contacts = await listContacts();
+
   res.status(200).json({ message: contacts });
 });
 
-// Get contacts with id - works
+// Get contacts with id - works x2
 router.get("/:contactId", async (req, res, next) => {
   try {
     const foundContact = await getContactById(req.params.contactId);
@@ -36,7 +38,8 @@ router.get("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-// Add contact- works
+// Add contact- works x2
+
 router.post("/", async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
@@ -44,7 +47,6 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ message: error.details[0].message });
     } else {
       const add = await addContact(req.body);
-
       res.status(201).json({ message: add });
     }
   } catch (error) {
@@ -53,12 +55,13 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// Delete contact- works
+// Delete contact- works x2
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const response = await removeContact(req.params.contactId);
+    console.log("response:", response);
     if (response) {
-      res.json({ message: "Contact deleted" });
+      res.json({ message: `Contact ${response.name} deleted` });
     } else {
       res.status(404).json({ message: "Not found" });
     }
@@ -67,7 +70,7 @@ router.delete("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-// Update contact- works
+// Update contact- works x2
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);

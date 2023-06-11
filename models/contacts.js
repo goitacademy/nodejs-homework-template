@@ -1,14 +1,28 @@
-const fs = require("fs/promises");
+const { default: mongoose } = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
-const path = require("path");
-const contactsPath = path.join(__dirname, "contacts.json");
+
+const Contacts = mongoose.model("contacts", {
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
+    const data = await Contacts.find();
 
-    return contacts;
+    return data;
   } catch (error) {
     console.error("An error occurred");
   }
@@ -16,8 +30,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const contacts = await listContacts();
-    const foundContact = contacts.find((contact) => contact.id === contactId);
+    const foundContact = Contacts.findOne({ _id: contactId });
 
     return foundContact;
   } catch (error) {
@@ -27,15 +40,9 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const contacts = await listContacts();
-    if (contacts.some((contact) => contact.id === contactId)) {
-      const newList = contacts.filter((contact) => contact.id !== contactId);
+    const deletedContact = await Contacts.findByIdAndDelete({ _id: contactId });
 
-      fs.writeFile(contactsPath, JSON.stringify(newList));
-      return "Contact deleted";
-    } else {
-      console.error("Contact can't be deleted because it doesn't exist.");
-    }
+    return deletedContact;
   } catch (error) {
     console.error(error);
   }
@@ -43,12 +50,16 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const contacts = await listContacts();
-    const newContact = { id: uuidv4(), ...body };
-    const newList = [...contacts, newContact];
+    const { name, email, phone, favorite } = body;
+    const newContact = new Contacts({
+      name: name,
+      email: email,
+      phone: phone,
+      favorite: favorite,
+    });
 
-    fs.writeFile(contactsPath, JSON.stringify(newList));
-    return newContact;
+    const result = newContact.save();
+    return result;
   } catch (error) {
     console.error(error);
   }
@@ -56,18 +67,9 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const contacts = await listContacts();
-    const contactIndex = contacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-    if (contactIndex === -1) {
-      return console.error("Contact not found");
-    } else {
-      const updatedContact = { ...contacts[contactIndex], ...body };
-      contacts.splice(contactIndex, 1, updatedContact);
-      await fs.writeFile(contactsPath, JSON.stringify(contacts));
-      return updatedContact;
-    }
+    await Contacts.findByIdAndUpdate({ _id: contactId }, body);
+    const updatedContact = await getContactById(contactId);
+    return updatedContact;
   } catch (error) {
     console.error(error);
   }
