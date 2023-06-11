@@ -24,8 +24,10 @@ router.post(
   authControllers.login
 );
 
+// get current user
 router.get("/current", authenticate, authControllers.getCurrent);
 
+// logout
 router.post("/logout", authenticate, authControllers.logout);
 
 module.exports = router;
