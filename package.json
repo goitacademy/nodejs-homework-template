@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "engines": {
-    "node": ">=14 <15"
+    "node": ">=16"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
