@@ -1,6 +1,6 @@
 const { HttpError, ctrlWrapper } = require("../helpers");
 const contacts = require("../models/contacts");
-const addSchema = require("../middlewares/validateSchema");
+// const addSchema = require("../middlewares/validateSchema");
 
 const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
@@ -18,13 +18,13 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const { body } = req;
-  const { error } = addSchema.validate(body);
-     if (!body || Object.keys(body).length === 0) {
-       throw HttpError(400, "missing fields");
-     }
-  if (error) {
-    throw HttpError(400, `${error.details[0].message}`);
-  }
+  // const { error } = addSchema.validate(body);
+  //    if (!body || Object.keys(body).length === 0) {
+  //      throw HttpError(400, "missing fields");
+  //    }
+  // if (error) {
+  //   throw HttpError(400, `${error.details[0].message}`);
+  // }
   const result = await contacts.addContact(body);
   res.status(201).json(result);
 };
@@ -40,13 +40,13 @@ const removeContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { body, params } = req;
-  const { error } = addSchema.validate(body);
-   if (!body || Object.keys(body).length === 0) {
-     throw HttpError(400, "missing fields");
-   }
-  if (error) {
-    throw HttpError(400, `${error.details[0].message}`);
-  }
+  // const { error } = addSchema.validate(body);
+  //  if (!body || Object.keys(body).length === 0) {
+  //    throw HttpError(400, "missing fields");
+  //  }
+  // if (error) {
+  //   throw HttpError(400, `${error.details[0].message}`);
+  // }
   const { id } = params;
   const result = await contacts.updateContact(id, body);
   if (!result) {
