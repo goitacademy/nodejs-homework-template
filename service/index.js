@@ -1,8 +1,6 @@
 const Contact = require("./schemas/contacts");
 
 const getAllContacts = async () => {
-  // db.getCollection('contacts').find({});
-
   return Contact.find();
 };
 
