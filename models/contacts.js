@@ -1,5 +1,4 @@
 const { default: mongoose } = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
 
 const Contacts = mongoose.model("contacts", {
   name: {
@@ -74,6 +73,13 @@ const updateContact = async (contactId, body) => {
     console.error(error);
   }
 };
+const updateStatusContact = async (contactId, favorite) => {
+  try {
+    return Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   listContacts,
@@ -81,4 +87,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

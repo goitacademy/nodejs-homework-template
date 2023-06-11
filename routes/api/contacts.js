@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const Joi = require("joi").extend(require("joi-phone-number"));
 const {
   listContacts,
@@ -7,6 +6,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 const router = express.Router();
 
@@ -14,6 +14,9 @@ const schema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().phoneNumber().required(),
+  favorite: Joi.boolean().required(),
+});
+const favSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
@@ -87,6 +90,27 @@ router.put("/:contactId", async (req, res, next) => {
       } else {
         return res.status(404).json({ message: "Not found" });
       }
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// Update status- works
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { error } = favSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: "Missing field favorite" });
+    }
+    const { contactId } = req.params;
+    const { favorite = false } = req.body;
+
+    const contactStatus = await updateStatusContact(contactId, { favorite });
+    if (contactStatus) {
+      return res.status(200).json({ message: `Contact updated` });
+    } else {
+      return res.status(400).json({ message: `Not found` });
     }
   } catch (error) {
     console.error(error);
