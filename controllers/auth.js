@@ -61,7 +61,7 @@ const logout = async (req, res, next) => {
 
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(204);
+  res.status(204).json();
 };
 
 const getCurrent = async (req, res, next) => {
@@ -77,17 +77,15 @@ const changeSubscription = async (req, res, next) => {
     throw HttpError(401, "Not authorized");
   }
 
-  const updatedUser = await User.findByIdAndUpdate(
-    user._id,
-    body,
-    { new: true }
-  );
+  const updatedUser = await User.findByIdAndUpdate(user._id, body, {
+    new: true,
+  });
 
   if (!updatedUser) {
     throw HttpError(404, "Not Found");
-    }
-    
-    res.status(200).json(updatedUser);
+  }
+
+  res.status(200).json(updatedUser);
 };
 
 module.exports = {
