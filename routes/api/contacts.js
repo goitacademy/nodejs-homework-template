@@ -31,6 +31,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const foundContact = await getContactById(req.params.contactId);
+
     if (foundContact) {
       res.status(200).json(foundContact);
     } else {
@@ -62,7 +63,6 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const response = await removeContact(req.params.contactId);
-    console.log("response:", response);
     if (response) {
       res.json({ message: `Contact ${response.name} deleted` });
     } else {

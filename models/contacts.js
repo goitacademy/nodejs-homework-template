@@ -19,9 +19,7 @@ const Contacts = mongoose.model("contacts", {
 
 const listContacts = async () => {
   try {
-    const data = await Contacts.find();
-
-    return data;
+    return await Contacts.find();
   } catch (error) {
     console.error("An error occurred");
   }
@@ -29,9 +27,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const foundContact = Contacts.findOne({ _id: contactId });
-
-    return foundContact;
+    return await Contacts.findOne({ _id: contactId });
   } catch (error) {
     console.error("An error occurred");
   }
@@ -39,9 +35,7 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const deletedContact = await Contacts.findByIdAndDelete({ _id: contactId });
-
-    return deletedContact;
+    return await Contacts.findByIdAndDelete({ _id: contactId });
   } catch (error) {
     console.error(error);
   }
@@ -57,8 +51,7 @@ const addContact = async (body) => {
       favorite: favorite,
     });
 
-    const result = newContact.save();
-    return result;
+    return await newContact.save();
   } catch (error) {
     console.error(error);
   }
@@ -67,15 +60,15 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     await Contacts.findByIdAndUpdate({ _id: contactId }, body);
-    const updatedContact = await getContactById(contactId);
-    return updatedContact;
+
+    return await getContactById(contactId);
   } catch (error) {
     console.error(error);
   }
 };
 const updateStatusContact = async (contactId, favorite) => {
   try {
-    return Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
+    return await Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
   } catch (error) {
     console.error(error);
   }
