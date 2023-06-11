@@ -38,8 +38,8 @@ const login = async (req, res) => {
   if (user === null) {
     throw HttpError(401, "Email or password is wrong");
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (isMatch === false) {
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (isPasswordCorrect === false) {
     throw HttpError(401, "Email or password is wrong");
   }
   const { SECRET_KEY } = process.env;
