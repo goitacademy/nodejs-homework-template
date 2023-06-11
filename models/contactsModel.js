@@ -16,7 +16,7 @@ const contactsSchema = new Schema(  {
       type: Boolean,
       default: false,
     },
-  });
+  }, {versionKey: false});
   contactsSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactsSchema);
