@@ -23,6 +23,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-console.log("first");
-
 module.exports = app;
