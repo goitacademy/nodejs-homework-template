@@ -38,6 +38,7 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
+    console.log('error', error)
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -46,6 +47,7 @@ router.post("/", async (req, res, next) => {
     res.status(201).json(result);
   } catch (error) {
     next(error);
+    console.log('error', error)
   }
 });
 
