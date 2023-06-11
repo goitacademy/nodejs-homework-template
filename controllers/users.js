@@ -25,6 +25,7 @@ const register = async(req, res) => {
 
     const newUser = await User.create({...req.body, password: hashPassword, avatarURL}, verificationToken);
     const {BASE_URL} = process.env;
+    
     const verifyEmail = {
       to: email,
       subject: "Verify email",
