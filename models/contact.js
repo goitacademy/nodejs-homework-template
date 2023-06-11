@@ -1,70 +1,42 @@
-// const fs = require("fs/promises");
-// const path = require("path");
-// const { nanoid } = require("nanoid");
-// const contactsPath = path.join(__dirname, "contacts.json");
-// console.log(contactsPath);
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const {handleMongooseError} = require("../helpers");
+const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+const mailPattern = /^.+@.+\..+$/;
 
-// const listContacts = async () => {
-//   const data = await fs.readFile(contactsPath);
-//   // console.log(JSON.parse(data))
-//   return JSON.parse(data);
-// };
+const contactSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      match: [mailPattern, "Please enter valid email"],
+    },
+    phone: {
+      type: String,
+      required: true,
+      match: [phonePattern, "Please enter a valid phone number."],
+    },
+    favorite: { type: Boolean, default: false },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const {Schema, model} = require("mongoose");
+contactSchema.post("save", handleMongooseError);
 
-const contactSchema = new Schema({
-    name: String,
-    email: String,
-    phone: String,
-})
+
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required().pattern(mailPattern),
+  phone: Joi.string().required().pattern(phonePattern),
+  favorite: Joi.boolean(),
+});
+
+const favoriteValidationSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
-
-// const getContactById = async (contactId) => {
-//   const data = await listContacts();
-//   const contactById = data.find((contact) => contact.id === contactId);
-//   return contactById || null;
-// };
-
-// const removeContact = async (contactId) => {
-//   const data = await listContacts();
-//   const index = data.findIndex((contact) => contact.id === contactId);
-//   if (index === -1) return null;
-//   const [result] = data.splice(index, 1);
-//   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-//   return result;
-// };
-
-// const addContact = async ({ name, email, phone }) => {
-//   const data = await listContacts();
-//   const strPhone = String(phone);
-
-//   const newContact = { id: nanoid(), name, email, phone: strPhone };
-//   data.push(newContact);
-//   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-//   return newContact;
-// };
-
-// const updateContact = async (contactId, { name, email, phone }) => {
-//   const data = await listContacts();
-//   const contactToUpdateIndex = data.findIndex(contact => contact.id === contactId
-//   );
-//   if (contactToUpdateIndex === -1) {
-//     return null;
-//   }
-//   const strPhone = String(phone);
-//   data[contactToUpdateIndex] = { id: nanoid(), name, email, phone: strPhone };
-//   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-//   // console.log("data[contactToUpdateIndex]", data[contactToUpdateIndex]);
-//   return data[contactToUpdateIndex];
-// };
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };
+module.exports = { Contact, addSchema, favoriteValidationSchema };
