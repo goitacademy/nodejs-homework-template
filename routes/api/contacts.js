@@ -18,6 +18,7 @@ const {
 const validateBody = require("../../decorators/validateBody");
 const authenticate = require("../../middlewares/auth");
 
+
 router.use(authenticate);
 
 router.get("/", getAllContacts);
