@@ -1,17 +1,17 @@
-// const Joi = require("joi");
+const Joi = require("joi");
 
 const contactSchema = require("../models/contacts");
 const mongoose = require("mongoose");
 
 const Contact = mongoose.model("Contact", contactSchema);
 
-// const contactAddSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().email(),
-//   phone: Joi.string()
-//     .regex(/^\d{3}-\d{2}-\d{2}$/)
-//     .required(),
-// });
+const contactAddSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email(),
+  phone: Joi.string()
+    .regex(/^\d{3}-\d{2}-\d{2}$/)
+    .required(),
+});
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -44,9 +44,18 @@ const getContactById = async (req, res, next) => {
 
   const addContact = async (req, res, next) => {
     const { _id: owner } = req.user;
-    const result = await Contact.create({...req.body, owner });
+    try{ 
+      const {value} = await contactAddSchema.validateAsync(req.body);
+      const newContact = {...value, owner};
+      const result = await Contact.create(newContact);
+      res.status(201).json(result);
+    } catch(error) {
+      next(error);
+    }
+   
+    
 
-    res.status(201).json(result);
+    
 }
 // const addContact = async (req, res, next) => {
 //   // const newContact = contactAddSchema.validate(req.body);
