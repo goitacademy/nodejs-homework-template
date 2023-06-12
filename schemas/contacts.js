@@ -1,9 +1,10 @@
 const Joi = require("joi");
+const {emailRegexp,nameRegexp,phoneRegexp} = require("../constans/contacts")
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string().pattern(nameRegexp).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  phone: Joi.string().pattern(phoneRegexp).required(),
    favorite: Joi.boolean(),
 })
 
