@@ -6,6 +6,7 @@ const {contacts: ctrl} = require("../../controllers");
 
 
 const validateMiddleware = validation(contactSchema);
+
 const router = express.Router();
 
 
