@@ -1,4 +1,5 @@
-const { HttpError, dataValidator } = require("../helpers");
+const { HttpError } = require("../helpers");
+const { dataValidator } = require("../models");
 
 const validateBody = () => {
   const func = async (req, res, next) => {

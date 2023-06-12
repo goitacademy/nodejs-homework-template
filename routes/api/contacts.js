@@ -14,8 +14,8 @@ router.get("/:contactId", getById);
 
 router.post("/", validateBody(), add);
 
-router.put("/:contactId", validateBody(), updateById);
+// router.put("/:contactId", validateBody(), updateById);
 
-router.delete("/:contactId", removeById);
+// router.delete("/:contactId", removeById);
 
 module.exports = router;
