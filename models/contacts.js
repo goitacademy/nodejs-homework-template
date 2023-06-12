@@ -1,14 +1,80 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises')
+const path = require('path')
+const { nanoid } = require('nanoid');
 
-const listContacts = async () => {}
+const ID = nanoid()
 
-const getContactById = async (contactId) => {}
+const contactsPath = path.join(__dirname, 'contacts.json')
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(contactsPath)
+  const contacts = JSON.parse(data)
+  return contacts;
+}
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  const data = await fs.readFile(contactsPath)
+  const contacts = JSON.parse(data)
 
-const updateContact = async (contactId, body) => {}
+  const contact = contacts.filter(el => el.id === contactId)
+
+  return contact;
+}
+
+const removeContact = async (contactId) => {
+  const data = await fs.readFile(contactsPath)
+  const contacts = JSON.parse(data)
+
+  const index = contacts.findIndex(el => el.id === contactId)
+  if (index > -1) {
+    const newcontacts = contacts.splice(index, 1)
+    return newcontacts
+  }
+}
+
+const addContact = async (body) => {
+  const data = await fs.readFile(contactsPath)
+  const contacts = JSON.parse(data)
+
+  const newContact = body;
+  newContact.id = ID;
+
+  if(
+    body.name === undefined ||
+    body.email === undefined ||
+    body.phone === undefined
+  )
+  return false;
+
+  contacts.push(newContact)
+
+  const updatedContacts = JSON.stringify(contacts)
+
+  await fs.writeFile(contactsPath, updatedContacts)
+
+  return newContact
+}
+
+const updateContact = async (contactId, body) => {
+  const data = await fs.readFile(contactsPath)
+  const contacts = JSON.parse(data)
+
+  const index = contacts.findIndex(el => el.id === contactId)
+
+  if(index > -1){
+    const updatedContact = body
+    contacts[index] = { ...contacts[index], ...updatedContact}
+
+    const updatedContacts = JSON.stringify(contacts)
+
+    await fs.writeFile(contactsPath, updatedContacts)
+
+    return contacts[index]
+  } else {
+    return false;
+  }
+  
+}
 
 module.exports = {
   listContacts,
