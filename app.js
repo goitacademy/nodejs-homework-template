@@ -16,7 +16,7 @@ app.use(express.json());
 // Welcome page
 
 app.get("/", (req, res) => {
-	res.send('WELCOM TO THE MAIN PAGE. Path to contact is "/api/contacts"');
+	res.send('WELCOME TO THE MAIN PAGE. Path to contact is "/api/contacts"');
 });
 
 // Router
