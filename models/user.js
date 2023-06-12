@@ -6,13 +6,13 @@ const { emailRegexp } = require("../constans/contacts");
 
 const userShema = new Schema({
  password: {
-        type: String,
+    type: String,
      minlength: 6,
     required: [true, 'Password is required'],
   },
   email: {
     type: String,
-     match:emailRegexp,
+    match:emailRegexp,
     required: [true, 'Email is required'],
     unique: true,
   },
