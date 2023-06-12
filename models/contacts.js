@@ -1,13 +1,14 @@
-const { nanoid } = require('nanoid');
+const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const { readFile, writeFile } = require('fs').promises;
 
 
-const contactsPath = path.join(__dirname, "./contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
+
 
 const listContacts = async () => {
     try {
-        const contacts = await readFile(contactsPath, 'utf-8');
+        const contacts = await readFile(contactsPath);
         return JSON.parse(contacts);
     } catch (error) {
         console.log(error);
@@ -40,43 +41,41 @@ const removeContact = async (contactId) => {
     }  
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async (data) => {
     try {
-        const data = await listContacts();
+        const contacts = await listContacts();
         const newContact = {
-            id: nanoid(),
-            name,
-            email,
-            phone
+            id: uuidv4(),
+            ...data
         };
-        data.push(newContact);
-        await writeFile(contactsPath, JSON.stringify(data, null, 2));
+        contacts.push(newContact);
+        await writeFile(contactsPath, JSON.stringify(contacts, null, 2));
         return newContact;
     } catch (error) {
         console.log(error);
     }  
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, data) => {
     try {
-        const data = await listContacts();
-        const index = data.findIndex(contact => contact.id === contactId);
+        const contacts = await listContacts();
+        const index = contacts.findIndex(contact => contact.id === id);
         if (index === -1) {
-          return null;
+            return null;
         }
 
-        data[index] = { contactId, ...body }
-        writeFile(contactsPath, JSON.stringify(data, null, 2))
+        contacts[index] = { id, ...data };
+        await writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+        return contacts[index];
     } catch (error) {
         console.log(error);
     }
-
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+    listContacts,
+    getContactById,
+    removeContact,
+    addContact,
+    updateContact
 }
