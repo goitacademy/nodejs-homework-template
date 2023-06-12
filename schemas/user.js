@@ -14,7 +14,12 @@ const userLoginSchema = Joi.object({
     password: Joi.string().min(4).required()
 });
 
+const resendVerificationLinkSchema = Joi.object({
+    email: Joi.string().required()
+})
+
 module.exports = {
    userRegisterSchema,
-   userLoginSchema
+   userLoginSchema,
+   resendVerificationLinkSchema
 }

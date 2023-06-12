@@ -6,13 +6,19 @@ const {
     login, 
     getCurrent, 
     logout, 
-    updateAvatar 
+    updateAvatar,
+    verify,
+    resendVerificationLink
 } = require('../../controllers/auth-controller');
 const { validateBody } = require('../../utils');
-const { userRegisterSchema } = require('../../schemas');
+const { userRegisterSchema, resendVerificationLinkSchema } = require('../../schemas');
 const { authenticate, upload } = require('../../middlewares');
 
 router.post('/register', validateBody(userRegisterSchema), register);
+
+router.get('/verify/:verificationToken', verify);
+
+router.post('/verify', validateBody(resendVerificationLinkSchema) , resendVerificationLink)
 
 router.post('/login', validateBody(userRegisterSchema), login);
 
