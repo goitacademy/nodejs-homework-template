@@ -44,6 +44,10 @@ const updateFavoriteById = async (req, res) => {
   const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
+  if (!contact) {
+    throw HttpError(404);
+  }
+
   res.json(contact);
 };
 module.exports = {
