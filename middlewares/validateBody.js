@@ -1,4 +1,5 @@
 const { HttpError } = require("../helpers");
+const { schema } = require("../schemas/contacts");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
@@ -12,4 +13,16 @@ const validateBody = (schema) => {
   return func;
 };
 
-module.exports = validateBody;
+const validateUpdateBody = (schema) => {
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const message = "missing fields";
+      throw HttpError(400, message);
+    }
+    next();
+  };
+  return func;
+}
+
+module.exports = { validateBody, validateUpdateBody };
