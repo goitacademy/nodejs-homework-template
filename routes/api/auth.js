@@ -2,7 +2,7 @@ const express = require("express");
 const ctrl = require("../../controllers/authController");
 const validateBody = require("../../middlewares/bodyValidation");
 const {authenticate} = require("../../middlewares")
-const {upload} = require("../../middlewares/index");
+const {upload} = require("../../middlewares");
 
 const {schemas} = require("../../models/users");
 
