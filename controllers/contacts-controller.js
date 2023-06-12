@@ -7,6 +7,7 @@ const {
 } = require("../models/contacts");
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
+const contactAddSchema = require("../schemas/contactSchema");
 const getAll = async (req, res) => {
   const contacts = await listContacts();
   res.json(contacts);
@@ -35,9 +36,18 @@ const deleteById = async (req, res) => {
   res.status(200).json({ message: "contact deleted" });
 };
 
-const updateById = async (req, res) => {
+const updateById = async (req, res, next) => {
+  const data = req.body;
+  const fieldsQuantity = Object.keys(data).length;
+  if (!fieldsQuantity) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+  const { error } = contactAddSchema.validate(data);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
   const { contactId } = req.params;
-  const contact = await updateContact(contactId, req.body);
+  const contact = await updateContact(contactId, data);
   if (!contact) {
     throw HttpError(404, `Contact with id=${contactId} not found`);
   }
