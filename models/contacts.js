@@ -1,13 +1,13 @@
 const fs = require("fs").promises;
 const path = require("path");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
- const contacts = path.join('models', 'contacts.json');
+const contacts = path.join("models", "contacts.json");
 
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contacts);
-    return JSON.parse(data)
+    return JSON.parse(data);
   } catch (error) {
     return console.log(error);
   }
@@ -19,7 +19,7 @@ const getContactById = async (contactId) => {
     const dataParse = JSON.parse(data);
     return dataParse.find((data) => {
       if (data.id === contactId) {
-        return data
+        return data;
       }
     });
   } catch (error) {
@@ -34,14 +34,18 @@ const removeContact = async (contactId) => {
     const contactsWithout = dataParse.filter(
       (contact) => contact.id !== contactId
     );
-    fs.writeFile(contacts, JSON.stringify(contactsWithout));
+    if (contactsWithout.length !== dataParse.length) {
+      fs.writeFile(contacts, JSON.stringify(contactsWithout));
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     return console.log(error);
   }
 };
 
-const addContact = async ({name, phone, email}) => {
-  console.log(name)
+const addContact = async (body) => {
   try {
     const data = await fs.readFile(contacts);
 
@@ -49,9 +53,7 @@ const addContact = async ({name, phone, email}) => {
 
     const newContact = {
       id: uuidv4(),
-      name: name,
-      email: email,
-      phone: phone,
+      ...body,
     };
 
     dataParse.push(newContact);
@@ -62,7 +64,25 @@ const addContact = async ({name, phone, email}) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contacts);
+    const dataParse = JSON.parse(data);
+
+    const index = dataParse.findIndex((data) => data.id === contactId);
+    if (index !== -1) {
+      dataParse[index] = {
+        id: contactId,
+        ...body,
+      };
+      fs.writeFile(contacts, JSON.stringify(dataParse));
+      return dataParse[index];
+    }
+    return false;
+  } catch (error) {
+    return console.log(error);
+  }
+};
 
 module.exports = {
   listContacts,
