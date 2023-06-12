@@ -16,8 +16,17 @@ const register = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({ ...req.body, password: hashPassword });
+    console.log(`newUser`,newUser)
+    console.log(`user` , req.body.name )
 
-    res.status(201).json({ email: newUser.email, name: newUser.name, password: newUser.password });
+    res.status(201).json({
+      user :  {
+        email: newUser.email,
+        subscription: newUser.subscription
+      }
+    })
+
+
   } catch (error) {
     next(error);
   }
@@ -29,11 +38,12 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      console.log(`!user. 401 error`);
+      console.log(`401 error : !user `);
       throw res.status(401).json({ message: 'Email or pass invalid' });
     }
     const passwoedCompare = await bcrypt.compare(password, user.password);
     if (!passwoedCompare) {
+      console.log(`401 error : !passwoedCompar`);
       throw res.status(401).json({ message: 'Email or pass invalid' });
     }
 
@@ -41,10 +51,26 @@ const login = async (req, res, next) => {
       id: user._id,
     };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+    console.log(token)
 
-    res.json({ token });
+    res.status(200).json({ token ,  user : {email,password} });
   } catch (error) {
     next(error);
   }
 };
-module.exports = { register, login };
+
+const logOut = async (req,res,next) => {
+  try {
+    
+  } catch (error) {
+    next(error)
+  }
+}
+const currentUser = async (req,res,next) => { 
+  try {
+  
+  } catch (error) {
+    next(error)
+  }
+}
+module.exports = { register, login ,logOut,currentUser};

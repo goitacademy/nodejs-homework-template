@@ -9,13 +9,14 @@
 
 const HttpError = (error, data, next) => {
   const { name, code } = error;
+
   console.log(`name error`, name);
   console.log(`code error`, code);
   const status = name === 'MongoServerError' && code === 11000 ? 409 : 400;
-  console.log(`status`,status)
-  
+  console.log(`status`, status);
+
   error.status = status;
-  next;
+  // next();
 };
 
 module.exports = HttpError;
