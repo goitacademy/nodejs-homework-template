@@ -6,6 +6,8 @@ const {
   updateContact,
 } = require("../service/index");
 
+const { Types } = require("mongoose");
+
 const get = async (req, res, next) => {
   try {
     const result = await getAllContacts();
@@ -17,18 +19,18 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { id } = req.params;
+  if (!Types.ObjectId.isValid(id)) {
+    res.status(404).send({ message: "not found" });
+    return;
+  }
   try {
     const result = await getContactById(id);
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.status(404).json(result);
-    }
+    res.status(200).json(result);
   } catch (e) {
     console.log(e.message);
+    res.status(500).json({ error: "Server error" });
   }
 };
-
 const create = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
@@ -45,14 +47,13 @@ const create = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { id } = req.params;
-  const contact = await getContactById(id);
+  if (!Types.ObjectId.isValid(id)) {
+    res.status(404).send({ message: "not found" });
+    return;
+  }
   try {
-    if (!contact) {
-      return res.status(404).send({ message: "Not found" });
-    } else {
-      const filteredContacts = await removeContact(id);
-      return res.status(200).json(filteredContacts);
-    }
+    const filteredContacts = await removeContact(id);
+    return res.status(200).json(filteredContacts);
   } catch (e) {
     console.log(e.message);
   }
@@ -61,15 +62,18 @@ const remove = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
+
+  if (!Types.ObjectId.isValid(id)) {
+    res.status(404).send({ message: "not found" });
+    return;
+  }
+
   try {
     if (!name && !email && !phone) {
       return res.status(400).send({ message: "missing fields" });
     }
     if (name || email || phone) {
       const updatedContact = await updateContact(id, { name, email, phone });
-      if (!updatedContact) {
-        return res.status(404).send({ message: "Not found" });
-      }
       return res.status(200).json(updatedContact);
     }
   } catch (e) {
@@ -80,13 +84,15 @@ const update = async (req, res, next) => {
 const changeStatus = async (req, res, next) => {
   const { id } = req.params;
   const { isFavorite = true } = req.body;
+
+  if (!Types.ObjectId.isValid(id)) {
+    res.status(404).send({ message: "not found" });
+    return;
+  }
+
   try {
     const updatedContact = await updateContact(id, { favorite: isFavorite });
-    if (updatedContact) {
-      return res.status(200).json(updatedContact);
-    } else {
-      return res.status(404).send({ message: "Not found" });
-    }
+    return res.status(200).json(updatedContact);
   } catch (e) {
     console.log(e.message);
   }

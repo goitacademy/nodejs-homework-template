@@ -22,8 +22,3 @@ connections
     console.log(`Server not running. Error : ${e.message}`);
     process.exit(1);
   });
-
-// const log = () => {
-//   console.log(mongoose.connection.readyState);
-// };
-// setTimeout(log, 3000);
