@@ -22,15 +22,11 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-    // const { error } = addScheme.validate(req.body);
-    // if (error) throw HttpError(400, `missing field ${error.message}`);
     const result = await addContact(req.body);
     res.status(201).json(result);
 };
 
 const update = async (req, res) => {
-    // const { error } = addScheme.validate(req.body);
-    // if (error) throw HttpError(400, `missing field ${error.message}`);
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);

@@ -9,7 +9,7 @@ const {
 
 const { validateBody } = require("../../middlewares");
 
-const { addScheme } = require("../../schemas");
+const { addScheme } = require("../../schemes");
 
 const router = express.Router();
 
