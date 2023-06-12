@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require ("fs/promises");
+const Jimp = require("jimp");
 
 const {SECRET_KEY} = process.env;
 
@@ -19,7 +20,7 @@ if(user){
     throw new HttpError(409,"Email in use");
 }
 const hashPassword = await bcrypt.hash(password,10);
-const avatarURL = gravatar.url.apply(email);
+const avatarURL = gravatar.url(email);
 const newUser = await User.create({...req.body, password: hashPassword, avatarURL});
 res.status(201).json({
     user:{
@@ -78,6 +79,11 @@ const updateAvatar = async(req, res) =>{
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
     const avatarURL = path.join("avatars", filename);
+
+    const image = await Jimp.read(resultUpload);
+    await image.resize(250, 250);
+    await image.writeAsync(resultUpload);
+
     await User.findByIdAndUpdate(_id, {avatarURL});
     res.json({
         avatarURL,
