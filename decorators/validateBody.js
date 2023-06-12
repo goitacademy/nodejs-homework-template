@@ -1,5 +1,4 @@
 const { HttpError } = require("../helpers");
-const contactAddSchema = require("../schemas/contactSchema");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
@@ -8,10 +7,11 @@ const validateBody = (schema) => {
       return res.status(400).json({ message: "missing fields" });
     }
 
-    const { error } = contactAddSchema.validate(req.body);
+    const { error } = schema.validate(req.body);
     if (error) {
       next(HttpError(400, error.message));
     }
+    next();
   };
   return func;
 };
