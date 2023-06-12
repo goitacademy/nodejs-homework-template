@@ -19,6 +19,7 @@ const authenticate = async (req, res, next) => {
       throw res.status(401).json({ message: 'Not authorized' });
     }
     req.user = user;
+    console.log(`user : `,user)
     next();
   } catch {
     console.log(' ERROR: catch ');
