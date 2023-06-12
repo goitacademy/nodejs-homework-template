@@ -8,6 +8,7 @@ const gravatar = require('gravatar');
 const fs = require('fs/promises');
 const path = require('path');
 const { nanoid } = require("nanoid");
+const Jimp = require('jimp');
 
 const avatarDir = path.resolve('public', 'avatars');
 
@@ -133,16 +134,27 @@ const logout = async (req, res) => {
 }
 
 const updateAvatar = async (req, res) => {
-    const { description } = req.body;
+    // const { description } = req.body;
     const { path: tempPath, originalname } = req.file;
     // console.log('REQ FILE ', req.file);
     const resultDir = path.join(avatarDir, originalname);
     const { _id } = req.user;
     const avatarUrl = path.join('avatars', originalname);
 
-    // console.log('AVATAR URL ', avatarUrl)
-
     fs.rename(tempPath, resultDir);
+
+    Jimp.read(`${resultDir}`)
+        .then((img) => {
+            return img
+            .resize(256, 256) // resize
+            .quality(60) // set JPEG quality
+            // .greyscale() // set greyscale
+            .write(resultDir); // save
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    
     await User.findByIdAndUpdate(_id, { avatarURL: avatarUrl });
 
     res.json({
