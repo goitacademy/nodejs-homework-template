@@ -33,7 +33,7 @@ const register = async (req, res) => {
     //     // html: `<a target="_blank" href="${verifyLink}">Click to verify your email</a>`
     //     html: verifyLink
     // }
-    const verifyEmail = createVerificationEmail(newUser.verificationToken, newUser.email);
+    const verifyEmail = createVerificationEmail(verificationToken, email);
 
     await sendEmail(verifyEmail);
 
@@ -47,7 +47,7 @@ const register = async (req, res) => {
 
 const verify = async (req, res) => {
     const { verificationToken } = req.params;
-    console.log(req.params)
+    // console.log(req.params)
     const user = await User.findOne({verificationToken});
 
     if(!user) throw HttpError(401, "User not found");
@@ -101,7 +101,7 @@ const login = async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, { token });
 
-    console.log(res.statusCode)
+    // console.log(res.statusCode)
     res.json({
         token,
         user: {
