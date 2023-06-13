@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require("jimp");
 const { nanoid } = require("nanoid");
-
+const {BASE_URL} = process.env;
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const register = async(req, res) => {
@@ -23,9 +23,8 @@ const register = async(req, res) => {
 
     const verificationToken = nanoid();
 
-    const newUser = await User.create({...req.body, password: hashPassword, avatarURL}, verificationToken);
-    const {BASE_URL} = process.env;
-    
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken});
+   
     const verifyEmail = {
       to: email,
       subject: "Verify email",
@@ -49,7 +48,7 @@ const verifyEmail = async(req, res) => {
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationToken: null,
+    verificationToken: "",
   });
   res.status(200).json({ message: 'Verification successful'});
 };
@@ -58,18 +57,19 @@ const resendVerifyEmail = async(req, res) => {
   const { email } = req.body;
   const user = await User.findOne({email});
   if(!user) {
-    throw HttpError(404, 'Email not found');
+    throw HttpError(401, 'Email not found');
   }
   if(user.verify) {
     throw HttpError(400, "Verification has already been passed");
   }
-  const {BASE_URL} = process.env;
-  const verifyEmail = {
+  const verificationToken = nanoid();
+   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click verify email</a>`,
   }
   await sendEmail(verifyEmail);
+  
   res.status(200).json({
     message: "Verification email sent"
   });
