@@ -9,7 +9,7 @@ const {
 const {
   validateNewContact,
   validateUpdatedContact,
-} = require("../../validations/contacts");
+} = require("../../middleware/contacts");
 
 const router = express.Router();
 
