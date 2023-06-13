@@ -1,3 +1,4 @@
+/* eslint-disable node/no-path-concat */
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
@@ -6,7 +7,7 @@ const contactsPath = path.join(__dirname, "contacts.json");
 console.log(contactsPath);
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
+  const data = await fs.readFile(`${__dirname}/contacts.json`, 'utf-8');
   const contacts = JSON.parse(data);
   console.table(contacts);
   return contacts;
