@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const {emailRegexp, subscriptionList} = require('../constatns/users')
 
 const validationSchema = Joi.object({
   name: Joi.string().trim().required('Field "Name" should not be empty'),
@@ -21,8 +22,21 @@ const isFavoriteValid = Joi.object({
    favorite: Joi.boolean()
 })
 
+const userRegisterValidation = Joi.object({
+  password: Joi.string().required("Enter password"),
+  email: Joi.string().pattern(emailRegexp).required("Enter valid email"),
+  subscription: Joi.string().valid(...subscriptionList)
+})
+
+const userLoginValidation = Joi.object({
+   password: Joi.string().required("Enter password"),
+  email: Joi.string().pattern(emailRegexp).required("Enter valid email"),
+})
+
 module.exports = {
   validationSchema,
   updateContactValidation,
   isFavoriteValid,
+  userRegisterValidation,
+  userLoginValidation,
 };

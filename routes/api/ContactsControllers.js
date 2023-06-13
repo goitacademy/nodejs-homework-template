@@ -5,19 +5,23 @@ const {
   isFavoriteValid,
 } = require("../../schemas/validation");
 const contactsModel = require("../../models/contactsModel");
+
 const { Error } = require("mongoose");
 const { isRequestEmpty, isIdValid } = require("../../helpers");
 
 class ContactListController {
   getOneContactById = asyncHandler(async (req, res, next) => {
+    const { _id: owner } = req.user;
     const { contactId } = req.params;
     if (!isIdValid(contactId)) {
       res.status(400);
       throw new Error("Not valid ID");
     }
     try {
-      const results = await contactsModel.findById(contactId);
-      if (!results) {
+      const results = await contactsModel
+        .find({ _id: contactId, owner })
+        .exec();
+      if (!results || !results.length) {
         res.status(404);
         throw new Error(`Contact with id: ${contactId} does not exist`);
       }
@@ -28,7 +32,8 @@ class ContactListController {
   });
 
   getAll = asyncHandler(async (req, res, next) => {
-    const result = await contactsModel.find({});
+    const { _id: owner } = req.user;
+    const result = await contactsModel.find({ owner });
     res.status(200).json({
       code: 200,
       message: "Success",
@@ -38,15 +43,15 @@ class ContactListController {
   });
 
   addContact = asyncHandler(async (req, res, next) => {
-    const { body } = req;
+    const { _id: owner } = req.user;
     try {
-      const { error } = validationSchema.validate(body);
+      const { error } = validationSchema.validate(req.body);
       if (error) {
         res.status(400);
         throw new Error(error.message);
       }
 
-      const results = await contactsModel.create({ ...body });
+      const results = await contactsModel.create({ ...req.body, owner });
       res.status(201).json(results);
     } catch (error) {
       next(error);
@@ -55,21 +60,27 @@ class ContactListController {
 
   deleteContactById = asyncHandler(async (req, res, next) => {
     const { contactId } = req.params;
+    const { _id: owner } = req.user;
+
     if (!isIdValid(contactId)) {
       res.status(400);
       throw new Error("Not valid ID");
     }
     try {
-     
-    const removeContact = await contactsModel.findById(contactId);
-      if (!removeContact) {
-      res.status(404);
-      throw new Error("ID not found");
-    }
-    await removeContact.deleteOne();
-    res.status(201).json({ code: 201, message: "Success", data: removeContact });
+      const contact = await contactsModel
+        .find({ _id: contactId, owner })
+        .exec();
 
-    //   res.status(200).json("Contact deleted");
+      if (!contact) {
+        res.status(404);
+        throw new Error("ID not found");
+      }
+      await contactsModel.findByIdAndRemove(contactId);
+      res
+        .status(201)
+        .json({ code: 201, message: "Deleted successfully", data: contact });
+
+      //   res.status(200).json("Contact deleted");
     } catch (error) {
       next(error);
     }
@@ -78,7 +89,7 @@ class ContactListController {
   updateContactById = asyncHandler(async (req, res, next) => {
     const { contactId } = req.params;
     const { body } = req;
-
+    const { _id: owner } = req.user;
     if (isRequestEmpty(body)) {
       res.status(400);
       throw new Error("Missing fields");
@@ -91,11 +102,15 @@ class ContactListController {
       throw new Error(error.message);
     }
     try {
-      const results = await contactsModel.findByIdAndUpdate(contactId, body);
-      if (results === null) {
+      const contact = await contactsModel
+        .find({ _id: contactId, owner })
+        .exec();
+
+      if (!contact) {
         res.status(404);
         throw new Error("No such contact, nothing to update");
       }
+      const results = await contactsModel.findByIdAndUpdate(contactId, body);
       res.json(results);
     } catch (error) {
       next(error);
@@ -104,9 +119,9 @@ class ContactListController {
 
   updateStatusContact = asyncHandler(async (req, res, next) => {
     const { contactId } = req.params;
-      const { body } = req;
-      const {error} = isFavoriteValid.validate(body)
-      
+    const { body } = req;
+    const { error } = isFavoriteValid.validate(body);
+
     if (error) {
       res.status(400);
       throw new Error("Missing field 'Favorite'");
