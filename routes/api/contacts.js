@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const findContactById = require('../../controllers/findContactById');
-const addContact = require('../../controllers/addContact');
-const deleteContact = require('../../controllers/deleteContact');
-const updateContact = require('../../controllers/updateContact');
-const contactList = require('../../controllers/contactList');
-const validate = require('../../middlewares/validator');
+const findContactById = require('../../controllers/contacts/findContactById');
+const addContact = require('../../controllers/contacts/addContact');
+const deleteContact = require('../../controllers/contacts/deleteContact');
+const updateContact = require('../../controllers/contacts/updateContact');
+const contactList = require('../../controllers/contacts/contactList');
+const updateFavorite = require('../../controllers/contacts/updateFavorite');
 
+const validate = require('../../middlewares/validator');
 const isValidId = require('../../middlewares/isValidId');
-const updateFavorite = require('../../controllers/updateFavorite');
+
 const schemas = require('../../shema/shema');
 const { updateFavoriteSchema } = require('../../shema/shema');
 const authenticate = require('../../middlewares/authenticate');

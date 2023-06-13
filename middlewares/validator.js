@@ -41,9 +41,9 @@ const validateAuth = validateAuth => {
     const { error } = validateAuth.validate(req.body);
 
     if (error) {
-      error.status = 401;
-      error.message = `Missing required ${error.details[0].context.label} field`;
-      console.log(`error 400!`, error.message);
+      error.status = 400;
+      error.message;
+      console.log(`err 400!`, error.message);
       next(error);
     } else {
       next();
@@ -54,4 +54,5 @@ const validateAuth = validateAuth => {
 module.exports = {
   validate,
   validateFavorite,
+  validateAuth,
 };

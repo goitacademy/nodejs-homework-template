@@ -11,19 +11,18 @@ const authenticate = async (req, res, next) => {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
     if (bearer !== 'Bearer') {
-      console.log('ERROR: bearer !== Bearer');
+      console.log('========> ERROR: bearer !== Bearer');
       throw res.status(401).json({ message: 'Not authorized' });
     }
-    if (!user) {
-      console.log('ERROR: !user');
+    if (!user || !user.token || user.token !== token) {
+      console.log('========> ERROR: !user');
       throw res.status(401).json({ message: 'Not authorized' });
     }
     req.user = user;
-    console.log(`user : `,user)
+    console.log(`user : `, user);
     next();
-  } catch {
-    console.log(' ERROR: catch ');
-    res.status(401).json({ message: 'Not authorized' });
+  } catch (error) {
+    next(error);
   }
 };
 module.exports = authenticate;
