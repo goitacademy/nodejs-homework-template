@@ -1,4 +1,4 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models/contacts");
 const { ctrlWrapper } = require("../../helpers");
 
 const addContact = async (req, res) => {
