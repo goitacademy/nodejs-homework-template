@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -34,7 +35,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contacts = await fs.readFile(contactsPath, "utf-8");
   const newContact = {
-    id: Math.random().toString(),
+    id: nanoid(5),
     ...body,
   };
   const newContacts = [...JSON.parse(contacts), newContact];
