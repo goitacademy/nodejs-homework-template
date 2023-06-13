@@ -3,7 +3,6 @@ const controllers = require("../../controllers/auth-controllers");
 const { authenticate } = require("../../middlewares/index");
 
 
-
 const router = express.Router();
 
 router.post("/users/register", controllers.signup);
