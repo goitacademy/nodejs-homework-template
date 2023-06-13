@@ -4,8 +4,10 @@ const router = express.Router()
 
 const contactsController = require('../../cntrl/contact-controler.js')
 
-const {isValidId} = require("../../middlewares")
+const {isValidId, authentication} = require("../../middlewares")
 
+
+router.use(authentication)
 
 router.get('/', contactsController.getAllContacts)
 
@@ -18,6 +20,8 @@ router.put('/:contactId', isValidId, contactsController.updateNewContacts)
 router.patch('/:contactId/favorite', isValidId, contactsController.favoriteContact) 
 
 router.delete('/:contactId', isValidId, contactsController.deleteByIdContacts)
+
+
 
 
 

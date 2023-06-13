@@ -19,7 +19,8 @@ const favoriteContactSchema = Joi.object({
 
 
 const getAllContacts = async (req, res) => {
-      const listCon = await Contact.find();
+      const { _id: owner } = req.user
+      const listCon = await Contact.find({owner});
       res.status(200).json(listCon)
 }
 
@@ -38,8 +39,9 @@ const addNewContacts = async (req, res) => {
       if (error) {
         throw HttpError(400, `missing required field`)
       }
-  
-      const addCon = await Contact.create(req.body);
+      
+      const {_id: owner} = req.user
+      const addCon = await Contact.create({...req.body, owner});
       res.status(201).json(addCon)
 }
 
