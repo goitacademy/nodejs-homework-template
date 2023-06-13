@@ -1,5 +1,9 @@
-const contactsSchema = require('./contacts');
+const { contactUpdateSchema, contactUpdateFavoriteSchema } = require('./contacts');
+const { userRegisterSchema, userLoginSchema } = require('./user');
 
 module.exports = {
-    contactsSchema
+    contactUpdateSchema,
+    contactUpdateFavoriteSchema,
+    userRegisterSchema,
+    userLoginSchema
 }

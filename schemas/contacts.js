@@ -9,4 +9,11 @@ const contactUpdateSchema = Joi.object({
 // .and('name', 'email', 'phone')
 .messages({'any.required': `{#label}`})
 
-module.exports = contactUpdateSchema
+const contactUpdateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required()
+})
+
+module.exports = {
+    contactUpdateSchema,
+    contactUpdateFavoriteSchema
+}
