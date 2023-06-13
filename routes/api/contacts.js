@@ -36,6 +36,9 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contacts.removeContact(id);
+    if (!result) {
+      throw Error(404, "Not found");
+    }
     res.json({ message: "Delete succses!" });
   } catch (error) {
     next(error);
@@ -44,10 +47,15 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    const { id } = req.params;
+    const result = await contacts.updateContact(id);
+    if (!result) {
+      throw Error(404, "Not found");
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
-  res.json({ message: "template message" });
 });
 
 module.exports = router;
