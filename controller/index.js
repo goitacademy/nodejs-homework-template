@@ -1,58 +1,190 @@
 const {
-  listContacts,
+  getAllContacts,
   getContactById,
-  addContact,
+  createContact,
   removeContact,
   updateContact,
-  updateFavoriteById,
+  updateFavorite,
 } = require("../service/index.js");
 
-const getContactsController = async (req, res) => {
-  const contacts = await listContacts();
-  res.json({ ...contacts });
-};
-const getContactsByIdController = async (req, res) => {
-  const { id } = req.params;
-  console.log('ID z parametrów:', id);
-  const contact = await getContactById(id);
-  if (contact.status === "ERROR") {
-    return res.status(404).json({ error: "Contact not found" });
+const get = async (req, res, next) => {
+  try {
+    const contacts = await getAllContacts();
+    if (contacts === {}) {
+      console.log("There is no contact in the contact database yet.");
+    }
+
+    console.log(
+      `There are ${contacts.length} contacts in the contact database`
+    );
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        contacts,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
-  console.log('Odpowiedź z getContactById:', contact);
-  res.json({ ...contact });
-};
-const postContactController = async (req, res) => {
-  const { body } = req;
-  const contact = await addContact(body);
-  res.json({ ...contact });
-};
-const deleteContactController = async (req, res) => {
-  const { id } = req.params;
-  const contact = await removeContact(id);
-  res.json({ ...contact });
-};
-const putContactController = async (req, res) => {
-  const { id } = req.params;
-  const { body } = req;
-  const contact = await updateContact(id, body);
-  res.json({ ...contact });
 };
 
-const patchContactController = async (req, res) => {
-  const { id } = req.params;
+const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const contact = await getContactById(contactId);
+    if (contact) {
+      console.log(
+        `Contact with id: ${contactId} was successfully found in the contact database.`
+      );
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      console.log(
+        `Contact with id: ${contactId} was not found in the contact database.`
+      );
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: "Not found",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const create = async (req, res, next) => {
+  const { body } = req;
+  try {
+    const contact = await createContact(body);
+    console.log(
+      `Contact with id: ${contact.id} has been successfully added to the contact database.`
+    );
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        contact,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const remove = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  try {
+    const contact = await removeContact(contactId);
+    if (contact) {
+      console.log(
+        `Contact with id: ${contactId} has been successfully removed from the contact database.`
+      );
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      console.log(
+        `Contact with id: ${contactId} was not found in the contact database.`
+      );
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: "Not found",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const update = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { body } = req;
+  try {
+    const contact = await updateContact(contactId, body);
+    if (contact) {
+      console.log(`Contact with id: ${contactId} has been updated.`);
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      console.log(
+        `Contact with id: ${contactId} was not found in the contact database.`
+      );
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: "Not found",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
   const { favorite } = req.body;
-  console.log("favorite: ", favorite);
 
-  const contact = await updateFavoriteById(id, favorite);
-
-  res.json({ ...contact });
+  try {
+    const contact = await updateFavorite(contactId, favorite);
+    if (contact) {
+      console.log(
+        `Contact status with id: ${contactId} has been updated.`
+      );
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      console.log(
+        `Contact with id: ${contactId} was not found in the contact database.`
+      );
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact with id: ${contactId}`,
+        data: "Not found",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 };
 
 module.exports = {
-  getContactsController,
-  getContactsByIdController,
-  postContactController,
-  deleteContactController,
-  putContactController,
-  patchContactController,
+  get,
+  getById,
+  create,
+  remove,
+  update,
+  updateStatusContact,
 };
