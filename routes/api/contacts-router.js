@@ -10,7 +10,7 @@ const {
 } = require("../../controllers/contacts-controller");
 
 const { validateBody } = require("../../decorators");
-const { isBodyEmpty, isValidId } = require("../../middlewares");
+const { isBodyEmpty, isValidId, isFavoriteExists } = require("../../middlewares");
 const {
   contactAddSchema,
   contactUpdateFavoriteSchema,
@@ -35,7 +35,7 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   isValidId,
-  isBodyEmpty,
+  isFavoriteExists,
   validateBody(contactUpdateFavoriteSchema),
   updateFavoriteById
 );
