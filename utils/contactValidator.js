@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-exports.createContactValidator = (data) => Joi.object()
+const createContactValidator = (data) => Joi.object()
     .options({abortEarly: false})
     .keys({
     name: Joi.string()
@@ -14,7 +14,7 @@ exports.createContactValidator = (data) => Joi.object()
     })
     .validate(data);
 
-exports.updateContactValidator = (data) => Joi.object()
+const updateContactValidator = (data) => Joi.object()
     .options({abortEarly: false})
     .keys({
     name: Joi.string()
@@ -26,3 +26,8 @@ exports.updateContactValidator = (data) => Joi.object()
     phone: Joi.string().min(7).max(15),
     })
     .validate(data);
+
+module.exports = {
+    createContactValidator,
+    updateContactValidator
+    }

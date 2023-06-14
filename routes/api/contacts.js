@@ -1,4 +1,5 @@
 const express = require('express')
+
 const {
     listContacts,
     getContactById,
@@ -6,18 +7,20 @@ const {
     addContact,
     updateContact } = require('../../controllers/contacts')
     
-const isValidId = require('../../middlewares/isValid')
+const { checkContactById, checkCreateContactData } = require('../../middlewares/contactMiddlewares');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', listContacts)
+router
+  .route('/')
+  .post(checkCreateContactData, addContact)
+  .get(listContacts);
 
-router.get('/:contactId', isValidId, getContactById)
+router.use('/:id', checkContactById);
+router
+  .route('/:id')
+  .get(getContactById)
+  .patch(updateContact)
+  .delete(removeContact);
 
-router.post('/', addContact)
-
-router.delete('/:contactId', isValidId, removeContact)
-
-router.put('/:contactId', isValidId, updateContact)
-
-module.exports = router
+module.exports = router;

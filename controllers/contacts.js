@@ -1,120 +1,66 @@
 const fs = require('fs/promises');
 const uuid = require('uuid').v4;
-const { createContactValidator, updateContactValidator } = require('../utils/contsactValidator');
+const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
+const Contact = require('../models/contactModel');
+
 
 const contactsDB = './controllers/contacts.json';
 
 // GET contacts list
 const listContacts = async (req, res) => {
-  try {
-    const contacts = JSON.parse(
-      await fs.readFile(contactsDB)
-    )
-    return res.status(200).json({
-      status: 'success',
+  const contacts = await Contact.find();
+     res.status(200).json({
       contacts,
-    })
-  } catch (err) {
-    res.status(400).json({
-      message: 'Something wrong...'
-    })
-  }
+    })  
 }
 
 // GET contact By ID
 const getContactById = async (req, res) => {
-  try {
-    const { contact } = req;
-    return res.status(200).json({
-      status: 'success',
+  const { contact } = req;
+  res.status(200).json({
       contact,
     });
-  } catch (err) {
-    console.log(err)
-    res.status(404).json({
-      message: 'Contact not found'
-    })
-  }
+  
 }
 
 // DELETE contact
-const removeContact = async (req, res) => {
-  const { contact } = req;
-  let contacts = JSON.parse(
-    await fs.readFile(contactsDB)
-  )
-  const newcontacts = contacts.filter(item => item.id !== contact.id);
-  contacts = [...newcontacts];
-  await fs.writeFile(contactsDB, JSON.stringify(contacts, null, 2))
-  return res.status(200).json({
-    message: 'Contact deleted',
-    status: 'success',
-    contacts,
-  });
-}
+const removeContact = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  await Contact.findByIdAndDelete(id);
+
+  res.sendStatus(204);
+})
 
 // POST new contact
-const addContact = async (req, res) => {
-  try {
-    const { error, value } = createContactValidator(req.body);
-
-    if (error) {
-      const fieldName = error.details[0].path[0];
-      console.log(fieldName)
-      return res.status(400).json({
-        message: `missing required <${fieldName}> field`
-      })
-    }
-    const contacts = JSON.parse(
-      await fs.readFile(contactsDB)
-    )
-    const newContact = {
-      id: uuid(),
-      ...value,
-    }
-    contacts.push(newContact);
-    await fs.writeFile(contactsDB, JSON.stringify(contacts))
-    return res.status(201).json({
-      message: 'Contact is added',
-      newContact,
-    })
-  } catch (err) {
-    res.status(400).json({
-      message: 'Something wrong...'
-    })
+const addContact = catchAsync(async (req, res, next) => {
+  const newContact = await Contact.create({ ...req.body });
+  
+  res.status(201).json({        
+    contact: newContact,    
+    })    
   }
-}
+  )
 
-//  PUT contact by ID
-const updateContact = async (req, res) => {
-  try {
-    const { error, value } = updateContactValidator(req.body);
-    if (error) {
-      return res.status(400).json({
-        message: 'Invalid data...'
-      })
-    }
-    const { contact } = req;
-    const contacts = JSON.parse(
-      await fs.readFile(contactsDB)
-    );
-    const updatedContacts = contacts.map(item => {
-      if (item.id === contact.id) {
-        return { ...item, ...value };
-      }
-      return item;
-    });
-    await fs.writeFile(contactsDB, JSON.stringify(updatedContacts, null, 2));
-    const updatedContact = updatedContacts.find(item => item.id === contact.id);
-    res.status(200).json({
-      updatedContact,
-    })
-  } catch (err) {
-    res.status(404).json({
-      message: 'Not found'
-    })
-  }
+//  PATCH contact by ID
+const updateContact = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const updatedContact = await Contact.findByIdAndUpdate(id, {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: req.body.favorite
+  },
+    {new: true}
+  );
+
+  res.status(200).json({
+    contact: updatedContact
+  })
 }
+)
 
 module.exports = {
   listContacts,
