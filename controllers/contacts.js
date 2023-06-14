@@ -1,25 +1,10 @@
-const Joi = require("joi");
-
 const contactSchema = require("../models/contacts");
 const mongoose = require("mongoose");
 
 const Contact = mongoose.model("Contact", contactSchema);
-
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email(),
-  phone: Joi.string()
-    .regex(/^\d{3}-\d{2}-\d{2}$/)
-    .required(),
-});
-
 const getAllContacts = async (req, res, next) => {
   try {
-    const { _id: owner } = req.user;
-    const { page = 1, limit = 5 } = req.query;
-    const skip = (page - 1) * limit;
-    const contacts = await Contact.find({owner}, {skip, limit});
-    // const contacts = await Contact.find({owner}, "-createdAt -updatedAt").populate("owner", "email");
+    const contacts = await Contact.find();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -31,9 +16,7 @@ const getContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await Contact.findById(contactId);
     if (!contact) {
-      res
-        .status(404)
-        .json({ message: `Contact with ID ${contactId} not found` });
+      res.status(404).json({ message: `Contact with ID ${contactId} not found` });
       return;
     }
     res.json(contact);
@@ -42,45 +25,21 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-  const addContact = async (req, res, next) => {
-    const { _id: owner } = req.user;
-    try{ 
-      const {value} = await contactAddSchema.validateAsync(req.body);
-      const newContact = {...value, owner};
-      const result = await Contact.create(newContact);
-      res.status(201).json(result);
-    } catch(error) {
-      next(error);
-    }
-   
-    
-
-    
-}
-// const addContact = async (req, res, next) => {
-//   // const newContact = contactAddSchema.validate(req.body);
-//   try {
-//     const { value } = await contactAddSchema.validateAsync(req.body);
-//     const savedContact = await Contact.create(value);
-//     // const { name, email, phone, favorite } = req.body;
-//     // const contact = new Contact({ name, email, phone, favorite });
-//     res.status(201).json(savedContact);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-const deleteContactById = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const deletedContact = await Contact.findByIdAndDelete(contactId);
-    if (!deletedContact) {
-      res
-        .status(404)
-        .json({ message: `Contact with ID ${contactId} not found` });
-      return;
-    }
-    res.json({ message: "Contact deleted successfully" });
+    const { name, email, phone, favorite } = req.body;
+    const contact = new Contact({ name, email, phone, favorite });
+    const savedContact = await contact.save();
+    
+    console.log(savedContact);
+    // res.status(201).json(savedContact);
+    res.status(201).json({
+      _id: savedContact._id,
+      name: savedContact.name,
+      email: savedContact.email,
+      phone: savedContact.phone,
+      favorite: savedContact.favorite
+    });
   } catch (error) {
     next(error);
   }
@@ -96,12 +55,24 @@ const updateContactById = async (req, res, next) => {
       { new: true }
     );
     if (!updatedContact) {
-      res
-        .status(404)
-        .json({ message: `Contact with ID ${contactId} not found` });
+      res.status(404).json({ message: `Contact with ID ${contactId} not found` });
       return;
     }
     res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteContactById = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+    if (!deletedContact) {
+      res.status(404).json({ message: `Contact with ID ${contactId} not found` });
+      return;
+    }
+    res.json({ message: "Contact deleted successfully" });
   } catch (error) {
     next(error);
   }
@@ -111,6 +82,6 @@ module.exports = {
   getAllContacts,
   getContactById,
   addContact,
-  deleteContactById,
   updateContactById,
+  deleteContactById,
 };

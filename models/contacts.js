@@ -22,7 +22,7 @@ const contactSchema = new mongoose.Schema({
       required: true
     }
   });
-  // const Contact = mongoose.model("Contact", contactSchema);
+   
   module.exports = {
     contactSchema
   };

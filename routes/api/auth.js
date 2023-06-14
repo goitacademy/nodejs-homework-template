@@ -5,9 +5,9 @@ const AuthController = require("../../controllers/register");
 const router = express.Router();
 const jsonParser = express.json();
 
-const { authenticate } = require("../../middlewares/authenticate");
+// const { authenticate } = require("../../middlewares/authenticate");
 
-router.use(authenticate);
+// router.use(authenticate);
 
  router.get("/users", jsonParser, AuthController.getAllUsers);
 
