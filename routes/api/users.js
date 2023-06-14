@@ -14,7 +14,7 @@ const {
   getCurrent,
   logout,
   updateSubscription,
-  updateAvatar,
+  updateAvatar, verify
 } = require("../../controllers/users-controllers");
 
 router.post(
@@ -22,6 +22,7 @@ router.post(
   validateBody(newUserSchema),
   register
 );
+router.get('/verify/:verificationCode',verify )
 router.post("/login", validateBody(newUserSchema), login);
 router.get("/current", authenticate, getCurrent);
 router.post("/logout", authenticate, logout);
