@@ -1,9 +1,21 @@
 const HttpError = require("../helpers/HttpError");
-const cntrlWrapper = require("../decorators/cntrlWrapper");
-const { Contact } = require("../schemas/contacts-schemas");
+const cntrlWrapper = require("../utils/cntrlWrapper");
+const { Contact } = require("../models/contacts");
 
 const listContacts = async (req, res, next) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  const query = { owner };
+
+  if (favorite === "true") {
+    query.favorite = true;
+  }
+
+  const result = await Contact.find(query, "", {
+    skip,
+    limit,
+  });
 
   if (!result) {
     res.status(500).json({
@@ -26,7 +38,8 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
 
   if (!result) next(error);
 
