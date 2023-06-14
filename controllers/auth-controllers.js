@@ -1,11 +1,17 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+
 const { User } = require("../models/user");
 
 const HttpError = require("../helpers/HttpError");
-
 const ctrlWrapper = require("../utils/cntrlWrapper");
+
+const fs = require("fs/promises");
+const path = require("path");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const { SECRET_KEY } = process.env;
 
@@ -24,6 +30,7 @@ const register = async (req, res) => {
     user: {
       email: result.email,
       subscription: result.subscription,
+      avatarURL: gravatar.url(result.email),
     },
   });
 };
@@ -75,9 +82,37 @@ const logout = async (req, res) => {
   res.status(204).json({});
 };
 
+const avatarUpdate = async (req, res) => {
+  const { _id } = req.user;
+  console.log(req.file);
+  const { path: tmpDir, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+
+  Jimp.read(tmpDir)
+    .then((image) => {
+      image.resize(250, 250);
+    })
+    .catch((err) => {
+      throw HttpError(err.status, err.message);
+    });
+
+  const destinationDir = path.join(avatarsDir, filename);
+  await fs.rename(tmpDir, destinationDir);
+
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  if (!avatarURL) {
+    throw HttpError(401, "Not authorized");
+  }
+
+  res.status(200).json({ avatarURL });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  avatarUpdate: ctrlWrapper(avatarUpdate),
 };
