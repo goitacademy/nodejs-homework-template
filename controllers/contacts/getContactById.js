@@ -1,15 +1,9 @@
-const { Contact } = require("../../models");
-const { HttpError, wrapper } = require("../../helpers");
+const { wrapper } = require("../../helpers");
 
-const getContactById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+const getContactById = (req, res) => {
+  const { contact } = req;
 
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-
-  res.json(result);
+  res.json(contact);
 };
 
 module.exports = wrapper(getContactById);
