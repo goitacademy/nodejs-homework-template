@@ -1,3 +1,3 @@
-const { contactValidation } = require("./validation");
+const { contactValidation, isValidId } = require("./validation");
 
-module.exports = { contactValidation };
+module.exports = { contactValidation, isValidId };

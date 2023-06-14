@@ -1,3 +1,11 @@
-const { addContactSchema, editContactSchema } = require("./validationSchema");
+const {
+  addContactSchema,
+  editContactSchema,
+  editFavoriteContactSchema,
+} = require("./validationSchema");
 
-module.exports = { addContactSchema, editContactSchema };
+module.exports = {
+  addContactSchema,
+  editContactSchema,
+  editFavoriteContactSchema,
+};

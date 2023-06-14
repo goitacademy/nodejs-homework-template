@@ -2,7 +2,7 @@ const express = require("express");
 
 const { addContactSchema, editContactSchema } = require("../../schema");
 
-const { contactValidation } = require("../../middlewares");
+const { contactValidation, isValidId } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const {
 
 router.get("/", getAll);
 
-router.get("/:contactId", getById);
+router.get("/:contactId", isValidId, getById);
 
 router.post(
   "/",
@@ -26,10 +26,11 @@ router.post(
 
 router.put(
   "/:contactId",
+  isValidId,
   contactValidation(editContactSchema, "Missing fields"),
   editById
 );
 
-router.delete("/:contactId", deleteById);
+router.delete("/:contactId", isValidId, deleteById);
 
 module.exports = router;
