@@ -3,9 +3,9 @@ const contactsControllers = require("../../controllers/contacts");
 const router = express.Router();
 const jsonParser = express.json();
 
-//  const { authenticate } = require("../../middlewares/authenticate");
+ const { authenticate } = require("../../middlewares/authenticate");
 
-//  router.use(authenticate);
+ router.use(authenticate);
 
 // router.get("/", jsonParser, authenticate, contactsControllers.getAllContacts);
 // router.get("/:contactId", jsonParser, authenticate, contactsControllers.getContactById);

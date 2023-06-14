@@ -9,15 +9,15 @@ const jsonParser = express.json();
 
 // router.use(authenticate);
 
- router.get("/users", jsonParser, AuthController.getAllUsers);
+ router.get("/", jsonParser, AuthController.getAllUsers);
 
  // post запит на регістрвцію
-router.post("/users/register", jsonParser, AuthController.register);
+router.post("/register", jsonParser, AuthController.register);
 
 // запит на авторизацію
-router.post("/users/login", jsonParser, AuthController.login);
+router.post("/login", jsonParser, AuthController.login);
 
-router.post("/users/logout", jsonParser, AuthController.logout);
+router.post("/logout", jsonParser, AuthController.logout);
 
 
 module.exports = router;

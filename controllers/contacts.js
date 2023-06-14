@@ -1,7 +1,7 @@
-const contactSchema = require("../models/contacts");
-const mongoose = require("mongoose");
+const { Contact } = require("../models/contacts");
+// const mongoose = require("mongoose");
 
-const Contact = mongoose.model("Contact", contactSchema);
+
 const getAllContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find();
@@ -28,18 +28,18 @@ const getContactById = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     const { name, email, phone, favorite } = req.body;
-    const contact = new Contact({ name, email, phone, favorite });
-    const savedContact = await contact.save();
-    
-    console.log(savedContact);
-    // res.status(201).json(savedContact);
-    res.status(201).json({
-      _id: savedContact._id,
-      name: savedContact.name,
-      email: savedContact.email,
-      phone: savedContact.phone,
-      favorite: savedContact.favorite
-    });
+    const {_id: owner} = req.user;
+    console.log(owner);
+    const contact = await Contact.create({ name, email, phone, favorite, owner});
+    // const savedContact = await contact.save();
+     res.status(201).send(contact);
+    // res.status(201).json({
+    //   _id: savedContact._id,
+    //   name: savedContact.name,
+    //   email: savedContact.email,
+    //   phone: savedContact.phone,
+    //   favorite: savedContact.favorite
+    // });
   } catch (error) {
     next(error);
   }
