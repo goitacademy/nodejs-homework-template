@@ -4,11 +4,14 @@ const authenticate = require("../../middlewares/authenticate");
 const {
   registerSchema,
   loginSchema,
+  verifyEmailSchema,
   updateUserSubscriptionSchema,
 } = require("../../schemas/usersSchemas");
 const {
   register,
   login,
+  verifyEmail,
+  resentVerifyEmail,
   getCurrent,
   logout,
   updateUserSubscription,
@@ -21,6 +24,10 @@ const router = express.Router();
 router.post("/register", validateBody(registerSchema), register);
 
 router.post("/login", validateBody(loginSchema), login);
+
+router.get("/verify/:verificationToken", verifyEmail);
+
+router.post("/verify", validateBody(verifyEmailSchema), resentVerifyEmail);
 
 router.get("/current", authenticate, getCurrent);
 

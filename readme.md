@@ -1,11 +1,11 @@
 # REST API for Contact Collection
 
 This repository contains a RESTful API for managing a collection of contacts. The API is built using Node.js and Express, providing endpoints for performing CRUD operations on the contacts.
-It uses MongoDB as the database for storing contact information. The API follows best practices and includes proper error handling, data validation using the Joi package, and integration with MongoDB using Mongoose. This project also implements user authentication and authorization using JSON Web Tokens (JWT). It provides endpoints for user registration, login, token verification middleware, user logout, pagination, filtration by favorites, and subscription update.
+It uses MongoDB as the database for storing contact information. The API follows best practices and includes proper error handling, data validation using the Joi package, and integration with MongoDB using Mongoose. This project also implements user authentication and authorization using JSON Web Tokens (JWT), and user email verification using the SendGrid service. It provides endpoints for user registration, login, token verification middleware, user logout, pagination, filtration by favorites, and subscription update.
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-## Homework 5 - Avatars
+## Homework 6 - Emails
 
 ### Endpoints
 
@@ -76,21 +76,24 @@ Updates the favorite status of a contact.
 Registers a new user.
 
     Receives the body in the format {name, email, password} where all fields are required.
-    The "subscription" field is optional, can have the following values: "starter", "pro", or "business", and defaults to "starter" if not provided,
-    If any of the required fields are missing in the body, it returns JSON with the key {"message":     "missing required name field"} and a status code of 400 (Bad Request).
+    The "subscription" field is optional and can have the following values: "starter", "pro", or "business". It defaults to "starter" if not provided.
+    If any of the required fields are missing in the body, it returns JSON with the key {"message": "missing required {field} field"} and a status code of 400 (Bad Request).
     If the provided email is already in use, it throws an error with a status code of 409 (Conflict) and the message "Email already in use".
-    If all required fields are present in the body and the email is not already in use it hashes the password, generates the avatar URL using Gravatar, creates a new user with the provided name, email, generated avatar and hashed password.
-    Returns an object {name, email} and a status code of 201 (Created).
+    If all required fields are present in the body and the email is not already in use, it hashes the password using bcrypt, generates an avatar URL using Gravatar, generates a verification token using uuid, and creates a new user with the provided name, email, generated avatar, hashed password, and a verification token.
+    If the user is successfully created and the verification email is sent, the API will return an object in the response with the following properties: name, email, subscription, avatarURL, and verificationToken, and a status code of 201 (Created).
+    The API will send a verification email to the provided email address containing a link to verify the user's email.
 
 #### 8. POST /api/users/login
 
 Logs in a user with the provided email and password.
 
     Receives the body in the format {email, password} where both fields are required.
-    If the email or password is incorrect, it throws an error with a status code of 401 (Unauthorized) and the message "Email or password is incorrect".
+    If the provided email or password is incorrect, it throws an error with a status code of 401 (Unauthorized) and the message "Email or password is incorrect".
+     If the user's email is not verified yet, it throws an error with a status code of 403 (Forbidden) and the message "Email is not verified".
     If the email and password are correct, it generates a JWT (JSON Web Token) using the user's ID as the payload and signs it with a secret key. The generated token has an expiration time of 23 hours.
     The generated token is then stored in the user's record in the database by updating the corresponding user document with the new token.
     Returns the generated token in the response body with a status code of 200 (OK).
+    Additionally, the response will include the user's information such as name, email, subscription, and avatarURL.
 
 #### 9. POST /api/users/logout
 
@@ -131,9 +134,27 @@ Updates the avatar of the currently logged-in user.
     Updates the user's avatarURL field with the URL of the processed avatar image.
     Returns a JSON response with the updated avatarURL and a status code of 200 (OK) if the operation is successful or JSON {"message": "Not authorized"} and a status code of 401 (Unauthorized) if the user is not authorized.
 
+#### 13. GET /api/users/verify/:verificationToken
+
+Verifies a user's email using the verification token.
+
+    Received the verification token in the URL parameter.
+    If a user with the provided verification token is found, the API updates the user's record in the database to mark the email as verified. The verification token will be set to null.
+    Returns a message "Verification successful" with a status code of 200 (OK).
+
+#### 14. POST /api/users/verify
+
+Resends the verification email to a user's email address.
+
+    Receives the required field email in the body.
+    If a user with the email is found, and the user's email was already verified it throws an error with a message "Verification has already been passed" and a status code of 400 (Bad Request).
+    If a user with the email is found, and the user's email was not verified the API will send a verification email to the provided email address.
+    The verification email will contain a link for the user to click and verify their email. The link will include the verification token as a parameter.
+    The API will return a JSON response with a message "Verification email sent" with a status code of 200 (OK).
+
 ### Validation
 
-To ensure data integrity, the API performs validation on the incoming data using the Joi and mongoose schema for model.
+To ensure data integrity, the API performs validation on the incoming data using the Joi and Mongoose schema for models.
 
 For adding a new contact:
 
@@ -173,3 +194,5 @@ The API relies on the following dependencies:
 - jsonwebtoken (JWT generation and verification)
 - multer (file upload handling)
 - jimp (image processing)
+- uuid (generating verification tokens)
+- sendgrid/mail (sending verification emails)
