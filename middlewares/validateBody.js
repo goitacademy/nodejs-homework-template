@@ -5,6 +5,8 @@ const validateBody = () => {
   const func = async (req, res, next) => {
     const { name, email, phone } = req.body;
 
+    console.log(" req.body 🚀  => ",  req.body)
+
     if (!name && !email && !phone) {
       next(HttpError(400, "Missing fields"));
     }
@@ -16,8 +18,10 @@ const validateBody = () => {
 
       next(HttpError(400, `Missing required '${err}' field`));
     }
+
     next();
   };
+
   return func;
 };
 

@@ -36,14 +36,14 @@ const dataValidator = (data) => {
   return schema.validate(data);
 };
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
+const favoriteValidator = (data) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
 
-const schemas = {
-  updateFavoriteSchema
-}
+  return schema.validate(data);
+};
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, dataValidator, schemas };
+module.exports = { Contact, dataValidator, favoriteValidator };

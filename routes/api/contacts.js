@@ -3,8 +3,7 @@ const express = require("express");
 const { getContacts, getContactById,   addContact,
   updateContact, removeContact, updateStatusContact } = require("../../controllers");
 
-const {validateId} = require('../../middlewares');
-const validateBody = require("../../middlewares/validateBody");
+const {validateId, validateBody, validateFavorite} = require('../../middlewares');
 
 const router = express.Router();
 
@@ -18,6 +17,6 @@ router.put("/:contactId", validateId, validateBody(), updateContact);
 
 router.delete("/:contactId", validateId, removeContact);
 
-router.patch("/:contactId/favorite", validateId, updateStatusContact);
+router.patch("/:contactId/favorite", validateId, validateFavorite(), updateStatusContact);
 
 module.exports = router;
