@@ -9,7 +9,6 @@ const {
     
 const { checkContactById, checkCreateContactData } = require('../../middlewares/contactMiddlewares');
 
-
 const router = express.Router();
 
 router
