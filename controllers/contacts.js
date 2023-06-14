@@ -1,40 +1,27 @@
 const fs = require('fs/promises');
 const uuid = require('uuid').v4;
-const { createContactValidator, updateContactValidator } = require('../utils/contsactValidator');
+const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
+const Contact = require('../models/contactModel');
+
 
 const contactsDB = './controllers/contacts.json';
 
 // GET contacts list
 const listContacts = async (req, res) => {
-  try {
-    const contacts = JSON.parse(
-      await fs.readFile(contactsDB)
-    )
-    return res.status(200).json({
-      status: 'success',
+  const contacts = await Contact.find().select('-__v');
+     res.status(200).json({
       contacts,
-    })
-  } catch (err) {
-    res.status(400).json({
-      message: 'Something wrong...'
-    })
-  }
+    })  
 }
 
 // GET contact By ID
 const getContactById = async (req, res) => {
-  try {
-    const { contact } = req;
-    return res.status(200).json({
-      status: 'success',
+  res.status(200).json({
       contact,
     });
-  } catch (err) {
-    console.log(err)
-    res.status(404).json({
-      message: 'Contact not found'
-    })
-  }
+  
 }
 
 // DELETE contact
@@ -54,36 +41,14 @@ const removeContact = async (req, res) => {
 }
 
 // POST new contact
-const addContact = async (req, res) => {
-  try {
-    const { error, value } = createContactValidator(req.body);
-
-    if (error) {
-      const fieldName = error.details[0].path[0];
-      console.log(fieldName)
-      return res.status(400).json({
-        message: `missing required <${fieldName}> field`
-      })
-    }
-    const contacts = JSON.parse(
-      await fs.readFile(contactsDB)
-    )
-    const newContact = {
-      id: uuid(),
-      ...value,
-    }
-    contacts.push(newContact);
-    await fs.writeFile(contactsDB, JSON.stringify(contacts))
-    return res.status(201).json({
-      message: 'Contact is added',
-      newContact,
-    })
-  } catch (err) {
-    res.status(400).json({
-      message: 'Something wrong...'
-    })
+const addContact = catchAsync(async (req, res, next) => {
+  const newContact = await Contact.create({ ...req.body });
+  
+  res.status(201).json({        
+    contact: newContact,    
+    })    
   }
-}
+  )
 
 //  PUT contact by ID
 const updateContact = async (req, res) => {
