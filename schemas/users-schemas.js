@@ -14,4 +14,11 @@ const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-module.exports = { newUserSchema, updateSubscriptionSchema };
+const verifyEmailSchema =  Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": `Invalid email format`,
+    "any.required": `Missing required email field`,
+  }),
+});
+
+module.exports = { newUserSchema, updateSubscriptionSchema, verifyEmailSchema };

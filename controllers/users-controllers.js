@@ -9,7 +9,7 @@ const path = require("path");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
 const { nanoid } = require("nanoid");
-const {PROJECT_URL} = process.env;
+const { PROJECT_URL } = process.env;
 
 const avatarsPath = path.join(__dirname, "../", "public", "avatars");
 
@@ -45,7 +45,7 @@ const register = async (req, res) => {
 
 const verify = async (req, res) => {
   const { verificationCode } = req.params;
-  const user = await User.findOne({verificationCode});
+  const user = await User.findOne({ verificationCode });
 
   if (!user) {
     throw HttpError(404, "User not found");
@@ -57,6 +57,25 @@ const verify = async (req, res) => {
   res.json({ message: "Verify success" });
 };
 
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.verified) {
+    throw HttpError(400, "Email already verified");
+  }
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${PROJECT_URL}/users/verify/${user.verificationCode}">Click to verify your email</a>`,
+  };
+  await sendEmail(verifyEmail);
+
+  res.json({ message: "Verify email send" });
+};
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -127,6 +146,7 @@ const updateAvatar = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   verify: ctrlWrapper(verify),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
