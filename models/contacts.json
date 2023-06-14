@@ -1,92 +1,62 @@
 [
   {
-    "id": "AeHIrLTr6JkxGE6SN-0Rw",
     "name": "Allen Raymond",
     "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
+    "phone": "(992) 914-3792",
+    "favorite": false
   },
   {
-    "id": "qdggE76Jtbfd9eWJHrssH",
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685"
+    "phone": "(294) 840-6685",
+    "favorite": true
   },
   {
-    "id": "drsAJ4SHPYqZeG-83QTVW",
     "name": "Kennedy Lane",
     "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
+    "phone": "(542) 451-7038",
+    "favorite": false
   },
   {
-    "id": "vza2RIzNGIwutCVCs4mCL",
     "name": "Wylie Pope",
     "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949"
+    "phone": "(692) 802-2949",
+    "favorite": true
   },
   {
-    "id": "05olLMgyVQdWRwgKfg5J6",
     "name": "Cyrus Jackson",
     "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218"
+    "phone": "(501) 472-5218",
+    "favorite": true
   },
   {
-    "id": "1DEXoP8AuCGYc1YgoQ6hw",
     "name": "Abbot Franks",
     "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720"
+    "phone": "(186) 568-3720",
+    "favorite": true
   },
   {
-    "id": "Z5sbDlS7pCzNsnAHLtDJd",
     "name": "Reuben Henry",
     "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792"
+    "phone": "(715) 598-5792",
+    "favorite": true
   },
   {
-    "id": "C9sjBfCo4UJCWjzBnOtxl",
     "name": "Simon Morton",
     "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360"
+    "phone": "(233) 738-2360",
+    "favorite": true
   },
   {
-    "id": "e6ywwRe4jcqxXfCZOj_1e",
     "name": "Thomas Lucas",
     "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
+    "phone": "(704) 398-7993",
+    "favorite": false
   },
   {
-    "id": "rsKkOQUi80UsgVPCcLZZW",
     "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquesceleri.net",
-    "phone": "(748) 206-2688"
-  },
-  {
-    "id": "fc06d05f-338f-4c7c-80e9-46d646741930",
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
-  {
-    "id": "0d453d6f-3b67-4c51-8a61-a7e8cb50bc18",
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
-  {
-    "id": "b7d0814e-f7d7-4ea4-a689-aeabc654bf5b",
-    "name": "Thor",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993"
-  },
-  {
-    "id": "fb1794d2-3d7f-4013-88e8-1eb663b717df",
-    "name": "Robert",
-    "email": "est@utquamvelroberto.net",
-    "phone": "(692) 802-2949"
-  },
-  {
-    "id": "e44f2c6a-a6fd-4526-ba67-54373da147cc",
-    "name": "Thor",
-    "email": "nec@thora.com",
-    "phone": "(704) 398-7993"
+    "email": "Donec.elementum@scelerisquescelerisquedui.net",
+    "phone": "(748) 206-2688",
+    "favorite": true
   }
 ]
