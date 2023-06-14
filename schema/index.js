@@ -2,7 +2,7 @@ const {
   addContactSchema,
   editContactSchema,
   editFavoriteContactSchema,
-} = require("./validationSchema");
+} = require("./contacts/contactsValidationSchema");
 
 module.exports = {
   addContactSchema,

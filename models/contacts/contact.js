@@ -1,8 +1,8 @@
 const { Schema, model } = require("mongoose");
 
-const { phoneNumberRegexp } = require("../constants");
+const { phoneNumberRegexp } = require("../../constants");
 
-const { contactSchemaError } = require("../utils");
+const { contactSchemaError } = require("../../utils");
 
 const contactSchema = new Schema(
   {

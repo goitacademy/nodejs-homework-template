@@ -5,7 +5,7 @@ const {
   editById,
   deleteById,
   updateStatusContact,
-} = require("./controllers");
+} = require("./contacts/contactsControllers");
 
 module.exports = {
   getAll,

@@ -1,3 +1,3 @@
-const { phoneNumberRegexp } = require("./regexp");
+const { phoneNumberRegexp } = require("./contacts/contactsRegexp");
 
 module.exports = { phoneNumberRegexp };

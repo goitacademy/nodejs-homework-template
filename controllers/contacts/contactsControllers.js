@@ -1,6 +1,6 @@
-const { Contact } = require("../models");
+const { Contact } = require("../../models");
 
-const { ApiError, decorCtrWrapper } = require("../utils");
+const { ApiError, decorCtrWrapper } = require("../../utils");
 
 const getAll = async (_, res) => {
   const response = await Contact.find();

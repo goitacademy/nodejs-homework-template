@@ -1,4 +1,4 @@
-const { ApiError } = require("../utils");
+const { ApiError } = require("../../utils");
 
 const { isValidObjectId } = require("mongoose");
 
