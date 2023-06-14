@@ -7,32 +7,32 @@ const getAllContacts = async () => {
 
 const getContactById = async (contactId) => {
   if (!Types.ObjectId.isValid(contactId)) {
-    return null; 
+    return null;
   }
   return Contact.findById(contactId);
 };
 
-const createContact = async ({ name, email, phone}) => {
+const createContact = async ({ name, email, phone }) => {
   return Contact.create({ name, email, phone });
 };
 
 const removeContact = async (contactId) => {
   if (!Types.ObjectId.isValid(contactId)) {
-    return null; 
+    return null;
   }
   return Contact.findByIdAndRemove({ _id: contactId });
 };
 
 const updateContact = async (contactId, body) => {
   if (!Types.ObjectId.isValid(contactId)) {
-    return null; 
+    return null;
   }
   return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
 };
 
 const updateFavorite = async (contactId, favorite) => {
   if (!Types.ObjectId.isValid(contactId)) {
-    return null; 
+    return null;
   }
   return Contact.findByIdAndUpdate(
     { _id: contactId },

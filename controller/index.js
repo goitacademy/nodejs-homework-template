@@ -10,20 +10,26 @@ const {
 const get = async (req, res, next) => {
   try {
     const contacts = await getAllContacts();
-    if (contacts === {}) {
+    if (contacts.length === 0) {
       console.log("There is no contact in the contact database yet.");
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "There are no contacts in the database.",
+      });
     }
-
-    console.log(
-      `There are ${contacts.length} contacts in the contact database`
-    );
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: {
-        contacts,
-      },
-    });
+    if (contacts.length > 0) {
+      console.log(
+        `There are ${contacts.length} contacts in the contact database`
+      );
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: {
+          contacts,
+        },
+      });
+    }
   } catch (err) {
     console.error(err);
     next(err);
@@ -153,9 +159,7 @@ const updateStatusContact = async (req, res, next) => {
   try {
     const contact = await updateFavorite(contactId, favorite);
     if (contact) {
-      console.log(
-        `Contact status with id: ${contactId} has been updated.`
-      );
+      console.log(`Contact status with id: ${contactId} has been updated.`);
       res.status(200).json({
         status: "success",
         code: 200,

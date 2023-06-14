@@ -2,7 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const contactSchema = Schema(
   {
-    
     name: {
       type: String,
       min: [3, "Too short name"],

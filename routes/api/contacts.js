@@ -21,10 +21,6 @@ router.delete("/:contactId", remove);
 
 router.put("/:contactId", contactValidation, update);
 
-router.patch(
-  "/:contactId/favorite",
-  favoriteValidation,
-  updateStatusContact
-);
+router.patch("/:contactId/favorite", favoriteValidation, updateStatusContact);
 
 module.exports = router;
