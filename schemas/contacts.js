@@ -7,6 +7,7 @@ const addSchema = Joi.object({
     .required(),
   phone: Joi.string().min(9).max(15).required(),
 });
+
 module.exports = {
   addSchema,
 };
