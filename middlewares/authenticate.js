@@ -22,6 +22,12 @@ const authenticate = async (req, res, next) => {
     console.log(`user : `, user);
     next();
   } catch (error) {
+    console.log(`auth catch`);
+    if (error.message === 'jwt must be provided') {
+      console.log(`jwt must be provided`);
+      error.status = 401;
+      error.message = 'Not authorized';
+    }
     next(error);
   }
 };

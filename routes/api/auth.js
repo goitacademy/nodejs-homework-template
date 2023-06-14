@@ -14,6 +14,6 @@ router.post('/register', validate(schemas.registerSchema), register);
 router.post('/login', validateAuth(schemas.loginSchema), login);
 
 router.post('/logout', authenticate, logout);
-router.post('/current', authenticate, currentUser);
+router.get('/current', authenticate, currentUser);
 
 module.exports = router;
