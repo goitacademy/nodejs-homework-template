@@ -4,7 +4,7 @@ const Contact = require('../models/contactModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { Types } = require('mongoose');
-const { createContactDataValidator } = require('../utils/contactValidator');
+const { createContactValidator } = require('../utils/contactValidator');
 
 // const contactsDB = './controllers/contacts.json';
 
@@ -47,7 +47,7 @@ const checkContactById = catchAsync(async (req, res, next) => {
 // module.exports = isValidId;
 
 const checkCreateContactData = catchAsync(async (req, res, next) => {
-  const { error, value } = createContactDataValidator(req.body);
+  const { error, value } = createContactValidator(req.body);
 
   if (error) return next(new AppError(400, 'Invalid contact data..'));
 
