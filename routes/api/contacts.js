@@ -1,96 +1,23 @@
 const express = require("express");
-const Joi = require("joi");
 
 const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
-
-const { HttpError } = require("../../helpers");
-// console.log("HttpError", HttpError);
+  getAll,
+  getById,
+  add,
+  deleteById,
+  editById,
+} = require("../../controllers");
 
 const router = express.Router();
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+router.get("/", getAll);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:contactId", getById);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await getContactById(contactId);
+router.post("/", add);
 
-    if (!result) throw HttpError(404, "Not Found");
+router.delete("/:contactId", deleteById);
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      // FIXME: do something with no validating TWO errors
-
-      throw HttpError(400, error.message);
-    }
-
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-
-    const result = await removeContact(contactId);
-
-    if (!result) throw HttpError(404, "Not found");
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      // FIXME: do something with no validating TWO errors
-
-      throw HttpError(400, "missing fields");
-    }
-
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    console.log("result", result);
-
-    if (!result) throw HttpError(404, "Not Found");
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:contactId", editById);
 
 module.exports = router;
