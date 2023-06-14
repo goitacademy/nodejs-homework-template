@@ -1,3 +1,17 @@
-const { getAll, getById, add, editById, deleteById } = require("./controllers");
+const {
+  getAll,
+  getById,
+  add,
+  editById,
+  deleteById,
+  updateStatusContact,
+} = require("./controllers");
 
-module.exports = { getAll, getById, add, editById, deleteById };
+module.exports = {
+  getAll,
+  getById,
+  add,
+  editById,
+  deleteById,
+  updateStatusContact,
+};

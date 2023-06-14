@@ -1,10 +1,12 @@
 const express = require("express");
 
-const { addContactSchema, editContactSchema } = require("../../schema");
+const {
+  addContactSchema,
+  editContactSchema,
+  editFavoriteContactSchema,
+} = require("../../schema");
 
 const { contactValidation, isValidId } = require("../../middlewares");
-
-const router = express.Router();
 
 const {
   getAll,
@@ -12,7 +14,10 @@ const {
   add,
   editById,
   deleteById,
+  updateStatusContact,
 } = require("../../controllers");
+
+const router = express.Router();
 
 router.get("/", getAll);
 
@@ -29,6 +34,13 @@ router.put(
   isValidId,
   contactValidation(editContactSchema, "Missing fields"),
   editById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  contactValidation(editFavoriteContactSchema, "Missing field favorite"),
+  updateStatusContact
 );
 
 router.delete("/:contactId", isValidId, deleteById);

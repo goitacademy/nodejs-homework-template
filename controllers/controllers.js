@@ -37,6 +37,19 @@ const editById = async (req, res) => {
   res.json({ data: response });
 };
 
+const updateStatusContact = async (req, res) => {
+  const { body } = req;
+  const { contactId } = req.params;
+
+  const response = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
+
+  if (!response) throw ApiError(404, "Not found");
+
+  res.json({ data: response });
+};
+
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const response = await Contact.findByIdAndDelete(contactId);
@@ -51,4 +64,5 @@ module.exports = {
   add: decorCtrWrapper(add),
   editById: decorCtrWrapper(editById),
   deleteById: decorCtrWrapper(deleteById),
+  updateStatusContact: decorCtrWrapper(updateStatusContact),
 };

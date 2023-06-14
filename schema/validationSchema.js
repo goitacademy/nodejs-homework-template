@@ -1,4 +1,5 @@
 const Joi = require("joi");
+
 const { phoneNumberRegexp } = require("../constants");
 
 const addContactSchema = Joi.object({
