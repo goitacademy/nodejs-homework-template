@@ -1,7 +1,6 @@
-// const fs = require('fs/promises')
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs").promises;
-const contactsJson = "./models/contacts.json";
+const contactsJson = "./controlers/contacts.json";
 
 const listContacts = async () => {
 	return fs.readFile(contactsJson).then((data) => JSON.parse(data));

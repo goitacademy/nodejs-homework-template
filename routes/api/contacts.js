@@ -1,4 +1,4 @@
-const functions = require("../../models/contacts");
+const functions = require("../../controlers");
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();

@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts.js");
 
@@ -21,6 +23,22 @@ app.get("/", (req, res) => {
 // Router
 
 app.use("/api/contacts", contactsRouter);
+
+// Conection to data base
+
+const BASE_URI = process.env.BASE_URI;
+
+const connection = mongoose.connect(BASE_URI, {
+	useUnifiedTopology: true,
+});
+
+connection
+	.then(() => {
+		app.listen(function () {
+			console.log(`Server running. Use our API on port: 3000`);
+		});
+	})
+	.catch((err) => console.log(`Server not running. Error message: ${err.message}`));
 
 // Middleware
 
