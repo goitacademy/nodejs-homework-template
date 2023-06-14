@@ -17,7 +17,6 @@ const getContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  console.log(contactId);
   const result = await contacts.getContactById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
@@ -63,4 +62,3 @@ module.exports = {
   deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
 };
-
