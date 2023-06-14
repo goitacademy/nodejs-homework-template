@@ -5,7 +5,7 @@ const contactsPath = `${path.dirname("./db/contacts.json")}/${path.basename(
   "./db/contacts.json"
 )}`;
 
-const { Contact } = require("../models/contact.js");
+const { Contact } = require("../models/contacts.js");
 
 const listContacts = async () => {
   try {
