@@ -13,7 +13,6 @@ const app = express()
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 mongoose.connect(process.env.DB_HOST).then(() => {
-  console.log(process.env.DB_HOST)
   console.log("Database connection successful")
 }).catch((err) => {
   console.log(err);

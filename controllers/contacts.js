@@ -10,7 +10,7 @@ const contactsDB = './controllers/contacts.json';
 
 // GET contacts list
 const listContacts = async (req, res) => {
-  const contacts = await Contact.find().select('-__v');
+  const contacts = await Contact.find();
      res.status(200).json({
       contacts,
     })  
