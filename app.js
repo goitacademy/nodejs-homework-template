@@ -2,7 +2,6 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-
 const contactsRouter = require("./routes/api/contacts.js");
 
 const app = express();
@@ -22,10 +21,6 @@ app.get("/", (req, res) => {
 // Router
 
 app.use("/api/contacts", contactsRouter);
-
-// app.use((req, res) => {
-// 	res.status(404).json({ message: "Not found" });
-// });
 
 // Middleware
 
