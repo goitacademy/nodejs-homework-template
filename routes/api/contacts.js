@@ -10,6 +10,7 @@ const {
   validateNewContact,
   validateUpdatedContact,
 } = require("../../middleware/contacts");
+const addSchema = require("../../schemes/contacts");
 
 const router = express.Router();
 
@@ -17,10 +18,10 @@ router.get("/", listContacts);
 
 router.get("/:contactId", getContactById);
 
-router.post("/", validateNewContact, addContact);
+router.post("/", validateNewContact(addSchema), addContact);
 
 router.delete("/:contactId", deleteContact);
 
-router.put("/:contactId", validateUpdatedContact, updateContact);
+router.put("/:contactId", validateUpdatedContact(addSchema), updateContact);
 
 module.exports = router;
