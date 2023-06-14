@@ -1,5 +1,8 @@
-const { ApiError } = require("./functions");
+const {
+  ApiError,
+  contactSchemaError,
+} = require("./contacts/contactsHelperFunctions");
 
-const decorCtrWrapper = require("./decorCtrWrapper");
+const decorCtrWrapper = require("./contacts/contactsDecorCtrWrapper");
 
-module.exports = { ApiError, decorCtrWrapper };
+module.exports = { ApiError, decorCtrWrapper, contactSchemaError };
