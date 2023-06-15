@@ -5,13 +5,12 @@ const contactsPath = `${path.dirname("./db/contacts.json")}/${path.basename(
   "./db/contacts.json"
 )}`;
 
-const { Contact } = require("../models/contacts.js");
+const { Contact } = require("../models/contact.js");
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const parsedData = JSON.parse(data);
-    return parsedData;
+    const contacts = await Contact.find();
+    return contacts;
   } catch (err) {
     console.log(err.message);
   }
@@ -19,10 +18,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const parsedData = JSON.parse(data);
-
-    const contact = parsedData.find((contact) => contact.id === contactId);
+    const contact = await Contact.findById({ _id: contactId });
     return contact;
   } catch (err) {
     console.log(err.message);
@@ -31,28 +27,13 @@ const getContactById = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const parsedData = JSON.parse(data);
-
-    const lastElement = parsedData.slice(-1);
-    const newId = Number(lastElement[0].id) + 1;
-    const stringifiedNewId = JSON.stringify(newId);
-
-    const contact = new Contact(
-      stringifiedNewId,
-      body.name,
-      body.email,
-      body.phone
-    );
-
-    const updatedContacts = [...parsedData];
-    updatedContacts.push(contact);
-
-    const stringifiedUpdatedContacts = JSON.stringify(updatedContacts);
-
-    await fs.writeFile(contactsPath, stringifiedUpdatedContacts);
-
-    return contact;
+    const newContact = new Contact({
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    });
+    await newContact.save();
+    return newContact;
   } catch (err) {
     console.log(err.message);
   }
@@ -60,47 +41,35 @@ const addContact = async (body) => {
 
 const removeContact = async (contactId) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const parsedData = JSON.parse(data);
-
-    const contactIndex = parsedData.findIndex(
-      (contact) => contact.id === contactId
-    );
-
-    const updatedContacts = [...parsedData];
-
-    updatedContacts.splice(contactIndex, 1);
-    const stringifiedUpdatedContacts = JSON.stringify(updatedContacts);
-
-    await fs.writeFile(contactsPath, stringifiedUpdatedContacts);
-
-    return parsedData;
+    return Contact.findByIdAndRemove({ _id: contactId });
   } catch (err) {
     console.log(err.message);
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, updatedData) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const parsedData = JSON.parse(data);
-
-    const contactIndex = parsedData.findIndex(
-      (contact) => contact.id === contactId
+    const updatedContact = await Contact.findByIdAndUpdate(
+      {
+        _id: contactId,
+      },
+      updatedData,
+      { new: true }
     );
+    return updatedContact;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
-    const updatedContact = {
-      id: parsedData[contactIndex].id,
-      ...body,
-    };
-
-    const updatedContacts = [...parsedData];
-
-    updatedContacts.splice(contactIndex, 1, updatedContact);
-    const stringifiedUpdatedContacts = JSON.stringify(updatedContacts);
-
-    await fs.writeFile(contactsPath, stringifiedUpdatedContacts);
-
+const updateStatus = async (contactId, updatedData) => {
+  console.log(updatedData);
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      updatedData,
+      { new: true }
+    );
     return updatedContact;
   } catch (err) {
     console.log(err.message);
@@ -113,4 +82,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatus,
 };
