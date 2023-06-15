@@ -4,7 +4,7 @@ const addSchema = Joi.object({
   name: Joi.string()
     .min(2)
     .max(30)
-    .messages({ "any.require": `missing required name field` })
+    .messages({ "any.required": `missing required name field` })
     .required(),
 
   email: Joi.string()
@@ -12,14 +12,12 @@ const addSchema = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ["com", "net"] },
     })
-    .messages({ "any.require": `missing required email field` })
+    .messages({ "any.required": `missing required email field` })
     .required(),
 
   phone: Joi.string()
-    .messages({ "any.require": `missing required phone field` })
+    .messages({ "any.required": `missing required phone field` })
     .required(),
-
-  favorite: Joi.boolean(),
 });
 
 module.exports = {
