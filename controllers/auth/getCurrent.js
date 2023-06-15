@@ -1,8 +1,7 @@
 const getCurrent = async (req, res, next) => {
-  console.log('get current');
-  const { email, subscription } = req.user;
+  const { email, subscription, avatarURL } = req.user;
 
-  res.json({ email, subscription });
+  res.json({ email, subscription, avatarURL });
 };
 
 module.exports = getCurrent;
