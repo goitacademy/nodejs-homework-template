@@ -12,6 +12,7 @@ mongoose.set('strictQuery', false);
 const connection = mongoose.connect(DB_HOST, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  ignoreUndefined: true,
 });
 
 connection
