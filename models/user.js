@@ -52,7 +52,9 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().required(),
 });
 
-const emailSchema = Joi.object({ email: Joi.string().required() });
+const emailSchema = Joi.object({
+  email: Joi.string().required(),
+});
 
 const schemas = {
   registerSchema,

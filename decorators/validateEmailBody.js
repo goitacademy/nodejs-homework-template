@@ -7,7 +7,7 @@ const validateEmailBody = (schema) => {
       if (Object.entries(req.body).length === 0) {
         next(HttpError(400, `missing required field email`));
       }
-      next(HttpError(400, `Verification has already been passed`));
+      next(HttpError(400, error.message));
     }
     next();
   };
