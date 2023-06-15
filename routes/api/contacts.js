@@ -15,19 +15,15 @@ const {Contact} = require('../../models/contact');
 
 // const { HttpError } = require('../../helper');
 
-// const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
+
 
 
 
 router.get('/', ctrl.getAll);
-router.get('/:contactId', isValidId, ctrl.getById);
-router.post('/', validateBody(Contact.addSchema), ctrl.addContact);
-router.delete('/:contactId', isValidId, ctrl.deleteContactById);
-router.put('/:contactId', isValidId, validateBody(Contact.addSchema), ctrl.updateContactById);
+// router.get('/:contactId', isValidId, ctrl.getById);
+// router.post('/', validateBody(Contact.addSchema), ctrl.addContact);
+// router.delete('/:contactId', isValidId, ctrl.deleteContactById);
+// router.put('/:contactId', isValidId, validateBody(Contact.addSchema), ctrl.updateContactById);
 
 
 // router.get('/:contactId', async (req, res, next) => {
