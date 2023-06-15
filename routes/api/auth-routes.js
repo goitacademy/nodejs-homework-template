@@ -34,7 +34,7 @@ router.post("/logout", authenticate, authControllers.logout);
 
 // avatar update
 router.patch(
-  "/avatar",
+  "/avatars",
   authenticate,
   upload.single("avatar"),
   authControllers.avatarUpdate
