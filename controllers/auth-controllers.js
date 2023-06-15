@@ -89,7 +89,6 @@ const logout = async (req, res) => {
 
 const avatarUpdate = async (req, res) => {
   const { _id } = req.user;
-  console.log(req.file);
   const { path: tmpDir, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
 
