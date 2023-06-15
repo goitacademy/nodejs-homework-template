@@ -2,6 +2,9 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -26,9 +29,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  },
-  "engines": {
-    "node": ">=14.20.1"
   },
   "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
   "main": ".eslintrc.js",
