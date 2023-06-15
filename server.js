@@ -2,7 +2,7 @@ const app = require('./app');
 
 const mongoose = require('mongoose');
 
-const {DB_HOST} = require('./config');
+const {DB_HOST} = require('./env');
 
 mongoose.connect(DB_HOST)
 .then(()=> {
@@ -13,3 +13,8 @@ mongoose.connect(DB_HOST)
 });
 
 
+// const app = require('./app');
+
+// app.listen(3000, () => {
+//   console.log("Server running. Use our API on port: 3000");
+// });
