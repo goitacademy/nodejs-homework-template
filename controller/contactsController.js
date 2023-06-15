@@ -3,12 +3,16 @@ const JoiSchema = require('../schemas/contactsSchema');
 
 const get = async (req, res, next) => {
   try {
-    const contacts = await contactsService.listContacts();
-    res.json({
-      status: 'success',
-      code: 200,
-      data: { contacts },
+    const { _id } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+    const skip = (page - 1) * limit;
+    const filters = { owner: _id, favorite };
+    const contacts = await contactsService.listContacts({
+      filters,
+      skip,
+      limit,
     });
+    res.json({ contacts });
   } catch (err) {
     console.error(err);
     next(err);
@@ -17,20 +21,16 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const contact = await contactsService.getContactById(id);
-    if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
-      return;
-    }
-    res.status(404).json({
-      status: 'Not found',
-      code: 404,
+    const { _id } = await req.user;
+    const { id } = await req.params;
+    const contact = await contactsService.getContactById({
+      userId: _id,
+      contactId: id,
     });
+    if (contact) {
+      return res.json({ contact });
+    }
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);
@@ -39,6 +39,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
+    const { _id } = await req.user;
     let { name, email, phone, favorite } = await req.body;
     if (!favorite) {
       favorite = false;
@@ -50,23 +51,18 @@ const create = async (req, res, next) => {
       favorite,
     });
     if (isValid.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
-      return;
     }
     const contact = await contactsService.addContact({
       name,
       email,
       phone,
       favorite,
+      owner: _id,
     });
-    res.json({
-      status: 'success',
-      code: 201,
-      data: { contact },
-    });
+    res.status(201).json({ contact });
   } catch (err) {
     console.error(err);
     next(err);
@@ -75,19 +71,18 @@ const create = async (req, res, next) => {
 
 const removeById = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
-    const isDelete = await contactsService.removeContact(id);
-    if (isDelete) {
-      res.json({
-        status: 'contact deleted',
-        code: 200,
-      });
-    } else {
-      res.status(404).json({
-        message: 'Not found',
-        code: 404,
-      });
+    const isDelete = await contactsService.removeContact({
+      userId: _id,
+      contactId: id,
+    });
+    if (!isDelete) {
+      return res.status(404).json();
     }
+    res.json({
+      Status: 'contact deleted',
+    });
   } catch (err) {
     console.error(err);
     next(err);
@@ -96,6 +91,7 @@ const removeById = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
     const { name, email, phone, favorite } = req.body;
     const isValid = JoiSchema.atLeastOne.validate({
@@ -105,26 +101,21 @@ const update = async (req, res, next) => {
       favorite,
     });
     if (isValid.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
-      return;
     }
     const newContact = JSON.parse(JSON.stringify(isValid.value));
-    const contact = await contactsService.updateContact(id, newContact);
+    const contact = await contactsService.updateContact({
+      userId: _id,
+      contactId: id,
+      body: newContact,
+    });
     if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
+      res.json({ contact });
       return;
     }
-    res.status(404).json({
-      message: 'Not found',
-      code: 404,
-    });
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);
@@ -133,6 +124,7 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
   try {
+    const { _id } = req.user;
     const { id } = req.params;
     const { favorite } = req.body;
     const isValid = JoiSchema.atLeastOne.validate({
@@ -141,26 +133,19 @@ const updateStatus = async (req, res, next) => {
     if (isValid.error) {
       res.status(400).json({
         message: isValid.error.details[0].message,
-        code: 400,
       });
       return;
     }
-    const contact = await contactsService.updateStatusContact(
-      id,
-      JSON.parse(JSON.stringify(isValid.value))
-    );
-    if (contact) {
-      res.json({
-        status: 'success',
-        code: 200,
-        data: { contact },
-      });
-      return;
-    }
-    res.status(404).json({
-      message: 'Not found',
-      code: 404,
+    const contact = await contactsService.updateStatusContact({
+      userId: _id,
+      contactId: id,
+      body: JSON.parse(JSON.stringify(isValid.value)),
     });
+    if (contact) {
+      res.json({ contact });
+      return;
+    }
+    res.status(404).json();
   } catch (err) {
     console.error(err);
     next(err);
