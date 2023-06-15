@@ -10,4 +10,4 @@ const isValidId = (req, res, next) => {
   next();
 };
 
-module.eports = isValidId;
+module.exports = isValidId;
