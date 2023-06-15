@@ -40,4 +40,10 @@ router.patch(
   authControllers.avatarUpdate
 );
 
+// verify email
+router.get("/verify/:verificationToken", authControllers.verifyEmail);
+
+// resend verification email
+router.post("/verify", authControllers.resendEmail);
+
 module.exports = router;
