@@ -5,6 +5,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
+const authMiddleware = require("./middlewares/authMiddleware");
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -36,7 +38,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", authMiddleware, contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });

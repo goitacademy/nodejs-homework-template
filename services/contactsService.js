@@ -2,38 +2,47 @@ const Contact = require("../models/contactsModel");
 const { validateContact } = require("../validators/contactsValidator");
 
 const contactsService = {
-  getContacts: () => {
-    return Contact.find();
+  getContacts: (owner) => {
+    return Contact.find({ owner });
   },
 
-  getContactById: (id) => {
-    return Contact.findById(id);
+  getContactById: (id, owner) => {
+    return Contact.findOne({ _id: id, owner });
   },
 
-  addContact: (contactData) => {
+  getFavoriteContacts: (owner) => {
+    return Contact.find({ owner, favorite: true });
+  },
+
+  addContact: (contactData, owner) => {
     const { error } = validateContact(contactData);
     if (error) {
       throw new Error(error.details[0].message);
     }
-    return Contact.create(contactData);
+    const newContact = { ...contactData, owner };
+    return Contact.create(newContact);
   },
 
-  removeContact: (id) => {
-    return Contact.findByIdAndRemove(id);
+  removeContact: (id, owner) => {
+    return Contact.findOneAndRemove({ _id: id, owner });
   },
 
-  updateContact: (id, contactData) => {
+  updateContact: (id, contactData, owner) => {
     const { error } = validateContact(contactData);
     if (error) {
       throw new Error(error.details[0].message);
     }
     const { name, email, phone } = contactData;
-    return Contact.findByIdAndUpdate(id, { name, email, phone }, { new: true });
+    return Contact.findOneAndUpdate(
+      { _id: id, owner },
+      { name, email, phone },
+      { new: true }
+    );
   },
 
-  toggleFavorite: (contactId, favorite) => {
-    return Contact.findByIdAndUpdate(
-      contactId,
+  toggleFavorite: (contactId, favorite, owner) => {
+    return Contact.findOneAndUpdate(
+      { _id: contactId, owner },
       { $set: { favorite } },
       { new: true }
     );

@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Contact = require("../../models/contactsModel");
 const { validateContact } = require("../../validators/contactsValidator");
+const { getUserByToken } = require("../../services/usersService");
+const { getFavoriteContacts } = require("../../services/contactsService");
 
 const router = express.Router();
 
@@ -15,7 +17,11 @@ const validateObjectId = (req, res, next) => {
 
 const getContacts = async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const contacts = await Contact.find({ owner: user._id });
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -24,7 +30,14 @@ const getContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const contact = await Contact.findById(req.params.id);
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const contact = await Contact.findOne({
+      _id: req.params.id,
+      owner: user._id,
+    });
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
     }
@@ -36,12 +49,17 @@ const getContactById = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
+    const newContact = { ...req.body, owner: user._id };
+    const createdContact = await Contact.create(newContact);
+    res.status(201).json(createdContact);
   } catch (error) {
     next(error);
   }
@@ -49,7 +67,14 @@ const createContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   try {
-    const contact = await Contact.findByIdAndRemove(req.params.id);
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const contact = await Contact.findOneAndRemove({
+      _id: req.params.id,
+      owner: user._id,
+    });
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
     }
@@ -61,13 +86,17 @@ const deleteContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { error } = validateContact(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
     const { name, email, phone } = req.body;
-    const updatedContact = await Contact.findByIdAndUpdate(
-      req.params.id,
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: req.params.id, owner: user._id },
       { name, email, phone },
       { new: true }
     );
@@ -86,8 +115,12 @@ const updateContactFavorite = async (req, res, next) => {
     return res.status(400).json({ message: "Missing field favorite" });
   }
   try {
-    const updatedContact = await Contact.findByIdAndUpdate(
-      req.params.contactId,
+    const user = await getUserByToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: req.params.contactId, owner: user._id },
       { $set: { favorite } },
       { new: true }
     );
@@ -102,6 +135,7 @@ const updateContactFavorite = async (req, res, next) => {
 
 router.get("/", getContacts);
 router.get("/:id", validateObjectId, getContactById);
+router.get("/:id/favorite", validateObjectId, getFavoriteContacts);
 router.post("/", createContact);
 router.delete("/:id", validateObjectId, deleteContact);
 router.put("/:id", validateObjectId, updateContact);
