@@ -23,6 +23,7 @@ router.put(
   "/:contactId",
   isBodyEmpty,
   isIdExist,
+  validationFields,
   contactWrapper(changeContact)
 );
 
