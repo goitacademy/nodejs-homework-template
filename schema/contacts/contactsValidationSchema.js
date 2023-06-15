@@ -19,7 +19,7 @@ const editContactSchema = Joi.object({
   }),
   phone: Joi.string().pattern(phoneNumberRegexp),
   favorite: Joi.boolean(),
-}).xor("name", "email", "phone", "favorite");
+}).or("name", "email", "phone");
 
 const editFavoriteContactSchema = Joi.object({
   favorite: Joi.boolean().required(),
