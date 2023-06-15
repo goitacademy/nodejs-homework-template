@@ -10,7 +10,7 @@ const router = express.Router();
 
 const {validateBody, isValidId} = require('../../middleware');
 
-const {Contact} = require('../../models/contact');
+const {schema} = require('../../models/contact');
 
 
 // const { HttpError } = require('../../helper');
