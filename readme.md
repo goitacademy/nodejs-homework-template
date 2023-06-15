@@ -30,16 +30,3 @@
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
 
-Mostova
-LuO2lPc69stXf78b
-
-// const mongoose = require("mongoose");
-
-// const DB_HOST =
-//   "mongodb+srv://Mostova:LuO2lPc69stXf78b@cluster0.vjdxvrm.mongodb.net/?retryWrites=true&w=majority";
-// mongoose
-//   .connect(DB_HOST)
-//   .then(() => {
-//     console.log("Database connection successful");
-//   })
-//   .catch((error) => console.log(error.message));
