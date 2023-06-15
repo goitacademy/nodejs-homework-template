@@ -1,4 +1,3 @@
-// const contactsFetch = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../utils/index");
 const { Contact } = require("../models/contact");
 
