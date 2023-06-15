@@ -1,9 +1,23 @@
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs").promises;
 const contactsJson = "./controlers/contacts.json";
+const service = require("../service/index");
 
-const listContacts = async () => {
-	return fs.readFile(contactsJson).then((data) => JSON.parse(data));
+const getContacts = async (_, res, next) => {
+	try {
+		const result = await service.getContactList();
+		console.log(result);
+		res.json({
+			status: "success",
+			code: 200,
+			data: {
+				contact: result,
+			},
+		});
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
 };
 
 const getContactById = async (contactId) => {
@@ -72,7 +86,7 @@ const updateContact = async (contactId, body) => {
 };
 
 module.exports = {
-	listContacts,
+	getContacts,
 	getContactById,
 	removeContact,
 	addContact,

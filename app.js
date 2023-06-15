@@ -29,23 +29,27 @@ app.use("/api/contacts", contactsRouter);
 const BASE_URI = process.env.BASE_URI;
 
 const connection = mongoose.connect(BASE_URI, {
+	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
 
 connection
 	.then(() => {
 		app.listen(function () {
-			console.log(`Server running. Use our API on port: 3000`);
+			console.log(`Server running. Database connection successful`);
 		});
 	})
-	.catch((err) => console.log(`Server not running. Error message: ${err.message}`));
+	.catch((err) => {
+		console.log(`Server not running. Error message: ${err.message}`);
+		process.exit(1);
+	});
 
 // Middleware
 
-app.use((req, res, next) => {
-	console.log("Nasze oprogramowanie pośredniczące");
-	next();
-});
+// app.use((req, res, next) => {
+// 	console.log("Nasze oprogramowanie pośredniczące");
+// 	next();
+// });
 
 // Error response
 

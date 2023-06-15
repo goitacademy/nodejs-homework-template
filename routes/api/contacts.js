@@ -1,19 +1,24 @@
-const functions = require("../../controlers");
 const express = require("express");
-const fs = require("fs");
 const router = express.Router();
-const Joi = require("joi");
+const controler = require("../../controlers/index");
+// const mongoose = require("mongoose");
 
-const schema = Joi.object({
+const fs = require("fs");
+const Joi = require("joi");
+const functions = require("../../controlers");
+
+const validate = Joi.object({
 	name: Joi.string().required(),
 	phone: Joi.number().required(),
 	email: Joi.string().email().required(),
 });
 
-router.get("/", async (req, res, next) => {
-	let contactList = await functions.listContacts();
-	res.json({ status: "success", code: 200, data: { contactList } });
-});
+router.get("/", controler.getContacts);
+
+// (req, res) =>  {
+// let contactList = await functions.listContacts();
+// res.json({ status: "success", code: 200, data: { contactList } });
+// });
 
 router.get("/:contactId", async (req, res, next) => {
 	const id = req.params.contactId;
@@ -30,7 +35,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-	const { error, value } = schema.validate(req.body);
+	const { error, value } = validate.validate(req.body);
 	if (error) {
 		return res.status(400).json({
 			status: "error",
@@ -59,7 +64,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
 	const body = req.body;
 	const id = req.params.contactId;
-	const { error, value } = schema.validate(body);
+	const { error, value } = validate.validate(body);
 	if (error) {
 		return res.status(400).json({
 			status: "error",
