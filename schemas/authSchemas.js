@@ -18,4 +18,8 @@ const updateSubSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
-module.exports = {signupSchema, loginSchema, updateSubSchema}
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailPattern).required()
+})
+
+module.exports = {signupSchema, loginSchema, updateSubSchema, emailSchema}
