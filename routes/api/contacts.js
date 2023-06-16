@@ -10,14 +10,18 @@ const validateMiddleware = validation(contactSchema);
 const router = express.Router();
 
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+ router.get("/", ctrl.getAll);
+// ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getById));
+ router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post("/",validateMiddleware, ctrlWrapper(ctrl.add));
+ router.post("/",
+//  validateMiddleware,
+  ctrl.add);
+// ctrlWrapper(ctrl.add));
 
-router.delete("/:contactId", ctrlWrapper(ctrl.removeById));
+ router.delete("/:contactId", ctrlWrapper(ctrl.removeById));
 
-router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateById));
+ router.put("/:contactId", validateMiddleware, ctrlWrapper(ctrl.updateById));
 
 module.exports = router;
