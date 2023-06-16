@@ -4,23 +4,18 @@ const User = require("../models/userModel");
 
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization;
-  console.log("token:", token);
 
   if (!token) {
-    return res.status(401).json({ message: "Not Authorized1" });
+    return res.status(401).json({ message: "Not Authorized" });
   }
 
   try {
-    console.log("1");
     const tokenValue = token.split(" ")[1];
     const decoded = jwt.verify(tokenValue, process.env.JWT_SECRET);
-    console.log(decoded);
-    console.log("2");
     const user = await User.findById(decoded.userId);
-    console.log("user");
 
     if (!user || user.token !== tokenValue) {
-      return res.status(401).json({ message: "Not Authorized2" });
+      return res.status(401).json({ message: "Not Authorized" });
     }
 
     req.user = user;
@@ -28,7 +23,7 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     return res
       .status(401)
-      .json({ message: "Not Authorized3", error: error.message });
+      .json({ message: "Not Authorized", error: error.message });
   }
 };
 
