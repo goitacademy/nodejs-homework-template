@@ -9,10 +9,6 @@ const {
   resendVerificationsService,
 } = require("../models/services/auth");
 const { catchAsync } = require("../utils/catchAsync");
-const { HttpError } = require("../utils/HttpError");
-const { sendEmail } = require("../utils/sendEmail");
-
-const { PROJECT_URL } = process.env;
 
 let signup = async (req, res) => {
   const newUser = await signupService(req.body);
