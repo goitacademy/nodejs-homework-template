@@ -5,8 +5,8 @@ const User = require("../models/userModel");
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ message: "Not Authorized" });
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Not authorized" });
   }
 
   try {
@@ -15,15 +15,13 @@ const authMiddleware = async (req, res, next) => {
     const user = await User.findById(decoded.userId);
 
     if (!user || user.token !== tokenValue) {
-      return res.status(401).json({ message: "Not Authorized" });
+      return res.status(401).json({ message: "Not authorized" });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ message: "Not Authorized", error: error.message });
+    return res.status(401).json({ message: "Not authorized" });
   }
 };
 
