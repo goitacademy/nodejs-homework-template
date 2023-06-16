@@ -38,8 +38,8 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const delContact = await removeContact(req.params.contactId);
-    if (delContact) res.json({ message: "Contact delete" });
+    const message = await removeContact(req.params.contactId);
+    if (message) res.json(message);
   } catch (error) {
     next(error);
   }
@@ -53,5 +53,7 @@ router.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch("/:contactId/favorite", async (req, res, next) => {});
 
 module.exports = router;

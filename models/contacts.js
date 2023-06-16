@@ -1,74 +1,44 @@
-// const fs = require("fs/promises");
-const path = require("path");
-const fs = require("fs/promises");
-const { randomUUID } = require("crypto");
-
-const contactsPath = path.join(__dirname, "./contacts.json");
+const Contacts = require("./contact");
 
 const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+  const contacts = await Contacts.find();
+  return contacts;
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  return contacts.find((contact) => contact.id === contactId);
+  const contact = await Contacts.findById(contactId);
+  return contact;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const delContact = contacts.find((contact) => contact.id === contactId);
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    contacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return delContact;
+  const delContact = await Contacts.findById(contactId);
+  const ERROR_MESSAGE = "Номер с таким id не найден";
+
+  if (delContact) {
+    await Contacts.deleteOne(delContact);
+    return "Контакт удален";
   } else {
-    console.log("Номер с таким id не найден");
+    return ERROR_MESSAGE;
   }
 };
 
-const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: randomUUID(),
-    name,
-    email,
-    phone,
-  };
+const addContact = async (body) => {
+  const contacts = await Contacts.find();
 
-  if (contacts.some((item) => item.phone === newContact.phone)) {
-    return console.log("Такой контакт уже существует");
-  } else {
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return newContact;
-  }
-};
+  const ERROR_MESSAGE = "Такой контакт уже существует";
 
-const updateContact = async (contact, body, id) => {
-  const { name, email, phone } = body;
-  if (!name || !email || !phone) {
-    throw new Error("The required field is missing");
+  if (contacts.some((item) => item.phone === body.phone)) {
+    return ERROR_MESSAGE;
   } else {
-    contact = {
-      id,
-      name,
-      email,
-      phone,
-    };
-    return contact;
+    await Contacts.create(body);
+    return body;
   }
 };
 
 const updateContacts = async (contactId, body) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((item) => item.id === contactId);
-  const index = contacts.findIndex((item) => item.id === contactId);
-  const changeContact = await updateContact(contact, body, contactId);
-  contacts.splice(index, 1, changeContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return contacts;
+  const contact = await Contacts.findById(contactId);
+  if (contact) await Contacts.findByIdAndUpdate(contactId, body);
+  else return "Контакт который Вы хотите изменить не найден";
 };
 
 module.exports = {
