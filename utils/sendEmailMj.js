@@ -1,7 +1,5 @@
 const Mailjet = require("node-mailjet");
 
-require("dotenv").config();
-
 const { MJ_APIKEY_PUBLIC, MJ_APIKEY_PRIVATE, MJ_SENDER_EMAIL } = process.env;
 
 const mailjet = new Mailjet({
