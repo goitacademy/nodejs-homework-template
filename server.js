@@ -1,10 +1,10 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const app = require("./app");
 
 mongoose.set("strictQuery", true);
 
-const DB_HOST =
-  "mongodb+srv://d3049999:ShadoW220133@cluster0.s4l4afj.mongodb.net/db-contacts";
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
@@ -18,3 +18,11 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
+// Middleware для проверки отсутствия поля "favorite"
+app.use((req, res, next) => {
+  if (req.method === "POST" && !req.body.favorite) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  next();
+});
