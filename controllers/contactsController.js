@@ -22,6 +22,15 @@ const contactsController = {
     }
   },
 
+  getFavoriteContacts: async (req, res, next) => {
+    try {
+      const contacts = await contactsService.getFavoriteContacts();
+      res.json(contacts);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   addContact: async (req, res, next) => {
     try {
       const newContact = await contactsService.addContact(req.body);
