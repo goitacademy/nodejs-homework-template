@@ -1,9 +1,7 @@
-const isBodyEmpty = require("./isBodyEmpty");
-const isValidId = require("./isValidId");
-const authenticate = require("./authenticate");
+const HttpError = require("./HttpError");
+const handleMongooseError = require("./handleMongooseError");
 
 module.exports = {
-    isBodyEmpty,
-    isValidId,
-    authenticate,
+    HttpError,
+    handleMongooseError,
 }
