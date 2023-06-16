@@ -18,6 +18,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+  
   const { body } = req;
 
   const result = await Contact.create(body);
