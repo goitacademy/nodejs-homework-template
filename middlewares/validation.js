@@ -13,11 +13,10 @@ const validation = (schema) => {
     if (error) {
       const err = error.details[0].path[0];
 
-   
       throw createError(400, `missing required ${err} field`);
     }
     next();
   };
 };
 
-module.exports = validation;
+module.exports = { validation };
