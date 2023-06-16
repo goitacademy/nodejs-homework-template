@@ -65,7 +65,6 @@ const updateContact = async (req, res) => {
 const updateStatusContact = async (req, res) => {
   const { error } = updateFavoriteSchema.validate(req.body);
   if (error) {
-    // throw HttpError(400, error.message);
     throw HttpError(400, "missing field favorite");
   }
   const { contactId } = req.params;
