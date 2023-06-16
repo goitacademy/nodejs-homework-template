@@ -1,5 +1,9 @@
-const HttpError = require("./HttpError");
+const isBodyEmpty = require("./isBodyEmpty");
+const isValidId = require("./isValidId");
+const authenticate = require("./authenticate");
 
 module.exports = {
-    HttpError,
+    isBodyEmpty,
+    isValidId,
+    authenticate,
 }

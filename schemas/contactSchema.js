@@ -1,8 +1,9 @@
 const Joi = require("joi");
+const { nameRegexp } = require("../constants/users");
 
 const contactSchema = Joi.object({
   name: Joi.string()
-    .regex(/^[a-zA-Z0-9 ]*$/)
+    .pattern(nameRegexp)
     .required()
     .messages({
       "any.required": "Missing required name field",
@@ -19,7 +20,6 @@ const contactSchema = Joi.object({
     .required()
     .messages({ "any.required": "Missing required phone field" }),
     favorite: Joi.boolean()
-    // .messages({ "any.required": "Missing required favorite field" }),
 });
 
 const contactUpdateFavoriteSchema = Joi.object({
