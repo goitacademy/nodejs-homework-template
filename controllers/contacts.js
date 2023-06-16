@@ -1,5 +1,4 @@
 const service = require("../service");
-const { contactValidator } = require("./../utils/validators/validator");
 
 const getAll = async (req, res) => {
   const contacts = await service.getAllContacts();
@@ -10,11 +9,10 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await service.getContactById(contactId);
-  if (contact) {
-    res.status(200).json(contact);
-  } else {
-    res.status(404).json({ message: "Not found" });
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
   }
+  res.status(200).json(contact);
 };
 
 const addContact = async (req, res, next) => {
@@ -38,22 +36,14 @@ const addContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = contactValidator(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
-    const { name, email, phone } = req.body;
     const { contactId } = req.params;
     const fields = req.body;
-    if (!name && !email && !phone) {
-      res.status(400).json({ message: "missing fields" });
-    }
     const contact = await service.updateContact(contactId, fields);
 
-    if (contact) {
-      res.status(200).json(contact);
-    } else {
-      res.status(404).json({ message: "Not found" });
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
     }
+    res.status(200).json(contact);
   } catch (error) {
     console.error(error.message);
     next(error);
@@ -62,21 +52,14 @@ const updateContact = async (req, res, next) => {
 
 const setFavorite = async (req, res, next) => {
   try {
-    const { error } = contactValidator(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
     const { favorite } = req.body;
     const { contactId } = req.params;
-    if (!favorite && favorite !== false) {
-      res.status(400).json({ message: "missing field favorite" });
-    }
     const contact = await service.updateStatusContact(contactId, favorite);
 
-    if (contact) {
-      res.status(200).json(contact);
-    } else {
-      res.status(404).json({ message: "Not found" });
+    if (!contact) {
+      return res.status(404).json({ message: "Missing field favorite" });
     }
+    res.status(200).json(contact);
   } catch (error) {
     console.error(error.message);
     next(error);
