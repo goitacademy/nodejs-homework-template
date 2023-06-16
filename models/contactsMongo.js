@@ -17,7 +17,6 @@ const contact = new Schema(
         required: [true, "Email is required"],
         validate: {
             validator: function (value) {
-              // Regular expression to validate email format
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
               return emailRegex.test(value);
             },
@@ -31,7 +30,6 @@ const contact = new Schema(
         required: [true, "Phone is required"],
         validate: {
             validator: function (value) {
-              // Regular expression to validate phone number format
               const phoneRegex = /^\d{9,15}$/;
               return phoneRegex.test(value);
             },

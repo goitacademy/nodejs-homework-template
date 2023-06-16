@@ -5,6 +5,7 @@ const router = express.Router();
 const contacts = require("../../models/contacts");
 
 const Contact = require("../../models/contactsMongo");
+const { date, boolean } = require("joi");
 
 /* const Joi = require("joi"); */
 
@@ -24,6 +25,10 @@ router.get("/", async (req, res, next) => {
     const data = await Contact.find();
     res.json(data);
   } catch (error) {
+    res.status(404).json({
+      status: "Not found",
+      code: 404,
+    });
     next(error);
   }
 });
@@ -31,15 +36,13 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     data = await Contact.findOne({ _id: req.params.contactId });
-    /*     if (data) {
-      return res.json(data);
-    }
-    res.status(404).json({
-      status: "Not found",
-      code: 404,
-    }); */
+
     return res.json(data);
   } catch (error) {
+    res.status(404).json({
+      status: "Contact not found",
+      code: 404,
+    });
     next(error);
   }
 });
@@ -58,10 +61,10 @@ router.delete("/:contactId", async (req, res, next) => {
     data = await Contact.findByIdAndRemove({ _id: req.params.contactId });
     if (data) {
       return res.json({
-        message: `contact with ${req.params.contactId} deleted`,
+        message: `Contact with ${req.params.contactId} deleted`,
       });
     }
-    return res.json({ message: "contact not found" });
+    return res.json({ message: "Contact not found" });
   } catch (error) {
     next(error);
   }
@@ -85,6 +88,10 @@ router.put("/:contactId", async (req, res, next) => {
       });
     }
   } catch (error) {
+    res.status(404).json({
+      status: "Contact not found",
+      code: 404,
+    });
     next(error);
   }
 });
@@ -93,10 +100,17 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
     data = await Contact.findByIdAndUpdate(
       { _id: req.params.contactId },
-      req.body,
-      )
-      res.json(data);
+      req.body
+    );
+    if (!req.body.favorite === boolean) {
+      return res.status(400).send({ "message": "missing field favorite" });
+    }
+    return res.json(data);
   } catch (error) {
+    res.status(404).json({
+      status: "Contact not found",
+      code: 404,
+    });
     next(error);
   }
 });
