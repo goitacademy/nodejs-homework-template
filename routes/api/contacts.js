@@ -37,8 +37,29 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { name, email, phone } = req.body;
+    const requiredFields = [];
+
+    if (!name) {
+      requiredFields.push("name");
+    }
+    if (!email) {
+      requiredFields.push("email");
+    }
+    if (!phone) {
+      requiredFields.push("phone");
+    }
+
+    if (requiredFields.length > 0) {
+      const errorMessage = `missing required ${requiredFields.join(
+        ", "
+      )} field`;
+      throw HttpError(400, errorMessage);
+    }
+
     const { error } = addSchema.validate(req.body);
     if (error) {
+      console.log(error);
       throw HttpError(400, error.message);
     }
     const newContact = await contacts.addContact(req.body);
@@ -63,6 +84,9 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    if (!req.body) {
+      throw HttpError(400, "missing fields");
+    }
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
