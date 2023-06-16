@@ -12,14 +12,17 @@ const contactSchema = new Schema(
 		email: {
 			type: String,
 			unique: true,
+			required: [true, "Please add email"],
 		},
 		phone: {
 			type: String,
 			unique: true,
+			required: [true, "Please add phone number"],
 		},
 		favorite: {
 			type: Boolean,
 			default: false,
+			required: [true, "Please set favorite category"],
 		},
 	},
 	{ collection: "contacts" }

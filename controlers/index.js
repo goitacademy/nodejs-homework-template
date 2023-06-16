@@ -1,6 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
-const fs = require("fs").promises;
-const contactsJson = "./controlers/contacts.json";
 const service = require("../service/index");
 
 const getContacts = async (_, res, next) => {
@@ -11,7 +8,7 @@ const getContacts = async (_, res, next) => {
 			status: "success",
 			code: 200,
 			data: {
-				contact: result,
+				contacts: result,
 			},
 		});
 	} catch (e) {
@@ -20,69 +17,130 @@ const getContacts = async (_, res, next) => {
 	}
 };
 
-const getContactById = async (contactId) => {
-	return fs.readFile(contactsJson).then((data) => {
-		const parsedData = JSON.parse(data);
-		const user = parsedData.filter((users) => users.id === contactId);
-		return user;
-	});
-};
+const getContactById = async (req, res, next) => {
+	const { contactId } = req.params;
 
-const removeContact = async (contactId) => {
-	return fs.readFile(contactsJson).then((data) => {
-		const parsedData = JSON.parse(data);
-		const removedContact = parsedData.filter((user) => user.id === contactId);
-		const contactListAfterRemove = parsedData.filter((user) => user.id !== contactId);
-		fs.writeFile(contactsJson, JSON.stringify(contactListAfterRemove));
-		return removedContact;
-	});
-};
-
-const addContact = async (body) => {
-	return fs.readFile(contactsJson).then((data) => {
-		const parsedData = JSON.parse(data);
-		const contactWithId = { ...body, id: uuidv4() };
-		parsedData.push(contactWithId);
-		return fs
-			.writeFile(contactsJson, JSON.stringify(parsedData))
-			.then(() => {
-				console.log(`Added user ${contactWithId.name}`);
-
-				return contactWithId;
-			})
-			.catch((err) => {
-				console.log("Append Failed: " + err);
+	try {
+		const result = await service.getContactById(contactId);
+		if (result) {
+			res.json({
+				status: "success",
+				code: 200,
+				data: { contact: result },
 			});
-	});
+		} else {
+			res.status(404).json({
+				status: "error",
+				code: 404,
+				message: `Not found contact with id: ${contactId}`,
+				data: "Not Found",
+			});
+		}
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
 };
 
-const updateContact = async (contactId, body) => {
-	return fs.readFile(contactsJson).then((data) => {
-		const parsedData = JSON.parse(data);
-		const doesIdExist = parsedData.find((el) => el.id === contactId);
-		if (doesIdExist) {
-			const [contact] = parsedData.filter((el) => el.id === contactId);
-			contact.name = body.name;
-			contact.email = body.email;
-			contact.phone = body.phone;
-			console.log(contact);
-			console.table(parsedData);
-			fs.writeFile(contactsJson, JSON.stringify(parsedData));
-			return contact;
-		} else if (!doesIdExist) {
-			const contactWithId = { ...body, id: uuidv4() };
-			parsedData.push(contactWithId);
-			return fs
-				.writeFile(contactsJson, JSON.stringify(parsedData))
-				.then(() => {
-					console.log(`Added user ${contactWithId.name}`);
-					console.table(parsedData);
-				})
-				.catch((err) => {
-					console.log("Append Failed: " + err);
-				});
+const addContact = async (req, res, next) => {
+	const { name, phone, email } = req.body;
+	try {
+		const result = await service.addContact({ name, phone, email });
+		if (result) {
+			res.status(201).json({
+				status: "success",
+				code: 201,
+				data: { contact: result },
+			});
+		} else {
+			res.status(400).json({
+				status: "error",
+				code: 400,
+				message: `missing required name - field`,
+				data: "Not Found",
+			});
 		}
-	});
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+};
+
+const removeContact = async (req, res, next) => {
+	const { contactId } = req.params;
+	try {
+		const result = await service.removeContact(contactId);
+		if (result) {
+			res.json({
+				status: "success",
+				code: 200,
+				data: { contact: result },
+			});
+		} else {
+			res.status(404).json({
+				status: "error",
+				code: 404,
+				message: `Not found contact id: ${contactId}`,
+				data: "Not Found",
+			});
+		}
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+};
+
+const updateContact = async (req, res, next) => {
+	const { name, phone, email } = req.body;
+	const { contactId } = req.params;
+	try {
+		const result = await service.updateContact({ name, phone, email }, { contactId });
+		console.log(result);
+		if (result) {
+			res.json({
+				status: "success",
+				code: 200,
+				data: { contact: result },
+			});
+		} else {
+			res.status(404).json({
+				status: "error",
+				code: 404,
+				message: `Not found contact with id: ${contactId}`,
+				data: "Not Found",
+			});
+		}
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+};
+
+const updateFavorite = async (req, res, next) => {
+	const { contactId } = req.params;
+	const { favorite } = req.body;
+	console.log(favorite);
+	try {
+		const result = await service.isFavorite(contactId, { favorite });
+		console.log(result);
+		if (result && favorite !== undefined) {
+			res.json({
+				status: "success",
+				code: 200,
+				data: { contact: result },
+			});
+		} else {
+			res.status(400).json({
+				status: "error",
+				code: 400,
+				message: `missing field favorite`,
+				data: "Not Found",
+			});
+		}
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
 };
 
 module.exports = {
@@ -91,4 +149,5 @@ module.exports = {
 	removeContact,
 	addContact,
 	updateContact,
+	updateFavorite,
 };
