@@ -11,7 +11,6 @@ mongoose
   .then(() => {
     app.listen(PORT, () => {
       console.log("Database connection successfull");
-      console.log(DB_HOST);
     });
   })
   .catch((error) => {
