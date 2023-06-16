@@ -1,16 +1,15 @@
-const { Contact } = require("../../models");
-
+const { findAll, find, create, edit, remove } = require("../../services");
 const { ApiError, decorCtrWrapper } = require("../../utils");
 
 const getAll = async (_, res) => {
-  const response = await Contact.find();
+  const response = await findAll();
 
   res.json({ data: response });
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const response = await Contact.findById(contactId);
+  const response = await find(contactId);
 
   if (!response) throw ApiError(404, "Not found");
   res.json({ data: response });
@@ -19,7 +18,7 @@ const getById = async (req, res) => {
 const add = async (req, res) => {
   const { body } = req;
 
-  const response = await Contact.create(body);
+  const response = await create(body);
 
   res.status(201).json({ data: response });
 };
@@ -28,9 +27,7 @@ const editById = async (req, res) => {
   const { body } = req;
   const { contactId } = req.params;
 
-  const response = await Contact.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
+  const response = await edit(contactId, body);
 
   if (!response) throw ApiError(404, "Not found");
 
@@ -41,9 +38,7 @@ const updateStatusContact = async (req, res) => {
   const { body } = req;
   const { contactId } = req.params;
 
-  const response = await Contact.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
+  const response = await edit(contactId, body);
 
   if (!response) throw ApiError(404, "Not found");
 
@@ -52,7 +47,7 @@ const updateStatusContact = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const response = await Contact.findByIdAndDelete(contactId);
+  const response = await remove(contactId);
 
   if (!response) throw ApiError(404, "Not found");
   res.json({ message: "contact deleted" });
