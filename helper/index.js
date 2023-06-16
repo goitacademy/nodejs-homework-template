@@ -5,5 +5,5 @@ const handleMongooseError = require('./handleMongooseError');
 module.exports = {
     HttpError,
     ctrlWrapper,
-    handleMongooseError,
-}
+    handleMongooseError
+};
