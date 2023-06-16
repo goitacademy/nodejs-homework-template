@@ -25,6 +25,7 @@ const get = async (req, res, next) => {
       res.status(200).json({
         status: "success",
         code: 200,
+        message: `There are ${contacts.length} contacts in the database.`,
         data: {
           contacts,
         },
@@ -78,6 +79,7 @@ const create = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       code: 201,
+      message: "Contact was added to database",
       data: {
         contact,
       },
@@ -100,6 +102,7 @@ const remove = async (req, res, next) => {
       res.status(200).json({
         status: "success",
         code: 200,
+        message: `Contact with id: ${contactId} was removed from database.`,
         data: {
           contact,
         },
@@ -131,6 +134,7 @@ const update = async (req, res, next) => {
       res.status(200).json({
         status: "success",
         code: 200,
+        message: "Contact updated",
         data: {
           contact,
         },
@@ -163,6 +167,7 @@ const updateStatusContact = async (req, res, next) => {
       res.status(200).json({
         status: "success",
         code: 200,
+        message: "Contact status updated",
         data: {
           contact,
         },
