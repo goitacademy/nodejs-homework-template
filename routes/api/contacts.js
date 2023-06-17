@@ -21,7 +21,8 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message post" });
+  await addContact(req.body);
+  res.json({ status: "success", code: 201, data: "Contact added" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
