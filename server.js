@@ -18,11 +18,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// Middleware для проверки отсутствия поля "favorite"
-app.use((req, res, next) => {
-  if (req.method === "POST" && !req.body.favorite) {
-    return res.status(400).json({ message: "missing field favorite" });
-  }
-  next();
-});
