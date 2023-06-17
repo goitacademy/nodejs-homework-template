@@ -1,6 +1,6 @@
 const Contacts = require('../models/contacts');
 
-// const HttpError = require('../helpers/HttpError');
+const HttpError = require('../helpers/HttpError');
 
 const getAll = async (req, res, next) => {
   try {
@@ -12,58 +12,79 @@ const getAll = async (req, res, next) => {
   }
 };
 
-// const getContactById = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contactsService.getContactById(contactId);
+const getContactById = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contacts.findById(contactId);
 
-//     if (!result) {
-//       throw HttpError(404, `Contact with id=${contactId} not found`);
-//     }
+    if (!result) {
+      throw HttpError(404, `Contact with id=${contactId} not found`);
+    }
 
-//     res.status(200).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
-// const addNewContact = async (req, res, next) => {
-//   try {
-//     const result = await contactsService.addContact(req.body);
+const addNewContact = async (req, res, next) => {
+  try {
+    const result = await Contacts.create(req.body);
 
-//     res.status(201).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
-// const deleteContact = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contactsService.removeContact(contactId);
+const deleteContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contacts.findByIdAndDelete(contactId);
 
-//     if (result) {
-//       res.status(200).json({ message: 'contact deleted' });
-//     } else {
-//       throw HttpError(404, `Contact with id=${contactId} not found`);
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    if (result) {
+      res.status(200).json({ message: 'contact deleted' });
+    } else {
+      throw HttpError(404, `Contact with id=${contactId} not found`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
-// const updateContact = async (req, res, next) => {
-//   try {
-//     const { contactId: id } = req.params;
+const updateContact = async (req, res, next) => {
+  try {
+    const { contactId: id } = req.params;
 
-//     const result = await contactsService.updateContactById(id, req.body);
+    const result = await Contacts.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
-//     res.status(200).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId: id } = req.params;
+
+    const result = await Contacts.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAll,
+  addNewContact,
+  getContactById,
+  updateContact,
+  updateStatusContact,
+  deleteContact,
 };
