@@ -1,4 +1,3 @@
-const express = require("express");
 const Joi = require("joi").extend(require("joi-phone-number"));
 const {
   listContacts,
@@ -8,8 +7,6 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../models/contacts");
-const router = express.Router();
-
 const schema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -20,15 +17,82 @@ const favSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-// Get contacts - works x2
-router.get("/", async (req, res, next) => {
+const express = require("express");
+const router = express.Router();
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
+const { User, userRegister } = require("../../models/users");
+const secret = "ciekaweczyzadziala";
+
+const auth = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (!user || err) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+        data: "Unauthorized",
+      });
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
+};
+
+// Sign up
+router.post("/users/register", async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    res.json({
+      status: "error",
+      code: 409,
+      data: "Conflict",
+      message: "User already exists!",
+    });
+  }
+  const newUser = await userRegister({ email, password });
+
+  res.json(newUser);
+});
+
+// Sign in
+
+router.post("/users/signin", async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user || !user.validPassword(password)) {
+    return res.json({
+      status: "error",
+      code: 400,
+      data: "Bad request",
+      message: "Incorrect login/password",
+    });
+  }
+  const payload = {
+    id: user.id,
+  };
+
+  const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      token,
+    },
+  });
+});
+
+// Get contacts
+router.get("/contacts", auth, async (req, res, next) => {
   const contacts = await listContacts();
 
   res.status(200).json({ message: contacts });
 });
 
-// Get contacts with id - works x2
-router.get("/:contactId", async (req, res, next) => {
+// Get contacts with id
+router.get("/contacts/:contactId", auth, async (req, res, next) => {
   try {
     const foundContact = await getContactById(req.params.contactId);
 
@@ -42,9 +106,9 @@ router.get("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-// Add contact- works x2
 
-router.post("/", async (req, res, next) => {
+// Add contact
+router.post("/contacts", auth, async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -59,8 +123,8 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// Delete contact- works x2
-router.delete("/:contactId", async (req, res, next) => {
+// Delete contact
+router.delete("/contacts/:contactId", auth, async (req, res, next) => {
   try {
     const response = await removeContact(req.params.contactId);
     if (response) {
@@ -73,8 +137,9 @@ router.delete("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-// Update contact- works x2
-router.put("/:contactId", async (req, res, next) => {
+
+// Update contact
+router.put("/contacts/:contactId", auth, async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -96,8 +161,9 @@ router.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-// Update status- works
-router.patch("/:contactId/favorite", async (req, res, next) => {
+
+// Update status
+router.patch("/contacts/:contactId/favorite", auth, async (req, res, next) => {
   try {
     const { error } = favSchema.validate(req.body);
     if (error) {

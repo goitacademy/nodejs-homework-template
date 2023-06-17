@@ -15,33 +15,37 @@ const Contacts = mongoose.model("contacts", {
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Object,
+    ref: "user",
+  },
 });
 
-const listContacts = async () => {
+const listContacts = () => {
   try {
-    return await Contacts.find();
+    return Contacts.find();
   } catch (error) {
     console.error("An error occurred");
   }
 };
 
-const getContactById = async (contactId) => {
+const getContactById = (contactId) => {
   try {
-    return await Contacts.findOne({ _id: contactId });
+    return Contacts.findOne({ _id: contactId });
   } catch (error) {
     console.error("An error occurred");
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = (contactId) => {
   try {
-    return await Contacts.findByIdAndDelete({ _id: contactId });
+    return Contacts.findByIdAndDelete({ _id: contactId });
   } catch (error) {
     console.error(error);
   }
 };
 
-const addContact = async (body) => {
+const addContact = (body) => {
   try {
     const { name, email, phone, favorite } = body;
     const newContact = new Contacts({
@@ -51,24 +55,24 @@ const addContact = async (body) => {
       favorite: favorite,
     });
 
-    return await newContact.save();
+    return newContact.save();
   } catch (error) {
     console.error(error);
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = (contactId, body) => {
   try {
-    return await Contacts.findByIdAndUpdate({ _id: contactId }, body, {
+    return Contacts.findByIdAndUpdate({ _id: contactId }, body, {
       new: true,
     });
   } catch (error) {
     console.error(error);
   }
 };
-const updateStatusContact = async (contactId, favorite) => {
+const updateStatusContact = (contactId, favorite) => {
   try {
-    return await Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
+    return Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
   } catch (error) {
     console.error(error);
   }
