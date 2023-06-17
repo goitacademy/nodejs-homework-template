@@ -9,7 +9,12 @@ const {
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { userRegister, logIn } = require("../../controller/userController");
+const {
+  userRegister,
+  logIn,
+  getUserDetails,
+  logOutUser,
+} = require("../../controller/userController");
 
 const auth = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
@@ -31,6 +36,12 @@ router.post("/users/register", userRegister);
 
 // Sign in
 router.post("/users/signin", logIn);
+
+// User info
+router.get("/users/current", auth, getUserDetails);
+
+// Log out
+router.get("/users/logout", auth, logOutUser);
 
 // Get contacts
 router.get("/contacts", auth, listContacts);

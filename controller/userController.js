@@ -74,4 +74,32 @@ const logIn = async (req, res, next) => {
   });
 };
 
-module.exports = { userRegister, logIn };
+const getUserDetails = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { email, subscription } = user;
+    res.json({
+      status: "OK",
+      code: 200,
+      ResponseBody: {
+        email,
+        subscription,
+      },
+    });
+  } catch {
+    next(error);
+  }
+};
+
+const logOutUser = async (req, res, next) => {
+  try {
+    req.user.token = null;
+
+    await req.user.save();
+    res.status(204).json();
+  } catch {
+    next(error);
+  }
+};
+
+module.exports = { userRegister, logIn, getUserDetails, logOutUser };

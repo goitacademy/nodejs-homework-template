@@ -56,6 +56,7 @@ const addContact = async (req, res, next) => {
       email: email,
       phone: phone,
       favorite: favorite,
+      owner: req.user._id,
     });
     newContact.save();
     res.status(201).json({ message: newContact });
