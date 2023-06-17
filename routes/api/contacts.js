@@ -8,9 +8,9 @@ const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-router.get("/", isValidId, ctrl.getAll);
+router.get("/", ctrl.getAll);
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", isValidId, ctrl.getById);
 
 router.post("/", ctrl.add);
 
