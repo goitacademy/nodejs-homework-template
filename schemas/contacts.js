@@ -1,12 +1,12 @@
 const Joi = require("joi");
 
-const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-
-const contactsAddSchema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email({ tlds: false }).required(),
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required(),
   phone: Joi.string()
-    .pattern(phonePattern)
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .messages({
       "string.pattern.base":
         "Invalid phone number format. The format should be (XXX) XXX-XXXX.",
@@ -14,4 +14,6 @@ const contactsAddSchema = Joi.object({
     .required(),
 });
 
-module.exports = contactsAddSchema;
+module.exports = {
+  addSchema,
+};

@@ -1,5 +1,5 @@
-const { validateContactsBody } = require("./validateContactsBody");
+const { validateBody } = require("../middlewares/validateBody");
 
 module.exports = {
-  validateContactsBody,
+  validateBody,
 };

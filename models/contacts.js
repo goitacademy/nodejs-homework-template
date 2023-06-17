@@ -1,13 +1,13 @@
+const fs = require("fs").promises;
 const path = require("path");
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactPath = path.join(__dirname, "./contacts.json");
 
 const listContacts = async () => {
   try {
-    const contacts = await fs.readFile(contactsPath, "utf-8");
-    return JSON.parse(contacts);
+    const data = await fs.readFile(contactPath, "utf-8");
+    return JSON.parse(data);
   } catch (error) {
     console.log(error);
   }
@@ -15,59 +15,66 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const allContacts = await listContacts();
-    const result = allContacts.find((contact) => contact.id === contactId);
+    const data = await fs.readFile(contactPath, "utf8");
+    const contacts = JSON.parse(data);
+    const result = contacts.find((el) => el.id === contactId);
     return result || null;
   } catch (error) {
     console.log(error);
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   try {
-    const allContacts = await listContacts();
-    const index = allContacts.findIndex((contact) => contact.id === contactId);
-
+    const data = await fs.readFile(contactPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const index = contacts.findIndex((el) => el.id === id);
     if (index === -1) {
       return null;
     }
-
-    const [result] = allContacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+    const [result] = contacts.splice(index, 1);
+    await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
     return result;
   } catch (error) {
     console.log(error);
   }
 };
 
-const addContact = async ({ name, email, phone }) => {
+const addContact = async (name, email, phone) => {
   try {
-    const allContacts = await listContacts();
-    const newContact = { id: nanoid(), name, email, phone };
+    const data = await fs.readFile(contactPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const newContact = {
+      id: uuidv4(),
+      name,
+      email,
+      phone,
+    };
+    const emailExist = contacts.some((el) => el.email === email);
 
-    allContacts.push(newContact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-
-    return newContact;
+    if (!emailExist) {
+      contacts.push(newContact);
+      await fs.writeFile(contactPath, JSON.stringify(contacts));
+      console.log("Contact successfully added!!!");
+    } else {
+      console.log("Contact with this email already exists");
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   try {
-    const allContacts = await listContacts();
-    const index = allContacts.findIndex((contact) => contact.id === contactId);
+    const data = await fs.readFile(contactPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const index = contacts.findIndex((el) => el.id === id);
     if (index === -1) {
       return null;
     }
-
-    allContacts[index] = { id: contactId, ...body };
-
-    await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-
-    return allContacts[index];
+    contacts[index] = { id, ...body };
+    await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
   } catch (error) {
     console.log(error);
   }
