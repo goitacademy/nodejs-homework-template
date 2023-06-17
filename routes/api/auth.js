@@ -9,6 +9,15 @@ const { shemas } = require("../../models/user");
 const router = express.Router();
 
 router.post("/register", validateBody(shemas.registerSchema), ctrl.register);
+
+router.get("/verify/:verificationCode", ctrl.verifyEmail);
+
+router.post(
+  "/verify",
+  validateBody(shemas.emailSchema),
+  ctrl.resendVerifyEmail
+);
+
 router.post("/login", validateBody(shemas.loginSchema), ctrl.login);
 
 router.get("/current", autenticate, ctrl.getCurrent);
