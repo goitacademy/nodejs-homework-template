@@ -14,7 +14,7 @@ router.get("/:contactId", contactsController.getContactById);
 
 router.post(
   "/",
-  validateBody(schemas.movieAddSchema),
+  validateBody(schemas.contactAddSchema),
   contactsController.addContact
 );
 
@@ -22,7 +22,7 @@ router.delete("/:contactId", contactsController.deleteContactById);
 
 router.put(
   "/:contactId",
-  validateBody(schemas.movieAddSchema),
+  validateBody(schemas.contactAddSchema),
   contactsController.updateContactById
 );
 
