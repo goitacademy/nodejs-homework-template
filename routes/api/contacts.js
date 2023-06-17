@@ -17,8 +17,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactsService.getContactById(id);
+    const { contactId } = req.params;
+    const result = await contactsService.getContactById(contactId);
     if (!result) {
       throw HttpError(404);
     }
@@ -26,11 +26,15 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  res.json({ message: "template message" });
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const result = await contactsService.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
