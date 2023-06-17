@@ -86,14 +86,23 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.patch("/:id", async (req, res, next) => {
   try {
+    const { id } = req.params;
+
+    if (!Object.keys(req.body).includes("favorite")) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
     const { error } = favoriteUpdateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body);
+    const { favorite } = req.body;
+    const result = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true }
+    );
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -102,5 +111,4 @@ router.put("/:id", async (req, res, next) => {
     next(error);
   }
 });
-
 module.exports = router;
