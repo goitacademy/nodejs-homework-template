@@ -4,8 +4,7 @@ const { HttpError } = require("../helpers");
 
 const isValidId = (req, res, next) => {
   const { contactId } = req.params;
-  console.log(contactId);
-  if (!isValidObjectId) {
+  if (!isValidObjectId(contactId)) {
     next(HttpError(404, `${contactId} invalid id format`));
   }
   next();

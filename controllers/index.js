@@ -5,7 +5,15 @@ const {
   deleteById,
   updateById,
   updateFavorite,
-} = require("./contacts");
+} = require("./contacts-controller");
+
+const { 
+  signup, 
+  signin, 
+  getCurrent, 
+  logout,
+  updateSubscription,
+} = require("./auth-controller");
 
 module.exports = {
   getAll,
@@ -14,4 +22,9 @@ module.exports = {
   deleteById,
   updateById,
   updateFavorite,
+  signup,
+  signin,
+  getCurrent,
+  logout,
+  updateSubscription,
 };
