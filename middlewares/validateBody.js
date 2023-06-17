@@ -1,8 +1,10 @@
-const { HttpError, dataValidator } = require("../helpers");
+const { HttpError } = require("../helpers");
+const { dataValidator } = require("../models");
 
 const validateBody = () => {
   const func = async (req, res, next) => {
     const { name, email, phone } = req.body;
+
 
     if (!name && !email && !phone) {
       next(HttpError(400, "Missing fields"));
@@ -15,8 +17,10 @@ const validateBody = () => {
 
       next(HttpError(400, `Missing required '${err}' field`));
     }
+
     next();
   };
+
   return func;
 };
 
