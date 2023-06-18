@@ -24,11 +24,16 @@ const removeContact = async (contactId) => {
     .readFile(contactsPath)
     .then((contacts) => JSON.parse(contacts));
 
-  const filteredList = contactList.filter((contact) => {
-    return contact.id !== contactId;
-  });
+  const isFound = contactList.find((contact) => contact.id === contactId);
 
-  fs.writeFile(contactsPath, JSON.stringify(filteredList));
+  if (isFound) {
+    const filteredList = contactList.filter((contact) => {
+      return contact.id !== contactId;
+    });
+
+    fs.writeFile(contactsPath, JSON.stringify(filteredList));
+    return true;
+  } else return false;
 };
 
 const addContact = async (body) => {
