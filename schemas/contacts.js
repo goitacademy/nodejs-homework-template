@@ -17,9 +17,20 @@ const addSchema = Joi.object({
 
   phone: Joi.string()
     .messages({ "any.required": `missing required phone field` })
+    .pattern(/\(([0-9]{3})\)?([ .-])([0-9]{3})?([ .-])([0-9]{4})/)
+    // .pattern(/^\d{3}-d{3}-d{4}$/)
+    .required(),
+
+  favorite: Joi.boolean().valid(false),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean()
+    .messages({ "any.required": `missing required favorite field` })
     .required(),
 });
 
 module.exports = {
   addSchema,
+  updateFavoriteSchema,
 };
