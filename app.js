@@ -46,10 +46,10 @@ connection
 
 // Middleware
 
-// app.use((req, res, next) => {
-// 	console.log("Nasze oprogramowanie pośredniczące");
-// 	next();
-// });
+app.use((req, res, next) => {
+	console.log("Nasze oprogramowanie pośredniczące");
+	next();
+});
 
 // Error response
 
