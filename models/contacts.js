@@ -48,7 +48,32 @@ const addContact = async (body) => {
   fs.writeFile(contactsPath, JSON.stringify(contactList));
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contactList = await fs
+    .readFile(contactsPath)
+    .then((contacts) => JSON.parse(contacts));
+
+  const contact = contactList.find((contact) => {
+    return contact.id === contactId;
+  });
+
+  const updatedContact = {
+    id: contact.id,
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+
+  contactList.forEach((contact) => {
+    if (contact.id === contactId) {
+      contact.name = updatedContact.name;
+      contact.email = updatedContact.email;
+      contact.phone = updatedContact.phone;
+    }
+  });
+
+  fs.writeFile(contactsPath, JSON.stringify(contactList));
+};
 
 module.exports = {
   listContacts,
