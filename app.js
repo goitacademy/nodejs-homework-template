@@ -45,13 +45,6 @@ connection
 		process.exit(1);
 	});
 
-// Middleware
-
-// app.use((req, res, next) => {
-// 	console.log("Nasze oprogramowanie pośredniczące");
-// 	next();
-// });
-
 // Error response
 
 app.use((req, res) => {
