@@ -5,7 +5,7 @@ const contactsAddSchema = require("../schemas/contacts");
 const getAll = async (req, res, next) => {
   const result = await contactsService.listContacts();
 
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const getContactById = async (req, res, next) => {
@@ -13,7 +13,7 @@ const getContactById = async (req, res, next) => {
   if (!result) {
     throw HttpError(404, "Not Found");
   }
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const addContact = async (req, res, next) => {
@@ -31,20 +31,29 @@ const removeContact = async (req, res, next) => {
   res.status(200).json({ message: "contact deleted" });
 };
 
-const updateContact = async (req, res, next) => {
+// const updateContact = async (req, res, next) => {
+//   const { error } = contactsAddSchema.validate(req.body);
+//   if (error) {
+//     throw HttpError(400, error.message);
+//   }
+
+//   const result = await contactsService.updateContact(
+//     req.params.contactId,
+//     req.body
+//   );
+//   if (!result) {
+//     throw HttpError(404, "Not found");
+//   }
+
+//   res.status(200).json(result);
+// };
+const updateContact = async (req, res) => {
+  const { contactId } = req.params;
   const { error } = contactsAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
-  const result = await contactsService.updateContact(
-    req.params.contactId,
-    req.body
-  );
+  const result = await contactsService.updateContact(contactId, req.body);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "Not Found");
   }
-
   res.status(200).json(result);
 };
 
