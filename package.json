@@ -3,21 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "cross-env NODE_ENV=production nodemon ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.1.4",
     "express": "4.17.1",
     "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.6.0",
     "mongoose": "^7.2.3",
     "morgan": "1.10.0",
-    "nanoid": "^3.3.6"
+    "nanoid": "^3.3.6",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",

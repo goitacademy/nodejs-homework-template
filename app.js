@@ -1,8 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
 
 const contactsRouter = require("./routes/api/index");
+const usersRouter = require("./auth//api/index");
 
 const app = express();
 
@@ -12,7 +15,10 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+require("./auth/config/config-passport");
+
 app.use("/", contactsRouter);
+app.use("/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
