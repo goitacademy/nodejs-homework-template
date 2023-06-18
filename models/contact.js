@@ -2,8 +2,7 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
-// const phoneRegExp = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-// const emailRegExp = /\\S+@\\S+/;
+const phoneRegExp = /^\(\d\d\d\) \d\d\d-\d\d\d\d$/;
 
 const contactSchema = new Schema(
   {
@@ -11,14 +10,18 @@ const contactSchema = new Schema(
     email: {
       type: String,
       required: true,
-      // match: emailRegExp,
     },
     phone: {
       type: String,
       required: true,
-      // match: phoneRegExp,
+      match: phoneRegExp,
     },
     favorite: { type: Boolean, default: false },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   {
     versionKey: false,
@@ -39,12 +42,11 @@ const addSchema = Joi.object({
       "any.required": `missing required email field`,
     })
     .required(),
-    // .pattern(emailRegExp),
   phone: Joi.string()
     .messages({
       "any.required": `missing required phone field`,
     })
-    // .pattern(phoneRegExp)
+    .pattern(phoneRegExp)
     .required(),
   favorite: Joi.boolean()
     .messages({
