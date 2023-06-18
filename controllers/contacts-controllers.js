@@ -60,6 +60,10 @@ const updateContact = async (req, res, next) => {
       new: true,
     });
 
+    if (!result) {
+      throw HttpError(404, `Not Found`);
+    }
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -73,6 +77,10 @@ const updateStatusContact = async (req, res, next) => {
     const result = await Contacts.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+
+    if (!result) {
+      throw HttpError(404, `Not Found`);
+    }
 
     res.status(200).json(result);
   } catch (error) {
