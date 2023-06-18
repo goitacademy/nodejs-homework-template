@@ -47,7 +47,7 @@ const removeContact = async (req, res, next) => {
 
 //   res.status(200).json(result);
 // };
-const updateContact = async (req, res) => {
+const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { error } = contactsAddSchema.validate(req.body);
   const result = await contactsService.updateContact(contactId, req.body);

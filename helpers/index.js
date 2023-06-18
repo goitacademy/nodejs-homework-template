@@ -1,5 +1,6 @@
-const { validateContactsBody } = require("./validateContactsBody");
-
+const { ctrlWrapper } = require("./ctrlWrapper");
+const { HttpError } = require("./HttpError");
 module.exports = {
-  validateContactsBody,
+  ctrlWrapper,
+  HttpError,
 };
