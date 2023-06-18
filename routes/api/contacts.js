@@ -26,7 +26,10 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message delete" });
+  await removeContact(req.params.contactId);
+  res.json({
+    message: `Contact with ID ${req.params.contactId} was succesfully removed`,
+  });
 });
 
 router.put("/:contactId", async (req, res, next) => {
