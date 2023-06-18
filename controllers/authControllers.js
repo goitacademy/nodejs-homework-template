@@ -17,27 +17,27 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
     email: newUser.email,
-    name: newUser.name,
+    password: newUser.password,
   });
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const { email: userEmail, password } = req.body;
+  const user = await User.findOne({ email: userEmail });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
   }
 
-  const { _id: id } = user;
+  const { _id: id, email, subscription } = user;
   const payload = { id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(id, {token});
-  res.json({ token });
+  res.json({ token, user: { email, subscription } });
 };
 
 const logout = async(req, res)=> {
@@ -51,11 +51,11 @@ const logout = async(req, res)=> {
 }
 
 const current = (req, res)=> {
-    const {name, email} = req.user;
+    const {email, subscription} = req.user;
 
     res.json({
-        name,
-        email,
+          email,
+          subscription
     })
 }
 
