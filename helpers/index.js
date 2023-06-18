@@ -1,7 +1,5 @@
-const { HttpError } = require("../helpers/HttpError");
-const { ctrlWrapper } = require("../helpers/ctrlWrapper");
+const { validateContactsBody } = require("./validateContactsBody");
 
 module.exports = {
-  HttpError,
-  ctrlWrapper,
+  validateContactsBody,
 };
