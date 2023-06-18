@@ -4,4 +4,3 @@ node_modules/
 .vscode
 .env
 .env.local
-config.js
