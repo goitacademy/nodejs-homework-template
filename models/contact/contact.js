@@ -45,5 +45,5 @@ const schemas = {
 
 module.exports = {
   Contact,
-  schemas,
+  schemas
 };

@@ -1,7 +1,7 @@
 const { HttpError } = require('../helper');
  
 
-const validateBody = (schema) => async (req, res, next) => {
+const validateBody = schema => async (req, res, next) => {
     const { path } = req.route;
     const { error } = schema.validate(req.body);
     if (error && path === "/:contactId/favorite") {
