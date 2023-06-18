@@ -36,12 +36,12 @@ const removeContact = async (contactId) => {
   } else return false;
 };
 
-const addContact = async (body) => {
+const addContact = async ({ name, email, phone }) => {
   const newContact = {
     id: nanoid(),
-    name: body.name,
-    email: body.email,
-    phone: body.phone,
+    name: name,
+    email: email,
+    phone: phone,
   };
 
   const contactList = await fs
