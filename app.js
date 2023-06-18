@@ -2,17 +2,6 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
-<<<<<<< Updated upstream
-=======
-
-const DB_HOST = "mongodb+srv://PavMor:Sobolivka1@cluster0.gydk4zo.mongodb.net/contacts_reader?retryWrites=true&w=majority";
-
-mongoose.set('strictQuery', true);
-
-mongoose.connect(DB_HOST)
-  .then(()=> console.log("Database connect success"))
-  .catch(error => console.log(error.message))
->>>>>>> Stashed changes
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -23,7 +12,7 @@ mongoose.set('strictQuery', true)
 mongoose.connect(DB_HOST)
   .then(()=> console.log("Database connect success"))
   .catch(error => console.log(error.message))
-  
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
