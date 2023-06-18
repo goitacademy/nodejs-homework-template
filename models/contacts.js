@@ -41,10 +41,20 @@ const updateContacts = async (contactId, body) => {
   else return "Контакт который Вы хотите изменить не найден";
 };
 
+const updateStatusContact = async (contactId, body) => {
+  const contact = await Contacts.findByIdAndUpdate(
+    contactId,
+    { favorite: body.favorite },
+    { new: true }
+  );
+  return contact;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContacts,
+  updateStatusContact,
 };
