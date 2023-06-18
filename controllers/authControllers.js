@@ -25,7 +25,7 @@ const login = async (req, res) => {
   const { email: userEmail, password } = req.body;
   const user = await User.findOne({ email: userEmail });
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
