@@ -1,4 +1,4 @@
-// import { nanoid } from "nanoid";
+const { nanoid } = require("nanoid");
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -21,7 +21,22 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  const newContact = {
+    id: nanoid(),
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+
+  const contactList = await fs
+    .readFile(contactsPath)
+    .then((contacts) => JSON.parse(contacts));
+
+  contactList.push(newContact);
+
+  fs.writeFile(contactsPath, JSON.stringify(contactList));
+};
 
 const updateContact = async (contactId, body) => {};
 
