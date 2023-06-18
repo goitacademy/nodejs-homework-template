@@ -59,9 +59,27 @@ const current = (req, res)=> {
     })
 }
 
+const subscription = async (req, res) => {
+  const { _id, subscription: currentSubscription } = req.user;
+  const { newSubscription } = req.body;
+
+  if (currentSubscription !== newSubscription) {
+    const validSubscriptions = ['starter', 'pro', 'business'];
+    if (validSubscriptions.includes(newSubscription)) {
+      await User.findByIdAndUpdate(_id, { subscription: newSubscription });
+      res.json({ newSubscription });
+    } else {
+      throw HttpError(400, "Invalid subscription value. Valid options are 'starter', 'pro', or 'business'");
+    }
+  } else {
+    throw HttpError(400, "This subscription is already in use");
+  }
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
+  subscription: ctrlWrapper(subscription),
 };

@@ -25,4 +25,6 @@ authRouter.get("/current", authenticate, authController.current);
 
 authRouter.post("/logout", authenticate, authController.logout);
 
+authRouter.patch("/subscription", authenticate, authController.subscription);
+
 module.exports = authRouter;
