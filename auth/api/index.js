@@ -60,6 +60,25 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.get(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    const { id } = req.user;
+    const currentUser = await User.findOne({ _id: id });
+    currentUser.token = null;
+
+    await currentUser.save();
+    return res.json({
+      status: "success",
+      code: 200,
+      data: {
+        message: "Logout succesful",
+      },
+    });
+  }
+);
+
+router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
@@ -69,7 +88,8 @@ router.get(
       status: "success",
       code: "200",
       data: {
-        users: currentUser,
+        email: currentUser.email,
+        subscription: currentUser.subscription,
       },
     });
   }
