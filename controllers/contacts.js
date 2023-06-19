@@ -1,15 +1,16 @@
-const contacts = require("../models/contacts");
+const { Contact } = require("../models/contact");
 
 const { HttpErr, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  // const result = await Contact.findOne({ _id: contactId });
+  const result = await Contact.findById(contactId);
   if (!result) {
     throw HttpErr(404, "Not found!");
   }
@@ -17,48 +18,48 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpErr(404, "Not found!");
   }
   res.json(result);
-  // const phoneRegex = /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/;
-  // const phone = phoneRegex;
 };
 
-// function validatePhoneNumber(phone) {
-//   const phoneRegex = /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/;
-
-// Проверяем соответствие номера телефона регулярному выражению
-// return phoneRegex.test(phoneNumber);
-// }
-// const phone = "+1-123-456-7890";
-// if (validatePhoneNumber(phone)) {
-//   console.log("Номер телефона верный");
-// } else {
-//   console.log("Номер телефона неверный");
-// }
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpErr(404, "Not found!");
+  }
+  res.json(result);
+};
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
-    throw HttpErr(404, "Not found!");
+    throw HttpErr(404, "Missing field favorite!");
   }
   res.json({
     message: "Delete success!",
   });
 };
+
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateStatusContact),
   removeContact: ctrlWrapper(removeContact),
 };
