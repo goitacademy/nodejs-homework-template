@@ -1,7 +1,7 @@
 const createHashPassword = require("../units/createHashPassword");
-const tokenFunc = require("../units/tokenFunc");
+const getToken = require("../units/getToken");
 
 module.exports = {
   createHashPassword,
-  tokenFunc,
+  getToken,
 };

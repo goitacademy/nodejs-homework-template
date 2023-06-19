@@ -1,4 +1,4 @@
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { httpError, ctrlWrapper } = require("../../helpers");
 
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
@@ -6,7 +6,7 @@ const getCurrent = async (req, res) => {
   console.log(subscription);
 
   if (!req.user) {
-    throw HttpError(401, "Not authorized");
+    throw httpError(401, "Not authorized");
   }
   res.status(200).json({ email, subscription });
 };

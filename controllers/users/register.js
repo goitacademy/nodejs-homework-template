@@ -1,4 +1,4 @@
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { httpError, ctrlWrapper } = require("../../helpers");
 const {
   UserModel: { User },
 } = require("../../models");
@@ -8,7 +8,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw HttpError(409, "Email in use");
+    throw httpError(409, "Email in use");
   }
   const newUser = await User.create({
     ...req.body,

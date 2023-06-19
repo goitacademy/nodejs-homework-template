@@ -1,4 +1,4 @@
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { httpError, ctrlWrapper } = require("../../helpers");
 const {
   UserModel: { User },
 } = require("../../models");
@@ -8,7 +8,7 @@ const updateSubscriptionUser = async (req, res) => {
   const { id } = params;
   const result = await User.findByIdAndUpdate(id, body, { new: true });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw httpError(404, "Not found");
   }
   res.status(200).json(result);
 };

@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
 
-const tokenFunc = async (id) => {
+const getToken = async (id) => {
   const payload = {
     id,
   };
@@ -11,4 +11,4 @@ const tokenFunc = async (id) => {
   return token;
 };
 
-module.exports = tokenFunc;
+module.exports = getToken;
