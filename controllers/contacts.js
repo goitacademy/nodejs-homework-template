@@ -38,12 +38,14 @@ const remove = async (req, res) => {
     })
 };
 
-const patchFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
     const { contactId } = req.params;
-    console.log(req.body);
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) throw HttpError(404, `Not found contact with id: ${contactId}`);
-    res.json(result);
+    res.json({
+        message: "Switch favorite status",
+        result
+    });
 }
 
 
@@ -53,5 +55,5 @@ module.exports = {
     add: ctrlWrapper(add),
     remove: ctrlWrapper(remove),
     update: ctrlWrapper(update),
-    patchFavorite: ctrlWrapper(patchFavorite),
+    updateStatusContact: ctrlWrapper(updateStatusContact),
 }

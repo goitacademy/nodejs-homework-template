@@ -11,7 +11,7 @@ router.get('/:contactId', ctrl.getById);
 router.post('/', validateBody(addScheme), ctrl.add);
 router.put('/:contactId', validateBody(addScheme), ctrl.update);
 router.delete('/:contactId', ctrl.remove);
-router.patch('/:contactId/favorite', validateBody(updateFavoriteScheme), ctrl.patchFavorite);
+router.patch('/:contactId/favorite', validateBody(updateFavoriteScheme), ctrl.updateStatusContact);
 
 
 module.exports = router;
