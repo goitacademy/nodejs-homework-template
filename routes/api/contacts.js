@@ -8,6 +8,7 @@ const {
   updateContact,
   contactFavorite,
 } = require("../../models/contacts");
+const User = require("../../models/users.model");
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -92,5 +93,29 @@ router.patch("/:contactId/favorite", async (req, res) => {
     res.status(200).json(updateContact);
   }
 });
+
+router.post("/users/signup", async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email, password });
+
+  if (user) {
+    res.json({
+      status: "error",
+      code: 400,
+      message: "Błąd z Joi lub innej biblioteki walidacji",
+    });
+  }
+  try {
+    const newUser = new User({ username, email });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/users/login", async (req, res, next) => {});
+
+router.get("/users/logout", async (req, res, next) => {});
+
+router.get("/users/current", async (req, res, next) => {});
 
 module.exports = router;
