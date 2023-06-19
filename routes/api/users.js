@@ -81,6 +81,7 @@ router.post("/login", async (req, res) => {
 	// Login logic
 	const token = jwt.sign({ _id: userExist._id }, secret, { expiresIn: "1h" });
 	res.header("Bearer", token);
+	await User.findOneAndUpdate({ _id: userExist._id }, { token: token });
 
 	try {
 		res.status(200).json({
@@ -88,6 +89,7 @@ router.post("/login", async (req, res) => {
 			code: 200,
 			user: {
 				email: email,
+				token: token,
 			},
 			message: "Login successful",
 		});
@@ -132,6 +134,7 @@ router.get("/current", auth, async (req, res, next) => {
 			code: 200,
 			data: {
 				email: currentUser.email,
+				token: currentUser.token,
 			},
 		});
 	} catch (err) {

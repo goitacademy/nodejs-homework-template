@@ -95,7 +95,6 @@ const updateContact = async (req, res, next) => {
 	const { contactId } = req.params;
 	try {
 		const result = await service.updateContact({ name, phone, email }, { contactId });
-		console.log(result);
 		if (result) {
 			res.json({
 				status: "success",
