@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 const secret = "goit";
 
@@ -57,5 +58,21 @@ router.post("/signup", async (req, res, next) => {
     console.log(e.message);
   }
 });
+
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    const { id } = req.user;
+    const currentUser = await User.findOne({ _id: id });
+    res.json({
+      status: "success",
+      code: "200",
+      data: {
+        users: currentUser,
+      },
+    });
+  }
+);
 
 module.exports = router;
