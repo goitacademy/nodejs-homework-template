@@ -8,13 +8,17 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "dependencies": {
     "cors": "2.8.5",
-    "cros": "^1.0.1",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.1.4",
     "express": "^4.17.1",
     "http-errors": "^2.0.0",
     "joi": "^17.9.2",
+    "mongoose": "^7.3.0",
     "morgan": "^1.10.0",
     "uuid": "^9.0.0"
   },
