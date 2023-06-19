@@ -8,6 +8,7 @@ const contactAddSchema = Joi.object({
   phone: Joi.string().pattern(phoneRegexp).required().messages({
     "string.pattern.base": "the phone should be in format (111) 111-1111",
   }),
+  favorite: Joi.boolean(),
 }).messages({
   "any.required": "missing required {#key} field",
 });
@@ -18,11 +19,19 @@ const contactUpdateSchema = Joi.object({
   phone: Joi.string().pattern(phoneRegexp).required().messages({
     "string.pattern.base": "the phone should be in format (111) 111-1111",
   }),
+  favorite: Joi.boolean(),
 }).messages({
   "any.required": "missing fields",
+});
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+}).messages({
+  "any.required": "missing field {#key}",
 });
 
 module.exports = {
   contactAddSchema,
   contactUpdateSchema,
+  contactUpdateFavoriteSchema,
 };
