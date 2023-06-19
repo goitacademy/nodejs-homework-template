@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-// import { readFile, writeFile } from "node:fs/promises";
 const join = require("path");
 const nanoid = require("nanoid");
 
@@ -7,7 +6,7 @@ const directoryName = "models";
 const fileName = "contacts.json";
 const contactsPath = join(directoryName, fileName);
 
-export const listContacts = async () => {
+const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath, { encoding: "utf-8" });
     return JSON.parse(contacts);
@@ -16,7 +15,7 @@ export const listContacts = async () => {
   }
 };
 
-export const getContactById = async (contactId) => {
+const getContactById = async (contactId) => {
   try {
     const parsedContacts = await listContacts();
     const searchedContact = parsedContacts.find(
@@ -32,7 +31,7 @@ export const getContactById = async (contactId) => {
   }
 };
 
-export const removeContact = async (contactId) => {
+const removeContact = async (contactId) => {
   try {
     const parsedContacts = await listContacts();
     const contactIndex = parsedContacts.findIndex(
@@ -55,7 +54,7 @@ export const removeContact = async (contactId) => {
   }
 };
 
-export const addContact = async (body) => {
+const addContact = async (body) => {
   try {
     const newContact = {
       id: nanoid(),
@@ -71,7 +70,7 @@ export const addContact = async (body) => {
   }
 };
 
-export const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body) => {
   try {
     const parsedContacts = await listContacts();
     const contactToUpdate = parsedContacts.find(
@@ -92,4 +91,12 @@ export const updateContact = async (contactId, body) => {
   } catch (error) {
     throw new Error(error);
   }
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
 };

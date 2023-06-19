@@ -18,7 +18,7 @@ const schema = Joi.object({
     .required(),
 });
 
-export const contactsRouter = Router();
+const contactsRouter = Router();
 
 contactsRouter.get("/", async (req, res, next) => {
   const contacts = await listContacts();
@@ -74,3 +74,5 @@ contactsRouter.put("/:contactId", async (req, res, next) => {
     return res.status(400).send(error.details[0].message);
   }
 });
+
+module.exports = contactsRouter;
