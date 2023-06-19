@@ -2,6 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const { handleMongooseError } = require("../helpers");
 
+const subscriptionType = ["starter", "pro", "business"];
+
 const userSchema = new Schema({
   password: {
     type: String,
@@ -14,7 +16,7 @@ const userSchema = new Schema({
   },
   subscription: {
     type: String,
-    enum: ["starter", "pro", "business"],
+    enum: subscriptionType,
     default: "starter",
   },
   token: String,
@@ -22,6 +24,6 @@ const userSchema = new Schema({
 
 userSchema.post("save", handleMongooseError);
 
-const User = model("contact", userSchema);
+const User = model("user", userSchema);
 
 module.exports = { User };
