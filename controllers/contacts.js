@@ -51,6 +51,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  
   const { body, params } = req;
 
   const { id } = params;
