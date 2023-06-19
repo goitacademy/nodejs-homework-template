@@ -8,7 +8,7 @@ const {
   updateContact,
   contactFavorite,
 } = require("../../models/contacts");
-const User = require("../../models/users.model");
+// const User = require("../../models/users.model");
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -94,28 +94,40 @@ router.patch("/:contactId/favorite", async (req, res) => {
   }
 });
 
-router.post("/users/signup", async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email, password });
+// USERS
 
-  if (user) {
-    res.json({
-      status: "error",
-      code: 400,
-      message: "Błąd z Joi lub innej biblioteki walidacji",
-    });
-  }
-  try {
-    const newUser = new User({ username, email });
-  } catch (error) {
-    next(error);
-  }
-});
+// router.post("/signup", async (req, res, next) => {
+//   const { email, password } = req.body;
+//   const user = await User.findOne({ email, password });
 
-router.post("/users/login", async (req, res, next) => {});
+//   if (user) {
+//     res.json({
+//       status: "error",
+//       code: 409,
+//       data: `Conflict`,
+//       message: "User already exists!",
+//     });
+//   }
+//   try {
+//     const newUser = new User({ email });
+//     newUser.setPassword(password)
+//     await newUser.save()
+//     res.json({
+//       status: "succress",
+//       code: 201,
+//       data: {
+//         message: "Register complete!"
+//       }
+//     })
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-router.get("/users/logout", async (req, res, next) => {});
+// router.post("/login", async (req, res, next) => {});
 
-router.get("/users/current", async (req, res, next) => {});
+// router.get("/logout", async (req, res, next) => {});
+
+// router.get("/current", async (req, res, next) => {});
 
 module.exports = router;

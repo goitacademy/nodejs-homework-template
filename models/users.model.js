@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const router = require("../routes/api/contacts");
+const bCrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
-const userSchema = newSchema({
+const userSchema = new Schema({
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -26,6 +26,14 @@ const userSchema = newSchema({
     ref: "user",
   },
 });
+
+userSchema.methods.setPassword = function (password) {
+  this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(7));
+};
+
+userSchema.methods.validPassword = function (password) {
+  return bCrypt.compareSync(password, this.password);
+};
 
 const User = mongoose.model("user", userSchema);
 
