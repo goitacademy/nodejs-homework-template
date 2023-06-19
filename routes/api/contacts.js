@@ -1,12 +1,12 @@
-import { Router } from "express";
-import {
+const Router = require("express");
+const {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-} from "../../models/contacts.js";
-import Joi from "joi";
+} = require("../../models/contacts.js");
+const Joi = require("joi");
 
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),

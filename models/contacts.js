@@ -1,6 +1,7 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { join } from "path";
-import { nanoid } from "nanoid";
+const fs = require("fs/promises");
+// import { readFile, writeFile } from "node:fs/promises";
+const join = require("path");
+const nanoid = require("nanoid");
 
 const directoryName = "models";
 const fileName = "contacts.json";
@@ -8,7 +9,7 @@ const contactsPath = join(directoryName, fileName);
 
 export const listContacts = async () => {
   try {
-    const contacts = await readFile(contactsPath, { encoding: "utf-8" });
+    const contacts = await fs.readFile(contactsPath, { encoding: "utf-8" });
     return JSON.parse(contacts);
   } catch (error) {
     throw new Error(`Something went wrong: ${error.message}`);
@@ -44,7 +45,10 @@ export const removeContact = async (contactId) => {
       const newContactsList = parsedContacts.filter(
         (contact) => contact.id !== contactId
       );
-      await writeFile(contactsPath, JSON.stringify(newContactsList, null, 2));
+      await fs.writeFile(
+        contactsPath,
+        JSON.stringify(newContactsList, null, 2)
+      );
     }
   } catch (error) {
     throw new Error(`Something went wrong: ${error.message}`);
@@ -60,7 +64,7 @@ export const addContact = async (body) => {
 
     const parsedContacts = await listContacts();
     const newContactsArray = [...parsedContacts, newContact];
-    writeFile(contactsPath, JSON.stringify(newContactsArray, null, 2));
+    fs.writeFile(contactsPath, JSON.stringify(newContactsArray, null, 2));
     return newContact;
   } catch (error) {
     throw new Error(`Something went wrong: ${error.message}`);
@@ -82,7 +86,7 @@ export const updateContact = async (contactId, body) => {
         (contact) => contact.id !== contactId
       );
       newContactList.push(updatedContact);
-      await writeFile(contactsPath, JSON.stringify(newContactList, null, 2));
+      await fs.writeFile(contactsPath, JSON.stringify(newContactList, null, 2));
       return updatedContact;
     }
   } catch (error) {

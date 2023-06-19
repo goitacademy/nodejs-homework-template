@@ -1,7 +1,8 @@
-import express from "express";
-import logger from "morgan";
-import cors from "cors";
-import { contactsRouter } from "./routes/api/contacts.js";
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+
+const contactsRouter = require("./routes/api/contacts");
 export const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
