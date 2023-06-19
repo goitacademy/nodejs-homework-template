@@ -1,8 +1,11 @@
 const { findAll, find, create, edit, remove } = require("../../services");
 const { ApiError, decorCtrWrapper } = require("../../utils");
 
-const getAll = async (_, res) => {
-  const response = await findAll();
+const getAll = async (req, res) => {
+  const { page, limit, favorite } = req.query;
+  const perPage = page > 0 ? (page - 1) * limit : 0;
+
+  const response = await findAll({ favorite }).skip(perPage).limit(limit);
 
   res.json({ data: response });
 };
