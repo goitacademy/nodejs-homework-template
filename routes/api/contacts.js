@@ -1,25 +1,31 @@
-const express = require('express')
+/** @format */
 
-const router = express.Router()
+const express = require("express");
+// const ctrl = require("../../controllers/contacts");
+// const controller = require('../../controllers/contact/')
+const controllerWrapper = require("../../helpers/controllerWrapper");
+const ctrl = require("../../controllers/contacts/")
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { auth } = require("../../middlewares");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", auth, controllerWrapper(ctrl.getAll));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+
+router.get("/:contactId", auth, (ctrl.getById));
+
+router.post("/", auth, controllerWrapper(ctrl.add));
+
+router.delete("/:contactId", auth, controllerWrapper(ctrl.remove));
+
+router.put("/:contactId", auth, controllerWrapper(ctrl.update));
+
+router.patch(
+  "/:contactId/favorite",
+  auth,
+  controllerWrapper(ctrl.updateFavorite)
+);
 
 module.exports = router
