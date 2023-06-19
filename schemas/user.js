@@ -9,6 +9,7 @@ const userRegisterSchema = Joi.object({
 const userLoginShema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().pattern(emailRegexp).required(),
+  token: Joi.string(),
 })
 
 module.exports = {

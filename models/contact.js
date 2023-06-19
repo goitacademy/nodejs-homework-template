@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
-const { handleMongooseError } = require("../middlewares")
-const {emailRegexp,nameRegexp,phoneRegexp} = require("../constans/contacts")
+const { handleMongooseError } = require("../helpers");
+const { emailRegexp, nameRegexp, phoneRegexp } = require("../constans/contacts");
 
 const contactShema = new Schema({
   name: {
@@ -21,6 +21,12 @@ const contactShema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  }
+  
 }, { versionKey: false, timestamps: true });
 
 contactShema.post("save", handleMongooseError);

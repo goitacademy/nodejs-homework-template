@@ -1,18 +1,18 @@
 const { Schema, model } = require("mongoose");
 
-const { handleMongooseError } = require("../middlewares");
+const {handleMongooseError} = require("../helpers")
 
 const { emailRegexp } = require("../constans/contacts");
 
-const userShema = new Schema({
- password: {
-    type: String,
-     minlength: 6,
+const userSchema = new Schema({
+  password: {
+     type: String,
+      minlength: 6,
     required: [true, 'Password is required'],
   },
   email: {
-    type: String,
-    match:emailRegexp,
+      type: String,
+      match: emailRegexp,
     required: [true, 'Email is required'],
     unique: true,
   },
@@ -24,11 +24,11 @@ const userShema = new Schema({
   token: {
     type: String,
     default: null,
-  },
+  }
 }, { versionKey: false, timestamps: true });
 
-userShema.post("save", handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
-const User = model("user", userShema);
+const User = model("user", userSchema);
 
 module.exports = User;
