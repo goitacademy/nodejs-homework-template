@@ -1,11 +1,11 @@
 #### Base URL
 https://phonebook-zwbk.onrender.com
------
+
 #### Endpoints and methods
 
 ## GET /api/contacts/
 Returns list of all the contacts
------
+
 ## GET /api/contacts/{id}/
 Returns contact by ID
 
