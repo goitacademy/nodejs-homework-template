@@ -6,8 +6,8 @@ const { validateBody } = require('../../decorators');
 
 const router = express.Router();
 
-router.post('/signup', validateBody(schema.UserRegisterSchema), authController.signup);
+router.post('/register', validateBody(schema.UserRegisterSchema), authController.signup);
 
-router.post('/signin', validateBody(schema.UserLoginSchema), authController.signin);
+router.post('/login', validateBody(schema.UserLoginSchema), authController.signin);
 
 module.exports = router;
