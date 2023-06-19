@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
-const {mongooseErrorHandler} = require("../utils");
+const { mongooseErrorHandler } = require("../utils");
+const Joi = require("joi");
 
 const contactSchema = new Schema({
   name: {
@@ -18,8 +19,23 @@ const contactSchema = new Schema({
   },
 });
 
-contactSchema.post("save",mongooseErrorHandler);
+contactSchema.post("save", mongooseErrorHandler);
+
+const validationSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
+const favoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
+const schemas = {
+  validationSchema,
+  favoriteSchema
+};
+
+module.exports = { Contact, schemas };
