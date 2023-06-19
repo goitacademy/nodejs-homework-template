@@ -18,18 +18,20 @@ router.post("/login", async (req, res, next) => {
       message: "Incorrect login/password",
     });
   }
+  try {
+    const payload = {
+      id: user.id,
+    };
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" });
 
-  const payload = {
-    id: user.id,
-  };
-
-  const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-
-  return res.json({
-    status: "success",
-    code: 200,
-    data: { token },
-  });
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { token },
+    });
+  } catch (e) {
+    return res.json.status(400).send(e.message);
+  }
 });
 
 router.post("/signup", async (req, res, next) => {
@@ -55,35 +57,62 @@ router.post("/signup", async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.log(e.message);
+    res.status(400).send(e.message);
   }
 });
 
 router.get(
   "/logout",
-  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({
+          status: "error",
+          code: 401,
+          message: "Unauthorized",
+        });
+      }
+
+      req.user = user;
+      next();
+    })(req, res, next);
+  },
   async (req, res, next) => {
     const { id } = req.user;
     const currentUser = await User.findOne({ _id: id });
     currentUser.token = null;
-
-    await currentUser.save();
-    return res.json({
-      status: "success",
-      code: 200,
-      data: {
-        message: "Logout succesful",
-      },
-    });
+    try {
+      await currentUser.save();
+      return res.json({
+        status: "success",
+        code: 204,
+      });
+    } catch (e) {
+      return res.status(401).send(e.message);
+    }
   }
 );
 
 router.get(
   "/current",
-  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({
+          status: "error",
+          code: 401,
+          message: "Unauthorized",
+        });
+      }
+
+      req.user = user;
+      next();
+    })(req, res, next);
+  },
   async (req, res, next) => {
     const { id } = req.user;
     const currentUser = await User.findOne({ _id: id });
+
     res.json({
       status: "success",
       code: "200",
