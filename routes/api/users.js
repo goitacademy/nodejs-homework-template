@@ -7,6 +7,6 @@ const ctrl = require("../../controllers/users");
 
 router.get("/register", ctrl.register);
 
-router.get("/login");
+router.get("/login", ctrl.login);
 
 module.exports = router;
