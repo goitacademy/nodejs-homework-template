@@ -1,7 +1,7 @@
-const { register } = require("./auth");
-const { login } = require("./auth");
-const { getCurrent } = require("./auth");
-const { logout } = require("./auth");
-const { updateSubscription } = require("./auth");
+const { register } = require("./register");
+const { login } = require("./login");
+const { getCurrent } = require("./getCurrent");
+const { logout } = require("./logout");
+const { updateSubscription } = require("./updateSubscription");
 
 module.exports = { register, login, getCurrent, logout, updateSubscription };
