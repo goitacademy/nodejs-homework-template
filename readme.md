@@ -1,15 +1,15 @@
-#### Base URL
+## Base URL
 https://phonebook-zwbk.onrender.com
 
-#### Endpoints and methods
+## Endpoints and methods
 
-## GET /api/contacts/
+### GET /api/contacts/
 Returns list of all the contacts
 
-## GET /api/contacts/{id}/
+### GET /api/contacts/{id}/
 Returns contact by ID
 
-## POST /api/contacts/
+### POST /api/contacts/
 Adds new contact
 Returns new contact
 
@@ -21,7 +21,7 @@ An example of a contact object to be added to the DB:
 }
 
 
-## PUT /api/contacts/{id}/
+### PUT /api/contacts/{id}/
 Find contact by ID and updates it.
 
 An example of a contact object to be added to the DB:
@@ -32,13 +32,13 @@ An example of a contact object to be added to the DB:
     "favorite": true
 }
 
-## PATCH /api/contacts/{id}/favorite/
+### PATCH /api/contacts/{id}/favorite/
 Find contact by ID and updates object property favorite.
 
 An example of a contact object to be added to the DB:
 {
     "favorite": true
 }
-## DELETE /api/contacts/{id}/
+### DELETE /api/contacts/{id}/
 Find contact by ID and delete
 
