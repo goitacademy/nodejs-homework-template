@@ -10,6 +10,7 @@ const app = express()
 app.use(express.urlencoded({
     extended: false
 }))
+app.use(express.static('public'))
 app.use(express.json())
 app.use('/api/v1/users', require("./routes/api/authRoutes/authRoutes"))
 app.use('/api/v1/contacts', require("./routes/api/contactsRoutes"))
