@@ -35,9 +35,23 @@ const removeContact = async (conactId) => {
   return result;
 };
 
+const updateContact = async (contactId, body) => {
+  const allContacts = await listContacts();
+  const contact = await allContacts.find((item) => item.id === contactId);
+  if (!contact) return null;
+  const updateContact = { ...contact, ...body };
+  const updateContacts = await allContacts.map((item) => {
+    if (item.id === contactId) return updateContact;
+    return item;
+  });
+  await fs.writeFile(contactsPath, JSON.stringify(updateContacts));
+  return updateContact;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };
