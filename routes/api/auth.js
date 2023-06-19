@@ -4,7 +4,9 @@ const router = express.Router()
 
 const authControler = require('../../cntrl/auth-controler')
 
+
 const {authentication, upload} = require('../../middlewares')
+
 
 router.post('/register', authControler.signup)
 
