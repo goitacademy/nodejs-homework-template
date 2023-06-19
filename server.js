@@ -2,15 +2,16 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-const DB_HOST =
-  "mongodb+srv://AlexRose2603:JtdUszcsc2T0Hb1B@contacts-db.lnvqx23.mongodb.net/DB-Contacts?retryWrites=true&w=majority";
+const { DB_HOST, PORT = 3000 } = process.env;
 mongoose.set("strictQuery", true);
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000);
+    app.listen(PORT);
   })
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
+console.log("Server is running on port 3000");
