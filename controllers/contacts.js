@@ -20,6 +20,9 @@ const getContactById = async (req, res) => {
 const addContact = async (req, res) => {
   
   const { body } = req;
+  // if (body.favorite !== "boolean") {
+  //   throw HttpError(400, "missing field favorite ");
+  // }
 
   const result = await Contact.create(body);
 
@@ -51,7 +54,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-  
+
   const { body, params } = req;
 
   const { id } = params;
