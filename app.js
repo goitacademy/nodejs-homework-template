@@ -4,9 +4,9 @@ const cors = require("cors");
 const contactsRouter = require("./routes/api/contacts");
 const connectMongo = require("./connectDb");
 const usersRouter = require("./routes/api/users");
-
+const passport = require("passport");
 const app = express();
-
+require("./config/config-passport");
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
@@ -15,6 +15,8 @@ app.use(express.json());
 connectMongo();
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
+app.use(passport.initialize());
+
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });

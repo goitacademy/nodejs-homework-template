@@ -65,6 +65,10 @@ router.post("/login", async (req, res, next) => {
   };
   const secret = "testsecret";
   const token = jwt.sign(payload, secret);
+
+  user.token = token;
+  await user.save();
+
   return res.json({
     status: "success",
     code: 200,
