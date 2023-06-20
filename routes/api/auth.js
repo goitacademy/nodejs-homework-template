@@ -1,11 +1,7 @@
 const express = require("express");
 const ctrl = require("../../controllers/auth");
 const {
-  validateBody,
-//   validateUpdateBody,
-//   validateFavorite,
-//   isValidId,
-} = require("../../middlewares");
+  validateBody,validateSubscription, authenticate} = require("../../middlewares");
 
 const { schemas } = require("../../models/userModel");
 
@@ -13,5 +9,13 @@ const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/login", validateBody(schemas.registerSchema), ctrl.login);
+router.get("/current", authenticate, ctrl.getCurrent)
+router.post("/logout", authenticate, ctrl.logout);
+router.patch(
+  "/",
+  authenticate,
+  validateSubscription(schemas.updateSubscriptionSchema),
+  ctrl.updateSubscription
+);
 
 module.exports = router
