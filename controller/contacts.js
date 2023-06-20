@@ -24,6 +24,7 @@ const getById = async (req, res, next) => {
       res.json({
         status: "success",
         code: 200,
+        message: "Contact found",
         data: { contact: result },
       });
     } else {
@@ -54,6 +55,7 @@ const create = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       code: 201,
+      message: "Contact created",
       data: { contact: result },
     });
   } catch (e) {
@@ -76,6 +78,7 @@ const update = async (req, res, next) => {
       res.json({
         status: "success",
         code: 200,
+        message: "Contact updated",
         data: { contact: result },
       });
     } else {
@@ -108,6 +111,7 @@ const updateStatus = async (req, res, next) => {
       res.json({
         status: "success",
         code: 200,
+        message: "Status changed",
         data: { contact: result },
       });
     } else {
