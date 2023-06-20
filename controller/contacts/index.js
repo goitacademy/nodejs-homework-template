@@ -15,10 +15,18 @@ const updateContactSchema = Joi.object({
   favourite: Joi.boolean(),
 }).or("name", "email", "phone", "favourite");
 
-const get = async (_, res, next) => {
+const get = async (req, res, next) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+
     const results = await service.getAllContacts();
-    // res.status(200).json(results);
+    // req.user._id,
+    // req.query.favorite,
+    // page,
+    // limit
+    // );
+    res.status(200).json(results);
     console.log(results);
     console.log("contacts getted!");
     res.json({
@@ -36,19 +44,22 @@ const get = async (_, res, next) => {
 
 const getById = async (req, res, next) => {
   const { id } = req.params;
+
   try {
-    const result = await service.getContactById(id);
+    const result = await service.getContactById(id, req.user._id);
     if (result) {
+      res.status(200).json(results);
+
       res.json({
         status: "success",
         code: 200,
-        data: { task: result },
+        data: { contact: result },
       });
     } else {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found task id: ${id}`,
+        message: `Not found contact id: ${id}`,
         data: "Not Found",
       });
     }
@@ -60,18 +71,21 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const { name, email, phone, favourite } = req.body;
+  const owner = req.user._id;
+
   try {
     const result = await service.createContact({
       name,
       email,
       phone,
       favourite,
+      owner,
     });
 
     res.status(201).json({
       status: "success",
       code: 201,
-      data: { task: result },
+      data: { contact: result },
     });
   } catch (e) {
     console.error(e);
@@ -82,8 +96,10 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params;
   const { name, email, phone, favourite } = req.body;
+  const owner = req.user._id;
+
   try {
-    const result = await service.updateTask(id, {
+    const result = await service.updateContact(id, owner, {
       name,
       email,
       phone,
@@ -93,13 +109,13 @@ const update = async (req, res, next) => {
       res.json({
         status: "success",
         code: 200,
-        data: { task: result },
+        data: { contact: result },
       });
     } else {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found task id: ${id}`,
+        message: `Not found contact id: ${id}`,
         data: "Not Found",
       });
     }
@@ -112,14 +128,15 @@ const update = async (req, res, next) => {
 const updateStatus = async (req, res, next) => {
   const { id } = req.params;
   const { favourite = false } = req.body;
+  const owner = req.user._id;
 
   try {
-    const result = await service.updateContact(id, { favourite });
+    const result = await service.updateContact(id, owner, { favourite });
     if (result) {
       res.json({
         status: "success",
         code: 200,
-        data: { task: result },
+        data: { contact: result },
       });
     } else {
       res.status(404).json({
@@ -137,14 +154,15 @@ const updateStatus = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { id } = req.params;
+  const owner = req.user._id;
 
   try {
-    const result = await service.removeContact(id);
+    const result = await service.removeContact(id, owner);
     if (result) {
       res.json({
         status: "success",
         code: 200,
-        data: { task: result },
+        data: { contact: result },
       });
     } else {
       res.status(404).json({
