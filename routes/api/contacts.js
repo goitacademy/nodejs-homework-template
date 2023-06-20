@@ -7,7 +7,7 @@ const {
   remove,
   update,
   changeStatus,
-} = require("../../controller");
+} = require("../../controller/contacts.js");
 const passport = require("passport");
 
 const auth = (req, res, next) => {

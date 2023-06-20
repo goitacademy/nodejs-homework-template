@@ -1,12 +1,10 @@
-const express = require("express");
-const User = require("../models/user");
-const router = express.Router();
+const User = require("../service/schemas/user");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
 const secret = "goit";
 
-router.post("/login", async (req, res, next) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -32,9 +30,9 @@ router.post("/login", async (req, res, next) => {
   } catch (e) {
     return res.json.status(400).send(e.message);
   }
-});
+};
 
-router.post("/signup", async (req, res, next) => {
+const register = async (req, res, next) => {
   const { username, email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -64,29 +62,22 @@ router.post("/signup", async (req, res, next) => {
   } catch (e) {
     res.status(400).send(e.message);
   }
-});
+};
 
-router.get(
-  "/logout",
-  (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (err, user) => {
-      if (err || !user) {
-        return res.status(401).json({
-          status: "error",
-          code: 401,
-          message: "Unauthorized",
-        });
-      }
+const logout = async (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+      });
+    }
 
-      req.user = user;
-      next();
-    })(req, res, next);
-  },
-
-  async (req, res, next) => {
+    req.user = user;
     const { id } = req.user;
     const currentUser = await User.findOne({ _id: id });
-    console.log(currentUser.token);
+    console.log(currentUser);
     currentUser.token = null;
     try {
       await currentUser.save();
@@ -97,26 +88,20 @@ router.get(
     } catch (e) {
       return res.status(401).send(e.message);
     }
-  }
-);
+  })(req, res, next);
+};
 
-router.get(
-  "/current",
-  (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (err, user) => {
-      if (err || !user) {
-        return res.status(401).json({
-          status: "error",
-          code: 401,
-          message: "Unauthorized",
-        });
-      }
+const getCurrent = async (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+      });
+    }
 
-      req.user = user;
-      next();
-    })(req, res, next);
-  },
-  async (req, res, next) => {
+    req.user = user;
     const { id } = req.user;
     const currentUser = await User.findOne({ _id: id });
     currentUser.token = req.token;
@@ -129,7 +114,12 @@ router.get(
         subscription: currentUser.subscription,
       },
     });
-  }
-);
+  })(req, res, next);
+};
 
-module.exports = router;
+module.exports = {
+  login,
+  register,
+  logout,
+  getCurrent,
+};

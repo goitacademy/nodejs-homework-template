@@ -4,8 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const contactsRouter = require("./routes/api/index");
-const usersRouter = require("./auth//api/index");
+const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
 
 const app = express();
 
