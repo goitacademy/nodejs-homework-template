@@ -18,7 +18,7 @@ const register = async (req, res) => {
   res.status(201).json({
     user: { 
     email: newUser.email,
-    password: newUser.password,}
+    subscription: newUser.subscription,}
   });
 };
 
@@ -26,11 +26,11 @@ const login = async (req, res) => {
   const { email: userEmail, password } = req.body;
   const user = await User.findOne({ email: userEmail });
   if (!user) {
-    throw HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
+    throw HttpError(400, "Email or password is wrong");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(400, "Помилка від Joi або іншої бібліотеки валідації");
+    throw HttpError(400, "Email or password is wrong");
   }
 
   const { _id: id, email, subscription } = user;
@@ -46,9 +46,9 @@ const logout = async(req, res)=> {
 
     await User.findByIdAndUpdate(_id, {token: ""});
 
-    res.json({
-        message: "No Content"
-    })
+       res.status(204).json({
+      message: "No Content"
+    });
 }
 
 const current = (req, res)=> {

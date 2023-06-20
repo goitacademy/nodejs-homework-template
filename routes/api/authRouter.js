@@ -1,6 +1,6 @@
 const express = require("express");
 const authController = require("../../controllers/authControllers");
-const { isBodyEmpty, authenticate } = require("../../middlewares");
+const { isBodyEmpty, authenticate, authenticateToken } = require("../../middlewares");
 const { validateBody } = require("../../decorators");
 
 const userSchemas = require("../../schemas/userSchemas");
@@ -18,6 +18,7 @@ authRouter.post(
   "/login",
   isBodyEmpty,
   validateBody(userSchemas.userLoginSchema),
+  authenticateToken,
   authController.login
 );
 
