@@ -1,7 +1,11 @@
-const { Contact, dataValidator, favoriteValidator } = require("./contact");
+const { Contact, bodyValidator, favoriteValidator } = require("./contact");
+const {User, registerValidator, loginValidator} = require('./user')
 
 module.exports = {
   Contact,
-  dataValidator,
+  bodyValidator,
   favoriteValidator,
+  User,
+  registerValidator,
+  loginValidator,
 };
