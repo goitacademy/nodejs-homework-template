@@ -1,17 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const ctrlContact = require("../controller");
+const ctrlContact = require("../controller/contacts");
+const ctrlUsers = require("../controller/users");
+const auth = require("../middleware/auth/auth");
 
-router.get("/contacts", ctrlContact.get);
+router.post("/users/signup", ctrlUsers.signup);
 
-router.get("/contacts/:id", ctrlContact.getById);
+router.post("/users/login", ctrlUsers.login);
 
-router.post("/contacts", ctrlContact.create);
+router.get("/users/current", auth, ctrlUsers.getCurrent);
 
-router.put("/contacts/:id", ctrlContact.update);
+router.patch("/users/", auth, ctrlUsers.setSubscription);
 
-router.patch("/contacts/:id/isFavourite", ctrlContact.updateStatus);
+router.post("/users/logout", auth, ctrlUsers.logout);
 
-router.delete("/contacts/:id", ctrlContact.remove);
+router.get("/contacts", auth, ctrlContact.get);
+
+router.get("/contacts/:id", auth, ctrlContact.getById);
+
+router.post("/contacts", auth, ctrlContact.create);
+
+router.put("/contacts/:id", auth, ctrlContact.update);
+
+router.patch("/contacts/:id/isFavourite", auth, ctrlContact.updateStatus);
+
+router.delete("/contacts/:id", auth, ctrlContact.remove);
 
 module.exports = router;
