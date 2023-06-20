@@ -52,6 +52,18 @@ const updateContact = async (req, res) => {
   }
   res.status(200).json(result);
 };
+const updateFavorite = async (req, res) => {
+  const { error } = addSchema.validate(req.body);
+  if (error) {
+    throw  HttpError(404, "missing fields");
+  }
+  const { contactId } = req.params;
+  const result = await Contact.findIdAndUpdate(contactId, req.body, {new:true});
+  if (!result) {
+    throw  HttpError(404, "Not found");
+  }
+  res.status(200).json(result);
+};
 
 
 module.exports = {
@@ -60,5 +72,6 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 
 };
