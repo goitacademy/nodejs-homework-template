@@ -15,7 +15,10 @@ const getAllContacts = async (owner, favorite, page, limit) => {
 };
 
 const getContactById = (id, owner) => {
-  return Contact.findOne({ _id: id, owner });
+  return Contact.findOne({
+    _id: id,
+    //FIXME: owner
+  });
 };
 
 const createContact = ({ name, email, phone, favourite, owner }) => {

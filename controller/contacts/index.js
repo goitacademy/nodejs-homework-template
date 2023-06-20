@@ -43,8 +43,8 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  console.log(req.params.id);
-  console.log(req.user.id);
+  // console.log(req.params.id);
+  // console.log(req.user.id);
 
   try {
     const result = await service.getContactById(req.params.id, req.user.id);
