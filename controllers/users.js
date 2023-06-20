@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
 
-const { User } = require("../models/user");
+const { User, subscriptionType } = require("../models/user");
 const { SECRET_KEY } = process.env;
 
 const registrationSchema = Joi.object({
@@ -16,6 +16,12 @@ const registrationSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
+});
+
+const updateShema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionType)
+    .required(),
 });
 
 const register = async (req, res) => {
@@ -84,9 +90,31 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateSubscription = async (req, res) => {
+  const { error } = updateShema.validate(req.body);
+  if (error) {
+    throw HttpError(400, "Enter the correct field value subscription");
+  }
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+  if (!user) {
+    throw HttpError(404);
+  }
+  res.json({
+    email: user.email,
+    subscription: user.subscription,
+  });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
