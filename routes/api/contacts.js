@@ -1,4 +1,4 @@
-const Router = require("express");
+const { Router } = require("express");
 const {
   listContacts,
   getContactById,
@@ -22,19 +22,18 @@ const contactsRouter = Router();
 
 contactsRouter.get("/", async (req, res, next) => {
   const contacts = await listContacts();
-  return res.status(200).json({ contacts });
+  return res.status(200).json(contacts);
 });
 
 contactsRouter.get("/:contactId", async (req, res, next) => {
   const requestedContact = await getContactById(req.params.contactId);
 
   if (!requestedContact) return res.status(404).send({ message: "Not found" });
-  return res.status(200).json({ requestedContact });
+  return res.status(200).json(requestedContact);
 });
 
 contactsRouter.post("/", async (req, res, next) => {
-  const user = req.body;
-
+  const user = req.query;
   try {
     Joi.attempt(user, schema);
     const newUser = await addContact(user);
@@ -48,10 +47,10 @@ contactsRouter.delete("/:contactId", async (req, res, next) => {
   const contactToDeleteID = req.params.contactId;
 
   if (!contactToDeleteID) {
-    return res.status(404).send({ message: "Not found" });
+    return res.status(404).send("Not found");
   } else {
     await removeContact(contactToDeleteID);
-    return res.status(200).json({ message: "Contact deleted" });
+    return res.status(200).json("Contact deleted");
   }
 });
 

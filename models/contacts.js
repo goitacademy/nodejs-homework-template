@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const { join } = require("path");
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const directoryName = "models";
 const fileName = "contacts.json";
