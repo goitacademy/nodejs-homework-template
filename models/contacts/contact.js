@@ -27,6 +27,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", contactSchemaError);
+contactSchema.post("find", contactSchemaError);
 
 const Contact = model("contact", contactSchema);
 

@@ -1,8 +1,9 @@
 const { Contact } = require("../../models");
 
 const findAll = (filter) => {
-  if (filter.favorite) return Contact.find(filter);
-  return Contact.find();
+  const query = filter.favorite ? filter : {};
+
+  return Contact.find(query);
 };
 
 const find = (id) => Contact.findById(id);
