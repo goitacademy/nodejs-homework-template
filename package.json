@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "hw02-express",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,13 +9,19 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
+
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "mongodb": "^5.6.0",
     "mongoose": "^7.3.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",    
+    "joi": "^17.9.2",
+    "lint-fix": "^0.24.0",   
+    "nanoid": "^4.0.2",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "7.19.0",
