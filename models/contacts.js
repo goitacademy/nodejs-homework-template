@@ -1,6 +1,8 @@
 const { default: mongoose } = require("mongoose");
 
-const Contacts = mongoose.model("contacts", {
+const Schema = mongoose.Schema;
+
+const contacts = new Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -15,70 +17,14 @@ const Contacts = mongoose.model("contacts", {
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 
-const listContacts = async () => {
-  try {
-    return await Contacts.find();
-  } catch (error) {
-    console.error("An error occurred");
-  }
-};
-
-const getContactById = async (contactId) => {
-  try {
-    return await Contacts.findOne({ _id: contactId });
-  } catch (error) {
-    console.error("An error occurred");
-  }
-};
-
-const removeContact = async (contactId) => {
-  try {
-    return await Contacts.findByIdAndDelete({ _id: contactId });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const addContact = async (body) => {
-  try {
-    const { name, email, phone, favorite } = body;
-    const newContact = new Contacts({
-      name: name,
-      email: email,
-      phone: phone,
-      favorite: favorite,
-    });
-
-    return await newContact.save();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const updateContact = async (contactId, body) => {
-  try {
-    await Contacts.findByIdAndUpdate({ _id: contactId }, body);
-
-    return await getContactById(contactId);
-  } catch (error) {
-    console.error(error);
-  }
-};
-const updateStatusContact = async (contactId, favorite) => {
-  try {
-    return await Contacts.findByIdAndUpdate({ _id: contactId }, favorite);
-  } catch (error) {
-    console.error(error);
-  }
-};
+const Contacts = mongoose.model("contact", contacts);
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
+  Contacts,
 };
