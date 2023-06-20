@@ -7,6 +7,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateContactFavorite,
 } = require("../../models/contacts.js");
 
 const contactSchema = Joi.object({
@@ -73,6 +74,23 @@ router.put("/:id", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res) => {
+  const { favorite } = req.body;
+  if (favorite === undefined || typeof favorite !== "boolean") {
+    res.status(400).json({ message: "favorite field is missing or invalid" });
+    return;
+  }
+  const updatedContact = await updateContactFavorite(
+    req.params.contactId,
+    favorite
+  );
+  if (!updatedContact) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.status(200).json(updatedContact);
   }
 });
 

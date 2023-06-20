@@ -1,3 +1,4 @@
+const Contact = require("./contact.model.js");
 const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
@@ -15,49 +16,32 @@ const writeContacts = async (contacts) => {
 };
 
 const listContacts = async () => {
-  return await readContacts();
+  return await Contact.find();
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await readContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
-  return contact;
+  return await Contact.findById(contactId);
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await readContacts();
-  const filteredContacts = contacts.filter(
-    (contact) => contact.id !== contactId
-  );
-
-  if (contacts.length > filteredContacts.length) {
-    await writeContacts(filteredContacts);
-    return true;
-  }
-
-  return false;
+  return await Contact.findByIdAndRemove(contactId);
 };
 
 const addContact = async (body) => {
-  const contacts = await readContacts();
-  const newContact = { id: uuidv4(), ...body };
-  contacts.push(newContact);
-  await writeContacts(contacts);
-  return newContact;
+  return await Contact.create(body);
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await readContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+};
 
-  if (index === -1) {
+const updateContactFavorite = async (contactId, favorite) => {
+  const contact = await Contact.findById(contactId);
+  if (!contact) {
     return null;
   }
-
-  const updatedContact = { ...contacts[index], ...body };
-  contacts[index] = updatedContact;
-  await writeContacts(contacts);
-  return updatedContact;
+  contact.favorite = favorite;
+  return await contact.save();
 };
 
 module.exports = {
@@ -66,4 +50,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateContactFavorite,
 };
