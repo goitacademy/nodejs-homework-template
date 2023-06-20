@@ -66,14 +66,14 @@ router.patch(
   validateId,
   favoriteValidate,
   async (req, res, next) => {
+    const contact = await updateStatusContact(req.params.contactId, req.body);
     try {
+      if (!contact) {
+        res.status(404).json({ message: "Not found" });
+      }
       if (!req.body) {
         res.status(400).json({ message: "missing field favorite" });
       } else {
-        const contact = await updateStatusContact(
-          req.params.contactId,
-          req.body
-        );
         res.json(contact);
       }
     } catch (error) {
