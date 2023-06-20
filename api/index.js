@@ -22,7 +22,7 @@ router.post("/contacts", auth, ctrlContact.create);
 
 router.put("/contacts/:id", auth, ctrlContact.update);
 
-router.patch("/contacts/:id/isFavourite", auth, ctrlContact.updateStatus);
+router.patch("/contacts/:id/favourite", auth, ctrlContact.updateStatus);
 
 router.delete("/contacts/:id", auth, ctrlContact.remove);
 

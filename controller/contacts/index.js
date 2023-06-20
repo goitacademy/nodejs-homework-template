@@ -21,15 +21,15 @@ const get = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 20;
 
     const results = await service.getAllContacts();
-    // req.user._id,
-    // req.query.favorite,
-    // page,
-    // limit
+    //   req.user._id,
+    //   req.query.favorite,
+    //   page,
+    //   limit
     // );
-    res.status(200).json(results);
-    console.log(results);
+    // res.status(200).json(results);
+    // console.log(results);
     console.log("contacts getted!");
-    res.json({
+    res.status(200).json({
       status: "success",
       code: 200,
       data: {
@@ -43,12 +43,13 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  const { id } = req.params;
+  console.log(req.params.id);
+  console.log(req.user.id);
 
   try {
-    const result = await service.getContactById(id, req.user._id);
+    const result = await service.getContactById(req.params.id, req.user.id);
     if (result) {
-      res.status(200).json(results);
+      res.status(200).json(result);
 
       res.json({
         status: "success",
