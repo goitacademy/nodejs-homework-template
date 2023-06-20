@@ -2,7 +2,11 @@ const express = require("express");
 
 const ctrl = require("../../controllers/contact");
 
-const { validateBody, isValidId } = require("../../middleWares");
+const {
+  validateBody,
+  isValidId,
+  validateFavorite,
+} = require("../../middleWares");
 
 const { schemas } = require("../../models/contact");
 
@@ -21,12 +25,14 @@ router.delete("/:contactId", isValidId, ctrl.deleteById);
 router.put(
   "/:contactId",
   isValidId,
+  validateFavorite,
   validateBody(schemas.addschema),
   ctrl.update
 );
 router.patch(
   "/:contactId/favorite",
   isValidId,
+
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateFavorite
 );
