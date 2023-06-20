@@ -1,11 +1,11 @@
 const validateId = require("./validateId");
 const validateBody = require("./validateBody");
 const validateFavorite = require("./validateFavorite");
-const validateRegister = require("./validateRegister");
+const validateUser = require('./validateUser')
 
 module.exports = {
   validateId,
   validateBody,
   validateFavorite,
-  validateRegister,
+  validateUser
 };

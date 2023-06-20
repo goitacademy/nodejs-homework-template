@@ -3,9 +3,7 @@ const { bodyValidator } = require("../models");
 
 const validateBody = () => {
   const func = async (req, res, next) => {
-    const { name, email, phone } = req.body;
-
-    if (!name && !email && !phone) {
+    if (Object.keys(req.body).length === 0) {
       next(HttpError(400, "Missing fields"));
     }
 
