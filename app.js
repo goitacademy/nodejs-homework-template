@@ -12,6 +12,11 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+
+// app.get("/home",(req, res) => { 
+//   res.send("<h2>Home Page</h2>");
+// });
+
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
