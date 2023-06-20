@@ -25,6 +25,6 @@ const contactSchema = new Schema({
     favorite:Joi.boolean(),
   });
   const schemas ={addSchema}
-  const Contact = model("contact", contactSchema );
+  const Contact = model("contact", contactSchema);
   module.exports = {Contact, schemas};
  

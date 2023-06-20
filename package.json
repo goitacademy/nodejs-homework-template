@@ -1,5 +1,5 @@
 {
-  "name": "hw02-express",
+  "name": "template",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,20 +8,15 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
-  "engines": {
-    "node": ">=14.20.1"
-  },
   "dependencies": {
-    "cors": "^2.8.5",
-    "cross-env": "7.0.3",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "http-errors": "^2.0.0",
+    "cors": "2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "express": "4.17.1",
     "joi": "^17.9.2",
-    "mongoose": "^7.3.0",
-    "morgan": "^1.10.0",
-    "nanoid": "^3.3.4",
-    "yarn": "^1.22.19"
+    "mongodb": "^5.5.0",
+    "mongoose": "^7.1.2",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -30,6 +25,9 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "2.0.15"
+  },
+  "engines": {
+    "node": ">=14.20.21"
   }
 }
