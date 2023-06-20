@@ -17,7 +17,7 @@ const updateFavoriteSchema = Joi.object({
 
 const getContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner });
+  const result = await Contact.find({ owner }).populate("owner", "email");
   res.json(result);
 };
 
