@@ -3,8 +3,8 @@ const User = require("./schemas/userSchema");
 const secret = process.env.SECRET_KEY;
 
 const auth = async (req, res, next) => {
-	const token = req.header("Bearer");
-	if (!token) {
+	const authHeader = req.header("Authorization");
+	if (!authHeader || !authHeader.startsWith("Bearer ")) {
 		return res.status(401).json({
 			status: "error",
 			code: 401,
@@ -12,6 +12,7 @@ const auth = async (req, res, next) => {
 		});
 	}
 
+	const token = authHeader.substring(7);
 	try {
 		const verified = jwt.verify(token, secret);
 		const foundUser = await User.findById(verified._id);
