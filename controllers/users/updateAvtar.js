@@ -26,9 +26,6 @@ const updateAvatarUser = async (req, res, next) => {
 
     const avatarURL = path.join('public', 'avatars', filename);
 
-   
-
-    console.log(`newSize-------------------------------`, newSizeAvatar);
 
     console.log(`avatarURL`, avatarURL);
 
