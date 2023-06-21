@@ -4,9 +4,11 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 
-dotenv.config({ path: './.env'})
+dotenv.config({ path: './.env' })
 
 const contactsRouter = require('./routes/api/contacts')
+const usersRouter = require('./routes/api/userRoutes')
+const authRouter = require('./routes/api/authRoutes')
 
 const app = express()
 
@@ -23,6 +25,8 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/auth', authRouter)
+app.use('/users', usersRouter)
 app.use('/contacts', contactsRouter)
 
 app.use((req, res) => {
@@ -30,7 +34,7 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  res.status(err.status || 500).json({ message: err.message })
 })
 
 module.exports = app

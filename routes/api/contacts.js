@@ -8,9 +8,11 @@ const {
     updateContact } = require('../../controllers/contacts')
     
 const { checkContactById, checkCreateContactData } = require('../../middlewares/contactMiddlewares');
+const { protect } = require('../../middlewares/authMiddlewares');
 
 const router = express.Router();
 
+router.use(protect);
 router
   .route('/')
   .post(checkCreateContactData, addContact)

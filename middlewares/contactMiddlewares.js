@@ -2,7 +2,7 @@ const Contact = require('../models/contactModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { Types } = require('mongoose');
-const { createContactValidator } = require('../utils/contactValidator');
+const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
 
 const checkContactById = catchAsync(async (req, res, next) => {
   const { id } = req.params;

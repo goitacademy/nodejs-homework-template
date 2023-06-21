@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
-const contactSchema = mongoose.Schema(
+const contactSchema = Schema(
       {
     name: {
       type: String,
@@ -17,9 +18,14 @@ const contactSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+      owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
     },
     {
-        versionKey: false
+      versionKey: false,
+      timestamps: true,
     }
     )
 
