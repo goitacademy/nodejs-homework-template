@@ -6,11 +6,11 @@ router.get("/", ctrlContact.get);
 
 router.get("/:id", ctrlContact.getById);
 
-// router.post("/", ctrlContact.create);
+router.post("/", ctrlContact.create);
 
-// router.put("/:id", ctrlContact.update);
+router.put("/:id", ctrlContact.update);
 
-// router.patch("/:id/status", ctrlContact.updateFavorite);
+router.patch("/:id/status", ctrlContact.updateFavorite);
 
 // router.delete("/:id", ctrlContact.remove);
 
