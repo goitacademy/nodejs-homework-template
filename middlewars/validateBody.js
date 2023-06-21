@@ -21,11 +21,27 @@ const validBody = (schema) => {
         })
       );
     }
+    if (!req.body.favorite) {
+      next( 
+        res.status(400).json({
+          message: "missing required favorite field",
+        })
+      );
+    }
     next();
   };
   return func;
 };
-
+const validateBody = (schema) =>{
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+        next(error.message);
+    }
+    next()
+  };
+  return func;
+}
 const validEmptyBody = () => {
   const func = (req, res, next) => {
     const bodyEmpty = Object.keys(req.body).length === 0;
@@ -53,9 +69,16 @@ const validEmptyBody = () => {
         })
       );
     }
+    if (!req.body.favorite) {
+      next( 
+        res.status(400).json({
+          message: "missing required favorite field",
+        })
+      );
+    }
     next();
   };
   return func;
 };
 
-module.exports = { validBody, validEmptyBody };
+module.exports = { validBody, validateBody, validEmptyBody };
