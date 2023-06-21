@@ -11,7 +11,7 @@ const validateUser = () => {
     const { error } = await userValidator(req.body);
 
     if (error) {
-      next(HttpError(400, "Email or password not validated"));
+      next(HttpError(400, "Email or password not valid"));
     }
 
     next();
