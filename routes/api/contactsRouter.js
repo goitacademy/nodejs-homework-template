@@ -3,9 +3,9 @@ const router = express.Router();
 
 const { validateBody, isValidId } = require("../../middlewares");
 
-const ctrl = require("../../controllers/contactsController");
+const ctrl = require("../../controllers/contacts");
 
-const { addSchema } = require("../../models/contacts");
+const { addSchema } = require("../../models/contacts/contacts");
 
 router.get("/", ctrl.listContacts);
 
