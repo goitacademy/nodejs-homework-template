@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
   try {
     const data = await contacts.listContacts();
     if (!data) {
-      res.status(400).json({ message: "Can't fetch contacts" });
+      res.status(404).json({ message: "Not found" });
     }
     res.status(200).json(data);
   } catch (error) {
@@ -23,14 +23,13 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params;
-    console.log(id);
     const data = await contacts.getById(id);
     if (!data) {
       // throw HttpError(404, "Can't fetch contacts by id");
-      res.status(404).json({ message: "Can't fetch contacts by id" });
+      res.status(404).json({ message: "Not found" });
     }
     res.status(200).json(data);
   } catch (error) {
@@ -43,21 +42,48 @@ router.post("/", async (req, res, next) => {
   if (error) {
     return res.status(400).json({ message: error.message });
   }
-
   try {
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
+    const data = await contacts.addContact(req.body);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.status(201).json(data);
   } catch (error) {
     next(error);
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const id = req.params;
+    const data = await contacts.removeContact(id);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+
+router.put("/:id", async (req, res, next) => {
+  const { error } = addSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+  try {
+    const id = req.params;
+    console.log(id);
+    const data = await contacts.updateContact(id, req.body);
+    if (!data) {
+      res.status(404).json({ message: "Not found" });
+    }
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
