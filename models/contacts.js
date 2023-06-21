@@ -11,15 +11,9 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-  const delContact = await Contacts.findById(contactId);
-  const ERROR_MESSAGE = "Номер с таким id не найден";
-
-  if (delContact) {
-    await Contacts.deleteOne(delContact);
-    return "Контакт удален";
-  } else {
-    return ERROR_MESSAGE;
-  }
+  const delContact = await Contacts.findByIdAndDelete(contactId);
+  if (delContact) return true;
+  else return false;
 };
 
 const addContact = async (body) => {
@@ -30,15 +24,15 @@ const addContact = async (body) => {
   if (contacts.some((item) => item.phone === body.phone)) {
     return ERROR_MESSAGE;
   } else {
-    await Contacts.create(body);
-    return body;
+    const contact = await Contacts.create(body);
+    return contact;
   }
 };
 
 const updateContacts = async (contactId, body) => {
-  const contact = await Contacts.findById(contactId);
-  if (contact) await Contacts.findByIdAndUpdate(contactId, body);
-  else return "Контакт который Вы хотите изменить не найден";
+  await Contacts.findByIdAndUpdate(contactId, body);
+  const changedContact = await Contacts.findById(contactId);
+  return changedContact;
 };
 
 const updateStatusContact = async (contactId, body) => {

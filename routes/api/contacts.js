@@ -26,9 +26,13 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", validateId, async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId);
   try {
-    const contact = await getContactById(req.params.contactId);
-    res.json(contact);
+    if (contact) {
+      res.json(contact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
   } catch (error) {
     next(error);
   }
@@ -37,7 +41,7 @@ router.get("/:contactId", validateId, async (req, res, next) => {
 router.post("/", validator, async (req, res, next) => {
   try {
     const newContact = await addContact(req.body);
-    res.json(newContact);
+    res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
@@ -45,8 +49,13 @@ router.post("/", validator, async (req, res, next) => {
 
 router.delete("/:contactId", validateId, async (req, res, next) => {
   try {
-    const message = await removeContact(req.params.contactId);
-    if (message) res.json(message);
+    const deletedCount = await removeContact(req.params.contactId);
+    console.log(deletedCount);
+    if (deletedCount) {
+      res.status(200).json({ message: "Contact deleted" });
+    } else {
+      res.status(404).json({ message: "Not Found" });
+    }
   } catch (error) {
     next(error);
   }
@@ -55,7 +64,11 @@ router.delete("/:contactId", validateId, async (req, res, next) => {
 router.put("/:contactId", validateId, validator, async (req, res, next) => {
   try {
     const contacts = await updateContacts(req.params.contactId, req.body);
-    res.json(contacts);
+    if (contacts) {
+      res.json(contacts);
+    } else {
+      res.status(404).json({ message: "Not Found" });
+    }
   } catch (error) {
     next(error);
   }
