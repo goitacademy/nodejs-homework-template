@@ -127,7 +127,6 @@ router.get("/current", auth, async (req, res, next) => {
 	const { _id } = req.user;
 	const currentUser = await User.findById({ _id });
 	const token = req.header("Authorization");
-	console.log(token);
 
 	// Current logic
 	try {
@@ -136,7 +135,7 @@ router.get("/current", auth, async (req, res, next) => {
 			code: 200,
 			data: {
 				email: currentUser.email,
-				token: currentUser.token,
+				token: token,
 			},
 		});
 	} catch (err) {

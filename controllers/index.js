@@ -1,9 +1,9 @@
 const service = require("../service/index");
+const mongoose = require("mongoose");
 
 const getContacts = async (_, res, next) => {
 	try {
 		const result = await service.getContactList();
-		console.log(result);
 		res.json({
 			status: "success",
 			code: 200,
@@ -19,6 +19,15 @@ const getContacts = async (_, res, next) => {
 
 const getContactById = async (req, res, next) => {
 	const { contactId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(contactId)) {
+		return res.status(404).json({
+			status: "error",
+			code: 404,
+			message: `Not found contact with id: ${contactId}`,
+			data: "Not Found",
+		});
+	}
 
 	try {
 		const result = await service.getContactById(contactId);
@@ -68,6 +77,16 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
 	const { contactId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(contactId)) {
+		return res.status(404).json({
+			status: "error",
+			code: 404,
+			message: `Not found contact with id: ${contactId}`,
+			data: "Not Found",
+		});
+	}
+
 	try {
 		const result = await service.removeContact(contactId);
 		if (result) {
@@ -93,6 +112,16 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
 	const { name, phone, email } = req.body;
 	const { contactId } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(contactId)) {
+		return res.status(404).json({
+			status: "error",
+			code: 404,
+			message: `Not found contact with id: ${contactId}`,
+			data: "Not Found",
+		});
+	}
+
 	try {
 		const result = await service.updateContact({ name, phone, email }, { contactId });
 		if (result) {
@@ -118,7 +147,16 @@ const updateContact = async (req, res, next) => {
 const updateFavorite = async (req, res, next) => {
 	const { contactId } = req.params;
 	const { favorite } = req.body;
-	console.log(favorite);
+
+	if (!mongoose.Types.ObjectId.isValid(contactId)) {
+		return res.status(404).json({
+			status: "error",
+			code: 404,
+			message: `Not found contact with id: ${contactId}`,
+			data: "Not Found",
+		});
+	}
+
 	try {
 		const result = await service.isFavorite(contactId, { favorite });
 		console.log(result);
