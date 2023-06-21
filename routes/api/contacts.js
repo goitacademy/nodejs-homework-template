@@ -1,5 +1,6 @@
 const express = require('express');
 const contacts = require('../../models/contacts.js');
+const { httpError } = require('../../helpers');
 
 const router = express.Router();
 
@@ -8,12 +9,23 @@ router.get('/', async (req, res, next) => {
     const allContacts = await contacts.listContacts();
     res.json(allContacts);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    // this redirects to Error handler in app.js
+    next(error);
   }
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { contactId } = req.params;
+    const contact = await contacts.getContactById(contactId);
+    if (!contact) {
+      throw httpError(404, 'Not found');
+    }
+    res.json(contact);
+  } catch (error) {
+    // this redirects to Error handler in app.js
+    next(error);
+  }
 });
 
 router.post('/', async (req, res, next) => {

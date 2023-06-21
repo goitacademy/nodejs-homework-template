@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+// const { httpError } = require('../helpers');
 // const {nanoid} = require('nanoid')
 
 const contactsPath = path.join(__dirname, 'contacts.json');
@@ -9,7 +10,11 @@ const listContacts = async () => {
   return JSON.parse(contacts);
 };
 
-const getContactById = async contactId => {};
+const getContactById = async contactId => {
+  const contacts = await listContacts();
+  const contact = contacts.find(person => person.id === contactId);
+  return contact || null;
+};
 
 const removeContact = async contactId => {};
 
