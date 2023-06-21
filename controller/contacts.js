@@ -92,6 +92,13 @@ const updateFavorite = async (req, res, next) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
+  if (!favorite) {
+    res.status(400).json({
+      message: "missing field favorite",
+    });
+    return;
+  }
+
   try {
     const updatedContact = await service.updateContact(id, { favorite });
     if (updatedContact) {
@@ -113,10 +120,35 @@ const updateFavorite = async (req, res, next) => {
   }
 };
 
+const remove = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const deletedContact = await service.deleteContact(id);
+    if (deletedContact) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { contact: deletedContact },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 200,
+        data: "Not found",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 module.exports = {
   get,
   getById,
   create,
   update,
   updateFavorite,
+  remove,
 };
