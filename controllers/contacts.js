@@ -32,7 +32,7 @@ const addContact = async (req, res) => {
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.removeContact(contactId);
+  const result = await Contact.findByIdAndRemove(contactId);
   if (!result) {
     throw  HttpError(404, "Not found");
   }
