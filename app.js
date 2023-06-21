@@ -4,8 +4,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 require("dotenv").config()
 
-const contactsRouter = require('./routes/api/contacts')
-
 const DB_HOST = "mongodb+srv://PavMor:Sobolivka1@cluster0.gydk4zo.mongodb.net/contacts_reader?retryWrites=true&w=majority"
 
 mongoose.set('strictQuery', true)
