@@ -3,9 +3,16 @@ const Contact = require('../models/contact');
 const { HttpError } = require('../helpers');
 
 const { ctrlWrapper } = require('../decorators');
+// const { query } = require('express');
 
 const getAllContacts = async (req, res) => {
-  const resultList = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, ...query } = req.query;
+  const skip = (page - 1) * limit;
+  const resultList = await Contact.find({ owner, ...query }, '-createdAt -updatedAt', { skip, limit }).populate(
+    'owner',
+    'email name'
+  );
   res.json(resultList);
 };
 
@@ -19,17 +26,14 @@ const getContactsById = async (req, res) => {
 };
 
 const addContacts = async (req, res) => {
-  const addContactResult = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const addContactResult = await Contact.create({ ...req.body, owner });
   res.status(201).json(addContactResult);
 };
 
 const updateContacts = async (req, res) => {
   const contactId = req.params.contactId;
-  const updateContactResult = await Contact.findByIdAndUpdate(
-    contactId,
-    req.body,
-    { new: true }
-  );
+  const updateContactResult = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
   if (!updateContactResult) {
     throw HttpError(404);
   } else res.json(updateContactResult);
@@ -37,11 +41,7 @@ const updateContacts = async (req, res) => {
 
 const updateContactsFavorite = async (req, res) => {
   const contactId = req.params.contactId;
-  const updateContactResult = await Contact.findByIdAndUpdate(
-    contactId,
-    req.body,
-    { new: true }
-  );
+  const updateContactResult = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
   if (!updateContactResult) {
     throw HttpError(404);
   } else res.json(updateContactResult);

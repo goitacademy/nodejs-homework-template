@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const { handleMongooseError } = require('../middlewares');
+const { handleMongooseError } = require('../helpers');
 
 const { emailRegexp } = require('../constants/user');
 
@@ -21,6 +21,7 @@ const userSchema = new Schema(
       minLength: 6,
       required: true,
     },
+    token: { type: String },
   },
   { versionKey: false, timestamps: true }
 );
