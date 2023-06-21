@@ -28,6 +28,11 @@ const authenticate = async (req, res, next) => {
       error.status = 401;
       error.message = 'Not authorized';
     }
+    if (error.message === 'invalid signature') {
+      console.log(`invalid signature`);
+      error.status = 401;
+      error.message = 'Not authorized';
+    }
     next(error);
   }
 };

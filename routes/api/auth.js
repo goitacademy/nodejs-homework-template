@@ -18,6 +18,6 @@ router.post('/login', validateAuth(schemas.loginSchema), login);
 router.post('/logout', authenticate, logout);
 router.get('/current', authenticate, currentUser);
 
-router.patch('/avatars',   upload.single("avatar"), authenticate, updateAvatarUser);
+router.patch('/avatars', upload.single("avatar"), authenticate, updateAvatarUser);
 
 module.exports = router;
