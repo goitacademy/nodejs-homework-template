@@ -10,12 +10,19 @@ const {
 } = require("../../controllers/contacts-controller");
 
 const { validateBody } = require("../../decorators");
-const { isBodyEmpty, isValidId, isFavoriteExists } = require("../../middlewares");
+const {
+  isBodyEmpty,
+  isValidId,
+  isFavoriteExists,
+  authenticate,
+} = require("../../middlewares");
 const {
   contactAddSchema,
   contactUpdateFavoriteSchema,
 } = require("../../schemas/contactSchema");
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", getAll);
 

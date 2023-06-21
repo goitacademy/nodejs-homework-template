@@ -1,10 +1,10 @@
 const isBodyEmpty = require("./isBodyEmpty");
-const handleMongooseError = require("./handleMongooseError");
 const isValidId = require("./isValidId");
 const isFavoriteExists = require("./isFavoriteExists");
+const authenticate = require("./authenticate");
 module.exports = {
   isBodyEmpty,
-  handleMongooseError,
   isValidId,
   isFavoriteExists,
+  authenticate,
 };
