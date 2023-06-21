@@ -23,13 +23,24 @@ const contactSchema = new Schema({
 
 const Contact = mongoose.model("contact", contactSchema);
 
-module.exports = Contact
+// module.exports = Contact
 
 
 
 // const ID = nanoid()
 
 // const contactsPath = path.join(__dirname, 'contacts.json')
+
+const updateStatusContact = async (contactID, body) => {
+  const contact = await Contact.findOneAndUpdate(contactID, body)
+
+  return contact
+}
+
+module.exports = {
+  Contact,
+  updateStatusContact
+}
 
 // const listContacts = async () => {
 //   const data = await fs.readFile(contactsPath)
