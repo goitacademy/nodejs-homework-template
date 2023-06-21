@@ -33,7 +33,7 @@ contactsRouter.get("/:contactId", async (req, res, next) => {
 });
 
 contactsRouter.post("/", async (req, res, next) => {
-  const user = req.query;
+  const user = req.body;
   try {
     Joi.attempt(user, schema);
     const newUser = await addContact(user);
