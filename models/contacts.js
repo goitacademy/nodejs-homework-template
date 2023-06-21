@@ -1,5 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
+const { nanoid } = require('nanoid');
+
 // const { httpError } = require('../helpers');
 // const {nanoid} = require('nanoid')
 
@@ -18,7 +20,16 @@ const getContactById = async contactId => {
 
 const removeContact = async contactId => {};
 
-const addContact = async body => {};
+const addContact = async body => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: nanoid(),
+    ...body,
+  };
+  contacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return newContact;
+};
 
 const updateContact = async (contactId, body) => {};
 

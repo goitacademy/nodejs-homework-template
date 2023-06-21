@@ -10,6 +10,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
 app.use(cors());
+/* This checks if request body has correct json format */
 app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
