@@ -43,7 +43,6 @@ const schemas = {
     addSchema,
     updateFavoriteSchema,
 }
-
 const Contact = model("contact", contactSchema);
 
 module.exports ={
