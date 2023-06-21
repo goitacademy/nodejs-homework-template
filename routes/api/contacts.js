@@ -10,12 +10,14 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 })
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try{
   const result =await contacts.listContacts();
-  res.json(result);}
-  catch{
-   res.status(500).json({message:"Server error"})
+  res.json(result);
+}
+  catch(error)
+  {
+    next(error);
 }})
 
 
