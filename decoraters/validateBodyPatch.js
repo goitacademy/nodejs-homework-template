@@ -1,13 +1,11 @@
 const HttpError = require('../helpers/HttpError');
 
-const validateBody = (schema, keys) => {
+const validateBodyPatch = (schema) => {
   const func = (req, res, next) => {
-    if (!keys?.length) {
-      const isBodyEmpty = !Object.keys(req.body).length;
+    const isBodyEmpty = !Object.keys(req.body).length;
 
-      if (isBodyEmpty) {
-        return res.status(400).json({ message: 'missing fields' });
-      }
+    if (isBodyEmpty) {
+      return res.status(400).json({ message: 'missing field favorite' });
     }
 
     const { error } = schema.validate(req.body);
@@ -23,5 +21,5 @@ const validateBody = (schema, keys) => {
 };
 
 module.exports = {
-  validateBody,
+  validateBodyPatch,
 };
