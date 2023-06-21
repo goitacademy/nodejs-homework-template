@@ -18,7 +18,7 @@ const updateAvatarUser = async (req, res, next) => {
     console.log(`newPath`, newPath);
     const avatarURL = path.join('public', 'avatars', filename);
 
-    const user = await User.findByIdAndUpdate(req.user._id, { avatarURL });
+    const user = await User.findByIdAndUpdate(req.user._id, { avatarURL }, { new: true });
 
     res.json({ avatarURL: user.avatarURL });
   } catch (error) {
