@@ -10,16 +10,18 @@ const updateFavorite = require('../../controllers/contacts/updateFavorite');
 
 const validate = require('../../middlewares/validator');
 const isValidId = require('../../middlewares/isValidId');
+const upload = require('../../middlewares/upload')
 
 const schemas = require('../../shema/shema');
 const { updateFavoriteSchema } = require('../../shema/shema');
 const authenticate = require('../../middlewares/authenticate');
 
+
 router.get('/', authenticate, contactList);
 
 router.get('/:contactId', authenticate, isValidId, findContactById);
 
-router.post('/', authenticate, validate.validate(schemas.addSchema), addContact);
+router.post('/',upload.single("avatars"), authenticate, validate.validate(schemas.addSchema), addContact);
 
 router.delete('/:contactId', authenticate, isValidId, deleteContact);
 
