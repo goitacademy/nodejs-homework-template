@@ -5,7 +5,7 @@ const { validateBody, isValidId } = require("../../middlewares");
 
 const { contactsController } = require("../../controllers");
 
-const { addSchema } = require("../../models/contacts/contacts");
+const { addSchema } = require("../../models/contact/contact");
 
 router.get("/", contactsController.listContacts);
 
