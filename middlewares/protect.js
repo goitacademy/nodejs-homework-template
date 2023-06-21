@@ -9,7 +9,7 @@ const protect = async (req, res, next) => {
     req.headers.authorization.split(" ")[1];
 
   if (!token) {
-    next(HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
   }
 
   let decoded = "";
@@ -18,16 +18,16 @@ const protect = async (req, res, next) => {
     decoded = jwt.verify(token, JWT_KEY);
     
   } catch (error) {
-    next(HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
   }
 
   const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) {
-    next(HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
   }
 
-  req.use = currentUser;
+  req.user = currentUser;
 
   next();
 };

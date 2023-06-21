@@ -32,7 +32,6 @@ router.delete("/:contactId", validateId, removeContact);
 
 router.patch(
   "/:contactId/favorite",
-
   validateId,
   validateFavorite(),
   updateStatusContact
