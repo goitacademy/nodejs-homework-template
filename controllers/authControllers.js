@@ -16,9 +16,10 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
-    user: { 
-    email: newUser.email,
-    subscription: newUser.subscription,}
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -37,40 +38,43 @@ const login = async (req, res) => {
   const payload = { id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(id, {token});
+  await User.findByIdAndUpdate(id, { token });
   res.json({ token, user: { email, subscription } });
 };
 
-const logout = async(req, res)=> {
-    const {_id} = req.user;
+const logout = async (req, res) => {
+  const { _id } = req.user;
 
-    await User.findByIdAndUpdate(_id, {token: ""});
+  await User.findByIdAndUpdate(_id, { token: "" });
 
-       res.status(204).json({
-      message: "No Content"
-    });
-}
+  res.status(204).json({
+    message: "No Content",
+  });
+};
 
-const current = (req, res)=> {
-    const {email, subscription} = req.user;
+const current = (req, res) => {
+  const { email, subscription } = req.user;
 
-    res.json({
-          email,
-          subscription
-    })
-}
+  res.json({
+    email,
+    subscription,
+  });
+};
 
 const subscription = async (req, res) => {
   const { _id, subscription: currentSubscription } = req.user;
   const { newSubscription } = req.body;
 
   if (currentSubscription !== newSubscription) {
-    const validSubscriptions = ['starter', 'pro', 'business'];
+    const validSubscriptions = ["starter", "pro", "business"];
     if (validSubscriptions.includes(newSubscription)) {
       await User.findByIdAndUpdate(_id, { subscription: newSubscription });
       res.json({ newSubscription });
     } else {
-      throw HttpError(400, "Invalid subscription value. Valid options are 'starter', 'pro', or 'business'");
+      throw HttpError(
+        400,
+        "Invalid subscription value. Valid options are 'starter', 'pro', or 'business'"
+      );
     }
   } else {
     throw HttpError(400, "This subscription is already in use");
