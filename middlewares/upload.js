@@ -1,6 +1,5 @@
 const multer = require('multer');
 const path = require('path');
-// const Jimp = require('jimp');
 
 const destination = path.resolve('tmp');
 
