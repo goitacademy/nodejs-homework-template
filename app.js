@@ -6,10 +6,6 @@ const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
 
-// app.listen(3000, () => {
-//   console.log("Example app is working on port 3000!")
-// })
-
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
