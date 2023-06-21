@@ -41,26 +41,26 @@ const addContact = async (data) => {
   }
 };
 
-const removeContact = async ({id}) => {
+const removeContact = async ({ id }) => {
   try {
     const contacts = await listContacts();
-    const index = await contacts.findIndex((item) => item.id === id)
-    if (index === -1) return null
+    const index = await contacts.findIndex((item) => item.id === id);
+    if (index === -1) return null;
     const contactsNew = contacts.filter((c) => c.id !== id);
     await fs.writeFile(contactsPath, JSON.stringify(contactsNew, null, 2));
-    return 'contact deleted';
+    return "contact deleted";
   } catch (err) {
     console.error(err);
   }
 };
 
-const updateContact = async ({id}, data) => {
+const updateContact = async ({ id }, data) => {
   const contacts = await listContacts();
-  const index = await contacts.findIndex((item) => item.id === id)
-  if(index === -1){
-      return null;
+  const index = await contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
   }
-  contacts[index] = {id, ...data};
+  contacts[index] = { id, ...data };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
