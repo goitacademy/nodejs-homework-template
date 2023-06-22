@@ -2,8 +2,6 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../utils");
 const Joi = require("joi");
 
-// const emailIsValid = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
-
 const userSchema = new Schema(
   {
     password: {
@@ -49,3 +47,4 @@ module.exports = {
   User,
   schemas,
 };
+

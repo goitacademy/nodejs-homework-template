@@ -8,21 +8,19 @@ dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
-// console.log(SECRET_KEY);
-
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, "Email or password is invalid");
+    throw HttpError(401, "Email or password is wrong");
   }
 
   const passwordComparre = await bcrypt.compare(password, user.password);
 
   if (!passwordComparre) {
-    throw HttpError(401, "Email or password is invalid");
+    throw HttpError(401, "Email or password is wrong");
   }
 
   const payload = {
@@ -30,8 +28,11 @@ const login = async (req, res, next) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "30d" });
+  await User.findByIdAndUpdate(user._id, {token})
 
   res.json({
+    email,
+    subscription: user.subscription,
     token,
   });
 };
