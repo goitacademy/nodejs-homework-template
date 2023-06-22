@@ -1,8 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+
 const User = require("../models/UserModel");
 const { ctrlWrapper } = require("../decorators");
 const { HttpError } = require("../helpers");
+const { saveUserAvatar } = require("../helpers/avatarHelpers");
+
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -14,11 +18,18 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email, { s: "250", d: "retro" });
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -81,10 +92,18 @@ const subscription = async (req, res) => {
   }
 };
 
+const updateAvatar = async (req, res) => {
+  const avatarURL = await saveUserAvatar(req, res);
+  await req.user.updateOne({ avatarURL });
+
+  res.json({ avatarURL });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
   subscription: ctrlWrapper(subscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
