@@ -43,7 +43,18 @@ const userValidator = (data) => {
   return schema.validate(data);
 };
 
+const subValidator = (data) => {
+  const schema = Joi.object({
+    subscription: Joi.string()
+      .validate(...subscriptionList)
+      .required(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports = {
   User,
   userValidator,
+  subValidator,
 };
