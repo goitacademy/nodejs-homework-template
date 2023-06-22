@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const EMAIL_PATTERN = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const EMAIL_PATTERN = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const dataValidator = (data) => {
   const schema = Joi.object({
