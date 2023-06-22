@@ -22,6 +22,9 @@ const login = async (req, res, next) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
 
+    user.token = token;
+    user.save();
+
     return res.json({
       status: "success",
       code: 200,
@@ -77,8 +80,9 @@ const logout = async (req, res, next) => {
     req.user = user;
     const { id } = req.user;
     const currentUser = await User.findOne({ _id: id });
-    console.log(currentUser);
+
     currentUser.token = null;
+    await currentUser.save();
     try {
       await currentUser.save();
       return res.json({
@@ -103,9 +107,20 @@ const getCurrent = async (req, res, next) => {
 
     req.user = user;
     const { id } = req.user;
+
     const currentUser = await User.findOne({ _id: id });
+
+    if (currentUser.token === null) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+      });
+    }
+
     currentUser.token = req.token;
-    console.log(currentUser);
+    await currentUser.save();
+    console.log(currentUser.token);
     res.json({
       status: "success",
       code: "200",
