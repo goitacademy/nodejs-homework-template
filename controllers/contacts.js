@@ -1,4 +1,4 @@
-const {Contact}  = require("../controllers/contacts");
+const {Contact}  = require('../models/contact'); 
 const { addSchema } = require("../schemas/contact");
 const { HttpError } =require("../helpers/HttpError")
 const { ctrlWrapper } = require("../helpers/ctrlWrapper");
