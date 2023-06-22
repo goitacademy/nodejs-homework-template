@@ -1,92 +1,28 @@
 const express = require("express");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
 
-const { HttpError } = require("../../helpers");
+const ctrl = require("../../controllers/contacts");
 
-const Joi = require("joi");
+const { validateBody, isValidId } = require("../../middlewares");
 
-// кусочек сервера создаеться при помощи роутера
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
-// валидация полей
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+router.get("/", ctrl.getAll);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    res.json(contacts);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:id", isValidId, ctrl.getById);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contacts = await getContactById(contactId);
-    if (!contacts) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(contacts);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:id", isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await removeContact(id);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json({
-      message: "Delete success",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateFavorite
+);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:id", isValidId, ctrl.deleteById);
 
 module.exports = router;
