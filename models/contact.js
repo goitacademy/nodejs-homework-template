@@ -1,9 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-
 const { handleSchemaValidationErrors } = require("../helpers");
 
-const phoneRegexp = /^(\d{3}) \d{3}-\d{2}\d{2}$/;
+// const phoneRegexp =  /^\(\d{3}\) \d{3}-\d{4}$/;
 
 const contactSchema = Schema(
   {
@@ -17,9 +16,9 @@ const contactSchema = Schema(
     },
     phone: {
       type: String,
-      match: phoneRegexp,
-      unique: true,
+      // match: phoneRegexp,
       required: true,
+      // unique: true, 
     },
     favorite: {
       type: Boolean,
@@ -39,17 +38,20 @@ const addSchema = Joi.object({
     .required()
     .messages({ "any.required": `missing required email field` }),
   phone: Joi.string()
-    .pattern(phoneRegexp)
+    // .pattern(phoneRegexp)
     .required()
     .messages({ "any.required": `missing required phone field` }),
-  favorite: Joi.boolean()
-    .required()
-    .messages({ "any.required": `missing required field favorite` }),
+  favorite: Joi.boolean().messages({
+		"any.required": `missing field favorite`,
+	}),
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean()
+  .required()
+  .messages({ "any.required": `missing required field favorite` }),
 });
+
 const schemas = {
   addSchema,
   updateFavoriteSchema,

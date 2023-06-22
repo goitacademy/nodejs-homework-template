@@ -10,9 +10,8 @@ const validation = (schema) => {
       return res
         .status(400)
         .json({ message: `missing required ${missingField} field` });
-    } else {
-      next();
     }
+    next();
   };
 };
 
