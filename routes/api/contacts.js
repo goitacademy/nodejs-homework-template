@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.json({ message: 'ihihij' })
 })
 
 router.post('/', async (req, res, next) => {
