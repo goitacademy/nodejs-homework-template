@@ -23,6 +23,8 @@ const login = async (req, res) => {
 
   const token = signToken(user._id);
 
+  await User.findByIdAndUpdate(user._id, {token})
+
   res.json({
     token,
     user: {

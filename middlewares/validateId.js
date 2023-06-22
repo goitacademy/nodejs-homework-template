@@ -8,13 +8,13 @@ const validateId = async (req, res, next) => {
   const isValidId = Types.ObjectId.isValid(contactId);
 
   if (!isValidId) {
-    next(HttpError(400, "Bad id"));
+    throw HttpError(400, "Bad id");
   }
 
   const contact = await Contact.findById(contactId);
 
   if (!contact) {
-    next(HttpError(404, "Not found"));
+    throw HttpError(404, "Not found");
   }
 
   req.contact = contact;

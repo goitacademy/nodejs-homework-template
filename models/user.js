@@ -3,6 +3,8 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
+const subscriptionList = ["starter", "pro", "business"];
+
 const userSchema = new Schema(
   {
     password: {
@@ -16,7 +18,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: {
@@ -24,7 +26,7 @@ const userSchema = new Schema(
       default: null,
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 userSchema.post("save", handleMongooseError);
@@ -35,6 +37,7 @@ const userValidator = (data) => {
   const schema = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().min(6).required(),
+    subscription: Joi.string().validate(...subscriptionList),
   });
 
   return schema.validate(data);
