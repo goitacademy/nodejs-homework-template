@@ -49,11 +49,34 @@ router.post('/', async (req, res, next) => {
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
+    if (!result) {
+      throw httpError(404, 'Not found');
+    }
+    /* If res.status(204).send() there is no status body */
+    res.status(200).json({ message: 'contact deleted' });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw httpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
+    if (!result) {
+      throw httpError(404, 'Not found');
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
