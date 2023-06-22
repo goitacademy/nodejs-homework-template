@@ -1,8 +1,6 @@
 const express = require("express");
 
-const { validateUser, protect } = require("../../middlewares");
-
-const validateSubscription = require('../../middlewares/validateSubscription')
+const { validateUser, protect, validateSubscription } = require("../../middlewares");
 
 const {
   register,
