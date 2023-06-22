@@ -120,7 +120,6 @@ const getCurrent = async (req, res, next) => {
 
     currentUser.token = req.token;
     await currentUser.save();
-    console.log(currentUser.token);
     res.json({
       status: "success",
       code: "200",
