@@ -40,4 +40,8 @@ const validateId = async (req, res, next) => {
   next();
 };
 
-module.exports = { validator, favoriteValidate, validateId };
+const userValidator = async (req, res, next) => {
+  res.json(req.body);
+};
+
+module.exports = { validator, favoriteValidate, validateId, userValidator };
