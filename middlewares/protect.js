@@ -23,7 +23,7 @@ const protect = async (req, res, next) => {
 
   const currentUser = await User.findById(decoded.id);
 
-  if (!currentUser) {
+  if (!currentUser || currentUser.token !== token) {
     throw HttpError(401, "Not authorized");
   }
 
