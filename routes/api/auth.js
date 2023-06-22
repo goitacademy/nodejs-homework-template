@@ -1,6 +1,9 @@
 const express = require("express");
 
-const { validateUser, protect, } = require("../../middlewares");
+const { validateUser, protect } = require("../../middlewares");
+
+const validateSubscription = require('../../middlewares/validateSubscription')
+
 const {
   register,
   login,
@@ -15,6 +18,8 @@ router.post("/register", validateUser(), register);
 router.post("/login", validateUser(), login);
 router.get("/current", protect, getCurrent);
 router.post("/logout", protect, logout);
-router.patch("/", protect,  updateSubscription);
+router.patch("/", protect, validateSubscription(), updateSubscription);
+
+
 
 module.exports = router;
