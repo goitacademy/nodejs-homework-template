@@ -17,7 +17,7 @@ app.use(express.json());
 
 require("./auth/config/config-passport");
 
-app.use("/", contactsRouter);
+app.use("/contacts", contactsRouter);
 app.use("/users", usersRouter);
 
 app.use((req, res) => {
