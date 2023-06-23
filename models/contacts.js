@@ -10,13 +10,13 @@ const getContacts = async () => {
 };
 
 const getContactById = async contactId => {
-  const contacts = await listContacts();
+  const contacts = await getContacts();
   const contact = contacts.find(contact => contact.id === contactId);
   return contact || null;
 };
 
 const removeContact = async contactId => {
-  const contacts = await listContacts();
+  const contacts = await getContacts();
   const index = contacts.findIndex(contact => contact.id === contactId);
   if (index === -1) {
     return null;
@@ -27,7 +27,7 @@ const removeContact = async contactId => {
 };
 
 const addContact = async body => {
-  const contacts = await listContacts();
+  const contacts = await getContacts();
   const newContact = { id: nanoid(), ...body };
   contacts.push(newContact);
   await writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -35,7 +35,7 @@ const addContact = async body => {
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
+  const contacts = await getContacts();
   const index = contacts.findIndex(contact => contact.id === contactId);
   if (index === -1) {
     return null;
