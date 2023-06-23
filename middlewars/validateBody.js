@@ -21,13 +21,6 @@ const validBody = (schema) => {
         })
       );
     }
-    if (!req.body.favorite) {
-      next( 
-        res.status(400).json({
-          message: "missing required favorite field",
-        })
-      );
-    }
     next();
   };
   return func;
@@ -66,13 +59,6 @@ const validEmptyBody = () => {
       next( 
         res.status(400).json({
           message: "missing required phone field",
-        })
-      );
-    }
-    if (!req.body.favorite) {
-      next( 
-        res.status(400).json({
-          message: "missing required favorite field",
         })
       );
     }
