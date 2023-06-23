@@ -6,6 +6,10 @@ const emailRageXP = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: [true, "Set password for user"],
