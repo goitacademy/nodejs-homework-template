@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid');
 
 const contactsPath = path.join(__dirname, './contacts.json');
 
-const listContacts = async () => {
+const getContacts = async () => {
   const contacts = await readFile(contactsPath);
   return JSON.parse(contacts);
 };
@@ -46,7 +46,7 @@ const updateContact = async (contactId, body) => {
 };
 
 module.exports = {
-  listContacts,
+  getContacts,
   getContactById,
   removeContact,
   addContact,
