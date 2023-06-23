@@ -11,7 +11,7 @@ const router = express.Router();
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.number().required()
+  phone: Joi.string().required()
 })
 
 router.get('/', async (req, res, next) => {
