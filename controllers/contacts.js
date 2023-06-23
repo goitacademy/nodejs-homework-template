@@ -1,10 +1,3 @@
-const fs = require("fs/promises");
-const path = require("node:path");
-
-const contactsPath = `${path.dirname("./db/contacts.json")}/${path.basename(
-  "./db/contacts.json"
-)}`;
-
 const { Contact } = require("../models/contact.js");
 
 const listContacts = async () => {
@@ -63,7 +56,6 @@ const updateContact = async (contactId, updatedData) => {
 };
 
 const updateStatus = async (contactId, updatedData) => {
-  console.log(updatedData);
   try {
     const updatedContact = await Contact.findByIdAndUpdate(
       { _id: contactId },

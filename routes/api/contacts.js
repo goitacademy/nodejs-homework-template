@@ -54,8 +54,7 @@ router.post("/", async (req, res, next) => {
       .send({ message: `missing required ${value} - field` });
   }
   try {
-    const body = req.body;
-    const contact = await addContact(body);
+    const contact = await addContact(req.body);
     return res.status(201).json(contact);
   } catch {
     return res.status(500).send("something went wrong");
@@ -121,7 +120,6 @@ router.patch("/:id/favorite", async (req, res, next) => {
 
   try {
     const contact = await getContactById(id);
-    console.log("contact:", contact);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }

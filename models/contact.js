@@ -8,7 +8,7 @@ const favoriteValidationSchema = Joi.object({
 
 const contactValidationSchema = Joi.object({
   name: Joi.string().min(3).required(),
-  email: Joi.string().email(),
+  email: Joi.string().email().required(),
   phone: Joi.string(),
 });
 
@@ -27,6 +27,10 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
