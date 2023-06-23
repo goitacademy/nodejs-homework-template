@@ -4,7 +4,7 @@ const handleMongooseError = (error, data, next) => {
   if (error) {
     next(HttpError(400, "Bad Request"));
   }
-  next()
+  next();
 };
 
 module.exports = handleMongooseError;

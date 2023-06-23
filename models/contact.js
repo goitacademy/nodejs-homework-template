@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
-const contactSchema = Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
@@ -19,13 +19,19 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 contactSchema.post("save", handleMongooseError);
 
-const dataValidator = (data) => {
+const Contact = model("contact", contactSchema);
+
+const bodyValidator = (data) => {
   const schema = Joi.object({
     name: Joi.string().min(2).max(30).required(),
     email: Joi.string().required(),
@@ -44,6 +50,4 @@ const favoriteValidator = (data) => {
   return schema.validate(data);
 };
 
-const Contact = model("contact", contactSchema);
-
-module.exports = { Contact, dataValidator, favoriteValidator };
+module.exports = { Contact, bodyValidator, favoriteValidator };

@@ -4,7 +4,7 @@ const { wrapper } = require("../../helpers");
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
   
-  await Contact.findByIdAndDelete(contactId);
+  await Contact.findByIdAndRemove(contactId);
 
   res.json({ message: "Contact deleted" });
 };

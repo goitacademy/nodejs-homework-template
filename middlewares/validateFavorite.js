@@ -3,9 +3,8 @@ const { favoriteValidator } = require("../models");
 
 const validateFavorite = () => {
   const func = async (req, res, next) => {
-    const { favorite } = req.body;
 
-    if (!favorite) {
+    if (Object.keys(req.body).length === 0) {
       next(HttpError(400, "Missing field favorite"));
     }
 
