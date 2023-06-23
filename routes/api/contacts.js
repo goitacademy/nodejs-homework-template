@@ -19,7 +19,13 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const id = req.params.contactId;
+    const contact = await getContactById(id);
+    res.json(contact);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post('/', async (req, res, next) => {
