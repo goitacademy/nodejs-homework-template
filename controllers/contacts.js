@@ -1,20 +1,20 @@
-const fs = require('fs/promises');
-const uuid = require('uuid').v4;
-const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
-const AppError = require('../utils/appError');
+// const fs = require('fs/promises');
+// const uuid = require('uuid').v4;
+// const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
+// const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Contact = require('../models/contactModel');
 
 
-const contactsDB = './controllers/contacts.json';
+// const contactsDB = './controllers/contacts.json';
 
 // GET contacts list
-const listContacts = async (req, res) => {
+const listContacts = catchAsync(async (req, res) => {
   const contacts = await Contact.find();
      res.status(200).json({
       contacts,
     })  
-}
+})
 
 // GET contact By ID
 const getContactById = async (req, res) => {
@@ -36,7 +36,15 @@ const removeContact = catchAsync(async (req, res) => {
 
 // POST new contact
 const addContact = catchAsync(async (req, res, next) => {
-  const newContact = await Contact.create({ ...req.body });
+
+  const newContactData = {
+    owner: req.user,
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone
+  }
+
+  const newContact = await Contact.create(newContactData);
   
   res.status(201).json({        
     contact: newContact,    

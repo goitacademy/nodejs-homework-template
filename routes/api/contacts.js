@@ -13,10 +13,8 @@ const { protect } = require('../../middlewares/authMiddlewares');
 const router = express.Router();
 
 router.use(protect);
-router
-  .route('/')
-  .post(checkCreateContactData, addContact)
-  .get(listContacts);
+router.post('/', checkCreateContactData, addContact)
+  router.get('/', listContacts);
 
 router.use('/:id', checkContactById);
 router
