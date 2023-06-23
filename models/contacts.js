@@ -28,7 +28,11 @@ const removeContact = async (contactId) => {
   try {
     const allContacts = await listContacts();
     const contactIndex = allContacts.findIndex((item) => item.id === contactId);
-    const deletedContact = allContacts.splise((contactIndex, 1));
+    console.log(contactIndex);
+    if (contactIndex === -1) {
+      return null;
+    }
+    const deletedContact = allContacts.splice(contactIndex, 1);
     await fs.writeFile(contactsDirection, JSON.stringify(allContacts, null, 2));
     return deletedContact;
   } catch (err) {
@@ -39,7 +43,8 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   try {
     const allContacts = await listContacts();
-    addContact.push({ id: nanoid(), ...body });
+    allContacts.push({ id: nanoid(), ...body });
+
     await fs.writeFile(contactsDirection, JSON.stringify(allContacts, null, 2));
     return body;
   } catch (err) {
@@ -48,16 +53,25 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  // try {
-  //   const allContacts = await listContacts();
-  //   const updatedContacts = allContacts.map((item) => {
-  //     if (item.id === contactId) {
-  //       return (item = body);
-  //     }
-  //   });
-  // } catch (err) {
-  //   console.log(err);
-  // }
+  try {
+    const allContacts = await listContacts();
+    const id = nanoid();
+    const updatedContacts = allContacts.map((item) => {
+      if (item.id === contactId) {
+        return (item = { id: id, ...body });
+      }
+      return item;
+    });
+    const updatedContact = updatedContacts.find((item) => item.id === id);
+    console.log(updateContact);
+    await fs.writeFile(
+      contactsDirection,
+      JSON.stringify(updatedContacts, null, 2)
+    );
+    return updatedContact;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports = {
