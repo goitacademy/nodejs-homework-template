@@ -1,25 +1,16 @@
-const express = require('express')
+const express = require("express");
+const contacts = require("../../controllers/contactsController");
+const { tryCatchHandler } = require("../../helpers");
+const router = express.Router();
 
-const router = express.Router()
+router.get("/", tryCatchHandler(contacts.getAllContacts));
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", tryCatchHandler(contacts.getContactById));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", tryCatchHandler(contacts.addContact));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", tryCatchHandler(contacts.deleteContact));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", tryCatchHandler(contacts.updateContact));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
