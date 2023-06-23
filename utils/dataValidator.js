@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const EMAIL_PATTERN = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const subscriptions = ["starter", "pro", "business"];
 
 const dataValidator = (data) => {
   const schema = Joi.object({
@@ -14,8 +15,9 @@ const dataValidator = (data) => {
 
 const userValidate = (data) => {
   const schema = Joi.object({
-    email: Joi.string().pattern(EMAIL_PATTERN).required(),
+    email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
+    subscription: Joi.string().valid(...subscriptions),
   });
 
   return schema.validate(data);
