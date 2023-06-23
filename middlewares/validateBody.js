@@ -1,6 +1,7 @@
 const { HttpError } = require("../helpers");
+const addSchema = require("../schemas/contacts");
 
-const validateBody = (schema) => {
+const validateBody = (addSchema) => {
   const func = (req, res, next) => {
     const { error } = addSchema.validate(req.body);
     if (error) {
