@@ -1,25 +1,17 @@
 const express = require('express')
-
+const contactController = require('../../controller/contactController')
+const { validateNewContact, validateUpdatedContact } = require('../../middlewares/contact')
+const joiConfig = require('../../joiconfig');
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', contactController.read)
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId',contactController.getById)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/',validateNewContact(joiConfig),contactController.create )
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', contactController.deleted)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId',validateUpdatedContact(joiConfig), contactController.update)
 
 module.exports = router
