@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { validateBody, isValidId } = require("../../middlewares");
+const { validateBody, isValidId, authenticate } = require("../../middlewares");
 const { contactSchema, updateFavoriteSchema } = require("../../schemas");
 
 const {
@@ -16,23 +16,25 @@ const {
 
 const router = express.Router();
 
-router.get("/", listContacts);
+router.get("/", authenticate, listContacts);
 
-router.get("/:contactId", isValidId, getContactById);
+router.get("/:id", authenticate, isValidId, getContactById);
 
-router.post("/", validateBody(contactSchema), addContact);
+router.post("/", authenticate, validateBody(contactSchema), addContact);
 
-router.delete("/:contactId", isValidId, removeContact);
+router.delete("/:id", authenticate, isValidId, removeContact);
 
 router.put(
-  "/:contactId",
+  "/:id",
+  authenticate,
   isValidId,
   validateBody(contactSchema),
   updateContact
 );
 
 router.patch(
-  "/:contactId/favorite",
+  "/:id/favorite",
+  authenticate,
   isValidId,
   validateBody(updateFavoriteSchema),
   updateStatusContact

@@ -1,10 +1,11 @@
-const { Contact } = require("../../models");
+const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
 const { ctrlWrapper } = require("../../helpers");
 
-const updateContact = async (req, res) => {
+const updateSubscription = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  //   console.log(_id);
+  const result = await User.findByIdAndUpdate(id, req.body, {
     new: true,
   });
 
@@ -16,5 +17,5 @@ const updateContact = async (req, res) => {
 };
 
 module.exports = {
-  updateContact: ctrlWrapper(updateContact),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
