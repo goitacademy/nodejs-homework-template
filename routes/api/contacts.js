@@ -35,7 +35,13 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const body = req.body;
+    const newContact = await addContact(body);
+    res.status(201).json(newContact);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
