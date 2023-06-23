@@ -17,10 +17,3 @@ const validateBody = schema => {
 };
 
 module.exports = validateBody;
-// const { error } = addSchema.validate(req.body);
-// if (error) {
-//   throw HttpError(
-//     400,
-//     `missing required ${error.message.slice(1, error.message.lastIndexOf('"'))} field`
-//   );
-// }

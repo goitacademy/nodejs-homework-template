@@ -11,9 +11,14 @@ const existBody = () => {
   return func;
 };
 
-module.exports = existBody;
-
-// const body = req.body;
-// if (Object.keys(body).length === 0) {
-//   throw HttpError(400, 'missing fields');
-// }
+const existBodyFavorite = () => {
+  const func = (req, res, next) => {
+    const body = req.body;
+    if (Object.keys(body).length === 0) {
+      next(HttpError(400, 'missing field favorite'));
+    }
+    next();
+  };
+  return func;
+};
+module.exports = { existBody, existBodyFavorite };
