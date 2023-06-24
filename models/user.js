@@ -21,10 +21,18 @@ const userSchema = new Schema({
     enum: subscriptionType,
     default: "starter",
   },
-  
+
   avatarURL: String,
 
   token: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+    default: "",
+  },
 });
 
 userSchema.post("save", handleMongooseError);
