@@ -1,9 +1,9 @@
-const path = require("path");
 const { User } = require("../models/users");
 const { emailValidator } = require("../validators/validators");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const SECRET = process.env.SECRET;
+const gravatar = require("gravatar");
 
 const userRegister = async (req, res, next) => {
   const { email, password } = req.body;
@@ -21,9 +21,16 @@ const userRegister = async (req, res, next) => {
       message: "User already exists!",
     });
   }
+
   try {
     const newUser = new User({ email });
     newUser.setPassword(password);
+    newUser.avatarURL = gravatar.url(email, {
+      protocol: "http",
+      s: "250",
+      r: "pg",
+    });
+
     await newUser.save();
 
     res.json({
@@ -107,16 +114,17 @@ const uploadAvatar = async (req, res, next) => {
   if (!req.file) {
     res.status(400).send("Nie przesłano żadnego pliku.");
   }
-  console.log("próbuję");
+  const user = req.user;
   const { description } = req.body;
-  const { path: temporaryName, originalname } = req.file;
+  const { filename } = req.file;
   try {
-    console.log(fileName);
+    user.avatarURL = filename;
+    await user.save();
   } catch (err) {
-    await fs.unlink(temporaryName);
     return next(err);
   }
-  res.json({ description, message: "Załadowano obrazek", status: 200 });
+  // res.json({ description, message: "Załadowano obrazek", status: 200 });
+  res.json({ data: `${filename} saved as a user avatar URL` });
 };
 
 module.exports = {

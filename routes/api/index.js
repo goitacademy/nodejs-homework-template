@@ -51,6 +51,6 @@ router.put("/contacts/:contactId", auth, updateContact);
 router.patch("/contacts/:contactId/favorite", auth, updateStatusContact);
 
 // Upload avatar
-router.patch("/users/avatars", userUploadAvatar, uploadAvatar);
+router.patch("/users/avatars", auth, userUploadAvatar, uploadAvatar);
 
 module.exports = router;
