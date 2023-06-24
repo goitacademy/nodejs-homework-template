@@ -98,12 +98,23 @@ router.get("/logout", async (req, res, next) => {
 });
 
 router.get("/current", auth, async (req, res, next) => {
-  const users = await User.find();
+  const userId = req.user.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.json({
+      status: "Unauthorized",
+      code: 401,
+      data: {
+        message: "Not authorized",
+      },
+    });
+  }
   res.json({
     status: "success",
     code: 200,
     data: {
-      users: users || [],
+      users: user || [],
     },
   });
 });
