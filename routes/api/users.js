@@ -46,7 +46,6 @@ router.post("/signup", async (req, res, next) => {
     next(error);
   }
 });
-
 router.post("/login", async (req, res, _) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -93,6 +92,7 @@ router.get("/logout", auth, async (req, res) => {
 });
 router.get("/current", auth, async (req, res, _) => {
   const user = await User.findById(req.user._id);
+
   if (!user) {
     return res.json({
       status: "error",
