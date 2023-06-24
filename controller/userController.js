@@ -1,4 +1,4 @@
-const { path } = require("../app");
+const path = require("path");
 const { User } = require("../models/users");
 const { emailValidator } = require("../validators/validators");
 const jwt = require("jsonwebtoken");
@@ -107,11 +107,11 @@ const uploadAvatar = async (req, res, next) => {
   if (!req.file) {
     res.status(400).send("Nie przesłano żadnego pliku.");
   }
+  console.log("próbuję");
   const { description } = req.body;
   const { path: temporaryName, originalname } = req.file;
-  const fileName = path.join(storeImage, originalname);
   try {
-    await fs.rename(temporaryName, fileName);
+    console.log(fileName);
   } catch (err) {
     await fs.unlink(temporaryName);
     return next(err);
