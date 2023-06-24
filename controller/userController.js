@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const SECRET = process.env.SECRET;
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs");
 
 const userRegister = async (req, res, next) => {
   const { email, password } = req.body;
@@ -110,21 +113,52 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
+// Resize images
+const resizeImages = (sourceImagePath, outputImagePath) => {
+  Jimp.read(sourceImagePath)
+    .then((image) => {
+      return image.resize(250, 250).quality(90).write(outputImagePath);
+    })
+    .then(() => {
+      console.log("Image resize and saved.");
+    })
+    .then(() => {
+      fs.unlink(sourceImagePath, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Old photo deleted");
+        }
+      });
+    })
+    .catch((err) => {
+      console.error("An error occurred :", err);
+    });
+};
+
 const uploadAvatar = async (req, res, next) => {
   if (!req.file) {
-    res.status(400).send("Nie przesłano żadnego pliku.");
+    res.status(400).send("No image found.");
   }
   const user = req.user;
-  const { description } = req.body;
-  const { filename } = req.file;
+
+  const { path: newPath, filename } = req.file;
+
   try {
+    const sourceImagePath = newPath;
+    const outputImagePath = path.join(
+      __dirname,
+      `../public/avatar/${filename}`
+    );
+
+    resizeImages(sourceImagePath, outputImagePath);
+
     user.avatarURL = filename;
     await user.save();
   } catch (err) {
     return next(err);
   }
-  // res.json({ description, message: "Załadowano obrazek", status: 200 });
-  res.json({ data: `${filename} saved as a user avatar URL` });
+  res.status(200).json({ avatarURL: `${filename} saved as a user avatar URL` });
 };
 
 module.exports = {
