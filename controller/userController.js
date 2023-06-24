@@ -1,3 +1,4 @@
+const { path } = require("../app");
 const { User } = require("../models/users");
 const { emailValidator } = require("../validators/validators");
 const jwt = require("jsonwebtoken");
@@ -102,4 +103,26 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
-module.exports = { userRegister, logIn, getUserDetails, logOutUser };
+const uploadAvatar = async (req, res, next) => {
+  if (!req.file) {
+    res.status(400).send("Nie przesłano żadnego pliku.");
+  }
+  const { description } = req.body;
+  const { path: temporaryName, originalname } = req.file;
+  const fileName = path.join(storeImage, originalname);
+  try {
+    await fs.rename(temporaryName, fileName);
+  } catch (err) {
+    await fs.unlink(temporaryName);
+    return next(err);
+  }
+  res.json({ description, message: "Załadowano obrazek", status: 200 });
+};
+
+module.exports = {
+  userRegister,
+  logIn,
+  getUserDetails,
+  logOutUser,
+  uploadAvatar,
+};

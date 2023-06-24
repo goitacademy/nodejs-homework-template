@@ -7,30 +7,19 @@ const {
   updateStatusContact,
 } = require("../../controller/contactController");
 const express = require("express");
-const router = express.Router();
 
 const {
   userRegister,
   logIn,
   getUserDetails,
   logOutUser,
+  uploadAvatar,
 } = require("../../controller/userController");
 const auth = require("../../middleware/auth");
-const multer = require("multer");
-const path = require("path");
-const uploadDir = path.join(process.cwd(), "../../public/avatars");
-const storeImage = path.join(process.cwd(), "images");
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cd) => {
-    return req.user._id + "_" + file.originalname;
-  },
-});
-const upload = multer({ dest: storage });
-
+//
+const userUploadAvatar = require("../../middleware/userUploadAvatar");
+const router = express.Router();
+//
 // Sign up
 router.post("/users/register", userRegister);
 
@@ -62,26 +51,6 @@ router.put("/contacts/:contactId", auth, updateContact);
 router.patch("/contacts/:contactId/favorite", auth, updateStatusContact);
 
 // Upload avatar
-router.patch(
-  "/users/avatars",
-  upload.single("picture"),
-  async (req, res, next) => {
-    const { description } = req.body;
-    const { path: tempPathName, originalname, filename, mimetype } = req.file;
-    const fileName = path.join(storeImage, filename);
-    try {
-      await fs.rename(tempPathName, fileName);
-    } catch (err) {
-      await fs.unlink(tempPathName);
-      console.log(err);
-    }
-
-    res.json({
-      description,
-      message: "Plik załadowany pomyślnie",
-      status: 200,
-    });
-  }
-);
+router.post("/users/avatars", userUploadAvatar, uploadAvatar);
 
 module.exports = router;
