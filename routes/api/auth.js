@@ -7,6 +7,7 @@ const {
 } = require("../../utils/passwordHash");
 const { KEY } = process.env;
 const jwt = require("jsonwebtoken");
+const validateToken = require("../../utils/tokenValidator");
 
 const router = express.Router();
 
@@ -59,6 +60,23 @@ router.post("/login", validateUser(), async (req, res) => {
       subscription: user.subscription,
     },
   });
+});
+
+router.get("/current", validateToken, async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+});
+
+router.post("/logout", validateToken, async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: null });
+
+  res.status(204).json();
 });
 
 module.exports = router;
