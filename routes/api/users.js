@@ -60,11 +60,8 @@ router.post("/login", async (req, res, _) => {
     });
   }
 
-  const payload = {
-    id: user.id,
-  };
   const secret = "testsecret";
-  const token = jwt.sign(payload, secret);
+  const token = jwt.sign({ userId: user._id }, secret);
 
   user.token = token;
   await user.save();
@@ -78,32 +75,27 @@ router.post("/login", async (req, res, _) => {
   });
 });
 
-router.get("/logout", async (req, res, next) => {
+router.get("/logout", auth, async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.decode(token);
-    const userId = decodedToken.id;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      res.status(401).json({ message: "Not authorized" });
+      return;
+    }
 
-    await User.findByIdAndUpdate(userId, { $unset: { authToken: 1 } });
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        message: "Logout successful!",
-      },
-    });
-  } catch (error) {
-    next(error);
+    user.token = null;
+    await user.save();
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
-
 router.get("/current", auth, async (req, res, _) => {
-  const userId = req.user.id;
-
-  const user = await User.findById(userId);
+  const user = await User.find(req.user._id);
   if (!user) {
     return res.json({
-      status: "Unauthorized",
+      status: "error",
       code: 401,
       data: {
         message: "Not authorized",
