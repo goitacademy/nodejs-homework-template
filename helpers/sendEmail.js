@@ -25,11 +25,4 @@ const sendEmail = async (data) => {
   }
 };
 
-// const email = {
-//     to: "mmainfo15@gmail.com",
-//     from: "mostovama@meta.ua",
-//     subject: "Test",
-//     html: <p>Test email</p>
-// }
-
 module.exports = sendEmail;
