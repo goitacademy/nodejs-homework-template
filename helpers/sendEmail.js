@@ -4,7 +4,7 @@ require("dotenv").config();
 const { META_PASSWORD } = process.env;
 
 const nodemailerConfig = {
-  host: "smpt.meta.ua",
+  host: "smtp.meta.ua",
   port: 465,
   secure: true,
   auth: {
@@ -21,7 +21,8 @@ const sendEmail = async (data) => {
     await transport.sendMail(email);
     return true;
   } catch (error) {
-console.log(error)  }
+    console.log(error);
+  }
 };
 
 // const email = {
@@ -30,6 +31,5 @@ console.log(error)  }
 //     subject: "Test",
 //     html: <p>Test email</p>
 // }
-
 
 module.exports = sendEmail;
