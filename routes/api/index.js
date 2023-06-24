@@ -8,28 +8,16 @@ const {
 } = require("../../controller/contactController");
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
+
 const {
   userRegister,
   logIn,
   getUserDetails,
   logOutUser,
 } = require("../../controller/userController");
-
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-        data: "Unauthorized",
-      });
-    }
-    req.user = user;
-    next();
-  })(req, res, next);
-};
+const auth = require("../../middleware/auth");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 // Sign up
 router.post("/users/register", userRegister);

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use("/api", routerApi);
 
 app.use((_, res) => {
-  res.status(404).json({ message: "Not found 2 tutaj" });
+  res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, _, res, __) => {

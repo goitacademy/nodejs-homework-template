@@ -6,7 +6,8 @@ const {
 
 const listContacts = async (req, res, next) => {
   try {
-    const contacts = await Contacts.find();
+    const userId = req.user._id;
+    const contacts = await Contacts.find({ owner: userId });
     res.status(200).json({ message: contacts });
   } catch (error) {
     console.error("An error occurred");
