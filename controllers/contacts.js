@@ -5,14 +5,28 @@
 const catchAsync = require('../utils/catchAsync');
 const Contact = require('../models/contactModel');
 
-
-// const contactsDB = './controllers/contacts.json';
-
 // GET contacts list
 const listContacts = catchAsync(async (req, res) => {
-  const contacts = await Contact.find();
+console.log(req.user)
+  const { _id: owner } = req.user;
+  const { page, limit, favorite } = req.query;
+  
+  const findOptions = favorite ? { owner, favorite } : { owner };
+  console.log(findOptions)
+  
+  const contactQuery = Contact.find(findOptions)
+  
+  const paginationPage = +page || 1;
+  const paginationLimit = +limit || 5;
+  const skip = (paginationPage - 1) * paginationLimit;
+
+  contactQuery.skip(skip).limit(paginationLimit);
+
+  const contacts = await contactQuery;
+  const total = await Contact.count(findOptions);
      res.status(200).json({
-      contacts,
+       contacts,
+       total
     })  
 })
 

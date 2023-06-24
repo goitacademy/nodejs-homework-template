@@ -48,3 +48,15 @@ exports.login = catchAsync(async (req, res) => {
         user,
     })
 })
+
+exports.logout = catchAsync(async (req, res) => { 
+    console.log(req.user)
+    const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(_id, { token: "" });
+
+  if (!user) {
+    throw AppError(401, "Not authorized");
+  }
+
+  res.status(204).json();
+})

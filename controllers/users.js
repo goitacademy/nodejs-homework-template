@@ -56,6 +56,7 @@ exports.updateUserById = catchAsync(async (req, res) => {
       name: req.body.name,
       year: req.body.year,
       email: req.body.email,
+      subscription: req.body.subscription
     },
     {
       new: true,
@@ -80,6 +81,7 @@ exports.deleteUserById = catchAsync(async (req, res) => {
 
 exports.getMe = (req, res) => {
   res.status(200).json({
-    user: req.user
+    email: req.user.email,
+    subscription: req.user.subscription
   })
 }
