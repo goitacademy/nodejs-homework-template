@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const Joi = require("joi");
 
-const { PHONE_REGEX } = require('../utils/patterns');
-const { handleMongooseError } = require('../helpers/handleMongooseError')
+const { PHONE_REGEX } = require('../../utils/patterns');
+const { handleMongooseError } = require('../../helpers/index')
 
-const addSchema = Joi.object({
+const contactSchemaJoi = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   phone: Joi.string()
@@ -34,6 +34,11 @@ const contactSchema = mongoose.Schema({
     favorite: {
       type: Boolean,
       default: false,
+  },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
     },
 }, {versionKey: false, timestamps: true})
 
@@ -41,4 +46,4 @@ contactSchema.post('save', handleMongooseError)
 
 const Contact = mongoose.model('contact', contactSchema)
 
-module.exports = { Contact, addSchema, updateFavoriteSchema };
+module.exports = { Contact, contactSchemaJoi, updateFavoriteSchema };
