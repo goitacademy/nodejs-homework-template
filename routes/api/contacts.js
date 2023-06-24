@@ -8,7 +8,6 @@ const {
   updateContact,
   contactFavorite,
 } = require("../../models/contacts");
-// const User = require("../../models/users.model");
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -25,7 +24,7 @@ const updateSchema = Joi.object({
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
 });
@@ -93,41 +92,5 @@ router.patch("/:contactId/favorite", async (req, res) => {
     res.status(200).json(updateContact);
   }
 });
-
-// USERS
-
-// router.post("/signup", async (req, res, next) => {
-//   const { email, password } = req.body;
-//   const user = await User.findOne({ email, password });
-
-//   if (user) {
-//     res.json({
-//       status: "error",
-//       code: 409,
-//       data: `Conflict`,
-//       message: "User already exists!",
-//     });
-//   }
-//   try {
-//     const newUser = new User({ email });
-//     newUser.setPassword(password)
-//     await newUser.save()
-//     res.json({
-//       status: "succress",
-//       code: 201,
-//       data: {
-//         message: "Register complete!"
-//       }
-//     })
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// router.post("/login", async (req, res, next) => {});
-
-// router.get("/logout", async (req, res, next) => {});
-
-// router.get("/current", async (req, res, next) => {});
 
 module.exports = router;

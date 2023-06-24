@@ -47,7 +47,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res, _) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -97,7 +97,7 @@ router.get("/logout", async (req, res, next) => {
   }
 });
 
-router.get("/current", auth, async (req, res, next) => {
+router.get("/current", auth, async (req, res, _) => {
   const userId = req.user.id;
 
   const user = await User.findById(userId);
