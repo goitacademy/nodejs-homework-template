@@ -8,7 +8,7 @@ const fs = require("fs/promises");
 require("dotenv").config();
 const { nanoid } = require("nanoid");
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
@@ -29,7 +29,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
   res.status(201).json({
@@ -40,17 +40,22 @@ const register = async (req, res) => {
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+
   if (!user) {
     throw HttpError(401, "User not found");
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: null,
+    token,
   });
 
-  res.json({
-    message: "Verification successful",
-  });
+  res.redirect(`${FRONTEND_URL}login`);
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -85,7 +90,7 @@ const login = async (req, res) => {
   if (!user.verify) {
     throw HttpError(401, "Email not verified");
   }
-  const passwordCompare = await bcrypt.compare(password, user.password);
+  const passwordCompare = bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     throw HttpError(401, "Email or password is wrong");
   }
@@ -93,8 +98,10 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+
   await User.findByIdAndUpdate(user._id, { token });
+
   res.json({ token, user: { email, password } });
 };
 
