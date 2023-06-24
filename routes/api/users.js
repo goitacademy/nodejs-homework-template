@@ -92,7 +92,7 @@ router.get("/logout", auth, async (req, res) => {
   }
 });
 router.get("/current", auth, async (req, res, _) => {
-  const user = await User.find(req.user._id);
+  const user = await User.findById(req.user._id);
   if (!user) {
     return res.json({
       status: "error",
