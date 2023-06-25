@@ -32,13 +32,13 @@ const validateBody = (schema) =>{
       if (bodyEmpty ) {
         next(res.status(400).json({ message: "missing fields favorite" }));
       }
-      //      if (!req.body.favorite) {
-      //   next( 
-      //     res.status(400).json({
-      //       message: "missing required favorite field",
-      //     })
-      //   );
-      // }
+           if (!req.body.favorite) {
+        next( 
+          res.status(400).json({
+            message: "missing required favorite field",
+          })
+        );
+      }
       next()
     }
  
