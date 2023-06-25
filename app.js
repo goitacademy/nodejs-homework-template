@@ -16,7 +16,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+require('./config/config-passport')
+
+app.use('/api', contactsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

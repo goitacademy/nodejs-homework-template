@@ -1,6 +1,7 @@
 const app = require('./app')
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 require('dotenv').config();
 
