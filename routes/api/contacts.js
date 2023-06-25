@@ -9,6 +9,7 @@ const {
   updateContact,
   updateContactFavorite,
 } = require("../../models/contacts.js");
+const authenticateToken = require("../../token.middleware.js");
 
 const contactSchema = Joi.object({
   name: Joi.string().min(2).required(),
@@ -23,7 +24,13 @@ const updateContactSchema = Joi.object({
 }).or("name", "email", "phone");
 
 router.get("/", async (req, res) => {
-  const contacts = await listContacts();
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const favorite = req.query.favorite;
+
+  const filter = favorite ? { favorite: favorite === "true" } : {};
+
+  const contacts = await listContacts(filter, page, limit);
   res.status(200).json(contacts);
 });
 
@@ -92,6 +99,13 @@ router.patch("/:contactId/favorite", async (req, res) => {
   } else {
     res.status(200).json(updatedContact);
   }
+});
+router.get("/", authenticateToken, async (req, res) => {
+  // ...
+});
+
+router.get("/:id", authenticateToken, async (req, res) => {
+  // ...
 });
 
 module.exports = router;
