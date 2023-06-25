@@ -30,12 +30,13 @@ exports.getUsersList = catchAsync(async (req, res) => {
 /**
  * Get user by id
  */
-exports.getUserById = (req, res) => {
+exports.getUserById = catchAsync(async (req, res) => {
+  console.log(req)
   const { user } = req;
   res.status(200).json({
     user,
   });
-};
+});
 
 /**
  * Update user by id

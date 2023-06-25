@@ -6,6 +6,7 @@ const catchAsync = require('../utils/catchAsync');
 const { createUserDataValidator, updateUserDataValidator } = require('../utils/userValidators');
 
 const checkUserById = catchAsync(async (req, res, next) => {
+  console.log(req.params)
   const { id } = req.params;
 
   const idIsValid = Types.ObjectId.isValid(id);
@@ -22,7 +23,6 @@ const checkUserById = catchAsync(async (req, res, next) => {
 });
 
 const checkCreateUserData = catchAsync(async (req, res, next) => {
-  console.log('req.body --->', req.body)
   const { error, value } = createUserDataValidator(req.body);
   if (error) return next(new AppError(400, 'Invalid user data..'));
 

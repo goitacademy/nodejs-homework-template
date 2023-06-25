@@ -25,11 +25,9 @@ router.use(allowFor(userRolesEnum.BUSINESS, userRolesEnum.PRO));
 router.post('/', createUser)
 router.get('/', getUsersList);
 
-router.use('/:id', checkUserById);
-router
-  .route('/:id')
-  .get(getUserById)
-  .patch(checkUpdateUserData, updateUserById)
-  .delete(deleteUserById);
+// router.use('/:id', checkUserById);
+  router.get('/:id', checkUserById, getUserById)
+  router.patch('/:id', checkUpdateUserData, updateUserById)
+  router.delete('/:id', deleteUserById);
 
 module.exports = router;
