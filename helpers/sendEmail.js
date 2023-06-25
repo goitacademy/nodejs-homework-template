@@ -17,7 +17,7 @@ const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
   try {
-    const email = { ...data, from: "mostovama@meta.ua" };
+    const email = { ...data, from: "mamostova@meta.ua" };
     await transport.sendMail(email);
     return true;
   } catch (error) {
