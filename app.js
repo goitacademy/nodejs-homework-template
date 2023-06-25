@@ -1,14 +1,13 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-// const { nanoid } = require("nanoid");
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 app.use(cors());
-// вызов express возвращает веб-сервер
+
 app.listen(3000, () => console.log("Server run"));
-// вызов сервера (2 аргум колбек возвращ)
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
