@@ -50,7 +50,6 @@ exports.login = catchAsync(async (req, res) => {
 })
 
 exports.logout = catchAsync(async (req, res) => { 
-    console.log(req.user)
     const { _id } = req.user;
   const user = await User.findByIdAndUpdate(_id, { token: "" });
 
