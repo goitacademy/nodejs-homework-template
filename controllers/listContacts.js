@@ -1,4 +1,3 @@
-// const { readContacts } = require("../models/contacts");
 const Contact = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
