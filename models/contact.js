@@ -32,7 +32,7 @@ const addSchema = Joi.object({
 });
 
 const updateStatusContactSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.bool().required(),
 });
 
 const schemas = { addSchema, updateStatusContactSchema };
