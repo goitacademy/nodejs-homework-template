@@ -44,8 +44,8 @@ const updateContact = async (req, res) => {
   if (error) {
     throw  HttpError(404, "missing fields");
   }
-  const { contactId } = req.params;
-  const result = await Contact.findIdAndUpdate(contactId, req.body);
+  const id = req.params.contactId;
+  const result = await Contact.findIdAndUpdate(id, req.body);
   if (!result) {
     throw  HttpError(404, "Not found");
   }
