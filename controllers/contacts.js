@@ -7,12 +7,11 @@ const listContacts = async (req, res) => {
   res.status(200).json(result);
 };
 const getContactById = async (req, res) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(404, error.message);
-  }
-  const { contactId } = req.params;
-  const result = await Contact.findOne({_id: contactId });
+  const {contactId} = req.params; 
+  const result = await Contact.findOne(contactId); 
+  if(!result) { 
+  throw HttpError(404, `Contact '${contactId}' Not found`)
+}
   res.status(200).json(result);
 };
 
