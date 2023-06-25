@@ -3,4 +3,4 @@ const HttpError  = (status, message) => {
   error.status = status;
   return error;
 };
-module.exports = {HttpError};
+module.exports = HttpError;
