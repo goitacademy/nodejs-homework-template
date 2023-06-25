@@ -13,4 +13,50 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-module.exports = { listContacts };
+const getById = async (contactId) => {
+  const contacts = await listContacts();
+  const result = contacts.find((contact) => contact.id === contactId);
+  return result || null;
+};
+
+const addContact = async (body) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: await nanoid(),
+    ...body,
+  };
+  contacts.push(newContact);
+  await update(contacts);
+  return newContact;
+};
+
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const contactIndex = contacts.findIndex(
+    (el) => el.id === contactId
+  );
+  const [result] = contacts.splice(contactIndex, 1);
+  await update(contacts);
+  return result || null;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contactIndex = contacts.findIndex(
+    (el) => el.id === contactId
+  );
+  contacts[contactIndex] = {
+    ...contacts[contactIndex],
+    ...body,
+  };
+  await update(contacts);
+  return contacts[contactIndex] || null;
+};
+
+module.exports = {
+  listContacts,
+  getById,
+  addContact,
+  removeContact,
+  updateContact,
+};
