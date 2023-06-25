@@ -19,9 +19,10 @@ const getById = async (req, res, next) => {
         return res.status(404).json({ message: "Not found" });
       }
       res.json(result);
+   
     }
     catch(error) {
-      next(error)
+      return res.status(404).json({ message: "Invalid Id" });
     }
   }
 
@@ -39,20 +40,25 @@ const getById = async (req, res, next) => {
     try {
       const { contactId } = req.params;
       const result = await Contact.findByIdAndRemove(contactId);
+      if(!result){
+        return res.status(404).json({ message: "Not found" });
+      }
       res.json({ message: "contact deleted" });
     } catch (error) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Invalid Id" });
     }
   };
 
-  const update = async (req, res, next) => {
+  const update = async (req, res) => {
     try {
       const { contactId } = req.params;
       const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
-
+      if(!result){
+        return res.status(404).json({ message: "Not found" });
+      }
       res.json(result);
     } catch (error) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Invalid Id" });
     }
   };
 
@@ -61,9 +67,12 @@ const getById = async (req, res, next) => {
       const { contactId } = req.params;
       // console.log(contactId)
       const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+      if(!result){
+        return res.status(400).json({ message: "Missing field favorite" });
+      }
       res.json(result);
     } catch (error) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found Id" });
     }
   }
 
