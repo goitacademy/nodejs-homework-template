@@ -43,7 +43,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) throw new AppError(401, 'Not logged in!');
-console.log('middleware-->', currentUser)
   req.user = currentUser;
 
   next();
