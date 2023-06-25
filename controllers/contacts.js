@@ -43,7 +43,7 @@ const updateContact = async (req, res) => {
 }
 
 module.exports = { 
-  getAllContacts: ctrlWrapper(listContacts),
+  listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   deleteContact: ctrlWrapper(deleteContact), 
