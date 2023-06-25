@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
 const contactSchema = new Schema(
   {
@@ -8,6 +9,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      match: /^\w+@\w+.\w+$/,
     },
     phone: {
       type: String,
@@ -17,8 +19,10 @@ const contactSchema = new Schema(
       default: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
+
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 

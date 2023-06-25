@@ -10,7 +10,7 @@ const {
   validateNewContact,
   validateUpdatedContact,
 } = require("../../middleware/contacts");
-const addSchema = require("../../schemes/contacts");
+const addSchema = require("../../models/contact");
 
 const router = express.Router();
 
