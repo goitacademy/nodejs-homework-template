@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 
-const DBPATH = process.env.DB_SECRET;
+const dbpath = process.env.DB_PATH;
 
-if (!DBPATH) {
-  console.error("No db secret provided");
+if (!dbpath) {
+  console.log("Database path is not defined");
 }
 
-const connectToDatabase = async () => {
-  mongoose
-    .connect(DBPATH)
-    .then(() => console.log("Database connection successful"))
-    .catch((error) => {
-      console.log("Error connecting to db server", error);
-      process.exit(1);
-    });
+const connectDatabase = async () => {
+  try {
+    await mongoose.connect(dbpath);
+    console.log("Database connection successful");
+  } catch (error) {
+    console.log("Database connection error");
+    process.exit(1);
+  }
 };
 
-module.exports = { connectToDatabase };
+module.exports = connectDatabase;

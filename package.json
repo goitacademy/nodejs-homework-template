@@ -14,11 +14,12 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
-    "joi": "^17.8.4",
+    "joi": "^17.8.3",
+    "joi-phone-number": "^5.1.1",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.2",
-    "morgan": "1.10.0",
-    "uuid": "^9.0.0"
+    "mongoose": "^7.0.1",
+    "mongoose-paginate-v2": "^1.7.1",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -27,6 +28,18 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "^2.0.15"
-  }
+    "nodemon": "2.0.15"
+  },
+  "description": "Node.js phonebook API",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jslonina/nodejs-homework-template.git"
+  },
+  "author": "John Doe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jslonina/nodejs-homework-template/issues"
+  },
+  "homepage": "https://github.com/jslonina/nodejs-homework-template2#readme"
 }

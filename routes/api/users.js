@@ -1,140 +1,84 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
-
 const router = express.Router();
-const { auth } = require("../../auth/auth.js");
+
+const userController = require("../../controllers/userController");
 const {
-  createUser,
-  getUserById,
-  getUserByEmail,
-  updateUser,
-} = require("../../controllers/users.js");
+  validateCreateUser,
+  validateUpdateSubscription,
+} = require("../../models/user");
+const loginHandler = require("../../auth/loginHandler");
+const auth = require("../../auth/auth");
 
-const { issueToken } = require("../../auth/issueToken.js");
-
-const { userValidationSchema } = require("../../models/user.js");
-
-router.post("/signup", async (req, res) => {
-  const { email, password } = req.body;
-  const { error } = userValidationSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: error.details[0].message,
-      data: "Bad Request",
-    });
-  }
-
-  const newUser = await getUserByEmail(email);
-
-  if (newUser) {
-    return res.status(409).json({
-      status: "error",
-      code: 409,
-      message: "Email is already in use",
-      data: "Conflict",
-    });
-  }
+router.post("/signup", async (req, res, next) => {
   try {
-    const user = await createUser(email, password);
-    return res.status(201).json({
-      status: "Created",
-      code: 201,
-      message: "Registration successful",
-      data: {
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      },
-    });
+    const { error } = validateCreateUser(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    const { email } = req.body;
+    const user = await userController.getUserByEmail(email);
+    if (user) {
+      return res.status(409).json({ message: "Email in use" });
+    }
+
+    const newUser = await userController.createUser(req.body);
+    res.status(201).json(newUser);
   } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
+    next(error);
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  const { error } = userValidationSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: error.details[0].message,
-      data: "Bad Request",
-    });
-  }
-
-  const user = await getUserByEmail(email);
-  const userPassword = user.password;
-
-  const passwordCorrect = bcrypt.compareSync(password, userPassword);
-
-  if (!user || !passwordCorrect) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: "Email or password is wrong",
-      data: "Bad request",
-    });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email or password is missing" });
   }
 
   try {
-    const token = issueToken(user);
-
-    const newData = { token: token };
-    await updateUser(user._id, newData);
-
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      data: {
-        token,
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      },
-    });
+    const token = await loginHandler(email, password);
+    res.status(200).json({ token });
   } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
-  }
-});
-
-router.get("/logout", auth, async (req, res, next) => {
-  try {
-    const { _id } = req.user;
-    const newData = { token: null };
-    await updateUser(_id, newData);
-    return res.status(204).json({
-      message: "Logged out",
-    });
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
+    next(error);
+    return res.status(401).json({ message: "Invalid login data" });
   }
 });
 
 router.get("/current", auth, async (req, res, next) => {
   try {
-    const user = await getUserById(req.user.id);
-
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      data: {
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      },
-    });
+    const { email } = req.user;
+    const user = await userController.getUserByEmail(email);
+    res.status(200).json(user);
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    next(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.patch("/", auth, async (req, res, next) => {
+  try {
+    const { error } = validateUpdateSubscription(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+    const { email } = req.user;
+    const user = await userController.updateSubscription(email, req.body);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/logout", auth, async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    const user = await userController.logout(token);
+    res.status(204).json(user);
+  } catch (error) {
+    next(error);
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
