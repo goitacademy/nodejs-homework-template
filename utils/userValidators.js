@@ -1,33 +1,31 @@
 const Joi = require('joi');
-const userRolesEnum = require('../constants/userRolesEnum');
 
 const PASSWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,128})/;
 
-exports.createUserDataValidator = (data) =>
-  Joi.object()
+exports.createUserDataValidator = (data) => {
+  return Joi.object()
     .options({ abortEarly: false })
     .keys({
-        password: Joi.string().regex(PASSWD_REGEX).required(),
-        email: Joi.string().email().required(),
-        subscription: Joi.string().valid(...Object.values(userRolesEnum)),
-        // token: Joi.string(),
+      password: Joi.string().regex(PASSWD_REGEX).required(),
+      email: Joi.string().email().required(),
     })
-    .validate(data);
+    .validate(data)
+};
 
-exports.updateUserDataValidator = (data) =>
-  Joi.object()
+exports.updateUserDataValidator = (data) => {
+  return Joi.object()
     .options({ abortEarly: false })
     .keys({
         email: Joi.string().email().required(),
         subscription: Joi.string().required(),
     })
-        .validate(data);
+        .validate(data)};
     
-exports.signupUserDataValidator = (data) =>            
-  Joi.object()
+exports.signupUserDataValidator = (data) => {         
+  return Joi.object()
     .options({ abortEarly: false })
     .keys({
       email: Joi.string().email().required(),
       password: Joi.string().regex(PASSWD_REGEX).required(),
     })
-    .validate(data);
+    .validate(data)};

@@ -1,18 +1,13 @@
-// const fs = require('fs/promises');
-// const uuid = require('uuid').v4;
-// const { createContactValidator, updateContactValidator } = require('../utils/contactValidator');
-// const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Contact = require('../models/contactModel');
 
 // GET contacts list
 const listContacts = catchAsync(async (req, res) => {
-console.log(req.user)
-  const { _id: owner } = req.user;
+  const owner = req.user._id.toHexString();
+  
   const { page, limit, favorite } = req.query;
   
   const findOptions = favorite ? { owner, favorite } : { owner };
-  console.log(findOptions)
   
   const contactQuery = Contact.find(findOptions)
   
@@ -42,9 +37,7 @@ const getContactById = async (req, res) => {
 // DELETE contact
 const removeContact = catchAsync(async (req, res) => {
   const { id } = req.params;
-
   await Contact.findByIdAndDelete(id);
-
   res.sendStatus(204);
 })
 
@@ -52,7 +45,7 @@ const removeContact = catchAsync(async (req, res) => {
 const addContact = catchAsync(async (req, res, next) => {
 
   const newContactData = {
-    owner: req.user,
+    owner: req.user._id.toHexString(),
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone

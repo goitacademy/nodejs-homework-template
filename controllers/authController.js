@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const userRolesEnum = require("../constants/userRolesEnum")
-const User = require("../models/userModel")
+const {User} = require("../models/userModel")
 const catchAsync = require("../utils/catchAsync")
 const AppError = require('../utils/appError')
 

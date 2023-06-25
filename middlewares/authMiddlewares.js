@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/userModel');
+const {User} = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { signupUserDataValidator } = require('../utils/userValidators');
@@ -43,7 +43,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) throw new AppError(401, 'Not logged in!');
-
+console.log('middleware-->', currentUser)
   req.user = currentUser;
 
   next();

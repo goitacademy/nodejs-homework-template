@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const userRolesEnum = require('../constants/userRolesEnum');
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
   password: {
     type: String,
@@ -17,8 +17,8 @@ const userSchema = mongoose.Schema(
   },
   subscription: {
     type: String,
-    enum: Object.values(userRolesEnum),
-    default: userRolesEnum.STARTER,
+    enum: ['starter', 'pro', 'bussines'],
+    default: 'starter',
   },
   token: {
     type: String,
@@ -47,4 +47,4 @@ userSchema.methods.checkPassword = (candidate, hash) => bcrypt.compare(candidate
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = {User};

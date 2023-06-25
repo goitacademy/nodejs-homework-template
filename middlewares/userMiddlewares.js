@@ -1,6 +1,6 @@
 const { Types } = require('mongoose');
 
-const User = require('../models/userModel');
+const {User} = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { createUserDataValidator, updateUserDataValidator } = require('../utils/userValidators');
@@ -22,8 +22,8 @@ const checkUserById = catchAsync(async (req, res, next) => {
 });
 
 const checkCreateUserData = catchAsync(async (req, res, next) => {
+  console.log('req.body --->', req.body)
   const { error, value } = createUserDataValidator(req.body);
-
   if (error) return next(new AppError(400, 'Invalid user data..'));
 
   const userExists = await User.exists({ email: value.email });
@@ -40,7 +40,6 @@ const checkUpdateUserData = catchAsync(async (req, res, next) => {
 
   if (error) return next(new AppError(400, 'Invalid user data..'));
 
-  // const userExists = await User.exists({ email: value.email });
   const userExists = await User.findOne({ email: value.email });
 
   const userIsTheSame = req.user.id === userExists.id;

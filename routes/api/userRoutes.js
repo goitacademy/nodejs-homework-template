@@ -19,13 +19,11 @@ const router = express.Router();
 // router.patch('/:id', checkUserById, updateUserById);
 // router.delete('/:id', checkUserById, deleteUserById);
 
-router.use(protect);
-router.get('/current', getMe)
+// router.use(protect);
+router.get('/current', protect, getMe)
 router.use(allowFor(userRolesEnum.BUSINESS, userRolesEnum.PRO));
-router
-  .route('/')
-  .post(checkCreateUserData, createUser)
-  .get(getUsersList);
+router.post('/', createUser)
+router.get('/', getUsersList);
 
 router.use('/:id', checkUserById);
 router
