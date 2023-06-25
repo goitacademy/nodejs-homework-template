@@ -14,6 +14,7 @@ const {
   getUserDetails,
   logOutUser,
   uploadAvatar,
+  getAvatar,
 } = require("../../controller/userController");
 const auth = require("../../middleware/auth");
 //
@@ -52,5 +53,8 @@ router.patch("/contacts/:contactId/favorite", auth, updateStatusContact);
 
 // Upload avatar
 router.patch("/users/avatars", auth, userUploadAvatar, uploadAvatar);
+
+// Preview of avatar
+router.get("/avatar/:filename", getAvatar);
 
 module.exports = router;

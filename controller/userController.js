@@ -161,10 +161,18 @@ const uploadAvatar = async (req, res, next) => {
   res.status(200).json({ avatarURL: `${filename} saved as a user avatar URL` });
 };
 
+const getAvatar = (req, res, next) => {
+  console.log("działa");
+  const filename = req.params.filename;
+  const imagePath = path.join(__dirname, "../public/avatar/", filename);
+  res.sendFile(imagePath);
+};
+
 module.exports = {
   userRegister,
   logIn,
   getUserDetails,
   logOutUser,
   uploadAvatar,
+  getAvatar,
 };
