@@ -13,16 +13,20 @@ app.use(cors())
 app.use(express.json())
 
 app.listen(3001)
-// app.listen(3000, ()=> console.log('server run'))
-// console.log("server run");
+
+const contacts = require('./contacts')
+// const fs = require("fs/promises")
+
 
 app.use('/api/contacts', contactsRouter)
 
-app.use((req, res) => {
+app.use(async(req, res) => {
+  const {method, url} = req
 //  console.log("hello");
 //  res.send(<h2>hello</h2>)
-  res.status(404).json({ message: 'Not found' })
-  // res.send("hello")
+  // res.status(404).json({ message: 'Not found' })
+  res.json(contacts)
+  await console.log(method,url);
 })
 
 app.use((err, req, res, next) => {
