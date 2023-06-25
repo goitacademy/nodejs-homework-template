@@ -11,7 +11,7 @@ mongoose
   .then(() => {
     app.listen(PORT, () => {
       console.log("Server is running and connected to DB");
-      console.log("live server: https://nodejs-homework-rest-api-34tv.onrender.com/api/contacts");
+      console.log("Live server: https://nodejs-homework-rest-api-34tv.onrender.com/api/contacts");
     });
   })
   .catch((error) => {
