@@ -3,6 +3,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 require('dotenv').config()
+// const gravatar = require('gravatar')
 
 const {
   Contact,
@@ -41,6 +42,8 @@ router.post('/users/signup', async (req, res, next) => {
     const newUser = new User({ email })
 
     newUser.setPassword(password)
+
+    // gravatar.url({ email })
 
     await newUser.save()
 
