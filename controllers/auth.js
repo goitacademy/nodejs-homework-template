@@ -55,7 +55,7 @@ const verifyEmail = async (req, res) => {
     token,
   });
 
-  res.redirect(`${FRONTEND_URL}login`);
+  res.redirect(`${FRONTEND_URL}contacts`);
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -106,9 +106,9 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email } = req.user;
-  const { subscription } = await User.findOne({ email });
-  res.json({ email, subscription });
+  const { persistedToken } = req.user;
+  const user = await User.findOne({ token: persistedToken });
+  res.json({ user });
 };
 
 const logout = async (req, res) => {
