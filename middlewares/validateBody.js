@@ -42,4 +42,21 @@ const validateFavorite = (schema) => {
   return func;
 };
 
-module.exports = { validateBody, validateUpdateBody, validateFavorite };
+const validateSubscription = (schema) => {
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const message = `field ${error.details[0].context.label} is not valid`;
+      throw HttpError(400, message);
+    }
+    next();
+  };
+  return func;
+};
+
+module.exports = {
+  validateBody,
+  validateUpdateBody,
+  validateFavorite,
+  validateSubscription,
+};
