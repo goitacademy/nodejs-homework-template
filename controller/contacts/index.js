@@ -20,12 +20,12 @@ const get = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
 
-    const results = await service.getAllContacts();
-    //   req.user._id,
-    //   req.query.favorite,
-    //   page,
-    //   limit
-    // );
+    const results = await service.getAllContacts(
+      req.user._id,
+      req.query.favourite,
+      page,
+      limit
+    );
     // res.status(200).json(results);
     // console.log(results);
     console.log("contacts getted!");
@@ -70,6 +70,7 @@ const getById = async (req, res, next) => {
   }
 };
 
+// FIXME: Probably problem with favourite, always false. Also validation by schema
 const create = async (req, res, next) => {
   const { name, email, phone, favourite } = req.body;
   const owner = req.user._id;

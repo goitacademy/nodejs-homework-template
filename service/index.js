@@ -1,14 +1,14 @@
 const Contact = require("./schemas/contacts");
 
-const getAllContacts = async (owner, favorite, page, limit) => {
+const getAllContacts = async (owner, favourite, page, limit) => {
   const skip = (page - 1) * limit;
 
-  if (favorite === "true") {
-    return Contact.find({ owner, favorite: true }).skip(skip).limit(limit);
+  if (favourite === "true") {
+    return Contact.find({ owner, favourite: true }).skip(skip).limit(limit);
   }
 
-  if (favorite === "false") {
-    return Contact.find({ owner, favorite: false }).skip(skip).limit(limit);
+  if (favourite === "false") {
+    return Contact.find({ owner, favourite: false }).skip(skip).limit(limit);
   }
 
   return Contact.find({ owner }).skip(skip).limit(limit);
@@ -25,8 +25,8 @@ const createContact = ({ name, email, phone, favourite, owner }) => {
   return Contact.create({ name, email, phone, favourite, owner });
 };
 
-const updateContact = (id, fields, owner) => {
-  return Contact.findByIdAndUpdate({ _id: id }, fields, owner, { new: true });
+const updateContact = (id, owner, fields) => {
+  return Contact.findByIdAndUpdate({ _id: id }, owner, fields, { new: true });
 };
 
 const removeContact = (id, owner) => {
