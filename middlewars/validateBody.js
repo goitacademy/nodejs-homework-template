@@ -25,6 +25,26 @@ const validBody = (schema) => {
   };
   return func;
 };
+const validateBody = (schema) =>{
+  const func = (req, res, next) => {
+
+      const bodyEmpty = Object.keys(req.body).length === 0;
+      if (bodyEmpty ) {
+        next(res.status(400).json({ message: "missing fields favorite" }));
+      }
+      const { error } = schema.validate(req.body);
+      if (error) {
+        next(
+          res.status(400).json({
+            message: error.message,
+          })
+        );
+      }
+      next()
+    }
+ 
+  return func;
+};
 
 const validEmptyBody = () => {
   const func = (req, res, next) => {
@@ -58,4 +78,4 @@ const validEmptyBody = () => {
   return func;
 };
 
-module.exports = { validBody, validEmptyBody };
+module.exports = { validBody, validateBody, validEmptyBody };
