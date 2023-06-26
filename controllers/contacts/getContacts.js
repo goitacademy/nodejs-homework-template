@@ -2,9 +2,9 @@ const { Contact } = require("../../models");
 const { wrapper } = require("../../helpers");
 
 const getContacts = async (req, res) => {
-  const { page = 1, limit = 10, favorite } = req.query;
+  const { page = 1, limit = 10, favorite="" } = req.query;
 
-  let findOptions = {
+  const findOptions = {
     owner: req.user._id,
   };
 
