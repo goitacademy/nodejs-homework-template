@@ -1,11 +1,12 @@
 const validateContact = (schema) => {
-  return (body) => {
-    const { error } = schema.validate(body);
+  const middleware = (req, res, next) => {
+    const { error } = schema.validate(req.body);
     if (error) {
-      throw new Error("Validation error: " + error.details[0].message);
+      throw new Error(error);
     }
-    return body;
+    next();
   };
+  return middleware;
 };
 
 module.exports = { validateContact };
