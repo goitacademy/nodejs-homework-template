@@ -11,7 +11,6 @@ const removeContact = async (req, res, next) => {
   }
   res.status(200).json({
     message: "Contact deleted",
-    result: result,
   });
 };
 
