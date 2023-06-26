@@ -24,7 +24,7 @@ const updateSchema = Joi.object({
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
 });
