@@ -13,7 +13,7 @@ const listContacts = async () => {
     const contacts = JSON.parse(data);
     return contacts;
   } catch (error) {
-    console.log("трапилось щось");
+    console.log("щось пішло не так");
   }
 };
 
@@ -63,13 +63,13 @@ async function addContact(body) {
 const updateContact = async (contactId, body) => {
   try {
     const allContacts = await listContacts();
-    const idx = allContacts.findIndex((item) => item.id === contactId);
-    if (idx === -1) {
+    const index = allContacts.findIndex((item) => item.id === contactId);
+    if (index === -1) {
       return null;
     }
-    allContacts[idx] = { id: contactId, ...body };
+    allContacts[index] = { id: contactId, ...body };
     updateContacts(allContacts);
-    return allContacts[idx];
+    return allContacts[index];
   } catch (error) {
     console.log(error);
   }

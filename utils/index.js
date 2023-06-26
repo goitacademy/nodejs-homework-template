@@ -1,4 +1,4 @@
-const requestError = require("./controllerWrapper");
+const requestError = require("./requestError");
 const controllerWrapper = require("./controllerWrapper");
 
 module.exports = {
