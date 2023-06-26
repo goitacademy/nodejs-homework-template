@@ -44,4 +44,6 @@ router.patch(
   ctrlWrapper(ctrl.updateStatusContact)
 );
 
+router.get("/", authenticate, ctrlWrapper(ctrl.getContacts));
+
 module.exports = router;
