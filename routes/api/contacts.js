@@ -3,7 +3,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 require('dotenv').config()
-// const gravatar = require('gravatar')
+const gravatar = require('gravatar')
 
 const {
   Contact,
@@ -43,7 +43,9 @@ router.post('/users/signup', async (req, res, next) => {
 
     newUser.setPassword(password)
 
-    // gravatar.url({ email })
+    const avatar = gravatar.url({ email })
+
+    newUser.avatarURL = avatar
 
     await newUser.save()
 
@@ -51,7 +53,8 @@ router.post('/users/signup', async (req, res, next) => {
       status: "success",
       code: 201,
       data: "Created",
-      message: "Register complete!"
+      message: "Register complete!",
+      image: avatar
     })
   } catch (error) {
     next(error)
@@ -136,6 +139,39 @@ router.get('/users/current', auth, async (req, res, next) => {
     message: `Current user is ${email}`
   })
 })
+
+// ======================================================
+
+router.patch('/users/avatars', auth, async (req, res, next) => {
+  const { avatarURL } = req.body
+  const id = req.user._id;
+  const user = await User.findById(id)
+
+  if(!user){
+    return res.json({
+      status: "error",
+      code: 401,
+      data: {
+        message: "Not authorized"
+      }
+    })
+  }
+
+  user.avatarURL = avatarURL;
+
+  user.save();
+
+  return res.json({
+    status: "success",
+    code: 200,
+    message: "OK",
+    data: {
+      avatarURL: avatarURL
+    }
+  })
+})
+
+// ======================================================
 
 router.get('/contacts', auth, async (req, res, next) => {
   const contacts = await Contact.find(); 
