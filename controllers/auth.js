@@ -1,7 +1,6 @@
 const { User } = require('../models/user');
 
 const { HttpError, ctrlWrapper } = require('../helpers');
-const { modelNames } = require('mongoose');
 
 const register = async(req, res) => {
     const { email, password } = req.body;
