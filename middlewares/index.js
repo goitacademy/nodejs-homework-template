@@ -3,6 +3,7 @@ const {validationFavorite} = require("./validationFavorite");
 const ctrlWrapper = require("./ctrlWrapper");
 const handleMongooseError = require("./handleMongooseError");
 const isValidId = require("./isValidId");
+const authenticate = require("./authenticate");
 
 module.exports = {
   validation,
@@ -10,4 +11,5 @@ module.exports = {
   ctrlWrapper,
   handleMongooseError,
   isValidId,
+  authenticate,
 };

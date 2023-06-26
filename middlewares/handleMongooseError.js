@@ -1,9 +1,13 @@
-const createError = require("http-errors");
+// const createError = require("http-errors");
 
-const handleMongooseError =(error, data, next) => {
-  console.log('error', error);
-  next(createError(400, "missing field favorite"))
- 
+const handleMongooseError = (error, data, next) => {
+  const { name, code } = error;
+
+  const status =
+    name === "MongoServerError" && code === 11000 ? 409 : 400
+        // "Помилка від Joi або іншої бібліотеки валідації");
+ error.status = status;
+  next();
 };
 
 module.exports = handleMongooseError;
