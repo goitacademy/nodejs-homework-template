@@ -1,5 +1,6 @@
 const {Schema, model} = require('mongoose');
 const favoriteList = ["true", "false"]
+
 const contactSchema = new Schema({
     name: {
         type: String,
