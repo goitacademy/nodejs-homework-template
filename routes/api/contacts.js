@@ -12,14 +12,15 @@ const productSchema = Joi.object({
 
 const contactsOperations = require('../../models/contacts');
 
+
 router.get('/', async (req, res, next) => {
  try {
-    const contacts = await contactsOperations.listContacts();
+    const result = await contactsOperations.listContacts();
     res.json({
       status: "success",
       code: 200,
       data: {
-        result: contacts
+        result
       }
     });
  } catch (error) {
@@ -72,13 +73,54 @@ router.post('/', async (req, res, next) => {
 
 
 router.delete('/:contactId', async (req, res, next) => {
-  const {id} = req.params;
+  try{
 
-  res.json({ message: 'template message @ DELETE /api/contacts/:id' })
+    const {contactId} = req.params;
+    const result = await contactsOperations.removeContact(contactId);
+    if (result ===  null) {
+      throw createError(404, `Contact with id=${contactId} not found`);
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      message: "contact deleted",
+      data: {
+        result
+      }
+    });
+
+  }catch (error){
+    next(error);
+  }
+
 });
+
+
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message @ PUT /api/contacts/:id' })
+  try{
+    const {error} = productSchema.validate(req.body);
+    if (error){
+      error.status = 400;
+      throw error;
+    }
+      const {contactId} = req.params;
+      const result = await contactsOperations.updateContact(contactId, req.body);
+      if (result ===  null) {
+        throw createError(404, `Contact with id=${contactId} not found`);
+      }
+      res.json({
+        status: "success",
+        code: 200,
+        data: {
+          result
+        }
+      });
+  } catch (error) {
+    next(error);
+  }
 });
+
+
 
 module.exports = router;
