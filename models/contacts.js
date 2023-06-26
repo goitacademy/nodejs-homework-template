@@ -24,9 +24,9 @@ const removeContact = async (contactId) => {
   return removedContact;
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   const data = await listContacts();
-  const contact = { id: nanoid(), name, email, phone };
+  const contact = { id: nanoid(), ...body };
   data.push(contact);
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
   return contact;
