@@ -5,7 +5,7 @@ const {
   validationFavorite,
   ctrlWrapper,
   isValidId,
-  //  authenticate,
+  authenticate,
 } = require("../../middlewares");
 const { addContactSchema, updateContactSchema } = require("../../schemas");
 const { contacts: ctrl } = require("../../controllers");
@@ -15,28 +15,22 @@ const validateMiddlewareUpdate = validationFavorite(updateContactSchema);
 
 const router = express.Router();
 
-router.get("/",
-//  authenticate,
- ctrlWrapper(ctrl.getAll));
+router.get("/", authenticate, ctrlWrapper(ctrl.getAll));
 
-router.get("/:contactId", 
-// authenticate, 
-isValidId, ctrlWrapper(ctrl.getById));
+router.get("/:contactId", authenticate, isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", 
-// authenticate, 
-validateMiddlewareAdd, ctrlWrapper(ctrl.add));
+router.post("/", authenticate, validateMiddlewareAdd, ctrlWrapper(ctrl.add));
 
 router.delete(
   "/:contactId",
-  // authenticate,
+  authenticate,
   isValidId,
   ctrlWrapper(ctrl.removeById)
 );
 
 router.put(
   "/:contactId",
-  // authenticate,
+  authenticate,
   isValidId,
   validateMiddlewareAdd,
   ctrlWrapper(ctrl.updateById)
@@ -44,7 +38,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
-  // authenticate,
+  authenticate,
   isValidId,
   validateMiddlewareUpdate,
   ctrlWrapper(ctrl.updateStatusContact)

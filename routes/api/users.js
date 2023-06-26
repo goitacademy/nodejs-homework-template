@@ -4,7 +4,7 @@ const {
   validation,
   ctrlWrapper,
   //  isValidId,
-  authenticate,
+    authenticate,
 } = require("../../middlewares");
 
 const { schemas } = require("../../models/userModel");
@@ -26,9 +26,13 @@ router.post(
 // signin
 router.post("/login", validateMiddlewareLogin, ctrlWrapper(ctrl.login));
 
-router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+router.get("/current",
+   authenticate,
+  ctrlWrapper(ctrl.getCurrent));
 
-router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
+router.post("/logout",
+ authenticate,
+  ctrlWrapper(ctrl.logout));
 
 
 module.exports = router;

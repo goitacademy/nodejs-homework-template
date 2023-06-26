@@ -2,9 +2,6 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../middlewares");
 const Joi = require("joi");
 
-// const emailRegexp = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
- const subscriptList = ["starter", "pro", "business"];
-
 const userSchema = new Schema(
   {
     password: {
@@ -18,8 +15,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: subscriptList,
-      // ["starter", "pro", "business"],
+      enum: ["starter", "pro", "business"],
       default: "starter",
     },
     token: {
@@ -38,8 +34,6 @@ userSchema.post("save", handleMongooseError);
 const registerSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
-  // subscription: Joi.string(),
-  subscription: Joi.string().valid(...subscriptList),
 });
 
 const loginSchema = Joi.object({
