@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const httpErr = require("../utils/HTTPErr");
 
 const userSchema = new Schema(
   {
@@ -25,7 +26,9 @@ const userSchema = new Schema(
 );
 
 userSchema.post("save", (error, data, next) => {
-  console.log(error);
+  if (error) {
+    next(httpErr(400, "Bad Request"));
+  }
   next();
 });
 
