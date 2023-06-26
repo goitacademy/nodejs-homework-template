@@ -16,14 +16,12 @@ const router = express.Router();
 const validateMiddlewareRegister = validation(schemas.registerSchema);
 const validateMiddlewareLogin = validation(schemas.loginSchema);
 
-// signup
 router.post(
   "/register",
   validateMiddlewareRegister,
   ctrlWrapper(ctrl.register)
 );
 
-// signin
 router.post("/login", validateMiddlewareLogin, ctrlWrapper(ctrl.login));
 
 router.get("/current",
