@@ -58,9 +58,11 @@ router.post("/login", async (req, res, _) => {
       message: "User already exists!",
     });
   }
-
+  const payload = {
+    id: user._id,
+  };
   const secret = "testsecret";
-  const token = jwt.sign({ userId: user._id }, secret);
+  const token = jwt.sign(payload, secret);
 
   user.token = token;
   await user.save();
@@ -91,24 +93,28 @@ router.get("/logout", auth, async (req, res) => {
   }
 });
 router.get("/current", auth, async (req, res, _) => {
-  const user = await User.findById(req.user._id);
+  try {
+    const user = await User.findById(req.user._id);
 
-  if (!user) {
-    return res.json({
-      status: "error",
-      code: 401,
+    if (!user) {
+      return res.json({
+        status: "error",
+        code: 401,
+        data: {
+          message: "Not authorized",
+        },
+      });
+    }
+    res.json({
+      status: "success",
+      code: 200,
       data: {
-        message: "Not authorized",
+        users: user || [],
       },
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      users: user || [],
-    },
-  });
 });
 
 module.exports = router;
