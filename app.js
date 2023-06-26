@@ -14,7 +14,7 @@ app.use(express.json())
 
 app.listen(3001)
 
-const contacts = require('./contacts')
+// const contacts = require('./contacts')
 // const fs = require("fs/promises")
 
 
@@ -32,6 +32,27 @@ app.use(async(req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+
+
+// app.get("/api/contacts", (req,res)=>{
+//   res.json(contacts)
+// })
+
+// app.get("/api/contacts:id", (req,res)=>{
+//   res.json(contacts[0])
+// })
+
+// app.post("/api/contacts", (req,res)=>{
+  
+// })
+
+// app.put("/api/contacts:id", (req,res)=>{
+  
+// })
+
+// app.delete("/api/contacts:id", (req,res)=>{
+  
+// })
 
 
 // app.get("/", (request,response) =>{

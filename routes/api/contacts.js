@@ -1,8 +1,11 @@
 const express = require('express')
 
+const contacts = require('./contacts')
+
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
+  console.log(contacts);
   res.json({ message: 'template message' })
 })
 
