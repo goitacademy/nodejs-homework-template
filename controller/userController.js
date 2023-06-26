@@ -162,7 +162,6 @@ const uploadAvatar = async (req, res, next) => {
 };
 
 const getAvatar = (req, res, next) => {
-  console.log("działa");
   const filename = req.params.filename;
   const imagePath = path.join(__dirname, "../public/avatar/", filename);
   res.sendFile(imagePath);
