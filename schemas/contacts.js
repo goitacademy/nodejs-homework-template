@@ -7,7 +7,7 @@ const addSchema = Joi.object({
   favorite:Joi.boolean().required(),
 });
 const contactUpdateFavouriteSchema = Joi.object({
-  favorite:Joi.boolean(),
+  favorite:Joi.boolean().required(),
 })
 module.exports = {
   addSchema,
