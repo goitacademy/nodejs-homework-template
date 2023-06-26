@@ -13,7 +13,7 @@ const listContacts = async () => {
     const contacts = JSON.parse(data);
     return contacts;
   } catch (error) {
-    console.log("трапилось щось");
+    console.log("fatal error: ", error);
   }
 };
 
