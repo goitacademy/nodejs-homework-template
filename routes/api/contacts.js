@@ -2,7 +2,7 @@ const express = require('express')
 const {
   listContacts,
   getContactById,
-  // addContact,
+  addContact,
   // removeContact,
   // updateContact,
 } = require('../../models/contacts');
@@ -27,7 +27,16 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      return res.status(400).json({ message: 'missing required name field' })
+    }
+    const newContact = await addContact({ name, email, phone });
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {

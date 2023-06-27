@@ -33,7 +33,7 @@ const getContactById = async (contactId) => {
     }
   };
 
-const addContact = async (name, email, phone) => {
+const addContact = async ({ name, email, phone }) => {
     try {
       const parsedContacts = await readContactsFile();
       const id = nanoid();
