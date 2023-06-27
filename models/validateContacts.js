@@ -4,6 +4,7 @@ const validatePostContact = (schema) => {
     if (error) {
       const missingField = error.details[0].context.label;
       res.status(400).json(`Missing required '${missingField}' field`);
+      return;
     }
     next();
   };
