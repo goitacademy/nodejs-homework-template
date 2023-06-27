@@ -56,7 +56,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const contact = await Contact.updateContact(req.params.id, req.body);
+    const contact = await Contacts.updateContact(req.params.id, req.body);
     if (contact) {
       return res
         .status(200)
