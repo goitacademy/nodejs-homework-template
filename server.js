@@ -7,17 +7,19 @@ class MyEmitter extends EventEmitter {}
 
 const myEmitter = new MyEmitter();
 
-// myEmitter.on('connected', () => {
-//   console.log('Connected to database has been established.');
-// });
+myEmitter.on('connected', () => {
+  console.log(
+    'Connection to database has been established. Listening on port 3000'
+  );
+});
 
 // myEmitter.on('connecting', () => {
 //   console.log('Connecting to the database...');
 // });
 
-myEmitter.on('disconnected', () => {
-  console.log('Disconnected from database');
-});
+// myEmitter.on('disconnected', () => {
+//   console.log('Disconnected from database');
+// });
 
 // myEmitter.emit('connected');
 // myEmitter.emit('disconnected');

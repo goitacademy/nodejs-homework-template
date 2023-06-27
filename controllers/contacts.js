@@ -1,5 +1,5 @@
 // const contacts = require('../models/contacts.js');
-const Contact = require('../models/contact');
+const { Contact } = require('../models/contact');
 
 const { httpError, ctrlWrapper } = require('../helpers');
 
@@ -21,6 +21,12 @@ const getAllContacts = async (req, res) => {
 //   }
 //   res.json(contact);
 // };
+
+const addContact = async (req, res) => {
+  const newContact = await Contact.create(req.body);
+  console.log(newContact);
+  res.status(201).json(newContact);
+};
 
 // const addContact = async (req, res) => {
 //   const newContact = await contacts.addContact(req.body);
@@ -49,7 +55,7 @@ const getAllContacts = async (req, res) => {
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
   // getContactById: ctrlWrapper(getContactById),
-  // addContact: ctrlWrapper(addContact),
+  addContact: ctrlWrapper(addContact),
   // deleteContact: ctrlWrapper(deleteContact),
   // updateContact: ctrlWrapper(updateContact),
 };
