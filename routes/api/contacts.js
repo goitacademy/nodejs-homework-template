@@ -13,8 +13,11 @@ const {
   validator,
   favoriteValidate,
 } = require("../../utils/validator");
+const validateToken = require("../../utils/tokenValidator");
 
 const router = express.Router();
+
+router.use(validateToken);
 
 router.get("/", async (req, res, next) => {
   try {
