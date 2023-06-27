@@ -12,7 +12,7 @@ const {
   validateUpdatedContact,
 } = require("../../middleware/contacts");
 const isValidId = require("../../middleware/isValidId");
-const { addSchema, updateFavoriteSchema } = require("../../models/contact");
+const { addSchema, updateFavoriteSchema } = require("../../schemes/contacts");
 
 const router = express.Router();
 
@@ -32,7 +32,7 @@ router.put(
 );
 
 router.patch(
-  "/:id/favorite",
+  "/:contactId/favorite",
   isValidId,
   validateUpdatedContact(updateFavoriteSchema),
   updateStatusContact
