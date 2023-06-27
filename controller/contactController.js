@@ -17,7 +17,8 @@ class ContactController {
       console.log(req.body)
       const validationResult = joiConfig.validate(req.body);
       if (validationResult.error) {
-        return res.status(400).json({"message": "missing fields"});
+        console.log(validationResult)
+        return res.status(400).json({message:`missing required ${validationResult.error.details[0].path[0]}`});
       }
       const created = await addContact(req.body);
       console.log(req.body);
@@ -39,7 +40,7 @@ class ContactController {
       const validationResult = joiConfig.validate(req.body)
   
       if (validationResult.error) {
-        return res.status(400).json({"message": "missing fields"})
+        return res.status(400).json({message:`missing required ${validationResult.error.details[0].path[0]}`});
       }
   
       const contactId = req.params.contactId;
