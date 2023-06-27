@@ -25,12 +25,13 @@ app.use(async(req, res) => {
 //  console.log("hello");
 //  res.send(<h2>hello</h2>)
   // res.status(404).json({ message: 'Not found' })
-  res.json(contacts)
+  // res.json(contacts)
   await console.log(method,url);
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+    const {status=500, message="Server error"} = err;
+  res.status(status).json({ message,})
 })
 
 
