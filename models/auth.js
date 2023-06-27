@@ -21,6 +21,7 @@ const userSchema = new Schema(
 		subscription: {
 			type: String,
 			enum: ["starter", "pro", "business"],
+			minlength: 6,
 			default: "starter",
 		},
 		token: String,
@@ -30,3 +31,20 @@ const userSchema = new Schema(
 );
 
 userSchema.post("save", handleMongooseError);
+
+const registerschema = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().pattern(emailRegexp).required(),
+	password: Joi.string().min().required(),
+});
+
+const loginschema = Joi.object({
+	email: Joi.string().pattern(emailRegexp).required(),
+	password: Joi.string().min(6).required(),
+});
+
+const User = model("auth", userSchema);
+
+const schemas = { registerschema, loginschema };
+
+module.exports = { User, schemas };
