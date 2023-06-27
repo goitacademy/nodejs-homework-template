@@ -1,14 +1,6 @@
 const contacts = require("../models/contacts");
 
-const Joi = require("joi");
-
 const { HttpError, ctrlWrapper } = require("../helpers");
-
-// const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().regex(/^\d+$/).required(),
-// });
 
 const getAll = async (req, res, next) => {
   const result = await contacts.listContacts();
@@ -37,6 +29,8 @@ const deleteById = async (req, res, next) => {
   }
   res.json({ message: "contact deleted" });
 };
+
+
 
 const updateById = async (req, res, next) => {
   const { id } = req.params;

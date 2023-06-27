@@ -23,25 +23,41 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
+// const removeContact = async (contactId) => {
+//   try {
+//     const contacts = await listContacts();
+
+//     const removedContact = contacts.find((contact) => contact.id === contactId);
+//     if (removedContact) {
+//       const updatedContacts = contacts.filter(
+//         (contact) => contact.id !== contactId
+//       );
+//       await fs.writeFile(
+//         contactsPath,
+//         JSON.stringify(updatedContacts, null, 2)
+//       );
+//     }
+//     return removedContact || null;
+//   } catch (error) {
+//     return null;
+//   }
+// };
+
+const removeContact = async(id) => {
   try {
     const contacts = await listContacts();
-
-    const removedContact = contacts.find((contact) => contact.id === contactId);
-    if (removedContact) {
-      const updatedContacts = contacts.filter(
-        (contact) => contact.id !== contactId
-      );
-      await fs.writeFile(
-        contactsPath,
-        JSON.stringify(updatedContacts, null, 2)
-      );
-    }
-    return removedContact || null;
+  const index = contacts.findIndex(item => item.id === id);
+  if(index === -1){
+      return null;
+  }
+  const [result] = contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return result;
   } catch (error) {
     return null;
   }
-};
+  
+}
 
 const addContact = async (body) => {
   try {
