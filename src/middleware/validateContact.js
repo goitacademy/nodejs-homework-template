@@ -1,7 +1,7 @@
 const validateContact = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
-    if (error) throw new Error("Error");
+    if (error) res.status(400).json(error.message);
     next();
   };
   return func;

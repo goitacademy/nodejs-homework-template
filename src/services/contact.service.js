@@ -35,9 +35,10 @@ const removeContact = async (contactId) => {
   const contactIndex = contacts.findIndex(
     (el) => el.id === contactId
   );
+  if (contactIndex < 0) return null;
   const [result] = contacts.splice(contactIndex, 1);
   await update(contacts);
-  return result || null;
+  return result;
 };
 
 const updateContact = async (contactId, body) => {
@@ -45,6 +46,7 @@ const updateContact = async (contactId, body) => {
   const contactIndex = contacts.findIndex(
     (el) => el.id === contactId
   );
+  if (contactIndex < 0) return null;
   contacts[contactIndex] = {
     ...contacts[contactIndex],
     ...body,
