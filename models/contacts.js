@@ -1,5 +1,6 @@
 const fs = require('fs/promises')
 const path = require("path");
+const { nanoid } = require("nanoid");
 const contactPath = path.resolve(__dirname, "contacts.json");
 
 const readContactsFile = async () => {
