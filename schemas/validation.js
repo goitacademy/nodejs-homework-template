@@ -33,10 +33,14 @@ const userLoginValidation = Joi.object({
   email: Joi.string().pattern(emailRegexp).required("Enter valid email"),
 })
 
+const emailValidation = Joi.object({
+   email: Joi.string().pattern(emailRegexp).required("Enter valid email"),
+})
 module.exports = {
   validationSchema,
   updateContactValidation,
   isFavoriteValid,
   userRegisterValidation,
   userLoginValidation,
+  emailValidation,
 };
