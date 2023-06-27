@@ -6,15 +6,17 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      required: true,
     },
     phone: {
       type: String,
-      required: true,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }
@@ -22,19 +24,25 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
-const addContactsShema = Joi.object({
+const addContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
-const shemas = {
-  addContactsShema,
+const favoriteContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  addContactSchema,
+  favoriteContactSchema,
 };
 
 const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
-  shemas,
+  schemas,
 };
