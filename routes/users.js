@@ -4,12 +4,12 @@ const {
   validation,
   ctrlWrapper,
   //  isValidId,
-    authenticate,
-} = require("../../middlewares");
+  authenticate,
+} = require("../middlewares");
 
-const { schemas } = require("../../models/userModel");
+const { schemas } = require("../models/userModel");
 
-const { users: ctrl } = require("../../controllers");
+const { users: ctrl } = require("../controllers");
 
 const router = express.Router();
 
@@ -24,13 +24,8 @@ router.post(
 
 router.post("/login", validateMiddlewareLogin, ctrlWrapper(ctrl.login));
 
-router.get("/current",
-   authenticate,
-  ctrlWrapper(ctrl.getCurrent));
+router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
-router.post("/logout",
- authenticate,
-  ctrlWrapper(ctrl.logout));
-
+router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
 module.exports = router;
