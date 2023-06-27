@@ -1,5 +1,5 @@
+const { Contact } = require("../models/contact");
 const {
-	Contact,
 	addSchema,
 	updateFavoriteSchema,
 	updateSchema,
