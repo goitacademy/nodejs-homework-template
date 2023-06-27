@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 const { nanoid } = require('nanoid');
 const path = require("path");
+const {CtrlWrapper} = require("../helpers")
 
 
 const contactsPath = path.join(__dirname, "/contacts.json");
@@ -58,9 +59,9 @@ const updateContact = async (contactId, body) => {
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  listContacts: CtrlWrapper(listContacts),
+  getContactById: CtrlWrapper(getContactById),
+  removeContact: CtrlWrapper(removeContact),
+  addContact: CtrlWrapper(addContact),
+  updateContact: CtrlWrapper(updateContact),
 }

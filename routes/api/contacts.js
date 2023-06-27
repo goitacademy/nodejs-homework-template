@@ -14,19 +14,24 @@ const checkingSchema = Joi.object({
 })
 
 // console.log(contacts.listContacts());
+// const CtrlWrapper =  ctrl =>  {
+//   const func = async (req,res,next) => {
+//       try {
+//   await ctrl(req,res,next);
+//       } catch (error) {
+//           next(error)
+//       }
+//   }
+// return func;
+// }
 
 router.get('/', async (req, res, next) => {
   
-  try {
+  
    const result = await contacts.listContacts()
    console.log(result);
   res.json(result)
-  } catch (error) {
-    next(error)
-    // res.status(500).json({
-    //   message: "Server error"
-    // })
-  }
+ 
 })
 
 router.get('/:contactId', async (req, res, next) => {
