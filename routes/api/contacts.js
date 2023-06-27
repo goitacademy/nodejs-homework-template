@@ -4,7 +4,7 @@ const {
   getContactById,
   addContact,
   removeContact,
-  // updateContact,
+  updateContact,
 } = require('../../models/contacts');
 const router = express.Router()
 
@@ -54,7 +54,25 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      return next(res.status(400).json({ message: "missing fields" }));
+    }
+    const { contactId } = req.params;
+    const contactById = await getContactById(contactId);
+    if (!contactById) {
+      return next(res.status(404).json({ message: "Not found" }));
+    }
+    const updatedContact = await updateContact(contactId, {
+      name,
+      email,
+      phone,
+    });
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
 })
 
 module.exports = router
