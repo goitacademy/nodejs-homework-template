@@ -6,14 +6,17 @@ const { wrapper, HttpError } = require("../../helpers");
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
-const updateAvatar = async (req, res, next) => {
+const updateAvatar = async (req, res) => {
   if (!req.file) {
     throw HttpError(400, "Missing 'avatar' field");
   }
 
   const img = await jimp.read(req.file.path);
 
-  await img.autocrop().cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE).writeAsync(req.file.path);
+  await img
+    .autocrop()
+    .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(req.file.path);
 
   const { path: tempUpload, originalname } = req.file;
   const { _id } = req.user;
