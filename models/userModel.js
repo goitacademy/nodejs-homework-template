@@ -21,7 +21,7 @@ const userSchema = new Schema({
     default: "starter",
   },
   token: String,
-  
+  avatarURL: String,
 });
 
 userSchema.post("save", handleMongooseError);
@@ -31,6 +31,7 @@ const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string().valid(...subscriptionLst),
   token: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 const updateSubscriptionSchema = Joi.object({
