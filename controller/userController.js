@@ -3,6 +3,10 @@ const { emailValidator } = require("../validators/validators");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const SECRET = process.env.SECRET;
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs");
 
 const userRegister = async (req, res, next) => {
   const { email, password } = req.body;
@@ -20,9 +24,16 @@ const userRegister = async (req, res, next) => {
       message: "User already exists!",
     });
   }
+
   try {
     const newUser = new User({ email });
     newUser.setPassword(password);
+    newUser.avatarURL = gravatar.url(email, {
+      protocol: "http",
+      s: "250",
+      r: "pg",
+    });
+
     await newUser.save();
 
     res.json({
@@ -102,4 +113,65 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
-module.exports = { userRegister, logIn, getUserDetails, logOutUser };
+// Resize images
+const resizeImages = (sourceImagePath, outputImagePath) => {
+  Jimp.read(sourceImagePath)
+    .then((image) => {
+      return image.resize(250, 250).quality(90).write(outputImagePath);
+    })
+    .then(() => {
+      console.log("Image resize and saved.");
+    })
+    .then(() => {
+      fs.unlink(sourceImagePath, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Old photo deleted");
+        }
+      });
+    })
+    .catch((err) => {
+      console.error("An error occurred :", err);
+    });
+};
+
+const uploadAvatar = async (req, res, next) => {
+  if (!req.file) {
+    res.status(400).send("No image found.");
+  }
+  const user = req.user;
+
+  const { path: newPath, filename } = req.file;
+
+  try {
+    const sourceImagePath = newPath;
+    const outputImagePath = path.join(
+      __dirname,
+      `../public/avatar/${filename}`
+    );
+
+    resizeImages(sourceImagePath, outputImagePath);
+
+    user.avatarURL = filename;
+    await user.save();
+  } catch (err) {
+    return next(err);
+  }
+  res.status(200).json({ avatarURL: `${filename} saved as a user avatar URL` });
+};
+
+const getAvatar = (req, res, next) => {
+  const filename = req.params.filename;
+  const imagePath = path.join(__dirname, "../public/avatar/", filename);
+  res.sendFile(imagePath);
+};
+
+module.exports = {
+  userRegister,
+  logIn,
+  getUserDetails,
+  logOutUser,
+  uploadAvatar,
+  getAvatar,
+};

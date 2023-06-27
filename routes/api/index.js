@@ -7,30 +7,20 @@ const {
   updateStatusContact,
 } = require("../../controller/contactController");
 const express = require("express");
-const router = express.Router();
-const passport = require("passport");
+
 const {
   userRegister,
   logIn,
   getUserDetails,
   logOutUser,
+  uploadAvatar,
+  getAvatar,
 } = require("../../controller/userController");
-
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-        data: "Unauthorized",
-      });
-    }
-    req.user = user;
-    next();
-  })(req, res, next);
-};
-
+const auth = require("../../middleware/auth");
+//
+const userUploadAvatar = require("../../middleware/userUploadAvatar");
+const router = express.Router();
+//
 // Sign up
 router.post("/users/register", userRegister);
 
@@ -60,5 +50,11 @@ router.put("/contacts/:contactId", auth, updateContact);
 
 // Update status
 router.patch("/contacts/:contactId/favorite", auth, updateStatusContact);
+
+// Upload avatar
+router.patch("/users/avatars", auth, userUploadAvatar, uploadAvatar);
+
+// Preview of avatar
+router.get("/avatar/:filename", getAvatar);
 
 module.exports = router;
