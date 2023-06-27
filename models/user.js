@@ -22,6 +22,7 @@ const userSchema = new Schema(
       enum: Object.values(SUBSCRIPTIONS_ENUM),
       default: SUBSCRIPTIONS_ENUM.STARTER,
     },
+    token: String,
   },
   { versionKey: false, timestamps: true }
 );
