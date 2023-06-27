@@ -6,7 +6,8 @@
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "watch": "node --watch app.js "
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -16,6 +17,7 @@
     "nanoid": "^3.3.4"
   },
   "devDependencies": {
+    "commander": "^11.0.0",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",

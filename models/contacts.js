@@ -2,13 +2,14 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
-const { brotliDecompress } = require("zlib");
+// const { brotliDecompress } = require("zlib");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 console.log(contactsPath);
 
 const listContacts = async () => {
   const allContacts = await fs.readFile(contactsPath, "utf-8");
+
   return allContacts;
 };
 
@@ -18,9 +19,9 @@ const getContactById = async (contactId) => {
   const contactById = parseAllContacts.find(
     (contact) => contact.id === contactId
   );
-  if (!contactById) {
-    return JSON.stringify({ message: "Not found" });
-  }
+  // if (!contactById) {
+  //   return JSON.stringify({ message: "Not found" });
+  // }
   return JSON.stringify(contactById);
 };
 
