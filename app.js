@@ -6,6 +6,7 @@ const connectMongo = require("./connectDb");
 const usersRouter = require("./routes/api/users");
 const passport = require("passport");
 const app = express();
+const path = require("path");
 require("./config/config-passport");
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -16,6 +17,7 @@ connectMongo();
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
 app.use(passport.initialize());
+app.use("/avatars", express.static(path.join(__dirname, "public/avatars")));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

@@ -3,6 +3,25 @@ const User = require("../../models/users.model");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const router = express.Router();
+const gravatar = require("gravatar");
+const multer = require("multer");
+const path = require("path");
+const jimp = require("jimp");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "tmp");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const fileName = uniqueSuffix + "-" + file.originalname;
+    cb(null, fileName);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
 
 const auth = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
@@ -19,7 +38,7 @@ const auth = (req, res, next) => {
   })(req, res, next);
 };
 
-router.post("/signup", async (req, res, next) => {
+router.post("/signup", upload.single("avatar"), async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email, password });
 
@@ -32,7 +51,15 @@ router.post("/signup", async (req, res, next) => {
     });
   }
   try {
-    const newUser = new User({ email });
+    const avatarURL = req.file
+      ? `/avatars/${req.file.filename}`
+      : gravatar.url(email, {
+          s: "250",
+          r: "pg",
+          d: "mm",
+        });
+
+    const newUser = new User({ email, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
     res.json({
@@ -111,6 +138,38 @@ router.get("/current", auth, async (req, res, _) => {
       data: {
         users: user || [],
       },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.patch("/avatars", auth, upload.single("avatar"), async (req, res, _) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const avatarPath = req.file.path;
+    const avatarsFolder = path.resolve(__dirname, "../../public/avatars");
+    console.log(avatarsFolder);
+    if (!user) {
+      return res.json({
+        status: "error",
+        code: 401,
+        data: {
+          message: "Not authorized",
+        },
+      });
+    }
+
+    const image = await jimp.read(avatarPath);
+    image
+      .resize(250, 250)
+      .write(path.resolve(avatarsFolder, req.file.filename));
+
+    const avatarUrl = `/avatars/${req.file.filename}`;
+    user.avatarURL = avatarUrl;
+    await user.save();
+    res.status(200).json({
+      avatarUrl: user.avatarURL,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
