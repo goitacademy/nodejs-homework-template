@@ -1,5 +1,7 @@
 const { Schema, model } = require("mongoose");
+
 const Joi = require("joi");
+
 const { handleMongooseError } = require("../helpers");
 
 const emailRegexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
@@ -55,4 +57,6 @@ const updateFavoriteSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, addSchema, updateFavoriteSchema, updateSchema };
+const schemas = { addSchema, updateFavoriteSchema, updateSchema };
+
+module.exports = { Contact, schemas };
