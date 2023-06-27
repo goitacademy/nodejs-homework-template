@@ -64,11 +64,5 @@
     "name": "Test 1",
     "email": "test1@test1.ca",
     "phone": "11111111"
-  },
-  {
-    "id": "JqeOLXoOQEgFYgVRj9R4u",
-    "name": "Test 2",
-    "email": "test2@test.ca",
-    "phone": "222222222222"
   }
 ]
