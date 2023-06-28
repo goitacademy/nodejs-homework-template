@@ -4,6 +4,7 @@ const addContact = require("./addContact");
 const removeContact = require("./removeContactById");
 const updateContactById = require("./updateContactById");
 const { ControllerWrapper } = require("../../utils/index");
+const updateStatusContact = require("./updateStatusContact");
 
 module.exports = {
   listContacts: ControllerWrapper(listContacts),
@@ -11,4 +12,5 @@ module.exports = {
   removeContact: ControllerWrapper(removeContact),
   addContact: ControllerWrapper(addContact),
   updateContactById: ControllerWrapper(updateContactById),
+  updateStatusContact: ControllerWrapper(updateStatusContact),
 };
