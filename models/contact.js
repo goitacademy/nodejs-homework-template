@@ -9,10 +9,13 @@ const contactSchema = new Schema({
     },
     email: {
       type: String,
+		unique: [true, 'Duplicated email'],
+		match: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
 		required: true,
     },
     phone: {
       type: String,
+		match: /^\(\d{3}\) \d{3}-\d{4}$/,
 		required: true,
     },
     favorite: {
