@@ -1,5 +1,5 @@
-const { Contact } = require("../models/contacts");
-const { HttpError, controllerWrapper } = require("../helpers");
+const Contact = require("../models/contacts");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAllContacts = async (req, res) => {
   const allContacts = await Contact.find();
@@ -16,7 +16,8 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await Contact.create(req.body);
+  const newContact = await Contact.create({ ...req.body });
+  console.log(newContact);
   res.status(201).json(newContact);
 };
 
@@ -41,7 +42,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-  const contactId = req.params.contactId;
+  const { contactId } = req.params;
   const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
@@ -52,10 +53,10 @@ const updateStatusContact = async (req, res) => {
 };
 
 module.exports = {
-  getAllContacts: controllerWrapper(getAllContacts),
-  getContactById: controllerWrapper(getContactById),
-  addContact: controllerWrapper(addContact),
-  deleteContact: controllerWrapper(deleteContact),
-  updateContact: controllerWrapper(updateContact),
-  updateStatusContact: controllerWrapper(updateStatusContact),
+  getAllContacts: ctrlWrapper(getAllContacts),
+  getContactById: ctrlWrapper(getContactById),
+  addContact: ctrlWrapper(addContact),
+  deleteContact: ctrlWrapper(deleteContact),
+  updateContact: ctrlWrapper(updateContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
