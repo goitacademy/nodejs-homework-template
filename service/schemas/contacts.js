@@ -13,7 +13,7 @@ const contacts = new Schema(
     phone: {
       type: String,
     },
-    favourite: {
+    favorite: {
       type: Boolean,
       default: false,
     },
@@ -25,6 +25,6 @@ const contacts = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contact = mongoose.model("contact", contacts);
+const Contact = mongoose.model("Contact", contacts);
 
 module.exports = Contact;

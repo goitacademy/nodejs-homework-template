@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bCrypt = require("bcryptjs");
+
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -23,6 +24,10 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.methods.setSubscription = function (subscription) {
+  this.subscription = subscription;
+};
+
 userSchema.methods.setToken = function (token) {
   this.token = token;
 };
@@ -33,10 +38,6 @@ userSchema.methods.setPassword = function (password) {
 
 userSchema.methods.validPassword = function (password) {
   return bCrypt.compareSync(password, this.password);
-};
-
-userSchema.methods.setSubscription = function (subscription) {
-  this.subscription = subscription;
 };
 
 const User = mongoose.model("user", userSchema);

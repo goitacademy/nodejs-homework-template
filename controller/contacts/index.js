@@ -1,28 +1,32 @@
 const service = require("../../service");
 const Joi = require("joi");
 
-const newContactSchema = Joi.object({
-  name: Joi.string().min(2).required(),
+const postContactSchema = Joi.object({
+  name: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().min(5).required(),
-  favourite: Joi.boolean().required,
 });
 
 const updateContactSchema = Joi.object({
-  name: Joi.string().min(2),
+  name: Joi.string().min(3),
   email: Joi.string().email(),
   phone: Joi.string().min(5),
-  favourite: Joi.boolean(),
-}).or("name", "email", "phone", "favourite");
+}).or("name", "email", "phone");
+
+const updateStatusSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
 
 const get = async (req, res, next) => {
+  // console.log(req.params.id);
+  // console.log(req.user.id);
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
 
     const results = await service.getAllContacts(
       req.user._id,
-      req.query.favourite,
+      req.query.favorite,
       page,
       limit
     );
@@ -43,15 +47,11 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  // console.log(req.params.id);
-  // console.log(req.user.id);
-
+  const { contactId } = req.params;
   try {
-    const result = await service.getContactById(req.params.id, req.user.id);
+    const result = await service.getContactById(contactId, req.user._id);
     if (result) {
-      res.status(200).json(result);
-
-      res.json({
+      res.status(200).json({
         status: "success",
         code: 200,
         data: { contact: result },
@@ -60,7 +60,7 @@ const getById = async (req, res, next) => {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found contact id: ${id}`,
+        message: `Not found contact id: ${contactId}`,
         data: "Not Found",
       });
     }
@@ -70,25 +70,21 @@ const getById = async (req, res, next) => {
   }
 };
 
-// FIXME: Probably problem with favourite, always false. Also validation by schema
 const create = async (req, res, next) => {
-  const { name, email, phone, favourite } = req.body;
+  const { name, email, phone } = req.body;
   const owner = req.user._id;
-
   try {
-    const result = await service.createContact({
-      name,
-      email,
-      phone,
-      favourite,
-      owner,
-    });
-
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      data: { contact: result },
-    });
+    const { error } = postContactSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      const result = await service.createContact({ name, email, phone, owner });
+      res.status(201).json({
+        status: "success",
+        code: 201,
+        data: { contact: result },
+      });
+    }
   } catch (e) {
     console.error(e);
     next(e);
@@ -96,30 +92,34 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const { id } = req.params;
-  const { name, email, phone, favourite } = req.body;
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
   const owner = req.user._id;
 
   try {
-    const result = await service.updateContact(id, owner, {
-      name,
-      email,
-      phone,
-      favourite,
-    });
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { contact: result },
-      });
+    const { error } = updateContactSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.message });
     } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: "Not Found",
+      const result = await service.updateContact(contactId, owner, {
+        name,
+        email,
+        phone,
       });
+      if (result) {
+        res.status(200).res.json({
+          status: "success",
+          code: 200,
+          data: { contact: result },
+        });
+      } else {
+        res.status(404).json({
+          status: "error",
+          code: 404,
+          message: `Not found contact id: ${contactId}`,
+          data: "Not Found",
+        });
+      }
     }
   } catch (e) {
     console.error(e);
@@ -128,25 +128,32 @@ const update = async (req, res, next) => {
 };
 
 const updateStatus = async (req, res, next) => {
-  const { id } = req.params;
-  const { favourite = false } = req.body;
+  const { contactId } = req.params;
+  const { favorite = false } = req.body;
   const owner = req.user._id;
 
   try {
-    const result = await service.updateContact(id, owner, { favourite });
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { contact: result },
-      });
+    const { error } = updateStatusSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: "missing field favorite" });
     } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found contact id: ${id}`,
-        data: "Not Found",
+      const result = await service.updateContact(contactId, owner, {
+        favorite,
       });
+      if (result) {
+        res.status(200).json({
+          status: "success",
+          code: 200,
+          data: { contact: result },
+        });
+      } else {
+        res.status(404).json({
+          status: "error",
+          code: 404,
+          message: `Not found contact id: ${contactId}`,
+          data: "Not Found",
+        });
+      }
     }
   } catch (e) {
     console.error(e);
@@ -155,22 +162,23 @@ const updateStatus = async (req, res, next) => {
 };
 
 const remove = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const owner = req.user._id;
 
   try {
-    const result = await service.removeContact(id, owner);
+    const result = await service.removeContact(contactId, owner);
     if (result) {
-      res.json({
+      res.status(200).json({
         status: "success",
         code: 200,
+        message: "Contact deleted",
         data: { contact: result },
       });
     } else {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found contact id: ${id}`,
+        message: `Not found contact id: ${contactId}`,
         data: "Not Found",
       });
     }

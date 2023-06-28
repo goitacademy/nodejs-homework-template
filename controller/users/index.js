@@ -1,13 +1,12 @@
+const User = require("../../service/schemas/user");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const User = require("../../service/schemas/user");
-
 require("dotenv").config();
 const secret = process.env.SECRET;
 
 const validationUserSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(4).required(),
+  password: Joi.string().min(5).required(),
 });
 
 const validationUserSubscription = Joi.object({
@@ -22,9 +21,7 @@ const signup = async (req, res, next) => {
       return res.status(400).json({
         status: "Bad request",
         code: 400,
-        ContentType: application / json,
         message: error.message,
-        ResponseBody: "Joi error or one of validation libraries",
         data: "Bad request",
       });
     } else {
@@ -36,7 +33,8 @@ const signup = async (req, res, next) => {
           message: "Email in use",
           data: "Conflict",
         });
-      } else {
+      }
+      try {
         const newUser = new User({ email });
         newUser.setPassword(password);
         await newUser.save();
@@ -50,6 +48,8 @@ const signup = async (req, res, next) => {
             },
           },
         });
+      } catch (error) {
+        next(error);
       }
     }
   } catch (e) {
@@ -57,7 +57,6 @@ const signup = async (req, res, next) => {
     next(e);
   }
 };
-
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -67,9 +66,6 @@ const login = async (req, res, next) => {
         status: "Bad request",
         code: 400,
         message: error.message,
-        ContentType: application / json,
-        message: error.message,
-        ResponseBody: "Joi error or one of validation libraries",
         data: "Bad request",
       });
     } else {
@@ -109,6 +105,25 @@ const login = async (req, res, next) => {
     console.error(e);
     next(e);
   }
+};
+
+const logout = async (req, res, next) => {
+  const { _id } = req.user;
+  const user = await User.findOne({ _id });
+
+  if (!user) {
+    return res.status(401).json({
+      status: "Unauthorized",
+      code: 401,
+      message: "Not authorized",
+      data: "Bad request",
+    });
+  }
+
+  user.setToken(null);
+  await user.save();
+
+  return res.status(204).send();
 };
 
 const getCurrent = async (req, res, next) => {
@@ -159,25 +174,6 @@ const setSubscription = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-const logout = async (req, res, next) => {
-  const { _id } = req.user;
-  const user = await User.findOne({ _id });
-
-  if (!user) {
-    return res.status(401).json({
-      status: "Unauthorized",
-      code: 401,
-      message: "Not authorized",
-      data: "Bad request",
-    });
-  }
-
-  user.setToken(null);
-  await user.save();
-
-  return res.status(204).send();
 };
 
 module.exports = {

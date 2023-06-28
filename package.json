@@ -10,13 +10,12 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
+    "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.1.4",
-    "express": "4.17.1",
+    "express": "^4.18.2",
     "joi": "^17.9.2",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.2.3",
+    "mongoose": "^7.2.2",
     "morgan": "1.10.0",
     "nanoid": "^3.3.6",
     "passport": "^0.6.0",
@@ -29,6 +28,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^2.0.22"
   }
 }

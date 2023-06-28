@@ -1,15 +1,16 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
 const routerApi = require("./api");
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-app.use(logger(formatsLogger));
 
-app.use(express.json());
+app.use(logger(formatsLogger));
 app.use(cors());
+app.use(express.json());
 
 require("./config/passport/config-passport");
 
@@ -21,6 +22,7 @@ app.use((_, res, __) => {
     code: 404,
     message: "You need to use /api route!",
     data: "Not found",
+    message: "Use api on routes: /api/contacts or /api/users",
   });
 });
 
