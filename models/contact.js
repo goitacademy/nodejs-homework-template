@@ -17,6 +17,11 @@ const contactSchema = new Schema({
         enum: favoriteList,
         default: false,
       },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+      },
 }, {versionKey: false,})
 
 contactSchema.post("save", (error, data, next) => {

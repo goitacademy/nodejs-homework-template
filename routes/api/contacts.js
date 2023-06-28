@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const ctrl = require('../../controllers/contacts')
-const {validate} = require('../../middlewars')
+const {validate, authenticate} = require('../../middlewars')
 const schemas = require('../../schemas/contacts')
+
+router.use(authenticate)
 
 router.get('/', ctrl.getAll)
 

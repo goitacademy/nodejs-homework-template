@@ -27,6 +27,11 @@ const validBody = (schema) => {
 };
 const validateUserBody = (schema) => {
   const func = (req, res, next) => {
+
+    const bodyEmpty = Object.keys(req.body).length === 0;
+      if (bodyEmpty ) {
+        next(res.status(400).json({ message: "missing login and password" }));
+      }
     if (!req.body.password) {
       next( 
         res.status(400).json({
@@ -41,13 +46,13 @@ const validateUserBody = (schema) => {
         })
       );
     }
-    if (!req.body.subscription) {
-      next( 
-        res.status(400).json({
-          message: "missing required subscription field",
-        })
-      );
-    }
+    // if (!req.body.subscription) {
+    //   next( 
+    //     res.status(400).json({
+    //       message: "missing required subscription field",
+    //     })
+    //   );
+    // }
 
     next();
 }
