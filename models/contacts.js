@@ -10,6 +10,8 @@ const addContact = async (body) => {}
 
 const updateContact = async (contactId, body) => {}
 
+console.log('Test')
+
 module.exports = {
   listContacts,
   getContactById,
