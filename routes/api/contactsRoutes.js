@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { HttpError } = require('../helpers');
+const { HttpError } = require('../../helpers');
 const contactsService = require('../../models/index');
 const Joi = require('joi');
 
