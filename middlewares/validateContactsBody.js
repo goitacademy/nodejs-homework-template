@@ -3,7 +3,7 @@ const { HttpError } = require("../helpers/HttpError");
 const validateContactsBody = (schema) => {
   const func = (req, res, next) => {
     const validBody = req.body;
-    if (validBody) {
+    if (Object.keys(validBody).length === 0) {
       const error = new Error("missing fields");
       error.status = 400;
       throw error;

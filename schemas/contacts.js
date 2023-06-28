@@ -22,4 +22,14 @@ const contactsAddSchema = Joi.object({
     }),
 });
 
-module.exports = contactsAddSchema;
+const contactsUpdateSchema = Joi.object({
+  name: Joi.string(),
+
+  email: Joi.string().email({ tlds: false }),
+
+  phone: Joi.string().pattern(phonePattern).messages({
+    "string.pattern.base": "Invalid phone number format.",
+  }),
+});
+
+module.exports = { contactsAddSchema, contactsUpdateSchema };
