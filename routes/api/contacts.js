@@ -1,25 +1,122 @@
 const express = require('express')
 
+const Joi = require('joi')
+
+const {nanoid} = require("nanoid");
+
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+
+const addSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    phone: Joi.string().required(),
 })
+ 
+const path = require('path')
+
+const fs = require('fs/promises');
+
+const contactsPath = path.join('models', 'contacts.json');
+
+
+const getAll = async () => {
+    const data = await fs.readFile(contactsPath);
+    return JSON.parse(data);
+}
+
+router.get("/", async(req, res)=> {
+  try {
+      const contacts = await getAll()
+      res.json(contacts);
+      res.status(200)
+    }
+    catch(error) {
+        console.log(error)
+    }
+})
+
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+   
+    const contacts = await getAll()
+    const { contactId } = req.params;
+    const result = contacts.find(item => item.id === contactId);
+    if (!result) { 
+      res.status(404).json("Not found")
+    }
+    res.json(result)
+  }
+)
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contacts = await getAll()
+    const { error } = addSchema.validate(req.body)
+    if (error) {
+      res.status(400).json(error.message)
+    }
+    const newContact = {
+      id: nanoid(),
+      ...req.body,
+    }
+    contacts.push(newContact)
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+     res.status(201).json(newContact)
+    }
+  catch (error) { 
+    next(error)
+}}
+)
+
+router.delete('/:contactId', async (req, res) => {
+  try {
+    const contacts = await getAll()
+      const { contactId } = req.params;
+    
+    const removeContact = async (contactId) => {
+      const index = contacts.findIndex(item => item.id === contactId);
+      if (index === -1) {
+        return null ;
+      }
+      const [result] = contacts.splice(index, 1);
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return result;
+    }
+    if (!removeContact) {
+      res.status(404).json({"message": " contact allready deleted"})
+    }
+    res.json({ message: 'Contact deleted' });
+  }
+  catch (error) { 
+console.log(error)
+  }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:contactId', async (req, res) => {
+  const body = req.body
+  const { error } = addSchema.validate(body)
+    if (error) {
+      res.status(400).json(error.message)
+    }
+    if (!body) {
+      res.status(400).json({"message": "missing fields"})
+    }
+  const updateContact = async (body) => {
+  const { contactId } = req.params;
+    const contacts = await getAll();
+    const index = contacts.findIndex(item => item.id === contactId);
+    if(index === -1){
+        return null;
+    }
+    contacts[index] = {contactId, ...body};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
+  }
+  if (!updateContact) { 
+      res.status(404).json({"message": "missing fields"})
+    }
+  res.status(200).json(updateContact)
 })
 
 module.exports = router
