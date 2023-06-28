@@ -18,11 +18,15 @@ const register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
-      ...req.body,
-      password: hashedPassword,
+        ...req.body,
+        password: hashedPassword
+
     });
     res.status(201).json({
-      email: newUser.email,
+      user: {
+        email: newUser.email,
+        subscription: newUser.subscription
+      }
     });
   } catch (error) {
     next(error);
@@ -52,8 +56,12 @@ const login = async (req, res, next) => {
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "6d" });
     await User.findByIdAndUpdate(user._id, { token });
 
-    res.json({
-      token,
+    res.status(200).json({
+      token: token,
+      user: {
+        email: user.email,
+        subscription: user.subscription
+      }
     });
   } catch (error) {
     next(error);
@@ -77,9 +85,7 @@ const logout = async (req, res, next) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
 
-    res.json({
-      message: "Logout success",
-    });
+    res.status(204)
   } catch (error) {
     next(error);
   }

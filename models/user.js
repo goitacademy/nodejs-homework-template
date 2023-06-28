@@ -29,10 +29,11 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMongooseError);
 
+const PASSWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,128})/;
+
 const signUpSchema = Joi.object({
   password: Joi.string()
-    .pattern(new RegExp("^[a-zA-Z0-9]{6,20}$"))
-    .min(6)
+    .regex(PASSWD_REGEX)
     .required(),
   email: Joi.string()
     .email({
@@ -40,7 +41,7 @@ const signUpSchema = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
-  subscription: Joi.string().required(),
+  subscription: Joi.string(),
   token: Joi.string().token(),
 });
 
