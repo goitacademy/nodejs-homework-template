@@ -7,7 +7,7 @@ const updateContactById = async (req, res, next) => {
   if (!result) {
     throw RequestError(404, "Not found");
   }
-  res.status(201).json(result);
+  res.status(200).json(result);
 };
 
 module.exports = updateContactById;

@@ -6,7 +6,15 @@ const validateBody = (schema) => {
     if (!Object.keys(req.body).length) {
       next(RequestError(400, "missing  fields"));
     } else if (error) {
-      next(RequestError(400, "missing required name field"));
+      next(
+        RequestError(
+          400,
+          `missing required ${error.message.slice(
+            1,
+            error.message.lastIndexOf('"')
+          )} field`
+        )
+      );
     }
     next(error);
   };
