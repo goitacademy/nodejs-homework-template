@@ -1,7 +1,5 @@
 const Joi = require("joi");
 
-// const contacts = require("../models/contacts");
-
 const Contact = require("../models/contact")
 
 const {HttpError, ctrlWrapper} = require("../helpers");
