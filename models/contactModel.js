@@ -1,14 +1,15 @@
-const {Schema, model} = require('mongoose');
-const {handleMongooseError} = require('../middlewares');
- 
-const contactSchema = new Schema({
+const { Schema, model } = require("mongoose");
+const  handleMongooseError  = require("../middlewares/handleMongooseError");
+
+const contactSchema = new Schema(
+  {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
-      unique:[true, 'Set email for contact'],
+      unique: [true, "Set email for contact"],
       required: true,
     },
     phone: {
@@ -19,14 +20,35 @@ const contactSchema = new Schema({
       type: Boolean,
       default: false,
     },
-  
-},{
-  versionKey: false, timestamps: true,
-});
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
 contactSchema.post("save", handleMongooseError);
 
+// const Joi = require("joi");
 
-const Contact = model('contact', contactSchema);
+// const addContactSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().min(7).max(15).required(),
+//   favorite: Joi.boolean(),
+// });
+
+// const updateContactSchema = Joi.object({
+//   favorite: Joi.boolean().required(),
+// });
+
+// module.exports = { addContactSchema, updateContactSchema };
+
+const Contact = model("contact", contactSchema);
 
 module.exports = Contact;

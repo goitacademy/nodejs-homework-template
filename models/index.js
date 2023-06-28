@@ -1,6 +1,8 @@
 const Contact = require('./contactModel');
-
+const {User, schemas} = require('./userModel');
 
 module.exports = {
-   Contact
+   Contact,
+    User,
+    schemas,
 }
