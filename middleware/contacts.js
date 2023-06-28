@@ -18,6 +18,9 @@ const validateUpdatedContact = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (!Object.keys(req.body).length) {
+      if (req.route.methods.patch) {
+        throw HttpError(400, "missing field favorite");
+      }
       throw HttpError(400, `missing fields`);
     }
     if (error) {
