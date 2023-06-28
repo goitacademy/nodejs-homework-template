@@ -12,7 +12,7 @@ const connection = mongoose.connect(uriDb, {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Server running. Use our API on port: 3000");
+  console.log("Server running. Use my API on port: 3000");
 });
 
 connection

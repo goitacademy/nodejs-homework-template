@@ -2,13 +2,13 @@ const service = require("../../service");
 const Joi = require("joi");
 
 const postContactSchema = Joi.object({
-  name: Joi.string().min(3).required(),
+  name: Joi.string().min(2).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().min(5).required(),
 });
 
 const updateContactSchema = Joi.object({
-  name: Joi.string().min(3),
+  name: Joi.string().min(2),
   email: Joi.string().email(),
   phone: Joi.string().min(5),
 }).or("name", "email", "phone");
@@ -17,22 +17,22 @@ const updateStatusSchema = Joi.object({
   favorite: Joi.bool().required(),
 });
 
-const get = async (req, res, next) => {
-  // console.log(req.params.id);
-  // console.log(req.user.id);
+const getContacts = async (req, res, next) => {
   try {
+    const owner = req.user._id;
+    const isFavorite = req.query.favorite;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
 
+    // console.log(req.user._id);
+    // console.log(req.query);
+
     const results = await service.getAllContacts(
-      req.user._id,
-      req.query.favorite,
+      owner,
+      isFavorite,
       page,
       limit
     );
-    // res.status(200).json(results);
-    // console.log(results);
-    console.log("contacts getted!");
     res.status(200).json({
       status: "success",
       code: 200,
@@ -46,10 +46,10 @@ const get = async (req, res, next) => {
   }
 };
 
-const getById = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const result = await service.getContactById(contactId, req.user._id);
+    const result = await service.getOneContact(contactId, req.user._id);
     if (result) {
       res.status(200).json({
         status: "success",
@@ -189,8 +189,8 @@ const remove = async (req, res, next) => {
 };
 
 module.exports = {
-  get,
-  getById,
+  getContacts,
+  getContactById,
   create,
   update,
   updateStatus,

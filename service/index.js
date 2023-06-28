@@ -1,4 +1,4 @@
-const Contact = require("../service/schemas/user");
+const Contact = require("./schemas/contacts");
 
 const getAllContacts = async (owner, favorite, page, limit) => {
   const skip = (page - 1) * limit;
@@ -14,7 +14,7 @@ const getAllContacts = async (owner, favorite, page, limit) => {
   return Contact.find({ owner }).skip(skip).limit(limit);
 };
 
-const getContactById = (id, owner) => {
+const getOneContact = (id, owner) => {
   return Contact.findOne({ _id: id, owner });
 };
 
@@ -32,7 +32,7 @@ const removeContact = (id, owner) => {
 
 module.exports = {
   getAllContacts,
-  getContactById,
+  getOneContact,
   createContact,
   updateContact,
   removeContact,

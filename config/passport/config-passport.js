@@ -17,10 +17,10 @@ passport.use(
     User.find({ _id: payload.id })
       .then(([user]) => {
         if (!user) {
-          return done(new Error("User is not here anymore"));
+          return done(new Error("User not found"));
         }
         return done(null, user);
       })
-      .catch((error) => done(error));
+      .catch((err) => done(err));
   })
 );
