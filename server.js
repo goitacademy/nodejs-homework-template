@@ -1,8 +1,8 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://adminInna:28ELGl7kxrkMRrdy@cluster0.j2samg1.mongodb.net/ContactsDB?retryWrites=true&w=majority";
+
+const {DB_HOST} = require("./config");
 
 mongoose.set("strictQuery", true);
 
