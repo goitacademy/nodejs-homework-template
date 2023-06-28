@@ -1,9 +1,9 @@
 const HttpError = require("./httpError");
-const validate = require("./validator");
-const tryCatchHandler = require("./errorHandler");
+const controllerWrapper = require("./ctrlWrapper");
+const handleMongooseError = require("./handleMongooseError");
 
 module.exports = {
   HttpError,
-  validate,
-  tryCatchHandler,
+  controllerWrapper,
+  handleMongooseError,
 };
