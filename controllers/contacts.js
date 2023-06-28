@@ -1,4 +1,4 @@
-const Contact = require("../models/contacts");
+const Contact = require("../models/contact");
 const { HttpError } = require("../helpers");
 
 const listContacts = async (req, res, next) => {
