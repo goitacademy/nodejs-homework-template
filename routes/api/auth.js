@@ -10,4 +10,4 @@ const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerschema), ctrl.register);
 
-module.export = router;
+module.exports = router;
