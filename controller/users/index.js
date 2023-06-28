@@ -1,22 +1,24 @@
-const User = require("../../service/schemas/user");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+
+const User = require("../../service/schemas/user");
+
 require("dotenv").config();
 const secret = process.env.SECRET;
 
-const validationUserSchema = Joi.object({
+const UserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(5).required(),
 });
 
-const validationUserSubscription = Joi.object({
+const UserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const { error } = validationUserSchema.validate(req.body);
+    const { error } = UserSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: "Bad request",
@@ -60,7 +62,7 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const { error } = validationUserSchema.validate(req.body);
+    const { error } = UserSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: "Bad request",
@@ -126,7 +128,7 @@ const logout = async (req, res, next) => {
   return res.status(204).send();
 };
 
-const getCurrent = async (req, res, next) => {
+const getCurrentUser = async (req, res, next) => {
   try {
     const user = req.user;
     res.json({
@@ -144,9 +146,9 @@ const getCurrent = async (req, res, next) => {
   }
 };
 
-const setSubscription = async (req, res, next) => {
+const changeSubscription = async (req, res, next) => {
   try {
-    const { error } = validationUserSubscription.validate(req.body);
+    const { error } = UserSubscriptionSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: "Bad request",
@@ -177,9 +179,9 @@ const setSubscription = async (req, res, next) => {
 };
 
 module.exports = {
+  getCurrentUser,
   signup,
   login,
   logout,
-  getCurrent,
-  setSubscription,
+  changeSubscription,
 };
