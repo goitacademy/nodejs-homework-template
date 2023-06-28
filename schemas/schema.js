@@ -21,8 +21,4 @@ const contacts = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const Contacts = mongoose.model("contacts", contacts);
-
-module.exports = {
-  Contacts,
-};
+module.exports = mongoose.model("contacts", contacts);
