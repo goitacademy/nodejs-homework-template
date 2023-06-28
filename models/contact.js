@@ -29,6 +29,8 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.post('save', handleMongooseError);
+
 // name: Joi.string().valid(...names).required() if validation in addSchema needed
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -37,12 +39,15 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-contactSchema.post('save', handleMongooseError);
-
 const Contact = model('contact', contactSchema);
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const schemas = {
   addSchema,
+  updateFavoriteSchema,
 };
 
 module.exports = { Contact, schemas };
