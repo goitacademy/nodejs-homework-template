@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport')
 require('dotenv').config()
 const gravatar = require('gravatar')
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+const Jimp = require('jimp');
 
 const {
   Contact,
@@ -26,6 +30,20 @@ const auth = (req, res, next) => {
     next()
   })(req, res, next)
 }
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'tmp');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ 
+  storage: storage 
+});
 
 router.post('/users/signup', async (req, res, next) => {
   const { email, password } = req.body
@@ -140,38 +158,47 @@ router.get('/users/current', auth, async (req, res, next) => {
   })
 })
 
-// ======================================================
+router.patch('/users/avatars', auth, upload.single('avatar'), async (req, res, next) => {
+  const { filename } = req.file
+  const { _id } = req.user
 
-router.patch('/users/avatars', auth, async (req, res, next) => {
-  const { avatarURL } = req.body
-  const id = req.user._id;
-  const user = await User.findById(id)
+  try {
+    const image = await Jimp.read(req.file.path)
+    await image.cover(250, 250).write(req.file.path)
 
-  if(!user){
-    return res.json({
-      status: "error",
-      code: 401,
-      data: {
-        message: "Not authorized"
-      }
-    })
-  }
+    const newFilePath = path.join(__dirname, '../../public/avatars', filename)
+    fs.renameSync(req.file.path, newFilePath)
 
-  user.avatarURL = avatarURL;
+    const avatarURL = `/avatars/${filename}`
 
-  user.save();
+    const user = await User.findByIdAndUpdate(
+      _id,
+      { avatarURL },
+      { new: true }
+    )
 
-  return res.json({
-    status: "success",
-    code: 200,
-    message: "OK",
-    data: {
-      avatarURL: avatarURL
+    if(user) {
+      return res.json({
+        status: "success",
+        code: 200,
+        message: "OK",
+        data: {
+          avatarURL: avatarURL
+        }
+      })
+    } else {
+      return res.json({
+        status: "error",
+        code: 401,
+        data: {
+          message: "Not authorized"
+        }
+      })
     }
-  })
+  } catch(error) {
+    next(error)
+  }
 })
-
-// ======================================================
 
 router.get('/contacts', auth, async (req, res, next) => {
   const contacts = await Contact.find(); 
