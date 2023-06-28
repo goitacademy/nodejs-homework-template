@@ -14,12 +14,6 @@ const JOI = require('joi');
 class ContactController {
   async create(req, res, next) {
     try {
-      console.log(req.body)
-      const validationResult = joiConfig.validate(req.body);
-      if (validationResult.error) {
-        console.log(validationResult)
-        return res.status(400).json({message:`missing required ${validationResult.error.details[0].path[0]}`});
-      }
       const created = await addContact(req.body);
       console.log(req.body);
       res.status(201).json(created);
@@ -37,24 +31,12 @@ class ContactController {
   async update(req, res, next) {
     try {
 
-      const validationResult = joiConfig.validate(req.body)
-  
-      if (validationResult.error) {
-        return res.status(400).json({message:`missing required ${validationResult.error.details[0].path[0]}`});
-      }
-  
-      const contactId = req.params.contactId;
       const body = req.body;
-  
-      if (body === null) {
-        throw HttpError(400, "Missing fields");
+      const contactId = req.params.contactId;
+      const contactUpdate = await updateContact(contactId, body); 
+      if(!contactUpdate){
+        res.status(404).json({message:"Not found"});
       }
-  
-      const contactUpdate = await updateContact(contactId, body);
-      if (!contactUpdate) {
-        throw HttpError(404, "Not found");
-      }
-      
       res.status(200).json(contactUpdate);
     } catch (error) {
       next(error);
@@ -80,7 +62,6 @@ class ContactController {
       const { contactId } = req.params;
       const result = await getContactById(contactId);
       if(!result){
-        //throw HttpError(404,"djkbgkjb")
         res.status(404).json({message:"Not found"});
       }
       res.status(200).json(result);
