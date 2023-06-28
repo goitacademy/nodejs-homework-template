@@ -40,6 +40,10 @@ const contact = new Schema(
       type: Boolean,
       default: false,
       required: [true, "Favorite is required"],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     }
   }
 );

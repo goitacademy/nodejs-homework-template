@@ -2,25 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
+const Contact = require("../../models/contact");
+const { boolean } = require("joi");
 
-const Contact = require("../../models/contactsMongo");
-const { date, boolean } = require("joi");
+const auth = require("../../config/authorization")
 
-/* const Joi = require("joi"); */
 
-/* const schema = Joi.object({
-  name: Joi.string().alphanum().min(1).required(),
+// Manage contacts
 
-  phone: Joi.string()
-    .regex(/^[0-9]{9}$/)
-    .messages({ "string.pattern.base": `Phone number must have 9 digits.` })
-    .required(),
-
-  email: Joi.string().email().min(3).required(),
-}); */
-
-router.get("/", async (req, res, next) => {
+router.get("/", auth, async (req, res, next) => {
   try {
     const data = await Contact.find();
     res.json(data);
@@ -33,7 +23,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", auth, async (req, res, next) => {
   try {
     data = await Contact.findOne({ _id: req.params.contactId });
 
@@ -47,16 +37,17 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     const data = await Contact.create(req.body);
+    console.log(data)
     res.json(data);
   } catch (error) {
     next(error);
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", auth, async (req, res, next) => {
   try {
     data = await Contact.findByIdAndRemove({ _id: req.params.contactId });
     if (data) {
@@ -70,7 +61,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", auth, async (req, res, next) => {
   try {
     data = await Contact.findByIdAndUpdate(
       { _id: req.params.contactId },
@@ -96,7 +87,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", auth, async (req, res, next) => {
   try {
     data = await Contact.findByIdAndUpdate(
       { _id: req.params.contactId },
