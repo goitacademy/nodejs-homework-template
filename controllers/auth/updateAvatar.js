@@ -11,8 +11,6 @@ const updateAvatar = async (req, res) => {
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
 
-  console.log(tempUpload);
-
   const avatarSize = await Jimp.read(tempUpload);
   await avatarSize
     .autocrop()
