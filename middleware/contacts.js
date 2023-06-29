@@ -1,39 +1,37 @@
-const Joi = require("joi");
-const { HttpError } = require("../helpers");
+const HttpError = require("../helpers/HttpError");
 
-const validateNewContact = (req, res, next) => {
-  const addSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    const requiredField = error.message
-      .replace(`"`, "")
-      .replace('" is required', "");
-    throw HttpError(400, `missing required ${requiredField} field`);
-  }
-  next();
+const validateNewContact = (schema) => {
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const requiredField = error.message
+        .replace(`"`, "")
+        .replace('" is required', "");
+      throw HttpError(400, `missing required ${requiredField} field`);
+    }
+    next();
+  };
+  return func;
 };
 
-const validateUpdatedContact = (req, res, next) => {
-  const updateSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
-  const { error } = updateSchema.validate(req.body);
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, `missing fields`);
-  }
-  if (error) {
-    const requiredField = error.message
-      .replace(`"`, "")
-      .replace('" is required', "");
-    throw HttpError(400, `missing required ${requiredField} field`);
-  }
-  next();
+const validateUpdatedContact = (schema) => {
+  const func = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (!Object.keys(req.body).length) {
+      throw HttpError(
+        400,
+        req.route.methods.patch ? `missing field favorite` : `missing fields`
+      );
+    }
+    if (error) {
+      const requiredField = error.message
+        .replace(`"`, "")
+        .replace('" is required', "");
+      throw HttpError(400, `missing required ${requiredField} field`);
+    }
+    next();
+  };
+  return func;
 };
 
 module.exports = { validateNewContact, validateUpdatedContact };
