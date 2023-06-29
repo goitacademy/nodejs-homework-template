@@ -1,16 +1,14 @@
-const contacts = require("../models/contacts");
-const joi = require("joi");
-const { httpError } = require("../helpers");
+const {
+  Contact,
+  addSchema,
+  updateFavoriteSchema,
+} = require("../models/contact");
 
-const addSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().email().required(),
-  phone: joi.string().required(),
-});
+const { httpError } = require("../helpers");
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
 
     res.json(result);
   } catch (error) {
@@ -21,7 +19,7 @@ const getAllContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw httpError(404, "Not found");
     }
@@ -37,7 +35,7 @@ const addContact = async (req, res, next) => {
     if (error) {
       throw httpError(400, error.message);
     }
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -51,7 +49,28 @@ const updateContact = async (req, res, next) => {
       throw httpError(400, error.message);
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw httpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { error } = updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw httpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw httpError(404, "Not found");
     }
@@ -64,7 +83,7 @@ const updateContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw httpError(404, "Not found");
     }
@@ -79,5 +98,6 @@ module.exports = {
   getContactById,
   addContact,
   updateContact,
+  updateStatusContact,
   deleteContact,
 };
