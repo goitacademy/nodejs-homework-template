@@ -48,8 +48,10 @@ const getContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
+  const owner = req.user._id;
+
   try {
-    const result = await service.getOneContact(contactId, req.user._id);
+    const result = await service.getOneContact(contactId, owner);
     if (result) {
       res.status(200).json({
         status: "success",

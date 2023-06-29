@@ -32,7 +32,7 @@ const signup = async (req, res, next) => {
         return res.status(409).json({
           status: "error",
           code: 409,
-          message: "Email in use",
+          message: "Email is in use. Try login on this email.",
           data: "Conflict",
         });
       }
@@ -40,13 +40,14 @@ const signup = async (req, res, next) => {
         const newUser = new User({ email });
         newUser.setPassword(password);
         await newUser.save();
+        const { email, subscription } = newUser;
         res.status(201).json({
-          status: "created",
+          status: "Contact created",
           code: 201,
           data: {
             user: {
-              email: newUser.email,
-              subscription: newUser.subscription,
+              email: email,
+              subscription: subscription,
             },
           },
         });
@@ -67,7 +68,7 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         status: "Bad request",
         code: 400,
-        message: error.message,
+        message: ("No user", error.message),
         data: "Bad request",
       });
     } else {
@@ -86,7 +87,7 @@ const login = async (req, res, next) => {
         id: user.id,
       };
 
-      const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+      const token = jwt.sign(payload, secret, { expiresIn: "1d" });
 
       user.setToken(token);
       await user.save();
@@ -123,6 +124,7 @@ const logout = async (req, res, next) => {
   }
 
   user.setToken(null);
+  console.log("Token deleted, user is logout");
   await user.save();
 
   return res.status(204).send();
@@ -130,14 +132,15 @@ const logout = async (req, res, next) => {
 
 const getCurrentUser = async (req, res, next) => {
   try {
-    const user = req.user;
+    const { email, subscription } = req.user;
+    // console.log(user);
     res.json({
       status: "success",
       code: 200,
       data: {
         user: {
-          email: user.email,
-          subscription: user.subscription,
+          email: email,
+          subscription: subscription,
         },
       },
     });
