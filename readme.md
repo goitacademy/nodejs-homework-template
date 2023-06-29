@@ -33,6 +33,8 @@ PATCH /users/ - will change user subscription
 
 GET /contacts - will get all contacts
 
+GET /contacts?favorite=false&page=2&limit=10 - will get all contacts with favorite filter set on true and pagination (favorite = false, page = 2 and limit per page = 10). Default limit is 10 per page.
+
 GET /contacts/:contactId - will get contact with contactId
 
 POST /contacts - will create contact

@@ -22,7 +22,7 @@ const getContacts = async (req, res, next) => {
     const owner = req.user._id;
     const isFavorite = req.query.favorite;
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 10;
 
     // console.log(req.user._id);
     // console.log(req.query);
