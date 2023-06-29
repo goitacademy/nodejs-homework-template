@@ -1,10 +1,10 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/contacts");
+const ctrl = require("../../controllers/index");
 
-const {validateBody, isValidId} = require("../../middlewares");
+const { validateBody, isValidId } = require("../../middlewares");
 
-const {schemas} = require("../../models/contact");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
@@ -16,7 +16,12 @@ router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
 router.put("/:id", isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
-router.patch("/:id/favorite", isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateStatusContact);
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateStatusContact
+);
 
 router.delete("/:id", isValidId, ctrl.deleteById);
 
