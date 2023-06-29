@@ -6,7 +6,7 @@ const schemas = require("../../schemas/contacts");
 
 const { validateBody } = require("../../decorators");
 
-const { isValidId, authentificate } = require("../../middlewares");
+const { isValidId, authentificate, upload } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ router.get("/:contactId", isValidId, contactsController.getContactById);
 
 router.post(
   "/",
+  upload.single("avatar"),
   validateBody(schemas.contactAddSchema),
   contactsController.postContact
 );

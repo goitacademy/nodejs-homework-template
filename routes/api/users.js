@@ -6,7 +6,7 @@ const schemas = require("../../schemas/users");
 
 const { validateBody } = require("../../decorators");
 
-const { authentificate } = require("../../middlewares");
+const { authentificate, upload } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -25,5 +25,12 @@ router.post(
 router.get('/current', authentificate, authController.getCurrent);
 
 router.post("/logout", authentificate, authController.logout);
+
+router.patch(
+  "/avatars",
+  authentificate,
+  upload.single("avatarURL"),
+  authController.updateAvatar
+);
 
 module.exports = router;
