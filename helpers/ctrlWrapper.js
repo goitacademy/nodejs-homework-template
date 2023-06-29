@@ -1,7 +1,7 @@
-const tryCatchHandler = (clb) => {
+const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
-      await clb(req, res, next);
+      await ctrl(req, res, next);
     } catch (error) {
       next(error);
     }
@@ -9,4 +9,4 @@ const tryCatchHandler = (clb) => {
   return func;
 };
 
-module.exports = tryCatchHandler;
+module.exports = ctrlWrapper;
