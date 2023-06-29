@@ -24,7 +24,7 @@ const removeContact = async (contactId) => {
 	return removedContact;
 };
 
-const addContact = async (body) => {
+const addContactFunc = async (body) => {
 	const contacts = JSON.parse(await fs.readFile(contactsPath));
 	const newContact = {
 		id: nanoid(),
@@ -53,6 +53,6 @@ module.exports = {
 	getListContacts,
 	getContactById,
 	removeContact,
-	addContact,
+	addContactFunc,
 	updateContact
 };
