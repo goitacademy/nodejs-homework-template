@@ -6,6 +6,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -16,10 +17,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({
-    message: "Use api on routes: /api/contacts",
+    message: "Use api on routes: /api",
     data: "Not found",
     status: "error",
     code: 404,
@@ -27,6 +29,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.error(err.stack);
   res.status(500).json({
     message: err.message,
     status: "fail",
