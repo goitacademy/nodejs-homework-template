@@ -1,10 +1,8 @@
 const express = require("express");
 const { program } = require("commander");
-// const logger = require("morgan");
-const morgan = require("morgan");
+const logger = require("morgan");
 
 const cors = require("cors");
-
 const contacts = require("./models/contacts");
 
 const contactsRouter = require("./routes/api/contacts");
@@ -13,62 +11,38 @@ const contactsRouter = require("./routes/api/contacts");
 const app = express();
 
 // запускаємо логгер
-app.use(morgan("combined"));
+app.use(logger("combined"));
 
-// прописуємо роати
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.get("/", (req, res) => {
-  res.send("Home page");
-});
-
-app.get("/contacts", (__, res) => {
-  contacts
-    .listContacts()
-    .then((data) => res.json(JSON.parse(data)))
-    .catch((err) => res.status(500).send(err));
-});
-
-app.get("/contacts/:id", (req, res) => {
-  const { id } = req.params;
-  contacts
-    .getContactById(id)
-    .then((data) => {
-      res.json(JSON.parse(data));
-    })
-    .catch((err) => {
-      console.log("err - ", err);
-      res.status(404).json({ message: "Not found" });
-    });
-  // res.send("Create contact by ID");
-});
-
-app.post("/contacts", (req, res) => {
-  res.send("Created contact");
-});
-
-app.delete("/contacts/:id", (req, res) => {
-  res.send("Removed contact");
-});
-
-app.put("/contacts/:id", (req, res) => {
-  res.send("Updated contact");
-});
-
-// const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-// app.use(logger(formatsLogger));
+app.use(logger(formatsLogger));
 app.use(cors());
-// app.use(express.json());
+app.use(express.json());
 
+// Коли пропишу усі функції для роутів, тоді розкоментую
 app.use("/api/contacts", contactsRouter);
 
-// app.use((req, res) => {
-//   res.status(404).json({ message: "Not found" });
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+// Домашня сторінка
+// app.get("/", (req, res, next) => {
+//   res.send("Home page");
 // });
 
-// app.use((err, req, res, next) => {
-//   res.status(500).json({ message: err.message });
-// });
+// обробник помилок
+app.use((err, req, res, next) => {
+  const { status = 500, message = "Server error" } = err;
+
+  res.status(status).json({ message });
+});
+
+//
+//
+//
+//
+//
+
 const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case "getList": {

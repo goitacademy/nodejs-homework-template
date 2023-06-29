@@ -5,7 +5,6 @@ const { nanoid } = require("nanoid");
 // const { brotliDecompress } = require("zlib");
 
 const contactsPath = path.join(__dirname, "contacts.json");
-console.log(contactsPath);
 
 const listContacts = async () => {
   const allContacts = await fs.readFile(contactsPath, "utf-8");
@@ -22,7 +21,7 @@ const getContactById = async (contactId) => {
   // if (!contactById) {
   //   return JSON.stringify({ message: "Not found" });
   // }
-  return JSON.stringify(contactById);
+  return contactById || null;
 };
 
 const removeContact = async (contactId) => {
@@ -34,7 +33,8 @@ const removeContact = async (contactId) => {
   });
 
   if (!removedContact) {
-    return JSON.stringify({ message: "Not found" });
+    // JSON.stringify({ message: "Not found" });
+    return null;
   }
 
   const index = parseAllContacts.indexOf(removedContact);
@@ -42,7 +42,7 @@ const removeContact = async (contactId) => {
 
   await fs.writeFile(contactsPath, JSON.stringify(parseAllContacts, null, 2));
 
-  return JSON.stringify({ message: "contact deleted" });
+  return { message: "contact deleted" };
 };
 
 const addContact = async (body) => {
@@ -63,12 +63,16 @@ const updateContact = async (contactId, body) => {
   const contactById = parseAllContacts.find(
     (contact) => contact.id === contactId
   );
+  if (!contactById) {
+    return null;
+  }
   const updateContact = { ...contactById, ...body };
   const updateList = parseAllContacts.map((contact) => {
     return contact.id === contactId ? updateContact : contact;
   });
 
   await fs.writeFile(contactsPath, JSON.stringify(updateList, null, 2));
+  return updateContact;
 };
 
 module.exports = {
