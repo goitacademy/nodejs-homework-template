@@ -71,52 +71,63 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:contactId', async (req, res) => {
   try {
-    const contacts = await getAll()
-      const { contactId } = req.params;
-    
+    const contacts = await getAll();
+    const { contactId } = req.params;
+
     const removeContact = async (contactId) => {
       const index = contacts.findIndex(item => item.id === contactId);
       if (index === -1) {
-        return null ;
+        return null;
       }
       const [result] = contacts.splice(index, 1);
       await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
       return result;
+    };
+
+    const deletedContact = await removeContact(contactId);
+    if (!deletedContact) {
+      res.status(404).json({ "message": "Контакт вже видалено" });
+    } else {
+      res.json({ message: 'Контакт видалено' });
     }
-    if (!removeContact) {
-      res.status(404).json({"message": " contact allready deleted"})
-    }
-    res.json({ message: 'Contact deleted' });
+  } catch (error) {
+    console.log(error);
   }
-  catch (error) { 
-console.log(error)
-  }
-})
+});
 
 router.put('/:contactId', async (req, res) => {
-  const body = req.body
-  const { error } = addSchema.validate(body)
-    if (error) {
-      res.status(400).json(error.message)
-    }
-    if (!body) {
-      res.status(400).json({"message": "missing fields"})
-    }
+  const body = req.body;
+  const { error } = addSchema.validate(body);
+
+  if (error) {
+    res.status(400).json(error.message);
+  }
+
+  if (!body) {
+    res.status(400).json({ "message": "відсутні поля" });
+  }
+
   const updateContact = async (body) => {
-  const { contactId } = req.params;
+    const { contactId } = req.params;
     const contacts = await getAll();
     const index = contacts.findIndex(item => item.id === contactId);
-    if(index === -1){
-        return null;
+
+    if (index === -1) {
+      return null;
     }
-    contacts[index] = {contactId, ...body};
+
+    contacts[index] = { contactId, ...body };
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return contacts[index];
+  };
+
+  const updatedContact = await updateContact(body);
+
+  if (!updatedContact) {
+    res.status(404).json({ "message": "відсутні поля" });
+  } else {
+    res.status(200).json(updatedContact);
   }
-  if (!updateContact) { 
-      res.status(404).json({"message": "missing fields"})
-    }
-  res.status(200).json(updateContact)
-})
+});
 
 module.exports = router
