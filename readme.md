@@ -1,31 +1,48 @@
-## GoIT Node.js Course Template Homework
+Welcome to my contacts app!
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+First of all you need to download my files, open in your code programm, install all libs by terminal command npm install.
 
-Додайте ментора до колаборації
+Now you must create .env with your data to mongoDb:
+DB_HOST=mongodb+srv://YOUR_LOGIN:YOUR_PASSWORD@cluster0.9yhbgdk.mongodb.net/db-contacts
+and secret to encrypt passwords:
+SECRET=YOUR_SECRET_PASSWORD
 
-Для кожної домашньої роботи створюйте свою гілку.
+My app default is working on localhost:3000/
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+If you are new, firstly register on route:
+/api/users/signup
+by using json {"email": "YOUR_EMAIL", "password": "YOUR_PASSWORD"}
 
-Кожна нова гілка для др повинна робитися з master
+If you have used my app and got account, login on route:
+/api/users/login
+by using json {"email": "YOUR_EMAIL", "password": "YOUR_PASSWORD"}
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+Then you will have acces to contacts saved in your mongoDb.
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+Helpfull links:
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+POST /users/signup - will register user
 
-### Команди:
+POST /users/login - will login user
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+GET /users/current - will show current logged in user
+
+POST /users/logout - will logout user (delete token)
+
+PATCH /users/ - will change user subscription
+
+GET /contacts - will get all contacts
+
+GET /contacts/:contactId - will get contact with contactId
+
+POST /contacts - will create contact
+
+PUT /contacts/:contactId - will update contact with contactId
+
+<!-- TODO: describe more? -->
+
+PATCH /contacts/:contactId/favorite - will update your favourite status in contact with contactId
+
+DELETE /contacts/:contactId - will remove contact with :contactId
+
+<!-- TODO: exapmles of links?  -->

@@ -5,11 +5,12 @@ const auth = require("../middleware/auth/auth");
 const controllerUsers = require("../controller/users");
 const controllerContac = require("../controller/contacts");
 
-router.get("/users/current", auth, controllerUsers.getCurrentUser);
 
 router.post("/users/signup", controllerUsers.signup);
 
 router.post("/users/login", controllerUsers.login);
+
+router.get("/users/current", auth, controllerUsers.getCurrentUser);
 
 router.post("/users/logout", auth, controllerUsers.logout);
 

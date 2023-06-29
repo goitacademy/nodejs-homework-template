@@ -131,7 +131,7 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favorite = false } = req.body;
+  const { favorite } = req.body;
   const owner = req.user._id;
 
   try {
