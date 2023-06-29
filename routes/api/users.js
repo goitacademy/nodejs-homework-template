@@ -2,12 +2,43 @@ const express = require("express");
 const Contact = require("../../service/schemas/contact");
 const User = require("../../service/schemas/user");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
-router.post("/login", async (req, res, next) => {});
+require("dotenv").config();
+const SECRET = process.env.SECRET;
+
+router.post("/login", async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user || !user.validPassword(password)) {
+    return res.json({
+      status: "error",
+      code: 400,
+      data: "Bad request",
+      message: "Incorrect login/password",
+    });
+  }
+
+  const payload = {
+    id: user.id,
+  };
+
+  const token = jwt.sign(payload, SECRET, {
+    expiresIn: "1h",
+  });
+
+  return res.json({
+    status: "success",
+    code: 200,
+    data: {
+      token,
+    },
+  });
+});
 
 router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne([]);
+  const user = await User.findOne({ email });
   if (user) {
     return res.json({
       status: "error",
