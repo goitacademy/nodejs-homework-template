@@ -35,7 +35,7 @@ const passwordCompare = await bcrypt.compare(password, user.password);
 if(!passwordCompare){
     return res.status(401).json({ message: "Email or password is wrong" });
 }
-const {_id:id} = user;
+const {_id:id, subscription} = user;
 const payload = {
     id
 }
@@ -43,6 +43,10 @@ const token = jwt.sign(payload, SECRET_KEY, {expiresIn:"23h"});
 await User.findByIdAndUpdate(id, {token});
 res.json({
     token,
+    user: {
+        email, 
+        subscription,
+      }
 })
 }
 
