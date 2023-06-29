@@ -38,7 +38,7 @@ router.post("/", async (req, res, next) => {
     const newContact = await addContact(name, email, phone);
     return res
       .status(201)
-      .json({ message: "contact added", contacts: newContact });
+      .json({ message: "Contact added", contact: newContact });
   }
 });
 
@@ -50,9 +50,10 @@ router.delete("/:contactId", async (req, res, next) => {
     return res.status(404).send({ message: "Not found" });
   } else {
     const filteredContacts = await removeContact(id);
-    return res
-      .status(200)
-      .json({ message: "contact deleted", contacts: filteredContacts });
+    return res.status(200).json({
+      message: `Contact deleted ID: ${contact.id}, Name: ${contact.name}, E-mail: ${contact.email}, Phone: ${contact.phone}`,
+      contacts: filteredContacts,
+    });
   }
 });
 
