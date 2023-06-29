@@ -3,29 +3,22 @@ const logger = require('morgan')
 const cors = require('cors')
 
 const contactsRouter = require('./routes/api/contacts')
-/* const { listContacts } = require('./models/contacts') */
-
-/* const path = require('node:path');
-const contactsPath = path.join(__dirname, './models/contacts.json'); */
+const { listContacts, getContactById } = require('./models/contacts')
 
 const app = express()
 
 app.get('/api', (request, responce) => {
-  responce.send('<h1>Contacts page</h1>')
+  responce.status(200);
 });
 
-app.get('/api/contacts', (request, responce) => {
-/*   const allContacts = await listContacts(); */
-      /* console.table(allContacts); */
-  /* responce.send(allContacts) */
-  /* responce.json(contactsPath); */
-/*   responce.send(contactsPath) */
+app.get('/api/contacts', async (request, responce) => {
+  const allContacts = await listContacts();
+  responce.status(200).json(allContacts);
 });
 
-app.get('/api/contacts/:id', (request, responce) => {
-  console.log(request.url)
-  console.log(request.method)
-  responce.send('Contacts page ID')
+app.get('/api/contacts/:id', async (request, responce) => {
+  const allContacts = await getContactById();
+  responce.status(200).json(allContacts);
 });
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
