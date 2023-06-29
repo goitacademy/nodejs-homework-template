@@ -68,8 +68,8 @@ const addContact = async (req, res, next) => {
       ...req.body,
     };
     contacts.push(newContact);
-    const result = await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    res.status(201).json(result);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    res.status(201).json(newContact);
     console.log(newContact);
     return newContact;
   } catch (error) {
