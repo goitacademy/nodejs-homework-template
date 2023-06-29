@@ -1,14 +1,22 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2");
+const Schema = mongoose.Schema;
 const Joi = require("joi");
-const JoiPhoneValidate = Joi.extend(require("joi-phone-number"));
 
-const Shema = mongoose.Schema;
+const favoriteValidationSchema = Joi.object({
+  favorite: Joi.boolean(),
+});
 
-const contactSchema = new Shema(
+const contactValidationSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string(),
+});
+
+const contactSchema = new Schema(
   {
     name: {
       type: String,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -21,62 +29,13 @@ const contactSchema = new Shema(
       default: false,
     },
     owner: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
     },
   },
-  {
-    versionKey: false,
-  }
+  { versionKey: false, timestamps: true }
 );
 
-contactSchema.plugin(mongoosePaginate);
+const Contact = mongoose.model("contact", contactSchema);
 
-const Contact = mongoose.model("Contact", contactSchema);
-
-const validator = (schema) => (payload) =>
-  schema.validate(payload, { abortEarly: false });
-
-const contactCreateValidationShema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: JoiPhoneValidate.string()
-    .phoneNumber({ defaultCountry: "PL", format: "international" })
-    .required(),
-  favorite: Joi.boolean(),
-});
-
-const contactUpdateValidationShema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: JoiPhoneValidate.string()
-    .phoneNumber({
-      defaultCountry: "PL",
-      format: "international",
-    })
-    .required(),
-  favorite: Joi.boolean().required(),
-});
-
-const contactUpdateStatusValidationShema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
-
-const idShema = Joi.object({
-  contactId: Joi.string().alphanum().length(24),
-});
-
-const validateCreateContact = validator(contactCreateValidationShema);
-const validateUpdateContact = validator(contactUpdateValidationShema);
-const validateUpdateStatusContact = validator(
-  contactUpdateStatusValidationShema
-);
-const validateIdContact = validator(idShema);
-
-module.exports = {
-  Contact,
-  validateCreateContact,
-  validateUpdateContact,
-  validateUpdateStatusContact,
-  validateIdContact,
-};
+module.exports = { Contact, contactValidationSchema, favoriteValidationSchema };

@@ -1,32 +1,53 @@
 const jwt = require("jsonwebtoken");
-const { getUserByEmail } = require("../controllers/userController");
-
-const jwtSecretKey = process.env.JWT_SECRET_KEY;
+const jwtSecret = process.env.JWT_SECRET;
+const { getUserById } = require("../controllers/users.js");
 
 const auth = async (req, res, next) => {
-  const token = req.header("Authorization");
+  const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied" });
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "No token provided",
+      data: "Unauthorized",
+    });
   }
-
   try {
-    jwt.verify(token, jwtSecretKey);
-    req.user = jwt.decode(token);
+    const decodedToken = jwt.verify(token, jwtSecret);
+    const { id } = decodedToken;
 
-    try {
-      const user = await getUserByEmail(req.user.email);
-      if (!user) {
-        return res.status(401).json({ message: "Not authorized" });
-      }
-    } catch (error) {
-      return res.status(401).json({ message: "Not authorized" });
+    const user = await getUserById(id);
+    const userToken = user.token;
+
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Not authorized",
+        data: "Unauthorized",
+      });
     }
+    if (token !== userToken) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Not authorized",
+        data: "Unauthorized",
+      });
+    }
+
+    req.user = user;
 
     next();
   } catch (error) {
-    res.status(401).json({ message: "Not authorized" });
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "Not authorized",
+      data: "Unauthorized",
+    });
   }
 };
 
-module.exports = auth;
+module.exports = { auth };

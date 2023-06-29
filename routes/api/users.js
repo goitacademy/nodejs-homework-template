@@ -1,85 +1,213 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs").promises;
+const multer = require("multer");
+const jimp = require("jimp");
+
 const router = express.Router();
-
-const userController = require("../../controllers/userController");
+const { auth } = require("../../auth/auth.js");
 const {
-  validateCreateUser,
-  validateUpdateSubscription,
-} = require("../../models/user");
-const loginHandler = require("../../auth/loginHandler");
-const auth = require("../../auth/auth");
+  createUser,
+  getUserById,
+  getUserByEmail,
+  updateUser,
+} = require("../../controllers/users.js");
 
-router.post("/signup", async (req, res, next) => {
-  try {
-    const { error } = validateCreateUser(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
+const { issueToken } = require("../../auth/issueToken.js");
 
-    const { email } = req.body;
-    const user = await userController.getUserByEmail(email);
-    if (user) {
-      return res.status(409).json({ message: "Email in use" });
-    }
+const { userValidationSchema } = require("../../models/user.js");
 
-    const newUser = await userController.createUser(req.body);
-    res.status(201).json(newUser);
-  } catch (error) {
-    next(error);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
-
-router.post("/login", async (req, res, next) => {
+router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email or password is missing" });
+  const { error } = userValidationSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: error.details[0].message,
+      data: "Bad Request",
+    });
   }
 
+  const newUser = await getUserByEmail(email);
+
+  if (newUser) {
+    return res.status(409).json({
+      status: "error",
+      code: 409,
+      message: "Email is already in use",
+      data: "Conflict",
+    });
+  }
   try {
-    const token = await loginHandler(email, password);
-    res.status(200).json({ token });
+    const user = await createUser(email, password);
+    return res.status(201).json({
+      status: "Created",
+      code: 201,
+      message: "Registration successful",
+      data: {
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      },
+    });
   } catch (error) {
-    next(error);
-    return res.status(401).json({ message: "Invalid login data" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 });
 
-router.get("/current", auth, async (req, res, next) => {
-  try {
-    const { email } = req.user;
-    const user = await userController.getUserByEmail(email);
-    res.status(200).json(user);
-  } catch (error) {
-    next(error);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const { error } = userValidationSchema.validate(req.body);
 
-router.patch("/", auth, async (req, res, next) => {
+  if (error) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: error.details[0].message,
+      data: "Bad Request",
+    });
+  }
+
+  const user = await getUserByEmail(email);
+  const userPassword = user.password;
+
+  const passwordCorrect = bcrypt.compareSync(password, userPassword);
+
+  if (!user || !passwordCorrect) {
+    return res.status(400).json({
+      status: "error",
+      code: 400,
+      message: "Email or password is wrong",
+      data: "Bad request",
+    });
+  }
+
   try {
-    const { error } = validateUpdateSubscription(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
-    const { email } = req.user;
-    const user = await userController.updateSubscription(email, req.body);
-    res.status(200).json(user);
+    const token = issueToken(user);
+
+    const newData = { token: token };
+    await updateUser(user._id, newData);
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        token,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      },
+    });
   } catch (error) {
-    next(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 });
 
 router.get("/logout", auth, async (req, res, next) => {
   try {
-    const { token } = req.body;
-    const user = await userController.logout(token);
-    res.status(204).json(user);
+    const { _id } = req.user;
+    const newData = { token: null };
+    await updateUser(_id, newData);
+    return res.status(204).json({
+      message: "Logged out",
+    });
   } catch (error) {
-    next(error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 });
+
+router.get("/current", auth, async (req, res, next) => {
+  try {
+    const user = await getUserById(req.user.id);
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+          avatar: user.avatarURL,
+        },
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong", error: error.message });
+  }
+});
+
+const uploadTmpDir = path.join(process.cwd(), "tmp");
+const avatarsDir = path.join(process.cwd(), "/public/avatars");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadTmpDir);
+  },
+  avatarFilePath: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+  limits: {
+    fileSize: 1048576,
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    const { path: temporaryName, originalname: originalName } = req.file;
+
+    const image = await jimp.read(temporaryName);
+    await image.resize(250, 250);
+    await image.writeAsync(temporaryName);
+
+    const { _id } = req.user;
+
+    const userId = req.user.id;
+    const newName = userId + "-" + originalName;
+    const avatarFilePath = path.join(avatarsDir, newName);
+
+    try {
+      await fs.rename(temporaryName, avatarFilePath);
+
+      const newData = { avatarURL: avatarFilePath };
+      await updateUser(_id, newData);
+
+      const user = await getUserById(req.user.id);
+      return res.status(200).json({
+        status: "ok",
+        code: 200,
+        message: "File uploaded successfully",
+        data: {
+          avatarURL: user.avatarURL,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+      await fs.unlink(temporaryName);
+      return res.status(401).json({
+        status: "Unauthorized",
+        code: 401,
+        message: "Not authorized",
+        error: error.message,
+      });
+    }
+  }
+);
 
 module.exports = router;

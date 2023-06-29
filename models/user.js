@@ -1,61 +1,43 @@
 const mongoose = require("mongoose");
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
-
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
+const Joi = require("joi");
 
-const userSchema = new Schema(
-  {
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-    },
-    subscription: {
-      type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
-    },
-    token: {
-      type: String,
-      default: null,
-    },
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+    unique: true,
   },
-  { versionKey: false, timestamps: true }
-);
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter",
+  },
+  token: {
+    type: String,
+    default: null,
+  },
+  avatarURL: {
+    type: String,
+  },
+});
 
 const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
-  return bcrypt.hashSync(password, salt);
+  const hashedPassword = bcrypt.hashSync(password, salt);
+  return hashedPassword;
 };
 
-const User = mongoose.model("User", userSchema);
-
-const validator = (schema) => (payload) =>
-  schema.validate(payload, { abortEarly: false });
-
-const userCreateValidationShema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-  subscription: Joi.string().valid("starter", "pro", "business"),
+const userValidationSchema = Joi.object({
+  password: Joi.string().required().min(6),
+  email: Joi.string().required().email(),
 });
 
-const userSubscriptionUpdateValidationShema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
-});
+const User = mongoose.model("user", userSchema);
 
-const validateCreateUser = validator(userCreateValidationShema);
-const validateUpdateSubscription = validator(
-  userSubscriptionUpdateValidationShema
-);
-
-module.exports = {
-  User,
-  hashPassword,
-  validateCreateUser,
-  validateUpdateSubscription,
-};
+module.exports = { User, userValidationSchema, hashPassword };
