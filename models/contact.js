@@ -12,7 +12,7 @@ const contactSchema = new Schema({
   },
   phone: {
     type: String,
-    match: /^[0-9]{10}$/,
+    match: /^\(\d{3}\) \d{3}-\d{4}$/,
   },
   favorite: {
     type: Boolean,
