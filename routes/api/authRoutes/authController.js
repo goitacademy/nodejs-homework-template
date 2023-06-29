@@ -87,7 +87,7 @@ class AuthController {
       };
       sendEmail(verifyData);
        return res.json({
-      message: "Verification code sent successfully",
+      message: "Verification code was sent successfully",
     })
     } catch (error) {
       next(error);
