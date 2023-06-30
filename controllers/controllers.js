@@ -55,8 +55,10 @@ const updateStatusContact = async (req, res, next) => {
   } else if (!result) {
     throw errorHandler(404);
   }
+  
   res.json(result);
 };
+
 
 
 module.exports = {
