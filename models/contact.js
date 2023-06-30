@@ -17,6 +17,10 @@ const contactSchema = new Schema({
         enum: favoriteList,
         default: false,
       },
+      avatarURL:{
+        type:  String,
+        required: true,
+      },
       owner: {
         type: Schema.Types.ObjectId,
         ref: 'user',
