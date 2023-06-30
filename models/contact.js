@@ -34,7 +34,6 @@ contactSchema.post('save', handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string()
-    .regex(/^[\p{L}\s]+$/u)
     .min(3)
     .max(30)
     .trim()
@@ -47,7 +46,6 @@ const addSchema = Joi.object({
     })
     .required(),
   phone: Joi.string()
-    .regex(/^[\d\-+\s()]+$/)
     .min(10)
     .max(15)
     .trim()

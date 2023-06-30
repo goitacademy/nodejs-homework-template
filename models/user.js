@@ -29,11 +29,10 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMongooseError);
 
-const PASSWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,128})/;
+
 
 const signUpSchema = Joi.object({
   password: Joi.string()
-    .regex(PASSWD_REGEX)
     .required(),
   email: Joi.string()
     .email({
