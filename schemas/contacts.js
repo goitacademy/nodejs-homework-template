@@ -1,35 +1,26 @@
 const Joi = require("joi");
 
-const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": "missing required name field",
-  }),
-
-  email: Joi.string().email({ tlds: false }).required().messages({
-    "any.required": "missing required email field",
-  }),
-
-  phone: Joi.string()
-    .pattern(phonePattern)
+const addSchema = Joi.object({
+  name: Joi.string()
+    .min(2)
+    .max(15)
+    .messages({ "any.required": `missing required name field` })
+    .required(),
+  email: Joi.string()
+    .email()
     .messages({
-      "string.pattern.base": "Invalid phone number format.",
+      "any.required": `missing required email field`,
     })
-    .required()
+    .required(),
+  phone: Joi.string()
+    .min(5)
+    .max(15)
     .messages({
-      "any.required": "missing required phone field",
-    }),
+      "any.required": `missing required phone field`,
+    })
+    .required(),
 });
 
-const contactsUpdateSchema = Joi.object({
-  name: Joi.string(),
-
-  email: Joi.string().email({ tlds: false }),
-
-  phone: Joi.string().pattern(phonePattern).messages({
-    "string.pattern.base": "Invalid phone number format.",
-  }),
-});
-
-module.exports = { contactsAddSchema, contactsUpdateSchema };
+module.exports = {
+  addSchema,
+};
