@@ -30,6 +30,7 @@ const contactSchema = new Schema(
 		owner: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
+			require: true,
 		},
 	},
 	{ versionKey: false, timestamps: true }
@@ -55,6 +56,8 @@ const updateFavoriteSchema = Joi.object({
 	favorite: Joi.boolean().required(),
 });
 
+const schemas = { addSchema, updateFavoriteSchema, updateSchema };
+
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, addSchema, updateFavoriteSchema, updateSchema };
+module.exports = { Contact, schemas };
