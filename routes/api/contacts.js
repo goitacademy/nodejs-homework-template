@@ -1,10 +1,10 @@
 const express = require('express');
 
 const { isValidId, validateBody } = require('../../middlewares');
-const { updateFavoriteShema } = require('../../models/JoiSchemas/contact');
+const { updateFavoriteShema } = require('../../models/JoiSchemas');
 
 const {
-  listContacts,
+  getAllContacts,
   getContactById,
   addContact,
   removeContact,
@@ -12,23 +12,23 @@ const {
   updateStatusContact,
 } = require('../../controllers/contacts');
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get('/', listContacts);
+contactsRouter.get('/', getAllContacts);
 
-router.get('/:id', isValidId, getContactById);
+contactsRouter.get('/:id', isValidId, getContactById);
 
-router.post('/', addContact);
+contactsRouter.post('/', addContact);
 
-router.put('/:id', isValidId, updateContact);
+contactsRouter.put('/:id', isValidId, updateContact);
 
-router.patch(
+contactsRouter.patch(
   '/:contactId/favorite',
   isValidId,
   validateBody(updateFavoriteShema),
   updateStatusContact
 );
 
-router.delete('/:id', isValidId, removeContact);
+contactsRouter.delete('/:id', isValidId, removeContact);
 
-module.exports = router;
+module.exports = contactsRouter;
