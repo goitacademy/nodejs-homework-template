@@ -11,6 +11,7 @@ const { register } = require('./users/auth');
 const { login } = require('./users/auth');
 const { getCurrent } = require('./users/auth');
 const {logout} = require('./users/auth');
+const {updateAvatar} =require('./users/auth');
 
   module.exports = {
     getAll,
@@ -23,4 +24,5 @@ const {logout} = require('./users/auth');
     login,
     getCurrent,
     logout,
+    updateAvatar,
   };
