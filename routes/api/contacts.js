@@ -1,25 +1,36 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const { auth, validation, ctrlWrapper } = require("../../middlewares");
+const { contactJoiSchema, favoriteJoiSchema } = require("../../schemas");
+const { contacts: ctrl } = require("../../controllers");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", auth, ctrlWrapper(ctrl.getAll));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", auth, ctrlWrapper(ctrl.getById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  auth,
+  validation(contactJoiSchema, "missing required name field"),
+  ctrlWrapper(ctrl.add)
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", auth, ctrlWrapper(ctrl.removeById));
 
-module.exports = router
+router.put(
+  "/:contactId",
+  auth,
+  validation(contactJoiSchema, "missing fields"),
+  ctrlWrapper(ctrl.updateById)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  auth,
+  validation(favoriteJoiSchema, "missing field favorite"),
+  ctrlWrapper(ctrl.updateFavorite)
+);
+
+module.exports = router;
