@@ -15,14 +15,21 @@ const userSchema = new Schema(
     password: {
       type: String,
       minlength: 6,
-      require: [true, 'Set password for user'],
+      required: [true, 'Set password for user'],
     },
     subscription: {
       type: String,
       enum: Object.values(SUBSCRIPTIONS_ENUM),
       default: SUBSCRIPTIONS_ENUM.STARTER,
     },
-    token: String,
+    token: {
+      type: String,
+      default: '',
+    },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
