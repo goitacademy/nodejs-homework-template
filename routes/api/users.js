@@ -1,3 +1,4 @@
+// const nanoid = require("nanoid")
 const express = require("express");
 const User = require("../../models/users.model");
 const jwt = require("jsonwebtoken");
@@ -7,6 +8,7 @@ const gravatar = require("gravatar");
 const multer = require("multer");
 const path = require("path");
 const jimp = require("jimp");
+const { verificationToken } = require("./user.email");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -173,6 +175,30 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, _) => {
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/verify/:verificationToken", auth, async (req, res, next) => {
+  try {
+    const verificationToken2 = verificationToken();
+    const user = await User.findOne({ verificationToken2 });
+    if (!user) {
+      return res.json({
+        status: "error",
+        code: 404,
+        data: {
+          message: "User not found",
+        },
+      });
+    }
+    user.verify = true;
+    user.verificationToken = null;
+    await user.save();
+
+    return res.status(200).json({ message: "Verification successful" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
