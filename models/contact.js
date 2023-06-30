@@ -1,5 +1,6 @@
 const {Schema, model} = require('mongoose');
 const favoriteList = ["true", "false"]
+
 const contactSchema = new Schema({
     name: {
         type: String,
@@ -15,6 +16,11 @@ const contactSchema = new Schema({
         type: Boolean,
         enum: favoriteList,
         default: false,
+      },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
       },
 }, {versionKey: false,})
 
