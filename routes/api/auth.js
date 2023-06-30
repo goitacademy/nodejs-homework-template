@@ -9,7 +9,7 @@ const { validateBody, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
-router.post("/register", validateBody(schemas.regiterSchema), ctrl.register);
+router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
