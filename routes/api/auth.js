@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const express = require("express");
 
-schemas = require("../../models/user");
+const { schemas } = require("../../models/user");
 
 const ctrl = require("../../controllers/users");
 
