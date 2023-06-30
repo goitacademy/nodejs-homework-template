@@ -62,6 +62,20 @@ router.post("/signup", async (req, res, next) => {
       message: "User already exists",
     });
   }
+  if (!email) {
+    return res.json({
+      status: "error",
+      code: 400,
+      message: "Please provide email",
+    });
+  }
+  if (!password) {
+    return res.json({
+      status: "error",
+      code: 400,
+      message: "Please provide password",
+    });
+  }
   try {
     const newUser = new User({ email });
     newUser.setPassword(password);
@@ -71,6 +85,7 @@ router.post("/signup", async (req, res, next) => {
       code: 201,
       data: {
         message: "Signup complete",
+        user: `${newUser.email}, ${newUser.subscription}`,
       },
     });
   } catch (error) {
