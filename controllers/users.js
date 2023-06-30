@@ -11,6 +11,7 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 const register = async (req, res) => {
 	const { email, password } = req.body;
 	const user = await User.findOne({ email });
+
 	if (user) {
 		throw HttpError(409, "Email in use");
 	}
