@@ -6,7 +6,7 @@ const contactJoiSchema = Joi.object({
     .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .required(),
   email: Joi.string().email().required(),
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 const favoriteJoiSchema = Joi.object({
