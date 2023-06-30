@@ -16,6 +16,7 @@ const getContact = async (req, res, next) => {
     console.log(contact);
     console.log(contact.id);
     if (contact) {
+      console.log(`Contact ${contact} found`);
       return res
         .status(200)
         .json({ status: "success", code: 200, data: { contact } });
@@ -31,6 +32,7 @@ const getContact = async (req, res, next) => {
 const saveContact = async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
+    console.log(`Contact successfully ${contact} added`);
     res.status(201).json({ status: "success", code: 201, data: { contact } });
   } catch (error) {
     next(error);
@@ -40,6 +42,7 @@ const saveContact = async (req, res, next) => {
 const removeContact = async (req, res, next) => {
   try {
     const contact = await Contacts.removeContact(req.params.id);
+    console.log(`Contact successfully ${contact} removed`);
     if (contact) {
       return res
         .status(200)
