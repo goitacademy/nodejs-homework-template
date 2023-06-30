@@ -4,6 +4,7 @@ const { Contact } = require("../../models");
 
 const removeById = async (req, res) => {
   const { contactId } = req.params;
+
   const updateContactById = await Contact.findByIdAndUpdate(
     contactId,
     req.body,
