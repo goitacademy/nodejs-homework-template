@@ -58,6 +58,7 @@ const updateStatusContact = async (req, res, next) => {
   res.json(result);
 };
 
+
 module.exports = {
   get,
   getByID,
