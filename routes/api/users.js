@@ -1,27 +1,10 @@
 const express = require("express");
-const Contact = require("../../service/schemas/contact");
 const User = require("../../service/schemas/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
 
 require("dotenv").config();
 const SECRET = process.env.SECRET;
-
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-        data: "Unauthorized",
-      });
-    }
-    req.user = user;
-    next();
-  })(req, res, next);
-};
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -91,15 +74,6 @@ router.post("/signup", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-router.get("/contacts", auth, async (req, res, next) => {
-  const contacts = await Contact.find();
-  res.json({
-    status: "success",
-    code: 200,
-    data: { contacts },
-  });
 });
 
 module.exports = router;
