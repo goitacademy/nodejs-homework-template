@@ -5,6 +5,7 @@ const {
   updateContact,
   deleteContact,
   createNewContact,
+  updateStatusContact,
 } = require("../../controllers/controllers.js");
 
 const { controllerWrapper } = require("../../heplers");
@@ -17,11 +18,21 @@ router.get("/", controllerWrapper(get));
 
 router.get("/:contactId", isIdValid, controllerWrapper(getByID));
 
-router.post("/", validateScheme(scheme), controllerWrapper(createNewContact));
+router.post(
+  "/",
+  isIdValid,
+  validateScheme(scheme),
+  controllerWrapper(createNewContact)
+);
 
-router.delete("/:contactId", controllerWrapper(deleteContact));
+router.delete("/:contactId", isIdValid, controllerWrapper(deleteContact));
 
-router.patch("/:contactId/favorite", controllerWrapper())
+router.patch(
+  "/:contactId/favorite",
+  isIdValid,
+  controllerWrapper(updateStatusContact)
+);
+
 router.put(
   "/:contactId",
   validateScheme(scheme),
