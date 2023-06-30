@@ -78,20 +78,16 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/logout", async (req, res, next) => {
 
-    const getTokenFromRequest = (req) => {
-        const authHeader = req.headers.authorization;
-      
-        if (authHeader && authHeader.startsWith("Bearer ")) {
-          // Extract the token from the "Authorization" header
-          const token = authHeader.slice(7);
-          return token;
-        }
-      
-        // If no valid token is found, return null or handle the error as needed
-        return null;
-      };
-
-      const token = getTokenFromRequest(req);
+    const token = req.headers.authorization.slice(7)
+    const user = await User.findOne({ token });
+  
+    if (!user) {
+      return res.status(401).json({
+        status: "Unauthorized",
+        code: 401,
+        message: "Invalid token",
+      });
+    }
 
   try {
     const user = await User.findOne({ token });
@@ -113,11 +109,27 @@ router.post("/logout", async (req, res, next) => {
 });
 
 router.get("/current", async (req, res, next) => {
+    const token = req.headers.authorization.slice(7)
+    const user = await User.findOne({ token });
+  
+    if (!user) {
+      return res.status(401).json({
+        status: "Unauthorized",
+        code: 401,
+        message: "Invalid token",
+      });
+    }
+
   try {
+    const user = await User.findOne({ token });
+    const message = `"email": ${user.email}, "subscription": ${user.subscription}`
     res.json({
       status: "ok",
       code: 200,
-      message: "Logged out successfully",
+      message: {
+        "email": user.email,
+        "subscription": user.subscription,
+      }
     });
   } catch (error) {
     res.json({
@@ -127,5 +139,52 @@ router.get("/current", async (req, res, next) => {
     });
   }
 });
+
+
+//Nie jestem pewien czy działa należy zrobić refaktor całego kodu i sprawdzić wszystko.
+
+router.patch("/", async (req, res, next) => {
+    try {
+      const token = req.headers.authorization.slice(7);
+      const user = await User.findOne({ token });
+  
+      if (!user) {
+        return res.status(401).json({
+          status: "Unauthorized",
+          code: 401,
+          message: "Invalid token",
+        });
+      }
+  
+      const { subscription } = req.body;
+
+      console.log(token)
+  
+      // Validate the subscription value
+      const validSubscriptions = ["starter", "pro", "business"];
+      if (!validSubscriptions.includes(subscription)) {
+        return res.status(400).json({
+          status: "Bad Request",
+          code: 400,
+          message: "Invalid subscription value",
+        });
+      }
+  
+      user.subscription = subscription;
+      await user.save();
+  
+      res.json({
+        status: "success",
+        code: 200,
+        message: "Subscription updated successfully",
+        data: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
 
 module.exports = router;
