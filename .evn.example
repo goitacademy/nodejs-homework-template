@@ -1,0 +1,2 @@
+PORT= number port, default 8080
+DB_HOST= mongodb connection string
