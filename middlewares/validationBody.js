@@ -1,13 +1,12 @@
 const { requestError } = require("../utils");
 
-const validateBody = (schema) => {
-  const func = (req, res, next) => {
-    const favoritePatch = req.route.path.includes("favorite");
-    const { error } = schema.validate(req.body);
-    if (favoritePatch && !Object.keys(req.body).length) {
-      next(requestError(400, "missing field favorite"));
-    }
-    if (!Object.keys(req.body).length) {
+const validationBody = (schema) => {
+  const func = (req, _, next) => {
+    const { body } = req;
+    const { error } = schema.validate(body);
+    const filledBody = Object.keys(body).length;
+
+    if (!filledBody) {
       next(requestError(400, "missing  fields"));
     } else if (error) {
       next(
@@ -25,4 +24,4 @@ const validateBody = (schema) => {
   return func;
 };
 
-module.exports = validateBody;
+module.exports = validationBody;
