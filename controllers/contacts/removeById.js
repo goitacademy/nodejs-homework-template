@@ -4,6 +4,7 @@ const { Contact } = require("../../models");
 
 const removeById = async (req, res) => {
   const { contactId } = req.params;
+
   const deleteContactById = await Contact.findByIdAndRemove(contactId);
   if (!deleteContactById) {
     throw new NotFound(`Contact not found`);
