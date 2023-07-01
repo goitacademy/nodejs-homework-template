@@ -40,14 +40,14 @@ const signup = async (req, res, next) => {
         const newUser = new User({ email });
         newUser.setPassword(password);
         await newUser.save();
-        const { email, subscription } = newUser;
+        // const { email, subscription } = newUser;
         res.status(201).json({
           status: "Contact created",
           code: 201,
           data: {
             user: {
-              email: email,
-              subscription: subscription,
+              email: newUser.email,
+              subscription: newUser.subscription,
             },
           },
         });
