@@ -5,10 +5,13 @@ const deleteContact = require("./contacts/deleteContact");
 const updateContact = require("./contacts/updateContact");
 const updateStatusContact = require("./contacts/updateStatusContact");
 const register = require("./auth/register");
+const login = require("./auth/login");
+
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 
 module.exports = {
   register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
