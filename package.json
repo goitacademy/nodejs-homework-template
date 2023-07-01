@@ -26,6 +26,7 @@
     "mongoose": "^7.3.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "supertest": "^6.3.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
