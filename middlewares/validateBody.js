@@ -1,5 +1,4 @@
 const { RequestError } = require("../utils");
-
 const validateBody = (schema) => {
   const func = (req, res, next) => {
     const favPatchBool = req.route.path.includes("favorite");
