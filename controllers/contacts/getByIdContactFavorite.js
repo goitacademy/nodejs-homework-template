@@ -7,7 +7,7 @@ const getByIdContactFavorite = async (req, res, next) => {
   if (!result) {
     throw requestError(404, "Not found");
   }
-  res.status(200).json(`${result.name} in your favorites ${result.favorite}`);
+  res.status(200).json(result);
 };
 
 module.exports = getByIdContactFavorite;
