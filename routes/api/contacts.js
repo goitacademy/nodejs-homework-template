@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const ctrl = require('../../controllers/contacts')
-const {validate, authenticate, upload} = require('../../middlewars')
+const {validate, authenticate} = require('../../middlewars')
 const schemas = require('../../schemas/contacts')
 
 router.use(authenticate)
@@ -10,7 +10,7 @@ router.get('/', ctrl.getAll)
 
 router.get('/:contactId', ctrl.getById)
 
-router.post('/', upload.single("avatarURL"), validate.validBody(schemas.addSchema), ctrl.add)
+router.post('/', validate.validBody(schemas.addSchema), ctrl.add)
 
 router.delete('/:contactId', ctrl.deleteRecord)
 

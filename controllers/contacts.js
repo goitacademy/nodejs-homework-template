@@ -1,8 +1,5 @@
-const fs = require('fs/promises');
-const path = require('path');
-
 const Contact = require('../models/contact');
-const contactsDir = path.resolve("public", "avatars");
+
 
 const getAll = async (req, res, next)=>{
 
@@ -33,22 +30,14 @@ const getById = async (req, res, next) => {
   }
 
   const add = async (req, res, next) => {
-    const {_id: owner} = req.user;
-    const { path: oldPath, filename} = req.file;
-    const newPath = path.join(contactsDir, filename);
-   await fs.rename(oldPath, newPath);
-   const avatarURL = path.join("avatars", filename)
-    const result = await Contact.create({...req.body, avatarURL, owner});
+    try{
+      const {_id: owner} = req.user;
+      const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
-
-    // try{
-    //   const {_id: owner} = req.user;
-    //   const result = await Contact.create({...req.body, owner});
-    // res.status(201).json(result);
-    // }
-    // catch(error){
-    //   next(error);
-    // }
+    }
+    catch(error){
+      next(error);
+    }
   }
 
   const deleteRecord = async (req, res, next) => {
@@ -91,6 +80,7 @@ const getById = async (req, res, next) => {
     }
   }
 
+  
 module.exports = {
     getAll,
     getById,

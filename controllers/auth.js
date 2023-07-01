@@ -1,8 +1,13 @@
 const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
+const fs = require('fs/promises');
+const path = require('path');
+const Jimp=require('jimp')
 const User = require('../models/users')
 const {SECRET_KEY} = process.env;
+
+const contactsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async(req, res, next)=>{
     try{
@@ -65,6 +70,23 @@ res.json({
 })
 }
 
+const updateAvatar = async(req,res) => {
+    const { id} = req.user;
+    const { path: oldPath, filename} = req.file;
+    const avatarName = `${id}_${filename}`;
+    const newPath = path.join(contactsDir, avatarName);
+    await Jimp.read(newPath).then(img=> {
+        return img.resize(250, Jimp.AUTO).writeAsync(newPath);
+    })
+    .catch(err=>console.log(err));
+    
+    await fs.rename(oldPath, newPath);
+   const avatarURL = path.join("avatars", avatarName)
+
+    await User.findByIdAndUpdate(id, {avatarURL})
+    res.status(201).json({avatarURL});
+  }
+
 const logOut = async(req,res)=>{
 const {_id} = req.user;
 await User.findByIdAndUpdate(_id, {token: ""});
@@ -76,4 +98,5 @@ module.exports={
     login,
     getCurrent,
     logOut,
+    updateAvatar,
 }

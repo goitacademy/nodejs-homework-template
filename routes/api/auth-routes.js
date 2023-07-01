@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const schemas = require('../../schemas/users')
-const {validate} = require('../../middlewars')
+const {validate, upload} = require('../../middlewars')
 const authControllers = require('../../controllers/auth')
 const {authenticate} = require('../../middlewars')
 
@@ -12,5 +12,7 @@ router.post("/login", validate.validateUserBody(schemas.userLoginSchema), authCo
 router.get("/current",  authenticate, authControllers.getCurrent)
 
 router.post("/logout", authenticate, authControllers.logOut)
+
+router.patch("/avatars", authenticate, upload.single("avatar"), authControllers.updateAvatar)
 
 module.exports = router
