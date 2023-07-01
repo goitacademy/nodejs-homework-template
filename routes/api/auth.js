@@ -9,8 +9,14 @@ const { KEY } = process.env;
 const jwt = require("jsonwebtoken");
 const validateToken = require("../../utils/tokenValidator");
 const httpErr = require("../../utils/HTTPErr");
+const path = require("path");
+const fs = require("fs");
+const jimp = require("jimp");
+const gravatar = require("gravatar");
 
 const router = express.Router();
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 router.post("/register", validateUser(), async (req, res, next) => {
   try {
@@ -24,7 +30,11 @@ router.post("/register", validateUser(), async (req, res, next) => {
 
     const hashPassword = await createHashPassword(password);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL: gravatar.url(email),
+    });
 
     res.status(201).json({
       user: {
@@ -86,6 +96,34 @@ router.post("/logout", validateToken, async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: null });
 
   res.status(204).json();
+});
+
+router.patch("/avatars", validateToken, async (req, res) => {
+  if (!req.file) {
+    throw httpErr(400, "Missing 'avatar' field");
+  }
+
+  const img = await jimp.read(req.file.path);
+
+  await img
+    .autocrop()
+    .cover(250, 250, jimp.HORIZONTAL_ALIGN_CENTER || jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(req.file.path);
+
+  const { path: tempUpload, originalname } = req.file;
+  const { _id } = req.user;
+
+  const fileName = `${_id}_${originalname}`;
+
+  const resultUpload = path.join(avatarsDir, fileName);
+
+  await fs.rename(tempUpload, resultUpload);
+
+  const avatarURL = path.join("avatars", fileName);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
 });
 
 module.exports = router;
