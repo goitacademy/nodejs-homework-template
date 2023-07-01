@@ -1,6 +1,6 @@
 const express = require('express');
 
-const ctrl = require('../../controllers/contacts');
+const ctrl = require('../../controllers');
 
 const { validateBody, isValidId } = require('../../middlewares');
 
@@ -14,7 +14,7 @@ router.get('/:contactId', isValidId, ctrl.getContactById);
 
 router.post('/', validateBody(schema.addSchema), ctrl.addContact);
 
-router.delete('/:contactId', isValidId, ctrl.removeContact);
+router.delete('/:contactId', isValidId, ctrl.removeContactt);
 
 router.put('/:contactId', isValidId, validateBody(schema.addSchema), ctrl.updateContact);
 
