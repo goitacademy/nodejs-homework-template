@@ -8,7 +8,7 @@ const gravatar = require("gravatar");
 const multer = require("multer");
 const path = require("path");
 const jimp = require("jimp");
-const { verificationToken } = require("./user.email");
+const { verificationToken, sendVerificationEmail } = require("./user.email");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -43,7 +43,6 @@ const auth = (req, res, next) => {
 router.post("/signup", upload.single("avatar"), async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email, password });
-
   if (user) {
     res.json({
       status: "error",
@@ -60,9 +59,10 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
           r: "pg",
           d: "mm",
         });
-
-    const newUser = new User({ email, avatarURL });
+    const newUser = new User({ email, avatarURL, verificationToken });
+    await sendVerificationEmail(email, verificationToken);
     newUser.setPassword(password);
+
     await newUser.save();
     res.json({
       status: "succress",
@@ -178,10 +178,11 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, _) => {
   }
 });
 
-router.get("/verify/:verificationToken", auth, async (req, res, next) => {
+router.get("/verify/:verificationToken", async (req, res, next) => {
   try {
-    const verificationToken2 = verificationToken();
-    const user = await User.findOne({ verificationToken2 });
+    const user = await User.findOne({
+      verificationToken,
+    });
     if (!user) {
       return res.json({
         status: "error",

@@ -1,30 +1,32 @@
 const nodemailer = require("nodemailer");
 const { nanoid } = require("nanoid");
+require("dotenv").config();
+
+const mailtrapApiToken = process.env.MAILTRAP_APITOKEN;
 
 function verificationToken() {
   return nanoid();
 }
 console.log(verificationToken());
-const transporter = nodemailer.createTransport({
-  host: "https://poczta.wp.pl",
-  port: 465,
-  secure: true,
+const transport = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
   auth: {
-    user: `${process.env.emailLogin}`,
-    pass: `${process.env.emailPass}`,
+    user: "0a4016d298c20f",
+    pass: "f772d2da5304dd",
   },
 });
 
 function sendVerificationEmail(userEmail, verificationToken) {
-  const verificationLink = `http://localhost:3000/users/verify/${verificationToken}`;
+  const verificationLink = `${mailtrapApiToken}/users/verify/${verificationToken}`;
   const mailOptions = {
-    from: `${process.env.emailLogin}`,
+    from: "0a4016d298c20f",
     to: userEmail,
     subject: "Email Verification",
-    text: `Click the link below to verify your email:\n\n${verificationLink}`,
+    text: `Hello Hello ${verificationLink}`,
   };
 
-  transporter.sendMail(mailOptions, (err, info) => {
+  transport.sendMail(mailOptions, (err, info) => {
     if (err) {
       console.log("Error occurred:", err);
     } else {
@@ -32,7 +34,7 @@ function sendVerificationEmail(userEmail, verificationToken) {
     }
   });
 }
-const userEmail = `${process.env.sendEmail}`;
+const userEmail = "faceitszpn@gmail.com";
 sendVerificationEmail(userEmail, verificationToken);
 
-module.exports = { verificationToken };
+module.exports = { verificationToken, sendVerificationEmail };
