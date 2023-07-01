@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const contacts = require('../models/contacts');
+const {contacts} = require('../controllers');
 
 const { HttpError } = require('../helpers');
 
@@ -18,21 +18,12 @@ const getListContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
     const { id } = req.params;
-    const oneContact = await contacts.getContactById(id);
+    const result = await contacts.getContactById(id);
     if (!result) {
       throw HttpError(404, 'Not found');
     }
     res.json(result);
   }
-
-// const postContacts = async (req, res, next) => {
-//     const { error } = addSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, error.message);
-//     }
-//     const result = await contacts.addContact(req.body);
-//     res.status(201).json(result);
-//   }
 
 const removeContact = async (req, res) => {
     const {id} = req.params;
