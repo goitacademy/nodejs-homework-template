@@ -15,6 +15,9 @@ const contactsSchema = new Schema({
     type: Boolean,
     default: false,
   },
+},
+{
+  versionKey: false
 })
 
 const contact = new model('contact', contactsSchema);
