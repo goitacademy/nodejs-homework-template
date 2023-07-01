@@ -4,6 +4,8 @@ Wykonaj forka tego repozytorium, aby wykonywać zadania domowe (2-6). Fork utwor
 
 Dodaj mentora jako collaboratora.
 
+pwd:notAllowedAccess
+
 Dla każdego zadania domowego utwórz nową gałąź (branch).
 
 - hw02
