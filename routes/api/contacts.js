@@ -20,7 +20,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const allContacts = await listContacts();
-    res.json(allContacts);
+    res.status(200).json(allContacts);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -61,7 +61,7 @@ router.delete("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json(result);
+    res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
@@ -78,7 +78,7 @@ router.put("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
