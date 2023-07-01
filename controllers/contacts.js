@@ -39,7 +39,7 @@ const updateBuId = async (req, res, next) => {
   }
   const resolt = await contact.findByIdAndUpdate(contactId, value, { new: true });
   if(!resolt){
-    throw new HttpError({status: 404, message:"Not found"});
+    throw HttpError({status: 404, message:"Not found"});
   }
   res.json(resolt);
 }
