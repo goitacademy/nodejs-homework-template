@@ -61,6 +61,6 @@ module.exports = {
     getById : decorator(getById),
     addById : decorator(addById),
     deleteById : decorator(deleteById),
-    updateBuId : decorator(updateBuId),
+    updateById : decorator(updateBuId),
     updateStatusContact: decorator(updateStatusContact),
 }

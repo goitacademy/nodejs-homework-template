@@ -11,7 +11,7 @@ router.post('/', contacts.addById);
 
 router.delete('/:contactId', contacts.deleteById);
 
-router.put('/:contactId', contacts.updateBuId);
+router.put('/:contactId', contacts.updateById);
 
 router.patch('/:contactId/favorite', contacts.updateStatusContact);
 
