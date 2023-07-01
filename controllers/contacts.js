@@ -37,11 +37,14 @@ const updateBuId = async (req, res, next) => {
   if(error){
     throw new HttpError({status: 400, message:"missing fields"});
   }
-  const updatedContact = await contact.findByIdAndUpdate(contactId, value, { new: true });
-  if(!updatedContact){
+  const resolt = await contact.findByIdAndUpdate(contactId, value, { new: true });
+  if(!resolt){
     throw new HttpError({status: 404, message:"Not found"});
   }
-  res.json(updatedContact);
+  res.json(resolt);
+}
+const updateFavoriteById = async(req, res, next) => {
+
 }
 
 module.exports = {
@@ -50,4 +53,5 @@ module.exports = {
     addById : decorator(addById),
     deleteById : decorator(deleteById),
     updateBuId : decorator(updateBuId),
+    updateFavoriteById: decorator(updateFavoriteById),
 }
