@@ -63,7 +63,17 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const data = await Contact.create(req.body);
+    const token = req.headers.authorization.slice(7);
+    const user = await User.findOne({ token });
+
+    const { name, email, phone } = req.body;
+
+    const data = await Contact.create({
+      name: name,
+      email: email,
+      phone: phone,
+      owner: user._id,
+    });
 
     res.json({
       status: "created",
@@ -128,7 +138,6 @@ const updateContactById = async (req, res, next) => {
 
 const changeFavouriteContactById = async (req, res, next) => {
   try {
-
     if (req.body.favorite === null) {
       return res.status(400).send({ message: "missing field favorite" });
     }

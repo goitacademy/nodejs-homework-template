@@ -44,18 +44,18 @@ const userLogin = async (req, res, next) => {
 };
 
 const userRegister = async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-
-  if (user) {
-    res.json({
-      status: "error",
-      code: 409,
-      data: "Conflict",
-      message: "User already exist!",
-    });
-  }
   try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (user) {
+      res.json({
+        status: "error",
+        code: 409,
+        data: "Conflict",
+        message: "User already exist!",
+      });
+    }
     const newUser = await new User({ email });
 
     newUser.setPassword(password);
@@ -76,10 +76,8 @@ const userRegister = async (req, res, next) => {
 };
 
 const userLogout = async (req, res, next) => {
-  const token = req.headers.authorization.slice(7);
-  const user = await User.findOne({ token });
-
   try {
+    const token = req.headers.authorization.slice(7);
     const user = await User.findOne({ token });
 
     user.token = null;
