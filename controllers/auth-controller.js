@@ -62,7 +62,7 @@ const signIn = async (req, res, next) => {
       },
     });
   } catch (error) {
-    next(HttpError(401, 'Not authorized'));
+    next(HttpError(401, 'Email or password is wrong'));
   }
 };
 
@@ -74,7 +74,7 @@ const getCurrent = async (req, res, next) => {
       throw HttpError(401, 'Not authorized');
     }
 
-    await res.status(200).json({
+    res.status(200).json({
       email: email,
       subscription: 'starter',
     });
@@ -95,7 +95,7 @@ const logout = async (req, res, next) => {
       throw HttpError(401, 'Not authorized');
     }
 
-    res.status(204);
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }

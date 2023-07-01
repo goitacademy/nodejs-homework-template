@@ -10,17 +10,17 @@ const userSchemas = require('../../schemas/user-schemes');
 module.exports = authRouter;
 
 authRouter.post(
-  '/users/register',
+  '/register',
   validateBody(userSchemas.userRegisterSchema),
   authController.signup
 );
 
 authRouter.post(
-  '/users/login',
+  '/login',
   validateBody(userSchemas.userLogInSchema),
   authController.signIn
 );
 
-authRouter.get('/users/current', authenticate, authController.getCurrent);
+authRouter.get('/current', authenticate, authController.getCurrent);
 
-authRouter.post('/users/logout', authenticate, authController.logout);
+authRouter.post('/logout', authenticate, authController.logout);
