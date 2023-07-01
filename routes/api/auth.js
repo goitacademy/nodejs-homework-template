@@ -5,6 +5,6 @@ const { register } = require("../../controllers");
 
 const router = express.Router();
 
-router.post("/api/auth", validateBody(schemas.registerSchema), register);
+router.post("/register", validateBody(schemas.registerSchema), register);
 
 module.exports = router;
